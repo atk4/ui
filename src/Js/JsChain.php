@@ -112,10 +112,6 @@ class JsChain extends JsExpression
     {
         return '('
             . implode(', ', array_map(function ($arg) {
-                if ($arg instanceof JsExpressionable) {
-                    return $arg->jsRender();
-                }
-
                 return $this->_jsEncode($arg);
             }, $args))
             . ')';
