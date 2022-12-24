@@ -10,8 +10,6 @@ namespace Atk4\Ui\Js;
  *
  * IMPORTANT: extend first, see Jquery class for example
  * IMPORTANT: all methods in this class are pre-pended with '_', to avoid clashes with js-mapping
- *
- * @method Jquery redirect(...$args)
  */
 class JsChain extends JsExpression
 {

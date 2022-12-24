@@ -146,10 +146,10 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::preventFormLeave\(\)\.$~'
         -
             path: 'src/Form/Control/Calendar.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Js\\Jquery::\$_flatpickr\.$~'
+            message: '~^Access to an undefined property Atk4\\Ui\\Js\\JsChain::\$_flatpickr\.$~'
         -
             path: 'src/Form/Control/Checkbox.php'
-            message: '~^Access to an undefined property Atk4\\Ui\\Js\\Jquery::\$checked\.$~'
+            message: '~^Access to an undefined property Atk4\\Ui\\Js\\JsChain::\$checked\.$~'
         -
             path: 'src/Form/Control/Multiline.php'
             message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'
@@ -197,6 +197,9 @@ parameters:
             path: 'src/Table/Column.php'
             message: '~^Call to an undefined method Atk4\\Ui\\JsCallback::onSelectItem\(\)\.$~'
         -
+            path: 'src/Table/Column/Checkbox.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::join\(\)\.$~'
+        -
             path: 'src/Table/Column/FilterModel/TypeDate.php'
             message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'
         -
@@ -220,6 +223,9 @@ parameters:
         -
             path: 'src/Tabs.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setElement\(\)\.$~'
+        -
+            path: 'src/UserAction/VpExecutor.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::redirect\(\)\.$~'
         -
             path: 'src/View.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::emit\(\)\.$~'

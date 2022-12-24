@@ -24,7 +24,7 @@ namespace Atk4\Ui\Js;
  * @method JsChain height(...$args)
  * @method Jquery  hide(...$args)
  * @method JsChain html(...$args)
- * @method JsChain map(...$args)
+ * @method Jquery  map(...$args)
  * @method Jquery  off(...$args)
  * @method Jquery  on(string $events, ...$args)
  * @method Jquery  parent(...$args)
