@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Ui\VueComponent;
 
 use Atk4\Data\Model;
-use Atk4\Ui\Js\JsVueService;
 use Atk4\Ui\View;
 
 /**
@@ -90,20 +89,16 @@ class ItemSearch extends View
             $reloadId = $this->reload;
         }
 
-        $this->js(true, (new JsVueService())->createAtkVue(
-            '#' . $this->name,
-            'AtkItemSearch',
-            [
-                'reload' => $reloadId,
-                'queryArg' => $this->queryArg,
-                'url' => $this->reload->jsUrl(),
-                'q' => $this->q,
-                'context' => $this->context,
-                'options' => [
-                    'inputTimeOut' => $this->inputTimeOut,
-                    'inputCss' => $this->inputCss,
-                ],
-            ]
-        ));
+        $this->vue('AtkItemSearch', [
+            'reload' => $reloadId,
+            'queryArg' => $this->queryArg,
+            'url' => $this->reload->jsUrl(),
+            'q' => $this->q,
+            'context' => $this->context,
+            'options' => [
+                'inputTimeOut' => $this->inputTimeOut,
+                'inputCss' => $this->inputCss,
+            ],
+        ]);
     }
 }

@@ -140,7 +140,7 @@ class Form extends View
         $this->initLayout();
 
         // set css loader for this form
-        $this->setApiConfig(['stateContext' => '#' . $this->name]);
+        $this->setApiConfig(['stateContext' => $this]);
 
         $this->cb = JsCallback::addTo($this, [], [['desired_name' => 'submit']]);
     }
@@ -167,14 +167,14 @@ class Form extends View
         }
 
         // allow to submit by pressing an enter key when child control is focused
-        $this->on('submit', new JsExpression('if (event.target === this) { $([name]).form(\'submit\'); }', ['name' => '#' . $this->formElement->name]));
+        $this->on('submit', new JsExpression('if (event.target === this) { $([]).form(\'submit\'); }', [$this->formElement]));
 
         // Add save button in layout
         if ($this->buttonSave) {
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
             $this->buttonSave->on('click', $this->js(false, null, $this->formElement)->form('submit'));
-            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { $([name]).form(\'submit\'); }', ['name' => '#' . $this->formElement->name]));
+            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { $([]).form(\'submit\'); }', [$this->formElement]));
         }
     }
 

@@ -40,7 +40,7 @@ class Popup extends View
      * When set to false, target is the triggerBy element.
      * Otherwise, you can supply a View object where popup will be shown.
      *
-     * @var View|bool
+     * @var View|false
      */
     public $target = false;
 
@@ -112,10 +112,10 @@ class Popup extends View
         }
 
         $this->popOptions = array_merge($this->popOptions, [
-            'popup' => '#' . $this->name,
+            'popup' => $this,
             'on' => $this->triggerOn,
             'position' => $this->position,
-            'target' => ($this->target) ? '#' . $this->target->name : false,
+            'target' => $this->target,
         ]);
     }
 
@@ -215,14 +215,11 @@ class Popup extends View
      */
     public function jsPopup()
     {
-        $name = $this->triggerBy;
-        if (!is_string($this->triggerBy)) {
-            $name = '#' . $this->triggerBy->name;
-            if ($this->triggerBy instanceof Form\Control) {
-                $name = '#' . $this->triggerBy->name . '_input';
-            }
+        $selector = $this->triggerBy;
+        if ($this->triggerBy instanceof Form\Control) {
+            $selector = '#' . $this->triggerBy->name . '_input';
         }
-        $chain = new Jquery($name);
+        $chain = new Jquery($selector);
         $chain->popup($this->popOptions);
         if ($this->stopClickEvent) {
             $chain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));

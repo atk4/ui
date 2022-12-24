@@ -833,7 +833,7 @@ class View extends AbstractView
     public function vue($component, $initData = [], $componentDefinition = null, $selector = null)
     {
         if (!$selector) {
-            $selector = '#' . $this->name;
+            $selector = '#' . $this->getHtmlId();
         }
 
         if ($componentDefinition) {

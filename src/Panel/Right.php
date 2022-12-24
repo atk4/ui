@@ -187,7 +187,7 @@ class Right extends View implements Loadable
         $panel_options = [
             'id' => $this->name,
             'loader' => ['selector' => '.ui.loader', 'trigger' => 'active'], // the css selector and trigger class to activate loader.
-            'modal' => $this->closeModal ? '#' . $this->closeModal->name : null,
+            'modal' => $this->closeModal,
             'warning' => ['selector' => $this->warningSelector, 'trigger' => $this->warningTrigger],
             'visible' => 'atk-visible', // the triggering css class that will make this panel visible.
             'closeSelector' => $this->closeSelector, // the css selector to close this flyout.
