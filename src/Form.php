@@ -203,7 +203,7 @@ class Form extends View
     public function setGroupDisplayRules($rules = [], $selector = '.atk-form-group')
     {
         if (is_object($selector)) {
-            $selector = $selector->jsRender();
+            $selector = '#' . $selector->getHtmlId();
         }
 
         $this->controlDisplayRules = $rules;
