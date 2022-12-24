@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Atk4\Ui\Js;
 
 /**
- * Implements mapper for jQuery library. Following mappings are just to keep phpstan/PhpStorm happy.
+ * Same as JsChain class, but with annotated methods to keep phpstan/PhpStorm happy.
  *
+ * For jQuery:
  * @method Jquery  addClass(...$args)
  * @method Jquery  append(...$args)
  * @method Jquery  appendTo(...$args)
@@ -73,6 +74,8 @@ namespace Atk4\Ui\Js;
  * @method Jquery atkScroll(...$args)
  * @method Jquery atkServerEvent(...$args)
  * @method Jquery atkSidenav(...$args)
+ *
+ * For other:
  * @method Jquery flatpickr(...$args)
  */
 class Jquery extends JsChain
