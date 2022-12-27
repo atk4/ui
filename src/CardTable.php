@@ -46,8 +46,8 @@ class CardTable extends Table
 
         $this->_bypass = true;
 
-        //parent::setSource($data);
-//
+        parent::setSource($data);
+        /*
         $mm = parent::setSource($data);
         $this->addDecorator('value', [Table\Column\Multiformat::class, function (Model $row) use ($model) {
             $field = $model->getField($row->getId());
@@ -61,7 +61,8 @@ class CardTable extends Table
 
             return [$ret];
         }]);
-//
+        */
+
         $this->_bypass = false;
     }
 }
