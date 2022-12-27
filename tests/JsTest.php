@@ -121,12 +121,12 @@ class JsTest extends TestCase
         $b2 = new Jquery('.box2');
 
         $doc = new Jquery(new JsExpression('document'));
-        $fx = $doc->ready(new JsFunction([], [
+        $fx = $doc->first(new JsFunction([], [
             $b1->height($b2->height()),
         ]));
 
         static::assertSame(<<<'EOF'
-            $(document).ready(function () {
+            $(document).first(function () {
                     $('.box1').height($('.box2').height());
                 })
             EOF, $fx->jsRender());

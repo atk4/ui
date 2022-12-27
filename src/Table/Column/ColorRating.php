@@ -89,8 +89,8 @@ class ColorRating extends Table\Column
 
     private function createGradientSingle(array &$gradients, string $hexFrom, string $hexTo, int $steps): void
     {
-        $hexFrom = trim($hexFrom, '#');
-        $hexTo = trim($hexTo, '#');
+        $hexFrom = ltrim($hexFrom, '#');
+        $hexTo = ltrim($hexTo, '#');
 
         $fromRgb = [
             'r' => hexdec(substr($hexFrom, 0, 2)),

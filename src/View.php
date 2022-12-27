@@ -18,7 +18,7 @@ use Atk4\Ui\UserAction\ExecutorFactory;
 /**
  * Base view of all UI components.
  */
-class View extends AbstractView implements JsExpressionable
+class View extends AbstractView
 {
     /**
      * When you call render() this will be populated with JavaScript chains.
@@ -833,7 +833,7 @@ class View extends AbstractView implements JsExpressionable
     public function vue($component, $initData = [], $componentDefinition = null, $selector = null)
     {
         if (!$selector) {
-            $selector = '#' . $this->name;
+            $selector = '#' . $this->getHtmlId();
         }
 
         if ($componentDefinition) {
@@ -1105,14 +1105,11 @@ class View extends AbstractView implements JsExpressionable
         return $res;
     }
 
-    /**
-     * Convert View into CSS identifier.
-     */
-    public function jsRender(): string
+    public function getHtmlId(): string
     {
         $this->assertIsInitialized();
 
-        return (new JsExpression('[]', ['#' . $this->name]))->jsRender();
+        return $this->name;
     }
 
     /**

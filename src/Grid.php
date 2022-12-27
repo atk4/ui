@@ -307,7 +307,7 @@ class Grid extends View
             'tableContainerHeight' => $containerHeight,
         ]);
         // adding a state context to js scroll plugin.
-        $options = array_merge(['stateContext' => '#' . $this->container->name], $options);
+        $options = array_merge(['stateContext' => $this->container], $options);
 
         return $this->addJsPaginator($ipp, $options, $container, $scrollRegion);
     }
