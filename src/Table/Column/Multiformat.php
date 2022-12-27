@@ -17,16 +17,16 @@ class Multiformat extends Table\Column
     /** @var \Closure Method to execute which will return array of seeds for decorators */
     public $callback;
 
-    public function getDataCellHtml(Field $field = null, array $attr = []): string
-    {
-        return '{$c_' . $this->shortName . '}';
-    }
-
     public function __construct(\Closure $callback)
     {
         parent::__construct();
 
         $this->callback = $callback;
+    }
+
+    public function getDataCellHtml(Field $field = null, array $attr = []): string
+    {
+        return '{$c_' . $this->shortName . '}';
     }
 
     public function getHtmlTags(Model $row, ?Field $field): array

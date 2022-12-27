@@ -27,7 +27,7 @@ class GridLayout extends View
     /** @var HtmlTemplate */
     public $template;
 
-    /** @var string Semantic UI CSS class */
+    /** @var string Fomantic-UI CSS class */
     public $ui = 'grid';
 
     /** @var string Template file */

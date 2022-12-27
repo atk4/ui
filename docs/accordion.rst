@@ -42,8 +42,8 @@ Example::
     HelloWorld::addTo($t->addSection('Static Content'));
 
     // add dynamic section
-    $t->addSection('Dynamically Loading', function ($section) {
-        LoremIpsum::addTo($section);
+    $t->addSection('Dynamically Loading', function (VirtualPage $vp) {
+        LoremIpsum::addTo($vp);
     });
 
 Dynamic Accordion Section
@@ -55,8 +55,8 @@ to pass a call-back which will be triggered when user clicks on the section titl
     $acc = Accordion::addTo($app);
 
     // dynamic section
-    $acc->addSection('Dynamic Lorem Ipsum', function ($section) {
-        LoremIpsum::addTo($section, ['size' => 2]);
+    $acc->addSection('Dynamic Lorem Ipsum', function (VirtualPage $vp) {
+        LoremIpsum::addTo($vp, ['size' => 2]);
     });
 
 Controlling Accordion Section via Javascript

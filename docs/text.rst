@@ -42,7 +42,7 @@ When you use paragraphs, escaping is performed by default::
 
     $text = Text::addTo($app)
         ->addParagraph('No alerts')
-        ->addParagraph('<script>alert(1)</script>');
+        ->addParagraph('<script>alert(1);</script>');
 
 Usage
 =====

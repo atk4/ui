@@ -10,7 +10,7 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-// For popup positioning to work correctly, table need to be inside a view segment.
+// For popup positioning to work correctly, table needs to be inside a view segment.
 $view = View::addTo($app, ['ui' => 'basic segment']);
 // Important: menu class added for Behat testing.
 $grid = Grid::addTo($view, ['menu' => ['class' => ['atk-grid-menu']]]);

@@ -9,7 +9,7 @@ namespace Atk4\Ui;
  */
 class TabsSubview extends View
 {
-    public $class = ['ui tab'];
+    public array $class = ['ui tab'];
 
     /** @var string */
     public $dataTabName;

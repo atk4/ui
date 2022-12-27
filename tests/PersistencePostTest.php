@@ -15,6 +15,8 @@ class PersistencePostTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $_POST = ['name' => 'John', 'is_married' => 'Y'];
         $this->model = new Model();
         $this->model->addField('name');
@@ -25,6 +27,8 @@ class PersistencePostTest extends TestCase
     protected function tearDown(): void
     {
         unset($_POST);
+
+        parent::tearDown();
     }
 
     /**

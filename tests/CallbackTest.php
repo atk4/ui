@@ -12,22 +12,11 @@ use Atk4\Ui\CallbackLater;
 use Atk4\Ui\Layout;
 use Atk4\Ui\View;
 use Atk4\Ui\VirtualPage;
-use Mvorisek\Atk4\Hintable\Phpstan\PhpstanUtil;
 
 class AppMock extends App
 {
-    /** @var bool */
-    public $terminated = false;
-
-    public function terminate($output = '', array $headers = []): void
-    {
-        $this->terminated = true;
-
-        PhpstanUtil::fakeNeverReturn();
-    }
-
     /**
-     * Overrided to allow multiple App::run() calls, prevent sending headers when headers are already sent.
+     * Overriden to allow multiple App::run() calls, prevent sending headers when headers are already sent.
      */
     protected function outputResponse(string $data, array $headers): void
     {
@@ -45,6 +34,8 @@ class CallbackTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->app = new AppMock(['alwaysRun' => false, 'catchExceptions' => false]);
         $this->app->initLayout([Layout\Centered::class]);
     }
@@ -53,6 +44,8 @@ class CallbackTest extends TestCase
     {
         unset($_GET);
         unset($_POST);
+
+        parent::tearDown();
     }
 
     /**
@@ -70,7 +63,7 @@ class CallbackTest extends TestCase
         $this->simulateCallbackTriggering($cb);
 
         $var = null;
-        $cb->set(function ($x) use (&$var) {
+        $cb->set(function (int $x) use (&$var) {
             $var = $x;
         }, [34]);
 
@@ -108,7 +101,7 @@ class CallbackTest extends TestCase
         static::assertSame($expectedUrlCb, $cb->getUrl());
 
         $var = null;
-        $cb->set(function ($x) use (&$var, $v1) {
+        $cb->set(function (int $x) use (&$var, $v1) {
             $v3 = View::addTo($v1);
             static::assertSame('test.php', $v3->url(['test']));
             $var = $x;
@@ -128,7 +121,7 @@ class CallbackTest extends TestCase
         // do NOT simulate triggering in this test
 
         $var = null;
-        $cb->set(function ($x) use (&$var) {
+        $cb->set(function (int $x) use (&$var) {
             $var = $x;
         }, [34]);
 
@@ -142,7 +135,7 @@ class CallbackTest extends TestCase
         $this->simulateCallbackTriggering($cb);
 
         $var = null;
-        $cb->set(function ($x) use (&$var) {
+        $cb->set(function (int $x) use (&$var) {
             $var = $x;
         }, [34]);
 
@@ -161,12 +154,12 @@ class CallbackTest extends TestCase
         $this->simulateCallbackTriggering($cb);
 
         $var = null;
-        $cb->set(function ($x) use (&$var) {
+        $cb->set(function (int $x) use (&$var) {
             $cb2 = CallbackLater::addTo($this->app);
 
             $this->simulateCallbackTriggering($cb2);
 
-            $cb2->set(function ($y) use (&$var) {
+            $cb2->set(function (int $y) use (&$var) {
                 $var = $y;
             }, [$x]);
         }, [34]);
@@ -185,7 +178,7 @@ class CallbackTest extends TestCase
 
         // don't simulate triggering
         $var = null;
-        $cb->set(function ($x) use (&$var) {
+        $cb->set(function (int $x) use (&$var) {
             $var = $x;
         }, [34]);
 
@@ -194,7 +187,7 @@ class CallbackTest extends TestCase
         $this->expectOutputRegex($this->htmlDoctypeRegex);
         $this->app->run();
 
-        static::assertNull($var);
+        static::assertNull($var); // @phpstan-ignore-line
     }
 
     public function testVirtualPage(): void
@@ -204,11 +197,11 @@ class CallbackTest extends TestCase
         $this->simulateCallbackTriggering($vp);
 
         $var = null;
-        $vp->set(function ($p) use (&$var) {
+        $vp->set(function (VirtualPage $p) use (&$var) {
             $var = 25;
         });
 
-        $this->expectOutputRegex('/^..DOCTYPE/');
+        $this->expectOutputRegex('~^..DOCTYPE~');
         $this->app->run();
         static::assertSame(25, $var);
     }
@@ -220,11 +213,11 @@ class CallbackTest extends TestCase
         $this->simulateCallbackTriggering($vp);
 
         $var = null;
-        $vp->set(function ($p) use (&$var) {
+        $vp->set(function (VirtualPage $p) use (&$var) {
             $var = 25;
         });
 
-        $this->expectOutputRegex('/^..DOCTYPE/');
+        $this->expectOutputRegex('~^..DOCTYPE~');
         $this->app->run();
         static::assertSame(25, $var);
     }
@@ -242,7 +235,7 @@ class CallbackTest extends TestCase
             $this->varPull230 = 26;
         });
 
-        $this->expectOutputRegex('/^..DOCTYPE/');
+        $this->expectOutputRegex('~^..DOCTYPE~');
         $this->app->run();
         static::assertSame(26, $this->varPull230);
     }

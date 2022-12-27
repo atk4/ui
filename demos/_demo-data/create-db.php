@@ -24,8 +24,8 @@ class ImportModelWithPrefixedFields extends Model
     private function prefixFieldName(string $fieldName, bool $forActualName = false): string
     {
         $tableShort = $this->table;
-        if (strlen($tableShort) > 8) {
-            $tableShort = substr(md5($tableShort), 0, 8);
+        if (strlen($tableShort) > 16) {
+            $tableShort = substr(md5($tableShort), 0, 16);
         }
 
         $fieldShort = $fieldName;
@@ -34,8 +34,8 @@ class ImportModelWithPrefixedFields extends Model
             $fieldShort = substr($fieldShort, 0, -strlen('_id'));
             $fieldWithIdSuffix = true;
         }
-        if (strlen($fieldShort) > 8) {
-            $fieldShort = substr(md5($fieldShort), 0, 8);
+        if (strlen($fieldShort) > 16) {
+            $fieldShort = substr(md5($fieldShort), 0, 16);
         }
         if ($fieldWithIdSuffix) {
             $fieldShort .= '_id';
@@ -62,7 +62,12 @@ class ImportModelWithPrefixedFields extends Model
         return parent::import(array_map(function (array $rows): array {
             $rowsPrefixed = [];
             foreach ($rows as $k => $v) {
-                $rowsPrefixed[$this->prefixFieldName($k)] = $v;
+                $field = $this->getField($this->prefixFieldName($k));
+                if (in_array($field->type, ['date', 'time', 'datetime'], true)) {
+                    $v = new \DateTime($v . ' GMT');
+                }
+
+                $rowsPrefixed[$field->shortName] = $v;
             }
 
             return $rowsPrefixed;
@@ -1100,11 +1105,6 @@ $data = [
     ['id' => 3, 'project_name' => 'Agile Data', 'project_code' => 'at03', 'description' => 'Agile Data implements an entirely new pattern for data abstraction, that is specifically designed for remote databases such as RDS, Cloud SQL, BigQuery and other distributed data storage architectures. It focuses on reducing number of requests your App have to send to the Database by using more sophisticated queries while also offering full Domain Model mapping and Database vendor abstraction.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,' . "\n" . 'Garden City' . "\n" . 'UK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 1, 'project_budget' => 12000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 300, 'project_hours_reported' => 394, 'project_expenses_est' => 600, 'project_expenses' => 430, 'project_mgmt_cost_pct' => 0.2, 'project_qa_cost_pct' => 0.3, 'start_date' => '2016-04-17', 'finish_date' => '2016-06-20', 'finish_time' => '03:04:00', 'created' => '2017-04-06 10:30:15', 'updated' => '2017-04-06 10:35:04'],
     ['id' => 4, 'project_name' => 'Agile UI', 'project_code' => 'at04', 'description' => 'Web UI Component library.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,' . "\n" . 'Garden City' . "\n" . 'UK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 0, 'project_budget' => 20000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 600, 'project_hours_reported' => 368, 'project_expenses_est' => 1200, 'project_expenses' => 0, 'project_mgmt_cost_pct' => 0.3, 'project_qa_cost_pct' => 0.4, 'start_date' => '2016-09-17', 'finish_date' => '', 'finish_time' => '', 'created' => '2017-04-06 10:30:15', 'updated' => '2017-04-06 10:35:04'],
 ];
-foreach ($data as $rowIndex => $row) {
-    foreach (['start_date', 'finish_date', 'finish_time', 'created', 'updated'] as $k) {
-        $data[$rowIndex][$k] = new \DateTime($row[$k] . ' GMT');
-    }
-}
 $model->import($data);
 
 $model = new ImportModelWithPrefixedFields($db, ['table' => 'product_category']);
@@ -1146,6 +1146,29 @@ $model->import([
     ['id' => 5, 'name' => 'Milk 2%', 'brand' => 'Milk Corp.', 'product_category_id' => 3, 'product_sub_category_id' => 8],
     ['id' => 6, 'name' => 'Milk 1%', 'brand' => 'Milk Corp.', 'product_category_id' => 3, 'product_sub_category_id' => 6],
     ['id' => 7, 'name' => 'Ice Cream', 'brand' => 'Milk Corp.', 'product_category_id' => 3, 'product_sub_category_id' => 8],
+]);
+
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'multiline_item']);
+$model->addField('item', ['type' => 'string']);
+$model->addField('inv_date', ['type' => 'date']);
+$model->addField('inv_time', ['type' => 'time']);
+$model->addField('country_id', ['type' => 'bigint']);
+$model->addField('qty', ['type' => 'integer']);
+$model->addField('box', ['type' => 'integer']);
+(new Migrator($model))->create();
+$model->import([
+    ['id' => 1, 'item' => 'Chocolate', 'inv_date' => '2020-02-20', 'inv_time' => '7:20', 'country_id' => 80, 'qty' => 7, 'box' => 5],
+    ['id' => 2, 'item' => 'DAP delivery', 'inv_date' => '2020-02-01', 'inv_time' => '8:33', 'country_id' => 223, 'qty' => 2, 'box' => 100],
+]);
+
+$model = new ImportModelWithPrefixedFields($db, ['table' => 'multiline_delivery']);
+$model->addField('name', ['type' => 'string']);
+$model->addField('country', ['type' => 'json']);
+$model->addField('items', ['type' => 'json']);
+(new Migrator($model))->create();
+$model->import([
+    // TODO Model::containsXxx support
+    // https://github.com/atk4/ui/issues/1860
 ]);
 
 echo 'import complete!' . "\n\n";

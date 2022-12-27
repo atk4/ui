@@ -7,8 +7,8 @@ namespace Atk4\Ui\VueComponent;
 use Atk4\Data\Model;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
-use Atk4\Ui\JsToast;
 use Atk4\Ui\View;
 
 /**
@@ -78,7 +78,7 @@ class InlineEdit extends View
 
         // Set default validation error handler.
         if (!$this->formatErrorMsg) {
-            $this->formatErrorMsg = function ($e, $value) {
+            $this->formatErrorMsg = function (ValidationException $e, string $value) {
                 $caption = $this->model->getField($this->fieldName)->getCaption();
 
                 return $caption . ' - ' . $e->getMessage() . '. <br>Trying to set this value: "' . $value . '"';
@@ -167,7 +167,7 @@ class InlineEdit extends View
     {
         parent::renderView();
 
-        $type = $this->model && $this->fieldName ? $this->model->getField($this->fieldName)->type : 'text';
+        $type = $this->model && $this->fieldName ? $this->model->getField($this->fieldName)->type : 'string';
         $type = $type === 'string' ? 'text' : $type;
 
         if ($type !== 'text' && $type !== 'integer') {
@@ -182,7 +182,7 @@ class InlineEdit extends View
 
         $fieldName = $this->fieldName ?? 'name';
 
-        $this->vue('atk-inline-edit', [
+        $this->vue('AtkInlineEdit', [
             'initValue' => $initValue,
             'url' => $this->cb->getJsUrl(),
             'saveOnBlur' => $this->saveOnBlur,

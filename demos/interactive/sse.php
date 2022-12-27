@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\JsSse;
 use Atk4\Ui\ProgressBar;
 use Atk4\Ui\View;
@@ -22,7 +23,7 @@ $buttonStop = Button::addTo($app, ['Turn Off']);
 // non-SSE way
 // $button->on('click', $bar->js()->progress(['percent' => 40]));
 
-$sse = JsSse::addTo($app, ['showLoader' => true]);
+$sse = JsSse::addTo($button, ['showLoader' => true]);
 
 $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
     $sse->send($button->js()->addClass('disabled'));
@@ -51,7 +52,7 @@ Header::addTo($app, ['SSE operation with user confirmation']);
 $sse = JsSse::addTo($app);
 $button = Button::addTo($app, ['Click me to change my text']);
 
-$button->on('click', $sse->set(function ($jsChain) use ($sse, $button) {
+$button->on('click', $sse->set(function (Jquery $jsChain) use ($sse, $button) {
     $sse->send($button->js()->text('Please wait for 2 seconds...'));
     sleep(2);
 

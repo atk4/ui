@@ -55,7 +55,7 @@ class Input extends Form\Control
     public $actionLeft;
 
     /**
-     * Specify width for semantic UI grid. For "four wide" use 'four'.
+     * Specify width for Fomantic-UI grid. For "four wide" use 'four'.
      */
     public $width;
 
@@ -104,20 +104,20 @@ class Input extends Form\Control
     }
 
     /**
-     * Returns <input .../> tag.
+     * Returns <input ...> tag.
      *
      * @return string
      */
     public function getInput()
     {
-        return $this->getApp()->getTag('input', array_merge([
+        return $this->getApp()->getTag('input/', array_merge([
             'name' => $this->shortName,
             'type' => $this->inputType,
-            'placeholder' => $this->placeholder,
+            'placeholder' => $this->inputType !== 'hidden' ? $this->placeholder : false,
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readonly' => $this->readOnly ? 'readonly' : false,
-            'disabled' => $this->disabled ? 'disabled' : false,
+            'readonly' => $this->readOnly && $this->inputType !== 'hidden',
+            'disabled' => $this->disabled && $this->inputType !== 'hidden',
         ], $this->inputAttr));
     }
 
@@ -249,7 +249,7 @@ class Input extends Form\Control
      */
     public function addAction(array $defaults = [])
     {
-        $this->action = Button::addTo($this, [$defaults], ['AfterInput']);
+        $this->action = Button::addTo($this, $defaults, ['AfterInput']);
         $this->addClass('action');
 
         return $this->action;

@@ -26,13 +26,13 @@ trait VueLookupTrait
      */
     public function outputApiResponse()
     {
-        $fieldName = $_GET['atk_vlookup_field'] ?? null;
-        $query = $_GET['atk_vlookup_q'] ?? '';
+        $fieldName = $_GET['atkVueLookupField'] ?? null;
+        $query = $_GET['atkVueLookupQuery'] ?? '';
         $data = [];
         if ($fieldName) {
             $reference = $this->model->getField($fieldName)->getReference();
             $model = $reference->refModel($this->model);
-            $referenceFieldName = $reference->getTheirFieldName();
+            $referenceFieldName = $reference->getTheirFieldName($model);
             if ($query !== '') {
                 $model->addCondition($model->titleField, 'like', '%' . $query . '%');
             }

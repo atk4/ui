@@ -44,7 +44,7 @@ class ScopeBuilder extends Form\Control
 
     /**
      * The date, time or datetime options:
-     * 'flatpickr' - any of flatpickr options
+     * 'flatpickr' - any of Flatpickr options
      * 'useDefault' - when true, will init date, time or datetime to current.
      */
     public array $atkdDateOptions = [
@@ -52,7 +52,7 @@ class ScopeBuilder extends Form\Control
         'flatpickr' => [],
     ];
 
-    /** Atk-lookup and semantic-ui dropdown options. */
+    /** AtkLookup and Fomantic-UI dropdown options. */
     public array $atkLookupOptions = [
         'ui' => 'small basic button',
     ];
@@ -210,7 +210,7 @@ class ScopeBuilder extends Form\Control
         'lookup' => [
             'type' => 'custom-component',
             'inputType' => 'lookup',
-            'component' => 'atk-lookup',
+            'component' => 'AtkLookup',
             'operators' => self::ENUM_OPERATORS,
             'componentProps' => [__CLASS__, 'getLookupProps'],
         ],
@@ -244,21 +244,21 @@ class ScopeBuilder extends Form\Control
         ],
         'date' => [
             'type' => 'custom-component',
-            'component' => 'atk-date-picker',
+            'component' => 'AtkDatePicker',
             'inputType' => 'date',
             'operators' => self::DATE_OPERATORS,
             'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
         'datetime' => [
             'type' => 'custom-component',
-            'component' => 'atk-date-picker',
+            'component' => 'AtkDatePicker',
             'inputType' => 'datetime',
             'operators' => self::DATE_OPERATORS,
             'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
         'time' => [
             'type' => 'custom-component',
-            'component' => 'atk-date-picker',
+            'component' => 'AtkDatePicker',
             'inputType' => 'time',
             'operators' => self::DATE_OPERATORS,
             'componentProps' => [__CLASS__, 'getDatePickerProps'],
@@ -280,7 +280,7 @@ class ScopeBuilder extends Form\Control
         $this->scopeBuilderView = View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
 
         if ($this->form) {
-            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
+            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
                 $key = $this->entityField->getFieldName();
                 $postRawData[$key] = static::queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
             });
@@ -339,7 +339,7 @@ class ScopeBuilder extends Form\Control
         } elseif ($field->hasReference()) {
             $type = 'lookup';
         } else {
-            $type = $field->type ?? 'string';
+            $type = $field->type;
         }
 
         $rule = $this->getRule($type, array_merge([
@@ -354,11 +354,11 @@ class ScopeBuilder extends Form\Control
     }
 
     /**
-     * Set property for atk-lookup component.
+     * Set property for AtkLookup component.
      */
     protected function getLookupProps(Field $field): array
     {
-        // set any of sui-dropdown props via this property. Will be applied globally.
+        // set any of SuiDropdown props via this property. Will be applied globally.
         $props = $this->atkLookupOptions;
         $items = $this->getFieldItems($field, 10);
         foreach ($items as $value => $text) {
@@ -377,7 +377,7 @@ class ScopeBuilder extends Form\Control
     }
 
     /**
-     * Set property for atk-date-picker component.
+     * Set property for AtkDatePicker component.
      */
     protected function getDatePickerProps(Field $field): array
     {
@@ -475,7 +475,7 @@ class ScopeBuilder extends Form\Control
             $model->setLimit($limit);
 
             foreach ($model as $item) {
-                $items[$item->get($field->getReference()->getTheirFieldName())] = $item->get($model->titleField);
+                $items[$item->get($field->getReference()->getTheirFieldName($model))] = $item->get($model->titleField);
             }
         }
 
@@ -694,7 +694,7 @@ class ScopeBuilder extends Form\Control
                 $condField = $condition->getModel()->getField($condition->key);
                 $reference = $condField->getReference();
                 $model = $reference->refModel($condField->getOwner());
-                $fieldName = $reference->getTheirFieldName();
+                $fieldName = $reference->getTheirFieldName($model);
                 $entity = $model->tryLoadBy($fieldName, $value);
                 if ($entity !== null) {
                     $option = [

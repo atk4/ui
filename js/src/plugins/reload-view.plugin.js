@@ -1,9 +1,9 @@
-import $ from 'jquery';
-import atkPlugin from './atk.plugin';
-import apiService from '../services/api.service';
+import $ from 'external/jquery';
+import atk from 'atk';
+import AtkPlugin from './atk.plugin';
 
 /**
- * Reload a view using Fomantic-ui API.
+ * Reload a view using Fomantic-UI API.
  * Prefer method is GET.
  *
  * You can include WebStorage value within the request
@@ -12,21 +12,21 @@ import apiService from '../services/api.service';
  * to the urlParameter for GET method but will be included in formData
  * for POST method.
  */
-export default class reloadView extends atkPlugin {
+export default class AtkReloadViewPlugin extends AtkPlugin {
     main() {
-        if (!this.settings.uri) {
-            console.error('Trying to reload view without url.');
+        if (!this.settings.url) {
+            console.error('Trying to reload view without URL');
 
             return;
         }
 
-        const url = $.atk.getUrl(this.settings.uri);
-        const userConfig = this.settings.apiConfig ? this.settings.apiConfig : {};
+        const url = atk.urlHelper.removeAllParams(this.settings.url);
+        const userConfig = this.settings.apiConfig ?? {};
 
         // add new param and remove duplicate, prioritizing the latest one.
-        let urlParam = Object.assign(
-            $.atkGetQueryParam(this.settings.uri),
-            this.settings.uri_options ? this.settings.uri_options : {},
+        let urlParams = Object.assign(
+            atk.urlHelper.parseParams(this.settings.url),
+            this.settings.urlOptions ?? {}
         );
 
         // get store object.
@@ -40,27 +40,37 @@ export default class reloadView extends atkPlugin {
             method: 'GET',
             onComplete: (response, content) => {
                 if (this.settings.afterSuccess) {
-                    apiService.onAfterSuccess(this.settings.afterSuccess);
+                    atk.apiService.onAfterSuccess(this.settings.afterSuccess);
                 }
             },
             ...userConfig,
         };
 
         // if post then we need to set our store into settings data.
-        if (settings.method.toLowerCase() === 'post') {
+        if (settings.method.toUpperCase() === 'POST') {
             settings.data = Object.assign(settings.data, store);
         } else {
-            urlParam = Object.assign(urlParam, store);
+            urlParams = Object.assign(urlParams, store);
         }
 
-        settings.url = url + '?' + $.param(urlParam);
-        this.$el.api(settings);
+        settings.url = url + '?' + $.param(urlParams);
+        // fix https://github.com/fomantic/Fomantic-UI/issues/2581
+        // remove once Fomantic-UI 2.9.1 is released
+        const dataUrlBackup = this.$el.data('url');
+        this.$el.removeData('url');
+        try {
+            this.$el.api(settings);
+        } finally {
+            if (dataUrlBackup) {
+                this.$el.data('url', dataUrlBackup);
+            }
+        }
     }
 }
 
-reloadView.DEFAULTS = {
-    uri: null,
-    uri_options: null,
+AtkReloadViewPlugin.DEFAULTS = {
+    url: null,
+    urlOptions: null,
     afterSuccess: null,
     apiConfig: null,
     storeName: null,

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\JsChain;
+
 /**
- * Class implements Loader, which is a View that will dynamically render it's content.
+ * Dynamically render it's content.
  * To provide content for a loader, use set() callback.
  */
 class Loader extends View
@@ -45,7 +47,7 @@ class Loader extends View
         parent::init();
 
         if (!$this->shim) { // @phpstan-ignore-line
-            $this->shim = [View::class, 'class' => ['padded segment'], 'style' => ['min-height' => '7em']];
+            $this->shim = [View::class, 'class' => ['padded segment'], 'style' => ['min-height' => '5em']];
         }
 
         if (!$this->cb) { // @phpstan-ignore-line
@@ -59,9 +61,9 @@ class Loader extends View
      * The loader view is pass as an argument to the loader callback function.
      * This allow to easily update the loader view content within the callback.
      *  $l1 = Loader::addTo($layout);
-     *  $l1->set(function ($loader_view) {
+     *  $l1->set(function (Loader $p) {
      *    do_long_processing_action();
-     *    $loader_view->set('new content');
+     *    $p->set('new content');
      *  });
      *
      * Or
@@ -108,15 +110,15 @@ class Loader extends View
      *
      * @param string $storeName
      *
-     * @return mixed
+     * @return JsChain
      */
     public function jsLoad(array $args = [], array $apiConfig = [], $storeName = null)
     {
         return $this->js()->atkReloadView([
-            'uri' => $this->cb->getUrl(),
-            'uri_options' => $args,
+            'url' => $this->cb->getUrl(),
+            'urlOptions' => $args,
             'apiConfig' => $apiConfig !== [] ? $apiConfig : null,
-            'storeName' => $storeName ? $storeName : null,
+            'storeName' => $storeName,
         ]);
     }
 }

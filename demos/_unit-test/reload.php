@@ -6,7 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Callback;
-use Atk4\Ui\JsReload;
+use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Loader;
 use Atk4\Ui\View;
 
@@ -23,6 +23,6 @@ $b->on('click', new JsReload($v));
 $cb = Callback::addTo($app);
 $cb->setUrlTrigger('c_reload');
 
-Loader::addTo($app, ['cb' => $cb])->set(function ($page) {
-    $v = View::addTo($page, ['ui' => 'segment'])->set('loaded');
+Loader::addTo($app, ['cb' => $cb])->set(function (Loader $p) {
+    $v = View::addTo($p, ['ui' => 'segment'])->set('loaded');
 });

@@ -27,7 +27,7 @@ class Layout extends AbstractLayout
 
     /**
      * Specify width of a group in numerical word e.g. 'width' => 'two' as per
-     * Semantic UI grid system.
+     * Fomantic-UI grid system.
      *
      * @var string
      */
@@ -111,7 +111,7 @@ class Layout extends AbstractLayout
      * @param mixed $seed
      * @param bool  $addDivider Should we add divider after this section
      *
-     * @return static
+     * @return self
      */
     public function addSubLayout($seed = [self::class], $addDivider = true)
     {
@@ -232,10 +232,12 @@ class Layout extends AbstractLayout
             }
         }
 
-        // Now collect JS from everywhere
-        foreach ($this->elements as $element) {
-            if ($element->_jsActions) { // @phpstan-ignore-line
-                $this->_jsActions = array_merge_recursive($this->_jsActions, $element->_jsActions);
+        // collect JS from everywhere
+        foreach ($this->elements as $view) {
+            foreach ($view->_jsActions as $when => $actions) { // @phpstan-ignore-line
+                foreach ($actions as $action) {
+                    $this->_jsActions[$when][] = $action;
+                }
             }
         }
     }

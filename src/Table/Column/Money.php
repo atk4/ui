@@ -14,7 +14,7 @@ use Atk4\Ui\Table;
  */
 class Money extends Table\Column
 {
-    public $attr = ['all' => ['class' => ['right aligned single line']]];
+    public array $attr = ['all' => ['class' => ['right aligned single line']]];
 
     /** @var bool Should we show zero values in cells? */
     public $showZeroValues = true;
@@ -32,11 +32,7 @@ class Money extends Table\Column
             throw new Exception('Money column requires a field');
         }
 
-        return $this->getTag(
-            'body',
-            '{$' . $field->shortName . '}',
-            $attr
-        );
+        return $this->getTag('body', '{$' . $field->shortName . '}', $attr);
     }
 
     public function getHtmlTags(Model $row, ?Field $field): array

@@ -12,13 +12,15 @@ use Atk4\Ui\Table;
 
 class TableColumnColorRatingTest extends TestCase
 {
-    use Concerns\HandlesTable;
+    use TableTestTrait;
 
     /** @var Table */
     public $table;
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $arr = [
             'table' => [
                 1 => ['id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'rating' => 3],
@@ -53,7 +55,7 @@ class TableColumnColorRatingTest extends TestCase
         );
 
         static::assertSame(
-            '<tr data-id="1"><td>bar</td><td>ref123</td><td style="background-color:#00ff00;">3</td></tr>',
+            '<tr data-id="1"><td>bar</td><td>ref123</td><td style="background-color: #00ff00;">3</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -97,7 +99,7 @@ class TableColumnColorRatingTest extends TestCase
         );
 
         static::assertSame(
-            '<tr data-id="1"><td>bar</td><td>ref123</td><td style="background-color:#ff0000;">3</td></tr>',
+            '<tr data-id="1"><td>bar</td><td>ref123</td><td style="background-color: #ff0000;">3</td></tr>',
             $this->extractTableRow($this->table)
         );
     }

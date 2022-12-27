@@ -9,9 +9,9 @@ use Atk4\Ui\Columns;
 use Atk4\Ui\Dropdown as UiDropdown;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsExpressionable;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Label;
 use Atk4\Ui\Lister;
 use Atk4\Ui\Menu;
@@ -206,12 +206,12 @@ if (!$cart->items) {
     $cartOutterLabel->addStyle('display', 'none');
 }
 
-$cartPopup->set(function ($popup) use ($cart) {
+$cartPopup->set(function (View $popup) use ($cart) {
     $cartInnerLabel = Label::addTo($popup, ['Number of items:']);
 
     // cart is already initialized, so init() is not called again. However, cart will be rendered
     // as a child of a pop-up now.
-    $cart = $popup->add($cart);
+    $popup->add($cart);
 
     $cartInnerLabel->detail = (string) count($cart->items);
     MenuItem::addTo($popup)->setElement('hr');
@@ -247,7 +247,7 @@ $signup = Popup::addTo($app, [$rightMenu, 'position' => 'bottom right'])->setHov
 
 // This popup will be dynamically loaded.
 $signup->stickyGet('logged');
-$signup->set(function ($pop) {
+$signup->set(function (View $pop) {
     // contetn of the popup will be different depending on this condition.
     if (isset($_GET['logged'])) {
         Message::addTo($pop, ['You are already logged in as ' . $_GET['logged']]);

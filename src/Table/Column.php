@@ -6,9 +6,9 @@ namespace Atk4\Ui\Table;
 
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use Atk4\Ui\Jquery;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\JsCallback;
-use Atk4\Ui\JsExpression;
 use Atk4\Ui\Popup;
 use Atk4\Ui\Table;
 
@@ -25,16 +25,14 @@ class Column
     use \Atk4\Core\NameTrait;
     use \Atk4\Core\TrackableTrait;
 
-    /** @const string */
     public const HOOK_GET_HTML_TAGS = self::class . '@getHtmlTags';
-    /** @const string */
     public const HOOK_GET_HEADER_CELL_HTML = self::class . '@getHeaderCellHtml';
 
     /** @var Table Link back to the table, where column is used. */
     public $table;
 
-    /** @var array Contains any custom attributes that may be applied on head, body or foot. */
-    public $attr = [];
+    /** Contains any custom attributes that may be applied on head, body or foot. */
+    public array $attr = [];
 
     /** @var string|null If set, will override column header value. */
     public $caption;
@@ -139,7 +137,7 @@ class Column
 
         $cb = $this->setHeaderDropdown($menuItems, $icon, $menuId);
 
-        $cb->onSelectItem(function ($menu, $item) use ($fx) {
+        $cb->onSelectItem(function (string $menu, string $item) use ($fx) {
             return $fx($item, $menu);
         });
     }
@@ -166,16 +164,16 @@ class Column
 
         $cb = Column\JsHeader::addTo($this->table);
 
-        $function = 'function(value, text, item) {
-                            if (value === undefined || value === \'\' || value === null) return;
-                            $(this)
-                            .api({
-                                on:\'now\',
-                                url:\'' . $cb->getJsUrl() . '\',
-                                data:{item:value, id:$(this).data(\'menu-id\')}
-                                }
-                            );
-                     }';
+        $function = 'function (value, text, item) {
+            if (value === undefined || value === \'\' || value === null) {
+                return;
+            }
+            $(this).api({
+                on: \'now\',
+                url: \'' . $cb->getJsUrl() . '\',
+                data: { item: value, id: $(this).data(\'menu-id\') }
+            });
+         }';
 
         $chain = new Jquery('#' . $id);
         $chain->dropdown([
@@ -185,7 +183,7 @@ class Column
         ]);
 
         // will stop grid column from being sorted.
-        $chain->on('click', new JsExpression('function(e) { e.stopPropagation(); }'));
+        $chain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));
 
         $this->table->js(true, $chain);
 
@@ -250,7 +248,7 @@ class Column
      * @param string|array $value    either html or array defining HTML structure, see App::getTag help
      * @param array        $attr     extra attributes to apply on the tag
      */
-    public function getTag(string $position, $value, $attr = []): string
+    public function getTag(string $position, $value, array $attr = []): string
     {
         $attr = $this->getTagAttributes($position, $attr);
 
@@ -269,7 +267,8 @@ class Column
      */
     public function getHeaderCellHtml(Field $field = null, $value = null): string
     {
-        if ($tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value])) {
+        $tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value]);
+        if ($tags) {
             return reset($tags);
         }
 

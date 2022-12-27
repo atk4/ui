@@ -4,7 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-class JsCallback extends Callback implements JsExpressionable
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
+
+class JsCallback extends Callback
 {
     /** @var array Holds information about arguments passed in to the callback. */
     public $args = [];
@@ -12,10 +17,10 @@ class JsCallback extends Callback implements JsExpressionable
     /** @var string Text to display as a confirmation. Set with setConfirm(..). */
     public $confirm;
 
-    /** @var array|null Use this apiConfig variable to pass API settings to Semantic UI in .api(). */
+    /** @var array|null Use this apiConfig variable to pass API settings to Fomantic-UI in .api(). */
     public $apiConfig;
 
-    /** @var string|null Include web storage data item (key) value to be include in the request. */
+    /** @var string|null Include web storage data item (key) value to be included in the request. */
     public $storeName;
 
     /**
@@ -33,12 +38,12 @@ class JsCallback extends Callback implements JsExpressionable
      * have some degree of nesting, convert it into a one-dimensional array,
      * so that it's easier for us to wrap it into a function body.
      */
-    public function flatternArray(array $response): array
+    protected function flattenArray(array $response): array
     {
         $res = [];
         foreach ($response as $element) {
             if (is_array($element)) {
-                $res = array_merge($res, $this->flatternArray($element));
+                $res = array_merge($res, $this->flattenArray($element));
             } else {
                 $res[] = $element;
             }
@@ -47,17 +52,17 @@ class JsCallback extends Callback implements JsExpressionable
         return $res;
     }
 
-    public function jsRender(): string
+    public function jsExecute(): JsExpression
     {
         $this->getApp(); // assert has App
 
-        return (new Jquery())->atkAjaxec([
-            'uri' => $this->getJsUrl(),
-            'uri_options' => $this->args,
+        return (new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkAjaxec([
+            'url' => $this->getJsUrl(),
+            'urlOptions' => $this->args,
             'confirm' => $this->confirm,
             'apiConfig' => $this->apiConfig,
             'storeName' => $this->storeName,
-        ])->jsRender();
+        ]);
     }
 
     /**
@@ -74,14 +79,14 @@ class JsCallback extends Callback implements JsExpressionable
     {
         $this->args = [];
         foreach ($args ?? [] as $key => $val) {
-            if (is_numeric($key)) {
+            if (is_int($key)) {
                 $key = 'c' . $key;
             }
             $this->args[$key] = $val;
         }
 
         parent::set(function () use ($fx) {
-            $chain = new Jquery(new JsExpression('this'));
+            $chain = new Jquery();
 
             $values = [];
             foreach ($this->args as $key => $value) {
@@ -89,6 +94,13 @@ class JsCallback extends Callback implements JsExpressionable
             }
 
             $response = $fx($chain, ...$values);
+
+            if (count($chain->_chain) === 0) {
+                // TODO should we create/pass $chain to $fx at all?
+                $chain = null;
+            } elseif ($response) {
+                // TODO throw when non-empty chain is to be ignored?
+            }
 
             $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
 
@@ -103,13 +115,19 @@ class JsCallback extends Callback implements JsExpressionable
      * which is returned to frontend.
      *
      * @param string|null $ajaxec
-     * @param string      $msg     General message, typically won't be displayed
-     * @param bool        $success Was request successful or not
+     * @param ($success is true ? null : string)      $msg     General message, typically won't be displayed
+     * @param bool $success Was request successful or not
      */
     public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
     {
+        $data = ['success' => $success];
+        if (!$success) {
+            $data['message'] = $msg;
+        }
+        $data['atkjs'] = $ajaxec;
+
         if ($this->canTerminate()) {
-            $this->getApp()->terminateJson(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
+            $this->getApp()->terminateJson($data);
         }
     }
 
@@ -123,12 +141,12 @@ class JsCallback extends Callback implements JsExpressionable
     {
         $actions = [];
 
-        if ($chain && $chain->_chain) {
+        if ($chain !== null) {
             $actions[] = $chain;
         }
 
         if (is_array($response)) {
-            $response = $this->flatternArray($response);
+            $response = $this->flattenArray($response);
             foreach ($response as $r) {
                 if ($r === null) {
                     continue;
@@ -180,6 +198,6 @@ class JsCallback extends Callback implements JsExpressionable
             $html = $modal->getHtml();
         }
 
-        return new JsExpression('$([html]).modal("show").data("needRemove", true).addClass("atk-callback-response")', ['html' => $html]);
+        return new JsExpression('$([html]).modal(\'show\').data(\'needRemove\', true).addClass(\'atk-callback-response\')', ['html' => $html]);
     }
 }

@@ -7,7 +7,7 @@ namespace Atk4\Ui\UserAction;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
 use Atk4\Ui\Panel\Right;
 use Atk4\Ui\View;
@@ -17,10 +17,10 @@ use Atk4\Ui\View;
  */
 class PanelExecutor extends Right implements JsExecutorInterface
 {
+    use CommonExecutorTrait;
     use HookTrait;
     use StepExecutorTrait;
 
-    /** @const string */
     public const HOOK_STEP = self::class . '@onStep';
 
     /** @var array No need for dynamic content. It is manage with step loader. */
@@ -75,7 +75,8 @@ class PanelExecutor extends Right implements JsExecutorInterface
         $this->afterActionInit($action);
 
         // get necessary step need prior to execute action.
-        if ($this->steps = $this->getSteps($action)) {
+        $this->steps = $this->getSteps($action);
+        if ($this->steps) {
             $this->header->set($this->title ?? $action->getDescription());
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
             $this->add($this->createButtonBar($this->action)->addStyle(['text-align' => 'end']));
@@ -99,18 +100,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
      */
     public function executeModelAction(): void
     {
-        $id = $this->stickyGet($this->name);
-        if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->load($id));
-        } elseif (!$this->action->isOwnerEntity()
-            && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)
-        ) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
-        }
-
-        if ($this->action->fields === true) {
-            $this->action->fields = array_keys($this->action->getModel()->getFields('editable'));
-        }
+        $this->action = $this->executeModelActionLoad($this->action);
 
         $this->jsSetBtnState($this->loader, $this->step);
         $this->jsSetListState($this->loader, $this->step);
@@ -133,7 +123,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
         $view->js(true, $this->stepList->js()->find('.item')->removeClass('active'));
         foreach ($this->steps as $step) {
             if ($step === $currentStep) {
-                $view->js(true, $this->stepList->js()->find("[data-list-item='{$step}']")->addClass('active'));
+                $view->js(true, $this->stepList->js()->find('[data-list-item="' . $step . '"]')->addClass('active'));
             }
         }
     }

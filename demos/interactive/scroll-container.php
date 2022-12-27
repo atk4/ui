@@ -25,7 +25,9 @@ $view = View::addTo($app)->addClass('ui basic segment atk-scroller');
 
 $scrollContainer = View::addTo($view)->addClass('ui segment')->addStyle(['max-height' => '400px', 'overflow-y' => 'scroll']);
 
-$listerTemplate = '<div id="{$_id}">{List}<div id="{$_id}" class="ui segment" style="height: 60px"><i class="{iso}ae{/} flag"></i> {name}andorra{/}</div>{/}{$Content}</div>';
+$listerTemplate = '<div id="{$_id}">{List}<div id="{$_id}" class="ui segment" style="height: 60px;"><i class="{$'
+    . Country::hinting()->fieldName()->iso . '} flag"></i> {$'
+    . Country::hinting()->fieldName()->name . '}</div>{/}{$Content}</div>';
 
 $listerContainer = View::addTo($scrollContainer, ['template' => new HtmlTemplate($listerTemplate)]);
 
@@ -36,5 +38,4 @@ $lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
 });
 $lister->setModel(new Country($app->db));
 
-// add dynamic scrolling.
 $lister->addJsPaginator(20, ['stateContext' => '.atk-scroller'], $scrollContainer);

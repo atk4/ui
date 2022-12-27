@@ -1,52 +1,42 @@
-import $ from 'jquery';
+import $ from 'external/jquery';
+import atk from 'atk';
 
 /**
- * Singleton class
- * Handle Semantic-ui form functionality throughout the app.
+ * Handle Fomantic-UI form functionality throughout the app.
  */
-
 class FormService {
-    static getInstance() {
-        return this.instance;
-    }
-
     constructor() {
-        if (!this.instance) {
-            this.instance = this;
-            this.formSettings = $.fn.form.settings;
-            // A collection of jQuery form object where preventLeave is set.
-            this.prevents = [];
-            window.onbeforeunload = function (event) {
-                atk.formService.prevents.forEach((el) => {
-                    if (el.data('__atkCheckDirty') && el.data('isDirty')) {
-                        const message = 'unsaved';
-                        if (event) {
-                            event.returnValue = message;
-                        }
+        this.formSettings = $.fn.form.settings;
+        // collection of jQuery form object where preventLeave is set
+        this.prevents = [];
+        window.addEventListener('beforeunload', (event) => {
+            for (const $el of atk.formService.prevents) {
+                if ($el.data('__atkCheckDirty') && $el.data('isDirty')) {
+                    event.returnValue = 'unsaved';
 
-                        return message;
-                    }
-                });
-            };
-        }
-
-        return this.instance;
+                    break;
+                }
+            }
+        });
     }
 
-    /**
-     * Setup semantic-ui form callback with this service.
-     * @param settings
-     */
-    setService(settings) {
-        settings.rules.isVisible = this.isVisible;
-        settings.rules.notEmpty = settings.rules.empty;
-        settings.rules.isEqual = this.isEqual;
-        settings.onSuccess = this.onSuccess;
+    getDefaultFomanticSettings() {
+        return [
+            {
+                rules: $.extend(true, {}, $.fn.form.settings.rules, {
+                    rules: {
+                        notEmpty: $.fn.form.settings.rules.empty,
+                        isVisible: this.isVisible,
+                        isEqual: this.isEqual,
+                    },
+                }),
+            },
+            {
+                onSuccess: this.onSuccess,
+            },
+        ];
     }
 
-    /**
-     * Form onSuccess handler when submit.
-     */
     onSuccess() {
         atk.formService.clearDirtyForm($(this).attr('id'));
 
@@ -56,8 +46,6 @@ class FormService {
     /**
      * Set form in order to detect
      * input changed before leaving page.
-     *
-     * @param id
      */
     preventFormLeave(id) {
         const $form = $('#' + id);
@@ -71,36 +59,32 @@ class FormService {
     /**
      * Clear Form from being dirty.
      * Use this function if you define your own onSuccess handler.
-     *
-     * @param id
      */
     clearDirtyForm(id) {
         const forms = this.prevents.filter(($form) => $form.attr('id') === id);
-        forms.forEach(($form) => {
+        for (const $form of forms) {
             $form.data('isDirty', false);
-        });
+        }
     }
 
     /**
-     * Visibility rule.
-     *
-     * @returns {boolean | jQuery}
+     * @returns {boolean}
      */
     isVisible() {
         return $(this).is(':visible');
     }
 
     isEqual(value, compare) {
-        return parseInt(value, 10) === parseInt(compare, 10);
+        return Number.parseInt(value, 10) === Number.parseInt(compare, 10);
     }
 
     /**
-     * Validate a field using our own or semantic-ui validation rule function.
+     * Validate a field using our own or Fomantic-UI validation rule function.
      *
-     * @param form  Form containing the field.
-     * @param fieldName Name of field
-     * @param rule  Rule to apply test.
-     * @returns {*|boolean}
+     * @param   {$}             form      Form containing the field.
+     * @param   {string}        fieldName Name of field
+     * @param   {string|object} rule      Rule to apply test.
+     * @returns {*|false}
      */
     validateField(form, fieldName, rule) {
         rule = this.normalizeRule(rule);
@@ -108,7 +92,7 @@ class FormService {
         if (ruleFunction) {
             const $field = this.getField(form, fieldName);
             if (!$field) {
-                console.error('You are validating a field that does not exist: ', fieldName);
+                console.error('You are validating a field that does not exist: ' + fieldName);
 
                 return false;
             }
@@ -117,7 +101,7 @@ class FormService {
 
             return ruleFunction.call($field, value, ancillary);
         }
-        console.error('this rule does not exist: ' + this.getRuleName(rule));
+        console.error('Rule does not exist: ' + this.getRuleName(rule));
 
         return false;
     }
@@ -161,13 +145,9 @@ class FormService {
     }
 
     getFieldValue($field) {
-        let value;
-        if ($field.length > 1) {
-            // radio button.
-            value = $field.filter(':checked').val();
-        } else {
-            value = $field.val();
-        }
+        const value = $field.length > 1
+            ? $field.filter(':checked').val() // radio button
+            : $field.val();
 
         return value;
     }
@@ -177,12 +157,12 @@ class FormService {
     }
 
     getAncillaryValue(rule) {
-    // must have a rule.value property and must be a bracketed rule.
+        // must have a rule.value property and must be a bracketed rule.
         if (!rule.value && !this.isBracketedRule(rule)) {
             return false;
         }
 
-        return (rule.value === undefined || rule.value === null)
+        return rule.value === undefined || rule.value === null
             ? rule.type.match(this.formSettings.regExp.bracket)[1] + ''
             : rule.value;
     }
@@ -196,11 +176,8 @@ class FormService {
     }
 
     isBracketedRule(rule) {
-        return (rule.type && rule.type.match(this.formSettings.regExp.bracket));
+        return rule.type && rule.type.match(this.formSettings.regExp.bracket);
     }
 }
 
-const formService = new FormService();
-Object.freeze(formService);
-
-export default formService;
+export default Object.freeze(new FormService());

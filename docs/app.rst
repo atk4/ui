@@ -207,7 +207,6 @@ Utilities by App
 App provides various utilities that are used by other components.
 
 .. php:method:: getTag()
-.. php:method:: encodeHtmlAttribute()
 .. php:method:: encodeHtml()
 
 Apart from basic utility, App class provides several mechanisms that are helpful for components.
@@ -425,7 +424,7 @@ Populating the left menu object is simply a matter of adding the right menu item
 This is the top menu of the admin layout. You can add other item to the top menu using::
 
     Button::addTo($layout->menu->addItem(), ['View Source', 'class.teal' => true, 'icon' => 'github'])
-        ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\JsExpression('document.location = [];', [$url . $f]));
+        ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\Js\JsExpression('document.location = [];', [$url . $f]));
 
 .. php:attr:: menuRight
 
@@ -453,7 +452,7 @@ You should be able to find 3rd party Layout implementations that may even be com
 some custom templates and views. The concept of a "Theme" in Agile UI consists of
 offering of the following 3 things:
 
- - custom CSS build from Fomantic UI
+ - custom CSS build from Fomantic-UI
  - custom Layout(s) along with documentation
  - additional or tweaked Views
 

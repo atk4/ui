@@ -8,7 +8,7 @@ use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Form;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -19,8 +19,8 @@ View::addTo($app, [
     'ui' => 'ignored warning message',
 ]);
 
-$formSubmit = function ($f) use ($app) {
-    return new JsToast($app->encodeJson($f->model->get()));
+$formSubmit = function (Form $form) use ($app) {
+    return new JsToast($app->encodeJson($form->model->get()));
 };
 
 $cc = Columns::addTo($app);
@@ -58,10 +58,11 @@ $model->addField('three', ['ui' => ['form' => ['caption' => 'Caption']]]);
 $model->addField('four', ['type' => 'boolean', 'ui' => ['form' => ['caption' => 'Caption2']]]);
 
 // Can specify class for a checkbox explicitly
-$model->addField('five', ['ui' => ['form' => [Form\Control\Checkbox::class, 'caption' => 'Caption3']]]);
+// type here in "six" should not be needed if we add Checkbox form control support for string type
+$model->addField('five', ['type' => 'boolean', 'ui' => ['form' => [Form\Control\Checkbox::class, 'caption' => 'Caption3']]]);
 
 // Form-specific caption overrides general caption of a field. Also you can specify object instead of seed
-$model->addField('six', ['caption' => 'badcaption', 'ui' => ['form' => new Form\Control\Checkbox(['caption' => 'Caption4'])]]);
+$model->addField('six', ['type' => 'boolean', 'caption' => 'badcaption', 'ui' => ['form' => new Form\Control\Checkbox(['caption' => 'Caption4'])]]);
 
 $model = $model->createEntity();
 

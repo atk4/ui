@@ -74,10 +74,7 @@ events can be triggered by the user or by other JavaScript code. There are sever
 
 To execute actions instantly on page load, use `true` as first argument to :php:meth:`View::js()`::
 
-    $view->js(
-        true,
-        new JsExpression('alert([])', ['Hello world'])
-    );
+    $view->js(true, new JsExpression('alert([])', ['Hello world']));
 
 You can also combine both forms::
 
@@ -107,7 +104,7 @@ Agile UI builds upon the concepts of actions and events in the following ways:
 
  - Action can be any arbitrary JavaScript with parameters:
 
-   - parameters are always escaped with json_encode,
+   - parameters are always encoded/escaped,
    - action can contain nested actions,
    - you can build your own integration patterns.
 
@@ -143,10 +140,10 @@ Building actions with JsExpressionable
 
     Express object as a string containing valid JavaScript statement or expression.
 
-:php:class:`View` class implements JsExpressionable and will present itself as a valid selector. Example::
+:php:class:`View` class is supported as JsExpression argument natively and will present
+itself as a valid selector. Example::
 
     $frame = new View();
-
     $button->js(true)->appendTo($frame);
 
 The resulting Javascript will be:
@@ -192,20 +189,20 @@ will output:
     It's considered very bad practice to use jsRender to output JavaScript manually. Agile UI takes care of
     JavaScript binding and also decides which actions should be available while creating actions for your chain.
 
-.. php:method:: _jsonEncode
+.. php:method:: _jsEncode
 
-    JsChain will map all the other methods into JS counterparts while encoding all the arguments using `_jsonEncode()`.
-    Although similar to the standard `json_encode()` function, this method recognizes :php:interface:`JsExpressionable`
-    objects and will substitute them with the result of :php:meth:`JsExpressionable::jsRender`. The result will
-    not be escaped and any object implementing :php:interface:`JsExpressionable` interface is responsible
-    for safe JavaScript generation.
+    JsChain will map all the other methods into JS counterparts while encoding all the arguments using `_jsEncode()`.
+    Although similar to the standard JSON encode function, this method quotes strings using single quotes
+    and recognizes :php:interface:`JsExpressionable` objects and will substitute them with the result of
+    :php:meth:`JsExpressionable::jsRender`. The result will not be escaped and any object implementing
+    :php:interface:`JsExpressionable` interface is responsible for safe JavaScript generation.
 
 The following code is safe::
 
     $b = new Button();
     $b->js(true)->text($_GET['button_text']);
 
-Any malicious input through the GET arguments will be wrapped through `json_encode` before being included as an
+Any malicious input through the GET arguments will be encoded as JS string before being included as an
 argument to `text()`.
 
 View to JS integration
@@ -218,7 +215,7 @@ between actual views. All views support JavaScript binding through two methods: 
 .. php:method:: js([$event, [$other_action]])
 
     Return action chain that targets this view. As event you can specify `true` which will make chain automatically execute
-    on document ready event. You can specify a specific JavaScript event such as `"click"` or `"mousein"`. You can also use your
+    on document ready event. You can specify a specific JavaScript event such as `click` or `mousein`. You can also use your
     custom event that you would trigger manually. If `$event` is false or null, no event binding will be performed.
 
     If `$other_chain` is specified together with event, it will also be bound to said event. `$other_chain` can also be
@@ -248,9 +245,9 @@ The following code will show three buttons and clicking any one will hide it. On
     $buttons->on('click', '.button')->hide();
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function(event) {
-    //   event.stopPropagation();
+    // $('#top-element-id').on('click', '.button', function (event) {
     //   event.preventDefault();
+    //   event.stopPropagation();
     //   $(this).hide();
     // });
 
@@ -268,10 +265,10 @@ You can use both actions together. The next example will allow only one button t
     $buttons->on('click', '.button', $b3->js()->hide());
 
     // Generates:
-    // $('#top-element-id').on('click', '.button', function(event) {
-    //   event.stopPropagation();
-    //   event.preventDefault();
-    //   $('#b3-element-id').hide();
+    // $('#top-element-id').on('click', '.button', function (event) {
+    //     event.preventDefault();
+    //     event.stopPropagation();
+    //     $('#b3-element-id').hide();
     // });
 
 
@@ -341,7 +338,7 @@ The template language for JsExpression is super-simple:
 So the following lines are identical::
 
     $sum = new JsExpression('[] + []', [$h1, $h2]);
-    $sum = new JsExpression('[0] + [1]', [0 => $h1, 1 => $h2]);
+    $sum = new JsExpression('[0] + [1]', [$h1, $h2]);
     $sum = new JsExpression('[a] + [b]', ['a' => $h1, 'b' => $h2]);
 
 .. important::
@@ -362,7 +359,7 @@ Create a file `test.js` containing:
 .. code-block:: js
 
     function mySum(arr) {
-        return arr.reduce(function(a, b) {
+        return arr.reduce(function (a, b) {
             return a + b;
         }, 0);
     }
@@ -408,37 +405,36 @@ Modal
 .. php:class:: Modal
 
 .. php:method:: set(callback)
-.. php:method:: show()
-.. php:method:: hide()
+.. php:method:: jsShow()
+.. php:method:: jsHide()
 .. php:method:: addContentCss()
 .. php:method:: addScrolling()
 .. php:method:: setOption()
-.. php:method:: setOptions()
 
-This class allows you to open modal dialogs and close them easily. It's based around Fomantic UI
+This class allows you to open modal dialogs and close them easily. It's based around Fomantic-UI
 `.modal(), <https://fomantic-ui.com/modules/modal.html>`_ but integrates PHP callback for dynamically
 producing content of your dialog::
 
     $modal = \Atk4\Ui\Modal::addTo($app, ['Modal Title']);
-    $modal->set(function ($p) use ($modal) {
+    $modal->set(function (View $p) use ($modal) {
         \Atk4\Ui\LoremIpsum::addTo($p);
-        \Atk4\Ui\Button::addTo($p, ['Hide'])->on('click', $modal->hide());
+        \Atk4\Ui\Button::addTo($p, ['Hide'])->on('click', $modal->jsHide());
     });
 
-    \Atk4\Ui\Button::addTo($app, ['Show'])->on('click', $modal->show());
+    \Atk4\Ui\Button::addTo($app, ['Show'])->on('click', $modal->jsShow());
 
 Modal will render as a HTML `<div>` block but will be hidden. Alternatively you can use Modal without loadable content::
 
     $modal = \Atk4\Ui\Modal::addTo($app, ['Modal Title']);
     \Atk4\Ui\LoremIpsum::addTo($modal);
-    \Atk4\Ui\Button::addTo($modal, ['Hide'])->on('click', $modal->hide());
+    \Atk4\Ui\Button::addTo($modal, ['Hide'])->on('click', $modal->jsHide());
 
-    \Atk4\Ui\Button::addTo($app, ['Show'])->on('click', $modal->show());
+    \Atk4\Ui\Button::addTo($app, ['Show'])->on('click', $modal->jsShow());
 
 The second way is more convenient for creating static content, such as Terms of Service.
 
 You can customize the CSS classes of both header and content section of the modal using the properties `headerCss`
-or `contentCss` or use the method `addContentCss()`. See the Fomantic UI modal documentation for further information.
+or `contentCss` or use the method `addContentCss()`. See the Fomantic-UI modal documentation for further information.
 
 JsModal
 -------
@@ -454,7 +450,7 @@ To accomplish that, use a :ref:`virtualpage`::
     \Atk4\Ui\LoremIpsum::addTo($vp, ['size' => 2]);
 
     \Atk4\Ui\Button::addTo($app, ['Dynamic Modal'])
-        ->on('click', new \Atk4\Ui\JsModal('My Popup Title', $vp->getUrl('cut')));
+        ->on('click', new \Atk4\Ui\Js\JsModal('My Popup Title', $vp->getUrl('cut')));
 
 Note that this element is always destroyed as opposed to :php:class:`Modal`,
 where it is only hidden.
@@ -462,58 +458,6 @@ where it is only hidden.
 .. important::
 
     See `Modals and reloading`_ concerning the intricacies between jsMmodals and callbacks.
-
-JsNotify
-========
-
-.. php:class:: JsNotify
-.. php:method:: setColor(color)
-
-Dynamic notifier used to display operation status::
-
-    \Atk4\Ui\Button::addTo($app, ['Test'])->on(
-        'click',
-        (new \Atk4\Ui\JsNotify('Not yet implemented'))->setColor('red')
-    );
-
-A typical use case would be to provide visual feedback of an action after used performs operation inside
-a Modal window with a Form. When user submits a form, its Submit handler will close modal in order to leave
-some feedback to the user. JsNotify can display a bar on top of the screen for some time::
-
-    $modal = \Atk4\Ui\Modal::addTo($app, ['Modal Title']);
-
-    $modal->set(function ($p) use ($modal) {
-        $form = \Atk4\Ui\Form::addTo($p);
-        $form->addControl('name', [], ['caption' => 'Add your name']);
-
-        $form->onSubmit(function (Form $form) use ($modal) {
-            if (empty($form->model->get('name'))) {
-                return $form->error('name', 'Please add a name!');
-            } else {
-                return [
-                    $modal->hide(),
-                    new \Atk4\Ui\JsNotify('Thank you ' . $form->model->get('name')),
-                ];
-            }
-        });
-    });
-
-    \Atk4\Ui\Button::addTo($app, ['Open Modal'])->on('click', $modal->show());
-
-.. php:method:: setIcon(color)
-.. php:method:: setTransition(openTransition, closeTransition)
-.. php:method:: setDuration(duration)
-.. php:method:: setPosition(duration)
-.. php:method:: setWidth(duration)
-.. php:method:: setOpacity(duration)
-
-You can pass options either as array or by calling methods.
-
-.. php:method:: attachTo(view)
-
-Finally you can attach your notification to another view::
-
-    $jsNotify->attachTo($form);
 
 
 Reloading
@@ -538,7 +482,7 @@ other view::
     $form->onSubmit(function (Form $form) use ($table) {
         $form->model->save();
 
-        return new \Atk4\Ui\JsReload($table);
+        return new \Atk4\Ui\Js\JsReload($table);
     });
 
     $t->setModel($m_book);
@@ -563,8 +507,8 @@ needed:
 
 The following will **not** work::
 
-    $app = new myApp;
-    $model = new myModel;
+    $app = new MyApp();
+    $model = new MyModel();
 
     // JsModal requires its contents to be put into a Virtual Page
     $vp = \Atk4\Ui\VirtualPage::addTo($app);
@@ -575,7 +519,7 @@ The following will **not** work::
     $table->setModel(clone $model));
 
     $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
-    $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
+    $button->on('click', new \Atk4\Ui\Js\JsModal('JSModal Title', $vp));
 
     $form->onSubmit(function (Form $form) use ($table) {
         $form->model->save();
@@ -588,8 +532,8 @@ The following will **not** work::
 
 Table needs to be first! The following works::
 
-    $app = new myApp;
-    $model = new myModel;
+    $app = new MyApp();
+    $model = new MyModel();
 
     // This needs to be first
     $table = \Atk4\Ui\Table::addTo($app);
@@ -600,7 +544,7 @@ Table needs to be first! The following works::
     $form->setModel(clone $model);
 
     $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
-    $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
+    $button->on('click', new \Atk4\Ui\Js\JsModal('JSModal Title', $vp));
 
     $form->onSubmit(function (Form $form) use ($table) {
         $form->model->save();
@@ -620,7 +564,7 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
     $table->setModel($model);
 
     $vp = \Atk4\Ui\VirtualPage::addTo($app);
-    $vp->set(function ($p) use ($table, $model) {
+    $vp->set(function (\Atk4\Ui\VirtualPage $p) use ($table, $model) {
         $form = \Atk4\Ui\Form::addTo($p);
         $form->setModel(clone $model);
         $form->onSubmit(function (Form $form) use ($table) {
@@ -634,7 +578,7 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
     });
 
     $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
-    $button->on('click', new \Atk4\Ui\JsModal('JSModal Title', $vp));
+    $button->on('click', new \Atk4\Ui\Js\JsModal('JSModal Title', $vp));
 
 Note that in no case you will be able to render the button *above* the table (because the button needs a
 reference to `$vp` which references `$table` for reload), so `$button` must be last.
@@ -677,7 +621,7 @@ This class implements ability for your PHP code to send messages to the browser 
 
     $button = \Atk4\Ui\Button::addTo($app, ['Process Image']);
 
-    $sse = \Atk4\Ui\JsSse::addTo($app);
+    $sse = \Atk4\Ui\JsSse::addTo($button);
 
     $button->on('click', $sse->set(function () use ($sse, $button, $image) {
         $sse->send($button->js()->text('Processing'));

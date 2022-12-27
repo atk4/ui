@@ -24,6 +24,5 @@ $table = Table::addTo($app);
 
 $model = new Country($app->db);
 $table->setModel($model);
-// $model->addCondition(Country::hinting()->fieldName()->name, 'like', 'A%');
 
 $table->addJsPaginator(30);

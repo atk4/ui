@@ -8,9 +8,9 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsModal;
-use Atk4\Ui\JsReload;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsModal;
+use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Table;
 use Atk4\Ui\VirtualPage;
 
@@ -41,7 +41,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
         $makeJsReloadFx = function (array $path): JsReload {
             return new JsReload($this, [$this->name => new JsExpression('[] + []', [
                 count($path) > 0 ? implode(',', $path) . ',' : '',
-                new JsExpression('$(this).data("id")'),
+                new JsExpression('$(this).data(\'id\')'),
             ])]);
         };
 

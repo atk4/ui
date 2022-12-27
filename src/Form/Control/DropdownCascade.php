@@ -6,6 +6,7 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Form;
+use Atk4\Ui\Js\Jquery;
 
 /**
  * Dropdown form control that will based it's list value
@@ -39,7 +40,7 @@ class DropdownCascade extends Dropdown
 
         // js to execute for the onChange handler of the parent dropdown.
         $expr = [
-            function ($t) use ($cascadeFromValue) {
+            function (Jquery $j) use ($cascadeFromValue) {
                 return [
                     $this->js()->dropdown('change values', $this->getNewValues($cascadeFromValue)),
                     $this->js()->removeClass('loading'),
@@ -84,7 +85,7 @@ class DropdownCascade extends Dropdown
         foreach ($model as $k => $row) {
             if ($this->renderRowFunction) {
                 $res = ($this->renderRowFunction)($row, $k);
-                $values[] = ['value' => $res['value'], 'text' => $row->get('name'), 'name' => $res['title']];
+                $values[] = ['value' => $res['value'], 'text' => $res['title'], 'name' => $res['title']];
             } else {
                 $values[] = ['value' => $row->getId(), 'text' => $row->get($model->titleField), 'name' => $row->get($model->titleField)];
             }

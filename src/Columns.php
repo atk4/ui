@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-use Atk4\Core\Factory;
-
 /**
  * Vertically distributed columns based on CSS Grid system.
  */
@@ -15,7 +13,7 @@ class Columns extends View
 
     /**
      * Explicitly specify the width of all columns. Normally that's 16, but
-     * semantic-ui allows you to override with 5 => "ui five column grid".
+     * Fomantic-UI allows you to override with 5 => "ui five column grid".
      *
      * @var int|null
      */
@@ -37,7 +35,7 @@ class Columns extends View
      *
      * @return View
      */
-    public function addColumn($defaults = null)
+    public function addColumn($defaults = [])
     {
         if (!is_array($defaults)) {
             $defaults = [$defaults];
@@ -46,8 +44,7 @@ class Columns extends View
         $size = $defaults[0] ?? null;
         unset($defaults[0]);
 
-        $column = Factory::factory([View::class], $defaults);
-        $this->add($column);
+        $column = View::addTo($this, $defaults);
 
         if ($size && isset($this->sizes[$size])) {
             $column->addClass($this->sizes[$size] . ' wide');

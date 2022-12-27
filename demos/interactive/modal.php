@@ -9,7 +9,7 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Menu;
 use Atk4\Ui\Message;
@@ -31,22 +31,22 @@ $bar = View::addTo($app, ['ui' => 'buttons']);
 
 $modal = Modal::addTo($app, ['title' => 'Add a name']);
 LoremIpsum::addTo($modal);
-Button::addTo($modal, ['Hide'])->on('click', $modal->hide());
+Button::addTo($modal, ['Hide'])->on('click', $modal->jsHide());
 
-$noTitle = Modal::addTo($app, ['title' => false]);
-LoremIpsum::addTo($noTitle);
-Button::addTo($noTitle, ['Hide'])->on('click', $noTitle->hide());
+$modalNoTitle = Modal::addTo($app, ['title' => false]);
+LoremIpsum::addTo($modalNoTitle);
+Button::addTo($modalNoTitle, ['Hide'])->on('click', $modalNoTitle->jsHide());
 
-$scrolling = Modal::addTo($app, ['title' => 'Long Content that Scrolls inside Modal']);
-$scrolling->addScrolling();
-LoremIpsum::addTo($scrolling);
-LoremIpsum::addTo($scrolling);
-LoremIpsum::addTo($scrolling);
-Button::addTo($scrolling, ['Hide'])->on('click', $scrolling->hide());
+$modalScrolling = Modal::addTo($app, ['title' => 'Long Content that Scrolls inside Modal']);
+$modalScrolling->addScrolling();
+LoremIpsum::addTo($modalScrolling);
+LoremIpsum::addTo($modalScrolling);
+LoremIpsum::addTo($modalScrolling);
+Button::addTo($modalScrolling, ['Hide'])->on('click', $modalScrolling->jsHide());
 
-Button::addTo($bar, ['Show'])->on('click', $modal->show());
-Button::addTo($bar, ['No Title'])->on('click', $noTitle->show());
-Button::addTo($bar, ['Scrolling Content'])->on('click', $scrolling->show());
+Button::addTo($bar, ['Show'])->on('click', $modal->jsShow());
+Button::addTo($bar, ['No Title'])->on('click', $modalNoTitle->jsShow());
+Button::addTo($bar, ['Scrolling Content'])->on('click', $modalScrolling->jsShow());
 
 // Modal demos.
 
@@ -58,46 +58,46 @@ ViewTester::addTo($simpleModal);
 
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($menuBar)->set('Show Modal');
-$button->on('click', $simpleModal->show());
+$button->on('click', $simpleModal->jsShow());
 
 // DYNAMIC
 
 Header::addTo($app, ['Three levels of Modal loading dynamic content via callback']);
 
-// vp1Modal will be render into page but hide until $vp1Modal->show() is activate.
+// vp1Modal will be render into page but hide until $vp1Modal->jsShow() is activate.
 $vp1Modal = Modal::addTo($app, ['title' => 'Lorem Ipsum load dynamically']);
 
-// vp2Modal will be render into page but hide until $vp1Modal->show() is activate.
+// vp2Modal will be render into page but hide until $vp1Modal->jsShow() is activate.
 $vp2Modal = Modal::addTo($app, ['title' => 'Text message load dynamically'])->addClass('small');
 
 $vp3Modal = Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
-$vp3Modal->set(function ($modal) {
-    Text::addTo($modal)->set('This is yet another modal');
-    LoremIpsum::addTo($modal, ['size' => 2]);
+$vp3Modal->set(function (View $p) {
+    Text::addTo($p)->set('This is yet another modal');
+    LoremIpsum::addTo($p, ['size' => 2]);
 });
 
-// When $vp1Modal->show() is activate, it will dynamically add this content to it.
-$vp1Modal->set(function ($modal) use ($vp2Modal) {
-    ViewTester::addTo($modal);
-    View::addTo($modal, ['Showing lorem ipsum']); // need in behat test.
-    LoremIpsum::addTo($modal, ['size' => 2]);
-    $form = Form::addTo($modal);
+// When $vp1Modal->jsShow() is activate, it will dynamically add this content to it.
+$vp1Modal->set(function (View $p) use ($vp2Modal) {
+    ViewTester::addTo($p);
+    View::addTo($p, ['Showing lorem ipsum']); // need in behat test.
+    LoremIpsum::addTo($p, ['size' => 2]);
+    $form = Form::addTo($p);
     $form->addControl('color', [], ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
     $form->onSubmit(function (Form $form) use ($vp2Modal) {
-        return $vp2Modal->show(['color' => $form->model->get('color')]);
+        return $vp2Modal->jsShow(['color' => $form->model->get('color')]);
     });
 });
 
-// When $vp2Modal->show() is activate, it will dynamically add this content to it.
-$vp2Modal->set(function ($modal) use ($vp3Modal) {
-    ViewTester::addTo($modal);
-    Message::addTo($modal, ['Message', $_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
-    Button::addTo($modal)->set('Third modal')->on('click', $vp3Modal->show());
+// When $vp2Modal->jsShow() is activate, it will dynamically add this content to it.
+$vp2Modal->set(function (View $p) use ($vp3Modal) {
+    ViewTester::addTo($p);
+    Message::addTo($p, [$_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
+    Button::addTo($p)->set('Third modal')->on('click', $vp3Modal->jsShow());
 });
 
 $bar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($bar)->set('Open Lorem Ipsum');
-$button->on('click', $vp1Modal->show());
+$button->on('click', $vp1Modal->jsShow());
 
 // ANIMATION
 
@@ -117,7 +117,7 @@ Header::addTo($app, ['Modal Animation']);
 
 $transitionModal = Modal::addTo($app, ['title' => 'Animated modal']);
 Message::addTo($transitionModal)->set('A lot of animated transition available');
-$transitionModal->duration(1000);
+$transitionModal->setOption('duration', 1000);
 
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
 $main = Menu::addTo($menuBar);
@@ -142,13 +142,13 @@ Header::addTo($app, ['Modal Options']);
 
 $denyApproveModal = Modal::addTo($app, ['title' => 'Deny / Approve actions']);
 Message::addTo($denyApproveModal)->set('This modal is only closable via the green button');
-$denyApproveModal->addDenyAction('No', new JsExpression('function() { window.alert("Can\'t do that."); return false; }'));
-$denyApproveModal->addApproveAction('Yes', new JsExpression('function() { window.alert("You\'re good to go!"); }'));
+$denyApproveModal->addDenyAction('No', new JsExpression('function () { window.alert(\'Cannot do that.\'); return false; }'));
+$denyApproveModal->addApproveAction('Yes', new JsExpression('function () { window.alert(\'You are good to go!\'); }'));
 $denyApproveModal->notClosable();
 
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($menuBar)->set('Show Deny/Approve');
-$button->on('click', $denyApproveModal->show());
+$button->on('click', $denyApproveModal->jsShow());
 
 // MULTI STEP
 
@@ -156,7 +156,6 @@ Header::addTo($app, ['Multiple page modal']);
 
 // Add modal to layout.
 $stepModal = Modal::addTo($app, ['title' => 'Multi step actions']);
-$stepModal->setOption('observeChanges', true);
 
 // Add buttons to modal for next and previous actions.
 $action = new View(['ui' => 'buttons']);
@@ -169,7 +168,7 @@ $action->add($nextAction);
 $stepModal->addButtonAction($action);
 
 // Set modal functionality. Will changes content according to page being displayed.
-$stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextAction) {
+$stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
     $page = $session->recall('page', 1);
     $success = $session->recall('success', false);
     if (isset($_GET['move'])) {
@@ -186,17 +185,17 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
     }
     $session->memorize('page', $page);
     if ($page === 1) {
-        Message::addTo($modal)->set('Thanks for choosing us. We will be asking some questions along the way.');
+        Message::addTo($p)->set('Thanks for choosing us. We will be asking some questions along the way.');
         $session->memorize('success', true);
-        $modal->js(true, $prevAction->js(true)->show());
-        $modal->js(true, $nextAction->js(true)->show());
-        $modal->js(true, $prevAction->js()->addClass('disabled'));
-        $modal->js(true, $nextAction->js(true)->removeClass('disabled'));
+        $p->js(true, $prevAction->js()->show());
+        $p->js(true, $nextAction->js()->show());
+        $p->js(true, $prevAction->js()->addClass('disabled'));
+        $p->js(true, $nextAction->js()->removeClass('disabled'));
     } elseif ($page === 2) {
         $modelRegister = new Model(new Persistence\Array_());
         $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
-        $form = Form::addTo($modal, ['class.segment' => true]);
+        $form = Form::addTo($p, ['class.segment' => true]);
         $form->setModel($modelRegister->createEntity());
 
         $form->onSubmit(function (Form $form) use ($nextAction, $session) {
@@ -213,29 +212,28 @@ $stepModal->set(function ($modal) use ($stepModal, $session, $prevAction, $nextA
 
             return $js;
         });
-        $modal->js(true, $prevAction->js()->removeClass('disabled'));
-        $modal->js(true, $nextAction->js(true)->addClass('disabled'));
+        $p->js(true, $prevAction->js()->removeClass('disabled'));
+        $p->js(true, $nextAction->js()->addClass('disabled'));
     } elseif ($page === 3) {
         $name = $session->recall('name');
-        Message::addTo($modal)->set("Thank you {$name} for visiting us! We will be in touch");
+        Message::addTo($p)->set("Thank you {$name} for visiting us! We will be in touch");
         $session->memorize('success', true);
-        $modal->js(true, $prevAction->js(true)->hide());
-        $modal->js(true, $nextAction->js(true)->hide());
+        $p->js(true, $prevAction->js()->hide());
+        $p->js(true, $nextAction->js()->hide());
     }
-    $stepModal->js(true)->modal('refresh');
 });
 
 // Bind next action to modal next button.
 $nextAction->on('click', $stepModal->js()->atkReloadView(
-    ['uri' => $stepModal->cb->getJsUrl(), 'uri_options' => ['move' => 'next']]
+    ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'next']]
 ));
 
 // Bin prev action to modal previous button.
 $prevAction->on('click', $stepModal->js()->atkReloadView(
-    ['uri' => $stepModal->cb->getJsUrl(), 'uri_options' => ['move' => 'prev']]
+    ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'prev']]
 ));
 
 // Bind display modal to page display button.
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($menuBar)->set('Multi Step Modal');
-$button->on('click', $stepModal->show());
+$button->on('click', $stepModal->jsShow());

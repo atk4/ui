@@ -7,7 +7,6 @@ namespace Atk4\Ui\Table\Column\FilterModel;
 use Atk4\Data\Model;
 use Atk4\Ui\Form;
 use Atk4\Ui\Table\Column;
-use DateTime;
 
 class TypeDate extends Column\FilterModel
 {
@@ -67,7 +66,7 @@ class TypeDate extends Column\FilterModel
     public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();
-        if (isset($filter['id'])) {
+        if ($filter !== null) {
             switch ($filter['op']) {
                 case 'empty':
                     $model->addCondition($filter['name'], '=', null);
@@ -104,7 +103,7 @@ class TypeDate extends Column\FilterModel
      *
      * @param string $dateModifier the string to pass to generated a date from
      *
-     * @return DateTime
+     * @return \DateTime
      */
     public function getDate($dateModifier)
     {
@@ -115,16 +114,16 @@ class TypeDate extends Column\FilterModel
                 break;
             case 'x_day_ago':
             case 'x_day_before':
-                $date = new DateTime('-' . $this->get('number_days') . ' days');
+                $date = new \DateTime('-' . $this->get('number_days') . ' days');
 
                 break;
             case 'x_day_now':
             case 'x_day_after':
-                $date = new DateTime('+' . $this->get('number_days') . ' days');
+                $date = new \DateTime('+' . $this->get('number_days') . ' days');
 
                 break;
             default:
-                $date = $dateModifier ? new DateTime($dateModifier) : null;
+                $date = $dateModifier ? new \DateTime($dateModifier) : null;
         }
 
         return $date;

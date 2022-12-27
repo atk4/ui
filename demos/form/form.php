@@ -10,10 +10,11 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Tabs;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -57,7 +58,7 @@ $group->addControl('surname');
 $group->addControl('gender', [Form\Control\Dropdown::class, 'values' => ['Female', 'Male']]);
 
 // testing 0 value
-$values = [0 => 'noob', 1 => 'pro', 2 => 'dev'];
+$values = ['noob', 'pro', 'dev'];
 $form->addControl('description', [Form\Control\Textarea::class])->set(0);
 $form->addControl('no_description', [Form\Control\Textarea::class])->set(null);
 $form->addControl('status_optional', [Form\Control\Dropdown::class, 'values' => $values]);
@@ -148,6 +149,7 @@ Header::addTo($tab, ['Form handles errors', 'size' => 2]);
 
 $form = Form::addTo($tab);
 $form->addControl('email');
+$form->buttonSave->set('SaveE1');
 $form->onSubmit(function (Form $form) {
     $o = new \stdClass();
 
@@ -158,24 +160,26 @@ Header::addTo($tab, ['Form shows Agile exceptions', 'size' => 2]);
 
 $form = Form::addTo($tab);
 $form->addControl('email');
+$form->buttonSave->set('SaveE2');
 $form->onSubmit(function (Form $form) {
-    throw (new CoreException('testing'))
+    throw (new CoreException('Test exception I.'))
         ->addMoreInfo('arg1', 'val1');
 
     // return 'somehow it did not crash';
 });
 
-Button::addTo($form, ['Modal Test', 'class.secondary' => true])->on('click', Modal::addTo($form)
-    ->set(function ($p) {
+Button::addTo($form, ['Modal Test', 'class.secondary' => true])
+    ->on('click', Modal::addTo($form)->set(function (View $p) {
         $form = Form::addTo($p);
+        $form->name = 'mf';
         $form->addControl('email');
         $form->onSubmit(function (Form $form) {
-            throw (new CoreException('testing'))
+            throw (new CoreException('Test exception II.'))
                 ->addMoreInfo('arg1', 'val1');
 
             // return 'somehow it did not crash';
         });
-    })->show());
+    })->jsShow());
 
 // -----------------------------------------------------------------------------
 
@@ -199,7 +203,7 @@ $form->onSubmit(function (Form $form) {
 
     return [
         $form->jsInput('email')->val('john@gmail.com'),
-        $form->jsControl('is_accept_terms')->checkbox('set checked'),
+        $form->getControl('is_accept_terms')->js()->checkbox('set checked'),
     ];
 });
 

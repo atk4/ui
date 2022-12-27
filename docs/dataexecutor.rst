@@ -20,7 +20,7 @@ Executor Interface
 
 .. php:namespace:: Atk4\Ui\UserAction
 
-All executors must implement the Executor or JsExecutor interface.
+All executors must implement the ExecutorInterface or JsExecutorInterface interface.
 
 .. php:interface:: ExecutorInterface
 .. php:interface:: JsExecutorInterface
@@ -98,7 +98,7 @@ Confirmation Executor
 
 Like ModalExecutor, Confirmation executor is also based on a Modal view. It allow to display UserAction::confirmation property prior to
 execute the action. Since UserAction::confirmation property may be set with a Closure function, this give a chance to
-return specific record information to be display to user prior to execute the action.
+return specific record information to be displayed to user prior to execute the action.
 
 Here is an example of an user action returning specific record information in the confirmation message::
 
@@ -106,7 +106,7 @@ Here is an example of an user action returning specific record information in th
             'caption' => 'Delete',
             'description' => 'Delete Country',
             'ui' => ['executor' => [\Atk4\Ui\UserAction\ConfirmationExecutor::class]],
-            'confirmation' => function ($action) {
+            'confirmation' => function (Model\UserAction $action) {
                 return 'Are you sure you want to delete this country: $action->getModel()->getTitle();
             },
             'callback' => 'delete',
@@ -124,7 +124,7 @@ Toast messages or removing a row within a Crud table.
 
 Some Ui View component, like Crud for example, will also set javascript action to return based on the UserAction::modifier property.
 For example it the modifier property is set to MODIFIER_DELETE then Crud will know it has to delete a table row on the
-other hand, if MODIFIER_UPDATE is set, then Table need to be reload.
+other hand, if MODIFIER_UPDATE is set, then Table needs to be reloaded.
 
 The Executor Factory
 ====================
@@ -154,8 +154,8 @@ If no executor type is found, then the create method will determine one, based o
 - if action does not use any of the above properties, then, the executor create is based on JS_EXECUTOR type.
 
 The create method also add the executor to the View passed as argument. However, note that when an executor View parent
-class is of type Modal, then it will be attached to the $app->html view instead. This is because Modal view in ui need
-to be add to $app->html view in order to work correctly on reload.
+class is of type Modal, then it will be attached to the $app->html view instead. This is because Modal view in ui needs
+to be added to $app->html view in order to work correctly on reload.
 
 
 Changing or adding Executor type
@@ -172,7 +172,7 @@ Type may also be registered per specific model user action via this method::
 
     ExecutorFactory::registerExecutor(UserAction $action, array $seed): void
 
-For example, you need a custom executor to be create when using a specific model user action::
+For example, you need a custom executor to be created when using a specific model user action::
 
     class MySpecialFormExecutor extends \Atk4\Ui\UserAction\ModalExecutor
     {

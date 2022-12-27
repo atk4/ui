@@ -37,7 +37,7 @@ Loader::addTo($app)->set(function (Loader $p) {
 
     // use loadEvent to prevent manual loading or even specify custom trigger event
     $loader->loadEvent = false;
-    $loader->set(function ($p) {
+    $loader->set(function (Loader $p) {
         // You may pass arguments to the loader, in this case it's "color"
         sleep(1);
         Header::addTo($p, ['Loader #1b - ' . $_GET['color']]);
@@ -51,8 +51,10 @@ Loader::addTo($app)->set(function (Loader $p) {
     });
 
     // button may contain load event.
-    Button::addTo($p, ['Load Segment Manually (2s)', 'class.red' => true])->js('click', $loader->jsLoad(['color' => 'red']));
-    Button::addTo($p, ['Load Segment Manually (2s)', 'class.blue' => true])->js('click', $loader->jsLoad(['color' => 'blue']));
+    Button::addTo($p, ['Load Segment Manually (2s)', 'class.red' => true])
+        ->on('click', $loader->jsLoad(['color' => 'red']));
+    Button::addTo($p, ['Load Segment Manually (2s)', 'class.blue' => true])
+        ->on('click', $loader->jsLoad(['color' => 'blue']));
 });
 
 // Example 2 - Loader with custom body.
@@ -63,7 +65,7 @@ Loader::addTo($app, [
         'Generating LoremIpsum, please wait...',
         'class.red' => true,
     ],
-])->set(function ($p) {
-    usleep(500_000);
+])->set(function (Loader $p) {
+    sleep(1);
     LoremIpsum::addTo($p, ['size' => 2]);
 });

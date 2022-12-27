@@ -1,5 +1,4 @@
-Feature: Filter
-  Testing table filter
+Feature: Table Filter
 
   Scenario:
     Given I am on "collection/tablefilter.php"

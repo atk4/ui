@@ -6,6 +6,9 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsFunction;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 
@@ -120,7 +123,7 @@ class CardDeck extends View
 
         if ($this->search !== false) {
             $right = View::addTo($this->menu, ['ui' => 'four wide column']);
-            $this->search = $right->add(Factory::factory($this->search, ['context' => '#' . $this->container->name]));
+            $this->search = $right->add(Factory::factory($this->search, ['context' => $this->container]));
             $this->search->reload = $this->container;
             $this->query = $this->stickyGet($this->search->queryArg);
         }
@@ -146,7 +149,8 @@ class CardDeck extends View
             $this->search->setModelCondition($this->model);
         }
 
-        if ($count = $this->initPaginator()) {
+        $count = $this->initPaginator();
+        if ($count) {
             foreach ($this->model as $m) {
                 $c = $this->cardHolder->add(Factory::factory([$this->card], ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]))->addClass('segment');
                 $c->setModel($m, $fields);
@@ -154,10 +158,8 @@ class CardDeck extends View
                     $c->addExtraFields($m, $extra, $this->extraGlue);
                 }
                 if ($this->useAction) {
-                    if ($singleActions = $this->getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD)) {
-                        foreach ($singleActions as $action) {
-                            $c->addClickAction($action, null, $this->getReloadArgs());
-                        }
+                    foreach ($this->getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD) as $action) {
+                        $c->addClickAction($action, null, $this->getReloadArgs());
                     }
                 }
             }
@@ -185,7 +187,7 @@ class CardDeck extends View
             $ex = $menuAction['executor'];
             if ($ex instanceof UserAction\JsExecutorInterface) {
                 $this->container->js(true, $menuAction['btn']->js()->off('click'));
-                $this->container->js(true, $menuAction['btn']->js()->on('click', new JsFunction($ex->jsExecute($this->getReloadArgs()))));
+                $this->container->js(true, $menuAction['btn']->js()->on('click', new JsFunction([], $ex->jsExecute($this->getReloadArgs()))));
             }
         }
     }
@@ -203,11 +205,11 @@ class CardDeck extends View
     {
         $executor = $this->getExecutorFactory()->create($action, $this);
         if ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $executor->jsSuccess = function ($x, $m, $id, $return) use ($action) {
+            $executor->jsSuccess = function (ExecutorInterface $ex, Model $m, $id, $return) use ($action) {
                 return $this->jsExecute($return, $action);
             };
         } else {
-            $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function ($ex, $return, $id) use ($action) {
+            $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function (ExecutorInterface $ex, $return, $id) use ($action) {
                 return $this->jsExecute($return, $action);
             });
         }
@@ -219,30 +221,33 @@ class CardDeck extends View
      * Return proper js statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      *
-     * @param string|array|JsExpressionable|Model|null $return
+     * @param string|JsExpressionable|array<int, JsExpressionable>|Model|null $return
      *
-     * @return array|object
+     * @return JsExpressionable|array<int, JsExpressionable>
      */
-    protected function jsExecute($return, Model\UserAction $action = null)
+    protected function jsExecute($return, Model\UserAction $action)
     {
         if (is_string($return)) {
-            return $this->getNotifier($return, $action);
+            return $this->getNotifier($action, $return);
         } elseif (is_array($return) || $return instanceof JsExpressionable) {
             return $return;
         } elseif ($return instanceof Model) {
+            if ($return->isEntity()) {
+                $action = $action->getActionForEntity($return);
+            }
+
             $msg = $return->isLoaded() ? $this->saveMsg : ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
 
             return $this->jsModelReturn($action, $msg);
         }
 
-        return $this->getNotifier($this->defaultMsg, $action);
+        return $this->getNotifier($action, $this->defaultMsg);
     }
 
     /**
-     * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
      */
-    protected function getNotifier(string $msg = null, Model\UserAction $action = null): object
+    protected function getNotifier(Model\UserAction $action, string $msg = null): JsExpressionable
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {
@@ -254,12 +259,15 @@ class CardDeck extends View
 
     /**
      * Js expression return when action afterHook executor return a Model.
+     *
+     * @return array<int, JsExpressionable>
      */
-    protected function jsModelReturn(Model\UserAction $action = null, string $msg = 'Done!'): array
+    protected function jsModelReturn(Model\UserAction $action, string $msg = 'Done!'): array
     {
         $js = [];
-        $js[] = $this->getNotifier($msg, $action);
-        if ($action->getModel()->isLoaded() && $card = $this->findCard($action->getModel())) {
+        $js[] = $this->getNotifier($action, $msg);
+        $card = $action->getEntity()->isLoaded() ? $this->findCard($action->getEntity()) : null;
+        if ($card !== null) {
             $js[] = $card->jsReload($this->getReloadArgs());
         } else {
             $js[] = $this->container->jsReload($this->getReloadArgs());
@@ -279,13 +287,10 @@ class CardDeck extends View
      * Therefore if card, that was just save, is not present in db result set or deck then return null
      * otherwise return Card view.
      *
-     * @return mixed
+     * @return View|null
      */
-    protected function findCard(Model $model)
+    protected function findCard(Model $entity)
     {
-        $mapResults = function ($a) use ($model) {
-            return $a[$model->idField];
-        };
         $deck = [];
         foreach ($this->cardHolder->elements as $element) {
             if ($element instanceof $this->card) {
@@ -293,9 +298,9 @@ class CardDeck extends View
             }
         }
 
-        if (in_array($model->getId(), array_map($mapResults, $model->export([$model->idField])), true)) {
+        if ($entity->getModel()->tryLoad($entity->getId()) !== null) {
             // might be in result set but not in deck, for example when adding a card.
-            return $deck[$model->getId()] ?? null;
+            return $deck[$entity->getId()] ?? null;
         }
 
         return null;
@@ -326,7 +331,8 @@ class CardDeck extends View
     {
         $defaults = [];
 
-        if ($args = $this->getReloadArgs()) {
+        $args = $this->getReloadArgs();
+        if ($args) {
             $defaults['args'] = $args;
         }
 
@@ -400,15 +406,10 @@ class CardDeck extends View
      */
     private function getModelActions(string $appliesTo): array
     {
-        $actions = [];
         if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
-            foreach ($this->singleScopeActions as $action) {
-                $actions[] = $this->model->getUserAction($action);
-            }
+            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions);
         } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
-            foreach ($this->noRecordScopeActions as $action) {
-                $actions[] = $this->model->getUserAction($action);
-            }
+            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions);
         } else {
             $actions = $this->model->getUserActions($appliesTo);
         }

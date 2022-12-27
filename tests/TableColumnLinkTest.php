@@ -11,13 +11,15 @@ use Atk4\Ui\Table;
 
 class TableColumnLinkTest extends TestCase
 {
-    use Concerns\HandlesTable;
+    use TableTestTrait;
 
     /** @var Table */
     public $table;
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $arr = [
             'table' => [
                 1 => ['id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'salary' => -123],
@@ -222,7 +224,7 @@ class TableColumnLinkTest extends TestCase
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'forceDownload' => true]);
 
         static::assertSame(
-            '<tr data-id="1"><td><a href="example.php?test=1" download="true" >bar</a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td><a href="example.php?test=1" download="true">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -232,7 +234,7 @@ class TableColumnLinkTest extends TestCase
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'target' => '_blank']);
 
         static::assertSame(
-            '<tr data-id="1"><td><a href="example.php?test=1" target="_blank" >bar</a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td><a href="example.php?test=1" target="_blank">bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -242,7 +244,7 @@ class TableColumnLinkTest extends TestCase
         $this->table->addDecorator('name', [Table\Column\Link::class, ['example'], ['test' => 'id'], 'icon' => 'info']);
 
         static::assertSame(
-            '<tr data-id="1"><td><a href="example.php?test=1"><i class="icon info"></i>bar</a></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td><a href="example.php?test=1"><i class="info icon"></i>bar</a></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }

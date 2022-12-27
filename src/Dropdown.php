@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsFunction;
+
 class Dropdown extends Lister
 {
     public $ui = 'dropdown';
@@ -13,7 +17,7 @@ class Dropdown extends Lister
     /** @var JsCallback|null Callback when a new value is selected in Dropdown. */
     public $cb;
 
-    /** @var array As per Fomantic-ui dropdown options. */
+    /** @var array As per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
 
     protected function init(): void
@@ -31,7 +35,7 @@ class Dropdown extends Lister
      * ex:
      *      $dropdown = Dropdown::addTo($menu, ['menu', 'dropdownOptions' => ['on' => 'hover']]);
      *      $dropdown->setModel($menuItems);
-     *      $dropdown->onChange(function ($item) {
+     *      $dropdown->onChange(function (string $item) {
      *          return 'New selected item: ' . $item;
      *      });.
      *
@@ -42,11 +46,11 @@ class Dropdown extends Lister
         // setting dropdown option for using callback url.
         $this->dropdownOptions['onChange'] = new JsFunction(['value', 'name', 't'], [
             new JsExpression(
-                "if ($(this).data('currentValue') != value) { $(this).atkAjaxec({ uri: [uri], uri_options: { item:value } }); $(this).data('currentValue', value); }",
-                ['uri' => $this->cb->getJsUrl()]
+                "if ($(this).data('currentValue') != value) { $(this).atkAjaxec({ url: [url], urlOptions: { item: value } }); $(this).data('currentValue', value); }",
+                ['url' => $this->cb->getJsUrl()]
             ), ]);
 
-        $this->cb->set(function ($j, $value) use ($fx) {
+        $this->cb->set(function (Jquery $j, string $value) use ($fx) {
             return $fx($value);
         }, ['item' => 'value']);
     }

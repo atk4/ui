@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\JsChain;
+
 /**
  * Accordion is a View holding accordion sections.
  *
@@ -16,10 +18,10 @@ class Accordion extends View
 
     public $ui = 'accordion';
 
-    /** @var array|string|null The CSS class for Fomantic-ui accordion type. */
+    /** @var array|string|null The CSS class for Fomantic-UI accordion type. */
     public $type;
 
-    /** @var array Settings as per Fomantic-ui accordion settings. */
+    /** @var array Settings as per Fomantic-UI accordion settings. */
     public $settings = [];
 
     /** @var array A collection of AccordionSection in this Accordion. */
@@ -45,7 +47,6 @@ class Accordion extends View
         // if there is callback action, then use VirtualPage
         if ($callback) {
             $section->virtualPage = VirtualPage::addTo($section, ['ui' => '']);
-            $section->virtualPage->stickyGet('__atk-dyn-section', '1');
             $section->virtualPage->set($callback);
         }
 
@@ -65,22 +66,12 @@ class Accordion extends View
     }
 
     /**
-     * @param bool $when
-     *
-     * @return JsChain
-     */
-    public function jsRefresh($when = null)
-    {
-        return $this->jsBehavior('refresh', [], $when);
-    }
-
-    /**
      * @param AccordionSection $section
      * @param bool             $when
      *
      * @return JsChain
      */
-    public function jsOpen($section, $when = null)
+    public function jsOpen($section, $when = false)
     {
         return $this->jsBehavior('open', [$this->getSectionIdx($section)], $when);
     }
@@ -90,7 +81,7 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsCloseOthers($when = null)
+    public function jsCloseOthers($when = false)
     {
         return $this->jsBehavior('close others', [], $when);
     }
@@ -101,7 +92,7 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsClose($section, $when = null)
+    public function jsClose($section, $when = false)
     {
         return $this->jsBehavior('close', [$this->getSectionIdx($section)], $when);
     }
@@ -112,14 +103,14 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsToggle($section, $when = null)
+    public function jsToggle($section, $when = false)
     {
         return $this->jsBehavior('toggle', [$this->getSectionIdx($section)], $when);
     }
 
     /**
      * Return an accordion js behavior command
-     * as in Semantic-ui behavior for Accordion module.
+     * as in Fomantic-UI behavior for Accordion module.
      * Ex: toggle an accordion from it's index value.
      * $accordion->jsBehavior('toggle', 1).
      *
@@ -128,7 +119,7 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsBehavior($behavior, array $args, $when = null)
+    public function jsBehavior($behavior, array $args, $when = false)
     {
         return $this->js($when)->accordion($behavior, ...$args);
     }
@@ -136,11 +127,9 @@ class Accordion extends View
     /**
      * Return the index of an accordion section in collection.
      *
-     * @param AccordionSection $section
-     *
      * @return int
      */
-    public function getSectionIdx($section)
+    public function getSectionIdx(AccordionSection $section)
     {
         $idx = -1;
         foreach ($this->sections as $key => $accordion_section) {
@@ -154,22 +143,15 @@ class Accordion extends View
         return $idx;
     }
 
-    /**
-     * Check if accordion section is dynamic.
-     */
-    public function isDynamicSection(): bool
-    {
-        return isset($_GET['__atk-dyn-section']);
-    }
-
     protected function renderView(): void
     {
         if ($this->type) {
             $this->addClass($this->type);
         }
 
-        // Only set Accordion in Top container. Otherwise Nested accordion won't work.
-        if (!$this->getClosestOwner($this, AccordionSection::class) && !$this->isDynamicSection()) {
+        // initialize top accordion only, otherwise nested accordion won't work
+        // https://github.com/fomantic/Fomantic-UI/issues/254
+        if ($this->getClosestOwner(AccordionSection::class) === null) {
             $this->js(true)->accordion($this->settings);
         }
 

@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 /**
- * Class implements Headers.
- *
  * Set size to 1, 2, 3, 4 or 5 if you are looking for Page Header. The size is not affected by
- * header placement on the page. Specify number to constructor like this:
+ * header placement on the page. Specify number to constructor like this:.
  *
  * $h = new Header(['size' => 1]); // creates <h1>..</h1> header.
  *
@@ -40,7 +38,7 @@ class Header extends View
     protected function renderView(): void
     {
         if ($this->size) {
-            if (is_numeric($this->size)) {
+            if (is_int($this->size)) {
                 $this->setElement('h' . $this->size);
             } else {
                 $this->addClass($this->size);

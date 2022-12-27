@@ -46,11 +46,14 @@ class PersistenceUiTest extends TestCase
         yield [[], ['type' => 'text'], "\n0\n\n0", "\n0\n\n0"];
         yield [[], ['type' => 'integer'], 1, '1'];
         yield [[], ['type' => 'integer'], 0, '0'];
-        yield [[], ['type' => 'integer'], -10000, '-10000'];
+        yield [[], ['type' => 'integer'], -1_100_230_000_456_345_678, '-1100230000456345678'];
         yield [[], ['type' => 'float'], 1.0, '1'];
         yield [[], ['type' => 'float'], 0.0, '0'];
-        yield [[], ['type' => 'float'], -10000.0, '-10000'];
+        yield [[], ['type' => 'float'], -1_100_230_000.4567, '-1100230000.4567'];
         yield [[], ['type' => 'float'], 1.100123, '1.100123'];
+        yield [[], ['type' => 'float'], 1.100123E-6, '1.100123E-6'];
+        yield [[], ['type' => 'float'], 1.100123E+221, '1.100123E+221'];
+        yield [[], ['type' => 'float'], -1.100123E-221, '-1.100123E-221'];
         yield [[], ['type' => 'boolean'], false, 'No'];
         yield [[], ['type' => 'boolean'], true, 'Yes'];
 
@@ -74,8 +77,8 @@ class PersistenceUiTest extends TestCase
         yield [['currency' => '$'], ['type' => 'atk4_money'], 1.0, $fixSpaceToNbspFx('$ 1.00')];
         yield [[], ['type' => 'atk4_money'], 1.1023, $fixSpaceToNbspFx('€ 1.1023')];
         yield [['currencyDecimals' => 4], ['type' => 'atk4_money'], 1.102, $fixSpaceToNbspFx('€ 1.1020')];
-        yield [[], ['type' => 'atk4_money'], 1234056789.1, $fixSpaceToNbspFx('€ 1 234 056 789.10')];
-        yield [[], ['type' => 'atk4_money'], 234056789.101, $fixSpaceToNbspFx('€ 234 056 789.101')];
+        yield [[], ['type' => 'atk4_money'], 1_234_056_789.1, $fixSpaceToNbspFx('€ 1 234 056 789.10')];
+        yield [[], ['type' => 'atk4_money'], 234_056_789.101, $fixSpaceToNbspFx('€ 234 056 789.101')];
         yield [['currencyDecimalSeparator' => ','], ['type' => 'atk4_money'], 1.0, $fixSpaceToNbspFx('€ 1,00')];
         yield [[], ['type' => 'atk4_money'], 1000.0, $fixSpaceToNbspFx('€ 1 000.00')];
         yield [['currencyThousandsSeparator' => ','], ['type' => 'atk4_money'], 1000.0, $fixSpaceToNbspFx('€ 1,000.00')];

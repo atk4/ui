@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
+use Atk4\Ui\App;
+use Atk4\Ui\Behat\CoverageUtil;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Layout;
@@ -14,12 +16,15 @@ date_default_timezone_set('UTC');
 require_once __DIR__ . '/init-autoloader.php';
 
 // collect coverage for HTTP tests 1/2
-if (file_exists(__DIR__ . '/CoverageUtil.php') && !class_exists(\PHPUnit\Framework\TestCase::class, false)) {
-    require_once __DIR__ . '/CoverageUtil.php';
-    \CoverageUtil::start();
+$coverageSaveFx = null;
+if (is_dir(__DIR__ . '/../coverage') && !CoverageUtil::isCalledFromPhpunit()) {
+    CoverageUtil::startFromPhpunitConfig(__DIR__ . '/..');
+    $coverageSaveFx = function (): void {
+        CoverageUtil::saveData(__DIR__ . '/../coverage');
+    };
 }
 
-$app = new \Atk4\Ui\App([
+$app = new App([
     'callExit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
     'catchExceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
     'alwaysRun' => (bool) ($_GET['APP_ALWAYS_RUN'] ?? true),
@@ -35,11 +40,10 @@ if ($app->catchExceptions !== true) {
 }
 
 // collect coverage for HTTP tests 2/2
-if (file_exists(__DIR__ . '/CoverageUtil.php') && !class_exists(\PHPUnit\Framework\TestCase::class, false)) {
-    $app->onHook(\Atk4\Ui\App::HOOK_BEFORE_EXIT, function () {
-        \CoverageUtil::saveData();
-    });
+if ($coverageSaveFx !== null) {
+    $app->onHook(App::HOOK_BEFORE_EXIT, $coverageSaveFx);
 }
+unset($coverageSaveFx);
 
 final class AnonymousClassNameCache
 {
@@ -133,8 +137,8 @@ if ($layout instanceof Layout\NavigableInterface) {
     $layout->addMenuItem(['Column Filters'], [$path . 'tablefilter'], $menu);
     $layout->addMenuItem('Grid - Table+Bar+Search+Paginator', [$path . 'grid'], $menu);
     $layout->addMenuItem('Crud - Full editing solution', [$path . 'crud'], $menu);
-    $layout->addMenuItem(['Crud with Array Persistence'], [$path . 'crud3'], $menu);
-    $layout->addMenuItem('Card Deck', [$path . 'card-deck'], $menu);
+    $layout->addMenuItem(['Crud - /w Array Persistence'], [$path . 'crud3'], $menu);
+    $layout->addMenuItem('Card Deck - /w custom actions', [$path . 'card-deck'], $menu);
     $layout->addMenuItem(['Lister'], [$path . 'lister-ipp'], $menu);
     $layout->addMenuItem(['Table column decorator from model'], [$path . 'tablecolumns'], $menu);
 
@@ -165,7 +169,7 @@ if ($layout instanceof Layout\NavigableInterface) {
     $layout->addMenuItem(['Pop-up'], [$path . 'popup'], $menu);
     $layout->addMenuItem(['Toast'], [$path . 'toast'], $menu);
     $layout->addMenuItem('Paginator', [$path . 'paginator'], $menu);
-    $layout->addMenuItem(['Drag n Drop sorting'], [$path . 'jssortable'], $menu);
+    $layout->addMenuItem(['Drag sorting'], [$path . 'jssortable'], $menu);
 
     $path = $demosUrl . 'javascript/';
     $menu = $layout->addMenuGroup(['Javascript', 'icon' => 'code']);

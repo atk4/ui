@@ -4,12 +4,11 @@ html(lang="{lang}en{/}")
     title {title}Agile UI - Untitled Project{/}
     | {$meta}
     meta(charset='utf-8')
-    meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0")
-    script(type="application/javascript")
-      | {$InitJsBundle}
+    script
+      | 'use strict'; {$InitJsBundle}
     |
     | {$Head}
-    style(type='text/css')
+    style
       | {$style}
   body(class="{$class}")
     | {$Content}

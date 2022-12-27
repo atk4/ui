@@ -6,9 +6,9 @@ namespace Atk4\Ui\Panel;
 
 use Atk4\Core\Factory;
 use Atk4\Ui\Button;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsChain;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Modal;
 use Atk4\Ui\View;
 
@@ -18,7 +18,7 @@ use Atk4\Ui\View;
  * via the js panel service.
  *
  * Content is loaded via a LoadableContent View.
- * This view must implement a callback for content to be add via the callback function.
+ * This view must implement a callback for content to be added via the callback function.
  */
 class Right extends View implements Loadable
 {
@@ -51,10 +51,10 @@ class Right extends View implements Loadable
     public $warningTrigger = 'atk-visible';
 
     /** @var string the warning icon class */
-    public $warningIcon = 'icon exclamation circle';
+    public $warningIcon = 'exclamation circle';
 
     /** @var string the close icon class */
-    public $closeIcon = 'icon times';
+    public $closeIcon = 'times';
 
     protected function init(): void
     {
@@ -187,7 +187,7 @@ class Right extends View implements Loadable
         $panel_options = [
             'id' => $this->name,
             'loader' => ['selector' => '.ui.loader', 'trigger' => 'active'], // the css selector and trigger class to activate loader.
-            'modal' => $this->closeModal ? '#' . $this->closeModal->name : null,
+            'modal' => $this->closeModal,
             'warning' => ['selector' => $this->warningSelector, 'trigger' => $this->warningTrigger],
             'visible' => 'atk-visible', // the triggering css class that will make this panel visible.
             'closeSelector' => $this->closeSelector, // the css selector to close this flyout.

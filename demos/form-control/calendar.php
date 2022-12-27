@@ -6,9 +6,9 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\GridLayout;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsFunction;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsFunction;
+use Atk4\Ui\Js\JsToast;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -46,7 +46,7 @@ $form->addControl('date_js_format', [
     'type' => 'date',
     'caption' => 'Format via Javascript',
     'options' => [
-        'formatDate' => new JsFunction(['date', 'format'], [new JsExpression('return "Date selected: " + flatpickr.formatDate(date, format)')]),
+        'formatDate' => new JsFunction(['date', 'format'], [new JsExpression('return \'Date selected: \' + flatpickr.formatDate(date, format)')]),
     ],
 ])->set(new \DateTime());
 

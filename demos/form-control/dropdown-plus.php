@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-use Atk4\Data\Model;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
@@ -48,7 +47,7 @@ $form->addControl('withModel', [
 // custom callback: alter title
 $form->addControl('withModel2', [
     Form\Control\Dropdown::class,
-    'caption' => 'Dropdown with data from Model',
+    'caption' => 'Dropdown with data from Model and custom render',
     'model' => (new Country($app->db))->setLimit(25),
     'renderRowFunction' => function (Country $row) {
         return [
@@ -61,7 +60,7 @@ $form->addControl('withModel2', [
 // custom callback: add icon
 $form->addControl('withModel3', [
     Form\Control\Dropdown::class,
-    'caption' => 'Dropdown with data from Model',
+    'caption' => 'Dropdown with data from Model and custom render with icon',
     'model' => (new File($app->db))->setLimit(25),
     'renderRowFunction' => function (File $row) {
         return [
@@ -89,7 +88,12 @@ $form->addControl('icon', [
     Form\Control\Dropdown::class,
     'caption' => 'Using icon',
     'empty' => 'Choose an icon',
-    'values' => ['tag' => ['Tag', 'icon' => 'tag icon'], 'globe' => ['Globe', 'icon' => 'globe icon'], 'registered' => ['Registered', 'icon' => 'registered icon'], 'file' => ['File', 'icon' => 'file icon']],
+    'values' => [
+        'tag' => ['Tag', 'icon' => 'tag'],
+        'globe' => ['Globe', 'icon' => 'globe'],
+        'registered' => ['Registered', 'icon' => 'registered'],
+        'file' => ['File', 'icon' => 'file'],
+    ],
 ]);
 
 $form->addControl('multi', [

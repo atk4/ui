@@ -197,7 +197,7 @@ Form and Crud Components
 Next we need to add Components that are capable of manipulating the data::
 
     $col = \Atk4\Ui\Columns::addTo($app, ['divided']);
-    $col_reload = new \Atk4\Ui\JsReload($col);
+    $col_reload = new \Atk4\Ui\Js\JsReload($col);
 
     $form = \Atk4\Ui\Form::addTo($col->addColumn());
     $form->setModel(new ToDoItem($s));
@@ -213,7 +213,7 @@ Next we need to add Components that are capable of manipulating the data::
 .. rubric:: Clarifications
 
 .. [#] We wish to position Form and Table side-by-side, so we use `\Atk4\Ui\Columns` component and
-    inject a Fomantic UI CSS class "divided" that will appear as a vertical separation line.
+    inject a Fomantic-UI CSS class "divided" that will appear as a vertical separation line.
 
 .. [#] $col_reload is a special object which we call :ref:`js_action`. It represents a Browser-event
     that will cause both columns to be reloaded from the server. To use this action we still have
@@ -252,7 +252,7 @@ another. In our example replace right column (label 17) with the following code:
     $grid->setModel(new ToDoItem($s));
 
     $grid->menu->addItem('Complete Selected',
-        new \Atk4\Ui\JsReload($grid->table, [
+        new \Atk4\Ui\Js\JsReload($grid->table, [
             'delete' => $grid->addSelection()->jsChecked(),
         ])
     );

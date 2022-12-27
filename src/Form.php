@@ -11,18 +11,22 @@ use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Data\Reference\ContainsMany;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Form\Control;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsConditionalForm;
+use Atk4\Ui\Js\JsExpression;
 
 class Form extends View
 {
     use \Atk4\Core\HookTrait;
 
-    /** @const string Executed when form is submitted */
+    /** Executed when form is submitted */
     public const HOOK_SUBMIT = self::class . '@submit';
-    /** @const string Executed when form is submitted */
+    /** Executed when form is submitted */
     public const HOOK_DISPLAY_ERROR = self::class . '@displayError';
-    /** @const string Executed when form is submitted */
+    /** Executed when form is submitted */
     public const HOOK_DISPLAY_SUCCESS = self::class . '@displaySuccess';
-    /** @const string Executed when self::loadPost() method is called. */
+    /** Executed when self::loadPost() method is called. */
     public const HOOK_LOAD_POST = self::class . '@loadPost';
 
     public $ui = 'form';
@@ -117,10 +121,10 @@ class Form extends View
      */
     public $controlDisplaySelector = '.field';
 
-    /** @var array Use this apiConfig variable to pass API settings to Semantic UI in .api(). */
+    /** @var array Use this apiConfig variable to pass API settings to Fomantic-UI in .api(). */
     public $apiConfig = [];
 
-    /** @var array Use this formConfig variable to pass settings to Semantic UI in .from(). */
+    /** @var array Use this formConfig variable to pass settings to Fomantic-UI in .from(). */
     public $formConfig = [];
 
     // {{{ Base Methods
@@ -136,7 +140,7 @@ class Form extends View
         $this->initLayout();
 
         // set css loader for this form
-        $this->setApiConfig(['stateContext' => '#' . $this->name]);
+        $this->setApiConfig(['stateContext' => $this]);
 
         $this->cb = JsCallback::addTo($this, [], [['desired_name' => 'submit']]);
     }
@@ -163,14 +167,14 @@ class Form extends View
         }
 
         // allow to submit by pressing an enter key when child control is focused
-        $this->on('submit', new JsExpression('if (event.target === this) { $([name]).form("submit"); }', ['name' => '#' . $this->formElement->name]));
+        $this->on('submit', new JsExpression('if (event.target === this) { $([]).form(\'submit\'); }', [$this->formElement]));
 
         // Add save button in layout
         if ($this->buttonSave) {
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
-            $this->buttonSave->on('click', $this->js(null, null, $this->formElement)->form('submit'));
-            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13){ $([name]).form("submit"); }', ['name' => '#' . $this->formElement->name]));
+            $this->buttonSave->on('click', $this->js(false, null, $this->formElement)->form('submit'));
+            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { $([]).form(\'submit\'); }', [$this->formElement]));
         }
     }
 
@@ -199,7 +203,7 @@ class Form extends View
     public function setGroupDisplayRules($rules = [], $selector = '.atk-form-group')
     {
         if (is_object($selector)) {
-            $selector = $selector->jsRender();
+            $selector = '#' . $selector->getHtmlId();
         }
 
         $this->controlDisplayRules = $rules;
@@ -259,6 +263,10 @@ class Form extends View
             } catch (ValidationException $e) {
                 $response = [];
                 foreach ($e->errors as $field => $error) {
+                    if (!isset($this->controls[$field])) {
+                        throw $e;
+                    }
+
                     $response[] = $this->error($field, $error);
                 }
 
@@ -285,7 +293,7 @@ class Form extends View
      * @param string $fieldName Field name
      * @param string $str       Error message
      *
-     * @return JsChain|array
+     * @return JsChain|array<int, JsChain>
      */
     public function error($fieldName, $str)
     {
@@ -346,26 +354,12 @@ class Form extends View
     /**
      * Add form control into current layout. If no layout, create one. If no model, create blank one.
      *
-     * @param array|Control $control
-     * @param array|Field   $field
+     * @param array<mixed>|Control $control
+     * @param array<mixed>         $fieldSeed
      */
-    public function addControl(string $name, $control = [], $field = []): Control
+    public function addControl(string $name, $control = [], array $fieldSeed = []): Control
     {
-        return $this->layout->addControl($name, $control, $field);
-    }
-
-    /**
-     * @param array<int, array> $controls
-     *
-     * @return $this
-     */
-    public function addControls(array $controls)
-    {
-        foreach ($controls as $control) {
-            $this->addControl(...$control);
-        }
-
-        return $this;
+        return $this->layout->addControl($name, $control, $fieldSeed);
     }
 
     /**
@@ -396,24 +390,11 @@ class Form extends View
      *
      * @param string $name Name of control
      *
-     * @return JsChain
+     * @return Jquery
      */
     public function jsInput($name)
     {
         return $this->layout->getControl($name)->js()->find('input');
-    }
-
-    /**
-     * Returns JS Chain that targets INPUT of a specified element. This method is handy
-     * if you wish to set a value to a certain field.
-     *
-     * @param string $name Name of control
-     *
-     * @return JsChain
-     */
-    public function jsControl($name)
-    {
-        return $this->layout->getControl($name)->js();
     }
 
     // }}}
@@ -430,7 +411,7 @@ class Form extends View
      * 3. $f->type is converted into seed and evaluated
      * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
      *
-     * @param array $ControlSeed
+     * @param array<string, mixed> $ControlSeed
      */
     public function controlFactory(Field $field, $ControlSeed = []): Control
     {
@@ -482,10 +463,9 @@ class Form extends View
     protected array $typeToControl = [
         'boolean' => [Control\Checkbox::class],
         'text' => [Control\Textarea::class],
-        'string' => [Control\Line::class],
-        'datetime' => [Control\Calendar::class, ['type' => 'datetime']],
-        'date' => [Control\Calendar::class, ['type' => 'date']],
-        'time' => [Control\Calendar::class, ['type' => 'time']],
+        'datetime' => [Control\Calendar::class, 'type' => 'datetime'],
+        'date' => [Control\Calendar::class, 'type' => 'date'],
+        'time' => [Control\Calendar::class, 'type' => 'time'],
         'atk4_money' => [Control\Money::class],
     ];
 
@@ -528,24 +508,21 @@ class Form extends View
         parent::renderView();
     }
 
-    protected function renderTemplateToHtml(string $region = null): string
+    protected function renderTemplateToHtml(): string
     {
-        $output = parent::renderTemplateToHtml($region);
+        $output = parent::renderTemplateToHtml();
 
-        return $this->fixFormInRenderedHtml($output);
+        return $this->fixOwningFormAttrInRenderedHtml($output);
     }
 
-    public function fixFormInRenderedHtml(string $html): string
+    public function fixOwningFormAttrInRenderedHtml(string $html): string
     {
-        $innerFormTags = ['button', 'datalist', 'fieldset', 'input', 'keygen', 'label', 'legend',
-            'meter', 'optgroup', 'option', 'output', 'progress', 'select', 'textarea', ];
-
-        return preg_replace('~<(' . implode('|', $innerFormTags) . ')(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $html);
+        return preg_replace('~<(button|fieldset|input|output|select|textarea)(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $html);
     }
 
     /**
-     * Set Semantic-ui Api settings to use with form. A complete list is here:
-     * https://semantic-ui.com/behaviors/api.html#/settings.
+     * Set Fomantic-UI Api settings to use with form. A complete list is here:
+     * https://fomantic-ui.com/behaviors/api.html#/settings .
      *
      * @param array $config
      *
@@ -559,7 +536,7 @@ class Form extends View
     }
 
     /**
-     * Set Semantic-ui From settings to use with form. A complete list is here:
+     * Set Fomantic-UI Form settings to use with form. A complete list is here:
      * https://fomantic-ui.com/behaviors/form.html#/settings.
      *
      * @param array $config
@@ -583,7 +560,9 @@ class Form extends View
         $this->js(true, null, $this->formElement)
             ->api(array_merge(['url' => $this->cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig));
 
-        $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new JsExpression('$(this).attr("name")')));
+        // [name] in selector is to suppress https://github.com/fomantic/Fomantic-UI/commit/facbca003cf0da465af7d44af41462e736d3eb8b
+        // console errors from Multiline/vue fields
+        $this->on('change', '.field input[name], .field textarea[name], .field select[name]', $this->js()->form('remove prompt', new JsExpression('$(this).attr(\'name\')')));
 
         if (!$this->canLeave) {
             $this->js(true, (new JsChain('atk.formService'))->preventFormLeave($this->name));

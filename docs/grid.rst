@@ -25,7 +25,7 @@ To make your grid look nicer, you might want to add some buttons and enable quic
     $grid->setModel(new Country($db));
 
     $grid->addQuickSearch();
-    $grid->menu->addItem('Reload Grid', new \Atk4\Ui\JsReload($grid));
+    $grid->menu->addItem('Reload Grid', new \Atk4\Ui\Js\JsReload($grid));
 
 Adding Menu Items
 =================
@@ -34,14 +34,14 @@ Adding Menu Items
 
 .. php:method: addButton($label)
 
-Grid top-bar which contains QuickSearch is implemented using Fomantic UI "ui menu". With that
+Grid top-bar which contains QuickSearch is implemented using Fomantic-UI "ui menu". With that
 you can add additional items and use all features of a regular :php:class:`Menu`::
 
     $sub = $grid->menu->addMenu('Drop-down');
     $sub->addItem('Test123');
 
 For compatibility grid supports addition of the buttons to the menu, but there are several
-Fomantic UI limitations that wouldn't allow to format buttons nicely::
+Fomantic-UI limitations that wouldn't allow to format buttons nicely::
 
     $grid->addButton('Hello');
 
@@ -124,7 +124,7 @@ See :php:meth:`Table\\Column\\\Actions::addAction`
 Similar to addAction, but when clicking a button, will open a modal dialog and execute $callback
 to populate a content::
 
-    $grid->addModalAction('Details', 'Additional Details', function ($p, $id) use ($grid) {
+    $grid->addModalAction('Details', 'Additional Details', function (View $p, $id) use ($grid) {
         // $id of the record which was clicked
         // $grid->model = $grid->model->load($id);
 
@@ -154,8 +154,8 @@ additionally place this column before any other column inside a grid. You can us
 method to reference value of selected checkboxes inside any :ref:`js_action`::
 
     $sel = $grid->addSelection();
-    $grid->menu->addItem('show selection')->on('click', new \Atk4\Ui\JsExpression(
-        'alert("Selected: "+[])', [$sel->jsChecked()]
+    $grid->menu->addItem('show selection')->on('click', new \Atk4\Ui\Js\JsExpression(
+        'alert(\'Selected: \' + [])', [$sel->jsChecked()]
     ));
 
 Sorting

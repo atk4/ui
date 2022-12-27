@@ -28,7 +28,8 @@ class ExecutorFactory
     public const MENU_ITEM = self::class . '@menuItem';
     public const TABLE_MENU_ITEM = self::class . '@tableMenuItem';
 
-    public const BUTTON_PRIMARY_COLOR = 'primary';
+    /** @var string */
+    public $buttonPrimaryColor = 'primary';
 
     /**
      * Store basic type of executor to use for create method.
@@ -157,23 +158,23 @@ class ExecutorFactory
      */
     protected function createExecutor(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
     {
-        // required a specific executor type.
-        if ($requiredType) {
+        if ($requiredType !== null) {
             if (!($this->executorSeed[$requiredType] ?? null)) {
                 throw (new Exception('Required executor type is not set'))
                     ->addMoreInfo('type', $requiredType);
             }
             $seed = $this->executorSeed[$requiredType];
-        // check if executor is register for this model/action.
-        } elseif ($seed = $this->executorSeed[$this->getModelId($action)][$action->shortName] ?? null) {
         } else {
-            // if no type is register, determine executor to use base on action properties.
-            if (is_callable($action->confirmation)) {
-                $seed = $this->executorSeed[self::CONFIRMATION_EXECUTOR];
-            } else {
-                $seed = (!$action->args && !$action->fields && !$action->preview)
-                        ? $this->executorSeed[self::JS_EXECUTOR]
-                        : $this->executorSeed[self::STEP_EXECUTOR];
+            $seed = $seed = $this->executorSeed[$this->getModelId($action)][$action->shortName] ?? null;
+            if ($seed === null) {
+                // if no type is register, determine executor to use base on action properties
+                if (is_callable($action->confirmation)) {
+                    $seed = $this->executorSeed[self::CONFIRMATION_EXECUTOR];
+                } else {
+                    $seed = (!$action->args && !$action->fields && !$action->preview)
+                            ? $this->executorSeed[self::JS_EXECUTOR]
+                            : $this->executorSeed[self::STEP_EXECUTOR];
+                }
             }
         }
 
@@ -190,10 +191,12 @@ class ExecutorFactory
     protected function createActionTrigger(UserAction $action, string $type = null): View
     {
         $viewType = array_merge(['default' => [$this, 'getDefaultTrigger']], $this->triggerSeed[$type] ?? []);
-        if ($seed = $viewType[$this->getModelId($action)][$action->shortName] ?? null) {
-        } elseif ($seed = $viewType[$action->shortName] ?? null) {
-        } else {
-            $seed = $viewType['default'];
+        $seed = $viewType[$this->getModelId($action)][$action->shortName] ?? null;
+        if ($seed === null) {
+            $seed = $viewType[$action->shortName] ?? null;
+            if ($seed === null) {
+                $seed = $viewType['default'];
+            }
         }
 
         $seed = is_array($seed) && is_callable($seed) ? call_user_func($seed, $action, $type) : $seed;
@@ -212,7 +215,7 @@ class ExecutorFactory
             case self::MODAL_BUTTON:
                 $seed = [Button::class, $this->getActionCaption($action, $type)];
                 if ($type === self::MODAL_BUTTON || $type === self::CARD_BUTTON) {
-                    $seed['class.' . static::BUTTON_PRIMARY_COLOR] = true;
+                    $seed['class.' . $this->buttonPrimaryColor] = true;
                 }
 
                 break;
@@ -236,11 +239,15 @@ class ExecutorFactory
      */
     protected function getActionCaption(UserAction $action, string $type = null): string
     {
-        if ($caption = $this->triggerCaption[$type][$action->shortName] ?? null) {
-        } elseif ($caption = $this->triggerCaption[$this->getModelId($action)][$action->shortName] ?? null) {
-        } elseif ($caption = $this->triggerCaption[$action->shortName] ?? null) {
-        } else {
-            $caption = $action->getCaption();
+        $caption = $this->triggerCaption[$type][$action->shortName] ?? null;
+        if ($caption === null) {
+            $caption = $this->triggerCaption[$this->getModelId($action)][$action->shortName] ?? null;
+            if ($caption === null) {
+                $caption = $this->triggerCaption[$action->shortName] ?? null;
+                if ($caption === null) {
+                    $caption = $action->getCaption();
+                }
+            }
         }
 
         return is_array($caption) && is_callable($caption) ? call_user_func($caption, $action) : $caption;

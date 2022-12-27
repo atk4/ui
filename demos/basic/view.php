@@ -8,8 +8,8 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
-use Atk4\Ui\JsModal;
-use Atk4\Ui\JsReload;
+use Atk4\Ui\Js\JsModal;
+use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Label;
 use Atk4\Ui\Message;
 use Atk4\Ui\Paginator;
@@ -70,9 +70,9 @@ Button::addTo($app, ['Jiggle plane', 'icon' => 'expand'])->on('click', $plane->j
 Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])->on('click', new JsReload($plane));
 
 Header::addTo($app, ['Can be on a Virtual Page']);
-$vp = VirtualPage::addTo($app)->set(function ($page) use ($planeTemplate) {
-    $plane = View::addTo($page, ['template' => $planeTemplate]);
-    Label::addTo($page, ['Plane ID: ', 'class.bottom attached' => true, 'detail' => $plane->name]);
+$vp = VirtualPage::addTo($app)->set(function (VirtualPage $vp) use ($planeTemplate) {
+    $plane = View::addTo($vp, ['template' => $planeTemplate]);
+    Label::addTo($vp, ['Plane ID: ', 'class.bottom attached' => true, 'detail' => $plane->name]);
 });
 
 Button::addTo($app, ['Show $plane in a dialog', 'icon' => 'clone'])->on('click', new JsModal('Plane Box', $vp));

@@ -28,7 +28,7 @@ To help you understand when to use VirtualPage here is the example:
 This pattern is very easy to implement and is used by many components to transparently provide dynamic functionality.
 Next is an example where :php:class:`Tabs` has support for call-back for generating dynamic content for the tab::
 
-    $tabs->addTab('Dynamic Tab Content', function ($vp) {
+    $tabs->addTab('Dynamic Tab Content', function (VirtualPage $vp) {
         \Atk4\Ui\LoremIpsum::addTo($vp);
     });
 
@@ -83,7 +83,7 @@ Setting Callback
 Although VirtualPage can work without defining a callback, using one is more reliable and is always recommended::
 
     $vp = \Atk4\Ui\VirtualPage::addTo($layout);
-    $vp->set(function ($vp) {
+    $vp->set(function (\Atk4\Ui\VirtualPage $vp) {
         \Atk4\Ui\LoremIpsum::addTo($vp);
     });
 
@@ -98,10 +98,10 @@ also makes it possible for VirtualPage to be embedded into any :ref:`component` 
 
 To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the following code::
 
-    $t = \Atk4\Ui\Tabs::addTo($layout);
+    $tabs = \Atk4\Ui\Tabs::addTo($layout);
 
-    \Atk4\Ui\LoremIpsum::addTo($t->addTab('Tab1')); // regular tab
-    $t->addTab('Tab2', function ($p) { // dynamic tab
+    \Atk4\Ui\LoremIpsum::addTo($tabs->addTab('Tab1')); // regular tab
+    $tabs->addTab('Tab2', function (VirtualPage $p) { // dynamic tab
         \Atk4\Ui\LoremIpsum::addTo($p);
     });
 
@@ -144,7 +144,7 @@ Like with a VirtualPage - you should use `set()` to define content that will be 
 while a spinner is shown to a user::
 
     $loader = \Atk4\Ui\Loader::addTo($app);
-    $loader->set(function ($p) {
+    $loader->set(function (\Atk4\Ui\Loader $p) {
         // Simulate slow-loading component
         sleep(2);
         \Atk4\Ui\LoremIpsum::addTo($p);
@@ -160,7 +160,7 @@ By default it will display a white segment with 7em height, but you can specify 
 property::
 
     $loader = \Atk4\Ui\Loader::addTo($app, ['shim' => [\Atk4\Ui\Message::class, 'Please wait until we load LoremIpsum...', 'class.red' => true]]);
-    $loader->set(function ($p) {
+    $loader->set(function (\Atk4\Ui\Loader $p) {
         // Simulate slow-loading component
         sleep(2);
         \Atk4\Ui\LoremIpsum::addTo($p);
@@ -196,7 +196,7 @@ To indicate how custom binding works::
 
     $loader = \Atk4\Ui\Loader::addTo($app, ['loadEvent' => 'kaboom']);
 
-    $loader->set(function ($p) {
+    $loader->set(function (\Atk4\Ui\Loader $p) {
         \Atk4\Ui\LoremIpsum::addTo($p);
     });
 
@@ -226,12 +226,12 @@ Next example will display DataTable, but will allow you to replace data with a f
 
     \Atk4\Ui\Button::addTo($box, ['Edit Data Settings'])->on('click', $loader->js()->trigger('edit'));
 
-    $loader->set(function ($p) use ($loader) {
+    $loader->set(function (\Atk4\Ui\Loader $p) {
         $form = \Atk4\Ui\Form::addTo($p);
         $form->addControl('year');
 
-        $form->onSubmit(function (Form $form) use ($loader) {
-            return new \Atk4\Ui\JsReload($loader, ['year' => $form->model->get('year')]);
+        $form->onSubmit(function (Form $form) use ($p) {
+            return new \Atk4\Ui\Js\JsReload($p, ['year' => $form->model->get('year')]);
         });
     });
 
@@ -247,10 +247,10 @@ Loader can have a progress bar. Imagine that your Loader has to run slow process
     sleep(1);
     sleep(1);
 
-You cannotify user about this progress through a simple code::
+You can notify user about this progress through a simple code::
 
     $loader = \Atk4\Ui\Loader::addTo($app, ['progressBar' => true]);
-    $loader->set(function ($p) {
+    $loader->set(function (\Atk4\Ui\Loader $p) {
         // Simulate slow-loading component
         sleep(1);
         $p->setProgress(0.25);

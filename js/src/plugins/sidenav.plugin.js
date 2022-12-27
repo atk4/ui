@@ -1,19 +1,17 @@
-import $ from 'jquery';
-import atkPlugin from './atk.plugin';
+import $ from 'external/jquery';
+import AtkPlugin from './atk.plugin';
 
 /**
  * Will expand or collapse menu items for side navigation.
  * Toggling is done when clicking the toggler element.
- *    - Toggling icon class name will be switch ex: caret left to caret down,
- *    when triggered.
+ * - Toggling icon class name will be switch ex: caret left to caret down, when triggered.
  * Clicking on a menu group will simulate a click event on the first menu item in the group.
  *
  * Default value are set for Maestro admin layout.
  */
-
-export default class sidenav extends atkPlugin {
+export default class AtkSidenavPlugin extends AtkPlugin {
     main() {
-    // menu items container.
+        // menu items container.
         this.menu = this.$el.find(this.settings.menuItemsSelector);
         if (this.menu.length === 0) {
             // this $el is our single item.
@@ -37,14 +35,14 @@ export default class sidenav extends atkPlugin {
     }
 
     /**
-     * Check if the url correspond to one of our menu items.
+     * Check if the URL correspond to one of our menu items.
      * if so, then add the menuItemActiveCSS class and return true.
      *
      * @returns {boolean}
      */
     hasBase() {
         let hasBase = false;
-        this.menu.find('a').each((idx, el) => {
+        this.menu.find('a').each((i, el) => {
             if (this.urlMatchLocation(el.href)) {
                 hasBase = true;
                 // set active class for this specific menu item.
@@ -56,17 +54,16 @@ export default class sidenav extends atkPlugin {
     }
 
     /**
-     * Check if an url match with current window location.
-     * @param refUrl
+     * Check if an URL match with current window location.
      *
-     * @return bool
+     * @returns {boolean}
      */
     urlMatchLocation(refUrl) {
         const url = new URL(refUrl);
         if (url.pathname === window.location.pathname) {
             return true;
         }
-        // try to match base index url
+        // try to match base index URL
         if (url.pathname === (window.location.pathname + this.settings.base)) {
             return true;
         }
@@ -86,11 +83,9 @@ export default class sidenav extends atkPlugin {
 
     /**
      * Set class icon for the toggler element.
-     *
-     * @param selector
      */
     setTogglerIcon(selector) {
-        this.toggler.find(selector).attr('class', this.isMenuOn() ? this.settings.icon.off : this.settings.icon.on);
+        this.toggler.find(selector).attr('class', (this.isMenuOn() ? this.settings.icon.off : this.settings.icon.on) + ' icon');
     }
 
     /**
@@ -99,20 +94,20 @@ export default class sidenav extends atkPlugin {
      */
     addClickHandler() {
         this.$el.find(this.settings.menuGroupTitleSelector).on('click', (e) => {
-            e.stopPropagation();
             e.preventDefault();
+            e.stopPropagation();
             window.open(this.menu.find(this.settings.firstItemSelector).first().attr('href'), e.metaKey ? '_blank' : '_self');
         });
         this.toggler.on('click', (e) => {
-            e.stopPropagation();
             e.preventDefault();
+            e.stopPropagation();
             this.menu.toggleClass(this.settings.visibleCssClass);
             this.setTogglerIcon(this.settings.icon.selector);
         });
     }
 }
 
-sidenav.DEFAULTS = {
+AtkSidenavPlugin.DEFAULTS = {
     base: 'index.php',
     menuItemsSelector: '.atk-maestro-menu-items', // The css selector where menu items are contain.
     menuGroupTitleSelector: '.atk-menu-group-title', // The css selector for menu group title.
@@ -123,7 +118,7 @@ sidenav.DEFAULTS = {
     firstItemSelector: 'a', // the selector for the first menu item in a group, where click will be trigger.
     icon: {
         selector: 'i',
-        on: 'icon caret right',
-        off: 'icon caret down',
+        on: 'caret right',
+        off: 'caret down',
     },
 };

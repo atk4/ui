@@ -6,7 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsModal;
+use Atk4\Ui\Js\JsModal;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
@@ -33,12 +33,12 @@ $virtualPageButton->link('virtual.php');
 $virtualPage->ui = 'grey inverted segment';
 
 $modal = Modal::addTo($virtualPage);
-$modal->set(function ($modal) {
-    Text::addTo($modal)->set('This is yet another modal');
-    LoremIpsum::addTo($modal, ['size' => 2]);
+$modal->set(function (View $p) {
+    Text::addTo($p)->set('This is yet another modal');
+    LoremIpsum::addTo($p, ['size' => 2]);
 });
 $button = Button::addTo($virtualPage)->set('Open Lorem Ipsum');
-$button->on('click', $modal->show());
+$button->on('click', $modal->jsShow());
 
 $msg = Message::addTo($app, ['Virtual Page']);
 $msg->text->addParagraph('Virtual page content are not rendered on page load. They will ouptput their content when trigger.');
@@ -86,8 +86,8 @@ $table = Table::addTo($app, ['class.celled' => true]);
 $table->setModel(new SomeData());
 
 $frame = VirtualPage::addTo($app);
-$frame->set(function ($frame) {
-    Header::addTo($frame, ['Clicked row with ID = ' . ($_GET['id'] ?? '')]);
+$frame->set(function (VirtualPage $p) {
+    Header::addTo($p, ['Clicked row with ID = ' . ($_GET['id'] ?? '')]);
 });
 
 $table->onRowClick(new JsModal('Row Clicked', $frame, ['id' => $table->jsRow()->data('id')]));

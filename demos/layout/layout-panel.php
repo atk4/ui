@@ -9,8 +9,8 @@ use Atk4\Ui\Card;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Icon;
-use Atk4\Ui\JsReload;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsReload;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Message;
 use Atk4\Ui\Panel;
 use Atk4\Ui\Text;
@@ -89,7 +89,7 @@ $txt->addParagraph('Try to change dropdown value and close without saving!');
 $panel2->onOpen(function (Panel\Content $p) {
     $form = Form::addTo($p);
     $form->addHeader('Settings');
-    $form->addControl('name', [Form\Control\Dropdown::class, 'values' => ['1' => 'Option 1', '2' => 'Option 2']])
+    $form->addControl('name', [Form\Control\Dropdown::class, 'values' => [1 => 'Option 1', 2 => 'Option 2']])
         ->set('1')
         ->onChange($p->getOwner()->jsDisplayWarning(true));
 

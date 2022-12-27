@@ -13,7 +13,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\View;
 
 /**
- * Custom Layout for a form (user-defined HTML).
+ * Custom Layout for a form.
  */
 abstract class AbstractLayout extends View
 {
@@ -31,26 +31,35 @@ abstract class AbstractLayout extends View
      * Places element inside a layout somewhere. Should be called
      * through $form->addControl().
      *
-     * @param array|Control $control
-     * @param array|Field   $field
+     * @param array<mixed>|Control $control
+     * @param array<mixed>         $fieldSeed
      */
-    public function addControl(string $name, $control = [], $field = []): Control
+    public function addControl(string $name, $control = [], array $fieldSeed = []): Control
     {
         if ($this->form->model === null) {
             $this->form->model = (new \Atk4\Ui\Misc\ProxyModel())->createEntity();
         }
         $this->form->model->assertIsEntity();
 
-        if (is_array($control) && isset($control['type'])) {
-            $field['type'] = $control['type'];
+        // TODO this class should not refer to any specific form control
+        $controlClass = is_object($control)
+            ? get_class($control)
+            : ($control[0] ?? (($fieldSeed['ui'] ?? [])['form'][0] ?? null));
+        if (is_a($controlClass, Control\Checkbox::class, true)) {
+            $fieldSeed['type'] = 'boolean';
+        } elseif (is_a($controlClass, Control\Calendar::class, true)) {
+            $calendarType = $control instanceof Control\Calendar ? $control->type : ($control['type'] ?? null);
+            if ($calendarType !== null) {
+                $fieldSeed['type'] = $calendarType;
+            }
         }
 
         try {
             if (!$this->form->model->hasField($name)) {
-                $field = $this->form->model->getModel()->addField($name, $field);
+                $field = $this->form->model->getModel()->addField($name, $fieldSeed);
             } else {
                 $field = $this->form->model->getField($name)
-                    ->setDefaults($field);
+                    ->setDefaults($fieldSeed);
             }
 
             $control = $this->form->controlFactory($field, $control);
@@ -58,24 +67,10 @@ abstract class AbstractLayout extends View
             throw (new Exception('Unable to create form control', 0, $e))
                 ->addMoreInfo('name', $name)
                 ->addMoreInfo('control', $control)
-                ->addMoreInfo('field', $field);
+                ->addMoreInfo('field', $fieldSeed);
         }
 
         return $this->_addControl($control, $field);
-    }
-
-    /**
-     * @param array<int, array> $controls
-     *
-     * @return $this
-     */
-    public function addControls(array $controls)
-    {
-        foreach ($controls as $control) {
-            $this->addControl(...$control);
-        }
-
-        return $this;
     }
 
     /**
@@ -104,24 +99,25 @@ abstract class AbstractLayout extends View
             $fields = $this->getModelFields($model);
         }
 
-        // prepare array of controls - check if fields are editable or read-only/disabled
-        $controls = [];
+        // add controls - check if fields are editable or read-only/disabled
         foreach ($fields as $fieldName) {
             $field = $model->getField($fieldName);
 
+            $controlSeed = null;
             if ($field->isEditable()) {
-                $controls[] = [$field->shortName];
+                $controlSeed = [];
             } elseif ($field->isVisible()) {
-                $controls[] = [$field->shortName, ['readOnly' => true]];
+                $controlSeed = ['readOnly' => true];
+            }
+
+            if ($controlSeed !== null) {
+                $this->addControl($field->shortName, $controlSeed);
             }
         }
-
-        $this->addControls($controls);
     }
 
     /**
-     * Return Field decorator associated with
-     * the form's field.
+     * Return Field decorator associated with the form's field.
      */
     public function getControl(string $name): Control
     {

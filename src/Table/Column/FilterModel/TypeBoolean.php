@@ -22,7 +22,7 @@ class TypeBoolean extends Column\FilterModel
     public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();
-        if (isset($filter['id'])) {
+        if ($filter !== null) {
             $model->addCondition($filter['name'], $filter['op'] === 'true');
         }
 

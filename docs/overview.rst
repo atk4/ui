@@ -11,7 +11,7 @@ CSS, the goal of Agile UI is to abstract them away behind easy-to-use component 
 
 As a framework it's closely coupled with Agile Data (https://agile-data.readthedocs.io)
 which abstracts database interaction operations. The default UI template set
-uses Fomantic UI (https://fomantic-ui.com) for presentation.
+uses Fomantic-UI (https://fomantic-ui.com) for presentation.
 
 At a glance, Agile UI consists of the following:
 
@@ -234,11 +234,8 @@ To render a component individually and get the HTML and JavaScript use this form
     $html = $form->render();
 
 
-This would render an individual component and will return HTML / JavaScript::
+This would render an individual component and will return HTML::
 
-    <script>
-      ..form submit callback setup..
-    </script>
     <div class="ui form">
         <form id="atk_form">
            ... fields
@@ -267,7 +264,7 @@ https://agile-core.readthedocs.io/en/develop/factory.html
 Templates
 ---------
 Components rely on :php:class:`Template` class for parsing and rendering their
-HTML. The default template is written for Fomantic UI framework, which makes sure
+HTML. The default template is written for Fomantic-UI framework, which makes sure
 that elements will look good and be consistent.
 
 

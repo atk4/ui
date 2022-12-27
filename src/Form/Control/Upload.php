@@ -6,11 +6,13 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
-use Atk4\Ui\JsExpressionable;
 
 class Upload extends Input
 {
+    public $defaultTemplate = 'form/control/upload.html';
+
     public string $inputType = 'hidden';
 
     /** @var Button|array|null The action button to open file browser dialog. */
@@ -25,9 +27,6 @@ class Upload extends Input
      * @var string|null
      */
     public $fileId;
-
-    /** @var string The input default template. */
-    public $defaultTemplate = 'form/control/upload.html';
 
     /** @var JsCallback Callback is use for onUpload or onDelete. */
     public $cb;
@@ -66,7 +65,7 @@ class Upload extends Input
         $this->cb = JsCallback::addTo($this);
 
         if (!$this->action) {
-            $this->action = new Button(['icon' => 'upload', 'class.disabled' => ($this->disabled || $this->readOnly)]);
+            $this->action = new Button(['icon' => 'upload', 'class.disabled' => $this->disabled || $this->readOnly]);
         }
     }
 
@@ -114,7 +113,7 @@ class Upload extends Input
     }
 
     /**
-     * @param string $id
+     * @param string|null $id
      */
     public function setFileId($id): void
     {
@@ -122,7 +121,7 @@ class Upload extends Input
     }
 
     /**
-     * Add a JS action to be return to server on callback.
+     * Add a JS action to be returned to server on callback.
      *
      * @param JsExpressionable $action
      */
@@ -137,7 +136,7 @@ class Upload extends Input
     public function onUpload(\Closure $fx): void
     {
         $this->hasUploadCb = true;
-        if (($_POST['f_upload_action'] ?? null) === self::UPLOAD_ACTION) {
+        if (($_POST['fUploadAction'] ?? null) === self::UPLOAD_ACTION) {
             $this->cb->set(function () use ($fx) {
                 $postFiles = [];
                 for ($i = 0;; ++$i) {
@@ -179,9 +178,9 @@ class Upload extends Input
     public function onDelete(\Closure $fx): void
     {
         $this->hasDeleteCb = true;
-        if (($_POST['f_upload_action'] ?? null) === self::DELETE_ACTION) {
+        if (($_POST['fUploadAction'] ?? null) === self::DELETE_ACTION) {
             $this->cb->set(function () use ($fx) {
-                $fileId = $_POST['f_upload_id'] ?? null;
+                $fileId = $_POST['fUploadId'] ?? null;
                 $this->addJsAction($fx($fileId));
 
                 return $this->jsActions;
@@ -198,7 +197,7 @@ class Upload extends Input
         parent::renderView();
 
         if ($this->cb->canTerminate()) {
-            $uploadActionRaw = $_POST['f_upload_action'] ?? null;
+            $uploadActionRaw = $_POST['fUploadAction'] ?? null;
             if (!$this->hasUploadCb && ($uploadActionRaw === self::UPLOAD_ACTION)) {
                 throw new Exception('Missing onUpload callback');
             } elseif (!$this->hasDeleteCb && ($uploadActionRaw === self::DELETE_ACTION)) {
@@ -207,10 +206,15 @@ class Upload extends Input
         }
 
         if ($this->accept !== []) {
-            $this->template->trySet('accept', implode(', ', $this->accept));
+            $this->template->set('accept', implode(', ', $this->accept));
         }
+
+        if ($this->disabled || $this->readOnly) {
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
+        }
+
         if ($this->multiple) {
-            $this->template->trySet('multiple', 'multiple');
+            $this->template->dangerouslySetHtml('multiple', 'multiple="multiple"');
         }
 
         if ($this->placeholder) {
@@ -218,7 +222,7 @@ class Upload extends Input
         }
 
         $this->js(true)->atkFileUpload([
-            'uri' => $this->cb->getJsUrl(),
+            'url' => $this->cb->getJsUrl(),
             'action' => $this->action->name,
             'file' => ['id' => $this->fileId ?? $this->entityField->get(), 'name' => $this->getInputValue()],
             'submit' => ($this->form->buttonSave) ? $this->form->buttonSave->name : null,

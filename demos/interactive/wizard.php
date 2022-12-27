@@ -75,7 +75,7 @@ $wizard->addStep(['Migration', 'description' => 'Create or update table', 'icon'
     $console = Console::addTo($wizard);
     $wizard->buttonFinish->addClass('disabled');
 
-    $console->set(function ($console) use ($wizard) {
+    $console->set(function (Console $console) use ($wizard) {
         $dsn = $wizard->recall('dsn');
         $model = $wizard->recall('model');
 

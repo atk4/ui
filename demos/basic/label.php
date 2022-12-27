@@ -6,7 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Columns;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsReload;
+use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Label;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Menu;
@@ -26,7 +26,7 @@ Label::addTo($app, ['Coded in PHP', 'image' => $img]);
 Label::addTo($app, ['Number of lines', 'detail' => '33']);
 
 Header::addTo($app, ['Combinations and Interraction']);
-$del = Label::addTo($app, ['Zoe', 'image' => 'https://semantic-ui.com/images/avatar/small/ade.jpg', 'iconRight' => 'delete']);
+$del = Label::addTo($app, ['Zoe', 'image' => 'https://fomantic-ui.com/images/avatar/small/ade.jpg', 'iconRight' => 'delete']);
 $del->on('click', '.delete', $del->js()->fadeOut());
 
 $val = isset($_GET['toggle']) && $_GET['toggle'];

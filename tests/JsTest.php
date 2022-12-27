@@ -6,10 +6,11 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\App;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsChain;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsFunction;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsFunction;
 
 class JsTest extends TestCase
 {
@@ -17,6 +18,12 @@ class JsTest extends TestCase
     {
         static::assertSame('2 + 2', (new JsExpression('2 + 2'))->jsRender());
         static::assertSame('3 + 4', (new JsExpression('[] + []', [3, 4]))->jsRender());
+    }
+
+    public function testStrings(): void
+    {
+        static::assertSame('\'\\\'\', \'"\', \'\n\'', (new JsExpression('[], [], []', ['\'', '"', "\n"]))->jsRender());
+        static::assertSame('\'\\\'a"b\\\\\\\'c\\\\" \\\'"\'', (new JsExpression('[]', ['\'a"b\\\'c\\" \'"']))->jsRender());
     }
 
     public function testNumbers(): void
@@ -37,12 +44,15 @@ class JsTest extends TestCase
             [1.5, '1.5'],
             [false, 'false'],
             [true, 'true'],
-            [ // verify if regex accepts big input and does not fail with backtrack limit
-                $longStr,
-                json_encode($longStr),
-            ],
+            // verify if regex accepts big input and does not fail with backtrack limit
+            [$longStrBase, json_encode($longStrBase)],
+            [$longStr, json_encode($longStr)],
         ] as [$in, $expected]) {
-            static::assertSame($expected, (new JsExpression('[]', [$in]))->jsRender());
+            $jsRendered = (new JsExpression('[]', [$in]))->jsRender();
+            if (substr($jsRendered, 0, 1) === '\'') {
+                $jsRendered = '"' . str_replace('"', '\\"', substr($jsRendered, 1, -1)) . '"';
+            }
+            static::assertSame($expected, $jsRendered);
 
             // test JSON renderer in App too
             // test extensively because of complex custom regex impl
@@ -78,14 +88,14 @@ class JsTest extends TestCase
     {
         $c = new JsChain('$myInput');
         $c->getTextInRange('start', 'end'); // @phpstan-ignore-line
-        static::assertSame('$myInput.getTextInRange("start", "end")', $c->jsRender());
+        static::assertSame('$myInput.getTextInRange(\'start\', \'end\')', $c->jsRender());
     }
 
     public function testChain2(): void
     {
         $c = new JsChain('$myInput');
         $c->getTextInRange(new JsExpression('getStart()'), 'end'); // @phpstan-ignore-line
-        static::assertSame('$myInput.getTextInRange(getStart(), "end")', $c->jsRender());
+        static::assertSame('$myInput.getTextInRange(getStart(), \'end\')', $c->jsRender());
     }
 
     public function testJquery(): void
@@ -93,7 +103,7 @@ class JsTest extends TestCase
         $c = new Jquery('.mytag');
         $c->find('li')->first()->hide();
 
-        static::assertSame('$(".mytag").find("li").first().hide()', $c->jsRender());
+        static::assertSame('$(\'.mytag\').find(\'li\').first().hide()', $c->jsRender());
     }
 
     public function testArgs(): void
@@ -101,7 +111,7 @@ class JsTest extends TestCase
         $c = new Jquery('.mytag');
         $c->val((new Jquery('.othertag'))->val());
 
-        static::assertSame('$(".mytag").val($(".othertag").val())', $c->jsRender());
+        static::assertSame('$(\'.mytag\').val($(\'.othertag\').val())', $c->jsRender());
     }
 
     public function testComplex1(): void
@@ -111,12 +121,23 @@ class JsTest extends TestCase
         $b2 = new Jquery('.box2');
 
         $doc = new Jquery(new JsExpression('document'));
-        $fx = $doc->ready(new JsFunction([], [
+        $fx = $doc->first(new JsFunction([], [
             $b1->height($b2->height()),
         ]));
 
-        static::assertSame('$(document).ready(function() {
-        $(".box1").height($(".box2").height());
-    })', $fx->jsRender());
+        static::assertSame(<<<'EOF'
+            $(document).first(function () {
+                    $('.box1').height($('.box2').height());
+                })
+            EOF, $fx->jsRender());
+    }
+
+    public function testUnsupportedTypeRenderException(): void
+    {
+        $js = new JsExpression('{}', [new \stdClass()]);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('not renderable to JS');
+        $js->jsRender();
     }
 }

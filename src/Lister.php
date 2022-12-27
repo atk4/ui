@@ -11,9 +11,7 @@ class Lister extends View
 {
     use HookTrait;
 
-    /** @const string */
     public const HOOK_BEFORE_ROW = self::class . '@beforeRow';
-    /** @const string */
     public const HOOK_AFTER_ROW = self::class . '@afterRow';
 
     /**
@@ -92,17 +90,15 @@ class Lister extends View
         $this->model->setLimit($ipp);
 
         // add onScroll callback
-        $this->jsPaginator->onScroll(function ($p) use ($ipp, $scrollRegion) {
+        $this->jsPaginator->onScroll(function (int $p) use ($ipp, $scrollRegion) {
             // set/overwrite model limit
             $this->model->setLimit($ipp, ($p - 1) * $ipp);
 
             // render this View (it will count rendered records !)
-            $jsonArr = $this->renderToJsonArr(true, $scrollRegion);
+            $jsonArr = $this->renderToJsonArr($scrollRegion);
 
-            // if there will be no more pages, then replace message=Success to let JS know that there are no more records
-            if ($this->_renderedRowsCount < $ipp) {
-                $jsonArr['message'] = 'Done'; // Done status means - no more requests from JS side
-            }
+            // let client know that there are no more records
+            $jsonArr['noMoreScrollPages'] = $this->_renderedRowsCount < $ipp;
 
             // return json response
             $this->getApp()->terminateJson($jsonArr);
@@ -190,5 +186,32 @@ class Lister extends View
         } else {
             $this->template->dangerouslyAppendHtml('_top', $html);
         }
+    }
+
+    /**
+     * Hack - override parent method with region render only support.
+     *
+     * TODO this hack/method must be removed as rendering HTML only partially but with all JS
+     * is wrong by design. Each table row should be probably rendered natively using cloned
+     * render tree (instead of cloned template).
+     */
+    public function renderToJsonArr(string $region = null): array
+    {
+        $this->renderAll();
+
+        // https://github.com/atk4/ui/issues/1932
+        if ($region !== null) {
+            if (!isset($this->_jsActions['click'])) {
+                $this->_jsActions['click'] = [];
+            }
+            array_unshift($this->_jsActions['click'], $this->js()->off());
+        }
+
+        return [
+            'success' => true,
+            'atkjs' => $this->getJs(),
+            'html' => $this->template->renderToHtml($region),
+            'id' => $this->name,
+        ];
     }
 }

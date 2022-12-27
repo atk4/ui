@@ -7,7 +7,8 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
@@ -34,29 +35,35 @@ Header::addTo($app, ['js() method']);
 
 $b = Button::addTo($app, ['Hide button B']);
 $b2 = Button::addTo($app, ['B']);
-$b->js('click', $b2->js()->hide('b2'))->hide('b1');
+$b->on('click', [
+    $b->js()->addClass('disabled')->addClass('disabled'),
+    $b2->js()->hide(),
+]);
 
 Header::addTo($app, ['on() method']);
 
-$b = Button::addTo($app, ['Hide button C']);
+$b = Button::addTo($app, ['Hide button C and self']);
 $b2 = Button::addTo($app, ['C']);
-$b->on('click', null, $b2->js()->hide('c2'))->hide('c1');
+$b->on('click', null, [
+    $b->js()->hide(),
+    $b2->js()->hide(),
+]);
 
 Header::addTo($app, ['Callbacks']);
 
 // On button click reload it and change it's title
 $b = Button::addTo($app, ['Callback Test']);
-$b->on('click', null, function ($b) {
-    return $b->text(random_int(1, 20));
+$b->on('click', null, function (Jquery $j) {
+    return $j->text(random_int(1, 20));
 });
 
 $b = Button::addTo($app, ['success']);
-$b->on('click', null, function ($b) {
+$b->on('click', null, function (Jquery $j) {
     return 'success';
 });
 
 $b = Button::addTo($app, ['failure']);
-$b->on('click', null, function ($b) {
+$b->on('click', null, function (Jquery $j) {
     throw new Exception('Everything is bad');
 });
 
@@ -64,6 +71,6 @@ Header::addTo($app, ['Callbacks on HTML element', 'subHeader' => 'Click on label
 
 $label = Label::addTo($app->layout, ['Test']);
 
-$label->on('click', null, function ($j, $arg1) {
+$label->on('click', null, function (Jquery $j, $arg1) {
     return 'width is ' . $arg1;
 }, [new JsExpression('$(window).width()')]);

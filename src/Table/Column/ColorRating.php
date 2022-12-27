@@ -10,7 +10,7 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Table;
 
 /**
- * Class ColorRating can be defined like this:
+ * Example seed:
  * [ColorRating::class, [
  *     'min' => 1,
  *     'max' => 3,
@@ -67,9 +67,9 @@ class ColorRating extends Table\Column
     {
         $colorFrom = '';
 
-        foreach ($this->colors as $idx => $color) {
+        foreach ($this->colors as $i => $color) {
             // skip first
-            if ($idx === 0) {
+            if ($i === 0) {
                 $colorFrom = $color;
 
                 continue;
@@ -89,8 +89,8 @@ class ColorRating extends Table\Column
 
     private function createGradientSingle(array &$gradients, string $hexFrom, string $hexTo, int $steps): void
     {
-        $hexFrom = trim($hexFrom, '#');
-        $hexTo = trim($hexTo, '#');
+        $hexFrom = ltrim($hexFrom, '#');
+        $hexTo = ltrim($hexTo, '#');
 
         $fromRgb = [
             'r' => hexdec(substr($hexFrom, 0, 2)),
@@ -158,7 +158,7 @@ class ColorRating extends Table\Column
         }
 
         return [
-            '_' . $this->shortName . '_color_rating' => 'background-color:' . $color . ';',
+            '_' . $this->shortName . '_color_rating' => 'background-color: ' . $color . ';',
         ];
     }
 

@@ -13,7 +13,7 @@ Forms
 One of the most important components of ATK UI is the "Form". Class :php:class:`Form`
 implements the following 4 major features:
 
-- Form Rendering using Fomantic UI HTML/CSS (https://fomantic-ui.com/collections/form.html):
+- Form Rendering using Fomantic-UI HTML/CSS (https://fomantic-ui.com/collections/form.html):
 
     .. image:: images/form.png
 
@@ -177,17 +177,6 @@ Form control does not have to be added directly into the form. You can use a sep
     $myview = View::addTo($form, ['defaultTemplate' => './mytemplate.html']);
     Form\Control\Dropdown::addTo($myview, ['form' => $form]);
 
-.. php:method:: addControls($fields)
-
-Similar to :php:meth:`Form::addControl()`, but allows to add multiple form controls in one method call::
-
-    $form = Form::addTo($app);
-    $form->addControls([
-        'email',
-        ['gender', [\Atk4\Ui\Form\Control\Dropdown::class, 'values' => ['Female', 'Male']]],
-        ['terms', null, ['type' => 'boolean', 'caption' => 'Agree to Terms & Conditions']],
-    ]);
-
 Adding new controls
 -------------------
 
@@ -255,8 +244,8 @@ There are 3 ways to define Data form control using 'string', 'json' or 'object':
 
     class MyBoolean extends \Atk4\Data\Field
     {
-        public ?string $type = 'boolean';
-        public $enum = ['N', 'Y'];
+        public string $type = 'boolean';
+        public ?array $enum = ['N', 'Y'];
     }
     $form->addControl('test2', [], new MyBoolean());
 
@@ -431,7 +420,7 @@ it's always nicer to load values for the database. Given a ``User`` model this i
 you can create a form to change profile of a currently logged user::
 
     $user = new User($db);
-    $user->getControl('password')->neverPersist = true; // ignore password field
+    $user->getField('password')->neverPersist = true; // ignore password field
     $user = $user->load($current_user);
 
     // Display all fields (except password) and values
@@ -539,7 +528,7 @@ Form Submit Handling
 
 .. php:method:: setApiConfing($config)
 
-    Add additional parameters to Fomantic UI .api function which does the AJAX submission of the form.
+    Add additional parameters to Fomantic-UI .api function which does the AJAX submission of the form.
 For example, if you want the loading overlay at a different HTML element, you can define it with::
 
     $form->setApiConfig(['stateContext' => 'my-JQuery-selector']);
@@ -651,10 +640,14 @@ My next example will add multiple controls on the same line::
 
     $form->setModel(new User($db), []); // will not populate any form controls automatically
 
-    $form->addControls(['name', 'surname']);
+    $group = $form->addGroup('Customer');
+    $group->addControl('name');
+    $group->addControl('surname');
 
     $group = $form->addGroup('Address');
-    $group->addControls(['address', 'city', 'country']); // grouped form controls, will appear on the same line
+    $group->addControl('street');
+    $group->addControl('city');
+    $group->addControl('country');
 
 By default grouped form controls will appear with fixed width. To distribute space you can either specify
 proportions manually::
@@ -666,7 +659,8 @@ proportions manually::
 or you can divide space equally between form controls. Header is also omitted for this group::
 
     $group = $form->addGroup(['width' => 'two']);
-    $group->addControls(['city', 'country']);
+    $group->addControl('city');
+    $group->addControl('country');
 
 You can also use in-line form groups. Controls in such a group will display header on the left and
 the error messages appearing on the right from the control::
@@ -717,10 +711,10 @@ is further separated in two accordion sections and form controls are added to ea
 Sub layout gives you greater control on how to display form controls within your form. For more examples on
 sub layouts please visit demo page: https://github.com/atk4/ui/blob/develop/demos/form-section.php
 
-Fomantic UI Modifiers
+Fomantic-UI Modifiers
 ---------------------
 
-There are many other classes Fomantic UI allow you to use on a form. The next code will produce
+There are many other classes Fomantic-UI allow you to use on a form. The next code will produce
 form inside a segment (outline) and will make form controls appear smaller::
 
     $form = new \Atk4\Ui\Form(['class.small segment' => true]));
@@ -769,7 +763,7 @@ The logic is based around passing a declarative array::
         'phone4' => ['phone1' => 'empty', 'phone2' => 'empty', 'phone3' => 'empty'],
     ]);
 
-The only catch here is that "empty" means "not empty". ATK UI relies on rules defined by FomanticUI
+The only catch here is that "empty" means "not empty". ATK UI relies on rules defined by Fomantic-UI
 https://fomantic-ui.com/behaviors/form.html, so you can use any of the conditions there.
 
 Here is a more advanced example::

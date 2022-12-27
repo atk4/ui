@@ -35,13 +35,13 @@ You can set default value and interact with a form control using JavaScript::
 
 
     $button = \Atk4\Ui\Button::addTo($app, ['check value']);
-    $button->on('click', new \Atk4\Ui\JsExpression('alert("control value is: "+[])', [$control->jsInput()->val()]));
+    $button->on('click', new \Atk4\Ui\Js\JsExpression('alert(\'control value is: \' + [])', [$control->jsInput()->val()]));
 
 
 When used stand-alone, Form\Controls will produce a basic HTML (I have omitted id=)::
 
     <div class="ui  input">
-        <input name="line" type="text" placeholder="" value="hello world"/>
+        <input name="line" type="text" placeholder="" value="hello world">
     </div>
 
 
@@ -93,7 +93,7 @@ properly:
 
  - Generic (abstract, extends View) - Use this if form control is NOT based on `<input>`
  - Input (abstract, extends Generic) - Easiest since it alrady implements `<input>` and various
-   ways to attach button to the input with markup of Fomantic UI form control.
+   ways to attach button to the input with markup of Fomantic-UI form control.
 
 Hints
 -----
@@ -101,7 +101,7 @@ Hints
 .. php:attr:: hint
 
 When Form Control appears in a Form, then you can specify a Hint also. It appears below the form control and
-although it intends to be "extra info" or "extra help" due to current limitation of Fomantic UI
+although it intends to be "extra info" or "extra help" due to current limitation of Fomantic-UI
 the only way we can display hint is using a gray bubble. In the future version of Agile UI we
 will update to use a more suitable form control.
 
@@ -300,17 +300,17 @@ $expression argument can be string, JsExpression, array of JsExpressions or even
 
     // simple string
     $f1 = $form->addControl('f1');
-    $f1->onChange('console.log("f1 changed")');
+    $f1->onChange('console.log(\'f1 changed\')');
 
     // callback
     $f2 = $form->addControl('f2');
     $f2->onChange(function () {
-        return new \Atk4\Ui\JsExpression('console.log("f2 changed")');
+        return new \Atk4\Ui\Js\JsExpression('console.log(\'f2 changed\')');
     });
 
     // Calendar form control - wraps in function call with arguments date, text and mode
     $c1 = $form->addControl('c1', new \Atk4\Ui\Form\Control\Calendar(['type' => 'date']));
-    $c1->onChange('console.log("c1 changed: " + date + ", " + text + ", " + mode)');
+    $c1->onChange('console.log(\'c1 changed: \' + date + \', \' + text + \', \' + mode)');
 
 
 Dropdown
@@ -318,7 +318,7 @@ Dropdown
 
 .. php:class:: Dropdown
 
-Dropdown uses Fomantic UI Dropdown (https://fomantic-ui.com/modules/dropdown.html). A Dropdown can be used in two ways:
+Dropdown uses Fomantic-UI Dropdown (https://fomantic-ui.com/modules/dropdown.html). A Dropdown can be used in two ways:
 1) Set a Model to $model property. The Dropdown will render all records of the model that matchs the model's conditions.
 2) You can define $values property to create custom Dropdown items.
 
@@ -406,19 +406,19 @@ If not used with a model, you can define the Dropdown values in $values array. T
 You can also define an Icon right away::
 
     $dropdown->values = [
-        'tag' => ['Tag', 'icon' => 'tag icon'],
-        'globe' => ['Globe', 'icon' => 'globe icon'],
-        'registered' => ['Registered', 'icon' => 'registered icon'],
-        'file' => ['File', 'icon' => 'file icon'],
+        'tag' => ['Tag', 'icon' => 'tag'],
+        'globe' => ['Globe', 'icon' => 'globe'],
+        'registered' => ['Registered', 'icon' => 'registered'],
+        'file' => ['File', 'icon' => 'file'],
     ];
 
 If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.
 If you use it, use the second parameter as well, its the array key::
 
-    function ($row, $key) {
+    function (string $value, $key) {
         return [
             'value' => $key,
-            'title' => strtoupper($row),
+            'title' => strtoupper($value),
         ];
     }
 
@@ -431,13 +431,9 @@ There's a bunch of settings to influence Dropdown behaviour.
 
 Define a string for the empty option (no selection). Standard is non-breaking space symbol.
 
-.. php:attr:: isValueRequired
-
-Whether or not this dropdown requires a value. When set to true, $empty is shown on page load but is not selectable once a value has been chosen.
-
 .. php:attr:: dropdownOptions
 
-Here you can pass an array of Fomantic UI dropdown options (https://fomantic-ui.com/modules/dropdown.html#/settings) e.g. ::
+Here you can pass an array of Fomantic-UI dropdown options (https://fomantic-ui.com/modules/dropdown.html#/settings) e.g. ::
 
     $dropdown = new Dropdown(['dropdownOptions' => [
         'selectOnKeydown' => false,

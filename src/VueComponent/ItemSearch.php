@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Ui\VueComponent;
 
 use Atk4\Data\Model;
-use Atk4\Ui\JsVueService;
 use Atk4\Ui\View;
 
 /**
@@ -13,7 +12,7 @@ use Atk4\Ui\View;
  */
 class ItemSearch extends View
 {
-    /** @var View|string the atk4 View to be reload or a jquery id selector string View to be reload that contains data to be filtered. */
+    /** @var View|string the atk4 View to be reloaded or a jquery id selector string View to be reloaded that contains data to be filtered. */
     public $reload;
 
     /** @var string The initial query. */
@@ -31,7 +30,7 @@ class ItemSearch extends View
     public $inputTimeOut = 250;
 
     /**
-     * The jquery selector where you need to add the semantic-ui 'loading' class.
+     * The jquery selector where you need to add the Fomantic-UI 'loading' class.
      * Default to reload selector.
      *
      * @var View
@@ -71,7 +70,8 @@ class ItemSearch extends View
      */
     public function setModelCondition(Model $model): void
     {
-        if ($q = $this->getQuery()) {
+        $q = $this->getQuery();
+        if ($q) {
             $model->addCondition($model->titleField, 'like', '%' . $q . '%');
         }
     }
@@ -81,7 +81,7 @@ class ItemSearch extends View
         $this->class = [];
         parent::renderView();
 
-        // reloadId is the view id selector name that need to be reload.
+        // reloadId is the view id selector name that needs to be reloaded.
         // this will be pass as get argument to __atk_reload.
         if ($this->reload instanceof View) {
             $reloadId = $this->reload->name;
@@ -89,20 +89,16 @@ class ItemSearch extends View
             $reloadId = $this->reload;
         }
 
-        $this->js(true, (new JsVueService())->createAtkVue(
-            '#' . $this->name,
-            'atk-item-search',
-            [
-                'reload' => $reloadId,
-                'queryArg' => $this->queryArg,
-                'url' => $this->reload->jsUrl(),
-                'q' => $this->q,
-                'context' => $this->context,
-                'options' => [
-                    'inputTimeOut' => $this->inputTimeOut,
-                    'inputCss' => $this->inputCss,
-                ],
-            ]
-        ));
+        $this->vue('AtkItemSearch', [
+            'reload' => $reloadId,
+            'queryArg' => $this->queryArg,
+            'url' => $this->reload->jsUrl(),
+            'q' => $this->q,
+            'context' => $this->context,
+            'options' => [
+                'inputTimeOut' => $this->inputTimeOut,
+                'inputCss' => $this->inputCss,
+            ],
+        ]);
     }
 }

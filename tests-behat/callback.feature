@@ -1,5 +1,4 @@
 Feature: Callback
-  Testing callbacks
 
   Scenario:
     Given I am on "_unit-test/callback.php"

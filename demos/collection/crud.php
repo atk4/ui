@@ -23,7 +23,7 @@ $model = new Country($app->db);
 $crud = Crud::addTo($app, ['ipp' => 10]);
 
 // callback for model action add form.
-$crud->onFormAdd(function (Form $form, $t) use ($model) {
+$crud->onFormAdd(function (Form $form, ModalExecutor $ex) use ($model) {
     $form->js(true, $form->getControl($model->fieldName()->name)->jsInput()->val('Entering value via javascript'));
 });
 
@@ -65,7 +65,7 @@ $model->onHook(Model::HOOK_VALIDATE, function (Country $model, ?string $intent) 
 $crud->setModel($model);
 
 // Because Crud inherits Grid, you can also define custom actions
-$crud->addModalAction(['icon' => 'cogs'], 'Details', function ($p, $id) use ($crud) {
+$crud->addModalAction(['icon' => 'cogs'], 'Details', function (View $p, $id) use ($crud) {
     $model = Country::assertInstanceOf($crud->model);
     Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $id . ')']);
 });

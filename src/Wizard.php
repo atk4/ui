@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
+use Atk4\Ui\Js\JsExpression;
 
 class Wizard extends View
 {
@@ -35,7 +36,7 @@ class Wizard extends View
     /**
      * Icon that will be used on all steps by default.
      *  - 'empty', since no such icon exists, no visible icon will be used unless step is completed
-     *  - 'square outline', use this (or any other) Semantic UI icon by default
+     *  - 'square outline', use this (or any other) Fomantic-UI icon by default
      *  - false, disables icons alltogether (or using checkboxes for completed steps).
      *
      * @var string|false
@@ -162,7 +163,7 @@ class Wizard extends View
     protected function recursiveRender(): void
     {
         if (!$this->steps) {
-            $this->addStep(['No Steps Defined', 'icon' => 'configure', 'description' => 'use $wizard->addStep() now'], function ($p) {
+            $this->addStep(['No Steps Defined', 'icon' => 'configure', 'description' => 'use $wizard->addStep() now'], function (self $p) {
                 Message::addTo($p, ['Step content will appear here', 'type' => 'error', 'text' => 'Specify callback to addStep() which would populate this area.']);
             });
         }
