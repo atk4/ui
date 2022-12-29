@@ -27,6 +27,13 @@ $model->addUserAction('test', function (Model $model) {
 
 $grid->setModel($model);
 
+// add country flag column
+$grid->addColumn('flag', [
+    Table\Column\CountryFlag::class,
+    'codeField' => $model->fieldName()->iso,
+    'nameField' => $model->fieldName()->name,
+]);
+
 // Adding Quicksearch on Name field using auto query.
 $grid->addQuickSearch([$model->fieldName()->name], true);
 
