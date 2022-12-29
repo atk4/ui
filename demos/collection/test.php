@@ -15,7 +15,7 @@ $m->addField('flag', [
     'neverPersist' => true, // no need for actual value in this field
     'ui' => [
         'table' => [
-            Table\Column\Flag::class,
+            Table\Column\CountryFlag::class,
             [
                 'codeField' => $m->fieldName()->iso,
                 'nameField' => $m->fieldName()->name,
