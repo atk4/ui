@@ -29,7 +29,7 @@ $grid->setModel($model);
 
 // add country flag column
 $grid->addColumn('flag', [
-    Table\Column\Flag::class,
+    Table\Column\CountryFlag::class,
     'codeField' => $model->fieldName()->iso,
     'nameField' => $model->fieldName()->name,
 ]);
