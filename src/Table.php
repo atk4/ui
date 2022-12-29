@@ -482,7 +482,7 @@ class Table extends Lister
                 if (!is_array($columns)) {
                     $columns = [$columns];
                 }
-                $field = !is_int($name) && $this->model->hasField($name) ? $this->model->getField($name) : null;
+                $field = is_int($name) ? null : $this->model->getField($name);
                 foreach ($columns as $column) {
                     $html_tags = array_merge($column->getHtmlTags($this->model, $field), $html_tags);
                 }
