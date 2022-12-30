@@ -9,7 +9,7 @@ use Atk4\Core\NameTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
-use Atk4\Data\Types\Types as CustomTypes;
+use Atk4\Data\Type\Types as CustomTypes;
 use Atk4\Ui\App;
 use Atk4\Ui\SessionTrait;
 use Doctrine\DBAL\Types\Types;
