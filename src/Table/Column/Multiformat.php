@@ -35,20 +35,19 @@ class Multiformat extends Table\Column
         // we need to smartly wrap things up
         $name = $field->shortName;
         $cell = null;
-        $cnt = count($decorators);
         $td_attr = [];
         $html_tags = [];
-        foreach ($decorators as $c) {
+        foreach ($decorators as $cKey => $c) {
             if (!is_object($c)) {
                 $c = $this->getOwner()->decoratorFactory($field, $c);
             }
             $c = Table\Column::assertInstanceOf($c);
 
-            if (--$cnt) {
+            if ($cKey !== array_key_last($decorators)) {
                 $html = $c->getDataCellTemplate($field);
                 $td_attr = $c->getTagAttributes('body', $td_attr);
             } else {
-                // Last formatter, ask it to give us whole rendering
+                // last formatter, ask it to give us whole rendering
                 $html = $c->getDataCellHtml($field, $td_attr);
             }
 
