@@ -157,6 +157,7 @@ if ($layout instanceof Layout\NavigableInterface) {
     $menu = $layout->addMenuGroup(['Interactive', 'icon' => 'talk']);
     $layout->addMenuItem('Tabs', [$path . 'tabs'], $menu);
     $layout->addMenuItem('Card', [$path . 'card'], $menu);
+    $layout->addMenuItem('Card Table', [$path . 'cardtable'], $menu);
     $layout->addMenuItem(['Accordion'], [$path . 'accordion'], $menu);
     $layout->addMenuItem(['Wizard'], [$path . 'wizard'], $menu);
     $layout->addMenuItem(['Virtual Page'], [$path . 'virtual'], $menu);
