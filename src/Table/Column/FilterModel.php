@@ -32,8 +32,8 @@ abstract class FilterModel extends Model
     /** @var bool Determines if this field shouldn't have a value field, and use only op field. */
     public $noValueField = false;
 
-    /** @var Field The field where this filter need to query data. */
-    public $lookupField;
+    /** The field where this filter need to query data. */
+    public Field $lookupField;
 
     public function __construct(App $app, array $defaults = [])
     {
