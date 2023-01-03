@@ -19,40 +19,40 @@ class CardTable extends Table
     /**
      * @param array<int, string>|null $columns
      */
-    public function setModel(Model $model, array $columns = null): void
+    public function setModel(Model $entity, array $columns = null): void
     {
         if ($this->_bypass) {
-            parent::setModel($model);
+            parent::setModel($entity);
 
             return;
         }
 
-        $model->assertIsLoaded();
+        $entity->assertIsLoaded();
 
         if ($columns === null) {
-            $columns = array_keys($model->getFields('visible'));
+            $columns = array_keys($entity->getFields('visible'));
         }
 
         $data = [];
-        foreach ($model->get() as $key => $value) {
+        foreach ($entity->get() as $key => $value) {
             if (in_array($key, $columns, true)) {
                 $data[] = [
                     'id' => $key,
-                    'field' => $model->getField($key)->getCaption(),
-                    'value' => $this->getApp()->uiPersistence->typecastSaveField($model->getField($key), $value),
+                    'field' => $entity->getField($key)->getCaption(),
+                    'value' => $this->getApp()->uiPersistence->typecastSaveField($entity->getField($key), $value),
                 ];
             }
         }
 
         $this->_bypass = true;
         try {
-            $mm = parent::setSource($data);
+            parent::setSource($data);
         } finally {
             $this->_bypass = false;
         }
 
-        $this->addDecorator('value', [Table\Column\Multiformat::class, function (Model $row) use ($model) {
-            $field = $model->getField($row->getId());
+        $this->addDecorator('value', [Table\Column\Multiformat::class, function (Model $row) use ($entity) {
+            $field = $entity->getField($row->getId());
             $ret = $this->decoratorFactory(
                 $field,
                 $field->type === 'boolean' ? [Table\Column\Status::class, ['positive' => [true, 'Yes'], 'negative' => [false, 'No']]] : []
