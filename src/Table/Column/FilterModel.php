@@ -9,7 +9,7 @@ use Atk4\Core\NameTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
-use Atk4\Data\Types\Types as CustomTypes;
+use Atk4\Data\Type\Types as CustomTypes;
 use Atk4\Ui\App;
 use Atk4\Ui\SessionTrait;
 use Doctrine\DBAL\Types\Types;
@@ -32,8 +32,8 @@ abstract class FilterModel extends Model
     /** @var bool Determines if this field shouldn't have a value field, and use only op field. */
     public $noValueField = false;
 
-    /** @var Field The field where this filter need to query data. */
-    public $lookupField;
+    /** The field where this filter need to query data. */
+    public Field $lookupField;
 
     public function __construct(App $app, array $defaults = [])
     {

@@ -680,14 +680,13 @@ class Table extends Lister
 
             // we need to smartly wrap things up
             $cell = null;
-            $cnt = count($column);
             $td_attr = [];
-            foreach ($column as $c) {
-                if (--$cnt) {
+            foreach ($column as $cKey => $c) {
+                if ($cKey !== array_key_last($column)) {
                     $html = $c->getDataCellTemplate($field);
                     $td_attr = $c->getTagAttributes('body', $td_attr);
                 } else {
-                    // Last formatter, ask it to give us whole rendering
+                    // last formatter, ask it to give us whole rendering
                     $html = $c->getDataCellHtml($field, $td_attr);
                 }
 

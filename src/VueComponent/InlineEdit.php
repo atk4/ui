@@ -86,9 +86,9 @@ class InlineEdit extends View
         }
     }
 
-    public function setModel(Model $model): void
+    public function setModel(Model $entity): void
     {
-        parent::setModel($model);
+        parent::setModel($entity);
 
         if ($this->fieldName === null) {
             $this->fieldName = $this->model->titleField;

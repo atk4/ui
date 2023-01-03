@@ -221,17 +221,17 @@ class Form extends View
      *
      * @param array<int, string>|null $fields
      */
-    public function setModel(Model $model, array $fields = null): void
+    public function setModel(Model $entity, array $fields = null): void
     {
-        $model->assertIsEntity();
+        $entity->assertIsEntity();
 
         // Model is set for the form and also for the current layout
         try {
-            parent::setModel($model);
+            parent::setModel($entity);
 
-            $this->layout->setModel($model, $fields);
+            $this->layout->setModel($entity, $fields);
         } catch (Exception $e) {
-            throw $e->addMoreInfo('model', $model);
+            throw $e->addMoreInfo('model', $entity);
         }
     }
 

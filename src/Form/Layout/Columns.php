@@ -26,13 +26,13 @@ class Columns extends Form\Layout
      *
      * @param array<int, string>|null $fields
      */
-    public function setModel(Model $model, array $fields = null): void
+    public function setModel(Model $entity, array $fields = null): void
     {
         // dont add any fields automatically
-        parent::setModel($model, []);
+        parent::setModel($entity, []);
 
         if ($fields === null) {
-            $fields = $this->getModelFields($model);
+            $fields = $this->getModelFields($entity);
         }
 
         $cnt = count($fields);
@@ -67,7 +67,7 @@ class Columns extends Form\Layout
         foreach ($chunks as $chunk) {
             $cc = $c->addColumn();
             Form\Layout::addTo($cc, ['form' => $this->form])
-                ->setModel($model, $chunk);
+                ->setModel($entity, $chunk);
         }
 
         View::addTo($this, ['ui' => 'clearing hidden divider']);

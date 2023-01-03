@@ -175,11 +175,11 @@ class Card extends View
      *
      * @param array<int, string>|null $fields
      */
-    public function setModel(Model $model, array $fields = null): void
+    public function setModel(Model $entity, array $fields = null): void
     {
-        $model->assertIsLoaded();
+        $entity->assertIsLoaded();
 
-        parent::setModel($model);
+        parent::setModel($entity);
 
         if ($fields === null) {
             $fields = array_keys($this->model->getFields(['editable', 'visible']));
@@ -187,8 +187,8 @@ class Card extends View
 
         $this->setDataId($this->model->getId());
 
-        View::addTo($this->getSection(), [$model->getTitle(), 'class.header' => true]);
-        $this->getSection()->addFields($model, $fields, $this->useLabel, $this->useTable);
+        View::addTo($this->getSection(), [$entity->getTitle(), 'class.header' => true]);
+        $this->getSection()->addFields($entity, $fields, $this->useLabel, $this->useTable);
     }
 
     /**

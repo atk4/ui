@@ -30,7 +30,7 @@ class TableColumnColorRatingTest extends TestCase
         $m = new Model($db, ['table' => 'table']);
         $m->addField('name');
         $m->addField('ref');
-        $m->addField('rating');
+        $m->addField('rating', ['type' => 'integer']);
         $this->table = new Table();
         $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref', 'rating']);

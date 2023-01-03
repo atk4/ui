@@ -21,8 +21,7 @@ class Tooltip extends Table\Column
     /** @var string */
     public $icon;
 
-    /** @var string */
-    public $tooltipField;
+    public string $tooltipField;
 
     protected function init(): void
     {
@@ -30,10 +29,6 @@ class Tooltip extends Table\Column
 
         if (!$this->icon) {
             $this->icon = 'info circle';
-        }
-
-        if (!$this->tooltipField) {
-            throw new Exception('Tooltip field must be defined');
         }
     }
 

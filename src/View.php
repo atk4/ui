@@ -125,10 +125,8 @@ class View extends AbstractView
      * Sets source of the View.
      *
      * @param array $fields Limit model to particular fields
-     *
-     * @return Model
      */
-    public function setSource(array $data, $fields = null)
+    public function setSource(array $data, $fields = null): Model
     {
         // ID with zero value is not supported (at least in MySQL replaces it with next AI value)
         if (isset($data[0])) {
