@@ -11,14 +11,14 @@ use Atk4\Ui\Table;
 class CountryFlag extends Table\Column
 {
     /** Name of country code model field (in ISO 3166-1 alpha-2 format) */
-    public string $codeField;
+    public ?string $codeField = null;
 
     /** Optional name of model field which contains full country name. */
     public ?string $nameField = null;
 
     public function getHtmlTags(Model $row, ?Field $field): array
     {
-        $countryCode = $row->get($this->codeField);
+        $countryCode = $row->get($this->codeField ?? $field->shortName);
         $countryName = $this->nameField ? $row->get($this->nameField) : null;
 
         return [

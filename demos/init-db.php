@@ -9,6 +9,7 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
+use Atk4\Ui\Table;
 use Mvorisek\Atk4\Hintable\Data\HintablePropertyDef;
 
 try {
@@ -269,6 +270,7 @@ class Stat extends ModelWithPrefixedFields
             'type' => 'string',
             'ui' => [
                 'form' => [Form\Control\Line::class],
+                'table' => [Table\Column\CountryFlag::class],
             ],
         ])
             ->addField($this->fieldName()->client_country, Country::hinting()->fieldName()->name);

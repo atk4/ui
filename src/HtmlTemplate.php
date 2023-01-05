@@ -456,7 +456,13 @@ class HtmlTemplate
             $this->tagTrees = [];
             try {
                 $this->tagTrees[self::TOP_TAG] = $this->parseTemplateTree($inputReversed);
-                self::$_parseCache[$cKey] = $this->tagTrees;
+                $tagTrees = $this->tagTrees;
+                \Closure::bind(function () use ($tagTrees) {
+                    foreach ($tagTrees as $tagTree) {
+                        $tagTree->parentTemplate = null; // @phpstan-ignore-line
+                    }
+                }, null, TagTree::class)();
+                self::$_parseCache[$cKey] = $tagTrees;
             } finally {
                 $this->tagTrees = null; // @phpstan-ignore-line
             }
