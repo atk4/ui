@@ -7,6 +7,7 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
@@ -389,6 +390,40 @@ class Table extends Lister
         }
     }
 
+    public function setSource(array $data, $fields = null): Model
+    {
+        // mainly for CardTable to support different field type for different row 1/2
+        // related with https://github.com/atk4/data/blob/4.0.0/tests/Persistence/StaticTest.php#L142
+        $dataWithObjects = [];
+        if (is_array(reset($data))) {
+            foreach ($data as $rowKey => $row) {
+                foreach ($row as $k => $v) {
+                    if ($v instanceof EntityFieldPair) {
+                        $dataWithObjects[$row['id']][$k] = $v;
+                        $data[$rowKey][$k] = null;
+                    }
+                }
+            }
+        }
+
+        $model = parent::setSource($data, $fields);
+
+        foreach ($dataWithObjects as $id => $row) {
+            $entity = $model->load($id);
+            foreach ($row as $k => $v) {
+                $model->getField($k)->type = 'atk4_local_object';
+                $entity->set($k, $v);
+            }
+            $entity->save();
+        }
+        $model->onHook(Model::HOOK_BEFORE_LOAD, function () use ($dataWithObjects) {
+            // useless hook, but make sure the $dataWithObjects is kept referenced from $model
+            $count = count($dataWithObjects);
+        });
+
+        return $model;
+    }
+
     protected function renderView(): void
     {
         if (!$this->columns) {
@@ -420,8 +455,26 @@ class Table extends Lister
         // the same in Lister class
         $modelBackup = $this->model;
         try {
-            foreach ($this->model as $this->model) {
-                $this->currentRow = $this->model;
+            foreach ($this->model as $entityOrig) {
+                // mainly for CardTable to support different field type for different row 2/2
+                $entityCloned = (clone $entityOrig->getModel())->createEntity();
+                $entityCloned->setId($entityOrig->getId());
+                \Closure::bind(function () use ($entityOrig, $entityCloned) {
+                    foreach ($entityOrig->data as $k => $v) {
+                        $field = $entityCloned->getField($k);
+                        if ($field->type === 'atk4_local_object' && $v instanceof EntityFieldPair) {
+                            $field->type = $v->getField()->type;
+                            $field->enum = $v->getField()->enum;
+                            $field->values = $v->getField()->values;
+                            $field->ui = $v->getField()->ui;
+                            $v = $v->get();
+                        }
+                        $entityCloned->data[$k] = $v;
+                    }
+                }, null, Model::class)();
+
+                $this->model = $entityCloned;
+                $this->currentRow = $entityCloned; // TODO we should either drop currentRow property or never update model property
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
                 }

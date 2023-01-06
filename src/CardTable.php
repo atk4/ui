@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 
 /**
@@ -34,12 +35,12 @@ class CardTable extends Table
         }
 
         $data = [];
-        foreach ($entity->get() as $key => $value) {
+        foreach (array_keys($entity->get()) as $key) {
             if (in_array($key, $columns, true)) {
                 $data[] = [
                     'id' => $key,
                     'field' => $entity->getField($key)->getCaption(),
-                    'value' => $this->getApp()->uiPersistence->typecastSaveField($entity->getField($key), $value),
+                    'value' => new Model\EntityFieldPair($entity, $key),
                 ];
             }
         }
@@ -51,17 +52,13 @@ class CardTable extends Table
             $this->_bypass = false;
         }
 
-        $this->addDecorator('value', [Table\Column\Multiformat::class, function (Model $row) use ($entity) {
-            $field = $entity->getField($row->getId());
-            $ret = $this->decoratorFactory(
-                $field,
-                $field->type === 'boolean' ? [Table\Column\Status::class, ['positive' => [true, 'Yes'], 'negative' => [false, 'No']]] : []
-            );
-            if ($ret instanceof Table\Column\Money) {
-                $ret->attr['all']['class'] = ['single line'];
+        $this->addDecorator('value', [Table\Column\Multiformat::class, function (Model $row, Field $field) {
+            $c = $this->decoratorFactory($field);
+            if ($c instanceof Table\Column\Money) {
+                $c->attr['all']['class'] = ['single line'];
             }
 
-            return [$ret];
+            return [$c];
         }]);
     }
 }
