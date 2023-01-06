@@ -16,7 +16,6 @@ module.exports = {
         'string-quotes': 'double',
 
         // TODO
-        'function-no-unknown': null, // 2 same errors: Unexpected unknown function "fade"
         'no-duplicate-selectors': null, // 3 errors
         'selector-class-pattern': null, // 14 errors, example: Expected class selector ".atk-topMenu" to be kebab-case
     },

@@ -203,7 +203,7 @@ footer.atk-footer {
     transition: box-shadow 0.2s, right 0.2s;
     bottom: 0;
     background-color: @atkSlidePanelColor;
-    box-shadow: 0 0 0 fade(@black, 0%);
+    box-shadow: 0 0 0 rgba(@black, 0%);
     height: 99%;
     right: -100%;
     overflow-y: auto;
@@ -211,7 +211,7 @@ footer.atk-footer {
     width: 40%;
     z-index: @rightPanelIndex;
     &.atk-visible {
-        box-shadow: 0 0 5px fade(@black, 20%);
+        box-shadow: 0 0 5px rgba(@black, 20%);
         right: 0%;
     }
 }
