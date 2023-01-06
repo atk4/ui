@@ -392,7 +392,7 @@ class Table extends Lister
 
     public function setSource(array $data, $fields = null): Model
     {
-        // mainly for CardTable to support different field type for different row 1/2
+        // mainly for CardTable to support different field type for different row
         // related with https://github.com/atk4/data/blob/4.0.0/tests/Persistence/StaticTest.php#L142
         $dataWithObjects = [];
         if (is_array(reset($data))) {
@@ -455,26 +455,9 @@ class Table extends Lister
         // the same in Lister class
         $modelBackup = $this->model;
         try {
-            foreach ($this->model as $entityOrig) {
-                // mainly for CardTable to support different field type for different row 2/2
-                $entityCloned = (clone $entityOrig->getModel())->createEntity();
-                $entityCloned->setId($entityOrig->getId());
-                \Closure::bind(function () use ($entityOrig, $entityCloned) {
-                    foreach ($entityOrig->data as $k => $v) {
-                        $field = $entityCloned->getField($k);
-                        if ($field->type === 'atk4_local_object' && $v instanceof EntityFieldPair) {
-                            $field->type = $v->getField()->type;
-                            $field->enum = $v->getField()->enum;
-                            $field->values = $v->getField()->values;
-                            $field->ui = $v->getField()->ui;
-                            $v = $v->get();
-                        }
-                        $entityCloned->data[$k] = $v;
-                    }
-                }, null, Model::class)();
-
-                $this->model = $entityCloned;
-                $this->currentRow = $entityCloned; // TODO we should either drop currentRow property or never update model property
+            foreach ($this->model as $entity) {
+                $this->model = $entity;
+                $this->currentRow = $entity; // TODO we should either drop currentRow property or never update model property
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
                 }

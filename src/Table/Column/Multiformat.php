@@ -31,6 +31,13 @@ class Multiformat extends Table\Column
 
     public function getHtmlTags(Model $row, ?Field $field): array
     {
+        // mainly for CardTable to support different field type for different row
+        $fieldValue = $field->get($row);
+        if ($fieldValue instanceof Model\EntityFieldPair) {
+            $row = $fieldValue->getEntity();
+            $field = $fieldValue->getField();
+        }
+
         $decorators = ($this->callback)($row, $field);
         // we need to smartly wrap things up
         $name = $field->shortName;
