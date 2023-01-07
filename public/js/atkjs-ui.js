@@ -1942,12 +1942,11 @@ class ApiService {
   }
 
   /**
-   * Check server response and clear api.data object.
+   * Check server response.
    *
    * @returns {boolean}
    */
   successTest(response) {
-    this.data = {};
     if (response.success) {
       return true;
     }
