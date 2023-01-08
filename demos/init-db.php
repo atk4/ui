@@ -34,7 +34,7 @@ trait ModelPreventModificationTrait
             parent::atomic(function () use ($fx, $eRollback, &$res) {
                 $res = $fx();
 
-                throw $eRollback;
+//                throw $eRollback;
             });
         } catch (\Exception $e) {
             if ($e !== $eRollback) {
@@ -163,7 +163,7 @@ class ModelWithPrefixedFields extends Model
 
         parent::init();
 
-        $this->initPreventModification();
+//        $this->initPreventModification();
     }
 
     public function addField(string $name, $seed = []): Field
