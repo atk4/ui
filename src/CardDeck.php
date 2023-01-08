@@ -58,9 +58,6 @@ class CardDeck extends View
     /** @var View|null A view container for buttons. Added into menu when menu is set. */
     private $btns;
 
-    /** @var string Button css class for menu. */
-    public $menuBtnStyle = 'primary';
-
     /** @var array Default notifier to perform when model action is successful * */
     public $notifyDefault = [JsToast::class, 'settings' => ['displayTime' => 5000]];
 
@@ -342,48 +339,6 @@ class CardDeck extends View
         }
 
         $btn->on('click', $executor, $defaults);
-
-        return $btn;
-    }
-
-    /**
-     * Add button to menu bar on top of deck card.
-     *
-     * @param Button|string|array            $button   a button object, a model action or a string representing a model action
-     * @param JsExpressionable|\Closure|null $callback an model action, js expression or callback function
-     * @param string|array                   $confirm  A confirmation string or View::on method defaults when passed has an array,
-     *
-     * @return mixed
-     */
-    public function addMenuButton($button, $callback = null, $confirm = null, bool $isDisabled = false, array $args = null)
-    {
-        $defaults = [];
-
-        if ($confirm) {
-            $defaults['confirm'] = $confirm;
-        }
-
-        if ($args) {
-            $defaults['args'] = $args;
-        }
-
-        if (!is_object($button)) {
-            if (is_string($button)) {
-                $button = [$button, 'ui' => 'button ' . $this->menuBtnStyle];
-            }
-            $button = Factory::factory([Button::class], $button);
-        }
-
-        if ($button->icon && !is_object($button->icon)) {
-            $button->icon = Factory::factory([Icon::class], $button->icon);
-        }
-
-        if ($isDisabled) {
-            $button->addClass('disabled');
-        }
-
-        $btn = $this->btns->add($button);
-        $btn->on('click', $callback, $defaults);
 
         return $btn;
     }
