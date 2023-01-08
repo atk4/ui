@@ -144,7 +144,7 @@ walkFilesSync(__dirname, (f) => {
             let pathRel = null;
             if (m2.startsWith('http://') || m2.startsWith('https://') || m2.startsWith('//')) {
                 const pathMap = {
-                    'https://twemoji.maxcdn.com/v/latest/svg/': path.join(__dirname, 'twemoji/assets/svg/'),
+                    'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/': path.join(__dirname, 'twemoji/assets/svg/'),
                 };
 
                 const pathMapKeys = Object.keys(pathMap);
