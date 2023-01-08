@@ -38,7 +38,7 @@ class CardDeck extends View
     public $useAction = true;
 
     /** @var View|null The container view. The view that is reload when page or data changed. */
-    public $container = [View::class, 'ui' => 'basic segment'];
+    public $container = [View::class, 'ui' => 'vertical segment'];
 
     /** @var View The view containing Cards. */
     public $cardHolder = [View::class, 'ui' => 'cards'];
@@ -390,10 +390,6 @@ class CardDeck extends View
 
     protected function renderView(): void
     {
-        if (($this->menu && count($this->menuActions) > 0) || $this->search !== false) {
-            View::addTo($this, ['ui' => 'divider'], ['Divider']);
-        }
-
         if ($this->container->name === ($_GET['__atk_reload'] ?? null)) {
             $this->applyReload();
         }
