@@ -49,14 +49,11 @@ class CardDeck extends View
     /** @var int The number of cards to be displayed per page. */
     public $ipp = 9;
 
-    /** @var array|false|null A menu seed for displaying button inside. */
-    public $menu = [View::class, 'ui' => 'stackable grid'];
+    /** @var Menu|false Will be initialized to Menu object, however you can set this to false to disable menu. */
+    public $menu;
 
-    /** @var array|false|VueComponent\ItemSearch */
-    public $search = [VueComponent\ItemSearch::class, 'ui' => 'ui compact basic segment'];
-
-    /** @var View|null A view container for buttons. Added into menu when menu is set. */
-    private $btns;
+    /** @var array|VueComponent\ItemSearch|false */
+    public $search = [VueComponent\ItemSearch::class];
 
     /** @var array Default notifier to perform when model action is successful * */
     public $notifyDefault = [JsToast::class, 'settings' => ['displayTime' => 5000]];
@@ -96,8 +93,12 @@ class CardDeck extends View
 
         $this->container = $this->add($this->container);
 
-        if ($this->menu !== false) {
-            $this->addMenuBar();
+        if ($this->menu !== false && !is_object($this->menu)) {
+            $this->menu = $this->add(Factory::factory([Menu::class, 'activateOnClick' => false], $this->menu), 'Menu');
+
+            if ($this->search !== false) {
+                $this->addMenuBarSeach();
+            }
         }
 
         $this->cardHolder = $this->container->add($this->cardHolder);
@@ -108,22 +109,13 @@ class CardDeck extends View
         }
     }
 
-    /**
-     * Add menu bar view to CardDeck.
-     */
-    protected function addMenuBar(): void
+    protected function addMenuBarSeach(): void
     {
-        $this->menu = $this->add(Factory::factory($this->menu), 'Menu');
+        $view = View::addTo($this->menu->addMenuRight()->addItem()->setElement('div'));
 
-        $left = View::addTo($this->menu, ['ui' => $this->search !== false ? 'twelve wide column' : 'sixteen wide column']);
-        $this->btns = View::addTo($left, ['ui' => 'buttons']);
-
-        if ($this->search !== false) {
-            $right = View::addTo($this->menu, ['ui' => 'four wide column']);
-            $this->search = $right->add(Factory::factory($this->search, ['context' => $this->container]));
-            $this->search->reload = $this->container;
-            $this->query = $this->stickyGet($this->search->queryArg);
-        }
+        $this->search = $view->add(Factory::factory($this->search, ['context' => $this->container]));
+        $this->search->reload = $this->container;
+        $this->query = $this->stickyGet($this->search->queryArg);
     }
 
     /**
@@ -168,24 +160,26 @@ class CardDeck extends View
         if ($this->useAction && $this->menu) {
             foreach ($this->getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
                 $executor = $this->initActionExecutor($action);
-                $this->menuActions[$k]['btn'] = $this->addExecutorMenuButton($executor);
+                $this->menuActions[$k]['btn'] = $this->menu->addItem(
+                    $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MENU_ITEM)
+                );
                 $this->menuActions[$k]['executor'] = $executor;
             }
         }
+
+        $this->setItemsAction();
     }
 
     /**
-     * Reset Menu button js event when reloading occur in order
-     * to have their arguments always in sync after container reload.
+     * Setup js for firing menu action - copied from Crud - TODO deduplicate.
      */
-    protected function applyReload(): void
+    protected function setItemsAction(): void
     {
-        foreach ($this->menuActions as $menuAction) {
-            $ex = $menuAction['executor'];
-            if ($ex instanceof UserAction\JsExecutorInterface) {
-                $this->container->js(true, $menuAction['btn']->js()->off('click'));
-                $this->container->js(true, $menuAction['btn']->js()->on('click', new JsFunction([], $ex->jsExecute($this->getReloadArgs()))));
-            }
+        foreach ($this->menuActions as $item) {
+            // hack - render executor action via MenuItem::on() into container
+            $item['btn']->on('click.atk_crud_item', $item['executor']);
+            $jsAction = array_pop($item['btn']->_jsActions['click.atk_crud_item']);
+            $this->container->js(true, $jsAction);
         }
     }
 
@@ -319,37 +313,6 @@ class CardDeck extends View
         }
 
         return $args;
-    }
-
-    /**
-     * Add button for executing Model user action in deck main menu.
-     */
-    protected function addExecutorMenuButton(ExecutorInterface $executor): AbstractView
-    {
-        $defaults = [];
-
-        $args = $this->getReloadArgs();
-        if ($args) {
-            $defaults['args'] = $args;
-        }
-
-        $btn = $this->btns->add($this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::CARD_BUTTON));
-        if ($executor->getAction()->enabled === false) {
-            $btn->addClass('disabled');
-        }
-
-        $btn->on('click', $executor, $defaults);
-
-        return $btn;
-    }
-
-    protected function renderView(): void
-    {
-        if ($this->container->name === ($_GET['__atk_reload'] ?? null)) {
-            $this->applyReload();
-        }
-
-        parent::renderView();
     }
 
     /**
