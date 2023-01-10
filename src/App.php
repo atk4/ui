@@ -585,11 +585,9 @@ class App
     /**
      * Load template by template file name.
      *
-     * @param string $filename
-     *
      * @return HtmlTemplate
      */
-    public function loadTemplate($filename)
+    public function loadTemplate(string $filename)
     {
         $template = new $this->templateClass();
         $template->setApp($this);

@@ -232,9 +232,6 @@ parameters:
         -
             path: 'src/View.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::addJsonData\(\)\.$~'
-        -
-            path: 'src/View.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\App::getViewJS\(\)\.$~'
 
         # TODO fix contravariance for View::set() method
         -
@@ -369,9 +366,6 @@ parameters:
         -
             path: 'src/Table/Column/FilterModel/TypeEnum.php'
             message: '~^Property Atk4\\Ui\\Table\\Column\\FilterModel::\$op \(Atk4\\Data\\Field\) does not accept null\.$~'
-        -
-            path: 'src/Text.php'
-            message: '~^Property Atk4\\Ui\\Text::\$defaultTemplate \(string\|null\) does not accept default value of type false\.$~'
         -
             path: 'src/Wizard.php'
             message: '~^Property Atk4\\Ui\\Form::\$buttonSave \(array\|Atk4\\Ui\\Button\|false\) does not accept null\.$~'

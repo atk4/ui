@@ -95,7 +95,6 @@ class View extends AbstractView
         }
 
         $defaults = is_array($label) ? $label : [$label];
-        unset($label);
 
         if (array_key_exists(0, $defaults)) {
             $defaults['content'] = $defaults[0];
@@ -213,30 +212,29 @@ class View extends AbstractView
     protected function init(): void
     {
         $addLater = $this->_addLater;
-        $this->_addLater = [];
+        $this->_addLater = null;
 
         parent::init();
 
-        if ($this->region && !$this->template && !$this->defaultTemplate && $this->issetOwner() && $this->getOwner()->template) {
-            $this->template = $this->getOwner()->template->cloneRegion($this->region);
+        if ($this->region === null) {
+            $this->region = 'Content';
+        }
 
-            $this->getOwner()->template->del($this->region);
-        } else {
-            // set up template
-            if (is_string($this->defaultTemplate) && $this->template === null) {
+        if ($this->template === null) {
+            if ($this->defaultTemplate !== null) {
                 $this->template = $this->getApp()->loadTemplate($this->defaultTemplate);
-            }
-
-            if (!$this->region) {
-                $this->region = 'Content';
+            } else {
+                if ($this->region !== 'Content' && $this->issetOwner() && $this->getOwner()->template) {
+                    $this->template = $this->getOwner()->template->cloneRegion($this->region);
+                    $this->getOwner()->template->del($this->region);
+                }
             }
         }
 
-        if ($this->template && !$this->template->issetApp() && $this->issetApp()) {
+        if ($this->template !== null && !$this->template->issetApp() && $this->issetApp()) {
             $this->template->setApp($this->getApp());
         }
 
-        // add default objects
         foreach ($addLater as [$object, $region]) {
             $this->add($object, $region);
         }
@@ -270,7 +268,7 @@ class View extends AbstractView
         if (!is_object($object)) { // @phpstan-ignore-line
             // for BC do not throw
             // later consider to accept strictly objects only
-            $object = AbstractView::addToWithCl($this, $object, [], true);
+            $object = AbstractView::fromSeed($object);
         }
 
         if (!$this->issetApp()) {
@@ -576,14 +574,11 @@ class View extends AbstractView
         }
 
         if ($this->style) {
-            $style = $this->style;
-            array_walk(
-                $style,
-                function (string &$item, string $key) {
-                    $item = $key . ': ' . $item;
-                }
-            );
-            $this->template->append('style', implode('; ', $style) . ';');
+            $styles = [];
+            foreach ($this->style as $k => $v) {
+                $styles[] = $k . ': ' . $v . ';';
+            }
+            $this->template->append('style', implode(' ', $styles));
         }
 
         if ($this->ui) {
@@ -1146,11 +1141,6 @@ class View extends AbstractView
         }
 
         $actions['indent'] = '';
-
-        // delegate $action rendering in hosting app if exist.
-        if ($this->issetApp() && $this->getApp()->hasMethod('getViewJS')) {
-            return $this->getApp()->getViewJS($actions);
-        }
 
         return (new JsExpression('[]()', [new JsFunction([], $actions)]))->jsRender();
     }

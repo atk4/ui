@@ -21,12 +21,16 @@ class HtmlTemplate
     public const TOP_TAG = '_top';
 
     /** @var array<string, string|false> */
-    private static $_filesCache = [];
+    private static array $_realpathCache = [];
+    /** @var array<string, string|false> */
+    private static array $_filesCache = [];
+
+    private static ?self $_parseCacheParentTemplate = null;
     /** @var array<string, array<string, TagTree>> */
-    private static $_parseCache = [];
+    private static array $_parseCache = [];
 
     /** @var array<string, TagTree> */
-    private $tagTrees;
+    private array $tagTrees;
 
     public function __construct(string $template = '')
     {
@@ -374,20 +378,32 @@ class HtmlTemplate
      */
     public function tryLoadFromFile(string $filename)
     {
-        $filename = realpath($filename);
+        // realpath() is slow on Windows, so cache it and dedup only directories
+        $filenameBase = basename($filename);
+        $filename = dirname($filename);
+        if (!isset(self::$_realpathCache[$filename])) {
+            self::$_realpathCache[$filename] = realpath($filename);
+        }
+        $filename = self::$_realpathCache[$filename];
+        if ($filename === false) {
+            return false;
+        }
+        $filename .= '/' . $filenameBase;
+
         if (!isset(self::$_filesCache[$filename])) {
-            $data = $filename !== false ? file_get_contents($filename) : false;
+            $data = @file_get_contents($filename);
             if ($data !== false) {
                 $data = preg_replace('~(?:\r\n?|\n)$~s', '', $data); // always trim end NL
             }
             self::$_filesCache[$filename] = $data;
         }
 
-        if (self::$_filesCache[$filename] === false) {
+        $str = self::$_filesCache[$filename];
+        if ($str === false) {
             return false;
         }
 
-        $this->loadFromString(self::$_filesCache[$filename]);
+        $this->loadFromString($str);
 
         return $this;
     }
@@ -445,7 +461,7 @@ class HtmlTemplate
 
     protected function parseTemplate(string $str): void
     {
-        $cKey = $str;
+        $cKey = static::class . "\0" . $str;
         if (!isset(self::$_parseCache[$cKey])) {
             // expand self-closing tags {$tag} -> {tag}{/tag}
             $str = preg_replace('~\{\$([\w\-:]+)\}~', '{\1}{/\1}', $str);
@@ -457,14 +473,26 @@ class HtmlTemplate
             try {
                 $this->tagTrees[self::TOP_TAG] = $this->parseTemplateTree($inputReversed);
                 $tagTrees = $this->tagTrees;
-                \Closure::bind(function () use ($tagTrees) {
+
+                if (self::$_parseCacheParentTemplate === null) {
+                    $cKeySelfEmpty = self::class . "\0";
+                    self::$_parseCache[$cKeySelfEmpty] = [];
+                    try {
+                        self::$_parseCacheParentTemplate = new self();
+                    } finally {
+                        unset(self::$_parseCache[$cKeySelfEmpty]);
+                    }
+                }
+                $parentTemplate = self::$_parseCacheParentTemplate;
+
+                \Closure::bind(function () use ($tagTrees, $parentTemplate) {
                     foreach ($tagTrees as $tagTree) {
-                        $tagTree->parentTemplate = null; // @phpstan-ignore-line
+                        $tagTree->parentTemplate = $parentTemplate;
                     }
                 }, null, TagTree::class)();
                 self::$_parseCache[$cKey] = $tagTrees;
             } finally {
-                $this->tagTrees = null; // @phpstan-ignore-line
+                $this->tagTrees = [];
             }
         }
 
