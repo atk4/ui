@@ -232,9 +232,6 @@ parameters:
         -
             path: 'src/View.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::addJsonData\(\)\.$~'
-        -
-            path: 'src/View.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\App::getViewJS\(\)\.$~'
 
         # TODO fix contravariance for View::set() method
         -

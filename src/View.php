@@ -1142,11 +1142,6 @@ class View extends AbstractView
 
         $actions['indent'] = '';
 
-        // delegate $action rendering in hosting app if exist.
-        if ($this->issetApp() && $this->getApp()->hasMethod('getViewJS')) {
-            return $this->getApp()->getViewJS($actions);
-        }
-
         return (new JsExpression('[]()', [new JsFunction([], $actions)]))->jsRender();
     }
 
