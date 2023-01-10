@@ -576,14 +576,11 @@ class View extends AbstractView
         }
 
         if ($this->style) {
-            $style = $this->style;
-            array_walk(
-                $style,
-                function (string &$item, string $key) {
-                    $item = $key . ': ' . $item;
-                }
-            );
-            $this->template->append('style', implode('; ', $style) . ';');
+            $styles = [];
+            foreach ($this->style as $k => $v) {
+                $styles[] = $k . ': ' . $v;;
+            }
+            $this->template->append('style', implode('; ', $styles) . ';');
         }
 
         if ($this->ui) {
