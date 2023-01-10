@@ -576,7 +576,7 @@ class View extends AbstractView
         if ($this->style) {
             $styles = [];
             foreach ($this->style as $k => $v) {
-                $styles[] = $k . ': ' . $v;;
+                $styles[] = $k . ': ' . $v;
             }
             $this->template->append('style', implode('; ', $styles) . ';');
         }

@@ -9,7 +9,7 @@ namespace Atk4\Ui;
  */
 class Text extends View
 {
-    public $defaultTemplate = null;
+    public $defaultTemplate;
 
     public function render(): string
     {
