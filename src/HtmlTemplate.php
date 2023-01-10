@@ -21,9 +21,11 @@ class HtmlTemplate
     public const TOP_TAG = '_top';
 
     /** @var array<string, string|false> */
-    private static $_filesCache = [];
+    private static array $_realpathCache = [];
+    /** @var array<string, string|false> */
+    private static array $_filesCache = [];
     /** @var array<string, array<string, TagTree>> */
-    private static $_parseCache = [];
+    private static array $_parseCache = [];
 
     /** @var array<string, TagTree> */
     private $tagTrees;
@@ -374,20 +376,32 @@ class HtmlTemplate
      */
     public function tryLoadFromFile(string $filename)
     {
-        $filename = realpath($filename);
+        // realpath() is slow on Windows, so cache it and dedup only directories
+        $filenameBase = basename($filename);
+        $filename = dirname($filename);
+        if (!isset(self::$_realpathCache[$filename])) {
+            self::$_realpathCache[$filename] = realpath($filename);
+        }
+        $filename = self::$_realpathCache[$filename];
+        if ($filename === false) {
+            return false;
+        }
+        $filename .= '/' . $filenameBase;
+
         if (!isset(self::$_filesCache[$filename])) {
-            $data = $filename !== false ? file_get_contents($filename) : false;
+            $data = @file_get_contents($filename);
             if ($data !== false) {
                 $data = preg_replace('~(?:\r\n?|\n)$~s', '', $data); // always trim end NL
             }
             self::$_filesCache[$filename] = $data;
         }
 
-        if (self::$_filesCache[$filename] === false) {
+        $str = self::$_filesCache[$filename];
+        if ($str === false) {
             return false;
         }
 
-        $this->loadFromString(self::$_filesCache[$filename]);
+        $this->loadFromString($str);
 
         return $this;
     }
