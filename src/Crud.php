@@ -238,7 +238,7 @@ class Crud extends Grid
      */
     protected function setItemsAction(): void
     {
-        foreach ($this->menuItems as $k => $item) {
+        foreach ($this->menuItems as $item) {
             // hack - render executor action via MenuItem::on() into container
             $item['item']->on('click.atk_crud_item', $item['executor']);
             $jsAction = array_pop($item['item']->_jsActions['click.atk_crud_item']);

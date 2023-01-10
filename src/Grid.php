@@ -101,7 +101,6 @@ class Grid extends View
             $this->sortTrigger = $this->name . '_sort';
         }
 
-        // if menu not disabled ot not already assigned as existing object
         if ($this->menu !== false && !is_object($this->menu)) {
             $this->menu = $this->add(Factory::factory([Menu::class, 'activateOnClick' => false], $this->menu), 'Menu');
         }
@@ -334,8 +333,7 @@ class Grid extends View
             throw new Exception('Unable to add QuickSearch without Menu');
         }
 
-        $view = View::addTo($this->menu
-            ->addMenuRight()->addItem()->setElement('div'));
+        $view = View::addTo($this->menu->addMenuRight()->addItem()->setElement('div'));
 
         $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
         $q = $this->stickyGet($this->quickSearch->name . '_q') ?? '';
