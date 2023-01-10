@@ -24,11 +24,13 @@ class HtmlTemplate
     private static array $_realpathCache = [];
     /** @var array<string, string|false> */
     private static array $_filesCache = [];
+
+    private static ?self $_parseCacheParentTemplate = null;
     /** @var array<string, array<string, TagTree>> */
     private static array $_parseCache = [];
 
     /** @var array<string, TagTree> */
-    private $tagTrees;
+    private array $tagTrees;
 
     public function __construct(string $template = '')
     {
@@ -459,7 +461,7 @@ class HtmlTemplate
 
     protected function parseTemplate(string $str): void
     {
-        $cKey = $str;
+        $cKey = static::class . "\0" . $str;
         if (!isset(self::$_parseCache[$cKey])) {
             // expand self-closing tags {$tag} -> {tag}{/tag}
             $str = preg_replace('~\{\$([\w\-:]+)\}~', '{\1}{/\1}', $str);
@@ -471,14 +473,26 @@ class HtmlTemplate
             try {
                 $this->tagTrees[self::TOP_TAG] = $this->parseTemplateTree($inputReversed);
                 $tagTrees = $this->tagTrees;
-                \Closure::bind(function () use ($tagTrees) {
+
+                if (self::$_parseCacheParentTemplate === null) {
+                    $cKeySelfEmpty = self::class . "\0";
+                    self::$_parseCache[$cKeySelfEmpty] = [];
+                    try {
+                        self::$_parseCacheParentTemplate = new self();
+                    } finally {
+                        unset(self::$_parseCache[$cKeySelfEmpty]);
+                    }
+                }
+                $parentTemplate = self::$_parseCacheParentTemplate;
+
+                \Closure::bind(function () use ($tagTrees, $parentTemplate) {
                     foreach ($tagTrees as $tagTree) {
-                        $tagTree->parentTemplate = null; // @phpstan-ignore-line
+                        $tagTree->parentTemplate = $parentTemplate;
                     }
                 }, null, TagTree::class)();
                 self::$_parseCache[$cKey] = $tagTrees;
             } finally {
-                $this->tagTrees = null; // @phpstan-ignore-line
+                $this->tagTrees = [];
             }
         }
 

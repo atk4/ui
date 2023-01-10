@@ -11,11 +11,9 @@ class Value
 {
     use WarnDynamicPropertyTrait;
 
-    /** @var string */
-    private $value = '';
+    private string $value = '';
 
-    /** @var bool */
-    private $isEncoded = false;
+    private bool $isEncoded = false;
 
     private function encodeValueToHtml(string $value): string
     {
