@@ -95,7 +95,6 @@ class View extends AbstractView
         }
 
         $defaults = is_array($label) ? $label : [$label];
-        unset($label);
 
         if (array_key_exists(0, $defaults)) {
             $defaults['content'] = $defaults[0];
@@ -213,7 +212,7 @@ class View extends AbstractView
     protected function init(): void
     {
         $addLater = $this->_addLater;
-        $this->_addLater = [];
+        $this->_addLater = null;
 
         parent::init();
 
@@ -236,7 +235,6 @@ class View extends AbstractView
             $this->template->setApp($this->getApp());
         }
 
-        // add default objects
         foreach ($addLater as [$object, $region]) {
             $this->add($object, $region);
         }
