@@ -226,7 +226,6 @@ class View extends AbstractView
             } else {
                 if ($this->region !== 'Content' && $this->issetOwner() && $this->getOwner()->template) {
                     $this->template = $this->getOwner()->template->cloneRegion($this->region);
-
                     $this->getOwner()->template->del($this->region);
                 }
             }
