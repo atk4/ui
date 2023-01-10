@@ -216,22 +216,23 @@ class View extends AbstractView
 
         parent::init();
 
-        if ($this->region && !$this->template && !$this->defaultTemplate && $this->issetOwner() && $this->getOwner()->template) {
-            $this->template = $this->getOwner()->template->cloneRegion($this->region);
+        if ($this->region === null) {
+            $this->region = 'Content';
+        }
 
-            $this->getOwner()->template->del($this->region);
-        } else {
-            // set up template
-            if (is_string($this->defaultTemplate) && $this->template === null) {
+        if ($this->template === null) {
+            if ($this->defaultTemplate !== null) {
                 $this->template = $this->getApp()->loadTemplate($this->defaultTemplate);
-            }
+            } else {
+                if ($this->region !== 'Content' && $this->issetOwner() && $this->getOwner()->template) {
+                    $this->template = $this->getOwner()->template->cloneRegion($this->region);
 
-            if (!$this->region) {
-                $this->region = 'Content';
+                    $this->getOwner()->template->del($this->region);
+                }
             }
         }
 
-        if ($this->template && !$this->template->issetApp() && $this->issetApp()) {
+        if ($this->template !== null && !$this->template->issetApp() && $this->issetApp()) {
             $this->template->setApp($this->getApp());
         }
 
@@ -268,7 +269,7 @@ class View extends AbstractView
         if (!is_object($object)) { // @phpstan-ignore-line
             // for BC do not throw
             // later consider to accept strictly objects only
-            $object = AbstractView::addToWithCl($this, $object, [], true);
+            $object = AbstractView::fromSeed($object);
         }
 
         if (!$this->issetApp()) {
