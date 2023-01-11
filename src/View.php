@@ -211,6 +211,10 @@ class View extends AbstractView
      */
     protected function init(): void
     {
+        // almost every View needs an App to load a template, so assert App is set upfront
+        // TODO consider lazy loading the template
+        $app = $this->getApp();
+
         $addLater = $this->_addLater;
         $this->_addLater = null;
 
@@ -222,7 +226,7 @@ class View extends AbstractView
 
         if ($this->template === null) {
             if ($this->defaultTemplate !== null) {
-                $this->template = $this->getApp()->loadTemplate($this->defaultTemplate);
+                $this->template = $app->loadTemplate($this->defaultTemplate);
             } else {
                 if ($this->region !== 'Content' && $this->issetOwner() && $this->getOwner()->template) {
                     $this->template = $this->getOwner()->template->cloneRegion($this->region);
@@ -231,8 +235,8 @@ class View extends AbstractView
             }
         }
 
-        if ($this->template !== null && !$this->template->issetApp() && $this->issetApp()) {
-            $this->template->setApp($this->getApp());
+        if ($this->template !== null && !$this->template->issetApp()) {
+            $this->template->setApp($app);
         }
 
         foreach ($addLater as [$object, $region]) {
@@ -240,7 +244,7 @@ class View extends AbstractView
         }
 
         // allow for injecting the model with a seed
-        if ($this->model) {
+        if ($this->model !== null) {
             $this->setModel($this->model);
         }
     }

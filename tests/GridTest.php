@@ -11,6 +11,7 @@ use Atk4\Ui\Table;
 
 class GridTest extends TestCase
 {
+    use CreateAppTrait;
     use TableTestTrait;
 
     /** @var MyModel */
@@ -30,6 +31,7 @@ class GridTest extends TestCase
     public function test1(): void
     {
         $t = new Table();
+        $t->setApp($this->createApp());
         $t->invokeInit();
         $t->setModel($this->m, []);
 
@@ -46,6 +48,7 @@ class GridTest extends TestCase
     public function test2(): void
     {
         $t = new Table();
+        $t->setApp($this->createApp());
         $t->invokeInit();
         $t->setModel($this->m, []);
 
@@ -62,6 +65,7 @@ class GridTest extends TestCase
     public function test3(): void
     {
         $t = new Table();
+        $t->setApp($this->createApp());
         $t->invokeInit();
         $t->setModel($this->m, ['email']);
         $del = $t->addColumn(null, [Table\Column\Delete::class]);

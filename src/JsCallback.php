@@ -54,7 +54,7 @@ class JsCallback extends Callback
 
     public function jsExecute(): JsExpression
     {
-        $this->getApp(); // assert has App
+        $this->assertIsInitialized();
 
         return (new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkAjaxec([
             'url' => $this->getJsUrl(),

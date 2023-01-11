@@ -18,8 +18,6 @@ class CallbackLater extends Callback
      */
     public function set($fx = null, $args = null)
     {
-        $this->getApp(); // assert has App
-
         if ($this->getApp()->isRendering) {
             return parent::set($fx, $args);
         }

@@ -18,17 +18,11 @@ use Atk4\Ui\SessionTrait;
  */
 class SessionTraitTest extends TestCase
 {
-    /** @var App */
-    protected $app;
+    use CreateAppTrait;
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->app = new App([
-            'catchExceptions' => false,
-            'alwaysRun' => false,
-        ]);
 
         session_abort();
         $sessionDir = sys_get_temp_dir() . '/atk4_test__ui__session';
@@ -55,7 +49,7 @@ class SessionTraitTest extends TestCase
 
     public function testException1(): void
     {
-        $m = new SessionWithoutNameMock($this->app);
+        $m = new SessionWithoutNameMock($this->createApp());
 
         // when try to start session without NameTrait
         $this->expectException(Exception::class);
@@ -64,7 +58,7 @@ class SessionTraitTest extends TestCase
 
     public function testConstructor(): void
     {
-        $m = new SessionMock($this->app);
+        $m = new SessionMock($this->createApp());
 
         static::assertFalse(isset($_SESSION));
         $m->atomicSession(function (): void {
@@ -78,7 +72,7 @@ class SessionTraitTest extends TestCase
      */
     public function testMemorize(): void
     {
-        $m = new SessionMock($this->app);
+        $m = new SessionMock($this->createApp());
         $m->name = 'test';
 
         // value as string
@@ -107,7 +101,7 @@ class SessionTraitTest extends TestCase
      */
     public function testLearnRecallForget(): void
     {
-        $m = new SessionMock($this->app);
+        $m = new SessionMock($this->createApp());
         $m->name = 'test';
 
         // value as string

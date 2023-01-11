@@ -45,29 +45,11 @@ abstract class AbstractView
     protected bool $_rendered = false;
 
     /**
-     * For the absence of the application, we would add a very
-     * simple one.
-     */
-    protected function initDefaultApp(): void
-    {
-        $this->setApp(new App([
-            'catchExceptions' => false,
-            'alwaysRun' => false,
-            'catchRunawayCallbacks' => false,
-        ]));
-        $this->getApp()->invokeInit();
-    }
-
-    /**
      * Called when view becomes part of render tree. You can override it but avoid
      * placing any "heavy processing" here.
      */
     protected function init(): void
     {
-        if (!$this->issetApp()) {
-            $this->initDefaultApp();
-        }
-
         if ($this->name === null) {
             $this->name = 'atk';
         }

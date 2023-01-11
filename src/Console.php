@@ -92,10 +92,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
         $this->sse->set(function () use ($fx) {
             $this->sseInProgress = true;
 
-            if ($this->issetApp()) {
-                $oldLogger = $this->getApp()->logger;
-                $this->getApp()->logger = $this;
-            }
+            $oldLogger = $this->getApp()->logger;
+            $this->getApp()->logger = $this;
 
             ob_start(function (string $content) {
                 if ($this->_outputBypass || $content === '' /* needed as self::output() adds NL */) {
@@ -118,9 +116,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 $this->outputHtmlWithoutPre('<div class="ui segment">{0}</div>', [$this->getApp()->renderExceptionHtml($e)]);
             }
 
-            if ($this->issetApp()) {
-                $this->getApp()->logger = $oldLogger;
-            }
+            $this->getApp()->logger = $oldLogger;
 
             $this->sseInProgress = false;
         });
