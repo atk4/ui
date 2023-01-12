@@ -48,7 +48,8 @@ $form->addControl('country3', [
 ]);
 
 $form->onSubmit(function (Form $form) {
-    $view = new Message('Select:'); // need in behat test.
+    $view = new Message('Select:');
+    $view->setApp($form->getApp());
     $view->invokeInit();
     $view->text->addParagraph($form->model->ref('country1')->get(Country::hinting()->fieldName()->name) ?? 'null');
     $view->text->addParagraph($form->model->ref('country2')->get(Country::hinting()->fieldName()->name) ?? 'null');

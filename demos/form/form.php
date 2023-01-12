@@ -80,6 +80,7 @@ $form->buttonSave->set('Compare Date');
 $form->onSubmit(function (Form $form) {
     $message = 'field = ' . print_r($form->model->get('field'), true) . '; <br> control = ' . print_r($form->model->get('control'), true);
     $view = new Message('Date field vs control:');
+    $view->setApp($form->getApp());
     $view->invokeInit();
     $view->text->addHtml($message);
 
@@ -112,6 +113,7 @@ $form->addControl('email3');
 $form->buttonSave->set('Save3');
 $form->onSubmit(function (Form $form) {
     $view = new Message('some header');
+    $view->setApp($form->getApp());
     $view->invokeInit();
     $view->text->addParagraph('some text ' . random_int(1, 100));
 
@@ -124,6 +126,7 @@ $form->addControl('email4');
 $form->buttonSave->set('Save4');
 $form->onSubmit(function (Form $form) {
     $view = new Message('some header');
+    $view->setApp($form->getApp());
     $view->invokeInit();
     $view->text->addParagraph('some text ' . random_int(1, 100));
 

@@ -61,6 +61,7 @@ $form->onSubmit(function (Form $form) use ($app) {
     ];
 
     $view = new Message('Items: ');
+    $view->setApp($form->getApp());
     $view->invokeInit();
     $view->text->addParagraph($app->encodeJson($response));
 

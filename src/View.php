@@ -506,9 +506,7 @@ class View extends AbstractView
     public $stickyArgs = [];
 
     /**
-     * Build an URL which this view can use for js call-backs. It should
-     * be guaranteed that requesting returned URL would at some point call
-     * $this->invokeInit().
+     * Build an URL which this view can use for JS callbacks.
      *
      * @param array $page
      */
@@ -518,9 +516,7 @@ class View extends AbstractView
     }
 
     /**
-     * Build an URL which this view can use for call-backs. It should
-     * be guaranteed that requesting returned URL would at some point call
-     * $this->invokeInit().
+     * Build an URL which this view can use for callbacks.
      *
      * @param string|array $page URL as string or array with page name as first element and other GET arguments
      */

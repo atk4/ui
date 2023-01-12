@@ -460,6 +460,7 @@ trait StepExecutorTrait
             throw $e;
         } catch (\Throwable $e) {
             $msg = new Message(['Error executing ' . $this->action->caption, 'type' => 'error', 'class.red' => true]);
+            $msg->setApp($this->getApp());
             $msg->invokeInit();
             $msg->text->content = $this->getApp()->renderExceptionHtml($e);
 

@@ -31,8 +31,9 @@ $inline_edit = VueComponent\InlineEdit::addTo($app);
 $inline_edit->fieldName = $model->fieldName()->name;
 $inline_edit->setModel($model);
 
-$inline_edit->onChange(function (string $value) {
+$inline_edit->onChange(function (string $value) use ($app) {
     $view = new Message();
+    $view->setApp($app);
     $view->invokeInit();
     $view->text->addParagraph('new value: ' . $value);
 
