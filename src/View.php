@@ -235,7 +235,7 @@ class View extends AbstractView
             }
         }
 
-        if ($this->template !== null && !$this->template->issetApp()) {
+        if ($this->template !== null && (!$this->template->issetApp() || $this->template->getApp() !== $app)) {
             $this->template->setApp($app);
         }
 
