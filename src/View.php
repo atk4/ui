@@ -114,7 +114,7 @@ class View extends AbstractView
     public function setModel(Model $model): void
     {
         if ($this->model !== null && $this->model !== $model) {
-            throw new Exception('Different model already set');
+            throw new Exception('Different model is already set');
         }
 
         $this->model = $model;
