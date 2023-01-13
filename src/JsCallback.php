@@ -194,6 +194,7 @@ class JsCallback extends Callback
             $html = $response->getHtml();
         } else {
             $modal = new Modal(['name' => false]);
+            $modal->setApp($this->getApp());
             $modal->add($response);
             $html = $modal->getHtml();
         }
