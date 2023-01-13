@@ -193,7 +193,7 @@ class CardDeck extends View
      */
     protected function initActionExecutor(Model\UserAction $action): ExecutorInterface
     {
-        $executor = $this->getExecutorFactory()->create($action, $this);
+        $executor = $this->getExecutorFactory()->createExecutor($action, $this);
         if ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
             $executor->jsSuccess = function (ExecutorInterface $ex, Model $m, $id, $return) use ($action) {
                 return $this->jsExecute($return, $action);

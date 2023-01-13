@@ -133,14 +133,6 @@ class ExecutorFactory
     }
 
     /**
-     * @return AbstractView&ExecutorInterface
-     */
-    public function create(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
-    {
-        return $this->createExecutor($action, $owner, $requiredType);
-    }
-
-    /**
      * @return ($type is self::MENU_ITEM ? MenuItem : ($type is self::TABLE_MENU_ITEM ? MenuItem : Button))
      */
     public function createTrigger(UserAction $action, string $type = null): View
@@ -156,7 +148,7 @@ class ExecutorFactory
     /**
      * @return AbstractView&ExecutorInterface
      */
-    protected function createExecutor(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
+    public function createExecutor(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
     {
         if ($requiredType !== null) {
             if (!($this->executorSeed[$requiredType] ?? null)) {
