@@ -5,19 +5,12 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
-use Atk4\Ui\App;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\HtmlTemplate;
 
 class AppTest extends TestCase
 {
-    protected function createApp(): App
-    {
-        return new App([
-            'catchExceptions' => false,
-            'alwaysRun' => false,
-        ]);
-    }
+    use CreateAppTrait;
 
     public function testTemplateClassDefault(): void
     {

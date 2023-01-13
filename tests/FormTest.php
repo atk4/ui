@@ -16,6 +16,8 @@ use Mvorisek\Atk4\Hintable\Phpstan\PhpstanUtil;
 
 class FormTest extends TestCase
 {
+    use CreateAppTrait;
+
     /** @var Form|null */
     public $form;
 
@@ -208,6 +210,7 @@ class FormTest extends TestCase
         $input = new Form\Control\Input();
         $input->disabled = true;
         $input->readOnly = true;
+        $input->setApp($this->createApp());
         static::assertStringContainsString(' disabled="disabled"', $input->render());
         static::assertStringContainsString(' readonly="readonly"', $input->render());
 
@@ -215,6 +218,7 @@ class FormTest extends TestCase
         $input->disabled = true;
         $input->readOnly = true;
         $input->inputType = 'hidden';
+        $input->setApp($this->createApp());
         static::assertStringNotContainsString('disabled', $input->render());
         static::assertStringNotContainsString('readonly', $input->render());
     }

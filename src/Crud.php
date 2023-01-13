@@ -263,7 +263,7 @@ class Crud extends Grid
             $action->fields = $this->editFields;
         }
 
-        return $this->getExecutorFactory()->create($action, $this);
+        return $this->getExecutorFactory()->createExecutor($action, $this);
     }
 
     /**

@@ -68,6 +68,7 @@ class ActionMenu extends Table\Column
             $item = Factory::factory([View::class], ['name' => false, 'ui' => 'item', 'content' => $item]);
         }
 
+        $item->setApp($this->getApp());
         $this->items[] = $item;
 
         $item->addClass('{$_' . $name . '_disabled} i_' . $name);

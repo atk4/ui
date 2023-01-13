@@ -43,7 +43,7 @@ class JsSse extends JsCallback
 
     public function jsExecute(): JsExpression
     {
-        $this->getApp(); // assert has App
+        $this->assertIsInitialized();
 
         $options = ['url' => $this->getJsUrl()];
         if ($this->showLoader) {

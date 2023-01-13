@@ -68,15 +68,15 @@ class ExecutorFactoryTest extends TestCase
         $view = View::addTo($this->app);
 
         $factory = $this->app->getExecutorFactory();
-        $modalExecutor = $factory->create($this->model->getUserAction('edit'), $view);
-        $jsCallbackExecutor = $factory->create($this->model->getUserAction('delete'), $view);
-        $confirmationExecutor = $factory->create($this->model->getUserAction('confirm'), $view);
+        $modalExecutor = $factory->createExecutor($this->model->getUserAction('edit'), $view);
+        $jsCallbackExecutor = $factory->createExecutor($this->model->getUserAction('delete'), $view);
+        $confirmationExecutor = $factory->createExecutor($this->model->getUserAction('confirm'), $view);
 
         $factory->registerTypeExecutor('MY_TYPE', [BasicExecutor::class]);
-        $myRequiredExecutor = $factory->create($this->model->getUserAction('confirm'), $view, 'MY_TYPE');
+        $myRequiredExecutor = $factory->createExecutor($this->model->getUserAction('confirm'), $view, 'MY_TYPE');
 
         $factory->registerExecutor($this->model->getUserAction('basic'), [BasicExecutor::class]);
-        $myBasicExecutor = $factory->create($this->model->getUserAction('basic'), $view);
+        $myBasicExecutor = $factory->createExecutor($this->model->getUserAction('basic'), $view);
 
         static::assertInstanceOf(ModalExecutor::class, $modalExecutor);
         static::assertInstanceOf(JsCallbackExecutor::class, $jsCallbackExecutor);

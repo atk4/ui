@@ -13,9 +13,12 @@ use Atk4\Ui\View;
 
 class JsIntegrationTest extends TestCase
 {
+    use CreateAppTrait;
+
     public function testUniqueId1(): void
     {
         $v = new Button(['icon' => 'pencil']);
+        $v->setApp($this->createApp());
         $v->render();
 
         static::assertNotEmpty($v->icon);
@@ -28,6 +31,7 @@ class JsIntegrationTest extends TestCase
         $v = new View(['ui' => 'buttons']);
         $b1 = Button::addTo($v);
         $b2 = Button::addTo($v);
+        $v->setApp($this->createApp());
         $v->render();
 
         static::assertNotSame($b1->name, $b2->name);
@@ -37,6 +41,7 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['name' => 'b']);
         $j = $v->js()->hide();
+        $v->setApp($this->createApp());
         $v->render();
 
         static::assertSame('$(\'#b\').hide()', $j->jsRender());
@@ -46,6 +51,7 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['name' => 'b']);
         $j = $v->js(true)->hide();
+        $v->setApp($this->createApp());
         $v->renderAll();
 
         static::assertSame('(function () {
@@ -57,6 +63,7 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['name' => 'b']);
         $v->js('click')->hide();
+        $v->setApp($this->createApp());
         $v->renderAll();
 
         static::assertSame('(function () {
@@ -72,6 +79,7 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['name' => 'b']);
         $v->js('click', null);
+        $v->setApp($this->createApp());
         $v->renderAll();
 
         static::assertSame('(function () {
@@ -98,6 +106,7 @@ class JsIntegrationTest extends TestCase
             $b2->js()->hide(),
         ]);
         $b1->js(true)->data('x', 'y');
+        $v->setApp($this->createApp());
         $v->renderAll();
 
         static::assertSame('(function () {
@@ -124,6 +133,7 @@ class JsIntegrationTest extends TestCase
     public function testChainUnsupportedTypeException(): void
     {
         $v = new View();
+        $v->setApp($this->createApp());
         $v->invokeInit();
 
         $js = $v->js();
@@ -137,6 +147,7 @@ class JsIntegrationTest extends TestCase
     public function testChainJsCallbackLazyExecuteRender(): void
     {
         $v = new View();
+        $v->setApp($this->createApp());
         $v->invokeInit();
         $b = Button::addTo($v);
 

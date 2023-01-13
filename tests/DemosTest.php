@@ -95,13 +95,15 @@ class DemosTest extends TestCase
     {
         $this->resetSuperglobals();
 
+        $rootDirRealpath = realpath(static::ROOT_DIR);
+
         $_SERVER = [
             'REQUEST_METHOD' => $request->getMethod(),
             'HTTP_HOST' => $request->getUri()->getHost(),
             'REQUEST_URI' => (string) $request->getUri(),
             'QUERY_STRING' => $request->getUri()->getQuery(),
-            'DOCUMENT_ROOT' => realpath(static::ROOT_DIR),
-            'SCRIPT_FILENAME' => realpath(static::ROOT_DIR) . $request->getUri()->getPath(),
+            'DOCUMENT_ROOT' => $rootDirRealpath,
+            'SCRIPT_FILENAME' => $rootDirRealpath . $request->getUri()->getPath(),
         ];
 
         $_GET = [];

@@ -10,7 +10,6 @@ use Atk4\Core\DynamicMethodTrait;
 use Atk4\Core\ExceptionRenderer;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
-use Atk4\Core\InitializerTrait;
 use Atk4\Core\TraitUtil;
 use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Persistence;
@@ -28,9 +27,6 @@ class App
     use DiContainerTrait;
     use DynamicMethodTrait;
     use HookTrait;
-    use InitializerTrait {
-        init as private _init;
-    }
 
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
     public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
@@ -572,14 +568,6 @@ class App
         if ($isExitException) {
             $this->callExit();
         }
-    }
-
-    /**
-     * Initialize app.
-     */
-    protected function init(): void
-    {
-        $this->_init();
     }
 
     /**

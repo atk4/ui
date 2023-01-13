@@ -12,6 +12,7 @@ use Atk4\Ui\Table;
 
 class TableColumnColorRatingTest extends TestCase
 {
+    use CreateAppTrait;
     use TableTestTrait;
 
     /** @var Table */
@@ -32,6 +33,7 @@ class TableColumnColorRatingTest extends TestCase
         $m->addField('ref');
         $m->addField('rating', ['type' => 'integer']);
         $this->table = new Table();
+        $this->table->setApp($this->createApp());
         $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref', 'rating']);
     }

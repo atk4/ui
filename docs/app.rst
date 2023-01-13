@@ -9,10 +9,8 @@ Purpose of App class
 .. php:namespace:: Atk4\Ui
 .. php:class:: App
 
-App is a mandatory object that's essential for Agile UI to operate. If you don't create App object explicitly, it
-will be automatically created if you execute `$component->invokeInit()` or `$component->render()`.
-
-In most use-scenarios, however, you would create instance of an App class yourself before other components::
+App is a mandatory object that's essential for Agile UI to operate. You should create instance
+of an App class yourself before other components::
 
     $app = new \Atk4\Ui\App('My App');
     $app->initLayout([\Atk4\Ui\Layout\Centered::class]);

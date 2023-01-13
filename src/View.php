@@ -114,7 +114,7 @@ class View extends AbstractView
     public function setModel(Model $model): void
     {
         if ($this->model !== null && $this->model !== $model) {
-            throw new Exception('Different model already set');
+            throw new Exception('Different model is already set');
         }
 
         $this->model = $model;
@@ -211,6 +211,10 @@ class View extends AbstractView
      */
     protected function init(): void
     {
+        // almost every View needs an App to load a template, so assert App is set upfront
+        // TODO consider lazy loading the template
+        $app = $this->getApp();
+
         $addLater = $this->_addLater;
         $this->_addLater = null;
 
@@ -222,7 +226,7 @@ class View extends AbstractView
 
         if ($this->template === null) {
             if ($this->defaultTemplate !== null) {
-                $this->template = $this->getApp()->loadTemplate($this->defaultTemplate);
+                $this->template = $app->loadTemplate($this->defaultTemplate);
             } else {
                 if ($this->region !== 'Content' && $this->issetOwner() && $this->getOwner()->template) {
                     $this->template = $this->getOwner()->template->cloneRegion($this->region);
@@ -231,8 +235,8 @@ class View extends AbstractView
             }
         }
 
-        if ($this->template !== null && !$this->template->issetApp() && $this->issetApp()) {
-            $this->template->setApp($this->getApp());
+        if ($this->template !== null && (!$this->template->issetApp() || $this->template->getApp() !== $app)) {
+            $this->template->setApp($app);
         }
 
         foreach ($addLater as [$object, $region]) {
@@ -240,7 +244,7 @@ class View extends AbstractView
         }
 
         // allow for injecting the model with a seed
-        if ($this->model) {
+        if ($this->model !== null) {
             $this->setModel($this->model);
         }
     }
@@ -502,9 +506,7 @@ class View extends AbstractView
     public $stickyArgs = [];
 
     /**
-     * Build an URL which this view can use for js call-backs. It should
-     * be guaranteed that requesting returned URL would at some point call
-     * $this->invokeInit().
+     * Build an URL which this view can use for JS callbacks.
      *
      * @param array $page
      */
@@ -514,9 +516,7 @@ class View extends AbstractView
     }
 
     /**
-     * Build an URL which this view can use for call-backs. It should
-     * be guaranteed that requesting returned URL would at some point call
-     * $this->invokeInit().
+     * Build an URL which this view can use for callbacks.
      *
      * @param string|array $page URL as string or array with page name as first element and other GET arguments
      */
@@ -1040,7 +1040,7 @@ class View extends AbstractView
             $actions[] = $lazyJsRenderFx(fn () => $cb->jsExecute());
         } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof Model\UserAction) {
             // Setup UserAction executor.
-            $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->create($action, $this) : $action;
+            $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->createExecutor($action, $this) : $action;
             if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
                 if (isset($arguments['id'])) {
                     $arguments[$ex->name] = $arguments['id'];

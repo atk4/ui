@@ -502,18 +502,9 @@ Rest of yet-to-document/implement methods and properties
         :param $val:
 
 
-
-    .. php:method:: initDefaultApp()
-
-        For the absence of the application, we would add a very
-        simple one
-
     .. php:method:: set($arg1 = [], $arg2 = null)
 
         :param $arg1:
         :param $arg2:
 
     .. php:method:: recursiveRender()
-
-
-

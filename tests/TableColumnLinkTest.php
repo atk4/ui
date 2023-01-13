@@ -11,6 +11,7 @@ use Atk4\Ui\Table;
 
 class TableColumnLinkTest extends TestCase
 {
+    use CreateAppTrait;
     use TableTestTrait;
 
     /** @var Table */
@@ -31,6 +32,7 @@ class TableColumnLinkTest extends TestCase
         $m->addField('ref');
         $m->addField('salary');
         $this->table = new Table();
+        $this->table->setApp($this->createApp());
         $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref']);
     }

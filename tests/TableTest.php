@@ -9,12 +9,15 @@ use Atk4\Ui\Table;
 
 class TableTest extends TestCase
 {
+    use CreateAppTrait;
+
     /**
      * @doesNotPerformAssertions
      */
     public function testAddColumnWithoutModel(): void
     {
         $t = new Table();
+        $t->setApp($this->createApp());
         $t->invokeInit();
         $t->setSource([
             ['one' => 1, 'two' => 2, 'three' => 3, 'four' => 4],

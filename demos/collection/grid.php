@@ -48,7 +48,7 @@ $grid->menu->addItem(['Delete All', 'icon' => 'trash', 'class.red active' => tru
 $grid->addColumn(null, [Table\Column\Template::class, 'hello<b>world</b>']);
 
 // Creating a button for executing model test user action.
-$grid->addExecutorButton($grid->getExecutorFactory()->create($model->getUserAction('test'), $grid));
+$grid->addExecutorButton($grid->getExecutorFactory()->createExecutor($model->getUserAction('test'), $grid));
 
 $grid->addActionButton('Say HI', function (Jquery $j, $id) use ($grid) {
     $model = Country::assertInstanceOf($grid->model);
@@ -61,7 +61,7 @@ $grid->addModalAction(['icon' => 'external'], 'Modal Test', function (View $p, $
 });
 
 // Creating an executor for delete action.
-$deleteExecutor = $grid->getExecutorFactory()->create($model->getUserAction('delete'), $grid);
+$deleteExecutor = $grid->getExecutorFactory()->createExecutor($model->getUserAction('delete'), $grid);
 $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
     return [
         (new Jquery())->closest('tr')->transition('fade left'),
