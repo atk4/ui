@@ -91,34 +91,33 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
         $this->sse->set(function () use ($fx) {
             $this->sseInProgress = true;
-
             $oldLogger = $this->getApp()->logger;
             $this->getApp()->logger = $this;
-
-            ob_start(function (string $content) {
-                if ($this->_outputBypass || $content === '' /* needed as self::output() adds NL */) {
-                    return $content;
-                }
-
-                $output = '';
-                $this->sse->echoFunction = function (string $str) use (&$output) {
-                    $output .= $str;
-                };
-                $this->output($content);
-                $this->sse->echoFunction = false;
-
-                return $output;
-            }, 1);
-
             try {
-                $fx($this);
-            } catch (\Throwable $e) {
-                $this->outputHtmlWithoutPre('<div class="ui segment">{0}</div>', [$this->getApp()->renderExceptionHtml($e)]);
+                ob_start(function (string $content) {
+                    if ($this->_outputBypass || $content === '' /* needed as self::output() adds NL */) {
+                        return $content;
+                    }
+
+                    $output = '';
+                    $this->sse->echoFunction = function (string $str) use (&$output) {
+                        $output .= $str;
+                    };
+                    $this->output($content);
+                    $this->sse->echoFunction = false;
+
+                    return $output;
+                }, 1);
+
+                try {
+                    $fx($this);
+                } catch (\Throwable $e) {
+                    $this->outputHtmlWithoutPre('<div class="ui segment">{0}</div>', [$this->getApp()->renderExceptionHtml($e)]);
+                }
+            } finally {
+                $this->sseInProgress = false;
+                $this->getApp()->logger = $oldLogger;
             }
-
-            $this->getApp()->logger = $oldLogger;
-
-            $this->sseInProgress = false;
         });
 
         if ($this->event) {
