@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.1-beta.36+250ba1e
+ * # Fomantic UI - 2.9.1
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -716,7 +716,7 @@ input::selection {
   background-color: #babbbc;
   background-image: "";
   color: rgba(0, 0, 0, 0.9);
-  box-shadow: 0 0 0 1px transparent inset, none;
+  box-shadow: none;
 }
 
 /* --------------
@@ -1524,11 +1524,11 @@ input::selection {
 }
 
 .ui.basic.buttons .button:hover {
-  box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.35) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset inset;
+  box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.35) inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset;
 }
 
 .ui.basic.buttons .button:active {
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset, 0 1px 4px 0 rgba(34, 36, 38, 0.15) inset inset;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15) inset, 0 1px 4px 0 rgba(34, 36, 38, 0.15) inset;
 }
 
 .ui.basic.buttons .active.button {
@@ -9098,6 +9098,14 @@ i.icon.sign.out::before {
   content: "\f2f5";
 }
 
+i.icon.sign.in.alternate::before {
+  content: "\f2f6";
+}
+
+i.icon.sign.out.alternate::before {
+  content: "\f2f5";
+}
+
 /*******************************
             Solid Icons
     *******************************/
@@ -12124,16 +12132,8 @@ i.icon.sign::before {
   content: "\f4d9";
 }
 
-i.icon.sign.in.alternate::before {
-  content: "\f2f6";
-}
-
 i.icon.sign.language::before {
   content: "\f2a7";
-}
-
-i.icon.sign.out.alternate::before {
-  content: "\f2f5";
 }
 
 i.icon.signal::before {
@@ -13586,10 +13586,6 @@ i.icon.ils::before {
   content: "\f20b";
 }
 
-i.icon.in.cart::before {
-  content: "\f218";
-}
-
 i.icon.inr::before {
   content: "\f156";
 }
@@ -13656,10 +13652,6 @@ i.icon.lira::before {
 
 i.icon.list.layout::before {
   content: "\f00b";
-}
-
-i.icon.log.out::before {
-  content: "\f2f5";
 }
 
 i.icon.magnify::before {
@@ -13952,14 +13944,6 @@ i.icon.shutdown::before {
 
 i.icon.sidebar::before {
   content: "\f0c9";
-}
-
-i.icon.sign.in::before {
-  content: "\f2f6";
-}
-
-i.icon.sign.out::before {
-  content: "\f2f5";
 }
 
 i.icon.signing::before {
@@ -14256,14 +14240,6 @@ i.icon.zip::before {
 
 i.icon.zoom::before {
   content: "\f00e";
-}
-
-i.icon.zoom.in::before {
-  content: "\f00e";
-}
-
-i.icon.zoom.out::before {
-  content: "\f010";
 }
 
 /*******************************
@@ -16085,11 +16061,6 @@ i.icon.linechat::before {
 
 i.icon.linkedin::before {
   content: "\f08c";
-  font-family: "brand-icons";
-}
-
-i.icon.linkedin.in::before {
-  content: "\f0e1";
   font-family: "brand-icons";
 }
 
@@ -29848,17 +29819,17 @@ span.ui.massive.text {
     ----------------------- */
 
 .ui.padded.grid:not(.vertically):not(.horizontally) {
-  margin: 0 !important;
+  margin: 0;
 }
 
 [class*="horizontally padded"].ui.grid {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 [class*="vertically padded"].ui.grid {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 /* ----------------------
@@ -30654,10 +30625,11 @@ span.ui.massive.text {
     -------------------- */
 
 @media only screen and (max-width: 767.98px) {
-  .ui.ui.ui.ui.stackable.grid {
+  body > .ui.stackable.grid,
+  .ui:not(.segment):not(.grid) .ui.stackable.grid {
     width: auto;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .ui.stackable.grid > .row > .wide.column,
@@ -30690,8 +30662,8 @@ span.ui.massive.text {
 
   .ui.grid .ui.stackable.grid,
   .ui.segment:not(.vertical) .ui.stackable.page.grid {
-    margin-left: -1rem !important;
-    margin-right: -1rem !important;
+    margin-left: -1rem;
+    margin-right: -1rem;
   }
 
   /* Divided Stackable */
@@ -32337,6 +32309,7 @@ Floated Menu / Item
 
 /* Icon */
 
+.ui.labeled.icon.menu > .right.menu > .item > i.icon:not(.dropdown),
 .ui.labeled.icon.menu > .item > i.icon:not(.dropdown) {
   height: 1em;
   display: block;
@@ -46765,6 +46738,7 @@ select.ui.dropdown {
   overflow-y: hidden;
   z-index: 102;
   background: #fff;
+  outline: none;
 }
 
 /* GPU Layers for Child Elements */
@@ -46835,11 +46809,21 @@ select.ui.dropdown {
 
 .ui.flyout.left > .content,
 .ui.flyout.right > .content {
+  min-height: calc(100vh - 4.7rem);
+}
+
+.ui.flyout.left > .header + .content,
+.ui.flyout.right > .header + .content {
   min-height: calc(100vh - 9.1rem);
 }
 
 .ui.flyout.left > .scrolling.content,
 .ui.flyout.right > .scrolling.content {
+  max-height: calc(100vh - 4.7rem);
+}
+
+.ui.flyout.left > .header + .scrolling.content,
+.ui.flyout.right > .header + .scrolling.content {
   max-height: calc(100vh - 9.1rem);
 }
 
@@ -47367,6 +47351,7 @@ body.pushable > .pusher {
   -ms-user-select: text;
   user-select: text;
   will-change: top, left, margin, transform, opacity;
+  outline: none;
 }
 
 .ui.modal > :first-child:not(.close):not(.dimmer),
@@ -49206,7 +49191,7 @@ a.ui.nag {
 
 /* Immediate Nested Grid */
 
-.ui.popup > .ui.grid:not(.padded) {
+.ui.ui.ui.popup > .ui.grid:not(.padded) {
   width: calc(100% + 1.75rem);
   margin: -0.7rem -0.875rem;
 }
