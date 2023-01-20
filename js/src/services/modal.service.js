@@ -113,9 +113,6 @@ class ModalService {
                         response.isServiceError = true;
                         response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
                     } else {
-                        if ($modal.modal('get settings').autofocus) {
-                            atk.modalService.doAutoFocus($modal);
-                        }
                         // content is replace no need to do it in api
                         response.id = null;
                     }
@@ -144,16 +141,6 @@ class ModalService {
                 // https://github.com/fomantic/Fomantic-UI/issues/2476
                 $prevModal.modal('refresh');
             }
-        }
-    }
-
-    doAutoFocus($modal) {
-        const inputs = $modal.find('[tabindex], :input').filter(':visible');
-        const autofocus = inputs.filter('[autofocus]');
-        const input = autofocus.length > 0 ? autofocus.first() : inputs.first();
-
-        if (input.length > 0) {
-            input.focus().select();
         }
     }
 
