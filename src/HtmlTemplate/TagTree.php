@@ -30,6 +30,7 @@ class TagTree
 
     private function __clone()
     {
+        // prevent clonning
     }
 
     /**

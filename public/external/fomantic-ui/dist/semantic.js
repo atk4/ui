@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.1-beta.36+250ba1e
+ * # Fomantic UI - 2.9.1
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -1916,6 +1916,8 @@
 
                                 return false;
                             } else {
+                                module.error(error.method, query);
+
                                 return false;
                             }
                         });
@@ -7809,12 +7811,28 @@
                     paste: function (event) {
                         var
                             pasteValue = (event.originalEvent.clipboardData || window.clipboardData).getData('text'),
-                            tokens = pasteValue.split(settings.delimiter)
+                            tokens = pasteValue.split(settings.delimiter),
+                            notFoundTokens = []
                         ;
                         tokens.forEach(function (value) {
-                            module.set.selected(module.escape.htmlEntities(value.trim()), null, true, true);
+                            if (module.set.selected(module.escape.htmlEntities(value.trim()), null, true, true) === false) {
+                                notFoundTokens.push(value);
+                            }
                         });
                         event.preventDefault();
+                        if (notFoundTokens.length > 0) {
+                            var searchEl = $search[0],
+                                startPos = searchEl.selectionStart,
+                                endPos = searchEl.selectionEnd,
+                                orgText = searchEl.value,
+                                pasteText = notFoundTokens.join(settings.delimiter),
+                                newEndPos = startPos + pasteText.length
+                            ;
+                            $search.val(orgText.slice(0, startPos) + pasteText + orgText.slice(endPos));
+                            searchEl.selectionStart = newEndPos;
+                            searchEl.selectionEnd = newEndPos;
+                            module.event.input(event);
+                        }
                     },
                     change: function () {
                         if (!internalChange) {
@@ -9455,7 +9473,7 @@
                             ? $selectedItem || module.get.itemWithAdditions(value)
                             : $selectedItem || module.get.item(value);
                         if (!$selectedItem) {
-                            return;
+                            return false;
                         }
                         module.debug('Setting selected menu item to', $selectedItem);
                         if (module.is.multiple()) {
@@ -9558,7 +9576,7 @@
                         if (settings.label.variation) {
                             $label.addClass(settings.label.variation);
                         }
-                        if (shouldAnimate === true) {
+                        if (shouldAnimate === true && settings.label.transition) {
                             module.debug('Animating in label', $label);
                             $label
                                 .addClass(className.hidden)
@@ -11969,6 +11987,11 @@
                     resize: function () {
                         module.setup.heights();
                     },
+                    focus: function () {
+                        if (module.is.visible() && settings.autofocus && settings.dimPage) {
+                            requestAnimationFrame(module.set.autofocus);
+                        }
+                    },
                     clickaway: function (event) {
                         if (settings.closable) {
                             var
@@ -12070,6 +12093,9 @@
                         ;
                         $closeIcon
                             .on('keyup' + elementNamespace, module.event.closeKeyUp)
+                        ;
+                        $window
+                            .on('focus' + elementNamespace, module.event.focus)
                         ;
                     },
                     clickaway: function () {
@@ -12191,9 +12217,42 @@
                 observeChanges: function () {
                     if ('MutationObserver' in window) {
                         observer = new MutationObserver(function (mutations) {
-                            module.refreshInputs();
+                            var collectNodes = function (parent) {
+                                    var nodes = [];
+                                    for (var c = 0, cl = parent.length; c < cl; c++) {
+                                        Array.prototype.push.apply(nodes, collectNodes(parent[c].childNodes));
+                                        nodes.push(parent[c]);
+                                    }
+
+                                    return nodes;
+                                },
+                                shouldRefreshInputs = false
+                            ;
+                            mutations.every(function (mutation) {
+                                if (mutation.type === 'attributes') {
+                                    if (mutation.attributeName === 'disabled' || $(mutation.target).find(':input').addBack(':input')) {
+                                        shouldRefreshInputs = true;
+                                    }
+                                } else {
+                                    // mutationobserver only provides the parent nodes
+                                    // so let's collect all childs as well to find nested inputs
+                                    var $addedInputs = $(collectNodes(mutation.addedNodes)).filter('a[href], [tabindex], :input:enabled').filter(':visible'),
+                                        $removedInputs = $(collectNodes(mutation.removedNodes)).filter('a[href], [tabindex], :input');
+                                    if ($addedInputs.length > 0 || $removedInputs.length > 0) {
+                                        shouldRefreshInputs = true;
+                                    }
+                                }
+
+                                return !shouldRefreshInputs;
+                            });
+
+                            if (shouldRefreshInputs) {
+                                module.refreshInputs();
+                            }
                         });
                         observer.observe(element, {
+                            attributeFilter: ['class', 'disabled'],
+                            attributes: true,
                             childList: true,
                             subtree: true,
                         });
@@ -12222,15 +12281,23 @@
                     if (!settings.dimPage) {
                         return;
                     }
-                    $inputs = $module.find('[tabindex], :input').filter(':visible').filter(function () {
+                    $inputs = $module.find('[tabindex], :input:enabled').filter(':visible').filter(function () {
                         return $(this).closest('.disabled').length === 0;
                     });
+                    $module.removeAttr('tabindex');
+                    if ($inputs.length === 0) {
+                        $inputs = $module;
+                        $module.attr('tabindex', -1);
+                    }
                     $inputs.first()
                         .on('keydown' + elementNamespace, module.event.inputKeyDown.first)
                     ;
                     $inputs.last()
                         .on('keydown' + elementNamespace, module.event.inputKeyDown.last)
                     ;
+                    if (settings.autofocus && $inputs.filter(':focus').length === 0) {
+                        module.set.autofocus();
+                    }
                 },
 
                 setup: {
@@ -12271,9 +12338,12 @@
                         var
                             $header = $module.children(selector.header),
                             $content = $module.children(selector.content),
-                            $actions = $module.children(selector.actions)
+                            $actions = $module.children(selector.actions),
+                            newContentHeight = ($context.height() || 0) - ($header.outerHeight() || 0) - ($actions.outerHeight() || 0)
                         ;
-                        $content.css('min-height', ($context.height() - $header.outerHeight() - $actions.outerHeight()) + 'px');
+                        if (newContentHeight > 0) {
+                            $content.css('min-height', String(newContentHeight) + 'px');
+                        }
                     },
                 },
 
@@ -12322,9 +12392,6 @@
                             }
                             module.save.focus();
                             module.refreshInputs();
-                            if (settings.autofocus) {
-                                module.set.autofocus();
-                            }
                         });
                         settings.onChange.call(element);
                     } else {
@@ -12499,10 +12566,18 @@
                     autofocus: function () {
                         var
                             $autofocus = $inputs.filter('[autofocus]'),
+                            $rawInputs = $inputs.filter(':input'),
                             $input     = $autofocus.length > 0
                                 ? $autofocus.first()
-                                : ($inputs.length > 1 ? $inputs.filter(':not(i.close)') : $inputs).first()
+                                : ($rawInputs.length > 0
+                                    ? $rawInputs
+                                    : $inputs.filter(':not(i.close)')
+                                ).first()
                         ;
+                        // check if only the close icon is remaining
+                        if ($input.length === 0 && $inputs.length > 0) {
+                            $input = $inputs.first();
+                        }
                         if ($input.length > 0) {
                             $input.trigger('focus');
                         }
@@ -13479,13 +13554,48 @@
                 observeChanges: function () {
                     if ('MutationObserver' in window) {
                         observer = new MutationObserver(function (mutations) {
-                            if (settings.observeChanges) {
+                            var collectNodes = function (parent) {
+                                    var nodes = [];
+                                    for (var c = 0, cl = parent.length; c < cl; c++) {
+                                        Array.prototype.push.apply(nodes, collectNodes(parent[c].childNodes));
+                                        nodes.push(parent[c]);
+                                    }
+
+                                    return nodes;
+                                },
+                                shouldRefresh = false,
+                                shouldRefreshInputs = false
+                            ;
+                            mutations.every(function (mutation) {
+                                if (mutation.type === 'attributes') {
+                                    if (mutation.attributeName === 'disabled' || $(mutation.target).find(':input').addBack(':input')) {
+                                        shouldRefreshInputs = true;
+                                    }
+                                } else {
+                                    shouldRefresh = true;
+                                    // mutationobserver only provides the parent nodes
+                                    // so let's collect all childs as well to find nested inputs
+                                    var $addedInputs = $(collectNodes(mutation.addedNodes)).filter('a[href], [tabindex], :input:enabled').filter(':visible'),
+                                        $removedInputs = $(collectNodes(mutation.removedNodes)).filter('a[href], [tabindex], :input');
+                                    if ($addedInputs.length > 0 || $removedInputs.length > 0) {
+                                        shouldRefreshInputs = true;
+                                    }
+                                }
+
+                                return !shouldRefreshInputs;
+                            });
+
+                            if (shouldRefresh && settings.observeChanges) {
                                 module.debug('DOM tree modified, refreshing');
                                 module.refresh();
                             }
-                            module.refreshInputs();
+                            if (shouldRefreshInputs) {
+                                module.refreshInputs();
+                            }
                         });
                         observer.observe(element, {
+                            attributeFilter: ['class', 'disabled'],
+                            attributes: true,
                             childList: true,
                             subtree: true,
                         });
@@ -13514,15 +13624,23 @@
                             .off('keydown' + elementEventNamespace)
                         ;
                     }
-                    $inputs = $module.find('[tabindex], :input').filter(':visible').filter(function () {
+                    $inputs = $module.find('a[href], [tabindex], :input:enabled').filter(':visible').filter(function () {
                         return $(this).closest('.disabled').length === 0;
                     });
+                    $module.removeAttr('tabindex');
+                    if ($inputs.length === 0) {
+                        $inputs = $module;
+                        $module.attr('tabindex', -1);
+                    }
                     $inputs.first()
                         .on('keydown' + elementEventNamespace, module.event.inputKeyDown.first)
                     ;
                     $inputs.last()
                         .on('keydown' + elementEventNamespace, module.event.inputKeyDown.last)
                     ;
+                    if (settings.autofocus && $inputs.filter(':focus').length === 0) {
+                        module.set.autofocus();
+                    }
                 },
 
                 attachEvents: function (selector, event) {
@@ -13556,6 +13674,7 @@
                         ;
                         $window
                             .on('resize' + elementEventNamespace, module.event.resize)
+                            .on('focus' + elementEventNamespace, module.event.focus)
                         ;
                     },
                     scrollLock: function () {
@@ -13713,6 +13832,11 @@
                             requestAnimationFrame(module.refresh);
                         }
                     },
+                    focus: function () {
+                        if ($dimmable.dimmer('is active') && module.is.active() && settings.autofocus) {
+                            requestAnimationFrame(module.set.autofocus);
+                        }
+                    },
                 },
 
                 toggle: function () {
@@ -13802,9 +13926,6 @@
                                             module.save.focus();
                                             module.set.active();
                                             module.refreshInputs();
-                                            if (settings.autofocus) {
-                                                module.set.autofocus();
-                                            }
                                             callback();
                                         },
                                     })
@@ -14218,10 +14339,18 @@
                     autofocus: function () {
                         var
                             $autofocus = $inputs.filter('[autofocus]'),
+                            $rawInputs = $inputs.filter(':input'),
                             $input     = $autofocus.length > 0
                                 ? $autofocus.first()
-                                : ($inputs.length > 1 ? $inputs.filter(':not(i.close)') : $inputs).first()
+                                : ($rawInputs.length > 0
+                                    ? $rawInputs
+                                    : $inputs.filter(':not(i.close)')
+                                ).first()
                         ;
+                        // check if only the close icon is remaining
+                        if ($input.length === 0 && $inputs.length > 0) {
+                            $input = $inputs.first();
+                        }
                         if ($input.length > 0) {
                             $input.trigger('focus');
                         }
@@ -14484,6 +14613,8 @@
 
                                 return false;
                             } else {
+                                module.error(error.method, query);
+
                                 return false;
                             }
                         });
@@ -16604,6 +16735,8 @@
 
                                 return false;
                             } else {
+                                module.error(error.method, query);
+
                                 return false;
                             }
                         });
@@ -19231,6 +19364,7 @@
 
                 namespace       = settings.namespace,
                 className       = settings.className,
+                error           = settings.error,
                 metadata        = settings.metadata,
                 selector        = settings.selector,
                 cssVars         = settings.cssVars,
@@ -19622,6 +19756,8 @@
 
                                 return false;
                             } else {
+                                module.error(error.method, query);
+
                                 return false;
                             }
                         });
@@ -19683,7 +19819,6 @@
 
         error: {
             method: 'The method you called is not defined',
-            noMaximum: 'No maximum rating specified. Cannot generate HTML automatically',
         },
 
         metadata: {
@@ -20383,8 +20518,10 @@
                             return [];
                         }
                         // iterate through search fields looking for matches
-                        $.each(searchFields, function (index, field) {
-                            $.each(source, function (label, content) {
+                        var lastSearchFieldIndex = searchFields.length - 1;
+                        $.each(source, function (label, content) {
+                            var concatenatedContent = [];
+                            $.each(searchFields, function (index, field) {
                                 var
                                     fieldExists = (typeof content[field] === 'string') || (typeof content[field] === 'number')
                                 ;
@@ -20393,11 +20530,21 @@
                                     text = typeof content[field] === 'string'
                                         ? module.remove.diacritics(content[field])
                                         : content[field].toString();
-                                    if (text.search(matchRegExp) !== -1) {
+                                    if (settings.fullTextSearch === 'all') {
+                                        concatenatedContent.push(text);
+                                        if (index < lastSearchFieldIndex) {
+                                            return true;
+                                        }
+                                        text = concatenatedContent.join(' ');
+                                    }
+                                    if (settings.fullTextSearch !== 'all' && text.search(matchRegExp) !== -1) {
                                         // content starts with value (first in results)
                                         addResult(results, content);
                                     } else if (settings.fullTextSearch === 'exact' && module.exactSearch(searchTerm, text)) {
-                                        // content fuzzy matches (last in results)
+                                        addResult(exactResults, content);
+                                    } else if (settings.fullTextSearch === 'some' && module.wordSearch(searchTerm, text)) {
+                                        addResult(exactResults, content);
+                                    } else if (settings.fullTextSearch === 'all' && module.wordSearch(searchTerm, text, true)) {
                                         addResult(exactResults, content);
                                     } else if (settings.fullTextSearch === true && module.fuzzySearch(searchTerm, text)) {
                                         // content fuzzy matches (last in results)
@@ -20417,6 +20564,21 @@
                     term = term.toLowerCase();
 
                     return term.indexOf(query) > -1;
+                },
+                wordSearch: function (query, term, matchAll) {
+                    var allWords = query.split(/\s+/),
+                        w,
+                        wL = allWords.length,
+                        found = false
+                    ;
+                    for (w = 0; w < wL; w++) {
+                        found = module.exactSearch(allWords[w], term);
+                        if ((!found && matchAll) || (found && !matchAll)) {
+                            break;
+                        }
+                    }
+
+                    return found;
                 },
                 fuzzySearch: function (query, term) {
                     var
@@ -20930,6 +21092,8 @@
 
                                 return false;
                             } else {
+                                module.error(error.method, query);
+
                                 return false;
                             }
                         });
@@ -21061,11 +21225,9 @@
         },
 
         error: {
-            source: 'Cannot search. No source used, and Semantic API module was not included',
+            source: 'Cannot search. No source used, and Fomantic API module was not included',
             noResultsHeader: 'No Results',
             noResults: 'Your search returned no results',
-            logging: 'Error in debug logging, exiting.',
-            noEndpoint: 'No search endpoint was specified',
             noTemplate: 'A valid template name was not specified.',
             oldSearchSyntax: 'searchFullText setting has been renamed fullTextSearch for consistency, please adjust your settings.',
             serverError: 'There was an issue querying the server.',
@@ -21977,6 +22139,8 @@
 
                                 return false;
                             } else {
+                                module.error(error.method, query);
+
                                 return false;
                             }
                         });
@@ -23543,8 +23707,6 @@
                             tagName = $container[0].tagName
                         ;
                         if (tagName === 'HTML' || tagName === 'body') {
-                            // this can trigger for too many reasons
-                            // module.error(error.container, tagName, $module);
                             module.determineContainer();
                         } else {
                             var tallestHeight = Math.max(module.cache.context.height, module.cache.element.height);
@@ -23970,6 +24132,8 @@
 
                                 return false;
                             } else {
+                                module.error(error.method, query);
+
                                 return false;
                             }
                         });
@@ -24062,7 +24226,6 @@
         onBottom: function () {},
 
         error: {
-            container: 'Sticky element must be inside a relative container',
             visible: 'Element is hidden, you must call refresh after element becomes visible. Use silent setting to suppress this warning in production.',
             method: 'The method you called is not defined.',
             invalidContext: 'Context specified does not exist',
@@ -26924,6 +27087,8 @@
 
                                 return false;
                             } else {
+                                module.error(error.method, query);
+
                                 return false;
                             }
                         });
@@ -27039,7 +27204,6 @@
         // possible errors
         error: {
             noAnimation: 'Element is no longer attached to DOM. Unable to animate.  Use silent setting to suppress this warning in production.',
-            repeated: 'That animation is already occurring, cancelling repeated animation',
             method: 'The method you called is not defined',
             support: 'This browser does not support CSS animations',
         },
@@ -28872,7 +29036,6 @@
 
         // error
         error: {
-            beforeSend: 'The before send function has cancelled state change',
             method: 'The method you called is not defined.',
         },
 
