@@ -9,26 +9,19 @@ use Atk4\Data\Persistence;
 
 class Post extends Persistence
 {
-    public function load(Model $model, $id = 0): array
+    public function load(Model $model, $id): array
     {
         // carefully copy stuff from $_POST into the model
-        $data = [];
+        $dataRaw = [$model->idField => $id];
 
         foreach ($model->getFields() as $field => $def) {
-            if ($def->type === 'boolean') {
-                $data[$field] = isset($_POST[$field]);
-
-                continue;
-            }
-
             if (isset($_POST[$field])) {
-                $data[$field] = $_POST[$field];
+                $dataRaw[$field] = $_POST[$field];
             }
         }
 
-        // TODO typecast!
+        $data = $this->typecastLoadRow($model, $dataRaw);
 
-//        return array_merge($model->get(), $data);
         return $data;
     }
 }

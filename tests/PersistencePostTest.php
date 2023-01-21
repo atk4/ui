@@ -17,11 +17,13 @@ class PersistencePostTest extends TestCase
     {
         parent::setUp();
 
-        $_POST = ['name' => 'John', 'is_married' => 'Y'];
+        $_POST = ['name' => 'John', 'is_enabled' => '1', 'is_admin' => '0'];
+
         $this->model = new Model();
         $this->model->addField('name');
         $this->model->addField('surname', ['default' => 'Smith']);
-        $this->model->addField('is_married', ['type' => 'boolean']);
+        $this->model->addField('is_enabled', ['type' => 'boolean']);
+        $this->model->addField('is_admin', ['type' => 'boolean']);
     }
 
     protected function tearDown(): void
@@ -41,11 +43,12 @@ class PersistencePostTest extends TestCase
         $m = $this->model;
         $m->setPersistence($p);
 
-        $m = $m->load(0);
+        $m = $m->load(1);
         $m->set('surname', 'DefSurname');
 
         static::assertSame('John', $m->get('name'));
-        static::assertTrue($m->get('is_married'));
+        static::assertTrue($m->get('is_enabled'));
+        static::assertFalse($m->get('is_admin'));
         static::assertSame('DefSurname', $m->get('surname'));
     }
 }
