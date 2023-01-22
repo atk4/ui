@@ -112,18 +112,12 @@ class ColorRating extends Table\Column
 
         for ($i = 0; $i <= $steps; ++$i) {
             $rgb = [
-                'r' => floor($fromRgb['r'] - $stepRgb['r'] * $i),
-                'g' => floor($fromRgb['g'] - $stepRgb['g'] * $i),
-                'b' => floor($fromRgb['b'] - $stepRgb['b'] * $i),
+                'r' => round($fromRgb['r'] - $stepRgb['r'] * $i),
+                'g' => round($fromRgb['g'] - $stepRgb['g'] * $i),
+                'b' => round($fromRgb['b'] - $stepRgb['b'] * $i),
             ];
 
-            $hexRgb = [
-                'r' => sprintf('%02x', $rgb['r']),
-                'g' => sprintf('%02x', $rgb['g']),
-                'b' => sprintf('%02x', $rgb['b']),
-            ];
-
-            $gradients[] = '#' . implode('', $hexRgb);
+            $gradients[] = '#' . sprintf('%02x%02x%02x', $rgb['r'], $rgb['g'], $rgb['b']);
         }
     }
 
