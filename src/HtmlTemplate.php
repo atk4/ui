@@ -114,7 +114,11 @@ class HtmlTemplate
     protected function _unsetFromTagTree(TagTree $tagTree, int $k): void
     {
         \Closure::bind(function () use ($tagTree, $k) {
-            unset($tagTree->children[$k]);
+            if ($k === array_key_last($tagTree->children)) {
+                array_pop($tagTree->children);
+            } else {
+                unset($tagTree->children[$k]);
+            }
         }, null, TagTree::class)();
     }
 
