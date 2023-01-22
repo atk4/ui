@@ -90,7 +90,6 @@ $modelColorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
                     [
                         'min' => 1,
                         'max' => 3,
-                        'steps' => 3,
                         'colors' => [
                             '#FF0000',
                             '#FFFF00',
