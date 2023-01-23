@@ -45,13 +45,13 @@ class View extends AbstractView
      */
     public $ui = false;
 
-    /** List of classes that needs to be added. */
+    /** @var array<int, string> List of element CSS classes. */
     public array $class = [];
 
-    /** List of custom CSS attributes. */
+    /** @var array<string, string> Map of element CSS styles. */
     public array $style = [];
 
-    /** List of custom attributes. */
+    /** @var array<string, string> Map of element attributes. */
     public array $attr = [];
 
     /**
@@ -379,14 +379,16 @@ class View extends AbstractView
      * Multiple CSS classes can also be added if passed as space separated
      * string or array of class names.
      *
-     * @param string|array $class CSS class name or array of class names
+     * @param string|array<int, string> $class
      *
      * @return $this
      */
     public function addClass($class)
     {
-        $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
-        $this->class = array_merge($this->class, $classArr);
+        if ($class !== []) {
+            $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
+            $this->class = array_merge($this->class, $classArr);
+        }
 
         return $this;
     }
@@ -394,7 +396,7 @@ class View extends AbstractView
     /**
      * Remove one or several CSS classes from the element.
      *
-     * @param string|array $class CSS class name or array of class names
+     * @param string|array<int, string> $class
      *
      * @return $this
      */
@@ -410,26 +412,29 @@ class View extends AbstractView
      * Add inline CSS style to element.
      * Multiple CSS styles can also be set if passed as array.
      *
-     * @param string|array $property CSS Property or hash
-     * @param string       $style    CSS Style definition
+     * @param string|array<string, string> $property
+     * @param ($property is array ? never : string) $value
      *
      * @return $this
      *
      * @todo Think about difference between setStyle and addStyle
      */
-    public function setStyle($property, string $style = null)
+    public function setStyle($property, string $value = null)
     {
-        $this->style = array_merge(
-            $this->style,
-            is_array($property) ? $property : [$property => $style]
-        );
+        if (is_array($property)) {
+            foreach ($property as $k => $v) {
+                $this->setStyle($k, $v);
+            }
+        } else {
+            $this->style[$property] = $value;
+        }
 
         return $this;
     }
 
     /**
-     * @param string|array $property CSS Property or hash
-     * @param string       $style    CSS Style definition
+     * @param string|array<string, string> $property
+     * @param ($property is array ? never : string) $value
      *
      * @return $this
      *
@@ -444,7 +449,7 @@ class View extends AbstractView
      * Remove inline CSS style from element, if it was added with setStyle
      * or addStyle.
      *
-     * @param string $property CSS Property to remove
+     * @param string $property
      *
      * @return $this
      */
@@ -458,20 +463,20 @@ class View extends AbstractView
     /**
      * Set attribute.
      *
-     * @param string|array $attr  Attribute name or hash
-     * @param string       $value Attribute value
+     * @param string|array<string, string> $name
+     * @param ($name is array ? never : string) $value
      *
      * @return $this
      */
-    public function setAttr($attr, $value = null)
+    public function setAttr($name, $value = null)
     {
-        if (is_array($attr)) {
-            $this->attr = array_merge($this->attr, $attr);
-
-            return $this;
+        if (is_array($name)) {
+            foreach ($name as $k => $v) {
+                $this->setAttr($k, $v);
+            }
+        } else {
+            $this->attr[$name] = $value;
         }
-
-        $this->attr[$attr] = $value;
 
         return $this;
     }
@@ -479,21 +484,19 @@ class View extends AbstractView
     /**
      * Remove attribute.
      *
-     * @param string|array $property Attribute name or hash
+     * @param string|array<int, string> $name
      *
      * @return $this
      */
-    public function removeAttr($property)
+    public function removeAttr($name)
     {
-        if (is_array($property)) {
-            foreach ($property as $v) {
-                unset($this->attr[$v]);
+        if (is_array($name)) {
+            foreach ($name as $v) {
+                $this->removeAttr($v);
             }
-
-            return $this;
+        } else {
+            unset($this->attr[$name]);
         }
-
-        unset($this->attr[$property]);
 
         return $this;
     }
@@ -569,11 +572,11 @@ class View extends AbstractView
      */
     protected function renderView(): void
     {
-        if ($this->class) {
+        if ($this->class !== []) {
             $this->template->append('class', implode(' ', $this->class));
         }
 
-        if ($this->style) {
+        if ($this->style !== []) {
             $styles = [];
             foreach ($this->style as $k => $v) {
                 $styles[] = $k . ': ' . $v . ';';
@@ -603,12 +606,12 @@ class View extends AbstractView
             $this->template->tryDangerouslySetHtml('_element_end_html', '</' . $this->element . '>');
         }
 
-        if ($this->attr) {
-            $tmp = [];
-            foreach ($this->attr as $attr => $val) {
-                $tmp[] = $attr . '="' . $this->getApp()->encodeHtml((string) $val) . '"';
+        if ($this->attr !== []) {
+            $attrs = [];
+            foreach ($this->attr as $k => $v) {
+                $attrs[] = $k . '="' . $this->getApp()->encodeHtml((string) $v) . '"';
             }
-            $this->template->dangerouslySetHtml('attributes', implode(' ', $tmp));
+            $this->template->dangerouslySetHtml('attributes', implode(' ', $attrs));
         }
     }
 
