@@ -51,7 +51,7 @@ class View extends AbstractView
     /** @var array<string, string> Map of element CSS styles. */
     public array $style = [];
 
-    /** @var array<string, string> Map of element attributes. */
+    /** @var array<string, string|int> Map of element attributes. */
     public array $attr = [];
 
     /**
@@ -440,9 +440,9 @@ class View extends AbstractView
      *
      * @see setStyle()
      */
-    public function addStyle($property, string $style = null)
+    public function addStyle($property, string $value = null)
     {
-        return $this->setStyle($property, $style);
+        return $this->setStyle($property, $value);
     }
 
     /**
@@ -463,8 +463,8 @@ class View extends AbstractView
     /**
      * Set attribute.
      *
-     * @param string|array<string, string> $name
-     * @param ($name is array ? never : string) $value
+     * @param string|int|array<string, string|int> $name
+     * @param ($name is array ? never : string|int) $value
      *
      * @return $this
      */
