@@ -9,13 +9,13 @@ class GridLayout extends View
     /** @var int Number of rows */
     protected $rows = 1;
 
-    /** @var int Number of columns */
+    /** @var int<1, 16> Number of columns */
     protected $columns = 2;
 
-    /** @var array columns CSS wide classes */
-    protected $words = [
-        '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
-        'thirteen', 'fourteen', 'fifteen', 'sixteen',
+    /** @var array<int, string> */
+    protected $cssWideClasses = [
+        1 => 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+        'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
     ];
 
     /** @var HtmlTemplate */
@@ -97,6 +97,6 @@ class GridLayout extends View
         // $template->rebuildTagsIndex();
         }, null, HtmlTemplate::class)();
 
-        $this->addClass($this->words[$this->columns] . ' column');
+        $this->addClass($this->cssWideClasses[$this->columns] . ' column');
     }
 }
