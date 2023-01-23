@@ -507,10 +507,11 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function () {
     const tableDefault = {
-      basic: false,
+      compact: 'very',
+      basic: 'very',
+      unstackable: true,
       celled: false,
       collapsing: false,
-      stackable: false,
       inverted: false
     };
     return {
