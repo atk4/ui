@@ -9,7 +9,7 @@ use Atk4\Core\Factory;
 class Tabs extends View
 {
     public $defaultTemplate = 'tabs.html';
-    public $ui = 'tabular menu wrapping buttons'; // "buttons" class is workaround to support "wrapping" until https://github.com/fomantic/Fomantic-UI/issues/2345 is officially supported
+    public $ui = 'tabular menu wrapping';
 
     /** @var string name of active tab */
     public $activeTabName;
