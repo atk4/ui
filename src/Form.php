@@ -84,6 +84,7 @@ class Form extends View
      * success() to replace form contents.
      *
      * WARNING: may be removed in the future as we refactor into using Message class
+     *          and remove the form-success.html template then.
      *
      * @var string
      */
