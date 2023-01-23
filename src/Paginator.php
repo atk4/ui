@@ -9,7 +9,7 @@ use Atk4\Ui\Js\JsReload;
 
 class Paginator extends View
 {
-    public $ui = 'pagination menu';
+    public $ui = 'pagination menu wrapping buttons'; // "buttons" class is workaround to support "wrapping" until https://github.com/fomantic/Fomantic-UI/issues/2345 is officially supported
     public $defaultTemplate = 'paginator.html';
 
     /** Specify how many pages this paginator has in total. */
