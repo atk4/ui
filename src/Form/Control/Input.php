@@ -66,27 +66,27 @@ class Input extends Form\Control
      *
      * Use setInputAttr() to fill this array
      *
-     * @var array
+     * @var array<string, string>
      */
-    public $inputAttr = [];
+    public array $inputAttr = [];
 
     /**
      * Set attribute which is added directly to the <input> tag, not the surrounding <div>.
      *
-     * @param string|array $attr  Attribute name or hash
-     * @param string       $value Attribute value
+     * @param string|int|array<string, string|int> $name
+     * @param ($name is array ? never : string|int) $value
      *
      * @return $this
      */
-    public function setInputAttr($attr, $value = null)
+    public function setInputAttr($name, $value = null)
     {
-        if (is_array($attr)) {
-            $this->inputAttr = array_merge($this->inputAttr, $attr);
-
-            return $this;
+        if (is_array($name)) {
+            foreach ($name as $k => $v) {
+                $this->setInputAttr($k, $v);
+            }
+        } else {
+            $this->inputAttr[$name] = $value;
         }
-
-        $this->inputAttr[$attr] = $value;
 
         return $this;
     }

@@ -39,7 +39,6 @@ class TagTree
     public function clone(HtmlTemplate $newParentTemplate): self
     {
         $res = new static($newParentTemplate, $this->tag);
-        $res->children = [];
         foreach ($this->children as $k => $v) {
             $res->children[$k] = is_string($v) ? $v : clone $v;
         }

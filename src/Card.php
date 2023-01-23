@@ -6,7 +6,6 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
-use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**
@@ -71,15 +70,6 @@ class Card extends View
 
     /** @var string Default executor class. */
     public $executor = UserAction\ModalExecutor::class;
-
-    /** @var array Columns CSS wide classes */
-    protected $words = [
-        '', 'fluid', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
-        'thirteen', 'fourteen', 'fifteen', 'sixteen',
-    ];
-
-    /** @var int The number of buttons */
-    private $btnCount = 0;
 
     protected function init(): void
     {
@@ -154,6 +144,10 @@ class Card extends View
     {
         if (!$this->btnContainer) {
             $this->btnContainer = $this->addExtraContent(new View(['ui' => 'buttons']));
+            $this->getButtonContainer()->addClass('wrapping');
+            if ($this->hasFluidButton) {
+                $this->getButtonContainer()->addClass('fluid');
+            }
         }
 
         return $this->btnContainer;
@@ -318,20 +312,11 @@ class Card extends View
      */
     public function addButton($seed)
     {
-        if ($this->hasFluidButton && $this->btnCount > 0) {
-            $this->getButtonContainer()->removeClass($this->words[$this->btnCount]);
-        }
-
         if (!is_object($seed)) {
             $seed = Factory::factory([Button::class], $seed);
         }
 
         $btn = $this->getButtonContainer()->add($seed);
-        ++$this->btnCount;
-
-        if ($this->hasFluidButton && $this->btnCount > 0) {
-            $this->getButtonContainer()->addClass($this->words[$this->btnCount]);
-        }
 
         return $btn;
     }

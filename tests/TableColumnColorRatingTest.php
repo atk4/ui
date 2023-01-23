@@ -43,7 +43,6 @@ class TableColumnColorRatingTest extends TestCase
         $rating = $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 0,
             'max' => 2,
-            'steps' => 3,
             'colors' => [
                 '#FF0000',
                 '#FFFF00',
@@ -67,7 +66,6 @@ class TableColumnColorRatingTest extends TestCase
         $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 0,
             'max' => 2,
-            'steps' => 3,
             'colors' => [
                 '#FF0000',
                 '#FFFF00',
@@ -87,7 +85,6 @@ class TableColumnColorRatingTest extends TestCase
         $rating = $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 4,
             'max' => 10,
-            'steps' => 3,
             'colors' => [
                 '#FF0000',
                 '#FFFF00',
@@ -111,7 +108,6 @@ class TableColumnColorRatingTest extends TestCase
         $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 4,
             'max' => 10,
-            'steps' => 3,
             'colors' => [
                 '#FF0000',
                 '#FFFF00',
@@ -126,13 +122,12 @@ class TableColumnColorRatingTest extends TestCase
         );
     }
 
-    public function testExceptionMinGreaterThanMax(): void
+    public function testMinGreaterThanMaxException(): void
     {
         $this->expectException(Exception::class);
         $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 3,
             'max' => 1,
-            'steps' => 3,
             'colors' => [
                 '#FF0000',
                 '#FFFF00',
@@ -141,13 +136,12 @@ class TableColumnColorRatingTest extends TestCase
         ]]);
     }
 
-    public function testExceptionMinEqualsMax(): void
+    public function testMinEqualsMaxException(): void
     {
         $this->expectException(Exception::class);
         $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 3,
             'max' => 3,
-            'steps' => 3,
             'colors' => [
                 '#FF0000',
                 '#FFFF00',
@@ -156,28 +150,12 @@ class TableColumnColorRatingTest extends TestCase
         ]]);
     }
 
-    public function testExceptionZeroSteps(): void
+    public function testLessThan2ColorsException(): void
     {
         $this->expectException(Exception::class);
         $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 1,
             'max' => 3,
-            'steps' => 0,
-            'colors' => [
-                '#FF0000',
-                '#FFFF00',
-                '#00FF00',
-            ],
-        ]]);
-    }
-
-    public function testExceptionLessThan2ColorsDefined(): void
-    {
-        $this->expectException(Exception::class);
-        $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
-            'min' => 1,
-            'max' => 3,
-            'steps' => 3,
             'colors' => [
                 '#FF0000',
             ],
