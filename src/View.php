@@ -416,8 +416,6 @@ class View extends AbstractView
      * @param ($property is array ? never : string) $value
      *
      * @return $this
-     *
-     * @todo Think about difference between setStyle and addStyle
      */
     public function setStyle($property, string $value = null)
     {
@@ -433,21 +431,7 @@ class View extends AbstractView
     }
 
     /**
-     * @param string|array<string, string> $property
-     * @param ($property is array ? never : string) $value
-     *
-     * @return $this
-     *
-     * @see setStyle()
-     */
-    public function addStyle($property, string $value = null)
-    {
-        return $this->setStyle($property, $value);
-    }
-
-    /**
-     * Remove inline CSS style from element, if it was added with setStyle
-     * or addStyle.
+     * Remove inline CSS style from element, if it was added with setStyle.
      *
      * @param string $property
      *

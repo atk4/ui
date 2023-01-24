@@ -475,9 +475,9 @@ TODO: Move to Element.
 Most of the basic elements will allow you to manipulate their content, HTML attributes or even
 add custom styles::
 
-    $view->setElement('A');
-    $view->addStyle('align', 'right');
-    $view->addAttr('href', '
+    $view->setElement('a');
+    $view->setStyle('align', 'right');
+    $view->setAttr('href', 'https://...');
 
 
 

@@ -29,7 +29,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
         $this->addClass('internally celled');
 
         // lets add our first table here
-        $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
+        $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->setStyle('cursor', 'pointer');
         $table->setModel($model, [$model->titleField]);
 
         $selections = explode(',', $_GET[$this->name] ?? '');
@@ -68,7 +68,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
             $pushModel = $pushModel->ref($ref);
             $pushModel->setOrder([File::hinting()->fieldName()->is_folder => 'desc', File::hinting()->fieldName()->name]);
 
-            $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
+            $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->setStyle('cursor', 'pointer');
             $table->setModel($pushModel->setLimit(10), [$pushModel->titleField]);
 
             if ($selections) {

@@ -90,7 +90,7 @@ class VpExecutor extends View implements JsExecutorInterface
         if ($this->steps) {
             $this->header->set($this->title ?? $action->getDescription());
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
-            $this->vp->add($this->createButtonBar($this->action)->addStyle(['text-align' => 'end']));
+            $this->vp->add($this->createButtonBar($this->action)->setStyle(['text-align' => 'end']));
             $this->addStepList();
         }
 

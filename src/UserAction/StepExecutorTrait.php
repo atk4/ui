@@ -336,8 +336,8 @@ trait StepExecutorTrait
 
     protected function createButtonBar(Model\UserAction $action): View
     {
-        $this->btns = (new View())->addStyle(['min-height' => '24px']);
-        $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
+        $this->btns = (new View())->setStyle(['min-height' => '24px']);
+        $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->setStyle(['float' => 'left !important']);
         $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'class.blue' => true]);
         $this->execActionBtn = $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MODAL_BUTTON);
         $this->btns->add($this->execActionBtn);

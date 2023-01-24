@@ -23,7 +23,7 @@ Header::addTo($app, ['Dynamic scroll in Container']);
 
 $view = View::addTo($app)->addClass('ui basic segment atk-scroller');
 
-$scrollContainer = View::addTo($view)->addClass('ui segment')->addStyle(['max-height' => '400px', 'overflow-y' => 'scroll']);
+$scrollContainer = View::addTo($view)->addClass('ui segment')->setStyle(['max-height' => '400px', 'overflow-y' => 'scroll']);
 
 $listerTemplate = '<div id="{$_id}">{List}<div id="{$_id}" class="ui segment" style="height: 60px;"><i class="{$'
     . Country::hinting()->fieldName()->iso . '} flag"></i> {$'

@@ -203,7 +203,7 @@ $cart->setApp($app);
 // item property is populated.
 $cartOutterLabel = Label::addTo($cartItem, [count($cart->items), 'class.floating red' => true]);
 if (!$cart->items) {
-    $cartOutterLabel->addStyle('display', 'none');
+    $cartOutterLabel->setStyle('display', 'none');
 }
 
 $cartPopup->set(function (View $popup) use ($cart) {

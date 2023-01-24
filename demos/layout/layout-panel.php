@@ -76,7 +76,7 @@ View::addTo($app, ['ui' => 'divider']);
 Header::addTo($app, ['Closing option', 'size' => 4, 'subHeader' => 'Panel can prevent from closing.']);
 
 $panel2 = Panel\Right::addTo($app, ['hasClickAway' => false]);
-$icon = Icon::addTo($app, ['big cog'])->addStyle('cursor', 'pointer');
+$icon = Icon::addTo($app, ['big cog'])->setStyle('cursor', 'pointer');
 $icon->on('click', $panel2->jsOpen());
 $panel2->addConfirmation('Changes will be lost. Are you sure?');
 
@@ -115,7 +115,7 @@ $deck = View::addTo($app, ['ui' => 'cards']);
 $country->setLimit(3);
 
 foreach ($country as $ct) {
-    $c = Card::addTo($deck, ['useLabel' => true])->addStyle('cursor', 'pointer');
+    $c = Card::addTo($deck, ['useLabel' => true])->setStyle('cursor', 'pointer');
     $c->setModel($ct);
     $c->on('click', $panel3->jsOpen([], ['id'], 'orange'));
 }

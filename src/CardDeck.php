@@ -122,7 +122,7 @@ class CardDeck extends View
      */
     protected function addPaginator(): void
     {
-        $seg = View::addTo($this->container, ['ui' => 'basic segment'])->addStyle('text-align', 'center');
+        $seg = View::addTo($this->container, ['ui' => 'basic segment'])->setStyle('text-align', 'center');
         $this->paginator = $seg->add(Factory::factory($this->paginator, ['reload' => $this->container]));
     }
 
