@@ -270,10 +270,15 @@ class Stat extends ModelWithPrefixedFields
             'type' => 'string',
             'ui' => [
                 'form' => [Form\Control\Line::class],
-                'table' => [Table\Column\CountryFlag::class],
+                'table' => [Table\Column\CountryFlag::class, 'nameField' => $this->fieldName()->client_country],
             ],
         ])
-            ->addField($this->fieldName()->client_country, Country::hinting()->fieldName()->name);
+            ->addField($this->fieldName()->client_country, Country::hinting()->fieldName()->name, [
+                // caption needs to be set explicitly because HasOneSql::addField() uses the value from referenced field
+                // https://github.com/atk4/data/blob/4.0.0/src/Reference/HasOneSql.php#L87
+                // https://github.com/atk4/data/pull/447/files#r1063408315
+                'caption' => 'Client Country Name',
+            ]);
 
         $this->addField($this->fieldName()->is_commercial, ['type' => 'boolean']);
         $this->addField($this->fieldName()->currency, ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
