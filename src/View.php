@@ -646,7 +646,20 @@ class View extends AbstractView
      */
     protected function renderTemplateToHtml(): string
     {
-        return $this->template->renderToHtml();
+        $res = $this->template->renderToHtml();
+
+        // DEBUG
+        preg_match_all('~ id="([^"]*)"~', $res, $matches);
+        $ids = array_diff($matches[1], ['atk', '_icon', 'atk_icon']);
+        $duplicateIds = array_diff_assoc($ids, array_unique($matches[1]));
+        if ($duplicateIds !== []) {
+            echo $res;
+
+            throw (new Exception('Duplicate ID rendered'))
+                ->addMoreInfo('duplicateIds', $duplicateIds);
+        }
+
+        return $res;
     }
 
     /**
