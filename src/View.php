@@ -553,46 +553,94 @@ class View extends AbstractView
      */
     protected function renderView(): void
     {
-        if ($this->class !== []) {
-            $this->template->append('class', implode(' ', $this->class));
-        }
-
-        if ($this->style !== []) {
-            $styles = [];
-            foreach ($this->style as $k => $v) {
-                $styles[] = $k . ': ' . $v . ';';
-            }
-            $this->template->append('style', implode(' ', $styles));
-        }
-
-        if ($this->ui) {
-            if (is_string($this->ui)) {
-                $this->template->set('_class', $this->ui);
-            }
-        } else {
-            $this->template->tryDel('_ui');
-        }
-
-        if ($this->name) {
-            $this->template->trySet('_id', $this->name);
-        }
-
         if ($this->element !== 'div') {
             $this->template->set('_element', $this->element);
         } else {
             $this->template->trySet('_element', $this->element);
         }
 
-        if (!$this->getApp()->isVoidTag($this->element)) {
+        $app = $this->getApp();
+        if (!$app->isVoidTag($this->element)) {
             $this->template->tryDangerouslySetHtml('_element_end', '</' . $this->element . '>');
         }
 
-        if ($this->attr !== []) {
-            $attrs = [];
-            foreach ($this->attr as $k => $v) {
-                $attrs[] = $k . '="' . $this->getApp()->encodeHtml((string) $v) . '"';
+        $attrsHtml = [];
+
+        if ($this->name) {
+            $attrsHtml[] = 'id="' . $app->encodeHtml($this->name) . '"';
+
+            // TODO hack for template/tabs.html
+            if ($this->template->hasTag('Tabs')) {
+                array_pop($attrsHtml);
             }
-            $this->template->dangerouslySetHtml('attributes', implode(' ', $attrs));
+
+            // TODO hack for template/form/control/upload.html
+            if ($this->template->hasTag('AfterBeforeInput') && str_contains($this->template->renderToHtml(), ' type="file"')) {
+                array_pop($attrsHtml);
+            }
+
+            // needed for template like '<input id="{$_id}_input">'
+            $this->template->trySet('_id', $this->name);
+        }
+
+        $class = null;
+        if ($this->class !== []) {
+            $class = implode(' ', $this->class);
+
+            // TODO remove once migrated
+            $this->template->tryAppend('class', implode(' ', $this->class));
+        }
+        if ($this->ui !== false && $this->ui !== '') {
+            $class = 'ui ' . $this->ui . ($class !== null ? ' ' . $class : '');
+        }
+        if ($class !== null) {
+            $attrsHtml[] = 'class="' . $app->encodeHtml($class) . '"';
+        }
+
+        // TODO remove once migrated
+        if ($this->ui) {
+            if (is_string($this->ui)) {
+                $this->template->trySet('_class', $this->ui);
+            }
+        } else {
+            $this->template->tryDel('_ui');
+        }
+
+        if ($this->style !== []) {
+            $styles = [];
+            foreach ($this->style as $k => $v) {
+                $styles[] = $k . ': ' . $app->encodeHtml($v) . ';';
+            }
+            $attrsHtml[] = 'style="' . implode(' ', $styles) . '"';
+
+            // TODO remove once migrated
+            $this->template->tryDangerouslyAppendHtml('style', implode(' ', $styles));
+        }
+
+        foreach ($this->attr as $k => $v) {
+            $attrsHtml[] = $k . '="' . $app->encodeHtml((string) $v) . '"';
+        }
+
+        if ($attrsHtml !== []) {
+            try {
+                $this->template->dangerouslySetHtml('attributes', implode(' ', $attrsHtml));
+            } catch (Exception $e) {
+                // TODO this is a hack to ignore missing '{$attributes}' in core layout templates and should be removed
+                $template = $this->template;
+                $templateTags = array_map(fn () => true, array_diff_key(\Closure::bind(fn () => $template->tagTrees, null, HtmlTemplate::class)(), [HtmlTemplate::TOP_TAG => true]));
+                $isCoreLayoutTemplate = isset($templateTags['InitJsBundle']) // template/html.html
+                    || isset($templateTags['CssVisibility']) // template/layout/admin.html
+                    || isset($templateTags['BeforeHeaderContent']) // template/layout/centered.html
+                    || isset($templateTags['Buttons']) // template/form/layout/generic.html
+                    || isset($templateTags['footNominal']) // demos/layout/templates/layout1.html
+                    || isset($templateTags['atk_fp_country__name']) // collection/lister-ipp.php, interactive/scroll-lister.php
+                    || $templateTags === [] // form-control/input2.php
+                    || $templateTags === ['tag1' => true, 'tag2' => true] // basic/button.php
+                    || $templateTags === ['list' => true]; // Atk4\Ui\Tests\ListerTest::testListerRender2
+                if (!$isCoreLayoutTemplate) {
+                    throw $e;
+                }
+            }
         }
     }
 
