@@ -58,7 +58,7 @@ page and the following HTML is now produced::
 
     <div class="field">
         <label for="atk_admin_form_generic_name_input">Name</label>
-        <div id="atk_admin_form_generic_name" class="ui input" style="">
+        <div id="atk_admin_form_generic_name" class="ui input">
             <input name="name" type="text" placeholder="" id="atk_admin_form_generic_name_input" value="">
         </div>
     </div>
