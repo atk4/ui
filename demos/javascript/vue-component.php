@@ -49,7 +49,7 @@ Header::addTo($app, ['Search using a Vue component', 'subHeader' => $subHeader])
 
 $model = new Country($app->db);
 
-$lister_template = new HtmlTemplate('<div id="{$_id}" {$attributes}>{List}<div class="ui icon label"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{$end}{/}</div>');
+$lister_template = new HtmlTemplate('<div {$attributes}>{List}<div class="ui icon label"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{$end}{/}</div>');
 
 $view = View::addTo($app);
 
@@ -105,7 +105,7 @@ $app->html->template->dangerouslyAppendHtml('Head', $app->getTag('script', [], <
 
 // Injecting template but normally you would create a template file.
 $clockTemplate = new HtmlTemplate(<<<'EOF'
-    <div id="{$_id}" class="ui center aligned segment" {$attributes}>
+    <div class="ui center aligned segment" {$attributes}>
         <my-clock v-bind="initData"></my-clock>
     </div>
     {$script}

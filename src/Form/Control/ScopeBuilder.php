@@ -274,7 +274,7 @@ class ScopeBuilder extends Form\Control
         parent::init();
 
         if (!$this->scopeBuilderTemplate) {
-            $this->scopeBuilderTemplate = new HtmlTemplate('<div id="{$_id}" class="ui" {$attributes}><atk-query-builder v-bind="initData"></atk-query-builder></div>');
+            $this->scopeBuilderTemplate = new HtmlTemplate('<div class="ui" {$attributes}><atk-query-builder v-bind="initData"></atk-query-builder></div>');
         }
 
         $this->scopeBuilderView = View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
