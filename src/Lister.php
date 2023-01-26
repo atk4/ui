@@ -123,9 +123,6 @@ class Lister extends View
             return;
         }
 
-        // Generate template for data row
-        $this->tRow->trySet('_id', $this->name);
-
         // Iterate data rows
         $this->_renderedRowsCount = 0;
 
@@ -133,9 +130,11 @@ class Lister extends View
         // then also backup/tryfinally would be not needed
         // the same in Table class
         $modelBackup = $this->model;
+        $tRowBackup = $this->tRow;
         try {
             foreach ($this->model as $this->model) {
                 $this->currentRow = $this->model;
+                $this->tRow = clone $tRowBackup;
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
                 }
@@ -146,6 +145,7 @@ class Lister extends View
             }
         } finally {
             $this->model = $modelBackup;
+            $this->tRow = $tRowBackup;
         }
 
         // empty message

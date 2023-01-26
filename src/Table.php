@@ -408,7 +408,7 @@ class Table extends Lister
 
         // Generate template for data row
         $this->tRowMaster->dangerouslySetHtml('cells', $this->getDataRowHtml());
-        $this->tRowMaster->set('_id', '{$_id}');
+        $this->tRowMaster->set('dataId', '{$dataId}');
         $this->tRow = new HtmlTemplate($this->tRowMaster->renderToHtml());
         $this->tRow->setApp($this->getApp());
 
@@ -419,9 +419,11 @@ class Table extends Lister
         // then also backup/tryfinally would be not needed
         // the same in Lister class
         $modelBackup = $this->model;
+        $tRowBackup = $this->tRow;
         try {
             foreach ($this->model as $this->model) {
                 $this->currentRow = $this->model;
+                $this->tRow = clone $tRowBackup;
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
                 }
@@ -440,6 +442,7 @@ class Table extends Lister
             }
         } finally {
             $this->model = $modelBackup;
+            $this->tRow = $tRowBackup;
         }
 
         // Add totals rows or empty message
@@ -490,7 +493,7 @@ class Table extends Lister
 
             // Render row and add to body
             $this->tRow->dangerouslySetHtml($html_tags);
-            $this->tRow->set('_id', $this->model->getId());
+            $this->tRow->set('dataId', $this->model->getId());
             $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
             $this->tRow->del(array_keys($html_tags));
         } else {
