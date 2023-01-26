@@ -15,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Accordion in Form', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['form-section-accordion']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 $model = new Country($app->db);
 $model = $model->loadAny();

@@ -34,7 +34,7 @@ class ActionMenu extends Table\Column
     public $label;
 
     /** @var string Dropdown module css class name as per Formantic-UI. */
-    public $ui = 'ui small dropdown button';
+    public $ui = 'small dropdown button';
 
     /** @var array The dropdown module option setting as per Fomantic-UI. */
     public $options = ['action' => 'hide'];
@@ -124,7 +124,7 @@ class ActionMenu extends Table\Column
             $output .= $item->getHtml();
         }
 
-        $res = $this->getApp()->getTag('div', ['class' => $this->ui . ' atk-action-menu'], [
+        $res = $this->getApp()->getTag('div', ['class' => 'ui ' . $this->ui . ' atk-action-menu'], [
             ['div', ['class' => 'text'], $this->label],
             $this->icon ? $this->getApp()->getTag('i', ['class' => $this->icon . ' icon'], '') : '',
             ['div', ['class' => 'menu'], [$output]],

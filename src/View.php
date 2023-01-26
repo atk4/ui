@@ -550,9 +550,6 @@ class View extends AbstractView
      * View-specific rendering stuff. Feel free to replace this method with
      * your own. View::renderView contains some logic that integrates with
      * Fomantic-UI.
-     *
-     * NOTE: maybe in the future, Fomantic-UI related stuff needs to go into
-     * a separate class.
      */
     protected function renderView(): void
     {
@@ -587,7 +584,7 @@ class View extends AbstractView
         }
 
         if (!$this->getApp()->isVoidTag($this->element)) {
-            $this->template->tryDangerouslySetHtml('_element_end_html', '</' . $this->element . '>');
+            $this->template->tryDangerouslySetHtml('_element_end', '</' . $this->element . '>');
         }
 
         if ($this->attr !== []) {

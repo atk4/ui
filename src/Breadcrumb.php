@@ -6,17 +6,15 @@ namespace Atk4\Ui;
 
 class Breadcrumb extends Lister
 {
+    public $ui = 'breadcrumb';
+
+    public $defaultTemplate = 'breadcrumb.html';
+
     /** @var array */
     public $path = [];
 
     /** @var string */
-    public $defaultTemplate = 'breadcrumb.html';
-
-    /** @var string */
     public $dividerClass = 'right angle icon';
-
-    /** @var string */
-    public $ui = 'breadcrumb';
 
     /**
      * Adds a new link that will appear on the right.

@@ -12,6 +12,8 @@ use Atk4\Ui\Js\JsChain;
  */
 class Loader extends View
 {
+    public $ui = 'segment';
+
     /**
      * Shim is a filler object that is displayed inside loader while the actual content is fetched
      * from the server. You may supply an object here or a seed. This view will be replaced
@@ -32,9 +34,6 @@ class Loader extends View
      * @var bool|string
      */
     public $loadEvent = true;
-
-    /** @var string defautl css class */
-    public $ui = 'ui segment';
 
     /** @var Callback for triggering */
     public $cb;

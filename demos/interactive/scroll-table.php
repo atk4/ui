@@ -16,7 +16,7 @@ Button::addTo($app, ['Dynamic scroll in Lister', 'class.small left floated basic
     ->link(['scroll-lister']);
 Button::addTo($app, ['Dynamic scroll in Container', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['scroll-container']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 Header::addTo($app, ['Dynamic scroll in Table']);
 

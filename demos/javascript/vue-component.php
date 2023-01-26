@@ -53,7 +53,7 @@ $lister_template = new HtmlTemplate('<div {$attributes}>{List}<div class="ui ico
 
 $view = View::addTo($app);
 
-$search = VueComponent\ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
+$search = VueComponent\ItemSearch::addTo($view, ['ui' => 'compact segment']);
 $lister_container = View::addTo($view, ['template' => $lister_template]);
 $lister = Lister::addTo($lister_container, [], ['List']);
 $lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {

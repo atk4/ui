@@ -16,7 +16,7 @@ require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Executor Factory in App instance', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['factory']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 // Overriding basic ExecutorFactory in order to change Card button.
 $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends ExecutorFactory {

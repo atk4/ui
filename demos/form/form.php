@@ -130,7 +130,7 @@ $form->onSubmit(function (Form $form) {
     $view->invokeInit();
     $view->text->addParagraph('some text ' . random_int(1, 100));
 
-    $modal = new Modal(['title' => 'Something happen', 'ui' => 'ui modal tiny']);
+    $modal = new Modal(['title' => 'Something happen', 'ui' => 'modal tiny']);
     $modal->add($view);
 
     return $modal;

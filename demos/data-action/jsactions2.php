@@ -29,7 +29,7 @@ $msg = Message::addTo($app, ['Notes', 'type' => 'info']);
 $msg->text->addParagraph('When passing an action to a button event, Ui will determine what executor is required base on the action properties.');
 $msg->text->addParagraph('If action require arguments, fields and/or preview, then a ModalExecutor will be use.');
 
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 $gl = GridLayout::addTo($app, ['rows' => 1, 'columns' => 2]);
 $c = Card::addTo($gl, ['useLabel' => true], ['r1c1']);

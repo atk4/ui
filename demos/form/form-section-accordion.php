@@ -14,7 +14,7 @@ require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Form Sections', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['form-section']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 $form = Form::addTo($app);
 

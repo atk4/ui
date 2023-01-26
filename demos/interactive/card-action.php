@@ -15,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Card', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['card']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 Header::addTo($app, ['Models', 'size' => 1, 'subHeader' => 'Card may display information from many models.']);
 
