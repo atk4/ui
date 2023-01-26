@@ -204,7 +204,7 @@ class Multiline extends Form\Control
         parent::init();
 
         if (!$this->multiLineTemplate) {
-            $this->multiLineTemplate = new HtmlTemplate('<div id="{$_id}" class=""><atk-multiline v-bind="initData"></atk-multiline></div>');
+            $this->multiLineTemplate = new HtmlTemplate('<div id="{$_id}" class="" {$attributes}><atk-multiline v-bind="initData"></atk-multiline></div>');
         }
 
         $this->multiLine = View::addTo($this, ['template' => $this->multiLineTemplate]);

@@ -18,7 +18,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $view = View::addTo($app, ['template' => new HtmlTemplate(
     '<div class="ui header">Click and drag country to reorder</div>
-    <div id="{$_id}" style="cursor: pointer;">
+    <div id="{$_id}" style="cursor: pointer;" {$attributes}>
         <ul>
             {List}<li class="ui icon label" data-name="{$atk_fp_country__name}"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</li>{/}
         </ul>
