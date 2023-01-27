@@ -694,14 +694,20 @@ class View extends AbstractView
         $res = $this->template->renderToHtml();
 
         // DEBUG
+        if (preg_match('~(?<![\w\-])([\w\-]+)=(["\'])([^"\']*?)\2[^<>]*(?<![\w\-])\1=(["\'])([^"\']*?)\4~', $res, $matches)) {
+            throw (new Exception('Duplicate attribute rendered'))
+                ->addMoreInfo('name', $matches[1])
+                ->addMoreInfo('value1', $matches[3])
+                ->addMoreInfo('value2', $matches[5])
+                ->addMoreInfo('wholeRes', $res);
+        }
         preg_match_all('~ id="([^"]*)"~', $res, $matches);
         $ids = array_diff($matches[1], ['atk', '_icon', 'atk_icon']);
         $duplicateIds = array_diff_assoc($ids, array_unique($matches[1]));
         if ($duplicateIds !== []) {
-            echo $res;
-
             throw (new Exception('Duplicate ID rendered'))
-                ->addMoreInfo('duplicateIds', $duplicateIds);
+                ->addMoreInfo('duplicateIds', $duplicateIds)
+                ->addMoreInfo('wholeRes', $res);
         }
 
         return $res;
