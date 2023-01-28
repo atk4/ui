@@ -40,7 +40,7 @@ $card->addExtraContent(new View(['Copyright notice: Image from Fomantic-UI', 'el
 $card = Card::addTo($app);
 $content = new View(['class' => ['content']]);
 $img = Image::addTo($content, ['../images/kristy.png']);
-$img->addClass('right floated mini ui image');
+$img->addClass('right floated mini');
 $header = Header::addTo($content, ['Kristy']);
 
 $card->addContent($content);

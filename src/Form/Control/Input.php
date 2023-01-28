@@ -163,7 +163,6 @@ class Input extends Form\Control
                 ? $this->getExecutorFactory()->createExecutor($button, $this, ExecutorFactory::JS_EXECUTOR)
                 : $button;
             $button = $this->add($this->getExecutorFactory()->createTrigger($executor->getAction()), $spot);
-            $this->addClass('action');
             if ($executor->getAction()->args) {
                 $val_as_arg = array_keys($executor->getAction()->args)[0];
 
@@ -174,7 +173,6 @@ class Input extends Form\Control
         }
         if (!$button->isInitialized()) {
             $this->add($button, $spot);
-            $this->addClass('action');
         }
 
         return $button;
@@ -228,11 +226,14 @@ class Input extends Form\Control
         // actions
         if ($this->action) {
             $this->action = $this->prepareRenderButton($this->action, 'AfterInput');
+            if (!$this->actionLeft) {
+                $this->addClass('action');
+            }
         }
 
         if ($this->actionLeft) {
             $this->actionLeft = $this->prepareRenderButton($this->actionLeft, 'BeforeInput');
-            $this->addClass('left');
+            $this->addClass('left action');
         }
 
         // set template
@@ -250,7 +251,6 @@ class Input extends Form\Control
     public function addAction(array $defaults = [])
     {
         $this->action = Button::addTo($this, $defaults, ['AfterInput']);
-        $this->addClass('action');
 
         return $this->action;
     }

@@ -9,4 +9,12 @@ class Icon extends View
     public $defaultTemplate = 'icon.html';
 
     public $content = 'circle help';
+
+    protected function renderView(): void
+    {
+        $this->addClass($this->content . ' icon');
+        $this->content = false;
+
+        parent::renderView();
+    }
 }

@@ -159,7 +159,7 @@ $stepModal = Modal::addTo($app, ['title' => 'Multi step actions']);
 
 // Add buttons to modal for next and previous actions.
 $action = new View(['ui' => 'buttons']);
-$prevAction = new Button(['Prev', 'class.labeled' => true, 'icon' => 'left arrow']);
+$prevAction = new Button(['Prev', 'icon' => 'left arrow']);
 $nextAction = new Button(['Next', 'iconRight' => 'right arrow']);
 
 $action->add($prevAction);

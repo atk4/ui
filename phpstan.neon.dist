@@ -128,9 +128,6 @@ parameters:
             message: '~^Access to an undefined property Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\ExecutorInterface::\$jsSuccess\.$~'
         -
             path: 'src/CardDeck.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::addClass\(\)\.$~'
-        -
-            path: 'src/CardDeck.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\ExecutorInterface::onHook\(\)\.$~'
         -
             path: 'src/Crud.php'

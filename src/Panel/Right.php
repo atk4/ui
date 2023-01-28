@@ -22,6 +22,7 @@ use Atk4\Ui\View;
  */
 class Right extends View implements Loadable
 {
+    public array $class = ['atk-right-panel'];
     public $defaultTemplate = 'panel/right.html';
 
     /** @var Modal|null */

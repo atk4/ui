@@ -12,7 +12,7 @@ class Wizard extends View
     use SessionTrait;
 
     public $defaultTemplate = 'wizard.html';
-    public $ui = 'steps';
+    public $ui = 'steps top attached';
 
     /** @var string Get argument for this wizard. */
     public $urlTrigger;

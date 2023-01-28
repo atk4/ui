@@ -70,7 +70,7 @@ Header::addTo($app, [
 $card = Card::addTo($app);
 $content = new View(['class' => ['content']]);
 $img = Image::addTo($content, ['../images/kristy.png']);
-$img->addClass('right floated mini ui image');
+$img->addClass('right floated mini');
 Header::addTo($content, ['Kristy']);
 
 $card->addContent($content);

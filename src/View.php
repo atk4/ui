@@ -431,7 +431,7 @@ class View extends AbstractView
     }
 
     /**
-     * Remove inline CSS style from element, if it was added with setStyle.
+     * Remove inline CSS style from element.
      *
      * @param string $property
      *

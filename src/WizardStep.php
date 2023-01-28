@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 class WizardStep extends View
 {
+    public $ui = 'step';
     public $defaultTemplate;
 
     /** @var string Title to display in the step. */

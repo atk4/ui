@@ -14,6 +14,10 @@ class Lister extends View
     public const HOOK_BEFORE_ROW = self::class . '@beforeRow';
     public const HOOK_AFTER_ROW = self::class . '@afterRow';
 
+    public $ui = 'list';
+
+    public $defaultTemplate;
+
     /**
      * Lister repeats part of it's template. This property will contain
      * the repeating part. Clones from {row}. If your template does not
@@ -25,8 +29,6 @@ class Lister extends View
 
     /** @var HtmlTemplate|null Lister use this part of template in case there are no elements in it. */
     public $tEmpty;
-
-    public $defaultTemplate;
 
     /** @var JsPaginator|null A dynamic paginator attach to window scroll event. */
     public $jsPaginator;
