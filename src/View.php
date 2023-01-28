@@ -709,6 +709,27 @@ class View extends AbstractView
                 ->addMoreInfo('duplicateIds', $duplicateIds)
                 ->addMoreInfo('wholeRes', $res);
         }
+        if (preg_match(
+            '~ class=(["\'])((?:[^"\']* )?([^"\']+)(?= )[^"\']*(?<= )\3(?: [^"\']*)?)\1~',
+            preg_replace(
+                '~(<(?:(?!right floated).)*[ "])right floated([ "](?:(?!right floated).)*>)~',
+                '$1right-floated$2',
+                preg_replace(
+                    '~(<(?:(?!left floated).)*[ "])left floated([ "](?:(?!left floated).)*>)~',
+                    '$1left-floated$2',
+                    preg_replace(
+                        '~(<(?:(?!very basic).)*[ "])very basic([ "](?:(?!very basic).)*>)~',
+                        '$1very-basic$2',
+                        $res
+                    ),
+                ),
+            ),
+            $matches
+        )) {
+            throw (new Exception('Duplicate class rendered'))
+                ->addMoreInfo('class', $matches[2])
+                ->addMoreInfo('wholeRes', $res);
+        }
 
         return $res;
     }
