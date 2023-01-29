@@ -58,6 +58,7 @@ class PersistenceUiTest extends TestCase
         yield [[], ['type' => 'integer'], 1, '1'];
         yield [[], ['type' => 'integer'], 0, '0'];
         yield [[], ['type' => 'integer'], -1_100_230_000_456_345_678, $fixSpaceToNbspFx('-1 100 230 000 456 345 678')];
+        yield [['thousandsSeparator' => ','], ['type' => 'integer'], 12345678, '12,345,678'];
         yield [[], ['type' => 'float'], 1.0, '1.0'];
         yield [[], ['type' => 'float'], 0.0, '0.0'];
         yield [[], ['type' => 'float'], -1_100_230_000.4567, $fixSpaceToNbspFx('-1 100 230 000.4567')];
@@ -65,6 +66,10 @@ class PersistenceUiTest extends TestCase
         yield [[], ['type' => 'float'], 1.100123E-6, '1.100123E-6'];
         yield [[], ['type' => 'float'], 1.100123E+221, '1.100123E+221'];
         yield [[], ['type' => 'float'], -1.100123E-221, '-1.100123E-221'];
+        yield [[], ['type' => 'float'], 12345678.3579, $fixSpaceToNbspFx('12 345 678.3579')];
+        yield [['decimalSeparator' => ','], ['type' => 'float'], 12345678.3579, $fixSpaceToNbspFx('12 345 678,3579')];
+        yield [['thousandsSeparator' => ','], ['type' => 'float'], 12345678.3579, '12,345,678.3579'];
+        yield [['decimalSeparator' => ',', 'thousandsSeparator' => '.'], ['type' => 'float'], 12345678.3579, '12.345.678,3579'];
         yield [[], ['type' => 'boolean'], false, 'No'];
         yield [[], ['type' => 'boolean'], true, 'Yes'];
 
@@ -120,5 +125,34 @@ class PersistenceUiTest extends TestCase
 
         yield [[], ['type' => 'boolean'], false, '0', false];
         yield [[], ['type' => 'boolean'], true, '1', false];
+
+        yield [[], ['type' => 'integer'], 0, '0.4', false];
+        yield [[], ['type' => 'integer'], 1, '1.49', false];
+        // yield [[], ['type' => 'integer'], 2, '1.5', false];
+        yield [[], ['type' => 'integer'], -1, '-1.49', false];
+        // yield [[], ['type' => 'integer'], -2, '-1.5', false];
+        yield [[], ['type' => 'integer'], -1_100_230_000_456_345_678, '-1_100_230_000_456_345_6_7_8', false];
+
+        yield [[], ['type' => 'float'], 1.0, '1', false];
+        yield [[], ['type' => 'float'], 0.0, '0', false];
+        yield [[], ['type' => 'float'], 0.3, '.3', false];
+        yield [[], ['type' => 'float'], -0.3, '-.3', false];
+        yield [[], ['type' => 'float'], 0.3, '+00.3', false];
+        yield [[], ['type' => 'float'], -0.3, '-00.300', false];
+        yield [[], ['type' => 'float'], 1234567.23456789, '1234567.23456789', false];
+        yield [[], ['type' => 'float'], 1234567.23456789, '1234_5_6_7.234 567 89', false];
+
+        yield [[], ['type' => 'atk4_money'], 2.0, '€2', false];
+        yield [[], ['type' => 'atk4_money'], 2.0, '$2', false];
+        yield [[], ['type' => 'atk4_money'], 2.0, '2€', false];
+        yield [[], ['type' => 'atk4_money'], 2.0, '2$', false];
+        yield [[], ['type' => 'atk4_money'], -1.3, '€-1.3', false];
+        yield [[], ['type' => 'atk4_money'], -1.3, '-1.3$', false];
+        yield [[], ['type' => 'atk4_money'], 0.3, '€.3', false];
+        yield [[], ['type' => 'atk4_money'], 0.3, '.3$', false];
+        yield [[], ['type' => 'atk4_money'], -0.3, '€-.3', false];
+        yield [[], ['type' => 'atk4_money'], -0.3, '-.3$', false];
+        // yield [[], ['type' => 'atk4_money'], 4.2, '4€2', false];
+        // yield [[], ['type' => 'atk4_money'], -4.2, '-4$2', false];
     }
 }
