@@ -579,7 +579,7 @@ class View extends AbstractView
                 array_pop($attrsHtml);
             }
 
-            // needed for template like '<input id="{$_id}_input">'
+            // needed for templates like '<input id="{$_id}_input">'
             $this->template->trySet('_id', $this->name);
         }
 
@@ -587,23 +587,14 @@ class View extends AbstractView
         if ($this->class !== []) {
             $class = implode(' ', $this->class);
 
-            // TODO remove once migrated
+            // needed for templates like template/form/layout/generic-input.html
             $this->template->tryAppend('class', implode(' ', $this->class));
         }
-        if ($this->ui !== false && $this->ui !== '') {
+        if ($this->ui !== false) {
             $class = 'ui ' . $this->ui . ($class !== null ? ' ' . $class : '');
         }
         if ($class !== null) {
             $attrsHtml[] = 'class="' . $app->encodeHtml($class) . '"';
-        }
-
-        // TODO remove once migrated
-        if ($this->ui) {
-            if (is_string($this->ui)) {
-                $this->template->trySet('_class', $this->ui);
-            }
-        } else {
-            $this->template->tryDel('_ui');
         }
 
         if ($this->style !== []) {
@@ -613,7 +604,7 @@ class View extends AbstractView
             }
             $attrsHtml[] = 'style="' . implode(' ', $styles) . '"';
 
-            // TODO remove once migrated
+            // needed for template/html.html
             $this->template->tryDangerouslyAppendHtml('style', implode(' ', $styles));
         }
 
@@ -625,19 +616,8 @@ class View extends AbstractView
             try {
                 $this->template->dangerouslySetHtml('attributes', implode(' ', $attrsHtml));
             } catch (Exception $e) {
-                // TODO this is a hack to ignore missing '{$attributes}' in core layout templates and should be removed
-                $template = $this->template;
-                $templateTags = array_map(fn () => true, array_diff_key(\Closure::bind(fn () => $template->tagTrees, null, HtmlTemplate::class)(), [HtmlTemplate::TOP_TAG => true]));
-                $isCoreLayoutTemplate = isset($templateTags['InitJsBundle']) // template/html.html
-                    || isset($templateTags['CssVisibility']) // template/layout/admin.html
-                    || isset($templateTags['BeforeHeaderContent']) // template/layout/centered.html
-                    || isset($templateTags['Buttons']) // template/form/layout/generic.html
-                    || isset($templateTags['footNominal']) // demos/layout/templates/layout1.html
-                    || isset($templateTags['atk_fp_country__name']) // collection/lister-ipp.php, interactive/scroll-lister.php
-                    || $templateTags === [] // form-control/input2.php
-                    || $templateTags === ['tag1' => true, 'tag2' => true] // basic/button.php
-                    || $templateTags === ['list' => true]; // Atk4\Ui\Tests\ListerTest::testListerRender2
-                if (!$isCoreLayoutTemplate) {
+                // TODO hack to ignore missing '{$attributes}' mostly in layout templates
+                if (count($attrsHtml) === 1 ? !str_starts_with(reset($attrsHtml), 'id=') : !$this instanceof Lister) {
                     throw $e;
                 }
             }
