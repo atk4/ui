@@ -547,7 +547,7 @@ class ScopeBuilder extends Form\Control
     public static function queryToCondition(array $query): Scope\Condition
     {
         $key = $query['rule'] ?? null;
-        $operator = (string) ($query['operator'] ?? null);
+        $operator = $query['operator'] ?? null;
         $value = $query['value'] ?? null;
 
         switch ($operator) {
@@ -573,7 +573,7 @@ class ScopeBuilder extends Form\Control
                 break;
             case self::OPERATOR_IN:
             case self::OPERATOR_NOT_IN:
-                $value = explode(static::detectDelimiter($value), (string) $value);
+                $value = explode(static::detectDelimiter($value), $value);
 
                 break;
         }
