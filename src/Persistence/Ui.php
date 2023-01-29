@@ -228,13 +228,6 @@ class Ui extends Persistence
     {
         $result = [];
         foreach ($row as $key => $value) {
-            // no knowledge of the field, it wasn't defined, leave it as-is
-            if (!$model->hasField($key)) {
-                $result[$key] = $value;
-
-                continue;
-            }
-
             $result[$key] = $this->typecastSaveField($model->getField($key), $value);
         }
 
