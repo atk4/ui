@@ -945,7 +945,7 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
    * @returns {string}
    */
   getEraseContent() {
-    return '<i class="red remove icon" style=""></i>';
+    return '<i class="red remove icon"></i>';
   }
 }
 AtkFileUploadPlugin.DEFAULTS = {
