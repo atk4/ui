@@ -177,7 +177,7 @@ class HtmlTemplate
         // TODO remove later in favor of strong string type
         if ($value === null) {
             $value = '';
-        } elseif (is_int($value)) {
+        } elseif (is_int($value)) { // @phpstan-ignore-line
             $value = $this->getApp()->uiPersistence->typecastSaveField(new Field(['type' => 'integer']), $value);
         }
 
