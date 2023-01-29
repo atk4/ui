@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\AppScopeTrait;
 use Atk4\Core\WarnDynamicPropertyTrait;
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\HtmlTemplate\TagTree;
 use Atk4\Ui\HtmlTemplate\Value as HtmlValue;
@@ -174,7 +175,11 @@ class HtmlTemplate
         }
 
         // TODO remove later in favor of strong string type
-        $value = (string) $value;
+        if ($value === null) {
+            $value = '';
+        } elseif (is_int($value)) {
+            $value = $this->getApp()->uiPersistence->typecastSaveField(new Field(['type' => 'integer']), $value);
+        }
 
         $htmlValue = new HtmlValue();
         if ($encodeHtml) {
