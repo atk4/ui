@@ -186,7 +186,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
      * @returns {string}
      */
     getEraseContent() {
-        return '<i class="red remove icon" style=""></i>';
+        return '<i class="red remove icon"></i>';
     }
 }
 
