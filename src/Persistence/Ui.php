@@ -8,7 +8,6 @@ use Atk4\Data\Field;
 use Atk4\Data\Field\PasswordField;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
-use Atk4\Data\Persistence\Sql\Expression;
 use Atk4\Ui\Exception;
 
 /**
@@ -26,15 +25,14 @@ class Ui extends Persistence
     /** @var string */
     public $locale = 'en';
 
-    /** @var string Thousands separator for numeric types. */
-    public $thousandsSeparator = ' ';
-    /** @var string Decimal point separator for numeric (non-integer) types. */
-    public $decimalSeparator = '.';
-
     /** @var string Currency symbol for 'atk4_money' type. */
     public $currency = '€';
     /** @var int Number of decimal digits for 'atk4_money' type. */
     public $currencyDecimals = 2;
+    /** @var string Decimal point separator for 'atk4_money' type. */
+    public $currencyDecimalSeparator = '.';
+    /** @var string Thousands separator for 'atk4_money' type. */
+    public $currencyThousandsSeparator = ' ';
 
     /** @var string */
     public $timezone;
@@ -95,25 +93,11 @@ class Ui extends Persistence
                 $value = $value ? $this->yes : $this->no;
 
                 break;
-            case 'integer':
-            case 'float':
-                $value = parent::_typecastLoadField($field, $value);
-                $value = is_int($value)
-                    ? (string) $value
-                    : Expression::castFloatToString($value);
-                $value = preg_replace_callback('~\.?\d+~', function ($matches) {
-                    return substr($matches[0], 0, 1) === '.'
-                        ? $this->decimalSeparator . preg_replace('~\d{3}\K(?!$)~', /* ' ' */ '', substr($matches[0], 1))
-                        : preg_replace('~(?<!^)(?=(?:\d{3})+$)~', $this->thousandsSeparator, $matches[0]);
-                }, $value);
-                $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */, $value);
-
-                break;
             case 'atk4_money':
                 $value = parent::_typecastLoadField($field, $value);
                 $valueDecimals = strlen(preg_replace('~^[^.]$|^.+\.|0+$~s', '', number_format($value, max(0, 11 - (int) log10($value)), '.', '')));
                 $value = ($this->currency ? $this->currency . ' ' : '')
-                    . number_format($value, max($this->currencyDecimals, $valueDecimals), $this->decimalSeparator, $this->thousandsSeparator);
+                    . number_format($value, max($this->currencyDecimals, $valueDecimals), $this->currencyDecimalSeparator, $this->currencyThousandsSeparator);
                 $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */, $value);
 
                 break;
@@ -158,14 +142,12 @@ class Ui extends Persistence
                 }
 
                 break;
-            case 'integer':
-            case 'float':
             case 'atk4_money':
                 if (is_string($value)) {
                     $value = str_replace([' ', "\u{00a0}" /* Unicode NBSP */, '_', $this->currency, '$', '€'], '', $value);
-                    $dSep = $this->decimalSeparator;
+                    $dSep = $this->currencyDecimalSeparator;
                     $tSeps = array_filter(
-                        array_unique([$dSep, $this->thousandsSeparator, '.', ',']),
+                        array_unique([$dSep, $this->currencyThousandsSeparator, '.', ',']),
                         fn ($sep) => strpos($value, $sep) !== false
                     );
                     usort($tSeps, fn ($sepA, $sepB) => strrpos($value, $sepB) <=> strrpos($value, $sepA));
