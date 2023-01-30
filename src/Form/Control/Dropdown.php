@@ -264,7 +264,7 @@ class Dropdown extends Input
     {
         foreach ($this->model as $key => $row) {
             $title = $row->getTitle();
-            $this->_tItem->set('value', $key);
+            $this->_tItem->set('value', (string) $key);
             $this->_tItem->set('title', $title || is_numeric($title) ? (string) $title : '');
             // add item to template
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
@@ -277,7 +277,7 @@ class Dropdown extends Input
     protected function _renderItemsForValues(): void
     {
         foreach ($this->values as $key => $val) {
-            $this->_tItem->set('value', $key);
+            $this->_tItem->set('value', (string) $key);
             if (is_array($val)) {
                 if (array_key_exists('icon', $val)) {
                     $this->_tIcon->set('iconClass', $val['icon'] . ' icon');
@@ -305,7 +305,7 @@ class Dropdown extends Input
     protected function _addCallBackRow($row, $key = null): void
     {
         $res = ($this->renderRowFunction)($row, $key);
-        $this->_tItem->set('value', $res['value']);
+        $this->_tItem->set('value', (string) $res['value']);
         $this->_tItem->set('title', $res['title']);
 
         // Icon
