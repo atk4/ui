@@ -201,7 +201,7 @@ $cart->setApp($app);
 
 // Label now can be added referencing Cart's items. Init() was colled when I added it into app, so the
 // item property is populated.
-$cartOutterLabel = Label::addTo($cartItem, [count($cart->items), 'class.floating red' => true]);
+$cartOutterLabel = Label::addTo($cartItem, [(string) count($cart->items), 'class.floating red' => true]);
 if (!$cart->items) {
     $cartOutterLabel->setStyle('display', 'none');
 }

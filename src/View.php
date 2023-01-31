@@ -74,7 +74,7 @@ class View extends AbstractView
      */
     public $defaultTemplate = 'element.html';
 
-    /** @var string|false|null Set static contents of this view. */
+    /** @var string|null Set static contents of this view. */
     public $content;
 
     /** Change this if you want to substitute default "div" for something else. */
@@ -339,33 +339,28 @@ class View extends AbstractView
      */
     public function set($arg1 = null, $arg2 = null)
     {
-        if (is_string($arg1) && $arg2 !== null) {
-            // must be initialized
-            $this->template->set($arg1, $arg2);
-
-            return $this;
-        }
-
         if ($arg2 !== null) {
-            throw (new Exception('Second argument to set() can be only passed if the first one is a string'))
-                ->addMoreInfo('arg1', $arg1)
-                ->addMoreInfo('arg2', $arg2);
-        }
+            if (is_string($arg1)) {
+                $this->template->set($arg1, $arg2);
 
-        if (is_scalar($arg1)) {
-            $this->content = $arg1;
-
-            return $this;
-        }
-
-        if (is_array($arg1)) {
-            if (isset($arg1[0])) {
-                $this->content = $arg1[0];
-                unset($arg1[0]);
+                return $this;
             }
-            $this->setDefaults($arg1);
+        } else {
+            if (is_string($arg1) || $arg1 === null) {
+                $this->content = $arg1;
 
-            return $this;
+                return $this;
+            }
+
+            if (is_array($arg1)) {
+                if (isset($arg1[0])) {
+                    $this->content = $arg1[0];
+                    unset($arg1[0]);
+                }
+                $this->setDefaults($arg1);
+
+                return $this;
+            }
         }
 
         throw (new Exception('Not sure what to do with argument'))
@@ -619,7 +614,7 @@ class View extends AbstractView
             }
         }
 
-        if ($this->content !== null && $this->content !== false) {
+        if ($this->content !== null) {
             $this->template->append('Content', $this->content);
         }
     }

@@ -139,9 +139,8 @@ class HtmlTemplate
      * If tag contains another tag trees, these tag trees are emptied.
      *
      * @param string|array|Model $tag
-     * @param string             $value
      */
-    protected function _setOrAppend($tag, $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
+    protected function _setOrAppend($tag, string $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
     {
         if ($tag instanceof Model) {
             if (!$encodeHtml) {
@@ -162,19 +161,14 @@ class HtmlTemplate
         }
 
         if (!is_string($tag) || $tag === '') {
-            throw (new Exception('Tag must be not empty string'))
+            throw (new Exception('Tag must be non-empty string'))
                 ->addMoreInfo('tag', $tag)
                 ->addMoreInfo('value', $value);
         }
 
-        if (!is_scalar($value) && $value !== null) { // @phpstan-ignore-line
-            throw (new Exception('Value must be scalar'))
-                ->addMoreInfo('tag', $tag)
-                ->addMoreInfo('value', $value);
+        if ($value === null) {
+            $value = '';
         }
-
-        // TODO remove later in favor of strong string type
-        $value = (string) $value;
 
         $htmlValue = new HtmlValue();
         if ($encodeHtml) {
@@ -210,9 +204,8 @@ class HtmlTemplate
      * would read and set multiple region values from $_GET array.
      *
      * @param string|array|Model $tag
-     * @param string             $value
      */
-    public function set($tag, $value = null): self
+    public function set($tag, string $value = null): self
     {
         $this->_setOrAppend($tag, $value, true, false);
 
@@ -224,9 +217,8 @@ class HtmlTemplate
      * $tag.
      *
      * @param string|array|Model $tag
-     * @param string             $value
      */
-    public function trySet($tag, $value = null): self
+    public function trySet($tag, string $value = null): self
     {
         $this->_setOrAppend($tag, $value, true, false, false);
 
@@ -238,9 +230,8 @@ class HtmlTemplate
      * encoding, so you must be sure to sanitize.
      *
      * @param string|array|Model $tag
-     * @param string             $value
      */
-    public function dangerouslySetHtml($tag, $value = null): self
+    public function dangerouslySetHtml($tag, string $value = null): self
     {
         $this->_setOrAppend($tag, $value, false, false);
 
@@ -252,9 +243,8 @@ class HtmlTemplate
      * $tag.
      *
      * @param string|array|Model $tag
-     * @param string             $value
      */
-    public function tryDangerouslySetHtml($tag, $value = null): self
+    public function tryDangerouslySetHtml($tag, string $value = null): self
     {
         $this->_setOrAppend($tag, $value, false, false, false);
 
@@ -265,9 +255,8 @@ class HtmlTemplate
      * Add more content inside a tag.
      *
      * @param string|array|Model $tag
-     * @param string             $value
      */
-    public function append($tag, $value): self
+    public function append($tag, ?string $value): self
     {
         $this->_setOrAppend($tag, $value, true, true);
 
@@ -279,9 +268,8 @@ class HtmlTemplate
      * $tag.
      *
      * @param string|array|Model $tag
-     * @param string             $value
      */
-    public function tryAppend($tag, $value): self
+    public function tryAppend($tag, ?string $value): self
     {
         $this->_setOrAppend($tag, $value, true, true, false);
 
@@ -293,9 +281,8 @@ class HtmlTemplate
      * encoding, so you must be sure to sanitize.
      *
      * @param string|array|Model $tag
-     * @param string             $value
      */
-    public function dangerouslyAppendHtml($tag, $value): self
+    public function dangerouslyAppendHtml($tag, ?string $value): self
     {
         $this->_setOrAppend($tag, $value, false, true);
 
@@ -307,9 +294,8 @@ class HtmlTemplate
      * $tag.
      *
      * @param string|array|Model $tag
-     * @param string             $value
      */
-    public function tryDangerouslyAppendHtml($tag, $value): self
+    public function tryDangerouslyAppendHtml($tag, ?string $value): self
     {
         $this->_setOrAppend($tag, $value, false, true, false);
 

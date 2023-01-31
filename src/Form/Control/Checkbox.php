@@ -65,7 +65,6 @@ class Checkbox extends Form\Control
             $this->template->dangerouslySetHtml('checked', 'checked="checked"');
         }
 
-        // We don't want this displayed, because it can only affect "checked" status anyway
         $this->content = null;
 
         if ($this->readOnly) {
@@ -78,8 +77,6 @@ class Checkbox extends Form\Control
         }
 
         $this->js(true)->checkbox();
-
-        $this->content = null; // no content again
 
         parent::renderView();
     }
