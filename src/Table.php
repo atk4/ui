@@ -16,7 +16,6 @@ class Table extends Lister
 {
     public $defaultTemplate = 'table.html';
     public $ui = 'table';
-    public $content = false;
 
     /**
      * If table is part of Grid or Crud, we want to reload that instead of table.

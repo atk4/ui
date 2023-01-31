@@ -179,20 +179,10 @@ class Card extends View
             $fields = array_keys($this->model->getFields(['editable', 'visible']));
         }
 
-        $this->setDataId($this->model->getId());
+        $this->template->trySet('dataId', (string) $this->model->getId());
 
         View::addTo($this->getSection(), [$entity->getTitle(), 'class.header' => true]);
         $this->getSection()->addFields($entity, $fields, $this->useLabel, $this->useTable);
-    }
-
-    /**
-     * Set data-id attribute of this card.
-     *
-     * @param string $id
-     */
-    protected function setDataId($id): void
-    {
-        $this->template->trySet('dataId', (string) $id);
     }
 
     /**
