@@ -129,11 +129,18 @@ class PersistenceUiTest extends TestCase
         yield [[], ['type' => 'boolean'], false, '0', false];
         yield [[], ['type' => 'boolean'], true, '1', false];
 
+        yield [[], ['type' => 'integer'], 12_345_678, '12345678', false];
+        yield [[], ['type' => 'integer'], 12_345_678, '12_345_678', false];
+        yield [[], ['type' => 'integer'], 12_345_678, '12 345 678', false];
+        yield [[], ['type' => 'integer'], 12_345_678, '12,345,678', false];
+        yield [[], ['type' => 'integer'], 12_345_678, "\n" . '12345678' . "\t\r", false];
+        yield [['decimalSeparator' => ','], ['type' => 'integer'], 12_345_678, '12.345.678', false];
         yield [[], ['type' => 'integer'], 0, '0.4', false];
-        yield [[], ['type' => 'integer'], 1, '1.49', false];
-        // yield [[], ['type' => 'integer'], 2, '1.5', false];
-        yield [[], ['type' => 'integer'], -1, '-1.49', false];
-        // yield [[], ['type' => 'integer'], -2, '-1.5', false];
+        yield [[], ['type' => 'integer'], 7, '7.49', false];
+        // yield [[], ['type' => 'integer'], 8, '7.5', false];
+        yield [[], ['type' => 'integer'], -7, '-7.49', false];
+        // yield [[], ['type' => 'integer'], -8, '-7.5', false];
+        yield [[], ['type' => 'integer'], 12, '12.345.678', false];
 
         yield [[], ['type' => 'float'], 1.0, '1', false];
         yield [[], ['type' => 'float'], 0.0, '0', false];
@@ -141,6 +148,9 @@ class PersistenceUiTest extends TestCase
         yield [[], ['type' => 'float'], -0.3, '-.3', false];
         yield [[], ['type' => 'float'], 0.3, '+00.3', false];
         yield [[], ['type' => 'float'], -0.3, '-00.300', false];
+        yield [[], ['type' => 'float'], 12_345_678.3579, '12345678.3579', false];
+        yield [[], ['type' => 'float'], 12_345_678.3579, '12_345_678.357_9', false];
+        yield [[], ['type' => 'float'], 12_345_678.3579, '12 345 678.357 9', false];
 
         yield [[], ['type' => 'atk4_money'], 2.0, '€2', false];
         yield [[], ['type' => 'atk4_money'], 2.0, '$2', false];
