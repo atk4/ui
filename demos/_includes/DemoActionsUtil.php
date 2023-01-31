@@ -126,12 +126,12 @@ class DemoActionsUtil
                 ],
             ],
             'fields' => [$country->fieldName()->iso3],
-            'callback' => function (Country $model, int $age, string $city, string $gender) {
+            'callback' => function (Country $model, int $age, ?string $city, string $gender) {
                 $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
 
                 return 'Thank you ' . $n . ' at age ' . $age;
             },
-            'preview' => function (Country $model, int $age, string $city, string $gender) {
+            'preview' => function (Country $model, int $age, ?string $city, string $gender) {
                 return 'Gender = ' . $gender . ' / Age = ' . $age;
             },
         ]);

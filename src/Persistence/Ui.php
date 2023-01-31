@@ -206,8 +206,8 @@ class Ui extends Persistence
         $value = parent::_typecastLoadField($field, $value);
         $value = (new Field(['type' => $field->type]))->normalize($value);
 
-        if ($field->hasReference() && $value === '') {
-            return null;
+        if ($value === '' && $field->nullable && !$field->required) {
+            $value = null;
         }
 
         if ($value !== null && $field instanceof PasswordField && !$field->hashPasswordIsHashed($value)) {

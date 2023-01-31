@@ -105,10 +105,10 @@ class PersistenceUiTest extends TestCase
             yield [[], ['type' => $type], null, '', false];
         }
 
-        yield [[], ['type' => 'string'], '', '', false];
-        yield [[], ['type' => 'text'], '', '', false];
-        yield [[], ['type' => 'string'], '', ' ', false];
-        yield [[], ['type' => 'string'], '', " \r\r\n ", false];
+        yield [[], ['type' => 'string'], null, '', false];
+        yield [[], ['type' => 'text'], null, '', false];
+        yield [[], ['type' => 'string'], null, ' ', false];
+        yield [[], ['type' => 'string'], null, " \r\r\n ", false];
         yield [[], ['type' => 'string', 'nullable' => false], '', '', false];
         yield [[], ['type' => 'string', 'nullable' => false], '', ' ', false];
         yield [[], ['type' => 'string', 'nullable' => false], '', " \n ", false];
