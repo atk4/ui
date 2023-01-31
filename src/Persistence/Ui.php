@@ -156,10 +156,14 @@ class Ui extends Persistence
             case 'float':
             case 'atk4_money':
                 if (is_string($value)) {
+                    if ($this->thousandsSeparator === '.') {
+                        $value = str_replace('.', '_', $value);
+                    }
+
                     $value = str_replace([' ', "\u{00a0}" /* Unicode NBSP */, '_', $this->currency, '$', '€'], '', $value);
                     $dSep = $this->decimalSeparator;
                     $tSeps = array_filter(
-                        array_unique([$dSep, $this->thousandsSeparator, '.', ',']),
+                        array_unique([$dSep, $this->thousandsSeparator !== '' ? $this->thousandsSeparator : '.', '.', ',']),
                         fn ($sep) => strpos($value, $sep) !== false
                     );
                     usort($tSeps, fn ($sepA, $sepB) => strrpos($value, $sepB) <=> strrpos($value, $sepA));
