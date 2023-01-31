@@ -192,7 +192,7 @@ class Card extends View
      */
     protected function setDataId($id): void
     {
-        $this->template->trySet('dataId', $id);
+        $this->template->trySet('dataId', (string) $id);
     }
 
     /**

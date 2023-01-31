@@ -178,7 +178,7 @@ class Lister extends View
 
         $this->tRow->trySet('_title', $this->model->getTitle());
         $this->tRow->trySet('_href', $this->url(['id' => $this->currentRow->getId()]));
-        $this->tRow->trySet('_id', $this->currentRow->getId());
+        $this->tRow->trySet('_id', (string) $this->currentRow->getId());
 
         $html = $this->tRow->renderToHtml();
         if ($this->template->hasTag('rows')) {

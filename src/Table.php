@@ -490,7 +490,7 @@ class Table extends Lister
 
             // Render row and add to body
             $this->tRow->dangerouslySetHtml($html_tags);
-            $this->tRow->set('_id', $this->model->getId());
+            $this->tRow->set('_id', (string) $this->model->getId());
             $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
             $this->tRow->del(array_keys($html_tags));
         } else {
