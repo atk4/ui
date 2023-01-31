@@ -12,12 +12,11 @@ class PersistenceUiTest extends TestCase
 {
     /**
      * @param mixed $phpValue
-     * @param mixed $uiValue
      *
      * @dataProvider providerTypecastBidirectional
      * @dataProvider providerTypecastLoadOnly
      */
-    public function testTypecast(array $persistenceSeed, array $fieldSeed, $phpValue, $uiValue, bool $isUiValueNormalized = true): void
+    public function testTypecast(array $persistenceSeed, array $fieldSeed, $phpValue, ?string $uiValue, bool $isUiValueNormalized = true): void
     {
         $p = (new UiPersistence())->setDefaults($persistenceSeed);
         $field = (new Field())->setDefaults($fieldSeed);
