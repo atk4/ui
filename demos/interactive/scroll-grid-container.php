@@ -18,7 +18,7 @@ require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Dynamic scroll in Crud and Grid', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['scroll-grid']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 Header::addTo($app, ['Dynamic scroll in Grid with fixed column headers']);
 

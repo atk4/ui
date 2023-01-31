@@ -1,10 +1,10 @@
-<div id="{$_id}" class="{_ui}ui{/}  {$class} {$_class}" style="{$style}" {$attributes}>
+<div {$attributes}>
     .text {$Content}
     i.dropdown.icon
     .menu
         | {rows}
         | {row}
-        .item(data-value='{$id}')
+        .item(data-value="{$id}")
             | {$name}
         |
         | {/}

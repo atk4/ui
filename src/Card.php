@@ -244,7 +244,7 @@ class Card extends View
                 $extra .= $model->get($field) . $glue;
             }
             $extra = rtrim($extra, $glue);
-            $this->addExtraContent(new View([$extra, 'ui' => 'ui basic fitted segment']));
+            $this->addExtraContent(new View([$extra, 'ui' => 'basic fitted segment']));
         } else {
             foreach ($fields as $field) {
                 $this->addExtraContent(new View([$model->get($field), 'class.ui basic fitted segment' => true]));

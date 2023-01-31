@@ -15,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Card Model', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['card-action']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 Header::addTo($app, ['Card.', 'size' => 1, 'subHeader' => 'Component based on Fomantic-UI Card view.']);
 
@@ -40,7 +40,7 @@ $card->addExtraContent(new View(['Copyright notice: Image from Fomantic-UI', 'el
 $card = Card::addTo($app);
 $content = new View(['class' => ['content']]);
 $img = Image::addTo($content, ['../images/kristy.png']);
-$img->addClass('right floated mini ui image');
+$img->addClass('right floated mini');
 $header = Header::addTo($content, ['Kristy']);
 
 $card->addContent($content);

@@ -30,7 +30,7 @@ $b1->link(['index']);
 
 Header::addTo($app, ['Properties', 'size' => 2]);
 Button::addTo($app, ['Primary button', 'class.primary' => true]);
-Button::addTo($app, ['Load', 'class.labeled' => true, 'icon' => 'pause']);
+Button::addTo($app, ['Load', 'icon' => 'pause']);
 Button::addTo($app, ['Next', 'iconRight' => 'right arrow']);
 Button::addTo($app, ['class.circular' => true, 'icon' => 'settings']);
 

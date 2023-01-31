@@ -28,7 +28,7 @@ trait StepExecutorTrait
     protected $loader;
 
     /** @var string */
-    public $loaderUi = 'ui basic segment';
+    public $loaderUi = 'basic segment';
 
     /** @var array */
     public $loaderShim = [];

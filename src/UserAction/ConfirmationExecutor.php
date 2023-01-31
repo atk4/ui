@@ -31,8 +31,8 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /** @var Loader|null Loader to add content to modal. */
     public $loader;
 
-    /** @var string css class for loader. */
-    public $loaderUi = 'ui basic segment';
+    /** @var string */
+    public $loaderUi = 'basic segment';
     /** @var array|View|null Loader shim object or seed. */
     public $loaderShim;
     /** @var JsExpressionable|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */

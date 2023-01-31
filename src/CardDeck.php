@@ -16,7 +16,7 @@ use Atk4\Ui\UserAction\ExecutorInterface;
  */
 class CardDeck extends View
 {
-    public $ui = '';
+    public $ui = 'basic segment atk-card-deck';
 
     /** @var class-string<View> Card type inside this deck. */
     public $card = Card::class;
@@ -140,7 +140,8 @@ class CardDeck extends View
         $count = $this->initPaginator();
         if ($count) {
             foreach ($this->model as $m) {
-                $c = $this->cardHolder->add(Factory::factory([$this->card], ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]))->addClass('segment');
+                /** @var Card */
+                $c = $this->cardHolder->add(Factory::factory([$this->card], ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]));
                 $c->setModel($m, $fields);
                 if ($extra) {
                     $c->addExtraFields($m, $extra, $this->extraGlue);

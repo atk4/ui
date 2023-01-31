@@ -426,7 +426,7 @@ class View extends AbstractView
     }
 
     /**
-     * Remove inline CSS style from element, if it was added with setStyle.
+     * Remove inline CSS style from element.
      *
      * @param string $property
      *
@@ -545,52 +545,77 @@ class View extends AbstractView
      * View-specific rendering stuff. Feel free to replace this method with
      * your own. View::renderView contains some logic that integrates with
      * Fomantic-UI.
-     *
-     * NOTE: maybe in the future, Fomantic-UI related stuff needs to go into
-     * a separate class.
      */
     protected function renderView(): void
     {
-        if ($this->class !== []) {
-            $this->template->append('class', implode(' ', $this->class));
-        }
-
-        if ($this->style !== []) {
-            $styles = [];
-            foreach ($this->style as $k => $v) {
-                $styles[] = $k . ': ' . $v . ';';
-            }
-            $this->template->append('style', implode(' ', $styles));
-        }
-
-        if ($this->ui) {
-            if (is_string($this->ui)) {
-                $this->template->set('_class', $this->ui);
-            }
-        } else {
-            $this->template->tryDel('_ui');
-        }
-
-        if ($this->name) {
-            $this->template->trySet('_id', $this->name);
-        }
-
         if ($this->element !== 'div') {
             $this->template->set('_element', $this->element);
         } else {
             $this->template->trySet('_element', $this->element);
         }
 
-        if (!$this->getApp()->isVoidTag($this->element)) {
-            $this->template->tryDangerouslySetHtml('_element_end_html', '</' . $this->element . '>');
+        $app = $this->getApp();
+        if (!$app->isVoidTag($this->element)) {
+            $this->template->tryDangerouslySetHtml('_element_end', '</' . $this->element . '>');
         }
 
-        if ($this->attr !== []) {
-            $attrs = [];
-            foreach ($this->attr as $k => $v) {
-                $attrs[] = $k . '="' . $this->getApp()->encodeHtml((string) $v) . '"';
+        $attrsHtml = [];
+
+        if ($this->name) {
+            $attrsHtml[] = 'id="' . $app->encodeHtml($this->name) . '"';
+
+            // TODO hack for template/tabs.html
+            if ($this->template->hasTag('Tabs')) {
+                array_pop($attrsHtml);
             }
-            $this->template->dangerouslySetHtml('attributes', implode(' ', $attrs));
+
+            // TODO hack for template/form/control/upload.html
+            if ($this->template->hasTag('AfterBeforeInput') && str_contains($this->template->renderToHtml(), ' type="file"')) {
+                array_pop($attrsHtml);
+            }
+
+            // needed for templates like '<input id="{$_id}_input">'
+            $this->template->trySet('_id', $this->name);
+        }
+
+        $class = null;
+        if ($this->class !== []) {
+            $class = implode(' ', $this->class);
+
+            // needed for templates like template/form/layout/generic-input.html
+            $this->template->tryAppend('class', implode(' ', $this->class));
+        }
+        if ($this->ui !== false) {
+            $class = 'ui ' . $this->ui . ($class !== null ? ' ' . $class : '');
+        }
+        if ($class !== null) {
+            $attrsHtml[] = 'class="' . $app->encodeHtml($class) . '"';
+        }
+
+        if ($this->style !== []) {
+            $styles = [];
+            foreach ($this->style as $k => $v) {
+                $styles[] = $k . ': ' . $app->encodeHtml($v) . ';';
+            }
+            $attrsHtml[] = 'style="' . implode(' ', $styles) . '"';
+
+            // needed for template/html.html
+            $this->template->tryDangerouslyAppendHtml('style', implode(' ', $styles));
+        }
+
+        foreach ($this->attr as $k => $v) {
+            $attrsHtml[] = $k . '="' . $app->encodeHtml((string) $v) . '"';
+        }
+
+        if ($attrsHtml !== []) {
+            try {
+                $this->template->dangerouslySetHtml('attributes', implode(' ', $attrsHtml));
+            } catch (Exception $e) {
+                // TODO hack to ignore missing '{$attributes}' mostly in layout templates
+                if (count($attrsHtml) === 1 ? !str_starts_with(reset($attrsHtml), 'id=') : !$this instanceof Lister) {
+                    throw $e;
+                }
+            }
         }
     }
 

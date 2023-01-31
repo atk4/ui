@@ -11,6 +11,7 @@ use Atk4\Ui\Lister;
 class Radio extends Form\Control
 {
     public $ui = false;
+    public array $class = ['grouped', 'fields'];
 
     public $defaultTemplate = 'form/control/radio.html';
 

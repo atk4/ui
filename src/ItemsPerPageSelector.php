@@ -13,7 +13,7 @@ use Atk4\Ui\Js\JsExpression;
 class ItemsPerPageSelector extends View
 {
     public $defaultTemplate = 'pagelength.html';
-    public $ui = ' ';
+    public $ui = 'selection compact dropdown';
 
     /** @var array Default page length menu items. */
     public $pageLengthItems = [10, 25, 50, 100];

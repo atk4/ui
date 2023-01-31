@@ -16,7 +16,7 @@ Button::addTo($app, ['Dynamic scroll in Container', 'class.small left floated ba
     ->link(['scroll-container']);
 Button::addTo($app, ['Dynamic scroll in Grid using Container', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['scroll-grid-container']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 Header::addTo($app, ['Dynamic scroll in Grid']);
 

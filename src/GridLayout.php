@@ -6,6 +6,8 @@ namespace Atk4\Ui;
 
 class GridLayout extends View
 {
+    public $ui = 'grid';
+
     /** @var int Number of rows */
     protected $rows = 1;
 
@@ -26,9 +28,6 @@ class GridLayout extends View
     protected $tCol;
     /** @var HtmlTemplate */
     public $template;
-
-    /** @var string Fomantic-UI CSS class */
-    public $ui = 'grid';
 
     /** @var string Template file */
     public $defaultTemplate = 'grid-layout.html';

@@ -608,7 +608,8 @@ Globally Recognized Tags
 
 
 Agile Toolkit View will automatically substitute several tags with the values.
-The tag {$_id} is automatically replaced with a unique name by a View.
+The tag {$attributes} is automatically replaced with a attributes incl. ``id``
+(unique name of a View), ``class`` and ``style``.
 
 There are more templates which are being substituted:
 

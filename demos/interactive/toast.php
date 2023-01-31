@@ -84,7 +84,7 @@ $btn->on('click', new JsToast([
     'title' => 'Awesome',
     'message' => 'I got my style from the message class',
     'class' => 'purple',
-    'className' => ['toast' => 'ui message', 'title' => 'ui header'],
+    'className' => ['toast' => 'ui message', 'title' => 'header cust'],
 ]));
 
 $btn = Button::addTo($app)->set('With progress bar');

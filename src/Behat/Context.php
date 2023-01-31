@@ -195,7 +195,6 @@ class Context extends RawMinkContext implements BehatContext
             EOF);
 
         // TODO hack to pass CI testing, fix these issues and remove the error diffs below asap
-        $invalidIds = array_diff($invalidIds, ['']); // id="" is hardcoded in templates
         $duplicateIds = array_diff($duplicateIds, ['atk', '_icon', 'atk_icon']); // generated when component is not correctly added to app/layout component tree - should throw, as such name/ID is dangerous to be used
 
         if (count($invalidIds) > 0) {

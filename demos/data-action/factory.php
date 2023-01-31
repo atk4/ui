@@ -16,7 +16,7 @@ require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Executor Factory in View Instance', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['factory-view']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 $msg = Message::addTo($app, [
     'Customizing action trigger by Overriding Executor Factory',

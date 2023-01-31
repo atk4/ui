@@ -39,11 +39,11 @@ class ViewTest extends TestCase
     {
         $v = new View();
         $v->setApp($this->createApp());
-        static::assertSame('<div id="atk" class="  " style="" ></div>', $v->render());
+        static::assertSame('<div id="atk"></div>', $v->render());
 
         $v = new View();
         $v->element = 'img';
         $v->setApp($this->createApp());
-        static::assertSame('<img id="atk" class="  " style="" >', $v->render());
+        static::assertSame('<img id="atk">', $v->render());
     }
 }

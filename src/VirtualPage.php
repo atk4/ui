@@ -15,14 +15,13 @@ namespace Atk4\Ui;
  */
 class VirtualPage extends View
 {
+    public $ui = 'container';
+
     /** @var Callback */
     public $cb;
 
     /** @var string|null specify custom callback trigger for the URL (see Callback::$urlTrigger) */
     protected $urlTrigger;
-
-    /** @var string UI container class */
-    public $ui = 'container';
 
     protected function init(): void
     {
