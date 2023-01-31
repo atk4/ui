@@ -16,7 +16,6 @@ class Table extends Lister
 {
     public $defaultTemplate = 'table.html';
     public $ui = 'table';
-    public $content = false;
 
     /**
      * If table is part of Grid or Crud, we want to reload that instead of table.
@@ -493,7 +492,7 @@ class Table extends Lister
 
             // Render row and add to body
             $this->tRow->dangerouslySetHtml($html_tags);
-            $this->tRow->set('dataId', $this->model->getId());
+            $this->tRow->set('dataId', (string) $this->model->getId());
             $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
             $this->tRow->del(array_keys($html_tags));
         } else {

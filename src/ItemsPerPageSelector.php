@@ -45,7 +45,7 @@ class ItemsPerPageSelector extends View
         if (!$this->currentIpp) {
             $this->currentIpp = $this->pageLengthItems[0];
         }
-        $this->set($this->currentIpp);
+        $this->set((string) $this->currentIpp);
     }
 
     /**

@@ -68,7 +68,7 @@ class Header extends View
         if (!$this->icon && !$this->elements) {
             $this->template->del('hasContent');
             $this->template->set('title', $this->content);
-            $this->content = false;
+            $this->content = null;
         }
 
         parent::renderView();

@@ -69,8 +69,6 @@ class Form extends View
     /** @var array<string, Control> List of form controls currently registered with this form. */
     public $controls = [];
 
-    public $content = false;
-
     /**
      * Will point to the Save button. If you don't want to have save button, then set this to false
      * or destroy it. Initialized by initLayout().

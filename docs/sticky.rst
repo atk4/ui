@@ -28,7 +28,7 @@ Sticky GET is a better approach. It works like this::
 
     Loader::addTo($app)->set(function (Loader $p) {
         Console::addTo($p)->set(function (Console $console) {
-            $console->output('client_id = !'. $_GET['client_id']);
+            $console->output('client_id = !' . $_GET['client_id']);
         });
     });
 

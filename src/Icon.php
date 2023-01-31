@@ -13,7 +13,7 @@ class Icon extends View
     protected function renderView(): void
     {
         $this->addClass($this->content . ' icon');
-        $this->content = false;
+        $this->content = null;
 
         parent::renderView();
     }

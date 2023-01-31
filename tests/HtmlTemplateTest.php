@@ -87,15 +87,6 @@ class HtmlTemplateTest extends TestCase
         $t->set('foo', "\xc2");
     }
 
-    public function testSetNonScalarException(): void
-    {
-        $t = new HtmlTemplate('{foo}hello{/} guys');
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Value must be scalar');
-        $t->set('foo', new \stdClass()); // @phpstan-ignore-line
-    }
-
     public function testSetAppendDel(): void
     {
         $t = new HtmlTemplate('{foo}hello{/} guys');
