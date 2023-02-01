@@ -8,6 +8,7 @@ use Atk4\Data\Field;
 use Atk4\Data\Field\PasswordField;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Data\Persistence\Sql\Expression;
 use Atk4\Ui\Exception;
 
 /**
@@ -25,23 +26,24 @@ class Ui extends Persistence
     /** @var string */
     public $locale = 'en';
 
+    /** @var '.'|',' Decimal point separator for numeric (non-integer) types. */
+    public $decimalSeparator = '.';
+    /** @var ''|' '|','|'.' Thousands separator for numeric types. */
+    public $thousandsSeparator = ' ';
+
     /** @var string Currency symbol for 'atk4_money' type. */
     public $currency = '€';
     /** @var int Number of decimal digits for 'atk4_money' type. */
     public $currencyDecimals = 2;
-    /** @var string Decimal point separator for 'atk4_money' type. */
-    public $currencyDecimalSeparator = '.';
-    /** @var string Thousands separator for 'atk4_money' type. */
-    public $currencyThousandsSeparator = ' ';
 
     /** @var string */
     public $timezone;
     /** @var string */
-    public $dateFormat = 'M d, Y';
+    public $dateFormat = 'M j, Y';
     /** @var string */
     public $timeFormat = 'H:i';
     /** @var string */
-    public $datetimeFormat = 'M d, Y H:i:s';
+    public $datetimeFormat = 'M j, Y H:i:s';
     /** @var int Calendar input first day of week, 0 = Sunday, 1 = Monday. */
     public $firstDayOfWeek = 0;
 
@@ -74,9 +76,6 @@ class Ui extends Persistence
         }
     }
 
-    /**
-     * This method contains the logic of casting generic values into user-friendly format.
-     */
     protected function _typecastSaveField(Field $field, $value): string
     {
         // always normalize string EOL
@@ -93,11 +92,25 @@ class Ui extends Persistence
                 $value = $value ? $this->yes : $this->no;
 
                 break;
+            case 'integer':
+            case 'float':
+                $value = parent::_typecastLoadField($field, $value);
+                $value = is_int($value)
+                    ? (string) $value
+                    : Expression::castFloatToString($value);
+                $value = preg_replace_callback('~\.?\d+~', function ($matches) {
+                    return substr($matches[0], 0, 1) === '.'
+                        ? $this->decimalSeparator . preg_replace('~\d{3}\K(?!$)~', '', substr($matches[0], 1))
+                        : preg_replace('~(?<!^)(?=(?:\d{3})+$)~', $this->thousandsSeparator, $matches[0]);
+                }, $value);
+                $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */, $value);
+
+                break;
             case 'atk4_money':
                 $value = parent::_typecastLoadField($field, $value);
                 $valueDecimals = strlen(preg_replace('~^[^.]$|^.+\.|0+$~s', '', number_format($value, max(0, 11 - (int) log10($value)), '.', '')));
                 $value = ($this->currency ? $this->currency . ' ' : '')
-                    . number_format($value, max($this->currencyDecimals, $valueDecimals), $this->currencyDecimalSeparator, $this->currencyThousandsSeparator);
+                    . number_format($value, max($this->currencyDecimals, $valueDecimals), $this->decimalSeparator, $this->thousandsSeparator);
                 $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */, $value);
 
                 break;
@@ -126,14 +139,12 @@ class Ui extends Persistence
         return (string) $value;
     }
 
-    /**
-     * Interpret user-defined input for various types.
-     */
     protected function _typecastLoadField(Field $field, $value)
     {
         switch ($field->type) {
             case 'boolean':
                 if (is_string($value)) {
+                    $value = trim($value);
                     if (mb_strtolower($value) === mb_strtolower($this->yes)) {
                         $value = '1';
                     } elseif (mb_strtolower($value) === mb_strtolower($this->no)) {
@@ -142,24 +153,32 @@ class Ui extends Persistence
                 }
 
                 break;
+            case 'integer':
+            case 'float':
             case 'atk4_money':
                 if (is_string($value)) {
-                    $value = str_replace([' ', "\u{00a0}" /* Unicode NBSP */, '_', $this->currency, '$', '€'], '', $value);
-                    $dSep = $this->currencyDecimalSeparator;
-                    $tSeps = array_filter(
-                        array_unique([$dSep, $this->currencyThousandsSeparator, '.', ',']),
-                        fn ($sep) => strpos($value, $sep) !== false
-                    );
-                    usort($tSeps, fn ($sepA, $sepB) => strrpos($value, $sepB) <=> strrpos($value, $sepA));
-                    foreach ($tSeps as $tSep) {
-                        if ($tSep === $dSep || strlen($value) - strrpos($value, $tSep) !== 4) {
-                            $dSep = $tSep;
-
-                            break;
+                    $dSep = $this->decimalSeparator;
+                    $tSep = $this->thousandsSeparator;
+                    if ($tSep !== '.' && $tSep !== ',' && !str_contains($value, $dSep)) {
+                        if (str_contains($value, '.')) {
+                            $dSep = '.';
+                        } elseif (str_contains($value, ',')) {
+                            $dSep = ',';
                         }
                     }
-                    $value = str_replace(array_diff($tSeps, [$dSep]), '', $value);
+
+                    $value = str_replace([' ', "\u{00a0}" /* Unicode NBSP */, '_', $tSep], '', $value);
                     $value = str_replace($dSep, '.', $value);
+
+                    if ($field->type === 'atk4_money' && $this->currency !== '' && substr_count($value, $this->currency) === 1) {
+                        $currencyPos = strpos($value, $this->currency);
+                        $beforeStr = substr($value, 0, $currencyPos);
+                        $afterStr = substr($value, $currencyPos + strlen($this->currency));
+
+                        $value = $beforeStr
+                            . (ctype_digit(substr($beforeStr, -1)) && ctype_digit(substr($afterStr, 0, 1)) ? '.' : '')
+                            . $afterStr;
+                    }
                 }
 
                 break;
@@ -218,11 +237,7 @@ class Ui extends Persistence
     }
 
     /**
-     * This is override of the default Persistence logic to tweak the behaviour:.
-     *
-     *  - "actual" property is ignored
-     *  - any validation for the "saving" or output is ignored.
-     *  - handling of all sorts of expressions is disabled
+     * Override parent method to ignore key change by Field::actual property.
      */
     public function typecastSaveRow(Model $model, array $row): array
     {
