@@ -39,11 +39,11 @@ class Ui extends Persistence
     /** @var string */
     public $timezone;
     /** @var string */
-    public $dateFormat = 'M d, Y';
+    public $dateFormat = 'M j, Y';
     /** @var string */
     public $timeFormat = 'H:i';
     /** @var string */
-    public $datetimeFormat = 'M d, Y H:i:s';
+    public $datetimeFormat = 'M j, Y H:i:s';
     /** @var int Calendar input first day of week, 0 = Sunday, 1 = Monday. */
     public $firstDayOfWeek = 0;
 

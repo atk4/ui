@@ -87,9 +87,9 @@ class PersistenceUiTest extends TestCase
             $evalTime = '$ new DateTime(\'1970-1-1 10:20 UTC\')';
             $evalDatetime = '$ new DateTime(\'2022-1-2 10:20:30 ' . $tz . '\')';
 
-            yield [['timezone' => $tz], ['type' => 'date'], $evalDate, 'Jan 02, 2022'];
+            yield [['timezone' => $tz], ['type' => 'date'], $evalDate, 'Jan 2, 2022'];
             yield [['timezone' => $tz], ['type' => 'time'], $evalTime, '10:20'];
-            yield [['timezone' => $tz], ['type' => 'datetime'], $evalDatetime, 'Jan 02, 2022 10:20:30'];
+            yield [['timezone' => $tz], ['type' => 'datetime'], $evalDatetime, 'Jan 2, 2022 10:20:30'];
             yield [['timezone' => $tz, 'dateFormat' => 'j.n.Y'], ['type' => 'date'], $evalDate, '2.1.2022'];
             yield [['timezone' => $tz, 'timeFormat' => 'g:i:s A'], ['type' => 'time'], $evalTime, '10:20:00 AM'];
             yield [['timezone' => $tz, 'datetimeFormat' => 'j.n.Y g:i:s A'], ['type' => 'datetime'], $evalDatetime, '2.1.2022 10:20:30 AM'];
@@ -161,6 +161,8 @@ class PersistenceUiTest extends TestCase
         yield [[], ['type' => 'float'], 12_345_678.3579, '12 345 678.357 9', false];
         yield [[], ['type' => 'float'], 123.456, '123,456', false];
         yield [['decimalSeparator' => ','], ['type' => 'float'], 123.456, '123.456', false];
+
+        yield [[], ['type' => 'date'], '$ new DateTime(\'2022-1-2 UTC\')', 'Jan 02, 2022', false];
 
         yield [[], ['type' => 'atk4_money'], 2.0, '€2', false];
         yield [[], ['type' => 'atk4_money'], 2.0, '2€', false];
