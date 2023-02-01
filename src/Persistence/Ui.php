@@ -26,9 +26,9 @@ class Ui extends Persistence
     /** @var string */
     public $locale = 'en';
 
-    /** @var string Decimal point separator for numeric (non-integer) types. */
+    /** @var '.'|',' Decimal point separator for numeric (non-integer) types. */
     public $decimalSeparator = '.';
-    /** @var string Thousands separator for numeric types. */
+    /** @var ''|' '|','|'.' Thousands separator for numeric types. */
     public $thousandsSeparator = ' ';
 
     /** @var string Currency symbol for 'atk4_money' type. */
@@ -100,7 +100,7 @@ class Ui extends Persistence
                     : Expression::castFloatToString($value);
                 $value = preg_replace_callback('~\.?\d+~', function ($matches) {
                     return substr($matches[0], 0, 1) === '.'
-                        ? $this->decimalSeparator . preg_replace('~\d{3}\K(?!$)~', /* ' ' */ '', substr($matches[0], 1))
+                        ? $this->decimalSeparator . preg_replace('~\d{3}\K(?!$)~', '', substr($matches[0], 1))
                         : preg_replace('~(?<!^)(?=(?:\d{3})+$)~', $this->thousandsSeparator, $matches[0]);
                 }, $value);
                 $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */, $value);
@@ -144,6 +144,7 @@ class Ui extends Persistence
         switch ($field->type) {
             case 'boolean':
                 if (is_string($value)) {
+                    $value = trim($value);
                     if (mb_strtolower($value) === mb_strtolower($this->yes)) {
                         $value = '1';
                     } elseif (mb_strtolower($value) === mb_strtolower($this->no)) {
@@ -156,26 +157,28 @@ class Ui extends Persistence
             case 'float':
             case 'atk4_money':
                 if (is_string($value)) {
-                    if ($this->thousandsSeparator === '.') {
-                        $value = str_replace('.', '_', $value);
-                    }
-
-                    $value = str_replace([' ', "\u{00a0}" /* Unicode NBSP */, '_', $this->currency, '$', '€'], '', $value);
                     $dSep = $this->decimalSeparator;
-                    $tSeps = array_filter(
-                        array_unique([$dSep, $this->thousandsSeparator !== '' ? $this->thousandsSeparator : '.', '.', ',']),
-                        fn ($sep) => strpos($value, $sep) !== false
-                    );
-                    usort($tSeps, fn ($sepA, $sepB) => strrpos($value, $sepB) <=> strrpos($value, $sepA));
-                    foreach ($tSeps as $tSep) {
-                        if ($tSep === $dSep || strlen($value) - strrpos($value, $tSep) !== 4) {
-                            $dSep = $tSep;
-
-                            break;
+                    $tSep = $this->thousandsSeparator;
+                    if ($tSep !== '.' && $tSep !== ',' && !str_contains($value, $dSep)) {
+                        if (str_contains($value, '.')) {
+                            $dSep = '.';
+                        } elseif (str_contains($value, ',')) {
+                            $dSep = ',';
                         }
                     }
-                    $value = str_replace(array_diff($tSeps, [$dSep]), '', $value);
+
+                    $value = str_replace([' ', "\u{00a0}" /* Unicode NBSP */, '_', $tSep], '', $value);
                     $value = str_replace($dSep, '.', $value);
+
+                    if ($field->type === 'atk4_money' && $this->currency !== '' && substr_count($value, $this->currency) === 1) {
+                        $currencyPos = strpos($value, $this->currency);
+                        $beforeStr = substr($value, 0, $currencyPos);
+                        $afterStr = substr($value, $currencyPos + strlen($this->currency));
+
+                        $value = $beforeStr
+                            . (ctype_digit(substr($beforeStr, -1)) && ctype_digit(substr($afterStr, 0, 1)) ? '.' : '')
+                            . $afterStr;
+                    }
                 }
 
                 break;
