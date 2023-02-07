@@ -281,8 +281,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 throw new Exception('Unexpected stream_select() result');
             }
 
-            $stat = proc_get_status($proc);
-            if (!$stat['running']) {
+            $status = proc_get_status($proc);
+            if (!$status['running']) {
                 proc_close($proc);
 
                 break;
@@ -305,7 +305,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }
         }
 
-        $this->lastExitCode = $stat['exitcode'];
+        $this->lastExitCode = $status['exitcode'];
 
         return $this->lastExitCode ? false : true;
     }
