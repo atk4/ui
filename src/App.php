@@ -975,6 +975,21 @@ class App
      */
     public function encodeJson($data, bool $forceObject = false): string
     {
+        if (is_array($data) || is_object($data)) {
+            $checkNoObjectFx = function ($v) {
+                if (is_object($v)) {
+                    throw (new Exception('Object to JSON encode is not supported'))
+                        ->addMoreInfo('value', $v);
+                }
+            };
+
+            if (is_object($data)) {
+                $checkNoObjectFx($data);
+            } else {
+                array_walk_recursive($data, $checkNoObjectFx);
+            }
+        }
+
         $options = \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT;
         if ($forceObject) {
             $options |= \JSON_FORCE_OBJECT;

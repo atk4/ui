@@ -14,6 +14,11 @@ use Atk4\Ui\Js\JsFunction;
 
 class JsTest extends TestCase
 {
+    protected function createAppWithoutConstructor(): App
+    {
+        return (new \ReflectionClass(App::class))->newInstanceWithoutConstructor();
+    }
+
     public function testBasicExpressions(): void
     {
         static::assertSame('2 + 2', (new JsExpression('2 + 2'))->jsRender());
@@ -56,7 +61,7 @@ class JsTest extends TestCase
 
             // test JSON renderer in App too
             // test extensively because of complex custom regex impl
-            $app = (new \ReflectionClass(App::class))->newInstanceWithoutConstructor();
+            $app = $this->createAppWithoutConstructor();
             $expectedRaw = json_decode($expected);
             foreach ([
                 [$expectedRaw, $in], // direct value
@@ -71,6 +76,24 @@ class JsTest extends TestCase
                 static::assertSame(json_encode(['x' => $inDataJson]), preg_replace('~\s+~', '', $app->encodeJson(['x' => $inDataJson])));
             }
         }
+    }
+
+    public function testJsonEncodeObjectException(): void
+    {
+        $app = $this->createAppWithoutConstructor();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Object to JSON encode is not supported');
+        $app->encodeJson(new \stdClass());
+    }
+
+    public function testJsonEncodeArrayWithObjectException(): void
+    {
+        $app = $this->createAppWithoutConstructor();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Object to JSON encode is not supported');
+        $app->encodeJson([[0, new \stdClass()]]);
     }
 
     public function testNestedExpressions(): void
