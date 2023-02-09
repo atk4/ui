@@ -202,9 +202,11 @@ class Lookup extends Input
      */
     public function renderRow(Model $row): array
     {
-        $renderRowFunction = $this->renderRowFunction ?? \Closure::fromCallable([static::class, 'defaultRenderRow']);
+        if ($this->renderRowFunction !== null) {
+            return ($this->renderRowFunction)($this, $row);
+        }
 
-        return $renderRowFunction($this, $row);
+        return $this->defaultRenderRow($row);
     }
 
     /**
@@ -214,10 +216,10 @@ class Lookup extends Input
      *
      * @return array{value: mixed, title: mixed}
      */
-    public static function defaultRenderRow(self $control, Model $row, $key = null)
+    public function defaultRenderRow(Model $row, $key = null)
     {
-        $idField = $control->idField ?? $row->idField;
-        $titleField = $control->titleField ?? $row->titleField;
+        $idField = $this->idField ?? $row->idField;
+        $titleField = $this->titleField ?? $row->titleField;
 
         return ['value' => $row->get($idField), 'title' => $row->get($titleField)];
     }
