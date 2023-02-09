@@ -8,6 +8,7 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
+use Atk4\Data\Persistence;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
@@ -17,7 +18,6 @@ class ScopeBuilder extends Form\Control
 {
     use VueLookupTrait;
 
-    /** @var bool Do not render label for this input. */
     public $renderLabel = false;
 
     public array $options = [
@@ -678,15 +678,17 @@ class ScopeBuilder extends Form\Control
         return [
             'rule' => $rule,
             'operator' => $operator,
-            'value' => $value,
+            'value' => $value instanceof \DateTimeInterface ? (new Persistence\Array_())->typecastSaveField($this->model->getField($rule), $value) : $value,
             'option' => static::getOption($inputType, $value, $condition),
         ];
     }
 
     /**
      * Return extra value option associate with certain inputType or null otherwise.
+     *
+     * @param mixed $value
      */
-    protected static function getOption(string $type, string $value, Condition $condition): ?array
+    protected static function getOption(string $type, $value, Condition $condition): ?array
     {
         $option = null;
         switch ($type) {
