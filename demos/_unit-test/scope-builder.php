@@ -115,7 +115,7 @@ $expectedInput = json_encode(json_decode(<<<"EOF"
                 "query": {
                   "rule": "{$statModelForHinting->fieldName()->finish_time}",
                   "operator": "is not on",
-                  "value": "22:22",
+                  "value": "22:22:00.000000",
                   "option": null
                 }
               },
