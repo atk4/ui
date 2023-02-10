@@ -5,7 +5,7 @@
         "@shopify/draggable": "^1.0.0-beta.12",
         "chart.js": "^3.9.1",
         "flatpickr": "^4.6.11",
-        "fomantic-ui": "2.9.1-beta.36",
+        "fomantic-ui": "^2.9.2",
         "jquery": "^3.6.0",
         "twemoji": "https://github.com/twitter/twemoji/archive/refs/tags/v14.0.2.tar.gz"
     },
