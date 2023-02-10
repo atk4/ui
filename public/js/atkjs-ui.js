@@ -2506,15 +2506,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-
-
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 
 
 
@@ -2548,26 +2542,26 @@ class ModalService {
     }];
   }
   onShow() {
-    const s = atk__WEBPACK_IMPORTED_MODULE_8__["default"].modalService;
+    const s = atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService;
     for (const modal of s.modals) {
       if (modal === this) {
         throw new Error('Unexpected modal to show - modal is already active');
       }
     }
     s.modals.push(this);
-    s.addModal(external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this));
+    s.addModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
   }
   onHide() {
-    const s = atk__WEBPACK_IMPORTED_MODULE_8__["default"].modalService;
+    const s = atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService;
     if (s.modals.length === 0 || s.modals[s.modals.length - 1] !== this) {
       throw new Error('Unexpected modal to hide - modal is not front');
     }
     s.modals.pop();
-    s.removeModal(external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this));
+    s.removeModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
     return true;
   }
   onHidden() {
-    const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this);
+    const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this);
     if ($modal.data('needRemove')) {
       $modal.remove();
     }
@@ -2575,7 +2569,7 @@ class ModalService {
   addModal($modal) {
     // hide other modals
     if (this.modals.length > 1) {
-      const $prevModal = external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this.modals[this.modals.length - 2]);
+      const $prevModal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.modals[this.modals.length - 2]);
       if ($prevModal.hasClass('visible')) {
         $prevModal.css('visibility', 'hidden');
         $prevModal.addClass('__hiddenNotFront');
@@ -2590,7 +2584,7 @@ class ModalService {
 
     // check for data type, usually json or html
     if (data.type === 'json') {
-      args = external_jquery__WEBPACK_IMPORTED_MODULE_7___default().extend(true, args, {
+      args = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(true, args, {
         __atk_json: 1
       });
     }
@@ -2607,9 +2601,9 @@ class ModalService {
         method: 'GET',
         obj: $content,
         onComplete: function (response, content) {
-          const modelsContainer = external_jquery__WEBPACK_IMPORTED_MODULE_7___default()('.ui.dimmer.modals.page')[0];
-          external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(external_jquery__WEBPACK_IMPORTED_MODULE_7___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
-            external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(modelsContainer).find('#' + e.id).remove();
+          const modelsContainer = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page')[0];
+          external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(external_jquery__WEBPACK_IMPORTED_MODULE_5___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
+            external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
           });
           const result = content.html(response.html);
           if (result.length === 0) {
@@ -2618,9 +2612,6 @@ class ModalService {
             response.isServiceError = true;
             response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
           } else {
-            if ($modal.modal('get settings').autofocus) {
-              atk__WEBPACK_IMPORTED_MODULE_8__["default"].modalService.doAutoFocus($modal);
-            }
             // content is replace no need to do it in api
             response.id = null;
           }
@@ -2639,7 +2630,7 @@ class ModalService {
 
     // hide other modals
     if (this.modals.length > 0) {
-      const $prevModal = external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this.modals[this.modals.length - 1]);
+      const $prevModal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.modals[this.modals.length - 1]);
       if ($prevModal.hasClass('__hiddenNotFront')) {
         $prevModal.css('visibility', '');
         $prevModal.addClass('visible');
@@ -2648,14 +2639,6 @@ class ModalService {
         // https://github.com/fomantic/Fomantic-UI/issues/2476
         $prevModal.modal('refresh');
       }
-    }
-  }
-  doAutoFocus($modal) {
-    const inputs = $modal.find('[tabindex], :input').filter(':visible');
-    const autofocus = inputs.filter('[autofocus]');
-    const input = autofocus.length > 0 ? autofocus.first() : inputs.first();
-    if (input.length > 0) {
-      input.focus().select();
     }
   }
   getLoaderHtml(loaderText) {

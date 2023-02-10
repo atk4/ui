@@ -148,31 +148,28 @@ class App
         // Set our exception handler
         if ($this->catchExceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
-            set_error_handler(
-                static function (int $severity, string $msg, string $file, int $line): bool {
-                    if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
-                        $isFirstFrame = true;
-                        foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
-                            // allow to suppress any warning outside Atk4
-                            if ($isFirstFrame) {
-                                $isFirstFrame = false;
-                                if (!isset($frame['class']) || !str_starts_with($frame['class'], 'Atk4\\')) {
-                                    return false;
-                                }
-                            }
-
-                            // allow to suppress undefined property warning
-                            if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
-                                && $frame['function'] === 'warnPropertyDoesNotExist') {
+            set_error_handler(static function (int $severity, string $msg, string $file, int $line): bool {
+                if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
+                    $isFirstFrame = true;
+                    foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
+                        // allow to suppress any warning outside Atk4
+                        if ($isFirstFrame) {
+                            $isFirstFrame = false;
+                            if (!isset($frame['class']) || !str_starts_with($frame['class'], 'Atk4\\')) {
                                 return false;
                             }
                         }
-                    }
 
-                    throw new \ErrorException($msg, 0, $severity, $file, $line);
-                },
-                \E_ALL
-            );
+                        // allow to suppress undefined property warning
+                        if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
+                            && $frame['function'] === 'warnPropertyDoesNotExist') {
+                            return false;
+                        }
+                    }
+                }
+
+                throw new \ErrorException($msg, 0, $severity, $file, $line);
+            });
             $this->outputResponseUnsafe('', [self::HEADER_STATUS_CODE => '500']);
         }
 

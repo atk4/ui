@@ -763,7 +763,7 @@ class Multiline extends Form\Control
         }
 
         if ($dummyFields !== []) {
-            $dummyModel = new Model($model->getPersistence(), ['table' => $model->table]);
+            $dummyModel = new Model($model->getModel()->getPersistence(), ['table' => $model->table]);
             $dummyModel->removeField('id');
             $dummyModel->idField = $model->idField;
 
@@ -783,7 +783,7 @@ class Multiline extends Form\Control
                         ? $dummyFields[$field->shortName]->expr
                         : ($field->shortName === $dummyModel->idField
                             ? '-1'
-                            : $createExprFromValueFx($model->getPersistence()->typecastSaveField($field, $field->get($model)))),
+                            : $createExprFromValueFx($model->getModel()->getPersistence()->typecastSaveField($field, $field->get($model)))),
                     'type' => $field->type,
                     'actual' => $field->actual,
                 ]);
