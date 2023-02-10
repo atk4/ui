@@ -8,6 +8,7 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
+use Atk4\Data\Persistence;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
@@ -17,7 +18,6 @@ class ScopeBuilder extends Form\Control
 {
     use VueLookupTrait;
 
-    /** @var bool Do not render label for this input. */
     public $renderLabel = false;
 
     public array $options = [
@@ -282,7 +282,7 @@ class ScopeBuilder extends Form\Control
         if ($this->form) {
             $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
                 $key = $this->entityField->getFieldName();
-                $postRawData[$key] = static::queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
+                $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
             });
         }
     }
@@ -326,7 +326,7 @@ class ScopeBuilder extends Form\Control
             $scope = $model->scope();
         }
 
-        $this->query = static::scopeToQuery($scope, $inputsMap)['query'];
+        $this->query = $this->scopeToQuery($scope, $inputsMap)['query'];
     }
 
     /**
@@ -519,19 +519,19 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts an VueQueryBuilder query array to Condition or Scope.
      */
-    public static function queryToScope(array $query): Scope\AbstractScope
+    public function queryToScope(array $query): Scope\AbstractScope
     {
         $type = $query['type'] ?? 'query-builder-group';
         $query = $query['query'] ?? $query;
 
         switch ($type) {
             case 'query-builder-group':
-                $components = array_map(fn ($v) => static::queryToScope($v), $query['children']);
+                $components = array_map(fn ($v) => $this->queryToScope($v), $query['children']);
                 $scope = new Scope($components, $query['logicalOperator']);
 
                 break;
             case 'query-builder-rule':
-                $scope = static::queryToCondition($query);
+                $scope = $this->queryToCondition($query);
 
                 break;
             default:
@@ -544,7 +544,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts an VueQueryBuilder rule array to Condition or Scope.
      */
-    public static function queryToCondition(array $query): Scope\Condition
+    public function queryToCondition(array $query): Scope\Condition
     {
         $key = $query['rule'] ?? null;
         $operator = $query['operator'] ?? null;
@@ -573,7 +573,7 @@ class ScopeBuilder extends Form\Control
                 break;
             case self::OPERATOR_IN:
             case self::OPERATOR_NOT_IN:
-                $value = explode(static::detectDelimiter($value), $value);
+                $value = explode($this->detectDelimiter($value), $value);
 
                 break;
         }
@@ -588,20 +588,20 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts Scope or Condition to VueQueryBuilder query array.
      */
-    public static function scopeToQuery(Scope\AbstractScope $scope, array $inputsMap = []): array
+    public function scopeToQuery(Scope\AbstractScope $scope, array $inputsMap = []): array
     {
         $query = [];
         if ($scope instanceof Scope\Condition) {
             $query = [
                 'type' => 'query-builder-rule',
-                'query' => static::conditionToQuery($scope, $inputsMap),
+                'query' => $this->conditionToQuery($scope, $inputsMap),
             ];
         }
 
         if ($scope instanceof Scope) {
             $children = [];
             foreach ($scope->getNestedConditions() as $nestedCondition) {
-                $children[] = static::scopeToQuery($nestedCondition, $inputsMap);
+                $children[] = $this->scopeToQuery($nestedCondition, $inputsMap);
             }
 
             $query = [
@@ -619,7 +619,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts a Condition to VueQueryBuilder query array.
      */
-    public static function conditionToQuery(Scope\Condition $condition, array $inputsMap = []): array
+    public function conditionToQuery(Scope\Condition $condition, array $inputsMap = []): array
     {
         if (is_string($condition->key)) {
             $rule = $condition->key;
@@ -678,15 +678,17 @@ class ScopeBuilder extends Form\Control
         return [
             'rule' => $rule,
             'operator' => $operator,
-            'value' => $value,
-            'option' => static::getOption($inputType, $value, $condition),
+            'value' => $value instanceof \DateTimeInterface ? (new Persistence\Array_())->typecastSaveField($this->model->getField($rule), $value) : $value, // TODO an UI typecasting hack to pass CI
+            'option' => $this->getConditionOption($inputType, $value, $condition),
         ];
     }
 
     /**
      * Return extra value option associate with certain inputType or null otherwise.
+     *
+     * @param mixed $value
      */
-    protected static function getOption(string $type, string $value, Condition $condition): ?array
+    protected function getConditionOption(string $type, $value, Condition $condition): ?array
     {
         $option = null;
         switch ($type) {
@@ -715,7 +717,7 @@ class ScopeBuilder extends Form\Control
      *
      * @phpstan-return non-empty-string
      */
-    public static function detectDelimiter(string $value): string
+    public function detectDelimiter(string $value): string
     {
         $matches = [];
         foreach (static::$listDelimiters as $delimiter) {

@@ -33,7 +33,7 @@ $q = [
         ],
     ],
 ];
-$scope = Form\Control\ScopeBuilder::queryToScope($q);
+$scope = (new Form\Control\ScopeBuilder())->queryToScope($q);
 
 $product = new Product($app->db);
 
