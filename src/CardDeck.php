@@ -10,6 +10,7 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
+use Atk4\Ui\UserAction\SharedExecutorsContainer;
 
 /**
  * A collection of Card set from a model.
@@ -35,6 +36,9 @@ class CardDeck extends View
 
     /** @var bool If each card should use action or not. */
     public $useAction = true;
+
+    /** @var SharedExecutorsContainer|null */
+    public $sharedExecutorsContainer = [SharedExecutorsContainer::class];
 
     /** @var View|null The container view. The view that is reload when page or data changed. */
     public $container = [View::class, 'ui' => 'vertical segment'];
@@ -89,6 +93,8 @@ class CardDeck extends View
     protected function init(): void
     {
         parent::init();
+
+        $this->sharedExecutorsContainer = $this->add($this->sharedExecutorsContainer);
 
         $this->container = $this->add($this->container);
 

@@ -229,7 +229,8 @@ class Card extends View
             $defaults['confirm'] = $confirm;
         }
 
-        $btn->on('click', $action, $defaults);
+        $cardDeck = $this->getClosestOwner(CardDeck::class);
+        $btn->on('click', $cardDeck && $action->shortName !== 'delete' ? $cardDeck->sharedExecutorsContainer->getExecutor($action) : $action, $defaults);
 
         return $this;
     }

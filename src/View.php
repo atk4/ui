@@ -1043,7 +1043,7 @@ class View extends AbstractView
             }, $arguments);
 
             $actions[] = $lazyJsRenderFx(fn () => $cb->jsExecute());
-        } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof Model\UserAction) {
+        } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof UserAction\SharedExecutor || $action instanceof Model\UserAction) {
             $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->createExecutor($action, $this) : $action;
 
             $setupNonSharedExecutorFx = function (UserAction\ExecutorInterface $ex) use (&$defaults, &$arguments): void {
@@ -1068,7 +1068,10 @@ class View extends AbstractView
                 }
             };
 
-            if ($ex instanceof UserAction\JsExecutorInterface && $ex instanceof self) {
+            if ($ex instanceof UserAction\SharedExecutor) {
+                $setupNonSharedExecutorFx($ex->getExecutor());
+                $actions = $ex->jsExecute($arguments);
+            } elseif ($ex instanceof UserAction\JsExecutorInterface && $ex instanceof self) {
                 $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction();
                 $actions = $ex->jsExecute($arguments);

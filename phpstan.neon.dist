@@ -269,10 +269,16 @@ parameters:
             message: '~^Property Atk4\\Ui\\CardDeck::\$container \(Atk4\\Ui\\View\|null\) does not accept default value of type array<int\|string, string>\.$~'
         -
             path: 'src/CardDeck.php'
+            message: '~^Property Atk4\\Ui\\CardDeck::\$sharedExecutorsContainer \(Atk4\\Ui\\UserAction\\SharedExecutorsContainer\|null\) does not accept default value of type array<int, string>\.$~'
+        -
+            path: 'src/CardDeck.php'
             message: '~^Property Atk4\\Ui\\CardDeck::\$cardHolder \(Atk4\\Ui\\View\) does not accept default value of type array<int\|string, string>\.$~'
         -
             path: 'src/CardDeck.php'
             message: '~^Property Atk4\\Ui\\CardDeck::\$paginator \(Atk4\\Ui\\Paginator\|false\|null\) does not accept default value of type array\{''Atk4\\\\Ui\\\\Paginator''\}\.$~'
+        -
+            path: 'src/CardDeck.php'
+            message: '~^Property Atk4\\Ui\\CardDeck::\$sharedExecutorsContainer \(Atk4\\Ui\\UserAction\\SharedExecutorsContainer\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/CardDeck.php'
             message: '~^Property Atk4\\Ui\\CardDeck::\$container \(Atk4\\Ui\\View\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
