@@ -532,7 +532,7 @@ class View extends AbstractView
      */
     public function stickyGet(string $name, string $newValue = null): ?string
     {
-        $this->stickyArgs[$name] = $newValue ?? $_GET[$name] ?? null;
+        $this->stickyArgs[$name] = $newValue ?? $this->stickyArgs[$name] ?? $_GET[$name] ?? null;
 
         return $this->stickyArgs[$name];
     }
@@ -993,9 +993,6 @@ class View extends AbstractView
             }
         }
 
-        $eventStatements = [];
-        $actions = [];
-
         if ($action !== null) {
             $res = null;
         } else {
@@ -1004,6 +1001,7 @@ class View extends AbstractView
         }
 
         // set preventDefault and stopPropagation by default
+        $eventStatements = [];
         $eventStatements['preventDefault'] = $defaults['preventDefault'] ?? true;
         $eventStatements['stopPropagation'] = $defaults['stopPropagation'] ?? true;
 
@@ -1025,6 +1023,7 @@ class View extends AbstractView
 
         // Dealing with callback action.
         if ($action instanceof \Closure || (is_array($action) && ($action[0] ?? null) instanceof \Closure)) {
+            $actions = [];
             if (is_array($action)) {
                 $urlData = $action;
                 unset($urlData[0]);
@@ -1057,8 +1056,8 @@ class View extends AbstractView
                     $arguments[$ex->name] = $arguments[0];
                     unset($arguments[0]);
                 }
-                $actions = $ex->jsExecute($arguments);
                 $ex->executeModelAction();
+                $actions = $ex->jsExecute($arguments);
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
                 $conf = $ex->getAction()->getConfirmation();
                 if ($conf) {
@@ -1067,17 +1066,15 @@ class View extends AbstractView
                 if ($defaults['apiConfig'] ?? null) {
                     $ex->apiConfig = $defaults['apiConfig'];
                 }
-                $actions[] = $lazyJsRenderFx(fn () => $ex->jsExecute());
                 $ex->executeModelAction($arguments);
+                $actions = [$lazyJsRenderFx(fn () => $ex->jsExecute())];
             } else {
                 throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or extend View and implement UserAction\JsExecutorInterface');
             }
         } elseif ($action instanceof JsCallback) {
-            $actions[] = $lazyJsRenderFx(fn () => $action->jsExecute());
-        } elseif (is_array($action)) {
-            $actions = array_merge($actions, $action);
+            $actions = [$lazyJsRenderFx(fn () => $action->jsExecute())];
         } else {
-            $actions[] = $action;
+            $actions = is_array($action) ? $action : [$action];
         }
 
         // Do we need confirm action.
