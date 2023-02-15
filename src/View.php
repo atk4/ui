@@ -750,7 +750,6 @@ class View extends AbstractView
      * You can bind it by passing object into on() method.
      *
      * 1. Calling with arguments:
-     *
      * $view->js(); // technically does nothing
      * $a = $view->js()->hide(); // creates chain for hiding $view but does not bind to event yet.
      *
@@ -768,7 +767,7 @@ class View extends AbstractView
      * 4. $view->js(true)->find('.current')->text($text);
      *
      * Will convert calls to jQuery chain into JavaScript string:
-     *  $('#view').find('.current').text('abc'); // The $text will be json-encoded to avoid JS injection.
+     *  $('#view').find('.current').text('abc'); // the text will be JSON encoded to avoid JS injection
      *
      * Documentation:
      *

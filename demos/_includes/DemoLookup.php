@@ -44,10 +44,10 @@ class DemoLookup extends Form\Control\Lookup
             $form->setModel($entity, $this->plus['fields'] ?? null);
 
             $form->onSubmit(function (Form $form) {
-                $form->model->save();
+                $msg = $form->model->getUserAction('add')->execute();
 
                 $ret = [
-                    new JsToast('Form submit!. Data are not save in demo mode.'),
+                    new JsToast($msg),
                     (new Jquery())->closest('.atk-modal')->modal('hide'),
                 ];
 

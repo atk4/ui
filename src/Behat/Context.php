@@ -62,7 +62,10 @@ class Context extends RawMinkContext implements BehatContext
         if (!str_starts_with($event->getStep()->getText(), 'Toast display should contain text ')
             && $event->getStep()->getText() !== 'No toast should be displayed'
         ) {
-            $this->getSession()->executeScript('jQuery(\'.toast-box > .ui.toast\').toast(\'close\');');
+            $hadToast = $this->getSession()->evaluateScript('jQuery(\'.toast-box > .ui.toast\').toast(\'close\').length > 0;');
+            if ($hadToast) {
+                usleep(600_000); // TODO
+            }
         }
     }
 
@@ -171,7 +174,7 @@ class Context extends RawMinkContext implements BehatContext
     protected function assertNoDuplicateId(): void
     {
         [$invalidIds, $duplicateIds] = $this->getSession()->evaluateScript(<<<'EOF'
-            return (function () {
+            (function () {
                 const idRegex = /^[a-z_][0-9a-z_\-]*$/is;
                 const invalidIds = [];
                 const duplicateIds = [];
@@ -642,7 +645,7 @@ class Context extends RawMinkContext implements BehatContext
 
         $this->getScopeBuilderRuleElem($name);
         $idx = ($value === 'Yes') ? 0 : 1;
-        $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="' . $name . '"]\').find(\'input\')[' . $idx . '].checked');
+        $isChecked = $this->getSession()->evaluateScript('$(\'[data-name="' . $name . '"]\').find(\'input\')[' . $idx . '].checked');
         if (!$isChecked) {
             throw new \Exception('Radio value selected is not: ' . $value);
         }
