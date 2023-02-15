@@ -99,11 +99,9 @@ class Control extends View
     {
         if ($this->entityField) {
             $this->entityField->set($value);
-
-            return $this;
+        } else {
+            $this->content = $value;
         }
-
-        $this->content = $value;
 
         return $this;
     }

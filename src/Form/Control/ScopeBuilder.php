@@ -332,7 +332,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Add the field rules to use in VueQueryBuilder.
      */
-    protected function addFieldRule(Field $field): self
+    protected function addFieldRule(Field $field): void
     {
         if ($field->enum || $field->values) {
             $type = 'enum';
@@ -349,8 +349,6 @@ class ScopeBuilder extends Form\Control
         ], $field->ui['scopebuilder'] ?? []), $field);
 
         $this->rules[] = $rule;
-
-        return $this;
     }
 
     /**
@@ -405,7 +403,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Add rules on the referenced model fields.
      */
-    protected function addReferenceRules(Field $field): self
+    protected function addReferenceRules(Field $field): void
     {
         if ($field->hasReference()) {
             $reference = $field->getReference();
@@ -428,8 +426,6 @@ class ScopeBuilder extends Form\Control
                 $this->addFieldRule($theirField);
             }
         }
-
-        return $this;
     }
 
     protected function getRule(string $type, array $defaults = [], Field $field = null): array

@@ -113,7 +113,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     }
 
     /**
-     * Perform this action steps.
+     * Perform the current step.
      */
     public function executeModelAction(): void
     {

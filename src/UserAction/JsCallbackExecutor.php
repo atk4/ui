@@ -51,10 +51,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         return $this;
     }
 
-    /**
-     * Execute model user action.
-     */
-    public function executeModelAction(array $args = [])
+    public function executeModelAction(array $args = []): void
     {
         $this->set(function (Jquery $j) {
             // may be id is passed as 'id' or model->idField within $post args.
@@ -94,8 +91,6 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 
             return $js;
         }, $args);
-
-        return $this;
     }
 
     /**

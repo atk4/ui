@@ -207,6 +207,8 @@ class Card extends View
 
     /**
      * Execute Model user action via button in Card.
+     *
+     * @return $this
      */
     public function addClickAction(Model\UserAction $action, Button $button = null, array $args = [], string $confirm = null): self
     {
