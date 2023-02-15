@@ -1048,6 +1048,17 @@ class View extends AbstractView
 
             $setupNonSharedExecutorFx = function (UserAction\ExecutorInterface $ex) use (&$defaults, &$arguments): void {
                 /** @var AbstractView&UserAction\ExecutorInterface $ex https://github.com/phpstan/phpstan/issues/3770 */
+                $ex = $ex;
+
+                if (isset($arguments['id'])) {
+                    $arguments[$ex->name] = $arguments['id'];
+                    unset($arguments['id']);
+                } elseif (isset($arguments[0])) {
+                    // if id is not specify we assume arguments[0] is the model id.
+                    $arguments[$ex->name] = $arguments[0];
+                    unset($arguments[0]);
+                }
+
                 if ($ex instanceof UserAction\JsCallbackExecutor) {
                     $confirmation = $ex->getAction()->getConfirmation();
                     if ($confirmation) {
@@ -1056,21 +1067,14 @@ class View extends AbstractView
                     if ($defaults['apiConfig'] ?? null) {
                         $ex->apiConfig = $defaults['apiConfig'];
                     }
-                } else {
-                    if (isset($arguments['id'])) {
-                        $arguments[$ex->name] = $arguments['id'];
-                        unset($arguments['id']);
-                    } elseif (isset($arguments[0])) {
-                        // if id is not specify we assume arguments[0] is the model id.
-                        $arguments[$ex->name] = $arguments[0];
-                        unset($arguments[0]);
-                    }
                 }
             };
 
             if ($ex instanceof UserAction\SharedExecutor) {
                 $setupNonSharedExecutorFx($ex->getExecutor());
-                $actions = $ex->jsExecute($arguments);
+                $actions = $ex->getExecutor() instanceof UserAction\JsCallbackExecutor
+                    ? [$lazyJsRenderFx(fn () => $ex->jsExecute($arguments)[0])]
+                    : $ex->jsExecute($arguments);
             } elseif ($ex instanceof UserAction\JsExecutorInterface && $ex instanceof self) {
                 $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction();

@@ -230,7 +230,7 @@ class Card extends View
         }
 
         $cardDeck = $this->getClosestOwner(CardDeck::class);
-        $btn->on('click', $cardDeck && $action->shortName !== 'delete' ? $cardDeck->sharedExecutorsContainer->getExecutor($action) : $action, $defaults);
+        $btn->on('click', $cardDeck ? $cardDeck->sharedExecutorsContainer->getExecutor($action) : $action, $defaults);
 
         return $this;
     }

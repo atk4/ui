@@ -33,6 +33,12 @@ class SharedExecutor
      */
     public function jsExecute(array $urlArgs): array
     {
-        return $this->getExecutor()->jsExecute($urlArgs); // @phpstan-ignore-line TODO dedup JS
+        // TODO executor::jsExecute() should be called only once, registered as a custom jQuery event and then
+        // call the event from JS with arguments to improve performance, ie. render (possibly large) JS only once
+        $res = $this->getExecutor()->jsExecute($urlArgs); // @phpstan-ignore-line
+
+        return $this->getExecutor() instanceof JsCallbackExecutor
+            ? [$res]
+            : $res;
     }
 }

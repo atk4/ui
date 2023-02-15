@@ -7,6 +7,7 @@ namespace Atk4\Ui\UserAction;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
@@ -51,13 +52,21 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         return $this;
     }
 
+    public function jsExecute(array $urlArgs = []): JsExpression
+    {
+        $res = parent::jsExecute();
+        $res->_chain[0][1][0]['urlOptions'] = array_merge($res->_chain[0][1][0]['urlOptions'], $urlArgs); // @phpstan-ignore-line TODO hack to accept/pass ID to parent/JsCallback::jsExecute() like JsExecutorInterface does, later, it should be passed using GET method
+
+        return $res;
+    }
+
     public function executeModelAction(array $args = []): void
     {
         $this->set(function (Jquery $j) {
             // may be id is passed as 'id' or model->idField within $post args.
             $id = $this->getApp()->uiPersistence->typecastLoadField(
                 $this->action->getModel()->getField($this->action->getModel()->idField),
-                $_POST['c0'] ?? $_POST['id'] ?? $_POST[$this->action->getModel()->idField] ?? null
+                $_POST['c0'] ?? $_POST['id'] ?? $_POST[$this->action->getModel()->idField] ?? $_POST[$this->name] ?? null
             );
             if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
                 if ($this->action->isOwnerEntity() && $this->action->getEntity()->getId()) {
