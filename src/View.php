@@ -1021,7 +1021,7 @@ class View extends AbstractView
             };
         };
 
-        // Dealing with callback action.
+        // dealing with callback action
         if ($action instanceof \Closure || (is_array($action) && ($action[0] ?? null) instanceof \Closure)) {
             $actions = [];
             if (is_array($action)) {
@@ -1045,31 +1045,40 @@ class View extends AbstractView
 
             $actions[] = $lazyJsRenderFx(fn () => $cb->jsExecute());
         } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof Model\UserAction) {
-            // Setup UserAction executor.
             $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->createExecutor($action, $this) : $action;
-            if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
-                if (isset($arguments['id'])) {
-                    $arguments[$ex->name] = $arguments['id'];
-                    unset($arguments['id']);
-                } elseif (isset($arguments[0])) {
-                    // if id is not specify we assume arguments[0] is the model id.
-                    $arguments[$ex->name] = $arguments[0];
-                    unset($arguments[0]);
+
+            $setupNonSharedExecutorFx = function (UserAction\ExecutorInterface $ex) use (&$defaults, &$arguments): void {
+                /** @var AbstractView&UserAction\ExecutorInterface $ex https://github.com/phpstan/phpstan/issues/3770 */
+                if ($ex instanceof UserAction\JsCallbackExecutor) {
+                    $confirmation = $ex->getAction()->getConfirmation();
+                    if ($confirmation) {
+                        $defaults['confirm'] = $confirmation;
+                    }
+                    if ($defaults['apiConfig'] ?? null) {
+                        $ex->apiConfig = $defaults['apiConfig'];
+                    }
+                } else {
+                    if (isset($arguments['id'])) {
+                        $arguments[$ex->name] = $arguments['id'];
+                        unset($arguments['id']);
+                    } elseif (isset($arguments[0])) {
+                        // if id is not specify we assume arguments[0] is the model id.
+                        $arguments[$ex->name] = $arguments[0];
+                        unset($arguments[0]);
+                    }
                 }
+            };
+
+            if ($ex instanceof UserAction\JsExecutorInterface && $ex instanceof self) {
+                $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction();
                 $actions = $ex->jsExecute($arguments);
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
-                $conf = $ex->getAction()->getConfirmation();
-                if ($conf) {
-                    $defaults['confirm'] = $conf;
-                }
-                if ($defaults['apiConfig'] ?? null) {
-                    $ex->apiConfig = $defaults['apiConfig'];
-                }
+                $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction($arguments);
                 $actions = [$lazyJsRenderFx(fn () => $ex->jsExecute())];
             } else {
-                throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or extend View and implement UserAction\JsExecutorInterface');
+                throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or UserAction\JsExecutorInterface');
             }
         } elseif ($action instanceof JsCallback) {
             $actions = [$lazyJsRenderFx(fn () => $action->jsExecute())];
