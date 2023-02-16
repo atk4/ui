@@ -54,10 +54,14 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 
     public function jsExecute(array $urlArgs = []): JsExpression
     {
-        $res = parent::jsExecute();
-        $res->_chain[0][1][0]['urlOptions'] = array_merge($res->_chain[0][1][0]['urlOptions'], $urlArgs); // @phpstan-ignore-line TODO hack to accept/pass ID to parent/JsCallback::jsExecute() like JsExecutorInterface does
-
-        return $res;
+        // TODO hack to parametrize parent::jsExecute() like JsExecutorInterface::jsExecute($urlArgs)
+        $argsOrig = $this->args;
+        $this->args = array_merge($this->args, $urlArgs);
+        try {
+            return parent::jsExecute();
+        } finally {
+            $this->args = $argsOrig;
+        }
     }
 
     public function executeModelAction(array $args = []): void
@@ -66,7 +70,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
             // may be id is passed as 'id' or model->idField within $post args.
             $id = $this->getApp()->uiPersistence->typecastLoadField(
                 $this->action->getModel()->getField($this->action->getModel()->idField),
-                $_POST['c0'] ?? $_POST['id'] ?? $_POST[$this->action->getModel()->idField] ?? $_POST[$this->name] ?? null
+                $_POST['c0'] ?? $_POST[$this->name] ?? $_POST['id'] ?? $_POST[$this->action->getModel()->idField] ?? null
             );
             if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
                 if ($this->action->isOwnerEntity() && $this->action->getEntity()->getId()) {
