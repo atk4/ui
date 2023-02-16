@@ -55,7 +55,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     public function jsExecute(array $urlArgs = []): JsExpression
     {
         $res = parent::jsExecute();
-        $res->_chain[0][1][0]['urlOptions'] = array_merge($res->_chain[0][1][0]['urlOptions'], $urlArgs); // @phpstan-ignore-line TODO hack to accept/pass ID to parent/JsCallback::jsExecute() like JsExecutorInterface does, later, it should be passed using GET method
+        $res->_chain[0][1][0]['urlOptions'] = array_merge($res->_chain[0][1][0]['urlOptions'], $urlArgs); // @phpstan-ignore-line TODO hack to accept/pass ID to parent/JsCallback::jsExecute() like JsExecutorInterface does
 
         return $res;
     }
