@@ -51,7 +51,7 @@ trait ModelPreventModificationTrait
         $action->callback = function (Model $model, ...$args) use ($action, $originalCallback, $outputCallback) {
             if ($model->isEntity()) {
                 $action = $action->getActionForEntity($model);
-                $loadedModel = clone $model;
+                $loadedEntity = clone $model;
             }
 
             $callbackBackup = $action->callback;
@@ -62,7 +62,7 @@ trait ModelPreventModificationTrait
                 $action->callback = $callbackBackup;
             }
 
-            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedModel : $model, ...$args);
+            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedEntity : $model, ...$args);
         };
     }
 
