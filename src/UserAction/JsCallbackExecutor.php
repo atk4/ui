@@ -7,6 +7,7 @@ namespace Atk4\Ui\UserAction;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
@@ -51,16 +52,24 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         return $this;
     }
 
-    /**
-     * Execute model user action.
-     */
-    public function executeModelAction(array $args = [])
+    public function jsExecute(array $urlArgs = []): JsExpression
+    {
+        // TODO hack to parametrize parent::jsExecute() like JsExecutorInterface::jsExecute($urlArgs)
+        $argsOrig = $this->args;
+        $this->args = array_merge($this->args, $urlArgs);
+        try {
+            return parent::jsExecute();
+        } finally {
+            $this->args = $argsOrig;
+        }
+    }
+
+    public function executeModelAction(array $args = []): void
     {
         $this->set(function (Jquery $j) {
-            // may be id is passed as 'id' or model->idField within $post args.
             $id = $this->getApp()->uiPersistence->typecastLoadField(
                 $this->action->getModel()->getField($this->action->getModel()->idField),
-                $_POST['c0'] ?? $_POST['id'] ?? $_POST[$this->action->getModel()->idField] ?? null
+                $_POST['c0'] ?? $_POST[$this->name] ?? null
             );
             if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
                 if ($this->action->isOwnerEntity() && $this->action->getEntity()->getId()) {
@@ -94,8 +103,6 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 
             return $js;
         }, $args);
-
-        return $this;
     }
 
     /**

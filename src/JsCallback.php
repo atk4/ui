@@ -75,6 +75,9 @@ class JsCallback extends Callback
         $this->confirm = $text;
     }
 
+    /**
+     * @return $this
+     */
     public function set($fx = null, $args = null)
     {
         $this->args = [];

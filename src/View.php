@@ -532,7 +532,7 @@ class View extends AbstractView
      */
     public function stickyGet(string $name, string $newValue = null): ?string
     {
-        $this->stickyArgs[$name] = $newValue ?? $_GET[$name] ?? null;
+        $this->stickyArgs[$name] = $newValue ?? $this->stickyArgs[$name] ?? $_GET[$name] ?? null;
 
         return $this->stickyArgs[$name];
     }
@@ -750,7 +750,6 @@ class View extends AbstractView
      * You can bind it by passing object into on() method.
      *
      * 1. Calling with arguments:
-     *
      * $view->js(); // technically does nothing
      * $a = $view->js()->hide(); // creates chain for hiding $view but does not bind to event yet.
      *
@@ -768,7 +767,7 @@ class View extends AbstractView
      * 4. $view->js(true)->find('.current')->text($text);
      *
      * Will convert calls to jQuery chain into JavaScript string:
-     *  $('#view').find('.current').text('abc'); // The $text will be json-encoded to avoid JS injection.
+     *  $('#view').find('.current').text('abc'); // the text will be JSON encoded to avoid JS injection
      *
      * Documentation:
      *
@@ -993,9 +992,6 @@ class View extends AbstractView
             }
         }
 
-        $eventStatements = [];
-        $actions = [];
-
         if ($action !== null) {
             $res = null;
         } else {
@@ -1004,6 +1000,7 @@ class View extends AbstractView
         }
 
         // set preventDefault and stopPropagation by default
+        $eventStatements = [];
         $eventStatements['preventDefault'] = $defaults['preventDefault'] ?? true;
         $eventStatements['stopPropagation'] = $defaults['stopPropagation'] ?? true;
 
@@ -1023,8 +1020,9 @@ class View extends AbstractView
             };
         };
 
-        // Dealing with callback action.
+        // dealing with callback action
         if ($action instanceof \Closure || (is_array($action) && ($action[0] ?? null) instanceof \Closure)) {
+            $actions = [];
             if (is_array($action)) {
                 $urlData = $action;
                 unset($urlData[0]);
@@ -1045,10 +1043,13 @@ class View extends AbstractView
             }, $arguments);
 
             $actions[] = $lazyJsRenderFx(fn () => $cb->jsExecute());
-        } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof Model\UserAction) {
-            // Setup UserAction executor.
+        } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof UserAction\SharedExecutor || $action instanceof Model\UserAction) {
             $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->createExecutor($action, $this) : $action;
-            if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
+
+            $setupNonSharedExecutorFx = function (UserAction\ExecutorInterface $ex) use (&$defaults, &$arguments): void {
+                /** @var AbstractView&UserAction\ExecutorInterface $ex https://github.com/phpstan/phpstan/issues/3770 */
+                $ex = $ex;
+
                 if (isset($arguments['id'])) {
                     $arguments[$ex->name] = $arguments['id'];
                     unset($arguments['id']);
@@ -1057,27 +1058,38 @@ class View extends AbstractView
                     $arguments[$ex->name] = $arguments[0];
                     unset($arguments[0]);
                 }
-                $actions = $ex->jsExecute($arguments);
+
+                if ($ex instanceof UserAction\JsCallbackExecutor) {
+                    $confirmation = $ex->getAction()->getConfirmation();
+                    if ($confirmation) {
+                        $defaults['confirm'] = $confirmation;
+                    }
+                    if ($defaults['apiConfig'] ?? null) {
+                        $ex->apiConfig = $defaults['apiConfig'];
+                    }
+                }
+            };
+
+            if ($ex instanceof UserAction\SharedExecutor) {
+                $setupNonSharedExecutorFx($ex->getExecutor());
+                $actions = $ex->getExecutor() instanceof UserAction\JsCallbackExecutor
+                    ? [$lazyJsRenderFx(fn () => $ex->jsExecute($arguments)[0])]
+                    : $ex->jsExecute($arguments);
+            } elseif ($ex instanceof UserAction\JsExecutorInterface && $ex instanceof self) {
+                $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction();
+                $actions = $ex->jsExecute($arguments);
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
-                $conf = $ex->getAction()->getConfirmation();
-                if ($conf) {
-                    $defaults['confirm'] = $conf;
-                }
-                if ($defaults['apiConfig'] ?? null) {
-                    $ex->apiConfig = $defaults['apiConfig'];
-                }
-                $actions[] = $lazyJsRenderFx(fn () => $ex->jsExecute());
-                $ex->executeModelAction($arguments);
+                $setupNonSharedExecutorFx($ex);
+                $ex->executeModelAction();
+                $actions = [$lazyJsRenderFx(fn () => $ex->jsExecute($arguments))];
             } else {
-                throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or extend View and implement UserAction\JsExecutorInterface');
+                throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or UserAction\JsExecutorInterface');
             }
         } elseif ($action instanceof JsCallback) {
-            $actions[] = $lazyJsRenderFx(fn () => $action->jsExecute());
-        } elseif (is_array($action)) {
-            $actions = array_merge($actions, $action);
+            $actions = [$lazyJsRenderFx(fn () => $action->jsExecute())];
         } else {
-            $actions[] = $action;
+            $actions = is_array($action) ? $action : [$action];
         }
 
         // Do we need confirm action.

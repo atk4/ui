@@ -125,6 +125,8 @@ class Popup extends View
      * for adding content to it.
      *
      * @param \Closure $fx
+     *
+     * @return $this
      */
     public function set($fx = null, $ignore = null)
     {

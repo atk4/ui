@@ -11,7 +11,7 @@ Feature: CardDeck
     Then I fill in "atk_fp_country__numcode" with "123"
     Then I fill in "atk_fp_country__phonecode" with "1"
     Then I press Modal button "Save"
-    Then Toast display should contain text "Form Submit"
+    Then Toast display should contain text 'Country action "add" with "Test" entity was executed.'
 
   Scenario: search
     Then I fill in "atk-vue-search" with "united kingdom"
@@ -21,12 +21,13 @@ Feature: CardDeck
     Then I press button "Edit"
     Then Modal is open with text "Edit Country"
     Then I press Modal button "Save"
-    Then Toast display should contain text "Form Submit"
+    Then Toast display should contain text 'Country action "edit" with "United Kingdom" entity was executed.'
     # make sure search query stick
     Then I should see "United Kingdom"
 
   Scenario: delete
     Then I press button "Delete"
     Then I press Modal button "Ok"
+    Then Toast display should contain text 'Country action "delete" with "United Kingdom" entity was executed.'
     # TODO https://github.com/atk4/ui/issues/1848
     # Then I should not see "United Kingdom"

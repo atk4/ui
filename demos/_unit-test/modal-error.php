@@ -32,7 +32,9 @@ $modal->set(function (View $p) {
     $country = new Country($p->getApp()->db);
     $button = Button::addTo($p)->set('Test ModalExecutor load PHP error');
     $executor = ModalExecutor::assertInstanceOf($p->getExecutorFactory()->createExecutor($country->getUserAction('edit'), $button));
-    $executor->stickyGet($executor->name, '-1');
+    if (\Closure::bind(fn () => $executor->loader, null, ModalExecutor::class)()->cb->isTriggered()) {
+        $executor->stickyGet($executor->name, '-1');
+    }
     $button->on('click', $executor);
 });
 $button = Button::addTo($app)->set('Test');

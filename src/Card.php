@@ -207,6 +207,8 @@ class Card extends View
 
     /**
      * Execute Model user action via button in Card.
+     *
+     * @return $this
      */
     public function addClickAction(Model\UserAction $action, Button $button = null, array $args = [], string $confirm = null): self
     {
@@ -227,7 +229,8 @@ class Card extends View
             $defaults['confirm'] = $confirm;
         }
 
-        $btn->on('click', $action, $defaults);
+        $cardDeck = $this->getClosestOwner(CardDeck::class);
+        $btn->on('click', $cardDeck ? $cardDeck->sharedExecutorsContainer->getExecutor($action) : $action, $defaults);
 
         return $this;
     }

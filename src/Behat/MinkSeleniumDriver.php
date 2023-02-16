@@ -156,7 +156,7 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
 
     public function evaluateScript($script, array $args = [])
     {
-        if (strpos(trim($script), 'return ') !== 0) {
+        if (!str_starts_with(trim($script), 'return ')) {
             $script = 'return ' . $script;
         }
 

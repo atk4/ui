@@ -51,6 +51,7 @@ trait ModelPreventModificationTrait
         $action->callback = function (Model $model, ...$args) use ($action, $originalCallback, $outputCallback) {
             if ($model->isEntity()) {
                 $action = $action->getActionForEntity($model);
+                $loadedEntity = clone $model;
             }
 
             $callbackBackup = $action->callback;
@@ -61,23 +62,28 @@ trait ModelPreventModificationTrait
                 $action->callback = $callbackBackup;
             }
 
-            return $outputCallback($model, ...$args);
+            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedEntity : $model, ...$args);
         };
     }
 
     protected function initPreventModification(): void
     {
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), function (Model $model) {
-            return 'Form Submit! Data are not save in demo mode.';
+        $makeMessageFx = function (string $actionName, Model $model) {
+            return $model->getModelCaption() . ' action "' . $actionName . '" with "' . $model->getTitle() . '" entity '
+                . ' was executed. In demo mode, all changes are reverved.';
+        };
+
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), function (Model $model) use ($makeMessageFx) {
+            return $makeMessageFx('add', $model);
         });
 
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), function (Model $model) {
-            return 'Form Submit! Data are not save in demo mode.';
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), function (Model $model) use ($makeMessageFx) {
+            return $makeMessageFx('edit', $model);
         });
 
         $this->getUserAction('delete')->confirmation = 'Please go ahead. Demo mode does not really delete data.';
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), function (Model $model) {
-            return 'Only simulating delete when in demo mode.';
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), function (Model $model) use ($makeMessageFx) {
+            return $makeMessageFx('delete', $model);
         });
     }
 }

@@ -335,6 +335,9 @@ class Multiline extends Form\Control
         return $rowErrors;
     }
 
+    /**
+     * @return $this
+     */
     public function saveRows(): self
     {
         $model = $this->model;

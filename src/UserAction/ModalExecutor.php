@@ -116,6 +116,8 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      * Assign a View that will fire action execution.
      * If action require steps, it will automatically initialize
      * proper step to execute first.
+     *
+     * @return $this
      */
     public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', string $selector = null): self
     {
