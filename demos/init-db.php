@@ -70,7 +70,7 @@ trait ModelPreventModificationTrait
     {
         $makeMessageFx = function (string $actionName, Model $model) {
             return $model->getModelCaption() . ' action "' . $actionName . '" with "' . $model->getTitle() . '" entity '
-                . ' was executed. In demo mode, all changes are reverved.';
+                . ' was executed. In demo mode all changes are reverved.';
         };
 
         $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), function (Model $model) use ($makeMessageFx) {
