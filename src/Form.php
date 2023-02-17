@@ -32,7 +32,7 @@ class Form extends View
     public $ui = 'form';
     public $defaultTemplate = 'form.html';
 
-    /** @var Callback Callback handling form submission. */
+    /** @var JsCallback Callback handling form submission. */
     public $cb;
 
     /**
