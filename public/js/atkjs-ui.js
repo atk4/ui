@@ -3606,7 +3606,7 @@ const fomanticServicesMap = {
             return true;
           }
         });
-        external_jquery__WEBPACK_IMPORTED_MODULE_1___default().extend(true, newSettings, ...args.slice(secondIndex + 1), customSettings);
+        external_jquery__WEBPACK_IMPORTED_MODULE_1___default().extend(true, newSettings, customSettings, ...args.slice(secondIndex + 1));
         return newSettings;
       }
     }
