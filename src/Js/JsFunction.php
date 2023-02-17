@@ -14,10 +14,10 @@ class JsFunction implements JsExpressionable
     use WarnDynamicPropertyTrait;
 
     /** @var array */
-    public $fxArgs;
+    public $args;
 
     /** @var array<int, JsExpressionable> */
-    public $fxStatements = [];
+    public $statements = [];
 
     /** @var bool add preventDefault(event) to generated method */
     public $preventDefault = false;
@@ -33,7 +33,7 @@ class JsFunction implements JsExpressionable
      */
     public function __construct(array $args, array $statements)
     {
-        $this->fxArgs = $args;
+        $this->args = $args;
 
         foreach ($statements as $key => $value) {
             if (is_int($key)) {
@@ -41,7 +41,7 @@ class JsFunction implements JsExpressionable
                     continue;
                 }
 
-                $this->fxStatements[] = $value;
+                $this->statements[] = $value;
             } else {
                 $this->{$key} = $value;
             }
@@ -52,17 +52,17 @@ class JsFunction implements JsExpressionable
     {
         $pre = '';
         if ($this->preventDefault) {
-            $this->fxArgs = ['event'];
+            $this->args = ['event'];
             $pre .= "\n" . $this->indent . '    event.preventDefault();';
         }
         if ($this->stopPropagation) {
-            $this->fxArgs = ['event'];
+            $this->args = ['event'];
             $pre .= "\n" . $this->indent . '    event.stopPropagation();';
         }
 
-        $output = 'function (' . implode(', ', $this->fxArgs) . ') {'
+        $output = 'function (' . implode(', ', $this->args) . ') {'
             . $pre;
-        foreach ($this->fxStatements as $statement) {
+        foreach ($this->statements as $statement) {
             $js = $statement->jsRender();
 
             $output .= "\n" . $this->indent . '    ' . $js . (!preg_match('~[;}]\s*$~', $js) ? ';' : '');
