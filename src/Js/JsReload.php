@@ -20,10 +20,7 @@ class JsReload implements JsExpressionable
     /** @var JsExpression|null A Js function to execute after reload is complete and onSuccess is execute. */
     public $afterSuccess;
 
-    /**
-     * If defined, they will be added at the end of your URL.
-     * Value in ARG can be either string or JsExpressionable.
-     */
+    /** @var array<string, string|JsExpressionable> Added at the end of your URL. */
     public array $args = [];
 
     /**

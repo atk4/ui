@@ -70,9 +70,6 @@ class Calendar extends Input
 
     public function onChange($expr, $default = []): void
     {
-        if (is_string($expr)) {
-            $expr = new JsExpression($expr);
-        }
         if (!is_array($expr)) {
             $expr = [$expr];
         }

@@ -181,7 +181,7 @@ class JsCallback extends Callback
     {
         if ($response instanceof View) {
             $response = $this->_jsRenderIntoModal($response);
-        } elseif (is_string($response)) {
+        } elseif (is_string($response)) { // TODO alert() should be removed
             $response = new JsExpression('alert([])', [$response]);
         }
 

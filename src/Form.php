@@ -43,7 +43,7 @@ class Form extends View
      * Note:
      * When using your own change handler
      * on an input field, set useDefault parameter to false.
-     * ex: $input->onChange('console.log(), false)
+     * ex: $input->onChange(new JsExpression('console.log()), false)
      * Otherwise, change event is not propagate to all event handler
      * and leaving page might not be prevent.
      *

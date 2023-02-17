@@ -164,7 +164,7 @@ class Column
 
         $cb = Column\JsHeader::addTo($this->table);
 
-        $function = 'function (value, text, item) {
+        $function = new JsExpression('function (value, text, item) {
             if (value === undefined || value === \'\' || value === null) {
                 return;
             }
@@ -173,13 +173,13 @@ class Column
                 url: \'' . $cb->getJsUrl() . '\',
                 data: { item: value, id: $(this).data(\'menu-id\') }
             });
-         }';
+        }');
 
         $chain = new Jquery('#' . $id);
         $chain->dropdown([
             'action' => 'hide',
             'values' => $items,
-            'onChange' => new JsExpression($function),
+            'onChange' => $function,
         ]);
 
         // will stop grid column from being sorted.
