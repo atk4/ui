@@ -70,7 +70,7 @@ trait ModelPreventModificationTrait
     {
         $makeMessageFx = function (string $actionName, Model $model) {
             return $model->getModelCaption() . ' action "' . $actionName . '" with "' . $model->getTitle() . '" entity '
-                . ' was executed. In demo mode, all changes are reverved.';
+                . ' was executed. In demo mode all changes are reverved.';
         };
 
         $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), function (Model $model) use ($makeMessageFx) {
@@ -371,11 +371,6 @@ class File extends ModelWithPrefixedFields
             $this->atomic(function () use ($path) {
                 foreach ($this as $entity) {
                     $entity->delete();
-
-                    // skip full/slow import for Behat testing
-                    if ($_ENV['CI'] ?? null) {
-                        break;
-                    }
                 }
 
                 $path = __DIR__ . '/../' . $path;
@@ -387,7 +382,7 @@ class File extends ModelWithPrefixedFields
         }
 
         foreach (new \DirectoryIterator($path) as $fileinfo) {
-            if ($fileinfo->isDot() || in_array($fileinfo->getFilename(), ['.git', 'vendor', 'js'], true)) {
+            if ($fileinfo->isDot() || in_array($fileinfo->getFilename(), ['.git', 'vendor', 'node_modules', 'external'], true)) {
                 continue;
             }
 
@@ -403,7 +398,7 @@ class File extends ModelWithPrefixedFields
                 $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
             }
 
-            // skip full/slow import for Behat testing
+            // skip full/slow import for Behat CI testing
             if ($_ENV['CI'] ?? null) {
                 break;
             }

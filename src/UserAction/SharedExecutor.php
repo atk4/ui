@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\UserAction;
 
+use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Ui\AbstractView;
 use Atk4\Ui\Js\JsExpressionable;
 
 class SharedExecutor
 {
+    use WarnDynamicPropertyTrait;
+
     /** @var AbstractView&ExecutorInterface */
     private ExecutorInterface $executor;
 
