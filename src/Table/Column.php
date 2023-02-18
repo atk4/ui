@@ -147,11 +147,11 @@ class Column
      * This method return a callback where you can detect
      * menu item change via $cb->onMenuItem($item) function.
      *
-     * @param array $items
+     * @param array<int, array> $items
      *
-     * @return JsCallback
+     * @return Column\JsHeader
      */
-    public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null)
+    public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null): JsCallback
     {
         $this->hasHeaderAction = true;
         $id = $this->name . '_ac';
@@ -164,7 +164,7 @@ class Column
 
         $cb = Column\JsHeader::addTo($this->table);
 
-        $function = 'function (value, text, item) {
+        $function = new JsExpression('function (value, text, item) {
             if (value === undefined || value === \'\' || value === null) {
                 return;
             }
@@ -173,13 +173,13 @@ class Column
                 url: \'' . $cb->getJsUrl() . '\',
                 data: { item: value, id: $(this).data(\'menu-id\') }
             });
-         }';
+        }');
 
         $chain = new Jquery('#' . $id);
         $chain->dropdown([
             'action' => 'hide',
             'values' => $items,
-            'onChange' => new JsExpression($function),
+            'onChange' => $function,
         ]);
 
         // will stop grid column from being sorted.

@@ -867,10 +867,8 @@ class View extends AbstractView
     /**
      * Get Local and Session web storage associated with this view.
      * Web storage can be retrieved using a $view->jsReload() request.
-     *
-     * @return mixed
      */
-    public function jsGetStoreData()
+    public function jsGetStoreData(): array
     {
         $data = [];
         $data['local'] = $this->getApp()->decodeJson($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null');
@@ -881,10 +879,8 @@ class View extends AbstractView
 
     /**
      * Clear Web storage data associated with this view.
-     *
-     * @return mixed
      */
-    public function jsClearStoreData(bool $useSession = false)
+    public function jsClearStoreData(bool $useSession = false): JsExpressionable
     {
         $type = $useSession ? 'session' : 'local';
 
@@ -906,10 +902,8 @@ class View extends AbstractView
      *  $v->jsAddStoreData(['args' => ['path' => '/'], 'fields' => ['name' => 'test']]]);
      *
      *  Final store value will be: ['args' => ['path' => '/'], 'fields' => ['name' => 'test']];
-     *
-     * @return mixed
      */
-    public function jsAddStoreData(array $data, bool $useSession = false)
+    public function jsAddStoreData(array $data, bool $useSession = false): JsExpressionable
     {
         $type = $useSession ? 'session' : 'local';
 
@@ -924,13 +918,13 @@ class View extends AbstractView
     /**
      * Returns JS for reloading View.
      *
-     * @param array             $args
-     * @param JsExpression|null $afterSuccess
-     * @param array             $apiConfig
+     * @param array                 $args
+     * @param JsExpressionable|null $afterSuccess
+     * @param array                 $apiConfig
      *
      * @return JsReload
      */
-    public function jsReload($args = [], $afterSuccess = null, $apiConfig = [])
+    public function jsReload($args = [], $afterSuccess = null, $apiConfig = []): JsExpressionable
     {
         return new JsReload($this, $args, $afterSuccess, $apiConfig);
     }

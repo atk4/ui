@@ -58,10 +58,8 @@ class JsSse extends JsCallback
 
     /**
      * Sending an SSE action.
-     *
-     * @param JsExpressionable $action
      */
-    public function send($action, bool $success = true): void
+    public function send(JsExpressionable $action, bool $success = true): void
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);

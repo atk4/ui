@@ -96,6 +96,7 @@ class JsCallback extends Callback
                 $values[] = $_POST[$key] ?? null;
             }
 
+            /** @var JsExpressionable|View|string|list<JsExpressionable|View|string>|null */
             $response = $fx($chain, ...$values);
 
             if (count($chain->_chain) === 0) {
@@ -137,8 +138,8 @@ class JsCallback extends Callback
     /**
      * Provided with a $response from callbacks convert it into a JavaScript code.
      *
-     * @param array|JsExpressionable $response response from callbacks,
-     * @param JsChain                $chain
+     * @param JsExpressionable|View|string|list<JsExpressionable|View|string>|null $response response from callbacks,
+     * @param JsChain                                                              $chain
      */
     public function getAjaxec($response, $chain = null): string
     {
@@ -181,7 +182,7 @@ class JsCallback extends Callback
     {
         if ($response instanceof View) {
             $response = $this->_jsRenderIntoModal($response);
-        } elseif (is_string($response)) {
+        } elseif (is_string($response)) { // TODO alert() should be removed
             $response = new JsExpression('alert([])', [$response]);
         }
 

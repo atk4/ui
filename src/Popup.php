@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 
 /**
  * Implement popup view.
@@ -215,7 +216,7 @@ class Popup extends View
      *
      * @return Jquery
      */
-    public function jsPopup()
+    public function jsPopup(): JsExpressionable
     {
         $selector = $this->triggerBy;
         if ($this->triggerBy instanceof Form\Control) {

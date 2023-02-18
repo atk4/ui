@@ -35,8 +35,6 @@ class ActionButtons extends Table\Column
     /**
      * Adds a new button which will execute $callback when clicked.
      *
-     * Returns button object
-     *
      * @param string|array|View                  $button
      * @param JsChain|\Closure|ExecutorInterface $action
      * @param bool|\Closure                      $isDisabled

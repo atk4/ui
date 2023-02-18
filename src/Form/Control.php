@@ -132,7 +132,7 @@ class Control extends View
      * Shorthand method for on('change') event.
      * Some input fields, like Calendar, could call this differently.
      *
-     * If $expr is string or JsExpression, then it will execute it instantly.
+     * If $expr is JsExpressionable, then it will execute it instantly.
      * If $expr is callback method, then it'll make additional request to webserver.
      *
      * Could be preferable to set useDefault to false. For example when
@@ -140,19 +140,14 @@ class Control extends View
      * Otherwise, change handler will not be propagate to all handlers.
      *
      * Examples:
-     * $control->onChange('console.log(\'changed\')');
      * $control->onChange(new JsExpression('console.log(\'changed\')'));
-     * $control->onChange('$(this).parents(\'.form\').form(\'submit\')');
+     * $control->onChange(new JsExpression('$(this).parents(\'.form\').form(\'submit\')'));
      *
-     * @param string|JsExpression|array|\Closure $expr
-     * @param array|bool                         $defaults
+     * @param JsExpressionable|array|\Closure $expr
+     * @param array|bool                      $defaults
      */
     public function onChange($expr, $defaults = []): void
     {
-        if (is_string($expr)) {
-            $expr = new JsExpression($expr);
-        }
-
         if (is_bool($defaults)) {
             $defaults = $defaults ? [] : ['preventDefault' => false, 'stopPropagation' => false];
         }
@@ -171,7 +166,7 @@ class Control extends View
      *
      * @return Jquery
      */
-    public function jsInput($when = false, $action = null)
+    public function jsInput($when = false, $action = null): JsExpressionable
     {
         return $this->js($when, $action, '#' . $this->name . '_input');
     }

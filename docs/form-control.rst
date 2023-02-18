@@ -296,7 +296,7 @@ onChange event
 .. php:method:: onChange($expression)
 
 It's prefferable to use this short-hand version of on('change', 'input', $expression) method.
-$expression argument can be string, JsExpression, array of JsExpressions or even PHP callback function.
+$expression argument can be JsExpression, array of JsExpressions or even PHP callback function.
 
     // simple string
     $f1 = $form->addControl('f1');

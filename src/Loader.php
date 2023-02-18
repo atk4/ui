@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpressionable;
 
 /**
  * Dynamically render it's content.
@@ -111,7 +112,7 @@ class Loader extends View
      *
      * @return JsChain
      */
-    public function jsLoad(array $args = [], array $apiConfig = [], $storeName = null)
+    public function jsLoad(array $args = [], array $apiConfig = [], $storeName = null): JsExpressionable
     {
         return $this->js()->atkReloadView([
             'url' => $this->cb->getUrl(),

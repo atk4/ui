@@ -209,8 +209,11 @@ class Console extends View implements \Psr\Log\LoggerInterface
         }, $messageHtml);
 
         $this->_outputBypass = true;
-        $this->sse->send($this->js()->append($messageHtml));
-        $this->_outputBypass = false;
+        try {
+            $this->sse->send($this->js()->append($messageHtml));
+        } finally {
+            $this->_outputBypass = false;
+        }
 
         return $this;
     }
@@ -225,15 +228,16 @@ class Console extends View implements \Psr\Log\LoggerInterface
     /**
      * Executes a JavaScript action.
      *
-     * @param JsExpressionable $js
-     *
      * @return $this
      */
-    public function send($js)
+    public function send(JsExpressionable $js)
     {
         $this->_outputBypass = true;
-        $this->sse->send($js);
-        $this->_outputBypass = false;
+        try {
+            $this->sse->send($js);
+        } finally {
+            $this->_outputBypass = false;
+        }
 
         return $this;
     }

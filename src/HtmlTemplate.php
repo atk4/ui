@@ -64,7 +64,7 @@ class HtmlTemplate
     public function getTagTree(string $tag): TagTree
     {
         if (!isset($this->tagTrees[$tag])) {
-            throw (new Exception('Tag not found in template'))
+            throw (new Exception('Tag is not defined in template'))
                 ->addMoreInfo('tag', $tag)
                 ->addMoreInfo('template_tags', array_diff(array_keys($this->tagTrees), [self::TOP_TAG]));
         }

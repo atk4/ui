@@ -142,8 +142,6 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
      * Associate your shelf with cart, so that when item is clicked, the content of a
      * cart is updated.
      *
-     * Also - you can supply jsAction to execute when this happens.
-     *
      * @param JsExpressionable|array $jsAction
      */
     public function linkCart(View $cart, $jsAction = null): void

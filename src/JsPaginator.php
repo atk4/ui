@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpressionable;
 
 /**
  * Paginate content using scroll event in JS.
@@ -46,11 +47,11 @@ class JsPaginator extends JsCallback
     }
 
     /**
-     * Set jsPagiantor in idle mode.
+     * Set JsPaginator in idle mode.
      *
      * @return Jquery
      */
-    public function jsIdle()
+    public function jsIdle(): JsExpressionable
     {
         return $this->view->js(true)->atkScroll('idle');
     }

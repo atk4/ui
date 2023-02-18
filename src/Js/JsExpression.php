@@ -42,7 +42,7 @@ class JsExpression implements JsExpressionable
                 }
 
                 if (!isset($this->args[$identifier])) {
-                    throw (new Exception('Tag not defined in template for JsExpression'))
+                    throw (new Exception('Tag is not defined in template'))
                         ->addMoreInfo('tag', $identifier)
                         ->addMoreInfo('template', $this->template);
                 }

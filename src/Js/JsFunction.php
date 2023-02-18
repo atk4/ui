@@ -13,35 +13,36 @@ class JsFunction implements JsExpressionable
 {
     use WarnDynamicPropertyTrait;
 
-    /** @var array */
-    public $fxArgs;
+    /** @var list<string> */
+    public array $args;
 
     /** @var array<int, JsExpressionable> */
-    public $fxStatements = [];
+    public array $statements;
 
-    /** @var bool add preventDefault(event) to generated method */
-    public $preventDefault = false;
+    /** Add event.preventDefault() to generated method */
+    public bool $preventDefault = false;
 
-    /** @var bool add stopPropagation(event) to generated method */
-    public $stopPropagation = false;
+    /** Add event.stopPropagation() to generated method */
+    public bool $stopPropagation = false;
 
-    /** @var string Indent of target code (not one indent level) */
-    public $indent = '    ';
+    /** Indent of target code (not one indent level) */
+    public string $indent = '    ';
 
     /**
      * @param array<int, JsExpressionable|null>|array<string, mixed> $statements
      */
     public function __construct(array $args, array $statements)
     {
-        $this->fxArgs = $args;
+        $this->args = $args;
 
+        $this->statements = [];
         foreach ($statements as $key => $value) {
             if (is_int($key)) {
                 if ($value === null) { // TODO this should be not needed
                     continue;
                 }
 
-                $this->fxStatements[] = $value;
+                $this->statements[] = $value;
             } else {
                 $this->{$key} = $value;
             }
@@ -52,17 +53,17 @@ class JsFunction implements JsExpressionable
     {
         $pre = '';
         if ($this->preventDefault) {
-            $this->fxArgs = ['event'];
+            $this->args = ['event'];
             $pre .= "\n" . $this->indent . '    event.preventDefault();';
         }
         if ($this->stopPropagation) {
-            $this->fxArgs = ['event'];
+            $this->args = ['event'];
             $pre .= "\n" . $this->indent . '    event.stopPropagation();';
         }
 
-        $output = 'function (' . implode(', ', $this->fxArgs) . ') {'
+        $output = 'function (' . implode(', ', $this->args) . ') {'
             . $pre;
-        foreach ($this->fxStatements as $statement) {
+        foreach ($this->statements as $statement) {
             $js = $statement->jsRender();
 
             $output .= "\n" . $this->indent . '    ' . $js . (!preg_match('~[;}]\s*$~', $js) ? ';' : '');

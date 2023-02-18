@@ -15,6 +15,7 @@ use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsConditionalForm;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 
 class Form extends View
 {
@@ -32,7 +33,7 @@ class Form extends View
     public $ui = 'form';
     public $defaultTemplate = 'form.html';
 
-    /** @var Callback Callback handling form submission. */
+    /** @var JsCallback Callback handling form submission. */
     public $cb;
 
     /**
@@ -43,7 +44,7 @@ class Form extends View
      * Note:
      * When using your own change handler
      * on an input field, set useDefault parameter to false.
-     * ex: $input->onChange('console.log(), false)
+     * ex: $input->onChange(new JsExpression('console.log()), false)
      * Otherwise, change event is not propagate to all event handler
      * and leaving page might not be prevent.
      *
@@ -289,19 +290,18 @@ class Form extends View
     /**
      * Causes form to generate error.
      *
-     * @param string $fieldName Field name
-     * @param string $str       Error message
+     * @param string $errorMessage
      *
      * @return JsChain|array<int, JsChain>
      */
-    public function error($fieldName, $str)
+    public function error(string $fieldName, $errorMessage)
     {
         // by using this hook you can overwrite default behavior of this method
         if ($this->hookHasCallbacks(self::HOOK_DISPLAY_ERROR)) {
-            return $this->hook(self::HOOK_DISPLAY_ERROR, [$fieldName, $str]);
+            return $this->hook(self::HOOK_DISPLAY_ERROR, [$fieldName, $errorMessage]);
         }
 
-        $jsError = [$this->js()->form('add prompt', $fieldName, $str)];
+        $jsError = [$this->js()->form('add prompt', $fieldName, $errorMessage)];
 
         return $jsError;
     }
@@ -315,7 +315,7 @@ class Form extends View
      *
      * @return JsChain
      */
-    public function success($success = 'Success', $subHeader = null, $useTemplate = true)
+    public function success($success = 'Success', $subHeader = null, bool $useTemplate = true)
     {
         $response = null;
         // by using this hook you can overwrite default behavior of this method
@@ -391,7 +391,7 @@ class Form extends View
      *
      * @return Jquery
      */
-    public function jsInput($name)
+    public function jsInput($name): JsExpressionable
     {
         return $this->layout->getControl($name)->js()->find('input');
     }

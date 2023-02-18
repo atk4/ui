@@ -72,20 +72,21 @@ class ItemsPerPageSelector extends View
         foreach ($this->pageLengthItems as $key => $item) {
             $menuItems[] = ['name' => $item, 'value' => $item];
         }
-        // set Fomantic-UI dropdown onChange function.
-        $function = 'function (value, text, item) {
-            if (value === undefined || value === \'\' || value === null) return;
-            $(this)
-            .api({
-                on:\'now\',
-                url:\'' . $this->cb->getUrl() . '\',
-                data:{ipp:value}
+
+        $function = new JsExpression('function (value, text, item) {
+            if (value === undefined || value === \'\' || value === null) {
+                return;
+            }
+            $(this).api({
+                on: \'now\',
+                url: \'' . $this->cb->getUrl() . '\',
+                data: {ipp:value}
             });
-        }';
+        }');
 
         $this->js(true)->dropdown([
             'values' => $menuItems,
-            'onChange' => new JsExpression($function),
+            'onChange' => $function,
         ]);
 
         parent::renderView();

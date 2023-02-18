@@ -44,7 +44,7 @@ class BasicExecutor extends View implements ExecutorInterface
     /** @var array list of validated arguments */
     protected $validArguments = [];
 
-    /** @var JsExpressionable|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     protected $jsSuccess;
 
     public function getAction(): Model\UserAction
