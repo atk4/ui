@@ -279,7 +279,7 @@ will send browser screen width back to the callback::
 
     $cb->set(function (\Atk4\Ui\Js\Jquery $j, $arg1) {
         return 'width is ' . $arg1;
-    }, [new \Atk4\Ui\Js\JsExpression( '$(window).width()' )]);
+    }, [new \Atk4\Ui\Js\JsExpression('$(window).width()')]);
 
     $label->detail = $cb->getUrl();
     $label->on('click', $cb);
@@ -292,7 +292,7 @@ also supports argument passing::
 
     $label->on('click', function (Jquery $j, $arg1) {
         return 'width is ' . $arg1;
-    }, ['confirm' => 'sure?', 'args' => [new \Atk4\Ui\Js\JsExpression( '$(window).width()' )]]);
+    }, ['confirm' => 'sure?', 'args' => [new \Atk4\Ui\Js\JsExpression('$(window).width()')]]);
 
 If you do not need to specify confirm, you can actually pass arguments in a key-less array too::
 
@@ -300,7 +300,7 @@ If you do not need to specify confirm, you can actually pass arguments in a key-
 
     $label->on('click', function (Jquery $j, $arg1) {
         return 'width is ' . $arg1;
-    }, [new \Atk4\Ui\Js\JsExpression( '$(window).width()' )]);
+    }, [new \Atk4\Ui\Js\JsExpression('$(window).width()')]);
 
 
 Refering to event origin

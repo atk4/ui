@@ -225,7 +225,7 @@ class CardDeck extends View
     protected function jsExecute($return, Model\UserAction $action)
     {
         if (is_string($return)) {
-            return $this->getNotifier($action, $return);
+            return $this->jsCreateNotifier($action, $return);
         } elseif (is_array($return) || $return instanceof JsExpressionable) {
             return $return;
         } elseif ($return instanceof Model) {
@@ -238,13 +238,13 @@ class CardDeck extends View
             return $this->jsModelReturn($action, $msg);
         }
 
-        return $this->getNotifier($action, $this->defaultMsg);
+        return $this->jsCreateNotifier($action, $this->defaultMsg);
     }
 
     /**
      * Override this method for setting notifier based on action or model value.
      */
-    protected function getNotifier(Model\UserAction $action, string $msg = null): JsExpressionable
+    protected function jsCreateNotifier(Model\UserAction $action, string $msg = null): JsExpressionable
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {
@@ -262,7 +262,7 @@ class CardDeck extends View
     protected function jsModelReturn(Model\UserAction $action, string $msg = 'Done!'): array
     {
         $js = [];
-        $js[] = $this->getNotifier($action, $msg);
+        $js[] = $this->jsCreateNotifier($action, $msg);
         $card = $action->getEntity()->isLoaded() ? $this->findCard($action->getEntity()) : null;
         if ($card !== null) {
             $js[] = $card->jsReload($this->getReloadArgs());

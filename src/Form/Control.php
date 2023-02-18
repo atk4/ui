@@ -166,7 +166,7 @@ class Control extends View
      *
      * @return Jquery
      */
-    public function jsInput($when = false, $action = null)
+    public function jsInput($when = false, $action = null): JsExpressionable
     {
         return $this->js($when, $action, '#' . $this->name . '_input');
     }

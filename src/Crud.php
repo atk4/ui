@@ -175,14 +175,14 @@ class Crud extends Grid
 
         // display msg return by action or depending on action modifier.
         if (is_string($return)) {
-            $js[] = $this->getNotifier($return);
+            $js[] = $this->jsCreateNotifier($return);
         } else {
             if ($action->modifier === Model\UserAction::MODIFIER_CREATE || $action->modifier === Model\UserAction::MODIFIER_UPDATE) {
-                $js[] = $this->getNotifier($this->saveMsg);
+                $js[] = $this->jsCreateNotifier($this->saveMsg);
             } elseif ($action->modifier === Model\UserAction::MODIFIER_DELETE) {
-                $js[] = $this->getNotifier($this->deleteMsg);
+                $js[] = $this->jsCreateNotifier($this->deleteMsg);
             } else {
-                $js[] = $this->getNotifier($this->defaultMsg);
+                $js[] = $this->jsCreateNotifier($this->defaultMsg);
             }
         }
 
@@ -216,14 +216,9 @@ class Crud extends Grid
     }
 
     /**
-     * Return jsNotifier object.
      * Override this method for setting notifier based on action or model value.
-     *
-     * @param string|null $msg the message to display
-     *
-     * @return JsExpressionable
      */
-    protected function getNotifier(string $msg = null)
+    protected function jsCreateNotifier(string $msg = null): JsExpressionable
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {

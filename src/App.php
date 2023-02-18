@@ -17,6 +17,7 @@ use Atk4\Ui\Exception\ExitApplicationError;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Psr\Log\LoggerInterface;
@@ -790,7 +791,7 @@ class App
      *
      * @param string|array $page Destination URL or page/arguments
      */
-    public function jsRedirect($page, bool $newWindow = false): JsExpression
+    public function jsRedirect($page, bool $newWindow = false): JsExpressionable
     {
         return new JsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
     }

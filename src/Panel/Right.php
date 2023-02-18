@@ -8,7 +8,7 @@ use Atk4\Core\Factory;
 use Atk4\Ui\Button;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsChain;
-use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Modal;
 use Atk4\Ui\View;
 
@@ -95,12 +95,12 @@ class Right extends View implements Loadable
     /**
      * Return js expression need to open panel via js panelService.
      *
-     * @param array        $urlArgs       the argument to include when dynamic content panel open
-     * @param array        $dataAttribute the data attribute name to include in reload from the triggering element
-     * @param string|null  $activeCss     the css class name to apply on triggering element when panel is open
-     * @param JsExpression $jsTrigger     JsExpression that trigger panel to open. Default = $(this).
+     * @param array            $urlArgs       the argument to include when dynamic content panel open
+     * @param array            $dataAttribute the data attribute name to include in reload from the triggering element
+     * @param string|null      $activeCss     the css class name to apply on triggering element when panel is open
+     * @param JsExpressionable $jsTrigger     JS expression that trigger panel to open. Default = $(this).
      */
-    public function jsOpen(array $urlArgs = [], array $dataAttribute = [], string $activeCss = null, JsExpression $jsTrigger = null): JsExpression
+    public function jsOpen(array $urlArgs = [], array $dataAttribute = [], string $activeCss = null, JsExpressionable $jsTrigger = null): JsExpressionable
     {
         return $this->service()->openPanel([
             'triggered' => $jsTrigger ?? new Jquery(),
@@ -114,7 +114,7 @@ class Right extends View implements Loadable
     /**
      * Will reload panel passing args as Get param via js flyoutService.
      */
-    public function jsPanelReload(array $args = []): JsExpression
+    public function jsPanelReload(array $args = []): JsExpressionable
     {
         return $this->service()->reloadPanel($this->name, $args);
     }
@@ -122,7 +122,7 @@ class Right extends View implements Loadable
     /**
      * Return js expression need to close panel via js panelService.
      */
-    public function jsClose(): JsExpression
+    public function jsClose(): JsExpressionable
     {
         return $this->service()->closePanel($this->name);
     }
@@ -163,7 +163,7 @@ class Right extends View implements Loadable
      *
      * @return Jquery
      */
-    public function jsDisplayWarning(bool $state = true): JsExpression
+    public function jsDisplayWarning(bool $state = true): JsExpressionable
     {
         $chain = new Jquery('#' . $this->name . ' ' . $this->warningSelector);
 
@@ -175,7 +175,7 @@ class Right extends View implements Loadable
      *
      * @return Jquery
      */
-    public function jsToggleWarning(): JsExpression
+    public function jsToggleWarning(): JsExpressionable
     {
         return (new Jquery('#' . $this->name . ' ' . $this->warningSelector))->toggleClass($this->warningTrigger);
     }

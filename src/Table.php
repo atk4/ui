@@ -536,7 +536,7 @@ class Table extends Lister
      *
      * @return Jquery
      */
-    public function jsRow()
+    public function jsRow(): JsExpressionable
     {
         return (new Jquery())->closest('tr');
     }
@@ -549,7 +549,7 @@ class Table extends Lister
      *
      * @return Jquery
      */
-    public function jsRemoveRow($id, $transition = 'fade left')
+    public function jsRemoveRow($id, $transition = 'fade left'): JsExpressionable
     {
         return $this->js()->find('tr[data-id=' . $id . ']')->transition($transition);
     }

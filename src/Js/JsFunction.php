@@ -13,20 +13,20 @@ class JsFunction implements JsExpressionable
 {
     use WarnDynamicPropertyTrait;
 
-    /** @var array */
-    public $args;
+    /** @var list<string> */
+    public array $args;
 
     /** @var array<int, JsExpressionable> */
-    public $statements = [];
+    public array $statements;
 
-    /** @var bool add preventDefault(event) to generated method */
-    public $preventDefault = false;
+    /** Add event.preventDefault() to generated method */
+    public bool $preventDefault = false;
 
-    /** @var bool add stopPropagation(event) to generated method */
-    public $stopPropagation = false;
+    /** Add event.stopPropagation() to generated method */
+    public bool $stopPropagation = false;
 
-    /** @var string Indent of target code (not one indent level) */
-    public $indent = '    ';
+    /** Indent of target code (not one indent level) */
+    public string $indent = '    ';
 
     /**
      * @param array<int, JsExpressionable|null>|array<string, mixed> $statements
@@ -35,6 +35,7 @@ class JsFunction implements JsExpressionable
     {
         $this->args = $args;
 
+        $this->statements = [];
         foreach ($statements as $key => $value) {
             if (is_int($key)) {
                 if ($value === null) { // TODO this should be not needed

@@ -131,7 +131,7 @@ class Modal extends View
      *
      * @return JsChain
      */
-    public function jsShow(array $args = [])
+    public function jsShow(array $args = []): JsExpressionable
     {
         $chain = $this->js();
         if ($args !== []) {
@@ -146,7 +146,7 @@ class Modal extends View
      *
      * @return JsChain
      */
-    public function jsHide()
+    public function jsHide(): JsExpressionable
     {
         return $this->js()->modal('hide');
     }
@@ -182,11 +182,11 @@ class Modal extends View
      * Add a deny action to modal.
      *
      * @param string           $label
-     * @param JsExpressionable $jsAction javascript action that will run when deny is click
+     * @param JsExpressionable $jsAction will run when deny is click
      *
      * @return $this
      */
-    public function addDenyAction($label, $jsAction)
+    public function addDenyAction($label, JsExpressionable $jsAction)
     {
         $button = new Button();
         $button->set($label)->addClass('red cancel');
@@ -200,11 +200,11 @@ class Modal extends View
      * Add an approve action button to modal.
      *
      * @param string           $label
-     * @param JsExpressionable $jsAction javascript action that will run when deny is click
+     * @param JsExpressionable $jsAction will run when deny is click
      *
      * @return $this
      */
-    public function addApproveAction($label, $jsAction)
+    public function addApproveAction($label, JsExpressionable $jsAction)
     {
         $b = new Button();
         $b->set($label)->addClass('green ok');

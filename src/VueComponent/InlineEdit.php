@@ -7,6 +7,7 @@ namespace Atk4\Ui\VueComponent;
 use Atk4\Data\Model;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
@@ -133,7 +134,7 @@ class InlineEdit extends View
      *
      * @return JsToast
      */
-    public function jsSuccess(string $message)
+    public function jsSuccess(string $message): JsExpressionable
     {
         return new JsToast([
             'title' => 'Success',
@@ -149,7 +150,7 @@ class InlineEdit extends View
      *
      * @return JsToast
      */
-    public function jsError($message)
+    public function jsError($message): JsExpressionable
     {
         return new JsToast([
             'title' => 'Validation error:',

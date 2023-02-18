@@ -147,11 +147,11 @@ class Column
      * This method return a callback where you can detect
      * menu item change via $cb->onMenuItem($item) function.
      *
-     * @param array $items
+     * @param array<int, array> $items
      *
-     * @return JsCallback
+     * @return Column\JsHeader
      */
-    public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null)
+    public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null): JsCallback
     {
         $this->hasHeaderAction = true;
         $id = $this->name . '_ac';

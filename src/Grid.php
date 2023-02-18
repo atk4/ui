@@ -9,7 +9,6 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
-use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
@@ -352,16 +351,7 @@ class Grid extends View
         $this->quickSearch->initValue = $q;
     }
 
-    /**
-     * Returns JS for reloading View.
-     *
-     * @param array             $args
-     * @param JsExpression|null $afterSuccess
-     * @param array             $apiConfig
-     *
-     * @return JsReload
-     */
-    public function jsReload($args = [], $afterSuccess = null, $apiConfig = [])
+    public function jsReload($args = [], $afterSuccess = null, $apiConfig = []): JsExpressionable
     {
         return new JsReload($this->container, $args, $afterSuccess, $apiConfig);
     }
@@ -687,7 +677,7 @@ class Grid extends View
      *
      * @return Jquery
      */
-    public function jsRow()
+    public function jsRow(): JsExpressionable
     {
         return $this->table->jsRow();
     }
