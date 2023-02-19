@@ -152,10 +152,12 @@ class Right extends View implements Loadable
     /**
      * Callback to execute when panel open if dynamic content is set.
      * Differ the callback execution to the FlyoutContent.
+     *
+     * @param \Closure(object): void $fx
      */
-    public function onOpen(\Closure $callback): void
+    public function onOpen(\Closure $fx): void
     {
-        $this->getDynamicContent()->onLoad($callback);
+        $this->getDynamicContent()->onLoad($fx);
     }
 
     /**

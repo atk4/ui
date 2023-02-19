@@ -50,7 +50,7 @@ class Crud extends Grid
     /** @var string Generic display message for no record scope action where model is not loaded. */
     public $defaultMsg = 'Done!';
 
-    /** @var array Callback containers for model action. */
+    /** @var array<int, array<string, \Closure(Form, UserAction\ModalExecutor): void>> Callback containers for model action. */
     public $onActions = [];
 
     /** @var mixed recently deleted record id. */
@@ -149,7 +149,7 @@ class Crud extends Grid
                 $executor->onHook(UserAction\ModalExecutor::HOOK_STEP, function (UserAction\ModalExecutor $ex, string $step, Form $form) use ($onAction, $action) {
                     $key = array_key_first($onAction);
                     if ($key === $action->shortName && $step === 'fields') {
-                        return $onAction[$key]($form, $ex);
+                        $onAction[$key]($form, $ex);
                     }
                 });
             }
@@ -295,6 +295,8 @@ class Crud extends Grid
     /**
      * Set callback for edit action in Crud.
      * Callback function will receive the Edit Form and Executor as param.
+     *
+     * @param \Closure(Form, UserAction\ModalExecutor): void $fx
      */
     public function onFormEdit(\Closure $fx): void
     {
@@ -304,6 +306,8 @@ class Crud extends Grid
     /**
      * Set callback for add action in Crud.
      * Callback function will receive the Add Form and Executor as param.
+     *
+     * @param \Closure(Form, UserAction\ModalExecutor): void $fx
      */
     public function onFormAdd(\Closure $fx): void
     {
@@ -313,6 +317,8 @@ class Crud extends Grid
     /**
      * Set callback for both edit and add action form.
      * Callback function will receive Forms and Executor as param.
+     *
+     * @param \Closure(Form, UserAction\ModalExecutor): void $fx
      */
     public function onFormAddEdit(\Closure $fx): void
     {
@@ -322,6 +328,8 @@ class Crud extends Grid
 
     /**
      * Set onActions.
+     *
+     * @param \Closure(Form, UserAction\ModalExecutor): void $fx
      */
     public function setOnActions(string $actionName, \Closure $fx): void
     {

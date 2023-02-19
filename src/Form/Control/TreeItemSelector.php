@@ -7,6 +7,7 @@ namespace Atk4\Ui\Form\Control;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
 
@@ -86,6 +87,8 @@ class TreeItemSelector extends Form\Control
      * Provide a function to be executed when clicking an item in tree selector.
      * The executing function will receive an array with item state in it
      * when allowMultiple is true or a single value when false.
+     *
+     * @param \Closure(mixed): (JsExpressionable|View|string|void) $fx
      */
     public function onItem(\Closure $fx): void
     {

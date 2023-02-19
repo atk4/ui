@@ -14,6 +14,7 @@ use Atk4\Data\ValidationException;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
@@ -146,7 +147,7 @@ class Multiline extends Form\Control
     /** @var JsCallback */
     private $renderCallback;
 
-    /** @var \Closure|null Function to execute when field change or row is delete. */
+    /** @var \Closure(mixed, Form): (JsExpressionable|View|string|void)|null Function to execute when field change or row is delete. */
     protected $onChangeFunction;
 
     /** @var array Set fields that will trigger onChange function. */
@@ -267,6 +268,8 @@ class Multiline extends Form\Control
     /**
      * Add a callback when fields are changed. You must supply array of fields
      * that will trigger the callback when changed.
+     *
+     * @param \Closure(mixed, Form): (JsExpressionable|View|string|void) $fx
      */
     public function onLineChange(\Closure $fx, array $fields): void
     {

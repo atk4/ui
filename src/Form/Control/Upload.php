@@ -10,6 +10,9 @@ use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
 
+/**
+ * @phpstan-type PhpFileArray array{error: int, name: string}
+ */
 class Upload extends Input
 {
     public $defaultTemplate = 'form/control/upload.html';
@@ -133,6 +136,8 @@ class Upload extends Input
 
     /**
      * Call when user is uploading a file.
+     *
+     * @param \Closure(PhpFileArray, PhpFileArray, PhpFileArray, PhpFileArray, PhpFileArray, PhpFileArray, PhpFileArray, PhpFileArray, PhpFileArray, PhpFileArray): JsExpressionable $fx
      */
     public function onUpload(\Closure $fx): void
     {
@@ -175,6 +180,8 @@ class Upload extends Input
 
     /**
      * Call when user is removing an already upload file.
+     *
+     * @param \Closure(string): JsExpressionable $fx
      */
     public function onDelete(\Closure $fx): void
     {
