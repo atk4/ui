@@ -39,7 +39,7 @@ class Modal extends View
     public $loadingLabel = 'Loading...';
     /** @var string */
     public $headerCss = 'header';
-    /** @var \Closure|null */
+    /** @var \Closure(View): void|null */
     public $fx;
     /** @var CallbackLater|null */
     public $cb;
@@ -76,8 +76,8 @@ class Modal extends View
      * $fx is set as an array in order to comply with View::set().
      * TODO Rename this function and break BC?
      *
-     * @param \Closure $fx
-     * @param never    $ignore
+     * @param \Closure(View): void $fx
+     * @param never                $ignore
      *
      * @return $this
      */

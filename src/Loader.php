@@ -69,8 +69,8 @@ class Loader extends View
      * Or
      *  $l1->set([$my_object, 'run_long_process']);
      *
-     * @param \Closure $fx
-     * @param never    $ignore
+     * @param \Closure($this): void $fx
+     * @param never                 $ignore
      *
      * @return $this
      */

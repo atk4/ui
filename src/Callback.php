@@ -62,10 +62,12 @@ class Callback extends AbstractView
     /**
      * Executes user-specified action when call-back is triggered.
      *
-     * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): mixed $fx
-     * @param array                                                                                 $fxArgs
+     * @template T
      *
-     * @return mixed
+     * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): T $fx
+     * @param array                                                                             $fxArgs
+     *
+     * @phpstan-return T|null
      */
     public function set($fx = null, $fxArgs = null)
     {

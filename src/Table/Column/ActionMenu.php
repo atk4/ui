@@ -8,6 +8,7 @@ use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\ExecutorInterface;
@@ -16,13 +17,15 @@ use Atk4\Ui\View;
 /**
  * Table column action menu.
  * Will create a dropdown menu within table column.
+ *
+ * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
  */
 class ActionMenu extends Table\Column
 {
     /** @var array Menu items collections. */
     protected $items = [];
 
-    /** @var array<string, \Closure> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
+    /** @var array<string, \Closure(Model): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
     protected $callbacks = [];
 
     /**
@@ -54,9 +57,9 @@ class ActionMenu extends Table\Column
     /**
      * Add a menu item in Dropdown.
      *
-     * @param View|string                           $item
-     * @param \Closure|Model|ExecutorInterface|null $action
-     * @param bool|\Closure                         $isDisabled
+     * @param View|string                                             $item
+     * @param JsExpressionable|JsCallbackSetClosure|ExecutorInterface $action
+     * @param bool|\Closure(Model): bool                              $isDisabled
      *
      * @return View
      */

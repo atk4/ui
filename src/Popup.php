@@ -125,8 +125,8 @@ class Popup extends View
      * Callback will receive a view attach to this popup
      * for adding content to it.
      *
-     * @param \Closure $fx
-     * @param never    $ignore
+     * @param \Closure(View): void $fx
+     * @param never                $ignore
      *
      * @return $this
      */

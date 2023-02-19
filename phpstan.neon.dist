@@ -242,19 +242,19 @@ parameters:
             message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void\) of method Atk4\\Ui\\JsCallback::set\(\) should be contravariant with parameter \$fx \(Closure\(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): mixed\) of method Atk4\\Ui\\Callback::set\(\)$~'
         -
             path: 'src/Loader.php'
-            message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Loader::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(\$this\(Atk4\\Ui\\Loader\)\): void\) of method Atk4\\Ui\\Loader::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Loader.php'
             message: '~^Parameter #2 \$ignore \(\*NEVER\*\) of method Atk4\\Ui\\Loader::set\(\) should be compatible with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Modal.php'
-            message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Modal::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\View\): void\) of method Atk4\\Ui\\Modal::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Modal.php'
             message: '~^Parameter #2 \$ignore \(\*NEVER\*\) of method Atk4\\Ui\\Modal::set\(\) should be compatible with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Popup.php'
-            message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Popup::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\View\): void\) of method Atk4\\Ui\\Popup::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Popup.php'
             message: '~^Parameter #2 \$ignore \(\*NEVER\*\) of method Atk4\\Ui\\Popup::set\(\) should be compatible with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
@@ -263,7 +263,7 @@ parameters:
             message: '~^Parameter #1 \$fx \(Closure\(\$this\(Atk4\\Ui\\VirtualPage\), mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/VirtualPage.php'
-            message: '~^Parameter #1 \$fx of method Atk4\\Ui\\Callback::set\(\) expects \(Closure\(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): mixed\)\|null, Closure\(\$this\(Atk4\\Ui\\VirtualPage\), mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void given.$~'
+            message: '~^Parameter #1 \$fx of method Atk4\\Ui\\Callback::set\(\) expects \(Closure\(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void\)\|null, Closure\(\$this\(Atk4\\Ui\\VirtualPage\), mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void given.$~'
         -
             path: 'src/VirtualPage.php'
             message: '~^Parameter #2 \$fxArgs \(array\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
