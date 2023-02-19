@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column;
 
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
+use Atk4\Ui\View;
 
 /**
  * Implement a callback for a column header dropdown menu.

@@ -58,16 +58,16 @@ class JsPaginator extends JsCallback
 
     /**
      * Get current page number.
-     *
-     * @return int
      */
-    public function getPage()
+    public function getPage(): int
     {
         return (int) ($_GET['page'] ?? 0);
     }
 
     /**
      * Callback when container has been scroll to bottom.
+     *
+     * @param \Closure(int): (JsExpressionable|View|string|void) $fx
      */
     public function onScroll(\Closure $fx): void
     {

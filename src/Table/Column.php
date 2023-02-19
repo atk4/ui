@@ -8,9 +8,11 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\Popup;
 use Atk4\Ui\Table;
+use Atk4\Ui\View;
 
 /**
  * Implements Column helper for table.

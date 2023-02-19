@@ -63,6 +63,8 @@ class JsSortable extends JsCallback
 
     /**
      * Callback when container has been reorder.
+     *
+     * @param \Closure(list<string>, string, int, int): (JsExpressionable|View|string|void) $fx
      */
     public function onReorder(\Closure $fx): void
     {
