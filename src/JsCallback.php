@@ -58,6 +58,8 @@ class JsCallback extends Callback
     }
 
     /**
+     * @param \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void) $fx
+     *
      * @return $this
      */
     public function set($fx = null, $args = null)
@@ -82,7 +84,6 @@ class JsCallback extends Callback
                 $values[] = $_POST[$key] ?? null;
             }
 
-            /** @var JsExpressionable|View|string|list<JsExpressionable|View|string>|null */
             $response = $fx($chain, ...$values);
 
             if (count($chain->_chain) === 0) {
@@ -124,28 +125,16 @@ class JsCallback extends Callback
     /**
      * Provided with a $response from callbacks convert it into a JavaScript code.
      *
-     * @param JsExpressionable|View|string|list<JsExpressionable|View|string|null>|null $response response from callbacks,
-     * @param JsChain                                                                   $chain
+     * @param JsExpressionable|View|string|null $response response from callbacks,
+     * @param JsChain                           $chain
      */
     public function getAjaxec($response, $chain = null): string
     {
         $actions = [];
-
         if ($chain !== null) {
             $actions[] = $chain;
         }
-
-        if (is_array($response)) {
-            foreach ($response as $r) {
-                if ($r === null) {
-                    continue;
-                }
-
-                $actions[] = $this->_getProperAction($r);
-            }
-        } else {
-            $actions[] = $this->_getProperAction($response);
-        }
+        $actions[] = $this->_getProperAction($response);
 
         $ajaxec = (new JsBlock($actions))->jsRender();
 

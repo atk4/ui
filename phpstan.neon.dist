@@ -238,6 +238,9 @@ parameters:
             path: 'src/Form/Control/Upload.php'
             message: '~^Parameter #1 \$fileId \(string\) of method Atk4\\Ui\\Form\\Control\\Upload::set\(\) should be contravariant with parameter \$value \(mixed\) of method Atk4\\Ui\\Form\\Control::set\(\)$~'
         -
+            path: 'src/JsCallback.php'
+            message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void\) of method Atk4\\Ui\\JsCallback::set\(\) should be contravariant with parameter \$fx \(Closure\) of method Atk4\\Ui\\Callback::set\(\)$~'
+        -
             path: 'src/Loader.php'
             message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Loader::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
@@ -257,7 +260,7 @@ parameters:
             message: '~^Parameter #2 \$ignore \(\*NEVER\*\) of method Atk4\\Ui\\Popup::set\(\) should be compatible with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/VirtualPage.php'
-            message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/VirtualPage.php'
             message: '~^Parameter #2 \$fxArgs \(array\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'

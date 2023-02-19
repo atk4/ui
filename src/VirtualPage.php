@@ -39,8 +39,8 @@ class VirtualPage extends View
     /**
      * Set callback function of virtual page.
      *
-     * @param \Closure $fx
-     * @param array    $fxArgs
+     * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $fx
+     * @param array                                                                                $fxArgs
      *
      * @return $this
      */

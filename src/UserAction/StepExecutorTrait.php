@@ -436,7 +436,7 @@ trait StepExecutorTrait
     /**
      * Get proper js after submitting a form in a step.
      *
-     * @return JsExpressionable|View
+     * @return JsBlock|View
      */
     protected function jsStepSubmit(string $step)
     {

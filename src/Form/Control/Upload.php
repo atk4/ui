@@ -6,6 +6,7 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
 
@@ -52,7 +53,7 @@ class Upload extends Input
     /** Whether callback has been defined or not. */
     public bool $hasDeleteCb = false;
 
-    /** @var array<int, JsExpressionable> */
+    /** @var list<JsExpressionable> */
     public $jsActions = [];
 
     public const UPLOAD_ACTION = 'upload';
@@ -167,7 +168,7 @@ class Upload extends Input
                     );
                 }
 
-                return $this->jsActions;
+                return new JsBlock($this->jsActions);
             });
         }
     }
@@ -183,7 +184,7 @@ class Upload extends Input
                 $fileId = $_POST['fUploadId'] ?? null;
                 $this->addJsAction($fx($fileId));
 
-                return $this->jsActions;
+                return new JsBlock($this->jsActions);
             });
         }
     }
