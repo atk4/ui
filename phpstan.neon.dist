@@ -16,9 +16,6 @@ parameters:
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
         - '~^Variable (static )?(property access|method call) on .+\.~'
 
-        # https://github.com/phpstan/phpstan/issues/7839
-        - '~PHPDoc type .+ of property Atk4\\Ui\\.+ is not the same as PHPDoc type .+ of overridden property .+\.~'
-
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
         -

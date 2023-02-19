@@ -19,11 +19,10 @@ class CardDeck extends View
 {
     public $ui = 'basic segment atk-card-deck';
 
+    public $defaultTemplate = 'card-deck.html';
+
     /** @var class-string<View> Card type inside this deck. */
     public $card = Card::class;
-
-    /** @var string default template file. */
-    public $defaultTemplate = 'card-deck.html';
 
     /** @var bool Whether card should use table display or not. */
     public $useTable = false;

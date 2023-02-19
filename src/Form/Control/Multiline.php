@@ -167,9 +167,6 @@ class Multiline extends Form\Control
     /** @var int The maximum number of items for select type field. */
     public $itemLimit = 25;
 
-    /** @var string Multiline's caption. */
-    public $caption;
-
     /**
      * Container for component that need Props set based on their field value as Lookup component.
      * Set during fieldDefinition and apply during renderView() after getValue().

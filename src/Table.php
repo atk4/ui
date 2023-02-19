@@ -14,8 +14,9 @@ use Atk4\Ui\Js\JsExpressionable;
 
 class Table extends Lister
 {
-    public $defaultTemplate = 'table.html';
     public $ui = 'table';
+
+    public $defaultTemplate = 'table.html';
 
     /**
      * If table is part of Grid or Crud, we want to reload that instead of table.
@@ -61,9 +62,6 @@ class Table extends Lister
 
     /** @var HtmlTemplate Contain the template for the "Foot" type row. */
     public $tTotals;
-
-    /** @var HtmlTemplate Contains the output to show if table contains no rows. */
-    public $tEmpty;
 
     /**
      * Set this if you want table to appear as sortable. This does not add any
