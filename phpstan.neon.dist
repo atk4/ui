@@ -235,6 +235,9 @@ parameters:
             path: 'src/Form/Control.php'
             message: '~^Parameter #2 \$ignore \(\*NEVER\*\) of method Atk4\\Ui\\Form\\Control::set\(\) should be compatible with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
+            path: 'src/Form/Control/Calendar.php'
+            message: '~^Parameter #1 \$expr \(Atk4\\Ui\\Js\\JsExpressionable\) of method Atk4\\Ui\\Form\\Control\\Calendar::onChange\(\) should be contravariant with parameter \$expr \(array{Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void}\|Atk4\\Ui\\Js\\JsExpressionable\|\(Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void\)\) of method Atk4\\Ui\\Form\\Control::onChange\(\)$~'
+        -
             path: 'src/Form/Control/Upload.php'
             message: '~^Parameter #1 \$fileId \(string\) of method Atk4\\Ui\\Form\\Control\\Upload::set\(\) should be contravariant with parameter \$value \(mixed\) of method Atk4\\Ui\\Form\\Control::set\(\)$~'
         -

@@ -13,8 +13,7 @@ class JsFunction implements JsExpressionable
     /** @var list<string> */
     public array $args;
 
-    /** @var JsBlock */
-    public JsExpressionable $body;
+    public JsBlock $body;
 
     /** Add event.preventDefault() to generated method */
     public bool $preventDefault = false;
@@ -32,7 +31,7 @@ class JsFunction implements JsExpressionable
     {
         $this->args = $args;
 
-        if ($statements instanceof JsBlock) {
+        if (!is_array($statements)) {
             $this->body = $statements;
         } else {
             foreach ($statements as $key => $value) {
