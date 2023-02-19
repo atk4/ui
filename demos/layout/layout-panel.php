@@ -9,6 +9,7 @@ use Atk4\Ui\Card;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Icon;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Message;
@@ -94,11 +95,11 @@ $panel2->onOpen(function (Panel\Content $p) {
         ->onChange($p->getOwner()->jsDisplayWarning(true));
 
     $form->onSubmit(function (Form $form) use ($p) {
-        return [
+        return new JsBlock([
             new JsToast('Saved, closing panel.'),
             $p->getOwner()->jsDisplayWarning(false),
             $p->getOwner()->jsClose(),
-        ];
+        ]);
     });
 });
 View::addTo($app, ['ui' => 'divider']);

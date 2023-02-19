@@ -10,6 +10,7 @@ use Atk4\Ui\Dropdown as UiDropdown;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Label;
@@ -141,10 +142,8 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
     /**
      * Associate your shelf with cart, so that when item is clicked, the content of a
      * cart is updated.
-     *
-     * @param JsExpressionable|array $jsAction
      */
-    public function linkCart(View $cart, $jsAction = null): void
+    public function linkCart(View $cart, JsExpressionable $jsAction = null): void
     {
         $this->on('click', '.item', function (Jquery $a, string $b) use ($cart, $jsAction) {
             $cart->addItem($b);
@@ -217,13 +216,13 @@ $cartPopup->set(function (View $popup) use ($cart) {
 });
 
 // Add item shelf below menu and link it with the cart
-$shelf->linkCart($cart, [
+$shelf->linkCart($cart, new JsBlock([
     // array is a valid js action. Will relad cart item (along with drop-down and label)
     $cartOutterLabel->jsReload(),
 
     // also will hide current item from the shelf
     (new Jquery())->hide(),
-]);
+]));
 
 // label placed on top of menu item, not in the popup
 

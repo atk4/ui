@@ -9,6 +9,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Message;
@@ -122,10 +123,8 @@ class BasicExecutor extends View implements ExecutorInterface
 
     /**
      * Will call $action->execute() with the correct arguments.
-     *
-     * @return mixed
      */
-    public function executeModelAction()
+    public function executeModelAction(): JsBlock
     {
         $args = [];
 

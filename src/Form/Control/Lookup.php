@@ -13,6 +13,7 @@ use Atk4\Ui\Callback;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsModal;
@@ -269,7 +270,7 @@ class Lookup extends Input
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
                 $ret[] = $chain;
 
-                return $ret;
+                return new JsBlock($ret);
             });
         });
 

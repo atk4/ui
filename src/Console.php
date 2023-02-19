@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\DebugTrait;
 use Atk4\Core\TraitUtil;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 
 /**
@@ -127,7 +128,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
         return $this;
     }
 
-    public function jsExecute(): JsExpressionable
+    public function jsExecute(): JsBlock
     {
         return $this->sse->jsExecute();
     }

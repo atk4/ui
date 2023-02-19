@@ -10,6 +10,7 @@ use Atk4\Data\Model\UserAction;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Loader;
@@ -435,7 +436,7 @@ trait StepExecutorTrait
     /**
      * Get proper js after submitting a form in a step.
      *
-     * @return mixed
+     * @return JsExpressionable|View
      */
     protected function jsStepSubmit(string $step)
     {
@@ -446,13 +447,13 @@ trait StepExecutorTrait
                 $js = $this->jsGetExecute($return, $this->action->getEntity()->getId());
             } else {
                 // store data and setup reload
-                $js = [
+                $js = new JsBlock([
                     $this->loader->jsAddStoreData($this->actionData, true),
                     $this->loader->jsLoad([
                         'step' => $this->getNextStep($step),
                         $this->name => $this->action->getEntity()->getId(),
                     ], ['method' => 'post'], $this->loader->name),
-                ];
+                ]);
             }
 
             return $js;

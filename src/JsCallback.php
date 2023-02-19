@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
@@ -52,17 +53,17 @@ class JsCallback extends Callback
         return $res;
     }
 
-    public function jsExecute(): JsExpression
+    public function jsExecute(): JsBlock
     {
         $this->assertIsInitialized();
 
-        return (new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkAjaxec([
+        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkAjaxec([
             'url' => $this->getJsUrl(),
             'urlOptions' => $this->args,
             'confirm' => $this->confirm,
             'apiConfig' => $this->apiConfig,
             'storeName' => $this->storeName,
-        ]);
+        ])]);
     }
 
     /**

@@ -7,6 +7,7 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
@@ -162,10 +163,8 @@ class Crud extends Grid
      * depending on return type, model loaded and action scope.
      *
      * @param string|null $return
-     *
-     * @return array<int, JsExpressionable>
      */
-    protected function jsExecute($return, Model\UserAction $action): array
+    protected function jsExecute($return, Model\UserAction $action): JsBlock
     {
         $js = [];
         $jsAction = $this->getJsGridAction($action);
@@ -186,7 +185,7 @@ class Crud extends Grid
             }
         }
 
-        return $js;
+        return new JsBlock($js);
     }
 
     /**

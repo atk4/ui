@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\UserAction\ExecutorFactory;
@@ -217,11 +218,9 @@ class CardDeck extends View
      * Return proper js statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      *
-     * @param string|JsExpressionable|array<int, JsExpressionable>|Model|null $return
-     *
-     * @return JsExpressionable|array<int, JsExpressionable>
+     * @param string|JsExpressionable|Model|null $return
      */
-    protected function jsExecute($return, Model\UserAction $action)
+    protected function jsExecute($return, Model\UserAction $action): JsBlock
     {
         if (is_string($return)) {
             return $this->jsCreateNotifier($action, $return);
@@ -243,22 +242,20 @@ class CardDeck extends View
     /**
      * Override this method for setting notifier based on action or model value.
      */
-    protected function jsCreateNotifier(Model\UserAction $action, string $msg = null): JsExpressionable
+    protected function jsCreateNotifier(Model\UserAction $action, string $msg = null): JsBlock
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {
             $notifier->setMessage($msg);
         }
 
-        return $notifier;
+        return new JsBlock([$notifier]);
     }
 
     /**
-     * Js expression return when action afterHook executor return a Model.
-     *
-     * @return array<int, JsExpressionable>
+     * JS expression return when action afterHook executor return a Model.
      */
-    protected function jsModelReturn(Model\UserAction $action, string $msg = 'Done!'): array
+    protected function jsModelReturn(Model\UserAction $action, string $msg = 'Done!'): JsBlock
     {
         $js = [];
         $js[] = $this->jsCreateNotifier($action, $msg);
@@ -269,7 +266,7 @@ class CardDeck extends View
             $js[] = $this->container->jsReload($this->getReloadArgs());
         }
 
-        return $js;
+        return new JsBlock($js);
     }
 
     /**

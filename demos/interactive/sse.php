@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\JsSse;
 use Atk4\Ui\ProgressBar;
 use Atk4\Ui\View;
@@ -38,10 +39,10 @@ $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
     sleep(1);
 
     // non-SSE way
-    return [
+    return new JsBlock([
         $bar->jsValue(100),
         $button->js()->removeClass('disabled'),
-    ];
+    ]);
 }));
 
 $buttonStop->on('click', [$button->js()->atkServerEvent('stop'), $button->js()->removeClass('disabled')]);

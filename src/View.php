@@ -1153,8 +1153,6 @@ class View extends AbstractView
             return '';
         }
 
-        $actions['indent'] = '';
-
         return (new JsExpression('[]()', [new JsFunction([], $actions)]))->jsRender();
     }
 

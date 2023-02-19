@@ -7,7 +7,7 @@ namespace Atk4\Ui\UserAction;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
-use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
@@ -52,7 +52,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         return $this;
     }
 
-    public function jsExecute(array $urlArgs = []): JsExpression
+    public function jsExecute(array $urlArgs = []): JsBlock
     {
         // TODO hack to parametrize parent::jsExecute() like JsExecutorInterface::jsExecute($urlArgs)
         $argsOrig = $this->args;

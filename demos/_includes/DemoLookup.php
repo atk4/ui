@@ -8,6 +8,7 @@ use Atk4\Core\Factory;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsModal;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\VirtualPage;
@@ -56,7 +57,7 @@ class DemoLookup extends Form\Control\Lookup
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
                 $ret[] = $chain;
 
-                return $ret;
+                return new JsBlock($ret);
             });
         });
 

@@ -12,6 +12,7 @@ use Atk4\Data\Reference\ContainsMany;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Form\Control;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsConditionalForm;
 use Atk4\Ui\Js\JsExpression;
@@ -291,19 +292,15 @@ class Form extends View
      * Causes form to generate error.
      *
      * @param string $errorMessage
-     *
-     * @return JsChain|array<int, JsChain>
      */
-    public function error(string $fieldName, $errorMessage)
+    public function error(string $fieldName, $errorMessage): JsExpressionable
     {
         // by using this hook you can overwrite default behavior of this method
         if ($this->hookHasCallbacks(self::HOOK_DISPLAY_ERROR)) {
             return $this->hook(self::HOOK_DISPLAY_ERROR, [$fieldName, $errorMessage]);
         }
 
-        $jsError = [$this->js()->form('add prompt', $fieldName, $errorMessage)];
-
-        return $jsError;
+        return new JsBlock([$this->js()->form('add prompt', $fieldName, $errorMessage)]);
     }
 
     /**
@@ -315,7 +312,7 @@ class Form extends View
      *
      * @return JsChain
      */
-    public function success($success = 'Success', $subHeader = null, bool $useTemplate = true)
+    public function success($success = 'Success', $subHeader = null, bool $useTemplate = true): JsExpressionable
     {
         $response = null;
         // by using this hook you can overwrite default behavior of this method
