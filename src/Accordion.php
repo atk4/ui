@@ -36,9 +36,9 @@ class Accordion extends View
      * You can add static View within your section or pass
      * a callback for dynamic content.
      *
-     * @param string                                                                               $title
-     * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $callback
-     * @param string                                                                               $icon
+     * @param string                                                                                            $title
+     * @param \Closure(VirtualPage, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $callback
+     * @param string                                                                                            $icon
      *
      * @return AccordionSection
      */

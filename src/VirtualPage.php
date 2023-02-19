@@ -39,8 +39,8 @@ class VirtualPage extends View
     /**
      * Set callback function of virtual page.
      *
-     * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $fx
-     * @param array                                                                                $fxArgs
+     * @param \Closure($this, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $fx
+     * @param array                                                                                       $fxArgs
      *
      * @return $this
      */
@@ -50,7 +50,7 @@ class VirtualPage extends View
             throw new \TypeError('$fx must be of type Closure');
         }
 
-        $this->cb->set($fx, array_merge([$this], $fxArgs));
+        $this->cb->set($fx, [$this, ...$fxArgs]);
 
         return $this;
     }

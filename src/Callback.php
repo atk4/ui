@@ -62,8 +62,8 @@ class Callback extends AbstractView
     /**
      * Executes user-specified action when call-back is triggered.
      *
-     * @param \Closure $fx
-     * @param array    $fxArgs
+     * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): mixed $fx
+     * @param array                                                                                 $fxArgs
      *
      * @return mixed
      */

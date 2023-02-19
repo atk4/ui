@@ -8,10 +8,12 @@ use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
-use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 
+/**
+ * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
+ */
 class Table extends Lister
 {
     public $ui = 'table';
@@ -302,16 +304,16 @@ class Table extends Lister
      * The callback function will receive two parameter, a Jquery chain object and a array containing all table columns
      * name and size.
      *
-     * @param \Closure        $fx             a callback function with columns widths as parameter
-     * @param array<int, int> $widths         ex: [100, 200, 300, 100]
-     * @param array           $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
+     * @param \Closure(Jquery, mixed): (JsExpressionable|View|string|void) $fx             a callback function with columns widths as parameter
+     * @param array<int, int>                                              $widths         ex: [100, 200, 300, 100]
+     * @param array                                                        $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
      *
      * @return $this
      */
     public function resizableColumn($fx = null, $widths = null, $resizerOptions = [])
     {
         $options = [];
-        if ($fx instanceof \Closure) {
+        if ($fx !== null) {
             $cb = JsCallback::addTo($this);
             $cb->set(function (Jquery $chain, string $data) use ($fx) {
                 return $fx($chain, $this->getApp()->decodeJson($data));
@@ -503,7 +505,7 @@ class Table extends Lister
      * click outside of the body. Additionally when you move cursor over the
      * rows, pointer will be used and rows will be highlighted as you hover.
      *
-     * @param JsChain|\Closure|JsExpressionable $action Code to execute
+     * @param JsExpressionable|JsCallbackSetClosure $action Code to execute
      */
     public function onRowClick($action): void
     {
