@@ -40,17 +40,17 @@ class VirtualPage extends View
      * Set callback function of virtual page.
      *
      * @param \Closure $fx
-     * @param array    $args arguments for \Closure
+     * @param array    $fxArgs
      *
      * @return $this
      */
-    public function set($fx = null, $args = [])
+    public function set($fx = null, $fxArgs = [])
     {
         if (!$fx instanceof \Closure) {
-            throw new Exception('Virtual page requires a Closure');
+            throw new \TypeError('$fx must be of type Closure');
         }
 
-        $this->cb->set($fx, array_merge([$this], $args));
+        $this->cb->set($fx, array_merge([$this], $fxArgs));
 
         return $this;
     }

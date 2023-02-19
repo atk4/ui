@@ -78,7 +78,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
     public function set($fx = null, $event = null)
     {
         if (!$fx instanceof \Closure) {
-            throw new Exception('Please specify the $callback argument');
+            throw new \TypeError('$fx must be of type Closure');
         }
 
         if ($event !== null) {

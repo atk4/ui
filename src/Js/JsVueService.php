@@ -7,8 +7,7 @@ namespace Atk4\Ui\Js;
 use Atk4\Core\WarnDynamicPropertyTrait;
 
 /**
- * Shortcut handler for calling method of
- * the atk javascript vue service.
+ * Shortcut handler for calling method of the atk JS vue service.
  */
 class JsVueService
 {

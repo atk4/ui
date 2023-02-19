@@ -7,9 +7,6 @@ namespace Atk4\Ui\Js;
 use Atk4\Core\DiContainerTrait;
 use Atk4\Ui\Form;
 
-/**
- * Implements conditions for displaying fields on form.
- */
 class JsConditionalForm implements JsExpressionable
 {
     use DiContainerTrait;
@@ -18,7 +15,7 @@ class JsConditionalForm implements JsExpressionable
     public $form;
 
     /** @var array|null The field rules for that form. */
-    public $fieldRules = [];
+    public $fieldRules;
 
     /** @var string The html class name parent for input. */
     public $selector;

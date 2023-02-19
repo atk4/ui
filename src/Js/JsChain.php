@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Atk4\Ui\Js;
 
 /**
- * Implements a transparent mapper that will actually translate into JavaScript code. Used
- * as a GLUE between Views and your actual JavaScript code.
+ * Transparent mapper that will actually translate into JavaScript code. Used
+ * as a glue between Views and your actual JavaScript code.
  *
+ * IMPORTANT: all methods in this class are prepended with '_', to avoid clashes with js-mapping
  * IMPORTANT: extend first, see Jquery class for example
- * IMPORTANT: all methods in this class are pre-pended with '_', to avoid clashes with js-mapping
  */
 class JsChain extends JsExpression
 {
@@ -18,12 +18,10 @@ class JsChain extends JsExpression
 
     /**
      * This will represent constructor argument. If no arguments are set, then the library will be executed like this:.
-     *
-     * $.hello();
+     * $.hello().
      *
      * If arguments are specified they are passed to constructor initializer:
-     *
-     * $('foo', 'bar').hello();
+     * $('foo', 'bar').hello().
      *
      * @var array
      */
@@ -34,13 +32,9 @@ class JsChain extends JsExpression
      * is also stored here.
      *
      * $js->foo()->bar(1)->baz->test(['abc' => 123']);
-     *
      * will be stored in $chain as
-     *
      * [['foo'], ['bar', [1]], 'baz', ['test', ['abc => 123]]]
-     *
      * will map into:
-     *
      * $.foo().bar(1).baz.test({ abc: 123 ]);
      *
      * @var array

@@ -126,13 +126,14 @@ class Popup extends View
      * for adding content to it.
      *
      * @param \Closure $fx
+     * @param never    $ignore
      *
      * @return $this
      */
     public function set($fx = null, $ignore = null)
     {
         if (!$fx instanceof \Closure) {
-            throw new Exception('Need to pass a function to Popup::set()');
+            throw new \TypeError('$fx must be of type Closure');
         } elseif (func_num_args() > 1) {
             throw new Exception('Only one argument is needed by Popup::set()');
         }

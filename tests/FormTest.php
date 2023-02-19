@@ -45,6 +45,10 @@ class FormTest extends TestCase
         static::assertSame($f->getControl('test'), $f->layout->getControl('test'));
     }
 
+    /**
+     * @param \Closure(Model): void  $submitFx
+     * @param \Closure(string): void $checkExpectedErrorsFx
+     */
     public function assertSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
     {
         $wasSubmitCalled = false;

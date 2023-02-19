@@ -53,19 +53,11 @@ class DropdownCascade extends Dropdown
         $this->cascadeFrom->onChange($expr, ['args' => [$this->cascadeFrom->name => $this->cascadeFrom->jsInput()->val()]]);
     }
 
-    /**
-     * Allow initializing CascadeDropdown with preset value.
-     *
-     * @param mixed $value The initial ID value to set this dropdown using reference model values
-     * @param mixed $junk
-     *
-     * @return $this
-     */
-    public function set($value = null, $junk = null)
+    public function set($value = null, $ignore = null)
     {
         $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($this->cascadeFrom->entityField->get()), $value);
 
-        return parent::set($value, $junk);
+        return parent::set($value, $ignore);
     }
 
     /**

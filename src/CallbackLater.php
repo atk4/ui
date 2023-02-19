@@ -16,14 +16,14 @@ class CallbackLater extends Callback
      * Executes user-specified action before rendering or if App is
      * already in rendering state, then before output.
      */
-    public function set($fx = null, $args = null)
+    public function set($fx = null, $fxArgs = null)
     {
         if ($this->getApp()->isRendering) {
-            return parent::set($fx, $args);
+            return parent::set($fx, $fxArgs);
         }
 
-        $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () use ($fx, $args) {
-            return parent::set($fx, $args);
+        $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () use ($fx, $fxArgs) {
+            return parent::set($fx, $fxArgs);
         });
 
         return null;

@@ -6,9 +6,6 @@ namespace Atk4\Ui\Js;
 
 use Atk4\Core\WarnDynamicPropertyTrait;
 
-/**
- * Implements structure for js closure.
- */
 class JsFunction implements JsExpressionable
 {
     use WarnDynamicPropertyTrait;

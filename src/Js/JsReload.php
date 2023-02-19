@@ -8,7 +8,7 @@ use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Ui\View;
 
 /**
- * This class generates action, that will be able to loop-back to the callback method.
+ * Generates action, that will be able to loop-back to the callback method.
  */
 class JsReload implements JsExpressionable
 {

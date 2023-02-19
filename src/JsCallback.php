@@ -80,6 +80,10 @@ class JsCallback extends Callback
      */
     public function set($fx = null, $args = null)
     {
+        if (!$fx instanceof \Closure) {
+            throw new \TypeError('$fx must be of type Closure');
+        }
+
         $this->args = [];
         foreach ($args ?? [] as $key => $val) {
             if (is_int($key)) {
@@ -155,6 +159,7 @@ class JsCallback extends Callback
                 if ($r === null) {
                     continue;
                 }
+
                 $actions[] = $this->_getProperAction($r);
             }
         } else {

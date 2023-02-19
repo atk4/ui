@@ -91,11 +91,11 @@ class Control extends View
      * the model, then the model's value will also be affected.
      *
      * @param mixed $value
-     * @param mixed $junk
+     * @param never $ignore
      *
      * @return $this
      */
-    public function set($value = null, $junk = null)
+    public function set($value = null, $ignore = null)
     {
         if ($this->entityField) {
             $this->entityField->set($value);

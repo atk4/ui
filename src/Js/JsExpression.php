@@ -9,19 +9,18 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Exception;
 use Atk4\Ui\View;
 
-/**
- * Implements a class that can be mapped into arbitrary JavaScript expression.
- */
 class JsExpression implements JsExpressionable
 {
     use DiContainerTrait;
 
-    /** @var string */
-    public $template;
+    public string $template;
 
-    /** @var array */
-    public $args = [];
+    /** @var array<int|string, mixed> */
+    public array $args;
 
+    /**
+     * @param array<int|string, mixed> $args
+     */
     public function __construct(string $template = '', array $args = [])
     {
         $this->template = $template;
