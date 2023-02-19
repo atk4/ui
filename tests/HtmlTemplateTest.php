@@ -176,4 +176,13 @@ class HtmlTemplateTest extends TestCase
         ]);
         static::assertSameTemplate('{foo}Hello{/} guys and {bar}welcome{/} here', $t);
     }
+
+    public function testTagNotDefinedException(): void
+    {
+        $t = new HtmlTemplate('{$foo}');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Tag is not defined in template');
+        $t->set('bar', 'test');
+    }
 }

@@ -121,6 +121,20 @@ class JsTest extends TestCase
         static::assertSame('$myInput.getTextInRange(getStart(), \'end\')', $c->jsRender());
     }
 
+    public function testChainNameStartingWithDigit(): void
+    {
+        $c = new JsChain('$myInput');
+        $c->{'1x'}(2);
+        static::assertSame('$myInput[\'1x\'](2)', $c->jsRender());
+    }
+
+    public function testChainNameWithDot(): void
+    {
+        $c = new JsChain('$myInput');
+        $c->{'x.y'}(2);
+        static::assertSame('$myInput[\'x.y\'](2)', $c->jsRender());
+    }
+
     public function testJquery(): void
     {
         $c = new Jquery('.mytag');
@@ -153,6 +167,15 @@ class JsTest extends TestCase
                     $('.box1').height($('.box2').height());
                 })
             EOF, $fx->jsRender());
+    }
+
+    public function testTagNotDefinedRenderException(): void
+    {
+        $js = new JsExpression('[foo]', ['foo']);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Tag is not defined in template');
+        $js->jsRender();
     }
 
     public function testUnsupportedTypeRenderException(): void
