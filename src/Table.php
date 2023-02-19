@@ -305,8 +305,8 @@ class Table extends Lister
      * name and size.
      *
      * @param \Closure(Jquery, mixed): (JsExpressionable|View|string|void) $fx             a callback function with columns widths as parameter
-     * @param array<int, int>                                              $widths         ex: [100, 200, 300, 100]
-     * @param array                                                        $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
+     * @param array<int, int> $widths         ex: [100, 200, 300, 100]
+     * @param array           $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
      *
      * @return $this
      */

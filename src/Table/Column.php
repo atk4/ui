@@ -125,6 +125,7 @@ class Column
     /**
      * Add a dropdown header menu.
      *
+     * @param \Closure(string, string): (JsExpressionable|View|string|void) $fx
      * @param string      $icon
      * @param string|null $menuId the menu name
      */

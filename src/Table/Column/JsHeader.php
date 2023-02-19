@@ -13,6 +13,8 @@ class JsHeader extends JsCallback
 {
     /**
      * Function to call when header menu item is select.
+     *
+     * @param \Closure(string|null, string|null): (JsExpressionable|View|string|void) $fx
      */
     public function onSelectItem(\Closure $fx): void
     {
