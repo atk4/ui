@@ -36,6 +36,16 @@ class JsBlock implements JsExpressionable
         $this->statements[] = $statement;
     }
 
+    /**
+     * @param list<JsExpressionable|null>|JsExpressionable|null $value
+     *
+     * @return static
+     */
+    public static function fromHookResult($value)
+    {
+        return new static(is_array($value) ? $value : [$value]);
+    }
+
     public function jsRender(): string
     {
         $output = '';

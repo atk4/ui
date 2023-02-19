@@ -202,8 +202,8 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             $this->jsHide(),
             $this->ok->js(true)->off(),
             $this->cancel->js(true)->off(),
-            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
-                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : ''))),
+            JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
         ]);
     }
 }
