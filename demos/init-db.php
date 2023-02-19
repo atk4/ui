@@ -45,6 +45,9 @@ trait ModelPreventModificationTrait
         return $res;
     }
 
+    /**
+     * @param \Closure(Model): string $outputCallback
+     */
     protected function wrapUserActionCallbackPreventModification(Model\UserAction $action, \Closure $outputCallback): void
     {
         $originalCallback = $action->callback;

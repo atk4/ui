@@ -17,6 +17,8 @@ use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**
  * Base view of all UI components.
+ *
+ * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
  */
 class View extends AbstractView
 {
@@ -769,10 +771,6 @@ class View extends AbstractView
      * Will convert calls to jQuery chain into JavaScript string:
      *  $('#view').find('.current').text('abc'); // the text will be JSON encoded to avoid JS injection
      *
-     * Documentation:
-     *
-     * @see http://agile-ui.readthedocs.io/en/latest/js.html
-     *
      * @param bool|string $when Event when chain will be executed
      * @param ($when is false ? null : JsExpressionable|null) $action   JavaScript action
      * @param string|self|null $selector If you wish to override jQuery($selector)
@@ -955,13 +953,9 @@ class View extends AbstractView
      *   return $js->parent()->hide();
      * });
      *
-     * For more information on how this works, see documentation:
-     *
-     * @see http://agile-ui.readthedocs.io/en/latest/js.html
-     *
      * @param string $event JavaScript event
-     * @param ($action is null|array ? string|JsExpressionable|JsCallback|\Closure|array|UserAction\ExecutorInterface|Model\UserAction : string|array) $selector Optional jQuery-style selector
-     * @param string|JsExpressionable|JsCallback|\Closure|array|UserAction\ExecutorInterface|Model\UserAction|null $action code to execute
+     * @param ($action is null|array ? string|JsExpressionable|JsCallback|JsCallbackSetClosure|array|UserAction\ExecutorInterface|Model\UserAction : string|array) $selector Optional jQuery-style selector
+     * @param string|JsExpressionable|JsCallback|JsCallbackSetClosure|array|UserAction\ExecutorInterface|Model\UserAction|null $action code to execute
      *
      * @return ($selector is null|string ? ($action is null ? Jquery : null) : ($action is null|array ? Jquery : null))
      */
@@ -1002,6 +996,9 @@ class View extends AbstractView
             return new class($fx) implements JsExpressionable {
                 public \Closure $fx;
 
+                /**
+                 * @param \Closure(JsExpressionable): JsExpressionable $fx
+                 */
                 public function __construct(\Closure $fx)
                 {
                     $this->fx = $fx;

@@ -320,8 +320,6 @@ class Form extends View
      * @param View|string $success     Success message or a View to display in modal
      * @param string      $subHeader   Sub-header
      * @param bool        $useTemplate Backward compatibility
-     *
-     * @return JsChain
      */
     public function success($success = 'Success', $subHeader = null, bool $useTemplate = true): JsExpressionable
     {

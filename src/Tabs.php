@@ -15,8 +15,8 @@ class Tabs extends View
     public $activeTabName;
 
     /**
-     * @param string|TabsTab $name
-     * @param \Closure       $callback Callback action or URL (or array with url + parameters)
+     * @param string|TabsTab                                                                       $name
+     * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $callback
      *
      * @return View
      */
