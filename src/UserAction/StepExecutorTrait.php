@@ -255,7 +255,7 @@ trait StepExecutorTrait
 
         $return = $this->action->execute(...$this->getActionArgs($this->getActionData('args')));
 
-        $this->jsSequencer($page, $this->jsGetExecute($return, $this->action->getEntity()->getId()));
+        $page->js(true, $this->jsGetExecute($return, $this->action->getEntity()->getId()));
     }
 
     /**
@@ -514,22 +514,6 @@ trait StepExecutorTrait
         }
 
         return $args;
-    }
-
-    /**
-     * Create a sequence of js statement for a view.
-     *
-     * @param array|JsExpressionable $js
-     */
-    protected function jsSequencer(View $view, $js): void
-    {
-        if (is_array($js)) {
-            foreach ($js as $jq) {
-                $this->jsSequencer($view, $jq);
-            }
-        } else {
-            $view->js(true, $js);
-        }
     }
 
     protected function handleException(\Throwable $exception, View $view, string $step): void

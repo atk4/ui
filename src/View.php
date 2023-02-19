@@ -1066,13 +1066,13 @@ class View extends AbstractView
 
             if ($ex instanceof UserAction\SharedExecutor) {
                 $setupNonSharedExecutorFx($ex->getExecutor());
-                $actions = $ex->getExecutor() instanceof UserAction\JsCallbackExecutor
-                    ? [$lazyJsRenderFx(fn () => $ex->jsExecute($arguments)[0])]
-                    : $ex->jsExecute($arguments);
+                $actions = [$ex->getExecutor() instanceof UserAction\JsCallbackExecutor
+                    ? $lazyJsRenderFx(fn () => $ex->jsExecute($arguments))
+                    : $ex->jsExecute($arguments)];
             } elseif ($ex instanceof UserAction\JsExecutorInterface && $ex instanceof self) {
                 $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction();
-                $actions = $ex->jsExecute($arguments);
+                $actions = [$ex->jsExecute($arguments)];
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
                 $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction();

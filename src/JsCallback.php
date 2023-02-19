@@ -34,25 +34,6 @@ class JsCallback extends Callback
      */
     public $triggerOnReload = false;
 
-    /**
-     * When multiple JsExpressionable's are collected inside an array and may
-     * have some degree of nesting, convert it into a one-dimensional array,
-     * so that it's easier for us to wrap it into a function body.
-     */
-    protected function flattenArray(array $response): array
-    {
-        $res = [];
-        foreach ($response as $element) {
-            if (is_array($element)) {
-                $res = array_merge($res, $this->flattenArray($element));
-            } else {
-                $res[] = $element;
-            }
-        }
-
-        return $res;
-    }
-
     public function jsExecute(): JsBlock
     {
         $this->assertIsInitialized();
@@ -143,8 +124,8 @@ class JsCallback extends Callback
     /**
      * Provided with a $response from callbacks convert it into a JavaScript code.
      *
-     * @param JsExpressionable|View|string|list<JsExpressionable|View|string>|null $response response from callbacks,
-     * @param JsChain                                                              $chain
+     * @param JsExpressionable|View|string|list<JsExpressionable|View|string|null>|null $response response from callbacks,
+     * @param JsChain                                                                   $chain
      */
     public function getAjaxec($response, $chain = null): string
     {
@@ -155,7 +136,6 @@ class JsCallback extends Callback
         }
 
         if (is_array($response)) {
-            $response = $this->flattenArray($response);
             foreach ($response as $r) {
                 if ($r === null) {
                     continue;
@@ -167,9 +147,7 @@ class JsCallback extends Callback
             $actions[] = $this->_getProperAction($response);
         }
 
-        $ajaxec = implode(";\n", array_map(function (JsExpressionable $r) {
-            return $r->jsRender();
-        }, $actions));
+        $ajaxec = (new JsBlock($actions))->jsRender();
 
         return $ajaxec;
     }

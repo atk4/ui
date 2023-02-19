@@ -224,8 +224,8 @@ class CardDeck extends View
     {
         if (is_string($return)) {
             return $this->jsCreateNotifier($action, $return);
-        } elseif (is_array($return) || $return instanceof JsExpressionable) {
-            return $return;
+        } elseif ($return instanceof JsExpressionable) {
+            return $return; // @phpstan-ignore-line
         } elseif ($return instanceof Model) {
             if ($return->isEntity()) {
                 $action = $action->getActionForEntity($return);

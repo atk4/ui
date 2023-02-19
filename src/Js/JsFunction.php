@@ -13,8 +13,8 @@ class JsFunction implements JsExpressionable
     /** @var list<string> */
     public array $args;
 
-    /** @var array<int, JsExpressionable> */
-    public array $statements;
+    /** @var JsBlock */
+    public JsExpressionable $body;
 
     /** Add event.preventDefault() to generated method */
     public bool $preventDefault = false;
@@ -23,26 +23,28 @@ class JsFunction implements JsExpressionable
     public bool $stopPropagation = false;
 
     /** Indent of target code (not one indent level) */
-    public string $indent = '    ';
+    public string $indent = '';
 
     /**
-     * @param array<int, JsExpressionable|null>|array<string, mixed> $statements
+     * @param JsBlock|array<int, JsExpressionable|null>|array<string, mixed> $statements
      */
-    public function __construct(array $args, array $statements)
+    public function __construct(array $args, $statements)
     {
         $this->args = $args;
 
-        $this->statements = [];
-        foreach ($statements as $key => $value) {
-            if (is_int($key)) {
-                if ($value === null) { // TODO this should be not needed
-                    continue;
+        if ($statements instanceof JsBlock) {
+            $this->body = $statements;
+        } else {
+            foreach ($statements as $key => $value) {
+                if (is_string($key)) {
+                    $this->{$key} = $value;
+                    unset($statements[$key]);
+                } elseif ($value === null) { // TODO this should be not needed
+                    unset($statements[$key]);
                 }
-
-                $this->statements[] = $value;
-            } else {
-                $this->{$key} = $value;
             }
+
+            $this->body = new JsBlock($statements);
         }
     }
 
@@ -51,22 +53,17 @@ class JsFunction implements JsExpressionable
         $pre = '';
         if ($this->preventDefault) {
             $this->args = ['event'];
-            $pre .= "\n" . $this->indent . '    event.preventDefault();';
+            $pre .= $this->indent . '    event.preventDefault();' . "\n";
         }
         if ($this->stopPropagation) {
             $this->args = ['event'];
-            $pre .= "\n" . $this->indent . '    event.stopPropagation();';
+            $pre .= $this->indent . '    event.stopPropagation();' . "\n";
         }
 
-        $output = 'function (' . implode(', ', $this->args) . ') {'
-            . $pre;
-        foreach ($this->statements as $statement) {
-            $js = $statement->jsRender();
-
-            $output .= "\n" . $this->indent . '    ' . $js . (!preg_match('~[;}]\s*$~', $js) ? ';' : '');
-        }
-
-        $output .= "\n" . $this->indent . '}';
+        $output = $this->indent . 'function (' . implode(', ', $this->args) . ') {' . "\n"
+            . $pre
+            . preg_replace('~^~m', $this->indent . '    ', $this->body->jsRender()) . "\n" // TODO IMPORTANT indentation must ignore multiline strings/comments!
+            . $this->indent . '}';
 
         return $output;
     }

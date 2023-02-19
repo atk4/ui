@@ -8,6 +8,7 @@ use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\App;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsFunction;
@@ -164,8 +165,8 @@ class JsTest extends TestCase
 
         static::assertSame(<<<'EOF'
             $(document).first(function () {
-                    $('.box1').height($('.box2').height());
-                })
+                $('.box1').height($('.box2').height());
+            })
             EOF, $fx->jsRender());
     }
 
@@ -185,5 +186,34 @@ class JsTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('not renderable to JS');
         $js->jsRender();
+    }
+
+    public function testBlockBasic(): void
+    {
+        $js = new JsBlock([
+            new JsExpression('a()'),
+            new JsExpression('b([])', ['foo']),
+        ]);
+
+        static::assertSame(<<<'EOF'
+            a();
+            b('foo');
+            EOF, $js->jsRender());
+    }
+
+    public function testBlockInvalidStringTypeException(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage((\PHP_MAJOR_VERSION === 7 ? 'must implement interface' : 'must be of type') . ' Atk4\Ui\Js\JsExpressionable, string given');
+        new JsBlock(['a()']); // @phpstan-ignore-line
+    }
+
+    public function testBlockInvalidArrayTypeException(): void
+    {
+        $js = new JsExpression('a()');
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage((\PHP_MAJOR_VERSION === 7 ? 'must implement interface' : 'must be of type') . ' Atk4\Ui\Js\JsExpressionable, array given');
+        new JsBlock([[$js]]); // @phpstan-ignore-line
     }
 }

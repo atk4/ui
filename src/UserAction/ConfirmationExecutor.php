@@ -183,7 +183,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     {
         $return = $this->action->execute([]);
 
-        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->getEntity()->getId()));
+        $modal->js(true, $this->jsGetExecute($return, $this->action->getEntity()->getId()));
     }
 
     /**
@@ -205,21 +205,5 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
                 ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : ''))),
         ]);
-    }
-
-    /**
-     * Create a sequence of js statement for a view.
-     *
-     * @param array|JsExpressionable $js
-     */
-    private function _jsSequencer(View $view, $js): void
-    {
-        if (is_array($js)) {
-            foreach ($js as $jq) {
-                $this->_jsSequencer($view, $jq);
-            }
-        } else {
-            $view->js(true, $js);
-        }
     }
 }
