@@ -757,7 +757,7 @@ class Multiline extends Form\Control
         $formatValues = [];
 
         foreach ($dummyFields as $k => $field) {
-            if (!is_callable($field->expr)) {
+            if (!$field->expr instanceof \Closure) {
                 $dummyFields[$k]->expr = $this->getDummyExpression($field, $model);
             }
         }

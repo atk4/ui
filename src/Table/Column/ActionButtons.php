@@ -22,7 +22,7 @@ class ActionButtons extends Table\Column
     /** @var array Stores all the buttons that have been added. */
     public $buttons = [];
 
-    /** @var array Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
+    /** @var array<string, \Closure> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
     protected $callbacks = [];
 
     protected function init(): void
@@ -55,9 +55,7 @@ class ActionButtons extends Table\Column
 
         if ($isDisabled === true) {
             $button->addClass('disabled');
-        }
-
-        if (is_callable($isDisabled)) {
+        } elseif ($isDisabled !== false) {
             $this->callbacks[$name] = $isDisabled;
         }
 

@@ -22,7 +22,7 @@ class ActionMenu extends Table\Column
     /** @var array Menu items collections. */
     protected $items = [];
 
-    /** @var array Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
+    /** @var array<string, \Closure> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
     protected $callbacks = [];
 
     /**
@@ -75,9 +75,7 @@ class ActionMenu extends Table\Column
 
         if ($isDisabled === true) {
             $item->addClass('disabled');
-        }
-
-        if (is_callable($isDisabled)) {
+        } elseif ($isDisabled !== false) {
             $this->callbacks[$name] = $isDisabled;
         }
 

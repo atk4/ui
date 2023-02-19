@@ -160,7 +160,7 @@ class ExecutorFactory
             $seed = $seed = $this->executorSeed[$this->getModelKey($action)][$action->shortName] ?? null;
             if ($seed === null) {
                 // if no type is register, determine executor to use base on action properties
-                if (is_callable($action->confirmation)) {
+                if ($action->confirmation instanceof \Closure) {
                     $seed = $this->executorSeed[self::CONFIRMATION_EXECUTOR];
                 } else {
                     $seed = (!$action->args && !$action->fields && !$action->preview)
