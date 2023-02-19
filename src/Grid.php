@@ -481,11 +481,11 @@ class Grid extends View
     /**
      * Add a dropdown menu to header column.
      *
-     * @param string                                                $columnName the name of column where to add dropdown
-     * @param array                                                 $items      the menu items to add
-     * @param \Closure(string): (JsExpressionable|View|string|void) $fx         the callback function to execute when an item is selected
-     * @param string                                                $icon       the icon
-     * @param string                                                $menuId     the menu id return by callback
+     * @param string $columnName the name of column where to add dropdown
+     * @param array  $items      the menu items to add
+     * @param \Closure(string): (JsExpressionable|View|string|void) $fx the callback function to execute when an item is selected
+     * @param string $icon   the icon
+     * @param string $menuId the menu id return by callback
      */
     public function addDropdown(string $columnName, $items, \Closure $fx, $icon = 'caret square down', $menuId = null): void
     {
