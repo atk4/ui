@@ -201,6 +201,30 @@ class JsTest extends TestCase
             EOF, $js->jsRender());
     }
 
+    public function testBlockEndSemicolon(): void
+    {
+        $js = new JsBlock([
+            new JsExpression('a()'),
+            new JsExpression('b();'),
+            new JsExpression('let fx = () => { a(); b(); }'),
+            new JsExpression(''),
+            new JsBlock([]),
+            new class([]) extends JsBlock {
+                public function jsRender(): string
+                {
+                    return 'if (foo) { a(); }';
+                }
+            },
+        ]);
+
+        static::assertSame(<<<'EOF'
+            a();
+            b();
+            let fx = () => { a(); b(); };
+            if (foo) { a(); }
+            EOF, $js->jsRender());
+    }
+
     public function testBlockInvalidStringTypeException(): void
     {
         $this->expectException(\TypeError::class);

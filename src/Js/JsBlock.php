@@ -51,7 +51,9 @@ class JsBlock implements JsExpressionable
         $output = '';
         foreach ($this->statements as $statement) {
             $js = $statement->jsRender();
-            if (!preg_match('~[;}]\s*$~', $js)) {
+            if ($js === '') {
+                continue;
+            } elseif (!$statement instanceof self && !preg_match('~;\s*$~s', $js)) {
                 $js .= ';';
             }
 
