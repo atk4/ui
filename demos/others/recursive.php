@@ -13,7 +13,6 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/** @var View $mySwitcherClass */
 $mySwitcherClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
     protected function init(): void
     {

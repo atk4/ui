@@ -52,7 +52,7 @@ class CardDeck extends View
     /** @var int The number of cards to be displayed per page. */
     public $ipp = 9;
 
-    /** @var Menu|false Will be initialized to Menu object, however you can set this to false to disable menu. */
+    /** @var Menu|array|false Will be initialized to Menu object, however you can set this to false to disable menu. */
     public $menu;
 
     /** @var array|VueComponent\ItemSearch|false */

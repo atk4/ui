@@ -27,8 +27,8 @@ $msg->text->addHtml('Override Executor class may be applied globally, via the Ap
 
 $msg->text->addParagraph('In this example, Crud and Card button was changed and set through the App instance.');
 
-// Overriding basic ExecutorFactory in order to change Table and Modal button.
-// and also changing default add action label.
+// overriding basic ExecutorFactory in order to change Table and Modal button
+// and also changing default add action label
 $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends ExecutorFactory {
     public $buttonPrimaryColor = 'green';
 

@@ -32,7 +32,6 @@ require_once __DIR__ . '/../init-app.php';
  * render the items.
  */
 
-/** @var Lister $cartClass */
 $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lister {
     use SessionTrait;
 
@@ -104,7 +103,6 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
  * item inside a cart reloading it afterwards.
  */
 
-/** @var View $itemShelfClass */
 $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
     public $ui = 'green segment';
 
