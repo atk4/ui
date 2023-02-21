@@ -32,7 +32,7 @@ $img->onDelete(function (string $fileId) use ($img) {
 
 $img->onUpload(function (array $postFile) use ($form, $img) {
     if ($postFile['error'] !== 0) {
-        return $form->error('img', 'Error uploading image.');
+        return $form->jsError('img', 'Error uploading image.');
     }
 
     $img->setThumbnailSrc($img->getApp()->cdn['atk'] . '/logo.png');
@@ -45,7 +45,7 @@ $img->onUpload(function (array $postFile) use ($form, $img) {
 
     // js Action can be return.
     // if using form, can return an error to form control directly.
-    // return $form->error('file', 'Unable to upload file.');
+    // return $form->jsError('file', 'Unable to upload file.');
 
     // can also return a notifier.
     return new JsToast([
@@ -65,7 +65,7 @@ $control->onDelete(function (string $fileId) {
 
 $control->onUpload(function (array $postFile) use ($form, $control) {
     if ($postFile['error'] !== 0) {
-        return $form->error('file', 'Error uploading file.');
+        return $form->jsError('file', 'Error uploading file.');
     }
     $control->setFileId('a_token');
 
@@ -87,5 +87,5 @@ $control->onUpload(function (array $postFile) use ($form, $control) {
 
 $form->onSubmit(function (Form $form) {
     // implement submission here
-    return $form->success('Thanks for submitting file: ' . $form->model->get('img') . ' / ' . $form->model->get('file'));
+    return $form->jsSuccess('Thanks for submitting file: ' . $form->model->get('img') . ' / ' . $form->model->get('file'));
 });

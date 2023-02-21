@@ -526,7 +526,7 @@ The following will **not** work::
 
         return [
             $table->jsReload(),
-            $form->success('ok'),
+            $form->jsSuccess('ok'),
         ];
     });
 
@@ -551,7 +551,7 @@ Table needs to be first! The following works::
 
         return [
             $table->jsReload(),
-            $form->success('ok'),
+            $form->jsSuccess('ok'),
         ];
     });
 
@@ -572,7 +572,7 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
 
             return [
                 $table->jsReload(),
-                $form->success('ok'),
+                $form->jsSuccess('ok'),
             ];
         });
     });

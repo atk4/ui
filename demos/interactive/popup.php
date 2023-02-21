@@ -258,7 +258,7 @@ $signup->set(function (View $pop) {
         // perfectly inside a popup.
         $form->onSubmit(function (Form $form) {
             if ($form->model->get('password') !== '123') {
-                return $form->error('password', 'Please use password "123"');
+                return $form->jsError('password', 'Please use password "123"');
             }
 
             // refreshes entire page

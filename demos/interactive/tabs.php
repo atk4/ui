@@ -56,7 +56,7 @@ $tabs->addTab('Dynamic Form', function (VirtualPage $vp) {
     $form->setModel($modelRegister->createEntity());
     $form->onSubmit(function (Form $form) {
         if ($form->model->get('name') !== 'John') {
-            return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
+            return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
         }
     });
 });

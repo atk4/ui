@@ -81,7 +81,7 @@ class Form extends View
 
     /**
      * When form is submitted successfully, this template is used by method
-     * success() to replace form contents.
+     * jsSuccess() to replace form contents.
      *
      * WARNING: may be removed in the future as we refactor into using Message class
      *          and remove the form-success.html template then.
@@ -265,7 +265,7 @@ class Form extends View
                         throw $e;
                     }
 
-                    $response->addStatement($this->error($field, $error));
+                    $response->addStatement($this->jsError($field, $error));
                 }
 
                 return $response;
@@ -290,7 +290,7 @@ class Form extends View
      *
      * @param string $errorMessage
      */
-    public function error(string $fieldName, $errorMessage): JsExpressionable
+    public function jsError(string $fieldName, $errorMessage): JsExpressionable
     {
         // by using this hook you can overwrite default behavior of this method
         if ($this->hookHasCallbacks(self::HOOK_DISPLAY_ERROR)) {
@@ -307,7 +307,7 @@ class Form extends View
      * @param string      $subHeader   Sub-header
      * @param bool        $useTemplate Backward compatibility
      */
-    public function success($success = 'Success', $subHeader = null, bool $useTemplate = true): JsExpressionable
+    public function jsSuccess($success = 'Success', $subHeader = null, bool $useTemplate = true): JsExpressionable
     {
         $response = null;
         // by using this hook you can overwrite default behavior of this method
