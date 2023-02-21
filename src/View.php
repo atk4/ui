@@ -7,6 +7,7 @@ namespace Atk4\Ui;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
@@ -1012,14 +1013,11 @@ class View extends AbstractView
 
         // dealing with callback action
         if ($action instanceof \Closure || (is_array($action) && ($action[0] ?? null) instanceof \Closure)) {
-            $actions = [];
             if (is_array($action)) {
-                $urlData = $action;
-                unset($urlData[0]);
-                foreach ($urlData as $a) {
-                    $actions[] = $a;
-                }
+                $js = new JsBlock(array_diff_key($action, [true]));
                 $action = $action[0];
+            } else {
+                $js = new JsBlock();
             }
 
             // create callback, that will include event as part of the full name
@@ -1032,7 +1030,7 @@ class View extends AbstractView
                 return $action($chain, ...$args);
             }, $arguments);
 
-            $actions[] = $lazyJsRenderFx(fn () => $cb->jsExecute());
+            $js->addStatement($lazyJsRenderFx(fn () => $cb->jsExecute()));
         } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof UserAction\SharedExecutor || $action instanceof Model\UserAction) {
             $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->createExecutor($action, $this) : $action;
 
@@ -1062,36 +1060,36 @@ class View extends AbstractView
 
             if ($ex instanceof UserAction\SharedExecutor) {
                 $setupNonSharedExecutorFx($ex->getExecutor());
-                $actions = [$ex->getExecutor() instanceof UserAction\JsCallbackExecutor
+                $js = $ex->getExecutor() instanceof UserAction\JsCallbackExecutor
                     ? $lazyJsRenderFx(fn () => $ex->jsExecute($arguments))
-                    : $ex->jsExecute($arguments)];
+                    : $ex->jsExecute($arguments);
             } elseif ($ex instanceof UserAction\JsExecutorInterface && $ex instanceof self) {
                 $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction();
-                $actions = [$ex->jsExecute($arguments)];
+                $js = $ex->jsExecute($arguments);
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
                 $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction();
-                $actions = [$lazyJsRenderFx(fn () => $ex->jsExecute($arguments))];
+                $js = $lazyJsRenderFx(fn () => $ex->jsExecute($arguments));
             } else {
                 throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or UserAction\JsExecutorInterface');
             }
         } elseif ($action instanceof JsCallback) {
-            $actions = [$lazyJsRenderFx(fn () => $action->jsExecute())];
+            $js = $lazyJsRenderFx(fn () => $action->jsExecute());
         } else {
-            $actions = [$action];
+            $js = $action;
         }
 
         // Do we need confirm action.
         if ($defaults['confirm'] ?? null) {
             array_unshift($eventStatements, new JsExpression('$.atkConfirm({ message: [confirm], onApprove: [action], options: { button: { ok: [ok], cancel: [cancel] } }, context: this })', [
                 'confirm' => $defaults['confirm'],
-                'action' => new JsFunction([], $actions),
+                'action' => new JsFunction([], [$js]),
                 'ok' => $defaults['ok'] ?? 'Ok',
                 'cancel' => $defaults['cancel'] ?? 'Cancel',
             ]));
         } else {
-            $eventStatements = array_merge($eventStatements, $actions);
+            $eventStatements = array_merge($eventStatements, [$js]);
         }
 
         $eventFunction = new JsFunction([], $eventStatements);
