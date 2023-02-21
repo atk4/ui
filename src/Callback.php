@@ -62,16 +62,18 @@ class Callback extends AbstractView
     /**
      * Executes user-specified action when call-back is triggered.
      *
-     * @param \Closure $fx
-     * @param array    $args
+     * @template T
      *
-     * @return mixed
+     * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): T $fx
+     * @param array                                                                             $fxArgs
+     *
+     * @phpstan-return T|null
      */
-    public function set($fx = null, $args = null)
+    public function set($fx = null, $fxArgs = null)
     {
         if ($this->isTriggered() && $this->canTrigger()) {
             try {
-                return $fx(...($args ?? []));
+                return $fx(...($fxArgs ?? []));
             } catch (\Exception $e) {
                 // catch and wrap an exception using a custom Error class to prevent "Callback requested, but never reached"
                 // exception which is hard to understand/locate as thrown from the main app context

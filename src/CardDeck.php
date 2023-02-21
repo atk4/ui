@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\UserAction\ExecutorFactory;
@@ -19,11 +20,10 @@ class CardDeck extends View
 {
     public $ui = 'basic segment atk-card-deck';
 
+    public $defaultTemplate = 'card-deck.html';
+
     /** @var class-string<View> Card type inside this deck. */
     public $card = Card::class;
-
-    /** @var string default template file. */
-    public $defaultTemplate = 'card-deck.html';
 
     /** @var bool Whether card should use table display or not. */
     public $useTable = false;
@@ -218,16 +218,14 @@ class CardDeck extends View
      * Return proper js statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      *
-     * @param string|JsExpressionable|array<int, JsExpressionable>|Model|null $return
-     *
-     * @return JsExpressionable|array<int, JsExpressionable>
+     * @param string|JsExpressionable|Model|null $return
      */
-    protected function jsExecute($return, Model\UserAction $action)
+    protected function jsExecute($return, Model\UserAction $action): JsBlock
     {
         if (is_string($return)) {
             return $this->jsCreateNotifier($action, $return);
-        } elseif (is_array($return) || $return instanceof JsExpressionable) {
-            return $return;
+        } elseif ($return instanceof JsExpressionable) {
+            return new JsBlock([$return]);
         } elseif ($return instanceof Model) {
             if ($return->isEntity()) {
                 $action = $action->getActionForEntity($return);
@@ -244,33 +242,31 @@ class CardDeck extends View
     /**
      * Override this method for setting notifier based on action or model value.
      */
-    protected function jsCreateNotifier(Model\UserAction $action, string $msg = null): JsExpressionable
+    protected function jsCreateNotifier(Model\UserAction $action, string $msg = null): JsBlock
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {
             $notifier->setMessage($msg);
         }
 
-        return $notifier;
+        return new JsBlock([$notifier]);
     }
 
     /**
-     * Js expression return when action afterHook executor return a Model.
-     *
-     * @return array<int, JsExpressionable>
+     * JS expression return when action afterHook executor return a Model.
      */
-    protected function jsModelReturn(Model\UserAction $action, string $msg = 'Done!'): array
+    protected function jsModelReturn(Model\UserAction $action, string $msg = 'Done!'): JsBlock
     {
-        $js = [];
-        $js[] = $this->jsCreateNotifier($action, $msg);
+        $res = new JsBlock();
+        $res->addStatement($this->jsCreateNotifier($action, $msg));
         $card = $action->getEntity()->isLoaded() ? $this->findCard($action->getEntity()) : null;
         if ($card !== null) {
-            $js[] = $card->jsReload($this->getReloadArgs());
+            $res->addStatement($card->jsReload($this->getReloadArgs()));
         } else {
-            $js[] = $this->container->jsReload($this->getReloadArgs());
+            $res->addStatement($this->container->jsReload($this->getReloadArgs()));
         }
 
-        return $js;
+        return $res;
     }
 
     /**

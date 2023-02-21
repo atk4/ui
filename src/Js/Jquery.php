@@ -81,14 +81,14 @@ namespace Atk4\Ui\Js;
  */
 class Jquery extends JsChain
 {
-    public $_library = '$';
+    public string $_library = '$';
 
     /**
      * @param mixed ...$constructorArgs arguments for JavaScript jQuery constructor
      */
     public function __construct(...$constructorArgs)
     {
-        parent::__construct();
+        parent::__construct($this->_library);
 
         if (count($constructorArgs) === 0) {
             $constructorArgs = [new JsExpression('this')];

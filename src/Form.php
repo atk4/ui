@@ -12,6 +12,7 @@ use Atk4\Data\Reference\ContainsMany;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Form\Control;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsConditionalForm;
 use Atk4\Ui\Js\JsExpression;
@@ -238,36 +239,33 @@ class Form extends View
     /**
      * Adds callback in submit hook.
      *
+     * @param \Closure($this): (JsExpressionable|View|string|void) $fx
+     *
      * @return $this
      */
-    public function onSubmit(\Closure $callback)
+    public function onSubmit(\Closure $fx)
     {
-        $this->onHook(self::HOOK_SUBMIT, $callback);
+        $this->onHook(self::HOOK_SUBMIT, $fx);
 
         $this->cb->set(function () {
             try {
                 $this->loadPost();
+
                 $response = $this->hook(self::HOOK_SUBMIT);
-
-                if (!$response) {
-                    if (!$this->model instanceof \Atk4\Ui\Misc\ProxyModel) {
-                        $this->model->save();
-
-                        return $this->success('Form data has been saved');
-                    }
-
-                    return new JsExpression('console.log([])', ['Form submission is not handled']);
+                // TODO JsBlock::fromHookResult() cannot be used here as long as the result can contain View
+                if (is_array($response) && count($response) === 1) {
+                    $response = reset($response);
                 }
 
                 return $response;
             } catch (ValidationException $e) {
-                $response = [];
+                $response = new JsBlock();
                 foreach ($e->errors as $field => $error) {
                     if (!isset($this->controls[$field])) {
                         throw $e;
                     }
 
-                    $response[] = $this->error($field, $error);
+                    $response->addStatement($this->error($field, $error));
                 }
 
                 return $response;
@@ -291,19 +289,15 @@ class Form extends View
      * Causes form to generate error.
      *
      * @param string $errorMessage
-     *
-     * @return JsChain|array<int, JsChain>
      */
-    public function error(string $fieldName, $errorMessage)
+    public function error(string $fieldName, $errorMessage): JsExpressionable
     {
         // by using this hook you can overwrite default behavior of this method
         if ($this->hookHasCallbacks(self::HOOK_DISPLAY_ERROR)) {
-            return $this->hook(self::HOOK_DISPLAY_ERROR, [$fieldName, $errorMessage]);
+            return JsBlock::fromHookResult($this->hook(self::HOOK_DISPLAY_ERROR, [$fieldName, $errorMessage]));
         }
 
-        $jsError = [$this->js()->form('add prompt', $fieldName, $errorMessage)];
-
-        return $jsError;
+        return new JsBlock([$this->js()->form('add prompt', $fieldName, $errorMessage)]);
     }
 
     /**
@@ -312,15 +306,13 @@ class Form extends View
      * @param View|string $success     Success message or a View to display in modal
      * @param string      $subHeader   Sub-header
      * @param bool        $useTemplate Backward compatibility
-     *
-     * @return JsChain
      */
-    public function success($success = 'Success', $subHeader = null, bool $useTemplate = true)
+    public function success($success = 'Success', $subHeader = null, bool $useTemplate = true): JsExpressionable
     {
         $response = null;
         // by using this hook you can overwrite default behavior of this method
         if ($this->hookHasCallbacks(self::HOOK_DISPLAY_SUCCESS)) {
-            return $this->hook(self::HOOK_DISPLAY_SUCCESS, [$success, $subHeader]);
+            return JsBlock::fromHookResult($this->hook(self::HOOK_DISPLAY_SUCCESS, [$success, $subHeader]));
         }
 
         if ($success instanceof View) {

@@ -8,6 +8,7 @@ use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\App;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsFunction;
@@ -121,6 +122,20 @@ class JsTest extends TestCase
         static::assertSame('$myInput.getTextInRange(getStart(), \'end\')', $c->jsRender());
     }
 
+    public function testChainNameStartingWithDigit(): void
+    {
+        $c = new JsChain('$myInput');
+        $c->{'1x'}(2);
+        static::assertSame('$myInput[\'1x\'](2)', $c->jsRender());
+    }
+
+    public function testChainNameWithDot(): void
+    {
+        $c = new JsChain('$myInput');
+        $c->{'x.y'}(2);
+        static::assertSame('$myInput[\'x.y\'](2)', $c->jsRender());
+    }
+
     public function testJquery(): void
     {
         $c = new Jquery('.mytag');
@@ -150,9 +165,18 @@ class JsTest extends TestCase
 
         static::assertSame(<<<'EOF'
             $(document).first(function () {
-                    $('.box1').height($('.box2').height());
-                })
+                $('.box1').height($('.box2').height());
+            })
             EOF, $fx->jsRender());
+    }
+
+    public function testTagNotDefinedRenderException(): void
+    {
+        $js = new JsExpression('[foo]', ['foo']);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Tag is not defined in template');
+        $js->jsRender();
     }
 
     public function testUnsupportedTypeRenderException(): void
@@ -162,5 +186,59 @@ class JsTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('not renderable to JS');
         $js->jsRender();
+    }
+
+    public function testBlockBasic(): void
+    {
+        $statements = [
+            new JsExpression('a()'),
+            new JsExpression('b([])', ['foo']),
+        ];
+
+        $jsBlock = new JsBlock($statements);
+
+        static::assertSame($statements, $jsBlock->getStatements());
+        static::assertSame(<<<'EOF'
+            a();
+            b('foo');
+            EOF, $jsBlock->jsRender());
+    }
+
+    public function testBlockEndSemicolon(): void
+    {
+        $jsBlock = new JsBlock([
+            new JsExpression('a()'),
+            new JsExpression('b();'),
+            new JsExpression('let fx = () => { a(); b(); }'),
+            new JsExpression(''),
+            new JsBlock(),
+            new class() extends JsBlock {
+                public function jsRender(): string
+                {
+                    return 'if (foo) { a(); }';
+                }
+            },
+        ]);
+
+        static::assertSame(<<<'EOF'
+            a();
+            b();
+            let fx = () => { a(); b(); };
+            if (foo) { a(); }
+            EOF, $jsBlock->jsRender());
+    }
+
+    public function testBlockInvalidStringTypeException(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage((\PHP_MAJOR_VERSION === 7 ? 'must implement interface' : 'must be of type') . ' Atk4\Ui\Js\JsExpressionable, string given');
+        new JsBlock(['a()']); // @phpstan-ignore-line
+    }
+
+    public function testBlockInvalidArrayTypeException(): void
+    {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage((\PHP_MAJOR_VERSION === 7 ? 'must implement interface' : 'must be of type') . ' Atk4\Ui\Js\JsExpressionable, array given');
+        new JsBlock([[]]); // @phpstan-ignore-line
     }
 }

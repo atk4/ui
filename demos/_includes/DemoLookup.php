@@ -8,6 +8,7 @@ use Atk4\Core\Factory;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsModal;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\VirtualPage;
@@ -46,17 +47,17 @@ class DemoLookup extends Form\Control\Lookup
             $form->onSubmit(function (Form $form) {
                 $msg = $form->model->getUserAction('add')->execute();
 
-                $ret = [
+                $res = new JsBlock([
                     new JsToast($msg),
                     (new Jquery())->closest('.atk-modal')->modal('hide'),
-                ];
+                ]);
 
                 $row = $this->renderRow($form->model);
                 $chain = new Jquery('#' . $this->name . '-ac');
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-                $ret[] = $chain;
+                $res->addStatement($chain);
 
-                return $ret;
+                return $res;
             });
         });
 

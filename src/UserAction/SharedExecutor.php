@@ -6,7 +6,7 @@ namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Ui\AbstractView;
-use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsBlock;
 
 class SharedExecutor
 {
@@ -31,17 +31,10 @@ class SharedExecutor
         return $this->executor;
     }
 
-    /**
-     * @return array<int, JsExpressionable>
-     */
-    public function jsExecute(array $urlArgs): array
+    public function jsExecute(array $urlArgs): JsBlock
     {
         // TODO executor::jsExecute() should be called only once, registered as a custom jQuery event and then
         // call the event from JS with arguments to improve performance, ie. render (possibly large) JS only once
-        $res = $this->getExecutor()->jsExecute($urlArgs); // @phpstan-ignore-line
-
-        return $this->getExecutor() instanceof JsCallbackExecutor
-            ? [$res]
-            : $res;
+        return $this->getExecutor()->jsExecute($urlArgs); // @phpstan-ignore-line
     }
 }

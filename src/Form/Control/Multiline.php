@@ -14,6 +14,7 @@ use Atk4\Data\ValidationException;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
@@ -146,7 +147,7 @@ class Multiline extends Form\Control
     /** @var JsCallback */
     private $renderCallback;
 
-    /** @var \Closure|null Function to execute when field change or row is delete. */
+    /** @var \Closure(mixed, Form): (JsExpressionable|View|string|void)|null Function to execute when field change or row is delete. */
     protected $onChangeFunction;
 
     /** @var array Set fields that will trigger onChange function. */
@@ -166,9 +167,6 @@ class Multiline extends Form\Control
 
     /** @var int The maximum number of items for select type field. */
     public $itemLimit = 25;
-
-    /** @var string Multiline's caption. */
-    public $caption;
 
     /**
      * Container for component that need Props set based on their field value as Lookup component.
@@ -270,6 +268,8 @@ class Multiline extends Form\Control
     /**
      * Add a callback when fields are changed. You must supply array of fields
      * that will trigger the callback when changed.
+     *
+     * @param \Closure(mixed, Form): (JsExpressionable|View|string|void) $fx
      */
     public function onLineChange(\Closure $fx, array $fields): void
     {
@@ -760,7 +760,7 @@ class Multiline extends Form\Control
         $formatValues = [];
 
         foreach ($dummyFields as $k => $field) {
-            if (!is_callable($field->expr)) {
+            if (!$field->expr instanceof \Closure) {
                 $dummyFields[$k]->expr = $this->getDummyExpression($field, $model);
             }
         }

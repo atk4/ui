@@ -7,6 +7,7 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
@@ -49,7 +50,7 @@ class Crud extends Grid
     /** @var string Generic display message for no record scope action where model is not loaded. */
     public $defaultMsg = 'Done!';
 
-    /** @var array Callback containers for model action. */
+    /** @var array<int, array<string, \Closure(Form, UserAction\ModalExecutor): void>> Callback containers for model action. */
     public $onActions = [];
 
     /** @var mixed recently deleted record id. */
@@ -148,7 +149,7 @@ class Crud extends Grid
                 $executor->onHook(UserAction\ModalExecutor::HOOK_STEP, function (UserAction\ModalExecutor $ex, string $step, Form $form) use ($onAction, $action) {
                     $key = array_key_first($onAction);
                     if ($key === $action->shortName && $step === 'fields') {
-                        return $onAction[$key]($form, $ex);
+                        $onAction[$key]($form, $ex);
                     }
                 });
             }
@@ -162,31 +163,29 @@ class Crud extends Grid
      * depending on return type, model loaded and action scope.
      *
      * @param string|null $return
-     *
-     * @return array<int, JsExpressionable>
      */
-    protected function jsExecute($return, Model\UserAction $action): array
+    protected function jsExecute($return, Model\UserAction $action): JsBlock
     {
-        $js = [];
+        $res = new JsBlock();
         $jsAction = $this->getJsGridAction($action);
         if ($jsAction) {
-            $js[] = $jsAction;
+            $res->addStatement($jsAction);
         }
 
         // display msg return by action or depending on action modifier.
         if (is_string($return)) {
-            $js[] = $this->jsCreateNotifier($return);
+            $res->addStatement($this->jsCreateNotifier($return));
         } else {
             if ($action->modifier === Model\UserAction::MODIFIER_CREATE || $action->modifier === Model\UserAction::MODIFIER_UPDATE) {
-                $js[] = $this->jsCreateNotifier($this->saveMsg);
+                $res->addStatement($this->jsCreateNotifier($this->saveMsg));
             } elseif ($action->modifier === Model\UserAction::MODIFIER_DELETE) {
-                $js[] = $this->jsCreateNotifier($this->deleteMsg);
+                $res->addStatement($this->jsCreateNotifier($this->deleteMsg));
             } else {
-                $js[] = $this->jsCreateNotifier($this->defaultMsg);
+                $res->addStatement($this->jsCreateNotifier($this->defaultMsg));
             }
         }
 
-        return $js;
+        return $res;
     }
 
     /**
@@ -296,6 +295,8 @@ class Crud extends Grid
     /**
      * Set callback for edit action in Crud.
      * Callback function will receive the Edit Form and Executor as param.
+     *
+     * @param \Closure(Form, UserAction\ModalExecutor): void $fx
      */
     public function onFormEdit(\Closure $fx): void
     {
@@ -305,6 +306,8 @@ class Crud extends Grid
     /**
      * Set callback for add action in Crud.
      * Callback function will receive the Add Form and Executor as param.
+     *
+     * @param \Closure(Form, UserAction\ModalExecutor): void $fx
      */
     public function onFormAdd(\Closure $fx): void
     {
@@ -314,6 +317,8 @@ class Crud extends Grid
     /**
      * Set callback for both edit and add action form.
      * Callback function will receive Forms and Executor as param.
+     *
+     * @param \Closure(Form, UserAction\ModalExecutor): void $fx
      */
     public function onFormAddEdit(\Closure $fx): void
     {
@@ -323,6 +328,8 @@ class Crud extends Grid
 
     /**
      * Set onActions.
+     *
+     * @param \Closure(Form, UserAction\ModalExecutor): void $fx
      */
     public function setOnActions(string $actionName, \Closure $fx): void
     {

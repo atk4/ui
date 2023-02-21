@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsModal;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Table;
@@ -33,9 +34,9 @@ $button->on('click', new JsModal('Edit First Record', $vp));
 $form->onSubmit(function (Form $form) use ($table) {
     $form->model->save();
 
-    return [
+    return new JsBlock([
         $table->jsReload(),
         new JsToast('Save'),
         (new Jquery())->closest('.ui.modal')->modal('hide'),
-    ];
+    ]);
 });

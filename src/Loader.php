@@ -69,14 +69,15 @@ class Loader extends View
      * Or
      *  $l1->set([$my_object, 'run_long_process']);
      *
-     * @param \Closure $fx
+     * @param \Closure($this): void $fx
+     * @param never                 $ignore
      *
      * @return $this
      */
     public function set($fx = null, $ignore = null)
     {
         if (!$fx instanceof \Closure) {
-            throw new Exception('Need to pass a function to Loader::set()');
+            throw new \TypeError('$fx must be of type Closure');
         } elseif (func_num_args() > 1) {
             throw new Exception('Only one argument is needed by Loader::set()');
         }

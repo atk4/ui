@@ -8,9 +8,11 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\Popup;
 use Atk4\Ui\Table;
+use Atk4\Ui\View;
 
 /**
  * Implements Column helper for table.
@@ -125,6 +127,7 @@ class Column
     /**
      * Add a dropdown header menu.
      *
+     * @param \Closure(string, string): (JsExpressionable|View|string|void) $fx
      * @param string      $icon
      * @param string|null $menuId the menu name
      */

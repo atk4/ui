@@ -39,7 +39,7 @@ class Modal extends View
     public $loadingLabel = 'Loading...';
     /** @var string */
     public $headerCss = 'header';
-    /** @var \Closure|null */
+    /** @var \Closure(View): void|null */
     public $fx;
     /** @var CallbackLater|null */
     public $cb;
@@ -76,14 +76,15 @@ class Modal extends View
      * $fx is set as an array in order to comply with View::set().
      * TODO Rename this function and break BC?
      *
-     * @param \Closure $fx
+     * @param \Closure(View): void $fx
+     * @param never                $ignore
      *
      * @return $this
      */
     public function set($fx = null, $ignore = null)
     {
         if (!$fx instanceof \Closure) {
-            throw new Exception('Need to pass a function to Modal::set()');
+            throw new \TypeError('$fx must be of type Closure');
         } elseif (func_num_args() > 1) {
             throw new Exception('Only one argument is needed by Modal::set()');
         }

@@ -9,6 +9,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Message;
@@ -122,10 +123,8 @@ class BasicExecutor extends View implements ExecutorInterface
 
     /**
      * Will call $action->execute() with the correct arguments.
-     *
-     * @return mixed
      */
-    public function executeModelAction()
+    public function executeModelAction(): JsBlock
     {
         $args = [];
 
@@ -139,8 +138,8 @@ class BasicExecutor extends View implements ExecutorInterface
             ? ($this->jsSuccess)($this, $this->action->getModel())
             : $this->jsSuccess;
 
-        return $this->hook(self::HOOK_AFTER_EXECUTE, [$return]) // @phpstan-ignore-line
-            ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : '')));
+        return JsBlock::fromHookResult($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) // @phpstan-ignore-line
+            ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
     }
 
     /**

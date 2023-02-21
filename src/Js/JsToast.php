@@ -7,8 +7,9 @@ namespace Atk4\Ui\Js;
 use Atk4\Core\DiContainerTrait;
 
 /**
- * Generate a Fomantic-UI toast module command in js.
- *  $('body').toast({options}).
+ * Create Fomantic-UI Toast using JS.
+ *
+ * Example output: $('body').toast({options}).
  */
 class JsToast implements JsExpressionable
 {

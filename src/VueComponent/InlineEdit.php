@@ -118,6 +118,8 @@ class InlineEdit extends View
      * You may supply your own function to handle update.
      * The function will receive one param:
      *  value: the new input value.
+     *
+     * @param \Closure(mixed): (JsExpressionable|View|string|void) $fx
      */
     public function onChange(\Closure $fx): void
     {

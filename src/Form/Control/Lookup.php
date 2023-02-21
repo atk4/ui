@@ -13,6 +13,7 @@ use Atk4\Ui\Callback;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsModal;
@@ -260,16 +261,15 @@ class Lookup extends Input
             $form->onSubmit(function (Form $form) {
                 $form->model->save();
 
-                $ret = [
-                    (new Jquery())->closest('.atk-modal')->modal('hide'),
-                ];
+                $res = new JsBlock();
+                $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
 
                 $row = $this->renderRow($form->model);
                 $chain = new Jquery('#' . $this->name . '-ac');
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-                $ret[] = $chain;
+                $res->addStatement($chain);
 
-                return $ret;
+                return $res;
             });
         });
 

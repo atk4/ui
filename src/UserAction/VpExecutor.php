@@ -9,6 +9,7 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
@@ -99,11 +100,11 @@ class VpExecutor extends View implements JsExecutorInterface
         return $this;
     }
 
-    public function jsExecute(array $urlArgs = []): array
+    public function jsExecute(array $urlArgs = []): JsBlock
     {
         $urlArgs['step'] = $this->step;
 
-        return [(new JsChain('atk.utils'))->redirect($this->vp->getUrl(), $urlArgs)];
+        return new JsBlock([(new JsChain('atk.utils'))->redirect($this->vp->getUrl(), $urlArgs)]);
     }
 
     /**
@@ -147,17 +148,17 @@ class VpExecutor extends View implements JsExecutorInterface
      * @param mixed      $obj
      * @param string|int $id
      */
-    protected function jsGetExecute($obj, $id): array
+    protected function jsGetExecute($obj, $id): JsBlock
     {
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
 
-        return [
-            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
-                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : ''))),
+        return new JsBlock([
+            JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
             $this->loader->jsClearStoreData(true),
             (new JsChain('atk.utils'))->redirect($this->url()),
-        ];
+        ]);
     }
 }

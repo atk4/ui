@@ -8,6 +8,8 @@ class GridLayout extends View
 {
     public $ui = 'grid';
 
+    public $defaultTemplate = 'grid-layout.html';
+
     /** @var int Number of rows */
     protected $rows = 1;
 
@@ -26,11 +28,6 @@ class GridLayout extends View
     protected $tRow;
     /** @var HtmlTemplate */
     protected $tCol;
-    /** @var HtmlTemplate */
-    public $template;
-
-    /** @var string Template file */
-    public $defaultTemplate = 'grid-layout.html';
 
     /** @var string CSS class for columns view */
     public $columnClass = '';

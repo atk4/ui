@@ -16,9 +16,6 @@ parameters:
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
         - '~^Variable (static )?(property access|method call) on .+\.~'
 
-        # https://github.com/phpstan/phpstan/issues/7839
-        - '~PHPDoc type .+ of property Atk4\\Ui\\.+ is not the same as PHPDoc type .+ of overridden property .+\.~'
-
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
         -
@@ -230,31 +227,49 @@ parameters:
         # TODO fix contravariance for View::set() method
         -
             path: 'src/Console.php'
-            message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Console::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(\$this\(Atk4\\Ui\\Console\)\): void\) of method Atk4\\Ui\\Console::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Console.php'
             message: '~^Parameter #2 \$event \(bool\|string\) of method Atk4\\Ui\\Console::set\(\) should be contravariant with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
+            path: 'src/Form/Control.php'
+            message: '~^Parameter #2 \$ignore \(\*NEVER\*\) of method Atk4\\Ui\\Form\\Control::set\(\) should be compatible with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+        -
+            path: 'src/Form/Control/Calendar.php'
+            message: '~^Parameter #1 \$expr \(Atk4\\Ui\\Js\\JsExpressionable\) of method Atk4\\Ui\\Form\\Control\\Calendar::onChange\(\) should be contravariant with parameter \$expr \(array{Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void}\|Atk4\\Ui\\Js\\JsExpressionable\|\(Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void\)\) of method Atk4\\Ui\\Form\\Control::onChange\(\)$~'
+        -
             path: 'src/Form/Control/Upload.php'
             message: '~^Parameter #1 \$fileId \(string\) of method Atk4\\Ui\\Form\\Control\\Upload::set\(\) should be contravariant with parameter \$value \(mixed\) of method Atk4\\Ui\\Form\\Control::set\(\)$~'
         -
-            path: 'src/Form/Control/Upload.php'
-            message: '~^Parameter #2 \$fileName \(string\|null\) of method Atk4\\Ui\\Form\\Control\\Upload::set\(\) should be contravariant with parameter \$junk \(mixed\) of method Atk4\\Ui\\Form\\Control::set\(\)$~'
+            path: 'src/JsCallback.php'
+            message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void\) of method Atk4\\Ui\\JsCallback::set\(\) should be contravariant with parameter \$fx \(Closure\(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): mixed\) of method Atk4\\Ui\\Callback::set\(\)$~'
         -
             path: 'src/Loader.php'
-            message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Loader::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(\$this\(Atk4\\Ui\\Loader\)\): void\) of method Atk4\\Ui\\Loader::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+        -
+            path: 'src/Loader.php'
+            message: '~^Parameter #2 \$ignore \(\*NEVER\*\) of method Atk4\\Ui\\Loader::set\(\) should be compatible with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Modal.php'
-            message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Modal::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\View\): void\) of method Atk4\\Ui\\Modal::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+        -
+            path: 'src/Modal.php'
+            message: '~^Parameter #2 \$ignore \(\*NEVER\*\) of method Atk4\\Ui\\Modal::set\(\) should be compatible with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Popup.php'
-            message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\Popup::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\View\): void\) of method Atk4\\Ui\\Popup::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+        -
+            path: 'src/Popup.php'
+            message: '~^Parameter #2 \$ignore \(\*NEVER\*\) of method Atk4\\Ui\\Popup::set\(\) should be compatible with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/VirtualPage.php'
-            message: '~^Parameter #1 \$fx \(Closure\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(\$this\(Atk4\\Ui\\VirtualPage\), mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/VirtualPage.php'
-            message: '~^Parameter #2 \$args \(array\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx of method Atk4\\Ui\\Callback::set\(\) expects \(Closure\(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void\)\|null, Closure\(\$this\(Atk4\\Ui\\VirtualPage\), mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void given.$~'
+        -
+            path: 'src/VirtualPage.php'
+            message: '~^Parameter #2 \$fxArgs \(array\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 3

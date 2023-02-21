@@ -9,6 +9,7 @@ use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsToast;
@@ -73,19 +74,19 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->loader->addClass('atk-hide-loading-content');
     }
 
-    private function jsShowAndLoad(array $urlArgs, array $apiConfig): array
+    private function jsShowAndLoad(array $urlArgs, array $apiConfig): JsBlock
     {
-        return [
+        return new JsBlock([
             $this->jsShow(),
             $this->js()->data('closeOnLoadingError', true),
             $this->loader->jsLoad($urlArgs, [
                 'method' => 'post',
                 'onSuccess' => new JsFunction([], [$this->js()->removeData('closeOnLoadingError')]),
             ]),
-        ];
+        ]);
     }
 
-    public function jsExecute(array $urlArgs = []): array
+    public function jsExecute(array $urlArgs = []): JsBlock
     {
         if (!$this->action) {
             throw new Exception('Action must be set prior to assign trigger');
@@ -182,7 +183,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     {
         $return = $this->action->execute([]);
 
-        $this->_jsSequencer($modal, $this->jsGetExecute($return, $this->action->getEntity()->getId()));
+        $modal->js(true, $this->jsGetExecute($return, $this->action->getEntity()->getId()));
     }
 
     /**
@@ -191,34 +192,18 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
      * @param mixed      $obj
      * @param string|int $id
      */
-    protected function jsGetExecute($obj, $id): array
+    protected function jsGetExecute($obj, $id): JsBlock
     {
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id)
             : $this->jsSuccess;
 
-        return [
+        return new JsBlock([
             $this->jsHide(),
             $this->ok->js(true)->off(),
             $this->cancel->js(true)->off(),
-            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
-                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : ''))),
-        ];
-    }
-
-    /**
-     * Create a sequence of js statement for a view.
-     *
-     * @param array|JsExpressionable $js
-     */
-    private function _jsSequencer(View $view, $js): void
-    {
-        if (is_array($js)) {
-            foreach ($js as $jq) {
-                $this->_jsSequencer($view, $jq);
-            }
-        } else {
-            $view->js(true, $js);
-        }
+            JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
+        ]);
     }
 }

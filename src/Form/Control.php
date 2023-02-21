@@ -16,6 +16,8 @@ use Atk4\Ui\View;
 
 /**
  * Provides generic functionality for a form control.
+ *
+ * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
  */
 class Control extends View
 {
@@ -91,11 +93,11 @@ class Control extends View
      * the model, then the model's value will also be affected.
      *
      * @param mixed $value
-     * @param mixed $junk
+     * @param never $ignore
      *
      * @return $this
      */
-    public function set($value = null, $junk = null)
+    public function set($value = null, $ignore = null)
     {
         if ($this->entityField) {
             $this->entityField->set($value);
@@ -143,8 +145,8 @@ class Control extends View
      * $control->onChange(new JsExpression('console.log(\'changed\')'));
      * $control->onChange(new JsExpression('$(this).parents(\'.form\').form(\'submit\')'));
      *
-     * @param JsExpressionable|array|\Closure $expr
-     * @param array|bool                      $defaults
+     * @param JsExpressionable|JsCallbackSetClosure|array{JsCallbackSetClosure} $expr
+     * @param array|bool $defaults
      */
     public function onChange($expr, $defaults = []): void
     {

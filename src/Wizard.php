@@ -78,6 +78,7 @@ class Wizard extends View
      * Adds step to the wizard.
      *
      * @param string|array|WizardStep $name
+     * @param \Closure($this): void   $fx
      *
      * @return WizardStep
      */
@@ -110,6 +111,8 @@ class Wizard extends View
     /**
      * Adds an extra screen to show user when he goes beyond last step.
      * There won't be "back" button on this step anymore.
+     *
+     * @param \Closure($this): void $fx
      */
     public function addFinish(\Closure $fx): void
     {

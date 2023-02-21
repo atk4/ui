@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Tabs;
 use Atk4\Ui\View;
@@ -155,10 +156,10 @@ $c1 = $group->addControl('c1', new Form\Control\Calendar(['type' => 'date']));
 $c2 = $group->addControl('c2', new Form\Control\Calendar(['type' => 'date']));
 
 $c1->onChange(new JsExpression('console.log(\'c1 changed: \' + date + \', \' + text + \', \' + mode)'));
-$c2->onChange([
+$c2->onChange(new JsBlock([
     new JsExpression('console.log(\'c2 changed: \' + date + \', \' + text + \', \' + mode)'),
     new JsExpression('console.log(\'c2 really changed: \' + date + \', \' + text + \', \' + mode)'),
-]);
+]));
 
 $group = $form->addGroup('Line');
 $f1 = $group->addControl('f1');
@@ -166,10 +167,10 @@ $f2 = $group->addControl('f2');
 $f3 = $group->addControl('f3');
 
 $f1->onChange(new JsExpression('console.log(\'f1 changed\')'));
-$f2->onChange([
+$f2->onChange(new JsBlock([
     new JsExpression('console.log(\'f2 changed\')'),
     new JsExpression('console.log(\'f2 really changed\')'),
-]);
+]));
 $f3->onChange(function () {
     return new JsExpression('console.log(\'f3 changed\')');
 });

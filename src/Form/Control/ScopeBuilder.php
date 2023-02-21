@@ -438,14 +438,7 @@ class ScopeBuilder extends Form\Control
         }
 
         $options = $defaults['options'] ?? [];
-
-        // 'options' is atk specific so not necessary to pass it to VueQueryBuilder
         unset($defaults['options']);
-
-        // when $rule is callable
-        if (is_callable($rule)) {
-            $rule = call_user_func($rule, $field, $options);
-        }
 
         // map all values for callables and merge with defaults
         return array_merge(array_map(function ($value) use ($field, $options) {

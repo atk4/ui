@@ -7,7 +7,7 @@ namespace Atk4\Ui\Js;
 use Atk4\Ui\VirtualPage;
 
 /**
- * This class generates action, that will be able to loop-back to the callback method.
+ * Create Fomantic-UI Modal using JS.
  */
 class JsModal extends JsExpression
 {
