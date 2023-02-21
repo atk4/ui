@@ -55,7 +55,11 @@ final class AnonymousClassNameCache
     }
 
     /**
-     * @param \Closure(): object $createAnonymousClassFx
+     * @template T of object
+     *
+     * @param \Closure(): T $createAnonymousClassFx
+     *
+     * @return class-string<T>
      */
     public static function get_class(\Closure $createAnonymousClassFx): string
     {

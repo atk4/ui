@@ -82,7 +82,6 @@ $form->onSubmit(function (Form $form) {
     return new JsToast($countryEntity->getUserAction('add')->execute());
 });
 
-/** @var Model $personClass */
 $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
     public $table = 'person';
 

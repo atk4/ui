@@ -73,7 +73,6 @@ $crud->addModalAction(['icon' => 'cogs'], 'Details', function (View $p, $id) use
 $column = $columns->addColumn();
 Header::addTo($column, ['Customizations']);
 
-/** @var ModalExecutor $myExecutorClass */
 $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() extends ModalExecutor {
     public function addFormTo(View $view): Form
     {

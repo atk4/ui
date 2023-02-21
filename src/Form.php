@@ -157,9 +157,9 @@ class Form extends View
             $this->layout = [Form\Layout::class]; // @phpstan-ignore-line
         }
 
-        if (is_string($this->layout) || is_array($this->layout)) {
+        if (is_string($this->layout) || is_array($this->layout)) { // @phpstan-ignore-line
             $this->layout = $this->add(Factory::factory($this->layout, ['form' => $this])); // @phpstan-ignore-line
-        } elseif (is_object($this->layout)) {
+        } elseif (is_object($this->layout)) { // @phpstan-ignore-line
             $this->layout->form = $this;
             $this->add($this->layout);
         } else {

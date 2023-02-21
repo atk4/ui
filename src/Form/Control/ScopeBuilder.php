@@ -453,11 +453,11 @@ class ScopeBuilder extends Form\Control
     protected function getFieldItems(Field $field, ?int $limit = 250): array
     {
         $items = [];
-        if ($field->enum) {
+        if ($field->enum !== null) {
             $items = array_slice($field->enum, 0, $limit);
             $items = array_combine($items, $items);
         }
-        if ($field->values && is_array($field->values)) {
+        if ($field->values !== null) {
             $items = array_slice($field->values, 0, $limit, true);
         } elseif ($field->hasReference()) {
             $model = $field->getReference()->refModel($this->model);

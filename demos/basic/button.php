@@ -58,7 +58,6 @@ Header::addTo($app, ['Forks Button Component', 'size' => 2]);
 
 // Creating your own button component example
 
-/** @var Button $forkButtonClass */
 $forkButtonClass = AnonymousClassNameCache::get_class(fn () => new class(0) /* need 0 argument here for constructor */ extends Button {
     public function __construct(int $n)
     {
