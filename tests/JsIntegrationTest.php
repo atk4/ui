@@ -99,12 +99,11 @@ class JsIntegrationTest extends TestCase
         $b1 = Button::addTo($v, ['name' => 'b1']);
         $b2 = Button::addTo($v, ['name' => 'b2']);
 
-        $b1->on('click', [
-            'preventDefault' => false,
+        $b1->on('click', new JsBlock([
             $b1->js()->hide(),
             $b2->js()->hide(),
             $b2->js()->hide(),
-        ]);
+        ]), ['preventDefault' => false]);
         $b1->js(true)->data('x', 'y');
         $v->setApp($this->createApp());
         $v->renderAll();

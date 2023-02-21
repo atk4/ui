@@ -931,12 +931,11 @@ class View extends AbstractView
      * Views in Agile Toolkit can assign javascript actions to themselves. This
      * is done by calling $view->js() or $view->on().
      *
-     * on() method is similar to jQuery on() method.
+     * on() method is similar to jQuery on(event, [selector, ] action) method.
      *
-     * on(event, [selector, ] action)
+     * When no $action is passed, the on() method returns a chain corresponding to the affected element.
      *
-     * Method on() also returns a chain, that will correspond affected element.
-     * Here are some ways to use on();
+     * Here are some ways to use on():
      *
      * // clicking on button will make the $view disappear
      * $button->on('click', $view->js()->hide());
@@ -954,8 +953,8 @@ class View extends AbstractView
      * });
      *
      * @param string $event JavaScript event
-     * @param ($action is null|array ? string|JsExpressionable|JsCallback|JsCallbackSetClosure|array|UserAction\ExecutorInterface|Model\UserAction : string|array) $selector Optional jQuery-style selector
-     * @param string|JsExpressionable|JsCallback|JsCallbackSetClosure|array|UserAction\ExecutorInterface|Model\UserAction|null $action code to execute
+     * @param ($action is object ? string : ($action is null ? string : never)|JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction) $selector Optional jQuery-style selector
+     * @param ($selector is string|null ? JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction : array) $action code to execute
      *
      * @return ($selector is null|string ? ($action is null ? Jquery : null) : ($action is null|array ? Jquery : null))
      */
@@ -972,7 +971,7 @@ class View extends AbstractView
         $arguments = $defaults['args'] ?? [];
         unset($defaults['args']);
 
-        // all non-key items of defaults are actually arguments
+        // all values with int keys of defaults are arguments
         foreach ($defaults as $key => $value) {
             if (is_int($key)) {
                 $arguments[] = $value;
@@ -1080,7 +1079,7 @@ class View extends AbstractView
         } elseif ($action instanceof JsCallback) {
             $actions = [$lazyJsRenderFx(fn () => $action->jsExecute())];
         } else {
-            $actions = is_array($action) ? $action : [$action];
+            $actions = [$action];
         }
 
         // Do we need confirm action.

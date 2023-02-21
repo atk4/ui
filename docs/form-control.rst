@@ -296,11 +296,11 @@ onChange event
 .. php:method:: onChange($expression)
 
 It's prefferable to use this short-hand version of on('change', 'input', $expression) method.
-$expression argument can be JsExpression, array of JsExpressions or even PHP callback function.
+$expression argument can be JS expression or PHP callback function.
 
     // simple string
     $f1 = $form->addControl('f1');
-    $f1->onChange('console.log(\'f1 changed\')');
+    $f1->onChange(\Atk4\Ui\Js\JsExpression('console.log(\'f1 changed\')'));
 
     // callback
     $f2 = $form->addControl('f2');
@@ -310,7 +310,7 @@ $expression argument can be JsExpression, array of JsExpressions or even PHP cal
 
     // Calendar form control - wraps in function call with arguments date, text and mode
     $c1 = $form->addControl('c1', new \Atk4\Ui\Form\Control\Calendar(['type' => 'date']));
-    $c1->onChange('console.log(\'c1 changed: \' + date + \', \' + text + \', \' + mode)');
+    $c1->onChange(\Atk4\Ui\Js\JsExpression('console.log(\'c1 changed: \' + date + \', \' + text + \', \' + mode)'));
 
 
 Dropdown

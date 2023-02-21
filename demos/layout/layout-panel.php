@@ -64,10 +64,10 @@ $panel1->onOpen(function (Panel\Content $p) use ($view) {
 
     View::addTo($panel, ['ui' => 'divider']);
     $panelButton = Button::addTo($panel, ['Complete']);
-    $panelButton->on('click', [
+    $panelButton->on('click', new JsBlock([
         $p->getOwner()->jsClose(),
         new JsReload($view, ['txt' => 'Complete using button #' . $buttonNumber]),
-    ]);
+    ]));
 });
 
 View::addTo($app, ['ui' => 'divider']);

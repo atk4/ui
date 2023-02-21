@@ -45,7 +45,10 @@ $button->on('click', $sse->set(function () use ($button, $sse, $bar) {
     ]);
 }));
 
-$buttonStop->on('click', [$button->js()->atkServerEvent('stop'), $button->js()->removeClass('disabled')]);
+$buttonStop->on('click', new JsBlock([
+    $button->js()->atkServerEvent('stop'),
+    $button->js()->removeClass('disabled'),
+]));
 
 View::addTo($app, ['ui' => 'divider']);
 Header::addTo($app, ['SSE operation with user confirmation']);
