@@ -250,25 +250,10 @@ class Form extends View
         $this->cb->set(function () {
             try {
                 $this->loadPost();
+
                 $response = $this->hook(self::HOOK_SUBMIT);
-
-                if (!$response) {
-                    if (!$this->model instanceof \Atk4\Ui\Misc\ProxyModel) {
-                        $this->model->save();
-
-                        return $this->success('Form data has been saved');
-                    }
-
-                    return new JsExpression('console.log([])', ['Form submission is not handled']);
-                }
-
                 if (is_array($response) && count($response) === 1) {
                     $response = reset($response);
-
-                    // TODO remove asap, hack to pass 2 FormTest tests
-                    if ($response === null) {
-                        $response = new JsBlock([]);
-                    }
                 }
 
                 return $response;

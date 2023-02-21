@@ -76,7 +76,7 @@ class FormTest extends TestCase
                 $checkExpectedErrorsFx($res['atkjs']);
             } else {
                 static::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
-                static::assertSame('', $res['atkjs']);
+                static::assertNull($res['atkjs']);
             }
 
             $this->form = null; // we shouldn't submit form twice!
