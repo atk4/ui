@@ -190,26 +190,29 @@ class JsTest extends TestCase
 
     public function testBlockBasic(): void
     {
-        $js = new JsBlock([
+        $statements = [
             new JsExpression('a()'),
             new JsExpression('b([])', ['foo']),
-        ]);
+        ];
 
+        $jsBlock = new JsBlock($statements);
+
+        static::assertSame($statements, $jsBlock->getStatements());
         static::assertSame(<<<'EOF'
             a();
             b('foo');
-            EOF, $js->jsRender());
+            EOF, $jsBlock->jsRender());
     }
 
     public function testBlockEndSemicolon(): void
     {
-        $js = new JsBlock([
+        $jsBlock = new JsBlock([
             new JsExpression('a()'),
             new JsExpression('b();'),
             new JsExpression('let fx = () => { a(); b(); }'),
             new JsExpression(''),
-            new JsBlock([]),
-            new class([]) extends JsBlock {
+            new JsBlock(),
+            new class() extends JsBlock {
                 public function jsRender(): string
                 {
                     return 'if (foo) { a(); }';
@@ -222,7 +225,7 @@ class JsTest extends TestCase
             b();
             let fx = () => { a(); b(); };
             if (foo) { a(); }
-            EOF, $js->jsRender());
+            EOF, $jsBlock->jsRender());
     }
 
     public function testBlockInvalidStringTypeException(): void
@@ -234,10 +237,8 @@ class JsTest extends TestCase
 
     public function testBlockInvalidArrayTypeException(): void
     {
-        $js = new JsExpression('a()');
-
         $this->expectException(\TypeError::class);
         $this->expectExceptionMessage((\PHP_MAJOR_VERSION === 7 ? 'must implement interface' : 'must be of type') . ' Atk4\Ui\Js\JsExpressionable, array given');
-        new JsBlock([[$js]]); // @phpstan-ignore-line
+        new JsBlock([[]]); // @phpstan-ignore-line
     }
 }

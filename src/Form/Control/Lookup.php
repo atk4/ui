@@ -261,16 +261,15 @@ class Lookup extends Input
             $form->onSubmit(function (Form $form) {
                 $form->model->save();
 
-                $ret = [
-                    (new Jquery())->closest('.atk-modal')->modal('hide'),
-                ];
+                $res = new JsBlock();
+                $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
 
                 $row = $this->renderRow($form->model);
                 $chain = new Jquery('#' . $this->name . '-ac');
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-                $ret[] = $chain;
+                $res->addStatement($chain);
 
-                return new JsBlock($ret);
+                return $res;
             });
         });
 

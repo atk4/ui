@@ -14,12 +14,12 @@ class JsBlock implements JsExpressionable
     use WarnDynamicPropertyTrait;
 
     /** @var list<JsExpressionable> */
-    public array $statements;
+    private array $statements;
 
     /**
      * @param list<JsExpressionable|null> $statements
      */
-    public function __construct(array $statements)
+    public function __construct(array $statements = [])
     {
         $this->statements = [];
         foreach ($statements as $value) {
@@ -31,7 +31,15 @@ class JsBlock implements JsExpressionable
         }
     }
 
-    private function addStatement(JsExpressionable $statement): void
+    /**
+     * @return list<JsExpressionable>
+     */
+    public function getStatements(): array
+    {
+        return $this->statements;
+    }
+
+    public function addStatement(JsExpressionable $statement): void
     {
         $this->statements[] = $statement;
     }

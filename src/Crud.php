@@ -166,26 +166,26 @@ class Crud extends Grid
      */
     protected function jsExecute($return, Model\UserAction $action): JsBlock
     {
-        $js = [];
+        $res = new JsBlock();
         $jsAction = $this->getJsGridAction($action);
         if ($jsAction) {
-            $js[] = $jsAction;
+            $res->addStatement($jsAction);
         }
 
         // display msg return by action or depending on action modifier.
         if (is_string($return)) {
-            $js[] = $this->jsCreateNotifier($return);
+            $res->addStatement($this->jsCreateNotifier($return));
         } else {
             if ($action->modifier === Model\UserAction::MODIFIER_CREATE || $action->modifier === Model\UserAction::MODIFIER_UPDATE) {
-                $js[] = $this->jsCreateNotifier($this->saveMsg);
+                $res->addStatement($this->jsCreateNotifier($this->saveMsg));
             } elseif ($action->modifier === Model\UserAction::MODIFIER_DELETE) {
-                $js[] = $this->jsCreateNotifier($this->deleteMsg);
+                $res->addStatement($this->jsCreateNotifier($this->deleteMsg));
             } else {
-                $js[] = $this->jsCreateNotifier($this->defaultMsg);
+                $res->addStatement($this->jsCreateNotifier($this->defaultMsg));
             }
         }
 
-        return new JsBlock($js);
+        return $res;
     }
 
     /**

@@ -47,17 +47,17 @@ class DemoLookup extends Form\Control\Lookup
             $form->onSubmit(function (Form $form) {
                 $msg = $form->model->getUserAction('add')->execute();
 
-                $ret = [
+                $res = new JsBlock([
                     new JsToast($msg),
                     (new Jquery())->closest('.atk-modal')->modal('hide'),
-                ];
+                ]);
 
                 $row = $this->renderRow($form->model);
                 $chain = new Jquery('#' . $this->name . '-ac');
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-                $ret[] = $chain;
+                $res->addStatement($chain);
 
-                return new JsBlock($ret);
+                return $res;
             });
         });
 

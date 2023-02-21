@@ -130,15 +130,13 @@ class JsCallback extends Callback
      */
     public function getAjaxec($response, $chain = null): string
     {
-        $actions = [];
+        $jsBlock = new JsBlock();
         if ($chain !== null) {
-            $actions[] = $chain;
+            $jsBlock->addStatement($chain);
         }
-        $actions[] = $this->_getProperAction($response);
+        $jsBlock->addStatement($this->_getProperAction($response));
 
-        $ajaxec = (new JsBlock($actions))->jsRender();
-
-        return $ajaxec;
+        return $jsBlock->jsRender();
     }
 
     public function getUrl(string $mode = 'callback'): string

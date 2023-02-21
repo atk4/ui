@@ -257,16 +257,16 @@ class CardDeck extends View
      */
     protected function jsModelReturn(Model\UserAction $action, string $msg = 'Done!'): JsBlock
     {
-        $js = [];
-        $js[] = $this->jsCreateNotifier($action, $msg);
+        $res = new JsBlock();
+        $res->addStatement($this->jsCreateNotifier($action, $msg));
         $card = $action->getEntity()->isLoaded() ? $this->findCard($action->getEntity()) : null;
         if ($card !== null) {
-            $js[] = $card->jsReload($this->getReloadArgs());
+            $res->addStatement($card->jsReload($this->getReloadArgs()));
         } else {
-            $js[] = $this->container->jsReload($this->getReloadArgs());
+            $res->addStatement($this->container->jsReload($this->getReloadArgs()));
         }
 
-        return new JsBlock($js);
+        return $res;
     }
 
     /**
