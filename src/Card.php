@@ -7,6 +7,8 @@ namespace Atk4\Ui;
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Ui\UserAction\ExecutorFactory;
+use Atk4\Ui\UserAction\ExecutorInterface;
+use Atk4\Ui\UserAction\SharedExecutor;
 
 /**
  * Card can contain arbitrary information.
@@ -230,7 +232,23 @@ class Card extends View
         }
 
         $cardDeck = $this->getClosestOwner(CardDeck::class);
-        $btn->on('click', $cardDeck ? $cardDeck->sharedExecutorsContainer->getExecutor($action) : $action, $defaults);
+        if ($cardDeck !== null) {
+            // mimic https://github.com/atk4/ui/blob/3c592b8f10fe67c61f179c5c8723b07f8ab754b9/src/Crud.php#L140
+            // based on https://github.com/atk4/ui/blob/3c592b8f10fe67c61f179c5c8723b07f8ab754b9/src/UserAction/SharedExecutorsContainer.php#L24
+            $isNew = !isset($cardDeck->sharedExecutorsContainer->sharedExecutors[$action->shortName]);
+            if ($isNew) {
+                $ex = $cardDeck->sharedExecutorsContainer->getExecutorFactory()->createExecutor($action, $this);
+
+                $ex->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, \Closure::bind(function (ExecutorInterface $ex, $return, $id) use ($cardDeck, $action) {
+                    return $cardDeck->jsExecute($return, $action);
+                }, null, CardDeck::class));
+
+                $ex->executeModelAction();
+                $cardDeck->sharedExecutorsContainer->sharedExecutors[$action->shortName] = new SharedExecutor($ex);
+            }
+        }
+
+        $btn->on('click', $cardDeck !== null ? $cardDeck->sharedExecutorsContainer->getExecutor($action) : $action, $defaults);
 
         return $this;
     }
