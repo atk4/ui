@@ -29,5 +29,6 @@ Feature: CardDeck
     Then I press button "Delete"
     Then I press Modal button "Ok"
     Then Toast display should contain text 'Country action "delete" with "United Kingdom" entity was executed.'
-    # TODO https://github.com/atk4/ui/issues/1848
+    # TODO CardDeck reload is fired in separate AJAX request, thus the changes
+    # cannot be tested with Behat, as reverted in the first request
     # Then I should not see "United Kingdom"

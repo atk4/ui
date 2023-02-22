@@ -223,7 +223,8 @@ class CardDeck extends View
     protected function jsExecute($return, Model\UserAction $action): JsBlock
     {
         if (is_string($return)) {
-            // hack to test reload with read only demos
+            // hack to test reload with read only demos, the reload is fired in separate AJAX request,
+            // thus the changes cannot be tested with Behat, as reverted in the first request
             if (str_ends_with($return, 'was executed. In demo mode all changes are reverved.')) {
                 return $this->jsModelReturn($action, $return);
             }
