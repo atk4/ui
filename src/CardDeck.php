@@ -223,6 +223,11 @@ class CardDeck extends View
     protected function jsExecute($return, Model\UserAction $action): JsBlock
     {
         if (is_string($return)) {
+            // hack to test reload with read only demos
+            if (str_ends_with($return, 'was executed. In demo mode all changes are reverved.')) {
+                return $this->jsModelReturn($action, $return);
+            }
+
             return $this->jsCreateNotifier($action, $return);
         } elseif ($return instanceof JsExpressionable) {
             return new JsBlock([$return]);
@@ -259,7 +264,7 @@ class CardDeck extends View
     {
         $res = new JsBlock();
         $res->addStatement($this->jsCreateNotifier($action, $msg));
-        $card = $action->getEntity()->isLoaded() ? $this->findCard($action->getEntity()) : null;
+        $card = $action->isOwnerEntity() && $action->getEntity()->isLoaded() ? $this->findCard($action->getEntity()) : null;
         if ($card !== null) {
             $res->addStatement($card->jsReload($this->getReloadArgs()));
         } else {
