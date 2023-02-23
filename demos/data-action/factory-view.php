@@ -62,7 +62,6 @@ $cardActions->setModel($country);
 foreach ($country->getModel()->getUserActions() as $action) {
     $showActions = ['callback', 'preview', 'edit_argument', 'edit_argument_prev', 'edit_iso', 'confirm', 'multi_step'];
     if (in_array($action->shortName, $showActions, true)) {
-        $action->fields = false; // disable dirty check for Behat
         $cardActions->addClickAction($action);
     }
 }

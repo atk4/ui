@@ -13,7 +13,23 @@ class DemoActionsUtil
 {
     public static function setupDemoActions(Country $country): void
     {
+        // standard UserAction class without dirty fields check
+        // needed for card.feature Behat test and data-action/factory-view.php demo
+        $modelUserActionWithoutDirtyCheckClass = AnonymousClassNameCache::get_class(fn () => new class() extends UserAction {
+            protected function validateBeforeExecute(): void
+            {
+                $fieldOrig = $this->fields;
+                $this->fields = false;
+                try {
+                    parent::validateBeforeExecute();
+                } finally {
+                    $this->fields = $fieldOrig;
+                }
+            }
+        });
+
         $country->addUserAction('callback', [
+            $modelUserActionWithoutDirtyCheckClass,
             'description' => 'Callback',
             'callback' => function (Country $model) {
                 return 'callback execute using country ' . $model->getTitle();
@@ -21,6 +37,7 @@ class DemoActionsUtil
         ]);
 
         $country->addUserAction('preview', [
+            $modelUserActionWithoutDirtyCheckClass,
             'description' => 'Display Preview prior to run the action',
             'preview' => function (Country $model) {
                 return 'Previewing country ' . $model->getTitle();
@@ -31,6 +48,7 @@ class DemoActionsUtil
         ]);
 
         $country->addUserAction('disabled_action', [
+            $modelUserActionWithoutDirtyCheckClass,
             'description' => 'This action is disabled.',
             'caption' => 'Disabled',
             'enabled' => false,
@@ -40,6 +58,7 @@ class DemoActionsUtil
         ]);
 
         $country->addUserAction('edit_argument', [
+            $modelUserActionWithoutDirtyCheckClass,
             'caption' => 'Argument',
             'description' => 'Ask for argument "Age" prior to execute the action.',
             'args' => [
@@ -57,6 +76,7 @@ class DemoActionsUtil
         ]);
 
         $country->addUserAction('edit_argument_prev', [
+            $modelUserActionWithoutDirtyCheckClass,
             'caption' => 'Argument/Preview',
             'description' => 'Ask for argument "Age" and display preview prior to execute',
             'args' => [
@@ -71,6 +91,7 @@ class DemoActionsUtil
         ]);
 
         $country->addUserAction('edit_iso', [
+            $modelUserActionWithoutDirtyCheckClass,
             'caption' => 'Edit ISO3',
             'description' => function (UserAction $action) {
                 return 'Edit ISO3 for country: ' /* TODO . $action->getEntity()->getTitle() */;
@@ -82,6 +103,7 @@ class DemoActionsUtil
         ]);
 
         $country->addUserAction('Ouch', [
+            $modelUserActionWithoutDirtyCheckClass,
             'caption' => 'Exception',
             'description' => 'Throw an exception when executing an action',
             'args' => [
@@ -96,6 +118,7 @@ class DemoActionsUtil
         ]);
 
         $country->addUserAction('confirm', [
+            $modelUserActionWithoutDirtyCheckClass,
             'caption' => 'User Confirmation',
             'description' => 'Confirm the action using a ConfirmationExecutor',
             'confirmation' => function (UserAction $a) {
@@ -109,6 +132,7 @@ class DemoActionsUtil
         ]);
 
         $country->addUserAction('multi_step', [
+            $modelUserActionWithoutDirtyCheckClass,
             'caption' => 'Multi Step',
             'description' => 'Ask for Arguments and field and display preview prior to run the action',
             'args' => [
