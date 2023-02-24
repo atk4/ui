@@ -40,7 +40,7 @@ to display current page BEFORE the paginator on your page::
 Remember that values of 'page' and 'total' are integers, so you may need to do type-casting::
 
     $label->set($p->page); // will not work
-    $label->set((string)$p->page); // works fine
+    $label->set((string) $p->page); // works fine
 
 Range and Logic
 ===============

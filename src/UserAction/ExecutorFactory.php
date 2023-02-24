@@ -92,7 +92,7 @@ class ExecutorFactory
      */
     public function registerExecutor(UserAction $action, array $seed): void
     {
-        $this->executorSeed[$this->getModelId($action)][$action->shortName] = $seed;
+        $this->executorSeed[$this->getModelKey($action)][$action->shortName] = $seed;
     }
 
     /**
@@ -104,7 +104,7 @@ class ExecutorFactory
     public function registerTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false): void
     {
         if ($isSpecific) {
-            $this->triggerSeed[$type][$this->getModelId($action)][$action->shortName] = $seed;
+            $this->triggerSeed[$type][$this->getModelKey($action)][$action->shortName] = $seed;
         } else {
             $this->triggerSeed[$type][$action->shortName] = $seed;
         }
@@ -124,20 +124,12 @@ class ExecutorFactory
     public function registerCaption(UserAction $action, string $caption, bool $isSpecific = false, string $type = null): void
     {
         if ($isSpecific) {
-            $this->triggerCaption[$this->getModelId($action)][$action->shortName] = $caption;
+            $this->triggerCaption[$this->getModelKey($action)][$action->shortName] = $caption;
         } elseif ($type) {
             $this->triggerCaption[$type][$action->shortName] = $caption;
         } else {
             $this->triggerCaption[$action->shortName] = $caption;
         }
-    }
-
-    /**
-     * @return AbstractView&ExecutorInterface
-     */
-    public function create(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
-    {
-        return $this->createExecutor($action, $owner, $requiredType);
     }
 
     /**
@@ -156,7 +148,7 @@ class ExecutorFactory
     /**
      * @return AbstractView&ExecutorInterface
      */
-    protected function createExecutor(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
+    public function createExecutor(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
     {
         if ($requiredType !== null) {
             if (!($this->executorSeed[$requiredType] ?? null)) {
@@ -165,10 +157,10 @@ class ExecutorFactory
             }
             $seed = $this->executorSeed[$requiredType];
         } else {
-            $seed = $seed = $this->executorSeed[$this->getModelId($action)][$action->shortName] ?? null;
+            $seed = $seed = $this->executorSeed[$this->getModelKey($action)][$action->shortName] ?? null;
             if ($seed === null) {
                 // if no type is register, determine executor to use base on action properties
-                if (is_callable($action->confirmation)) {
+                if ($action->confirmation instanceof \Closure) {
                     $seed = $this->executorSeed[self::CONFIRMATION_EXECUTOR];
                 } else {
                     $seed = (!$action->args && !$action->fields && !$action->preview)
@@ -191,7 +183,7 @@ class ExecutorFactory
     protected function createActionTrigger(UserAction $action, string $type = null): View
     {
         $viewType = array_merge(['default' => [$this, 'getDefaultTrigger']], $this->triggerSeed[$type] ?? []);
-        $seed = $viewType[$this->getModelId($action)][$action->shortName] ?? null;
+        $seed = $viewType[$this->getModelKey($action)][$action->shortName] ?? null;
         if ($seed === null) {
             $seed = $viewType[$action->shortName] ?? null;
             if ($seed === null) {
@@ -220,7 +212,7 @@ class ExecutorFactory
 
                 break;
             case self::MENU_ITEM:
-                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'class.item' => true];
+                $seed = [MenuItem::class, $this->getActionCaption($action, $type)];
 
                 break;
             case self::TABLE_MENU_ITEM:
@@ -241,7 +233,7 @@ class ExecutorFactory
     {
         $caption = $this->triggerCaption[$type][$action->shortName] ?? null;
         if ($caption === null) {
-            $caption = $this->triggerCaption[$this->getModelId($action)][$action->shortName] ?? null;
+            $caption = $this->triggerCaption[$this->getModelKey($action)][$action->shortName] ?? null;
             if ($caption === null) {
                 $caption = $this->triggerCaption[$action->shortName] ?? null;
                 if ($caption === null) {
@@ -269,11 +261,8 @@ class ExecutorFactory
         return 'Add' . ($action->getModel()->caption ? ' ' . $action->getModel()->caption : '');
     }
 
-    /**
-     * Generate id for a model user action.
-     */
-    protected function getModelId(UserAction $action): string
+    protected function getModelKey(UserAction $action): string
     {
-        return strtolower(str_replace(' ', '_', $action->getModel()->getModelCaption()));
+        return $action->getModel()->getModelCaption();
     }
 }

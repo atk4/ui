@@ -57,7 +57,7 @@ class DemosTest extends TestCase
             $this->setSuperglobalsFromRequest(new Request('GET', 'http://localhost/demos/?APP_CALL_EXIT=0&APP_CATCH_EXCEPTIONS=0&APP_ALWAYS_RUN=0'));
 
             /** @var App $app */
-            $app = 'for-phpstan';
+            $app = 'for-phpstan'; // @phpstan-ignore-line
             require_once static::DEMOS_DIR . '/init-app.php';
             $initVars = array_diff_key(get_defined_vars(), $initVars + ['initVars' => true]);
 
@@ -93,13 +93,15 @@ class DemosTest extends TestCase
     {
         $this->resetSuperglobals();
 
+        $rootDirRealpath = realpath(static::ROOT_DIR);
+
         $_SERVER = [
             'REQUEST_METHOD' => $request->getMethod(),
             'HTTP_HOST' => $request->getUri()->getHost(),
             'REQUEST_URI' => (string) $request->getUri(),
             'QUERY_STRING' => $request->getUri()->getQuery(),
-            'DOCUMENT_ROOT' => realpath(static::ROOT_DIR),
-            'SCRIPT_FILENAME' => realpath(static::ROOT_DIR) . $request->getUri()->getPath(),
+            'DOCUMENT_ROOT' => $rootDirRealpath,
+            'SCRIPT_FILENAME' => $rootDirRealpath . $request->getUri()->getPath(),
         ];
 
         $_GET = [];

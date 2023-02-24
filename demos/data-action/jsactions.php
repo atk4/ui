@@ -31,7 +31,7 @@ $sendEmailAction = $country->addUserAction('Email', [
 
 // -----------------------------------------------------------------------------
 
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 Header::addTo($app, [
     'Using Input button',
@@ -58,7 +58,7 @@ Form\Control\Line::addTo($app, ['action' => $country->getUserAction('greet')]);
 
 // -----------------------------------------------------------------------------
 
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 Header::addTo($app, [
     'Using buttons in a Card component',
@@ -70,7 +70,7 @@ Header::addTo($app, [
 $card = Card::addTo($app);
 $content = new View(['class' => ['content']]);
 $img = Image::addTo($content, ['../images/kristy.png']);
-$img->addClass('right floated mini ui image');
+$img->addClass('right floated mini');
 Header::addTo($content, ['Kristy']);
 
 $card->addContent($content);

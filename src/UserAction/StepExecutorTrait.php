@@ -10,6 +10,7 @@ use Atk4\Data\Model\UserAction;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Loader;
@@ -28,7 +29,7 @@ trait StepExecutorTrait
     protected $loader;
 
     /** @var string */
-    public $loaderUi = 'ui basic segment';
+    public $loaderUi = 'basic segment';
 
     /** @var array */
     public $loaderShim = [];
@@ -54,7 +55,7 @@ trait StepExecutorTrait
     /** @var bool */
     protected $actionInitialized = false;
 
-    /** @var JsExpressionable|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
     /** @var array A seed for creating form in order to edit arguments/fields user entry. */
@@ -109,27 +110,23 @@ trait StepExecutorTrait
     protected function runSteps(): void
     {
         $this->loader->set(function (Loader $p) {
-            try {
-                switch ($this->step) {
-                    case 'args':
-                        $this->doArgs($p);
+            switch ($this->step) {
+                case 'args':
+                    $this->doArgs($p);
 
-                        break;
-                    case 'fields':
-                        $this->doFields($p);
+                    break;
+                case 'fields':
+                    $this->doFields($p);
 
-                        break;
-                    case 'preview':
-                        $this->doPreview($p);
+                    break;
+                case 'preview':
+                    $this->doPreview($p);
 
-                        break;
-                    case 'final':
-                        $this->doFinal($p);
+                    break;
+                case 'final':
+                    $this->doFinal($p);
 
-                        break;
-                }
-            } catch (\Exception $e) {
-                $this->handleException($e, $p, $this->step);
+                    break;
             }
         });
     }
@@ -254,7 +251,7 @@ trait StepExecutorTrait
 
         $return = $this->action->execute(...$this->getActionArgs($this->getActionData('args')));
 
-        $this->jsSequencer($page, $this->jsGetExecute($return, $this->action->getEntity()->getId()));
+        $page->js(true, $this->jsGetExecute($return, $this->action->getEntity()->getId()));
     }
 
     /**
@@ -336,8 +333,8 @@ trait StepExecutorTrait
 
     protected function createButtonBar(Model\UserAction $action): View
     {
-        $this->btns = (new View())->addStyle(['min-height' => '24px']);
-        $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
+        $this->btns = (new View())->setStyle(['min-height' => '24px']);
+        $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->setStyle(['float' => 'left !important']);
         $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'class.blue' => true]);
         $this->execActionBtn = $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MODAL_BUTTON);
         $this->btns->add($this->execActionBtn);
@@ -435,7 +432,7 @@ trait StepExecutorTrait
     /**
      * Get proper js after submitting a form in a step.
      *
-     * @return mixed
+     * @return JsBlock|View
      */
     protected function jsStepSubmit(string $step)
     {
@@ -446,13 +443,13 @@ trait StepExecutorTrait
                 $js = $this->jsGetExecute($return, $this->action->getEntity()->getId());
             } else {
                 // store data and setup reload
-                $js = [
+                $js = new JsBlock([
                     $this->loader->jsAddStoreData($this->actionData, true),
                     $this->loader->jsLoad([
                         'step' => $this->getNextStep($step),
                         $this->name => $this->action->getEntity()->getId(),
                     ], ['method' => 'post'], $this->loader->name),
-                ];
+                ]);
             }
 
             return $js;
@@ -460,6 +457,7 @@ trait StepExecutorTrait
             throw $e;
         } catch (\Throwable $e) {
             $msg = new Message(['Error executing ' . $this->action->caption, 'type' => 'error', 'class.red' => true]);
+            $msg->setApp($this->getApp());
             $msg->invokeInit();
             $msg->text->content = $this->getApp()->renderExceptionHtml($e);
 
@@ -512,37 +510,5 @@ trait StepExecutorTrait
         }
 
         return $args;
-    }
-
-    /**
-     * Create a sequence of js statement for a view.
-     *
-     * @param array|JsExpressionable $js
-     */
-    protected function jsSequencer(View $view, $js): void
-    {
-        if (is_array($js)) {
-            foreach ($js as $jq) {
-                $this->jsSequencer($view, $jq);
-            }
-        } else {
-            $view->js(true, $js);
-        }
-    }
-
-    protected function handleException(\Throwable $exception, View $view, string $step): void
-    {
-        $msg = Message::addTo($view, ['Error:', 'type' => 'error']);
-        $msg->text->addHtml($this->getApp()->renderExceptionHtml($exception));
-        $view->js(true, $this->nextStepBtn->js()->addClass('disabled'));
-        if (!$this->isFirstStep($step)) {
-            $this->jsSetPrevHandler($view, $step);
-        }
-        if ($this->isLastStep($step)) {
-            $view->js(true, $this->execActionBtn->js()->addClass('disabled'));
-        }
-        if ($step === 'final') {
-            $this->jsSetPrevHandler($view, $this->steps[count($this->steps) - 1]);
-        }
     }
 }

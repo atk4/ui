@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpressionable;
 
 /**
  * Accordion is a View holding accordion sections.
@@ -35,8 +36,9 @@ class Accordion extends View
      * You can add static View within your section or pass
      * a callback for dynamic content.
      *
-     * @param string $title
-     * @param string $icon
+     * @param string                                                                                            $title
+     * @param \Closure(VirtualPage, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $callback
+     * @param string                                                                                            $icon
      *
      * @return AccordionSection
      */
@@ -71,7 +73,7 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsOpen($section, $when = false)
+    public function jsOpen($section, $when = false): JsExpressionable
     {
         return $this->jsBehavior('open', [$this->getSectionIdx($section)], $when);
     }
@@ -81,7 +83,7 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsCloseOthers($when = false)
+    public function jsCloseOthers($when = false): JsExpressionable
     {
         return $this->jsBehavior('close others', [], $when);
     }
@@ -92,7 +94,7 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsClose($section, $when = false)
+    public function jsClose($section, $when = false): JsExpressionable
     {
         return $this->jsBehavior('close', [$this->getSectionIdx($section)], $when);
     }
@@ -103,7 +105,7 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsToggle($section, $when = false)
+    public function jsToggle($section, $when = false): JsExpressionable
     {
         return $this->jsBehavior('toggle', [$this->getSectionIdx($section)], $when);
     }
@@ -119,7 +121,7 @@ class Accordion extends View
      *
      * @return JsChain
      */
-    public function jsBehavior($behavior, array $args, $when = false)
+    public function jsBehavior($behavior, array $args, $when = false): JsExpressionable
     {
         return $this->js($when)->accordion($behavior, ...$args);
     }

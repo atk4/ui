@@ -29,6 +29,7 @@ $form->onSubmit(function (Form $form) use ($app) {
     $message = $app->encodeJson($form->model->get());
 
     $view = new Message('Values: ');
+    $view->setApp($form->getApp());
     $view->invokeInit();
     $view->text->addParagraph($message);
 
@@ -108,6 +109,7 @@ $form->onSubmit(function (Form $form) use ($app) {
     $message = $app->encodeJson($form->model->get());
 
     $view = new Message('Values: ');
+    $view->setApp($form->getApp());
     $view->invokeInit();
     $view->text->addParagraph($message);
 

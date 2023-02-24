@@ -59,6 +59,9 @@ class Demo extends Columns
         }, $codeArr));
     }
 
+    /**
+     * @param \Closure(View): void $fx
+     */
     public function setCodeAndCall(\Closure $fx, string $lang = 'php'): void
     {
         $code = $this->extractCodeFromClosure($fx);

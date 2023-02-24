@@ -16,6 +16,8 @@ use Mvorisek\Atk4\Hintable\Phpstan\PhpstanUtil;
 
 class FormTest extends TestCase
 {
+    use CreateAppTrait;
+
     /** @var Form|null */
     public $form;
 
@@ -43,6 +45,10 @@ class FormTest extends TestCase
         static::assertSame($f->getControl('test'), $f->layout->getControl('test'));
     }
 
+    /**
+     * @param \Closure(Model): void  $submitFx
+     * @param \Closure(string): void $checkExpectedErrorsFx
+     */
     public function assertSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
     {
         $wasSubmitCalled = false;
@@ -70,7 +76,7 @@ class FormTest extends TestCase
                 $checkExpectedErrorsFx($res['atkjs']);
             } else {
                 static::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
-                static::assertSame('', $res['atkjs']);
+                static::assertNull($res['atkjs']);
             }
 
             $this->form = null; // we shouldn't submit form twice!
@@ -208,6 +214,7 @@ class FormTest extends TestCase
         $input = new Form\Control\Input();
         $input->disabled = true;
         $input->readOnly = true;
+        $input->setApp($this->createApp());
         static::assertStringContainsString(' disabled="disabled"', $input->render());
         static::assertStringContainsString(' readonly="readonly"', $input->render());
 
@@ -215,6 +222,7 @@ class FormTest extends TestCase
         $input->disabled = true;
         $input->readOnly = true;
         $input->inputType = 'hidden';
+        $input->setApp($this->createApp());
         static::assertStringNotContainsString('disabled', $input->render());
         static::assertStringNotContainsString('readonly', $input->render());
     }

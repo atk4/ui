@@ -7,6 +7,7 @@ namespace Atk4\Ui\VueComponent;
 use Atk4\Data\Model;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
@@ -86,9 +87,9 @@ class InlineEdit extends View
         }
     }
 
-    public function setModel(Model $model): void
+    public function setModel(Model $entity): void
     {
-        parent::setModel($model);
+        parent::setModel($entity);
 
         if ($this->fieldName === null) {
             $this->fieldName = $this->model->titleField;
@@ -117,6 +118,8 @@ class InlineEdit extends View
      * You may supply your own function to handle update.
      * The function will receive one param:
      *  value: the new input value.
+     *
+     * @param \Closure(mixed): (JsExpressionable|View|string|void) $fx
      */
     public function onChange(\Closure $fx): void
     {
@@ -133,7 +136,7 @@ class InlineEdit extends View
      *
      * @return JsToast
      */
-    public function jsSuccess(string $message)
+    public function jsSuccess(string $message): JsExpressionable
     {
         return new JsToast([
             'title' => 'Success',
@@ -149,7 +152,7 @@ class InlineEdit extends View
      *
      * @return JsToast
      */
-    public function jsError($message)
+    public function jsError($message): JsExpressionable
     {
         return new JsToast([
             'title' => 'Validation error:',

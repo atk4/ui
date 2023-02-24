@@ -19,4 +19,4 @@ Feature: Callback
     Then I click using selector "xpath((//div.ui.atk-test.button)[1])"
     Then Modal is open with text "Edit Country"
     Then I press Modal button "Save"
-    Then Toast display should contain text "Form Submit"
+    Then Toast display should contain text 'Country action "edit" with "Andorra" entity was executed.'

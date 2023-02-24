@@ -6,13 +6,14 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 
 class Wizard extends View
 {
     use SessionTrait;
 
     public $defaultTemplate = 'wizard.html';
-    public $ui = 'steps';
+    public $ui = 'steps top attached';
 
     /** @var string Get argument for this wizard. */
     public $urlTrigger;
@@ -77,6 +78,7 @@ class Wizard extends View
      * Adds step to the wizard.
      *
      * @param string|array|WizardStep $name
+     * @param \Closure($this): void   $fx
      *
      * @return WizardStep
      */
@@ -109,6 +111,8 @@ class Wizard extends View
     /**
      * Adds an extra screen to show user when he goes beyond last step.
      * There won't be "back" button on this step anymore.
+     *
+     * @param \Closure($this): void $fx
      */
     public function addFinish(\Closure $fx): void
     {
@@ -143,7 +147,7 @@ class Wizard extends View
     }
 
     /**
-     * Get URL to next step. Will respect stickyGET.
+     * Get URL to next step. Will respect stickyGet.
      */
     public function urlNext(): string
     {
@@ -151,11 +155,9 @@ class Wizard extends View
     }
 
     /**
-     * Generate a js that will navigate to next step URL.
-     *
-     * @return JsExpression
+     * Generate JS that will navigate to next step URL.
      */
-    public function jsNext()
+    public function jsNext(): JsExpressionable
     {
         return new JsExpression('document.location = []', [$this->urlNext()]);
     }

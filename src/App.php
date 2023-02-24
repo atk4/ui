@@ -10,7 +10,6 @@ use Atk4\Core\DynamicMethodTrait;
 use Atk4\Core\ExceptionRenderer;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
-use Atk4\Core\InitializerTrait;
 use Atk4\Core\TraitUtil;
 use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Persistence;
@@ -18,6 +17,7 @@ use Atk4\Ui\Exception\ExitApplicationError;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Nyholm\Psr7\Response;
@@ -32,9 +32,6 @@ class App
     use DiContainerTrait;
     use DynamicMethodTrait;
     use HookTrait;
-    use InitializerTrait {
-        init as private _init;
-    }
 
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
     public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
@@ -58,7 +55,7 @@ class App
      *
      * @TODO remove, no longer needed for CDN versioning as we bundle all resources
      */
-    public $version = '4.1-dev';
+    public $version = '5.0-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -190,31 +187,28 @@ class App
         // Set our exception handler
         if ($this->catchExceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
-            set_error_handler(
-                static function (int $severity, string $msg, string $file, int $line): bool {
-                    if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
-                        $isFirstFrame = true;
-                        foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
-                            // allow to suppress any warning outside Atk4
-                            if ($isFirstFrame) {
-                                $isFirstFrame = false;
-                                if (!isset($frame['class']) || !str_starts_with($frame['class'], 'Atk4\\')) {
-                                    return false;
-                                }
-                            }
-
-                            // allow to suppress undefined property warning
-                            if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
-                                && $frame['function'] === 'warnPropertyDoesNotExist') {
+            set_error_handler(static function (int $severity, string $msg, string $file, int $line): bool {
+                if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
+                    $isFirstFrame = true;
+                    foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
+                        // allow to suppress any warning outside Atk4
+                        if ($isFirstFrame) {
+                            $isFirstFrame = false;
+                            if (!isset($frame['class']) || !str_starts_with($frame['class'], 'Atk4\\')) {
                                 return false;
                             }
                         }
-                    }
 
-                    throw new \ErrorException($msg, 0, $severity, $file, $line);
-                },
-                \E_ALL
-            );
+                        // allow to suppress undefined property warning
+                        if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
+                            && $frame['function'] === 'warnPropertyDoesNotExist') {
+                            return false;
+                        }
+                    }
+                }
+
+                throw new \ErrorException($msg, 0, $severity, $file, $line);
+            });
             http_response_code(500);
         }
 
@@ -587,21 +581,11 @@ class App
     }
 
     /**
-     * Initialize app.
-     */
-    protected function init(): void
-    {
-        $this->_init();
-    }
-
-    /**
      * Load template by template file name.
-     *
-     * @param string $filename
      *
      * @return HtmlTemplate
      */
-    public function loadTemplate($filename)
+    public function loadTemplate(string $filename)
     {
         $template = new $this->templateClass();
         $template->setApp($this);
@@ -809,7 +793,7 @@ class App
      *
      * @param string|array $page Destination URL or page/arguments
      */
-    public function jsRedirect($page, bool $newWindow = false): JsExpression
+    public function jsRedirect($page, bool $newWindow = false): JsExpressionable
     {
         return new JsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
     }
@@ -991,6 +975,21 @@ class App
      */
     public function encodeJson($data, bool $forceObject = false): string
     {
+        if (is_array($data) || is_object($data)) {
+            $checkNoObjectFx = function ($v) {
+                if (is_object($v)) {
+                    throw (new Exception('Object to JSON encode is not supported'))
+                        ->addMoreInfo('value', $v);
+                }
+            };
+
+            if (is_object($data)) {
+                $checkNoObjectFx($data);
+            } else {
+                array_walk_recursive($data, $checkNoObjectFx);
+            }
+        }
+
         $options = \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT;
         if ($forceObject) {
             $options |= \JSON_FORCE_OBJECT;

@@ -59,7 +59,7 @@ Loader::addTo($app)->set(function (Loader $p) {
 
 // Example 2 - Loader with custom body.
 Loader::addTo($app, [
-    'ui' => '', // this will prevent "loading spinner" from showing
+    'ui' => false, // this will prevent "loading spinner" from showing
     'shim' => [ // shim is displayed while content is leaded
         Message::class,
         'Generating LoremIpsum, please wait...',

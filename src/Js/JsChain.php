@@ -5,32 +5,24 @@ declare(strict_types=1);
 namespace Atk4\Ui\Js;
 
 /**
- * Implements a transparent mapper that will actually translate into JavaScript code. Used
- * as a GLUE between Views and your actual JavaScript code.
+ * Transparent mapper that will actually translate into JavaScript code. Used
+ * as a glue between Views and your actual JavaScript code.
  *
- * IMPORTANT: extend first. see Jquery.php for example.
- *
- * IMPORTANT: don't write any JavaScript logic in PHP, only bind.
- *
- * IMPORTANT: all methods in this class are pre-pended with '_', to avoid clashes with js-mapping.
- *
- * @method Jquery redirect(...$args)
+ * IMPORTANT: all methods in this class are prepended with '_', to avoid clashes with js-mapping
+ * IMPORTANT: extend first, see Jquery class for example
  */
 class JsChain extends JsExpression
 {
-    /** @var string Set this to the object of your library. Most libraries prefer '$', although you might want to use 'jQuery' or 'new google.maps.Map';. */
-    public $_library = '$';
+    public string $_library;
 
     /**
      * This will represent constructor argument. If no arguments are set, then the library will be executed like this:.
-     *
-     * $.hello();
+     * $.hello().
      *
      * If arguments are specified they are passed to constructor initializer:
+     * $('foo', 'bar').hello().
      *
-     * $('foo', 'bar').hello();
-     *
-     * @var array
+     * @var list<mixed>
      */
     public $_constructorArgs = [];
 
@@ -39,42 +31,30 @@ class JsChain extends JsExpression
      * is also stored here.
      *
      * $js->foo()->bar(1)->baz->test(['abc' => 123']);
-     *
      * will be stored in $chain as
-     *
      * [['foo'], ['bar', [1]], 'baz', ['test', ['abc => 123]]]
-     *
      * will map into:
-     *
      * $.foo().bar(1).baz.test({ abc: 123 ]);
      *
-     * @var array
+     * @var list<string|int|array{string, list<mixed>}>
      */
     public $_chain = [];
 
-    /**
-     * Override a library when executing constructor. For instance if you wish to use jQuery3 instead of jQuery.
-     *
-     * @param string $library
-     */
-    public function __construct($library = null)
+    public function __construct(string $library)
     {
         parent::__construct();
 
-        if ($library) {
-            $this->_library = $library;
-        }
+        $this->_library = $library;
     }
 
     /**
      * Records all calls to this chain returning itself every time.
      *
-     * @param string $name
-     * @param mixed  $args
+     * @param list<mixed> $args
      *
      * @return $this
      */
-    public function __call($name, $args)
+    public function __call(string $name, $args)
     {
         $this->_chain[] = [$name, $args];
 
@@ -85,18 +65,14 @@ class JsChain extends JsExpression
      * Allows you to use syntax like this.
      *
      * $js->offset()->top
-     *
      * that maps into
-     *
      * $.offset()->top
-     *
-     * @param string $property
      *
      * @return $this
      */
-    public function &__get($property)
+    public function &__get(string $name)
     {
-        $this->_chain[] = $property;
+        $this->_chain[] = $name;
 
         return $this;
     }
@@ -104,18 +80,12 @@ class JsChain extends JsExpression
     /**
      * Renders JS chain arguments.
      *
-     * @param array $args
-     *
-     * @return string
+     * @param list<mixed> $args
      */
-    private function _renderArgs($args = [])
+    private function _renderArgs(array $args = []): string
     {
         return '('
             . implode(', ', array_map(function ($arg) {
-                if ($arg instanceof JsExpressionable) {
-                    return $arg->jsRender();
-                }
-
                 return $this->_jsEncode($arg);
             }, $args))
             . ')';
@@ -123,25 +93,29 @@ class JsChain extends JsExpression
 
     public function jsRender(): string
     {
-        // start with constructor
-        $ret = $this->_library;
+        $res = $this->_library;
 
-        // next perhaps we have arguments
         if ($this->_constructorArgs) {
-            $ret .= $this->_renderArgs($this->_constructorArgs);
+            $res .= $this->_renderArgs($this->_constructorArgs);
         }
 
-        // next we do same with the calls
         foreach ($this->_chain as $chain) {
-            if (is_array($chain)) {
-                $ret .= '.' . $chain[0] . $this->_renderArgs($chain[1]);
-            } elseif (is_int($chain)) {
-                $ret .= '[' . $chain . ']';
+            $args = null;
+            if (is_int($chain)) {
+                $name = (string) $chain;
+            } elseif (is_string($chain)) {
+                $name = $chain;
             } else {
-                $ret .= '.' . $chain;
+                $name = $chain[0];
+                $args = $chain[1];
+            }
+
+            $res .= preg_match('~^(?!\d)\w+$~su', $name) ? '.' . $name : '[' . $this->_jsEncode($name) . ']';
+            if ($args !== null) {
+                $res .= $this->_renderArgs($args);
             }
         }
 
-        return $ret;
+        return $res;
     }
 }

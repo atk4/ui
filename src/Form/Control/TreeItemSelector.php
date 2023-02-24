@@ -7,6 +7,7 @@ namespace Atk4\Ui\Form\Control;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
 
@@ -73,10 +74,10 @@ class TreeItemSelector extends Form\Control
     {
         parent::init();
 
-        $this->addClass(['ui', 'vertical', 'segment', 'basic', $this->loaderCssName])->addStyle(['padding' => '0px!important']);
+        $this->addClass(['ui', 'vertical', 'segment', 'basic', $this->loaderCssName])->setStyle(['padding' => '0px!important']);
 
         if (!$this->itemSelectorTemplate) {
-            $this->itemSelectorTemplate = new HtmlTemplate('<div id="{$_id}" class="ui list" style="margin-left: 16px;"><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
+            $this->itemSelectorTemplate = new HtmlTemplate('<div class="ui list" style="margin-left: 16px;" {$attributes}><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
         $this->itemSelector = View::addTo($this, ['template' => $this->itemSelectorTemplate]);
@@ -86,6 +87,8 @@ class TreeItemSelector extends Form\Control
      * Provide a function to be executed when clicking an item in tree selector.
      * The executing function will receive an array with item state in it
      * when allowMultiple is true or a single value when false.
+     *
+     * @param \Closure(mixed): (JsExpressionable|View|string|void) $fx
      */
     public function onItem(\Closure $fx): void
     {

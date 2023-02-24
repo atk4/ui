@@ -9,6 +9,7 @@ use Atk4\Ui\Card;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Icon;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Message;
@@ -63,10 +64,10 @@ $panel1->onOpen(function (Panel\Content $p) use ($view) {
 
     View::addTo($panel, ['ui' => 'divider']);
     $panelButton = Button::addTo($panel, ['Complete']);
-    $panelButton->on('click', [
+    $panelButton->on('click', new JsBlock([
         $p->getOwner()->jsClose(),
         new JsReload($view, ['txt' => 'Complete using button #' . $buttonNumber]),
-    ]);
+    ]));
 });
 
 View::addTo($app, ['ui' => 'divider']);
@@ -76,7 +77,7 @@ View::addTo($app, ['ui' => 'divider']);
 Header::addTo($app, ['Closing option', 'size' => 4, 'subHeader' => 'Panel can prevent from closing.']);
 
 $panel2 = Panel\Right::addTo($app, ['hasClickAway' => false]);
-$icon = Icon::addTo($app, ['big cog'])->addStyle('cursor', 'pointer');
+$icon = Icon::addTo($app, ['big cog'])->setStyle('cursor', 'pointer');
 $icon->on('click', $panel2->jsOpen());
 $panel2->addConfirmation('Changes will be lost. Are you sure?');
 
@@ -94,11 +95,11 @@ $panel2->onOpen(function (Panel\Content $p) {
         ->onChange($p->getOwner()->jsDisplayWarning(true));
 
     $form->onSubmit(function (Form $form) use ($p) {
-        return [
+        return new JsBlock([
             new JsToast('Saved, closing panel.'),
             $p->getOwner()->jsDisplayWarning(false),
             $p->getOwner()->jsClose(),
-        ];
+        ]);
     });
 });
 View::addTo($app, ['ui' => 'divider']);
@@ -115,7 +116,7 @@ $deck = View::addTo($app, ['ui' => 'cards']);
 $country->setLimit(3);
 
 foreach ($country as $ct) {
-    $c = Card::addTo($deck, ['useLabel' => true])->addStyle('cursor', 'pointer');
+    $c = Card::addTo($deck, ['useLabel' => true])->setStyle('cursor', 'pointer');
     $c->setModel($ct);
     $c->on('click', $panel3->jsOpen([], ['id'], 'orange'));
 }

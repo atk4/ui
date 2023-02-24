@@ -14,6 +14,7 @@ use Atk4\Data\ValidationException;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
@@ -146,7 +147,7 @@ class Multiline extends Form\Control
     /** @var JsCallback */
     private $renderCallback;
 
-    /** @var \Closure|null Function to execute when field change or row is delete. */
+    /** @var \Closure(mixed, Form): (JsExpressionable|View|string|void)|null Function to execute when field change or row is delete. */
     protected $onChangeFunction;
 
     /** @var array Set fields that will trigger onChange function. */
@@ -166,9 +167,6 @@ class Multiline extends Form\Control
 
     /** @var int The maximum number of items for select type field. */
     public $itemLimit = 25;
-
-    /** @var string Multiline's caption. */
-    public $caption;
 
     /**
      * Container for component that need Props set based on their field value as Lookup component.
@@ -204,7 +202,7 @@ class Multiline extends Form\Control
         parent::init();
 
         if (!$this->multiLineTemplate) {
-            $this->multiLineTemplate = new HtmlTemplate('<div id="{$_id}" class=""><atk-multiline v-bind="initData"></atk-multiline></div>');
+            $this->multiLineTemplate = new HtmlTemplate('<div {$attributes}><atk-multiline v-bind="initData"></atk-multiline></div>');
         }
 
         $this->multiLine = View::addTo($this, ['template' => $this->multiLineTemplate]);
@@ -270,6 +268,8 @@ class Multiline extends Form\Control
     /**
      * Add a callback when fields are changed. You must supply array of fields
      * that will trigger the callback when changed.
+     *
+     * @param \Closure(mixed, Form): (JsExpressionable|View|string|void) $fx
      */
     public function onLineChange(\Closure $fx, array $fields): void
     {
@@ -335,6 +335,9 @@ class Multiline extends Form\Control
         return $rowErrors;
     }
 
+    /**
+     * @return $this
+     */
     public function saveRows(): self
     {
         $model = $this->model;
@@ -611,11 +614,11 @@ class Multiline extends Form\Control
     protected function getFieldItems(Field $field, ?int $limit = 10): array
     {
         $items = [];
-        if ($field->enum) {
+        if ($field->enum !== null) {
             $items = array_slice($field->enum, 0, $limit);
             $items = array_combine($items, $items);
         }
-        if ($field->values && is_array($field->values)) {
+        if ($field->values !== null) {
             $items = array_slice($field->values, 0, $limit, true);
         } elseif ($field->hasReference()) {
             $model = $field->getReference()->refModel($this->model);
@@ -757,13 +760,13 @@ class Multiline extends Form\Control
         $formatValues = [];
 
         foreach ($dummyFields as $k => $field) {
-            if (!is_callable($field->expr)) {
+            if (!$field->expr instanceof \Closure) {
                 $dummyFields[$k]->expr = $this->getDummyExpression($field, $model);
             }
         }
 
         if ($dummyFields !== []) {
-            $dummyModel = new Model($model->getPersistence(), ['table' => $model->table]);
+            $dummyModel = new Model($model->getModel()->getPersistence(), ['table' => $model->table]);
             $dummyModel->removeField('id');
             $dummyModel->idField = $model->idField;
 
@@ -783,7 +786,7 @@ class Multiline extends Form\Control
                         ? $dummyFields[$field->shortName]->expr
                         : ($field->shortName === $dummyModel->idField
                             ? '-1'
-                            : $createExprFromValueFx($model->getPersistence()->typecastSaveField($field, $field->get($model)))),
+                            : $createExprFromValueFx($model->getModel()->getPersistence()->typecastSaveField($field, $field->get($model)))),
                     'type' => $field->type,
                     'actual' => $field->actual,
                 ]);

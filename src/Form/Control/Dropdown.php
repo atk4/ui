@@ -10,6 +10,7 @@ use Atk4\Ui\Js\JsFunction;
 
 class Dropdown extends Input
 {
+    public $ui = 'dropdown fluid search selection';
     public $defaultTemplate = 'form/control/dropdown.html';
 
     public string $inputType = 'hidden';
@@ -30,9 +31,6 @@ class Dropdown extends Input
 
     /** @var string The string to set as an empty values. */
     public $empty = "\u{00a0}"; // Unicode NBSP
-
-    /** @var string The css class associate with this dropdown. */
-    public $defaultClass = 'fluid search selection dropdown';
 
     /**
      * The icon to display at the dropdown menu.
@@ -112,8 +110,6 @@ class Dropdown extends Input
     {
         parent::init();
 
-        $this->ui = ' ';
-
         $this->_tItem = $this->template->cloneRegion('Item');
         $this->template->del('Item');
         $this->_tIcon = $this->_tItem->cloneRegion('Icon');
@@ -139,11 +135,11 @@ class Dropdown extends Input
      * the model, then the model's value will also be affected.
      *
      * @param mixed $value
-     * @param mixed $junk
+     * @param never $ignore
      *
      * @return $this
      */
-    public function set($value = null, $junk = null)
+    public function set($value = null, $ignore = null)
     {
         if ($this->entityField) {
             if ($this->entityField->getField()->type === 'json' && is_string($value)) {
@@ -154,7 +150,7 @@ class Dropdown extends Input
             return $this;
         }
 
-        return parent::set($value, $junk);
+        return parent::set($value, $ignore);
     }
 
     /**
@@ -223,10 +219,8 @@ class Dropdown extends Input
     protected function renderView(): void
     {
         if ($this->isMultiple) {
-            $this->defaultClass .= ' multiple';
+            $this->addClass('multiple');
         }
-
-        $this->addClass($this->defaultClass);
 
         if ($this->readOnly || $this->disabled) {
             $this->setDropdownOption('allowTab', false);

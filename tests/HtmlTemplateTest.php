@@ -78,12 +78,13 @@ class HtmlTemplateTest extends TestCase
         static::assertFalse($t->hasTag(['foo', 'bar', 'non_existent_tag']));
     }
 
-    public function testSetBadTypeException(): void
+    public function testSetInvalidUtf8Exception(): void
     {
         $t = new HtmlTemplate('{foo}hello{/} guys');
 
         $this->expectException(Exception::class);
-        $t->set('foo', new \stdClass()); // @phpstan-ignore-line
+        $this->expectExceptionMessage('Value is not valid UTF-8');
+        $t->set('foo', "\xc2");
     }
 
     public function testSetAppendDel(): void
@@ -125,6 +126,28 @@ class HtmlTemplateTest extends TestCase
         static::assertSameTemplate('{foo}Hi and <b>welcome</b> my dear and <b>smart</b>{/} guys', $t);
     }
 
+    public function testValueEncoded(): void
+    {
+        $t = new HtmlTemplate('{foo}hello{/} guys');
+        $tagTreeFoo = $t->getTagTree('foo');
+
+        static::assertTrue($tagTreeFoo->getChildren()[0]->isEncoded());
+        static::assertSame('hello', $tagTreeFoo->getChildren()[0]->getHtml());
+
+        $t->set('foo', '<br>');
+        static::assertFalse($tagTreeFoo->getChildren()[0]->isEncoded());
+        static::assertSame('&lt;br&gt;', $tagTreeFoo->getChildren()[0]->getHtml());
+        static::assertSame('<br>', $tagTreeFoo->getChildren()[0]->getUnencoded());
+
+        $t->dangerouslyAppendHtml('foo', '<br>');
+        static::assertTrue($tagTreeFoo->getChildren()[1]->isEncoded());
+        static::assertSame('<br>', $tagTreeFoo->getChildren()[1]->getHtml());
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unencoded value is not available');
+        $tagTreeFoo->getChildren()[1]->getUnencoded();
+    }
+
     public function testClone(): void
     {
         $t = new HtmlTemplate('{foo}{inner}hello{/}{/} guys');
@@ -152,5 +175,14 @@ class HtmlTemplateTest extends TestCase
             'bar' => 'welcome',
         ]);
         static::assertSameTemplate('{foo}Hello{/} guys and {bar}welcome{/} here', $t);
+    }
+
+    public function testTagNotDefinedException(): void
+    {
+        $t = new HtmlTemplate('{$foo}');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Tag is not defined in template');
+        $t->set('bar', 'test');
     }
 }

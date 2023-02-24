@@ -8,15 +8,17 @@ use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
-use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 
+/**
+ * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
+ */
 class Table extends Lister
 {
-    public $defaultTemplate = 'table.html';
     public $ui = 'table';
-    public $content = false;
+
+    public $defaultTemplate = 'table.html';
 
     /**
      * If table is part of Grid or Crud, we want to reload that instead of table.
@@ -62,9 +64,6 @@ class Table extends Lister
 
     /** @var HtmlTemplate Contain the template for the "Foot" type row. */
     public $tTotals;
-
-    /** @var HtmlTemplate Contains the output to show if table contains no rows. */
-    public $tEmpty;
 
     /**
      * Set this if you want table to appear as sortable. This does not add any
@@ -305,7 +304,7 @@ class Table extends Lister
      * The callback function will receive two parameter, a Jquery chain object and a array containing all table columns
      * name and size.
      *
-     * @param \Closure        $fx             a callback function with columns widths as parameter
+     * @param \Closure(Jquery, mixed): (JsExpressionable|View|string|void) $fx             a callback function with columns widths as parameter
      * @param array<int, int> $widths         ex: [100, 200, 300, 100]
      * @param array           $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
      *
@@ -314,7 +313,7 @@ class Table extends Lister
     public function resizableColumn($fx = null, $widths = null, $resizerOptions = [])
     {
         $options = [];
-        if ($fx instanceof \Closure) {
+        if ($fx !== null) {
             $cb = JsCallback::addTo($this);
             $cb->set(function (Jquery $chain, string $data) use ($fx) {
                 return $fx($chain, $this->getApp()->decodeJson($data));
@@ -408,7 +407,7 @@ class Table extends Lister
 
         // Generate template for data row
         $this->tRowMaster->dangerouslySetHtml('cells', $this->getDataRowHtml());
-        $this->tRowMaster->set('_id', '{$_id}');
+        $this->tRowMaster->set('dataId', '{$dataId}');
         $this->tRow = new HtmlTemplate($this->tRowMaster->renderToHtml());
         $this->tRow->setApp($this->getApp());
 
@@ -419,9 +418,11 @@ class Table extends Lister
         // then also backup/tryfinally would be not needed
         // the same in Lister class
         $modelBackup = $this->model;
+        $tRowBackup = $this->tRow;
         try {
             foreach ($this->model as $this->model) {
                 $this->currentRow = $this->model;
+                $this->tRow = clone $tRowBackup;
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
                 }
@@ -440,6 +441,7 @@ class Table extends Lister
             }
         } finally {
             $this->model = $modelBackup;
+            $this->tRow = $tRowBackup;
         }
 
         // Add totals rows or empty message
@@ -482,7 +484,7 @@ class Table extends Lister
                 if (!is_array($columns)) {
                     $columns = [$columns];
                 }
-                $field = !is_int($name) && $this->model->hasField($name) ? $this->model->getField($name) : null;
+                $field = is_int($name) ? null : $this->model->getField($name);
                 foreach ($columns as $column) {
                     $html_tags = array_merge($column->getHtmlTags($this->model, $field), $html_tags);
                 }
@@ -490,7 +492,7 @@ class Table extends Lister
 
             // Render row and add to body
             $this->tRow->dangerouslySetHtml($html_tags);
-            $this->tRow->set('_id', $this->model->getId());
+            $this->tRow->set('dataId', (string) $this->model->getId());
             $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
             $this->tRow->del(array_keys($html_tags));
         } else {
@@ -503,7 +505,7 @@ class Table extends Lister
      * click outside of the body. Additionally when you move cursor over the
      * rows, pointer will be used and rows will be highlighted as you hover.
      *
-     * @param JsChain|\Closure|JsExpressionable $action Code to execute
+     * @param JsExpressionable|JsCallbackSetClosure $action Code to execute
      */
     public function onRowClick($action): void
     {
@@ -534,7 +536,7 @@ class Table extends Lister
      *
      * @return Jquery
      */
-    public function jsRow()
+    public function jsRow(): JsExpressionable
     {
         return (new Jquery())->closest('tr');
     }
@@ -547,7 +549,7 @@ class Table extends Lister
      *
      * @return Jquery
      */
-    public function jsRemoveRow($id, $transition = 'fade left')
+    public function jsRemoveRow($id, $transition = 'fade left'): JsExpressionable
     {
         return $this->js()->find('tr[data-id=' . $id . ']')->transition($transition);
     }
@@ -680,14 +682,13 @@ class Table extends Lister
 
             // we need to smartly wrap things up
             $cell = null;
-            $cnt = count($column);
             $td_attr = [];
-            foreach ($column as $c) {
-                if (--$cnt) {
+            foreach ($column as $cKey => $c) {
+                if ($cKey !== array_key_last($column)) {
                     $html = $c->getDataCellTemplate($field);
                     $td_attr = $c->getTagAttributes('body', $td_attr);
                 } else {
-                    // Last formatter, ask it to give us whole rendering
+                    // last formatter, ask it to give us whole rendering
                     $html = $c->getDataCellHtml($field, $td_attr);
                 }
 

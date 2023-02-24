@@ -135,7 +135,7 @@ Here is the code with comments::
 
             if (is_null($this->social)) {
                 $this->social = $this->content;
-                $this->content = 'Add on '.ucwords($this->content);
+                $this->content = 'Add on ' . ucwords($this->content);
             }
 
             if (!$this->social) {

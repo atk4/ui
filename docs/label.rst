@@ -80,7 +80,7 @@ Groups
 Label can be part of the group, but you would need to either use custom HTML template or
 composition::
 
-    $group = View::addTo($app, [false, 'class.blue tag' => true, 'ui' => 'labels']);
+    $group = View::addTo($app, ['class.blue tag' => true, 'ui' => 'labels']);
     Label::addTo($group, ['$9.99']);
     Label::addTo($group, ['$19.99', 'class.red tag' => true]);
     Label::addTo($group, ['$24.99']);

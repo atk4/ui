@@ -25,4 +25,4 @@ Feature: Lookup
     When I fill in "atk_fp_country__numcode" with "88"
     When I fill in "atk_fp_country__phonecode" with "8"
     Then I press Modal button "Save"
-    Then Toast display should contain text "Form submit!"
+    Then Toast display should contain text 'Country action "add" with "New country" entity was executed.'

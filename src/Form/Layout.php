@@ -220,6 +220,7 @@ class Layout extends AbstractLayout
                 } else {
                     $hint->set($element->hint);
                 }
+                $hint->setApp($this->getApp());
                 $template->dangerouslySetHtml('Hint', $hint->getHtml());
             } elseif ($template->hasTag('Hint')) {
                 $template->del('Hint');

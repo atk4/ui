@@ -65,7 +65,6 @@ class Checkbox extends Form\Control
             $this->template->dangerouslySetHtml('checked', 'checked="checked"');
         }
 
-        // We don't want this displayed, because it can only affect "checked" status anyway
         $this->content = null;
 
         if ($this->readOnly) {
@@ -79,8 +78,6 @@ class Checkbox extends Form\Control
 
         $this->js(true)->checkbox();
 
-        $this->content = null; // no content again
-
         parent::renderView();
     }
 
@@ -92,7 +89,7 @@ class Checkbox extends Form\Control
      *
      * @return Jquery
      */
-    public function jsChecked($when = false, $action = null)
+    public function jsChecked($when = false, $action = null): JsExpressionable
     {
         return $this->jsInput($when, $action)->get(0)->checked;
     }

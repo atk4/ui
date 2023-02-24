@@ -17,7 +17,7 @@ require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Loader Example - page 1', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['loader']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 $c = Columns::addTo($app);
 

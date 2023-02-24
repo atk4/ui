@@ -8,7 +8,7 @@ use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Ui\View;
 
 /**
- * This class generates action, that will be able to loop-back to the callback method.
+ * Generates action, that will be able to loop-back to the callback method.
  */
 class JsReload implements JsExpressionable
 {
@@ -17,13 +17,10 @@ class JsReload implements JsExpressionable
     /** Specifies which view to reload. Use constructor to set. */
     public View $view;
 
-    /** @var JsExpression|null A Js function to execute after reload is complete and onSuccess is execute. */
+    /** @var JsExpressionable|null A Js function to execute after reload is complete and onSuccess is execute. */
     public $afterSuccess;
 
-    /**
-     * If defined, they will be added at the end of your URL.
-     * Value in ARG can be either string or JsExpressionable.
-     */
+    /** @var array<string, string|int|JsExpressionable> Added at the end of your URL. */
     public array $args = [];
 
     /**
@@ -35,7 +32,10 @@ class JsReload implements JsExpressionable
     /** @var bool */
     public $includeStorage = false;
 
-    public function __construct(View $view, array $args = [], JsExpression $afterSuccess = null, array $apiConfig = [], bool $includeStorage = false)
+    /**
+     * @param array<string, string|int|JsExpressionable> $args
+     */
+    public function __construct(View $view, array $args = [], JsExpressionable $afterSuccess = null, array $apiConfig = [], bool $includeStorage = false)
     {
         $this->view = $view;
         $this->args = $args;

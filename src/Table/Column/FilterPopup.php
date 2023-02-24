@@ -23,8 +23,8 @@ class FilterPopup extends Popup
     /** @var Form The form associate with this FilterPopup. */
     public $form;
 
-    /** @var Field The table field that need filtering. */
-    public $field;
+    /** The table field that need filtering. */
+    public Field $field;
 
     /** @var View|null The view associated with this filter popup that needs to be reloaded. */
     public $reload;

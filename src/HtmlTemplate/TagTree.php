@@ -15,14 +15,12 @@ class TagTree
 {
     use WarnDynamicPropertyTrait;
 
-    /** @var HtmlTemplate */
-    private $parentTemplate;
+    private HtmlTemplate $parentTemplate;
 
-    /** @var string */
-    private $tag;
+    private string $tag;
 
     /** @var array<int, Value|string|HtmlTemplate> */
-    private $children = [];
+    private array $children = [];
 
     public function __construct(HtmlTemplate $parentTemplate, string $tag)
     {
@@ -32,6 +30,7 @@ class TagTree
 
     private function __clone()
     {
+        // prevent clonning
     }
 
     /**
@@ -40,7 +39,6 @@ class TagTree
     public function clone(HtmlTemplate $newParentTemplate): self
     {
         $res = new static($newParentTemplate, $this->tag);
-        $res->children = [];
         foreach ($this->children as $k => $v) {
             $res->children[$k] = is_string($v) ? $v : clone $v;
         }

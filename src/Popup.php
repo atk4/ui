@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 
 /**
  * Implement popup view.
@@ -40,7 +41,7 @@ class Popup extends View
      * When set to false, target is the triggerBy element.
      * Otherwise, you can supply a View object where popup will be shown.
      *
-     * @var View|bool
+     * @var View|false
      */
     public $target = false;
 
@@ -112,10 +113,10 @@ class Popup extends View
         }
 
         $this->popOptions = array_merge($this->popOptions, [
-            'popup' => '#' . $this->name,
+            'popup' => $this,
             'on' => $this->triggerOn,
             'position' => $this->position,
-            'target' => ($this->target) ? '#' . $this->target->name : false,
+            'target' => $this->target,
         ]);
     }
 
@@ -124,12 +125,15 @@ class Popup extends View
      * Callback will receive a view attach to this popup
      * for adding content to it.
      *
-     * @param \Closure $fx
+     * @param \Closure(View): void $fx
+     * @param never                $ignore
+     *
+     * @return $this
      */
     public function set($fx = null, $ignore = null)
     {
         if (!$fx instanceof \Closure) {
-            throw new Exception('Need to pass a function to Popup::set()');
+            throw new \TypeError('$fx must be of type Closure');
         } elseif (func_num_args() > 1) {
             throw new Exception('Only one argument is needed by Popup::set()');
         }
@@ -213,16 +217,13 @@ class Popup extends View
      *
      * @return Jquery
      */
-    public function jsPopup()
+    public function jsPopup(): JsExpressionable
     {
-        $name = $this->triggerBy;
-        if (!is_string($this->triggerBy)) {
-            $name = '#' . $this->triggerBy->name;
-            if ($this->triggerBy instanceof Form\Control) {
-                $name = '#' . $this->triggerBy->name . '_input';
-            }
+        $selector = $this->triggerBy;
+        if ($this->triggerBy instanceof Form\Control) {
+            $selector = '#' . $this->triggerBy->name . '_input';
         }
-        $chain = new Jquery($name);
+        $chain = new Jquery($selector);
         $chain->popup($this->popOptions);
         if ($this->stopClickEvent) {
             $chain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));

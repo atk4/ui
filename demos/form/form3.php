@@ -39,7 +39,7 @@ $form->onSubmit(function (Form $form) {
     foreach ($modelDirty as $field => $value) {
         // we should care only about editable fields
         if ($form->model->getField($field)->isEditable()) {
-            $errors[] = $form->error($field, 'Value was changed, ' . $form->getApp()->encodeJson($value) . ' to ' . $form->getApp()->encodeJson($form->model->get($field)));
+            $errors[] = $form->jsError($field, 'Value was changed, ' . $form->getApp()->encodeJson($value) . ' to ' . $form->getApp()->encodeJson($form->model->get($field)));
         }
     }
 

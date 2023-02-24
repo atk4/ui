@@ -7,15 +7,18 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
-use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
 
 class JsIntegrationTest extends TestCase
 {
+    use CreateAppTrait;
+
     public function testUniqueId1(): void
     {
         $v = new Button(['icon' => 'pencil']);
+        $v->setApp($this->createApp());
         $v->render();
 
         static::assertNotEmpty($v->icon);
@@ -28,6 +31,7 @@ class JsIntegrationTest extends TestCase
         $v = new View(['ui' => 'buttons']);
         $b1 = Button::addTo($v);
         $b2 = Button::addTo($v);
+        $v->setApp($this->createApp());
         $v->render();
 
         static::assertNotSame($b1->name, $b2->name);
@@ -37,6 +41,7 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['name' => 'b']);
         $j = $v->js()->hide();
+        $v->setApp($this->createApp());
         $v->render();
 
         static::assertSame('$(\'#b\').hide()', $j->jsRender());
@@ -46,6 +51,7 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['name' => 'b']);
         $j = $v->js(true)->hide();
+        $v->setApp($this->createApp());
         $v->renderAll();
 
         static::assertSame('(function () {
@@ -57,6 +63,7 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['name' => 'b']);
         $v->js('click')->hide();
+        $v->setApp($this->createApp());
         $v->renderAll();
 
         static::assertSame('(function () {
@@ -72,6 +79,7 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['name' => 'b']);
         $v->js('click', null);
+        $v->setApp($this->createApp());
         $v->renderAll();
 
         static::assertSame('(function () {
@@ -91,13 +99,13 @@ class JsIntegrationTest extends TestCase
         $b1 = Button::addTo($v, ['name' => 'b1']);
         $b2 = Button::addTo($v, ['name' => 'b2']);
 
-        $b1->on('click', [
-            'preventDefault' => false,
+        $b1->on('click', new JsBlock([
             $b1->js()->hide(),
             $b2->js()->hide(),
             $b2->js()->hide(),
-        ]);
+        ]), ['preventDefault' => false]);
         $b1->js(true)->data('x', 'y');
+        $v->setApp($this->createApp());
         $v->renderAll();
 
         static::assertSame('(function () {
@@ -124,6 +132,7 @@ class JsIntegrationTest extends TestCase
     public function testChainUnsupportedTypeException(): void
     {
         $v = new View();
+        $v->setApp($this->createApp());
         $v->invokeInit();
 
         $js = $v->js();
@@ -137,13 +146,14 @@ class JsIntegrationTest extends TestCase
     public function testChainJsCallbackLazyExecuteRender(): void
     {
         $v = new View();
+        $v->setApp($this->createApp());
         $v->invokeInit();
         $b = Button::addTo($v);
 
         $jsCallback = new class() extends JsCallback {
             public int $counter = 0;
 
-            public function jsExecute(): JsExpression
+            public function jsExecute(): JsBlock
             {
                 ++$this->counter;
 

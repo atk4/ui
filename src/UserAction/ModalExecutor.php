@@ -7,6 +7,7 @@ namespace Atk4\Ui\UserAction;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
@@ -100,22 +101,24 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->runSteps();
     }
 
-    private function jsShowAndLoad(array $urlArgs, array $apiConfig): array
+    private function jsShowAndLoad(array $urlArgs, array $apiConfig): JsBlock
     {
-        return [
+        return new JsBlock([
             $this->jsShow(),
             $this->js()->data('closeOnLoadingError', true),
             $this->loader->jsLoad($urlArgs, [
                 'method' => 'post',
                 'onSuccess' => new JsFunction([], [$this->js()->removeData('closeOnLoadingError')]),
             ]),
-        ];
+        ]);
     }
 
     /**
      * Assign a View that will fire action execution.
      * If action require steps, it will automatically initialize
      * proper step to execute first.
+     *
+     * @return $this
      */
     public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', string $selector = null): self
     {
@@ -136,7 +139,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         return $this;
     }
 
-    public function jsExecute(array $urlArgs = []): array
+    public function jsExecute(array $urlArgs = []): JsBlock
     {
         if (!$this->actionInitialized) {
             throw new Exception('Action must be set prior to assign trigger');
@@ -153,17 +156,17 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      * @param mixed      $obj
      * @param string|int $id
      */
-    protected function jsGetExecute($obj, $id): array
+    protected function jsGetExecute($obj, $id): JsBlock
     {
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
 
-        return [
+        return new JsBlock([
             $this->jsHide(),
-            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
-                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : ''))),
+            JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
             $this->loader->jsClearStoreData(true),
-        ];
+        ]);
     }
 }

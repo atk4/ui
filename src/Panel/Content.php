@@ -45,6 +45,8 @@ class Content extends View implements LoadableContent
 
     /**
      * Will load content into callback.
+     *
+     * @param \Closure($this): void $fx
      */
     public function onLoad(\Closure $fx): void
     {

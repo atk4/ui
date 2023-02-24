@@ -43,7 +43,7 @@ $form->addControl('email');
 $form->onSubmit(function (Form $form) {
     // implement subscribe here
 
-    return $form->success('Subscribed ' . $form->model->get('email') . ' to newsletter.');
+    return $form->jsSuccess('Subscribed ' . $form->model->get('email') . ' to newsletter.');
 });
 
 $form->buttonSave->set('Subscribe');
@@ -80,6 +80,7 @@ $form->buttonSave->set('Compare Date');
 $form->onSubmit(function (Form $form) {
     $message = 'field = ' . print_r($form->model->get('field'), true) . '; <br> control = ' . print_r($form->model->get('control'), true);
     $view = new Message('Date field vs control:');
+    $view->setApp($form->getApp());
     $view->invokeInit();
     $view->text->addHtml($message);
 
@@ -95,7 +96,7 @@ $form = Form::addTo($tab);
 $form->addControl('email1');
 $form->buttonSave->set('Save1');
 $form->onSubmit(function (Form $form) {
-    return $form->error('email1', 'some error action ' . random_int(1, 100));
+    return $form->jsError('email1', 'some error action ' . random_int(1, 100));
 });
 
 Header::addTo($tab, ['..or success message']);
@@ -103,7 +104,7 @@ $form = Form::addTo($tab);
 $form->addControl('email2');
 $form->buttonSave->set('Save2');
 $form->onSubmit(function (Form $form) {
-    return $form->success('form was successful');
+    return $form->jsSuccess('form was successful');
 });
 
 Header::addTo($tab, ['Any other view can be output']);
@@ -112,6 +113,7 @@ $form->addControl('email3');
 $form->buttonSave->set('Save3');
 $form->onSubmit(function (Form $form) {
     $view = new Message('some header');
+    $view->setApp($form->getApp());
     $view->invokeInit();
     $view->text->addParagraph('some text ' . random_int(1, 100));
 
@@ -124,10 +126,12 @@ $form->addControl('email4');
 $form->buttonSave->set('Save4');
 $form->onSubmit(function (Form $form) {
     $view = new Message('some header');
+    $view->setApp($form->getApp());
     $view->invokeInit();
     $view->text->addParagraph('some text ' . random_int(1, 100));
 
-    $modal = new Modal(['title' => 'Something happen', 'ui' => 'ui modal tiny']);
+    $modal = new Modal(['title' => 'Something happen', 'ui' => 'modal tiny']);
+    $modal->setApp($form->getApp());
     $modal->add($view);
 
     return $modal;
@@ -198,7 +202,7 @@ $form->setModel($modelRegister);
 
 $form->onSubmit(function (Form $form) {
     if ($form->model->get('name') !== 'John') {
-        return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
+        return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
     }
 
     return [
@@ -242,9 +246,9 @@ $form->onSubmit(function (Form $form) {
         }
 
         if ($form->model->get($name) !== 'a') {
-            $errors[] = $form->error($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $form->model->get($name));
+            $errors[] = $form->jsError($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $form->model->get($name));
         }
     }
 
-    return $errors !== [] ? $errors : $form->success('No more errors', 'so we have saved everything into the database');
+    return $errors !== [] ? $errors : $form->jsSuccess('No more errors', 'so we have saved everything into the database');
 });

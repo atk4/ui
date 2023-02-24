@@ -45,7 +45,7 @@ foreach (str_split('Click me!!') as $letter) {
 }
 
 Header::addTo($app, ['View load HTML from string or file']);
-$planeTemplate = new HtmlTemplate('<div id="{$_id}" class="ui statistic">
+$planeTemplate = new HtmlTemplate('<div class="ui statistic" {$attributes}>
     <div class="value">
       <i class="plane icon"></i> {$num}
     </div>

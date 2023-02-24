@@ -31,8 +31,9 @@ $inline_edit = VueComponent\InlineEdit::addTo($app);
 $inline_edit->fieldName = $model->fieldName()->name;
 $inline_edit->setModel($model);
 
-$inline_edit->onChange(function (string $value) {
+$inline_edit->onChange(function (string $value) use ($app) {
     $view = new Message();
+    $view->setApp($app);
     $view->invokeInit();
     $view->text->addParagraph('new value: ' . $value);
 
@@ -48,11 +49,11 @@ Header::addTo($app, ['Search using a Vue component', 'subHeader' => $subHeader])
 
 $model = new Country($app->db);
 
-$lister_template = new HtmlTemplate('<div id="{$_id}">{List}<div class="ui icon label"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{$end}{/}</div>');
+$lister_template = new HtmlTemplate('<div {$attributes}>{List}<div class="ui icon label"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{$end}{/}</div>');
 
 $view = View::addTo($app);
 
-$search = VueComponent\ItemSearch::addTo($view, ['ui' => 'ui compact segment']);
+$search = VueComponent\ItemSearch::addTo($view, ['ui' => 'compact segment']);
 $lister_container = View::addTo($view, ['template' => $lister_template]);
 $lister = Lister::addTo($lister_container, [], ['List']);
 $lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
@@ -104,7 +105,7 @@ $app->html->template->dangerouslyAppendHtml('Head', $app->getTag('script', [], <
 
 // Injecting template but normally you would create a template file.
 $clockTemplate = new HtmlTemplate(<<<'EOF'
-    <div id="{$_id}" class="ui center aligned segment">
+    <div class="ui center aligned segment" {$attributes}>
         <my-clock v-bind="initData"></my-clock>
     </div>
     {$script}

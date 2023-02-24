@@ -42,9 +42,6 @@ class Accordion extends UiAccordion
     /**
      * Return an accordion section with a form layout associate with a form.
      *
-     * @param string $title
-     * @param string $icon
-     *
      * @return Form\Layout
      */
     public function addSection($title, \Closure $callback = null, $icon = 'dropdown')

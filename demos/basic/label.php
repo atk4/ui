@@ -39,7 +39,7 @@ Label::addTo($menu->addMenu('Others')->addItem('Draft'), ['10', 'class.floating 
 
 $seg = View::addTo($app, ['ui' => 'segment']);
 Header::addTo($seg, ['Label Group']);
-$labels = View::addTo($seg, [false, 'class.tag' => true, 'ui' => 'labels']);
+$labels = View::addTo($seg, ['class.tag' => true, 'ui' => 'labels']);
 Label::addTo($seg, ['$9.99']);
 Label::addTo($seg, ['$19.99']);
 Label::addTo($seg, ['$24.99']);

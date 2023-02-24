@@ -89,19 +89,19 @@ abstract class AbstractLayout extends View
      *
      * @param array<int, string>|null $fields
      */
-    public function setModel(Model $model, array $fields = null): void
+    public function setModel(Model $entity, array $fields = null): void
     {
-        $model->assertIsEntity();
+        $entity->assertIsEntity();
 
-        parent::setModel($model);
+        parent::setModel($entity);
 
         if ($fields === null) {
-            $fields = $this->getModelFields($model);
+            $fields = $this->getModelFields($entity);
         }
 
         // add controls - check if fields are editable or read-only/disabled
         foreach ($fields as $fieldName) {
-            $field = $model->getField($fieldName);
+            $field = $entity->getField($fieldName);
 
             $controlSeed = null;
             if ($field->isEditable()) {

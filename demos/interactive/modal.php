@@ -159,7 +159,7 @@ $stepModal = Modal::addTo($app, ['title' => 'Multi step actions']);
 
 // Add buttons to modal for next and previous actions.
 $action = new View(['ui' => 'buttons']);
-$prevAction = new Button(['Prev', 'class.labeled' => true, 'icon' => 'left arrow']);
+$prevAction = new Button(['Prev', 'icon' => 'left arrow']);
 $nextAction = new Button(['Next', 'iconRight' => 'right arrow']);
 
 $action->add($prevAction);
@@ -200,14 +200,14 @@ $stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
 
         $form->onSubmit(function (Form $form) use ($nextAction, $session) {
             if ($form->model->get('name') !== 'John') {
-                return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
+                return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
             }
 
             $session->memorize('success', true);
             $session->memorize('name', $form->model->get('name'));
 
             $js = [];
-            $js[] = $form->success('Thank you, ' . $form->model->get('name') . ' you can go on!');
+            $js[] = $form->jsSuccess('Thank you, ' . $form->model->get('name') . ' you can go on!');
             $js[] = $nextAction->js()->removeClass('disabled');
 
             return $js;

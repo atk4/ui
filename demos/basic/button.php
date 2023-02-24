@@ -30,7 +30,7 @@ $b1->link(['index']);
 
 Header::addTo($app, ['Properties', 'size' => 2]);
 Button::addTo($app, ['Primary button', 'class.primary' => true]);
-Button::addTo($app, ['Load', 'class.labeled' => true, 'icon' => 'pause']);
+Button::addTo($app, ['Load', 'icon' => 'pause']);
 Button::addTo($app, ['Next', 'iconRight' => 'right arrow']);
 Button::addTo($app, ['class.circular' => true, 'icon' => 'settings']);
 
@@ -58,7 +58,6 @@ Header::addTo($app, ['Forks Button Component', 'size' => 2]);
 
 // Creating your own button component example
 
-/** @var Button $forkButtonClass */
 $forkButtonClass = AnonymousClassNameCache::get_class(fn () => new class(0) /* need 0 argument here for constructor */ extends Button {
     public function __construct(int $n)
     {

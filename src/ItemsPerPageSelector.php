@@ -13,7 +13,7 @@ use Atk4\Ui\Js\JsExpression;
 class ItemsPerPageSelector extends View
 {
     public $defaultTemplate = 'pagelength.html';
-    public $ui = ' ';
+    public $ui = 'selection compact dropdown';
 
     /** @var array Default page length menu items. */
     public $pageLengthItems = [10, 25, 50, 100];
@@ -45,13 +45,15 @@ class ItemsPerPageSelector extends View
         if (!$this->currentIpp) {
             $this->currentIpp = $this->pageLengthItems[0];
         }
-        $this->set($this->currentIpp);
+        $this->set((string) $this->currentIpp);
     }
 
     /**
      * Run callback when an item is select via dropdown menu.
      * The callback should return a View to be reloaded after an item
      * has been select.
+     *
+     * @param \Closure(int): (View|void) $fx
      */
     public function onPageLengthSelect(\Closure $fx): void
     {
@@ -72,20 +74,21 @@ class ItemsPerPageSelector extends View
         foreach ($this->pageLengthItems as $key => $item) {
             $menuItems[] = ['name' => $item, 'value' => $item];
         }
-        // set Fomantic-UI dropdown onChange function.
-        $function = 'function (value, text, item) {
-            if (value === undefined || value === \'\' || value === null) return;
-            $(this)
-            .api({
-                on:\'now\',
-                url:\'' . $this->cb->getUrl() . '\',
-                data:{ipp:value}
+
+        $function = new JsExpression('function (value, text, item) {
+            if (value === undefined || value === \'\' || value === null) {
+                return;
+            }
+            $(this).api({
+                on: \'now\',
+                url: \'' . $this->cb->getUrl() . '\',
+                data: {ipp:value}
             });
-        }';
+        }');
 
         $this->js(true)->dropdown([
             'values' => $menuItems,
-            'onChange' => new JsExpression($function),
+            'onChange' => $function,
         ]);
 
         parent::renderView();

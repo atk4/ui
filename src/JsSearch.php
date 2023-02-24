@@ -10,6 +10,9 @@ namespace Atk4\Ui;
  */
 class JsSearch extends View
 {
+    public $ui = 'left icon action transparent input';
+    public $defaultTemplate = 'js-search.html';
+
     /** @var View The View to reload using this JsSearch. */
     public $reload;
 
@@ -53,8 +56,6 @@ class JsSearch extends View
     {
         return parent::link($url, $target);
     }
-
-    public $defaultTemplate = 'js-search.html';
 
     /** @var string ui css classes */
     public $button = 'ui mini transparent basic button';

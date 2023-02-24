@@ -24,8 +24,6 @@ $table = Table::addTo($app, ['class.celled' => true]);
 Button::addTo($bb, ['Refresh Table', 'icon' => 'refresh'])
     ->on('click', new JsReload($table));
 
-$bb->on('click', $table->js()->reload());
-
 $table->setModel(new SomeData(), []);
 
 $table->addColumn('name', new Table\Column\Link(['table', 'foo' => 'bar'], ['person_id' => 'id'], ['target' => '_blank']));

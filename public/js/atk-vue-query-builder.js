@@ -15,6 +15,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * Wrapper for vue-flatpickr-component component.
+ *
  * https://github.com/ankurk91/vue-flatpickr-component
  *
  * Properties:
@@ -853,10 +854,7 @@ module.exports = function (item) {
     var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(cssMapping))));
     var data = "sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(base64);
     var sourceMapping = "/*# ".concat(data, " */");
-    var sourceURLs = cssMapping.sources.map(function (source) {
-      return "/*# sourceURL=".concat(cssMapping.sourceRoot || "").concat(source, " */");
-    });
-    return [content].concat(sourceURLs).concat([sourceMapping]).join("\n");
+    return [content].concat([sourceMapping]).join("\n");
   }
   return [content].join("\n");
 };
@@ -1549,7 +1547,6 @@ var defaultLabels = {
       }
     );
 
-    console.log(this.modelValue);
     if (typeof this.modelValue !== "undefined") {
       this.query = Object.assign(this.query, this.modelValue);
     }

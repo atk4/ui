@@ -26,20 +26,16 @@ class Labels extends Table\Column
         $v = $field->get($row);
         $v = explode(',', $v ?? '');
 
-        $labels = [];
+        $labelsHtml = [];
         foreach ($v as $id) {
-            $id = trim($id);
-
             // if field values is set, then use titles instead of IDs
             $id = $values[$id] ?? $id;
 
             if ($id !== '') {
-                $labels[] = $this->getApp()->getTag('div', ['class' => 'ui label'], $id);
+                $labelsHtml[] = $this->getApp()->getTag('div', ['class' => 'ui label'], $id);
             }
         }
 
-        $labels = implode('', $labels);
-
-        return [$field->shortName => $labels];
+        return [$field->shortName => implode('', $labelsHtml)];
     }
 }

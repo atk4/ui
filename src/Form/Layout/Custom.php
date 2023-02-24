@@ -11,7 +11,6 @@ use Atk4\Ui\Form;
 
 class Custom extends Form\AbstractLayout
 {
-    /** @var string */
     public $defaultTemplate;
 
     protected function init(): void

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpressionable;
 
 class JsSortable extends JsCallback
 {
@@ -62,6 +63,8 @@ class JsSortable extends JsCallback
 
     /**
      * Callback when container has been reorder.
+     *
+     * @param \Closure(list<string>, string, int, int): (JsExpressionable|View|string|void) $fx
      */
     public function onReorder(\Closure $fx): void
     {
@@ -82,7 +85,7 @@ class JsSortable extends JsCallback
      *
      * @return JsChain
      */
-    public function jsSendSortOrders($urlOptions = null)
+    public function jsSendSortOrders($urlOptions = null): JsExpressionable
     {
         return $this->view->js()->atkJsSortable('sendSortOrders', [$urlOptions]);
     }

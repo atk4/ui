@@ -475,9 +475,9 @@ TODO: Move to Element.
 Most of the basic elements will allow you to manipulate their content, HTML attributes or even
 add custom styles::
 
-    $view->setElement('A');
-    $view->addStyle('align', 'right');
-    $view->addAttr('href', '
+    $view->setElement('a');
+    $view->setStyle('align', 'right');
+    $view->setAttr('href', 'https://...');
 
 
 
@@ -502,18 +502,9 @@ Rest of yet-to-document/implement methods and properties
         :param $val:
 
 
-
-    .. php:method:: initDefaultApp()
-
-        For the absence of the application, we would add a very
-        simple one
-
     .. php:method:: set($arg1 = [], $arg2 = null)
 
         :param $arg1:
         :param $arg2:
 
     .. php:method:: recursiveRender()
-
-
-

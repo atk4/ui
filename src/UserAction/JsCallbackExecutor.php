@@ -7,6 +7,7 @@ namespace Atk4\Ui\UserAction;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
@@ -33,7 +34,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /** @var Model\UserAction The model user action */
     public $action;
 
-    /** @var JsExpressionable|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
     public function getAction(): Model\UserAction
@@ -51,16 +52,24 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         return $this;
     }
 
-    /**
-     * Execute model user action.
-     */
-    public function executeModelAction(array $args = [])
+    public function jsExecute(array $urlArgs = []): JsBlock
+    {
+        // TODO hack to parametrize parent::jsExecute() like JsExecutorInterface::jsExecute($urlArgs)
+        $argsOrig = $this->args;
+        $this->args = array_merge($this->args, $urlArgs);
+        try {
+            return parent::jsExecute();
+        } finally {
+            $this->args = $argsOrig;
+        }
+    }
+
+    public function executeModelAction(array $args = []): void
     {
         $this->set(function (Jquery $j) {
-            // may be id is passed as 'id' or model->idField within $post args.
             $id = $this->getApp()->uiPersistence->typecastLoadField(
                 $this->action->getModel()->getField($this->action->getModel()->idField),
-                $_POST['c0'] ?? $_POST['id'] ?? $_POST[$this->action->getModel()->idField] ?? null
+                $_POST['c0'] ?? $_POST[$this->name] ?? null
             );
             if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
                 if ($this->action->isOwnerEntity() && $this->action->getEntity()->getId()) {
@@ -88,14 +97,12 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
                     ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $return)
                     : $this->jsSuccess;
 
-                $js = $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) // @phpstan-ignore-line
-                    ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : '')));
+                $js = JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) // @phpstan-ignore-line
+                    ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
             }
 
             return $js;
         }, $args);
-
-        return $this;
     }
 
     /**

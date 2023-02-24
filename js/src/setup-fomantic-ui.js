@@ -105,7 +105,7 @@ $.extend = $.fn.extend = new Proxy($.fn.extend, { // eslint-disable-line no-mult
                     },
                 });
 
-                $.extend(true, newSettings, ...args.slice(secondIndex + 1), customSettings);
+                $.extend(true, newSettings, customSettings, ...args.slice(secondIndex + 1));
 
                 return newSettings;
             }

@@ -6,7 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\HookTrait;
 use Atk4\Ui\Js\Jquery;
-use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 
 class JsSse extends JsCallback
@@ -41,9 +41,9 @@ class JsSse extends JsCallback
         }
     }
 
-    public function jsExecute(): JsExpression
+    public function jsExecute(): JsBlock
     {
-        $this->getApp(); // assert has App
+        $this->assertIsInitialized();
 
         $options = ['url' => $this->getJsUrl()];
         if ($this->showLoader) {
@@ -53,15 +53,13 @@ class JsSse extends JsCallback
             $options['closeBeforeUnload'] = $this->closeBeforeUnload;
         }
 
-        return (new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options);
+        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)]);
     }
 
     /**
      * Sending an SSE action.
-     *
-     * @param JsExpressionable $action
      */
-    public function send($action, bool $success = true): void
+    public function send(JsExpressionable $action, bool $success = true): void
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);

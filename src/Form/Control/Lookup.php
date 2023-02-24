@@ -13,6 +13,7 @@ use Atk4\Ui\Callback;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsModal;
@@ -202,9 +203,11 @@ class Lookup extends Input
      */
     public function renderRow(Model $row): array
     {
-        $renderRowFunction = $this->renderRowFunction ?? \Closure::fromCallable([static::class, 'defaultRenderRow']);
+        if ($this->renderRowFunction !== null) {
+            return ($this->renderRowFunction)($this, $row);
+        }
 
-        return $renderRowFunction($this, $row);
+        return $this->defaultRenderRow($row);
     }
 
     /**
@@ -214,10 +217,10 @@ class Lookup extends Input
      *
      * @return array{value: mixed, title: mixed}
      */
-    public static function defaultRenderRow(self $control, Model $row, $key = null)
+    public function defaultRenderRow(Model $row, $key = null)
     {
-        $idField = $control->idField ?? $row->idField;
-        $titleField = $control->titleField ?? $row->titleField;
+        $idField = $this->idField ?? $row->idField;
+        $titleField = $this->titleField ?? $row->titleField;
 
         return ['value' => $row->get($idField), 'title' => $row->get($titleField)];
     }
@@ -258,16 +261,15 @@ class Lookup extends Input
             $form->onSubmit(function (Form $form) {
                 $form->model->save();
 
-                $ret = [
-                    (new Jquery())->closest('.atk-modal')->modal('hide'),
-                ];
+                $res = new JsBlock();
+                $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
 
                 $row = $this->renderRow($form->model);
                 $chain = new Jquery('#' . $this->name . '-ac');
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-                $ret[] = $chain;
+                $res->addStatement($chain);
 
-                return $ret;
+                return $res;
             });
         });
 

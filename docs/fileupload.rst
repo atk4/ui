@@ -77,7 +77,7 @@ Example showing the onUpload callback on the UploadImage field::
 
     $img->onUpload(function (array $postFile) use ($form, $img) {
         if ($postFile['error'] !== 0) {
-            return $form->error('img', 'Error uploading image.');
+            return $form->jsError('img', 'Error uploading image.');
         }
 
         // Do file processing here...
@@ -97,7 +97,7 @@ The fileId is set to file name by default if omitted::
 
     $form->onSubmit(function (Form $form) {
         // implement submission here
-        return $form->success('Thanks for submitting file: ' . $form->model->get('img'));
+        return $form->jsSuccess('Thanks for submitting file: ' . $form->model->get('img'));
     });
 
 onDelete

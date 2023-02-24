@@ -8,8 +8,8 @@
         "dev": "webpack --progress --watch --env development",
         "profile": "webpack --env production --profile --json > profile/atkjs-bundle-profile.json",
         "analyze-profile": "webpack-bundle-analyzer profile/atkjs-bundle-profile.json",
-        "lint": "eslint -c .eslintrc.js --ext .js,.vue .",
-        "lint-fix": "eslint -c .eslintrc.js --ext .js,.vue . --fix"
+        "lint": "eslint --ext .js,.vue . && stylelint \"../**/*.less\" && prettier --config .prettierrc.js --loglevel warn \"../**/*.less\" --check",
+        "lint-fix": "eslint --ext .js,.vue . --fix && stylelint \"../**/*.less\" --fix && prettier --config .prettierrc.js --loglevel warn \"../**/*.less\" --write"
     },
     "repository": {
         "type": "git",
@@ -30,7 +30,7 @@
         "vue": "^3.2.41",
         "vue-flatpickr-component": "^10.0.0",
         "vue-fomantic-ui": "^0.13.0",
-        "vue-query-builder": "github:TheAustinG/vue-query-builder#2f5c4408e3"
+        "vue-query-builder": "github:TheAustinG/vue-query-builder#2f62fa09ea"
     },
     "devDependencies": {
         "@babel/cli": "^7.19.3",
@@ -47,8 +47,12 @@
         "eslint-plugin-jsdoc": "^39.3.25",
         "eslint-plugin-unicorn": "^45.0.0",
         "eslint-plugin-vue": "^9.6.0",
+        "postcss-less": "^6.0.0",
+        "prettier": "^2.8.1",
         "source-map-loader": "^4.0.1",
         "style-loader": "^3.3.1",
+        "stylelint": "^14.16.0",
+        "stylelint-config-standard": "^29.0.0",
         "terser-webpack-plugin": "^5.3.6",
         "vue-loader": "^17.0.0",
         "webpack": "^5.74.0",

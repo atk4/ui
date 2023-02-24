@@ -9,6 +9,7 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
@@ -57,7 +58,7 @@ class VpExecutor extends View implements JsExecutorInterface
         /** @var Button $b */
         $b = $this->vp->add(Factory::factory($this->cancelBtnSeed));
         $b->link($this->getApp()->url());
-        View::addTo($this->vp, ['ui' => 'ui clearing divider']);
+        View::addTo($this->vp, ['ui' => 'clearing divider']);
 
         $this->header = Header::addTo($this->vp);
         $this->stepList = View::addTo($this->vp)->addClass('ui horizontal bulleted link list');
@@ -90,7 +91,7 @@ class VpExecutor extends View implements JsExecutorInterface
         if ($this->steps) {
             $this->header->set($this->title ?? $action->getDescription());
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
-            $this->vp->add($this->createButtonBar($this->action)->addStyle(['text-align' => 'end']));
+            $this->vp->add($this->createButtonBar($this->action)->setStyle(['text-align' => 'end']));
             $this->addStepList();
         }
 
@@ -99,11 +100,11 @@ class VpExecutor extends View implements JsExecutorInterface
         return $this;
     }
 
-    public function jsExecute(array $urlArgs = []): array
+    public function jsExecute(array $urlArgs = []): JsBlock
     {
         $urlArgs['step'] = $this->step;
 
-        return [(new JsChain('atk.utils'))->redirect($this->vp->getUrl(), $urlArgs)];
+        return new JsBlock([(new JsChain('atk.utils'))->redirect($this->vp->getUrl(), $urlArgs)]);
     }
 
     /**
@@ -147,17 +148,17 @@ class VpExecutor extends View implements JsExecutorInterface
      * @param mixed      $obj
      * @param string|int $id
      */
-    protected function jsGetExecute($obj, $id): array
+    protected function jsGetExecute($obj, $id): JsBlock
     {
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
 
-        return [
-            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
-                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : ''))),
+        return new JsBlock([
+            JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
             $this->loader->jsClearStoreData(true),
             (new JsChain('atk.utils'))->redirect($this->url()),
-        ];
+        ]);
     }
 }

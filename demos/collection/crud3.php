@@ -12,7 +12,6 @@ use Atk4\Ui\Header;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/** @var Model $modelClass */
 $modelClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
     public $table = 'test';
 

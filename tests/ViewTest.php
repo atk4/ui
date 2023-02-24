@@ -10,11 +10,14 @@ use Atk4\Ui\View;
 
 class ViewTest extends TestCase
 {
+    use CreateAppTrait;
+
     public function testMultipleTimesRender(): void
     {
         $v = new View();
         $v->set('foo');
 
+        $v->setApp($this->createApp());
         $a = $v->render();
         $b = $v->render();
         static::assertSame($a, $b);
@@ -25,6 +28,7 @@ class ViewTest extends TestCase
         $v = new View();
         $v->set('foo');
 
+        $v->setApp($this->createApp());
         $v->render();
 
         $this->expectException(Exception::class);
@@ -34,10 +38,12 @@ class ViewTest extends TestCase
     public function testVoidTagRender(): void
     {
         $v = new View();
-        static::assertSame('<div id="atk" class="  " style="" ></div>', $v->render());
+        $v->setApp($this->createApp());
+        static::assertSame('<div id="atk"></div>', $v->render());
 
         $v = new View();
         $v->element = 'img';
-        static::assertSame('<img id="atk" class="  " style="" >', $v->render());
+        $v->setApp($this->createApp());
+        static::assertSame('<img id="atk">', $v->render());
     }
 }
