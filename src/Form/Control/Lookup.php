@@ -7,9 +7,8 @@ namespace Atk4\Ui\Form\Control;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
-use Atk4\Ui\App;
 use Atk4\Ui\Button;
-use Atk4\Ui\Callback;
+use Atk4\Ui\CallbackLater;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\Jquery;
@@ -30,7 +29,7 @@ class Lookup extends Input
     /** @var array Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
     public $values = [];
 
-    /** @var Callback Object used to capture requests from the browser. */
+    /** @var CallbackLater Object used to capture requests from the browser. */
     public $callback;
 
     /** @var string Set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value. */
@@ -137,10 +136,9 @@ class Lookup extends Input
 
         $this->initQuickNewRecord();
 
-        $this->callback = Callback::addTo($this);
-
-        $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () {
-            $this->callback->set(fn () => $this->outputApiResponse());
+        $this->callback = CallbackLater::addTo($this);
+        $this->callback->set(function () {
+            $this->outputApiResponse();
         });
     }
 
