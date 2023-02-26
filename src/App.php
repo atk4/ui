@@ -1034,8 +1034,8 @@ class App
                     } catch (ExitApplicationError $e) {
                         // let the process go and stop on ->callExit below
                     } catch (\Throwable $e) {
-                        // process is already in shutdown
-                        // must be forced to catch exception
+                        // set_exception_handler does not work in shutdown
+                        // https://github.com/php/php-src/issues/10695
                         $this->caughtException($e);
                     }
 

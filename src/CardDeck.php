@@ -222,27 +222,26 @@ class CardDeck extends View
      */
     protected function jsExecute($return, Model\UserAction $action): JsBlock
     {
-        if (is_string($return)) {
-            // hack to test reload with read only demos, the reload is fired in separate AJAX request,
-            // thus the changes cannot be tested with Behat, as reverted in the first request
-            if (str_ends_with($return, 'was executed. In demo mode all changes are reverved.')) {
-                return $this->jsModelReturn($action, $return);
-            }
+        $res = new JsBlock();
 
-            return $this->jsCreateNotifier($action, $return);
-        } elseif ($return instanceof JsExpressionable) {
-            return new JsBlock([$return]);
-        } elseif ($return instanceof Model) {
-            if ($return->isEntity()) {
-                $action = $action->getActionForEntity($return);
-            }
-
-            $msg = $return->isLoaded() ? $this->saveMsg : ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
-
-            return $this->jsModelReturn($action, $msg);
+        if ($return instanceof Model) {
+            $return = $return->isLoaded()
+                ? $this->saveMsg
+                : ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
         }
 
-        return $this->jsCreateNotifier($action, $this->defaultMsg);
+        if (is_string($return)) {
+            $msg = $this->jsCreateNotifier($action, $return);
+        } elseif ($return instanceof JsExpressionable) {
+            $msg = $return;
+        } else {
+            $msg = $this->jsCreateNotifier($action, $this->defaultMsg);
+        }
+        $res->addStatement($msg);
+
+        $res->addStatement($this->container->jsReload($this->getReloadArgs()));
+
+        return $res;
     }
 
     /**
@@ -256,53 +255,6 @@ class CardDeck extends View
         }
 
         return new JsBlock([$notifier]);
-    }
-
-    /**
-     * JS expression return when action afterHook executor return a Model.
-     */
-    protected function jsModelReturn(Model\UserAction $action, string $msg = 'Done!'): JsBlock
-    {
-        $res = new JsBlock();
-        $res->addStatement($this->jsCreateNotifier($action, $msg));
-        $card = $action->isOwnerEntity() && $action->getEntity()->isLoaded() ? $this->findCard($action->getEntity()) : null;
-        if ($card !== null) {
-            $res->addStatement($card->jsReload($this->getReloadArgs()));
-        } else {
-            $res->addStatement($this->container->jsReload($this->getReloadArgs()));
-        }
-
-        return $res;
-    }
-
-    /**
-     * Check if a card is still in current set and
-     * return it. Otherwise return null.
-     * After an action is execute and data is saved, the db result
-     * set might be different than previous one, which represent cards displayed on page.
-     *
-     * For example, editing a card which does not fulfill search requirement after it has been saved.
-     * Or when adding a new one.
-     * Therefore if card, that was just save, is not present in db result set or deck then return null
-     * otherwise return Card view.
-     *
-     * @return View|null
-     */
-    protected function findCard(Model $entity)
-    {
-        $deck = [];
-        foreach ($this->cardHolder->elements as $element) {
-            if ($element instanceof $this->card) {
-                $deck[$element->model->getId()] = $element;
-            }
-        }
-
-        if ($entity->getModel()->tryLoad($entity->getId()) !== null) {
-            // might be in result set but not in deck, for example when adding a card.
-            return $deck[$entity->getId()] ?? null;
-        }
-
-        return null;
     }
 
     /**

@@ -10,6 +10,7 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
@@ -205,10 +206,10 @@ $form->onSubmit(function (Form $form) {
         return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
     }
 
-    return [
+    return new JsBlock([
         $form->jsInput('email')->val('john@gmail.com'),
         $form->getControl('is_accept_terms')->js()->checkbox('set checked'),
-    ];
+    ]);
 });
 
 // -----------------------------------------------------------------------------
@@ -250,5 +251,5 @@ $form->onSubmit(function (Form $form) {
         }
     }
 
-    return $errors !== [] ? $errors : $form->jsSuccess('No more errors', 'so we have saved everything into the database');
+    return $errors !== [] ? new JsBlock($errors) : $form->jsSuccess('No more errors', 'so we have saved everything into the database');
 });
