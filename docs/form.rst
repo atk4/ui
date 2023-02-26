@@ -570,7 +570,7 @@ with a message about failure to accept of terms and conditions::
         }
 
         if ($errors) {
-            return $errors;
+            return new \Atk4\Ui\Js\JsBlock($errors);
         }
 
         if (!$form->model->get('terms')) {

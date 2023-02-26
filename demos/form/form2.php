@@ -9,6 +9,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Label;
 
@@ -76,7 +77,7 @@ $form->onSubmit(function (Form $form) {
     }
 
     if ($errors) {
-        return $errors;
+        return new JsBlock($errors);
     }
 
     return new JsToast($countryEntity->getUserAction('add')->execute());

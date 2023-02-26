@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Layout;
 
 /** @var \Atk4\Ui\App $app */
@@ -61,5 +62,5 @@ $form->onSubmit(function (Form $form) {
         }
     }
 
-    return $errors !== [] ? $errors : $form->jsSuccess('No more errors', 'so we have saved everything into the database');
+    return $errors !== [] ? new JsBlock($errors) : $form->jsSuccess('No more errors', 'so we have saved everything into the database');
 });

@@ -236,9 +236,9 @@ class Multiline extends Form\Control
             // Otherwise use normal field error.
             if ($fieldName === $this->shortName) {
                 // multiline.js component listen to 'multiline-rows-error' event.
-                $jsError = [$this->jsEmitEvent($this->multiLine->name . '-multiline-rows-error', ['errors' => $this->rowErrors])];
+                $jsError = $this->jsEmitEvent($this->multiLine->name . '-multiline-rows-error', ['errors' => $this->rowErrors]);
             } else {
-                $jsError = [$form->js()->form('add prompt', $fieldName, $str)];
+                $jsError = $form->js()->form('add prompt', $fieldName, $str);
             }
 
             return $jsError;
