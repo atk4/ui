@@ -336,6 +336,49 @@ class App
         $this->callBeforeExit();
     }
 
+    public function getRequest(): ServerRequestInterface
+    {
+        return $this->request;
+    }
+
+    public function getResponse(): ResponseInterface
+    {
+        return $this->response;
+    }
+
+    public function issetRequestGetParam(string $key): bool
+    {
+        return isset($this->request->getQueryParams()[$key]);
+    }
+
+    /**
+     * Return $_GET param by key or null if not exists.
+     *
+     * @return mixed
+     */
+    public function getRequestGetParam(string $key)
+    {
+        return $this->request->getQueryParams()[$key] ?? null;
+    }
+
+    /**
+     * Return whole $_POST data.
+     */
+    public function getRequestPostParams(): array
+    {
+        return $this->request->getParsedBody() ?? [];
+    }
+
+    /**
+     * Return $_POST param by key or null if not exists.
+     *
+     * @return mixed
+     */
+    public function getRequestPostParam(string $key)
+    {
+        return $this->request->getParsedBody()[$key] ?? null;
+    }
+
     /**
      * @return $this
      */
