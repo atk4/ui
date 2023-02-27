@@ -20,10 +20,6 @@ use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
-use Nyholm\Psr7\Response;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -136,44 +132,11 @@ class App
     /** @var class-string */
     public $templateClass = HtmlTemplate::class;
 
-    /** @var ResponseInterface */
-    private $response;
-
-    /** @var ServerRequestInterface */
-    private $request;
-
     public function __construct(array $defaults = [])
     {
         $this->setApp($this);
 
-        $this->response = $defaults['response'] ?? new Response();
-        if (isset($defaults['response'])) {
-            unset($defaults['response']);
-        }
-
-        // TODO remove this before PSR7 PR merge, fix tests to pass /wo this develop merge hack
-        global $_GET;
-        $_GET ??= []; // @phpstan-ignore-line
-        global $_COOKIE;
-        $_COOKIE ??= []; // @phpstan-ignore-line
-        global $_FILES;
-        $_FILES ??= []; // @phpstan-ignore-line
-
-        $psr17Factory = new \Nyholm\Psr7\Factory\Psr17Factory();
-        $this->request = $defaults['request'] ?? (new \Nyholm\Psr7Server\ServerRequestCreator(
-            $psr17Factory, // ServerRequestFactory
-            $psr17Factory, // UriFactory
-            $psr17Factory, // UploadedFileFactory
-            $psr17Factory  // StreamFactory
-        ))->fromGlobals();
-        if (isset($defaults['request'])) {
-            unset($defaults['request']);
-        }
-
         $this->setDefaults($defaults);
-
-        // add default headers to response
-        $this->setResponseHeaders($this->responseHeaders);
 
         $this->setupTemplateDirs();
 
@@ -208,7 +171,7 @@ class App
 
                 throw new \ErrorException($msg, 0, $severity, $file, $line);
             });
-            http_response_code(500);
+            $this->outputResponseUnsafe('', [self::HEADER_STATUS_CODE => '500']);
         }
 
         // Always run app on shutdown
@@ -335,11 +298,28 @@ class App
     }
 
     /**
+     * Normalize HTTP headers to associative array with LC keys.
+     *
+     * @param array<string, string> $headers
+     *
+     * @return array<string, string>
+     */
+    protected function normalizeHeaders(array $headers): array
+    {
+        $res = [];
+        foreach ($headers as $k => $v) {
+            $res[strtolower(trim($k))] = trim($v);
+        }
+
+        return $res;
+    }
+
+    /**
      * @return $this
      */
     public function setResponseStatusCode(int $statusCode): self
     {
-        $this->response = $this->response->withStatus($statusCode);
+        $this->setResponseHeader(self::HEADER_STATUS_CODE, (string) $statusCode);
 
         return $this;
     }
@@ -349,10 +329,14 @@ class App
      */
     public function setResponseHeader(string $name, string $value): self
     {
+        $arr = $this->normalizeHeaders([$name => $value]);
+        $value = reset($arr);
+        $name = array_key_first($arr);
+
         if ($value !== '') {
-            $this->response = $this->response->withHeader($name, $value);
+            $this->responseHeaders[$name] = $value;
         } else {
-            $this->response = $this->response->withoutHeader($name);
+            unset($this->responseHeaders[$name]);
         }
 
         return $this;
@@ -370,12 +354,17 @@ class App
      */
     public function terminate($output = '', array $headers = []): void
     {
-        $this->setResponseHeaders($headers);
+        $headers = $this->normalizeHeaders($headers);
+        if (!isset($headers['content-type'])) {
+            $this->responseHeaders = $this->normalizeHeaders($this->responseHeaders);
+            if (!isset($this->responseHeaders['content-type'])) {
+                throw new Exception('Content type must be always set');
+            }
 
-        $type = preg_replace('~;.*~', '', strtolower($this->response->getHeaderLine('content-type'))); // in LC without charset
-        if ($type === '') {
-            throw new Exception('Content type must be always set');
+            $headers['content-type'] = $this->responseHeaders['content-type'];
         }
+
+        $type = preg_replace('~;.*~', '', strtolower($headers['content-type'])); // in LC without charset
 
         if ($type === 'application/json') {
             if (is_string($output)) {
@@ -383,7 +372,7 @@ class App
             }
             $output['portals'] = $this->getRenderedPortals();
 
-            $this->outputResponseJson($output, []);
+            $this->outputResponseJson($output, $headers);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
             // ugly hack for TABS
             // because Fomantic-UI tab only deal with html and not JSON
@@ -403,11 +392,11 @@ class App
             $output = $this->getTag('script', [], '$(function () {' . $remove_function . $output['atkjs'] . '});')
                 . $output['html'];
 
-            $this->outputResponseHtml($output, []);
+            $this->outputResponseHtml($output, $headers);
         } elseif ($type === 'text/html') {
-            $this->outputResponseHtml($output, []);
+            $this->outputResponseHtml($output, $headers);
         } else {
-            $this->outputResponse($output, []);
+            $this->outputResponse($output, $headers);
         }
 
         $this->runCalled = true; // prevent shutdown function from triggering
@@ -429,7 +418,7 @@ class App
 
         $this->terminate(
             $output,
-            array_merge($headers, ['content-type' => 'text/html'])
+            array_merge($this->normalizeHeaders($headers), ['content-type' => 'text/html'])
         );
     }
 
@@ -446,7 +435,7 @@ class App
 
         $this->terminate(
             $output,
-            array_merge($headers, ['content-type' => 'application/json'])
+            array_merge($this->normalizeHeaders($headers), ['content-type' => 'application/json'])
         );
     }
 
@@ -608,7 +597,19 @@ class App
 
     protected function getRequestUrl(): string
     {
-        return $this->request->getUri()->getPath();
+        if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
+            $requestUrl = $_SERVER['HTTP_X_REWRITE_URL'];
+        } elseif (isset($_SERVER['REQUEST_URI'])) { // Apache
+            $requestUrl = $_SERVER['REQUEST_URI'];
+        } elseif (isset($_SERVER['ORIG_PATH_INFO'])) { // IIS 5.0, PHP as CGI
+            $requestUrl = $_SERVER['ORIG_PATH_INFO'];
+        // This one comes without QUERY string
+        } else {
+            $requestUrl = '';
+        }
+        $requestUrl = explode('?', $requestUrl, 2);
+
+        return $requestUrl[0];
     }
 
     protected function createRequestPathFromLocalPath(string $localPath): string
@@ -782,9 +783,7 @@ class App
      */
     public function redirect($page, bool $permanent = false): void
     {
-        $this->setResponseStatusCode($permanent ? 301 : 302);
-        $this->setResponseHeader('location', $this->url($page));
-        $this->terminateHtml('');
+        $this->terminateHtml('', ['location' => $this->url($page), self::HEADER_STATUS_CODE => $permanent ? '301' : '302']);
     }
 
     /**
@@ -1052,22 +1051,35 @@ class App
     /**
      * This can be overridden for future PSR-7 implementation.
      *
+     * @param array<string, string> $headersNew
+     *
      * @internal should be called only from self::outputResponse()
      */
-    protected function outputResponseUnsafe(string $data): void
+    protected function outputResponseUnsafe(string $data, array $headersNew): void
     {
-        // if is Sse, break the flow and echo events directly
-        // Check discussion here : https://github.com/atk4/ui/pull/1706
-        if (headers_sent() && $this->response->getHeaderLine('Content-Type') === 'text/event-stream') {
-            echo $data;
+        $isCli = \PHP_SAPI === 'cli'; // for phpunit
 
-            return;
+        if (!headers_sent() || $isCli) {
+            foreach ($headersNew as $k => $v) {
+                if (!$isCli) {
+                    if ($k === self::HEADER_STATUS_CODE) {
+                        http_response_code($v === (string) (int) $v ? (int) $v : 500);
+                    } else {
+                        $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                            return strtoupper($matches[0]);
+                        }, $k);
+
+                        header($kCamelCase . ': ' . $v);
+                    }
+                }
+            }
         }
 
-        $this->response->getBody()->write($data);
-
-        $this->emitResponse();
+        echo $data;
     }
+
+    /** @var array<string, string> */
+    private static array $_sentHeaders = [];
 
     /**
      * Output Response to the client.
@@ -1076,7 +1088,11 @@ class App
      */
     protected function outputResponse(string $data, array $headers): void
     {
-        $this->setResponseHeaders($headers);
+        $this->responseHeaders = $this->normalizeHeaders($this->responseHeaders);
+        $headersAll = array_merge($this->responseHeaders, $this->normalizeHeaders($headers));
+        unset($headers);
+        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
+        unset($headersAll);
 
         foreach (ob_get_status(true) as $status) {
             if ($status['buffer_used'] !== 0) {
@@ -1092,14 +1108,7 @@ class App
 
         $isCli = \PHP_SAPI === 'cli'; // for phpunit
 
-        // Sse have multiple phases
-        // Headers - Send Response only with headers.
-        // Browser - Prepare to receive streamed events.
-        // Sending - Subsequent calls will output only structured data.
-        // Check below is done directly on response to check on first call LateOutputError.
-        $isSse = $this->response->getHeaderLine('Content-Type') === 'text/event-stream';
-
-        if (!$isSse && !$isCli && headers_sent()) {
+        if (count($headersNew) > 0 && headers_sent() && !$isCli) {
             $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
             if ($this->catchExceptions) {
                 $this->caughtException($lateError);
@@ -1109,27 +1118,29 @@ class App
             throw $lateError;
         }
 
-        $this->outputResponseUnsafe($data);
+        foreach ($headersNew as $k => $v) {
+            self::$_sentHeaders[$k] = $v;
+        }
+
+        $this->outputResponseUnsafe($data, $headersNew);
     }
 
     /**
-     * Last chance to output a meaningful response before exit.
-     *
      * @return never
      */
     protected function outputLateOutputError(LateOutputError $exception): void
     {
-        // In case of late error for headers, this will be not respected
-        // http response code was already sent implicit
-        $this->setResponseStatusCode(500);
+        $plainTextMessage = "\n" . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!' . "\n";
 
-        // In case of late error for headers, they were already sent
-        // so all headers needs to be removed, to avoid throwing error in loop
-        foreach ($this->response->getHeaders() as $name => $value) {
-            $this->setResponseHeader($name, '');
+        $headersAll = $this->normalizeHeaders(['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500']);
+        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
+        unset($headersAll);
+
+        foreach ($headersNew as $k => $v) {
+            self::$_sentHeaders[$k] = $v;
         }
 
-        $this->outputResponseUnsafe("\n" . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!' . "\n");
+        $this->outputResponseUnsafe($plainTextMessage, $headersNew);
 
         $this->runCalled = true; // prevent shutdown function from triggering
 
@@ -1145,7 +1156,7 @@ class App
     {
         $this->outputResponse(
             $data,
-            array_merge($headers, ['content-type' => 'text/html'])
+            array_merge($this->normalizeHeaders($headers), ['content-type' => 'text/html'])
         );
     }
 
@@ -1163,7 +1174,7 @@ class App
 
         $this->outputResponse(
             $data,
-            array_merge($headers, ['content-type' => 'application/json'])
+            array_merge($this->normalizeHeaders($headers), ['content-type' => 'application/json'])
         );
     }
 
@@ -1182,80 +1193,5 @@ class App
         }
 
         return $portals;
-    }
-
-    public function getResponse(): ResponseInterface
-    {
-        return $this->response;
-    }
-
-    protected function emitResponse(): void
-    {
-        http_response_code($this->response->getStatusCode());
-
-        foreach ($this->response->getHeaders() as $name => $values) {
-            foreach ($values as $value) {
-                header($name . ': ' . $value, false);
-            }
-        }
-
-        $stream = $this->response->getBody();
-        if ($stream->isSeekable()) {
-            $stream->rewind();
-        }
-
-        // for streaming response
-        if (!$stream->isReadable()) {
-            return;
-        }
-
-        while (!$stream->eof()) {
-            echo $stream->read(1024);
-        }
-    }
-
-    protected function setResponseHeaders(array $headers = []): void
-    {
-        foreach ($headers as $name => $value) {
-            $this->setResponseHeader($name, $value);
-        }
-    }
-
-    public function getRequest(): RequestInterface
-    {
-        return $this->request;
-    }
-
-    /**
-     * Return $_GET param by key or null if not exists.
-     *
-     * @return mixed|null
-     */
-    public function getRequestQueryParam(string $key)
-    {
-        return $this->request->getQueryParams()[$key] ?? null;
-    }
-
-    public function issetRequestQueryParam(string $key): bool
-    {
-        return isset($this->request->getQueryParams()[$key]);
-    }
-
-    /**
-     * Return whole $_POST data.
-     */
-    public function getRequestFormParams(): array
-    {
-        return $this->request->getParsedBody() ?? [];
-    }
-
-    /**
-     * Return $_POST param by key or null if not exists.
-     *
-     * @return mixed|null
-     */
-    public function getRequestFormParam(string $key)
-    {
-        return $this->request->getParsedBody()[$key] ?? null;
     }
 }
