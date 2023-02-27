@@ -20,6 +20,11 @@ use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7\Response;
+use Nyholm\Psr7Server\ServerRequestCreator;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -100,6 +105,10 @@ class App
     /** @var App\SessionManager */
     public $session;
 
+    private ServerRequestInterface $request;
+
+    private ResponseInterface $response;
+
     /** @var array<string, string> Extra HTTP headers to send on exit. */
     protected array $responseHeaders = [
         self::HEADER_STATUS_CODE => '200',
@@ -134,6 +143,36 @@ class App
 
     public function __construct(array $defaults = [])
     {
+        if (isset($defaults['request'])) {
+            $this->request = $defaults['request'];
+            unset($defaults['request']);
+        } else {
+            $requestFactory = new Psr17Factory();
+            $requestCreator = new ServerRequestCreator($requestFactory, $requestFactory, $requestFactory, $requestFactory);
+
+            $noGlobals = [];
+            foreach (['_GET', '_COOKIE', '_FILES'] as $k) {
+                if (!array_key_exists($k, $GLOBALS)) {
+                    $noGlobals[] = $k;
+                    $GLOBALS[$k] = [];
+                }
+            }
+            try {
+                $this->request = $requestCreator->fromGlobals();
+            } finally {
+                foreach ($noGlobals as $k) {
+                    unset($GLOBALS[$k]);
+                }
+            }
+        }
+
+        if (isset($defaults['response'])) {
+            $this->response = $defaults['response'];
+            unset($defaults['response']);
+        } else {
+            $this->response = new Response();
+        }
+
         $this->setApp($this);
 
         $this->setDefaults($defaults);
