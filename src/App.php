@@ -337,23 +337,6 @@ class App
     }
 
     /**
-     * Normalize HTTP headers to associative array with LC keys.
-     *
-     * @param array<string, string> $headers
-     *
-     * @return array<string, string>
-     */
-    protected function normalizeHeaders(array $headers): array
-    {
-        $res = [];
-        foreach ($headers as $k => $v) {
-            $res[strtolower(trim($k))] = trim($v);
-        }
-
-        return $res;
-    }
-
-    /**
      * @return $this
      */
     public function setResponseStatusCode(int $statusCode): self
@@ -368,10 +351,6 @@ class App
      */
     public function setResponseHeader(string $name, string $value): self
     {
-        $arr = $this->normalizeHeaders([$name => $value]);
-        $value = reset($arr);
-        $name = array_key_first($arr);
-
         if ($value !== '') {
             $this->responseHeaders[$name] = $value;
         } else {
@@ -393,9 +372,7 @@ class App
      */
     public function terminate($output = '', array $headers = []): void
     {
-        $headers = $this->normalizeHeaders($headers);
         if (!isset($headers['content-type'])) {
-            $this->responseHeaders = $this->normalizeHeaders($this->responseHeaders);
             if (!isset($this->responseHeaders['content-type'])) {
                 throw new Exception('Content type must be always set');
             }
@@ -457,7 +434,7 @@ class App
 
         $this->terminate(
             $output,
-            array_merge($this->normalizeHeaders($headers), ['content-type' => 'text/html'])
+            array_merge($headers, ['content-type' => 'text/html'])
         );
     }
 
@@ -474,7 +451,7 @@ class App
 
         $this->terminate(
             $output,
-            array_merge($this->normalizeHeaders($headers), ['content-type' => 'application/json'])
+            array_merge($headers, ['content-type' => 'application/json'])
         );
     }
 
@@ -1115,8 +1092,7 @@ class App
      */
     protected function outputResponse(string $data, array $headers): void
     {
-        $this->responseHeaders = $this->normalizeHeaders($this->responseHeaders);
-        $headersAll = array_merge($this->responseHeaders, $this->normalizeHeaders($headers));
+        $headersAll = array_merge($this->responseHeaders, $headers);
         unset($headers);
         $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
         unset($headersAll);
@@ -1159,7 +1135,7 @@ class App
     {
         $plainTextMessage = "\n" . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!' . "\n";
 
-        $headersAll = $this->normalizeHeaders(['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500']);
+        $headersAll = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500'];
         $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
         unset($headersAll);
 
@@ -1183,7 +1159,7 @@ class App
     {
         $this->outputResponse(
             $data,
-            array_merge($this->normalizeHeaders($headers), ['content-type' => 'text/html'])
+            array_merge($headers, ['content-type' => 'text/html'])
         );
     }
 
@@ -1201,7 +1177,7 @@ class App
 
         $this->outputResponse(
             $data,
-            array_merge($this->normalizeHeaders($headers), ['content-type' => 'application/json'])
+            array_merge($headers, ['content-type' => 'application/json'])
         );
     }
 
