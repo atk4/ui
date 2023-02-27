@@ -636,19 +636,7 @@ class App
 
     protected function getRequestUrl(): string
     {
-        if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
-            $requestUrl = $_SERVER['HTTP_X_REWRITE_URL'];
-        } elseif (isset($_SERVER['REQUEST_URI'])) { // Apache
-            $requestUrl = $_SERVER['REQUEST_URI'];
-        } elseif (isset($_SERVER['ORIG_PATH_INFO'])) { // IIS 5.0, PHP as CGI
-            $requestUrl = $_SERVER['ORIG_PATH_INFO'];
-        // This one comes without QUERY string
-        } else {
-            $requestUrl = '';
-        }
-        $requestUrl = explode('?', $requestUrl, 2);
-
-        return $requestUrl[0];
+        return $this->request->getUri()->getPath();
     }
 
     protected function createRequestPathFromLocalPath(string $localPath): string
