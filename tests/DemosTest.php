@@ -117,10 +117,6 @@ class DemosTest extends TestCase
         foreach ($queryArr as $k => $v) {
             $_POST[$k] = $v;
         }
-
-        \Closure::bind(function () {
-            App::$_sentHeaders = [];
-        }, null, App::class)();
     }
 
     protected function resetSuperglobals(): void
@@ -194,12 +190,10 @@ class DemosTest extends TestCase
                 $this->resetSuperglobals();
             }
 
-            $headers = \Closure::bind(fn () => App::$_sentHeaders, null, App::class)();
-
             // Attach a response to the easy handle with the parsed headers.
             $response = new Response(
                 $app->getResponse()->getStatusCode(), // @phpstan-ignore-line
-                $headers,
+                $app->getResponse()->getHeaders(), // @phpstan-ignore-line
                 class_exists(Utils::class) ? Utils::streamFor($body) : \GuzzleHttp\Psr7\stream_for($body), // @phpstan-ignore-line Utils class present since guzzlehttp/psr7 v1.7
                 '1.0'
             );

@@ -107,11 +107,6 @@ class App
 
     private ResponseInterface $response;
 
-    /** @var array<string, string> Extra HTTP headers to send on exit. */
-    protected array $responseHeaders = [
-        'cache-control' => 'no-store', // disable caching by default
-    ];
-
     /** @var array<string, View> Modal view that need to be rendered using json output. */
     private $portals = [];
 
@@ -169,6 +164,9 @@ class App
         } else {
             $this->response = new Response();
         }
+
+        // disable caching by default
+        $this->setResponseHeader('cache-control', 'no-store');
 
         $this->setApp($this);
 
@@ -391,20 +389,17 @@ class App
      */
     public function setResponseHeader(string $name, string $value): self
     {
-        if ($value !== '') {
-            $this->responseHeaders[$name] = $value;
+        if ($value === '') {
+            $this->response = $this->response->withoutHeader($name);
         } else {
-            unset($this->responseHeaders[$name]);
+            $name = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                return strtoupper($matches[0]);
+            }, strtolower($name));
+
+            $this->response = $this->response->withHeader($name, $value);
         }
 
         return $this;
-    }
-
-    private function setResponseHeaders(array $headers = []): void
-    {
-        foreach ($headers as $name => $value) {
-            $this->setResponseHeader($name, $value);
-        }
     }
 
     /**
@@ -412,22 +407,16 @@ class App
      * directly, instead call it form Callback, JsCallback or similar
      * other classes.
      *
-     * @param string|array          $output  Array type is supported only for JSON response
-     * @param array<string, string> $headers content-type header must be always set or consider using App::terminateHtml() or App::terminateJson() methods
+     * @param string|array $output Array type is supported only for JSON response
      *
      * @return never
      */
-    public function terminate($output = '', array $headers = []): void
+    public function terminate($output = ''): void
     {
-        if (!isset($headers['content-type'])) {
-            if (!isset($this->responseHeaders['content-type'])) {
-                throw new Exception('Content type must be always set');
-            }
-
-            $headers['content-type'] = $this->responseHeaders['content-type'];
+        $type = preg_replace('~;.*~', '', strtolower($this->response->getHeaderLine('content-type'))); // in LC without charset
+        if ($type === '') {
+            throw new Exception('Content type must be always set');
         }
-
-        $type = preg_replace('~;.*~', '', strtolower($headers['content-type'])); // in LC without charset
 
         if ($type === 'application/json') {
             if (is_string($output)) {
@@ -435,7 +424,6 @@ class App
             }
             $output['portals'] = $this->getRenderedPortals();
 
-            $this->setResponseHeaders($headers);
             $this->outputResponseJson($output);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
             // ugly hack for TABS
@@ -456,13 +444,11 @@ class App
             $output = $this->getTag('script', [], '$(function () {' . $remove_function . $output['atkjs'] . '});')
                 . $output['html'];
 
-            $this->setResponseHeaders($headers);
-            $this->outputResponseHtml($output, $headers);
+            $this->outputResponseHtml($output);
         } elseif ($type === 'text/html') {
-            $this->setResponseHeaders($headers);
-            $this->outputResponseHtml($output, $headers);
+            $this->outputResponseHtml($output);
         } else {
-            $this->outputResponse($output, $headers);
+            $this->outputResponse($output);
         }
 
         $this->runCalled = true; // prevent shutdown function from triggering
@@ -474,7 +460,7 @@ class App
      *
      * @return never
      */
-    public function terminateHtml($output, array $headers = []): void
+    public function terminateHtml($output): void
     {
         if ($output instanceof View) {
             $output = $output->render();
@@ -482,10 +468,8 @@ class App
             $output = $output->renderToHtml();
         }
 
-        $this->terminate(
-            $output,
-            array_merge($headers, ['content-type' => 'text/html'])
-        );
+        $this->setResponseHeader('content-type', 'text/html');
+        $this->terminate($output);
     }
 
     /**
@@ -493,16 +477,14 @@ class App
      *
      * @return never
      */
-    public function terminateJson($output, array $headers = []): void
+    public function terminateJson($output): void
     {
         if ($output instanceof View) {
             $output = $output->renderToJsonArr();
         }
 
-        $this->terminate(
-            $output,
-            array_merge($headers, ['content-type' => 'application/json'])
-        );
+        $this->setResponseHeader('content-type', 'application/json');
+        $this->terminate($output);
     }
 
     /**
@@ -838,7 +820,8 @@ class App
     public function redirect($page, bool $permanent = false): void
     {
         $this->setResponseStatusCode($permanent ? 301 : 302);
-        $this->terminateHtml('', ['location' => $this->url($page)]);
+        $this->setResponseHeader('location', $this->url($page));
+        $this->terminateHtml('');
     }
 
     /**
@@ -1110,24 +1093,36 @@ class App
     {
         http_response_code($this->response->getStatusCode());
 
+        $isCli = \PHP_SAPI === 'cli'; // for phpunit
+
+        /* if (count($headersNew) > 0 && headers_sent() && !$isCli) {
+            $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
+            if ($this->catchExceptions) {
+                $this->caughtException($lateError);
+                $this->outputLateOutputError($lateError);
+            }
+
+            throw $lateError;
+        } */
+
+        if (!headers_sent() || $isCli) {
+            foreach ($this->response->getHeaders() as $name => $values) {
+                foreach ($values as $value) {
+                    if (!$isCli) {
+                        header($name . ': ' . $value, false);
+                    }
+                }
+            }
+        }
+
         echo $data;
     }
 
-    /** @var array<string, string> */
-    private static array $_sentHeaders = [];
-
     /**
      * Output Response to the client.
-     *
-     * @param array<string, string> $headers
      */
-    protected function outputResponse(string $data, array $headers): void
+    protected function outputResponse(string $data): void
     {
-        $headersAll = array_merge($this->responseHeaders, $headers);
-        unset($headers);
-        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
-        unset($headersAll);
-
         foreach (ob_get_status(true) as $status) {
             if ($status['buffer_used'] !== 0) {
                 $lateError = new LateOutputError('Unexpected output detected');
@@ -1140,34 +1135,6 @@ class App
             }
         }
 
-        $isCli = \PHP_SAPI === 'cli'; // for phpunit
-
-        if (count($headersNew) > 0 && headers_sent() && !$isCli) {
-            $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
-            if ($this->catchExceptions) {
-                $this->caughtException($lateError);
-                $this->outputLateOutputError($lateError);
-            }
-
-            throw $lateError;
-        }
-
-        foreach ($headersNew as $k => $v) {
-            self::$_sentHeaders[$k] = $v;
-        }
-
-        if (!headers_sent() || $isCli) {
-            foreach ($headersNew as $k => $v) {
-                if (!$isCli) {
-                    $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
-                        return strtoupper($matches[0]);
-                    }, $k);
-
-                    header($kCamelCase . ': ' . $v);
-                }
-            }
-        }
-
         $this->outputResponseUnsafe($data);
     }
 
@@ -1177,30 +1144,9 @@ class App
     protected function outputLateOutputError(LateOutputError $exception): void
     {
         $this->setResponseStatusCode(500);
+        $this->setResponseHeader('content-type', 'text/plain');
 
         $plainTextMessage = "\n" . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!' . "\n";
-
-        $headersAll = ['content-type' => 'text/plain'];
-        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
-        unset($headersAll);
-
-        foreach ($headersNew as $k => $v) {
-            self::$_sentHeaders[$k] = $v;
-        }
-
-        $isCli = \PHP_SAPI === 'cli'; // for phpunit
-
-        if (!headers_sent() || $isCli) {
-            foreach ($headersNew as $k => $v) {
-                if (!$isCli) {
-                    $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
-                        return strtoupper($matches[0]);
-                    }, $k);
-
-                    header($kCamelCase . ': ' . $v);
-                }
-            }
-        }
 
         $this->outputResponseUnsafe($plainTextMessage);
 
@@ -1221,7 +1167,7 @@ class App
     /**
      * Output JSON response to the client.
      *
-     * @param string|array          $data
+     * @param string|array $data
      */
     private function outputResponseJson($data): void
     {

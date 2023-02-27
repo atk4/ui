@@ -18,7 +18,7 @@ class AppMock extends App
     /**
      * Overriden to allow multiple App::run() calls, prevent sending headers when headers are already sent.
      */
-    protected function outputResponse(string $data, array $headers): void
+    protected function outputResponse(string $data): void
     {
         echo $data;
     }

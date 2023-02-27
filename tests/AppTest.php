@@ -36,6 +36,21 @@ class AppTest extends TestCase
         );
     }
 
+    public function testHeaderNormalize(): void
+    {
+        $app = $this->createApp();
+        $app->setResponseHeader('cache-control', '');
+
+        $app->setResponseHeader('content-type', 'Xy');
+        static::assertSame(['Content-Type' => ['Xy']], $app->getResponse()->getHeaders());
+
+        $app->setResponseHeader('CONTENT-type', 'xY');
+        static::assertSame(['Content-Type' => ['xY']], $app->getResponse()->getHeaders());
+
+        $app->setResponseHeader('content-TYPE', '');
+        static::assertSame([], $app->getResponse()->getHeaders());
+    }
+
     public function testUnexpectedOutputLateError(): void
     {
         $app = $this->createApp();
