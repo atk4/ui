@@ -37,8 +37,6 @@ class App
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
     public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
 
-    protected const HEADER_STATUS_CODE = 'atk4-status-code';
-
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
         'atk' => '/public',
@@ -111,7 +109,6 @@ class App
 
     /** @var array<string, string> Extra HTTP headers to send on exit. */
     protected array $responseHeaders = [
-        self::HEADER_STATUS_CODE => '200',
         'cache-control' => 'no-store', // disable caching by default
     ];
 
@@ -384,7 +381,7 @@ class App
      */
     public function setResponseStatusCode(int $statusCode): self
     {
-        $this->setResponseHeader(self::HEADER_STATUS_CODE, (string) $statusCode);
+        $this->response = $this->response->withStatus($statusCode);
 
         return $this;
     }
@@ -830,7 +827,8 @@ class App
      */
     public function redirect($page, bool $permanent = false): void
     {
-        $this->terminateHtml('', ['location' => $this->url($page), self::HEADER_STATUS_CODE => $permanent ? '301' : '302']);
+        $this->setResponseStatusCode($permanent ? 301 : 302);
+        $this->terminateHtml('', ['location' => $this->url($page)]);
     }
 
     /**
@@ -1100,6 +1098,8 @@ class App
      */
     protected function outputResponseUnsafe(string $data): void
     {
+        http_response_code($this->response->getStatusCode());
+
         echo $data;
     }
 
@@ -1149,15 +1149,11 @@ class App
         if (!headers_sent() || $isCli) {
             foreach ($headersNew as $k => $v) {
                 if (!$isCli) {
-                    if ($k === self::HEADER_STATUS_CODE) {
-                        http_response_code($v === (string) (int) $v ? (int) $v : 500);
-                    } else {
-                        $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
-                            return strtoupper($matches[0]);
-                        }, $k);
+                    $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                        return strtoupper($matches[0]);
+                    }, $k);
 
-                        header($kCamelCase . ': ' . $v);
-                    }
+                    header($kCamelCase . ': ' . $v);
                 }
             }
         }
@@ -1170,9 +1166,11 @@ class App
      */
     protected function outputLateOutputError(LateOutputError $exception): void
     {
+        $this->setResponseStatusCode(500);
+
         $plainTextMessage = "\n" . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!' . "\n";
 
-        $headersAll = ['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500'];
+        $headersAll = ['content-type' => 'text/plain'];
         $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
         unset($headersAll);
 
@@ -1185,15 +1183,11 @@ class App
         if (!headers_sent() || $isCli) {
             foreach ($headersNew as $k => $v) {
                 if (!$isCli) {
-                    if ($k === self::HEADER_STATUS_CODE) {
-                        http_response_code($v === (string) (int) $v ? (int) $v : 500);
-                    } else {
-                        $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
-                            return strtoupper($matches[0]);
-                        }, $k);
+                    $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                        return strtoupper($matches[0]);
+                    }, $k);
 
-                        header($kCamelCase . ': ' . $v);
-                    }
+                    header($kCamelCase . ': ' . $v);
                 }
             }
         }

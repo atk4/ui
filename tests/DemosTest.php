@@ -194,20 +194,11 @@ class DemosTest extends TestCase
                 $this->resetSuperglobals();
             }
 
-            [$statusCode, $headers] = \Closure::bind(function () {
-                $statusCode = 200;
-                $headers = App::$_sentHeaders;
-                if (isset($headers[App::HEADER_STATUS_CODE])) {
-                    $statusCode = $headers[App::HEADER_STATUS_CODE];
-                    unset($headers[App::HEADER_STATUS_CODE]);
-                }
-
-                return [$statusCode, $headers];
-            }, null, App::class)();
+            $headers = \Closure::bind(fn () => App::$_sentHeaders, null, App::class)();
 
             // Attach a response to the easy handle with the parsed headers.
             $response = new Response(
-                $statusCode,
+                $app->getResponse()->getStatusCode(), // @phpstan-ignore-line
                 $headers,
                 class_exists(Utils::class) ? Utils::streamFor($body) : \GuzzleHttp\Psr7\stream_for($body), // @phpstan-ignore-line Utils class present since guzzlehttp/psr7 v1.7
                 '1.0'
