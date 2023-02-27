@@ -210,7 +210,7 @@ class App
 
                 throw new \ErrorException($msg, 0, $severity, $file, $line);
             });
-            $this->outputResponseUnsafe('', [self::HEADER_STATUS_CODE => '500']);
+            http_response_code(500);
         }
 
         // Always run app on shutdown
@@ -1053,32 +1053,10 @@ class App
     // RESPONSES
 
     /**
-     * This can be overridden for future PSR-7 implementation.
-     *
-     * @param array<string, string> $headersNew
-     *
      * @internal should be called only from self::outputResponse()
      */
-    protected function outputResponseUnsafe(string $data, array $headersNew): void
+    protected function outputResponseUnsafe(string $data): void
     {
-        $isCli = \PHP_SAPI === 'cli'; // for phpunit
-
-        if (!headers_sent() || $isCli) {
-            foreach ($headersNew as $k => $v) {
-                if (!$isCli) {
-                    if ($k === self::HEADER_STATUS_CODE) {
-                        http_response_code($v === (string) (int) $v ? (int) $v : 500);
-                    } else {
-                        $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
-                            return strtoupper($matches[0]);
-                        }, $k);
-
-                        header($kCamelCase . ': ' . $v);
-                    }
-                }
-            }
-        }
-
         echo $data;
     }
 
@@ -1125,7 +1103,23 @@ class App
             self::$_sentHeaders[$k] = $v;
         }
 
-        $this->outputResponseUnsafe($data, $headersNew);
+        if (!headers_sent() || $isCli) {
+            foreach ($headersNew as $k => $v) {
+                if (!$isCli) {
+                    if ($k === self::HEADER_STATUS_CODE) {
+                        http_response_code($v === (string) (int) $v ? (int) $v : 500);
+                    } else {
+                        $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                            return strtoupper($matches[0]);
+                        }, $k);
+
+                        header($kCamelCase . ': ' . $v);
+                    }
+                }
+            }
+        }
+
+        $this->outputResponseUnsafe($data);
     }
 
     /**
@@ -1143,7 +1137,25 @@ class App
             self::$_sentHeaders[$k] = $v;
         }
 
-        $this->outputResponseUnsafe($plainTextMessage, $headersNew);
+        $isCli = \PHP_SAPI === 'cli'; // for phpunit
+
+        if (!headers_sent() || $isCli) {
+            foreach ($headersNew as $k => $v) {
+                if (!$isCli) {
+                    if ($k === self::HEADER_STATUS_CODE) {
+                        http_response_code($v === (string) (int) $v ? (int) $v : 500);
+                    } else {
+                        $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                            return strtoupper($matches[0]);
+                        }, $k);
+
+                        header($kCamelCase . ': ' . $v);
+                    }
+                }
+            }
+        }
+
+        $this->outputResponseUnsafe($plainTextMessage);
 
         $this->runCalled = true; // prevent shutdown function from triggering
 
