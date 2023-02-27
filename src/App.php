@@ -400,6 +400,13 @@ class App
         return $this;
     }
 
+    private function setResponseHeaders(array $headers = []): void
+    {
+        foreach ($headers as $name => $value) {
+            $this->setResponseHeader($name, $value);
+        }
+    }
+
     /**
      * Will perform a preemptive output and terminate. Do not use this
      * directly, instead call it form Callback, JsCallback or similar
@@ -428,7 +435,8 @@ class App
             }
             $output['portals'] = $this->getRenderedPortals();
 
-            $this->outputResponseJson($output, $headers);
+            $this->setResponseHeaders($headers);
+            $this->outputResponseJson($output);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
             // ugly hack for TABS
             // because Fomantic-UI tab only deal with html and not JSON
@@ -448,8 +456,10 @@ class App
             $output = $this->getTag('script', [], '$(function () {' . $remove_function . $output['atkjs'] . '});')
                 . $output['html'];
 
+            $this->setResponseHeaders($headers);
             $this->outputResponseHtml($output, $headers);
         } elseif ($type === 'text/html') {
+            $this->setResponseHeaders($headers);
             $this->outputResponseHtml($output, $headers);
         } else {
             $this->outputResponse($output, $headers);
@@ -1201,33 +1211,26 @@ class App
 
     /**
      * Output HTML response to the client.
-     *
-     * @param array<string, string> $headers
      */
-    private function outputResponseHtml(string $data, array $headers = []): void
+    private function outputResponseHtml(string $data): void
     {
-        $this->outputResponse(
-            $data,
-            array_merge($headers, ['content-type' => 'text/html'])
-        );
+        $this->setResponseHeader('content-type', 'text/html');
+        $this->outputResponse($data);
     }
 
     /**
      * Output JSON response to the client.
      *
      * @param string|array          $data
-     * @param array<string, string> $headers
      */
-    private function outputResponseJson($data, array $headers = []): void
+    private function outputResponseJson($data): void
     {
         if (!is_string($data)) {
             $data = $this->encodeJson($data);
         }
 
-        $this->outputResponse(
-            $data,
-            array_merge($headers, ['content-type' => 'application/json'])
-        );
+        $this->setResponseHeader('content-type', 'application/json');
+        $this->outputResponse($data);
     }
 
     /**
