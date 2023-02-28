@@ -233,7 +233,7 @@ class AppFormTestMock extends App
     /** @var string|array */
     public $output;
 
-    public function terminate($output = '', array $headers = []): void
+    public function terminate($output = ''): void
     {
         $this->output = $output;
 
