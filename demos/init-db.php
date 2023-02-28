@@ -84,7 +84,7 @@ trait ModelPreventModificationTrait
             return $makeMessageFx('edit', $model);
         });
 
-        $this->getUserAction('delete')->confirmation = 'Please go ahead. Demo mode does not really delete data.';
+//        $this->getUserAction('delete')->confirmation = 'Please go ahead. Demo mode does not really delete data.';
         $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), function (Model $model) use ($makeMessageFx) {
             return $makeMessageFx('delete', $model);
         });
