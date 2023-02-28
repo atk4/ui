@@ -1111,27 +1111,13 @@ class App
      */
     protected function outputResponseRaw(string $data): void
     {
-        /* $isCli = \PHP_SAPI === 'cli'; // for phpunit
+        // TODO hack for SSE
+        // https://github.com/atk4/ui/pull/1706#discussion_r757819527
+        if (headers_sent() && $this->response->getHeaderLine('Content-Type') === 'text/event-stream') {
+            echo $data;
 
-        if (count($headersNew) > 0 && headers_sent() && !$isCli) {
-            $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
-            if ($this->catchExceptions) {
-                $this->caughtException($lateError);
-                $this->outputLateOutputError($lateError);
-            }
-
-            throw $lateError;
+            return;
         }
-
-        if (!headers_sent() || $isCli) {
-            foreach ($this->response->getHeaders() as $name => $values) {
-                foreach ($values as $value) {
-                    if (!$isCli) {
-                        header($name . ': ' . $value, false);
-                    }
-                }
-            }
-        } */
 
         $this->response->getBody()->write($data);
 
