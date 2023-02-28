@@ -48,20 +48,16 @@ class ProgressBar extends View
 
     /**
      * Return js action for incrementing progress by one.
-     *
-     * @return JsExpressionable
      */
-    public function jsIncrement()
+    public function jsIncrement(): JsExpressionable
     {
         return $this->js()->progress('increment');
     }
 
     /**
      * Return js action for setting value (client-side).
-     *
-     * @return JsExpressionable
      */
-    public function jsValue(int $value)
+    public function jsValue(int $value): JsExpressionable
     {
         return $this->js()->progress(['percent' => $value]);
     }

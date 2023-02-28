@@ -17,6 +17,7 @@ use Atk4\Ui\Exception\ExitApplicationError;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Psr\Log\LoggerInterface;
@@ -50,7 +51,7 @@ class App
      *
      * @TODO remove, no longer needed for CDN versioning as we bundle all resources
      */
-    public $version = '4.1-dev';
+    public $version = '5.0-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -148,31 +149,28 @@ class App
         // Set our exception handler
         if ($this->catchExceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
-            set_error_handler(
-                static function (int $severity, string $msg, string $file, int $line): bool {
-                    if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
-                        $isFirstFrame = true;
-                        foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
-                            // allow to suppress any warning outside Atk4
-                            if ($isFirstFrame) {
-                                $isFirstFrame = false;
-                                if (!isset($frame['class']) || !str_starts_with($frame['class'], 'Atk4\\')) {
-                                    return false;
-                                }
-                            }
-
-                            // allow to suppress undefined property warning
-                            if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
-                                && $frame['function'] === 'warnPropertyDoesNotExist') {
+            set_error_handler(static function (int $severity, string $msg, string $file, int $line): bool {
+                if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
+                    $isFirstFrame = true;
+                    foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
+                        // allow to suppress any warning outside Atk4
+                        if ($isFirstFrame) {
+                            $isFirstFrame = false;
+                            if (!isset($frame['class']) || !str_starts_with($frame['class'], 'Atk4\\')) {
                                 return false;
                             }
                         }
-                    }
 
-                    throw new \ErrorException($msg, 0, $severity, $file, $line);
-                },
-                \E_ALL
-            );
+                        // allow to suppress undefined property warning
+                        if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
+                            && $frame['function'] === 'warnPropertyDoesNotExist') {
+                            return false;
+                        }
+                    }
+                }
+
+                throw new \ErrorException($msg, 0, $severity, $file, $line);
+            });
             $this->outputResponseUnsafe('', [self::HEADER_STATUS_CODE => '500']);
         }
 
@@ -793,7 +791,7 @@ class App
      *
      * @param string|array $page Destination URL or page/arguments
      */
-    public function jsRedirect($page, bool $newWindow = false): JsExpression
+    public function jsRedirect($page, bool $newWindow = false): JsExpressionable
     {
         return new JsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
     }
@@ -975,6 +973,21 @@ class App
      */
     public function encodeJson($data, bool $forceObject = false): string
     {
+        if (is_array($data) || is_object($data)) {
+            $checkNoObjectFx = function ($v) {
+                if (is_object($v)) {
+                    throw (new Exception('Object to JSON encode is not supported'))
+                        ->addMoreInfo('value', $v);
+                }
+            };
+
+            if (is_object($data)) {
+                $checkNoObjectFx($data);
+            } else {
+                array_walk_recursive($data, $checkNoObjectFx);
+            }
+        }
+
         $options = \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT;
         if ($forceObject) {
             $options |= \JSON_FORCE_OBJECT;
@@ -1021,8 +1034,8 @@ class App
                     } catch (ExitApplicationError $e) {
                         // let the process go and stop on ->callExit below
                     } catch (\Throwable $e) {
-                        // process is already in shutdown
-                        // must be forced to catch exception
+                        // set_exception_handler does not work in shutdown
+                        // https://github.com/php/php-src/issues/10695
                         $this->caughtException($e);
                     }
 

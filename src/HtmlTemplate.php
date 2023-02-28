@@ -64,7 +64,7 @@ class HtmlTemplate
     public function getTagTree(string $tag): TagTree
     {
         if (!isset($this->tagTrees[$tag])) {
-            throw (new Exception('Tag not found in template'))
+            throw (new Exception('Tag is not defined in template'))
                 ->addMoreInfo('tag', $tag)
                 ->addMoreInfo('template_tags', array_diff(array_keys($this->tagTrees), [self::TOP_TAG]));
         }
@@ -87,6 +87,9 @@ class HtmlTemplate
         $this->tagTrees = $this->cloneTagTrees($this->tagTrees);
     }
 
+    /**
+     * @return static
+     */
     public function cloneRegion(string $tag): self
     {
         $template = new static();
@@ -204,6 +207,8 @@ class HtmlTemplate
      * would read and set multiple region values from $_GET array.
      *
      * @param string|array|Model $tag
+     *
+     * @return $this
      */
     public function set($tag, string $value = null): self
     {
@@ -217,6 +222,8 @@ class HtmlTemplate
      * $tag.
      *
      * @param string|array|Model $tag
+     *
+     * @return $this
      */
     public function trySet($tag, string $value = null): self
     {
@@ -230,6 +237,8 @@ class HtmlTemplate
      * encoding, so you must be sure to sanitize.
      *
      * @param string|array|Model $tag
+     *
+     * @return $this
      */
     public function dangerouslySetHtml($tag, string $value = null): self
     {
@@ -243,6 +252,8 @@ class HtmlTemplate
      * $tag.
      *
      * @param string|array|Model $tag
+     *
+     * @return $this
      */
     public function tryDangerouslySetHtml($tag, string $value = null): self
     {
@@ -255,6 +266,8 @@ class HtmlTemplate
      * Add more content inside a tag.
      *
      * @param string|array|Model $tag
+     *
+     * @return $this
      */
     public function append($tag, ?string $value): self
     {
@@ -268,6 +281,8 @@ class HtmlTemplate
      * $tag.
      *
      * @param string|array|Model $tag
+     *
+     * @return $this
      */
     public function tryAppend($tag, ?string $value): self
     {
@@ -281,6 +296,8 @@ class HtmlTemplate
      * encoding, so you must be sure to sanitize.
      *
      * @param string|array|Model $tag
+     *
+     * @return $this
      */
     public function dangerouslyAppendHtml($tag, ?string $value): self
     {
@@ -294,6 +311,8 @@ class HtmlTemplate
      * $tag.
      *
      * @param string|array|Model $tag
+     *
+     * @return $this
      */
     public function tryDangerouslyAppendHtml($tag, ?string $value): self
     {
@@ -307,6 +326,8 @@ class HtmlTemplate
      * it will be also removed.
      *
      * @param string|array $tag
+     *
+     * @return $this
      */
     public function del($tag): self
     {
@@ -333,6 +354,8 @@ class HtmlTemplate
      * Similar to del() but won't throw exception if tag is not present.
      *
      * @param string|array $tag
+     *
+     * @return $this
      */
     public function tryDel($tag): self
     {
@@ -351,6 +374,9 @@ class HtmlTemplate
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function loadFromFile(string $filename): self
     {
         if ($this->tryLoadFromFile($filename) !== false) {
@@ -398,6 +424,9 @@ class HtmlTemplate
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function loadFromString(string $str): self
     {
         $this->parseTemplate($str);

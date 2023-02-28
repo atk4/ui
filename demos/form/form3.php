@@ -8,6 +8,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\View;
 
@@ -39,9 +40,9 @@ $form->onSubmit(function (Form $form) {
     foreach ($modelDirty as $field => $value) {
         // we should care only about editable fields
         if ($form->model->getField($field)->isEditable()) {
-            $errors[] = $form->error($field, 'Value was changed, ' . $form->getApp()->encodeJson($value) . ' to ' . $form->getApp()->encodeJson($form->model->get($field)));
+            $errors[] = $form->jsError($field, 'Value was changed, ' . $form->getApp()->encodeJson($value) . ' to ' . $form->getApp()->encodeJson($form->model->get($field)));
         }
     }
 
-    return $errors !== [] ? $errors : 'No fields were changed';
+    return $errors !== [] ? new JsBlock($errors) : 'No fields were changed';
 });

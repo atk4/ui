@@ -6,10 +6,12 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
+use Atk4\Ui\UserAction\SharedExecutorsContainer;
 
 /**
  * A collection of Card set from a model.
@@ -18,11 +20,10 @@ class CardDeck extends View
 {
     public $ui = 'basic segment atk-card-deck';
 
+    public $defaultTemplate = 'card-deck.html';
+
     /** @var class-string<View> Card type inside this deck. */
     public $card = Card::class;
-
-    /** @var string default template file. */
-    public $defaultTemplate = 'card-deck.html';
 
     /** @var bool Whether card should use table display or not. */
     public $useTable = false;
@@ -36,6 +37,9 @@ class CardDeck extends View
     /** @var bool If each card should use action or not. */
     public $useAction = true;
 
+    /** @var SharedExecutorsContainer|null */
+    public $sharedExecutorsContainer = [SharedExecutorsContainer::class];
+
     /** @var View|null The container view. The view that is reload when page or data changed. */
     public $container = [View::class, 'ui' => 'vertical segment'];
 
@@ -48,7 +52,7 @@ class CardDeck extends View
     /** @var int The number of cards to be displayed per page. */
     public $ipp = 9;
 
-    /** @var Menu|false Will be initialized to Menu object, however you can set this to false to disable menu. */
+    /** @var Menu|array|false Will be initialized to Menu object, however you can set this to false to disable menu. */
     public $menu;
 
     /** @var array|VueComponent\ItemSearch|false */
@@ -89,6 +93,8 @@ class CardDeck extends View
     protected function init(): void
     {
         parent::init();
+
+        $this->sharedExecutorsContainer = $this->add($this->sharedExecutorsContainer);
 
         $this->container = $this->add($this->container);
 
@@ -212,89 +218,43 @@ class CardDeck extends View
      * Return proper js statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      *
-     * @param string|JsExpressionable|array<int, JsExpressionable>|Model|null $return
-     *
-     * @return JsExpressionable|array<int, JsExpressionable>
+     * @param string|JsExpressionable|Model|null $return
      */
-    protected function jsExecute($return, Model\UserAction $action)
+    protected function jsExecute($return, Model\UserAction $action): JsBlock
     {
-        if (is_string($return)) {
-            return $this->getNotifier($action, $return);
-        } elseif (is_array($return) || $return instanceof JsExpressionable) {
-            return $return;
-        } elseif ($return instanceof Model) {
-            if ($return->isEntity()) {
-                $action = $action->getActionForEntity($return);
-            }
+        $res = new JsBlock();
 
-            $msg = $return->isLoaded() ? $this->saveMsg : ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
-
-            return $this->jsModelReturn($action, $msg);
+        if ($return instanceof Model) {
+            $return = $return->isLoaded()
+                ? $this->saveMsg
+                : ($action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD ? $this->deleteMsg : $this->defaultMsg);
         }
 
-        return $this->getNotifier($action, $this->defaultMsg);
+        if (is_string($return)) {
+            $msg = $this->jsCreateNotifier($action, $return);
+        } elseif ($return instanceof JsExpressionable) {
+            $msg = $return;
+        } else {
+            $msg = $this->jsCreateNotifier($action, $this->defaultMsg);
+        }
+        $res->addStatement($msg);
+
+        $res->addStatement($this->container->jsReload($this->getReloadArgs()));
+
+        return $res;
     }
 
     /**
      * Override this method for setting notifier based on action or model value.
      */
-    protected function getNotifier(Model\UserAction $action, string $msg = null): JsExpressionable
+    protected function jsCreateNotifier(Model\UserAction $action, string $msg = null): JsBlock
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {
             $notifier->setMessage($msg);
         }
 
-        return $notifier;
-    }
-
-    /**
-     * Js expression return when action afterHook executor return a Model.
-     *
-     * @return array<int, JsExpressionable>
-     */
-    protected function jsModelReturn(Model\UserAction $action, string $msg = 'Done!'): array
-    {
-        $js = [];
-        $js[] = $this->getNotifier($action, $msg);
-        $card = $action->getEntity()->isLoaded() ? $this->findCard($action->getEntity()) : null;
-        if ($card !== null) {
-            $js[] = $card->jsReload($this->getReloadArgs());
-        } else {
-            $js[] = $this->container->jsReload($this->getReloadArgs());
-        }
-
-        return $js;
-    }
-
-    /**
-     * Check if a card is still in current set and
-     * return it. Otherwise return null.
-     * After an action is execute and data is saved, the db result
-     * set might be different than previous one, which represent cards displayed on page.
-     *
-     * For example, editing a card which does not fulfill search requirement after it has been saved.
-     * Or when adding a new one.
-     * Therefore if card, that was just save, is not present in db result set or deck then return null
-     * otherwise return Card view.
-     *
-     * @return View|null
-     */
-    protected function findCard(Model $entity)
-    {
-        $deck = [];
-        foreach ($this->cardHolder->elements as $element) {
-            if ($element instanceof $this->card) {
-                $deck[$element->model->getId()] = $element;
-            }
-        }
-
-        if ($entity->getModel()->tryLoad($entity->getId()) !== null) {
-            // might be in result set but not in deck, for example when adding a card.
-            return $deck[$entity->getId()] ?? null;
-        }
-
-        return null;
+        return new JsBlock([$notifier]);
     }
 
     /**

@@ -16,7 +16,6 @@ View::addTo($app, [
     'ui' => 'ignored info message',
 ]);
 
-/** @var Button $myButtonClass */
 $myButtonClass = AnonymousClassNameCache::get_class(fn () => new class() extends Button {
     protected function renderView(): void
     {

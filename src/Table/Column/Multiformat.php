@@ -14,9 +14,12 @@ use Atk4\Ui\Table;
  */
 class Multiformat extends Table\Column
 {
-    /** @var \Closure Method to execute which will return array of seeds for decorators */
+    /** @var \Closure(Model, Field|null): array Method to execute which will return array of seeds for decorators */
     public $callback;
 
+    /**
+     * @param \Closure(Model, Field|null): array $callback
+     */
     public function __construct(\Closure $callback)
     {
         parent::__construct();

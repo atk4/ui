@@ -7,12 +7,12 @@ namespace Atk4\Ui\Form\Control;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
-use Atk4\Ui\App;
 use Atk4\Ui\Button;
-use Atk4\Ui\Callback;
+use Atk4\Ui\CallbackLater;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsModal;
@@ -29,7 +29,7 @@ class Lookup extends Input
     /** @var array Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
     public $values = [];
 
-    /** @var Callback Object used to capture requests from the browser. */
+    /** @var CallbackLater Object used to capture requests from the browser. */
     public $callback;
 
     /** @var string Set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value. */
@@ -136,10 +136,9 @@ class Lookup extends Input
 
         $this->initQuickNewRecord();
 
-        $this->callback = Callback::addTo($this);
-
-        $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () {
-            $this->callback->set(fn () => $this->outputApiResponse());
+        $this->callback = CallbackLater::addTo($this);
+        $this->callback->set(function () {
+            $this->outputApiResponse();
         });
     }
 
@@ -202,9 +201,11 @@ class Lookup extends Input
      */
     public function renderRow(Model $row): array
     {
-        $renderRowFunction = $this->renderRowFunction ?? \Closure::fromCallable([static::class, 'defaultRenderRow']);
+        if ($this->renderRowFunction !== null) {
+            return ($this->renderRowFunction)($this, $row);
+        }
 
-        return $renderRowFunction($this, $row);
+        return $this->defaultRenderRow($row);
     }
 
     /**
@@ -214,10 +215,10 @@ class Lookup extends Input
      *
      * @return array{value: mixed, title: mixed}
      */
-    public static function defaultRenderRow(self $control, Model $row, $key = null)
+    public function defaultRenderRow(Model $row, $key = null)
     {
-        $idField = $control->idField ?? $row->idField;
-        $titleField = $control->titleField ?? $row->titleField;
+        $idField = $this->idField ?? $row->idField;
+        $titleField = $this->titleField ?? $row->titleField;
 
         return ['value' => $row->get($idField), 'title' => $row->get($titleField)];
     }
@@ -258,16 +259,15 @@ class Lookup extends Input
             $form->onSubmit(function (Form $form) {
                 $form->model->save();
 
-                $ret = [
-                    (new Jquery())->closest('.atk-modal')->modal('hide'),
-                ];
+                $res = new JsBlock();
+                $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
 
                 $row = $this->renderRow($form->model);
                 $chain = new Jquery('#' . $this->name . '-ac');
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-                $ret[] = $chain;
+                $res->addStatement($chain);
 
-                return $ret;
+                return $res;
             });
         });
 

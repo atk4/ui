@@ -9,18 +9,20 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
-use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 
+/**
+ * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
+ */
 class Grid extends View
 {
     use HookTrait;
 
-    /** @var Menu|false Will be initialized to Menu object, however you can set this to false to disable menu. */
+    /** @var Menu|array|false Will be initialized to Menu object, however you can set this to false to disable menu. */
     public $menu;
 
     /** @var JsSearch|null */
@@ -352,16 +354,7 @@ class Grid extends View
         $this->quickSearch->initValue = $q;
     }
 
-    /**
-     * Returns JS for reloading View.
-     *
-     * @param array             $args
-     * @param JsExpression|null $afterSuccess
-     * @param array             $apiConfig
-     *
-     * @return JsReload
-     */
-    public function jsReload($args = [], $afterSuccess = null, $apiConfig = [])
+    public function jsReload($args = [], $afterSuccess = null, $apiConfig = []): JsExpressionable
     {
         return new JsReload($this->container, $args, $afterSuccess, $apiConfig);
     }
@@ -370,9 +363,9 @@ class Grid extends View
      * Adds a new button into the action column on the right. For Crud this
      * column will already contain "delete" and "edit" buttons.
      *
-     * @param string|array|View         $button     Label text, object or seed for the Button
-     * @param JsExpressionable|\Closure $action     JavaScript action or callback
-     * @param bool                      $isDisabled
+     * @param string|array|View                     $button     Label text, object or seed for the Button
+     * @param JsExpressionable|JsCallbackSetClosure $action
+     * @param bool                                  $isDisabled
      *
      * @return View
      */
@@ -411,8 +404,8 @@ class Grid extends View
      * Similar to addAction. Will add Button that when click will display
      * a Dropdown menu.
      *
-     * @param View|string   $view
-     * @param \Closure|null $action
+     * @param View|string                           $view
+     * @param JsExpressionable|JsCallbackSetClosure $action
      *
      * @return View
      */
@@ -488,13 +481,13 @@ class Grid extends View
     /**
      * Add a dropdown menu to header column.
      *
-     * @param string   $columnName the name of column where to add dropdown
-     * @param array    $items      the menu items to add
-     * @param \Closure $fx         the callback function to execute when an item is selected
-     * @param string   $icon       the icon
-     * @param string   $menuId     the menu id return by callback
+     * @param string $columnName the name of column where to add dropdown
+     * @param array  $items      the menu items to add
+     * @param \Closure(string): (JsExpressionable|View|string|void) $fx the callback function to execute when an item is selected
+     * @param string $icon   the icon
+     * @param string $menuId the menu id return by callback
      */
-    public function addDropdown($columnName, $items, \Closure $fx, $icon = 'caret square down', $menuId = null): void
+    public function addDropdown(string $columnName, $items, \Closure $fx, $icon = 'caret square down', $menuId = null): void
     {
         if (!isset($this->table->columns[$columnName])) {
             throw (new Exception('Column does not exist'))
@@ -535,10 +528,10 @@ class Grid extends View
      * Similar to addAction but when button is clicked, modal is displayed
      * with the $title and $callback is executed through VirtualPage.
      *
-     * @param string|array|View $button
-     * @param string            $title
-     * @param \Closure          $callback function (View $page) {...
-     * @param array             $args     extra url argument for callback
+     * @param string|array|View                 $button
+     * @param string                            $title
+     * @param \Closure(View, string|null): void $callback
+     * @param array                             $args     extra url argument for callback
      *
      * @return View
      */
@@ -687,7 +680,7 @@ class Grid extends View
      *
      * @return Jquery
      */
-    public function jsRow()
+    public function jsRow(): JsExpressionable
     {
         return $this->table->jsRow();
     }

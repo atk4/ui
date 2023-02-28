@@ -10,6 +10,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Console;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Message;
 use Atk4\Ui\Tabs;
 use Atk4\Ui\View;
@@ -18,7 +19,6 @@ use Atk4\Ui\VirtualPage;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/** @var View $testRunClass */
 $testRunClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
     use DebugTrait;
 
@@ -140,9 +140,9 @@ $tab = $tabs->addTab('Use after form submit', function (VirtualPage $vp) {
     $form->onSubmit(function (Form $form) use ($console) {
         $_SESSION['atk4_ui_console_demo'] = $form->model; // only option is to store model in session here in demo
 
-        return [
+        return new JsBlock([
             $console->js()->show(),
             $console->jsExecute(),
-        ];
+        ]);
     });
 });

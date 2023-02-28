@@ -8,6 +8,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Label;
 
@@ -35,19 +36,19 @@ Header::addTo($app, ['js() method']);
 
 $b = Button::addTo($app, ['Hide button B']);
 $b2 = Button::addTo($app, ['B']);
-$b->on('click', [
+$b->on('click', new JsBlock([
     $b->js()->addClass('disabled')->addClass('disabled'),
     $b2->js()->hide(),
-]);
+]));
 
 Header::addTo($app, ['on() method']);
 
 $b = Button::addTo($app, ['Hide button C and self']);
 $b2 = Button::addTo($app, ['C']);
-$b->on('click', null, [
+$b->on('click', null, new JsBlock([
     $b->js()->hide(),
     $b2->js()->hide(),
-]);
+]));
 
 Header::addTo($app, ['Callbacks']);
 

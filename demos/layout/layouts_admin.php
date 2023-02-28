@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Layout;
 
 /** @var \Atk4\Ui\App $app */
@@ -57,9 +58,9 @@ $form->onSubmit(function (Form $form) {
     $errors = [];
     foreach (['first_name', 'last_name', 'address'] as $field) {
         if (!$form->model->get($field)) {
-            $errors[] = $form->error($field, 'Field ' . $field . ' is mandatory');
+            $errors[] = $form->jsError($field, 'Field ' . $field . ' is mandatory');
         }
     }
 
-    return $errors !== [] ? $errors : $form->success('No more errors', 'so we have saved everything into the database');
+    return $errors !== [] ? new JsBlock($errors) : $form->jsSuccess('No more errors', 'so we have saved everything into the database');
 });

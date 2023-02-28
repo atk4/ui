@@ -7,7 +7,7 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
-use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
 
@@ -99,12 +99,11 @@ class JsIntegrationTest extends TestCase
         $b1 = Button::addTo($v, ['name' => 'b1']);
         $b2 = Button::addTo($v, ['name' => 'b2']);
 
-        $b1->on('click', [
-            'preventDefault' => false,
+        $b1->on('click', new JsBlock([
             $b1->js()->hide(),
             $b2->js()->hide(),
             $b2->js()->hide(),
-        ]);
+        ]), ['preventDefault' => false]);
         $b1->js(true)->data('x', 'y');
         $v->setApp($this->createApp());
         $v->renderAll();
@@ -154,7 +153,7 @@ class JsIntegrationTest extends TestCase
         $jsCallback = new class() extends JsCallback {
             public int $counter = 0;
 
-            public function jsExecute(): JsExpression
+            public function jsExecute(): JsBlock
             {
                 ++$this->counter;
 

@@ -6,45 +6,44 @@ namespace Atk4\Ui\Js;
 
 use Atk4\Core\WarnDynamicPropertyTrait;
 
-/**
- * Implements structure for js closure.
- */
 class JsFunction implements JsExpressionable
 {
     use WarnDynamicPropertyTrait;
 
-    /** @var array */
-    public $fxArgs;
+    /** @var list<string> */
+    public array $args;
 
-    /** @var array<int, JsExpressionable> */
-    public $fxStatements = [];
+    public JsBlock $body;
 
-    /** @var bool add preventDefault(event) to generated method */
-    public $preventDefault = false;
+    /** Add event.preventDefault() to generated method */
+    public bool $preventDefault = false;
 
-    /** @var bool add stopPropagation(event) to generated method */
-    public $stopPropagation = false;
+    /** Add event.stopPropagation() to generated method */
+    public bool $stopPropagation = false;
 
-    /** @var string Indent of target code (not one indent level) */
-    public $indent = '    ';
+    /** Indent of target code (not one indent level) */
+    public string $indent = '';
 
     /**
-     * @param array<int, JsExpressionable|null>|array<string, mixed> $statements
+     * @param JsBlock|array<int, JsExpressionable|null>|array<string, mixed> $statements
      */
-    public function __construct(array $args, array $statements)
+    public function __construct(array $args, $statements)
     {
-        $this->fxArgs = $args;
+        $this->args = $args;
 
-        foreach ($statements as $key => $value) {
-            if (is_int($key)) {
-                if ($value === null) { // TODO this should be not needed
-                    continue;
+        if (!is_array($statements)) {
+            $this->body = $statements;
+        } else {
+            foreach ($statements as $key => $value) {
+                if (is_string($key)) {
+                    $this->{$key} = $value;
+                    unset($statements[$key]);
+                } elseif ($value === null) { // TODO this should be not needed
+                    unset($statements[$key]);
                 }
-
-                $this->fxStatements[] = $value;
-            } else {
-                $this->{$key} = $value;
             }
+
+            $this->body = new JsBlock($statements);
         }
     }
 
@@ -52,23 +51,18 @@ class JsFunction implements JsExpressionable
     {
         $pre = '';
         if ($this->preventDefault) {
-            $this->fxArgs = ['event'];
-            $pre .= "\n" . $this->indent . '    event.preventDefault();';
+            $this->args = ['event'];
+            $pre .= $this->indent . '    event.preventDefault();' . "\n";
         }
         if ($this->stopPropagation) {
-            $this->fxArgs = ['event'];
-            $pre .= "\n" . $this->indent . '    event.stopPropagation();';
+            $this->args = ['event'];
+            $pre .= $this->indent . '    event.stopPropagation();' . "\n";
         }
 
-        $output = 'function (' . implode(', ', $this->fxArgs) . ') {'
-            . $pre;
-        foreach ($this->fxStatements as $statement) {
-            $js = $statement->jsRender();
-
-            $output .= "\n" . $this->indent . '    ' . $js . (!preg_match('~[;}]\s*$~', $js) ? ';' : '');
-        }
-
-        $output .= "\n" . $this->indent . '}';
+        $output = $this->indent . 'function (' . implode(', ', $this->args) . ') {' . "\n"
+            . $pre
+            . preg_replace('~^~m', $this->indent . '    ', $this->body->jsRender()) . "\n" // TODO IMPORTANT indentation must ignore multiline strings/comments!
+            . $this->indent . '}';
 
         return $output;
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
@@ -33,36 +34,17 @@ class JsCallback extends Callback
      */
     public $triggerOnReload = false;
 
-    /**
-     * When multiple JsExpressionable's are collected inside an array and may
-     * have some degree of nesting, convert it into a one-dimensional array,
-     * so that it's easier for us to wrap it into a function body.
-     */
-    protected function flattenArray(array $response): array
-    {
-        $res = [];
-        foreach ($response as $element) {
-            if (is_array($element)) {
-                $res = array_merge($res, $this->flattenArray($element));
-            } else {
-                $res[] = $element;
-            }
-        }
-
-        return $res;
-    }
-
-    public function jsExecute(): JsExpression
+    public function jsExecute(): JsBlock
     {
         $this->assertIsInitialized();
 
-        return (new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkAjaxec([
+        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkAjaxec([
             'url' => $this->getJsUrl(),
             'urlOptions' => $this->args,
             'confirm' => $this->confirm,
             'apiConfig' => $this->apiConfig,
             'storeName' => $this->storeName,
-        ]);
+        ])]);
     }
 
     /**
@@ -75,8 +57,17 @@ class JsCallback extends Callback
         $this->confirm = $text;
     }
 
+    /**
+     * @param \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void) $fx
+     *
+     * @return $this
+     */
     public function set($fx = null, $args = null)
     {
+        if (!$fx instanceof \Closure) {
+            throw new \TypeError('$fx must be of type Closure');
+        }
+
         $this->args = [];
         foreach ($args ?? [] as $key => $val) {
             if (is_int($key)) {
@@ -134,34 +125,18 @@ class JsCallback extends Callback
     /**
      * Provided with a $response from callbacks convert it into a JavaScript code.
      *
-     * @param array|JsExpressionable $response response from callbacks,
-     * @param JsChain                $chain
+     * @param JsExpressionable|View|string|null $response response from callbacks,
+     * @param JsChain                           $chain
      */
     public function getAjaxec($response, $chain = null): string
     {
-        $actions = [];
-
+        $jsBlock = new JsBlock();
         if ($chain !== null) {
-            $actions[] = $chain;
+            $jsBlock->addStatement($chain);
         }
+        $jsBlock->addStatement($this->_getProperAction($response));
 
-        if (is_array($response)) {
-            $response = $this->flattenArray($response);
-            foreach ($response as $r) {
-                if ($r === null) {
-                    continue;
-                }
-                $actions[] = $this->_getProperAction($r);
-            }
-        } else {
-            $actions[] = $this->_getProperAction($response);
-        }
-
-        $ajaxec = implode(";\n", array_map(function (JsExpressionable $r) {
-            return $r->jsRender();
-        }, $actions));
-
-        return $ajaxec;
+        return $jsBlock->jsRender();
     }
 
     public function getUrl(string $mode = 'callback'): string
@@ -178,7 +153,7 @@ class JsCallback extends Callback
     {
         if ($response instanceof View) {
             $response = $this->_jsRenderIntoModal($response);
-        } elseif (is_string($response)) {
+        } elseif (is_string($response)) { // TODO alert() should be removed
             $response = new JsExpression('alert([])', [$response]);
         }
 

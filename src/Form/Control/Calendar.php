@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Js\Jquery;
-use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 
 /**
@@ -68,12 +70,12 @@ class Calendar extends Input
         parent::renderView();
     }
 
+    /**
+     * @param JsExpressionable $expr
+     */
     public function onChange($expr, $default = []): void
     {
-        if (is_string($expr)) {
-            $expr = new JsExpression($expr);
-        }
-        if (!is_array($expr)) {
+        if (!$expr instanceof JsBlock) {
             $expr = [$expr];
         }
 
@@ -85,8 +87,10 @@ class Calendar extends Input
      * get it's properties like selectedDates or run it's methods.
      * Ex: clearing date via js
      *     $btn->on('click', $f->getControl('date')->getJsInstance()->clear());.
+     *
+     * @return JsChain
      */
-    public function getJsInstance(): JsExpression
+    public function getJsInstance(): JsExpressionable
     {
         return (new Jquery('#' . $this->name . '_input'))->get(0)->_flatpickr;
     }

@@ -10,6 +10,7 @@ use Atk4\Ui\Dropdown as UiDropdown;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Label;
@@ -31,7 +32,6 @@ require_once __DIR__ . '/../init-app.php';
  * render the items.
  */
 
-/** @var Lister $cartClass */
 $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lister {
     use SessionTrait;
 
@@ -103,7 +103,6 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
  * item inside a cart reloading it afterwards.
  */
 
-/** @var View $itemShelfClass */
 $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
     public $ui = 'green segment';
 
@@ -141,12 +140,8 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
     /**
      * Associate your shelf with cart, so that when item is clicked, the content of a
      * cart is updated.
-     *
-     * Also - you can supply jsAction to execute when this happens.
-     *
-     * @param JsExpressionable|array $jsAction
      */
-    public function linkCart(View $cart, $jsAction = null): void
+    public function linkCart(View $cart, JsExpressionable $jsAction = null): void
     {
         $this->on('click', '.item', function (Jquery $a, string $b) use ($cart, $jsAction) {
             $cart->addItem($b);
@@ -219,13 +214,13 @@ $cartPopup->set(function (View $popup) use ($cart) {
 });
 
 // Add item shelf below menu and link it with the cart
-$shelf->linkCart($cart, [
+$shelf->linkCart($cart, new JsBlock([
     // array is a valid js action. Will relad cart item (along with drop-down and label)
     $cartOutterLabel->jsReload(),
 
     // also will hide current item from the shelf
     (new Jquery())->hide(),
-]);
+]));
 
 // label placed on top of menu item, not in the popup
 
@@ -263,7 +258,7 @@ $signup->set(function (View $pop) {
         // perfectly inside a popup.
         $form->onSubmit(function (Form $form) {
             if ($form->model->get('password') !== '123') {
-                return $form->error('password', 'Please use password "123"');
+                return $form->jsError('password', 'Please use password "123"');
             }
 
             // refreshes entire page

@@ -39,7 +39,7 @@ class Modal extends View
     public $loadingLabel = 'Loading...';
     /** @var string */
     public $headerCss = 'header';
-    /** @var \Closure|null */
+    /** @var \Closure(View): void|null */
     public $fx;
     /** @var CallbackLater|null */
     public $cb;
@@ -76,14 +76,15 @@ class Modal extends View
      * $fx is set as an array in order to comply with View::set().
      * TODO Rename this function and break BC?
      *
-     * @param \Closure $fx
+     * @param \Closure(View): void $fx
+     * @param never                $ignore
      *
      * @return $this
      */
     public function set($fx = null, $ignore = null)
     {
         if (!$fx instanceof \Closure) {
-            throw new Exception('Need to pass a function to Modal::set()');
+            throw new \TypeError('$fx must be of type Closure');
         } elseif (func_num_args() > 1) {
             throw new Exception('Only one argument is needed by Modal::set()');
         }
@@ -131,7 +132,7 @@ class Modal extends View
      *
      * @return JsChain
      */
-    public function jsShow(array $args = [])
+    public function jsShow(array $args = []): JsExpressionable
     {
         $chain = $this->js();
         if ($args !== []) {
@@ -146,7 +147,7 @@ class Modal extends View
      *
      * @return JsChain
      */
-    public function jsHide()
+    public function jsHide(): JsExpressionable
     {
         return $this->js()->modal('hide');
     }
@@ -182,11 +183,11 @@ class Modal extends View
      * Add a deny action to modal.
      *
      * @param string           $label
-     * @param JsExpressionable $jsAction javascript action that will run when deny is click
+     * @param JsExpressionable $jsAction will run when deny is click
      *
      * @return $this
      */
-    public function addDenyAction($label, $jsAction)
+    public function addDenyAction($label, JsExpressionable $jsAction)
     {
         $button = new Button();
         $button->set($label)->addClass('red cancel');
@@ -200,11 +201,11 @@ class Modal extends View
      * Add an approve action button to modal.
      *
      * @param string           $label
-     * @param JsExpressionable $jsAction javascript action that will run when deny is click
+     * @param JsExpressionable $jsAction will run when deny is click
      *
      * @return $this
      */
-    public function addApproveAction($label, $jsAction)
+    public function addApproveAction($label, JsExpressionable $jsAction)
     {
         $b = new Button();
         $b->set($label)->addClass('green ok');

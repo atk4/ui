@@ -45,6 +45,10 @@ class FormTest extends TestCase
         static::assertSame($f->getControl('test'), $f->layout->getControl('test'));
     }
 
+    /**
+     * @param \Closure(Model): void  $submitFx
+     * @param \Closure(string): void $checkExpectedErrorsFx
+     */
     public function assertSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
     {
         $wasSubmitCalled = false;
@@ -72,7 +76,7 @@ class FormTest extends TestCase
                 $checkExpectedErrorsFx($res['atkjs']);
             } else {
                 static::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
-                static::assertSame('', $res['atkjs']);
+                static::assertNull($res['atkjs']);
             }
 
             $this->form = null; // we shouldn't submit form twice!

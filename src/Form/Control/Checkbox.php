@@ -89,7 +89,7 @@ class Checkbox extends Form\Control
      *
      * @return Jquery
      */
-    public function jsChecked($when = false, $action = null)
+    public function jsChecked($when = false, $action = null): JsExpressionable
     {
         return $this->jsInput($when, $action)->get(0)->checked;
     }

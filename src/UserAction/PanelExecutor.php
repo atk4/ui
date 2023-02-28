@@ -7,6 +7,7 @@ namespace Atk4\Ui\UserAction;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
 use Atk4\Ui\Panel\Right;
@@ -88,11 +89,11 @@ class PanelExecutor extends Right implements JsExecutorInterface
         return $this;
     }
 
-    public function jsExecute(array $urlArgs = []): array
+    public function jsExecute(array $urlArgs = []): JsBlock
     {
         $urlArgs['step'] = $this->step;
 
-        return [$this->jsOpen(), $this->loader->jsLoad($urlArgs)];
+        return new JsBlock([$this->jsOpen(), $this->loader->jsLoad($urlArgs)]);
     }
 
     /**
@@ -134,17 +135,17 @@ class PanelExecutor extends Right implements JsExecutorInterface
      * @param mixed      $obj
      * @param string|int $id
      */
-    protected function jsGetExecute($obj, $id): array
+    protected function jsGetExecute($obj, $id): JsBlock
     {
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
 
-        return [
+        return new JsBlock([
             $this->jsClose(),
-            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
-                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : ''))),
+            JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
             $this->loader->jsClearStoreData(true),
-        ];
+        ]);
     }
 }

@@ -60,7 +60,7 @@
     },
     "require-release": {
         "php": ">=7.4 <8.3",
-        "atk4/data": "~4.1.0",
+        "atk4/data": "~5.0.0",
         "symfony/filesystem": "^4.4 || ^5.3",
         "symfony/http-foundation": "^4.4 || ^5.3"
     },

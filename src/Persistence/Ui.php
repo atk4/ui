@@ -59,6 +59,9 @@ class Ui extends Persistence
         }
     }
 
+    /**
+     * @return scalar|null
+     */
     public function typecastSaveField(Field $field, $value)
     {
         // relax empty checks for UI render for not yet set values

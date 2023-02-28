@@ -17,6 +17,8 @@ use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**
  * Base view of all UI components.
+ *
+ * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
  */
 class View extends AbstractView
 {
@@ -532,7 +534,7 @@ class View extends AbstractView
      */
     public function stickyGet(string $name, string $newValue = null): ?string
     {
-        $this->stickyArgs[$name] = $newValue ?? $_GET[$name] ?? null;
+        $this->stickyArgs[$name] = $newValue ?? $this->stickyArgs[$name] ?? $_GET[$name] ?? null;
 
         return $this->stickyArgs[$name];
     }
@@ -750,7 +752,6 @@ class View extends AbstractView
      * You can bind it by passing object into on() method.
      *
      * 1. Calling with arguments:
-     *
      * $view->js(); // technically does nothing
      * $a = $view->js()->hide(); // creates chain for hiding $view but does not bind to event yet.
      *
@@ -768,11 +769,7 @@ class View extends AbstractView
      * 4. $view->js(true)->find('.current')->text($text);
      *
      * Will convert calls to jQuery chain into JavaScript string:
-     *  $('#view').find('.current').text('abc'); // The $text will be json-encoded to avoid JS injection.
-     *
-     * Documentation:
-     *
-     * @see http://agile-ui.readthedocs.io/en/latest/js.html
+     *  $('#view').find('.current').text('abc'); // the text will be JSON encoded to avoid JS injection
      *
      * @param bool|string $when Event when chain will be executed
      * @param ($when is false ? null : JsExpressionable|null) $action   JavaScript action
@@ -868,10 +865,8 @@ class View extends AbstractView
     /**
      * Get Local and Session web storage associated with this view.
      * Web storage can be retrieved using a $view->jsReload() request.
-     *
-     * @return mixed
      */
-    public function jsGetStoreData()
+    public function jsGetStoreData(): array
     {
         $data = [];
         $data['local'] = $this->getApp()->decodeJson($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null');
@@ -882,10 +877,8 @@ class View extends AbstractView
 
     /**
      * Clear Web storage data associated with this view.
-     *
-     * @return mixed
      */
-    public function jsClearStoreData(bool $useSession = false)
+    public function jsClearStoreData(bool $useSession = false): JsExpressionable
     {
         $type = $useSession ? 'session' : 'local';
 
@@ -907,10 +900,8 @@ class View extends AbstractView
      *  $v->jsAddStoreData(['args' => ['path' => '/'], 'fields' => ['name' => 'test']]]);
      *
      *  Final store value will be: ['args' => ['path' => '/'], 'fields' => ['name' => 'test']];
-     *
-     * @return mixed
      */
-    public function jsAddStoreData(array $data, bool $useSession = false)
+    public function jsAddStoreData(array $data, bool $useSession = false): JsExpressionable
     {
         $type = $useSession ? 'session' : 'local';
 
@@ -925,13 +916,13 @@ class View extends AbstractView
     /**
      * Returns JS for reloading View.
      *
-     * @param array             $args
-     * @param JsExpression|null $afterSuccess
-     * @param array             $apiConfig
+     * @param array                 $args
+     * @param JsExpressionable|null $afterSuccess
+     * @param array                 $apiConfig
      *
      * @return JsReload
      */
-    public function jsReload($args = [], $afterSuccess = null, $apiConfig = [])
+    public function jsReload($args = [], $afterSuccess = null, $apiConfig = []): JsExpressionable
     {
         return new JsReload($this, $args, $afterSuccess, $apiConfig);
     }
@@ -940,12 +931,11 @@ class View extends AbstractView
      * Views in Agile Toolkit can assign javascript actions to themselves. This
      * is done by calling $view->js() or $view->on().
      *
-     * on() method is similar to jQuery on() method.
+     * on() method is similar to jQuery on(event, [selector, ] action) method.
      *
-     * on(event, [selector, ] action)
+     * When no $action is passed, the on() method returns a chain corresponding to the affected element.
      *
-     * Method on() also returns a chain, that will correspond affected element.
-     * Here are some ways to use on();
+     * Here are some ways to use on():
      *
      * // clicking on button will make the $view disappear
      * $button->on('click', $view->js()->hide());
@@ -962,13 +952,9 @@ class View extends AbstractView
      *   return $js->parent()->hide();
      * });
      *
-     * For more information on how this works, see documentation:
-     *
-     * @see http://agile-ui.readthedocs.io/en/latest/js.html
-     *
      * @param string $event JavaScript event
-     * @param ($action is null|array ? string|JsExpressionable|JsCallback|\Closure|array|UserAction\ExecutorInterface|Model\UserAction : string|array) $selector Optional jQuery-style selector
-     * @param string|JsExpressionable|JsCallback|\Closure|array|UserAction\ExecutorInterface|Model\UserAction|null $action code to execute
+     * @param ($action is object ? string : ($action is null ? string : never)|JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction) $selector Optional jQuery-style selector
+     * @param ($selector is string|null ? JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction : array) $action code to execute
      *
      * @return ($selector is null|string ? ($action is null ? Jquery : null) : ($action is null|array ? Jquery : null))
      */
@@ -985,16 +971,13 @@ class View extends AbstractView
         $arguments = $defaults['args'] ?? [];
         unset($defaults['args']);
 
-        // all non-key items of defaults are actually arguments
+        // all values with int keys of defaults are arguments
         foreach ($defaults as $key => $value) {
             if (is_int($key)) {
                 $arguments[] = $value;
                 unset($defaults[$key]);
             }
         }
-
-        $eventStatements = [];
-        $actions = [];
 
         if ($action !== null) {
             $res = null;
@@ -1004,6 +987,7 @@ class View extends AbstractView
         }
 
         // set preventDefault and stopPropagation by default
+        $eventStatements = [];
         $eventStatements['preventDefault'] = $defaults['preventDefault'] ?? true;
         $eventStatements['stopPropagation'] = $defaults['stopPropagation'] ?? true;
 
@@ -1011,6 +995,9 @@ class View extends AbstractView
             return new class($fx) implements JsExpressionable {
                 public \Closure $fx;
 
+                /**
+                 * @param \Closure(JsExpressionable): JsExpressionable $fx
+                 */
                 public function __construct(\Closure $fx)
                 {
                     $this->fx = $fx;
@@ -1023,8 +1010,9 @@ class View extends AbstractView
             };
         };
 
-        // Dealing with callback action.
+        // dealing with callback action
         if ($action instanceof \Closure || (is_array($action) && ($action[0] ?? null) instanceof \Closure)) {
+            $actions = [];
             if (is_array($action)) {
                 $urlData = $action;
                 unset($urlData[0]);
@@ -1045,10 +1033,13 @@ class View extends AbstractView
             }, $arguments);
 
             $actions[] = $lazyJsRenderFx(fn () => $cb->jsExecute());
-        } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof Model\UserAction) {
-            // Setup UserAction executor.
+        } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof UserAction\SharedExecutor || $action instanceof Model\UserAction) {
             $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->createExecutor($action, $this) : $action;
-            if ($ex instanceof self && $ex instanceof UserAction\JsExecutorInterface) {
+
+            $setupNonSharedExecutorFx = function (UserAction\ExecutorInterface $ex) use (&$defaults, &$arguments): void {
+                /** @var AbstractView&UserAction\ExecutorInterface $ex https://github.com/phpstan/phpstan/issues/3770 */
+                $ex = $ex;
+
                 if (isset($arguments['id'])) {
                     $arguments[$ex->name] = $arguments['id'];
                     unset($arguments['id']);
@@ -1057,27 +1048,38 @@ class View extends AbstractView
                     $arguments[$ex->name] = $arguments[0];
                     unset($arguments[0]);
                 }
-                $actions = $ex->jsExecute($arguments);
+
+                if ($ex instanceof UserAction\JsCallbackExecutor) {
+                    $confirmation = $ex->getAction()->getConfirmation();
+                    if ($confirmation) {
+                        $defaults['confirm'] = $confirmation;
+                    }
+                    if ($defaults['apiConfig'] ?? null) {
+                        $ex->apiConfig = $defaults['apiConfig'];
+                    }
+                }
+            };
+
+            if ($ex instanceof UserAction\SharedExecutor) {
+                $setupNonSharedExecutorFx($ex->getExecutor());
+                $actions = [$ex->getExecutor() instanceof UserAction\JsCallbackExecutor
+                    ? $lazyJsRenderFx(fn () => $ex->jsExecute($arguments))
+                    : $ex->jsExecute($arguments)];
+            } elseif ($ex instanceof UserAction\JsExecutorInterface && $ex instanceof self) {
+                $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction();
+                $actions = [$ex->jsExecute($arguments)];
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
-                $conf = $ex->getAction()->getConfirmation();
-                if ($conf) {
-                    $defaults['confirm'] = $conf;
-                }
-                if ($defaults['apiConfig'] ?? null) {
-                    $ex->apiConfig = $defaults['apiConfig'];
-                }
-                $actions[] = $lazyJsRenderFx(fn () => $ex->jsExecute());
-                $ex->executeModelAction($arguments);
+                $setupNonSharedExecutorFx($ex);
+                $ex->executeModelAction();
+                $actions = [$lazyJsRenderFx(fn () => $ex->jsExecute($arguments))];
             } else {
-                throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or extend View and implement UserAction\JsExecutorInterface');
+                throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or UserAction\JsExecutorInterface');
             }
         } elseif ($action instanceof JsCallback) {
-            $actions[] = $lazyJsRenderFx(fn () => $action->jsExecute());
-        } elseif (is_array($action)) {
-            $actions = array_merge($actions, $action);
+            $actions = [$lazyJsRenderFx(fn () => $action->jsExecute())];
         } else {
-            $actions[] = $action;
+            $actions = [$action];
         }
 
         // Do we need confirm action.
@@ -1146,8 +1148,6 @@ class View extends AbstractView
         if (count($actions) === 0) {
             return '';
         }
-
-        $actions['indent'] = '';
 
         return (new JsExpression('[]()', [new JsFunction([], $actions)]))->jsRender();
     }

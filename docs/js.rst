@@ -524,10 +524,10 @@ The following will **not** work::
     $form->onSubmit(function (Form $form) use ($table) {
         $form->model->save();
 
-        return [
+        return new \Atk4\Ui\Js\JsBlock([
             $table->jsReload(),
-            $form->success('ok'),
-        ];
+            $form->jsSuccess('ok'),
+        ]);
     });
 
 Table needs to be first! The following works::
@@ -549,10 +549,10 @@ Table needs to be first! The following works::
     $form->onSubmit(function (Form $form) use ($table) {
         $form->model->save();
 
-        return [
+        return new \Atk4\Ui\Js\JsBlock([
             $table->jsReload(),
-            $form->success('ok'),
-        ];
+            $form->jsSuccess('ok'),
+        ]);
     });
 
 The first will not work because of how the render tree is called and because VirtualPage is special.
@@ -570,10 +570,10 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
         $form->onSubmit(function (Form $form) use ($table) {
             $form->model->save();
 
-            return [
+            return new \Atk4\Ui\Js\JsBlock([
                 $table->jsReload(),
-                $form->success('ok'),
-            ];
+                $form->jsSuccess('ok'),
+            ]);
         });
     });
 

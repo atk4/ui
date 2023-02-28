@@ -45,12 +45,16 @@ trait ModelPreventModificationTrait
         return $res;
     }
 
+    /**
+     * @param \Closure(Model): string $outputCallback
+     */
     protected function wrapUserActionCallbackPreventModification(Model\UserAction $action, \Closure $outputCallback): void
     {
         $originalCallback = $action->callback;
         $action->callback = function (Model $model, ...$args) use ($action, $originalCallback, $outputCallback) {
             if ($model->isEntity()) {
                 $action = $action->getActionForEntity($model);
+                $loadedEntity = clone $model;
             }
 
             $callbackBackup = $action->callback;
@@ -61,23 +65,28 @@ trait ModelPreventModificationTrait
                 $action->callback = $callbackBackup;
             }
 
-            return $outputCallback($model, ...$args);
+            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedEntity : $model, ...$args);
         };
     }
 
     protected function initPreventModification(): void
     {
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), function (Model $model) {
-            return 'Form Submit! Data are not save in demo mode.';
+        $makeMessageFx = function (string $actionName, Model $model) {
+            return $model->getModelCaption() . ' action "' . $actionName . '" with "' . $model->getTitle() . '" entity '
+                . ' was executed. In demo mode all changes are reverved.';
+        };
+
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), function (Model $model) use ($makeMessageFx) {
+            return $makeMessageFx('add', $model);
         });
 
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), function (Model $model) {
-            return 'Form Submit! Data are not save in demo mode.';
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), function (Model $model) use ($makeMessageFx) {
+            return $makeMessageFx('edit', $model);
         });
 
         $this->getUserAction('delete')->confirmation = 'Please go ahead. Demo mode does not really delete data.';
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), function (Model $model) {
-            return 'Only simulating delete when in demo mode.';
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), function (Model $model) use ($makeMessageFx) {
+            return $makeMessageFx('delete', $model);
         });
     }
 }
@@ -214,7 +223,7 @@ class Country extends ModelWithPrefixedFields
 
         // look if name is unique
         $c = $this->getModel()->tryLoadBy($this->fieldName()->name, $this->name);
-        if ($c !== null && $c->getId() !== $this->getId()) {
+        if ($c !== null && !$this->compare($this->idField, $c->getId())) {
             $errors[$this->fieldName()->name] = 'Country name must be unique';
         }
 
@@ -365,11 +374,6 @@ class File extends ModelWithPrefixedFields
             $this->atomic(function () use ($path) {
                 foreach ($this as $entity) {
                     $entity->delete();
-
-                    // skip full/slow import for Behat testing
-                    if ($_ENV['CI'] ?? null) {
-                        break;
-                    }
                 }
 
                 $path = __DIR__ . '/../' . $path;
@@ -381,7 +385,7 @@ class File extends ModelWithPrefixedFields
         }
 
         foreach (new \DirectoryIterator($path) as $fileinfo) {
-            if ($fileinfo->isDot() || in_array($fileinfo->getFilename(), ['.git', 'vendor', 'js'], true)) {
+            if ($fileinfo->isDot() || in_array($fileinfo->getFilename(), ['.git', 'vendor', 'node_modules', 'external'], true)) {
                 continue;
             }
 
@@ -397,7 +401,7 @@ class File extends ModelWithPrefixedFields
                 $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
             }
 
-            // skip full/slow import for Behat testing
+            // skip full/slow import for Behat CI testing
             if ($_ENV['CI'] ?? null) {
                 break;
             }
