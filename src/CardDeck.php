@@ -59,7 +59,7 @@ class CardDeck extends View
     public $search = [VueComponent\ItemSearch::class];
 
     /** @var array Default notifier to perform when model action is successful * */
-    public $notifyDefault = [JsToast::class, 'settings' => ['class' => 'success', 'displayTime' => 5000]];
+    public $notifyDefault = [JsToast::class];
 
     /** Model single scope action to include in table action column. Will include all single scope actions if empty. */
     public array $singleScopeActions = [];
