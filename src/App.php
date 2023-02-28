@@ -1107,25 +1107,7 @@ class App
     // RESPONSES
 
     /**
-     * @internal should be called only from self::outputResponse()
-     */
-    protected function outputResponseRaw(string $data): void
-    {
-        // TODO hack for SSE
-        // https://github.com/atk4/ui/pull/1706#discussion_r757819527
-        if (headers_sent() && $this->response->getHeaderLine('Content-Type') === 'text/event-stream') {
-            echo $data;
-
-            return;
-        }
-
-        $this->response->getBody()->write($data);
-
-        $this->emitResponse();
-    }
-
-    /**
-     * @internal should be called only from self::outputResponseRaw()
+     * @internal should be called only from self::outputResponse() and self::outputLateOutputError()
      */
     protected function emitResponse(): void
     {
@@ -1171,7 +1153,16 @@ class App
 
         $this->assertHeadersNotSent();
 
-        $this->outputResponseRaw($data);
+        // TODO hack for SSE
+        // https://github.com/atk4/ui/pull/1706#discussion_r757819527
+        if (headers_sent() && $this->response->getHeaderLine('Content-Type') === 'text/event-stream') {
+            echo $data;
+
+            return;
+        }
+
+        $this->response->getBody()->write($data);
+        $this->emitResponse();
     }
 
     /**
@@ -1187,10 +1178,10 @@ class App
             $this->response = $this->response->withoutHeader($name);
         }
 
-        $plainTextMessage = "\n"
+        $this->response->getBody()->write("\n"
             . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!'
-            . "\n";
-        $this->outputResponseRaw($plainTextMessage);
+            . "\n");
+        $this->emitResponse();
 
         $this->runCalled = true; // prevent shutdown function from triggering
 
