@@ -1091,11 +1091,9 @@ class App
      */
     protected function outputResponseUnsafe(string $data): void
     {
-        http_response_code($this->response->getStatusCode());
+        /* $isCli = \PHP_SAPI === 'cli'; // for phpunit
 
-        $isCli = \PHP_SAPI === 'cli'; // for phpunit
-
-        /* if (count($headersNew) > 0 && headers_sent() && !$isCli) {
+        if (count($headersNew) > 0 && headers_sent() && !$isCli) {
             $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
             if ($this->catchExceptions) {
                 $this->caughtException($lateError);
@@ -1103,7 +1101,7 @@ class App
             }
 
             throw $lateError;
-        } */
+        }
 
         if (!headers_sent() || $isCli) {
             foreach ($this->response->getHeaders() as $name => $values) {
@@ -1113,9 +1111,39 @@ class App
                     }
                 }
             }
+        } */
+
+        $this->response->getBody()->write($data);
+
+        $this->emitResponse();
+    }
+
+    /**
+     * @internal should be called only from self::outputResponseUnsafe()
+     */
+    protected function emitResponse(): void
+    {
+        http_response_code($this->response->getStatusCode());
+
+        foreach ($this->response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header($name . ': ' . $value, false);
+            }
         }
 
-        echo $data;
+        $stream = $this->response->getBody();
+        if ($stream->isSeekable()) {
+            $stream->rewind();
+        }
+
+        // for streaming response
+        if (!$stream->isReadable()) {
+            return;
+        }
+
+        while (!$stream->eof()) {
+            echo $stream->read(4096);
+        }
     }
 
     /**
