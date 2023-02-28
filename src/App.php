@@ -374,11 +374,29 @@ class App
         return $this->request->getParsedBody()[$key] ?? null;
     }
 
+    protected function assertHeadersNotSent(): void
+    {
+        if (headers_sent()
+            && \PHP_SAPI !== 'cli' // for phpunit
+            && $this->response->getHeaderLine('Content-Type') !== 'text/event-stream' // for SSE
+        ) {
+            $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
+            if ($this->catchExceptions) {
+                $this->caughtException($lateError);
+                $this->outputLateOutputError($lateError);
+            }
+
+            throw $lateError;
+        }
+    }
+
     /**
      * @return $this
      */
     public function setResponseStatusCode(int $statusCode): self
     {
+        $this->assertHeadersNotSent();
+
         $this->response = $this->response->withStatus($statusCode);
 
         return $this;
@@ -389,6 +407,8 @@ class App
      */
     public function setResponseHeader(string $name, string $value): self
     {
+        $this->assertHeadersNotSent();
+
         if ($value === '') {
             $this->response = $this->response->withoutHeader($name);
         } else {
@@ -1089,7 +1109,7 @@ class App
     /**
      * @internal should be called only from self::outputResponse()
      */
-    protected function outputResponseUnsafe(string $data): void
+    protected function outputResponseRaw(string $data): void
     {
         /* $isCli = \PHP_SAPI === 'cli'; // for phpunit
 
@@ -1119,7 +1139,7 @@ class App
     }
 
     /**
-     * @internal should be called only from self::outputResponseUnsafe()
+     * @internal should be called only from self::outputResponseRaw()
      */
     protected function emitResponse(): void
     {
@@ -1163,7 +1183,9 @@ class App
             }
         }
 
-        $this->outputResponseUnsafe($data);
+        $this->assertHeadersNotSent();
+
+        $this->outputResponseRaw($data);
     }
 
     /**
@@ -1171,20 +1193,18 @@ class App
      */
     protected function outputLateOutputError(LateOutputError $exception): void
     {
-        $this->setResponseStatusCode(500);
+        $this->response = $this->response->withStatus(500);
 
         // late error means headers were already sent to the client, so remove all response headers,
-        // to avoid throwing error in loop
+        // to avoid throwing late error in loop
         foreach (array_keys($this->response->getHeaders()) as $name) {
             $this->response = $this->response->withoutHeader($name);
         }
-        if (!headers_sent()) {
-            $this->setResponseHeader('Content-Type', 'text/plain');
-            $this->setResponseHeader('Cache-Control', 'no-store');
-        }
 
-        $plainTextMessage = "\n" . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!' . "\n";
-        $this->outputResponseUnsafe($plainTextMessage);
+        $plainTextMessage = "\n"
+            . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!'
+            . "\n";
+        $this->outputResponseRaw($plainTextMessage);
 
         $this->runCalled = true; // prevent shutdown function from triggering
 
