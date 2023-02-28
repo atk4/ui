@@ -166,7 +166,7 @@ class App
         }
 
         // disable caching by default
-        $this->setResponseHeader('cache-control', 'no-store');
+        $this->setResponseHeader('Cache-Control', 'no-store');
 
         $this->setApp($this);
 
@@ -413,7 +413,7 @@ class App
      */
     public function terminate($output = ''): void
     {
-        $type = preg_replace('~;.*~', '', strtolower($this->response->getHeaderLine('content-type'))); // in LC without charset
+        $type = preg_replace('~;.*~', '', strtolower($this->response->getHeaderLine('Content-Type'))); // in LC without charset
         if ($type === '') {
             throw new Exception('Content type must be always set');
         }
@@ -468,7 +468,7 @@ class App
             $output = $output->renderToHtml();
         }
 
-        $this->setResponseHeader('content-type', 'text/html');
+        $this->setResponseHeader('Content-Type', 'text/html');
         $this->terminate($output);
     }
 
@@ -483,7 +483,7 @@ class App
             $output = $output->renderToJsonArr();
         }
 
-        $this->setResponseHeader('content-type', 'application/json');
+        $this->setResponseHeader('Content-Type', 'application/json');
         $this->terminate($output);
     }
 
@@ -1172,10 +1172,18 @@ class App
     protected function outputLateOutputError(LateOutputError $exception): void
     {
         $this->setResponseStatusCode(500);
-        $this->setResponseHeader('content-type', 'text/plain');
+
+        // late error means headers were already sent to the client, so remove all response headers,
+        // to avoid throwing error in loop
+        foreach (array_keys($this->response->getHeaders()) as $name) {
+            $this->response = $this->response->withoutHeader($name);
+        }
+        if (!headers_sent()) {
+            $this->setResponseHeader('Content-Type', 'text/plain');
+            $this->setResponseHeader('Cache-Control', 'no-store');
+        }
 
         $plainTextMessage = "\n" . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!' . "\n";
-
         $this->outputResponseUnsafe($plainTextMessage);
 
         $this->runCalled = true; // prevent shutdown function from triggering
@@ -1188,7 +1196,7 @@ class App
      */
     private function outputResponseHtml(string $data): void
     {
-        $this->setResponseHeader('content-type', 'text/html');
+        $this->setResponseHeader('Content-Type', 'text/html');
         $this->outputResponse($data);
     }
 
@@ -1203,7 +1211,7 @@ class App
             $data = $this->encodeJson($data);
         }
 
-        $this->setResponseHeader('content-type', 'application/json');
+        $this->setResponseHeader('Content-Type', 'application/json');
         $this->outputResponse($data);
     }
 
