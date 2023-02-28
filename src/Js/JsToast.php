@@ -32,7 +32,7 @@ class JsToast implements JsExpressionable
             $this->settings['message'] = $settings;
         }
 
-        // set defautl css class.
+        // set default css class
         if (!array_key_exists('class', $this->settings)) {
             $this->settings['class'] = $this->defaultCss;
         }
