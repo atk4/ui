@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.2
+ * # Fomantic UI - 2.9.3-beta.4+bda537d
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -25106,6 +25106,7 @@ ol.ui.suffixed.list li::before,
   border: 1px solid rgba(34, 36, 38, 0.15);
 }
 
+.ui.wrapping.horizontal.segments,
 .ui.stackable.horizontal.segments {
   flex-wrap: wrap;
 }
@@ -25143,7 +25144,7 @@ ol.ui.suffixed.list li::before,
   border-top: none;
 }
 
-.ui.horizontal.segments:not(.stackable) > .segment:first-child {
+.ui.horizontal.segments:not(.stackable):not(.wrapping) > .segment:first-child {
   border-left: none;
 }
 
@@ -43165,24 +43166,24 @@ a.inverted.ui.card:hover,
   background: rgba(255, 255, 255, 0.02);
 }
 
-.ui.calendar.popup > .ui.ui.grid {
+.ui.ui.ui.calendar.popup > .ui.ui.grid {
   margin: -1rem;
 }
 
-.ui.calendar.popup > .ui.ui.grid > .column:not(:first-child) {
+.ui.ui.ui.calendar.popup > .ui.ui.grid > .column:not(:first-child) {
   padding-left: 0;
 }
 
-.ui.calendar.popup > .ui.ui.grid > .column:not(:first-child) > .ui.table {
+.ui.ui.ui.calendar.popup > .ui.ui.grid > .column:not(:first-child) > .ui.table {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-.ui.calendar.popup > .ui.ui.grid > .column:not(:last-child) {
+.ui.ui.ui.calendar.popup > .ui.ui.grid > .column:not(:last-child) {
   padding-right: 0;
 }
 
-.ui.calendar.popup > .ui.ui.grid > .column:not(:last-child) > .ui.table {
+.ui.ui.ui.calendar.popup > .ui.ui.grid > .column:not(:last-child) > .ui.table {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }

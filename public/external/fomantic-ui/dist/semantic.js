@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.2
+ * # Fomantic UI - 2.9.3-beta.4+bda537d
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -468,7 +468,7 @@
     $.fn.form = function (parameters) {
         var
             $allModules      = $(this),
-            moduleSelector   = $allModules.selector || '',
+            $window        = $(window),
 
             time             = Date.now(),
             performance      = [],
@@ -507,6 +507,8 @@
                 namespace,
                 moduleNamespace,
                 eventNamespace,
+                attachEventsSelector,
+                attachEventsAction,
 
                 submitting = false,
                 dirty = false,
@@ -589,6 +591,9 @@
                         module[action]();
                         event.preventDefault();
                     });
+
+                    attachEventsSelector = selector;
+                    attachEventsAction = action;
                 },
 
                 bindEvents: function () {
@@ -614,10 +619,14 @@
 
                     // Dirty events
                     if (settings.preventLeaving) {
-                        $(window).on('beforeunload' + eventNamespace, module.event.beforeUnload);
+                        $window.on('beforeunload' + eventNamespace, module.event.beforeUnload);
                     }
 
-                    $field.on('change click keyup keydown blur', function (e) {
+                    $field.on('change' + eventNamespace
+                        + ' click' + eventNamespace
+                        + ' keyup' + eventNamespace
+                        + ' keydown' + eventNamespace
+                        + ' blur' + eventNamespace, function (e) {
                         module.determine.isDirty();
                     });
 
@@ -628,6 +637,9 @@
                     $module.on('clean' + eventNamespace, function (e) {
                         settings.onClean.call();
                     });
+                    if (attachEventsSelector) {
+                        module.attachEvents(attachEventsSelector, attachEventsAction);
+                    }
                 },
 
                 clear: function () {
@@ -676,6 +688,7 @@
                             isCheckbox   = $field.is(selector.checkbox),
                             isDropdown   = $element.is(selector.uiDropdown) && module.can.useElement('dropdown'),
                             isCalendar   = $calendar.length > 0 && module.can.useElement('calendar'),
+                            isFile       = $field.is(selector.file),
                             isErrored    = $fieldGroup.hasClass(className.error)
                         ;
                         if (defaultValue === undefined) {
@@ -696,7 +709,7 @@
                             $calendar.calendar('set date', defaultValue);
                         } else {
                             module.verbose('Resetting field value', $field, defaultValue);
-                            $field.val(defaultValue);
+                            $field.val(isFile ? '' : defaultValue);
                         }
                     });
                     module.remove.states();
@@ -832,6 +845,13 @@
                     $module.off(eventNamespace);
                     $field.off(eventNamespace);
                     $submit.off(eventNamespace);
+                    if (settings.preventLeaving) {
+                        $window.off(eventNamespace);
+                    }
+                    if (attachEventsSelector) {
+                        $(attachEventsSelector).off(eventNamespace);
+                        attachEventsSelector = undefined;
+                    }
                 },
 
                 event: {
@@ -933,18 +953,7 @@
                         return rule.type;
                     },
                     changeEvent: function (type, $input) {
-                        if (type === 'checkbox' || type === 'radio' || type === 'hidden' || $input.is('select')) {
-                            return 'change';
-                        }
-
-                        return module.get.inputEvent();
-                    },
-                    inputEvent: function () {
-                        return document.createElement('input').oninput !== undefined
-                            ? 'input'
-                            : (document.createElement('input').onpropertychange !== undefined
-                                ? 'propertychange'
-                                : 'keyup');
+                        return ['file', 'checkbox', 'radio', 'hidden'].indexOf(type) >= 0 || $input.is('select') ? 'change' : 'input';
                     },
                     fieldsFromShorthand: function (fields) {
                         var
@@ -1549,6 +1558,7 @@
                                 $field      = module.get.field(key),
                                 $element    = $field.parent(),
                                 $calendar   = $field.closest(selector.uiCalendar),
+                                isFile      = $field.is(selector.file),
                                 isMultiple  = Array.isArray(value),
                                 isCheckbox  = $element.is(selector.uiCheckbox) && module.can.useElement('checkbox'),
                                 isDropdown  = $element.is(selector.uiDropdown) && module.can.useElement('dropdown'),
@@ -1591,7 +1601,7 @@
                                     $calendar.calendar('set date', value);
                                 } else {
                                     module.verbose('Setting field value', value, $field);
-                                    $field.val(value);
+                                    $field.val(isFile ? '' : value);
                                 }
                             }
                         });
@@ -1919,9 +1929,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if ($allModules.length > 1) {
                             title += ' (' + $allModules.length + ')';
                         }
@@ -2097,9 +2104,10 @@
         selector: {
             checkbox: 'input[type="checkbox"], input[type="radio"]',
             clear: '.clear',
-            field: 'input:not(.search):not([type="file"]):not([type="reset"]):not([type="button"]):not([type="submit"]), textarea, select',
+            field: 'input:not(.search):not([type="reset"]):not([type="button"]):not([type="submit"]), textarea, select',
+            file: 'input[type="file"]',
             group: '.field',
-            input: 'input:not([type="file"])',
+            input: 'input',
             message: '.error.message',
             prompt: '.prompt.label',
             radio: 'input[type="radio"]',
@@ -2588,7 +2596,6 @@
 
                 eventNamespace  = '.' + namespace,
                 moduleNamespace = 'module-' + namespace,
-                moduleSelector  = $allModules.selector || '',
 
                 $module  = $(this),
                 $title   = $module.find(selector.title),
@@ -2995,9 +3002,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -3155,8 +3159,6 @@
         var
             $allModules    = $(this),
             $document      = $(document),
-
-            moduleSelector = $allModules.selector || '',
 
             time           = Date.now(),
             performance    = [],
@@ -4626,9 +4628,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -5161,7 +5160,6 @@
     $.fn.checkbox = function (parameters) {
         var
             $allModules    = $(this),
-            moduleSelector = $allModules.selector || '',
 
             time           = Date.now(),
             performance    = [],
@@ -5876,9 +5874,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -6061,7 +6056,6 @@
 
                 eventNamespace  = '.' + namespace,
                 moduleNamespace = 'module-' + namespace,
-                moduleSelector  = $allModules.selector || '',
 
                 clickEvent      = 'ontouchstart' in document.documentElement
                     ? 'touchstart'
@@ -6557,9 +6551,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if ($allModules.length > 1) {
                             title += ' (' + $allModules.length + ')';
                         }
@@ -6765,14 +6756,25 @@
             $allModules    = $(this),
             $document      = $(document),
 
-            moduleSelector = $allModules.selector || '',
-
             time           = Date.now(),
             performance    = [],
 
             query          = arguments[0],
             methodInvoked  = typeof query === 'string',
             queryArguments = [].slice.call(arguments, 1),
+            contextCheck   = function (context, win) {
+                var $context;
+                if ([window, document].indexOf(context) >= 0) {
+                    $context = $(context);
+                } else {
+                    $context = $(win.document).find(context);
+                    if ($context.length === 0) {
+                        $context = win.frameElement ? contextCheck(context, win.parent) : window;
+                    }
+                }
+
+                return $context;
+            },
             returnedValue
         ;
 
@@ -6797,7 +6799,7 @@
                 moduleNamespace = 'module-' + namespace,
 
                 $module         = $(this),
-                $context        = [window, document].indexOf(settings.context) < 0 ? $document.find(settings.context) : $(settings.context),
+                $context        = contextCheck(settings.context, window),
                 $text           = $module.find(selector.text),
                 $search         = $module.find(selector.search),
                 $sizer          = $module.find(selector.sizer),
@@ -6832,7 +6834,8 @@
                 selectObserver,
                 menuObserver,
                 classObserver,
-                module
+                module,
+                tempDisableApiCache = false
             ;
 
             module = {
@@ -7599,11 +7602,12 @@
                     if (!$module.api('get request')) {
                         module.setup.api();
                     }
-                    apiSettings = $.extend(true, {}, apiSettings, settings.apiSettings, apiCallbacks);
+                    apiSettings = $.extend(true, {}, apiSettings, settings.apiSettings, apiCallbacks, tempDisableApiCache ? { cache: false } : {});
                     $module
                         .api('setting', apiSettings)
                         .api('query')
                     ;
+                    tempDisableApiCache = false;
                 },
 
                 filterItems: function (query) {
@@ -8806,7 +8810,7 @@
                                     values.push({
                                         name: name,
                                         value: value,
-                                        text: text,
+                                        text: module.escape.htmlEntities(text, true),
                                         disabled: disabled,
                                     });
                                 }
@@ -9127,6 +9131,11 @@
 
                 clearValue: function (preventChangeTrigger) {
                     module.set.value('', null, null, preventChangeTrigger);
+                },
+
+                clearCache: function () {
+                    module.debug('Clearing API cache once');
+                    tempDisableApiCache = true;
                 },
 
                 scrollPage: function (direction, $selectedItem) {
@@ -10179,7 +10188,7 @@
                         return settings.apiSettings && module.can.useAPI();
                     },
                     noApiCache: function () {
-                        return settings.apiSettings && !settings.apiSettings.cache;
+                        return tempDisableApiCache || (settings.apiSettings && !settings.apiSettings.cache);
                     },
                     single: function () {
                         return !module.is.multiple();
@@ -10189,7 +10198,7 @@
                             selectChanged = false
                         ;
                         $.each(mutations, function (index, mutation) {
-                            if ($(mutation.target).is('select, option, optgroup') || $(mutation.addedNodes).is('select')) {
+                            if ($(mutation.target).is('option, optgroup') || $(mutation.addedNodes).is('select') || ($(mutation.target).is('select') && mutation.type !== 'attributes')) {
                                 selectChanged = true;
 
                                 return false;
@@ -10498,7 +10507,7 @@
 
                         return text.replace(regExp.escape, '\\$&');
                     },
-                    htmlEntities: function (string) {
+                    htmlEntities: function (string, forceAmpersand) {
                         var
                             badChars     = /["'<>`]/g,
                             shouldEscape = /["&'<>`]/,
@@ -10514,7 +10523,7 @@
                             }
                         ;
                         if (shouldEscape.test(string)) {
-                            string = string.replace(/&(?![\d#a-z]{1,12};)/gi, '&amp;');
+                            string = string.replace(forceAmpersand ? /&/g : /&(?![\d#a-z]{1,12};)/gi, '&amp;');
 
                             return string.replace(badChars, escapedChar);
                         }
@@ -10605,9 +10614,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -11090,8 +11096,6 @@
         var
             $allModules     = $(this),
 
-            moduleSelector  = $allModules.selector || '',
-
             time            = Date.now(),
             performance     = [],
 
@@ -11522,9 +11526,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if ($allModules.length > 1) {
                             title += ' (' + $allModules.length + ')';
                         }
@@ -11770,15 +11771,25 @@
             $head           = $('head'),
             $body           = $('body'),
 
-            moduleSelector  = $allModules.selector || '',
-
             time            = Date.now(),
             performance     = [],
 
             query           = arguments[0],
             methodInvoked   = typeof query === 'string',
             queryArguments  = [].slice.call(arguments, 1),
+            contextCheck    = function (context, win) {
+                var $context;
+                if ([window, document].indexOf(context) >= 0) {
+                    $context = $body;
+                } else {
+                    $context = $(win.document).find(context);
+                    if ($context.length === 0) {
+                        $context = win.frameElement ? contextCheck(context, win.parent) : $body;
+                    }
+                }
 
+                return $context;
+            },
             returnedValue
         ;
 
@@ -11799,7 +11810,7 @@
                 moduleNamespace      = 'module-' + namespace,
 
                 $module              = $(this),
-                $context             = [window, document].indexOf(settings.context) < 0 ? $document.find(settings.context) : $body,
+                $context             = contextCheck(settings.context, window),
                 $closeIcon           = $module.find(selector.close),
                 $inputs,
                 $focusedElement,
@@ -11818,6 +11829,7 @@
                 initialBodyMargin    = '',
                 tempBodyMargin       = '',
                 hadScrollbar         = false,
+                windowRefocused      = false,
 
                 elementNamespace,
                 id,
@@ -11996,9 +12008,13 @@
                         module.setup.heights();
                     },
                     focus: function () {
-                        if (module.is.visible() && settings.autofocus && settings.dimPage) {
+                        windowRefocused = true;
+                    },
+                    click: function (event) {
+                        if (windowRefocused && document.activeElement !== event.target && module.is.visible() && settings.autofocus && settings.dimPage && $(document.activeElement).closest(selector.flyout).length === 0) {
                             requestAnimationFrame(module.set.autofocus);
                         }
+                        windowRefocused = false;
                     },
                     clickaway: function (event) {
                         if (settings.closable) {
@@ -12104,6 +12120,9 @@
                         ;
                         $window
                             .on('focus' + elementNamespace, module.event.focus)
+                        ;
+                        $context
+                            .on('click' + elementNamespace, module.event.click)
                         ;
                     },
                     clickaway: function () {
@@ -12234,11 +12253,12 @@
 
                                     return nodes;
                                 },
-                                shouldRefreshInputs = false
+                                shouldRefreshInputs = false,
+                                ignoreAutofocus = true
                             ;
                             mutations.every(function (mutation) {
                                 if (mutation.type === 'attributes') {
-                                    if (observeAttributes && (mutation.attributeName === 'disabled' || $(mutation.target).find(':input').addBack(':input').length > 0)) {
+                                    if (observeAttributes && (mutation.attributeName === 'disabled' || $(mutation.target).find(':input').addBack(':input').filter(':visible').length > 0)) {
                                         shouldRefreshInputs = true;
                                     }
                                 } else {
@@ -12248,6 +12268,7 @@
                                         $removedInputs = $(collectNodes(mutation.removedNodes)).filter('a[href], [tabindex], :input');
                                     if ($addedInputs.length > 0 || $removedInputs.length > 0) {
                                         shouldRefreshInputs = true;
+                                        ignoreAutofocus = false;
                                     }
                                 }
 
@@ -12255,7 +12276,7 @@
                             });
 
                             if (shouldRefreshInputs) {
-                                module.refreshInputs();
+                                module.refreshInputs(ignoreAutofocus);
                             }
                         });
                         observer.observe(element, {
@@ -12269,7 +12290,7 @@
                 },
                 refresh: function () {
                     module.verbose('Refreshing selector cache');
-                    $context = [window, document].indexOf(settings.context) < 0 ? $document.find(settings.context) : $body;
+                    $context = contextCheck(settings.context, window);
                     module.refreshFlyouts();
                     $pusher = $context.children(selector.pusher);
                     module.clear.cache();
@@ -12280,7 +12301,7 @@
                     $flyouts = $context.children(selector.flyout);
                 },
 
-                refreshInputs: function () {
+                refreshInputs: function (ignoreAutofocus) {
                     if ($inputs) {
                         $inputs
                             .off('keydown' + elementNamespace)
@@ -12292,8 +12313,8 @@
                     $inputs = $module.find('a[href], [tabindex], :input:enabled').filter(':visible').filter(function () {
                         return $(this).closest('.disabled').length === 0;
                     });
-                    if ($inputs.length === 0) {
-                        $inputs = $module;
+                    if ($inputs.filter(':input').length === 0) {
+                        $inputs = $module.add($inputs);
                         $module.attr('tabindex', -1);
                     } else {
                         $module.removeAttr('tabindex');
@@ -12304,7 +12325,7 @@
                     $inputs.last()
                         .on('keydown' + elementNamespace, module.event.inputKeyDown.last)
                     ;
-                    if (settings.autofocus && $inputs.filter(':focus').length === 0) {
+                    if (!ignoreAutofocus && settings.autofocus && $inputs.filter(':focus').length === 0) {
                         module.set.autofocus();
                     }
                 },
@@ -12582,20 +12603,14 @@
                         var
                             $autofocus = $inputs.filter('[autofocus]'),
                             $rawInputs = $inputs.filter(':input'),
-                            $input     = $autofocus.length > 0
-                                ? $autofocus.first()
+                            $input     = ($autofocus.length > 0
+                                ? $autofocus
                                 : ($rawInputs.length > 0
                                     ? $rawInputs
-                                    : $inputs.filter(':not(i.close)')
-                                ).first()
+                                    : $module)
+                            ).first()
                         ;
-                        // check if only the close icon is remaining
-                        if ($input.length === 0 && $inputs.length > 0) {
-                            $input = $inputs.first();
-                        }
-                        if ($input.length > 0) {
-                            $input.trigger('focus');
-                        }
+                        $input.trigger('focus');
                     },
                     dimmerStyles: function () {
                         if (settings.blurring) {
@@ -12986,9 +13001,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -13327,15 +13339,25 @@
             $document      = $(document),
             $body          = $('body'),
 
-            moduleSelector = $allModules.selector || '',
-
             time           = Date.now(),
             performance    = [],
 
             query          = arguments[0],
             methodInvoked  = typeof query === 'string',
             queryArguments = [].slice.call(arguments, 1),
+            contextCheck   = function (context, win) {
+                var $context;
+                if ([window, document].indexOf(context) >= 0) {
+                    $context = $body;
+                } else {
+                    $context = $(win.document).find(context);
+                    if ($context.length === 0) {
+                        $context = win.frameElement ? contextCheck(context, win.parent) : $body;
+                    }
+                }
 
+                return $context;
+            },
             returnedValue
         ;
 
@@ -13355,7 +13377,7 @@
                 moduleNamespace = 'module-' + namespace,
 
                 $module         = $(this),
-                $context        = [window, document].indexOf(settings.context) < 0 ? $document.find(settings.context) : $body,
+                $context        = contextCheck(settings.context, window),
                 isBody          = $context[0] === $body[0],
                 $closeIcon      = $module.find(selector.closeIcon),
                 $inputs,
@@ -13379,6 +13401,7 @@
                 tempBodyMargin = '',
                 keepScrollingClass = false,
                 hadScrollbar = false,
+                windowRefocused = false,
 
                 elementEventNamespace,
                 id,
@@ -13542,6 +13565,7 @@
                         .off(eventNamespace)
                     ;
                     $window.off(elementEventNamespace);
+                    $context.off(elementEventNamespace);
                     $dimmer.off(elementEventNamespace);
                     $closeIcon.off(elementEventNamespace);
                     if ($inputs) {
@@ -13563,11 +13587,12 @@
                                     return nodes;
                                 },
                                 shouldRefresh = false,
-                                shouldRefreshInputs = false
+                                shouldRefreshInputs = false,
+                                ignoreAutofocus = true
                             ;
                             mutations.every(function (mutation) {
                                 if (mutation.type === 'attributes') {
-                                    if (observeAttributes && (mutation.attributeName === 'disabled' || $(mutation.target).find(':input').addBack(':input').length > 0)) {
+                                    if (observeAttributes && (mutation.attributeName === 'disabled' || $(mutation.target).find(':input').addBack(':input').filter(':visible').length > 0)) {
                                         shouldRefreshInputs = true;
                                     }
                                 } else {
@@ -13578,6 +13603,7 @@
                                         $removedInputs = $(collectNodes(mutation.removedNodes)).filter('a[href], [tabindex], :input');
                                     if ($addedInputs.length > 0 || $removedInputs.length > 0) {
                                         shouldRefreshInputs = true;
+                                        ignoreAutofocus = false;
                                     }
                                 }
 
@@ -13589,7 +13615,7 @@
                                 module.refresh();
                             }
                             if (shouldRefreshInputs) {
-                                module.refreshInputs();
+                                module.refreshInputs(ignoreAutofocus);
                             }
                         });
                         observer.observe(element, {
@@ -13617,7 +13643,7 @@
                     $allModals = $otherModals.add($module);
                 },
 
-                refreshInputs: function () {
+                refreshInputs: function (ignoreAutofocus) {
                     if ($inputs) {
                         $inputs
                             .off('keydown' + elementEventNamespace)
@@ -13626,8 +13652,8 @@
                     $inputs = $module.find('a[href], [tabindex], :input:enabled').filter(':visible').filter(function () {
                         return $(this).closest('.disabled').length === 0;
                     });
-                    if ($inputs.length === 0) {
-                        $inputs = $module;
+                    if ($inputs.filter(':input').length === 0) {
+                        $inputs = $module.add($inputs);
                         $module.attr('tabindex', -1);
                     } else {
                         $module.removeAttr('tabindex');
@@ -13638,7 +13664,7 @@
                     $inputs.last()
                         .on('keydown' + elementEventNamespace, module.event.inputKeyDown.last)
                     ;
-                    if (settings.autofocus && $inputs.filter(':focus').length === 0) {
+                    if (!ignoreAutofocus && settings.autofocus && $inputs.filter(':focus').length === 0) {
                         module.set.autofocus();
                     }
                 },
@@ -13675,6 +13701,9 @@
                         $window
                             .on('resize' + elementEventNamespace, module.event.resize)
                             .on('focus' + elementEventNamespace, module.event.focus)
+                        ;
+                        $context
+                            .on('click' + elementEventNamespace, module.event.click)
                         ;
                     },
                     scrollLock: function () {
@@ -13833,9 +13862,13 @@
                         }
                     },
                     focus: function () {
-                        if ($dimmable.dimmer('is active') && module.is.active() && settings.autofocus) {
+                        windowRefocused = true;
+                    },
+                    click: function (event) {
+                        if (windowRefocused && document.activeElement !== event.target && $dimmable.dimmer('is active') && module.is.active() && settings.autofocus && $(document.activeElement).closest(selector.modal).length === 0) {
                             requestAnimationFrame(module.set.autofocus);
                         }
+                        windowRefocused = false;
                     },
                 },
 
@@ -14345,20 +14378,14 @@
                         var
                             $autofocus = $inputs.filter('[autofocus]'),
                             $rawInputs = $inputs.filter(':input'),
-                            $input     = $autofocus.length > 0
-                                ? $autofocus.first()
+                            $input     = ($autofocus.length > 0
+                                ? $autofocus
                                 : ($rawInputs.length > 0
                                     ? $rawInputs
-                                    : $inputs.filter(':not(i.close)')
-                                ).first()
+                                    : $module)
+                            ).first()
                         ;
-                        // check if only the close icon is remaining
-                        if ($input.length === 0 && $inputs.length > 0) {
-                            $input = $inputs.first();
-                        }
-                        if ($input.length > 0) {
-                            $input.trigger('focus');
-                        }
+                        $input.trigger('focus');
                     },
                     bodyMargin: function () {
                         var position = module.can.leftBodyScrollbar() ? 'left' : 'right';
@@ -14572,9 +14599,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -14936,7 +14960,7 @@
     $.fn.nag = function (parameters) {
         var
             $allModules    = $(this),
-            moduleSelector = $allModules.selector || '',
+            $body          = $('body'),
 
             time           = Date.now(),
             performance    = [],
@@ -14944,6 +14968,19 @@
             query          = arguments[0],
             methodInvoked  = typeof query === 'string',
             queryArguments = [].slice.call(arguments, 1),
+            contextCheck   = function (context, win) {
+                var $context;
+                if ([window, document].indexOf(context) >= 0) {
+                    $context = $(context);
+                } else {
+                    $context = $(win.document).find(context);
+                    if ($context.length === 0) {
+                        $context = win.frameElement ? contextCheck(context, win.parent) : $body;
+                    }
+                }
+
+                return $context;
+            },
             returnedValue
         ;
         $allModules.each(function () {
@@ -14961,9 +14998,7 @@
 
                 $module         = $(this),
 
-                $context        = settings.context
-                    ? ([window, document].indexOf(settings.context) < 0 ? $(document).find(settings.context) : $(settings.context))
-                    : $('body'),
+                $context        = settings.context ? contextCheck(settings.context, window) : $body,
 
                 element         = this,
                 instance        = $module.data(moduleNamespace),
@@ -15293,9 +15328,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -15484,8 +15516,6 @@
             $window        = $(window),
             $body          = $('body'),
 
-            moduleSelector = $allModules.selector || '',
-
             clickEvent      = 'ontouchstart' in document.documentElement
                 ? 'touchstart'
                 : 'click',
@@ -15496,6 +15526,19 @@
             query          = arguments[0],
             methodInvoked  = typeof query === 'string',
             queryArguments = [].slice.call(arguments, 1),
+            contextCheck   = function (context, win) {
+                var $context;
+                if ([window, document].indexOf(context) >= 0) {
+                    $context = $(context);
+                } else {
+                    $context = $(win.document).find(context);
+                    if ($context.length === 0) {
+                        $context = win.frameElement ? contextCheck(context, win.parent) : $body;
+                    }
+                }
+
+                return $context;
+            },
 
             returnedValue
         ;
@@ -15515,12 +15558,10 @@
                 moduleNamespace    = 'module-' + namespace,
 
                 $module            = $(this),
-                $context           = [window, document].indexOf(settings.context) < 0 ? $document.find(settings.context) : $(settings.context),
-                $scrollContext     = [window, document].indexOf(settings.scrollContext) < 0 ? $document.find(settings.scrollContext) : $(settings.scrollContext),
-                $boundary          = [window, document].indexOf(settings.boundary) < 0 ? $document.find(settings.boundary) : $(settings.boundary),
-                $target            = settings.target
-                    ? ([window, document].indexOf(settings.target) < 0 ? $document.find(settings.target) : $(settings.target))
-                    : $module,
+                $context           = contextCheck(settings.context, window),
+                $scrollContext     = contextCheck(settings.scrollContext, window),
+                $boundary          = contextCheck(settings.boundary, window),
+                $target            = settings.target ? contextCheck(settings.target, window) : $module,
 
                 $popup,
                 $offsetParent,
@@ -16704,9 +16745,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -17019,8 +17057,6 @@
     $.fn.progress = function (parameters) {
         var
             $allModules    = $(this),
-
-            moduleSelector = $allModules.selector || '',
 
             time           = Date.now(),
             performance    = [],
@@ -17803,9 +17839,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -17995,8 +18028,6 @@
             $allModules    = $(this),
             $document      = $(document),
             $window        = $(window),
-
-            moduleSelector = $allModules.selector || '',
 
             time           = Date.now(),
             performance    = [],
@@ -19162,9 +19193,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -19337,7 +19365,6 @@
     $.fn.rating = function (parameters) {
         var
             $allModules     = $(this),
-            moduleSelector  = $allModules.selector || '',
 
             time            = Date.now(),
             performance     = [],
@@ -19697,9 +19724,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if ($allModules.length > 1) {
                             title += ' (' + $allModules.length + ')';
                         }
@@ -19871,7 +19895,6 @@
     $.fn.search = function (parameters) {
         var
             $allModules     = $(this),
-            moduleSelector  = $allModules.selector || '',
 
             time            = Date.now(),
             performance     = [],
@@ -21033,9 +21056,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if ($allModules.length > 1) {
                             title += ' (' + $allModules.length + ')';
                         }
@@ -21456,7 +21476,6 @@
 
         $allModules.each(function () {
             var
-                moduleSelector = $allModules.selector || '',
                 settings       = $.isPlainObject(parameters)
                     ? $.extend(true, {}, $.fn.shape.settings, parameters)
                     : $.extend({}, $.fn.shape.settings),
@@ -22058,9 +22077,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if ($allModules.length > 1) {
                             title += ' (' + $allModules.length + ')';
                         }
@@ -22240,15 +22256,25 @@
             $html           = $('html'),
             $head           = $('head'),
 
-            moduleSelector  = $allModules.selector || '',
-
             time            = Date.now(),
             performance     = [],
 
             query           = arguments[0],
             methodInvoked   = typeof query === 'string',
             queryArguments  = [].slice.call(arguments, 1),
+            contextCheck    = function (context, win) {
+                var $context;
+                if ([window, document].indexOf(context) >= 0) {
+                    $context = $body;
+                } else {
+                    $context = $(win.document).find(context);
+                    if ($context.length === 0) {
+                        $context = win.frameElement ? contextCheck(context, win.parent) : $body;
+                    }
+                }
 
+                return $context;
+            },
             returnedValue;
 
         $allModules.each(function () {
@@ -22267,7 +22293,7 @@
                 moduleNamespace = 'module-' + namespace,
 
                 $module         = $(this),
-                $context        = [window, document].indexOf(settings.context) < 0 ? $document.find(settings.context) : $body,
+                $context        = contextCheck(settings.context, window),
                 isBody          = $context[0] === $body[0],
 
                 $sidebars       = $module.children(selector.sidebar),
@@ -22489,7 +22515,7 @@
 
                 refresh: function () {
                     module.verbose('Refreshing selector cache');
-                    $context = [window, document].indexOf(settings.context) < 0 ? $document.find(settings.context) : $body;
+                    $context = contextCheck(settings.context, window);
                     module.refreshSidebars();
                     $pusher = $context.children(selector.pusher);
                     $fixed = $context.children(selector.fixed);
@@ -23113,9 +23139,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -23302,7 +23325,6 @@
         var
             $allModules    = $(this),
             $document      = $(document),
-            moduleSelector = $allModules.selector || '',
 
             time           = Date.now(),
             performance    = [],
@@ -23310,6 +23332,19 @@
             query          = arguments[0],
             methodInvoked  = typeof query === 'string',
             queryArguments = [].slice.call(arguments, 1),
+            contextCheck   = function (context, win) {
+                var $context;
+                if ([window, document].indexOf(context) >= 0) {
+                    $context = $(context);
+                } else {
+                    $context = $(win.document).find(context);
+                    if ($context.length === 0) {
+                        $context = win.frameElement ? contextCheck(context, win.parent) : window;
+                    }
+                }
+
+                return $context;
+            },
             returnedValue
         ;
 
@@ -23328,7 +23363,7 @@
 
                 $module               = $(this),
                 $window               = $(window),
-                $scroll               = [window, document].indexOf(settings.scrollContext) < 0 ? $document.find(settings.scrollContext) : $(settings.scrollContext),
+                $scroll               = contextCheck(settings.scrollContext, window),
                 $container,
                 $context,
 
@@ -23406,19 +23441,11 @@
                 },
 
                 determineContainer: function () {
-                    if (settings.container) {
-                        $container = [window, document].indexOf(settings.container) < 0 ? $document.find(settings.container) : $(settings.container);
-                    } else {
-                        $container = $module.offsetParent();
-                    }
+                    $container = settings.container ? contextCheck(settings.container, window) : $module.offsetParent();
                 },
 
                 determineContext: function () {
-                    if (settings.context) {
-                        $context = [window, document].indexOf(settings.context) < 0 ? $document.find(settings.context) : $(settings.context);
-                    } else {
-                        $context = $container;
-                    }
+                    $context = settings.context ? contextCheck(settings.context, window) : $container;
                     if ($context.length === 0) {
                         module.error(error.invalidContext, settings.context, $module);
                     }
@@ -24034,9 +24061,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -24215,14 +24239,25 @@
                 ? $(window)
                 : $(this),
             $document      = $(document),
-            moduleSelector  = $allModules.selector || '',
             time            = Date.now(),
             performance     = [],
 
             query           = arguments[0],
             methodInvoked   = typeof query === 'string',
             queryArguments  = [].slice.call(arguments, 1),
+            contextCheck   = function (context, win) {
+                var $context;
+                if ([window, document].indexOf(context) >= 0) {
+                    $context = $(context);
+                } else {
+                    $context = $(win.document).find(context);
+                    if ($context.length === 0) {
+                        $context = win.frameElement ? contextCheck(context, win.parent) : window;
+                    }
+                }
 
+                return $context;
+            },
             initializedHistory = false,
             returnedValue
         ;
@@ -24337,7 +24372,7 @@
                         $context = $reference.parent();
                         module.verbose('Determined parent element for creating context', $context);
                     } else if (settings.context) {
-                        $context = [window, document].indexOf(settings.context) < 0 ? $document.find(settings.context) : $(settings.context);
+                        $context = contextCheck(settings.context, window);
                         module.verbose('Using selector for tab context', settings.context, $context);
                     } else {
                         $context = $('body');
@@ -24973,9 +25008,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -25154,7 +25186,7 @@
     $.fn.toast = function (parameters) {
         var
             $allModules    = $(this),
-            moduleSelector = $allModules.selector || '',
+            $body          = $('body'),
 
             time           = Date.now(),
             performance    = [],
@@ -25162,6 +25194,19 @@
             query          = arguments[0],
             methodInvoked  = typeof query === 'string',
             queryArguments = [].slice.call(arguments, 1),
+            contextCheck   = function (context, win) {
+                var $context;
+                if ([window, document].indexOf(context) >= 0) {
+                    $context = $(context);
+                } else {
+                    $context = $(win.document).find(context);
+                    if ($context.length === 0) {
+                        $context = win.frameElement ? contextCheck(context, win.parent) : $body;
+                    }
+                }
+
+                return $context;
+            },
             returnedValue
         ;
         $allModules.each(function () {
@@ -25187,9 +25232,7 @@
                 $progressBar,
                 $animationObject,
                 $close,
-                $context         = settings.context
-                    ? ([window, document].indexOf(settings.context) < 0 ? $(document).find(settings.context) : $(settings.context))
-                    : $('body'),
+                $context         = settings.context ? contextCheck(settings.context, window) : $body,
 
                 isToastComponent = $module.hasClass('toast') || $module.hasClass('message') || $module.hasClass('card'),
 
@@ -25238,11 +25281,11 @@
                     if ($toastBox) {
                         module.debug('Removing toast', $toastBox);
                         module.unbind.events();
+                        settings.onRemove.call($toastBox, element);
                         $toastBox.remove();
                         $toastBox = undefined;
                         $toast = undefined;
                         $animationObject = undefined;
-                        settings.onRemove.call($toastBox, element);
                         $progress = undefined;
                         $progressBar = undefined;
                         $close = undefined;
@@ -25836,9 +25879,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -26098,7 +26138,6 @@
     $.fn.transition = function () {
         var
             $allModules     = $(this),
-            moduleSelector  = $allModules.selector || '',
 
             time            = Date.now(),
             performance     = [],
@@ -26939,9 +26978,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if ($allModules.length > 1) {
                             title += ' (' + $allModules.length + ')';
                         }
@@ -27131,14 +27167,25 @@
             $allModules     = isFunction(this)
                 ? $(window)
                 : $(this),
-            moduleSelector = $allModules.selector || '',
             time           = Date.now(),
             performance    = [],
 
             query          = arguments[0],
             methodInvoked  = typeof query === 'string',
             queryArguments = [].slice.call(arguments, 1),
+            contextCheck   = function (context, win) {
+                var $context;
+                if ([window, document].indexOf(context) >= 0) {
+                    $context = $(context);
+                } else {
+                    $context = $(win.document).find(context);
+                    if ($context.length === 0) {
+                        $context = win.frameElement ? contextCheck(context, win.parent) : window;
+                    }
+                }
 
+                return $context;
+            },
             returnedValue
         ;
 
@@ -27164,9 +27211,7 @@
                 $form           = $module.closest(selector.form),
 
                 // context used for state
-                $context        = settings.stateContext
-                    ? ([window, document].indexOf(settings.stateContext) < 0 ? $(document).find(settings.stateContext) : $(settings.stateContext))
-                    : $module,
+                $context        = settings.stateContext ? contextCheck(settings.stateContext, window) : $module,
 
                 // request details
                 ajaxSettings,
@@ -28076,9 +28121,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -28331,15 +28373,25 @@
         var
             $allModules     = $(this),
 
-            moduleSelector  = $allModules.selector || '',
-
             time            = Date.now(),
             performance     = [],
 
             query           = arguments[0],
             methodInvoked   = typeof query === 'string',
             queryArguments  = [].slice.call(arguments, 1),
+            contextCheck    = function (context, win) {
+                var $context;
+                if ([window, document].indexOf(context) >= 0) {
+                    $context = $(context);
+                } else {
+                    $context = $(win.document).find(context);
+                    if ($context.length === 0) {
+                        $context = win.frameElement ? contextCheck(context, win.parent) : window;
+                    }
+                }
 
+                return $context;
+            },
             returnedValue
         ;
         $allModules.each(function () {
@@ -28359,6 +28411,7 @@
                 moduleNamespace = namespace + '-module',
 
                 $module         = $(this),
+                $context        = settings.context ? contextCheck(settings.context, window) : $module,
 
                 element         = this,
                 instance        = $module.data(moduleNamespace),
@@ -28376,19 +28429,11 @@
                     }
 
                     // bind events with delegated events
-                    if (settings.context && moduleSelector !== '') {
-                        ([window, document].indexOf(settings.context) < 0 ? $(document).find(settings.context) : $(settings.context))
-                            .on(moduleSelector, 'mouseenter' + eventNamespace, module.change.text)
-                            .on(moduleSelector, 'mouseleave' + eventNamespace, module.reset.text)
-                            .on(moduleSelector, 'click' + eventNamespace, module.toggle.state)
-                        ;
-                    } else {
-                        $module
-                            .on('mouseenter' + eventNamespace, module.change.text)
-                            .on('mouseleave' + eventNamespace, module.reset.text)
-                            .on('click' + eventNamespace, module.toggle.state)
-                        ;
-                    }
+                    $context
+                        .on('mouseenter' + eventNamespace, module.change.text)
+                        .on('mouseleave' + eventNamespace, module.reset.text)
+                        .on('click' + eventNamespace, module.toggle.state)
+                    ;
                     module.instantiate();
                 },
 
@@ -28402,8 +28447,11 @@
 
                 destroy: function () {
                     module.verbose('Destroying previous module', instance);
-                    $module
+                    $context
                         .off(eventNamespace)
+                    ;
+                    $module
+                        .removeData(metadata.storedText)
                         .removeData(moduleNamespace)
                     ;
                 },
@@ -28797,9 +28845,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
@@ -29014,7 +29059,6 @@
     $.fn.visibility = function (parameters) {
         var
             $allModules    = $(this),
-            moduleSelector = $allModules.selector || '',
 
             time           = Date.now(),
             performance    = [],
@@ -29022,6 +29066,19 @@
             query          = arguments[0],
             methodInvoked  = typeof query === 'string',
             queryArguments = [].slice.call(arguments, 1),
+            contextCheck   = function (context, win) {
+                var $context;
+                if ([window, document].indexOf(context) >= 0) {
+                    $context = $(context);
+                } else {
+                    $context = $(win.document).find(context);
+                    if ($context.length === 0) {
+                        $context = win.frameElement ? contextCheck(context, win.parent) : window;
+                    }
+                }
+
+                return $context;
+            },
             returnedValue,
 
             moduleCount    = $allModules.length,
@@ -29045,7 +29102,7 @@
                 $window         = $(window),
 
                 $module         = $(this),
-                $context        = [window, document].indexOf(settings.context) < 0 ? $(document).find(settings.context) : $(settings.context),
+                $context        = contextCheck(settings.context, window),
 
                 $placeholder,
 
@@ -30081,9 +30138,6 @@
                             totalTime += data['Execution Time'];
                         });
                         title += ' ' + totalTime + 'ms';
-                        if (moduleSelector) {
-                            title += ' \'' + moduleSelector + '\'';
-                        }
                         if (performance.length > 0) {
                             console.groupCollapsed(title);
                             if (console.table) {
