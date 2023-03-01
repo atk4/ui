@@ -241,7 +241,7 @@ class Card extends View
             // based on https://github.com/atk4/ui/blob/3c592b8f10fe67c61f179c5c8723b07f8ab754b9/src/UserAction/SharedExecutorsContainer.php#L24
             $isNew = !isset($cardDeck->sharedExecutorsContainer->sharedExecutors[$action->shortName]);
             if ($isNew) {
-                $ex = $cardDeck->sharedExecutorsContainer->getExecutorFactory()->createExecutor($action, $this);
+                $ex = $cardDeck->sharedExecutorsContainer->getExecutorFactory()->createExecutor($action, $cardDeck->sharedExecutorsContainer);
 
                 $ex->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, \Closure::bind(function (ExecutorInterface $ex, $return, $id) use ($cardDeck, $action) { // @phpstan-ignore-line
                     return $cardDeck->jsExecute($return, $action);
