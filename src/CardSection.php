@@ -76,7 +76,7 @@ class CardSection extends View
                 $value = $label . $this->glue . $value;
             }
 
-            $this->addDescription($value);
+            if ($value) { $this->addDescription($value); }
         }
     }
 
