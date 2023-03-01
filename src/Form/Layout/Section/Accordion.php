@@ -7,6 +7,7 @@ namespace Atk4\Ui\Form\Layout\Section;
 use Atk4\Ui\Accordion as UiAccordion;
 use Atk4\Ui\AccordionSection;
 use Atk4\Ui\Form;
+use Atk4\Ui\Js\JsBlock;
 
 /**
  * Represents form controls in accordion.
@@ -35,7 +36,7 @@ class Accordion extends UiAccordion
                 $jsError[] = $section->getOwner()->jsOpen($section);
             }
 
-            return $jsError;
+            return new JsBlock($jsError);
         });
     }
 
