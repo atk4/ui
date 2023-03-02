@@ -60,7 +60,7 @@ class ItemsPerPageSelector extends View
         $this->cb->set(function () use ($fx) {
             $ipp = isset($_GET['ipp']) ? (int) $_GET['ipp'] : null;
             // $this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
-            $this->set($ipp); // @phpstan-ignore-line TODO https://github.com/atk4/ui/issues/2016
+            $this->set((string) $ipp);
             $reload = $fx($ipp);
             if ($reload) {
                 $this->getApp()->terminateJson($reload);
