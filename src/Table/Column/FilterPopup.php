@@ -9,6 +9,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Popup;
 use Atk4\Ui\View;
@@ -73,11 +74,11 @@ class FilterPopup extends Popup
             ->on('click', function (Jquery $j) use ($model) {
                 $model->clearData();
 
-                return [
+                return new JsBlock([
                     $this->form->js(false, null, $this->form->formElement)->form('reset'),
                     new JsReload($this->reload),
                     (new Jquery($this->colTrigger))->trigger('click'),
-                ];
+                ]);
             });
     }
 
