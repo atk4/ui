@@ -132,7 +132,7 @@ class TreeItemSelector extends Form\Control
     public function getValue()
     {
         if (is_scalar($this->entityField->get())) {
-            return $this->getApp()->uiPersistence->typecastLoadField($this->entityField->getField(), $this->entityField->get());
+            return $this->entityField->get();
         }
 
         return $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get());
