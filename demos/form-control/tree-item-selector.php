@@ -64,7 +64,7 @@ $form->onSubmit(function (Form $form) use ($app) {
     $response = [
         'multiple' => $form->model->get('tree'),
         'single' => $form->model->get('tree1'),
-        'model' => $form->model->get('tree2')
+        'model' => $form->model->get('tree2'),
     ];
 
     $view = new Message('Items: ');
