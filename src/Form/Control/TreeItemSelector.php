@@ -122,14 +122,15 @@ class TreeItemSelector extends Form\Control
 
 
     /**
-     * Recursive function to return sub-node for a given parent
+     * Recursive function to return sub-node for a given parent.
      *
      * @param $model : Model
      * @param $nodes: array
      * @param $parentId : int|string|null
+     *
      * @return array|null
      */
-    protected function addNodes(Model $model, array $nodes, $parentId = null)
+    protected function addNodes(Model $model, array $nodes, int|string|null $parentId = null)
     {
         // return an array of items with parent = $parentId
         $result = [];
