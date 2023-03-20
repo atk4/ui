@@ -126,10 +126,10 @@ class TreeItemSelector extends Form\Control
      *
      * @param $model : Model
      * @param $nodes: array
-     * @param $parentId : string|null
+     * @param $parentId : int|string|null
      * @return array|null
      */
-    protected function addNodes(Model $model, array $nodes, string $parentId = null)
+    protected function addNodes(Model $model, array $nodes, $parentId = null)
     {
         // return an array of items with parent = $parentId
         $result = [];
