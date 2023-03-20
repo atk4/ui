@@ -39,6 +39,13 @@ class TreeItemSelector extends Form\Control
      */
     public $loaderCssName = 'atk-tree-loader';
 
+    /**
+     * The field name which includes the parent node's id.
+     *
+     * @var string
+     */
+    public $parentIdField = 'parent_id';
+
     /** @var bool Allow multiple selection or just one. */
     public $allowMultiple = true;
 
@@ -112,7 +119,36 @@ class TreeItemSelector extends Form\Control
         return $this;
     }
 
-    /**
+    protected function addNodes($model, $nodes, $parentid) {
+        // return an array of items with parent = $parentId
+        $result = array();
+        foreach ($nodes as $node) {
+            if ($node[$this->parentIdField] == $parentid) {
+                $newNode['name'] = $node[$model->titleField];
+                $newNode['id'] = $node[$model->idField];
+                $newNode['parent_id'] = $node[$this->parentIdField];
+                $newNode['nodes'] = $this->addNodes($model, $nodes, $newNode['id']);
+                $result[] = $newNode;
+            }
+        }
+
+        if (count($result) > 0) return $result;
+        return null;
+    }
+
+    public function setModel($model): void
+    {
+        parent::setModel($model);
+
+        if ($model) {
+            $nodes_array = (clone $this->model)->export();
+            $this->treeItems = $this->addNodes($model, $nodes_array, null);
+            unset($nodes_array);
+
+        }
+    }
+
+        /**
      * Returns <input ...> tag.
      *
      * @return string

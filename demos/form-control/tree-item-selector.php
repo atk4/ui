@@ -50,6 +50,12 @@ $control->set([201, 301, 503]);
 $control = $form->addControl('tree1', [Form\Control\TreeItemSelector::class, 'treeItems' => $items, 'allowMultiple' => false, 'caption' => 'Single selection:']);
 $control->set(502);
 
+$model = new File($app->db);
+$control = $form->addControl('tree2', [Form\Control\TreeItemSelector::class, 'allowMultiple' => false, 'caption' => 'Single selection:',
+    'parentIdField' => $model->fieldName()->parent_folder_id]);
+
+$control->setModel($model);
+
 // $control->onItem(function (int $value) {
 //    return new JsToast('Received ' . $value);
 // });
