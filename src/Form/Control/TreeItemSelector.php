@@ -119,11 +119,12 @@ class TreeItemSelector extends Form\Control
         return $this;
     }
 
-    protected function addNodes($model, $nodes, $parentid) {
+    protected function addNodes($model, $nodes, $parentid)
+    {
         // return an array of items with parent = $parentId
-        $result = array();
+        $result = [];
         foreach ($nodes as $node) {
-            if ($node[$this->parentIdField] == $parentid) {
+            if ($node[$this->parentIdField] === $parentid) {
                 $newNode['name'] = $node[$model->titleField];
                 $newNode['id'] = $node[$model->idField];
                 $newNode['parent_id'] = $node[$this->parentIdField];
@@ -132,7 +133,10 @@ class TreeItemSelector extends Form\Control
             }
         }
 
-        if (count($result) > 0) return $result;
+        if (count($result) > 0) {
+            return $result;
+        }
+
         return null;
     }
 
@@ -144,11 +148,10 @@ class TreeItemSelector extends Form\Control
             $nodes_array = (clone $this->model)->export();
             $this->treeItems = $this->addNodes($model, $nodes_array, null);
             unset($nodes_array);
-
         }
     }
 
-        /**
+    /**
      * Returns <input ...> tag.
      *
      * @return string
