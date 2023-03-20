@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Js\Jquery;
@@ -119,12 +120,22 @@ class TreeItemSelector extends Form\Control
         return $this;
     }
 
-    protected function addNodes($model, $nodes, $parentid)
+
+    /**
+     * Recursive function to return sub-node for a given parent
+     *
+     * @param $model : Model
+     * @param $nodes: array
+     * @param $parentId : string|null
+     * @return array|null
+     */
+    protected function addNodes(Model $model, array $nodes, string $parentId = null)
     {
         // return an array of items with parent = $parentId
         $result = [];
         foreach ($nodes as $node) {
-            if ($node[$this->parentIdField] === $parentid) {
+            if ($node[$this->parentIdField] === $parentId) {
+                $newNode = [];
                 $newNode['name'] = $node[$model->titleField];
                 $newNode['id'] = $node[$model->idField];
                 $newNode['parent_id'] = $node[$this->parentIdField];
@@ -140,15 +151,13 @@ class TreeItemSelector extends Form\Control
         return null;
     }
 
-    public function setModel($model): void
+    public function setModel(Model $model): void
     {
         parent::setModel($model);
 
-        if ($model) {
-            $nodes_array = (clone $this->model)->export();
-            $this->treeItems = $this->addNodes($model, $nodes_array, null);
-            unset($nodes_array);
-        }
+        $nodes_array = (clone $this->model)->export();
+        $this->treeItems = $this->addNodes($model, $nodes_array);
+        unset($nodes_array);
     }
 
     /**
