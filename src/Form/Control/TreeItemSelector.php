@@ -120,7 +120,6 @@ class TreeItemSelector extends Form\Control
         return $this;
     }
 
-
     /**
      * Recursive function to return sub-node for a given parent.
      *
@@ -130,7 +129,7 @@ class TreeItemSelector extends Form\Control
      *
      * @return array|null
      */
-    protected function addNodes(Model $model, array $nodes, int|string|null $parentId = null)
+    protected function addNodes(Model $model, array $nodes, $parentId = null)
     {
         // return an array of items with parent = $parentId
         $result = [];

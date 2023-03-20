@@ -51,7 +51,7 @@ $control = $form->addControl('tree1', [Form\Control\TreeItemSelector::class, 'tr
 $control->set(502);
 
 $model = new File($app->db);
-$control = $form->addControl('tree2', [Form\Control\TreeItemSelector::class, 'allowMultiple' => false, 'caption' => 'Single selection:',
+$control = $form->addControl('tree2', [Form\Control\TreeItemSelector::class, 'allowMultiple' => false, 'caption' => 'Selection from tree in Atk4/Model:',
     'parentIdField' => $model->fieldName()->parent_folder_id]);
 
 $control->setModel($model);
@@ -64,6 +64,7 @@ $form->onSubmit(function (Form $form) use ($app) {
     $response = [
         'multiple' => $form->model->get('tree'),
         'single' => $form->model->get('tree1'),
+        'model' => $form->model->get('tree2')
     ];
 
     $view = new Message('Items: ');
