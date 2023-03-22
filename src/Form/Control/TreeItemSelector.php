@@ -120,12 +120,14 @@ class TreeItemSelector extends Form\Control
         return $this;
     }
 
-    protected function addNodes(Model $model, $parentId = null)
+    protected function addNodes(Model $model, $parentId = null): array
     {
         // return an array of items with parent = $parentId
         $result = [];
 
-        if ($parentId) { $model->addCondition($this->parentIdField, $parentId); }
+        if ($parentId) {
+            $model->addCondition($this->parentIdField, $parentId);
+        }
 
         foreach ($model as $node) {
             if ($node->get($this->parentIdField) === $parentId) {
