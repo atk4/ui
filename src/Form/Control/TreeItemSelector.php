@@ -120,17 +120,20 @@ class TreeItemSelector extends Form\Control
         return $this;
     }
 
-    protected function addNodes(Model $model, array $nodes, $parentId = null)
+    protected function addNodes(Model $model, $parentId = null)
     {
         // return an array of items with parent = $parentId
         $result = [];
-        foreach ($nodes as $node) {
-            if ($node[$this->parentIdField] === $parentId) {
+
+        if ($parentId) { $model->addCondition($this->parentIdField, $parentId); }
+
+        foreach ($model as $node) {
+            if ($node->get($this->parentIdField) === $parentId) {
                 $newNode = [];
-                $newNode['name'] = $node[$model->titleField];
-                $newNode['id'] = $node[$model->idField];
-                $newNode['parent_id'] = $node[$this->parentIdField];
-                $newNode['nodes'] = $this->addNodes($model, $nodes, $newNode['id']);
+                $newNode['name'] = $node->getTitle();
+                $newNode['id'] = $node->getId();
+                $newNode['parent_id'] = $node->get($this->parentIdField);
+                $newNode['nodes'] = $this->addNodes(clone $model, $node->getId());
                 $result[] = $newNode;
             }
         }
@@ -142,8 +145,7 @@ class TreeItemSelector extends Form\Control
     {
         parent::setModel($model);
 
-        $nodes_array = $this->model->export();
-        $this->treeItems = $this->addNodes($model, $nodes_array);
+        $this->treeItems = $this->addNodes($model);
     }
 
     /**
