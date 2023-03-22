@@ -120,9 +120,14 @@ class TreeItemSelector extends Form\Control
         return $this;
     }
 
+    /**
+     * @param Model $model
+     * @param mixed $parentId
+     * @return array
+     * @throws \Throwable
+     */
     protected function addNodes(Model $model, $parentId = null): array
     {
-        // return an array of items with parent = $parentId
         $result = [];
 
         if ($parentId) {
