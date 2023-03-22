@@ -121,20 +121,15 @@ class TreeItemSelector extends Form\Control
     }
 
     /**
-     * @param Model $model
      * @param mixed $parentId
-     * @return array
-     * @throws \Throwable
      */
     protected function addNodes(Model $model, $parentId = null): array
     {
         $result = [];
 
-        if ($parentId) {
-            $model->addCondition($this->parentIdField, $parentId);
-        }
+        $nodeModel = (clone $model)->addCondition($this->parentIdField, $parentId);
 
-        foreach ($model as $node) {
+        foreach ($nodeModel as $node) {
             if ($node->get($this->parentIdField) === $parentId) {
                 $newNode = [];
                 $newNode['name'] = $node->getTitle();
