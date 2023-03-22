@@ -120,15 +120,6 @@ class TreeItemSelector extends Form\Control
         return $this;
     }
 
-    /**
-     * Recursive function to return sub-node for a given parent.
-     *
-     * @param $model : Model
-     * @param $nodes: array
-     * @param $parentId : int|string|null
-     *
-     * @return array|null
-     */
     protected function addNodes(Model $model, array $nodes, $parentId = null)
     {
         // return an array of items with parent = $parentId
@@ -144,20 +135,15 @@ class TreeItemSelector extends Form\Control
             }
         }
 
-        if (count($result) > 0) {
-            return $result;
-        }
-
-        return null;
+        return $result;
     }
 
     public function setModel(Model $model): void
     {
         parent::setModel($model);
 
-        $nodes_array = (clone $this->model)->export();
+        $nodes_array = $this->model->export();
         $this->treeItems = $this->addNodes($model, $nodes_array);
-        unset($nodes_array);
     }
 
     /**
