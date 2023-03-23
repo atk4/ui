@@ -135,7 +135,7 @@ class TreeItemSelector extends Form\Control
                 $newNode['name'] = $node->getTitle();
                 $newNode['id'] = $node->getId();
                 $newNode['parent_id'] = $node->get($this->parentIdField);
-                $newNode['nodes'] = $this->addNodes(clone $model, $node->getId());
+                $newNode['nodes'] = $this->addNodes($model, $node->getId());
                 $result[] = $newNode;
             }
         }
