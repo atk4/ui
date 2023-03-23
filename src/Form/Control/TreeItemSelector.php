@@ -40,11 +40,7 @@ class TreeItemSelector extends Form\Control
      */
     public $loaderCssName = 'atk-tree-loader';
 
-    /**
-     * The field name which includes the parent node's id.
-     *
-     * @var string
-     */
+    /** @var string The field name which includes the parent node's id. */
     public $parentIdField = 'parent_id';
 
     /** @var bool Allow multiple selection or just one. */
