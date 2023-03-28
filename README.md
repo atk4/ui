@@ -81,7 +81,7 @@ To get most of ATK UI, use [ATK Data](https://github.com/atk4/data) to describe 
 [Crud](https://ui.agiletoolkit.org/demos/crud.php) is a fully-interractive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
 
 ``` php
-$app = new \Atk4\Ui\App('hello world');
+$app = new \Atk4\Ui\App(['title' => 'hello world']);
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 
