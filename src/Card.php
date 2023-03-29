@@ -64,13 +64,16 @@ class Card extends View
     /** @var View|null The button Container for Button */
     public $btnContainer;
 
+    /** @var bool Do we want to add fields in section or just set values in template */
+    public $addFields = true;
+
     /** @var bool Display model field as table inside card holder content */
     public $useTable = false;
 
-    /** @var bool Use Field label with value data. */
+    /** @var bool Use Field label with value data */
     public $useLabel = false;
 
-    /** @var string Default executor class. */
+    /** @var string Default executor class */
     public $executor = UserAction\ModalExecutor::class;
 
     protected function init(): void
@@ -195,7 +198,12 @@ class Card extends View
         $this->template->trySet('dataId', (string) $this->model->getId());
 
         View::addTo($this->getSection(), [$entity->getTitle(), 'class.header' => true]);
-        $this->getSection()->addFields($entity, $fields, $this->useLabel, $this->useTable);
+
+        if ($this->addFields) {
+            $this->getSection()->addFields($entity, $fields, $this->useLabel, $this->useTable);
+        } else {
+            $this->template->set($this->model);
+        }
     }
 
     /**
