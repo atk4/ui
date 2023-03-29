@@ -166,7 +166,18 @@ class Card extends View
     }
 
     /**
-     * If Fields are past with $model that field will be add
+     * Returns array of names of fields to automatically include them in view.
+     * This includes all editable or visible fields of the model.
+     *
+     * @return array
+     */
+    protected function getModelFields(Model $model)
+    {
+        return array_keys($model->getFields(['editable', 'visible']));
+    }
+
+    /**
+     * If Fields are past with $model that field will be added
      * to the main section of this card.
      *
      * @param array<int, string>|null $fields
@@ -178,7 +189,7 @@ class Card extends View
         parent::setModel($entity);
 
         if ($fields === null) {
-            $fields = array_keys($this->model->getFields(['editable', 'visible']));
+            $fields = $this->getModelFields($entity);
         }
 
         $this->template->trySet('dataId', (string) $this->model->getId());
