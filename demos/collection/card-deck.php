@@ -74,7 +74,7 @@ class MyCard extends Card
 }
 
 $countries = new Country($app->db);
-$countries->addCalculatedField('iso_lower', ['expr' => function (Country $m){return strtolower($m->get($m->fieldName()->iso)); }]);
+$countries->addCalculatedField('iso_lower', ['expr' => function (Country $m) {return strtolower($m->get($m->fieldName()->iso)); }]);
 $deck = CardDeck::addTo($app, [
     'cardHolder' => [View::class, 'ui' => 'cards six'],
     'ipp' => 6 * 2,
