@@ -157,7 +157,7 @@ class HtmlTemplate
         // in this case we don't throw exception if tags don't exist
         if (is_array($tag) && $value === null) {
             foreach ($tag as $k => $v) {
-                $this->_setOrAppend($k, $v, $encodeHtml, $append, false);
+                $this->_setOrAppend($k, (string) $v, $encodeHtml, $append, false);
             }
 
             return;
