@@ -6,15 +6,17 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
+use Atk4\Ui\Card;
 use Atk4\Ui\CardDeck;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\UserAction\ExecutorFactory;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-Header::addTo($app, ['Card Deck', 'size' => 1, 'subHeader' => 'Card can be display in a deck, also using model action.']);
+Header::addTo($app, ['Card Deck - Booking', 'size' => 1, 'subHeader' => 'Card can be display in a deck, also using model action.']);
 
 $countries = new Country($app->db);
 $countries->addCalculatedField('cost', ['type' => 'atk4_money', 'expr' => function (Country $country) {
@@ -50,3 +52,42 @@ $infoAction->args = [
 $deck = CardDeck::addTo($app, ['noRecordScopeActions' => ['request_info'], 'singleScopeActions' => ['book']]);
 
 $deck->setModel($countries, ['cost'], [$countries->fieldName()->iso, $countries->fieldName()->iso3]);
+
+
+
+
+
+
+
+Header::addTo($app, ['Card Deck - Editable', 'size' => 1, 'subHeader' => 'Cards can also use custom templates and have full editing support like Grid.']);
+
+class MyCard extends Card {
+    public function getButtonContainer()
+    {
+        if (!$this->btnContainer) {
+            //$this->btnContainer = $this->addExtraContent(new View(['ui' => 'buttons']));
+            $this->btnContainer = $this->add(new View(['ui' => 'buttons bottom attached'])); // attach buttons to bottom
+            $this->getButtonContainer()->addClass('wrapping');
+            if ($this->hasFluidButton) {
+                $this->getButtonContainer()->addClass('fluid');
+            }
+        }
+
+        return $this->btnContainer;
+    }
+}
+
+$countries = new Country($app->db);
+$countries->addCalculatedField('iso_lower', ['expr' => function (Country $m){return strtolower($m->get($m->fieldName()->iso));}]);
+$deck = CardDeck::addTo($app, [
+    'cardHolder' => [View::class, 'ui' => 'cards six'],
+    'ipp' => 6 * 2,
+    'card' => [
+        MyCard::class,
+        'ui' => 'card atk-card blue',
+        'addFields' => false,
+        'defaultTemplate' => __DIR__ . '/templates/card.html',
+    ],
+]);
+$deck->setModel($countries);
+//var_dump($countries->tryLoadAny()->get());
