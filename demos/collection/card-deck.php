@@ -56,30 +56,13 @@ $deck->setModel($countries, ['cost'], [$countries->fieldName()->iso, $countries-
 // Another Card Deck example below
 Header::addTo($app, ['Card Deck - Editable', 'size' => 1, 'subHeader' => 'Cards can also use custom templates and have full editing support like Grid.']);
 
-class MyCard extends Card
-{
-    public function getButtonContainer()
-    {
-        if (!$this->btnContainer) {
-            // $this->btnContainer = $this->addExtraContent(new View(['ui' => 'buttons']));
-            $this->btnContainer = $this->add(new View(['ui' => 'buttons bottom attached'])); // attach buttons to bottom
-            $this->getButtonContainer()->addClass('wrapping');
-            if ($this->hasFluidButton) {
-                $this->getButtonContainer()->addClass('fluid');
-            }
-        }
-
-        return $this->btnContainer;
-    }
-}
-
 $countries = new Country($app->db);
 $countries->addCalculatedField('iso_lower', ['expr' => function (Country $m) {return strtolower($m->get($m->fieldName()->iso)); }]);
 $deck = CardDeck::addTo($app, [
     'cardHolder' => [View::class, 'ui' => 'cards six'],
     'ipp' => 6 * 2,
     'card' => [
-        MyCard::class,
+        CustomCard::class,
         'ui' => 'card atk-card blue',
         'addFields' => false,
         'defaultTemplate' => __DIR__ . '/templates/card.html',
