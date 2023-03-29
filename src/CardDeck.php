@@ -85,10 +85,10 @@ class CardDeck extends View
     ];
 
     /** @var array A collection of menu button added in Menu. */
-    private $menuActions = [];
+    protected $menuActions = [];
 
     /** @var string|null The current search query string. */
-    private $query;
+    protected $query;
 
     protected function init(): void
     {
@@ -262,7 +262,7 @@ class CardDeck extends View
      *
      * @return mixed
      */
-    private function getReloadArgs()
+    protected function getReloadArgs()
     {
         $args = [];
         if ($this->paginator !== false) {
@@ -278,7 +278,7 @@ class CardDeck extends View
     /**
      * Return proper action need to setup menu or action column.
      */
-    private function getModelActions(string $appliesTo): array
+    protected function getModelActions(string $appliesTo): array
     {
         if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
             $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions);
