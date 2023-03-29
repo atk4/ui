@@ -198,7 +198,6 @@ class Card extends View
         $this->template->trySet('dataId', (string) $this->model->getId());
 
         View::addTo($this->getSection(), [$entity->getTitle(), 'class.header' => true]);
-
         if ($this->addFields) {
             $this->getSection()->addFields($entity, $fields, $this->useLabel, $this->useTable);
         } else {
