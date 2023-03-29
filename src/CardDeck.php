@@ -99,11 +99,7 @@ class CardDeck extends View
         $this->container = $this->add($this->container);
 
         if ($this->menu !== false && !is_object($this->menu)) {
-            $this->menu = $this->add(Factory::factory([Menu::class, 'activateOnClick' => false], $this->menu), 'Menu');
-
-            if ($this->search !== false) {
-                $this->addMenuBarSeach();
-            }
+            $this->addMenuBar();
         }
 
         $this->cardHolder = $this->container->add($this->cardHolder);
@@ -111,6 +107,15 @@ class CardDeck extends View
         if ($this->paginator !== false) {
             $this->addPaginator();
             $this->stickyGet($this->paginator->name);
+        }
+    }
+
+    protected function addMenuBar(): void
+    {
+        $this->menu = $this->add(Factory::factory([Menu::class, 'activateOnClick' => false], $this->menu), 'Menu');
+
+        if ($this->search !== false) {
+            $this->addMenuBarSeach();
         }
     }
 
