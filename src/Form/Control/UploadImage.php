@@ -44,10 +44,8 @@ class UploadImage extends Upload
 
     /**
      * Set the thumbnail img src value.
-     *
-     * @param string $src
      */
-    public function setThumbnailSrc($src): void
+    public function setThumbnailSrc(string $src): void
     {
         $this->thumbnail->setAttr(['src' => $src]);
         $action = $this->thumbnail->js();
@@ -58,11 +56,11 @@ class UploadImage extends Upload
     /**
      * Clear the thumbnail src.
      * You can also supply a default thumbnail src.
-     *
-     * @param string $defaultThumbnail
      */
-    public function clearThumbnail($defaultThumbnail = null): void
+    public function clearThumbnail(string $defaultThumbnail = null): void
     {
+        $defaultThumbnail = defaultThumbnail ?? $this->defaultSrc;
+
         $action = $this->thumbnail->js();
         if ($defaultThumbnail !== null) {
             $action->attr('src', $defaultThumbnail);
