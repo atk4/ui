@@ -76,6 +76,9 @@ class Card extends View
     /** @var string Default executor class */
     public $executor = UserAction\ModalExecutor::class;
 
+    /** @var View|null Header view, useful to add additional views to it, icons for example */
+    public $headerView;
+
     protected function init(): void
     {
         parent::init();
@@ -197,7 +200,7 @@ class Card extends View
 
         $this->template->trySet('dataId', (string) $this->model->getId());
 
-        View::addTo($this->getSection(), [$entity->getTitle(), 'class.header' => true]);
+        $this->headerView = View::addTo($this->getSection(), [$entity->getTitle(), 'class.header' => true]);
         if ($this->addFields) {
             $this->getSection()->addFields($entity, $fields, $this->useLabel, $this->useTable);
         } else {
