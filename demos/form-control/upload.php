@@ -21,7 +21,7 @@ $control = $form->addControl('file', [Form\Control\Upload::class, ['accept' => [
 // $control->set('a_generated_token');
 
 $img->onDelete(function (string $fileId) use ($img) {
-    $img->clearThumbnail('./images/default.png');
+    $img->clearThumbnail();
 
     return new JsToast([
         'title' => 'Delete successfully',
