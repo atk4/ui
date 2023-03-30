@@ -19,7 +19,7 @@ class UploadImage extends Upload
      */
     public $thumnailRegion = 'AfterAfterInput';
 
-    /** @var string The default thumbnail source. */
+    /** @var string|null The default thumbnail source. */
     public $defaultSrc;
 
     protected function init(): void
