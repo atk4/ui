@@ -59,7 +59,9 @@ class UploadImage extends Upload
      */
     public function clearThumbnail(string $defaultThumbnail = null): void
     {
-        $defaultThumbnail ??= $this->defaultSrc;
+        if ($defaultThumbnail === null) {
+            $defaultThumbnail = $this->defaultSrc;
+        }
 
         $action = $this->thumbnail->js();
         if ($defaultThumbnail !== null) {
