@@ -8,12 +8,12 @@ Feature: Upload
     When I select file input "file" with "Žlutý kůň" as "$kůň"
     Then Toast display should contain text "(name: $kůň, md5: b047fb155be776f5bbae061c7b08cdf0)"
 
-    When I click using selector "#atk_layout_maestro_form_form_layout_file_button"
+    When I click using selector "div[id$='file'] .action .button"
     Then Toast display should contain text "has been removed"
 
     When I select file input "img" with "Foo" as "bar.png"
     Then Toast display should contain text "is uploaded"
 
-    When I click using selector "#atk_layout_maestro_form_form_layout_img_button"
+    When I click using selector "div[id$='img'] .action .button"
     Then Toast display should contain text "has been removed"
     Then Element "#atk_layout_maestro_form_form_layout_img_view" attribute "src" should contain text "default.png"
