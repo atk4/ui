@@ -561,18 +561,6 @@ class Context extends RawMinkContext implements BehatContext
             EOF, [$element, array_map('ord', str_split($fileContent)), $fileName]);
     }
 
-    /**
-     * @Then Element :arg1 attribute :arg2 should contain text :arg3
-     */
-    public function elementAttributeShouldContainText(string $selector, string $attribute, string $text): void
-    {
-        $element = $this->findElement(null, $selector);
-        $attr = $element->getAttribute($attribute);
-        if (!str_contains($attr, $text)) {
-            throw new \Exception('Element " . $selector . " attribute "' . $attribute . '" does not contain "' . $text . '"');
-        }
-    }
-
     private function getScopeBuilderRuleElem(string $ruleName): NodeElement
     {
         return $this->findElement(null, '.vqb-rule[data-name=' . $ruleName . ']');
@@ -818,6 +806,18 @@ class Context extends RawMinkContext implements BehatContext
 
         if (!preg_match($regex, $this->findElement(null, $selector)->getText())) {
             throw new \Exception('Container with selector: ' . $selector . ' does not match regex: ' . $regex);
+        }
+    }
+
+    /**
+     * @Then Element :arg1 attribute :arg2 should contain text :arg3
+     */
+    public function elementAttributeShouldContainText(string $selector, string $attribute, string $text): void
+    {
+        $element = $this->findElement(null, $selector);
+        $attr = $element->getAttribute($attribute);
+        if (!str_contains($attr, $text)) {
+            throw new \Exception('Element " . $selector . " attribute "' . $attribute . '" does not contain "' . $text . '"');
         }
     }
 
