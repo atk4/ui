@@ -35,15 +35,13 @@ class UploadImage extends Upload
 
     public function getThumbnail(): View
     {
-        if ($this->thumbnail) {
-            return $this->thumbnail;
-        }
+        if ($this->thumbnail === null) {
+            $this->thumbnail = (new View(['element' => 'img', 'class' => ['right', 'floated', 'image'], 'ui' => true]))
+                ->setAttr(['width' => 36, 'height' => 36]);
 
-        $this->thumbnail = (new View(['element' => 'img', 'class' => ['right', 'floated', 'image'], 'ui' => true]))
-            ->setAttr(['width' => 36, 'height' => 36]);
-
-        if ($this->defaultSrc) {
-            $this->thumbnail->setAttr(['src' => $this->defaultSrc]);
+            if ($this->defaultSrc) {
+                $this->thumbnail->setAttr(['src' => $this->defaultSrc]);
+            }
         }
 
         return $this->thumbnail;
@@ -62,17 +60,12 @@ class UploadImage extends Upload
 
     /**
      * Clear the thumbnail src.
-     * You can also supply a default thumbnail src.
      */
-    public function clearThumbnail(string $defaultThumbnail = null): void
+    public function clearThumbnail(): void
     {
-        if ($defaultThumbnail === null) {
-            $defaultThumbnail = $this->defaultSrc;
-        }
-
         $action = $this->thumbnail->js();
-        if ($defaultThumbnail !== null) {
-            $action->attr('src', $defaultThumbnail);
+        if ($this->defaultSrc !== null) {
+            $action->attr('src', $this->defaultSrc);
         } else {
             $action->removeAttr('src');
         }
