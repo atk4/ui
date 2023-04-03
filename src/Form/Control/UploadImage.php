@@ -17,7 +17,7 @@ class UploadImage extends Upload
      *
      * @var string
      */
-    public $thumnailRegion = 'AfterAfterInput';
+    public $thumbnailRegion = 'AfterAfterInput';
 
     /** @var string|null The default thumbnail source. */
     public $defaultSrc;
@@ -30,16 +30,23 @@ class UploadImage extends Upload
             $this->accept = ['.jpg', '.jpeg', '.png'];
         }
 
-        if (!$this->thumbnail) {
-            $this->thumbnail = (new View(['element' => 'img', 'class' => ['right', 'floated', 'image'], 'ui' => true]))
-                ->setAttr(['width' => 36, 'height' => 36]);
+        $this->add($this->getThumbnail(), $this->thumnailRegion);
+    }
+
+    public function getThumbnail(): View
+    {
+        if ($this->thumbnail) {
+            return $this->thumbnail;
         }
+
+        $this->thumbnail = (new View(['element' => 'img', 'class' => ['right', 'floated', 'image'], 'ui' => true]))
+            ->setAttr(['width' => 36, 'height' => 36]);
 
         if ($this->defaultSrc) {
             $this->thumbnail->setAttr(['src' => $this->defaultSrc]);
         }
 
-        $this->add($this->thumbnail, $this->thumnailRegion);
+        return $this->thumbnail;
     }
 
     /**
