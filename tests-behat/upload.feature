@@ -16,4 +16,4 @@ Feature: Upload
 
     When I click using selector "div[id$='img'] .action .button"
     Then Toast display should contain text "has been removed"
-    Then Element "#atk_layout_maestro_form_form_layout_img_view" attribute "src" should contain text "default.png"
+    Then Element "div[id$='img'] .action img" attribute "src" should contain text "default.png"
