@@ -30,7 +30,7 @@ class UploadImage extends Upload
             $this->accept = ['.jpg', '.jpeg', '.png'];
         }
 
-        $this->add($this->getThumbnail(), $this->thumnailRegion);
+        $this->add($this->getThumbnail(), $this->thumbnailRegion);
     }
 
     public function getThumbnail(): View
