@@ -567,7 +567,7 @@ class Context extends RawMinkContext implements BehatContext
     public function elementAttributeShouldContainText(string $selector, string $attribute, string $text): void
     {
         $element = $this->findElement(null, $selector);
-        $attr = $element->getAttr($attribute);
+        $attr = $element->getAttribute($attribute);
         if (!str_contains($attr, $text)) {
             throw new \Exception('Element " . $selector . " attribute "' . $attribute . '" does not contain "' . $text . '"');
         }
