@@ -7,3 +7,6 @@ Feature: Upload
 
     When I select file input "file" with "Žlutý kůň" as "$kůň"
     Then Toast display should contain text "(name: $kůň, md5: b047fb155be776f5bbae061c7b08cdf0)"
+
+    When I click using selector "#atk_layout_maestro_form_form_layout_file_button"
+    Then Toast display should contain text "has been removed"
