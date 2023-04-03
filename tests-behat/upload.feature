@@ -10,3 +10,10 @@ Feature: Upload
 
     When I click using selector "#atk_layout_maestro_form_form_layout_file_button"
     Then Toast display should contain text "has been removed"
+
+    When I select file input "img" with "Foo" as "bar.png"
+    Then Toast display should contain text "is uploaded"
+
+    When I click using selector "#atk_layout_maestro_form_form_layout_img_button"
+    Then Toast display should contain text "has been removed"
+    Then Element "#atk_layout_maestro_form_form_layout_img_view" attribute "src" contain text "default.png"

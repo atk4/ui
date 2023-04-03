@@ -561,6 +561,18 @@ class Context extends RawMinkContext implements BehatContext
             EOF, [$element, array_map('ord', str_split($fileContent)), $fileName]);
     }
 
+    /**
+     * @Then Element :arg1 attribute :arg2 should contain text :arg3
+     */
+    public function elementAttributeShouldContainText(string $selector, string $attribute, string $text): void
+    {
+        $element = $this->findElement(null, $selector);
+        $attr = $element->getAttr($attribute);
+        if (!str_contains($attr, $text)) {
+            throw new \Exception('Element " . $selector . " attribute "' . $attribute . '" does not contain "' . $text . '"');
+        }
+    }
+
     private function getScopeBuilderRuleElem(string $ruleName): NodeElement
     {
         return $this->findElement(null, '.vqb-rule[data-name=' . $ruleName . ']');
