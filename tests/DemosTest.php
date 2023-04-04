@@ -368,6 +368,21 @@ class DemosTest extends TestCase
         static::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
+    public function testDownloadAsStream(): void
+    {
+        $btn = 'atk_layout_maestro_button_click';
+        $response = $this->getResponseFromRequest(
+            '_unit-test/stream.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . $btn . '=ajax' . Callback::URL_QUERY_TARGET . '=' . $btn,
+            [
+            //'form_params' => [
+            //    'dsn' => 'mysql://root:root@db-host.example.com/atk4',
+            //]
+            ]
+        );
+        static::assertSame(200, $response->getStatusCode());
+        static::assertSame(1048576 * 128, strlen($response->getBody()->getContents())); // 128Mb
+    }
+
     /**
      * Test reload and loader callback.
      */
