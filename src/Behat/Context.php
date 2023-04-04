@@ -809,6 +809,18 @@ class Context extends RawMinkContext implements BehatContext
         }
     }
 
+    /**
+     * @Then Element :arg1 attribute :arg2 should contain text :arg3
+     */
+    public function elementAttributeShouldContainText(string $selector, string $attribute, string $text): void
+    {
+        $element = $this->findElement(null, $selector);
+        $attr = $element->getAttribute($attribute);
+        if (!str_contains($attr, $text)) {
+            throw new \Exception('Element " . $selector . " attribute "' . $attribute . '" does not contain "' . $text . '"');
+        }
+    }
+
     // }}}
 
     /**

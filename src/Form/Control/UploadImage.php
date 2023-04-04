@@ -17,9 +17,9 @@ class UploadImage extends Upload
      *
      * @var string
      */
-    public $thumnailRegion = 'AfterAfterInput';
+    public $thumbnailRegion = 'AfterAfterInput';
 
-    /** @var string The default thumbnail source. */
+    /** @var string|null The default thumbnail source. */
     public $defaultSrc;
 
     protected function init(): void
@@ -30,24 +30,27 @@ class UploadImage extends Upload
             $this->accept = ['.jpg', '.jpeg', '.png'];
         }
 
-        if (!$this->thumbnail) {
+        $this->add($this->getThumbnail(), $this->thumbnailRegion);
+    }
+
+    public function getThumbnail(): View
+    {
+        if ($this->thumbnail === null) {
             $this->thumbnail = (new View(['element' => 'img', 'class' => ['right', 'floated', 'image'], 'ui' => true]))
                 ->setAttr(['width' => 36, 'height' => 36]);
+
+            if ($this->defaultSrc !== null) {
+                $this->thumbnail->setAttr(['src' => $this->defaultSrc]);
+            }
         }
 
-        if ($this->defaultSrc) {
-            $this->thumbnail->setAttr(['src' => $this->defaultSrc]);
-        }
-
-        $this->add($this->thumbnail, $this->thumnailRegion);
+        return $this->thumbnail;
     }
 
     /**
      * Set the thumbnail img src value.
-     *
-     * @param string $src
      */
-    public function setThumbnailSrc($src): void
+    public function setThumbnailSrc(string $src): void
     {
         $this->thumbnail->setAttr(['src' => $src]);
         $action = $this->thumbnail->js();
@@ -57,15 +60,12 @@ class UploadImage extends Upload
 
     /**
      * Clear the thumbnail src.
-     * You can also supply a default thumbnail src.
-     *
-     * @param string $defaultThumbnail
      */
-    public function clearThumbnail($defaultThumbnail = null): void
+    public function clearThumbnail(): void
     {
         $action = $this->thumbnail->js();
-        if ($defaultThumbnail !== null) {
-            $action->attr('src', $defaultThumbnail);
+        if ($this->defaultSrc !== null) {
+            $action->attr('src', $this->defaultSrc);
         } else {
             $action->removeAttr('src');
         }
