@@ -25,6 +25,7 @@ use Nyholm\Psr7\Response;
 use Nyholm\Psr7Server\ServerRequestCreator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -394,7 +395,7 @@ class App
      * directly, instead call it form Callback, JsCallback or similar
      * other classes.
      *
-     * @param string|array $output Array type is supported only for JSON response
+     * @param string|array|StreamInterface $output Array type is supported only for JSON response
      *
      * @return never
      */
@@ -405,7 +406,10 @@ class App
             throw new Exception('Content type must be always set');
         }
 
-        if ($type === 'application/json') {
+        if ($output instanceof StreamInterface) { // if is a stream, emit directly
+            $this->response->withBody($output);
+            $this->outputResponse('');
+        } elseif ($type === 'application/json') {
             if (is_string($output)) {
                 $output = $this->decodeJson($output);
             }
@@ -1128,7 +1132,11 @@ class App
             return;
         }
 
-        $this->response->getBody()->write($data);
+        $stream = $this->response->getBody();
+        if ($data !== '' && $stream->isWritable()) {
+            $stream->write($data);
+        }
+
         $this->emitResponse();
     }
 
