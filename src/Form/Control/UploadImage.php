@@ -39,7 +39,7 @@ class UploadImage extends Upload
             $this->thumbnail = (new View(['element' => 'img', 'class' => ['right', 'floated', 'image'], 'ui' => true]))
                 ->setAttr(['width' => 36, 'height' => 36]);
 
-            if ($this->defaultSrc) {
+            if ($this->defaultSrc !== null) {
                 $this->thumbnail->setAttr(['src' => $this->defaultSrc]);
             }
         }
