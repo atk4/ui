@@ -7,6 +7,8 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\HtmlTemplate;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Http\Message\ServerRequestInterface;
 
 class AppTest extends TestCase
 {
@@ -68,4 +70,28 @@ class AppTest extends TestCase
             ob_end_clean();
         }
     }
+
+    public function testRequest(): void
+    {
+        $app = $this->createApp();
+        static::assertTrue($app->getRequest() instanceof ServerRequestInterface);
+    }
+
+    /* throws headers already sent exception so not sure how to write this test for stream output
+    public function testStreamResponse(): void
+    {
+        $app = $this->createApp();
+
+        ob_start();
+
+        $content = 'Hello, world!';
+        $factory = new Psr17Factory();
+        $stream = $factory->createStream($content);
+        $app->setResponseHeader('Content-Type', 'text/html');
+        $app->terminate($stream); // @todo headers already sent
+
+        static::assertSame($content, ob_get_contents());
+        ob_end_clean();
+    }
+    */
 }
