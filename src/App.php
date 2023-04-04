@@ -406,8 +406,8 @@ class App
             throw new Exception('Content type must be always set');
         }
 
-        if ($output instanceof StreamInterface) { // if is a stream, emit directly
-            $this->response->withBody($output);
+        if ($output instanceof StreamInterface) {
+            $this->response = $this->response->withBody($output);
             $this->outputResponse('');
         } elseif ($type === 'application/json') {
             if (is_string($output)) {
