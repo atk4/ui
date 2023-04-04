@@ -7,8 +7,6 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\HtmlTemplate;
-use Nyholm\Psr7\Factory\Psr17Factory;
-use Psr\Http\Message\ServerRequestInterface;
 
 class AppTest extends TestCase
 {
@@ -70,45 +68,4 @@ class AppTest extends TestCase
             ob_end_clean();
         }
     }
-
-    /*
-    public function testTextResponse(): void
-    {
-        ob_start();
-        $app = $this->createApp();
-        $content = 'Hello, world!';
-        $app->setResponseHeader('Content-Type', 'text/plain');
-        $app->terminate($content); // @todo throws headers already sent
-        static::assertSame($content, ob_get_contents());
-        ob_end_clean();
-    }
-
-    // throws headers already sent exception so not sure how to write this test for stream output
-    public function testStreamResponse(): void
-    {
-        ob_start();
-        $app = $this->createApp();
-
-        $pattern = str_repeat('0123456789ABCDEF', 65536); // 1Mb
-        $chunks = 1024 * 1; // 1024 chunks = 1Gb
-        $tempFile = tempnam(sys_get_temp_dir(), 'test');
-
-        // Generate the data and write it to a temporary file
-        $fh = fopen($tempFile, 'wb');
-        for ($i = 0; $i < $chunks; $i++) {
-            fwrite($fh, $pattern);
-        }
-        fclose($fh);
-
-        // Send the data using a file stream response
-        $factory = new Psr17Factory();
-        $stream = $factory->createStreamFromFile($tempFile);
-        $app->setResponseHeader('Content-Type', 'text/plain');
-        $app->terminate($stream); // @todo headers already sent
-
-
-        // Check that the response was not materialized somewhere
-        static::assertEmpty(ob_get_contents());
-    }
-    */
 }
