@@ -395,7 +395,7 @@ class App
      * directly, instead call it form Callback, JsCallback or similar
      * other classes.
      *
-     * @param string|array|StreamInterface $output Array type is supported only for JSON response
+     * @param string|StreamInterface|array $output Array type is supported only for JSON response
      *
      * @return never
      */
