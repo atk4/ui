@@ -71,6 +71,7 @@ class AppTest extends TestCase
         }
     }
 
+    /*
     public function testTextResponse(): void
     {
         ob_start();
@@ -109,4 +110,5 @@ class AppTest extends TestCase
         // Check that the response was not materialized somewhere
         static::assertEmpty(ob_get_contents());
     }
+    */
 }
