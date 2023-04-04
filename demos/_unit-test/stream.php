@@ -14,7 +14,7 @@ $button = Button::addTo($app, ['Download', 'class.atk-test' => true]);
 $button->on('click', function () use ($app) {
     // Generate big data and write it to a temporary file
     $pattern = str_repeat('0123456789ABCDEF', 65536); // 1Mb
-    $chunks = 128; // 1 chunk = 1Mb, 1024 chunks = 1Gb etc
+    $chunks = 64; // 1 chunk = 1Mb, 1024 chunks = 1Gb etc
     $tempFile = tempnam(sys_get_temp_dir(), 'test.txt');
 
     $fh = fopen($tempFile, 'w');

@@ -380,7 +380,7 @@ class DemosTest extends TestCase
             ]
         );
         static::assertSame(200, $response->getStatusCode());
-        static::assertSame(1048576 * 128, strlen($response->getBody()->getContents())); // 128Mb
+        static::assertSame(1048576 * 64, strlen($response->getBody()->getContents())); // 64Mb
     }
 
     /**
