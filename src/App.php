@@ -1133,7 +1133,7 @@ class App
         }
 
         $stream = $this->response->getBody();
-        if ($data !== '' /*&& $stream->isWritable()*/) {
+        if ($data !== '' /* && $stream->isWritable() */) {
             $stream->write($data);
         }
 
