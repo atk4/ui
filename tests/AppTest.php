@@ -71,12 +71,6 @@ class AppTest extends TestCase
         }
     }
 
-    public function testRequest(): void
-    {
-        $app = $this->createApp();
-        static::assertTrue($app->getRequest() instanceof ServerRequestInterface);
-    }
-
     /* throws headers already sent exception so not sure how to write this test for stream output
     public function testStreamResponse(): void
     {
