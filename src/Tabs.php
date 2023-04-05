@@ -9,7 +9,7 @@ use Atk4\Core\Factory;
 class Tabs extends View
 {
     public $defaultTemplate = 'tabs.html';
-    public $ui = 'tabular menu';
+    public $ui = 'tabular menu wrapping';
 
     /** @var string name of active tab */
     public $activeTabName;
