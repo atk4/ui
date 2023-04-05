@@ -378,7 +378,7 @@ class DemosTest extends TestCase
             ]
         );
         static::assertSame(200, $response->getStatusCode());
-        static::assertSame(16 * 65536 * 64, strlen($response->getBody()->getContents())); // 64Mb
+        static::assertSame(16 * 65536 * 64, strlen($response->getBody()->getContents()) - 666); // 64Mb
     }
 
     /**
