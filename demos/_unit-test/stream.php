@@ -4,38 +4,132 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-use Atk4\Ui\Button;
-use Nyholm\Psr7\Factory\Psr17Factory;
+use Atk4\Ui\Exception;
+use Psr\Http\Message\StreamInterface;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/**
- * Size in Mb of generated download file.
- * This can also be passed as GET['size_mb'] parameter.
- *
- * @var int
- */
-$size_mb = (int) ($_GET['size_mb'] ?? 64);
+class HugePseudoStream implements StreamInterface
+{
+    /** @var \Closure(int): string */
+    private \Closure $fx;
+    
+    private int $size;
+    
+    private ?int $pos = 0;
+    
+    private string $buffer = '';
 
-$button = Button::addTo($app, ['Download', 'class.atk-test' => true]);
-$button->on('click', function () use ($app, $size_mb) {
-    // Generate big data and write it to a temporary file
-    $pattern = str_repeat('0123456789ABCDEF', 65536); // 1Mb
-    $total_size = strlen($pattern) * $size_mb;
-    $tempFile = tempnam(sys_get_temp_dir(), 'test.txt');
-
-    $fh = fopen($tempFile, 'w');
-    for ($i = 0; $i < $size_mb; ++$i) {
-        fwrite($fh, $pattern);
+    /**
+     * @param \Closure(int): string $fx
+     */
+    public function __construct(\Closure $fx, int $size)
+    {
+        $this->fx = $fx;
+        $this->size = $size;
     }
-    fclose($fh);
+    
+    /**
+     * @return never
+     */
+    public function throwNotSupported(): void
+    {
+        throw new Exception('Not implemented/supported');
+    }
 
-    // Send the data using a file stream response
-    $factory = new Psr17Factory();
-    $stream = $factory->createStreamFromFile($tempFile);
-    $app->setResponseHeader('Content-Type', 'text/plain');
-    $app->setResponseHeader('Content-Disposition', 'attachment; filename="test.txt"');
-    $app->setResponseHeader('Content-Length', (string) $total_size);
-    $app->terminate($stream);
-});
+    public function __toString()
+    {
+        $this->throwNotSupported();
+    }
+
+    public function close(): void
+    {
+        $this->pos = null;
+        $this->buffer = '';
+    }
+
+    public function detach()
+    {
+        $this->close();
+    }
+
+    public function getSize(): int
+    {
+        return $this->size;
+    }
+
+    public function tell(): int
+    {
+        return $this->pos;
+    }
+
+    public function eof(): bool
+    {
+        return $this->pos === $this->size;
+    }
+
+    public function isSeekable(): bool
+    {
+        return false;
+    }
+
+    public function seek($offset, $whence = \SEEK_SET): void
+    {
+        $this->throwNotSupported();
+    }
+
+    public function rewind(): void
+    {
+        $this->seek(0);
+    }
+
+    public function isWritable(): bool
+    {
+        return false;
+    }
+
+    public function write($string): int
+    {
+        $this->throwNotSupported();
+    }
+
+    public function isReadable(): bool
+    {
+        return true;
+    }
+
+    public function read($length): string
+    {
+        while (strlen($this->buffer) < $length) {
+            $this->buffer .= ($this->fx)($this->pos + strlen($this->buffer));
+        }
+        
+        $res = substr($this->buffer, 0, $length);
+        $this->pos += $length;
+        $this->buffer = substr($this->buffer, $length);
+        
+        return $res;
+    }
+
+    public function getContents(): string
+    {
+        $this->throwNotSupported();
+    }
+
+    public function getMetadata($key = null)
+    {
+        $this->throwNotSupported();
+    }
+}
+
+$sizeBytes = ((int) $_GET['size_mb']) * 1024 * 1024;
+
+$stream = new HugePseudoStream(function (int $pos) {
+    return "\n\0" . str_repeat($pos . ',', 1024);
+}, $sizeBytes);
+
+$app->setResponseHeader('Content-Type', 'text/plain');
+$app->setResponseHeader('Content-Disposition', 'attachment; filename="test.bin"');
+$app->setResponseHeader('Content-Length', (string) $sizeBytes);
+$app->terminate($stream);
