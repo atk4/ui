@@ -1132,9 +1132,8 @@ class App
             return;
         }
 
-        $stream = $this->response->getBody();
-        if ($data !== '' /* && $stream->isWritable() */) {
-            $stream->write($data);
+        if ($data !== '') {
+            $this->response->getBody()->write($data);
         }
 
         $this->emitResponse();
