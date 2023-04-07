@@ -10,15 +10,14 @@ use Psr\Http\Message\StreamInterface;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(fn () => null, -1) implements StreamInterface
-{
+$hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(fn (int $pos) => '', -1) implements StreamInterface {
     /** @var \Closure(int): string */
     private \Closure $fx;
-    
+
     private int $size;
-    
+
     private ?int $pos = 0;
-    
+
     private string $buffer = '';
 
     /**
@@ -29,7 +28,7 @@ $hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(f
         $this->fx = $fx;
         $this->size = $size;
     }
-    
+
     /**
      * @return never
      */
@@ -52,6 +51,8 @@ $hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(f
     public function detach()
     {
         $this->close();
+        
+        return null;
     }
 
     public function getSize(): int
@@ -104,11 +105,11 @@ $hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(f
         while (strlen($this->buffer) < $length) {
             $this->buffer .= ($this->fx)($this->pos + strlen($this->buffer));
         }
-        
+
         $res = substr($this->buffer, 0, $length);
         $this->pos += $length;
         $this->buffer = substr($this->buffer, $length);
-        
+
         return $res;
     }
 

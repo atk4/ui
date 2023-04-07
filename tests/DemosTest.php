@@ -352,7 +352,7 @@ class DemosTest extends TestCase
         static::assertSame(200, $response->getStatusCode());
         static::assertSame('application/octet-stream', $response->getHeaderLine('Content-Type'));
         static::assertSame((string) $sizeBytes, $response->getHeaderLine('Content-Length'));
-        
+
         $hugePseudoStreamFx = function (int $pos) {
             return "\n\0" . str_repeat($pos . ',', 1024);
         };
@@ -367,7 +367,7 @@ class DemosTest extends TestCase
             $pos += $length;
 
             if ($buffer !== $response->getBody()->read($length)) {
-                static::assertTrue(false);
+                static::assertSame(-1, $pos);
             }
         }
     }
