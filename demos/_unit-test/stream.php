@@ -51,7 +51,7 @@ $hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(f
     public function detach()
     {
         $this->close();
-        
+
         return null;
     }
 
@@ -102,6 +102,10 @@ $hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(f
 
     public function read($length): string
     {
+        if ($this->pos + $length > $this->size) {
+            $length = $this->size - $this->pos;
+        }
+
         while (strlen($this->buffer) < $length) {
             $this->buffer .= ($this->fx)($this->pos + strlen($this->buffer));
         }
