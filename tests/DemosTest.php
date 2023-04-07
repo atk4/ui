@@ -261,7 +261,7 @@ class DemosTest extends TestCase
     public function demoFilesProvider(): array
     {
         $excludeDirs = ['_demo-data', '_includes'];
-        $excludeFiles = ['layout/layouts_error.php'];
+        $excludeFiles = ['_unit-test/stream.php', 'layout/layouts_error.php'];
 
         $files = [];
         $files[] = 'index.php';
@@ -344,6 +344,34 @@ class DemosTest extends TestCase
         static::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
+    public function testAppHugeOutputStream(): void
+    {
+        $sizeMb = 600; // larger than typical memory limit
+        $sizeBytes = $sizeMb * 1024 * 1024;
+        $response = $this->getResponseFromRequest('_unit-test/stream.php?size_mb=' . $sizeMb);
+        static::assertSame(200, $response->getStatusCode());
+        static::assertSame('application/octet-stream', $response->getHeaderLine('Content-Type'));
+        static::assertSame((string) $sizeBytes, $response->getHeaderLine('Content-Length'));
+        
+        $hugePseudoStreamFx = function (int $pos) {
+            return "\n\0" . str_repeat($pos . ',', 1024);
+        };
+        $pos = 0;
+        while ($pos < $sizeBytes) {
+            $buffer = $hugePseudoStreamFx($pos);
+            $length = strlen($buffer);
+            if ($pos + $length > $sizeBytes) {
+                $length = $sizeBytes - $pos;
+                $buffer = substr($buffer, 0, $length);
+            }
+            $pos += $length;
+
+            if ($buffer !== $response->getBody()->read($length)) {
+                static::assertTrue(false);
+            }
+        }
+    }
+
     public function testWizard(): void
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
@@ -366,19 +394,6 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest('interactive/wizard.php?atk_admin_wizard=2&name=Country');
         static::assertSame(200, $response->getStatusCode());
         static::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
-    }
-
-    public function testDownloadAsStream(): void
-    {
-        $btn = 'atk_layout_maestro_button_click';
-        $response = $this->getResponseFromRequest(
-            '_unit-test/stream.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . $btn . '=ajax&' . Callback::URL_QUERY_TARGET . '=' . $btn,
-            [
-                'size_mb' => 64, // 128Mb will give out of memory error
-            ]
-        );
-        static::assertSame(200, $response->getStatusCode());
-        static::assertSame(16 * 65536 * 64, strlen($response->getBody()->getContents())); // 64Mb
     }
 
     /**

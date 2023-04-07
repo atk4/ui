@@ -10,7 +10,7 @@ use Psr\Http\Message\StreamInterface;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-class HugePseudoStream implements StreamInterface
+$hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(fn () => null, -1) implements StreamInterface
 {
     /** @var \Closure(int): string */
     private \Closure $fx;
@@ -121,15 +121,15 @@ class HugePseudoStream implements StreamInterface
     {
         $this->throwNotSupported();
     }
-}
+});
 
-$sizeBytes = ((int) $_GET['size_mb']) * 1024 * 1024;
+$sizeBytes = (int) $_GET['size_mb'] * 1024 * 1024;
 
-$stream = new HugePseudoStream(function (int $pos) {
+$stream = new $hugePseudoStreamClass(function (int $pos) {
     return "\n\0" . str_repeat($pos . ',', 1024);
 }, $sizeBytes);
 
-$app->setResponseHeader('Content-Type', 'text/plain');
-$app->setResponseHeader('Content-Disposition', 'attachment; filename="test.bin"');
+$app->setResponseHeader('Content-Type', 'application/octet-stream');
 $app->setResponseHeader('Content-Length', (string) $sizeBytes);
+$app->setResponseHeader('Content-Disposition', 'attachment; filename="test.bin"');
 $app->terminate($stream);
