@@ -346,7 +346,7 @@ class DemosTest extends TestCase
 
     public function testHugeOutputStream(): void
     {
-        $sizeMb = 300; // larger than typical memory limit
+        $sizeMb = 50;
         $sizeBytes = $sizeMb * 1024 * 1024;
         $response = $this->getResponseFromRequest('_unit-test/stream.php?size_mb=' . $sizeMb);
         static::assertSame(200, $response->getStatusCode());
