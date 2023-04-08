@@ -261,7 +261,7 @@ class DemosTest extends TestCase
     public function demoFilesProvider(): array
     {
         $excludeDirs = ['_demo-data', '_includes'];
-        $excludeFiles = ['layout/layouts_error.php'];
+        $excludeFiles = ['_unit-test/stream.php', 'layout/layouts_error.php'];
 
         $files = [];
         $files[] = 'index.php';
@@ -342,6 +342,34 @@ class DemosTest extends TestCase
         static::assertSame(200, $response->getStatusCode());
         static::assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         static::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
+    }
+
+    public function testHugeOutputStream(): void
+    {
+        $sizeMb = 50;
+        $sizeBytes = $sizeMb * 1024 * 1024;
+        $response = $this->getResponseFromRequest('_unit-test/stream.php?size_mb=' . $sizeMb);
+        static::assertSame(200, $response->getStatusCode());
+        static::assertSame('application/octet-stream', $response->getHeaderLine('Content-Type'));
+        static::assertSame((string) $sizeBytes, $response->getHeaderLine('Content-Length'));
+
+        $hugePseudoStreamFx = function (int $pos) {
+            return "\n\0" . str_repeat($pos . ',', 1024);
+        };
+        $pos = 0;
+        while ($pos < $sizeBytes) {
+            $buffer = $hugePseudoStreamFx($pos);
+            $length = strlen($buffer);
+            if ($pos + $length > $sizeBytes) {
+                $length = $sizeBytes - $pos;
+                $buffer = substr($buffer, 0, $length);
+            }
+            $pos += $length;
+
+            if ($buffer !== $response->getBody()->read($length)) {
+                static::assertSame(-1, $pos);
+            }
+        }
     }
 
     public function testWizard(): void

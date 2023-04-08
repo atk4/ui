@@ -25,6 +25,7 @@ use Nyholm\Psr7\Response;
 use Nyholm\Psr7Server\ServerRequestCreator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -394,7 +395,7 @@ class App
      * directly, instead call it form Callback, JsCallback or similar
      * other classes.
      *
-     * @param string|array $output Array type is supported only for JSON response
+     * @param string|StreamInterface|array $output Array type is supported only for JSON response
      *
      * @return never
      */
@@ -405,7 +406,10 @@ class App
             throw new Exception('Content type must be always set');
         }
 
-        if ($type === 'application/json') {
+        if ($output instanceof StreamInterface) {
+            $this->response = $this->response->withBody($output);
+            $this->outputResponse('');
+        } elseif ($type === 'application/json') {
             if (is_string($output)) {
                 $output = $this->decodeJson($output);
             }
@@ -1097,7 +1101,7 @@ class App
         }
 
         while (!$stream->eof()) {
-            echo $stream->read(4096);
+            echo $stream->read(16 * 1024);
         }
     }
 
@@ -1128,7 +1132,10 @@ class App
             return;
         }
 
-        $this->response->getBody()->write($data);
+        if ($data !== '') {
+            $this->response->getBody()->write($data);
+        }
+
         $this->emitResponse();
     }
 
@@ -1145,9 +1152,9 @@ class App
             $this->response = $this->response->withoutHeader($name);
         }
 
-        $this->response->getBody()->write("\n"
+        $this->response = $this->response->withBody((new Psr17Factory())->createStream("\n"
             . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!'
-            . "\n");
+            . "\n"));
         $this->emitResponse();
 
         $this->runCalled = true; // prevent shutdown function from triggering
