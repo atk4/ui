@@ -1101,7 +1101,7 @@ class App
         }
 
         while (!$stream->eof()) {
-            echo $stream->read(4096);
+            echo $stream->read(16 * 1024);
         }
     }
 
