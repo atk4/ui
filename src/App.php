@@ -1152,9 +1152,9 @@ class App
             $this->response = $this->response->withoutHeader($name);
         }
 
-        $this->response->getBody()->write("\n"
+        $this->response = $this->response->withBody((new Psr17Factory())->createStream("\n"
             . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!'
-            . "\n");
+            . "\n"));
         $this->emitResponse();
 
         $this->runCalled = true; // prevent shutdown function from triggering
