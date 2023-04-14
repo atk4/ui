@@ -2817,14 +2817,14 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__976__;
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
+var __nested_webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
 (() => {
 // ESM COMPAT FLAG
-__nested_webpack_require_1086__.r(__webpack_exports__);
+__nested_webpack_require_1086__.r(__nested_webpack_exports__);
 
 // EXPORTS
-__nested_webpack_require_1086__.d(__webpack_exports__, {
+__nested_webpack_require_1086__.d(__nested_webpack_exports__, {
   "default": () => (/* binding */ src)
 });
 
@@ -3061,7 +3061,7 @@ const configCallbacks = ['locale', 'showMonths'];
 /* harmony default export */ const src = (component);
 })();
 
-/******/ 	return __webpack_exports__;
+/******/ 	return __nested_webpack_exports__;
 /******/ })()
 ;
 });
