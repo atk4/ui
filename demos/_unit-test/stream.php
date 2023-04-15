@@ -128,7 +128,7 @@ $hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(f
     }
 });
 
-$sizeBytes = (int) $_GET['size_mb'] * 1024 * 1024;
+$sizeBytes = $_GET['size_mb'] * 1024 * 1024;
 
 $stream = new $hugePseudoStreamClass(function (int $pos) {
     return "\n\0" . str_repeat($pos . ',', 1024);
