@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.3-beta.4+bda537d
+ * # Fomantic UI - 2.9.3-beta.20+1e3f606
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -523,6 +523,7 @@
                 initialize: function () {
                     // settings grabbed at run time
                     module.get.settings();
+                    $module.addClass(className.initial);
                     if (methodInvoked) {
                         if (instance === undefined) {
                             module.instantiate();
@@ -576,10 +577,13 @@
                     module.bindEvents();
                 },
 
-                submit: function () {
+                submit: function (event) {
                     module.verbose('Submitting form', $module);
                     submitting = true;
                     $module.trigger('submit');
+                    if (event) {
+                        event.preventDefault();
+                    }
                 },
 
                 attachEvents: function (selector, action) {
@@ -605,6 +609,7 @@
                         .on('click' + eventNamespace, selector.reset, module.reset)
                         .on('click' + eventNamespace, selector.clear, module.clear)
                     ;
+                    $field.on('invalid' + eventNamespace, module.event.field.invalid);
                     if (settings.keyboardShortcuts) {
                         $module.on('keydown' + eventNamespace, selector.field, module.event.field.keydown);
                     }
@@ -720,8 +725,12 @@
                         var
                             allValid = true
                         ;
-                        $.each(validation, function (fieldName, field) {
-                            if (!module.validate.field(field, fieldName, true)) {
+                        $field.each(function (index, el) {
+                            var $el = $(el),
+                                validation = module.get.validation($el) || {},
+                                identifier = module.get.identifier(validation, $el)
+                            ;
+                            if (!module.validate.field(validation, identifier, true)) {
                                 allValid = false;
                             }
                         });
@@ -877,9 +886,8 @@
                             if (!event.ctrlKey && key === keyCode.enter && isInput && !isInDropdown && !isCheckbox) {
                                 if (!keyHeldDown) {
                                     $field.one('keyup' + eventNamespace, module.event.field.keyup);
-                                    module.submit();
+                                    module.submit(event);
                                     module.debug('Enter pressed on input submitting form');
-                                    event.preventDefault();
                                 }
                                 keyHeldDown = true;
                             }
@@ -887,15 +895,18 @@
                         keyup: function () {
                             keyHeldDown = false;
                         },
+                        invalid: function (event) {
+                            event.preventDefault();
+                        },
                         blur: function (event) {
                             var
                                 $field          = $(this),
-                                $fieldGroup     = $field.closest($group),
-                                validationRules = module.get.validation($field)
+                                validationRules = module.get.validation($field) || {},
+                                identifier      = module.get.identifier(validationRules, $field)
                             ;
-                            if (validationRules && (settings.on === 'blur' || ($fieldGroup.hasClass(className.error) && settings.revalidate))) {
+                            if (settings.on === 'blur' || (!$module.hasClass(className.initial) && settings.revalidate)) {
                                 module.debug('Revalidating field', $field, validationRules);
-                                module.validate.field(validationRules);
+                                module.validate.field(validationRules, identifier);
                                 if (!settings.inline) {
                                     module.validate.form(false, true);
                                 }
@@ -904,14 +915,14 @@
                         change: function (event) {
                             var
                                 $field      = $(this),
-                                $fieldGroup = $field.closest($group),
-                                validationRules = module.get.validation($field)
+                                validationRules = module.get.validation($field) || {},
+                                identifier = module.get.identifier(validationRules, $field)
                             ;
-                            if (validationRules && (settings.on === 'change' || ($fieldGroup.hasClass(className.error) && settings.revalidate))) {
+                            if (settings.on === 'change' || (!$module.hasClass(className.initial) && settings.revalidate)) {
                                 clearTimeout(module.timer);
                                 module.timer = setTimeout(function () {
                                     module.debug('Revalidating field', $field, validationRules);
-                                    module.validate.field(validationRules);
+                                    module.validate.field(validationRules, identifier);
                                     if (!settings.inline) {
                                         module.validate.form(false, true);
                                     }
@@ -976,6 +987,9 @@
                         });
 
                         return fullFields;
+                    },
+                    identifier: function (validation, $el) {
+                        return validation.identifier || $el.attr('id') || $el.attr('name') || $el.data(metadata.validate);
                     },
                     prompt: function (rule, field) {
                         var
@@ -1089,7 +1103,7 @@
                         var $field = typeof identifier === 'string'
                                 ? module.get.field(identifier)
                                 : identifier,
-                            $label = $field.closest(selector.group).find('label').eq(0)
+                            $label = $field.closest(selector.group).find('label:not(:empty)').eq(0)
                         ;
 
                         return $label.length === 1
@@ -1420,7 +1434,7 @@
                         $message.empty();
                     },
                     states: function () {
-                        $module.removeClass(className.error).removeClass(className.success);
+                        $module.removeClass(className.error).removeClass(className.success).addClass(className.initial);
                         if (!settings.inline) {
                             module.remove.errors();
                         }
@@ -1657,7 +1671,7 @@
                                         return rule.type === 'empty';
                                     }) !== 0
                                     : false,
-                                identifier = validation.identifier || $el.attr('id') || $el.attr('name') || $el.data(metadata.validate)
+                                identifier = module.get.identifier(validation, $el)
                             ;
                             if (isRequired && !isDisabled && !hasEmptyRule && identifier !== undefined) {
                                 if (isCheckbox) {
@@ -1689,7 +1703,7 @@
                         if (keyHeldDown) {
                             return false;
                         }
-
+                        $module.removeClass(className.initial);
                         // reset errors
                         formErrors = [];
                         if (module.determine.isValid()) {
@@ -1761,13 +1775,24 @@
                                 ? module.get.field(field.depends)
                                 : false,
                             fieldValid  = true,
-                            fieldErrors = []
+                            fieldErrors = [],
+                            isDisabled = $field.filter(':not(:disabled)').length === 0,
+                            validationMessage = $field[0].validationMessage
                         ;
                         if (!field.identifier) {
                             module.debug('Using field name as identifier', identifier);
                             field.identifier = identifier;
                         }
-                        var isDisabled = $field.filter(':not(:disabled)').length === 0;
+                        if (validationMessage) {
+                            module.debug('Field is natively invalid', identifier);
+                            fieldErrors.push(validationMessage);
+                            fieldValid = false;
+                            if (showErrors) {
+                                $field.closest($group).addClass(className.error);
+                            }
+                        } else if (showErrors) {
+                            $field.closest($group).removeClass(className.error);
+                        }
                         if (isDisabled) {
                             module.debug('Field is disabled. Skipping', identifier);
                         } else if (field.optional && module.is.blank($field)) {
@@ -1775,9 +1800,6 @@
                         } else if (field.depends && module.is.empty($dependsField)) {
                             module.debug('Field depends on another value that is not present or empty. Skipping', $dependsField);
                         } else if (field.rules !== undefined) {
-                            if (showErrors) {
-                                $field.closest($group).removeClass(className.error);
-                            }
                             $.each(field.rules, function (index, rule) {
                                 if (module.has.field(identifier)) {
                                     var invalidFields = module.validate.rule(field, rule, true) || [];
@@ -1794,7 +1816,7 @@
                         }
                         if (fieldValid) {
                             if (showErrors) {
-                                module.remove.prompt(identifier, fieldErrors);
+                                module.remove.prompt(identifier);
                                 settings.onValid.call($field);
                             }
                         } else {
@@ -2084,8 +2106,8 @@
             isExactly: '{name} must be exactly "{ruleValue}"',
             not: '{name} cannot be set to "{ruleValue}"',
             notExactly: '{name} cannot be set to exactly "{ruleValue}"',
-            contain: '{name} must contain "{ruleValue}"',
-            containExactly: '{name} must contain exactly "{ruleValue}"',
+            contains: '{name} must contain "{ruleValue}"',
+            containsExactly: '{name} must contain exactly "{ruleValue}"',
             doesntContain: '{name} cannot contain "{ruleValue}"',
             doesntContainExactly: '{name} cannot contain exactly "{ruleValue}"',
             minLength: '{name} must be at least {ruleValue} characters',
@@ -2119,6 +2141,7 @@
         },
 
         className: {
+            initial: 'initial',
             error: 'error',
             label: 'ui basic red pointing prompt label',
             pressed: 'down',
@@ -8139,11 +8162,13 @@
                                     if (settings.allowAdditions) {
                                         module.remove.userAddition();
                                     }
-                                    module.remove.filteredItem();
+                                    if (!settings.keepSearchTerm) {
+                                        module.remove.filteredItem();
+                                        module.remove.searchTerm();
+                                    }
                                     if (!module.is.visible() && $target.length > 0) {
                                         module.show();
                                     }
-                                    module.remove.searchTerm();
                                     if (!module.is.focusedOnSearch() && skipRefocus !== true) {
                                         module.focusSearch(true);
                                     }
@@ -8329,7 +8354,9 @@
                                         module.verbose('Selecting item from keyboard shortcut', $selectedItem);
                                         module.event.item.click.call($selectedItem, event);
                                         if (module.is.searchSelection()) {
-                                            module.remove.searchTerm();
+                                            if (!settings.keepSearchTerm) {
+                                                module.remove.searchTerm();
+                                            }
                                             if (module.is.multiple()) {
                                                 $search.trigger('focus');
                                             }
@@ -8546,7 +8573,7 @@
                             ? value
                             : text;
                         if (module.can.activate($(element))) {
-                            module.set.selected(value, $(element));
+                            module.set.selected(value, $(element), false, settings.keepSearchTerm);
                             if (!module.is.multiple() && !(!settings.collapseOnActionable && $(element).hasClass(className.actionable))) {
                                 module.hideAndClear();
                             }
@@ -9196,7 +9223,7 @@
                             valueIsSet       = searchValue !== ''
                         ;
                         if (isMultiple && hasSearchValue) {
-                            module.verbose('Adjusting input width', searchWidth, settings.glyphWidth);
+                            module.verbose('Adjusting input width', searchWidth);
                             $search.css('width', searchWidth + 'px');
                         }
                         if (hasSearchValue || (isSearchMultiple && valueIsSet)) {
@@ -9495,7 +9522,7 @@
                             return false;
                         }
                         module.debug('Setting selected menu item to', $selectedItem);
-                        if (module.is.multiple()) {
+                        if (module.is.multiple() && !keepSearchTerm) {
                             module.remove.searchWidth();
                         }
                         if (module.is.single()) {
@@ -10738,6 +10765,7 @@
         forceSelection: false, // force a choice on blur with search selection
 
         allowAdditions: false, // whether multiple select should allow user added values
+        keepSearchTerm: false, // whether the search value should be kept and menu stays filtered on item selection
         ignoreCase: false, // whether to consider case sensitivity when creating labels
         ignoreSearchCase: true, // whether to consider case sensitivity when filtering items
         hideAdditions: true, // whether or not to hide special message prompting a user they can enter a value
@@ -10756,8 +10784,6 @@
         transition: 'auto', // auto transition will slide down or up based on direction
         duration: 200, // duration of transition
         displayType: false, // displayType of transition
-
-        glyphWidth: 1.037, // widest glyph width in em (W is 1.037 em) used to calculate multiselect input width
 
         headerDivider: true, // whether option headers should have an additional divider line underneath when converted from <select> <optgroup>
 
@@ -12268,7 +12294,9 @@
                                         $removedInputs = $(collectNodes(mutation.removedNodes)).filter('a[href], [tabindex], :input');
                                     if ($addedInputs.length > 0 || $removedInputs.length > 0) {
                                         shouldRefreshInputs = true;
-                                        ignoreAutofocus = false;
+                                        if ($addedInputs.filter(':input').length > 0 || $removedInputs.filter(':input').length > 0) {
+                                            ignoreAutofocus = false;
+                                        }
                                     }
                                 }
 
@@ -13603,7 +13631,9 @@
                                         $removedInputs = $(collectNodes(mutation.removedNodes)).filter('a[href], [tabindex], :input');
                                     if ($addedInputs.length > 0 || $removedInputs.length > 0) {
                                         shouldRefreshInputs = true;
-                                        ignoreAutofocus = false;
+                                        if ($addedInputs.filter(':input').length > 0 || $removedInputs.filter(':input').length > 0) {
+                                            ignoreAutofocus = false;
+                                        }
                                     }
                                 }
 
@@ -13933,7 +13963,7 @@
                             ignoreRepeatedEvents = false;
                             if (settings.allowMultiple) {
                                 if (module.others.active()) {
-                                    $otherModals.filter('.' + className.active).find(selector.dimmer).addClass('active');
+                                    $otherModals.filter('.' + className.active).find(selector.dimmer).removeClass('out').addClass('transition fade in active');
                                 }
 
                                 if (settings.detachable) {
@@ -14005,6 +14035,8 @@
                                     onStart: function () {
                                         if (!module.others.active() && !module.others.animating() && !keepDimmed) {
                                             module.hideDimmer();
+                                        } else if (settings.allowMultiple) {
+                                            (hideOthersToo ? $allModals : $previousModal).find(selector.dimmer).removeClass('in').addClass('out');
                                         }
                                         if (settings.keyboardShortcuts && !module.others.active()) {
                                             module.remove.keyboardShortcuts();
@@ -14017,11 +14049,7 @@
                                             $previousModal.addClass(className.front);
                                             $module.removeClass(className.front);
 
-                                            if (hideOthersToo) {
-                                                $allModals.find(selector.dimmer).removeClass('active');
-                                            } else {
-                                                $previousModal.find(selector.dimmer).removeClass('active');
-                                            }
+                                            (hideOthersToo ? $allModals : $previousModal).find(selector.dimmer).removeClass('active');
                                         }
                                         if (isFunction(settings.onHidden)) {
                                             settings.onHidden.call(element);
@@ -15738,9 +15766,11 @@
                 // generates popup html from metadata
                 create: function () {
                     var
+                        targetSibling = $target.next(selector.popup),
+                        contentFallback = !settings.popup && targetSibling.length === 0 ? $module.attr('title') : false,
                         html      = module.get.html(),
                         title     = module.get.title(),
-                        content   = module.get.content()
+                        content   = module.get.content(contentFallback)
                     ;
 
                     if (html || content || title) {
@@ -15781,10 +15811,10 @@
                         if (settings.hoverable) {
                             module.bind.popup();
                         }
-                    } else if ($target.next(selector.popup).length > 0) {
+                    } else if (targetSibling.length > 0) {
                         module.verbose('Pre-existing popup found');
                         settings.inline = true;
-                        settings.popup = $target.next(selector.popup).data(metadata.activator, $module);
+                        settings.popup = targetSibling.data(metadata.activator, $module);
                         module.refresh();
                         if (settings.hoverable) {
                             module.bind.popup();
@@ -15974,10 +16004,10 @@
 
                         return $module.data(metadata.title) || settings.title;
                     },
-                    content: function () {
+                    content: function (fallback) {
                         $module.removeData(metadata.content);
 
-                        return $module.data(metadata.content) || settings.content || $module.attr('title');
+                        return $module.data(metadata.content) || settings.content || fallback;
                     },
                     variation: function () {
                         $module.removeData(metadata.variation);
@@ -18107,9 +18137,7 @@
                     module.setup.layout();
                     module.setup.labels();
 
-                    if (!module.is.disabled()) {
-                        module.bind.events();
-                    }
+                    module.bind.events();
 
                     module.read.metadata();
                     module.read.settings();
@@ -18141,20 +18169,32 @@
                             $module.attr('tabindex', 0);
                         }
                         if ($module.find('.inner').length === 0) {
-                            $module.append("<div class='inner'>"
-                                + "<div class='track'></div>"
-                                + "<div class='track-fill'></div>"
-                                + "<div class='thumb'></div>"
+                            $module.append('<div class="inner">'
+                                + '<div class="track"></div>'
+                                + '<div class="track-fill"></div>'
+                                + '<div class="thumb"></div>'
                                 + '</div>');
                         }
                         precision = module.get.precision();
                         $thumb = $module.find('.thumb:not(.second)');
+                        if (settings.showThumbTooltip) {
+                            $thumb
+                                .attr('data-position', settings.tooltipConfig.position)
+                                .attr('data-variation', settings.tooltipConfig.variation)
+                            ;
+                        }
                         $currThumb = $thumb;
                         if (module.is.range()) {
                             if ($module.find('.thumb.second').length === 0) {
-                                $module.find('.inner').append("<div class='thumb second'></div>");
+                                $module.find('.inner').append('<div class="thumb second"></div>');
                             }
                             $secondThumb = $module.find('.thumb.second');
+                            if (settings.showThumbTooltip) {
+                                $secondThumb
+                                    .attr('data-position', settings.tooltipConfig.position)
+                                    .attr('data-variation', settings.tooltipConfig.variation)
+                                ;
+                            }
                         }
                         $track = $module.find('.track');
                         $trackFill = $module.find('.track-fill');
@@ -18208,9 +18248,10 @@
                         for (var i = 0, len = module.get.numLabels(); i <= len; i++) {
                             var
                                 labelText = module.get.label(i),
-                                $label = labelText !== ''
+                                showLabel = settings.restrictedLabels.length === 0 || settings.restrictedLabels.indexOf(labelText) >= 0,
+                                $label = labelText !== '' && (showLabel || settings.showLabelTicks === 'always')
                                     ? (!(i % module.get.gapRatio())
-                                        ? $('<li class="label">' + labelText + '</li>')
+                                        ? $('<li class="label">' + (showLabel ? labelText : '') + '</li>')
                                         : $('<li class="halftick label"></li>'))
                                     : null,
                                 ratio  = i / len
@@ -18354,6 +18395,18 @@
                             ;
                             $currThumb = initialPosition > newPos ? $thumb : $secondThumb;
                         }
+                        if (module.is.range() && (settings.minRange || settings.maxRange)) {
+                            var currentRangeDiff = module.get.currentRangeDiff(value),
+                                isSecondThumb = $currThumb.hasClass('second')
+                            ;
+                            if ((settings.minRange && currentRangeDiff < settings.minRange)
+                                || (settings.maxRange && currentRangeDiff > settings.maxRange)
+                                || (settings.preventCrossover && !isSecondThumb && value > module.secondThumbVal)
+                                || (settings.preventCrossover && isSecondThumb && value < module.thumbVal)
+                            ) {
+                                return;
+                            }
+                        }
                         if (module.get.step() === 0 || module.is.smooth()) {
                             var
                                 thumbVal = module.thumbVal,
@@ -18389,6 +18442,17 @@
                             return;
                         }
                         var value = module.determine.valueFromEvent(event);
+                        if (module.is.range() && (settings.minRange || settings.maxRange)) {
+                            if ($currThumb === undefined) {
+                                $currThumb = value <= module.get.currentThumbValue() ? $thumb : $secondThumb;
+                            }
+                            var currentRangeDiff = module.get.currentRangeDiff(value);
+                            if (settings.minRange && currentRangeDiff < settings.minRange) {
+                                value = module.get.edgeValue(value, settings.minRange);
+                            } else if (settings.maxRange && currentRangeDiff > settings.maxRange) {
+                                value = module.get.edgeValue(value, settings.maxRange);
+                            }
+                        }
                         module.set.value(value);
                         module.unbind.slidingEvents();
                         touchIdentifier = undefined;
@@ -18405,6 +18469,9 @@
                         }
                     },
                     keydown: function (event, first) {
+                        if (module.is.disabled()) {
+                            return;
+                        }
                         if (settings.preventCrossover && module.is.range() && module.thumbVal === module.secondThumbVal) {
                             $currThumb = undefined;
                         }
@@ -18441,7 +18508,7 @@
                         }
                     },
                     activateFocus: function (event) {
-                        if (!module.is.focused() && module.is.hover() && module.determine.keyMovement(event) !== NO_STEP) {
+                        if (!module.is.disabled() && !module.is.focused() && module.is.hover() && module.determine.keyMovement(event) !== NO_STEP) {
                             event.preventDefault();
                             module.event.keydown(event, true);
                             $module.trigger('focus');
@@ -18506,7 +18573,13 @@
 
                 is: {
                     range: function () {
-                        return $module.hasClass(settings.className.range);
+                        var isRange = $module.hasClass(className.range);
+                        if (!isRange && (settings.minRange || settings.maxRange)) {
+                            $module.addClass(className.range);
+                            isRange = true;
+                        }
+
+                        return isRange;
                     },
                     hover: function () {
                         return isHover;
@@ -18515,23 +18588,56 @@
                         return $module.is(':focus');
                     },
                     disabled: function () {
-                        return $module.hasClass(settings.className.disabled);
+                        return $module.hasClass(className.disabled);
                     },
                     labeled: function () {
-                        return $module.hasClass(settings.className.labeled);
+                        var isLabeled = $module.hasClass(className.labeled);
+                        if (!isLabeled && (settings.restrictedLabels.length > 0 || settings.showLabelTicks !== false)) {
+                            $module.addClass(className.labeled);
+                            isLabeled = true;
+                        }
+
+                        return isLabeled;
                     },
                     reversed: function () {
-                        return $module.hasClass(settings.className.reversed);
+                        return $module.hasClass(className.reversed);
                     },
                     vertical: function () {
-                        return $module.hasClass(settings.className.vertical);
+                        return $module.hasClass(className.vertical);
                     },
                     smooth: function () {
-                        return settings.smooth || $module.hasClass(settings.className.smooth);
+                        return settings.smooth || $module.hasClass(className.smooth);
                     },
                 },
 
                 get: {
+                    currentRangeDiff: function (value) {
+                        var currentRangeDiff;
+                        if ($currThumb.hasClass('second')) {
+                            currentRangeDiff = module.thumbVal < value
+                                ? value - module.thumbVal
+                                : module.thumbVal - value;
+                        } else {
+                            currentRangeDiff = module.secondThumbVal > value
+                                ? module.secondThumbVal - value
+                                : value - module.secondThumbVal;
+                        }
+
+                        return currentRangeDiff;
+                    },
+                    edgeValue: function (value, edgeValue) {
+                        if ($currThumb.hasClass('second')) {
+                            value = module.thumbVal < value
+                                ? module.thumbVal + edgeValue
+                                : module.thumbVal - edgeValue;
+                        } else {
+                            value = module.secondThumbVal < value
+                                ? module.secondThumbVal + edgeValue
+                                : module.secondThumbVal - edgeValue;
+                        }
+
+                        return value;
+                    },
                     trackOffset: function () {
                         if (module.is.vertical()) {
                             return $track.offset().top;
@@ -18735,13 +18841,10 @@
                         return thumbDelta <= secondThumbDelta ? thumbPos : secondThumbPos;
                     },
                     thumbPos: function ($element) {
-                        var
-                            pos = module.is.vertical()
-                                ? (module.is.reversed() ? $element.css('bottom') : $element.css('top'))
-                                : (module.is.reversed() ? $element.css('right') : $element.css('left'))
+                        return module.is.vertical()
+                            ? (module.is.reversed() ? $element.css('bottom') : $element.css('top'))
+                            : (module.is.reversed() ? $element.css('right') : $element.css('left'))
                         ;
-
-                        return pos;
                     },
                     positionFromValue: function (val) {
                         var
@@ -18765,6 +18868,7 @@
                             position = Math.round(ratio * trackLength),
                             adjustedPos = step === 0 ? position : Math.round(position / step) * step
                         ;
+                        module.verbose('Determined position: ' + position + ' from ratio: ' + ratio);
 
                         return adjustedPos;
                     },
@@ -18988,12 +19092,12 @@
                             }
                             if (!$currThumb.hasClass('second')) {
                                 if (settings.preventCrossover && module.is.range()) {
-                                    newValue = Math.min(module.secondThumbVal, newValue);
+                                    newValue = Math.min(module.secondThumbVal - (settings.minRange || 0), newValue);
                                 }
                                 module.thumbVal = newValue;
                             } else {
                                 if (settings.preventCrossover && module.is.range()) {
-                                    newValue = Math.max(module.thumbVal, newValue);
+                                    newValue = Math.max(module.thumbVal + (settings.minRange || 0), newValue);
                                 }
                                 module.secondThumbVal = newValue;
                             }
@@ -19012,6 +19116,10 @@
                             thumbVal = module.thumbVal || module.get.min(),
                             secondThumbVal = module.secondThumbVal || module.get.min()
                         ;
+                        if (settings.showThumbTooltip) {
+                            var precision = module.get.precision();
+                            $targetThumb.attr('data-tooltip', Math.round(newValue * precision) / precision);
+                        }
                         if (module.is.range()) {
                             if (!$targetThumb.hasClass('second')) {
                                 position = newPos;
@@ -19100,6 +19208,14 @@
                     settings: function () {
                         if (settings.start !== false) {
                             if (module.is.range()) {
+                                var rangeDiff = settings.end - settings.start;
+                                if (rangeDiff < 0
+                                    || (settings.minRange && rangeDiff < settings.minRange)
+                                    || (settings.maxRange && rangeDiff > settings.maxRange)
+                                    || (settings.minRange && settings.maxRange && settings.minRange > settings.maxRange)
+                                ) {
+                                    module.error(error.invalidRanges, settings.start, settings.end, settings.minRange, settings.maxRange);
+                                }
                                 module.debug('Start position set from settings', settings.start, settings.end);
                                 module.set.rangeValue(settings.start, settings.end);
                             } else {
@@ -19292,6 +19408,7 @@
         error: {
             method: 'The method you called is not defined.',
             notrange: 'This slider is not a range slider',
+            invalidRanges: 'Invalid range settings (start/end/minRange/maxRange)',
         },
 
         metadata: {
@@ -19304,6 +19421,8 @@
         step: 1,
         start: 0,
         end: 20,
+        minRange: false,
+        maxRange: false,
         labelType: 'number',
         showLabelTicks: false,
         smooth: false,
@@ -19338,6 +19457,13 @@
             upArrow: 38,
             rightArrow: 39,
             downArrow: 40,
+        },
+
+        restrictedLabels: [],
+        showThumbTooltip: false,
+        tooltipConfig: {
+            position: 'top center',
+            variation: 'tiny black',
         },
 
         labelTypes: {
@@ -20434,6 +20560,7 @@
                         if (cache) {
                             module.debug('Reading result from cache', searchTerm);
                             module.save.results(cache.results);
+                            settings.onResults.call(element, cache.results, true);
                             module.addResults(cache.html);
                             module.inject.id(cache.results);
                             callback();
@@ -21218,7 +21345,7 @@
         onResultsAdd: false,
 
         onSearchQuery: function (query) {},
-        onResults: function (response) {},
+        onResults: function (response, fromCache) {},
 
         onResultsOpen: function () {},
         onResultsClose: function () {},
