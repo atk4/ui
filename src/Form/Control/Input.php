@@ -12,9 +12,6 @@ use Atk4\Ui\Label;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\JsCallbackExecutor;
 
-/**
- * Input element for a form control.
- */
 class Input extends Form\Control
 {
     public $ui = 'input';

@@ -10,9 +10,6 @@ use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 
-/**
- * Date/Time picker attached to a form control.
- */
 class Calendar extends Input
 {
     public string $inputType = 'text';
