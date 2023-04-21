@@ -20,7 +20,7 @@ class Input extends Form\Control
     public $ui = 'input';
     public $defaultTemplate = 'form/control/input.html';
 
-    public string $inputType = 'text';
+    public string $inputType;
 
     /** @var string */
     public $placeholder = '';

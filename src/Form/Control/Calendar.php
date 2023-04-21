@@ -15,6 +15,8 @@ use Atk4\Ui\Js\JsFunction;
  */
 class Calendar extends Input
 {
+    public string $inputType = 'text';
+
     /**
      * Set this to 'date', 'time', 'datetime'.
      */

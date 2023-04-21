@@ -6,4 +6,5 @@ namespace Atk4\Ui\Form\Control;
 
 class Line extends Input
 {
+    public string $inputType = 'text';
 }

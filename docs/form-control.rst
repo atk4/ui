@@ -224,7 +224,7 @@ element. For example, `icon` property:
     Adds icon into the input form control. Default - `icon` will appear on the right, while `leftIcon`
     will display icon on the left.
 
-Here are few ways to specify `icon` to an Input::
+Here are few ways to specify `icon` to an Input/Line::
 
     // compact
     Line::addTo($page, ['icon' => 'search']);
