@@ -22,7 +22,7 @@ class CardDeck extends View
 
     public $defaultTemplate = 'card-deck.html';
 
-    /** @var class-string<View> Card type inside this deck. */
+    /** @var class-string<View>|array Card type inside this deck. */
     public $card = Card::class;
 
     /** @var bool Whether card should use table display or not. */
@@ -85,10 +85,10 @@ class CardDeck extends View
     ];
 
     /** @var array A collection of menu button added in Menu. */
-    private $menuActions = [];
+    protected $menuActions = [];
 
     /** @var string|null The current search query string. */
-    private $query;
+    protected $query;
 
     protected function init(): void
     {
@@ -99,11 +99,7 @@ class CardDeck extends View
         $this->container = $this->add($this->container);
 
         if ($this->menu !== false && !is_object($this->menu)) {
-            $this->menu = $this->add(Factory::factory([Menu::class, 'activateOnClick' => false], $this->menu), 'Menu');
-
-            if ($this->search !== false) {
-                $this->addMenuBarSeach();
-            }
+            $this->addMenuBar();
         }
 
         $this->cardHolder = $this->container->add($this->cardHolder);
@@ -111,6 +107,15 @@ class CardDeck extends View
         if ($this->paginator !== false) {
             $this->addPaginator();
             $this->stickyGet($this->paginator->name);
+        }
+    }
+
+    protected function addMenuBar(): void
+    {
+        $this->menu = $this->add(Factory::factory([Menu::class, 'activateOnClick' => false], $this->menu), 'Menu');
+
+        if ($this->search !== false) {
+            $this->addMenuBarSeach();
         }
     }
 
@@ -147,7 +152,7 @@ class CardDeck extends View
         if ($count) {
             foreach ($this->model as $m) {
                 /** @var Card */
-                $c = $this->cardHolder->add(Factory::factory([$this->card], ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]));
+                $c = $this->cardHolder->add(Factory::factory((array) $this->card, ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]));
                 $c->setModel($m, $fields);
                 if ($extra) {
                     $c->addExtraFields($m, $extra, $this->extraGlue);
@@ -262,7 +267,7 @@ class CardDeck extends View
      *
      * @return mixed
      */
-    private function getReloadArgs()
+    protected function getReloadArgs()
     {
         $args = [];
         if ($this->paginator !== false) {
@@ -278,7 +283,7 @@ class CardDeck extends View
     /**
      * Return proper action need to setup menu or action column.
      */
-    private function getModelActions(string $appliesTo): array
+    protected function getModelActions(string $appliesTo): array
     {
         if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
             $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions);

@@ -64,14 +64,20 @@ class Card extends View
     /** @var View|null The button Container for Button */
     public $btnContainer;
 
+    /** @var bool Do we want to add fields in section or just set values in template */
+    public $addFields = true;
+
     /** @var bool Display model field as table inside card holder content */
     public $useTable = false;
 
-    /** @var bool Use Field label with value data. */
+    /** @var bool Use Field label with value data */
     public $useLabel = false;
 
-    /** @var string Default executor class. */
+    /** @var string Default executor class */
     public $executor = UserAction\ModalExecutor::class;
+
+    /** @var View|null Header view, useful to add additional views to it, icons for example */
+    public $headerView;
 
     protected function init(): void
     {
@@ -166,7 +172,18 @@ class Card extends View
     }
 
     /**
-     * If Fields are past with $model that field will be add
+     * Returns array of names of fields to automatically include them in view.
+     * This includes all editable or visible fields of the model.
+     *
+     * @return array
+     */
+    protected function getModelFields(Model $model)
+    {
+        return array_keys($model->getFields(['editable', 'visible']));
+    }
+
+    /**
+     * If Fields are past with $model that field will be added
      * to the main section of this card.
      *
      * @param array<int, string>|null $fields
@@ -178,13 +195,17 @@ class Card extends View
         parent::setModel($entity);
 
         if ($fields === null) {
-            $fields = array_keys($this->model->getFields(['editable', 'visible']));
+            $fields = $this->getModelFields($entity);
         }
 
         $this->template->trySet('dataId', (string) $this->model->getId());
 
-        View::addTo($this->getSection(), [$entity->getTitle(), 'class.header' => true]);
-        $this->getSection()->addFields($entity, $fields, $this->useLabel, $this->useTable);
+        $this->headerView = View::addTo($this->getSection(), [$entity->getTitle(), 'class.header' => true]);
+        if ($this->addFields) {
+            $this->getSection()->addFields($entity, $fields, $this->useLabel, $this->useTable);
+        } else {
+            $this->template->set($this->model);
+        }
     }
 
     /**

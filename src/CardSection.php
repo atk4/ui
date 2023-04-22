@@ -64,15 +64,15 @@ class CardSection extends View
     /**
      * Add fields label and value to section.
      */
-    private function addSectionFields(Model $model, array $fields, bool $useLabel = false): void
+    protected function addSectionFields(Model $model, array $fields, bool $useLabel = false): void
     {
         foreach ($fields as $field) {
             if ($model->titleField === $field) {
                 continue;
             }
-            $label = $model->getField($field)->getCaption();
             $value = $this->getApp()->uiPersistence->typecastSaveField($model->getField($field), $model->get($field));
             if ($useLabel) {
+                $label = $model->getField($field)->getCaption();
                 $value = $label . $this->glue . $value;
             }
 
@@ -85,7 +85,7 @@ class CardSection extends View
     /**
      * Add field into section using a CardTable View.
      */
-    private function addTableSection(Model $model, array $fields): void
+    protected function addTableSection(Model $model, array $fields): void
     {
         $cardTable = CardTable::addTo($this, ['class' => $this->tableClass]);
         $cardTable->setModel($model, $fields);
