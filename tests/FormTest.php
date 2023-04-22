@@ -211,17 +211,16 @@ class FormTest extends TestCase
 
     public function testNoDisabledAttrWithHiddenType(): void
     {
-        $input = new Form\Control\Input();
+        $input = new Form\Control\Line();
         $input->disabled = true;
         $input->readOnly = true;
         $input->setApp($this->createApp());
         static::assertStringContainsString(' disabled="disabled"', $input->render());
         static::assertStringContainsString(' readonly="readonly"', $input->render());
 
-        $input = new Form\Control\Input();
+        $input = new Form\Control\Hidden();
         $input->disabled = true;
         $input->readOnly = true;
-        $input->inputType = 'hidden';
         $input->setApp($this->createApp());
         static::assertStringNotContainsString('disabled', $input->render());
         static::assertStringNotContainsString('readonly', $input->render());
