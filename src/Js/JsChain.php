@@ -110,7 +110,7 @@ class JsChain extends JsExpression
                 $args = $chain[1];
             }
 
-            $res .= preg_match('~^(?!\d)\w+$~su', $name) ? '.' . $name : '[' . $this->_jsEncode($name) . ']';
+            $res .= preg_match('~^(?!\d)\w+$~Du', $name) ? '.' . $name : '[' . $this->_jsEncode($name) . ']';
             if ($args !== null) {
                 $res .= $this->_renderArgs($args);
             }
