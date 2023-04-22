@@ -15,7 +15,7 @@ class Calendar extends Input
     public string $inputType = 'text';
 
     /**
-     * Set this to 'date', 'time', 'datetime'.
+     * @var 'date'|'time'|'datetime'
      */
     public string $type = 'date';
 
