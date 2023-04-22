@@ -218,10 +218,9 @@ class FormTest extends TestCase
         static::assertStringContainsString(' disabled="disabled"', $input->render());
         static::assertStringContainsString(' readonly="readonly"', $input->render());
 
-        $input = new Form\Control\Line();
+        $input = new Form\Control\Hidden();
         $input->disabled = true;
         $input->readOnly = true;
-        $input->inputType = 'hidden';
         $input->setApp($this->createApp());
         static::assertStringNotContainsString('disabled', $input->render());
         static::assertStringNotContainsString('readonly', $input->render());
