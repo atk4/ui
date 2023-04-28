@@ -17,6 +17,7 @@ use Behat\MinkExtension\Context\RawMinkContext;
 class Context extends RawMinkContext implements BehatContext
 {
     use JsCoverageContextTrait;
+    use RwDemosContextTrait;
     use WarnDynamicPropertyTrait;
 
     public function getSession($name = null): MinkSession
@@ -71,6 +72,10 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function waitUntilLoadingAndAnimationFinished(AfterStepScope $event): void
     {
+        if (!$this->getSession()->getDriver()->isStarted()) {
+            return;
+        }
+
         $this->jqueryWait();
         $this->disableAnimations();
 

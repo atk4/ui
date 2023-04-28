@@ -26,6 +26,16 @@ try {
 
 trait ModelPreventModificationTrait
 {
+    protected function allowDbModifications(): bool
+    {
+        static $rw = null;
+        if ($rw === null) {
+            $rw = file_exists(__DIR__ . '/db-behat-rw.txt');
+        }
+
+        return $rw;
+    }
+
     public function atomic(\Closure $fx)
     {
         $eRollback = new \Exception('Prevent modification');
@@ -34,7 +44,9 @@ trait ModelPreventModificationTrait
             parent::atomic(function () use ($fx, $eRollback, &$res) {
                 $res = $fx();
 
-                throw $eRollback;
+                if (!$this->allowDbModifications()) {
+                    throw $eRollback;
+                }
             });
         } catch (\Exception $e) {
             if ($e !== $eRollback) {
@@ -60,7 +72,11 @@ trait ModelPreventModificationTrait
             $callbackBackup = $action->callback;
             try {
                 $action->callback = $originalCallback;
-                $action->execute(...$args);
+                $res = $action->execute(...$args);
+
+                if ($this->allowDbModifications()) {
+                    return $res;
+                }
             } finally {
                 $action->callback = $callbackBackup;
             }
