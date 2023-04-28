@@ -30,8 +30,8 @@ Feature: CardDeck
     Then I press Modal button "Ok"
     Then Toast display should contain text 'Country action "delete" with "United Kingdom" entity was executed.'
 
-  Scenario: delete - with cross-request DB modifications
-    When I allow cross-request DB modifications
+  Scenario: delete - with unlocked DB
+    When I persist DB changes across requests
     Then I press button "Delete"
     Then I press Modal button "Ok"
     Then Toast display should contain text 'Record has been deleted!'

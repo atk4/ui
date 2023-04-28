@@ -26,13 +26,13 @@ Feature: Crud
     # make sure search query stick
     Then I should see "United Kingdom"
 
-  Scenario: edit - with cross-request DB modifications
+  Scenario: edit - with unlocked DB
     # TODO hotfix "element not interactable"
     Given I am on "_unit-test/crud.php"
     Then I search grid for "united kingdom"
 
     Then I should not see "My United Kingdom"
-    When I allow cross-request DB modifications
+    When I persist DB changes across requests
     Then I press button "Edit"
     Then Modal is open with text "Edit Country"
     Then I fill in "atk_fp_country__name" with "My United Kingdom"

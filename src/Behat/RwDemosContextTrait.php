@@ -182,9 +182,9 @@ trait RwDemosContextTrait
     }
 
     /**
-     * @When I allow cross-request DB modifications
+     * @When I persist DB changes across requests
      */
-    public function allowDbModifications(): void
+    public function iPersistDbChangesAcrossRequests(): void
     {
         if ($this->databaseBackupData === null) {
             if (file_exists($this->demosDir . '/db-behat-rw.txt')) {
