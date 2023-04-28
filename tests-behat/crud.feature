@@ -27,13 +27,17 @@ Feature: Crud
     Then I should see "United Kingdom"
 
   Scenario: edit - with cross-request DB modifications
+    # TODO hotfix "element not interactable"
+    Given I am on "_unit-test/crud.php"
+    Then I search grid for "united kingdom"
+
     Then I should not see "My United Kingdom"
     When I allow cross-request DB modifications
     Then I press button "Edit"
     Then Modal is open with text "Edit Country"
     Then I fill in "atk_fp_country__name" with "My United Kingdom"
     Then I press Modal button "Save"
-    Then Toast display should contain text 'Country action "edit" with "United Kingdom" entity was executed.'
+    Then Toast display should contain text 'Record has been saved!'
     Then I should see "My United Kingdom"
 
   Scenario: delete
