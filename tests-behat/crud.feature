@@ -27,10 +27,6 @@ Feature: Crud
     Then I should see "United Kingdom"
 
   Scenario: edit - with unlocked DB
-    # TODO hotfix "element not interactable"
-    Given I am on "_unit-test/crud.php"
-    Then I search grid for "united kingdom"
-
     Then I should not see "My United Kingdom"
     When I persist DB changes across requests
     Then I press button "Edit"
