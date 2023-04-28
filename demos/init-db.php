@@ -26,7 +26,7 @@ try {
 
 trait ModelPreventModificationTrait
 {
-    protected function allowDbModifications(): bool
+    protected function isAllowDbModifications(): bool
     {
         static $rw = null;
         if ($rw === null) {
@@ -44,7 +44,7 @@ trait ModelPreventModificationTrait
             parent::atomic(function () use ($fx, $eRollback, &$res) {
                 $res = $fx();
 
-                if (!$this->allowDbModifications()) {
+                if (!$this->isAllowDbModifications()) {
                     throw $eRollback;
                 }
             });
@@ -74,7 +74,7 @@ trait ModelPreventModificationTrait
                 $action->callback = $originalCallback;
                 $res = $action->execute(...$args);
 
-                if ($this->allowDbModifications()) {
+                if ($this->isAllowDbModifications()) {
                     return $res;
                 }
             } finally {
