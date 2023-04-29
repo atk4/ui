@@ -26,7 +26,7 @@ Alternatvie syntax if you wish to initialize object yourself::
     $app->add($button);
 
 
-You can refer to the Fomantic UI documentation for Button to find out more about available classes: https://fomantic-ui.com/elements/button.html.
+You can refer to the Fomantic-UI documentation for Button to find out more about available classes: https://fomantic-ui.com/elements/button.html.
 
 Demo: https://ui.agiletoolkit.org/demos/button.php
 
@@ -109,14 +109,14 @@ If array is used, it's routed to :php:meth:`App::url`
 
 For other JavaScript actions you can use :ref:`js`::
 
-    $button->js('click', new JsExpression('document.location.reload()'));
+    $button->on('click', new JsExpression('document.location.reload()'));
 
 Complex Buttons
 ---------------
 
 
 
-Knowledge of the Fomantic UI button (https://fomantic-ui.com/elements/button.html) can help you
+Knowledge of the Fomantic-UI button (https://fomantic-ui.com/elements/button.html) can help you
 in creating more complex buttons::
 
     $forks = new Button(['labeled' => true]); // Button, not Buttons!

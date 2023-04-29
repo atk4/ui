@@ -1,5 +1,4 @@
 Feature: Crud
-  Testing crud add, edit, delete using search
 
   Scenario:
     Given I am on "_unit-test/crud.php"
@@ -10,27 +9,53 @@ Feature: Crud
     Then I fill in "atk_fp_country__iso" with "TT"
     Then I fill in "atk_fp_country__iso3" with "TTT"
     Then I fill in "atk_fp_country__numcode" with "123"
-    # '50ce262c' = substr(md5('phonecode'), 0, 8)
-    Then I fill in "atk_fp_country__50ce262c" with "1"
+    Then I fill in "atk_fp_country__phonecode" with "1"
     Then I press Modal button "Save"
-    Then Toast display should contain text "Form Submit"
+    Then Toast display should contain text 'Country action "add" with "Test" entity was executed.'
 
   Scenario: search
     Then I search grid for "united kingdom"
     Then I should see "United Kingdom"
+    Then I should not see "No records"
 
   Scenario: edit
     Then I press button "Edit"
     Then Modal is open with text "Edit Country"
     Then I press Modal button "Save"
-    Then Toast display should contain text "Form Submit"
+    Then Toast display should contain text 'Country action "edit" with "United Kingdom" entity was executed.'
     # make sure search query stick
     Then I should see "United Kingdom"
+
+  Scenario: edit - with unlocked DB
+    # hotfix "element not interactable"
+    # TODO modal should be always fully (re)loaded on open and fully destroyed once it is closed
+    # https://github.com/atk4/ui/issues/1928
+    Given I am on "_unit-test/crud.php"
+    Then I search grid for "united kingdom"
+
+    Then I should not see "My United Kingdom"
+    When I persist DB changes across requests
+    Then I press button "Edit"
+    Then Modal is open with text "Edit Country"
+    Then I fill in "atk_fp_country__name" with "My United Kingdom"
+    Then I press Modal button "Save"
+    Then Toast display should contain text 'Record has been saved!'
+    Then I should see "My United Kingdom"
 
   Scenario: delete
     Then I press button "Delete"
     Then I press Modal button "Ok"
+    Then Toast display should contain text 'Country action "delete" with "United Kingdom" entity was executed.'
     Then I should not see "United Kingdom"
+
+  Scenario: search across multiple columns
+    Then I search grid for "420 zech"
+    Then I should see "Czech Republic"
+
+  Scenario: search no match
+    Then I search grid for "420X zech"
+    Then I should see "No records"
+    Then I should not see "Czech Republic"
 
   Scenario: Modal in modal
     Given I am on "_unit-test/crud-nested.php"
@@ -58,3 +83,14 @@ Feature: Crud
     Then input "atk_fp_product__name" value should start with "Cola"
     When I press Modal button "Save"
     Then I click close modal
+
+  Scenario: edit /w array persistence (strict comparison)
+    Given I am on "collection/crud3.php"
+    Then I click using selector "xpath(//table//tr[3]//i.icon.edit)"
+    Then Modal is open with text "Edit Country"
+    Then I press Modal button "Save"
+    Then Toast display should contain text "Record has been saved!"
+
+  Scenario: delete /w array persistence (strict comparison)
+    Then I click using selector "xpath(//table//tr[3]//i.icon.trash)"
+    Then Toast display should contain text "Record has been deleted!"

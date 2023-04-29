@@ -15,20 +15,19 @@ namespace Atk4\Ui;
  */
 class VirtualPage extends View
 {
+    public $ui = 'container';
+
     /** @var Callback */
     public $cb;
 
-    /** @var string specify custom callback trigger for the URL (see Callback::$urlTrigger) */
+    /** @var string|null specify custom callback trigger for the URL (see Callback::$urlTrigger) */
     protected $urlTrigger;
-
-    /** @var string UI container class */
-    public $ui = 'container';
 
     protected function init(): void
     {
         parent::init();
 
-        $this->cb = Callback::addTo($this, ['urlTrigger' => $this->urlTrigger ?: $this->name]);
+        $this->cb = Callback::addTo($this, ['urlTrigger' => $this->urlTrigger ?? $this->name]);
         unset($this->{'urlTrigger'});
     }
 
@@ -40,18 +39,18 @@ class VirtualPage extends View
     /**
      * Set callback function of virtual page.
      *
-     * @param \Closure $fx
-     * @param array    $args arguments for \Closure
+     * @param \Closure($this, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $fx
+     * @param array                                                                                       $fxArgs
      *
      * @return $this
      */
-    public function set($fx = null, $args = [])
+    public function set($fx = null, $fxArgs = [])
     {
         if (!$fx instanceof \Closure) {
-            throw new Exception('Virtual page requires a Closure');
+            throw new \TypeError('$fx must be of type Closure');
         }
 
-        $this->cb->set($fx, array_merge([$this], $args));
+        $this->cb->set($fx, [$this, ...$fxArgs]);
 
         return $this;
     }
@@ -67,25 +66,17 @@ class VirtualPage extends View
     /**
      * Returns URL which you can load directly in the browser location, open in a new tab,
      * new window or inside iframe. This URL will contain HTML for a new page.
-     *
-     * @param string $mode
-     *
-     * @return string
      */
-    public function getUrl($mode = 'callback')
+    public function getUrl(string $mode = 'callback'): string
     {
         return $this->cb->getUrl($mode);
     }
 
     /**
      * Return URL that is designed to be loaded from inside JavaScript and contain JSON code.
-     * This is useful for dynamically loaded Modal, Tab or Loader.
-     *
-     * @param string $mode
-     *
-     * @return string
+     * This is useful for dynamically loaded Modal, Tabs or Loader.
      */
-    public function getJsUrl($mode = 'callback')
+    public function getJsUrl(string $mode = 'callback'): string
     {
         return $this->cb->getJsUrl($mode);
     }
@@ -102,12 +93,13 @@ class VirtualPage extends View
             return parent::getHtml();
         }
 
-        if ($mode = $this->cb->getTriggeredValue()) {
+        $mode = $this->cb->getTriggeredValue();
+        if ($mode) {
             // special treatment for popup
             if ($mode === 'popup') {
                 $this->getApp()->html->template->set('title', $this->getApp()->title);
                 $this->getApp()->html->template->dangerouslySetHtml('Content', parent::getHtml());
-                $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getApp()->getTag('script', null, $this->getJs()));
+                $this->getApp()->html->template->dangerouslyAppendHtml('Head', $this->getApp()->getTag('script', [], '$(function () {' . $this->getJs() . ';});'));
 
                 $this->getApp()->terminateHtml($this->getApp()->html->template);
             }
@@ -135,11 +127,17 @@ class VirtualPage extends View
         }
 
         $this->getApp()->layout->template->dangerouslySetHtml('Content', parent::getHtml());
-        $this->getApp()->layout->_js_actions = array_merge($this->getApp()->layout->_js_actions, $this->_js_actions);
+
+        // collect JS from everywhere
+        foreach ($this->_jsActions as $when => $actions) {
+            foreach ($actions as $action) {
+                $this->getApp()->layout->_jsActions[$when][] = $action;
+            }
+        }
 
         $this->getApp()->html->template->dangerouslySetHtml('Content', $this->getApp()->layout->template->renderToHtml());
 
-        $this->getApp()->html->template->dangerouslyAppendHtml('HEAD', $this->getApp()->getTag('script', null, $this->getApp()->layout->getJs()));
+        $this->getApp()->html->template->dangerouslyAppendHtml('Head', $this->getApp()->getTag('script', [], '$(function () {' . $this->getApp()->layout->getJs() . ';});'));
 
         $this->getApp()->terminateHtml($this->getApp()->html->template);
     }

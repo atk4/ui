@@ -20,9 +20,9 @@ The most common use is when you need to implement a certain HTML and if that HTM
 items. If your HTML looks like this::
 
     <div class="ui header">Top 20 countries (alphabetically)</div>
-      <div class="ui icon label"><i class="ae flag"></i> Andorra</div>
-      <div class="ui icon label"><i class="cm flag"></i> Camerroon</div>
-      <div class="ui icon label"><i class="ca flag"></i> Canada</div>
+        <div class="ui icon label"><i class="ae flag"></i> Andorra</div>
+        <div class="ui icon label"><i class="cm flag"></i> Camerroon</div>
+        <div class="ui icon label"><i class="ca flag"></i> Canada</div>
     </div>
 
 you should put that into file `myview.html` then use it with a view::
@@ -33,15 +33,15 @@ Now your application should contain list of 3 sample countires as you have speci
 we need to add some tags into your template::
 
     <div class="ui header">Top {limit}20{/limit} countries (alphabetically)</div>
-      {Countries}
-      {rows}
-      {row}
-      <div class="ui icon label"><i class="ae flag"></i> Andorra</div>
-      {/row}
-      <div class="ui icon label"><i class="cm flag"></i> Camerroon</div>
-      <div class="ui icon label"><i class="ca flag"></i> Canada</div>
-      {/rows}
-      {/Countries}
+        {Countries}
+        {rows}
+        {row}
+        <div class="ui icon label"><i class="ae flag"></i> Andorra</div>
+        {/row}
+        <div class="ui icon label"><i class="cm flag"></i> Camerroon</div>
+        <div class="ui icon label"><i class="ca flag"></i> Canada</div>
+        {/rows}
+        {/Countries}
     </div>
 
 Here the `{Countries}` region will be replaced with the lister, but the contents of
@@ -65,39 +65,39 @@ to use template inside your region. It will look for "row" and "rows" tag:
 If you refresh your page now, you should see "Andorra" duplicated 20 times. This is because
 the {row} did not contain any field tags. Lets set them up::
 
-      {row}
-      <div class="ui icon label"><i class="{iso}ae{/} flag"></i> {name}Andorra{/name}</div>
-      {/row}
+    {row}
+    <div class="ui icon label"><i class="{iso}ae{/} flag"></i> {name}Andorra{/name}</div>
+    {/row}
 
 Refresh your page and you should see list of countries as expected. The flags are not showing yet,
 but I'll deal with in next section. For now, lets clean up the template by removing unnecessary tag content::
 
     <div class="ui header">Top {limit}20{/limit} countries (alphabetically)</div>
-      {Countries}
-      {rows}
-      {row}
-      <div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>
-      {/row}
-      {/rows}
-      {/Countries}
+        {Countries}
+        {rows}
+        {row}
+        <div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>
+        {/row}
+        {/rows}
+        {/Countries}
     </div>
 
 Finally, Lister permits you not to use {rows} and {row} tags if entire region can be considered as a row::
 
     <div class="ui header">Top {limit}20{/limit} countries (alphabetically)</div>
-      {Countries}
-      <div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>
-      {/Countries}
+        {Countries}
+        <div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>
+        {/Countries}
     </div>
 
 Tweaking the output
 ===================
 
-Output is formatted using the standard :ref:`ui_persistence` routine, but you can also fine-tune the content
+Output is formatted using the standard :ref:`uiPersistence` routine, but you can also fine-tune the content
 of your tags like this::
 
-    $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function(\Atk4\Ui\Lister $lister) {
-        $lister->current_row->set('iso', mb_strtolower($lister->current_row->get('iso')));
+    $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
+        $lister->currentRow->set('iso', mb_strtolower($lister->currentRow->get('iso')));
     });
 
 Model vs Static Source
@@ -113,10 +113,10 @@ Since Lister is non-interactive, you can also set a static source for your liste
 Special template tags
 =====================
 
-Your {row} tempalte may contain few special tags:
+Your {row} template may contain few special tags:
 
  - {$_id} - will be set to ID of the record (regardless of how your id field is called)
- - {$_title} - will be set to the title of your record (see $model->$title_field)
+ - {$_title} - will be set to the title of your record (see $model->$titleField)
  - {$_href} - will point to current page but with ?id=123 extra GET argument.
 
 
@@ -140,5 +140,5 @@ you can specify it explicitly::
 
     Lister::addTo($app, ['defaultTemplate' => 'lister.html']);
 
-This should display a list nicely formatted by Fomantic UI, with header, links, icons and description area.
+This should display a list nicely formatted by Fomantic-UI, with header, links, icons and description area.
 

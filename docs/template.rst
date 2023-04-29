@@ -37,7 +37,7 @@ Once template is initialized you can `renderToHtml()` it any-time to get string
 
     $t->set('mytag', 'Agile UI');
 
-    echo $t->renderToHtml();  // "Hello, Agile UI".
+    echo $t->renderToHtml(); // "Hello, Agile UI".
 
 Tags may also be self-closing::
 
@@ -166,14 +166,13 @@ same way as empty tag. (``{$elephant}``)
 
 Region — typically a multiple lines HTML and text between opening and
 closing tag which can contain a nested tags. Regions are typically named
-with CamelCase, while other tags are named using ``snake_case``::
+with PascalCase, while other tags are named using ``snake_case``::
 
     some text before
     {ElephantBlock}
-      Hello, {$name}.
+        Hello, {$name}.
 
-      by {sender}John Smith{/}
-
+        by {sender}John Smith{/}
     {/ElephantBlock}
     some text after
 
@@ -377,27 +376,27 @@ Let's assume you have the following template in ``template/envelope.html``::
 
     <div class="sender">
     {Sender}
-      {$name},
-      Address: {$street}
-               {$city} {$zip}
+        {$name},
+        Address: {$street}
+                 {$city} {$zip}
     {/Sender}
     </div>
 
     <div class="recipient">
     {Recipient}
-      {$name},
-      Address: {$street}
-               {$city} {$zip}
+        {$name},
+        Address: {$street}
+                 {$city} {$zip}
     {/Recipient}
     </div>
 
 You can use the following code to manipulate the template above::
 
     $template = GiTemplate::addTo($this);
-    $template->loadFromFile('envelope');        // templates/envelope.html
+    $template->loadFromFile('envelope'); // templates/envelope.html
 
     // Split into multiple objects for processing
-    $sender    = $template->cloneRegion('Sender');
+    $sender = $template->cloneRegion('Sender');
     $recipient = $template->cloneRegion('Recipient');
 
     // Set data to each sub-template separately
@@ -405,7 +404,7 @@ You can use the following code to manipulate the template above::
     $recipient->set($recipient_data);
 
     // render sub-templates, insert into master template
-    $template->dangerouslySetHtml('Sender',    $sender->renderToHtml());
+    $template->dangerouslySetHtml('Sender', $sender->renderToHtml());
     $template->dangerouslySetHtml('Recipient', $recipient->renderToHtml());
 
     // get final result
@@ -415,7 +414,7 @@ Same thing using Agile Toolkit Views::
 
     $envelope = \Atk4\Ui\View::addTo($this, [], [null], null, ['envelope']);
 
-    $sender    = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender',    'Sender');
+    $sender = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender', 'Sender');
     $recipient = \Atk4\Ui\View::addTo($envelope, [], [null], 'Recipient', 'Recipient');
 
     $sender->template->set($sender_data);
@@ -437,7 +436,7 @@ Other operations with tags
 
     Empties contents of tag within a template.
 
-.. php:method:: isSet(tag)
+.. php:method:: hasTag(tag)
 
     Returns ``true`` if tag exists in a template.
 
@@ -505,7 +504,8 @@ clone region with such a name from parent's template. This can be used
 by your "menu" implementation, which will clone parent's template's tag
 instead to hook into some specific template::
 
-    function defaultTemplate() {
+    public function defaultTemplate()
+    {
         return ['greeting']; // uses templates/greeting.html
     }
 
@@ -596,9 +596,9 @@ other projects developed using Agile Toolkit.
 Naming of tags
 --------------
 
-Tags use two type of naming - CamelCase and underscore\_lowercase. Tags
+Tags use two type of naming - PascalCase and underscore\_lowercase. Tags
 are case sensitive. The larger regions which are typically used for
-cloning or by adding new objects into it are named with CamelCase.
+cloning or by adding new objects into it are named with PascalCase.
 Examples would be: "Menu", "Content" and "Recipient". The lowercase and
 underscore is used for short variables which would be inserted into
 template directly such as "name" or "zip".
@@ -608,7 +608,8 @@ Globally Recognized Tags
 
 
 Agile Toolkit View will automatically substitute several tags with the values.
-The tag {$_id} is automatically replaced with a unique name by a View.
+The tag {$attributes} is automatically replaced with a attributes incl. ``id``
+(unique name of a View), ``class`` and ``style``.
 
 There are more templates which are being substituted:
 
@@ -616,13 +617,6 @@ There are more templates which are being substituted:
 - {public}logo.png{/} - will replace with URL to a public asset
 - {css}css/file.css{/} - will replace with URL link to a CSS file
 - {js}jquery.validator.js{/} - will replace with URL to JavaScript file
-
-Avoid using the next two tags, which are obsolete:
-
-- {$atk_path} - will insert URL leading to atk4 public folder
-- {$base_path} - will insert URL leading to public folder of the project
-
-.. todo:: base_path might be pointing to a base folder and not public
 
 
 Application (API) has a function :php:`App_Web::setTags` which is called for
@@ -651,18 +645,18 @@ under ``$template->template`::
 
     // template property:
     array (
-      0 => 'Hello ',
-      'subject#0' => array (
-        0 => 'world',
-      ),
-      1 => '!!',
+        'Hello ',
+        'subject#0' => array (
+            'world',
+        ),
+        1 => '!!',
     )
 
 Property tags would contain::
 
     array (
-      'subject#0' => array( &array ),
-      'subject#1' => array( &array )
+        'subject#0' => array( &array ),
+        'subject#1' => array( &array )
     )
 
 As a result each tag will be stored under it's actual name and the name with

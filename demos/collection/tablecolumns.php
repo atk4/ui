@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\Header;
 use Atk4\Ui\Table;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/** @var \Atk4\Data\Model $modelColorClass */
-$modelColorClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Data\Model {
+$modelColorClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
     protected function init(): void
     {
         parent::init();
@@ -22,7 +23,7 @@ $modelColorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
                 'table' => [
                     Table\Column\Tooltip::class,
                     [
-                        'tooltip_field' => 'note',
+                        'tooltipField' => 'note',
                         'icon' => 'info circle blue',
                     ],
                 ],
@@ -35,7 +36,7 @@ $modelColorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
                 'table' => [
                     Table\Column\NoValue::class,
                     [
-                        'no_value' => ' no value ',
+                        'noValue' => ' no value ',
                     ],
                 ],
             ],
@@ -88,7 +89,6 @@ $modelColorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
                     [
                         'min' => 1,
                         'max' => 3,
-                        'steps' => 3,
                         'colors' => [
                             '#FF0000',
                             '#FFFF00',
@@ -110,7 +110,7 @@ $keyValueString = [
     'four',
 ];
 
-\Atk4\Ui\Header::addTo($app, ['Table column', 'subHeader' => 'Table column decorator can be set from your model.']);
+Header::addTo($app, ['Table column', 'subHeader' => 'Table column decorator can be set from your model.']);
 
 $model = new $modelColorClass(new Persistence\Static_([]));
 
@@ -129,5 +129,5 @@ foreach (range(1, 10) as $id) {
     ]);
 }
 
-$table = \Atk4\Ui\Table::addTo($app);
+$table = Table::addTo($app);
 $table->setModel($model);

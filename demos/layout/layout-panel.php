@@ -4,9 +4,17 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\Button;
+use Atk4\Ui\Card;
+use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Icon;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsReload;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Message;
-use Atk4\Ui\Panel\Right;
+use Atk4\Ui\Panel;
+use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
@@ -20,46 +28,46 @@ Header::addTo($app, ['Right Panel', 'subHeader' => 'Content on the fly!']);
 // PANEL
 
 Header::addTo($app, ['Static', 'size' => 4, 'subHeader' => 'Panel may have static content only.']);
-$panel = Right::addTo($app, ['dynamic' => []]);
+$panel = Panel\Right::addTo($app, ['dynamic' => []]);
 Message::addTo($panel, ['This panel contains only static content.']);
-$btn = \Atk4\Ui\Button::addTo($app, ['Open Static']);
+$btn = Button::addTo($app, ['Open Static']);
 $btn->on('click', $panel->jsOpen());
 View::addTo($app, ['ui' => 'divider']);
 
 // PANEL_1
 
 Header::addTo($app, ['Dynamic', 'size' => 4, 'subHeader' => 'Panel can load content dynamically']);
-$panel1 = Right::addTo($app);
+$panel1 = Panel\Right::addTo($app);
 
 Message::addTo($panel1, ['This panel will load content dynamically below according to button select on the right.']);
-$btn = \Atk4\Ui\Button::addTo($app, ['Button 1']);
+$btn = Button::addTo($app, ['Button 1']);
 $btn->js(true)->data('btn', '1');
 $btn->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
 
-$btn = \Atk4\Ui\Button::addTo($app, ['Button 2']);
+$btn = Button::addTo($app, ['Button 2']);
 $btn->js(true)->data('btn', '2');
 $btn->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
 
 $view = View::addTo($app, ['ui' => 'segment']);
-$text = \Atk4\Ui\Text::addTo($view);
+$text = Text::addTo($view);
 $text->set($_GET['txt'] ?? 'Not Complete');
 
-$panel1->onOpen(function ($p) use ($view) {
+$panel1->onOpen(function (Panel\Content $p) use ($view) {
     $panel = View::addTo($p, ['ui' => 'basic segment']);
     $buttonNumber = $panel->stickyGet('btn');
 
     $panelText = 'You loaded panel content using button #' . $buttonNumber;
     Message::addTo($panel, ['Panel 1', 'text' => $panelText]);
 
-    $reloadPanelButton = \Atk4\Ui\Button::addTo($panel, ['Reload Myself']);
-    $reloadPanelButton->on('click', new \Atk4\Ui\JsReload($panel));
+    $reloadPanelButton = Button::addTo($panel, ['Reload Myself']);
+    $reloadPanelButton->on('click', new JsReload($panel));
 
     View::addTo($panel, ['ui' => 'divider']);
-    $panelButton = \Atk4\Ui\Button::addTo($panel, ['Complete']);
-    $panelButton->on('click', [
+    $panelButton = Button::addTo($panel, ['Complete']);
+    $panelButton->on('click', new JsBlock([
         $p->getOwner()->jsClose(),
-        new \Atk4\Ui\JsReload($view, ['txt' => 'Complete using button #' . $buttonNumber]),
-    ]);
+        new JsReload($view, ['txt' => 'Complete using button #' . $buttonNumber]),
+    ]));
 });
 
 View::addTo($app, ['ui' => 'divider']);
@@ -68,30 +76,30 @@ View::addTo($app, ['ui' => 'divider']);
 
 Header::addTo($app, ['Closing option', 'size' => 4, 'subHeader' => 'Panel can prevent from closing.']);
 
-$panel2 = Right::addTo($app, ['hasClickAway' => false]);
-$icon = \Atk4\Ui\Icon::addTo($app, ['big cog'])->addStyle('cursor', 'pointer');
+$panel2 = Panel\Right::addTo($app, ['hasClickAway' => false]);
+$icon = Icon::addTo($app, ['big cog'])->setStyle('cursor', 'pointer');
 $icon->on('click', $panel2->jsOpen());
 $panel2->addConfirmation('Changes will be lost. Are you sure?');
 
 $msg = Message::addTo($panel2, ['Prevent close.']);
 
-$txt = \Atk4\Ui\Text::addTo($msg);
+$txt = Text::addTo($msg);
 $txt->addParagraph('This panel can only be closed via it\'s close icon at top right.');
 $txt->addParagraph('Try to change dropdown value and close without saving!');
 
-$panel2->onOpen(function ($p) {
-    $form = \Atk4\Ui\Form::addTo($p);
+$panel2->onOpen(function (Panel\Content $p) {
+    $form = Form::addTo($p);
     $form->addHeader('Settings');
-    $form->addControl('name', [\Atk4\Ui\Form\Control\Dropdown::class, 'values' => ['1' => 'Option 1', '2' => 'Option 2']])
+    $form->addControl('name', [Form\Control\Dropdown::class, 'values' => [1 => 'Option 1', 2 => 'Option 2']])
         ->set('1')
         ->onChange($p->getOwner()->jsDisplayWarning(true));
 
-    $form->onSubmit(function (\Atk4\Ui\Form $form) use ($p) {
-        return [
-            new \Atk4\Ui\JsToast('Saved, closing panel.'),
+    $form->onSubmit(function (Form $form) use ($p) {
+        return new JsBlock([
+            new JsToast('Saved, closing panel.'),
             $p->getOwner()->jsDisplayWarning(false),
             $p->getOwner()->jsClose(),
-        ];
+        ]);
     });
 });
 View::addTo($app, ['ui' => 'divider']);
@@ -100,7 +108,7 @@ View::addTo($app, ['ui' => 'divider']);
 
 Header::addTo($app, ['UserAction Friendly', 'size' => 4, 'subHeader' => 'Panel can run model action.']);
 
-$panel3 = Right::addTo($app);
+$panel3 = Panel\Right::addTo($app);
 $countryId = $panel3->stickyGet('id');
 $msg = Message::addTo($panel3, ['Run Country model action below.']);
 
@@ -108,17 +116,17 @@ $deck = View::addTo($app, ['ui' => 'cards']);
 $country->setLimit(3);
 
 foreach ($country as $ct) {
-    $c = \Atk4\Ui\Card::addTo($deck, ['useLabel' => true])->addStyle('cursor', 'pointer');
+    $c = Card::addTo($deck, ['useLabel' => true])->setStyle('cursor', 'pointer');
     $c->setModel($ct);
     $c->on('click', $panel3->jsOpen([], ['id'], 'orange'));
 }
 
-$panel3->onOpen(function ($p) use ($country, $countryId) {
+$panel3->onOpen(function (Panel\Content $p) use ($country, $countryId) {
     $seg = View::addTo($p, ['ui' => 'basic segment center aligned']);
     Header::addTo($seg, [$country->load($countryId)->getTitle()]);
     $buttons = View::addTo($seg, ['ui' => 'vertical basic buttons']);
     foreach ($country->getUserActions() as $action) {
-        $button = \Atk4\Ui\Button::addTo($buttons, [$action->getCaption()]);
+        $button = Button::addTo($buttons, [$action->getCaption()]);
         $button->on('click', $action, ['args' => ['id' => $countryId]]);
     }
 });

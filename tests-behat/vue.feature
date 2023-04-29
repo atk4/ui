@@ -1,5 +1,4 @@
 Feature: Vue
-  Testing Vue component
 
   Scenario: testing InlineEdit
     Given I am on "javascript/vue-component.php"

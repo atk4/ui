@@ -13,21 +13,16 @@ use Atk4\Ui\SessionTrait;
 
 /**
  * @group require_session
+ *
  * @runTestsInSeparateProcesses
  */
 class SessionTraitTest extends TestCase
 {
-    /** @var App */
-    protected $app;
+    use CreateAppTrait;
 
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->app = new App([
-            'catchExceptions' => false,
-            'alwaysRun' => false,
-        ]);
 
         session_abort();
         $sessionDir = sys_get_temp_dir() . '/atk4_test__ui__session';
@@ -54,21 +49,22 @@ class SessionTraitTest extends TestCase
 
     public function testException1(): void
     {
+        $m = new SessionWithoutNameMock($this->createApp());
+
         // when try to start session without NameTrait
         $this->expectException(Exception::class);
-        $m = new SessionWithoutNameMock($this->app);
         $m->memorize('test', 'foo');
     }
 
     public function testConstructor(): void
     {
-        $m = new SessionMock($this->app);
+        $m = new SessionMock($this->createApp());
 
-        $this->assertFalse(isset($_SESSION));
+        static::assertFalse(isset($_SESSION));
         $m->atomicSession(function (): void {
-            $this->assertTrue(isset($_SESSION));
+            static::assertTrue(isset($_SESSION));
         });
-        $this->assertFalse(isset($_SESSION));
+        static::assertFalse(isset($_SESSION));
     }
 
     /**
@@ -76,19 +72,19 @@ class SessionTraitTest extends TestCase
      */
     public function testMemorize(): void
     {
-        $m = new SessionMock($this->app);
+        $m = new SessionMock($this->createApp());
         $m->name = 'test';
 
         // value as string
         $m->memorize('foo', 'bar');
         $m->atomicSession(function () use ($m): void {
-            $this->assertSame('bar', $_SESSION['__atk_session'][$m->name]['foo']);
+            static::assertSame('bar', $_SESSION['__atk_session'][$m->name]['foo']);
         }, true);
 
         // value as null
         $m->memorize('foo', null);
         $m->atomicSession(function () use ($m): void {
-            $this->assertNull($_SESSION['__atk_session'][$m->name]['foo']);
+            static::assertNull($_SESSION['__atk_session'][$m->name]['foo']);
         }, true);
 
         // value as object
@@ -96,7 +92,7 @@ class SessionTraitTest extends TestCase
         $o->foo = 'x';
         $m->memorize('foo', $o);
         $m->atomicSession(function () use ($m, $o): void {
-            $this->assertSame(serialize($o), serialize($_SESSION['__atk_session'][$m->name]['foo']));
+            static::assertSame(serialize($o), serialize($_SESSION['__atk_session'][$m->name]['foo']));
         }, true);
     }
 
@@ -105,38 +101,38 @@ class SessionTraitTest extends TestCase
      */
     public function testLearnRecallForget(): void
     {
-        $m = new SessionMock($this->app);
+        $m = new SessionMock($this->createApp());
         $m->name = 'test';
 
         // value as string
         $m->learn('foo', 'bar');
-        $this->assertSame('bar', $m->recall('foo'));
+        static::assertSame('bar', $m->recall('foo'));
 
         $m->learn('foo', 'qwerty');
-        $this->assertSame('bar', $m->recall('foo'));
+        static::assertSame('bar', $m->recall('foo'));
 
         $m->forget('foo');
-        $this->assertSame('undefined', $m->recall('foo', 'undefined'));
+        static::assertSame('undefined', $m->recall('foo', 'undefined'));
 
         // value as callback
-        $m->learn('foo', function ($key) {
+        $m->learn('foo', function (string $key) {
             return $key . '_bar';
         });
-        $this->assertSame('foo_bar', $m->recall('foo'));
+        static::assertSame('foo_bar', $m->recall('foo'));
 
         $m->learn('foo_2', 'another');
-        $this->assertSame('another', $m->recall('foo_2'));
+        static::assertSame('another', $m->recall('foo_2'));
 
-        $v = $m->recall('foo_3', function ($key) {
+        $v = $m->recall('foo_3', function (string $key) {
             return $key . '_bar';
         });
-        $this->assertSame('foo_3_bar', $v);
-        $this->assertSame('undefined', $m->recall('foo_3', 'undefined'));
+        static::assertSame('foo_3_bar', $v);
+        static::assertSame('undefined', $m->recall('foo_3', 'undefined'));
 
         $m->forget();
-        $this->assertSame('undefined', $m->recall('foo', 'undefined'));
-        $this->assertSame('undefined', $m->recall('foo_2', 'undefined'));
-        $this->assertSame('undefined', $m->recall('foo_3', 'undefined'));
+        static::assertSame('undefined', $m->recall('foo', 'undefined'));
+        static::assertSame('undefined', $m->recall('foo_2', 'undefined'));
+        static::assertSame('undefined', $m->recall('foo_3', 'undefined'));
     }
 }
 

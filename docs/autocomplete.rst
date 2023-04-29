@@ -51,10 +51,10 @@ You can do much more with AutoComplete form control by passing dropdown settings
         'settings' => [
             'allowReselection' => true,
             'selectOnKeydown' => false,
-            'onChange' => new \Atk4\Ui\JsExpression('function(value, t, c) {
-                  if ($(this).data("value") !== value) {
-                  $(this).parents(".form").form("submit");
-                  $(this).data("value", value);
+            'onChange' => new \Atk4\Ui\Js\JsExpression('function (value, t, c) {
+                if ($(this).data(\'value\') !== value) {
+                    $(this).parents(\'.form\').form(\'submit\');
+                    $(this).data(\'value\', value);
                 }}'),
         ],
     ])->setModel(new Country($db));
@@ -70,7 +70,7 @@ use of Filters::
     $form = \Atk4\Ui\Form::addTo($app, ['class.segment' => true]);
     \Atk4\Ui\Label::addTo($form, ['Add city', 'class.top attached' => true], ['AboveControls']);
 
-    $l = $form->addControl('city',[\Atk4\Ui\Form\Control\Lookup::class]);
+    $l = $form->addControl('city', [\Atk4\Ui\Form\Control\Lookup::class]);
 
     // will restraint possible city value in droddown base on country and/or language.
     $l->addFilter('country', 'Country');

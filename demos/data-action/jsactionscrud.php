@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\Crud;
 use Atk4\Ui\Header;
 
 /** @var \Atk4\Ui\App $app */
@@ -17,25 +18,22 @@ Header::addTo($app, ['Actions in Crud', 'subHeader' => 'Crud will automatically 
 $files = new File($app->db);
 
 // This action must appear on top of the Crud
-$files->addUserAction(
-    'import_from_filesystem',
-    [
-        'caption' => 'Import',
-        'callback' => 'importFromFilesystem',
-        'description' => 'Import file using path:',
-        'preview' => function (Model $model, $path) {
-            return 'Execute Import using path: "' . $path . '"';
-        },
-        'args' => [
-            'path' => ['type' => 'string', 'required' => true],
-        ],
-        'appliesTo' => \Atk4\Data\Model\UserAction::APPLIES_TO_NO_RECORDS,
-    ]
-);
+$files->addUserAction('import_from_filesystem', [
+    'caption' => 'Import',
+    'callback' => 'importFromFilesystem',
+    'description' => 'Import file using path:',
+    'preview' => function (Model $model, $path) {
+        return 'Execute Import using path: "' . $path . '"';
+    },
+    'args' => [
+        'path' => ['type' => 'string', 'required' => true],
+    ],
+    'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORDS,
+]);
 
 $files->addUserAction('download', function (Model $model) {
     return 'File has been download!';
 });
 
-\Atk4\Ui\Crud::addTo($app, ['ipp' => 10])
+Crud::addTo($app, ['ipp' => 10])
     ->setModel($files);

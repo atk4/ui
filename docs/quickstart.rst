@@ -34,13 +34,13 @@ Coding "Hello, World"
 
 Open a new file `index.php` and enter the following code::
 
-    <?php                                          // 1
-    require_once __DIR__ . '/vendor/autoload.php'; // 2
+    <?php
+    require_once __DIR__ . '/vendor/autoload.php';
 
-    $app = new \Atk4\Ui\App('My First App');       // 3
-    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);                  // 4
+    $app = new \Atk4\Ui\App('My First App');
+    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
-    \Atk4\Ui\HelloWorld::addTo($app);                       // 5
+    \Atk4\Ui\HelloWorld::addTo($app);
 
 .. rubric:: Clarifications
 
@@ -137,17 +137,20 @@ We need a class `Task` which describes `data model <https://agile-data.readthedo
 single ToDo item::
 
 
-    class ToDoItem extends \Atk4\Data\Model {
-        public $table = 'todo_item';                 // 6
-        function init(): void {
+    class ToDoItem extends \Atk4\Data\Model
+    {
+        public $table = 'todo_item';
+
+        protected function init(): void
+        {
             parent::init();
 
             $this->addField('name', ['caption' => 'Task Name', 'required' => true]);
-                                                     // 7
+
             $this->addField('due', [
-              'type' => 'date',                      // 8
-              'caption' => 'Due Date',
-              'default' => new \DateTime('+1 week'), // 9
+                'type' => 'date',
+                'caption' => 'Due Date',
+                'default' => new \DateTime('+1 week'),
             ]);
         }
     }
@@ -193,24 +196,24 @@ Form and Crud Components
 
 Next we need to add Components that are capable of manipulating the data::
 
-    $col = \Atk4\Ui\Columns::addTo($app, ['divided']);               // 10
-    $col_reload = new \Atk4\Ui\JsReload($col);              // 11
+    $col = \Atk4\Ui\Columns::addTo($app, ['divided']);
+    $col_reload = new \Atk4\Ui\Js\JsReload($col);
 
-    $form = \Atk4\Ui\Form::addTo($col->addColumn());                 // 12
-    $form->setModel(new ToDoItem($s));                      // 13
-    $form->onSubmit(function(Form $form) use($col_reload) {      // 14
-        $form->model->save();                               // 15
+    $form = \Atk4\Ui\Form::addTo($col->addColumn());
+    $form->setModel(new ToDoItem($s));
+    $form->onSubmit(function (Form $form) use ($col_reload) {
+        $form->model->save();
 
-        return $col_reload;                                 // 16
+        return $col_reload;
     });
 
-    \Atk4\Ui\Table::addTo($col->addColumn())                // 17
+    \Atk4\Ui\Table::addTo($col->addColumn())
         ->setModel(new ToDoItem($s));
 
 .. rubric:: Clarifications
 
 .. [#] We wish to position Form and Table side-by-side, so we use `\Atk4\Ui\Columns` component and
-    inject a Fomantic UI CSS class "divided" that will appear as a vertical separation line.
+    inject a Fomantic-UI CSS class "divided" that will appear as a vertical separation line.
 
 .. [#] $col_reload is a special object which we call :ref:`js_action`. It represents a Browser-event
     that will cause both columns to be reloaded from the server. To use this action we still have
@@ -241,20 +244,22 @@ Grid and Crud
 As mentioned before, UI Components in Agile Toolkit are often interchangeable, you can swap one for
 another. In our example replace right column (label 17) with the following code::
 
-    $grid = \Atk4\Ui\Crud::addTo($col->addColumn(), ['paginator' => false, // 18
-        'canCreate' => false, 'canDelete' => false,             // 19
+    $grid = \Atk4\Ui\Crud::addTo($col->addColumn(), [
+        'paginator' => false,
+        'canCreate' => false,
+        'canDelete' => false,
     ]);
     $grid->setModel(new ToDoItem($s));
 
-    $grid->menu->addItem('Complete Selected',                   // 20
-        new \Atk4\Ui\JsReload($grid->table, [                   // 21
-            'delete' => $grid->addSelection()->jsChecked(),     // 22
+    $grid->menu->addItem('Complete Selected',
+        new \Atk4\Ui\Js\JsReload($grid->table, [
+            'delete' => $grid->addSelection()->jsChecked(),
         ])
     );
 
-    if (isset($_GET['delete'])) {                               // 23
+    if (isset($_GET['delete'])) {
         foreach (explode(',', $_GET['delete']) as $id) {
-            $grid->model->delete($id);                          // 24
+            $grid->model->delete($id);
         }
     }
 

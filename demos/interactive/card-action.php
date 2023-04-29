@@ -6,20 +6,23 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
+use Atk4\Ui\Card;
+use Atk4\Ui\Header;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\Button::addTo($app, ['Card', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
+Button::addTo($app, ['Card', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['card']);
-\Atk4\Ui\View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
-\Atk4\Ui\Header::addTo($app, ['Models', 'size' => 1, 'subHeader' => 'Card may display information from many models.']);
+Header::addTo($app, ['Models', 'size' => 1, 'subHeader' => 'Card may display information from many models.']);
 
 $stat = new Stat($app->db);
 $stat = $stat->loadAny();
 
-$c = \Atk4\Ui\Card::addTo($app);
+$c = Card::addTo($app);
 $c->setModel($stat, [$stat->fieldName()->client_name, $stat->fieldName()->description]);
 
 $c->addSection('Project: ', $stat, [$stat->fieldName()->start_date, $stat->fieldName()->finish_date], true);

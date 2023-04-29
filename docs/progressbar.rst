@@ -29,7 +29,7 @@ After adding a console to your :ref:`render_tree`, you just need to set a call-b
 The value of the progress bar can be changed either before rendering, inside PHP, or after rendering
 with JavaScript::
 
-    $bar->value = 5;  // sets this value instead of 0
+    $bar->value = 5; // sets this value instead of 0
 
     Button::addTo($app, ['charge up the battery'])->on('click', $bar2->jsValue(100));
 

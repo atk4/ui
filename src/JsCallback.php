@@ -4,7 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-class JsCallback extends Callback implements JsExpressionable
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
+
+class JsCallback extends Callback
 {
     /** @var array Holds information about arguments passed in to the callback. */
     public $args = [];
@@ -12,10 +18,10 @@ class JsCallback extends Callback implements JsExpressionable
     /** @var string Text to display as a confirmation. Set with setConfirm(..). */
     public $confirm;
 
-    /** @var array|null Use this apiConfig variable to pass API settings to Semantic UI in .api(). */
+    /** @var array|null Use this apiConfig variable to pass API settings to Fomantic-UI in .api(). */
     public $apiConfig;
 
-    /** @var string|null Include web storage data item (key) value to be include in the request. */
+    /** @var string|null Include web storage data item (key) value to be included in the request. */
     public $storeName;
 
     /**
@@ -28,41 +34,17 @@ class JsCallback extends Callback implements JsExpressionable
      */
     public $triggerOnReload = false;
 
-    /**
-     * When multiple JsExpressionable's are collected inside an array and may
-     * have some degree of nesting, convert it into a one-dimensional array,
-     * so that it's easier for us to wrap it into a function body.
-     *
-     * @param array $response
-     *
-     * @return array
-     */
-    public function flatternArray($response)
+    public function jsExecute(): JsBlock
     {
-        if (!is_array($response)) {
-            return [$response];
-        }
+        $this->assertIsInitialized();
 
-        $out = [];
-
-        foreach ($response as $element) {
-            $out = array_merge($out, $this->flatternArray($element));
-        }
-
-        return $out;
-    }
-
-    public function jsRender(): string
-    {
-        $this->getApp(); // assert has App
-
-        return (new Jquery())->atkAjaxec([
-            'uri' => $this->getJsUrl(),
-            'uri_options' => $this->args,
+        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkAjaxec([
+            'url' => $this->getJsUrl(),
+            'urlOptions' => $this->args,
             'confirm' => $this->confirm,
             'apiConfig' => $this->apiConfig,
             'storeName' => $this->storeName,
-        ])->jsRender();
+        ])]);
     }
 
     /**
@@ -70,23 +52,32 @@ class JsCallback extends Callback implements JsExpressionable
      *
      * @param string $text
      */
-    public function setConfirm($text = 'Are you sure?')
+    public function setConfirm($text = 'Are you sure?'): void
     {
         $this->confirm = $text;
     }
 
+    /**
+     * @param \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void) $fx
+     *
+     * @return $this
+     */
     public function set($fx = null, $args = null)
     {
+        if (!$fx instanceof \Closure) {
+            throw new \TypeError('$fx must be of type Closure');
+        }
+
         $this->args = [];
         foreach ($args ?? [] as $key => $val) {
-            if (is_numeric($key)) {
+            if (is_int($key)) {
                 $key = 'c' . $key;
             }
             $this->args[$key] = $val;
         }
 
         parent::set(function () use ($fx) {
-            $chain = new Jquery(new JsExpression('this'));
+            $chain = new Jquery();
 
             $values = [];
             foreach ($this->args as $key => $value) {
@@ -94,6 +85,13 @@ class JsCallback extends Callback implements JsExpressionable
             }
 
             $response = $fx($chain, ...$values);
+
+            if (count($chain->_chain) === 0) {
+                // TODO should we create/pass $chain to $fx at all?
+                $chain = null;
+            } elseif ($response) {
+                // TODO throw when non-empty chain is to be ignored?
+            }
 
             $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
 
@@ -108,47 +106,37 @@ class JsCallback extends Callback implements JsExpressionable
      * which is returned to frontend.
      *
      * @param string|null $ajaxec
-     * @param string      $msg     General message, typically won't be displayed
-     * @param bool        $success Was request successful or not
+     * @param ($success is true ? null : string)      $msg     General message, typically won't be displayed
+     * @param bool $success Was request successful or not
      */
-    public function terminateAjax($ajaxec, $msg = null, $success = true): void
+    public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
     {
+        $data = ['success' => $success];
+        if (!$success) {
+            $data['message'] = $msg;
+        }
+        $data['atkjs'] = $ajaxec;
+
         if ($this->canTerminate()) {
-            $this->getApp()->terminateJson(['success' => $success, 'message' => $msg, 'atkjs' => $ajaxec]);
+            $this->getApp()->terminateJson($data);
         }
     }
 
     /**
      * Provided with a $response from callbacks convert it into a JavaScript code.
      *
-     * @param array|JsExpressionable $response response from callbacks,
-     * @param JsExpressionable       $chain
+     * @param JsExpressionable|View|string|null $response response from callbacks,
+     * @param JsChain                           $chain
      */
     public function getAjaxec($response, $chain = null): string
     {
-        $actions = [];
-
-        if ($chain && $chain->_chain) {
-            $actions[] = $chain;
+        $jsBlock = new JsBlock();
+        if ($chain !== null) {
+            $jsBlock->addStatement($chain);
         }
+        $jsBlock->addStatement($this->_getProperAction($response));
 
-        if (is_array($response)) {
-            $response = $this->flatternArray($response);
-            foreach ($response as $r) {
-                if ($r === null) {
-                    continue;
-                }
-                $actions[] = $this->_getProperAction($r);
-            }
-        } else {
-            $actions[] = $this->_getProperAction($response);
-        }
-
-        $ajaxec = implode(";\n", array_map(function (JsExpressionable $r) {
-            return $r->jsRender();
-        }, $actions));
-
-        return $ajaxec;
+        return $jsBlock->jsRender();
     }
 
     public function getUrl(string $mode = 'callback'): string
@@ -163,19 +151,13 @@ class JsCallback extends Callback implements JsExpressionable
      */
     private function _getProperAction($response): JsExpressionable
     {
-        $action = null;
         if ($response instanceof View) {
-            $action = $this->_jsRenderIntoModal($response);
-        } elseif (is_string($response)) {
-            $action = new JsExpression('alert([])', [$response]);
-        } elseif ($response instanceof JsExpressionable) {
-            $action = $response;
-        } else {
-            throw (new Exception('Incorrect callback, response must be of type JsExpressionable, View, or String'))
-                ->addMoreInfo('r', $response);
+            $response = $this->_jsRenderIntoModal($response);
+        } elseif (is_string($response)) { // TODO alert() should be removed
+            $response = new JsExpression('alert([])', [$response]);
         }
 
-        return $action;
+        return $response;
     }
 
     /**
@@ -187,10 +169,11 @@ class JsCallback extends Callback implements JsExpressionable
             $html = $response->getHtml();
         } else {
             $modal = new Modal(['name' => false]);
+            $modal->setApp($this->getApp());
             $modal->add($response);
             $html = $modal->getHtml();
         }
 
-        return new JsExpression('$([html]).modal("show").data("needRemove", true).addClass("atk-callback-response")', ['html' => $html]);
+        return new JsExpression('$([html]).modal(\'show\').data(\'needRemove\', true).addClass(\'atk-callback-response\')', ['html' => $html]);
     }
 }

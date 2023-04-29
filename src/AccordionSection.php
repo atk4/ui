@@ -6,6 +6,8 @@ namespace Atk4\Ui;
 
 /**
  * An accordion item in Accordion.
+ *
+ * @method Accordion getOwner()
  */
 class AccordionSection extends View
 {
@@ -17,6 +19,7 @@ class AccordionSection extends View
     /** @var VirtualPage|null The accordion item virtual page. */
     public $virtualPage;
 
+    /** @var string */
     public $icon = 'dropdown';
 
     protected function renderView(): void
@@ -30,8 +33,11 @@ class AccordionSection extends View
         }
 
         if ($this->virtualPage) {
-            $this->template->set('item_id', $this->virtualPage->name);
+            $this->template->set('itemId', $this->virtualPage->name);
             $this->template->set('path', $this->virtualPage->getJsUrl('cut'));
+        } else {
+            // TODO hack to prevent rendering 'id=""'
+            $this->template->set('itemId', $this->name . '-vp-unused');
         }
     }
 }

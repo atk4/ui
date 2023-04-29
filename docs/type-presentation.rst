@@ -38,7 +38,7 @@ support for a new type.
 In the below steps, the #1 and #2 are a minimum to achieve. #3 and #4 will improve experience
 of your integration.
 
- 1. Extend UI persistence and use your class prototype in `$app->persistence`.
+ 1. Extend UI persistence and use your class in `$app->uiPersistence`.
 
   You need to define how to output your data as well as read it.
 
@@ -85,7 +85,7 @@ Selecting the decorator is done in the following order:
     Both **models** (Data) as well as some **views** (UI: form) use fields. They are not the same.
     Notably, Model field `ui` property contains flags like editable, visible and hidden,
     which do have some impact on rendering, whereas UI field `ui` property (not used here)
-    designates the Fomantic UI element to use.
+    designates the Fomantic-UI element to use.
 
 Examples
 ========
@@ -124,22 +124,22 @@ yet make it available when editing, you could create your own :php:class:`Table\
 
     class Masker extends \Atk4\Ui\Table\Column
     {
-        public function getDataCellTemplate(\Atk4\Data\Field $field = null)
+        public function getDataCellTemplate(\Atk4\Data\Field $field = null): string
         {
             return '**** **** **** {$mask}';
         }
 
-        public function getHtmlTags(\Atk4\Data\Model $row, $field)
+        public function getHtmlTags(\Atk4\Data\Model $row, ?\Atk4\Data\Field $field): array
         {
             return [
-                'mask' => substr($field->get(), -4),
+                'mask' => substr($field->get($row), -4),
             ];
         }
     }
 
 If you are wondering, why I'm not overriding by providing HTML tag equal to the field name,
 it's because this technique is unreliable due to ability to exclude HTML tags with
-:php:attr:`Table::$use_html_tags`.
+:php:attr:`Table::$useHtmlTags`.
 
 Display credit card number with spaces
 --------------------------------------
@@ -149,14 +149,15 @@ extending :php:class:`Persistence\Ui`::
 
     class MyPersistence extends Persistence\Ui
     {
-
         protected function _typecastSaveField(\Atk4\Data\Field $field, $value)
         {
             switch ($field->type) {
                 case 'card':
                     $parts = str_split($value, 4);
-                    return join(' ', $parts);
+
+                    return implode(' ', $parts);
             }
+
             return parent::_typecastSaveField($field, $value);
         }
 
@@ -166,6 +167,7 @@ extending :php:class:`Persistence\Ui`::
                 case 'card':
                     return str_replace(' ', '', $value);
             }
+
             return parent::_typecastLoadField($field, $value);
         }
     }
@@ -174,11 +176,10 @@ extending :php:class:`Persistence\Ui`::
     {
         public function __construct($defaults = [])
         {
-            $this->ui_persistence = new MyPersistence()
+            $this->uiPersistence = new MyPersistence()
 
             parent::__construct($defaults);
         }
-
     }
 
 Now your 'card' type will work system-wide.

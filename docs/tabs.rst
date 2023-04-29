@@ -36,14 +36,14 @@ You should pass Closure action as a second parameter.
 
 Example::
 
-    $t = Tabs::addTo($layout);
+    $tabs = Tabs::addTo($layout);
 
     // add static tab
-    HelloWorld::addTo($t->addTab('Static Tab'));
+    HelloWorld::addTo($tabs->addTab('Static Tab'));
 
     // add dynamic tab
-    $t->addTab('Dynamically Loading', function ($tab) {
-        LoremIpsum::addTo($tab);
+    $tabs->addTab('Dynamically Loading', function (VirtualPage $vp) {
+        LoremIpsum::addTo($vp);
     });
 
 Dynamic Tabs
@@ -54,23 +54,23 @@ to pass a call-back which will be triggered when user clicks on the tab.
 
 Note that tab contents are refreshed including any values you put on the form::
 
-    $t = Tabs::addTo($app);
+    $tabs = Tabs::addTo($app);
 
     // dynamic tab
-    $t->addTab('Dynamic Lorem Ipsum', function ($tab) {
-        LoremIpsum::addTo($tab, ['size' => 2]);
+    $tabs->addTab('Dynamic Lorem Ipsum', function (VirtualPage $vp) {
+        LoremIpsum::addTo($vp, ['size' => 2]);
     });
 
     // dynamic tab
-    $t->addTab('Dynamic Form', function ($tab) {
+    $tabs->addTab('Dynamic Form', function (VirtualPage $vp) {
         $m_register = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_($a));
         $m_register->addField('name', ['caption' => 'Please enter your name (John)']);
 
-        $form = Form::addTo($tab, ['class.segment' => true]);
+        $form = Form::addTo($vp, ['class.segment' => true]);
         $form->setModel($m_register);
         $form->onSubmit(function (Form $form) {
             if ($form->model->get('name') !== 'John') {
-                return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
+                return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
             }
         });
     });
@@ -83,7 +83,7 @@ URL Tabs
 
 Tab can load external URL or a different page if you prefer that instead of VirtualPage. This works similar to iframe::
 
-    $t = Tabs::addTo($app);
+    $tabs = Tabs::addTo($app);
 
-    $t->addTabUrl('Terms and Condition', 'terms.html');
+    $tabs->addTabUrl('Terms and Condition', 'terms.html');
 

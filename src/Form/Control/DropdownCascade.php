@@ -1,17 +1,19 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Dropdown form control that will based it's list value
- * according to another input value.
- * Also possible to cascade value from another cascade field.
- */
 
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Form;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 
+/**
+ * Dropdown form control that will based it's list value
+ * according to another input value.
+ * Also possible to cascade value from another cascade field.
+ */
 class DropdownCascade extends Dropdown
 {
     /** @var string|Form\Control The form control to use for setting this dropdown list values from. */
@@ -29,7 +31,7 @@ class DropdownCascade extends Dropdown
         }
 
         $cascadeFromValue = isset($_POST[$this->cascadeFrom->name])
-            ? $this->getApp()->ui_persistence->typecastLoadField($this->cascadeFrom->entityField->getField(), $_POST[$this->cascadeFrom->name])
+            ? $this->getApp()->uiPersistence->typecastLoadField($this->cascadeFrom->entityField->getField(), $_POST[$this->cascadeFrom->name])
             : $this->cascadeFrom->entityField->get();
 
         $this->model = $this->cascadeFrom->model ? $this->cascadeFrom->model->ref($this->reference) : null;
@@ -39,11 +41,11 @@ class DropdownCascade extends Dropdown
 
         // js to execute for the onChange handler of the parent dropdown.
         $expr = [
-            function ($t) use ($cascadeFromValue) {
-                return [
+            function (Jquery $j) use ($cascadeFromValue) {
+                return new JsBlock([
                     $this->js()->dropdown('change values', $this->getNewValues($cascadeFromValue)),
                     $this->js()->removeClass('loading'),
-                ];
+                ]);
             },
             $this->js()->dropdown('clear'),
             $this->js()->addClass('loading'),
@@ -52,19 +54,11 @@ class DropdownCascade extends Dropdown
         $this->cascadeFrom->onChange($expr, ['args' => [$this->cascadeFrom->name => $this->cascadeFrom->jsInput()->val()]]);
     }
 
-    /**
-     * Allow initializing CascadeDropdown with preset value.
-     *
-     * @param mixed $value The initial ID value to set this dropdown using reference model values
-     * @param mixed $junk
-     *
-     * @return $this
-     */
-    public function set($value = null, $junk = null)
+    public function set($value = null, $ignore = null)
     {
         $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($this->cascadeFrom->entityField->get()), $value);
 
-        return parent::set($value, $junk);
+        return parent::set($value, $ignore);
     }
 
     /**
@@ -79,14 +73,14 @@ class DropdownCascade extends Dropdown
             return [['value' => '', 'text' => $this->empty, 'name' => $this->empty]];
         }
 
-        $model = $this->cascadeFrom->model->tryLoad($id)->ref($this->reference);
+        $model = $this->cascadeFrom->model->load($id)->ref($this->reference);
         $values = [];
         foreach ($model as $k => $row) {
             if ($this->renderRowFunction) {
                 $res = ($this->renderRowFunction)($row, $k);
-                $values[] = ['value' => $res['value'], 'text' => $row->get('name'), 'name' => $res['title']];
+                $values[] = ['value' => $res['value'], 'text' => $res['title'], 'name' => $res['title']];
             } else {
-                $values[] = ['value' => $row->getId(), 'text' => $row->get($model->title_field), 'name' => $row->get($model->title_field)];
+                $values[] = ['value' => $row->getId(), 'text' => $row->get($model->titleField), 'name' => $row->get($model->titleField)];
             }
         }
 
@@ -94,8 +88,8 @@ class DropdownCascade extends Dropdown
     }
 
     /**
-     *  Will mark current value as selected from a list
-     *  of possible values.
+     * Will mark current value as selected from a list
+     * of possible values.
      *
      * @param string|int $value the current field value
      */
@@ -121,6 +115,7 @@ class DropdownCascade extends Dropdown
     {
         // multiple selection is not supported
         $this->isMultiple = false;
+
         parent::renderView();
     }
 }

@@ -17,8 +17,8 @@ $model = new Stat($app->db, ['caption' => 'Demo Stat']);
 
 $project = new Condition($model->fieldName()->project_name, Condition::OPERATOR_REGEXP, '[a-zA-Z]');
 $brazil = new Condition($model->fieldName()->client_country_iso, '=', 'BR');
-$start = new Condition($model->fieldName()->start_date, '=', '2020-10-22');
-$finish = new Condition($model->fieldName()->finish_time, '!=', '22:22');
+$start = new Condition($model->fieldName()->start_date, '=', new \DateTime('2020-10-22'));
+$finish = new Condition($model->fieldName()->finish_time, '!=', new \DateTime('22:22'));
 $isCommercial = new Condition($model->fieldName()->is_commercial, '0');
 $budget = new Condition($model->fieldName()->project_budget, '>=', '1000');
 $currency = new Condition($model->fieldName()->currency, 'USD');
@@ -30,13 +30,14 @@ $model->addCondition($budget);
 $model->scope()->add($scope);
 $model->scope()->add($orScope);
 
-$form = \Atk4\Ui\Form::addTo($app);
+$form = Form::addTo($app);
 
-$form->addControl('qb', [\Atk4\Ui\Form\Control\ScopeBuilder::class, 'model' => $model], ['type' => 'object']);
+$form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model], ['type' => 'object']);
 
 $form->onSubmit(function (Form $form) use ($model) {
     $message = $form->model->get('qb')->toWords($model);
-    $view = (new \Atk4\Ui\View(['name' => false]))->addClass('atk-scope-builder-response');
+    $view = (new View(['name' => false]))->addClass('atk-scope-builder-response');
+    $view->setApp($form->getApp());
     $view->invokeInit();
 
     $view->set($message);
@@ -114,7 +115,7 @@ $expectedInput = json_encode(json_decode(<<<"EOF"
                 "query": {
                   "rule": "{$statModelForHinting->fieldName()->finish_time}",
                   "operator": "is not on",
-                  "value": "22:22",
+                  "value": "22:22:00.000000",
                   "option": null
                 }
               },

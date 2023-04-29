@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Layout\Section;
 
+use Atk4\Ui\Accordion as UiAccordion;
 use Atk4\Ui\AccordionSection;
 use Atk4\Ui\Form;
+use Atk4\Ui\Js\JsBlock;
 
 /**
  * Represents form controls in accordion.
  */
-class Accordion extends \Atk4\Ui\Accordion
+class Accordion extends UiAccordion
 {
-    public $formLayout = \Atk4\Ui\Form\Layout::class;
-    public $form;
+    /** @var class-string<Form\Layout> */
+    public $formLayout = Form\Layout::class;
+
+    public Form $form;
 
     /**
      * Adds hook which in case of field error expands respective accordion sections.
@@ -22,27 +26,24 @@ class Accordion extends \Atk4\Ui\Accordion
     {
         parent::init();
 
-        $this->form->onHook(\Atk4\Ui\Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
+        $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
             // default behavior
             $jsError = [$form->js()->form('add prompt', $fieldName, $str)];
 
             // if a form control is part of an accordion section, it will open that section.
-            $section = $form->getClosestOwner($form->getControl($fieldName), AccordionSection::class);
+            $section = $form->getControl($fieldName)->getClosestOwner(AccordionSection::class);
             if ($section) {
                 $jsError[] = $section->getOwner()->jsOpen($section);
             }
 
-            return $jsError;
+            return new JsBlock($jsError);
         });
     }
 
     /**
      * Return an accordion section with a form layout associate with a form.
      *
-     * @param string $title
-     * @param string $icon
-     *
-     * @return \Atk4\Ui\Form\Layout
+     * @return Form\Layout
      */
     public function addSection($title, \Closure $callback = null, $icon = 'dropdown')
     {
@@ -52,18 +53,14 @@ class Accordion extends \Atk4\Ui\Accordion
     }
 
     /**
-     * Return a section index.
-     *
-     * @param AccordionSection $section
-     *
-     * @return int
+     * @param AccordionSection|Form\Layout $section
      */
     public function getSectionIdx($section)
     {
-        if ($section instanceof \Atk4\Ui\AccordionSection) {
-            return parent::getSectionIdx($section);
+        if (!$section instanceof AccordionSection) {
+            $section = AccordionSection::assertInstanceOf($section->getOwner());
         }
 
-        return parent::getSectionIdx($section->getOwner());
+        return parent::getSectionIdx($section);
     }
 }

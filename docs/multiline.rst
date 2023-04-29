@@ -83,7 +83,7 @@ Lets say a User can have many email addresses, but you want to store them in a s
         }
     }
 
-     /**
+    /**
      * User model
      */
     class User extends \Atk4\Data\Model
@@ -115,7 +115,7 @@ If you want to edit them along with the user, Multiline need to be set up accord
     $ml->setReferenceModel('Emails');
 
     // set up saving of Email on Form submit
-    $user_form->onSubmit(function(Form $form) use ($ml) {
+    $user_form->onSubmit(function (Form $form) use ($ml) {
         $form->model->save();
         // save emails record related to current user.
         $ml->saveRows();
@@ -131,7 +131,7 @@ Important
 ---------
 
 It is important to note that for Email's record to be properly saved, in relation to their User record, the User model
-need to be load prior to call Multiline::setReferenceModel() method.
+needs to be loaded prior to call Multiline::setReferenceModel() method.
 
 Also note that Multiline::saveRows() method need to be called for related record to be saved in related table. You would
 normally call this method in your form onSubmit handler method.
@@ -148,9 +148,10 @@ Lets use the example of demos/multiline.php::
         protected function init(): void
         {
             parent::init();
+
             $this->addField('item', ['required' => true, 'default' => 'item']);
-            $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
-            $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
+            $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]]]);
+            $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]]]);
             $this->addExpression('total', ['expr' => function (Model $row) {
                 return $row->get('qty') * $row->get('box');
             }, 'type' => 'integer']);
@@ -169,14 +170,15 @@ You can return a single JsExpressionable or an array of JsExpressionables which 
 
 In this case we display a message when any of the control value for 'qty' and 'box' are changed::
 
-    $multiline->onLineChange(function ($rows, Form $form) {
+    $multiline->onLineChange(function (array $rows, Form $form) {
         $total = 0;
         foreach ($rows as $row => $cols) {
             $qty = $cols['qty'] ?? 0;
             $box = $cols['box'] ?? 0;
             $total += $qty * $box;
         }
-        return new JsToast('The new Total is '.number_format($total, 2));
+
+        return new JsToast('The new Total is ' . $app->uiPersistence->typecastSaveField(new Field(['type' => 'atk4_money']), $total));
     }, ['qty', 'box']);
 
 
@@ -201,7 +203,7 @@ Use the $componentProps property of Multiline in order to apply 'Props' to compo
 
 .. php:attr:: componentProps
 
-Example of changing all Dropdown(sui-dropdown) within Multiline::
+Example of changing all Dropdown(SuiDropdown) within Multiline::
 
     $ml = $form->addControl('ml', [Multiline::class, 'compponentProps' => [Multiline::SELECT => ['floating' => true]]]);
 
@@ -222,7 +224,7 @@ Specific field components Props may be applied using the 'ui' field property whe
 Note on Multiline control
 -------------------------
 
-Each control inside Multiline is wrap within a table cell(sui-table-cell) component and this component can be customize as
+Each control inside Multiline is wrap within a table cell(SuiTableCell) component and this component can be customize as
 well using the 'ui' property of the model's field::
 
     $this->addExpression('total', [
@@ -235,7 +237,7 @@ well using the 'ui' property of the model's field::
 
 Table appearance within Multiline
 ---------------------------------
-Table(sui-table) Props can be set using $tableProps property of Multiline::
+Table(SuiTable) Props can be set using $tableProps property of Multiline::
 
     $ml = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'blue']]);
 

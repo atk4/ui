@@ -4,28 +4,30 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsReload;
+
 class Paginator extends View
 {
-    /** @var int Specify how many pages this paginator has in total. */
-    public $total;
+    public $ui = 'pagination menu';
+    public $defaultTemplate = 'paginator.html';
+
+    /** Specify how many pages this paginator has in total. */
+    public int $total;
 
     /**
      * Override what is the current page. If not set, Paginator will look inside
      * $_GET[$this->name]. If page > total, then page = total.
-     *
-     * @var int
      */
-    public $page;
+    public ?int $page = null;
 
     /**
      * When there are more than ($range * 2 + 1) items, then current page will be surrounded by $range pages
      * followed by spacer ..., for example if range=2, then.
      *
      * 1, ..., 5, 6, *7*, 8, 9, ..., 34
-     *
-     * @var int
      */
-    public $range = 4;
+    public int $range = 4;
 
     /** @var string|null Set this if you want GET argument name to look beautifully. */
     public $urlTrigger;
@@ -34,29 +36,21 @@ class Paginator extends View
      * If specified, must be instance of a view which will be reloaded on click.
      * Otherwise will use link to current page.
      *
-     * @var View
+     * @var View|null
      */
     public $reload;
 
     /**
      * Add extra parameter to the reload view
-     * as JsReload uri_options.
-     *
-     * @var array
+     * as JsReload urlOptions.
      */
-    public $reloadArgs = [];
+    public array $reloadArgs = [];
 
-    public $ui = 'pagination menu';
-    public $defaultTemplate = 'paginator.html';
-
-    /**
-     * Initializing.
-     */
     protected function init(): void
     {
         parent::init();
 
-        if (!$this->urlTrigger) {
+        if ($this->urlTrigger === null) {
             $this->urlTrigger = $this->name;
         }
 
@@ -68,7 +62,7 @@ class Paginator extends View
     /**
      * Set total number of pages.
      */
-    public function setTotal(int $total)
+    public function setTotal(int $total): void
     {
         $this->total = $total < 1 ? 1 : $total;
 
@@ -94,12 +88,10 @@ class Paginator extends View
      *
      * [ '[', '...', 10, 11, 12 ]
      *
-     * Array will contain '[', ']', denoting "first" , "last" items, '...' for the spacer and any
+     * Array will contain '[', ']', denoting "first", "last" items, '...' for the spacer and any
      * other integer value for a regular page link.
-     *
-     * @return array
      */
-    public function getPaginatorItems()
+    public function getPaginatorItems(): array
     {
         if ($this->page < 1) {
             $this->page = 1;
@@ -154,21 +146,19 @@ class Paginator extends View
      * Return URL for displaying a certain page.
      *
      * @param int|string $page
-     *
-     * @return string
      */
-    protected function getPageUrl($page)
+    protected function getPageUrl($page): string
     {
         return $this->url([$this->urlTrigger => $page]);
     }
 
     /**
      * Add extra argument to the reload view.
-     * These arguments will be set as uri_options to JsReload.
+     * These arguments will be set as urlOptions to JsReload.
      *
      * @param array $args
      */
-    public function addReloadArgs($args)
+    public function addReloadArgs($args): void
     {
         $this->reloadArgs = array_merge($this->reloadArgs, $args);
     }
@@ -179,7 +169,7 @@ class Paginator extends View
      * @param HtmlTemplate $t
      * @param int|string   $page
      */
-    public function renderItem($t, $page = null)
+    public function renderItem($t, $page = null): void
     {
         if ($page) {
             $t->trySet('page', (string) $page);
@@ -213,7 +203,7 @@ class Paginator extends View
         }
 
         if ($this->reload) {
-            $this->on('click', '.item', new JsReload($this->reload, array_merge([$this->urlTrigger => new JsExpression('$(this).data("page")')], $this->reloadArgs)));
+            $this->on('click', '.item', new JsReload($this->reload, array_merge([$this->urlTrigger => new JsExpression('$(this).data(\'page\')')], $this->reloadArgs)));
         }
 
         parent::renderView();

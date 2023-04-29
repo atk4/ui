@@ -11,11 +11,13 @@ use Behat\Behat\Hook\Scope\BeforeStepScope;
 use Behat\Behat\Hook\Scope\StepScope;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Mink\Element\NodeElement;
+use Behat\Mink\WebAssert;
 use Behat\MinkExtension\Context\RawMinkContext;
-use Exception;
 
 class Context extends RawMinkContext implements BehatContext
 {
+    use JsCoverageContextTrait;
+    use RwDemosContextTrait;
     use WarnDynamicPropertyTrait;
 
     public function getSession($name = null): MinkSession
@@ -23,18 +25,30 @@ class Context extends RawMinkContext implements BehatContext
         return new MinkSession($this->getMink()->getSession($name));
     }
 
+    public function assertSession($name = null): WebAssert
+    {
+        return new class($this->getSession($name)) extends WebAssert {
+            protected function cleanUrl($url)
+            {
+                // fix https://github.com/minkphp/Mink/issues/656
+                return $url;
+            }
+        };
+    }
+
     protected function getScenario(StepScope $event): ScenarioInterface
     {
         foreach ($event->getFeature()->getScenarios() as $scenario) {
             $scenarioSteps = $scenario->getSteps();
             if (count($scenarioSteps) > 0
-                    && reset($scenarioSteps)->getLine() <= $event->getStep()->getLine()
-                    && end($scenarioSteps)->getLine() >= $event->getStep()->getLine()) {
+                && reset($scenarioSteps)->getLine() <= $event->getStep()->getLine()
+                && end($scenarioSteps)->getLine() >= $event->getStep()->getLine()
+            ) {
                 return $scenario;
             }
         }
 
-        throw new Exception('Unable to find scenario');
+        throw new \Exception('Unable to find scenario');
     }
 
     /**
@@ -46,8 +60,10 @@ class Context extends RawMinkContext implements BehatContext
             return;
         }
 
-        if (!str_starts_with($event->getStep()->getText(), 'Toast display should contain text ')) {
-            $this->getSession()->executeScript('jQuery(\'.toast-box > .ui.toast\').toast(\'close\');');
+        if (!str_starts_with($event->getStep()->getText(), 'Toast display should contain text ')
+            && $event->getStep()->getText() !== 'No toast should be displayed'
+        ) {
+            $this->getSession()->executeScript('jQuery(\'.toast-box > .ui.toast\').toast(\'destroy\')');
         }
     }
 
@@ -56,12 +72,19 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function waitUntilLoadingAndAnimationFinished(AfterStepScope $event): void
     {
+        if (!$this->getSession()->getDriver()->isStarted()) {
+            return;
+        }
+
         $this->jqueryWait();
         $this->disableAnimations();
+
         if (!str_contains($this->getScenario($event)->getTitle() ?? '', 'exception is displayed')) {
             $this->assertNoException();
         }
         $this->assertNoDuplicateId();
+
+        $this->saveJsCoverage();
     }
 
     protected function getFinishedScript(): string
@@ -94,13 +117,13 @@ class Context extends RawMinkContext implements BehatContext
             }
         }
 
-        throw new Exception('jQuery did not finish within a time limit');
+        throw new \Exception('jQuery did not finish within a time limit');
     }
 
     protected function disableAnimations(): void
     {
         // disable all CSS/jQuery animations/transitions
-        $toCssFx = function ($selector, $cssPairs) {
+        $toCssFx = function (string $selector, array $cssPairs): string {
             $css = [];
             foreach ($cssPairs as $k => $v) {
                 foreach ([$k, '-moz-' . $k, '-webkit-' . $k] as $k2) {
@@ -124,7 +147,7 @@ class Context extends RawMinkContext implements BehatContext
         ]);
 
         $this->getSession()->executeScript(
-            'if (Array.prototype.filter.call(document.getElementsByTagName("style"), e => e.getAttribute("about") === "atk-test-behat").length === 0) {'
+            'if (Array.prototype.filter.call(document.getElementsByTagName(\'style\'), (e) => e.getAttribute(\'about\') === \'atk-test-behat\').length === 0) {'
             . ' $(\'<style about="atk-test-behat">' . $css . '</style>\').appendTo(\'head\');'
             . ' }'
             . 'jQuery.fx.off = true;'
@@ -145,7 +168,7 @@ class Context extends RawMinkContext implements BehatContext
                     )
                 )) . "\n";
 
-                throw new Exception('Page contains uncaught exception');
+                throw new \Exception('Page contains uncaught exception');
             }
         }
     }
@@ -153,7 +176,7 @@ class Context extends RawMinkContext implements BehatContext
     protected function assertNoDuplicateId(): void
     {
         [$invalidIds, $duplicateIds] = $this->getSession()->evaluateScript(<<<'EOF'
-            return (function () {
+            (function () {
                 const idRegex = /^[a-z_][0-9a-z_\-]*$/is;
                 const invalidIds = [];
                 const duplicateIds = [];
@@ -171,32 +194,32 @@ class Context extends RawMinkContext implements BehatContext
                         }
                     }
                 });
+
                 return [invalidIds, duplicateIds];
             })();
             EOF);
 
         // TODO hack to pass CI testing, fix these issues and remove the error diffs below asap
-        $invalidIds = array_diff($invalidIds, ['']); // id="" is hardcoded in templates
         $duplicateIds = array_diff($duplicateIds, ['atk', '_icon', 'atk_icon']); // generated when component is not correctly added to app/layout component tree - should throw, as such name/ID is dangerous to be used
 
         if (count($invalidIds) > 0) {
-            throw new Exception('Page contains element with invalid ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $invalidIds)));
+            throw new \Exception('Page contains element with invalid ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $invalidIds)));
         }
 
         if (count($duplicateIds) > 0) {
-            throw new Exception('Page contains elements with duplicate ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $duplicateIds)));
+            throw new \Exception('Page contains elements with duplicate ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $duplicateIds)));
         }
     }
 
     /**
-     * @return array{0: 'css'|'xpath', 1: string}
+     * @return array{'css'|'xpath', string}
      */
     protected function parseSelector(string $selector): array
     {
         if (preg_match('~^xpath\((.+)\)$~s', $selector, $matches)) {
             // add support for standard CSS class selector
             $xpath = preg_replace_callback(
-                '~\'(?:[^\']+|\'\')*\'\K|"(?:[^"]+|"")*"\K|(?<=\w)\.([\w\-]+)~s',
+                '~\'(?:[^\']+|\'\')*+\'\K|"(?:[^"]+|"")*+"\K|(?<=\w)\.([\w\-]+)~s',
                 function ($matches) {
                     if ($matches[0] === '') {
                         return '';
@@ -222,7 +245,7 @@ class Context extends RawMinkContext implements BehatContext
         $elements = ($context ?? $this->getSession()->getPage())->findAll($selectorParsed[0], $selectorParsed[1]);
 
         if (count($elements) === 0) {
-            throw new Exception('No element found in ' . ($context === null ? 'page' : 'element')
+            throw new \Exception('No element found in ' . ($context === null ? 'page' : 'element')
                 . ' using selector: ' . $selector);
         }
 
@@ -236,6 +259,12 @@ class Context extends RawMinkContext implements BehatContext
         return $elements[0];
     }
 
+    protected function unquoteStepArgument(string $argument): string
+    {
+        // copied from https://github.com/Behat/MinkExtension/blob/v2.2/src/Behat/MinkExtension/Context/MinkContext.php#L567
+        return str_replace('\\"', '"', $argument);
+    }
+
     /**
      * Sleep for a certain time in ms.
      *
@@ -244,6 +273,16 @@ class Context extends RawMinkContext implements BehatContext
     public function iWait(int $ms): void
     {
         $this->getSession()->wait($ms);
+    }
+
+    /**
+     * @When I drag selector :selector onto selector :selectorTarget
+     */
+    public function iDragElementOnto(string $selector, string $selectorTarget): void
+    {
+        $elem = $this->findElement(null, $selector);
+        $elemTarget = $this->findElement(null, $selectorTarget);
+        $this->getSession()->getDriver()->dragTo($elem->getXpath(), $elemTarget->getXpath());
     }
 
     // {{{ button
@@ -266,7 +305,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $menu = $this->findElement(null, $selector);
         $link = $this->findElement($menu, 'xpath(//a[text()="' . $btnLabel . '"])');
-        $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
+        $this->getSession()->executeScript('$(\'#' . $link->getAttribute('id') . '\').click()');
     }
 
     /**
@@ -284,7 +323,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $element = $this->findElement(null, 'xpath(//div[text()="' . $text . '"])');
         if (!str_contains($element->getAttribute('style'), 'display: none')) {
-            throw new Exception('Element with text "' . $text . '" must be invisible');
+            throw new \Exception('Element with text "' . $text . '" must be invisible');
         }
     }
 
@@ -314,7 +353,16 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickPaginatorPage(string $pageNumber): void
     {
-        $this->getSession()->executeScript('$("a.item[data-page=' . $pageNumber . ']").click()');
+        $this->getSession()->executeScript('$(\'a.item[data-page=' . $pageNumber . ']\').click()');
+    }
+
+    /**
+     * @When I fill field using :selector with :value
+     */
+    public function iFillField(string $selector, string $value): void
+    {
+        $element = $this->findElement(null, $selector);
+        $element->setValue($value);
     }
 
     // }}}
@@ -333,14 +381,18 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * @Then Modal is open with text :arg1
-     * @Then Modal is open with text :arg1 in tag :arg2
+     * @Then Modal is open with text :arg1 in selector :arg2
      *
      * Check if text is present in modal or dynamic modal.
      */
-    public function modalIsOpenWithText(string $text, string $tag = 'div'): void
+    public function modalIsOpenWithText(string $text, string $selector = 'div'): void
     {
+        $textEncoded = str_contains($text, '"')
+            ? 'concat("' . str_replace('"', '", \'"\', "', $text) . '")'
+            : '"' . $text . '"';
+
         $modal = $this->findElement(null, '.modal.visible.active.front');
-        $this->findElement($modal, 'xpath(//' . $tag . '[text()[normalize-space()="' . $text . '"]])');
+        $this->findElement($modal, 'xpath(//' . $selector . '[text()[normalize-space()=' . $textEncoded . ']])');
     }
 
     /**
@@ -358,7 +410,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickCloseModal(): void
     {
-        $this->getSession()->executeScript('$(".modal.visible.active.front > i.icon.close")[0].click()');
+        $this->getSession()->executeScript('$(\'.modal.visible.active.front > i.icon.close\')[0].click()');
     }
 
     /**
@@ -366,7 +418,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iHideJsModal(): void
     {
-        $this->getSession()->executeScript('$(".modal.active.front").modal("hide")');
+        $modal = $this->findElement(null, '.modal.visible.active.front');
+        $this->getSession()->executeScript('$(arguments[0]).modal(\'hide\')', [$modal]);
     }
 
     // }}}
@@ -383,12 +436,12 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * @Then Panel is open with text :arg1
-     * @Then Panel is open with text :arg1 in tag :arg2
+     * @Then Panel is open with text :arg1 in selector :arg2
      */
-    public function panelIsOpenWithText(string $text, string $tag = 'div'): void
+    public function panelIsOpenWithText(string $text, string $selector = 'div'): void
     {
         $panel = $this->findElement(null, '.atk-right-panel.atk-visible');
-        $this->findElement($panel, 'xpath(//' . $tag . '[text()[normalize-space()="' . $text . '"]])');
+        $this->findElement($panel, 'xpath(//' . $selector . '[text()[normalize-space()="' . $text . '"]])');
     }
 
     /**
@@ -423,7 +476,7 @@ class Context extends RawMinkContext implements BehatContext
         $tabMenu = $this->findElement(null, '.ui.tabular.menu');
         $link = $this->findElement($tabMenu, 'xpath(//a[text()="' . $tabTitle . '"])');
 
-        $this->getSession()->executeScript('$("#' . $link->getAttribute('id') . '").click()');
+        $this->getSession()->executeScript('$(\'#' . $link->getAttribute('id') . '\').click()');
     }
 
     /**
@@ -433,7 +486,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $tab = $this->findElement(null, '.ui.tabular.menu > .item.active');
         if ($tab->getText() !== $title) {
-            throw new Exception('Active tab is not ' . $title);
+            throw new \Exception('Active tab is not ' . $title);
         }
     }
 
@@ -442,14 +495,17 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ input
 
     /**
-     * @Then /^input "([^"]*)" value should start with "([^"]*)"$/
+     * @Then ~^input "([^"]*)" value should start with "([^"]*)"$~
      */
     public function inputValueShouldStartWith(string $inputName, string $text): void
     {
+        $inputName = $this->unquoteStepArgument($inputName);
+        $text = $this->unquoteStepArgument($text);
+
         $field = $this->assertSession()->fieldExists($inputName);
 
         if (!str_starts_with($field->getValue(), $text)) {
-            throw new Exception('Field value ' . $field->getValue() . ' does not start with ' . $text);
+            throw new \Exception('Field value ' . $field->getValue() . ' does not start with ' . $text);
         }
     }
 
@@ -458,7 +514,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSetCalendarInputNameWithValue(string $inputName, string $value): void
     {
-        $script = '$(\'input[name="' . $inputName . '"]\').get(0)._flatpickr.setDate("' . $value . '")';
+        $script = '$(\'input[name="' . $inputName . '"]\').get(0)._flatpickr.setDate(\'' . $value . '\')';
         $this->getSession()->executeScript($script);
     }
 
@@ -476,24 +532,24 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSelectValueInLookup(string $value, string $inputName): void
     {
-        // get dropdown item from semantic ui which is direct parent of input html element
+        // get dropdown item from Fomantic-UI which is direct parent of input html element
         $lookupElem = $this->findElement(null, 'xpath(//input[@name="' . $inputName . '"]/parent::div)');
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
-        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("show")');
-        $this->jqueryWait('$("#' . $lookupElem->getAttribute('id') . '").hasClass("visible")');
+        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'show\')');
+        $this->jqueryWait('$(\'#' . $lookupElem->getAttribute('id') . '\').hasClass(\'visible\')');
 
         // select value
         $valueElem = $this->findElement($lookupElem, 'xpath(//div[text()="' . $value . '"])');
-        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("set selected", ' . $valueElem->getAttribute('data-value') . ');');
+        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'set selected\', ' . $valueElem->getAttribute('data-value') . ');');
         $this->jqueryWait();
 
         // hide dropdown and wait till fully closed
-        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("hide");');
+        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'hide\');');
         $this->jqueryWait();
         // for unknown reasons, dropdown very often remains visible in CI, so hide twice
-        $this->getSession()->executeScript('$("#' . $lookupElem->getAttribute('id') . '").dropdown("hide");');
-        $this->jqueryWait('!$("#' . $lookupElem->getAttribute('id') . '").hasClass("visible")');
+        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'hide\');');
+        $this->jqueryWait('!$(\'#' . $lookupElem->getAttribute('id') . '\').hasClass(\'visible\')');
     }
 
     /**
@@ -510,37 +566,54 @@ class Context extends RawMinkContext implements BehatContext
             EOF, [$element, array_map('ord', str_split($fileContent)), $fileName]);
     }
 
+    private function getScopeBuilderRuleElem(string $ruleName): NodeElement
+    {
+        return $this->findElement(null, '.vqb-rule[data-name=' . $ruleName . ']');
+    }
+
     /**
      * Generic ScopeBuilder rule with select operator and input value.
      *
-     * @Then /^rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     * @Then ~^rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
      */
     public function scopeBuilderRule(string $name, string $operator, string $value): void
     {
+        $name = $this->unquoteStepArgument($name);
+        $operator = $this->unquoteStepArgument($operator);
+        $value = $this->unquoteStepArgument($value);
+
         $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
         $this->assertInputValue($rule, $value);
     }
 
     /**
-     * hasOne reference or enum type rule for ScopeBuilder.
+     * HasOne reference or enum type rule for ScopeBuilder.
      *
-     * @Then /^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     * @Then ~^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
      */
     public function scopeBuilderReferenceRule(string $name, string $operator, string $value): void
     {
+        $name = $this->unquoteStepArgument($name);
+        $operator = $this->unquoteStepArgument($operator);
+        $value = $this->unquoteStepArgument($value);
+
         $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
         $this->assertDropdownValue($rule, $value, '.vqb-rule-input .active.item');
     }
 
     /**
-     * hasOne select or enum type rule for ScopeBuilder.
+     * HasOne select or enum type rule for ScopeBuilder.
      *
-     * @Then /^select rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     * @Then ~^select rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
      */
     public function scopeBuilderSelectRule(string $name, string $operator, string $value): void
     {
+        $name = $this->unquoteStepArgument($name);
+        $operator = $this->unquoteStepArgument($operator);
+        $value = $this->unquoteStepArgument($value);
+
         $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
         $this->assertSelectedValue($rule, $value, '.vqb-rule-input select');
@@ -549,10 +622,14 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Date, Time or Datetime rule for ScopeBuilder.
      *
-     * @Then /^date rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$/
+     * @Then ~^date rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
      */
     public function scopeBuilderDateRule(string $name, string $operator, string $value): void
     {
+        $name = $this->unquoteStepArgument($name);
+        $operator = $this->unquoteStepArgument($operator);
+        $value = $this->unquoteStepArgument($value);
+
         $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
         $this->assertInputValue($rule, $value, 'input.form-control');
@@ -561,27 +638,47 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Boolean type rule for ScopeBuilder.
      *
-     * @Then /^bool rule "([^"]*)" has value "([^"]*)"$/
+     * @Then ~^bool rule "([^"]*)" has value "([^"]*)"$~
      */
     public function scopeBuilderBoolRule(string $name, string $value): void
     {
+        $name = $this->unquoteStepArgument($name);
+        $value = $this->unquoteStepArgument($value);
+
         $this->getScopeBuilderRuleElem($name);
         $idx = ($value === 'Yes') ? 0 : 1;
-        $isChecked = $this->getSession()->evaluateScript('return $(\'[data-name="' . $name . '"]\').find(\'input\')[' . $idx . '].checked');
+        $isChecked = $this->getSession()->evaluateScript('$(\'[data-name="' . $name . '"]\').find(\'input\')[' . $idx . '].checked');
         if (!$isChecked) {
-            throw new Exception('Radio value selected is not: ' . $value);
+            throw new \Exception('Radio value selected is not: ' . $value);
         }
     }
 
     /**
-     * @Then /^I check if input value for "([^"]*)" match text in "([^"]*)"$/
+     * @Then ~^I check if input value for "([^"]*)" match text "([^"]*)"~
+     */
+    public function compareInputValueToText(string $selector, string $text): void
+    {
+        $selector = $this->unquoteStepArgument($selector);
+        $text = $this->unquoteStepArgument($text);
+
+        $inputValue = $this->findElement(null, $selector)->getValue();
+        if ($inputValue !== $text) {
+            throw new \Exception('Input value does not match: ' . $inputValue . ' expected: ' . $text);
+        }
+    }
+
+    /**
+     * @Then ~^I check if input value for "([^"]*)" match text in "([^"]*)"$~
      */
     public function compareInputValueToElementText(string $inputName, string $selector): void
     {
+        $inputName = $this->unquoteStepArgument($inputName);
+        $selector = $this->unquoteStepArgument($selector);
+
         $expectedText = $this->findElement(null, $selector)->getText();
         $input = $this->findElement(null, 'input[name="' . $inputName . '"]');
         if ($expectedText !== $input->getValue()) {
-            throw new Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expectedText);
+            throw new \Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expectedText);
         }
     }
 
@@ -606,21 +703,23 @@ class Context extends RawMinkContext implements BehatContext
         $column = $this->findElement(null, "th[data-column='" . $columnName . "']");
         $icon = $this->findElement($column, 'i');
 
-        $this->getSession()->executeScript('$("#' . $icon->getAttribute('id') . '").click()');
+        $this->getSession()->executeScript('$(\'#' . $icon->getAttribute('id') . '\').click()');
     }
 
     /**
-     * @Then /^container "([^"]*)" should display "([^"]*)" item\(s\)$/
+     * @Then ~^container "([^"]*)" should display "([^"]*)" item\(s\)$~
      */
     public function containerShouldHaveNumberOfItem(string $selector, int $numberOfitems): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+
         $items = $this->getSession()->getPage()->findAll('css', $selector);
         $count = 0;
         foreach ($items as $el => $item) {
             ++$count;
         }
         if ($count !== $numberOfitems) {
-            throw new Exception('Items does not match. There were ' . $count . ' item in container');
+            throw new \Exception('Items does not match. There were ' . $count . ' item in container');
         }
     }
 
@@ -629,7 +728,15 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iScrollToTop(): void
     {
-        $this->getSession()->executeScript('window.scrollTo(0,0)');
+        $this->getSession()->executeScript('window.scrollTo(0, 0)');
+    }
+
+    /**
+     * @Then I scroll to bottom
+     */
+    public function iScrollToBottom(): void
+    {
+        $this->getSession()->executeScript('window.scrollTo(0, 100 * 1000)');
     }
 
     /**
@@ -637,50 +744,85 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function toastDisplayShouldContainText(string $text): void
     {
-        $toast = $this->findElement(null, '.ui.toast-container');
-        if (!str_contains($this->findElement($toast, '.content')->getText(), $text)) {
-            throw new Exception('Cannot find text: "' . $text . '" in toast');
+        $toastContainer = $this->findElement(null, '.ui.toast-container');
+        $toastText = $this->findElement($toastContainer, '.content')->getText();
+        if (!str_contains($toastText, $text)) {
+            throw new \Exception('Toast text "' . $toastText . '" does not contain "' . $text . '"');
         }
     }
 
     /**
-     * @Then /^page url should contain \'([^\']*)\'$/
+     * @Then No toast should be displayed
      */
-    public function pageUrlShouldContain(string $text): void
+    public function noToastShouldBeDisplayed(): void
     {
-        $url = $this->getSession()->getCurrentUrl();
-        if (!str_contains($url, $text)) {
-            throw new Exception('Text : "' . $text . '" not found in ' . $url);
+        $toasts = $this->getSession()->getPage()->findAll('css', '.ui.toast-container .toast-box');
+        if (count($toasts) > 0) {
+            throw new \Exception('Toast is displayed: "' . $this->findElement(reset($toasts), '.content')->getText() . '"');
         }
     }
 
     /**
-     * @Then /^I check if text in "([^"]*)" match text in "([^"]*)"/
+     * Remove once https://github.com/Behat/MinkExtension/pull/386 and
+     * https://github.com/minkphp/Mink/issues/656 are fixed and released.
+     *
+     * @Then ~^PATCH MINK the (?i)url(?-i) should match "(?P<pattern>(?:[^"]|\\")*)"$~
+     */
+    public function assertUrlRegExp(string $pattern): void
+    {
+        $pattern = $this->unquoteStepArgument($pattern);
+
+        $this->assertSession()->addressMatches($pattern);
+    }
+
+    /**
+     * @Then ~^I check if text in "([^"]*)" match text in "([^"]*)"~
      */
     public function compareElementText(string $compareSelector, string $compareToSelector): void
     {
+        $compareSelector = $this->unquoteStepArgument($compareSelector);
+        $compareToSelector = $this->unquoteStepArgument($compareToSelector);
+
         if ($this->findElement(null, $compareSelector)->getText() !== $this->findElement(null, $compareToSelector)->getText()) {
-            throw new Exception('Text does not match between: ' . $compareSelector . ' and ' . $compareToSelector);
+            throw new \Exception('Text does not match between: ' . $compareSelector . ' and ' . $compareToSelector);
         }
     }
 
     /**
-     * @Then /^I check if text in "([^"]*)" match text "([^"]*)"/
+     * @Then ~^I check if text in "([^"]*)" match text "([^"]*)"~
      */
     public function textInContainerShouldMatch(string $selector, string $text): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+        $text = $this->unquoteStepArgument($text);
+
         if ($this->findElement(null, $selector)->getText() !== $text) {
-            throw new Exception('Container with selector: ' . $selector . ' does not match text: ' . $text);
+            throw new \Exception('Container with selector: ' . $selector . ' does not match text: ' . $text);
         }
     }
 
     /**
-     * @Then /^I check if text in "([^"]*)" match regex "([^"]*)"/
+     * @Then ~^I check if text in "([^"]*)" match regex "([^"]*)"~
      */
     public function textInContainerShouldMatchRegex(string $selector, string $regex): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+        $regex = $this->unquoteStepArgument($regex);
+
         if (!preg_match($regex, $this->findElement(null, $selector)->getText())) {
-            throw new Exception('Container with selector: ' . $selector . ' does not match regex: ' . $regex);
+            throw new \Exception('Container with selector: ' . $selector . ' does not match regex: ' . $regex);
+        }
+    }
+
+    /**
+     * @Then Element :arg1 attribute :arg2 should contain text :arg3
+     */
+    public function elementAttributeShouldContainText(string $selector, string $attribute, string $text): void
+    {
+        $element = $this->findElement(null, $selector);
+        $attr = $element->getAttribute($attribute);
+        if (!str_contains($attr, $text)) {
+            throw new \Exception('Element " . $selector . " attribute "' . $attribute . '" does not contain "' . $text . '"');
         }
     }
 
@@ -692,8 +834,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     private function assertDropdownValue(NodeElement $element, string $value, string $selector): void
     {
-        if ($this->findElement($element, $selector)->getHtml() !== $value) {
-            throw new Exception('Value: "' . $value . '" not set using selector: ' . $selector);
+        if ($this->findElement($element, $selector)->getText() !== $value) {
+            throw new \Exception('Value: "' . $value . '" not set using selector: ' . $selector);
         }
     }
 
@@ -704,7 +846,7 @@ class Context extends RawMinkContext implements BehatContext
     private function assertSelectedValue(NodeElement $element, string $value, string $selector): void
     {
         if ($this->findElement($element, $selector)->getValue() !== $value) {
-            throw new Exception('Value: "' . $value . '" not set using selector: ' . $selector);
+            throw new \Exception('Value: "' . $value . '" not set using selector: ' . $selector);
         }
     }
 
@@ -715,12 +857,7 @@ class Context extends RawMinkContext implements BehatContext
     private function assertInputValue(NodeElement $element, string $value, string $selector = 'input'): void
     {
         if ($this->findElement($element, $selector)->getValue() !== $value) {
-            throw new Exception('Input value not is not: ' . $value);
+            throw new \Exception('Input value not is not: ' . $value);
         }
-    }
-
-    private function getScopeBuilderRuleElem(string $ruleName): NodeElement
-    {
-        return $this->findElement(null, '.vqb-rule[data-name=' . $ruleName . ']');
     }
 }

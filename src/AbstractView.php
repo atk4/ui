@@ -14,7 +14,7 @@ use Atk4\Core\TrackableTrait;
 /**
  * Abstract view tree item (used only for View and Callback, you want probably to extend one of these).
  *
- * @property View[] $elements
+ * @property array<string, AbstractView> $elements
  *
  * @method View getOwner()
  */
@@ -31,35 +31,18 @@ abstract class AbstractView
     use StaticAddToTrait;
     use TrackableTrait;
 
-    /** @var string Default name of the element. */
-    public $defaultName = 'atk';
-
     /**
      * If add() method is called, but current view is not part of render tree yet,
      * then arguments to add() are simply stored in this array. When the view is
      * initialized by calling init() or adding into App or another initialized View,
      * then add() will be re-invoked with the contents of this array.
      *
-     * @var array
+     * @var array<int, array{self, array}>|null
      */
-    protected $_addLater = [];
+    protected ?array $_addLater = [];
 
-    /** @var bool will be set to true after rendered. This is so that we don't render view twice. */
-    protected $_rendered = false;
-
-    /**
-     * For the absence of the application, we would add a very
-     * simple one.
-     */
-    protected function initDefaultApp()
-    {
-        $this->setApp(new App([
-            'catchExceptions' => false,
-            'alwaysRun' => false,
-            'catchRunawayCallbacks' => false,
-        ]));
-        $this->getApp()->invokeInit();
-    }
+    /** Will be set to true after rendered. This is so that we don't render view twice. */
+    protected bool $_rendered = false;
 
     /**
      * Called when view becomes part of render tree. You can override it but avoid
@@ -67,30 +50,25 @@ abstract class AbstractView
      */
     protected function init(): void
     {
-        if (!$this->issetApp()) {
-            $this->initDefaultApp();
-        }
-
         if ($this->name === null) {
-            $this->name = $this->defaultName;
+            $this->name = 'atk';
         }
 
         $this->_init();
 
-        // add default objects
-        foreach ($this->_addLater as [$object, $args]) {
-            $this->add($object, $args);
+        if ($this->_addLater !== null) {
+            foreach ($this->_addLater as [$object, $args]) {
+                $this->add($object, $args);
+            }
+            $this->_addLater = null;
         }
-        $this->_addLater = [];
     }
 
     /**
-     * @param AbstractView $object
+     * @return ($object is View ? View : self)
      */
-    public function add($object, $args = null): self
+    public function add(self $object, array $args = []): self
     {
-        (self::class)::assertInstanceOf($object);
-
         if (func_num_args() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');
         } elseif ($this->_rendered) {

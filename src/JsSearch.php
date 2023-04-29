@@ -1,15 +1,18 @@
 <?php
 
 declare(strict_types=1);
+
+namespace Atk4\Ui;
+
 /**
  * A Search input field that will reload View
  * using the view->url with a _q arguments attach to url.
  */
-
-namespace Atk4\Ui;
-
 class JsSearch extends View
 {
+    public $ui = 'left icon action transparent input';
+    public $defaultTemplate = 'js-search.html';
+
     /** @var View The View to reload using this JsSearch. */
     public $reload;
 
@@ -24,7 +27,7 @@ class JsSearch extends View
      */
     public $autoQuery = false;
 
-    /** @var Form\Control\Line The input field. */
+    /** @var Form\Control\Line|null The input field. */
     public $placeHolder = 'Search';
 
     /**
@@ -54,20 +57,22 @@ class JsSearch extends View
         return parent::link($url, $target);
     }
 
-    public $defaultTemplate = 'js-search.html';
-
     /** @var string ui css classes */
     public $button = 'ui mini transparent basic button';
+    /** @var string */
     public $filterIcon = 'filter';
+    /** @var string */
     public $btnSearchIcon = 'search';
+    /** @var string */
     public $btnRemoveIcon = 'red remove';
+    /** @var string|null */
     public $btnStyle;
 
     protected function init(): void
     {
         parent::init();
 
-        // $this->input = Form\Control\Line::addTo($this, ['iconLeft' => 'filter',  'action' => new Button(['icon' => 'search', 'ui' => 'button atk-action'])]);
+        // $this->input = Form\Control\Line::addTo($this, ['iconLeft' => 'filter', 'action' => new Button(['icon' => 'search', 'ui' => 'button atk-action'])]);
     }
 
     protected function renderView(): void
@@ -77,7 +82,7 @@ class JsSearch extends View
         }
 
         if ($this->btnStyle) {
-            $this->template->trySet('button_style', $this->btnStyle);
+            $this->template->trySet('buttonStyle', $this->btnStyle);
         }
 
         $this->template->set('Button', $this->button);
@@ -86,9 +91,9 @@ class JsSearch extends View
         $this->template->set('BtnRemoveIcon', $this->btnRemoveIcon);
 
         $this->js(true)->atkJsSearch([
-            'uri' => $this->reload->jsUrl(),
-            'uri_options' => array_merge(['__atk_reload' => $this->reload->name], $this->args),
-            'uri_query_key' => $this->name . '_q',
+            'url' => $this->reload->jsUrl(),
+            'urlOptions' => array_merge(['__atk_reload' => $this->reload->name], $this->args),
+            'urlQueryKey' => $this->name . '_q',
             'autoQuery' => $this->autoQuery,
             'q' => $this->initValue,
             'useAjax' => $this->useAjax,

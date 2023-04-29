@@ -4,23 +4,26 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\Columns;
 use Atk4\Ui\Form;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsToast;
+use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-\Atk4\Ui\View::addTo($app, [
+View::addTo($app, [
     'Forms below focus on Data integration and automated layouts',
     'ui' => 'ignored warning message',
 ]);
 
-$formSubmit = function ($f) use ($app) {
-    return new JsToast($app->encodeJson($f->model->get()));
+$formSubmit = function (Form $form) use ($app) {
+    return new JsToast($app->encodeJson($form->model->get()));
 };
 
-$cc = \Atk4\Ui\Columns::addTo($app);
+$cc = Columns::addTo($app);
 $form = Form::addTo($cc->addColumn());
 
 // adding field without model creates a regular line
@@ -40,7 +43,7 @@ $form->addControl('six', new Form\Control\Checkbox(['caption' => 'Caption3']));
 
 $form->onSubmit($formSubmit);
 
-$model = new \Atk4\Data\Model(new Persistence\Array_());
+$model = new Model(new Persistence\Array_());
 
 // model field uses regular line form control by default
 $model->addField('one');
@@ -55,10 +58,11 @@ $model->addField('three', ['ui' => ['form' => ['caption' => 'Caption']]]);
 $model->addField('four', ['type' => 'boolean', 'ui' => ['form' => ['caption' => 'Caption2']]]);
 
 // Can specify class for a checkbox explicitly
-$model->addField('five', ['ui' => ['form' => [Form\Control\Checkbox::class, 'caption' => 'Caption3']]]);
+// type here in "six" should not be needed if we add Checkbox form control support for string type
+$model->addField('five', ['type' => 'boolean', 'ui' => ['form' => [Form\Control\Checkbox::class, 'caption' => 'Caption3']]]);
 
 // Form-specific caption overrides general caption of a field. Also you can specify object instead of seed
-$model->addField('six', ['caption' => 'badcaption', 'ui' => ['form' => new Form\Control\Checkbox(['caption' => 'Caption4'])]]);
+$model->addField('six', ['type' => 'boolean', 'caption' => 'badcaption', 'ui' => ['form' => new Form\Control\Checkbox(['caption' => 'Caption4'])]]);
 
 $model = $model->createEntity();
 

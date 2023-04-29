@@ -9,8 +9,9 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsChain;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
 use Atk4\Ui\View;
 use Atk4\Ui\VirtualPage;
@@ -20,10 +21,10 @@ use Atk4\Ui\VirtualPage;
  */
 class VpExecutor extends View implements JsExecutorInterface
 {
+    use CommonExecutorTrait;
     use HookTrait;
     use StepExecutorTrait;
 
-    /** @const string */
     public const HOOK_STEP = self::class . '@onStep';
 
     /** @var VirtualPage */
@@ -38,7 +39,7 @@ class VpExecutor extends View implements JsExecutorInterface
     /** @var View */
     public $stepList;
 
-    /** @var string[] */
+    /** @var array<string, string> */
     public $stepListItems = ['args' => 'Fill argument(s)', 'fields' => 'Edit Record(s)', 'preview' => 'Preview', 'final' => 'Complete'];
 
     /** @var array */
@@ -47,6 +48,7 @@ class VpExecutor extends View implements JsExecutorInterface
     protected function init(): void
     {
         parent::init();
+
         $this->initExecutor();
     }
 
@@ -56,7 +58,7 @@ class VpExecutor extends View implements JsExecutorInterface
         /** @var Button $b */
         $b = $this->vp->add(Factory::factory($this->cancelBtnSeed));
         $b->link($this->getApp()->url());
-        View::addTo($this->vp, ['ui' => 'ui clearing divider']);
+        View::addTo($this->vp, ['ui' => 'clearing divider']);
 
         $this->header = Header::addTo($this->vp);
         $this->stepList = View::addTo($this->vp)->addClass('ui horizontal bulleted link list');
@@ -73,25 +75,23 @@ class VpExecutor extends View implements JsExecutorInterface
      * to make sure that view id is properly set for loader and button
      * js action to run properly.
      */
-    public function afterActionInit(Model\UserAction $action): void
+    protected function afterActionInit(Model\UserAction $action): void
     {
         $this->loader = Loader::addTo($this->vp, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 
-    /**
-     * Will associate executor with the action.
-     */
-    public function setAction(Model\UserAction $action): self
+    public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
         $this->afterActionInit($action);
 
         // get necessary step need prior to execute action.
-        if ($this->steps = $this->getSteps($action)) {
+        $this->steps = $this->getSteps($action);
+        if ($this->steps) {
             $this->header->set($this->title ?? $action->getDescription());
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
-            $this->vp->add($this->createButtonBar($this->action)->addStyle(['text-align' => 'end']));
+            $this->vp->add($this->createButtonBar($this->action)->setStyle(['text-align' => 'end']));
             $this->addStepList();
         }
 
@@ -100,11 +100,11 @@ class VpExecutor extends View implements JsExecutorInterface
         return $this;
     }
 
-    public function jsExecute(array $urlArgs = []): array
+    public function jsExecute(array $urlArgs = []): JsBlock
     {
         $urlArgs['step'] = $this->step;
 
-        return [(new JsChain('atk.utils'))->redirect($this->vp->getUrl(), $urlArgs)];
+        return new JsBlock([(new JsChain('atk.utils'))->redirect($this->vp->getUrl(), $urlArgs)]);
     }
 
     /**
@@ -112,19 +112,9 @@ class VpExecutor extends View implements JsExecutorInterface
      */
     public function executeModelAction(): void
     {
-        $id = $this->stickyGet($this->name);
-        if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->tryLoad($id));
-        } elseif (!$this->action->isOwnerEntity()
-                && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
-        }
+        $this->action = $this->executeModelActionLoad($this->action);
 
-        if ($this->action->fields === true) {
-            $this->action->fields = array_keys($this->action->getModel()->getFields('editable'));
-        }
-
-        $this->vp->set(function ($vPage) {
+        $this->vp->set(function () {
             $this->jsSetBtnState($this->loader, $this->step);
             $this->jsSetListState($this->loader, $this->step);
             $this->runSteps();
@@ -147,7 +137,7 @@ class VpExecutor extends View implements JsExecutorInterface
         $view->js(true, $this->stepList->js()->find('.item')->removeClass('active'));
         foreach ($this->steps as $step) {
             if ($step === $currentStep) {
-                $view->js(true, $this->stepList->js()->find("[data-list-item='{$step}']")->addClass('active'));
+                $view->js(true, $this->stepList->js()->find('[data-list-item="' . $step . '"]')->addClass('active'));
             }
         }
     }
@@ -158,18 +148,17 @@ class VpExecutor extends View implements JsExecutorInterface
      * @param mixed      $obj
      * @param string|int $id
      */
-    protected function jsGetExecute($obj, $id): array
+    protected function jsGetExecute($obj, $id): JsBlock
     {
-        // @phpstan-ignore-next-line
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
 
-        return [
-            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) ?:
-                $success ?: new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
+        return new JsBlock([
+            JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
             $this->loader->jsClearStoreData(true),
             (new JsChain('atk.utils'))->redirect($this->url()),
-        ];
+        ]);
     }
 }

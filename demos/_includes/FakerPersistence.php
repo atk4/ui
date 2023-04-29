@@ -20,14 +20,14 @@ class FakerPersistence extends Persistence
         $this->faker = \Faker\Factory::create();
     }
 
-    public function prepareIterator(Model $model)
+    public function prepareIterator(Model $model): \Traversable
     {
         foreach ($this->export($model) as $row) {
             yield $row;
         }
     }
 
-    private function export(Model $model, $fields = [])
+    private function export(Model $model, array $fields = []): array
     {
         if (!$fields) {
             foreach ($model->getFields() as $name => $e) {
@@ -41,7 +41,7 @@ class FakerPersistence extends Persistence
             foreach ($fields as $field) {
                 $type = $field;
 
-                if ($field === $model->id_field) {
+                if ($field === $model->idField) {
                     $row[$field] = $i + 1;
 
                     continue;

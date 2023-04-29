@@ -54,7 +54,9 @@ $loader->set(function (Loader $p) use ($m) {
             $c->setModel($m, [$m->fieldName()->name]);
         });
     });
-    \Atk4\Ui\Button::addTo($p, ['Load2'])->js('click', $loaderSub->jsLoad());
+    Button::addTo($p, ['Load2'])
+        ->on('click', $loaderSub->jsLoad());
 });
 
-\Atk4\Ui\Button::addTo($app, ['Load1'])->js('click', $loader->jsLoad());
+Button::addTo($app, ['Load1'])
+    ->on('click', $loader->jsLoad());

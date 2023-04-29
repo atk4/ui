@@ -1,7 +1,23 @@
 /*
 !/.gitignore
+!/package.json
+!/package-lock.json
+!/postinstall.js
 !/*/
 /*/*
+
+!/@shopify/draggable/
+/@shopify/draggable/*
+!/@shopify/draggable/LICENS*
+!/@shopify/draggable/lib/
+/@shopify/draggable/lib/*
+!/@shopify/draggable/lib/*.bundle.js
+
+!/chart.js/LICENS*
+!/chart.js/dist/
+/chart.js/dist/*
+!/chart.js/dist/*.js
+/chart.js/dist/*.esm.js
 
 !/flatpickr/LICENS*
 !/flatpickr/dist/
@@ -16,26 +32,21 @@
 # seems not needed... !/flatpickr/dist/plugins/*
 # seems not needed... !/flatpickr/dist/themes/*
 
-!/fomantic-ui-css/LICENS*
-!/fomantic-ui-css/*.css
-!/fomantic-ui-css/*.js
-!/fomantic-ui-css/themes/
-/fomantic-ui-css/themes/*
-!/fomantic-ui-css/themes/default/
-/fomantic-ui-css/themes/default/*
-!/fomantic-ui-css/themes/default/assets/
-/fomantic-ui-css/themes/default/assets/*
-!/fomantic-ui-css/themes/default/assets/fonts/
-/fomantic-ui-css/themes/default/assets/fonts/*
-!/fomantic-ui-css/themes/default/assets/fonts/*.woff2
-!/fomantic-ui-css/themes/default/assets/images/
-/fomantic-ui-css/themes/default/assets/images/*
-!/fomantic-ui-css/themes/default/assets/images/flags.png
-
-!/form-serializer/LICENS*
-!/form-serializer/dist/
-/form-serializer/dist/*
-!/form-serializer/dist/*.js
+!/fomantic-ui/LICENS*
+!/fomantic-ui/dist/
+/fomantic-ui/dist/*
+!/fomantic-ui/dist/*.css
+!/fomantic-ui/dist/*.js
+!/fomantic-ui/dist/themes/
+/fomantic-ui/dist/themes/*
+!/fomantic-ui/dist/themes/default/
+/fomantic-ui/dist/themes/default/*
+!/fomantic-ui/dist/themes/default/assets/
+/fomantic-ui/dist/themes/default/assets/*
+!/fomantic-ui/dist/themes/default/assets/fonts/
+/fomantic-ui/dist/themes/default/assets/fonts/*
+!/fomantic-ui/dist/themes/default/assets/fonts/*.woff2
+/fomantic-ui/dist/themes/default/assets/fonts/Lato*.woff2
 
 !/jquery/LICENS*
 !/jquery/dist/
@@ -43,9 +54,18 @@
 !/jquery/dist/*.js
 /jquery/dist/*.slim.*
 
-#!/twemoji/LICENS*
-#!/twemoji/assets/
-#/twemoji/assets/*
-#!/twemoji/assets/svg/
-#/twemoji/assets/svg/*
-# wait until https://github.com/fomantic/Fomantic-UI/issues/2363 is implemented or pack all images in one phar !/twemoji/assets/svg/*.svg
+!/twemoji/LICENS*
+!/twemoji/assets/
+/twemoji/assets/*
+!/twemoji/assets/svg/
+/twemoji/assets/svg/*
+# bundle country flags only and wait until https://github.com/fomantic/Fomantic-UI/issues/2363
+# is implemented or pack all svg images in one phar
+!/twemoji/assets/svg/1f1e[6-9a-f]-1f1[e-f][0-9a-f].svg
+!/twemoji/assets/svg/1f1f[0-9a-f]-1f1[e-f][0-9a-f].svg
+!/twemoji/assets/svg/1f3f3-fe0f-200d-1f308.svg
+!/twemoji/assets/svg/1f3f3-fe0f-200d-26a7-fe0f.svg
+!/twemoji/assets/svg/1f3f4-200d-2620-fe0f.svg
+!/twemoji/assets/svg/1f3f4-e0067-e0062-e0065-e006e-e0067-e007f.svg
+!/twemoji/assets/svg/1f3f4-e0067-e0062-e0073-e0063-e0074-e007f.svg
+!/twemoji/assets/svg/1f3f4-e0067-e0062-e0077-e006c-e0073-e007f.svg

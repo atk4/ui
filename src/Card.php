@@ -1,15 +1,22 @@
 <?php
 
 declare(strict_types=1);
+
+namespace Atk4\Ui;
+
+use Atk4\Core\Factory;
+use Atk4\Data\Model;
+use Atk4\Ui\UserAction\ExecutorFactory;
+use Atk4\Ui\UserAction\ExecutorInterface;
+use Atk4\Ui\UserAction\SharedExecutor;
+
 /**
- * A Card container.
- *
  * Card can contain arbitrary information.
  *
  * Card contains one main CardSection for adding content
  * but it can contains other CardSection using addSection method.
  *
- * Each section can have it's own model field to be display has
+ * Each section can have it's own model, field to be displayed has
  * field value, field label, field value or as table.
  *
  * Card also has an extra content section which is formatted
@@ -18,16 +25,9 @@ declare(strict_types=1);
  *
  * Multiple model can be used to display various content on each card section.
  * When using model or models, the first model that get set via setModel method
- * will have it's id_field set as data-id html attribute for the card. Thus making
+ * will have it's idField set as data-id html attribute for the card. Thus making
  * the id available via javascript (new Jquery())->data('id')
  */
-
-namespace Atk4\Ui;
-
-use Atk4\Core\Factory;
-use Atk4\Data\Model;
-use Atk4\Ui\UserAction\ExecutorFactory;
-
 class Card extends View
 {
     public $ui = 'card atk-card';
@@ -73,15 +73,6 @@ class Card extends View
     /** @var string Default executor class. */
     public $executor = UserAction\ModalExecutor::class;
 
-    /** @var array Columns CSS wide classes */
-    protected $words = [
-        '', 'fluid', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
-        'thirteen', 'fourteen', 'fifteen', 'sixteen',
-    ];
-
-    /** @var int The number of buttons */
-    private $btnCount = 0;
-
     protected function init(): void
     {
         parent::init();
@@ -107,12 +98,12 @@ class Card extends View
     /**
      * Get main section of this card.
      *
-     * @return CardSection|View|null
+     * @return CardSection
      */
     public function getSection()
     {
         if (!$this->section) {
-            $this->section = $this->add([$this->cardSection, 'card' => $this]);
+            $this->section = CardSection::addToWithCl($this, [$this->cardSection, 'card' => $this]);
         }
 
         return $this->section;
@@ -121,7 +112,7 @@ class Card extends View
     /**
      * Get the image container of this card.
      *
-     * @return View|null
+     * @return View
      */
     public function getImageContainer()
     {
@@ -135,7 +126,7 @@ class Card extends View
     /**
      * Get the ExtraContainer of this card.
      *
-     * @return View|null
+     * @return View
      */
     public function getExtraContainer()
     {
@@ -149,12 +140,16 @@ class Card extends View
     /**
      * Get the button container of this card.
      *
-     * @return View|null
+     * @return View
      */
     public function getButtonContainer()
     {
         if (!$this->btnContainer) {
             $this->btnContainer = $this->addExtraContent(new View(['ui' => 'buttons']));
+            $this->getButtonContainer()->addClass('wrapping');
+            if ($this->hasFluidButton) {
+                $this->getButtonContainer()->addClass('fluid');
+            }
         }
 
         return $this->btnContainer;
@@ -163,7 +158,7 @@ class Card extends View
     /**
      * Add Content to card.
      *
-     * @return View|null
+     * @return View
      */
     public function addContent(View $view)
     {
@@ -171,64 +166,25 @@ class Card extends View
     }
 
     /**
-     * Set model.
-     *
      * If Fields are past with $model that field will be add
      * to the main section of this card.
      *
      * @param array<int, string>|null $fields
      */
-    public function setModel(Model $model, array $fields = null): void
+    public function setModel(Model $entity, array $fields = null): void
     {
-        $model->assertIsLoaded();
+        $entity->assertIsLoaded();
 
-        parent::setModel($model);
+        parent::setModel($entity);
 
         if ($fields === null) {
             $fields = array_keys($this->model->getFields(['editable', 'visible']));
         }
 
-        $this->setDataId($this->model->getId());
+        $this->template->trySet('dataId', (string) $this->model->getId());
 
-        View::addTo($this->getSection(), [$model->getTitle(), 'class.header' => true]);
-        $this->getSection()->addFields($model, $fields, $this->useLabel, $this->useTable);
-    }
-
-    /**
-     * Set data-id attribute of this card.
-     */
-    public function setDataId($id)
-    {
-        $this->template->trySet('dataId', $id);
-    }
-
-    /**
-     * Add actions from various model.
-     */
-    public function addModelsActions(array $models)
-    {
-        foreach ($models as $model) {
-            $this->addModelActions($model);
-        }
-    }
-
-    /**
-     * Add action from Model.
-     */
-    public function addModelActions(Model $model)
-    {
-        if ($singleActions = $model->getUserActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD)) {
-            $this->setModel($model);
-            foreach ($singleActions as $action) {
-                $this->addAction($action, $this->executor);
-            }
-        }
-
-        if ($noRecordAction = $model->getUserActions(Model\UserAction::APPLIES_TO_NO_RECORDS)) {
-            foreach ($noRecordAction as $action) {
-                $this->addAction($action, $this->executor);
-            }
-        }
+        View::addTo($this->getSection(), [$entity->getTitle(), 'class.header' => true]);
+        $this->getSection()->addFields($entity, $fields, $this->useLabel, $this->useTable);
     }
 
     /**
@@ -252,45 +208,27 @@ class Card extends View
     }
 
     /**
-     * Add action executor to card.
-     *
-     * @param class-string<View&UserAction\ExecutorInterface> $executorClass
-     */
-    public function addAction(Model\UserAction $action, $executorClass, $button = null)
-    {
-        if (!$button) {
-            $button = new Button([$action->caption]);
-        }
-        $btn = $this->addButton($button);
-
-        $vp = VirtualPage::addTo($this)->set(function (View $page) use ($executorClass, $action) {
-            $id = $this->stickyGet($this->name);
-
-            $executor = $page->add(new $executorClass());
-
-            $action = $action->getActionForEntity($action->getModel()->load($id));
-
-            $executor->setAction($action);
-        });
-
-        $btn->on('click', new JsModal($action->caption, $vp, [$this->name => (new Jquery())->parents('.atk-card')->data('id')]));
-    }
-
-    /**
      * Execute Model user action via button in Card.
+     *
+     * @return $this
      */
     public function addClickAction(Model\UserAction $action, Button $button = null, array $args = [], string $confirm = null): self
     {
-        $defaults = [];
-
         $btn = $this->addButton($button ?? $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::CARD_BUTTON));
+
+        $cardDeck = $this->getClosestOwner(CardDeck::class);
+
+        $defaults = [];
 
         // Setting arg for model id. $args[0] is consider to hold a model id, i.e. as a js expression.
         if ($this->model && $this->model->isLoaded() && !isset($args[0])) {
             $defaults[] = $this->model->getId();
+            if ($cardDeck === null && !$action->isOwnerEntity()) {
+                $action = $action->getActionForEntity($this->model);
+            }
         }
 
-        if (!empty($args)) {
+        if ($args !== []) {
             $defaults['args'] = $args;
         }
 
@@ -298,7 +236,23 @@ class Card extends View
             $defaults['confirm'] = $confirm;
         }
 
-        $btn->on('click', $action, $defaults);
+        if ($cardDeck !== null) {
+            // mimic https://github.com/atk4/ui/blob/3c592b8f10fe67c61f179c5c8723b07f8ab754b9/src/Crud.php#L140
+            // based on https://github.com/atk4/ui/blob/3c592b8f10fe67c61f179c5c8723b07f8ab754b9/src/UserAction/SharedExecutorsContainer.php#L24
+            $isNew = !isset($cardDeck->sharedExecutorsContainer->sharedExecutors[$action->shortName]);
+            if ($isNew) {
+                $ex = $cardDeck->sharedExecutorsContainer->getExecutorFactory()->createExecutor($action, $cardDeck->sharedExecutorsContainer);
+
+                $ex->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, \Closure::bind(function (ExecutorInterface $ex, $return, $id) use ($cardDeck, $action) { // @phpstan-ignore-line
+                    return $cardDeck->jsExecute($return, $action);
+                }, null, CardDeck::class));
+
+                $ex->executeModelAction();
+                $cardDeck->sharedExecutorsContainer->sharedExecutors[$action->shortName] = new SharedExecutor($ex);
+            }
+        }
+
+        $btn->on('click', $cardDeck !== null ? $cardDeck->sharedExecutorsContainer->getExecutor($action) : $action, $defaults);
 
         return $this;
     }
@@ -306,7 +260,7 @@ class Card extends View
     /**
      * Set extra content using model field.
      */
-    public function addExtraFields(Model $model, array $fields, string $glue = null)
+    public function addExtraFields(Model $model, array $fields, string $glue = null): void
     {
         // display extra field in line.
         if ($glue) {
@@ -315,7 +269,7 @@ class Card extends View
                 $extra .= $model->get($field) . $glue;
             }
             $extra = rtrim($extra, $glue);
-            $this->addExtraContent(new View([$extra, 'ui' => 'ui basic fitted segment']));
+            $this->addExtraContent(new View([$extra, 'ui' => 'basic fitted segment']));
         } else {
             foreach ($fields as $field) {
                 $this->addExtraContent(new View([$model->get($field), 'class.ui basic fitted segment' => true]));
@@ -328,7 +282,7 @@ class Card extends View
      *
      * @param string|View $description
      *
-     * @return View|string|null the description to add
+     * @return View
      */
     public function addDescription($description)
     {
@@ -351,7 +305,7 @@ class Card extends View
      *
      * @param string|Image $img
      *
-     * @return View|null
+     * @return View
      */
     public function addImage($img)
     {
@@ -367,41 +321,18 @@ class Card extends View
     /**
      * Add button to card.
      *
-     * @param Button $button a Button
+     * @param Button|array $seed
      *
-     * @return View|null
+     * @return View
      */
-    public function addButton($button)
+    public function addButton($seed)
     {
-        if ($this->hasFluidButton && $this->btnCount > 0) {
-            $this->getButtonContainer()->removeClass($this->words[$this->btnCount]);
+        if (!is_object($seed)) {
+            $seed = Factory::factory([Button::class], $seed);
         }
 
-        if (!is_object($button)) {
-            $button = Factory::factory([Button::class], $button);
-        }
-
-        $btn = $this->getButtonContainer()->add($button);
-        ++$this->btnCount;
-
-        if ($this->hasFluidButton && $this->btnCount > 0) {
-            $this->getButtonContainer()->addClass($this->words[$this->btnCount]);
-        }
+        $btn = $this->getButtonContainer()->add($seed);
 
         return $btn;
-    }
-
-    /**
-     * Add a series of buttons to this card.
-     *
-     * @return View|null
-     */
-    public function addButtons(array $buttons)
-    {
-        foreach ($buttons as $btn) {
-            $btn = $this->addButton($btn);
-        }
-
-        return $this->getButtonContainer();
     }
 }

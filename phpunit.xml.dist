@@ -21,8 +21,12 @@
     </listeners>
     <coverage>
         <include>
-            <directory suffix=".php">src</directory>
+            <directory>src</directory>
+            <directory>tests</directory>
         </include>
+        <exclude>
+            <directory>src/Behat</directory>
+        </exclude>
         <report>
             <php outputFile="coverage/phpunit.cov" />
         </report>

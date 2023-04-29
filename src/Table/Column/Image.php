@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column;
 
+use Atk4\Data\Field;
 use Atk4\Ui\Table;
 
 /**
@@ -11,18 +12,12 @@ use Atk4\Ui\Table;
  */
 class Image extends Table\Column
 {
-    /** @var array Overrides custom attributes that will be applied on head, body or foot. */
-    public $attr = ['all' => ['class' => ['center aligned single line']]];
+    public array $attr = ['all' => ['class' => ['center aligned single line']]];
 
-    /**
-     * Extend parent method.
-     *
-     * @return string
-     */
-    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
+    public function getDataCellTemplate(Field $field = null): string
     {
         $caption = $field ? $field->getCaption() : $this->shortName;
 
-        return '<img src="' . parent::getDataCellTemplate($field) . '" alt="' . $caption . '" border="0" />';
+        return $this->getApp()->getTag('img/', ['src' => parent::getDataCellTemplate($field), 'alt' => $caption, 'border' => '0']);
     }
 }

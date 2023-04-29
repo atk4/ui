@@ -4,29 +4,34 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsFunction;
 
-/**
- * Date/Time picker attached to a form control.
- */
 class Calendar extends Input
 {
-    /**
-     * Set this to 'date', 'time', 'datetime'.
-     */
-    public $type = 'date';
+    public string $inputType = 'text';
 
     /**
-     * Any other options you'd like to pass to flatpickr JS.
+     * @var 'date'|'time'|'datetime'
+     */
+    public string $type = 'date';
+
+    /**
+     * Any other options you'd like to pass to Flatpickr JS.
      * See https://flatpickr.js.org/options/ for all possible options.
      */
-    public $options = [];
+    public array $options = [];
 
     /**
-     * Set flatpickr option.
+     * Set Flatpickr option.
+     *
+     * @param string $name
+     * @param mixed  $value
      */
-    public function setOption($name, $value)
+    public function setOption($name, $value): void
     {
         $this->options[$name] = $value;
     }
@@ -36,30 +41,26 @@ class Calendar extends Input
         parent::init();
 
         // setup format
-        $phpFormat = $this->getApp()->ui_persistence->{$this->type . '_format'};
+        $phpFormat = $this->getApp()->uiPersistence->{$this->type . 'Format'};
         $this->options['dateFormat'] = $this->convertPhpDtFormatToFlatpickr($phpFormat);
 
         if ($this->type === 'datetime' || $this->type === 'time') {
             $this->options['enableTime'] = true;
-            $this->options['time_24hr'] ??= $this->use24hrTimeFormat($phpFormat);
+            $this->options['time_24hr'] ??= $this->isDtFormatWith24hrTime($phpFormat);
             $this->options['noCalendar'] = ($this->type === 'time');
-
-            // Add seconds picker if set
-            $this->options['enableSeconds'] ??= $this->useSeconds($phpFormat);
-
-            // Allow edit if microseconds is set.
-            $this->options['allowInput'] ??= $this->allowMicroSecondsInput($phpFormat);
+            $this->options['enableSeconds'] ??= $this->isDtFormatWithSeconds($phpFormat);
+            $this->options['allowInput'] ??= $this->isDtFormatWithMicroseconds($phpFormat);
         }
 
         // setup locale
         $this->options['locale'] = [
-            'firstDayOfWeek' => $this->getApp()->ui_persistence->firstDayOfWeek,
+            'firstDayOfWeek' => $this->getApp()->uiPersistence->firstDayOfWeek,
         ];
     }
 
     protected function renderView(): void
     {
-        if ($this->readonly) {
+        if ($this->readOnly) {
             $this->options['clickOpens'] = false;
         }
 
@@ -69,41 +70,26 @@ class Calendar extends Input
     }
 
     /**
-     * Shorthand method for on('change') event.
-     * Some input fields, like Calendar, could call this differently.
-     *
-     * If $expr is string or JsExpression, then it will execute it instantly.
-     *
-     * Examples:
-     * $control->onChange('console.log(date, text, mode)');
-     * $control->onChange(new \Atk4\Ui\JsExpression('console.log(date, text, mode)'));
-     * $control->onChange('$(this).parents(".form").form("submit")');
-     *
-     * Note: Unlike Control::onChange() method, flatpickr onChange options does not use $default settings.
-     *
-     * @param string|JsExpression|array $expr
-     * @param array|bool                $default
+     * @param JsExpressionable $expr
      */
-    public function onChange($expr, $default = [])
+    public function onChange($expr, $default = []): void
     {
-        if (is_string($expr)) {
-            $expr = new \Atk4\Ui\JsExpression($expr);
-        }
-        if (!is_array($expr)) {
+        if (!$expr instanceof JsBlock) {
             $expr = [$expr];
         }
 
-        // flatpickr on change event
-        $this->options['onChange'] = new \Atk4\Ui\JsFunction(['date', 'text', 'mode'], $expr);
+        $this->options['onChange'] = new JsFunction(['date', 'text', 'mode'], $expr);
     }
 
     /**
-     * Get the flatPickr instance of this input in order to
+     * Get the FlatPickr instance of this input in order to
      * get it's properties like selectedDates or run it's methods.
      * Ex: clearing date via js
      *     $btn->on('click', $f->getControl('date')->getJsInstance()->clear());.
+     *
+     * @return JsChain
      */
-    public function getJsInstance(): JsExpression
+    public function getJsInstance(): JsExpressionable
     {
         return (new Jquery('#' . $this->name . '_input'))->get(0)->_flatpickr;
     }
@@ -130,17 +116,17 @@ class Calendar extends Input
         return $res;
     }
 
-    public function use24hrTimeFormat(string $phpFormat): bool
+    public function isDtFormatWith24hrTime(string $phpFormat): bool
     {
         return !preg_match('~[gh]~', $this->expandPhpDtFormat($phpFormat));
     }
 
-    public function useSeconds(string $phpFormat): bool
+    public function isDtFormatWithSeconds(string $phpFormat): bool
     {
         return (bool) preg_match('~[suv]~', $this->expandPhpDtFormat($phpFormat));
     }
 
-    public function allowMicroSecondsInput(string $phpFormat): bool
+    public function isDtFormatWithMicroseconds(string $phpFormat): bool
     {
         return (bool) preg_match('~[uv]~', $this->expandPhpDtFormat($phpFormat));
     }

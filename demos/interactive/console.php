@@ -4,13 +4,27 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Core\DebugTrait;
+use Atk4\Core\Exception as CoreException;
+use Atk4\Ui\Button;
+use Atk4\Ui\Console;
+use Atk4\Ui\Form;
+use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Message;
+use Atk4\Ui\Tabs;
+use Atk4\Ui\View;
+use Atk4\Ui\VirtualPage;
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/** @var \Atk4\Ui\View $testRunClass */
-$testRunClass = AnonymousClassNameCache::get_class(fn () => new class() extends \Atk4\Ui\View {
-    use \Atk4\Core\DebugTrait;
+$testRunClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
+    use DebugTrait;
 
+    /**
+     * @return mixed
+     */
     public function generateReport()
     {
         $this->log('info', 'Console will automatically pick up output from all DebugTrait objects');
@@ -27,79 +41,79 @@ $testRunClass = AnonymousClassNameCache::get_class(fn () => new class() extends 
     }
 });
 
-$tabs = \Atk4\Ui\Tabs::addTo($app);
+$tabs = Tabs::addTo($app);
 
 $tab = $tabs->addTab('set()');
-\Atk4\Ui\Header::addTo($tab, [
+Header::addTo($tab, [
     'icon' => 'terminal',
     'Console output streaming',
     'subHeader' => 'any output your PHP script produces through console is displayed to user in real-time',
 ]);
-\Atk4\Ui\Console::addTo($tab)->set(function ($console) {
+Console::addTo($tab)->set(function (Console $console) {
     $console->output('Executing test process...');
     sleep(1);
     $console->output('Now trying something dangerous..');
     sleep(1);
     echo 'direct output is captured';
 
-    throw new \Atk4\Core\Exception('BOOM - exceptions are caught');
+    throw new CoreException('BOOM - exceptions are caught');
 });
 
-$tab = $tabs->addTab('runMethod()', function ($tab) use ($testRunClass) {
-    \Atk4\Ui\Header::addTo($tab, [
+$tab = $tabs->addTab('runMethod()', function (VirtualPage $vp) use ($testRunClass) {
+    Header::addTo($vp, [
         'icon' => 'terminal',
         'Non-interractive method invocation',
         'subHeader' => 'console can invoke a method, which normaly would be non-interractive and can still capture debug output',
     ]);
-    \Atk4\Ui\Console::addTo($tab)->runMethod($testRunClass::addTo($tab), 'generateReport');
+    Console::addTo($vp)->runMethod($testRunClass::addTo($vp), 'generateReport');
 });
 
-$tab = $tabs->addTab('exec() single', function ($tab) {
-    \Atk4\Ui\Header::addTo($tab, [
+$tab = $tabs->addTab('exec() single', function (VirtualPage $vp) {
+    Header::addTo($vp, [
         'icon' => 'terminal',
         'Command execution',
         'subHeader' => 'it is easy to run server-side commands and stream output through console',
     ]);
-    $message = \Atk4\Ui\Message::addTo($tab, ['This demo may not work', 'type' => 'warning']);
+    $message = Message::addTo($vp, ['This demo may not work', 'type' => 'warning']);
     $message->text->addParagraph('This demo requires Linux OS and will display error otherwise.');
-    \Atk4\Ui\Console::addTo($tab)->exec('/bin/pwd');
+    Console::addTo($vp)->exec('/bin/pwd');
 });
 
-$tab = $tabs->addTab('exec() chain', function ($tab) {
-    \Atk4\Ui\Header::addTo($tab, [
+$tab = $tabs->addTab('exec() chain', function (VirtualPage $vp) {
+    Header::addTo($vp, [
         'icon' => 'terminal',
         'Command execution',
         'subHeader' => 'it is easy to run server-side commands and stream output through console',
     ]);
-    $message = \Atk4\Ui\Message::addTo($tab, ['This demo may not work', 'type' => 'warning']);
+    $message = Message::addTo($vp, ['This demo may not work', 'type' => 'warning']);
     $message->text->addParagraph('This demo requires Linux OS and will display error otherwise.');
-    \Atk4\Ui\Console::addTo($tab)->set(function ($console) {
+    Console::addTo($vp)->set(function (Console $console) {
         $console->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1']);
         $console->exec('/sbin/ping', ['-c', '5', '-i', '2', '8.8.8.8']);
         $console->exec('/bin/no-such-command');
     });
 });
 
-$tab = $tabs->addTab('composer update', function ($tab) {
-    \Atk4\Ui\Header::addTo($tab, [
+$tab = $tabs->addTab('composer update', function (VirtualPage $vp) {
+    Header::addTo($vp, [
         'icon' => 'terminal',
         'Command execution',
         'subHeader' => 'it is easy to run server-side commands and stream output through console',
     ]);
 
-    $message = \Atk4\Ui\Message::addTo($tab, ['This demo may not work', 'type' => 'warning']);
+    $message = Message::addTo($vp, ['This demo may not work', 'type' => 'warning']);
     $message->text->addParagraph('This demo requires you to have "bash" and "composer" installed and may display error if the process running PHP does not have write access to the "vendor" folder and "composer.*".');
 
-    $button = \Atk4\Ui\Button::addTo($message, ['I understand, proceed anyway', 'class.primary big' => true]);
+    $button = Button::addTo($message, ['I understand, proceed anyway', 'class.primary big' => true]);
 
-    $console = \Atk4\Ui\Console::addTo($tab, ['event' => false]);
-    $console->exec('bash', ['-c', 'cd ../..; echo "Running \'composer update\' in `pwd`"; composer --no-ansi update; echo "Self-updated. OK to refresh now!"']);
+    $console = Console::addTo($vp, ['event' => false]);
+    $console->exec('bash', ['-c', 'cd ../..; echo \'Running "composer update" in `pwd`\'; composer --no-ansi update; echo \'Self-updated. OK to refresh now!\'']);
 
     $button->on('click', $console->jsExecute());
 });
 
-$tab = $tabs->addTab('Use after form submit', function ($tab) {
-    \Atk4\Ui\Header::addTo($tab, [
+$tab = $tabs->addTab('Use after form submit', function (VirtualPage $vp) {
+    Header::addTo($vp, [
         'icon' => 'terminal',
         'How to log form submit process',
         'subHeader' => 'Sometimes you can have long running process after form submit and want to show progress for user...',
@@ -107,12 +121,13 @@ $tab = $tabs->addTab('Use after form submit', function ($tab) {
 
     session_start();
 
-    $form = \Atk4\Ui\Form::addTo($tab);
-    $form->addControls([['foo'], ['bar']]);
+    $form = Form::addTo($vp);
+    $form->addControl('foo');
+    $form->addControl('bar');
 
-    $console = \Atk4\Ui\Console::addTo($tab, ['event' => false]);
-    $console->set(function ($console) {
-        $model = $_SESSION['data'];
+    $console = Console::addTo($vp, ['event' => false]);
+    $console->set(function (Console $console) {
+        $model = $_SESSION['atk4_ui_console_demo'];
         $console->output('Executing process...');
         $console->info(var_export($model->get(), true));
         sleep(1);
@@ -122,12 +137,12 @@ $tab = $tabs->addTab('Use after form submit', function ($tab) {
     });
     $console->js(true)->hide();
 
-    $form->onSubmit(function (\Atk4\Ui\Form $form) use ($console) {
-        $_SESSION['data'] = $form->model; // only option is to store model in session here in demo
+    $form->onSubmit(function (Form $form) use ($console) {
+        $_SESSION['atk4_ui_console_demo'] = $form->model; // only option is to store model in session here in demo
 
-        return [
+        return new JsBlock([
             $console->js()->show(),
             $console->jsExecute(),
-        ];
+        ]);
     });
 });

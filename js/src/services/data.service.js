@@ -1,27 +1,17 @@
 /**
  * Save and Retrieve Session or Local Web storage data.
- *
  */
 class DataService {
-    static getInstance() {
-        return this.instance;
-    }
-
     constructor() {
-        if (!this.instance) {
-            this.instance = this;
-            this.hasStorage = this.storageAvailable('localStorage') && this.storageAvailable('sessionStorage');
-            this.storage = { session: sessionStorage, local: localStorage };
-        }
-        return this.instance;
+        this.hasStorage = this.storageAvailable('localStorage') && this.storageAvailable('sessionStorage');
+        this.storage = { session: sessionStorage, local: localStorage };
     }
 
     /**
-   * Check if storage is available.
-   *
-   * @param type
-   * @returns {boolean|boolean|*}
-   */
+     * Check if storage is available.
+     *
+     * @returns {boolean|*}
+     */
     storageAvailable(type) {
         let storage;
         try {
@@ -29,76 +19,71 @@ class DataService {
             const x = '__storage_test__';
             storage.setItem(x, x);
             storage.removeItem(x);
+
             return true;
         } catch (e) {
-            return e instanceof DOMException && (
-            // everything except Firefox
-                e.code === 22
-        // Firefox
-        || e.code === 1014
-        // test name field too, because code might not be present
-        // everything except Firefox
-        || e.name === 'QuotaExceededError'
-        // Firefox
-        || e.name === 'NS_ERROR_DOM_QUOTA_REACHED')
-        // acknowledge QuotaExceededError only if there's something already stored
-        && (storage && storage.length !== 0);
+            return e instanceof DOMException
+                && (
+                    // everything except Firefox
+                    e.code === 22
+                    // Firefox
+                    || e.code === 1014
+                    // test name field too, because code might not be present
+                    // everything except Firefox
+                    || e.name === 'QuotaExceededError'
+                    // Firefox
+                    || e.name === 'NS_ERROR_DOM_QUOTA_REACHED'
+                )
+                // acknowledge QuotaExceededError only if there's something already stored
+                && (storage && storage.length > 0);
         }
     }
 
     /**
-   * Check for valid json string.
-   * @param str
-   * @returns {boolean}
-   */
+     * Check for valid json string.
+     *
+     * @returns {boolean}
+     */
     isJsonString(str) {
         try {
             JSON.parse(str);
         } catch (e) {
-            console.error('Invalid json string.');
+            console.error('JSON string parse failed: ' + e.message);
+
             return false;
         }
+
         return true;
     }
 
     /**
-   * Set Item data value to local or web storage.
-   * The item is the key associated with the data value in web or local storage.
-   * Will add item value or replace it if already exist.
-   *
-   * @param item
-   * @param value
-   * @param type
-   */
+     * Set Item data value to local or web storage.
+     * The item is the key associated with the data value in web or local storage.
+     * Will add item value or replace it if already exist.
+     */
     setData(item, value, type = 'local') {
         if (this.hasStorage) {
             this.storage[type].setItem(item, value);
         } else {
-            console.error('Session storage is not available in your Browser.');
+            console.error('Session storage is not available in your browser');
         }
     }
 
     /**
-   * Get data value using an item as key.
-   *
-   * @param item
-   * @param type
-   * @returns {null}
-   */
+     * Get data value using an item as key.
+     */
     getData(item, type = 'local') {
         let value = null;
         if (this.hasStorage) {
             value = this.storage[type].getItem(item);
         }
+
         return value;
     }
 
     /**
-   * Clear associated data using item as key.
-   *
-   * @param item
-   * @param type
-   */
+     * Clear associated data using item as key.
+     */
     clearData(item, type = 'local') {
         if (this.hasStorage) {
             this.storage[type].removeItem(item);
@@ -106,11 +91,10 @@ class DataService {
     }
 
     /**
-   * Return store data for an item or empty object.
-   *
-   * @param item
-   * @returns {{session: *, local: *}}
-   */
+     * Return store data for an item or empty object.
+     *
+     * @returns {{ session: *, local: * }}
+     */
     getStoreData(name) {
         const store = {};
         if (name) {
@@ -128,13 +112,9 @@ class DataService {
     }
 
     /**
-   * Similar to set data but make sure that value is
-   * a valid json string prior to set data.
-   *
-   * @param item
-   * @param value
-   * @param type
-   */
+     * Similar to set data but make sure that value is
+     * a valid json string prior to set data.
+     */
     setJsonData(item, value, type = 'local') {
         if (!this.isJsonString(value)) {
             return;
@@ -143,14 +123,10 @@ class DataService {
     }
 
     /**
-   * Will either create or merge with existing data.
-   * Merging is done with Object assign, prioritizing new value.
-   * Previous data, if exist, and value must be a valid json string.
-   *
-   * @param item
-   * @param value
-   * @param type
-   */
+     * Will either create or merge with existing data.
+     * Merging is done with Object assign, prioritizing new value.
+     * Previous data, if exist, and value must be a valid json string.
+     */
     addJsonData(item, value, type = 'local') {
         const previous = this.getData(item, type);
         if (!this.isJsonString(value) || !this.isJsonString(previous)) {
@@ -165,7 +141,4 @@ class DataService {
     }
 }
 
-const dataService = new DataService();
-Object.freeze(dataService);
-
-export default dataService;
+export default Object.freeze(new DataService());

@@ -11,27 +11,26 @@ use Atk4\Data\Persistence\Array_;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
-use Atk4\Ui\JsExpressionable;
-use Atk4\Ui\JsFunction;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsFunction;
+use Atk4\Ui\Loader;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
-/**
- * Common property/method for step executor.
- */
 trait StepExecutorTrait
 {
-    /** @var string[] The steps need to complete the action. */
+    /** @var array<int, string> The steps need to complete the action. */
     protected $steps;
 
     /** @var string current step. */
     protected $step;
 
-    /** @var \Atk4\Ui\Loader The Loader that will execute all action step. */
+    /** @var Loader The Loader that will execute all action step. */
     protected $loader;
 
     /** @var string */
-    public $loaderUi = 'ui basic segment';
+    public $loaderUi = 'basic segment';
 
     /** @var array */
     public $loaderShim = [];
@@ -57,7 +56,7 @@ trait StepExecutorTrait
     /** @var bool */
     protected $actionInitialized = false;
 
-    /** @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
     /** @var array A seed for creating form in order to edit arguments/fields user entry. */
@@ -66,7 +65,7 @@ trait StepExecutorTrait
     /** @var string can be "console", "text", or "html". Determine how preview step will display information. */
     public $previewType = 'html';
 
-    /** @var array[] View seed for displaying title for each step. */
+    /** @var array<string, array<mixed>> View seed for displaying title for each step. */
     protected $stepTitle = ['args' => [], 'fields' => [], 'preview' => []];
 
     /** @var string */
@@ -80,7 +79,8 @@ trait StepExecutorTrait
      */
     protected function addStepTitle(View $view, string $step): void
     {
-        if ($seed = $this->stepTitle[$step] ?? null) {
+        $seed = $this->stepTitle[$step] ?? null;
+        if ($seed) {
             $view->add(Factory::factory($seed));
         }
     }
@@ -148,28 +148,24 @@ trait StepExecutorTrait
     {
         $argModel = $this->initActionArguments();
 
-        $this->loader->set(function ($page) use ($argModel) {
-            try {
-                switch ($this->step) {
-                    case 'args':
-                        $this->doArgs($page, $argModel);
+        $this->loader->set(function (Loader $p) use ($argModel) {
+            switch ($this->step) {
+                case 'args':
+                    $this->doArgs($p, $argModel);
 
-                        break;
-                    case 'fields':
-                        $this->doFields($page);
+                    break;
+                case 'fields':
+                    $this->doFields($p);
 
-                        break;
-                    case 'preview':
-                        $this->doPreview($page);
+                    break;
+                case 'preview':
+                    $this->doPreview($p);
 
-                        break;
-                    case 'final':
-                        $this->doFinal($page);
+                    break;
+                case 'final':
+                    $this->doFinal($p);
 
-                        break;
-                }
-            } catch (\Exception $e) {
-                $this->handleException($e, $page, $this->step);
+                    break;
             }
         });
     }
@@ -225,37 +221,34 @@ trait StepExecutorTrait
     {
         $this->addStepTitle($page, $this->step);
 
-        if ($fields = $this->getActionData('fields')) {
+        $fields = $this->getActionData('fields');
+        if ($fields) {
             $this->action->getEntity()->setMulti($fields);
         }
 
-        if ($prev = $this->getPreviousStep($this->step)) {
+        $prev = $this->getPreviousStep($this->step);
+        if ($prev) {
             $chain = $this->loader->jsLoad([
                 'step' => $prev,
                 $this->name => $this->action->getEntity()->getId(),
             ], ['method' => 'post'], $this->loader->name);
 
-            $page->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([$chain])));
+            $page->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([], [$chain])));
         }
 
         // setup executor button to perform action
         $page->js(
             true,
-            $this->execActionBtn->js()->on(
-                'click',
-                new JsFunction(
+            $this->execActionBtn->js()->on('click', new JsFunction([], [
+                $this->loader->jsLoad(
                     [
-                        $this->loader->jsLoad(
-                            [
-                                'step' => 'final',
-                                $this->name => $this->action->getEntity()->getId(),
-                            ],
-                            ['method' => 'post'],
-                            $this->loader->name
-                        ),
-                    ]
-                )
-            )
+                        'step' => 'final',
+                        $this->name => $this->action->getEntity()->getId(),
+                    ],
+                    ['method' => 'post'],
+                    $this->loader->name
+                ),
+            ]))
         );
 
         $text = $this->getActionPreview();
@@ -288,7 +281,7 @@ trait StepExecutorTrait
 
         $return = $this->action->execute(...$this->getActionArgs($this->getActionData('args')));
 
-        $this->jsSequencer($page, $this->jsGetExecute($return, $this->action->getEntity()->getId()));
+        $page->js(true, $this->jsGetExecute($return, $this->action->getEntity()->getId()));
     }
 
     /**
@@ -370,8 +363,8 @@ trait StepExecutorTrait
 
     protected function createButtonBar(Model\UserAction $action): View
     {
-        $this->btns = (new View())->addStyle(['min-height' => '24px']);
-        $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->addStyle(['float' => 'left !important']);
+        $this->btns = (new View())->setStyle(['min-height' => '24px']);
+        $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->setStyle(['float' => 'left !important']);
         $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'class.blue' => true]);
         $this->execActionBtn = $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MODAL_BUTTON);
         $this->btns->add($this->execActionBtn);
@@ -394,9 +387,9 @@ trait StepExecutorTrait
         }
 
         // reset button handler
-        $view->js(true, $this->execActionBtn->js(true)->off());
-        $view->js(true, $this->nextStepBtn->js(true)->off());
-        $view->js(true, $this->prevStepBtn->js(true)->off());
+        $view->js(true, $this->execActionBtn->js()->off());
+        $view->js(true, $this->nextStepBtn->js()->off());
+        $view->js(true, $this->prevStepBtn->js()->off());
         $view->js(true, $this->nextStepBtn->js()->removeClass('disabled'));
         $view->js(true, $this->execActionBtn->js()->removeClass('disabled'));
     }
@@ -407,10 +400,10 @@ trait StepExecutorTrait
     protected function jsSetNextState(string $step): JsExpressionable
     {
         if ($this->isLastStep($step)) {
-            return $this->nextStepBtn->js(true)->hide();
+            return $this->nextStepBtn->js()->hide();
         }
 
-        return $this->nextStepBtn->js(true)->show();
+        return $this->nextStepBtn->js()->show();
     }
 
     /**
@@ -419,10 +412,10 @@ trait StepExecutorTrait
     protected function jsSetPrevState(string $step): JsExpressionable
     {
         if ($this->isFirstStep($step)) {
-            return $this->prevStepBtn->js(true)->hide();
+            return $this->prevStepBtn->js()->hide();
         }
 
-        return $this->prevStepBtn->js(true)->show();
+        return $this->prevStepBtn->js()->show();
     }
 
     /**
@@ -431,10 +424,10 @@ trait StepExecutorTrait
     protected function jsSetExecState(string $step): JsExpressionable
     {
         if ($this->isLastStep($step)) {
-            return $this->execActionBtn->js(true)->show();
+            return $this->execActionBtn->js()->show();
         }
 
-        return $this->execActionBtn->js(true)->hide();
+        return $this->execActionBtn->js()->hide();
     }
 
     /**
@@ -442,13 +435,14 @@ trait StepExecutorTrait
      */
     protected function jsSetPrevHandler(View $view, string $step): void
     {
-        if ($prev = $this->getPreviousStep($step)) {
+        $prev = $this->getPreviousStep($step);
+        if ($prev) {
             $chain = $this->loader->jsLoad([
                 'step' => $prev,
                 $this->name => $this->action->getEntity()->getId(),
             ], ['method' => 'post'], $this->loader->name);
 
-            $view->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([$chain])));
+            $view->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([], [$chain])));
         }
     }
 
@@ -458,17 +452,17 @@ trait StepExecutorTrait
     protected function jsSetSubmitBtn(View $view, Form $form, string $step): void
     {
         if ($this->isLastStep($step)) {
-            $view->js(true, $this->execActionBtn->js()->on('click', new JsFunction([$form->js(null, null, $form->formElement)->form('submit')])));
+            $view->js(true, $this->execActionBtn->js()->on('click', new JsFunction([], [$form->js(false, null, $form->formElement)->form('submit')])));
         } else {
             // submit on next
-            $view->js(true, $this->nextStepBtn->js()->on('click', new JsFunction([$form->js(null, null, $form->formElement)->form('submit')])));
+            $view->js(true, $this->nextStepBtn->js()->on('click', new JsFunction([], [$form->js(false, null, $form->formElement)->form('submit')])));
         }
     }
 
     /**
      * Get proper js after submitting a form in a step.
      *
-     * @return mixed
+     * @return JsBlock|View
      */
     protected function jsStepSubmit(string $step)
     {
@@ -479,13 +473,13 @@ trait StepExecutorTrait
                 $js = $this->jsGetExecute($return, $this->action->getEntity()->getId());
             } else {
                 // store data and setup reload
-                $js = [
+                $js = new JsBlock([
                     $this->loader->jsAddStoreData($this->actionData, true),
                     $this->loader->jsLoad([
                         'step' => $this->getNextStep($step),
                         $this->name => $this->action->getEntity()->getId(),
                     ], ['method' => 'post'], $this->loader->name),
-                ];
+                ]);
             }
 
             return $js;
@@ -493,6 +487,7 @@ trait StepExecutorTrait
             throw $e;
         } catch (\Throwable $e) {
             $msg = new Message(['Error executing ' . $this->action->caption, 'type' => 'error', 'class.red' => true]);
+            $msg->setApp($this->getApp());
             $msg->invokeInit();
             $msg->text->content = $this->getApp()->renderExceptionHtml($e);
 
@@ -545,37 +540,5 @@ trait StepExecutorTrait
         }
 
         return $args;
-    }
-
-    /**
-     * Create a sequence of js statement for a view.
-     *
-     * @param array|JsExpressionable $js
-     */
-    protected function jsSequencer(View $view, $js): void
-    {
-        if (is_array($js)) {
-            foreach ($js as $jq) {
-                $this->jsSequencer($view, $jq);
-            }
-        } else {
-            $view->js(true, $js);
-        }
-    }
-
-    protected function handleException(\Throwable $exception, View $view, string $step): void
-    {
-        $msg = Message::addTo($view, ['Error:', 'type' => 'error']);
-        $msg->text->addHtml($this->getApp()->renderExceptionHtml($exception));
-        $view->js(true, $this->nextStepBtn->js()->addClass('disabled'));
-        if (!$this->isFirstStep($step)) {
-            $this->jsSetPrevHandler($view, $step);
-        }
-        if ($this->isLastStep($step)) {
-            $view->js(true, $this->execActionBtn->js()->addClass('disabled'));
-        }
-        if ($step === 'final') {
-            $this->jsSetPrevHandler($view, $this->steps[count($this->steps) - 1]);
-        }
     }
 }

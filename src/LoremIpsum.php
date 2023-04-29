@@ -12,22 +12,32 @@ class LoremIpsum extends Text
     /**
      * Specifies amount of filler you need. This value affects number of
      * paragraphs and amount of text per-paragraph.
-     *
-     * @var int
      */
-    public $size = 3;
+    public int $size = 3;
 
-    /** @var int Base amount of words per paragraph. */
-    public $words = 50;
+    /** Base amount of words per paragraph. */
+    public int $words = 50;
+
+    /**
+     * @param array|int $defaults
+     */
+    public function __construct($defaults = [])
+    {
+        if (is_scalar($defaults)) {
+            $this->size = $defaults;
+
+            return;
+        }
+
+        parent::__construct($defaults);
+    }
 
     /**
      * Returns string of LoremIpsum text.
      *
-     * @param int $words Amount of words to generate
-     *
      * @return string "Lorem Ipsum" text
      */
-    public function generateLorem($words)
+    public function generateLorem(int $words)
     {
         $punctuation = ['. ', '. ', '. ', '. ', '. ', '. ', '. ', '. ', '... ', '! ', '? '];
 
@@ -79,23 +89,10 @@ class LoremIpsum extends Text
         return $lorem;
     }
 
-    /**
-     * @param array|int $defaults pass array of defaults or simply size property value
-     */
-    public function __construct($defaults = null)
-    {
-        if (is_scalar($defaults) && $defaults) {
-            $this->size = $defaults;
-
-            return;
-        }
-
-        parent::__construct($defaults);
-    }
-
     protected function init(): void
     {
         parent::init();
+
         for ($x = 0; $x < $this->size; ++$x) {
             $this->addParagraph($this->generateLorem($this->words * $this->size));
         }

@@ -70,7 +70,7 @@ Sticky GET
 Agile UI implements advanced approach allowing any View object that you add into Render Tree to
 declare "sticky GET arguments". Here is example::
 
-    if(isset($_GET['message'])) {
+    if (isset($_GET['message'])) {
         Message::addTo($app)->set($_GET['message']);
     }
 
@@ -82,7 +82,7 @@ we use :php:class:`Console` instead, which must display an interactive data stre
 
 In Agile UI you can request that some $_GET arguments are preserved and included into callback urls::
 
-    if($this->getApp()->stickyGet('message')) {
+    if ($this->getApp()->stickyGet('message')) {
         Message::addTo($app)->set($_GET['message']);
     }
 
@@ -157,7 +157,9 @@ for implementing PHP call-backs. They follow the pattern:
 
 Once the concept is established, it can even be used on a higher level, for example::
 
-    $button->on('click', function () { return 'clicked button'; });
+    $button->on('click', function () {
+        return 'clicked button';
+    });
 
 .. toctree::
     :maxdepth: 4
@@ -176,7 +178,7 @@ exist to enhance other Components with dynamically loadable content. Here is exa
     $tabs = Tabs::addTo($app);
     LoremIpsum::addTo($tabs->addTab('First tab is static'));
 
-    $tabs->addTab('Second tab is dynamic', function($vp) {
+    $tabs->addTab('Second tab is dynamic', function (VirtualPage $vp) {
         LoremIpsum::addTo($vp);
     });
 

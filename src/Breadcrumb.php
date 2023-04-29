@@ -4,28 +4,25 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-/**
- * Implements a more sophisticated and interactive Data-Table component.
- */
 class Breadcrumb extends Lister
 {
+    public $ui = 'breadcrumb';
+
+    public $defaultTemplate = 'breadcrumb.html';
+
     /** @var array */
     public $path = [];
 
     /** @var string */
-    public $defaultTemplate = 'breadcrumb.html';
-
-    /** @var string */
     public $dividerClass = 'right angle icon';
-
-    /** @var string */
-    public $ui = 'breadcrumb';
 
     /**
      * Adds a new link that will appear on the right.
      *
      * @param string       $section Title of link
      * @param string|array $link    Link itself
+     *
+     * @return $this
      */
     public function addCrumb($section = null, $link = null)
     {
@@ -33,6 +30,8 @@ class Breadcrumb extends Lister
             $link = $this->url($link);
         }
         $this->path[] = ['section' => $section, 'link' => $link, 'divider' => $this->dividerClass];
+
+        return $this;
     }
 
     /**
@@ -44,7 +43,7 @@ class Breadcrumb extends Lister
     public function popTitle()
     {
         $title = array_pop($this->path);
-        $this->set($title['section'] ?: '');
+        $this->set($title['section'] ?? '');
 
         return $this;
     }
@@ -54,15 +53,16 @@ class Breadcrumb extends Lister
      *
      * @param string       $section Title of link
      * @param string|array $link    Link itself
+     *
+     * @return $this
      */
     public function addCrumbReverse($section = null, $link = null)
     {
         array_unshift($this->path, ['section' => $section, 'link' => $link]);
+
+        return $this;
     }
 
-    /**
-     * Renders view.
-     */
     protected function renderView(): void
     {
         $this->setSource($this->path);

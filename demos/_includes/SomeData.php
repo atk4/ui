@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-class SomeData extends \Atk4\Data\Model
+use Atk4\Data\Model;
+
+class SomeData extends Model
 {
     public function __construct()
     {
@@ -16,13 +18,12 @@ class SomeData extends \Atk4\Data\Model
     protected function init(): void
     {
         parent::init();
-        $model = $this;
 
-        $model->addField('title');
-        $model->addField('name');
-        $model->addField('surname', ['actual' => 'name']);
-        $model->addField('date', ['type' => 'date']);
-        $model->addField('salary', ['type' => 'atk4_money', 'actual' => 'randomNumber']);
-        $model->addField('logo_url');
+        $this->addField('title');
+        $this->addField('name');
+        $this->addField('surname', ['actual' => 'name']);
+        $this->addField('date', ['type' => 'date']);
+        $this->addField('salary', ['type' => 'atk4_money', 'actual' => 'randomNumber']);
+        $this->addField('logo_url');
     }
 }

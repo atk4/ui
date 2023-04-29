@@ -9,28 +9,38 @@ use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\View;
 
 /**
  * Provides generic functionality for a form control.
+ *
+ * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
  */
 class Control extends View
 {
-    /** @var Form to which this field belongs */
+    /** @var Form|null to which this field belongs */
     public $form;
 
-    /** @var EntityFieldPair<Model, Field> */
+    /**
+     * @var EntityFieldPair|null
+     *
+     * @phpstan-var EntityFieldPair<Model, Field>|null
+     */
     public $entityField;
 
     /** @var string */
     public $controlClass = '';
 
     /** @var bool Whether you need this field to be rendered wrap in a form layout or as his */
-    public $layoutWrap = true;
+    public bool $layoutWrap = true;
 
     /** @var bool rendered or not input label in generic Form\Layout template. */
     public $renderLabel = true;
 
+    /** @var string */
     public $width;
 
     /**
@@ -41,7 +51,7 @@ class Control extends View
      *
      * Caption is usually specified by a model.
      *
-     * @var string
+     * @var string|null
      */
     public $caption;
 
@@ -49,25 +59,21 @@ class Control extends View
      * Placed as a pointing label below the field. This only works when Form\Control appears in a form. You can also
      * set this to object, such as \Atk4\Ui\Text otherwise HTML characters are escaped.
      *
-     * @var string|\Atk4\Ui\View|array
+     * @var string|View|array
      */
     public $hint;
 
     /**
      * Is input field disabled?
      * Disabled input fields are not editable and will not be submitted.
-     *
-     * @var bool
      */
-    public $disabled = false;
+    public bool $disabled = false;
 
     /**
      * Is input field read only?
      * Read only input fields are not editable, but will be submitted.
-     *
-     * @var bool
      */
-    public $readonly = false;
+    public bool $readOnly = false;
 
     protected function init(): void
     {
@@ -87,19 +93,17 @@ class Control extends View
      * the model, then the model's value will also be affected.
      *
      * @param mixed $value
-     * @param mixed $junk
+     * @param never $ignore
      *
      * @return $this
      */
-    public function set($value = null, $junk = null)
+    public function set($value = null, $ignore = null)
     {
         if ($this->entityField) {
             $this->entityField->set($value);
-
-            return $this;
+        } else {
+            $this->content = $value;
         }
-
-        $this->content = $value;
 
         return $this;
     }
@@ -117,21 +121,20 @@ class Control extends View
         parent::renderView();
     }
 
-    protected function renderTemplateToHtml(string $region = null): string
+    protected function renderTemplateToHtml(): string
     {
-        $output = parent::renderTemplateToHtml($region);
+        $output = parent::renderTemplateToHtml();
 
-        /** @var Form|null $form */
-        $form = $this->getClosestOwner($this, Form::class);
+        $form = $this->getClosestOwner(Form::class);
 
-        return $form !== null ? $form->fixFormInRenderedHtml($output) : $output;
+        return $form !== null ? $form->fixOwningFormAttrInRenderedHtml($output) : $output;
     }
 
     /**
      * Shorthand method for on('change') event.
      * Some input fields, like Calendar, could call this differently.
      *
-     * If $expr is string or JsExpression, then it will execute it instantly.
+     * If $expr is JsExpressionable, then it will execute it instantly.
      * If $expr is callback method, then it'll make additional request to webserver.
      *
      * Could be preferable to set useDefault to false. For example when
@@ -139,25 +142,19 @@ class Control extends View
      * Otherwise, change handler will not be propagate to all handlers.
      *
      * Examples:
-     * $control->onChange('console.log("changed")');
-     * $control->onChange(new \Atk4\Ui\JsExpression('console.log("changed")'));
-     * $control->onChange('$(this).parents(".form").form("submit")');
+     * $control->onChange(new JsExpression('console.log(\'changed\')'));
+     * $control->onChange(new JsExpression('$(this).parents(\'.form\').form(\'submit\')'));
      *
-     * @param string|\Atk4\Ui\JsExpression|array|\Closure $expr
-     * @param array|bool                                  $default
+     * @param JsExpressionable|JsCallbackSetClosure|array{JsCallbackSetClosure} $expr
+     * @param array|bool $defaults
      */
-    public function onChange($expr, $default = [])
+    public function onChange($expr, $defaults = []): void
     {
-        if (is_string($expr)) {
-            $expr = new \Atk4\Ui\JsExpression($expr);
+        if (is_bool($defaults)) {
+            $defaults = $defaults ? [] : ['preventDefault' => false, 'stopPropagation' => false];
         }
 
-        if (is_bool($default)) {
-            $default['preventDefault'] = $default;
-            $default['stopPropagation'] = $default;
-        }
-
-        $this->on('change', '#' . $this->name . '_input', $expr, $default);
+        $this->on('change', '#' . $this->name . '_input', $expr, $defaults);
     }
 
     /**
@@ -166,18 +163,13 @@ class Control extends View
      *
      * $field->jsInput(true)->val(123);
      *
-     * @return \Atk4\Ui\Jquery
+     * @param bool|string      $when
+     * @param JsExpressionable $action
+     *
+     * @return Jquery
      */
-    public function jsInput($when = null, $action = null)
+    public function jsInput($when = false, $action = null): JsExpressionable
     {
         return $this->js($when, $action, '#' . $this->name . '_input');
-    }
-
-    /**
-     * @return string
-     */
-    public function getControlClass()
-    {
-        return $this->controlClass;
     }
 }

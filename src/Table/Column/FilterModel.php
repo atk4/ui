@@ -9,7 +9,7 @@ use Atk4\Core\NameTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
-use Atk4\Data\Types\Types as CustomTypes;
+use Atk4\Data\Type\Types as CustomTypes;
 use Atk4\Ui\App;
 use Atk4\Ui\SessionTrait;
 use Doctrine\DBAL\Types\Types;
@@ -32,8 +32,8 @@ abstract class FilterModel extends Model
     /** @var bool Determines if this field shouldn't have a value field, and use only op field. */
     public $noValueField = false;
 
-    /** @var Field The field where this filter need to query data. */
-    public $lookupField;
+    /** The field where this filter need to query data. */
+    public Field $lookupField;
 
     public function __construct(App $app, array $defaults = [])
     {
@@ -65,18 +65,17 @@ abstract class FilterModel extends Model
             Types::DATETIME_MUTABLE => FilterModel\TypeDatetime::class,
             Types::DATETIME_IMMUTABLE => FilterModel\TypeDatetime::class,
 
-            'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
-        ][$field->type ?? 'string'];
+            Types::JSON => FilterModel\TypeString::class,
 
-        /*
-         * You can set your own filter model condition by extending
-         * Field class and setting your filter model class.
-         */
-        if (!@empty($field->filterModel)) {
-            if ($field->filterModel instanceof self) {
-                return $field->filterModel;
+            'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
+        ][$field->type];
+
+        // You can set your own filter model class.
+        if (isset($field->ui['filterModel'])) {
+            if ($field->ui['filterModel'] instanceof self) {
+                return $field->ui['filterModel'];
             }
-            $class = $field->filterModel;
+            $class = $field->ui['filterModel'];
         }
 
         $filterModel = new $class($app, ['lookupField' => $field]);
@@ -87,6 +86,7 @@ abstract class FilterModel extends Model
     protected function init(): void
     {
         parent::init();
+
         $this->op = $this->addField('op', ['ui' => ['caption' => '']]);
 
         if (!$this->noValueField) {
@@ -97,9 +97,9 @@ abstract class FilterModel extends Model
     }
 
     /**
-     * Perform further initialisation.
+     * Perform further initialization.
      */
-    public function afterInit()
+    public function afterInit(): void
     {
         $this->addField('name', ['default' => $this->lookupField->shortName, 'system' => true]);
 
@@ -119,9 +119,9 @@ abstract class FilterModel extends Model
     /**
      * Recall filter model data.
      */
-    public function recallData(): array
+    public function recallData(): ?array
     {
-        return $this->recall('data', []);
+        return $this->recall('data');
     }
 
     /**
@@ -137,8 +137,9 @@ abstract class FilterModel extends Model
      * If form filter need to have a field display at certain condition, then
      * override this method in your FilterModel\TypeModel.
      */
-    public function getFormDisplayRules()
+    public function getFormDisplayRules(): array
     {
+        return [];
     }
 
     /**

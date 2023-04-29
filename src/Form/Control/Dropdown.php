@@ -4,42 +4,37 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsExpressionable;
-use Atk4\Ui\JsFunction;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsFunction;
 
-/**
- * Input element for a form control.
- */
 class Dropdown extends Input
 {
+    public $ui = 'dropdown fluid search selection';
+    public $defaultTemplate = 'form/control/dropdown.html';
+
+    public string $inputType = 'hidden';
+
     /**
      * Values need for the dropdown.
-     *  Note: Now possible to display icon with value in dropdown by passing the
-     *        icon class with your values.
+     * Note: Now possible to display icon with value in dropdown by passing the icon class with your values.
      * ex: 'values' => [
-     *          'tag' => ['Tag', 'icon' => 'tag icon'],
-     *          'globe' => ['Globe', 'icon' => 'globe icon'],
-     *          'registered' => ['Registered', 'icon' => 'registered icon'],
-     *          'file' => ['File', 'icon' => 'file icon']
-     *          ].
+     *     'tag' => ['Tag', 'icon' => 'tag'],
+     *     'globe' => ['Globe', 'icon' => 'globe'],
+     *     'registered' => ['Registered', 'icon' => 'registered'],
+     *     'file' => ['File', 'icon' => 'file'],
+     * ].
      *
-     * @var array
+     * @var array<int|string, mixed>
      */
-    public $values = [];
+    public array $values;
 
     /** @var string The string to set as an empty values. */
     public $empty = "\u{00a0}"; // Unicode NBSP
 
-    /** @var string The html template associate whit this dropdown. */
-    public $defaultTemplate = 'form/control/dropdown.html';
-
-    /** @var string The css class associate with this dropdown. */
-    public $defaultClass = 'fluid search selection dropdown';
-
     /**
      * The icon to display at the dropdown menu.
-     *  The template default is set to: 'dropdown icon'.
+     *  The template default is set to: 'dropdown'.
      *  Note: dropdown icon is show on the right side of the menu
      *  while other icon are usually display on the left side.
      *
@@ -47,7 +42,7 @@ class Dropdown extends Input
      */
     public $dropIcon;
 
-    /** @var array Dropdown options as per semantic-ui dropdown options. */
+    /** @var array Dropdown options as per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
 
     /**
@@ -68,7 +63,7 @@ class Dropdown extends Input
      * Use additional 'icon' element to add an icon to this row.
      *
      * Example 1 with Model: Title in Uppercase
-     * function(Model $row) {
+     * function (Model $row) {
      *     return [
      *         'value' => $row->getId(),
      *         'title' => mb_strtoupper($row->getTitle()),
@@ -76,7 +71,7 @@ class Dropdown extends Input
      *  }
      *
      * Example 2 with Model: Add an icon
-     * function(Model $row) {
+     * function (Model $row) {
      *     return [
      *         'value' => $row->getId(),
      *         'title' => $row->getTitle(),
@@ -85,7 +80,7 @@ class Dropdown extends Input
      * }
      *
      * Example 3 with Model: Combine Title from model fields
-     * function(Model $row) {
+     * function (Model $row) {
      *     return [
      *         'value' => $row->getId(),
      *         'title' => $row->getTitle() . ' (' . $row->get('title2') . ')',
@@ -93,7 +88,7 @@ class Dropdown extends Input
      * }
      *
      * Example 4 with $values property Array:
-     * function($value, $key) {
+     * function (string $value, $key) {
      *     return [
      *        'value' => $key,
      *        'title' => mb_strtoupper($value),
@@ -108,37 +103,17 @@ class Dropdown extends Input
     /** @var object Subtemplate for a single dropdown item. */
     protected $_tItem;
 
-    /** @var object; Subtemplate for an icon for a single dropdown item. */
+    /** @var object Subtemplate for an icon for a single dropdown item. */
     protected $_tIcon;
 
     protected function init(): void
     {
         parent::init();
 
-        $this->ui = ' ';
-        $this->inputType = 'hidden';
-
         $this->_tItem = $this->template->cloneRegion('Item');
         $this->template->del('Item');
         $this->_tIcon = $this->_tItem->cloneRegion('Icon');
         $this->_tItem->del('Icon');
-    }
-
-    /**
-     * returns <input .../> tag.
-     *
-     * @return string
-     */
-    public function getInput()
-    {
-        return $this->getApp()->getTag('input', array_merge([
-            'name' => $this->shortName,
-            'type' => $this->inputType,
-            'id' => $this->name . '_input',
-            'value' => $this->getValue(),
-            'readonly' => $this->readonly ? 'readonly' : false,
-            'disabled' => $this->disabled ? 'disabled' : false,
-        ], $this->inputAttr));
     }
 
     /**
@@ -151,7 +126,7 @@ class Dropdown extends Input
     public function getValue()
     {
         return $this->entityField !== null
-            ? (is_array($this->entityField->get()) ? implode(',', $this->entityField->get()) : $this->entityField->get())
+            ? (is_array($this->entityField->get()) ? implode(', ', $this->entityField->get()) : $this->entityField->get())
             : parent::getValue();
     }
 
@@ -160,11 +135,11 @@ class Dropdown extends Input
      * the model, then the model's value will also be affected.
      *
      * @param mixed $value
-     * @param mixed $junk
+     * @param never $ignore
      *
      * @return $this
      */
-    public function set($value = null, $junk = null)
+    public function set($value = null, $ignore = null)
     {
         if ($this->entityField) {
             if ($this->entityField->getField()->type === 'json' && is_string($value)) {
@@ -175,7 +150,7 @@ class Dropdown extends Input
             return $this;
         }
 
-        return parent::set($value, $junk);
+        return parent::set($value, $ignore);
     }
 
     /**
@@ -184,7 +159,7 @@ class Dropdown extends Input
      * @param string $option
      * @param mixed  $value
      */
-    public function setDropdownOption($option, $value)
+    public function setDropdownOption($option, $value): void
     {
         $this->dropdownOptions[$option] = $value;
     }
@@ -194,7 +169,7 @@ class Dropdown extends Input
      *
      * @param array $options
      */
-    public function setDropdownOptions($options)
+    public function setDropdownOptions($options): void
     {
         $this->dropdownOptions = array_merge($this->dropdownOptions, $options);
     }
@@ -215,7 +190,7 @@ class Dropdown extends Input
         // add selection only if no value is required and Dropdown has no multiple selections enabled
         if ($this->entityField !== null && !$this->entityField->getField()->required && !$this->isMultiple) {
             $this->_tItem->set('value', '');
-            $this->_tItem->set('title', $this->empty || is_numeric($this->empty) ? (string) $this->empty : '');
+            $this->_tItem->set('title', $this->empty);
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
         }
 
@@ -227,7 +202,7 @@ class Dropdown extends Input
                 }
             } else {
                 // for standard model rendering, only load id and title field
-                $this->model->setOnlyFields([$this->model->title_field, $this->model->id_field]);
+                $this->model->setOnlyFields([$this->model->titleField, $this->model->idField]);
                 $this->_renderItemsForModel();
             }
         } else {
@@ -241,19 +216,13 @@ class Dropdown extends Input
         }
     }
 
-    /**
-     * Renders view.
-     */
     protected function renderView(): void
     {
         if ($this->isMultiple) {
-            $this->defaultClass .= ' multiple';
+            $this->addClass('multiple');
         }
 
-        $this->addClass($this->defaultClass);
-
-        if ($this->readonly || $this->disabled) {
-            $this->setDropdownOption('showOnFocus', false);
+        if ($this->readOnly || $this->disabled) {
             $this->setDropdownOption('allowTab', false);
             $this->removeClass('search');
             if ($this->isMultiple) {
@@ -265,9 +234,9 @@ class Dropdown extends Input
             $this->addClass('disabled');
         }
 
-        if ($this->readonly) {
+        if ($this->readOnly) {
             $this->setDropdownOption('allowTab', false);
-            $this->setDropdownOption('onShow', new JsFunction([new JsExpression('return false')]));
+            $this->setDropdownOption('onShow', new JsFunction([], [new JsExpression('return false')]));
         }
 
         if ($this->dropIcon) {
@@ -282,8 +251,10 @@ class Dropdown extends Input
         parent::renderView();
     }
 
-    // Sets the dropdown items to the template if a model is used
-    protected function _renderItemsForModel()
+    /**
+     * Sets the dropdown items to the template if a model is used.
+     */
+    protected function _renderItemsForModel(): void
     {
         foreach ($this->model as $key => $row) {
             $title = $row->getTitle();
@@ -294,14 +265,16 @@ class Dropdown extends Input
         }
     }
 
-    // sets the dropdown items from $this->values array
-    protected function _renderItemsForValues()
+    /**
+     * Sets the dropdown items from $this->values array.
+     */
+    protected function _renderItemsForValues(): void
     {
         foreach ($this->values as $key => $val) {
             $this->_tItem->set('value', (string) $key);
             if (is_array($val)) {
                 if (array_key_exists('icon', $val)) {
-                    $this->_tIcon->set('icon', $val['icon']);
+                    $this->_tIcon->set('iconClass', $val['icon'] . ' icon');
                     $this->_tItem->dangerouslySetHtml('Icon', $this->_tIcon->renderToHtml());
                 } else {
                     $this->_tItem->del('Icon');
@@ -316,11 +289,14 @@ class Dropdown extends Input
         }
     }
 
-    /*
-     * used when a custom callback is defined for row rendering. Sets
-     * values to row tempalte and appends it to main template
+    /**
+     * Used when a custom callback is defined for row rendering. Sets
+     * values to row template and appends it to main template.
+     *
+     * @param mixed      $row
+     * @param int|string $key
      */
-    protected function _addCallBackRow($row, $key = null)
+    protected function _addCallBackRow($row, $key = null): void
     {
         $res = ($this->renderRowFunction)($row, $key);
         $this->_tItem->set('value', (string) $res['value']);
@@ -328,11 +304,10 @@ class Dropdown extends Input
 
         // Icon
         $this->_tItem->del('Icon');
-        if (isset($res['icon'])
-        && $res['icon']) {
+        if (isset($res['icon']) && $res['icon']) {
             // compatibility with how $values property works on icons: 'icon'
             // is defined in there
-            $this->_tIcon->set('icon', 'icon ' . $res['icon']);
+            $this->_tIcon->set('iconClass', 'icon ' . $res['icon']);
             $this->_tItem->dangerouslyAppendHtml('Icon', $this->_tIcon->renderToHtml());
         }
 

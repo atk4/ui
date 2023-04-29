@@ -6,50 +6,46 @@ namespace Atk4\Ui;
 
 class GridLayout extends View
 {
+    public $ui = 'grid';
+
+    public $defaultTemplate = 'grid-layout.html';
+
     /** @var int Number of rows */
     protected $rows = 1;
 
-    /** @var int Number of columns */
+    /** @var int<1, 16> Number of columns */
     protected $columns = 2;
 
-    /** @var array columns CSS wide classes */
-    protected $words = [
-        '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
-        'thirteen', 'fourteen', 'fifteen', 'sixteen',
+    /** @var array<int, string> */
+    protected $cssWideClasses = [
+        1 => 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+        'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
     ];
 
     /** @var HtmlTemplate */
-    protected $t_wrap;
+    protected $tWrap;
     /** @var HtmlTemplate */
-    protected $t_row;
+    protected $tRow;
     /** @var HtmlTemplate */
-    protected $t_col;
-    /** @var HtmlTemplate */
-    public $template;
-
-    /** @var string Semantic UI CSS class */
-    public $ui = 'grid';
-
-    /** @var string Template file */
-    public $defaultTemplate = 'grid-layout.html';
+    protected $tCol;
 
     /** @var string CSS class for columns view */
-    public $column_class = '';
+    public $columnClass = '';
 
     protected function init(): void
     {
         parent::init();
 
-        $this->template->set('column_class', $this->column_class);
+        $this->template->set('columnClass', $this->columnClass);
 
         // extract template parts
-        $this->t_wrap = clone $this->template;
-        $this->t_row = $this->template->cloneRegion('row');
-        $this->t_col = $this->template->cloneRegion('column');
+        $this->tWrap = clone $this->template;
+        $this->tRow = $this->template->cloneRegion('row');
+        $this->tCol = $this->template->cloneRegion('column');
 
         // clean them
-        $this->t_row->del('column');
-        $this->t_wrap->del('rows');
+        $this->tRow->del('column');
+        $this->tWrap->del('rows');
 
         // Will need to manipulate template a little
         $this->buildTemplate();
@@ -58,24 +54,24 @@ class GridLayout extends View
     /**
      * Build and set view template.
      */
-    protected function buildTemplate()
+    protected function buildTemplate(): void
     {
-        $this->t_wrap->del('rows');
-        $this->t_wrap->dangerouslyAppendHtml('rows', '{rows}');
+        $this->tWrap->del('rows');
+        $this->tWrap->dangerouslyAppendHtml('rows', '{rows}');
 
         for ($row = 1; $row <= $this->rows; ++$row) {
-            $this->t_row->del('column');
+            $this->tRow->del('column');
 
             for ($col = 1; $col <= $this->columns; ++$col) {
-                $this->t_col->set('Content', '{$r' . $row . 'c' . $col . '}');
+                $this->tCol->set('Content', '{$r' . $row . 'c' . $col . '}');
 
-                $this->t_row->dangerouslyAppendHtml('column', $this->t_col->renderToHtml());
+                $this->tRow->dangerouslyAppendHtml('column', $this->tCol->renderToHtml());
             }
 
-            $this->t_wrap->dangerouslyAppendHtml('rows', $this->t_row->renderToHtml());
+            $this->tWrap->dangerouslyAppendHtml('rows', $this->tRow->renderToHtml());
         }
-        $this->t_wrap->dangerouslyAppendHtml('rows', '{/rows}');
-        $tmp = new HtmlTemplate($this->t_wrap->renderToHtml());
+        $this->tWrap->dangerouslyAppendHtml('rows', '{/rows}');
+        $tmp = new HtmlTemplate($this->tWrap->renderToHtml());
 
         // TODO replace later, the only use of direct template tree manipulation
         $t = $this->template;
@@ -93,10 +89,10 @@ class GridLayout extends View
             };
             $cloneTagTreeFx($tmp->getTagTree('rows'));
 
-        // TODO prune unreachable nodes
-        // $template->rebuildTagsIndex();
+            // TODO prune unreachable nodes
+            // $template->rebuildTagsIndex();
         }, null, HtmlTemplate::class)();
 
-        $this->addClass($this->words[$this->columns] . ' column');
+        $this->addClass($this->cssWideClasses[$this->columns] . ' column');
     }
 }

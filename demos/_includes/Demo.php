@@ -4,29 +4,44 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-class Demo extends \Atk4\Ui\Columns
+use Atk4\Ui\Columns;
+use Atk4\Ui\Exception;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\View;
+
+class Demo extends Columns
 {
+    /** @var View */
     public $left;
+    /** @var View */
     public $right;
+
+    /** @var bool */
     public static $isInitialized = false;
+
+    /** @var string */
     public $highlightDefaultStyle = 'dark';
-    public $left_width = 8;
-    public $right_width = 8;
+
+    /** @var int */
+    public $leftWidth = 8;
+    /** @var int */
+    public $rightWidth = 8;
 
     protected function init(): void
     {
         parent::init();
+
         $this->addClass('celled');
 
-        $this->left = $this->addColumn($this->left_width);
-        $this->right = $this->addColumn($this->right_width);
+        $this->left = $this->addColumn($this->leftWidth);
+        $this->right = $this->addColumn($this->rightWidth);
     }
 
     protected function extractCodeFromClosure(\Closure $fx): string
     {
         $funcRefl = new \ReflectionFunction($fx);
         if ($funcRefl->getEndLine() === $funcRefl->getStartLine()) {
-            throw new \Atk4\Ui\Exception('Closure body to extract must be on separate lines');
+            throw new Exception('Closure body to extract must be on separate lines');
         }
 
         $codeArr = array_slice(
@@ -44,22 +59,25 @@ class Demo extends \Atk4\Ui\Columns
         }, $codeArr));
     }
 
-    public function setCodeAndCall(\Closure $fx, $lang = 'php')
+    /**
+     * @param \Closure(View): void $fx
+     */
+    public function setCodeAndCall(\Closure $fx, string $lang = 'php'): void
     {
         $code = $this->extractCodeFromClosure($fx);
 
         $this->highLightCode();
-        \Atk4\Ui\View::addTo(\Atk4\Ui\View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])->addClass($lang)->set($code);
+        View::addTo(View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])->addClass($lang)->set($code);
 
         $fx($this->right);
     }
 
-    public function highLightCode()
+    public function highLightCode(): void
     {
         if (!self::$isInitialized) {
             $this->getApp()->requireCss('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.16.2/styles/' . $this->highlightDefaultStyle . '.min.css');
             $this->getApp()->requireJs('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.16.2/highlight.min.js');
-            $this->js(true, (new \Atk4\Ui\JsChain('hljs'))->initHighlighting());
+            $this->js(true, (new JsChain('hljs'))->initHighlighting());
             self::$isInitialized = true;
         }
     }

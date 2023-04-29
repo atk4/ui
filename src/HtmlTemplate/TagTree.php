@@ -8,18 +8,19 @@ use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Ui\Exception;
 use Atk4\Ui\HtmlTemplate;
 
+/**
+ * @phpstan-consistent-constructor
+ */
 class TagTree
 {
     use WarnDynamicPropertyTrait;
 
-    /** @var HtmlTemplate */
-    private $parentTemplate;
+    private HtmlTemplate $parentTemplate;
 
-    /** @var string */
-    private $tag;
+    private string $tag;
 
     /** @var array<int, Value|string|HtmlTemplate> */
-    private $children = [];
+    private array $children = [];
 
     public function __construct(HtmlTemplate $parentTemplate, string $tag)
     {
@@ -29,6 +30,7 @@ class TagTree
 
     private function __clone()
     {
+        // prevent clonning
     }
 
     /**
@@ -37,7 +39,6 @@ class TagTree
     public function clone(HtmlTemplate $newParentTemplate): self
     {
         $res = new static($newParentTemplate, $this->tag);
-        $res->children = [];
         foreach ($this->children as $k => $v) {
             $res->children[$k] = is_string($v) ? $v : clone $v;
         }
@@ -76,13 +77,11 @@ class TagTree
      */
     public function add(object $value): self
     {
-        // very important check
-        if ($value instanceof self) {
-            throw new Exception('Tag tree cannot be added directly');
-        }
+        if (!$value instanceof Value && !$value instanceof HtmlTemplate) { // @phpstan-ignore-line
+            if ($value instanceof self) { // @phpstan-ignore-line
+                throw new Exception('Tag tree cannot be added directly');
+            }
 
-        // not strictly needed, but catch issues sooner
-        if (!$value instanceof Value && !$value instanceof HtmlTemplate) {
             throw new Exception('Value must be of type HtmlTemplate\Value or HtmlTemplate');
         }
 

@@ -19,29 +19,30 @@ class Centered extends Layout
 
     public $defaultTemplate = 'layout/centered.html';
 
-    /** @var string|null @see \Atk4\Ui\App::$cdn */
+    /** @var string|null @see App::$cdn */
     public $image;
-    public $image_alt = 'Logo';
+    /** @var string */
+    public $imageAlt = 'Logo';
 
     protected function init(): void
     {
         parent::init();
 
         // if image is still unset load it when layout is initialized from the App
-        if ($this->image === null && $this->issetApp()) {
+        if ($this->image === null) {
             $this->image = $this->getApp()->cdn['atk'] . '/logo.png';
         }
 
         // set application's title
-
         $this->template->trySet('title', $this->getApp()->title);
     }
 
     protected function renderView(): void
     {
         if ($this->image) {
-            $this->template->tryDangerouslySetHtml('HeaderImage', '<img class="ui image" src="' . $this->image . '" alt="' . $this->image_alt . '" />');
+            $this->template->tryDangerouslySetHtml('HeaderImage', $this->getApp()->getTag('img/', ['class' => 'ui image', 'src' => $this->image, 'alt' => $this->imageAlt]));
         }
+
         parent::renderView();
     }
 }

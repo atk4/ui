@@ -1,15 +1,12 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Test for VirtualPage inside VirtualPage.
- */
 
 namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\View;
 use Atk4\Ui\VirtualPage;
 
@@ -18,12 +15,12 @@ require_once __DIR__ . '/../init-app.php';
 
 $vp = VirtualPage::addTo($app);
 
-$vp->set(function ($firstPage) {
+$vp->set(function (VirtualPage $firstPage) {
     $secondVp = VirtualPage::addTo($firstPage);
-    $secondVp->set(function ($secondPage) {
+    $secondVp->set(function (VirtualPage $secondPage) {
         View::addTo($secondPage)->set('Second Level Page')->addClass('__atk-behat-test-second');
         $thirdVp = VirtualPage::addTo($secondPage);
-        $thirdVp->set(function ($thirdPage) {
+        $thirdVp->set(function (VirtualPage $thirdPage) {
             View::addTo($thirdPage)->set('Third Level Page')->addClass('__atk-behat-test-third');
             $form = Form::addTo($thirdPage);
             $form->addControl('category', [Form\Control\Lookup::class, 'model' => new Category($thirdPage->getApp()->db)]);

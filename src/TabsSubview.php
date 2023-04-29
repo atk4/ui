@@ -5,15 +5,16 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 /**
- * One Sub view of Tabs widget.
+ * @method Tabs getOwner()
  */
 class TabsSubview extends View
 {
-    public $class = ['ui tab'];
+    public array $class = ['ui tab'];
 
+    /** @var string */
     public $dataTabName;
 
-    public function setActive()
+    public function setActive(): void
     {
         $this->getOwner()->activeTabName = $this->dataTabName;
     }

@@ -4,65 +4,60 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-/**
- * Place menu.
- */
+use Atk4\Data\Model;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsExpressionable;
+
 class Menu extends View
 {
     public $ui = 'menu';
 
     /**
-     * if you set this to false, then upon clicking on the item, it won't
+     * If you set this to false, then upon clicking on the item, it won't
      * be highlighted as "active". This is useful if you have action on your
      * menu and page does not actually reload.
      *
      * @var bool
      */
-    public $activate_on_click = true;
+    public $activateOnClick = true;
 
     public $defaultTemplate = 'menu.html';
 
     /**
-     * will be set to true, when Menu is used as a part of a dropdown.
+     * Will be set to true, when Menu is used as a part of a dropdown.
      *
      * @internal
      *
      * @var bool
      */
-    public $in_dropdown = false;
+    public $inDropdown = false;
 
     /**
      * $seed can also be name here.
      *
-     * @param string|array|Item $item
-     * @param string|array      $action
+     * @param string|array|MenuItem                          $item
+     * @param string|array|JsExpressionable|Model\UserAction $action
      *
-     * @return Item
+     * @return MenuItem
      */
     public function addItem($item = null, $action = null)
     {
         if (!is_object($item)) {
-            $item = (array) $item;
+            if (!is_array($item)) {
+                $item = [$item];
+            }
 
-            array_unshift($item, Item::class);
+            array_unshift($item, MenuItem::class);
         }
 
         $item = $this->add($item)->setElement('a');
 
         if (is_string($action) || is_array($action)) {
-            $action = $this->url($action);
-        }
-
-        if (is_string($action)) {
-            $item->setAttr('href', $action);
-        }
-
-        if ($action instanceof JsExpressionable) {
-            $item->js('click', $action);
-        }
-
-        if ($action instanceof UserAction\ExecutorInterface) {
-            $item->on('click', $action);
+            $url = $this->url($action);
+            $item->setAttr('href', $url);
+        } elseif ($action) {
+            $item->on('click', null, $action);
         }
 
         return $item;
@@ -73,11 +68,11 @@ class Menu extends View
      *
      * @param string $name
      *
-     * @return Item
+     * @return MenuItem
      */
     public function addHeader($name)
     {
-        return Item::addTo($this, [$name])->addClass('header');
+        return MenuItem::addTo($this, [$name])->addClass('header');
     }
 
     /**
@@ -89,21 +84,23 @@ class Menu extends View
      */
     public function addMenu($name)
     {
-        $subMenu = (self::class)::addTo($this, ['defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'in_dropdown' => true]);
+        $subMenu = (self::class)::addTo($this, ['defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'inDropdown' => true]);
 
-        $name = (array) $name;
+        if (!is_array($name)) {
+            $name = [$name];
+        }
 
         $label = $name['title'] ?? $name['text'] ?? $name['name'] ?? $name[0] ?? null;
 
-        if (isset($label)) {
+        if ($label !== null) {
             $subMenu->set('label', $label);
         }
 
-        if (!empty($name['icon'])) {
+        if (isset($name['icon'])) {
             Icon::addTo($subMenu, [$name['icon']], ['Icon'])->removeClass('item');
         }
 
-        if (!$this->in_dropdown) {
+        if (!$this->inDropdown) {
             $subMenu->js(true)->dropdown(['on' => 'hover', 'action' => 'hide']);
         }
 
@@ -121,15 +118,17 @@ class Menu extends View
     {
         $group = (self::class)::addTo($this, ['defaultTemplate' => $template, 'ui' => false]);
 
-        $name = (array) $name;
+        if (!is_array($name)) {
+            $name = [$name];
+        }
 
         $title = $name['title'] ?? $name['text'] ?? $name['name'] ?? $name[0] ?? null;
 
-        if (isset($title)) {
+        if ($title !== null) {
             $group->set('title', $title);
         }
 
-        if (!empty($name['icon'])) {
+        if (isset($name['icon'])) {
             Icon::addTo($group, [$name['icon']], ['Icon'])->removeClass('item');
         }
 
@@ -146,12 +145,6 @@ class Menu extends View
         return (self::class)::addTo($this, ['ui' => false], ['RightMenu'])->removeClass('item')->addClass('right menu');
     }
 
-    /**
-     * Add Item.
-     *
-     * @param View|string|array $seed   New object to add
-     * @param string|array|null $region
-     */
     public function add($seed, $region = null): AbstractView
     {
         return parent::add($seed, $region)->addClass('item');
@@ -170,7 +163,7 @@ class Menu extends View
     public function getHtml()
     {
         // if menu don't have a single element or content, then destroy it
-        if (empty($this->elements) && !$this->content) {
+        if ($this->elements === [] && !$this->content) {
             $this->destroy();
 
             return '';
@@ -181,10 +174,12 @@ class Menu extends View
 
     protected function renderView(): void
     {
-        if ($this->activate_on_click && $this->ui === 'menu') {
-            // Semantic UI need some JS magic
-            $this->on('click', 'a.item', $this->js()->find('.active')->removeClass('active'), ['preventDefault' => false, 'stopPropagation' => false]);
-            $this->on('click', 'a.item', null, ['preventDefault' => false, 'stopPropagation' => false])->addClass('active');
+        if ($this->activateOnClick && $this->ui === 'menu') {
+            // Fomantic-UI need some JS magic
+            $this->on('click', 'a.item', new JsBlock([
+                $this->js()->find('.active')->removeClass('active'),
+                (new Jquery())->addClass('active'),
+            ]), ['preventDefault' => false, 'stopPropagation' => false]);
         }
 
         if ($this->content) {

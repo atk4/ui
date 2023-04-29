@@ -11,7 +11,7 @@ CSS, the goal of Agile UI is to abstract them away behind easy-to-use component 
 
 As a framework it's closely coupled with Agile Data (https://agile-data.readthedocs.io)
 which abstracts database interaction operations. The default UI template set
-uses Fomantic UI (https://fomantic-ui.com) for presentation.
+uses Fomantic-UI (https://fomantic-ui.com) for presentation.
 
 At a glance, Agile UI consists of the following:
 
@@ -99,16 +99,18 @@ clarifications::
     require_once __DIR__ . '/vendor/autoload.php';
 
     // Define your data structure
-    class Offer extends \Atk4\Data\Model {
-
+    class Offer extends \Atk4\Data\Model
+    {
         public $table = 'offer';
 
-        function init(): void {
+        protected function init(): void
+        {
             parent::init();
 
             // Persistence may not have structure, so we define here
             $this->addField('domain_name');
-            $this->addFields(['contact_email', 'contact_phone']);
+            $this->addField('contact_email');
+            $this->addField('contact_phone');
             $this->addField('date', ['type' => 'date']);
             $this->addField('offer', ['type' => 'atk4_money']);
             $this->addField('is_accepted', ['type' => 'boolean']);
@@ -226,17 +228,15 @@ of application layout with a line::
 To render a component individually and get the HTML and JavaScript use this format::
 
     $form = new Form();
+    $form->setApp($app);
     $form->invokeInit();
     $form->setModel(new User($db));
 
     $html = $form->render();
 
 
-This would render an individual component and will return HTML / JavaScript::
+This would render an individual component and will return HTML::
 
-    <script>
-      ..form submit callback setup..
-    </script>
     <div class="ui form">
         <form id="atk_form">
            ... fields
@@ -265,7 +265,7 @@ https://agile-core.readthedocs.io/en/develop/factory.html
 Templates
 ---------
 Components rely on :php:class:`Template` class for parsing and rendering their
-HTML. The default template is written for Fomantic UI framework, which makes sure
+HTML. The default template is written for Fomantic-UI framework, which makes sure
 that elements will look good and be consistent.
 
 

@@ -1,4 +1,4 @@
-<table id="{$_id}" class="{_ui}ui{/} {$class} {$_class}" style="{$style}" {$attributes}>
+<table {$attributes}>
 thead
     | {Head}
     tr {$cells}
@@ -10,7 +10,7 @@ tbody
     | {Body}
 
     | {Row}
-    tr('data-id'='{$_id}')
+    tr(data-id="{$dataId}")
         | {$cells}
 
     |
@@ -24,7 +24,7 @@ tbody
 
     | {/Body}
 
-| {has_foot}
+| {hasFoot}
 tfoot
     | {Foot}
 

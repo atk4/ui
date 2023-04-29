@@ -56,8 +56,8 @@ For example the next code will use some logic::
 
     $model = new User($app->db);
 
-    if ($id = $app->stickyGet('user_id')) {
-
+    $id = $app->stickyGet('user_id');
+    if ($id) {
         // perhaps we edit individual user?
         $model = $model->load($id);
         $crumb->addCrumb($model->get('name'), []);
@@ -68,7 +68,6 @@ For example the next code will use some logic::
 
         Form::addTo($app)->setModel($model);
     } else {
-
         // display list of users
         $table = Table::addTo($app);
         $table->setModel($model);

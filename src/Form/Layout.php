@@ -6,8 +6,11 @@ namespace Atk4\Ui\Form;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
+use Atk4\Ui\Button;
+use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Label;
+use Atk4\Ui\View;
 
 /**
  * Provides generic layout for a form.
@@ -19,12 +22,12 @@ class Layout extends AbstractLayout
     /** @var string Default input template file. */
     public $defaultInputTemplate = 'form/layout/generic-input.html';
 
-    /** @var string If specified will appear on top of the group. Can be string or Label object. */
+    /** @var string|null If specified will appear on top of the group. Can be string or Label object. */
     public $label;
 
     /**
      * Specify width of a group in numerical word e.g. 'width' => 'two' as per
-     * Semantic UI grid system.
+     * Fomantic-UI grid system.
      *
      * @var string
      */
@@ -33,7 +36,7 @@ class Layout extends AbstractLayout
     /** @var bool Set true if you want fields to appear in-line. */
     public $inline = false;
 
-    /** @var HtmlTemplate Template holding input html. */
+    /** @var HtmlTemplate|null Template holding input html. */
     public $inputTemplate;
 
     /** @var array Seed for creating input hint View used in this layout. */
@@ -56,13 +59,13 @@ class Layout extends AbstractLayout
     /**
      * Adds Button.
      *
-     * @param \Atk4\Ui\Button|array|string $seed
+     * @param Button|array $seed
      *
-     * @return \Atk4\Ui\Button
+     * @return Button
      */
     public function addButton($seed)
     {
-        return $this->add(Factory::mergeSeeds([\Atk4\Ui\Button::class], $seed), 'Buttons');
+        return $this->add(Factory::mergeSeeds([Button::class], $seed), 'Buttons');
     }
 
     /**
@@ -74,7 +77,7 @@ class Layout extends AbstractLayout
      */
     public function addHeader($label)
     {
-        \Atk4\Ui\Header::addTo($this, [$label, 'class.dividing' => true, 'element' => 'h4']);
+        Header::addTo($this, [$label, 'class.dividing' => true, 'element' => 'h4']);
 
         return $this;
     }
@@ -108,17 +111,17 @@ class Layout extends AbstractLayout
      * @param mixed $seed
      * @param bool  $addDivider Should we add divider after this section
      *
-     * @return static
+     * @return self
      */
     public function addSubLayout($seed = [self::class], $addDivider = true)
     {
         $v = $this->add(Factory::factory($seed, ['form' => $this->form]));
-        if ($v instanceof \Atk4\Ui\Form\Layout\Section) {
+        if ($v instanceof Layout\Section) {
             $v = $v->addSection();
         }
 
         if ($addDivider) {
-            \Atk4\Ui\View::addTo($this, ['ui' => 'hidden divider']);
+            View::addTo($this, ['ui' => 'hidden divider']);
         }
 
         return $v;
@@ -138,7 +141,7 @@ class Layout extends AbstractLayout
 
         foreach ($this->elements as $element) {
             // Buttons go under Button section
-            if ($element instanceof \Atk4\Ui\Button) {
+            if ($element instanceof Button) {
                 $this->template->dangerouslyAppendHtml('Buttons', $element->getHtml());
 
                 continue;
@@ -168,13 +171,13 @@ class Layout extends AbstractLayout
 
             // Anything but controls or explicitly defined controls get inserted directly
             if (!$element instanceof Control || !$element->layoutWrap) {
-                $this->template->dangerouslyAppendHtml('Content', $element->getHtml());
+                $this->template->dangerouslyAppendHtml('Content', $element->getHtml()); // @phpstan-ignore-line
 
                 continue;
             }
 
             $template = $element->renderLabel ? $labeledControl : $noLabelControl;
-            $label = $element->caption ?: $element->entityField->getField()->getCaption();
+            $label = $element->caption ?? $element->entityField->getField()->getCaption();
 
             // Anything but form controls gets inserted directly
             if ($element instanceof Control\Checkbox) {
@@ -198,15 +201,15 @@ class Layout extends AbstractLayout
             // Controls get extra pampering
             $template->dangerouslySetHtml('Input', $element->getHtml());
             $template->trySet('label', $label);
-            $template->trySet('label_for', $element->name . '_input');
-            $template->set('control_class', $element->getControlClass());
+            $template->trySet('labelFor', $element->name . '_input');
+            $template->set('controlClass', $element->controlClass);
 
             if ($element->entityField->getField()->required) {
-                $template->append('control_class', 'required ');
+                $template->append('controlClass', 'required ');
             }
 
-            if (isset($element->width)) {
-                $template->append('control_class', $element->width . ' wide ');
+            if ($element->width) {
+                $template->append('controlClass', $element->width . ' wide ');
             }
 
             if ($element->hint && $template->hasTag('Hint')) {
@@ -217,6 +220,7 @@ class Layout extends AbstractLayout
                 } else {
                     $hint->set($element->hint);
                 }
+                $hint->setApp($this->getApp());
                 $template->dangerouslySetHtml('Hint', $hint->getHtml());
             } elseif ($template->hasTag('Hint')) {
                 $template->del('Hint');
@@ -229,10 +233,12 @@ class Layout extends AbstractLayout
             }
         }
 
-        // Now collect JS from everywhere
-        foreach ($this->elements as $element) {
-            if ($element->_js_actions) {
-                $this->_js_actions = array_merge_recursive($this->_js_actions, $element->_js_actions);
+        // collect JS from everywhere
+        foreach ($this->elements as $view) {
+            foreach ($view->_jsActions as $when => $actions) { // @phpstan-ignore-line
+                foreach ($actions as $action) {
+                    $this->_jsActions[$when][] = $action;
+                }
             }
         }
     }

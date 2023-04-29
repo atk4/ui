@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
-use Atk4\Ui\Jquery;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpressionable;
 
-/**
- * Input element for a form control.
- */
 class Checkbox extends Form\Control
 {
     public $ui = 'checkbox';
@@ -38,21 +37,24 @@ class Checkbox extends Form\Control
 
     protected function init(): void
     {
+        // TODO exception should be generalized for type acceptable for any form control
+        if ($this->entityField && $this->entityField->getField()->type !== 'boolean') {
+            throw (new Exception('Checkbox form control requires field with boolean type'))
+                ->addMoreInfo('type', $this->entityField->getField()->type);
+        }
+
         parent::init();
 
         // checkboxes are annoying because they don't send value when they are
         // not ticked. We assume they are ticked and sent boolean "false" as a
         // workaround. Otherwise send boolean "true".
         if ($this->form) {
-            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, &$postRawData) {
+            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
                 $postRawData[$this->entityField->getFieldName()] = isset($postRawData[$this->entityField->getFieldName()]);
             });
         }
     }
 
-    /**
-     * Render view.
-     */
     protected function renderView(): void
     {
         if ($this->label) {
@@ -60,26 +62,21 @@ class Checkbox extends Form\Control
         }
 
         if ($this->entityField ? $this->entityField->get() : $this->content) {
-            $this->template->set('checked', 'checked');
+            $this->template->dangerouslySetHtml('checked', 'checked="checked"');
         }
 
-        // We don't want this displayed, because it can only affect "checked" status anyway
         $this->content = null;
 
-        // take care of readonly status
-        if ($this->readonly) {
+        if ($this->readOnly) {
             $this->addClass('read-only');
         }
 
-        // take care of disabled status
         if ($this->disabled) {
             $this->addClass('disabled');
-            $this->template->set('disabled', 'disabled="disabled"');
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
         }
 
         $this->js(true)->checkbox();
-
-        $this->content = null; // no content again
 
         parent::renderView();
     }
@@ -87,9 +84,12 @@ class Checkbox extends Form\Control
     /**
      * Will return jQuery expression to get checkbox checked state.
      *
+     * @param bool|string      $when
+     * @param JsExpressionable $action
+     *
      * @return Jquery
      */
-    public function jsChecked($when = null, $action = null)
+    public function jsChecked($when = false, $action = null): JsExpressionable
     {
         return $this->jsInput($when, $action)->get(0)->checked;
     }

@@ -1,14 +1,9 @@
 categories:
-  - title: "Breaking Changes"
-    labels:
-      - "BC-break"
-  - title: "Major Features"
+  - title: "Major features"
     labels:
       - "MAJOR"
-  - title: "Documentation enhancements"
+  - title: "Breaking changes"
     labels:
-      - "Documentation :books:"
-template: |
-  ## What’s Changed
-
-  $CHANGES
+      - "BC-break"
+  - title: "Other changes"
+template: $CHANGES

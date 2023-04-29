@@ -1,9 +1,6 @@
 <?php
 
 declare(strict_types=1);
-/**
- * LoadableContent interface.
- */
 
 namespace Atk4\Ui\Panel;
 
@@ -23,6 +20,8 @@ interface LoadableContent
 
     /**
      * The callback for loading content.
+     *
+     * @param \Closure($this): void $fx
      */
     public function onLoad(\Closure $fx): void;
 }

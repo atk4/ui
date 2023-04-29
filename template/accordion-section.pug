@@ -1,7 +1,7 @@
-div(id="{$_id}" class="title")
+div(class="title", {$attributes})
     i(class="{$icon} icon")
     | {title}Title{/}
-div(class="content ui basic segment", data-path="{$path}", style="min-height: 60px")
-    div(id="{$item_id}")
+div(class="content ui basic segment" data-path="{$path}")
+    div(id="{$itemId}")
         | {$Content}
 = "\n"

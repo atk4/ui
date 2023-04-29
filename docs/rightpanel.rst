@@ -46,7 +46,7 @@ Initializing a panel with onOpen callback::
     $btn->js(true)->data('btn', '1');
     $btn->on('click', $panel_1->jsOpen(['btn'], 'orange'));
 
-    $panel_1->onOpen(function($p) {
+    $panel_1->onOpen(function (Panel\Content $p) {
         $btn_number = $_GET['btn'] ?? null;
         $text =  'You loaded panel content using button #' . $btn_number;
         Message::addTo($p, ['Panel 1', 'text' => $text]);
@@ -64,4 +64,4 @@ This method may take up to three arguments.
     to the trigger element as long as the panel remains open. This help visualize, which element has trigger the
     panel opening.
 
-    $jsTrigger: a JsExpression that represent the jQuery object where the data property reside. Default to $(this).
+    $jsTrigger: JS expression that represent the jQuery object where the data property reside. Default to $(this).

@@ -6,7 +6,6 @@ namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 
@@ -20,17 +19,12 @@ class ArgumentFormExecutor extends BasicExecutor
     /** @var Form */
     public $form;
 
-    public function initPreview()
+    public function initPreview(): void
     {
-        Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?: $this->action->getDescription()]);
+        Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?? $this->action->getDescription()]);
         $this->form = Form::addTo($this, ['buttonSave' => $this->executorButton]);
 
         foreach ($this->action->args as $key => $val) {
-            if (is_numeric($key)) {
-                throw (new Exception('Action arguments must be named'))
-                    ->addMoreInfo('args', $this->action->args);
-            }
-
             if ($val instanceof Model) {
                 $val = ['model' => $val];
             }

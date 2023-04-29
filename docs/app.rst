@@ -9,10 +9,8 @@ Purpose of App class
 .. php:namespace:: Atk4\Ui
 .. php:class:: App
 
-App is a mandatory object that's essential for Agile UI to operate. If you don't create App object explicitly, it
-will be automatically created if you execute `$component->invokeInit()` or `$component->render()`.
-
-In most use-scenarios, however, you would create instance of an App class yourself before other components::
+App is a mandatory object that's essential for Agile UI to operate. You should create instance
+of an App class yourself before other components::
 
     $app = new \Atk4\Ui\App('My App');
     $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
@@ -66,7 +64,8 @@ active. (See :ref:`system_pattern`)::
         public $user;
         public $company;
 
-        function __construct($auth = true) {
+        public function __construct(bool $auth = true)
+        {
             parent::__construct('Warehouse App v0.4');
 
             // My App class will establish database connection
@@ -74,23 +73,23 @@ active. (See :ref:`system_pattern`)::
             $this->db->setApp($this);
 
             // My App class provides access to a currently logged user and currently selected system.
-            $this->user = new User($this->db);
-            $this->company = new Company($this->db);
             session_start();
 
             // App class may be used for pages that do not require authentication
             if (!$auth) {
                 $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
+
                 return;
             }
 
-            // Load User from database based on session data
+            // Load user from database based on session data
             if (isset($_SESSION['user_id'])) {
-                $this->user = $this->user->tryLoad($_SESSION['user_id']);
+                $user = new User($this->db);
+                $this->user = $user->tryLoad($_SESSION['user_id']);
             }
 
             // Make sure user is valid
-            if (!$this->user->isLoaded()) {
+            if ($this->user === null) {
                 $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
                 Message::addTo($this, ['Login Required', 'type' => 'error']);
                 Button::addTo($this, ['Login', 'class.primary' => true])->link('index.php');
@@ -206,7 +205,6 @@ Utilities by App
 App provides various utilities that are used by other components.
 
 .. php:method:: getTag()
-.. php:method:: encodeAttribute()
 .. php:method:: encodeHtml()
 
 Apart from basic utility, App class provides several mechanisms that are helpful for components.
@@ -275,7 +273,7 @@ call-back is triggered and need to respond with some JSON.
 
 You can also use this method to output debug data. Here is comparison to var_dump::
 
-    // var_dump($my_var);  // does not stop execution, draws UI anyway
+    // var_dump($my_var); // does not stop execution, draws UI anyway
 
     $this->getApp()->terminate(var_export($my_var)); // stops execution.
 
@@ -351,8 +349,8 @@ Having composition of multiple components will allow them to share the app objec
 
     $grid = new \Atk4\Ui\Grid();
     $grid->setModel($user);
-    $grid->addPaginator();          // initialize and populate paginator
-    $grid->addButton('Test');       // initialize and populate toolbar
+    $grid->addPaginator(); // initialize and populate paginator
+    $grid->addButton('Test'); // initialize and populate toolbar
 
     echo $grid->render();
 
@@ -389,7 +387,7 @@ This will initialize two new views inside the app::
     $app->html
     $app->layout
 
-The first view is a HTML boilerplate - containing HEAD / BODY tags but not the body
+The first view is a HTML boilerplate - containing head / body tags but not the body
 contents. It is a standard html5 doctype template.
 
 The layout will be selected based on your choice - Layout\Centered, Layout\Admin etc. This will
@@ -424,7 +422,7 @@ Populating the left menu object is simply a matter of adding the right menu item
 This is the top menu of the admin layout. You can add other item to the top menu using::
 
     Button::addTo($layout->menu->addItem(), ['View Source', 'class.teal' => true, 'icon' => 'github'])
-        ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\JsExpression('document.location=[];', [$url . $f]));
+        ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\Js\JsExpression('document.location = [];', [$url . $f]));
 
 .. php:attr:: menuRight
 
@@ -452,7 +450,7 @@ You should be able to find 3rd party Layout implementations that may even be com
 some custom templates and views. The concept of a "Theme" in Agile UI consists of
 offering of the following 3 things:
 
- - custom CSS build from Fomantic UI
+ - custom CSS build from Fomantic-UI
  - custom Layout(s) along with documentation
  - additional or tweaked Views
 

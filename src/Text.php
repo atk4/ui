@@ -9,9 +9,9 @@ namespace Atk4\Ui;
  */
 class Text extends View
 {
-    public $defaultTemplate = false;
+    public $defaultTemplate;
 
-    public function render($forceReturn = true): string
+    public function render(): string
     {
         return $this->content;
     }
@@ -30,9 +30,7 @@ class Text extends View
      */
     public function addParagraph($text)
     {
-        $this->content .= $this->issetApp()
-            ? $this->getApp()->getTag('p', $text)
-            : '<p>' . htmlspecialchars($text) . '</p>';
+        $this->content .= $this->getApp()->getTag('p', [], $text);
 
         return $this;
     }

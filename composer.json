@@ -53,14 +53,20 @@
     ],
     "homepage": "https://github.com/atk4/ui",
     "require": {
-        "php": ">=7.4 <8.2",
+        "php": ">=7.4 <8.3",
         "atk4/data": "dev-develop",
+        "nyholm/psr7": "^1.4",
+        "nyholm/psr7-server": "^1.0",
         "symfony/filesystem": "^4.4 || ^5.3",
         "symfony/http-foundation": "^4.4 || ^5.3"
     },
     "require-release": {
-        "php": ">=7.4 <8.2",
-        "atk4/data": "~3.2.0"
+        "php": ">=7.4 <8.3",
+        "atk4/data": "~5.0.0",
+        "nyholm/psr7": "^1.4",
+        "nyholm/psr7-server": "^1.0",
+        "symfony/filesystem": "^4.4 || ^5.3",
+        "symfony/http-foundation": "^4.4 || ^5.3"
     },
     "require-dev": {
         "behat/mink-extension": "^2.3.1",
@@ -68,11 +74,12 @@
         "ergebnis/composer-normalize": "^2.13",
         "friendsofphp/php-cs-fixer": "^3.0",
         "fzaninotto/faker": "^1.6",
-        "guzzlehttp/guzzle": "^6.3",
+        "guzzlehttp/guzzle": "^7.3",
         "johnkary/phpunit-speedtrap": "^3.3",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.0",
         "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-strict-rules": "^1.3",
         "phpunit/phpunit": "^9.5.5",
         "symfony/process": "^4.4.30 || ^5.3.7"
     },

@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-/**
- * Counter for certain demos file.
- */
-class Counter extends \Atk4\Ui\Form\Control\Line
+use Atk4\Ui\Button;
+use Atk4\Ui\Form;
+use Atk4\Ui\Js\JsExpression;
+
+class Counter extends Form\Control\Line
 {
-    public $content = '20'; // default
+    public $content = '20';
 
     protected function init(): void
     {
         parent::init();
 
-        $this->actionLeft = new \Atk4\Ui\Button(['icon' => 'minus']);
-        $this->action = new \Atk4\Ui\Button(['icon' => 'plus']);
+        $this->actionLeft = new Button(['icon' => 'minus']);
+        $this->action = new Button(['icon' => 'plus']);
 
-        $this->actionLeft->js('click', $this->jsInput()->val(new \Atk4\Ui\JsExpression('parseInt([]) - 1', [$this->jsInput()->val()])));
-        $this->action->js('click', $this->jsInput()->val(new \Atk4\Ui\JsExpression('parseInt([]) + 1', [$this->jsInput()->val()])));
+        $this->actionLeft->on('click', $this->jsInput()->val(new JsExpression('parseInt([]) - 1', [$this->jsInput()->val()])));
+        $this->action->on('click', $this->jsInput()->val(new JsExpression('parseInt([]) + 1', [$this->jsInput()->val()])));
     }
 }

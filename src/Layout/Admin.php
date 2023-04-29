@@ -6,10 +6,11 @@ namespace Atk4\Ui\Layout;
 
 use Atk4\Ui\Header;
 use Atk4\Ui\Icon;
-use Atk4\Ui\Item;
-use Atk4\Ui\Jquery;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Layout;
 use Atk4\Ui\Menu;
+use Atk4\Ui\MenuItem;
 
 /**
  * Implements a classic 100% width admin layout.
@@ -35,11 +36,15 @@ use Atk4\Ui\Menu;
  */
 class Admin extends Layout implements NavigableInterface
 {
-    public $menuLeft;    // vertical menu
-    public $menu;        // horizontal menu
-    public $menuRight;   // vertical pull-down
+    /** @var Menu Top horizontal menu */
+    public $menu;
+    /** @var Menu|null Left vertical menu */
+    public $menuLeft;
+    /** @var Menu Right vertical menu pull-down */
+    public $menuRight;
 
-    public $burger = true;      // burger menu item
+    /** @var MenuItem */
+    public $burger;
 
     /** @var bool Whether or not left Menu is visible on Page load. */
     public $isMenuLeftVisible = true;
@@ -57,10 +62,10 @@ class Admin extends Layout implements NavigableInterface
                 ['TopMenu']
             );
             $this->burger = $this->menu->addItem(['class' => ['icon']]);
-            $this->burger->on('click', [
+            $this->burger->on('click', new JsBlock([
                 (new Jquery('.atk-sidenav'))->toggleClass('visible'),
                 (new Jquery('body'))->toggleClass('atk-sidenav-visible'),
-            ]);
+            ]));
             Icon::addTo($this->burger, ['content']);
 
             Header::addTo($this->menu, [$this->getApp()->title, 'size' => 4]);
@@ -78,18 +83,12 @@ class Admin extends Layout implements NavigableInterface
         $this->template->trySet('version', $this->getApp()->version);
     }
 
-    /**
-     * Add a group to left menu.
-     */
     public function addMenuGroup($seed): Menu
     {
         return $this->menuLeft->addGroup($seed);
     }
 
-    /**
-     * Add items to left menu.
-     */
-    public function addMenuItem($name, $action = null, $group = null): Item
+    public function addMenuItem($name, $action = null, $group = null): MenuItem
     {
         if ($group) {
             return $group->addItem($name, $action);
@@ -100,14 +99,12 @@ class Admin extends Layout implements NavigableInterface
 
     protected function renderView(): void
     {
-        if ($this->menuLeft) {
-            if (count($this->menuLeft->elements) === 0) {
-                // no items were added, so lets add dashboard
-                $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], ['index']);
-            }
-            if (!$this->isMenuLeftVisible) {
-                $this->template->tryDel('CssVisibility');
-            }
+        if (count($this->menuLeft->elements) === 0) {
+            // no items were added, so lets add dashboard
+            $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], ['index']);
+        }
+        if (!$this->isMenuLeftVisible) {
+            $this->template->tryDel('CssVisibility');
         }
 
         parent::renderView();

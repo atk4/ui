@@ -1,6 +1,16 @@
 <?php
 
 declare(strict_types=1);
+
+namespace Atk4\Ui\Form\Control;
+
+use Atk4\Ui\Form;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\JsCallback;
+use Atk4\Ui\View;
+
 /**
  * Display items in a hierarchical (tree) view structure.
  *
@@ -13,19 +23,12 @@ declare(strict_types=1);
  *
  * see demos/tree-item-selector.php to see how tree items are build.
  */
-
-namespace Atk4\Ui\Form\Control;
-
-use Atk4\Ui\Form;
-use Atk4\Ui\HtmlTemplate;
-use Atk4\Ui\JsCallback;
-
 class TreeItemSelector extends Form\Control
 {
-    /** @var HtmlTemplate Template for the item selector view. */
+    /** @var HtmlTemplate|null Template for the item selector view. */
     public $itemSelectorTemplate;
 
-    /** @var \Atk4\Ui\View|null The tree item selector View. */
+    /** @var View|null The tree item selector View. */
     public $itemSelector;
 
     /**
@@ -45,18 +48,18 @@ class TreeItemSelector extends Form\Control
      * Only the id value, from a single node, are returned i.e. not the group id value.
      *
      * Each item may have it's own children by adding nodes children to it.
-     *   $items = [
-     *       ['name' => 'Electronics', 'id' => 'P100', 'nodes' => [
-     *           ['name' => 'Phone', 'id' => 'P100', 'nodes' => [
-     *               ['name' => 'iPhone', 'id' => 502],
-     *               ['name' => 'Google Pixels', 'id' => 503],
-     *           ]],
-     *           ['name' => 'Tv' , 'id' => 501],
-     *           ['name' => 'Radio' , 'id' => 601],
-     *       ]],
-     *       ['name' => 'Cleaner' , 'id' => 201],
-     *       ['name' => 'Appliances' , 'id' => 301],
-     *   ];
+     * $items = [
+     *     ['name' => 'Electronics', 'id' => 'P100', 'nodes' => [
+     *         ['name' => 'Phone', 'id' => 'P100', 'nodes' => [
+     *             ['name' => 'iPhone', 'id' => 502],
+     *             ['name' => 'Google Pixels', 'id' => 503],
+     *         ]],
+     *         ['name' => 'Tv', 'id' => 501],
+     *         ['name' => 'Radio', 'id' => 601],
+     *     ]],
+     *     ['name' => 'Cleaner', 'id' => 201],
+     *     ['name' => 'Appliances', 'id' => 301],
+     * ];
      *
      * When adding nodes array into an item, it will automatically be treated as a group unless empty.
      *
@@ -71,25 +74,25 @@ class TreeItemSelector extends Form\Control
     {
         parent::init();
 
-        $this->addClass(['ui', 'vertical', 'segment', 'basic', $this->loaderCssName])->addStyle(['padding' => '0px!important']);
+        $this->addClass(['ui', 'vertical', 'segment', 'basic', $this->loaderCssName])->setStyle(['padding' => '0px!important']);
 
         if (!$this->itemSelectorTemplate) {
-            $this->itemSelectorTemplate = new HtmlTemplate('<div id="{$_id}" class="ui list" style="margin-left: 16px"><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
+            $this->itemSelectorTemplate = new HtmlTemplate('<div class="ui list" style="margin-left: 16px;" {$attributes}><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
-        $this->itemSelector = \Atk4\Ui\View::addTo($this, ['template' => $this->itemSelectorTemplate]);
+        $this->itemSelector = View::addTo($this, ['template' => $this->itemSelectorTemplate]);
     }
 
     /**
-     * Provide a function to be execute when clicking an item in tree selector.
+     * Provide a function to be executed when clicking an item in tree selector.
      * The executing function will receive an array with item state in it
      * when allowMultiple is true or a single value when false.
      *
-     * @return $this
+     * @param \Closure(mixed): (JsExpressionable|View|string|void) $fx
      */
-    public function onItem(\Closure $fx)
+    public function onItem(\Closure $fx): void
     {
-        $this->cb = JsCallback::addTo($this)->set(function ($j, $data) use ($fx) {
+        $this->cb = JsCallback::addTo($this)->set(function (Jquery $j, $data) use ($fx) {
             $value = $this->getApp()->decodeJson($data);
             if (!$this->allowMultiple) {
                 $value = $value[0];
@@ -97,16 +100,12 @@ class TreeItemSelector extends Form\Control
 
             return $fx($value);
         }, ['data' => 'value']);
-
-        return $this;
     }
 
     /**
-     * Set the items.
-     *
      * @return $this
      */
-    public function setTreeItems($treeItems)
+    public function setTreeItems(array $treeItems)
     {
         $this->treeItems = $treeItems;
 
@@ -114,23 +113,25 @@ class TreeItemSelector extends Form\Control
     }
 
     /**
-     * Input field.
+     * Returns <input ...> tag.
      *
      * @return string
      */
     public function getInput()
     {
-        return $this->getApp()->getTag('input', [
+        return $this->getApp()->getTag('input/', [
             'name' => $this->shortName,
             'type' => 'hidden',
             'value' => $this->getValue(),
-            'readonly' => true,
         ]);
     }
 
+    /**
+     * @return string|null
+     */
     public function getValue()
     {
-        return $this->getApp()->ui_persistence->typecastSaveField($this->entityField->getField(), $this->entityField->get());
+        return $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get());
     }
 
     protected function renderView(): void
@@ -139,18 +140,15 @@ class TreeItemSelector extends Form\Control
 
         $this->itemSelector->template->tryDangerouslySetHtml('Input', $this->getInput());
 
-        $this->itemSelector->vue(
-            'atk-tree-item-selector',
-            [
-                'item' => ['id' => 'atk-root', 'nodes' => $this->treeItems],
-                'values' => [], // need empty for Vue reactivity.
-                'field' => $this->shortName,
-                'options' => [
-                    'mode' => $this->allowMultiple ? 'multiple' : 'single',
-                    'url' => $this->cb ? $this->cb->getJsUrl() : null,
-                    'loader' => $this->loaderCssName,
-                ],
-            ]
-        );
+        $this->itemSelector->vue('AtkTreeItemSelector', [
+            'item' => ['id' => 'atk-root', 'nodes' => $this->treeItems],
+            'values' => [], // need empty for Vue reactivity.
+            'field' => $this->shortName,
+            'options' => [
+                'mode' => $this->allowMultiple ? 'multiple' : 'single',
+                'url' => $this->cb ? $this->cb->getJsUrl() : null,
+                'loader' => $this->loaderCssName,
+            ],
+        ]);
     }
 }

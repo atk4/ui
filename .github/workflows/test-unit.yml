@@ -24,7 +24,7 @@ jobs:
             type: 'StaticAnalysis'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Configure PHP
         run: |
@@ -34,10 +34,10 @@ jobs:
       - name: Setup cache 1/2
         id: composer-cache
         run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Setup cache 2/2
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-smoke-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
@@ -62,6 +62,8 @@ jobs:
         run: |
           if [ "$(find demos/ -name '*.php' -print0 | xargs -0 grep -L "namespace Atk4\\\\Ui\\\\Demos[;\\\\]" | tee /dev/fd/2)" ]; then echo 'All demos/ files must have namespace declared' && (exit 1); fi
           vendor/bin/php-cs-fixer fix --dry-run --using-cache=no --diff --verbose
+          composer config --unset version && composer config --unset require-release
+          composer validate --strict --no-check-lock && composer normalize --dry-run --no-check-lock
 
       - name: Run Static Analysis (only for StaticAnalysis)
         if: matrix.type == 'StaticAnalysis'
@@ -77,7 +79,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1']
+        php: ['7.4', '8.0', '8.1', '8.2']
         type: ['Phpunit', 'Phpunit Lowest']
         include:
           - php: '8.1' # TODO replace with 'latest' once it represents at least PHP 8.1
@@ -104,12 +106,12 @@ jobs:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
       oracle:
-        image: gvenzl/oracle-xe:18
+        image: gvenzl/oracle-xe:18-slim-faststart
         env:
           ORACLE_PASSWORD: atk4_pass
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Configure PHP
         run: |
@@ -119,10 +121,10 @@ jobs:
       - name: Setup cache 1/2
         id: composer-cache
         run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Setup cache 2/2
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
@@ -145,7 +147,7 @@ jobs:
           php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
           /usr/lib/oracle/setup.sh
-          if [ -n "$LOG_COVERAGE" ]; then mkdir coverage && cp tools/CoverageUtil.php demos; fi
+          if [ -n "$LOG_COVERAGE" ]; then mkdir coverage; fi
 
       - name: "Run tests: SQLite"
         run: |
@@ -165,8 +167,8 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mysql.cov; fi
 
-      - name: "Run tests: MariaDB"
-        if: success() || failure()
+      - name: "Run tests: MariaDB (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -177,8 +179,8 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mariadb.cov; fi
 
-      - name: "Run tests: PostgreSQL"
-        if: success() || failure()
+      - name: "Run tests: PostgreSQL (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "pgsql:host=postgres;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -189,8 +191,8 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-postgres.cov; fi
 
-      - name: "Run tests: MSSQL"
-        if: success() || failure()
+      - name: "Run tests: MSSQL (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "sqlsrv:host=mssql;dbname=master;driverOptions[TrustServerCertificate]=1"
           DB_USER: sa
@@ -201,8 +203,8 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mssql.cov; fi
 
-      - name: "Run tests: Oracle"
-        if: success() || failure()
+      - name: "Run tests: Oracle (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "oci:dbname=oracle/xe"
           DB_USER: system
@@ -222,10 +224,11 @@ jobs:
 
       - name: Upload coverage logs 2/2 (only for latest Phpunit)
         if: env.LOG_COVERAGE
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: coverage/merged.xml
+          fail_ci_if_error: true
+          files: coverage/merged.xml
 
   behat-test:
     name: Behat
@@ -235,7 +238,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1']
+        php: ['7.4', '8.0', '8.1', '8.2']
         type: ['Chrome', 'Chrome Lowest']
         include:
           - php: 'latest'
@@ -264,12 +267,12 @@ jobs:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
       oracle:
-        image: gvenzl/oracle-xe:18
+        image: gvenzl/oracle-xe:18-slim-faststart
         env:
           ORACLE_PASSWORD: atk4_pass
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Configure PHP
         run: |
@@ -279,53 +282,68 @@ jobs:
       - name: Setup cache 1/2
         id: composer-cache
         run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Setup cache 2/2
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-behat-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - name: Install JS dependencies (only for Slow)
-        if: matrix.type == 'Chrome Slow'
+      - name: Install JS dependencies (only for coverage or Slow)
+        if: env.LOG_COVERAGE || matrix.type == 'Chrome Slow'
         run: |
-          mv public public.orig
-          mkdir public public/external
-          cp public.orig/.gitignore public
-          cp public.orig/agileui.less public
-          cp public.orig/logo.png public
-          cp public.orig/external/.gitignore public/external
-          cp public.orig/external/package.json public/external
-          cp public.orig/external/package-lock.json public/external
-          cp public.orig/external/postinstall.js public/external
-          npm install --loglevel=error -g pug-cli less less-plugin-clean-css uglify-js
-          (cd js && npm ci --loglevel=error)
-          (cd public/external && npm ci --loglevel=error && git clean -dxfq .)
+          if [ -n "$LOG_COVERAGE" ]; then
+            (cd js && npm install --package-lock-only --save-dev babel-plugin-istanbul nyc && npm ci --loglevel=error)
+          else
+            mv public public.orig
+            mkdir public public/css public/external
+            cp public.orig/.gitattributes public
+            cp public.orig/.gitignore public
+            cp public.orig/logo.png public
+            cp public.orig/css/agileui.less public/css
+            cp public.orig/external/.gitignore public/external
+            cp public.orig/external/package.json public/external
+            cp public.orig/external/package-lock.json public/external
+            cp public.orig/external/postinstall.js public/external
+            npm install --loglevel=error -g pug-cli less less-plugin-clean-css uglify-js
+            (cd js && npm ci --loglevel=error)
+            (cd public/external && npm ci --loglevel=error && git clean -dxfq .)
+          fi
 
       - name: Lint JS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
-          (cd js && npm run lint ../public/external/\*.js)
+          (cd js && npm run lint)
 
       - name: Compile HTML files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
           cp -r template template.orig
           find template -not -type d -not -name '*.pug' -delete
-          (cd template && pug --silent --pretty .)
+          (cd template && pug --doctype html --pretty --silent .)
 
       - name: Compile CSS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
-          lessc public/agileui.less public/agileui.min.css --clean-css="--s1 --advanced" --source-map
+          lessc public/css/agileui.less public/css/agileui.min.css --clean-css="--s1 --advanced" --source-map
 
-      - name: Compile JS files (only for Slow)
-        if: matrix.type == 'Chrome Slow'
+      - name: Compile JS files (only for coverage or Slow)
+        if: env.LOG_COVERAGE || matrix.type == 'Chrome Slow'
         run: |
-          (cd js && npm run build)
+          if [ -n "$LOG_COVERAGE" ]; then
+            rm -r public/js
+            (cd js && ISTANBUL_COVERAGE=1 npm run build)
+          else
+            # fix webpack build repeatability
+            # https://github.com/vuejs/vue-loader/blob/v17.0.1/src/index.ts#L284 should be fine,
+            # the import itself is relativized, but the variable (generated by webpack) is not
+            # https://github.com/vuejs/vue-loader/issues/2028
+            sed -i -E 's~(import exportComponent from )\$\{exportHelperPath\}(`;)~\1'"'"'vue-loader/dist/exportHelper.js'"'"'\2~' js/node_modules/vue-loader/dist/index.js
+            (cd js && npm run build)
+          fi
 
       - name: Diff compiled files (only for Slow)
         if: matrix.type == 'Chrome Slow'
@@ -349,7 +367,7 @@ jobs:
           php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
           /usr/lib/oracle/setup.sh
-          if [ -n "$LOG_COVERAGE" ]; then mkdir coverage && cp tools/CoverageUtil.php demos; fi
+          if [ -n "$LOG_COVERAGE" ]; then mkdir coverage coverage/js; fi
           ci_wait_until () { timeout 30 sh -c "until { $1 2> /dev/null; }; do sleep 0.02; done" || timeout 15 sh -c "$1" || { echo "health timeout: $1"; exit 1; }; }
           php -d opcache.enable_cli=1 -S 127.0.0.1:8888 > /dev/null 2>&1 &
           ci_wait_until 'nc -w 1 127.0.0.1 8888'
@@ -377,8 +395,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MariaDB (only for coverage or cron)"
-        if: (success() || failure()) && (env.LOG_COVERAGE || github.event_name == 'schedule')
+      - name: "Run tests: MariaDB (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -388,8 +406,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: PostgreSQL (only for coverage or cron)"
-        if: (success() || failure()) && (env.LOG_COVERAGE || github.event_name == 'schedule')
+      - name: "Run tests: PostgreSQL (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "pgsql:host=postgres;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -399,8 +417,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MSSQL (only for coverage or cron)"
-        if: (success() || failure()) && (env.LOG_COVERAGE || github.event_name == 'schedule')
+      - name: "Run tests: MSSQL (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "sqlsrv:host=mssql;dbname=master;driverOptions[TrustServerCertificate]=1"
           DB_USER: sa
@@ -410,8 +428,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: Oracle (only for coverage or cron)"
-        if: (success() || failure()) && (env.LOG_COVERAGE || github.event_name == 'schedule')
+      - name: "Run tests: Oracle (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "oci:dbname=oracle/xe"
           DB_USER: system
@@ -422,15 +440,22 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: Upload coverage logs 1/2 (only for latest Chrome)
+      - name: Upload coverage logs 1/2 (only for coverage)
         if: env.LOG_COVERAGE
         run: |
           ls -l coverage | wc -l
           php -d memory_limit=2G vendor/bin/phpcov merge coverage/ --clover coverage/merged.xml
+          ls -l coverage/js | wc -l
+          (cd js && npx nyc report --temp-dir ../coverage/js --report-dir ../coverage/js -e vue --reporter=clover)
+          # fix never reached condition is rendered to clover with falsecount > 0
+          # https://github.com/istanbuljs/istanbuljs/issues/695
+          sed -i -E 's~count="0" type="cond" truecount="0" falsecount="[1-9]+[0-9]*"~count="0" type="cond" truecount="0" falsecount="0"~' coverage/js/clover.xml
+          sed -i -E 's~count="[0-9]+" type="cond" truecount="[1-9]+[0-9]*" falsecount="[0-9]+"~count="1" type="cond" truecount="1" falsecount="1"~' coverage/js/clover.xml
 
-      - name: Upload coverage logs 2/2 (only for latest Chrome)
+      - name: Upload coverage logs 2/2 (only for coverage)
         if: env.LOG_COVERAGE
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: coverage/merged.xml
+          fail_ci_if_error: true
+          files: coverage/merged.xml,coverage/js/clover.xml

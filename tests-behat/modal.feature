@@ -1,5 +1,4 @@
 Feature: Modal
-  Testing modal view
 
   Scenario: Modal
     Given I am on "interactive/modal.php"

@@ -8,7 +8,7 @@ Menu
 .. php:namespace:: Atk4\Ui
 .. php:class:: Menu
 
-Menu implements horizontal or vertical multi-level menu by using Fomantic UI's 'menu'.
+Menu implements horizontal or vertical multi-level menu by using Fomantic-UI 'menu'.
 
 Using Menu
 ==========
@@ -29,7 +29,7 @@ to make menu vertical::
 Decorating Menu Items
 =====================
 
-See :php:class:`Item` for more options::
+See :php:class:`MenuItem` for more options::
 
     $menu->addItem(['foo', 'icon' => 'book']);
 
@@ -69,10 +69,10 @@ Advanced Use
 
 You can add other elements inside menu. Refer to demos/menu.php.
 
-Item
+MenuItem
 ====
 
-.. php:class:: Item
+.. php:class:: MenuItem
 
 .. php:attr:: label
 

@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Core\Factory;
+use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
+use Atk4\Ui\Table;
 use Mvorisek\Atk4\Hintable\Data\HintablePropertyDef;
 
 try {
@@ -14,7 +18,7 @@ try {
         : __DIR__ . '/db.default.php';
 } catch (\PDOException $e) {
     // do not show $e unless you can secure DSN!
-    throw (new \Atk4\Ui\Exception('This demo requires access to the database. See "demos/init-db.php"'))
+    throw (new Exception('This demo requires access to the database. See "demos/init-db.php"'))
         ->addMoreInfo('PDO error', $e->getMessage());
 }
 
@@ -22,6 +26,16 @@ try {
 
 trait ModelPreventModificationTrait
 {
+    protected function isAllowDbModifications(): bool
+    {
+        static $rw = null;
+        if ($rw === null) {
+            $rw = file_exists(__DIR__ . '/db-behat-rw.txt');
+        }
+
+        return $rw;
+    }
+
     public function atomic(\Closure $fx)
     {
         $eRollback = new \Exception('Prevent modification');
@@ -30,7 +44,9 @@ trait ModelPreventModificationTrait
             parent::atomic(function () use ($fx, $eRollback, &$res) {
                 $res = $fx();
 
-                throw $eRollback;
+                if (!$this->isAllowDbModifications()) {
+                    throw $eRollback;
+                }
             });
         } catch (\Exception $e) {
             if ($e !== $eRollback) {
@@ -41,20 +57,53 @@ trait ModelPreventModificationTrait
         return $res;
     }
 
+    /**
+     * @param \Closure(Model): string $outputCallback
+     */
+    protected function wrapUserActionCallbackPreventModification(Model\UserAction $action, \Closure $outputCallback): void
+    {
+        $originalCallback = $action->callback;
+        $action->callback = function (Model $model, ...$args) use ($action, $originalCallback, $outputCallback) {
+            if ($model->isEntity()) {
+                $action = $action->getActionForEntity($model);
+                $loadedEntity = clone $model;
+            }
+
+            $callbackBackup = $action->callback;
+            try {
+                $action->callback = $originalCallback;
+                $res = $action->execute(...$args);
+
+                if ($this->isAllowDbModifications()) {
+                    return $res;
+                }
+            } finally {
+                $action->callback = $callbackBackup;
+            }
+
+            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedEntity : $model, ...$args);
+        };
+    }
+
     protected function initPreventModification(): void
     {
-        $this->getUserAction('add')->callback = function (Model $model) {
-            return 'Form Submit! Data are not save in demo mode.';
+        $makeMessageFx = function (string $actionName, Model $model) {
+            return $model->getModelCaption() . ' action "' . $actionName . '" with "' . $model->getTitle() . '" entity '
+                . ' was executed. In demo mode all changes are reverved.';
         };
 
-        $this->getUserAction('edit')->callback = function (Model $model) {
-            return 'Form Submit! Data are not save in demo mode.';
-        };
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), function (Model $model) use ($makeMessageFx) {
+            return $makeMessageFx('add', $model);
+        });
+
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), function (Model $model) use ($makeMessageFx) {
+            return $makeMessageFx('edit', $model);
+        });
 
         $this->getUserAction('delete')->confirmation = 'Please go ahead. Demo mode does not really delete data.';
-        $this->getUserAction('delete')->callback = function (Model $model) {
-            return 'Only simulating delete when in demo mode.';
-        };
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), function (Model $model) use ($makeMessageFx) {
+            return $makeMessageFx('delete', $model);
+        });
     }
 }
 
@@ -68,8 +117,8 @@ class ModelWithPrefixedFields extends Model
     private function prefixFieldName(string $fieldName, bool $forActualName = false): string
     {
         $tableShort = $this->table;
-        if (strlen($tableShort) > 8) {
-            $tableShort = substr(md5($tableShort), 0, 8);
+        if (strlen($tableShort) > 16) {
+            $tableShort = substr(md5($tableShort), 0, 16);
         }
 
         if ($forActualName) {
@@ -82,8 +131,8 @@ class ModelWithPrefixedFields extends Model
             $fieldShort = substr($fieldShort, 0, -strlen('_id'));
             $fieldWithIdSuffix = true;
         }
-        if (strlen($fieldShort) > 8) {
-            $fieldShort = substr(md5($fieldShort), 0, 8);
+        if (strlen($fieldShort) > 16) {
+            $fieldShort = substr(md5($fieldShort), 0, 16);
         }
         if ($fieldWithIdSuffix) {
             $fieldShort .= '_id';
@@ -120,12 +169,12 @@ class ModelWithPrefixedFields extends Model
 
     protected function init(): void
     {
-        if ($this->id_field === 'id') {
-            $this->id_field = $this->prefixFieldName($this->id_field);
+        if ($this->idField === 'id') {
+            $this->idField = $this->prefixFieldName($this->idField);
         }
 
-        if ($this->title_field === 'name') {
-            $this->title_field = $this->prefixFieldName($this->title_field);
+        if ($this->titleField === 'name') {
+            $this->titleField = $this->prefixFieldName($this->titleField);
         }
 
         parent::init();
@@ -133,9 +182,9 @@ class ModelWithPrefixedFields extends Model
         $this->initPreventModification();
     }
 
-    public function addField($name, $seed = []): \Atk4\Data\Field
+    public function addField(string $name, $seed = []): Field
     {
-        $seed = \Atk4\Core\Factory::mergeSeeds($seed, [
+        $seed = Factory::mergeSeeds($seed, [
             'actual' => $this->prefixFieldName($name, true),
             'caption' => $this->readableCaption($this->unprefixFieldName($name)),
         ]);
@@ -160,6 +209,7 @@ class Country extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name, ['actual' => 'atk_afp_country__nicename', 'required' => true, 'type' => 'string']);
         $this->addField($this->fieldName()->sys_name, ['actual' => 'atk_afp_country__name', 'system' => true]);
 
@@ -175,7 +225,7 @@ class Country extends ModelWithPrefixedFields
         });
     }
 
-    public function validate($intent = null): array
+    public function validate(string $intent = null): array
     {
         $errors = parent::validate($intent);
 
@@ -189,7 +239,7 @@ class Country extends ModelWithPrefixedFields
 
         // look if name is unique
         $c = $this->getModel()->tryLoadBy($this->fieldName()->name, $this->name);
-        if ($c->isLoaded() && $c->getId() !== $this->getId()) {
+        if ($c !== null && !$this->compare($this->idField, $c->getId())) {
             $errors[$this->fieldName()->name] = 'Country name must be unique';
         }
 
@@ -227,7 +277,6 @@ class Country extends ModelWithPrefixedFields
 class Stat extends ModelWithPrefixedFields
 {
     public $table = 'stat';
-    public $title = 'Project Stat';
 
     protected function init(): void
     {
@@ -235,24 +284,25 @@ class Stat extends ModelWithPrefixedFields
 
         $this->addField($this->fieldName()->project_name, ['type' => 'string']);
         $this->addField($this->fieldName()->project_code, ['type' => 'string']);
-        $this->title_field = $this->fieldName()->project_name;
+        $this->titleField = $this->fieldName()->project_name;
         $this->addField($this->fieldName()->description, ['type' => 'text']);
         $this->addField($this->fieldName()->client_name, ['type' => 'string']);
         $this->addField($this->fieldName()->client_address, ['type' => 'text', 'ui' => ['form' => [Form\Control\Textarea::class, 'rows' => 4]]]);
 
         $this->hasOne($this->fieldName()->client_country_iso, [
             'model' => [Country::class],
-            'their_field' => Country::hinting()->fieldName()->iso,
+            'theirField' => Country::hinting()->fieldName()->iso,
             'type' => 'string',
             'ui' => [
                 'form' => [Form\Control\Line::class],
+                'table' => [Table\Column\CountryFlag::class],
             ],
         ])
             ->addField($this->fieldName()->client_country, Country::hinting()->fieldName()->name);
 
         $this->addField($this->fieldName()->is_commercial, ['type' => 'boolean']);
         $this->addField($this->fieldName()->currency, ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
-        $this->addField($this->fieldName()->currency_symbol, ['never_persist' => true]);
+        $this->addField($this->fieldName()->currency_symbol, ['neverPersist' => true]);
         $this->onHook(Model::HOOK_AFTER_LOAD, function (self $model) {
             /* implementation for "intl"
             $locale = 'en-UK';
@@ -286,9 +336,9 @@ class Stat extends ModelWithPrefixedFields
     }
 }
 
-class Percent extends \Atk4\Data\Field
+class Percent extends Field
 {
-    public $type = 'float'; // will need to be able to affect rendering and storage
+    public string $type = 'float';
 }
 
 /**
@@ -307,6 +357,7 @@ class File extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name);
 
         $this->addField($this->fieldName()->type, ['caption' => 'MIME Type']);
@@ -314,9 +365,9 @@ class File extends ModelWithPrefixedFields
 
         $this->hasMany($this->fieldName()->SubFolder, [
             'model' => [self::class],
-            'their_field' => self::hinting()->fieldName()->parent_folder_id,
+            'theirField' => self::hinting()->fieldName()->parent_folder_id,
         ])
-            ->addField($this->fieldName()->count, ['aggregate' => 'count', 'field' => $this->persistence->expr($this, '*')]);
+            ->addField($this->fieldName()->count, ['aggregate' => 'count', 'field' => $this->getPersistence()->expr($this, '*')]);
 
         $this->hasOne($this->fieldName()->parent_folder_id, [
             'model' => [Folder::class],
@@ -339,11 +390,6 @@ class File extends ModelWithPrefixedFields
             $this->atomic(function () use ($path) {
                 foreach ($this as $entity) {
                     $entity->delete();
-
-                    // skip full/slow import for Behat testing
-                    if ($_ENV['CI'] ?? null) {
-                        break;
-                    }
                 }
 
                 $path = __DIR__ . '/../' . $path;
@@ -355,27 +401,25 @@ class File extends ModelWithPrefixedFields
         }
 
         foreach (new \DirectoryIterator($path) as $fileinfo) {
-            if ($fileinfo->isDot() || in_array($fileinfo->getFilename(), ['.git', 'vendor', 'js'], true)) {
+            if ($fileinfo->isDot() || in_array($fileinfo->getFilename(), ['.git', 'vendor', 'node_modules', 'external'], true)) {
                 continue;
             }
 
-            if (in_array($fileinfo->getFilename(), ['demos', 'src', 'tests'], true) || $isSub) {
-                $entity = $this->createEntity();
+            $entity = $this->createEntity();
 
-                $entity->save([
-                    $this->fieldName()->name => $fileinfo->getFilename(),
-                    $this->fieldName()->is_folder => $fileinfo->isDir(),
-                    $this->fieldName()->type => pathinfo($fileinfo->getFilename(), \PATHINFO_EXTENSION),
-                ]);
+            $entity->save([
+                $this->fieldName()->name => $fileinfo->getFilename(),
+                $this->fieldName()->is_folder => $fileinfo->isDir(),
+                $this->fieldName()->type => pathinfo($fileinfo->getFilename(), \PATHINFO_EXTENSION),
+            ]);
 
-                if ($fileinfo->isDir()) {
-                    $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
-                }
+            if ($fileinfo->isDir()) {
+                $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
+            }
 
-                // skip full/slow import for Behat testing
-                if ($_ENV['CI'] ?? null) {
-                    break;
-                }
+            // skip full/slow import for Behat CI testing
+            if ($_ENV['CI'] ?? null) {
+                break;
             }
         }
     }
@@ -403,15 +447,16 @@ class Category extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name);
 
         $this->hasMany($this->fieldName()->SubCategories, [
             'model' => [SubCategory::class],
-            'their_field' => SubCategory::hinting()->fieldName()->product_category_id,
+            'theirField' => SubCategory::hinting()->fieldName()->product_category_id,
         ]);
         $this->hasMany($this->fieldName()->Products, [
             'model' => [Product::class],
-            'their_field' => Product::hinting()->fieldName()->product_category_id,
+            'theirField' => Product::hinting()->fieldName()->product_category_id,
         ]);
     }
 }
@@ -428,6 +473,7 @@ class SubCategory extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name);
 
         $this->hasOne($this->fieldName()->product_category_id, [
@@ -435,7 +481,7 @@ class SubCategory extends ModelWithPrefixedFields
         ]);
         $this->hasMany($this->fieldName()->Products, [
             'model' => [Product::class],
-            'their_field' => Product::hinting()->fieldName()->product_sub_category_id,
+            'theirField' => Product::hinting()->fieldName()->product_sub_category_id,
         ]);
     }
 }
@@ -454,6 +500,7 @@ class Product extends ModelWithPrefixedFields
     protected function init(): void
     {
         parent::init();
+
         $this->addField($this->fieldName()->name);
         $this->addField($this->fieldName()->brand);
         $this->hasOne($this->fieldName()->product_category_id, [
@@ -462,5 +509,65 @@ class Product extends ModelWithPrefixedFields
         $this->hasOne($this->fieldName()->product_sub_category_id, [
             'model' => [SubCategory::class],
         ])->addTitle();
+    }
+}
+
+/**
+ * @property string    $item       @Atk4\Field()
+ * @property \DateTime $inv_date   @Atk4\Field()
+ * @property \DateTime $inv_time   @Atk4\Field()
+ * @property Country   $country_id @Atk4\RefOne()
+ * @property int       $qty        @Atk4\Field()
+ * @property int       $box        @Atk4\Field()
+ * @property int       $total_sql  @Atk4\Field()
+ * @property int       $total_php  @Atk4\Field()
+ */
+class MultilineItem extends ModelWithPrefixedFields
+{
+    public $table = 'multiline_item';
+
+    protected function init(): void
+    {
+        parent::init();
+
+        $this->addField($this->fieldName()->item, ['required' => true]);
+        $this->addField($this->fieldName()->inv_date, ['type' => 'date']);
+        $this->addField($this->fieldName()->inv_time, ['type' => 'time']);
+        $this->hasOne($this->fieldName()->country_id, [
+            'model' => [Country::class],
+        ]);
+        $this->addField($this->fieldName()->qty, ['type' => 'integer', 'required' => true]);
+        $this->addField($this->fieldName()->box, ['type' => 'integer', 'required' => true]);
+        $this->addExpression($this->fieldName()->total_sql, [
+            'expr' => function (Model /* TODO self is not working bacause of clone in Multiline */ $row) {
+                return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore-line
+            },
+            'type' => 'integer',
+        ]);
+        $this->addCalculatedField($this->fieldName()->total_php, [
+            'expr' => function (self $row) {
+                return $row->qty * $row->box;
+            },
+            'type' => 'integer',
+        ]);
+    }
+}
+
+/**
+ * @property string        $name    @Atk4\Field()
+ * @property Country       $country @Atk4\RefOne()
+ * @property MultilineItem $items   @Atk4\RefMany()
+ */
+class MultilineDelivery extends ModelWithPrefixedFields
+{
+    public $table = 'multiline_delivery';
+
+    protected function init(): void
+    {
+        parent::init();
+
+        $this->addField($this->fieldName()->name, ['required' => true]);
+        $this->containsOne($this->fieldName()->country, ['model' => [Country::class]]);
+        $this->containsMany($this->fieldName()->items, ['model' => [MultilineItem::class]]);
     }
 }

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-class Flyers extends \Atk4\Data\Model
+use Atk4\Data\Model;
+
+class Flyers extends Model
 {
     protected function init(): void
     {
@@ -12,6 +14,6 @@ class Flyers extends \Atk4\Data\Model
 
         $this->addField('first_name');
         $this->addField('last_name');
-        $this->addField('age', ['values' => ['1' => 'From months to 2 years old', '2' => 'From 3 to 17 years old', '3' => '18 years or more']]);
+        $this->addField('age', ['values' => [1 => 'From months to 2 years old', 2 => 'From 3 to 17 years old', 3 => '18 years or more']]);
     }
 }

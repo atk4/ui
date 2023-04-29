@@ -32,10 +32,15 @@ interface ExecutorInterface
 
     /**
      * Will associate executor with the action.
+     *
+     * @return $this
      */
     public function setAction(UserAction $action);
 
     public function getAction(): UserAction;
 
+    /**
+     * @return mixed
+     */
     public function executeModelAction();
 }

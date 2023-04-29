@@ -27,7 +27,7 @@ The above code will produce the following HTML block:
 .. code-block:: html
 
     <div class="ui inverted segment">
-      <button class="ui inverted orange button">Orange</button>
+        <button class="ui inverted orange button">Orange</button>
     </div>
 
 All of the views combined form a ``Render Tree``. In order to get the HTML output
@@ -127,7 +127,7 @@ Use of $app property and Dependency Injeciton
 
 Consider the following example::
 
-    $app->debug = new Logger('log');  // Monolog
+    $app->debug = new Logger('log'); // Monolog
 
     // next, somewhere in a render tree
     $view->getApp()->debug->log('Foo Bar');
@@ -151,7 +151,7 @@ Models::
 
     $db = new \Atk4\Data\Persistence\Sql($dsn);
 
-    $client = new Client($db);  // extends \Atk4\Data\Model();
+    $client = new Client($db); // extends \Atk4\Data\Model
 
 Once you have a model, you can associate it with a View such as Form or Grid
 so that those Views would be able to interact with your persistence directly::
@@ -290,7 +290,7 @@ Any view has the ability to render itself. Once executed, render will perform th
 
  - call renderView() of a current object.
  - call recursiveRender() to recursively render sub-elements.
- - returns ``<script>`` with on-dom-ready instructions along with rendering of a current view.
+ - return JS code with on-dom-ready instructions along with HTML code of a current view.
 
 You must not override render() in your objects. If you are integrating Agile UI into your
 framework you shouldn't even use ``render()``, but instead use ``getHtml`` and ``getJs``.
@@ -320,7 +320,7 @@ You should override this method when necessary and don't forget to execute paren
     protected function renderView(): void
     {
         if (str_len($this->info) > 100) {
-             $this->addClass('tiny');
+            $this->addClass('tiny');
         }
 
         parent::renderView();
@@ -364,7 +364,8 @@ will output itself. By default 'Content'.
 
 Here is a best practice for using custom template::
 
-    class MyView extends View {
+    class MyView extends View
+    {
         public $template = 'custom.html';
 
         public $title = 'Default Title';
@@ -372,9 +373,9 @@ Here is a best practice for using custom template::
         protected function renderView(): void
         {
             parent::renderView();
+
             $this->template->set('title', $this->title);
         }
-
     }
 
 As soon as the view becomes part of a render-tree, the Template object will also be allocated.
@@ -459,7 +460,7 @@ which will respond with JavaScript Action for reloading the view::
     $b1->on('click', $b2->jsReload());
 
     // Previously:
-    // $b1->on('click', new \Atk4\Ui\JsReload($b2));
+    // $b1->on('click', new \Atk4\Ui\Js\JsReload($b2));
 
 
 
@@ -474,9 +475,9 @@ TODO: Move to Element.
 Most of the basic elements will allow you to manipulate their content, HTML attributes or even
 add custom styles::
 
-    $view->setElement('A');
-    $view->addStyle('align', 'right');
-    $view->addAttr('href', '
+    $view->setElement('a');
+    $view->setStyle('align', 'right');
+    $view->setAttr('href', 'https://...');
 
 
 
@@ -501,18 +502,9 @@ Rest of yet-to-document/implement methods and properties
         :param $val:
 
 
-
-    .. php:method:: initDefaultApp()
-
-        For the absence of the application, we would add a very
-        simple one
-
     .. php:method:: set($arg1 = [], $arg2 = null)
 
         :param $arg1:
         :param $arg2:
 
     .. php:method:: recursiveRender()
-
-
-

@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpressionable;
+
 /**
- * Class implements Loader, which is a View that will dynamically render it's content.
+ * Dynamically render it's content.
  * To provide content for a loader, use set() callback.
  */
 class Loader extends View
 {
+    public $ui = 'segment';
+
     /**
      * Shim is a filler object that is displayed inside loader while the actual content is fetched
      * from the server. You may supply an object here or a seed. This view will be replaced
@@ -31,9 +36,6 @@ class Loader extends View
      */
     public $loadEvent = true;
 
-    /** @var string defautl css class */
-    public $ui = 'ui segment';
-
     /** @var Callback for triggering */
     public $cb;
 
@@ -44,11 +46,11 @@ class Loader extends View
     {
         parent::init();
 
-        if (!$this->shim) {
-            $this->shim = [View::class, 'class' => ['padded segment'], 'style' => ['min-height' => '7em']];
+        if (!$this->shim) { // @phpstan-ignore-line
+            $this->shim = [View::class, 'class' => ['padded segment'], 'style' => ['min-height' => '5em']];
         }
 
-        if (!$this->cb) {
+        if (!$this->cb) { // @phpstan-ignore-line
             $this->cb = Callback::addTo($this);
         }
     }
@@ -59,22 +61,23 @@ class Loader extends View
      * The loader view is pass as an argument to the loader callback function.
      * This allow to easily update the loader view content within the callback.
      *  $l1 = Loader::addTo($layout);
-     *  $l1->set(function ($loader_view) {
+     *  $l1->set(function (Loader $p) {
      *    do_long_processing_action();
-     *    $loader_view->set('new content');
+     *    $p->set('new content');
      *  });
      *
      * Or
      *  $l1->set([$my_object, 'run_long_process']);
      *
-     * @param \Closure $fx
+     * @param \Closure($this): void $fx
+     * @param never                 $ignore
      *
      * @return $this
      */
     public function set($fx = null, $ignore = null)
     {
-        if (!($fx instanceof \Closure)) {
-            throw new Exception('Need to pass a function to Loader::set()');
+        if (!$fx instanceof \Closure) {
+            throw new \TypeError('$fx must be of type Closure');
         } elseif (func_num_args() > 1) {
             throw new Exception('Only one argument is needed by Loader::set()');
         }
@@ -106,17 +109,17 @@ class Loader extends View
     /**
      * Return a js action that will trigger the loader to start.
      *
-     * @param array $args
+     * @param string $storeName
      *
-     * @return mixed
+     * @return JsChain
      */
-    public function jsLoad($args = [], $apiConfig = [], $storeName = null)
+    public function jsLoad(array $args = [], array $apiConfig = [], $storeName = null): JsExpressionable
     {
         return $this->js()->atkReloadView([
-            'uri' => $this->cb->getUrl(),
-            'uri_options' => $args,
-            'apiConfig' => !empty($apiConfig) ? $apiConfig : null,
-            'storeName' => $storeName ? $storeName : null,
+            'url' => $this->cb->getUrl(),
+            'urlOptions' => $args,
+            'apiConfig' => $apiConfig !== [] ? $apiConfig : null,
+            'storeName' => $storeName,
         ]);
     }
 }

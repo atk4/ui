@@ -12,25 +12,24 @@ use Atk4\Ui\Label;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\JsCallbackExecutor;
 
-/**
- * Input element for a form control.
- */
 class Input extends Form\Control
 {
     public $ui = 'input';
-
-    public $inputType = 'text';
-
-    public $placeholder = '';
-
     public $defaultTemplate = 'form/control/input.html';
 
+    public string $inputType;
+
+    /** @var string */
+    public $placeholder = '';
+
+    /** @var Icon|string|null */
     public $icon;
 
+    /** @var Icon|string|null */
     public $iconLeft;
 
     /**
-     * Specify left / right. If you use "true" will default to the right side.
+     * @var bool|'left'|'right' Specify left / right. If you use "true" will default to the right side.
      */
     public $loading;
 
@@ -46,43 +45,45 @@ class Input extends Form\Control
     /** @var string|object Set label that will appear to the right of the input field. */
     public $labelRight;
 
+    /** @var Button|array|null */
     public $action;
 
+    /** @var Button|array|null */
     public $actionLeft;
 
     /**
-     * Specify width for semantic UI grid. For "four wide" use 'four'.
+     * Specify width for Fomantic-UI grid. For "four wide" use 'four'.
      */
     public $width;
 
     /**
-     * here additional attributes directly for the <input> tag can be added:
+     * Additional attributes directly for the <input> tag can be added:
      * ['attribute_name' => 'attribute_value'], e.g.
      * ['autocomplete' => 'new-password'].
      *
      * Use setInputAttr() to fill this array
      *
-     * @var array
+     * @var array<string, string>
      */
-    public $inputAttr = [];
+    public array $inputAttr = [];
 
     /**
      * Set attribute which is added directly to the <input> tag, not the surrounding <div>.
      *
-     * @param string|array $attr  Attribute name or hash
-     * @param string       $value Attribute value
+     * @param string|int|array<string, string|int> $name
+     * @param ($name is array ? never : string|int) $value
      *
      * @return $this
      */
-    public function setInputAttr($attr, $value = null)
+    public function setInputAttr($name, $value = null)
     {
-        if (is_array($attr)) {
-            $this->inputAttr = array_merge($this->inputAttr, $attr);
-
-            return $this;
+        if (is_array($name)) {
+            foreach ($name as $k => $v) {
+                $this->setInputAttr($k, $v);
+            }
+        } else {
+            $this->inputAttr[$name] = $value;
         }
-
-        $this->inputAttr[$attr] = $value;
 
         return $this;
     }
@@ -95,25 +96,25 @@ class Input extends Form\Control
     public function getValue()
     {
         return $this->entityField !== null
-                    ? $this->getApp()->ui_persistence->typecastSaveField($this->entityField->getField(), $this->entityField->get())
+                    ? $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get())
                     : ($this->content ?? '');
     }
 
     /**
-     * Returns <input .../> tag.
+     * Returns <input ...> tag.
      *
      * @return string
      */
     public function getInput()
     {
-        return $this->getApp()->getTag('input', array_merge([
+        return $this->getApp()->getTag('input/', array_merge([
             'name' => $this->shortName,
             'type' => $this->inputType,
-            'placeholder' => $this->placeholder,
+            'placeholder' => $this->inputType !== 'hidden' ? $this->placeholder : false,
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readonly' => $this->readonly ? 'readonly' : false,
-            'disabled' => $this->disabled ? 'disabled' : false,
+            'readonly' => $this->readOnly && $this->inputType !== 'hidden',
+            'disabled' => $this->disabled && $this->inputType !== 'hidden',
         ], $this->inputAttr));
     }
 
@@ -144,8 +145,8 @@ class Input extends Form\Control
     /**
      * Used only from renderView().
      *
-     * @param string|object $button Button class or object
-     * @param string        $spot   Template spot
+     * @param string|array|object $button Button class or object
+     * @param string              $spot   Template spot
      *
      * @return Button
      */
@@ -155,11 +156,10 @@ class Input extends Form\Control
             $button = new Button($button);
         }
         if ($button instanceof UserAction || $button instanceof JsCallbackExecutor) {
-            $executor = ($button instanceof UserAction)
-                ? $this->getExecutorFactory()->create($button, $this, ExecutorFactory::JS_EXECUTOR)
+            $executor = $button instanceof UserAction
+                ? $this->getExecutorFactory()->createExecutor($button, $this, ExecutorFactory::JS_EXECUTOR)
                 : $button;
             $button = $this->add($this->getExecutorFactory()->createTrigger($executor->getAction()), $spot);
-            $this->addClass('action');
             if ($executor->getAction()->args) {
                 $val_as_arg = array_keys($executor->getAction()->args)[0];
 
@@ -170,7 +170,6 @@ class Input extends Form\Control
         }
         if (!$button->isInitialized()) {
             $this->add($button, $spot);
-            $this->addClass('action');
         }
 
         return $button;
@@ -224,11 +223,14 @@ class Input extends Form\Control
         // actions
         if ($this->action) {
             $this->action = $this->prepareRenderButton($this->action, 'AfterInput');
+            if (!$this->actionLeft) {
+                $this->addClass('action');
+            }
         }
 
         if ($this->actionLeft) {
             $this->actionLeft = $this->prepareRenderButton($this->actionLeft, 'BeforeInput');
-            $this->addClass('left');
+            $this->addClass('left action');
         }
 
         // set template
@@ -241,18 +243,11 @@ class Input extends Form\Control
     /**
      * Adds new action button.
      *
-     * @param array $defaults
-     *
      * @return Button
      */
-    public function addAction($defaults = [])
+    public function addAction(array $defaults = [])
     {
-        if (!is_array($defaults)) {
-            $defaults = [$defaults];
-        }
-
-        $this->action = Button::addTo($this, [$defaults], ['AfterInput']);
-        $this->addClass('action');
+        $this->action = Button::addTo($this, $defaults, ['AfterInput']);
 
         return $this->action;
     }

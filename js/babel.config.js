@@ -1,21 +1,26 @@
-/**
- * Babel configuration file.
- * targets browser from Browserlist integration query.
- *
- * @type {*[][]}
- */
-const presets = [
-    [
-        '@babel/env',
-        {
-            targets: '> 1% , not dead',
-            corejs: { version: '3.6', proposals: true },
-            useBuiltIns: 'usage',
-        },
-    ],
-    {
-        plugins: ['@babel/plugin-transform-runtime'],
-    },
-];
+module.exports = (api) => {
+    const isCoverage = !!process.env.ISTANBUL_COVERAGE;
+    api.cache.using(() => isCoverage);
 
-module.exports = { presets: presets };
+    return {
+        presets: [
+            [
+                '@babel/preset-env',
+                {
+                    targets: 'defaults',
+                    corejs: { version: '3.9999', proposals: true },
+                    useBuiltIns: 'usage',
+                },
+            ],
+        ],
+        plugins: [
+            ...(isCoverage ? [[
+                'babel-plugin-istanbul',
+                {
+                    extension: ['.js', '.vue'],
+                },
+            ]] : []),
+            '@babel/plugin-transform-runtime',
+        ],
+    };
+};

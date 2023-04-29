@@ -8,6 +8,8 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
 use Atk4\Ui\GridLayout;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsToast;
+use Atk4\Ui\Label;
 use Atk4\Ui\Tabs;
 use Atk4\Ui\View;
 
@@ -34,7 +36,7 @@ $right = View::addTo($gridLayout, [], ['r1c1']);
 Header::addTo($right, ['Button on right']);
 
 $form = Form::addTo($right, ['layout' => [Form\Layout::class, 'defaultTemplate' => __DIR__ . '/templates/form-button-right.html']]);
-$form->setModel((new Flyers(new Persistence\Array_()))->tryLoadAny());
+$form->setModel((new Flyers(new Persistence\Array_()))->createEntity());
 $form->getControl('last_name')->hint = 'Please enter your last name.';
 
 $left = View::addTo($gridLayout, [], ['r1c2']);
@@ -45,11 +47,11 @@ $form = Form::addTo($left, [
         Form\Layout::class,
         [
             'defaultInputTemplate' => __DIR__ . '/templates/input.html',
-            'defaultHint' => [\Atk4\Ui\Label::class, 'class' => ['pointing', 'below']],
+            'defaultHint' => [Label::class, 'class' => ['pointing', 'below']],
         ],
     ],
 ]);
-$form->setModel((new Flyers(new Persistence\Array_()))->tryLoadAny());
+$form->setModel((new Flyers(new Persistence\Array_()))->createEntity());
 $form->getControl('last_name')->hint = 'Please enter your last name.';
 
 // -----------------------------------------------------------------------------
@@ -60,5 +62,5 @@ $form = Form::addTo($tab, ['layout' => [Form\Layout\Custom::class, 'defaultTempl
 $form->setModel((new Country($app->db))->loadAny());
 
 $form->onSubmit(function (Form $form) {
-    return new \Atk4\Ui\JsToast('Saving is disabled');
+    return new JsToast('Saving is disabled');
 });

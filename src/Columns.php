@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-use Atk4\Core\Factory;
-
 /**
- * Imprements vertically distributed columns based on CSS Grid system.
+ * Vertically distributed columns based on CSS Grid system.
  */
 class Columns extends View
 {
@@ -15,25 +13,29 @@ class Columns extends View
 
     /**
      * Explicitly specify the width of all columns. Normally that's 16, but
-     * semantic-ui allows you to override with 5 => "ui five column grid".
+     * Fomantic-UI allows you to override with 5 => "ui five column grid".
      *
-     * @var int
+     * @var int|null
      */
     public $width;
 
-    /** @var int Sum of all column widths added so far. */
-    protected $calculated_width = 0;
+    /** @var int|false Sum of all column widths added so far. */
+    protected $calculatedWidth = 0;
 
-    /** @var array Allows Grid to calculate widths automatically. */
-    public $sizes = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
-        'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', ];
+    /** @var array<int, string> */
+    protected $cssWideClasses = [
+        1 => 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+        'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
+    ];
 
     /**
      * Add new vertical column.
      *
      * @param int|array $defaults specify width (1..16) or relative to $width
+     *
+     * @return View
      */
-    public function addColumn($defaults = null)
+    public function addColumn($defaults = [])
     {
         if (!is_array($defaults)) {
             $defaults = [$defaults];
@@ -42,14 +44,13 @@ class Columns extends View
         $size = $defaults[0] ?? null;
         unset($defaults[0]);
 
-        $column = Factory::factory([\Atk4\Ui\View::class], $defaults);
-        $this->add($column);
+        $column = View::addTo($this, $defaults);
 
-        if ($size && isset($this->sizes[$size])) {
-            $column->addClass($this->sizes[$size] . ' wide');
-            $this->calculated_width = false;
-        } elseif ($this->calculated_width !== false) {
-            ++$this->calculated_width;
+        if ($size && isset($this->cssWideClasses[$size])) {
+            $column->addClass($this->cssWideClasses[$size] . ' wide');
+            $this->calculatedWidth = false;
+        } elseif ($this->calculatedWidth !== false) {
+            ++$this->calculatedWidth;
         }
         $column->addClass('column');
 
@@ -61,6 +62,8 @@ class Columns extends View
      * which will default to 16.
      *
      * @param int $width
+     *
+     * @return self
      */
     public function addRow($width = null)
     {
@@ -69,14 +72,14 @@ class Columns extends View
 
     protected function renderView(): void
     {
-        $width = $this->width ?: $this->calculated_width;
+        $width = $this->width ?? $this->calculatedWidth;
         if ($this->content) {
             $this->addClass($this->content);
             $this->content = null;
         }
 
-        if (isset($this->sizes[$width])) {
-            $this->addClass($this->sizes[$width] . ' column');
+        if (isset($this->cssWideClasses[$width])) {
+            $this->addClass($this->cssWideClasses[$width] . ' column');
         }
 
         parent::renderView();

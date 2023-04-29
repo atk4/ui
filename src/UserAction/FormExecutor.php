@@ -9,7 +9,7 @@ use Atk4\Ui\Form;
 
 class FormExecutor extends BasicExecutor
 {
-    /** @var Form */
+    /** @var Form|null */
     public $form;
 
     /**
@@ -18,7 +18,7 @@ class FormExecutor extends BasicExecutor
      *
      * If model is already supply in form, then editable fields must match action fields property.
      */
-    public function initPreview()
+    public function initPreview(): void
     {
         $this->addHeader();
 

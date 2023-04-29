@@ -11,15 +11,13 @@ class Value
 {
     use WarnDynamicPropertyTrait;
 
-    /** @var string */
-    private $value = '';
+    private string $value = '';
 
-    /** @var bool */
-    private $isEncoded = false;
+    private bool $isEncoded = false;
 
     private function encodeValueToHtml(string $value): string
     {
-        return htmlspecialchars($value, \ENT_NOQUOTES | \ENT_HTML5, 'UTF-8');
+        return htmlspecialchars($value, \ENT_HTML5 | \ENT_QUOTES | \ENT_SUBSTITUTE, 'UTF-8');
     }
 
     /**
@@ -27,7 +25,10 @@ class Value
      */
     public function set(string $value): self
     {
-        if (!preg_match('~~u', $value)) {
+        if (\PHP_MAJOR_VERSION === 7 || (\PHP_MAJOR_VERSION === 8 && \PHP_MAJOR_VERSION <= 1) // @phpstan-ignore-line
+                ? !preg_match('~~u', $value) // much faster in PHP 8.1 and lower
+                : !mb_check_encoding($value, 'UTF-8')
+        ) {
             throw new Exception('Value is not valid UTF-8');
         }
 

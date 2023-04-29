@@ -5,66 +5,63 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Core\Factory;
+use Atk4\Ui\Button;
+use Atk4\Ui\Form;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsModal;
+use Atk4\Ui\Js\JsToast;
+use Atk4\Ui\VirtualPage;
 
-/**
- * Setup file - do not test.
- * Lookup that cannot saved data.
- */
-class DemoLookup extends \Atk4\Ui\Form\Control\Lookup
+class DemoLookup extends Form\Control\Lookup
 {
-    /**
-     * Add button for new record.
-     */
-    protected function initQuickNewRecord()
+    protected function initQuickNewRecord(): void
     {
         if (!$this->plus) {
             return;
         }
 
-        $this->plus = is_bool($this->plus) ? 'Add New' : $this->plus;
-
-        $this->plus = is_string($this->plus) ? ['button' => $this->plus] : $this->plus;
-
-        $buttonSeed = $this->plus['button'] ?? [];
-
-        $buttonSeed = is_string($buttonSeed) ? ['content' => $buttonSeed] : $buttonSeed;
-
-        $defaultSeed = [\Atk4\Ui\Button::class, 'class.disabled' => ($this->disabled || $this->readonly)];
-
-        $this->action = Factory::factory(array_merge($defaultSeed, (array) $buttonSeed));
-
-        if ($this->form) {
-            $vp = \Atk4\Ui\VirtualPage::addTo($this->form);
-        } else {
-            $vp = \Atk4\Ui\VirtualPage::addTo($this->getOwner());
+        if ($this->plus === true) {
+            $this->plus = 'Add New';
         }
 
-        $vp->set(function ($page) {
-            $form = \Atk4\Ui\Form::addTo($page);
+        if (is_string($this->plus)) {
+            $this->plus = ['button' => $this->plus];
+        }
+
+        $buttonSeed = $this->plus['button'] ?? [];
+        if (is_string($buttonSeed)) {
+            $buttonSeed = ['content' => $buttonSeed];
+        }
+
+        $defaultSeed = [Button::class, 'class.disabled' => $this->disabled || $this->readOnly];
+        $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
+
+        $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
+        $vp->set(function (VirtualPage $vp) {
+            $form = Form::addTo($vp);
 
             $entity = $this->model->createEntity();
-
             $form->setModel($entity, $this->plus['fields'] ?? null);
 
-            $form->onSubmit(function (\Atk4\Ui\Form $form) {
-                $form->model->save();
+            $form->onSubmit(function (Form $form) {
+                $msg = $form->model->getUserAction('add')->execute();
 
-                $ret = [
-                    new \Atk4\Ui\JsToast('Form submit!. Data are not save in demo mode.'),
-                    (new \Atk4\Ui\Jquery('.atk-modal'))->modal('hide'),
-                ];
+                $res = new JsBlock([
+                    new JsToast($msg),
+                    (new Jquery())->closest('.atk-modal')->modal('hide'),
+                ]);
 
                 $row = $this->renderRow($form->model);
-                $chain = new \Atk4\Ui\Jquery('#' . $this->name . '-ac');
+                $chain = new Jquery('#' . $this->name . '-ac');
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-                $ret[] = $chain;
+                $res->addStatement($chain);
 
-                return $ret;
+                return $res;
             });
         });
 
         $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
-
-        $this->action->js('click', new \Atk4\Ui\JsModal($caption, $vp));
+        $this->action->on('click', new JsModal($caption, $vp));
     }
 }

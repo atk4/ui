@@ -1,7 +1,4 @@
 <?php
-/**
- * Trait for Control that use Vue Lookup component.
- */
 
 declare(strict_types=1);
 
@@ -11,7 +8,7 @@ use Atk4\Ui\Callback;
 
 trait VueLookupTrait
 {
-    /** @var Callback */
+    /** @var Callback|null */
     public $dataCb;
 
     public function initVueLookupCallback(): void
@@ -19,7 +16,7 @@ trait VueLookupTrait
         if (!$this->dataCb) {
             $this->dataCb = Callback::addTo($this);
         }
-        $this->dataCb->set(\Closure::fromCallable([$this, 'outputApiResponse']));
+        $this->dataCb->set(fn () => $this->outputApiResponse());
     }
 
     /**
@@ -29,18 +26,18 @@ trait VueLookupTrait
      */
     public function outputApiResponse()
     {
-        $fieldName = $_GET['atk_vlookup_field'] ?? null;
-        $query = $_GET['atk_vlookup_q'] ?? null;
+        $fieldName = $_GET['atkVueLookupField'] ?? null;
+        $query = $_GET['atkVueLookupQuery'] ?? '';
         $data = [];
         if ($fieldName) {
-            $ref = $this->getModel()->getField($fieldName)->getReference();
-            $model = $ref->refModel($this->model);
-            $refFieldName = $ref->getTheirFieldName();
-            if (!empty($query)) {
-                $model->addCondition($model->title_field, 'like', '%' . $query . '%');
+            $reference = $this->model->getField($fieldName)->getReference();
+            $model = $reference->refModel($this->model);
+            $referenceFieldName = $reference->getTheirFieldName($model);
+            if ($query !== '') {
+                $model->addCondition($model->titleField, 'like', '%' . $query . '%');
             }
             foreach ($model as $row) {
-                $data[] = ['key' => $row->get($refFieldName), 'text' => $row->getTitle(), 'value' => $row->get($refFieldName)];
+                $data[] = ['key' => $row->get($referenceFieldName), 'text' => $row->getTitle(), 'value' => $row->get($referenceFieldName)];
             }
         }
 

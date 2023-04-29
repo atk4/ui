@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
-/**
- * Input element for a form control.
- */
 class Money extends Input
 {
+    public string $inputType = 'text';
+
     public function getValue()
     {
-        $v = $this->entityField ? $this->entityField->get() : ($this->content ?: null);
-
-        if ($v === null) {
-            return;
+        $res = parent::getValue();
+        if ($res === null) {
+            return null;
         }
 
-        return number_format($v, $this->getApp()->ui_persistence->currency_decimals);
+        $res = str_replace("\u{00a0}" /* Unicode NBSP */, ' ', $res);
+
+        return trim(str_replace($this->getApp()->uiPersistence->currency, '', $res));
     }
 
     protected function renderView(): void
     {
         if ($this->label === null) {
-            $this->label = $this->getApp()->ui_persistence->currency;
+            $this->label = $this->getApp()->uiPersistence->currency;
         }
 
         parent::renderView();

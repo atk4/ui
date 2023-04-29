@@ -5,25 +5,18 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
-use Atk4\Ui\App;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\HtmlTemplate;
 
 class AppTest extends TestCase
 {
-    protected function getApp(): App
-    {
-        return new App([
-            'catchExceptions' => false,
-            'alwaysRun' => false,
-        ]);
-    }
+    use CreateAppTrait;
 
     public function testTemplateClassDefault(): void
     {
-        $app = $this->getApp();
+        $app = $this->createApp();
 
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             HtmlTemplate::class,
             $app->loadTemplate('html.html')
         );
@@ -34,18 +27,33 @@ class AppTest extends TestCase
         $anotherTemplateClass = new class() extends HtmlTemplate {
         };
 
-        $app = $this->getApp();
+        $app = $this->createApp();
         $app->templateClass = get_class($anotherTemplateClass);
 
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             get_class($anotherTemplateClass),
             $app->loadTemplate('html.html')
         );
     }
 
+    public function testHeaderNormalize(): void
+    {
+        $app = $this->createApp();
+        $app->setResponseHeader('cache-control', '');
+
+        $app->setResponseHeader('content-type', 'Xy');
+        static::assertSame(['Content-Type' => ['Xy']], $app->getResponse()->getHeaders());
+
+        $app->setResponseHeader('CONTENT-type', 'xY');
+        static::assertSame(['Content-Type' => ['xY']], $app->getResponse()->getHeaders());
+
+        $app->setResponseHeader('content-TYPE', '');
+        static::assertSame([], $app->getResponse()->getHeaders());
+    }
+
     public function testUnexpectedOutputLateError(): void
     {
-        $app = $this->getApp();
+        $app = $this->createApp();
 
         ob_start();
         $testStr = 'direct output test';
@@ -56,7 +64,7 @@ class AppTest extends TestCase
             $this->expectExceptionMessage('Unexpected output detected');
             $app->terminateHtml('');
         } finally {
-            $this->assertSame($testStr, ob_get_contents());
+            static::assertSame($testStr, ob_get_contents());
             ob_end_clean();
         }
     }

@@ -7,12 +7,13 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
+use Atk4\Ui\Js\JsToast;
 
 class FlyersForm extends Form
 {
-    public $flyers = [];
+    public array $flyers = [];
 
-    public $cards = [
+    public array $cards = [
         ['name' => 'Frequent Flyer Program', 'id' => 1, 'nodes' => []],
         ['name' => 'World Class', 'id' => 2, 'nodes' => []],
         ['name' => 'Around the world', 'id' => 3, 'nodes' => []],
@@ -59,7 +60,7 @@ class FlyersForm extends Form
         $cards->set([]);
 
         $this->onSubmit(function (Form $form) {
-            return new \Atk4\Ui\JsToast('Thank you!');
+            return new JsToast('Thank you!');
         });
     }
 }

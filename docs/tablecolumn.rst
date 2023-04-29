@@ -44,17 +44,17 @@ but first we need to look at the generic column and understand it's base capabil
 A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
 when constructing HTML:
 
-.. php:method:: getHeaderCellHtml(\Atk4\Data\Field $field)
+.. php:method:: getHeaderCellHtml(\Atk4\Data\Field $field): string
 
 Must respond with HTML for the header cell (`<th>`) and an appropriate caption. If necessary
 will include "sorting" icons or any other controls that go in the header of the table.
 
-.. php:method:: getTotalsCellHtml(\Atk4\Data\Field $field, $value)
+.. php:method:: getTotalsCellHtml(\Atk4\Data\Field $field, $value): string
 
 Provided with the field and the value, format the cell for the footer "totals" row. Table
 can rely on various strategies for calculating totals. See :php:meth:`Table::addTotals`.
 
-.. php:method:: getDataCellHtml(\Atk4\Data\Field $field)
+.. php:method:: getDataCellHtml(\Atk4\Data\Field $field): string
 
 Provided with a field, this method will respond with HTML **template**. In order to keep
 performance of Web Application at the maximum, Table will execute getDataCellHtml for all the
@@ -99,7 +99,7 @@ The simplest way to use Menus and Popups is through a wrappers: :php:meth:`Atk4\
 
     // OR
 
-    $grid->addDropdown('name', ['Sort A-Z', 'Sort by Relevance'], function ($item) {
+    $grid->addDropdown('name', ['Sort A-Z', 'Sort by Relevance'], function (string $item) {
         return $item;
     });
 
@@ -119,8 +119,8 @@ will return it. When using model, use :php:meth:`Atk4\\Ui\\Table::getColumnDecor
     $table = Table::addTo($app, ['class.celled' => true]);
     $table->setModel(new Country($app->db));
 
-    $name_column = $table->getColumnDecorators('name');
-    LoremIpsum::addTo($name_column[0]->addPopup());
+    $nameColumn = $table->getColumnDecorators('name');
+    LoremIpsum::addTo($nameColumn[0]->addPopup());
 
 .. important:: If content of a pop-up is too large, it may not be possible to display it on-screen. Watch for warning.
 
@@ -130,8 +130,8 @@ You may also use :php:meth:`Atk4\\Ui\\Popup::set` method to dynamically load the
     $table = Table::addTo($app, ['class.celled' => true]);
     $table->setModel(new Country($app->db));
 
-    $name_column = $table->getColumnDecorators('name');
-    $name_column[0]->addPopup()->set(function($p) {
+    $nameColumn = $table->getColumnDecorators('name');
+    $nameColumn[0]->addPopup()->set(function (View $p) {
         HelloWorld::addTo($p);
     });
 
@@ -142,7 +142,7 @@ Dropdown Menus
 
 Menus will show item selection and will trigger a callback when user selects one of them::
 
-    $some_column->addDropdown(['Change', 'Reorder', 'Update'], function ($item) {
+    $someColumn->addDropdown(['Change', 'Reorder', 'Update'], function (string $item) {
         return 'Title item: ' . $item;
     });
 
@@ -178,9 +178,9 @@ Money
 .. php:class:: Table\\Column\\Money
 
 Helps decorating monetary values. Will align value to the right and if value is less than zero will also
-use red text (td class "negative" for Fomantic ui). The money cells are not wrapped.
+use red text (td class "negative" for Fomantic-UI). The money cells are not wrapped.
 
-For the actual number formatting, see :ref:`ui_persistence`
+For the actual number formatting, see :ref:`uiPersistence`
 
 Status
 ------
@@ -203,8 +203,8 @@ to use different icons and colors to emphasise status::
 
 Current list of states supported:
 
- - positive (icon checkmark)
- - negative (icon close)
+ - positive (checkmark icon)
+ - negative (close icon)
  - and the default/unspecified state (icon question)
 
 (list of states may be expanded further)
@@ -252,17 +252,17 @@ If you want to have label above the action column, then::
 
     $action = $table->addColumn(null, [Table\Column\ActionButtons::class, 'caption' => 'User Actions']);
 
-.. php:method:: addAction($button, $action, $confirm = false)
+.. php:method:: addButton($button, $action, $confirm = false)
 
 Adds another button into "Actions" column which will perform a certain JavaScript action when clicked.
-See also :php:meth:`Atk4\\Ui\\Grid::addAction()`::
+See also :php:meth:`Atk4\\Ui\\Grid::addActionButton()`::
 
-    $button = $action->addAction('Reload Table', $table->jsReload());
+    $button = $action->addButton('Reload Table', $table->jsReload());
 
 Normally you would also want to pass the ID of the row which was clicked. You can use :php:meth:`Atk4\\Ui\\Table:jsRow()`
 and jQuery's data() method to reference it::
 
-    $button = $action->addAction('Reload Table', $table->jsReload(['clicked' => $table->jsRow()->data('id')]));
+    $button = $action->addButton('Reload Table', $table->jsReload(['clicked' => $table->jsRow()->data('id')]));
 
 Moreover you may pass $action argument as a PHP callback.
 
@@ -270,7 +270,7 @@ Moreover you may pass $action argument as a PHP callback.
 
 Triggers a modal dialog when you click on the button. See description on :php:meth:`Atk4\\Ui\\Grid::addModalAction()`::
 
-    $action->addAction(['Say HI'], function ($j, $id) use ($g) {
+    $action->addButton(['Say HI'], function (Jquery $j, $id) use ($g) {
         return 'Loaded "' . $g->model->load($id)->get('name') . '" from ID=' . $id;
     });
 
@@ -302,26 +302,24 @@ Multiformat
 Sometimes your formatting may change depending on value. For example you may want to place link
 only on certain rows. For this you can use an `\\Atk4\Ui\\Table\\Column\\Multiformat` decorator::
 
-    $table->addColumn('amount', [\Atk4\Ui\Table\Column\Multiformat::class, function(Model $model) {
+    $table->addColumn('amount', [\Atk4\Ui\Table\Column\Multiformat::class, function (Model $model) {
         if ($model->get('is_invoiced') > 0) {
             return [\Atk4\Ui\Table\Column\Money::class, [\Atk4\Ui\Table\Column\Link::class, 'invoice', ['invoice_id' => 'id']]];
         } elseif (abs($model->get('is_refunded')) < 50) {
             return [[\Atk4\Ui\Table\Column\Template::class, 'Amount was <b>refunded</b>']];
         }
 
-        return \Atk4\Ui\Table\Column\Money::class;
+        return [[\Atk4\Ui\Table\Column\Money::class]];
     }]);
 
 You supply a callback to the Multiformat decorator, which will then be used to determine
 the actual set of decorators to be used on a given row. The example above will look at various
 fields of your models and will conditionally add Link on top of Money formatting.
 
-Your callback can return things in varous ways:
+The callback must return array of seeds like:
 
- - return array of seeds: [[\Atk4\Ui\Table\Column\Link::class], \Atk4\Ui\Table\Column\Money::class];
- - if string or object is returned it is wrapped inside array automatically
+    [[\Atk4\Ui\Table\Column\Link::class], \Atk4\Ui\Table\Column\Money::class]
 
 Multiple decorators will be created and merged.
 
 .. note:: If you are operating with large tables, code your own decorator, which would be more CPU-efficient.
-

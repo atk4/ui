@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column;
 
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Table;
@@ -38,7 +39,7 @@ class Link extends Table\Column
      *
      * In addition to abpove "args" refer to values picked up from a current row.
      *
-     * @var string|array
+     * @var string|array|null
      */
     public $page;
 
@@ -61,7 +62,7 @@ class Link extends Table\Column
     public $args = [];
 
     /** @var bool use value as label of the link */
-    public $use_label = true;
+    public $useLabel = true;
 
     /** @var string|null set element class. */
     public $class;
@@ -70,15 +71,15 @@ class Link extends Table\Column
     public $icon;
 
     /**
-     * set html5 target attribute in tag
-     * possible values : _blank | _parent | _self | _top | frame#name.
+     * Set html5 target attribute in tag
+     * possible values: _blank | _parent | _self | _top | frame#name.
      *
-     * @var string!null
+     * @var string|null
      */
     public $target;
 
     /** @var bool add download in the tag to force download from the url. */
-    public $force_download = false;
+    public $forceDownload = false;
 
     /**
      * @param string|array $page
@@ -87,7 +88,7 @@ class Link extends Table\Column
     {
         if (is_array($page)) {
             $page = ['page' => $page];
-        } elseif (is_string($page)) {
+        } else {
             $page = ['url' => $page];
         }
 
@@ -110,42 +111,47 @@ class Link extends Table\Column
         }
     }
 
-    public function getDataCellTemplate(\Atk4\Data\Field $field = null)
+    public function getDataCellTemplate(Field $field = null): string
     {
-        $download = $this->force_download ? ' download="true" ' : '';
-        $external = $this->target ? ' target="' . $this->target . '" ' : '';
+        $attr = ['href' => '{$c_' . $this->shortName . '}'];
+
+        if ($this->forceDownload) {
+            $attr['download'] = 'true';
+        }
+
+        if ($this->target) {
+            $attr['target'] = $this->target;
+        }
 
         $icon = '';
-
         if ($this->icon) {
-            $icon = '<i class="icon ' . $this->icon . '"></i>';
+            $icon = $this->getApp()->getTag('i', ['class' => $this->icon . ' icon'], '');
         }
 
         $label = '';
-        if ($this->use_label) {
+        if ($this->useLabel) {
             $label = $field ? ('{$' . $field->shortName . '}') : '[Link]';
         }
 
-        $class = '';
         if ($this->class) {
-            $class = ' class="' . $this->class . '" ';
+            $attr['class'] = $this->class;
         }
 
-        return '<a href="{$c_' . $this->shortName . '}"' . $external . $class . $download . '>' . $icon . '' . $label . '</a>';
+        return $this->getApp()->getTag('a', $attr, [$icon, $label]); // TODO $label is not HTML encoded
     }
 
-    public function getHtmlTags(Model $row, $field)
+    public function getHtmlTags(Model $row, ?Field $field): array
     {
         if ($this->url) {
-            $rowValues = $this->getApp()->ui_persistence->typecastSaveRow($row, $row->get());
+            $rowValues = $this->getApp()->uiPersistence->typecastSaveRow($row, $row->get());
 
             return ['c_' . $this->shortName => $this->url->set($rowValues)->renderToHtml()];
         }
 
-        $p = $this->page ?: [];
+        $p = $this->page ?? [];
 
         foreach ($this->args as $key => $val) {
-            if (is_numeric($key)) {
+            if (is_int($key)) {
                 $key = $val;
             }
 

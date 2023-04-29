@@ -66,12 +66,12 @@ Adding a TreeItemSelector form control to a Form::
                         ],
                     ],
                 ],
-                ['name' => 'Tv' , 'id' => 501, 'nodes' => []],
-                ['name' => 'Radio' , 'id' => 601, 'nodes' => []],
+                ['name' => 'Tv', 'id' => 501, 'nodes' => []],
+                ['name' => 'Radio', 'id' => 601, 'nodes' => []],
             ],
         ],
-        ['name' => 'Cleaner' , 'id' => 201, 'nodes' => []],
-        ['name' => 'Appliances' , 'id' => 301, 'nodes' => []],
+        ['name' => 'Cleaner', 'id' => 201, 'nodes' => []],
+        ['name' => 'Appliances', 'id' => 301, 'nodes' => []],
     ];
 
 
@@ -91,8 +91,8 @@ Callback Usage
 It is possible to run a callback function every time an item is select on the list. The callback function will receive the selected item
 set by the user.::
 
-    $control->onItem(function($value) {
-        return new \Atk4\Ui\JsToast($this->getApp()->encodeJson($value));
+    $control->onItem(function (array $value) {
+        return new \Atk4\Ui\Js\JsToast($this->getApp()->encodeJson($value));
     });
 
 Note

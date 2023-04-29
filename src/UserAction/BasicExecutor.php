@@ -8,24 +8,26 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
-use Atk4\Ui\JsExpressionable;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Message;
+use Atk4\Ui\View;
 
-class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
+class BasicExecutor extends View implements ExecutorInterface
 {
     use HookTrait;
 
-    /** @const string */
     public const HOOK_AFTER_EXECUTE = self::class . '@afterExecute';
 
-    /** @var Model\UserAction */
+    /** @var Model\UserAction|null */
     public $action;
 
     /** @var bool display header or not */
     public $hasHeader = true;
 
-    /** @var string header description */
+    /** @var string|null header description */
     public $description;
 
     /** @var string display message when action is disabled */
@@ -43,7 +45,7 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
     /** @var array list of validated arguments */
     protected $validArguments = [];
 
-    /** @var JsExpressionable array|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     protected $jsSuccess;
 
     public function getAction(): Model\UserAction
@@ -51,21 +53,20 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
         return $this->action;
     }
 
-    /**
-     * Associate executor with action.
-     */
-    public function setAction(Model\UserAction $action): void
+    public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
         if (!$this->executorButton) {
             $this->executorButton = $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::BASIC_BUTTON);
         }
+
+        return $this;
     }
 
     /**
      * Provide values for named arguments.
      */
-    public function setArguments(array $arguments)
+    public function setArguments(array $arguments): void
     {
         // TODO: implement mechanism for validating arguments based on definition
 
@@ -93,7 +94,7 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
     /**
      * Check if all argument values have been provided.
      */
-    public function hasAllArguments()
+    public function hasAllArguments(): bool
     {
         foreach ($this->action->args as $key => $val) {
             if (!isset($this->arguments[$key])) {
@@ -104,7 +105,7 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
         return true;
     }
 
-    protected function initPreview()
+    protected function initPreview(): void
     {
         // lets make sure that all arguments are supplied
         if (!$this->hasAllArguments()) {
@@ -115,17 +116,15 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
 
         $this->addHeader();
 
-        \Atk4\Ui\Button::addToWithCl($this, $this->executorButton)->on('click', function () {
+        Button::addToWithCl($this, $this->executorButton)->on('click', function () {
             return $this->executeModelAction();
         });
     }
 
     /**
      * Will call $action->execute() with the correct arguments.
-     *
-     * @return mixed
      */
-    public function executeModelAction()
+    public function executeModelAction(): JsBlock
     {
         $args = [];
 
@@ -139,16 +138,17 @@ class BasicExecutor extends \Atk4\Ui\View implements ExecutorInterface
             ? ($this->jsSuccess)($this, $this->action->getModel())
             : $this->jsSuccess;
 
-        return ($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) ?: $success) ?: new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''));
+        return JsBlock::fromHookResult($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) // @phpstan-ignore-line
+            ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
     }
 
     /**
      * Will add header if set.
      */
-    public function addHeader()
+    public function addHeader(): void
     {
         if ($this->hasHeader) {
-            \Atk4\Ui\Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?: $this->action->getDescription()]);
+            Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?? $this->action->getDescription()]);
         }
     }
 }

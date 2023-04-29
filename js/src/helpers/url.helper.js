@@ -1,96 +1,71 @@
-/**
- *  Url helper jQuery functions.
- *
- * - AddParams - Pass an url with an object and object key=value pair will be
- *   added to the url as get parameter.
- *   ex: $.atkAddParams('myurl.php', {q: 'test', 'reload': 'my_view'})
- *   will return: myurl.php?q=test&reload=my_view
- *
- * -RemoveParam - remove a parameter from an url string.
- *  ex: $.atkRemoveParam('myurl.php?q=test&reload=my_view', 'q')
- *  will return: myurl.php?reload=my_view
- *
- */
+import $ from 'external/jquery';
 
-(function ($) {
-    if (!$.atk) {
-        $.atk = {};
-    }
-
+export default {
     /**
-     * Get the base url from string.
+     * Get each URL query parameter as a key:value pair object.
      *
-     * @param url
-     * @returns {*|string}
+     * @returns {object}
      */
-    $.atk.getUrl = function (url) {
-        return url.split('?')[0];
-    };
+    parseParams: function (url) {
+        const query = url.includes('?') ? url.slice(url.indexOf('?') + 1) : '';
 
-    /**
-     * Get each url query parameter as a key:value pair object.
-     *
-     * @param str
-     * @returns {{}|unknown}
-     */
-    $.atk.getQueryParams = function (str) {
-        if (str.split('?')[1]) {
-            return decodeURIComponent(str.split('?')[1])
-                .split('&')
-                .reduce((obj, unsplitArg) => {
-                    const arg = unsplitArg.split('=');
-                    // eslint-disable-next-line prefer-destructuring
-                    obj[arg[0]] = arg[1];
-                    return obj;
-                }, {});
+        const res = {};
+        for (const queryPart of query.split('&')) {
+            if (queryPart.length > 0) {
+                let k = queryPart;
+                let v = null;
+                if (k.includes('=')) {
+                    v = k.slice(k.indexOf('=') + 1);
+                    k = k.slice(0, k.indexOf('='));
+                }
+
+                res[decodeURIComponent(k)] = decodeURIComponent(v);
+            }
         }
-        return {};
-    };
+
+        return res;
+    },
 
     /**
-     * Add param to an url string.
+     * Add param to an URL string.
      *
-     * @param url
-     * @param data
-     * @returns {*}
+     * ex: atk.urlHelper.appendParams('myurl.php', { q: 'test', 'reload': 'myView' })
+     * will return: myurl.php?q=test&reload=myView
+     *
+     * @returns {string}
      */
-    $.atk.addParams = function (url, data) {
-        if (!$.isEmptyObject(data)) {
-            url += (url.indexOf('?') >= 0 ? '&' : '?') + $.param(data);
+    appendParams: function (url, data) {
+        const query = $.param(data);
+        if (query !== '') {
+            url += (url.includes('?') ? '&' : '?') + query;
         }
 
         return url;
-    };
+    },
 
     /**
-     * Remove param from an url string.
+     * Remove param from an URL string.
      *
-     * @param url
-     * @param param
-     * @returns {string|*|string}
+     * ex: atk.urlHelper.removeParam('myurl.php?q=test&reload=myView', 'q')
+     * will return: myurl.php?reload=myView
+     *
+     * @returns {string}
      */
-    $.atk.removeParam = function (url, param) {
-        const splitUrl = url.split('?');
-        if (splitUrl.length === 0) {
-            return url;
-        }
+    removeParam: function (url, param) {
+        const query = url.includes('?') ? url.slice(url.indexOf('?') + 1) : '';
+        const newParams = (query.length > 0 ? query.split('&') : [])
+            .filter((queryPart) => decodeURIComponent(queryPart.split('=')[0]) !== param);
 
-        const urlBase = splitUrl[0];
-        if (splitUrl.length === 1) {
-            return urlBase;
-        }
+        return url.slice(0, Math.max(0, url.indexOf('?')))
+                + (newParams.length > 0 ? '?' + newParams.join('&') : '');
+    },
 
-        const newParams = splitUrl[1].split('&').filter((item) => item.split('=')[0] !== param);
-        if (newParams.length > 0) {
-            return urlBase + '?' + newParams.join('&');
-        }
-        return urlBase;
-    };
-}(jQuery));
-
-export default (function ($) {
-    $.atkGetUrl = $.atk.getUrl;
-    $.atkAddParams = $.atk.addParams;
-    $.atkRemoveParam = $.atk.removeParam;
-    $.atkGetQueryParam = $.atk.getQueryParams;
-}(jQuery));
+    /**
+     * Remove whole query string from an URL string.
+     *
+     * @returns {string}
+     */
+    removeAllParams: function (url) {
+        return url.split('?')[0];
+    },
+};

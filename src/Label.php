@@ -19,8 +19,6 @@ class Label extends View
     /**
      * Icon to the right of the label.
      *
-     * @see $icon
-     *
      * @var View|array|string
      */
     public $iconRight;
@@ -39,8 +37,6 @@ class Label extends View
     /**
      * Image to the right of the label.
      *
-     * @see $image
-     *
      * @var View|array|string
      */
     public $imageRight;
@@ -58,7 +54,7 @@ class Label extends View
             $this->addClass('image');
         }
 
-        if (isset($this->detail)) {
+        if ($this->detail) {
             $this->detail = View::addTo($this, [$this->detail], ['AfterContent'])->addClass('detail');
         }
 

@@ -80,7 +80,7 @@ Groups
 Label can be part of the group, but you would need to either use custom HTML template or
 composition::
 
-    $group = View::addTo($app, [false, 'class.blue tag' => true, 'ui' => 'labels']);
+    $group = View::addTo($app, ['class.blue tag' => true, 'ui' => 'labels']);
     Label::addTo($group, ['$9.99']);
     Label::addTo($group, ['$19.99', 'class.red tag' => true]);
     Label::addTo($group, ['$24.99']);
@@ -88,7 +88,7 @@ composition::
 Combining classes
 =================
 
-Based on Fomantic UI documentation, you can add more classes to your labels::
+Based on Fomantic-UI documentation, you can add more classes to your labels::
 
     $columns = Columns::addTo($app);
 
@@ -122,7 +122,7 @@ Added labels into Table
 You can even use label inside a table, but because table renders itself by repeating periodically, then
 the following code is needed::
 
-    $table->onHook(\Atk4\Ui\Table\Column::HOOK_GET_HTML_TAGS, function ($table, Model $row) {
+    $table->onHook(\Atk4\Ui\Table\Column::HOOK_GET_HTML_TAGS, function (Table $table, Model $row) {
         if ($row->getId() == 1) {
             return [
                 'name' => $table->getApp()->getTag('div', ['class' => 'ui ribbon label'], $row->get('name')),

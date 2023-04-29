@@ -1,51 +1,48 @@
-import $ from 'jquery';
-import atkPlugin from './atk.plugin';
+import $ from 'external/jquery';
+import AtkPlugin from './atk.plugin';
 
-export default class createModal extends atkPlugin {
+export default class AtkCreateModalPlugin extends AtkPlugin {
     main() {
         const options = this.settings;
         // make sure we have an object when no option is passed
-        if ($.isArray(options.uri_options)) {
-            options.uri_options = {};
+        if ($.isArray(options.urlOptions)) {
+            options.urlOptions = {};
         }
         // create modal and add it to the DOM
-        const $m = $('<div class="atk-modal ui modal"/>')
+        const $m = $('<div class="atk-modal ui modal" />')
             .appendTo('body')
             .html(this.getDialogHtml(options.title));
 
         // add setting to our modal for modalService
         $m.data({
-            uri: options.uri,
-            type: options.data_type,
-            args: options.uri_options,
+            url: options.url,
+            type: options.dataType,
+            args: options.urlOptions,
             needRemove: true,
-            needCloseTrigger: true,
-            label: options.label,
+            loadingLabel: options.loadingLabel,
         });
 
-        // call semantic-ui modal
+        // call Fomantic-UI modal
         $m.modal(options.modal).modal('show');
         $m.addClass(this.settings.modalCss);
     }
 
     getDialogHtml(title) {
-        return `<i class="icon close"></i>
-          <div class="${this.settings.headerCss}">${title}</div>
-          <div class="${this.settings.contentCss} content atk-dialog-content">
+        return `<i class="close icon"></i>
+          ` + (title ? `<div class="${this.settings.headerCss}">${title}</div>
+          ` : '') + `<div class="${this.settings.contentCss} content atk-dialog-content">
             </div>
           </div>`;
     }
 }
 
-createModal.DEFAULTS = {
+AtkCreateModalPlugin.DEFAULTS = {
     title: '',
-    uri: null,
-    uri_options: {},
+    url: null,
+    urlOptions: {},
     headerCss: 'header',
     modalCss: 'scrolling',
     contentCss: 'image',
-    label: 'Loading...',
-    modal: {
-        duration: 100,
-    },
+    loadingLabel: 'Loading...',
+    modal: {},
 };

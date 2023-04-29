@@ -1,13 +1,12 @@
+import $ from 'external/jquery';
 import throttle from 'lodash/throttle';
-import $ from 'jquery';
 
 /**
- * Simple helper to help displaying Fomantic-ui Dropdown within an atk table.
+ * Simple helper to help displaying Fomantic-UI Dropdown within an atk table.
  * Because atk table use overflow: scroll, Dropdown is not
  * display on top of table.
  *
- * This utility will properly set css style for dropdown menu to be display correctly.
- *
+ * This utility will properly set css style for dropdown menu to be displayed correctly.
  */
 function showTableDropdown() {
     // getting element composing dropdown.
@@ -17,19 +16,19 @@ function showTableDropdown() {
     const hasFloating = $that.hasClass('floating');
 
     /**
-   * Check if menu fit below button.
-   *
-   * @returns {boolean}
-   */
+     * Check if menu fit below button.
+     *
+     * @returns {boolean}
+     */
     function canFitBelow() {
         return $menu.outerHeight() < $(window).height() - $that[0].getBoundingClientRect().bottom;
     }
 
     /**
-   * Set menu style for displaying at right position.
-   */
+     * Set menu style for displaying at right position.
+     */
     function setCssPosition() {
-    // console.log(position.top, $that.scrollTop());
+        // console.log(position.top, $that.scrollTop());
         let top = 0;
         let left = 0;
         // check if we need to place menu above or down button.
@@ -43,7 +42,8 @@ function showTableDropdown() {
         top -= $(window).scrollTop();
         left = position.left;
 
-        const style = `position: fixed; z-index: 12; top: 0px; margin-top: ${top}px !important; left: ${left}px !important; width: fit-content !important; height: fit-content; min-width: 12px`;
+        const style = 'position: fixed; z-index: 12; top: 0px; margin-top: ' + top + 'px !important;'
+            + ' left: ' + left + 'px !important; width: fit-content !important; height: fit-content; min-width: 12px;';
         $menu.css('cssText', style);
     }
 
@@ -65,8 +65,7 @@ function hideTableDropdown() {
     $(window).off('resize.atktable');
 }
 
-// Export function to atk.
-export const tableDropdown = {
+export default {
     onShow: showTableDropdown,
     onHide: hideTableDropdown,
 };

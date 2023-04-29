@@ -1,23 +1,28 @@
 <?php
 
 declare(strict_types=1);
-/**
- * Slide Panel Content.
- */
 
 namespace Atk4\Ui\Panel;
 
 use Atk4\Ui\Callback;
 use Atk4\Ui\View;
 
+/**
+ * Slide Panel Content.
+ *
+ * @method Right getOwner()
+ */
 class Content extends View implements LoadableContent
 {
     public $defaultTemplate = 'panel/content.html';
+
+    /** @var Callback */
     public $cb;
 
     protected function init(): void
     {
         parent::init();
+
         $this->addClass('atk-panel-content');
         $this->setCb(new Callback());
     }
@@ -35,11 +40,13 @@ class Content extends View implements LoadableContent
      */
     public function setCb(Callback $cb): void
     {
-        $this->cb = $this->add($cb);
+        $this->cb = $this->add($cb); // @phpstan-ignore-line
     }
 
     /**
      * Will load content into callback.
+     *
+     * @param \Closure($this): void $fx
      */
     public function onLoad(\Closure $fx): void
     {

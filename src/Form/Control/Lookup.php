@@ -7,23 +7,29 @@ namespace Atk4\Ui\Form\Control;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
-use Atk4\Ui\App;
+use Atk4\Ui\Button;
+use Atk4\Ui\CallbackLater;
 use Atk4\Ui\Exception;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsFunction;
+use Atk4\Ui\Form;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsFunction;
+use Atk4\Ui\Js\JsModal;
+use Atk4\Ui\VirtualPage;
 
 class Lookup extends Input
 {
     use HookTrait;
 
     public $defaultTemplate = 'form/control/lookup.html';
-    public $ui = 'input';
+
+    public string $inputType = 'hidden';
 
     /** @var array Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
     public $values = [];
 
-    /** @var \Atk4\Ui\Callback Object used to capture requests from the browser. */
+    /** @var CallbackLater Object used to capture requests from the browser. */
     public $callback;
 
     /** @var string Set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value. */
@@ -35,7 +41,7 @@ class Lookup extends Input
      *
      * If left null, then search will be performed on a model's title field
      *
-     * @var array|\Closure
+     * @var array|\Closure|null
      */
     public $search;
 
@@ -47,7 +53,7 @@ class Lookup extends Input
      * with dependency
      * Then model of the 'state' field can be limited to states of the currently selected 'country'.
      *
-     * @var \Closure
+     * @var \Closure|null
      */
     public $dependency;
 
@@ -64,38 +70,39 @@ class Lookup extends Input
     /** @var int Sets the max. amount of records that are loaded. */
     public $limit = 100;
 
-    /** @var string Set custom model field here to use it's value as ID in dropdown instead of default model ID field. */
-    public $id_field;
+    /** @var string|null Set custom model field here to use it's value as ID in dropdown instead of default model ID field. */
+    public $idField;
 
-    /** @var string Set custom model field here to display it's value in dropdown instead of default model title field. */
-    public $title_field;
+    /** @var string|null Set custom model field here to display it's value in dropdown instead of default model title field. */
+    public $titleField;
 
     /**
-     * Semantic UI uses cache to remember choices. For dynamic sites this may be dangerous, so
+     * Fomantic-UI uses cache to remember choices. For dynamic sites this may be dangerous, so
      * it's disabled by default. To switch cache on, set 'cache' => 'local'.
      *
-     * Use this apiConfig variable to pass API settings to Semantic UI in .dropdown()
+     * Use this apiConfig variable to pass API settings to Fomantic-UI in .dropdown()
      *
      * @var array
      */
     public $apiConfig = ['cache' => false];
 
     /**
-     * Semantic UI dropdown module settings.
+     * Fomantic-UI dropdown module settings.
      * Use this setting to configure various dropdown module settings
      * to use with Lookup.
      *
      * For example, using this setting will automatically submit
      * form when field value is changes.
-     * $form->addControl('field', [\Atk4\Ui\Form\Control\Lookup::class, 'settings' => ['allowReselection' => true,
-     *                           'selectOnKeydown' => false,
-     *                           'onChange' => new Atk4\Ui\JsExpression('function(value, t, c) {
-     *                                 if ($(this).data("value") !== value) {
-     *                                   $(this).parents(".form").form("submit");
-     *                                   $(this).data("value", value);
-     *                                 }
-     *                               }'),
-     *                          ]]);
+     * $form->addControl('field', [Form\Control\Lookup::class, 'settings' => [
+     *     'allowReselection' => true,
+     *     'selectOnKeydown' => false,
+     *     'onChange' => new JsExpression('function (value, t, c) {
+     *         if ($(this).data("value") !== value) {
+     *             $(this).parents(\'.form\').form(\'submit\');
+     *             $(this).data(\'value\', value);
+     *         }
+     *     }'),
+     * ]]);
      *
      * @var array
      */
@@ -123,25 +130,22 @@ class Lookup extends Input
         parent::init();
 
         $this->template->set([
-            'input_id' => $this->name . '-ac',
+            'inputId' => $this->name . '-ac',
             'placeholder' => $this->placeholder,
         ]);
 
         $this->initQuickNewRecord();
 
-        $this->settings['forceSelection'] = false;
-
-        $this->callback = \Atk4\Ui\Callback::addTo($this);
-
-        $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () {
-            $this->callback->set(\Closure::fromCallable([$this, 'outputApiResponse']));
+        $this->callback = CallbackLater::addTo($this);
+        $this->callback->set(function () {
+            $this->outputApiResponse();
         });
     }
 
     /**
      * Returns URL which would respond with first 50 matching records.
      */
-    protected function getCallbackUrl()
+    protected function getCallbackUrl(): string
     {
         return $this->callback->getJsUrl();
     }
@@ -163,6 +167,8 @@ class Lookup extends Input
      * Generate Lookup data.
      *
      * @param int|bool $limit
+     *
+     * @return array<int, array{value: mixed, title: mixed}>
      */
     public function getData($limit = true): array
     {
@@ -182,7 +188,7 @@ class Lookup extends Input
         }
 
         if (!$this->multiple && $this->empty) {
-            array_unshift($data, ['value' => '0', 'title' => (string) $this->empty]);
+            array_unshift($data, ['value' => '', 'title' => $this->empty]);
         }
 
         return $data;
@@ -190,37 +196,37 @@ class Lookup extends Input
 
     /**
      * Renders the Lookup row depending on properties set.
+     *
+     * @return array{value: mixed, title: mixed}
      */
     public function renderRow(Model $row): array
     {
-        $renderRowFunction = $this->renderRowFunction ?? \Closure::fromCallable([static::class, 'defaultRenderRow']);
+        if ($this->renderRowFunction !== null) {
+            return ($this->renderRowFunction)($this, $row);
+        }
 
-        return $renderRowFunction($this, $row);
+        return $this->defaultRenderRow($row);
     }
 
     /**
      * Default callback for generating data row.
      *
-     * @param Lookup $field
      * @param string $key
      *
-     * @return string[]
+     * @return array{value: mixed, title: mixed}
      */
-    public static function defaultRenderRow($field, Model $row, $key = null)
+    public function defaultRenderRow(Model $row, $key = null)
     {
-        $id_field = $field->id_field ?: $row->id_field;
-        $title_field = $field->title_field ?: $row->title_field;
+        $idField = $this->idField ?? $row->idField;
+        $titleField = $this->titleField ?? $row->titleField;
 
-        return [
-            'value' => $row->get($id_field),
-            'title' => $row->get($title_field),
-        ];
+        return ['value' => $row->get($idField), 'title' => $row->get($titleField)];
     }
 
     /**
      * Add button for new record.
      */
-    protected function initQuickNewRecord()
+    protected function initQuickNewRecord(): void
     {
         if (!$this->plus) {
             return;
@@ -239,64 +245,54 @@ class Lookup extends Input
             $buttonSeed = ['content' => $buttonSeed];
         }
 
-        $defaultSeed = [\Atk4\Ui\Button::class, 'class.disabled' => ($this->disabled || $this->readonly)];
-
+        $defaultSeed = [Button::class, 'class.disabled' => $this->disabled || $this->readOnly];
         $this->action = Factory::factory(array_merge($defaultSeed, $buttonSeed));
 
-        if ($this->form) {
-            $vp = \Atk4\Ui\VirtualPage::addTo($this->form);
-        } else {
-            $vp = \Atk4\Ui\VirtualPage::addTo($this->getOwner());
-        }
-
-        $vp->set(function ($page) {
-            $form = \Atk4\Ui\Form::addTo($page);
+        $vp = VirtualPage::addTo($this->form ?? $this->getOwner());
+        $vp->set(function (VirtualPage $p) {
+            $form = Form::addTo($p);
 
             $entity = (clone $this->model)->setOnlyFields($this->plus['fields'] ?? null)->createEntity();
 
             $form->setModel($entity);
 
-            $form->onSubmit(function (\Atk4\Ui\Form $form) {
+            $form->onSubmit(function (Form $form) {
                 $form->model->save();
 
-                $ret = [
-                    (new Jquery('.atk-modal'))->modal('hide'),
-                ];
+                $res = new JsBlock();
+                $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
 
-                if ($row = $this->renderRow($form->model)) {
-                    $chain = new Jquery('#' . $this->name . '-ac');
-                    $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
+                $row = $this->renderRow($form->model);
+                $chain = new Jquery('#' . $this->name . '-ac');
+                $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
+                $res->addStatement($chain);
 
-                    $ret[] = $chain;
-                }
-
-                return $ret;
+                return $res;
             });
         });
 
         $caption = $this->plus['caption'] ?? 'Add New ' . $this->model->getModelCaption();
-
-        $this->action->js('click', new \Atk4\Ui\JsModal($caption, $vp));
+        $this->action->on('click', new JsModal($caption, $vp));
     }
 
     /**
      * Apply limit to model.
+     *
+     * @param int|bool $limit
      */
-    protected function applyLimit($limit = true)
+    protected function applyLimit($limit = true): void
     {
-        if (!$limit) {
-            return;
+        if ($limit !== false) {
+            $this->model->setLimit($limit === true ? $this->limit : $limit);
         }
-
-        $this->model->setLimit(is_numeric($limit) ? $limit : $this->limit);
     }
 
     /**
      * Apply conditions to model based on search string.
      */
-    protected function applySearchConditions()
+    protected function applySearchConditions(): void
     {
-        if (empty($_GET['q'])) {
+        if (($_GET['q'] ?? '') === '') {
             return;
         }
 
@@ -309,18 +305,18 @@ class Lookup extends Input
             }
             $this->model->addCondition($scope);
         } else {
-            $title_field = $this->title_field ?: $this->model->title_field;
+            $titleField = $this->titleField ?? $this->model->titleField;
 
-            $this->model->addCondition($title_field, 'like', '%' . $_GET['q'] . '%');
+            $this->model->addCondition($titleField, 'like', '%' . $_GET['q'] . '%');
         }
     }
 
     /**
      * Apply conditions to model based on dependency.
      */
-    protected function applyDependencyConditions()
+    protected function applyDependencyConditions(): void
     {
-        if (!($this->dependency instanceof \Closure)) {
+        if (!$this->dependency instanceof \Closure) {
             return;
         }
 
@@ -337,22 +333,7 @@ class Lookup extends Input
     }
 
     /**
-     * returns <input .../> tag.
-     */
-    public function getInput()
-    {
-        return $this->getApp()->getTag('input', array_merge([
-            'name' => $this->shortName,
-            'type' => 'hidden',
-            'id' => $this->name . '_input',
-            'value' => $this->getValue(),
-            'readonly' => $this->readonly ? 'readonly' : false,
-            'disabled' => $this->disabled ? 'disabled' : false,
-        ], $this->inputAttr));
-    }
-
-    /**
-     * Set Semantic-ui Api settings to use with dropdown.
+     * Set Fomantic-UI Api settings to use with dropdown.
      *
      * @param array $config
      *
@@ -370,7 +351,7 @@ class Lookup extends Input
      *
      * @param Jquery $chain
      */
-    protected function initDropdown($chain)
+    protected function initDropdown($chain): void
     {
         $settings = array_merge([
             'fields' => ['name' => 'title'],
@@ -383,27 +364,26 @@ class Lookup extends Input
     protected function renderView(): void
     {
         if ($this->multiple) {
-            $this->template->set('multiple', 'multiple');
+            $this->template->dangerouslySetHtml('multipleClass', 'multiple');
         }
 
         if ($this->disabled) {
-            $this->settings['showOnFocus'] = false;
             $this->settings['allowTab'] = false;
 
-            $this->template->set('disabled', 'disabled');
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
+            $this->template->set('disabledClass', 'disabled');
         }
 
-        if ($this->readonly) {
-            $this->settings['showOnFocus'] = false;
+        if ($this->readOnly) {
             $this->settings['allowTab'] = false;
             $this->settings['apiSettings'] = null;
-            $this->settings['onShow'] = new JsFunction([new JsExpression('return false')]);
-            $this->template->set('readonly', 'readonly');
+            $this->settings['onShow'] = new JsFunction([], [new JsExpression('return false')]);
+            $this->template->dangerouslySetHtml('readonly', 'readonly="readonly"');
         }
 
         if ($this->dependency) {
             $this->apiConfig['data'] = array_merge([
-                'form' => new JsFunction([new JsExpression('return []', [$this->form->formElement->js()->serialize()])]),
+                'form' => new JsFunction([], [new JsExpression('return []', [$this->form->formElement->js()->serialize()])]),
             ], $this->apiConfig['data'] ?? []);
         }
 
@@ -412,28 +392,16 @@ class Lookup extends Input
         $this->initDropdown($chain);
 
         if ($this->entityField && $this->entityField->get()) {
-            $id_field = $this->id_field ?: $this->model->id_field;
+            $idField = $this->idField ?? $this->model->idField;
 
-            $this->model = $this->model->tryLoadBy($id_field, $this->entityField->get());
+            $this->model = $this->model->loadBy($idField, $this->entityField->get());
 
-            if ($this->model->isLoaded()) {
-                $row = $this->renderRow($this->model);
-
-                $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-            } else {
-                $this->entityField->setNull();
-            }
+            $row = $this->renderRow($this->model);
+            $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
         }
 
         $this->js(true, $chain);
 
         parent::renderView();
-    }
-
-    public function set($value = null, $junk = null)
-    {
-        $value = implode(',', (array) $value);
-
-        return parent::set($value, $junk);
     }
 }

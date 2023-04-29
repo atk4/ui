@@ -1,8 +1,8 @@
-import $ from 'jquery';
-import atkPlugin from './atk.plugin';
-import uploadService from '../services/upload.service';
+import $ from 'external/jquery';
+import atk from 'atk';
+import AtkPlugin from './atk.plugin';
 
-export default class fileUpload extends atkPlugin {
+export default class AtkFileUploadPlugin extends AtkPlugin {
     main() {
         this.textInput = this.$el.find('input[type="text"]');
         this.hiddenInput = this.$el.find('input[type="hidden"]');
@@ -17,10 +17,10 @@ export default class fileUpload extends atkPlugin {
     }
 
     /**
-   * Setup field initial state.
-   */
+     * Setup field initial state.
+     */
     setInitialState() {
-    // Set progress bar.
+        // Set progress bar.
         this.bar.progress({
             text: {
                 percent: '{percent}%',
@@ -38,16 +38,13 @@ export default class fileUpload extends atkPlugin {
     }
 
     /**
-   * Update input value.
-   *
-   * @param fileId
-   * @param fileName
-   */
+     * Update input value.
+     */
     updateField(fileId, fileName) {
         this.$el.data().fileId = fileId;
         this.hiddenInput.val(fileId);
 
-        if (fileName === '' || typeof fileName === 'undefined' || fileName === null) {
+        if (fileName === '' || fileName === undefined || fileName === null) {
             this.textInput.val(fileId);
         } else {
             this.textInput.val(fileName);
@@ -55,8 +52,8 @@ export default class fileUpload extends atkPlugin {
     }
 
     /**
-   * Add event handler to input element.
-   */
+     * Add event handler to input element.
+     */
     setEventHandler() {
         this.textInput.on('click', (e) => {
             if (!e.target.value) {
@@ -74,7 +71,7 @@ export default class fileUpload extends atkPlugin {
                 // Check if that id exist and send it with
                 // delete callback, If not, default to file name.
                 let id = this.$el.data().fileId;
-                if (id === '' || typeof id === 'undefined' || id === null) {
+                if (id === '' || id === undefined || id === null) {
                     id = this.textInput.val();
                 }
                 this.doFileDelete(id);
@@ -91,35 +88,38 @@ export default class fileUpload extends atkPlugin {
     }
 
     /**
-   * Set the action button html content.
-   * Set the input text content.
-   */
+     * Set the action button html content.
+     * Set the input text content.
+     */
     setState(mode) {
         switch (mode) {
-        case 'delete':
-            this.action.html(this.getEraseContent);
-            setTimeout(() => {
-                this.bar.progress('reset');
-                this.bar.hide('fade');
-            }, 1000);
-            break;
-        case 'upload':
-            this.action.html(this.actionContent);
-            this.textInput.val('');
-            this.fileInput.val('');
-            this.hiddenInput.val('');
-            this.$el.data().fileId = null;
-            break;
-        default:
+            case 'delete': {
+                this.action.html(this.getEraseContent);
+                setTimeout(() => {
+                    this.bar.progress('reset');
+                    this.bar.hide('fade');
+                }, 1000);
+
+                break;
+            }
+            case 'upload': {
+                this.action.html(this.actionContent);
+                this.textInput.val('');
+                this.fileInput.val('');
+                this.hiddenInput.val('');
+                this.$el.data().fileId = null;
+
+                break;
+            }
         }
     }
 
     /**
-   * Do the actual file uploading process.
-   *
-   * @param file the FileList object.
-   */
-    doFileUpload(file) {
+     * Do the actual file uploading process.
+     *
+     * @param {FileList} files
+     */
+    doFileUpload(files) {
         // if submit button id is set, then disable submit
         // during upload.
         if (this.settings.submit) {
@@ -141,36 +141,35 @@ export default class fileUpload extends atkPlugin {
         // setup progress bar update via xhr.
         const xhrCb = () => {
             const xhr = new window.XMLHttpRequest();
-            xhr.upload.addEventListener('progress', (evt) => {
-                if (evt.lengthComputable) {
-                    const percentComplete = evt.loaded / evt.total;
-                    this.bar.progress('set percent', parseInt(percentComplete * 100, 10));
+            xhr.upload.addEventListener('progress', (event) => {
+                if (event.lengthComputable) {
+                    const percentComplete = event.loaded / event.total;
+                    this.bar.progress('set percent', Number.parseInt(percentComplete * 100, 10));
                 }
             }, false);
+
             return xhr;
         };
 
         this.bar.show();
-        uploadService.uploadFiles(
-            file,
+        atk.uploadService.uploadFiles(
+            files,
             this.$el,
-            { f_upload_action: 'upload' },
-            this.settings.uri,
+            { fUploadAction: 'upload' },
+            this.settings.url,
             completeCb,
-            xhrCb,
+            xhrCb
         );
     }
 
     /**
-   * Callback server for file delete.
-   *
-   * @param fileId
-   */
+     * Callback server for file delete.
+     */
     doFileDelete(fileId) {
         this.$el.api({
             on: 'now',
-            url: this.settings.uri,
-            data: { f_upload_action: 'delete', f_upload_id: fileId },
+            url: this.settings.url,
+            data: { fUploadAction: 'delete', fUploadId: fileId },
             method: 'POST',
             obj: this.$el,
             onComplete: (response, content) => {
@@ -182,19 +181,19 @@ export default class fileUpload extends atkPlugin {
     }
 
     /**
-   * Return the html content for erase action button.
-   *
-   * @returns {string}
-   */
+     * Return the html content for erase action button.
+     *
+     * @returns {string}
+     */
     getEraseContent() {
-        return '<i class="red remove icon" style=""></i>';
+        return '<i class="red remove icon"></i>';
     }
 }
 
-fileUpload.DEFAULTS = {
-    uri: null,
+AtkFileUploadPlugin.DEFAULTS = {
+    url: null,
     file: { id: null, name: null },
-    uri_options: {},
+    urlOptions: {},
     action: null,
     completeLabel: '100%',
     submit: null,

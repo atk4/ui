@@ -7,7 +7,8 @@ namespace Atk4\Ui\UserAction;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
 use Atk4\Ui\Panel\Right;
 use Atk4\Ui\View;
@@ -17,10 +18,10 @@ use Atk4\Ui\View;
  */
 class PanelExecutor extends Right implements JsExecutorInterface
 {
+    use CommonExecutorTrait;
     use HookTrait;
     use StepExecutorTrait;
 
-    /** @const string */
     public const HOOK_STEP = self::class . '@onStep';
 
     /** @var array No need for dynamic content. It is manage with step loader. */
@@ -36,12 +37,13 @@ class PanelExecutor extends Right implements JsExecutorInterface
     /** @var View */
     public $stepList;
 
-    /** @var string[] */
+    /** @var array<string, string> */
     public $stepListItems = ['args' => 'Fill argument(s)', 'fields' => 'Edit Record(s)', 'preview' => 'Preview', 'final' => 'Complete'];
 
     protected function init(): void
     {
         parent::init();
+
         $this->initExecutor();
     }
 
@@ -62,25 +64,23 @@ class PanelExecutor extends Right implements JsExecutorInterface
      * to make sure that view id is properly set for loader and button
      * js action to run properly.
      */
-    public function afterActionInit(Model\UserAction $action): void
+    protected function afterActionInit(Model\UserAction $action): void
     {
         $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim, 'loadEvent' => false]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 
-    /**
-     * Will associate executor with the action.
-     */
-    public function setAction(Model\UserAction $action): self
+    public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
         $this->afterActionInit($action);
 
         // get necessary step need prior to execute action.
-        if ($this->steps = $this->getSteps($action)) {
+        $this->steps = $this->getSteps($action);
+        if ($this->steps) {
             $this->header->set($this->title ?? $action->getDescription());
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
-            $this->add($this->createButtonBar($this->action)->addStyle(['text-align' => 'end']));
+            $this->add($this->createButtonBar($this->action)->setStyle(['text-align' => 'end']));
             $this->addStepList();
         }
 
@@ -89,11 +89,11 @@ class PanelExecutor extends Right implements JsExecutorInterface
         return $this;
     }
 
-    public function jsExecute(array $urlArgs = []): array
+    public function jsExecute(array $urlArgs = []): JsBlock
     {
         $urlArgs['step'] = $this->step;
 
-        return [$this->jsOpen(), $this->loader->jsLoad($urlArgs)];
+        return new JsBlock([$this->jsOpen(), $this->loader->jsLoad($urlArgs)]);
     }
 
     /**
@@ -101,17 +101,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
      */
     public function executeModelAction(): void
     {
-        $id = $this->stickyGet($this->name);
-        if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->tryLoad($id));
-        } elseif (!$this->action->isOwnerEntity()
-                && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)) {
-            $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
-        }
-
-        if ($this->action->fields === true) {
-            $this->action->fields = array_keys($this->action->getModel()->getFields('editable'));
-        }
+        $this->action = $this->executeModelActionLoad($this->action);
 
         $this->jsSetBtnState($this->loader, $this->step);
         $this->jsSetListState($this->loader, $this->step);
@@ -134,7 +124,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
         $view->js(true, $this->stepList->js()->find('.item')->removeClass('active'));
         foreach ($this->steps as $step) {
             if ($step === $currentStep) {
-                $view->js(true, $this->stepList->js()->find("[data-list-item='{$step}']")->addClass('active'));
+                $view->js(true, $this->stepList->js()->find('[data-list-item="' . $step . '"]')->addClass('active'));
             }
         }
     }
@@ -145,18 +135,17 @@ class PanelExecutor extends Right implements JsExecutorInterface
      * @param mixed      $obj
      * @param string|int $id
      */
-    protected function jsGetExecute($obj, $id): array
+    protected function jsGetExecute($obj, $id): JsBlock
     {
-        // @phpstan-ignore-next-line
         $success = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
 
-        return [
+        return new JsBlock([
             $this->jsClose(),
-            $this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) ?:
-                $success ?: new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')),
+            JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
             $this->loader->jsClearStoreData(true),
-        ];
+        ]);
     }
 }

@@ -1,4 +1,4 @@
-# Agile UI - User Interface framework for Agile Toolkit
+# Agile UI - Low-code PHP Framework for Web Apps
 
 [Agile Toolkit](https://agiletoolkit.org/) is a Low Code framework written in PHP. Agile UI implement server side rendering engine and over 50 UI generic components for interacting with your Data Model.
 
@@ -11,14 +11,12 @@ Agile UI is quickest way for building back-end UI, admin interfaces, data manage
  - Agile UI is compact - single file, several lines of code - that's all it takes.
  - Agile UI is extensible - integrates VueJS for custom components and interactive behaviours.
 
-![Build](https://github.com/atk4/ui/workflows/Unit%20Testing/badge.svg)
+![Build](https://github.com/atk4/ui/workflows/Unit/badge.svg)
 [![CodeCov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
 [![GitHub release](https://img.shields.io/github/release/atk4/ui.svg)](CHANGELOG.md)
 [![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
 
-Quick-Links: [Documentation](https://agile-ui.readthedocs.io). [Namespaces](https://www.agiletoolkit.org/dox/namespaces.html). [Demo-site](https://ui.agiletoolkit.org). [ATK Data](https://github.com/atk4/data). [Forum](https://forum.agiletoolkit.org/). [Chat](https://gitter.im/atk4/atk4). [Commercial support](https://www.agiletoolkit.org/contact). [Udemy Course](https://forum.agiletoolkit.org/t/udemy-com-atk-course-early-access-limited-time-free/413).
-
-Our localization is done using the amazing services of [Lokalise.com](https://www.lokalise.com) (Thanks)
+Quick-Links: [Documentation](https://agile-ui.readthedocs.io). [Demo-site](https://ui.agiletoolkit.org). [ATK Data](https://github.com/atk4/data). [Forum](https://forum.agiletoolkit.org/). [Chat](https://gitter.im/atk4/atk4). [Commercial support](https://www.agiletoolkit.org/contact).
 
 ## How does Agile Toolkit work?
 
@@ -39,11 +37,7 @@ high-level projects developed entirely on Agile Toolkit.
 
 ### Who uses Agile Toolkit?
 
-Companies use Agile Toolkit to implement admin interface and in some cases even user-facing interface.
-
- - www.linkedfinance.com
- - www.sortmybooks.com
- - If you have a project built with Agile Toolkit - add it here!
+Many companies use Agile Toolkit to implement admin interface and in some cases even user-facing interface.
 
 ### How does it work?
 
@@ -64,7 +58,7 @@ $form->addField('email');
 $form->onSubmit(function (Form $form) {
     // implement subscribe here
 
-    return $form->success('Subscribed ' . $form->model->get('email') . ' to newsletter.');
+    return $form->jsSuccess('Subscribed ' . $form->model->get('email') . ' to newsletter.');
 });
 
 // decorate anything
@@ -87,7 +81,7 @@ To get most of ATK UI, use [ATK Data](https://github.com/atk4/data) to describe 
 [Crud](https://ui.agiletoolkit.org/demos/crud.php) is a fully-interractive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
 
 ``` php
-$app = new \Atk4\Ui\App('hello world');
+$app = new \Atk4\Ui\App(['title' => 'hello world']);
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 
@@ -98,8 +92,10 @@ $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 ATK Data allows you to set up relations between models:
 
 ``` php
-class User extends Model {
-    function init(): void {
+class User extends Model
+{
+    protected function init(): void
+    {
         parent::init();
 
         $this->addField('name');
@@ -134,7 +130,7 @@ It's easy to create your own application styling. Here are some example UI:
 As of version 2.0 - Agile Toolkit offers support for User Actions. Those are easy to define in your Data Model declaration:
 
 ``` php
-$this->addAction('archive', function (Model $m) {
+$this->addUserAction('archive', function (Model $m) {
     $m->set('is_archived', true);
     $this->saveAndUnload();
 });
@@ -199,10 +195,12 @@ $app = new \Atk4\Ui\App('My App');
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/yourdb');
 
-class User extends \Atk4\Data\Model {
+class User extends \Atk4\Data\Model
+{
     public $table = 'user';
 
-    function init(): void {
+    protected function init(): void
+    {
         parent::init();
 
         $this->addField('name');
@@ -262,7 +260,6 @@ Add-ons:
 -   [User Authentication and ACL](https://github.com/atk4/login) - User Log-in, Registration and Access Control for Agile UI
 -   [Charts add-on](https://github.com/atk4/chart) - Modern looking and free charts with [chartJS](https://www.chartjs.org/)
 -   [Audit for Models](https://github.com/atk4/audit) - Record all DB operations with Undo/Redo support for Agile Data
--   [Data for Reports](https://github.com/atk4/report) - Implement data aggregation and union models for Agile Data
 
 Integrations:
 

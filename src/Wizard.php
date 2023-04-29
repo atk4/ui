@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 
-/**
- * Wizard widget.
- */
 class Wizard extends View
 {
     use SessionTrait;
 
     public $defaultTemplate = 'wizard.html';
-    public $ui = 'steps';
+    public $ui = 'steps top attached';
 
     /** @var string Get argument for this wizard. */
     public $urlTrigger;
@@ -37,9 +36,9 @@ class Wizard extends View
 
     /**
      * Icon that will be used on all steps by default.
-     *  - 'empty' , since no such icon exists, no visible icon will be used unless step is completed
-     *  - 'square outline', use this (or any other) Semantic UI icon by default
-     *  - false,  disables icons alltogether (or using checkboxes for completed steps).
+     *  - 'empty', since no such icon exists, no visible icon will be used unless step is completed
+     *  - 'square outline', use this (or any other) Fomantic-UI icon by default
+     *  - false, disables icons alltogether (or using checkboxes for completed steps).
      *
      * @var string|false
      */
@@ -78,14 +77,15 @@ class Wizard extends View
     /**
      * Adds step to the wizard.
      *
-     * @param mixed $name Name of tab or Tab object
+     * @param string|array|WizardStep $name
+     * @param \Closure($this): void   $fx
      *
-     * @return View
+     * @return WizardStep
      */
     public function addStep($name, \Closure $fx)
     {
         $step = Factory::factory([
-            Step::class,
+            WizardStep::class,
             'wizard' => $this,
             'template' => clone $this->stepTemplate,
             'sequence' => count($this->steps),
@@ -111,8 +111,10 @@ class Wizard extends View
     /**
      * Adds an extra screen to show user when he goes beyond last step.
      * There won't be "back" button on this step anymore.
+     *
+     * @param \Closure($this): void $fx
      */
-    public function addFinish(\Closure $fx)
+    public function addFinish(\Closure $fx): void
     {
         if (count($this->steps) === $this->currentStep + 1) {
             $this->buttonFinish->link($this->getUrl(count($this->steps)));
@@ -145,7 +147,7 @@ class Wizard extends View
     }
 
     /**
-     * Get URL to next step. Will respect stickyGET.
+     * Get URL to next step. Will respect stickyGet.
      */
     public function urlNext(): string
     {
@@ -153,11 +155,9 @@ class Wizard extends View
     }
 
     /**
-     * Get URL to previous step. Will respect stickyGET.
-     *
-     * @return string URL to previous step
+     * Generate JS that will navigate to next step URL.
      */
-    public function jsNext()
+    public function jsNext(): JsExpressionable
     {
         return new JsExpression('document.location = []', [$this->urlNext()]);
     }
@@ -165,7 +165,7 @@ class Wizard extends View
     protected function recursiveRender(): void
     {
         if (!$this->steps) {
-            $this->addStep(['No Steps Defined', 'icon' => 'configure', 'description' => 'use $wizard->addStep() now'], function ($p) {
+            $this->addStep(['No Steps Defined', 'icon' => 'configure', 'description' => 'use $wizard->addStep() now'], function (self $p) {
                 Message::addTo($p, ['Step content will appear here', 'type' => 'error', 'text' => 'Specify callback to addStep() which would populate this area.']);
             });
         }

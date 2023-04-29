@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 
 class Lister extends View
 {
-    use \Atk4\Core\HookTrait;
+    use HookTrait;
 
-    /** @const string */
     public const HOOK_BEFORE_ROW = self::class . '@beforeRow';
-    /** @const string */
     public const HOOK_AFTER_ROW = self::class . '@afterRow';
+
+    public $ui = 'list';
+
+    public $defaultTemplate;
 
     /**
      * Lister repeats part of it's template. This property will contain
@@ -22,12 +25,10 @@ class Lister extends View
      *
      * @var HtmlTemplate
      */
-    public $t_row;
+    public $tRow;
 
     /** @var HtmlTemplate|null Lister use this part of template in case there are no elements in it. */
-    public $t_empty;
-
-    public $defaultTemplate;
+    public $tEmpty;
 
     /** @var JsPaginator|null A dynamic paginator attach to window scroll event. */
     public $jsPaginator;
@@ -35,8 +36,8 @@ class Lister extends View
     /** @var int|null The number of item per page for JsPaginator. */
     public $ipp;
 
-    /** @var Model */
-    public $current_row;
+    /** @var Model Current row entity */
+    public $currentRow;
 
     protected function init(): void
     {
@@ -46,9 +47,9 @@ class Lister extends View
     }
 
     /**
-     * From the current template will extract {row} into $this->t_row_master and {empty} into $this->t_empty.
+     * From the current template will extract {row} into $this->tRowMaster and {empty} into $this->tEmpty.
      */
-    public function initChunks()
+    protected function initChunks(): void
     {
         if (!$this->template) {
             throw new Exception('Lister does not have default template. Either supply your own HTML or use "defaultTemplate" => "lister.html"');
@@ -56,16 +57,16 @@ class Lister extends View
 
         // empty row template
         if ($this->template->hasTag('empty')) {
-            $this->t_empty = $this->template->cloneRegion('empty');
+            $this->tEmpty = $this->template->cloneRegion('empty');
             $this->template->del('empty');
         }
 
         // data row template
         if ($this->template->hasTag('row')) {
-            $this->t_row = $this->template->cloneRegion('row');
+            $this->tRow = $this->template->cloneRegion('row');
             $this->template->del('rows');
         } else {
-            $this->t_row = clone $this->template;
+            $this->tRow = clone $this->template;
             $this->template->del('_top');
         }
     }
@@ -91,17 +92,15 @@ class Lister extends View
         $this->model->setLimit($ipp);
 
         // add onScroll callback
-        $this->jsPaginator->onScroll(function ($p) use ($ipp, $scrollRegion) {
+        $this->jsPaginator->onScroll(function (int $p) use ($ipp, $scrollRegion) {
             // set/overwrite model limit
             $this->model->setLimit($ipp, ($p - 1) * $ipp);
 
             // render this View (it will count rendered records !)
-            $jsonArr = $this->renderToJsonArr(true, $scrollRegion);
+            $jsonArr = $this->renderToJsonArr($scrollRegion);
 
-            // if there will be no more pages, then replace message=Success to let JS know that there are no more records
-            if ($this->_rendered_rows_count < $ipp) {
-                $jsonArr['message'] = 'Done'; // Done status means - no more requests from JS side
-            }
+            // let client know that there are no more records
+            $jsonArr['noMoreScrollPages'] = $this->_renderedRowsCount < $ipp;
 
             // return json response
             $this->getApp()->terminateJson($jsonArr);
@@ -111,7 +110,7 @@ class Lister extends View
     }
 
     /** @var int This will count how many rows are rendered. Needed for JsPaginator for example. */
-    protected $_rendered_rows_count = 0;
+    protected $_renderedRowsCount = 0;
 
     protected function renderView(): void
     {
@@ -126,35 +125,35 @@ class Lister extends View
             return;
         }
 
-        // Generate template for data row
-        $this->t_row->trySet('_id', $this->name);
-
         // Iterate data rows
-        $this->_rendered_rows_count = 0;
+        $this->_renderedRowsCount = 0;
 
         // TODO we should not iterate using $this->model variable,
         // then also backup/tryfinally would be not needed
         // the same in Table class
         $modelBackup = $this->model;
+        $tRowBackup = $this->tRow;
         try {
             foreach ($this->model as $this->model) {
-                $this->current_row = $this->model;
+                $this->currentRow = $this->model;
+                $this->tRow = clone $tRowBackup;
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
                 }
 
                 $this->renderRow();
 
-                ++$this->_rendered_rows_count;
+                ++$this->_renderedRowsCount;
             }
         } finally {
             $this->model = $modelBackup;
+            $this->tRow = $tRowBackup;
         }
 
         // empty message
-        if (!$this->_rendered_rows_count) {
+        if ($this->_renderedRowsCount === 0) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
-                $empty = $this->t_empty !== null ? $this->t_empty->renderToHtml() : '';
+                $empty = $this->tEmpty !== null ? $this->tEmpty->renderToHtml() : '';
                 if ($this->template->hasTag('rows')) {
                     $this->template->dangerouslyAppendHtml('rows', $empty);
                 } else {
@@ -164,7 +163,7 @@ class Lister extends View
         }
 
         // stop JsPaginator if there are no more records to fetch
-        if ($this->jsPaginator && ($this->_rendered_rows_count < $this->ipp)) {
+        if ($this->jsPaginator && ($this->_renderedRowsCount < $this->ipp)) {
             $this->jsPaginator->jsIdle();
         }
 
@@ -175,19 +174,46 @@ class Lister extends View
      * Render individual row. Override this method if you want to do more
      * decoration.
      */
-    public function renderRow()
+    public function renderRow(): void
     {
-        $this->t_row->trySet($this->current_row);
+        $this->tRow->trySet($this->currentRow);
 
-        $this->t_row->trySet('_title', $this->model->getTitle());
-        $this->t_row->trySet('_href', $this->url(['id' => $this->current_row->getId()]));
-        $this->t_row->trySet('_id', $this->current_row->getId());
+        $this->tRow->trySet('_title', $this->model->getTitle());
+        $this->tRow->trySet('_href', $this->url(['id' => $this->currentRow->getId()]));
+        $this->tRow->trySet('_id', $this->name . '-' . $this->currentRow->getId());
 
-        $html = $this->t_row->renderToHtml();
+        $html = $this->tRow->renderToHtml();
         if ($this->template->hasTag('rows')) {
             $this->template->dangerouslyAppendHtml('rows', $html);
         } else {
             $this->template->dangerouslyAppendHtml('_top', $html);
         }
+    }
+
+    /**
+     * Hack - override parent method with region render only support.
+     *
+     * TODO this hack/method must be removed as rendering HTML only partially but with all JS
+     * is wrong by design. Each table row should be probably rendered natively using cloned
+     * render tree (instead of cloned template).
+     */
+    public function renderToJsonArr(string $region = null): array
+    {
+        $this->renderAll();
+
+        // https://github.com/atk4/ui/issues/1932
+        if ($region !== null) {
+            if (!isset($this->_jsActions['click'])) {
+                $this->_jsActions['click'] = [];
+            }
+            array_unshift($this->_jsActions['click'], $this->js()->off());
+        }
+
+        return [
+            'success' => true,
+            'atkjs' => $this->getJs(),
+            'html' => $this->template->renderToHtml($region),
+            'id' => $this->name,
+        ];
     }
 }

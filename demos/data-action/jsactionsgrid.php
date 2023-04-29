@@ -6,14 +6,16 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model\UserAction;
+use Atk4\Ui\Grid;
+use Atk4\Ui\Header;
 use Atk4\Ui\Icon;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\View;
 
+// Demo for Model action in Grid
+
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
-
-// Demo for Model action in Grid
 
 $country = new Country($app->db);
 // Model actions for this file are setup in DemoActionUtil.
@@ -26,9 +28,9 @@ Icon::addTo($specialItem, ['content' => 'window maximize outline']);
 // register this menu item in factory.
 $app->getExecutorFactory()->registerTrigger(ExecutorFactory::TABLE_MENU_ITEM, $specialItem, $multiAction);
 
-\Atk4\Ui\Header::addTo($app, ['Execute model action from Grid menu items', 'subHeader' => 'Setting grid menu items in order to execute model actions or javascript.']);
+Header::addTo($app, ['Execute model action from Grid menu items', 'subHeader' => 'Setting grid menu items in order to execute model actions or javascript.']);
 
-$grid = \Atk4\Ui\Grid::addTo($app, ['menu' => false]);
+$grid = Grid::addTo($app, ['menu' => false]);
 $grid->setModel($country);
 
 $divider = Factory::factory([View::class], ['name' => false, 'class' => ['divider'], 'content' => '']);
@@ -54,7 +56,7 @@ foreach ($country->getUserActions(UserAction::APPLIES_TO_SINGLE_RECORD) as $acti
     if (in_array($action->shortName, ['add', 'edit', 'delete'], true)) {
         continue;
     }
-    $grid->addExecutorMenuItem($executor = $app->getExecutorFactory()->create($action, $grid));
+    $grid->addExecutorMenuItem($executor = $app->getExecutorFactory()->createExecutor($action, $grid));
 }
 
 $grid->ipp = 10;

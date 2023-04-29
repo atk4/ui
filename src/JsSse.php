@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\HookTrait;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsExpressionable;
 
-/**
- * Implements a class that can be mapped into arbitrary JavaScript expression.
- */
 class JsSse extends JsCallback
 {
     use HookTrait;
 
-    /** @const string Executed when user aborted, or disconnect browser, when using this SSE. */
-    public const HOOK_ABORTED = self::class . '@connection_aborted';
+    /** Executed when user aborted, or disconnect browser, when using this SSE. */
+    public const HOOK_ABORTED = self::class . '@connectionAborted';
 
     /** @var bool Allows us to fall-back to standard functionality of JsCallback if browser does not support SSE. */
     public $browserSupport = false;
@@ -28,7 +28,7 @@ class JsSse extends JsCallback
     /** @var bool Keep execution alive or not if connection is close by user. False mean that execution will stop on user aborted. */
     public $keepAlive = false;
 
-    /** @var \Closure custom function for outputting (instead of echo) */
+    /** @var \Closure|null custom function for outputting (instead of echo) */
     public $echoFunction;
 
     protected function init(): void
@@ -41,11 +41,11 @@ class JsSse extends JsCallback
         }
     }
 
-    public function jsRender(): string
+    public function jsExecute(): JsBlock
     {
-        $this->getApp(); // assert has App
+        $this->assertIsInitialized();
 
-        $options = ['uri' => $this->getJsUrl()];
+        $options = ['url' => $this->getJsUrl()];
         if ($this->showLoader) {
             $options['showLoader'] = $this->showLoader;
         }
@@ -53,31 +53,31 @@ class JsSse extends JsCallback
             $options['closeBeforeUnload'] = $this->closeBeforeUnload;
         }
 
-        return (new Jquery())->atkServerEvent($options)->jsRender();
+        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)]);
     }
 
     /**
-     * Sending an sse action.
+     * Sending an SSE action.
      */
-    public function send($action, $success = true)
+    public function send(JsExpressionable $action, bool $success = true): void
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
-            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]), 'atk_sse_action');
+            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec]), 'atkSseAction');
         }
     }
 
     /**
      * @return never
      */
-    public function terminateAjax($ajaxec, $msg = null, $success = true): void
+    public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
     {
         if ($this->browserSupport) {
             if ($ajaxec) {
                 $this->sendEvent(
                     'js',
-                    $this->getApp()->encodeJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]),
-                    'atk_sse_action'
+                    $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec]),
+                    'atkSseAction'
                 );
             }
 
@@ -85,13 +85,13 @@ class JsSse extends JsCallback
             $this->getApp()->terminate();
         }
 
-        $this->getApp()->terminateJson(['success' => $success, 'message' => 'Success', 'atkjs' => $ajaxec]);
+        $this->getApp()->terminateJson(['success' => $success, 'atkjs' => $ajaxec]);
     }
 
     /**
      * Output a SSE Event.
      */
-    public function sendEvent($id, $data, $eventName)
+    public function sendEvent(string $id, string $data, string $eventName = null): void
     {
         $this->sendBlock($id, $data, $eventName);
     }
@@ -118,14 +118,14 @@ class JsSse extends JsCallback
         // output headers and content
         $app = $this->getApp();
         \Closure::bind(static function () use ($app, $content): void {
-            $app->outputResponse($content, []);
+            $app->outputResponse($content);
         }, null, $app)();
     }
 
     /**
      * Send a SSE data block.
      */
-    public function sendBlock(string $id, string $data, string $name = null): void
+    public function sendBlock(string $id, string $data, string $eventName = null): void
     {
         if (connection_aborted()) {
             $this->hook(self::HOOK_ABORTED);
@@ -137,8 +137,8 @@ class JsSse extends JsCallback
         }
 
         $this->output('id: ' . $id . "\n");
-        if ($name !== null) {
-            $this->output('event: ' . $name . "\n");
+        if ($eventName !== null) {
+            $this->output('event: ' . $eventName . "\n");
         }
         $this->output($this->wrapData($data) . "\n");
         $this->flush();
@@ -149,7 +149,7 @@ class JsSse extends JsCallback
      */
     private function wrapData(string $string): string
     {
-        return implode('', array_map(function ($v) {
+        return implode('', array_map(function (string $v): string {
             return 'data: ' . $v . "\n";
         }, preg_split('~\r?\n|\r~', $string)));
     }
@@ -158,7 +158,7 @@ class JsSse extends JsCallback
      * Initialise this sse.
      * It will ignore user abort by default.
      */
-    protected function initSse()
+    protected function initSse(): void
     {
         @set_time_limit(0); // disable time limit
         ignore_user_abort(true);

@@ -6,7 +6,9 @@ namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
 use Atk4\Ui\Exception;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Table;
 
 /**
@@ -14,6 +16,7 @@ use Atk4\Ui\Table;
  */
 class Checkbox extends Table\Column
 {
+    /** @var string */
     public $class;
 
     /**
@@ -21,23 +24,25 @@ class Checkbox extends Table\Column
      *
      * [3, 5, 20]
      */
-    public function jsChecked()
+    public function jsChecked(): JsExpressionable
     {
-        return new JsExpression(' $(' . $this->table->jsRender() . ').find(\'.checked.' . $this->class . '\').closest(\'tr\').map(function(){ '
-            . 'return $(this).data(\'id\'); }).get().join(\',\')');
+        return (new Jquery($this->table))->find('.checked.' . $this->class)->closest('tr')
+            ->map(new \Atk4\Ui\Js\JsFunction([], [new JsExpression('return $(this).data(\'id\')')]))
+            ->get()->join(',');
     }
 
     protected function init(): void
     {
         parent::init();
+
         if (!$this->class) {
             $this->class = 'cb_' . $this->shortName;
         }
     }
 
-    public function getHeaderCellHtml(Field $field = null, $value = null)
+    public function getHeaderCellHtml(Field $field = null, $value = null): string
     {
-        if (isset($field)) {
+        if ($field !== null) {
             throw (new Exception('Checkbox must be placed in an empty column, don\'t specify any field'))
                 ->addMoreInfo('field', $field);
         }
@@ -46,8 +51,8 @@ class Checkbox extends Table\Column
         return parent::getHeaderCellHtml($field);
     }
 
-    public function getDataCellTemplate(Field $field = null)
+    public function getDataCellTemplate(Field $field = null): string
     {
-        return $this->getApp()->getTag('div', ['class' => 'ui checkbox ' . $this->class], [['input', ['type' => 'checkbox']]]);
+        return $this->getApp()->getTag('div', ['class' => 'ui checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]);
     }
 }
