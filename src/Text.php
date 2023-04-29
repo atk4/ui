@@ -1,22 +1,22 @@
 <?php
 
-// vim:ts=4:sw=4:et:fdm=marker:fdl=0
+declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
 /**
  * Simple text block view.
  */
 class Text extends View
 {
-    public $defaultTemplate = false;
+    public $defaultTemplate;
 
-    public function render($force_echo = true)
+    public function render(): string
     {
         return $this->content;
     }
 
-    public function getHTML()
+    public function getHtml()
     {
         return $this->content;
     }
@@ -30,9 +30,19 @@ class Text extends View
      */
     public function addParagraph($text)
     {
-        $this->content .= isset($this->app)
-            ? $this->app->getTag('p', $text)
-            : '<p>'.htmlspecialchars($text).'</p>';
+        $this->content .= $this->getApp()->getTag('p', [], $text);
+
+        return $this;
+    }
+
+    /**
+     * Adds some HTML code.
+     *
+     * @return $this
+     */
+    public function addHtml(string $html)
+    {
+        $this->content .= $html;
 
         return $this;
     }

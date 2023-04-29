@@ -1,4 +1,4 @@
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 ======
 Header
@@ -6,16 +6,16 @@ Header
 
 Can be used for page or section headers.
 
-Based around: http://semantic-ui.com/elements/header.html. 
+Based around: https://fomantic-ui.com/elements/header.html.
 
-Demo:  http://ui.agiletoolkit.org/demos/header.php
+Demo:  https://ui.agiletoolkit.org/demos/header.php
 
 Basic Usage
 ===========
 
 By default header size will depend on where you add it::
 
-    $this->add(['Header', 'Hello, Header']);
+    Header::addTo($this, ['Hello, Header']);
 
 Attributes
 ==========
@@ -26,20 +26,18 @@ Attributes
 
 Specify size and sub-header content::
 
-    $seg->add([
-        'Header',
+    Header::addTo($seg, [
         'H1 header',
-        'size'=>1,
-        'subHeader'=>'H1 subheader'
+        'size' => 1,
+        'subHeader' => 'H1 subheader',
     ]);
 
-    // or 
+    // or
 
-    $seg->add([
-        'Header', 
-        'Small header', 
-        'size'=>'small', 
-        'subHeader'=>'small subheader'
+    Header::addTo($seg, [
+        'Small header',
+        'size' => 'small',
+        'subHeader' => 'small subheader',
     ]);
 
 Icon and Image
@@ -52,21 +50,19 @@ Icon and Image
 
 Header may specify icon or image::
 
-    $seg->add([
-        'Header', 
-        'Header with icon', 
-        'icon'=>'settings', 
-        'subHeader'=>'and with sub-header'
+    Header::addTo($seg, [
+        'Header with icon',
+        'icon' => 'settings',
+        'subHeader' => 'and with sub-header',
     ]);
 
 Here you can also specify seed for the image::
 
-    $img = 'https://cdn.rawgit.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
-    $seg->add([
-        'Header', 
-        'Center-aligned header', 
-        'aligned'=>'center', 
-        'image'=>[$img, 'disabled'], 
-        'subHeader'=>'header with image'
+    $img = $app->cdn['atk'] . '/logo.png';
+    Header::addTo($seg, [
+        'Center-aligned header',
+        'aligned' => 'center',
+        'image' => [$img, 'class.disabled' => true],
+        'subHeader' => 'header with image',
     ]);
 

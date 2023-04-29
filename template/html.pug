@@ -1,0 +1,18 @@
+doctype html
+html(lang="{lang}en{/}")
+  head
+    title {title}Agile UI - Untitled Project{/}
+    | {$meta}
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    script
+      | 'use strict'; {$InitJsBundle}
+    |
+    | {$Head}
+    style
+      | {$style}
+  body(class="{$class}")
+    | {$Content}
+    .atk-side-panels
+    .ui.dimmer.modals.page
+= "\n"

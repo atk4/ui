@@ -1,6 +1,8 @@
 <?php
 
-namespace atk4\ui;
+declare(strict_types=1);
+
+namespace Atk4\Ui;
 
 /**
  * Works same as Callback but will be executed when the current
@@ -13,27 +15,17 @@ class CallbackLater extends Callback
     /**
      * Executes user-specified action before rendering or if App is
      * already in rendering state, then before output.
-     *
-     * @param callable $callback
-     * @param array    $args
-     *
-     * @return mixed|null
      */
-    public function set($callback, $args = [])
+    public function set($fx = null, $fxArgs = null)
     {
-        if (!$this->app) {
-            throw new Exception(['Call-back must be part of a RenderTree']);
+        if ($this->getApp()->isRendering) {
+            return parent::set($fx, $fxArgs);
         }
 
-        if ($this->app->is_rendering) {
-            $hook = 'beforeOutput';
-        } else {
-            $hook = 'beforeRender';
-        }
+        $this->getApp()->onHook(App::HOOK_BEFORE_RENDER, function () use ($fx, $fxArgs) {
+            return parent::set($fx, $fxArgs);
+        });
 
-        $this->app->addHook($hook, function (...$args) use ($callback) {
-            array_shift($args); // Hook will have first argument pointing to the app. We don't need that.
-            return parent::set($callback, $args);
-        }, $args);
+        return null;
     }
 }

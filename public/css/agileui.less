@@ -1,0 +1,403 @@
+/* --- Colors --- */
+@red: #db2828;
+@orange: #f2711c;
+@yellow: #fbbd08;
+@olive: #b5cc18;
+@green: #21ba45;
+@teal: #00b5ad;
+@blue: #2185d0;
+@violet: #6435c9;
+@purple: #a333c8;
+@pink: #e03997;
+@brown: #a5673f;
+@grey: #767676;
+@black: #1b1c1d;
+
+/* --- Light Colors --- */
+@lightRed: #ff695e;
+@lightOrange: #ff851b;
+@lightYellow: #ffe21f;
+@lightOlive: #d9e778;
+@lightGreen: #2ecc40;
+@lightTeal: #6dffff;
+@lightBlue: #54c8ff;
+@lightViolet: #a291fb;
+@lightPurple: #dc73ff;
+@lightPink: #ff8edf;
+@lightBrown: #d67c1c;
+@lightGrey: #dcddde;
+@lightBlack: #545454;
+
+/* --- Neutrals --- */
+@fullBlack: #000000;
+@offWhite: #f9fafb;
+@darkWhite: #f3f4f5;
+@midWhite: #dcddde;
+@white: #ffffff;
+
+// Variables
+@leftMenuWidth: 260px;
+@maestroSpace: 8px;
+@maestroItemsLeftMargin: 10px;
+@desktopWidth: 992px;
+@tabletWidth: 768px;
+@adminMenuHeight: 48px;
+@atkFooterHeight: 50px;
+@menuBorder: 1px solid rgba(255, 255, 255, 0.1);
+
+@atkSlidePanelColor: @offWhite;
+
+// z-index
+@topMenuIndex: 201;
+@rightPanelIndex: 301;
+@pushableIndex: 101;
+@sideNavIndex: 200;
+
+/******* ADMIN TOP MENU *******/
+
+.ui.inverted.fixed.atk-admin-top-menu {
+    border: @menuBorder;
+    z-index: @topMenuIndex;
+}
+
+/******* ADMIN SIDENAV MENU *******/
+
+.atk-maestro-sidenav > .ui.grid {
+    width: @leftMenuWidth;
+}
+
+.atk-sidenav-content {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* A selected item in admin menu */
+.ui.sidebar.atk-sidenav {
+    .menu > .item.active {
+        background: none;
+    }
+}
+
+/******* MAESTRO SIDENAV MENU *******/
+
+.atk-maestro-sidenav {
+    cursor: pointer;
+    color: white;
+}
+
+.atk-maestro-sidenav > .ui.grid > .atk-maestro-menu-items {
+    display: none;
+    &.atk-visible {
+        display: flex;
+    }
+}
+
+/* MenuItem without a group in menu */
+.ui.inverted.menu a.atk-maestro-sidenav.item {
+    padding-left: 34px;
+    i {
+        margin-right: 2px;
+    }
+    &.active {
+        background-color: @blue;
+    }
+}
+
+.atk-maestro-sidenav {
+    .atk-submenu-toggle {
+        div {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+    &:not(.active) {
+        .atk-submenu-toggle:hover {
+            background-color: rgba(255, 255, 255, 15%);
+        }
+    }
+    .ui.grid {
+        .row {
+            padding: 0;
+        }
+        .column {
+            padding-top: @maestroSpace;
+            padding-bottom: @maestroSpace;
+        }
+        .atk-maestro-menu-title header {
+            margin-left: -@maestroItemsLeftMargin;
+        }
+        .atk-maestro-menu-items .menu {
+            margin-left: @maestroItemsLeftMargin;
+        }
+    }
+}
+
+.atk-maestro-sidenav.active .atk-maestro-menu-title {
+    background-color: @blue;
+}
+
+// Layout
+header.ui.fixed.horizontal.menu {
+    min-height: 48px;
+}
+
+.ui.visible.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
+    width: ~"calc(100% - " @leftMenuWidth~ ")";
+}
+.ui.visible.left.sidebar ~ .atk-mainContainer,
+.ui.visible.left.sidebar ~ footer.atk-footer {
+    padding-left: @leftMenuWidth;
+}
+
+.ui.modal .atk-dialog-content.loading,
+.ui.modal .atk-dialog-content .ui.dimmer.active {
+    min-height: 100px;
+}
+
+.atk-hide-loading-content.loading::before {
+    background: rgba(255, 255, 255, 98%) !important;
+}
+
+.atk-layout {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+.atk-topMenuGhost.ui.menu {
+    display: none;
+    margin: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+header.atk-topMenu.ui.fixed.menu ~ .atk-topMenuGhost {
+    display: block;
+}
+header.atk-topMenu.ui.menu .item > .label {
+    margin-left: 0;
+}
+
+.atk-mainContainer {
+    flex: 1;
+    .atk-mainContainerWrapper {
+        padding: 2em;
+    }
+    &.atk-admin-layout {
+        margin-top: @adminMenuHeight;
+    }
+}
+footer.atk-footer {
+    .ui.divider,
+    .ui.segment {
+        margin: 0;
+    }
+}
+
+.ui.left.sidebar {
+    z-index: @sideNavIndex;
+}
+
+.atk-right-panel {
+    transition: box-shadow 0.2s, right 0.2s;
+    bottom: 0;
+    background-color: @atkSlidePanelColor;
+    box-shadow: 0 0 0 rgba(@black, 0%);
+    height: 99%;
+    right: -100%;
+    overflow-y: auto;
+    position: fixed;
+    width: 40%;
+    z-index: @rightPanelIndex;
+    &.atk-visible {
+        box-shadow: 0 0 5px rgba(@black, 20%);
+        right: 0%;
+    }
+}
+
+.atk-panel-close {
+    color: @black;
+}
+
+i.atk-panel-warning {
+    color: @atkSlidePanelColor;
+    &.atk-visible {
+        color: @orange;
+    }
+}
+
+.ui.left.sidebar.atk-sidenav {
+    top: @adminMenuHeight;
+}
+
+.atk-sidenav-content {
+    height: ~"calc(100% - " @atkFooterHeight + @adminMenuHeight~ ")";
+}
+
+.ui.left.sidebar.atk-sidenav {
+    width: @leftMenuWidth;
+}
+
+// table dropdown menu
+.atk-table-dropdown {
+    float: left;
+    i {
+        opacity: 0.3;
+    }
+    i.table-filter-on {
+        &::after {
+            content: "\f150";
+            color: dodgerblue;
+        }
+    }
+    i.table-filter-off {
+        &::after {
+            content: "\f150";
+        }
+    }
+    .dropdown {
+        .menu {
+            margin: 1em -10px 0 !important;
+        }
+    }
+}
+
+.atk-table-column-header {
+    white-space: pre-wrap;
+    &::after {
+        // display: none;
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+        content: "";
+        height: 1em;
+        width: auto;
+        opacity: 0.8;
+        margin: 0 0 0 0.5em;
+        font-family: Icons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
+        float: right;
+    }
+}
+.atk-table-column-header.ascending {
+    &::after {
+        content: "\f0d8";
+    }
+}
+
+.atk-table-column-header.descending {
+    &::after {
+        content: "\f0d7";
+    }
+}
+
+.ui.sortable.table thead th:not(.sortable) {
+    cursor: default;
+}
+
+// fix calendar input
+// https://github.com/atk4/ui/issues/1376
+.ui.input .ui.popup.calendar {
+    padding: 0;
+}
+
+// Components
+
+.ui.step,
+.ui.steps .step {
+    user-select: none;
+}
+
+.atk-overflow-auto {
+    overflow: auto;
+    border: 1px solid rgba(34, 36, 38, 15%);
+    margin-bottom: 1em;
+    > .ui.table {
+        margin-top: 0;
+    }
+}
+.atk-cell-expanded {
+    min-width: 320px;
+    max-width: 640px;
+    white-space: normal;
+}
+.atk-overlay.pushable {
+    height: 100%;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    top: @adminMenuHeight;
+    width: 100%;
+    z-index: @pushableIndex;
+    .pusher {
+        &::after {
+            height: 100%;
+            opacity: 1;
+            width: 100%;
+        }
+    }
+}
+
+// Responsive
+
+@media (max-width: (@desktopWidth - 1px)) {
+    .ui.left.sidebar ~ header.atk-topMenu.ui.menu.fixed {
+        transform: translate3d(0, 0, 0);
+        width: 100% !important;
+    }
+    .ui.visible.left.sidebar ~ .atk-mainContainer,
+    .ui.visible.left.sidebar ~ footer.atk-footer {
+        padding-left: 0;
+    }
+    .ui.left.sidebar {
+        opacity: 0;
+        pointer-events: none;
+        transform: translate3d(0, 0, 0);
+        visibility: visible;
+    }
+    body.atk-sidenav-visible {
+        &::after {
+            left: 0;
+            position: fixed;
+            top: 0;
+        }
+        .ui.left.sidebar {
+            opacity: 1;
+            pointer-events: auto;
+            .atk-leftMenuClose {
+                display: block;
+            }
+        }
+    }
+}
+@media (max-width: @desktopWidth - 1px) {
+    body.atk-sidenav-visible .atk-overlay.pushable {
+        opacity: 1;
+    }
+}
+
+@media (min-width: @tabletWidth) and (max-width: (@desktopWidth - 1px)) {
+    .atk-right-panel {
+        width: 65%;
+    }
+}
+@media (max-width: (@tabletWidth - 1px)) {
+    .atk-right-panel {
+        width: 95%;
+    }
+}
+
+// Print
+
+@media print {
+    .ui.visible.left.sidebar ~ .atk-mainContainer,
+    .ui.visible.left.sidebar ~ footer.atk-footer {
+        padding-left: 0;
+    }
+    .ui.left.sidebar,
+    .atk-topMenu,
+    .atk-topMenuGhost {
+        display: none !important;
+    }
+}

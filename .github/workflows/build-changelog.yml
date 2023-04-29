@@ -1,0 +1,16 @@
+name: Build changelog
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  update:
+    name: Update
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run
+        uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

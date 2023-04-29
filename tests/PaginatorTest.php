@@ -1,18 +1,17 @@
 <?php
 
-namespace atk4\ui\tests;
+declare(strict_types=1);
 
-class PaginatorTest extends \atk4\core\PHPUnit_AgileTestCase
+namespace Atk4\Ui\Tests;
+
+use Atk4\Core\Phpunit\TestCase;
+use Atk4\Ui\Paginator;
+
+class PaginatorTest extends TestCase
 {
-    /**
-     * Test constructor.
-     */
-    public $p;
-
-    public function addDataProvider()
+    public function addDataProvider(): array
     {
         return [
-            // cur, range, total, expected output
             [1, 1, 1, [1]],
             [1, 4, 1, [1]],
             [1, 1, 2, [1, 2]],
@@ -37,9 +36,9 @@ class PaginatorTest extends \atk4\core\PHPUnit_AgileTestCase
     /**
      * @dataProvider addDataProvider
      */
-    public function testPaginator($page, $range, $total, $expected)
+    public function testPaginator(int $page, int $range, int $total, array $expected): void
     {
-        $p = new \atk4\ui\Paginator(['page' => $page, 'range' => $range, 'total' => $total]);
-        $this->assertEquals($expected, $p->getPaginatorItems());
+        $p = new Paginator(['page' => $page, 'range' => $range, 'total' => $total]);
+        static::assertSame($expected, $p->getPaginatorItems());
     }
 }

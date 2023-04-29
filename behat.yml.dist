@@ -1,0 +1,29 @@
+default:
+  suites:
+    main:
+      paths:
+        features: '%paths.base%/tests-behat'
+      contexts:
+        - Behat\MinkExtension\Context\MinkContext
+        - Atk4\Ui\Behat\Context
+  extensions:
+    Behat\MinkExtension:
+      base_url: 'http://127.0.0.1:8888/demos'
+      sessions:
+        default:
+          selenium2:
+            browser: chrome
+            wd_host: 'http://127.0.0.1:4444/wd/hub'
+            capabilities:
+              extra_capabilities:
+                chrome:
+                  args:
+                    - '--no-sandbox'
+                    - '--headless'
+                    - '--disable-dev-shm-usage'
+                    - '--disable-gpu'
+                    - '--window-size=1280,720'
+                proxy:
+                  proxyType: manual
+                  httpProxy: 203.0.113.0:2
+                  sslProxy: 203.0.113.0:2

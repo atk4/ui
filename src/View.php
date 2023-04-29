@@ -1,99 +1,60 @@
 <?php
 
-// vim:ts=4:sw=4:et:fdm=marker:fdl=0
+declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
+
+use Atk4\Data\Model;
+use Atk4\Data\Persistence;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsFunction;
+use Atk4\Ui\Js\JsReload;
+use Atk4\Ui\Js\JsVueService;
+use Atk4\Ui\UserAction\ExecutorFactory;
 
 /**
- * Implements a most core view, which all of the other components descend
- * form.
+ * Base view of all UI components.
+ *
+ * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
  */
-class View implements jsExpressionable
+class View extends AbstractView
 {
-    use \atk4\core\ContainerTrait {
-        add as _add;
-    }
-    use \atk4\core\InitializerTrait {
-        init as _init;
-    }
-    use \atk4\core\TrackableTrait;
-    use \atk4\core\AppScopeTrait;
-    use \atk4\core\FactoryTrait;
-    use \atk4\core\DIContainerTrait {
-        setMissingProperty as _setMissingProperty;
-    }
-
-    // {{{ Properties of the class
-
     /**
-     * When you call render() this will be populated with JavaScript
-     * chains.
+     * When you call render() this will be populated with JavaScript chains.
      *
-     * @internal must remain public so that child views could interact
-     * with parent's $js.
+     * @var array<1|string, array<int, JsExpressionable>>
      *
-     * @var array
+     * @internal
      */
-    public $_js_actions = [];
+    protected array $_jsActions = [];
+
+    public ?Model $model = null;
 
     /**
-     * Data model.
-     *
-     * @var \atk4\data\Model
+     * Name of the region in the parent's template where this object will output itself.
      */
-    public $model;
+    public ?string $region = null;
 
     /**
-     * Name of the region in the parent's template where this object
-     * will output itself.
-     *
-     * @var string
-     */
-    public $region = null; //'Content';
-
-    /**
-     * Enables UI keyword for Semantic UI indicating that this is a
+     * Enables UI keyword for Fomantic-UI indicating that this is a
      * UI element. If you set this variable value to string, it will
      * be appended at the end of the element class.
      *
-     * @var bool
+     * @var bool|string
      */
     public $ui = false;
 
-    /**
-     * ID of the element, that's unique and is used in JS operations.
-     *
-     * @var string
-     */
-    public $id = null;
+    /** @var array<int, string> List of element CSS classes. */
+    public array $class = [];
 
-    /**
-     * List of classes that needs to be added.
-     *
-     * @var array
-     */
-    public $class = [];
+    /** @var array<string, string> Map of element CSS styles. */
+    public array $style = [];
 
-    /**
-     * List of custom CSS attributes.
-     *
-     * @var array
-     */
-    public $style = [];
-
-    /**
-     * List of custom attributes.
-     *
-     * @var array
-     */
-    public $attr = [];
-
-    /**
-     * Just here temporarily, until App picks it up.
-     *
-     * @var string
-     */
-    protected $skin;
+    /** @var array<string, string|int> Map of element attributes. */
+    public array $attr = [];
 
     /**
      * Template object, that, for most Views will be rendered to
@@ -101,9 +62,9 @@ class View implements jsExpressionable
      * a new Template will be generated during init() based on the
      * value of $defaultTemplate.
      *
-     * @var Template
+     * @var HtmlTemplate|null
      */
-    public $template = null;
+    public $template;
 
     /**
      * Specifies how to initialize $template.
@@ -111,80 +72,38 @@ class View implements jsExpressionable
      * If you specify a string, then it will be considered a filename
      * from which to load the $template.
      *
-     * @var string
+     * @var string|null
      */
     public $defaultTemplate = 'element.html';
 
-    /**
-     * Set static contents of this view.
-     *
-     * @var string|false
-     */
-    public $content = null;
+    /** @var string|null Set static contents of this view. */
+    public $content;
 
-    /**
-     * Change this if you want to substitute default "div" for something else.
-     *
-     * @var string
-     */
-    public $element = null;
+    /** Change this if you want to substitute default "div" for something else. */
+    public string $element = 'div';
 
-    /**
-     * If add() method is called, but current view is not part of render tree yet,
-     * then arguments to add() are simply stored in this array. When the view is
-     * initialized by calling init() or adding into App or another initialized View,
-     * then add() will be re-invoked with the contents of this array.
-     *
-     * @var array
-     */
-    protected $_add_later = [];
-
-    /**
-     * will be set to true after rendered. This is so that we don't render view twice.
-     *
-     * @var bool
-     */
-    protected $_rendered = false;
-
-    // }}}
+    /** @var ExecutorFactory|null */
+    protected $executorFactory;
 
     // {{{ Setting Things up
 
     /**
-     * May accept properties of a class, but if property is not defined, it will
-     * be used as a HTML class instead.
-     *
      * @param array|string $label
-     * @param array|string $class
-     *
-     * @throws Exception
      */
-    public function __construct($label = null, $class = null)
+    public function __construct($label = [])
     {
-        if (is_array($label)) {
-            // backwards mode
-            $defaults = $label;
-            if (isset($defaults[0])) {
-                $label = $defaults[0];
-                unset($defaults[0]);
-            } else {
-                $label = null;
-            }
-
-            if (isset($defaults[1])) {
-                $class = $defaults[1];
-                unset($defaults[1]);
-            }
-            $this->setDefaults($defaults);
+        if (func_num_args() > 1) { // prevent bad usage
+            throw new \Error('Too many method arguments');
         }
 
-        if ($label !== null) {
-            $this->content = $label;
+        $defaults = is_array($label) ? $label : [$label];
+
+        if (array_key_exists(0, $defaults)) {
+            $defaults['content'] = $defaults[0];
+            unset($defaults[0]);
         }
 
-        if ($class) {
-            $this->addClass($class);
-        }
+        $this->setDefaults($defaults);
     }
 
     /**
@@ -193,67 +112,62 @@ class View implements jsExpressionable
      *
      * Do not try to create your own "Model" implementation, instead you must be looking for
      * your own "Persistence" implementation.
-     *
-     * @param \atk4\data\Model $m
-     *
-     * @return \atk4\data\Model
      */
-    public function setModel(\atk4\data\Model $m)
+    public function setModel(Model $model): void
     {
-        $this->model = $m;
+        if ($this->model !== null && $this->model !== $model) {
+            throw new Exception('Different model is already set');
+        }
 
-        return $m;
+        $this->model = $model;
     }
 
     /**
      * Sets source of the View.
      *
-     * @param array $data   Array of data
      * @param array $fields Limit model to particular fields
-     *
-     * @return \atk4\data\Model
      */
-    public function setSource(array $data, $fields = null)
+    public function setSource(array $data, $fields = null): Model
     {
-        $this->setModel(new \atk4\data\Model(new \atk4\data\Persistence_Static($data)), $fields);
+        // ID with zero value is not supported (at least in MySQL replaces it with next AI value)
+        if (isset($data[0])) {
+            if (array_is_list($data)) {
+                $oldData = $data;
+                $data = [];
+                foreach ($oldData as $k => $row) {
+                    $data[$k + 1_000_000_000] = $row; // large offset to prevent accessing wrong data by old key
+                }
+            } else {
+                throw new Exception('Source data contains unsupported zero key');
+            }
+        }
+
+        $this->setModel(new Model(new Persistence\Static_($data)), $fields); // @phpstan-ignore-line
+        $this->model->getField($this->model->idField)->type = 'string'; // TODO probably unwanted
+
+        return $this->model;
     }
 
     /**
-     * TODO: move into trait because it's used so often.
-     *
-     * @param string $key
-     * @param mixed  $val
-     *
-     * @throws Exception
+     * @param mixed $value
      */
-    protected function setMissingProperty($key, $val)
+    protected function setMissingProperty(string $propertyName, $value): void
     {
-        if (is_numeric($key)) {
-            $key = $val;
-            $val = true;
-        }
-
-        if ($val === true) {
-            $this->addClass($key);
-
-            return;
-        } elseif ($val === false) {
-            $this->removeClass($key);
+        if (is_bool($value) && str_starts_with($propertyName, 'class.')) {
+            $class = substr($propertyName, strlen('class.'));
+            if ($value) {
+                $this->addClass($class);
+            } else {
+                $this->removeClass($class);
+            }
 
             return;
         }
 
-        throw new Exception([
-            'Unable to set property for the object',
-            'object'   => $this,
-            'property' => $key,
-            'value'    => $val,
-        ]);
+        parent::setMissingProperty($propertyName, $value);
     }
 
     /**
-     * Sets View element.
-     *
      * @param string $element
      *
      * @return $this
@@ -269,18 +183,22 @@ class View implements jsExpressionable
      * Makes view into a "<a>" element with a link.
      *
      * @param string|array $url
+     * @param string       $target
      *
      * @return $this
      */
-    public function link($url)
+    public function link($url, $target = null)
     {
         $this->element = 'a';
         if (is_string($url)) {
             $this->setAttr('href', $url);
-
-            return $this;
+        } else {
+            $this->setAttr('href', $this->url($url));
         }
-        $this->setAttr('href', $this->url($url));
+
+        if ($target !== null) {
+            $this->setAttr('target', $target);
+        }
 
         return $this;
     }
@@ -293,106 +211,117 @@ class View implements jsExpressionable
      * Called when view becomes part of render tree. You can override it but avoid
      * placing any "heavy processing" here.
      */
-    public function init()
+    protected function init(): void
     {
-        // set name and id of view
-        if (!$this->name) {
-            if (!$this->id) {
-                $this->id = $this->name = 'atk';
+        // almost every View needs an App to load a template, so assert App is set upfront
+        // TODO consider lazy loading the template
+        $app = $this->getApp();
+
+        $addLater = $this->_addLater;
+        $this->_addLater = null;
+
+        parent::init();
+
+        if ($this->region === null) {
+            $this->region = 'Content';
+        }
+
+        if ($this->template === null) {
+            if ($this->defaultTemplate !== null) {
+                $this->template = $app->loadTemplate($this->defaultTemplate);
             } else {
-                $this->name = $this->id;
-            }
-        } elseif (!$this->id) {
-            $this->id = $this->name;
-        }
-
-        // initialize
-        $this->_init();
-
-        if (!$this->app) {
-            $this->initDefaultApp();
-        }
-
-        if ($this->region && !$this->template && !$this->defaultTemplate && $this->owner && $this->owner->template) {
-            $this->template = $this->owner->template->cloneRegion($this->region);
-
-            $this->owner->template->del($this->region);
-        } else {
-            // set up template
-            if (is_string($this->defaultTemplate) && is_null($this->template)) {
-                $this->template = $this->app->loadTemplate($this->defaultTemplate);
-            }
-
-            if (!$this->region) {
-                $this->region = 'Content';
+                if ($this->region !== 'Content' && $this->issetOwner() && $this->getOwner()->template) {
+                    $this->template = $this->getOwner()->template->cloneRegion($this->region);
+                    $this->getOwner()->template->del($this->region);
+                }
             }
         }
 
-        if ($this->template && !isset($this->template->app) && isset($this->app)) {
-            $this->template->app = $this->app;
+        if ($this->template !== null && (!$this->template->issetApp() || $this->template->getApp() !== $app)) {
+            $this->template->setApp($app);
         }
 
-        // add default objects
-        foreach ($this->_add_later as list($object, $region)) {
+        foreach ($addLater as [$object, $region]) {
             $this->add($object, $region);
         }
 
-        $this->_add_later = [];
+        // allow for injecting the model with a seed
+        if ($this->model !== null) {
+            $this->setModel($this->model);
+        }
     }
 
-    /**
-     * For the absence of the application, we would add a very
-     * simple one.
-     */
-    protected function initDefaultApp()
+    public function getExecutorFactory(): ExecutorFactory
     {
-        $this->app = new App(['skin' => $this->skin, 'catch_exceptions' => false, 'always_run' => false]);
-        $this->app->init();
+        return $this->executorFactory ?? $this->getApp()->getExecutorFactory();
     }
 
     /**
      * In addition to adding a child object, sets up it's template
      * and associate it's output with the region in our template.
      *
-     * @param mixed  $seed   New object to add
-     * @param string $region
+     * @param AbstractView      $object
+     * @param string|array|null $region
      *
-     * @throws Exception
-     *
-     * @return View
+     * @return ($object is self ? self : AbstractView)
      */
-    public function add($seed, $region = null)
+    public function add($object, $region = null): AbstractView
     {
-        if ($this->_rendered) {
-            throw new Exception('You cannot add anything into the view after it was rendered');
+        if (func_num_args() > 2) { // prevent bad usage
+            throw new \Error('Too many method arguments');
         }
-        if (!$this->app) {
-            $this->_add_later[] = [$seed, $region];
 
-            return $seed;
+        if (!is_object($object)) { // @phpstan-ignore-line
+            // for BC do not throw
+            // later consider to accept strictly objects only
+            $object = AbstractView::fromSeed($object);
+        }
+
+        if (!$this->issetApp()) {
+            $this->_addLater[] = [$object, $region];
+
+            return $object;
         }
 
         if (is_array($region)) {
             $args = $region;
-            if (isset($args['region'])) {
-                $region = ['region'=>$args['region']];
-                unset($args['region']);
-            }
-        } elseif ($region) {
-            $args = null;
-            $region = ['region'=>$region];
+            $region = $args['region'] ?? null;
+            unset($args['region']);
         } else {
-            $args = null;
-            $region = null;
+            $args = [];
         }
 
-        // Create object first
-        $object = $this->factory($this->mergeSeeds($seed, ['View']), $region);
+        // set region
+        if ($region !== null) {
+            $object->setDefaults(['region' => $region]);
+        }
 
-        // Will call init() of the object
-        $object = $this->_add($object, $args);
+        // will call init() of the object
+        parent::add($object, $args);
 
         return $object;
+    }
+
+    /**
+     * Get closest owner which is instance of particular class.
+     *
+     * @template T of View
+     *
+     * @param class-string<T> $class
+     *
+     * @phpstan-return T|null
+     */
+    public function getClosestOwner(string $class): ?self
+    {
+        if (!$this->issetOwner()) {
+            return null;
+        }
+
+        if ($this->getOwner() instanceof $class) {
+            return $this->getOwner();
+        }
+
+        return $this->getOwner()->getClosestOwner($class);
     }
 
     // }}}
@@ -400,55 +329,46 @@ class View implements jsExpressionable
     // {{{ Manipulating classes and view properties
 
     /**
+     * TODO this method is hard to override, drop it from View.
+     *
      * Override this method without compatibility with parent, if you wish
      * to set your own things your own way for your view.
      *
-     * @param string|array $arg1
-     * @param string|null  $arg2
-     *
-     * @throws Exception
+     * @param mixed $arg1
+     * @param mixed $arg2
      *
      * @return $this
      */
     public function set($arg1 = null, $arg2 = null)
     {
-        if (is_string($arg1) && $arg2 !== null) {
-
-            // must be initialized
-            $this->template->set($arg1, $arg2);
-
-            return $this;
-        }
-
         if ($arg2 !== null) {
-            throw new Exception([
-                'Second argument to set() can be only passed if the first one is a string',
-                'arg1' => $arg1,
-                'arg2' => $arg2,
-            ]);
-        }
+            if (is_string($arg1)) {
+                $this->template->set($arg1, $arg2);
 
-        if (is_scalar($arg1)) {
-            $this->content = $arg1;
-
-            return $this;
-        }
-
-        if (is_array($arg1)) {
-            if (isset($arg1[0])) {
-                $this->content = $arg1[0];
+                return $this;
             }
-            $this->setDefaults($arg1);
+        } else {
+            if (is_string($arg1) || $arg1 === null) {
+                $this->content = $arg1;
 
-            return $this;
+                return $this;
+            }
+
+            if (is_array($arg1)) {
+                if (isset($arg1[0])) {
+                    $this->content = $arg1[0];
+                    unset($arg1[0]);
+                }
+                $this->setDefaults($arg1);
+
+                return $this;
+            }
         }
 
-        throw new Exception([
-            'Not sure what to do with argument',
-            'this' => $this,
-            'arg1' => $arg1,
-            'arg2' => $arg2,
-        ]);
+        throw (new Exception('Not sure what to do with argument'))
+            ->addMoreInfo('this', $this)
+            ->addMoreInfo('arg1', $arg1)
+            ->addMoreInfo('arg2', $arg2);
     }
 
     /**
@@ -456,25 +376,16 @@ class View implements jsExpressionable
      * Multiple CSS classes can also be added if passed as space separated
      * string or array of class names.
      *
-     * @param string|array $class CSS class name or array of class names
+     * @param string|array<int, string> $class
      *
      * @return $this
      */
     public function addClass($class)
     {
-        if (is_array($class)) {
-            $class = implode(' ', $class);
+        if ($class !== []) {
+            $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
+            $this->class = array_merge($this->class, $classArr);
         }
-
-        if (!$this->class) {
-            $this->class = [];
-        }
-
-        if (is_string($this->class)) {
-            throw new Exception(['Property $class should always be array', 'object' => $this, 'class' => $this->class]);
-        }
-
-        $this->class = array_merge($this->class, explode(' ', $class));
 
         return $this;
     }
@@ -482,18 +393,14 @@ class View implements jsExpressionable
     /**
      * Remove one or several CSS classes from the element.
      *
-     * @param array|string $class CSS class name or array of class names
+     * @param string|array<int, string> $class
      *
      * @return $this
      */
     public function removeClass($class)
     {
-        if (is_array($class)) {
-            $class = implode(' ', $class);
-        }
-
-        $class = explode(' ', $class);
-        $this->class = array_diff($this->class, $class);
+        $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
+        $this->class = array_diff($this->class, $classArr);
 
         return $this;
     }
@@ -502,45 +409,28 @@ class View implements jsExpressionable
      * Add inline CSS style to element.
      * Multiple CSS styles can also be set if passed as array.
      *
-     * @param string|array $property CSS Property or hash
-     * @param string       $style    CSS Style definition
+     * @param string|array<string, string> $property
+     * @param ($property is array ? never : string) $value
      *
      * @return $this
-     *
-     * @todo Think about difference between setStyle and addStyle
      */
-    public function setStyle($property, $style = null)
+    public function setStyle($property, string $value = null)
     {
-        if (is_array($property) && $style === null) {
+        if (is_array($property)) {
             foreach ($property as $k => $v) {
-                $this->addStyle($k, $v);
+                $this->setStyle($k, $v);
             }
-
-            return $this;
+        } else {
+            $this->style[$property] = $value;
         }
-        $this->style[$property] = $style;
 
         return $this;
     }
 
     /**
-     * @param string|array $property CSS Property or hash
-     * @param string       $style    CSS Style definition
+     * Remove inline CSS style from element.
      *
-     * @return $this
-     *
-     * @see setStyle()
-     */
-    public function addStyle($property, $style = null)
-    {
-        return $this->setStyle($property, $style);
-    }
-
-    /**
-     * Remove inline CSS style from element, if it was added with setStyle
-     * or addStyle.
-     *
-     * @param string $property CSS Property to remove
+     * @param string $property
      *
      * @return $this
      */
@@ -554,20 +444,20 @@ class View implements jsExpressionable
     /**
      * Set attribute.
      *
-     * @param string|array $attr  Attribute name or hash
-     * @param string       $value Attribute value
+     * @param string|int|array<string, string|int> $name
+     * @param ($name is array ? never : string|int) $value
      *
      * @return $this
      */
-    public function setAttr($attr, $value = null)
+    public function setAttr($name, $value = null)
     {
-        if (is_array($attr)) {
-            $this->attr = array_merge($this->attr, $attr);
-
-            return $this;
+        if (is_array($name)) {
+            foreach ($name as $k => $v) {
+                $this->setAttr($k, $v);
+            }
+        } else {
+            $this->attr[$name] = $value;
         }
-
-        $this->attr[$attr] = $value;
 
         return $this;
     }
@@ -575,23 +465,78 @@ class View implements jsExpressionable
     /**
      * Remove attribute.
      *
-     * @param string|array $property Attribute name or hash
+     * @param string|array<int, string> $name
      *
      * @return $this
      */
-    public function removeAttr($property)
+    public function removeAttr($name)
     {
-        if (is_array($property)) {
-            foreach ($property as $v) {
-                unset($this->attr[$v]);
+        if (is_array($name)) {
+            foreach ($name as $v) {
+                $this->removeAttr($v);
             }
-
-            return $this;
+        } else {
+            unset($this->attr[$name]);
         }
 
-        unset($this->attr[$property]);
-
         return $this;
+    }
+
+    // }}}
+
+    // {{{ Sticky URLs
+
+    /** @var array<string, string> stickyGet arguments */
+    public $stickyArgs = [];
+
+    /**
+     * Build an URL which this view can use for JS callbacks.
+     *
+     * @param array $page
+     */
+    public function jsUrl($page = []): string
+    {
+        return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
+    }
+
+    /**
+     * Build an URL which this view can use for callbacks.
+     *
+     * @param string|array $page URL as string or array with page name as first element and other GET arguments
+     */
+    public function url($page = []): string
+    {
+        return $this->getApp()->url($page, false, $this->_getStickyArgs());
+    }
+
+    /**
+     * Get sticky arguments defined by the view and parents (including API).
+     */
+    protected function _getStickyArgs(): array
+    {
+        if ($this->issetOwner()) {
+            $stickyArgs = array_merge($this->getOwner()->_getStickyArgs(), $this->stickyArgs);
+        } else {
+            $stickyArgs = $this->stickyArgs;
+        }
+
+        return $stickyArgs;
+    }
+
+    /**
+     * Mark GET argument as sticky. Calling url() on this view or any
+     * sub-views will embedd the value of this GET argument.
+     *
+     * If GET argument is empty or false, it won't make into URL.
+     *
+     * If GET argument is not presently set you can specify a 2nd argument
+     * to forge-set the GET argument for current view and it's sub-views.
+     */
+    public function stickyGet(string $name, string $newValue = null): ?string
+    {
+        $this->stickyArgs[$name] = $newValue ?? $this->stickyArgs[$name] ?? $_GET[$name] ?? null;
+
+        return $this->stickyArgs[$name];
     }
 
     // }}}
@@ -601,84 +546,113 @@ class View implements jsExpressionable
     /**
      * View-specific rendering stuff. Feel free to replace this method with
      * your own. View::renderView contains some logic that integrates with
-     * semanticUI.
-     *
-     * NOTE: maybe in the future, SemanticUI-related stuff needs to go into
-     * a separate class.
+     * Fomantic-UI.
      */
-    public function renderView()
+    protected function renderView(): void
     {
-        if ($this->class) {
-            $this->template->append('class', implode(' ', $this->class));
-        }
-
-        if ($this->style) {
-            $style = $this->style;
-            array_walk(
-                $style,
-                function (&$item, $key) {
-                    $item = $key.':'.$item;
-                }
-            );
-            $this->template->append('style', implode(';', $style));
-        }
-
-        if ($this->ui) {
-            if (is_string($this->ui)) {
-                $this->template->set('_class', $this->ui);
-            }
-        } else {
-            $this->template->tryDel('_ui');
-        }
-
-        if ($this->id) {
-            $this->template->trySet('_id', $this->id);
-        }
-
-        if ($this->element) {
+        if ($this->element !== 'div') {
             $this->template->set('_element', $this->element);
+        } else {
+            $this->template->trySet('_element', $this->element);
         }
 
-        if ($this->attr) {
-            $tmp = [];
-            foreach ($this->attr as $attr => $val) {
-                $tmp[] = $attr.'="'.$this->app->encodeAttribute($val).'"';
+        $app = $this->getApp();
+        if (!$app->isVoidTag($this->element)) {
+            $this->template->tryDangerouslySetHtml('_element_end', '</' . $this->element . '>');
+        }
+
+        $attrsHtml = [];
+
+        if ($this->name) {
+            $attrsHtml[] = 'id="' . $app->encodeHtml($this->name) . '"';
+
+            // TODO hack for template/tabs.html
+            if ($this->template->hasTag('Tabs')) {
+                array_pop($attrsHtml);
             }
-            $this->template->setHTML('attributes', implode(' ', $tmp));
+
+            // TODO hack for template/form/control/upload.html
+            if ($this->template->hasTag('AfterBeforeInput') && str_contains($this->template->renderToHtml(), ' type="file"')) {
+                array_pop($attrsHtml);
+            }
+
+            // needed for templates like '<input id="{$_id}_input">'
+            $this->template->trySet('_id', $this->name);
+        }
+
+        $class = null;
+        if ($this->class !== []) {
+            $class = implode(' ', $this->class);
+
+            // needed for templates like template/form/layout/generic-input.html
+            $this->template->tryAppend('class', implode(' ', $this->class));
+        }
+        if ($this->ui !== false) {
+            $class = 'ui ' . $this->ui . ($class !== null ? ' ' . $class : '');
+        }
+        if ($class !== null) {
+            $attrsHtml[] = 'class="' . $app->encodeHtml($class) . '"';
+        }
+
+        if ($this->style !== []) {
+            $styles = [];
+            foreach ($this->style as $k => $v) {
+                $styles[] = $k . ': ' . $app->encodeHtml($v) . ';';
+            }
+            $attrsHtml[] = 'style="' . implode(' ', $styles) . '"';
+
+            // needed for template/html.html
+            $this->template->tryDangerouslyAppendHtml('style', implode(' ', $styles));
+        }
+
+        foreach ($this->attr as $k => $v) {
+            $attrsHtml[] = $k . '="' . $app->encodeHtml((string) $v) . '"';
+        }
+
+        if ($attrsHtml !== []) {
+            try {
+                $this->template->dangerouslySetHtml('attributes', implode(' ', $attrsHtml));
+            } catch (Exception $e) {
+                // TODO hack to ignore missing '{$attributes}' mostly in layout templates
+                if (count($attrsHtml) === 1 ? !str_starts_with(reset($attrsHtml), 'id=') : !$this instanceof Lister) {
+                    throw $e;
+                }
+            }
         }
     }
 
     /**
-     * Recursively render all children, placing their
-     * output in our template.
+     * Recursively render all children, placing their output in our template.
      */
-    public function recursiveRender()
+    protected function recursiveRender(): void
     {
         foreach ($this->elements as $view) {
             if (!$view instanceof self) {
                 continue;
             }
 
-            $this->template->appendHTML($view->region, $view->getHTML());
+            $this->template->dangerouslyAppendHtml($view->region, $view->getHtml());
 
-            if ($view->_js_actions) {
-                $this->_js_actions = array_merge_recursive($this->_js_actions, $view->_js_actions);
+            // collect JS from everywhere
+            foreach ($view->_jsActions as $when => $actions) {
+                foreach ($actions as $action) {
+                    $this->_jsActions[$when][] = $action;
+                }
             }
         }
 
-        if (isset($this->content) && $this->content !== false) {
+        if ($this->content !== null) {
             $this->template->append('Content', $this->content);
         }
     }
 
     /**
-     * Render everything recursively, render ourselves but don't return
-     * anything just yet.
+     * Render everything recursively, render ourselves but don't return anything just yet.
      */
-    public function renderAll()
+    public function renderAll(): void
     {
-        if (!$this->_initialized) {
-            $this->init();
+        if (!$this->isInitialized()) {
+            $this->invokeInit();
         }
 
         if (!$this->_rendered) {
@@ -690,55 +664,53 @@ class View implements jsExpressionable
     }
 
     /**
-     * This method is for those cases when developer want to simply render his
-     * view and grab HTML himself.
-     *
-     * @param bool $force_echo
-     *
-     * @return string
+     * For Form::renderTemplateToHtml() only.
      */
-    public function render($force_echo = true)
+    protected function renderTemplateToHtml(): string
     {
-        $this->renderAll();
-
-        return
-            $this->getJS($force_echo).
-            $this->template->render();
+        return $this->template->renderToHtml();
     }
 
     /**
-     * Render View using json format.
-     *
-     * @param bool $force_echo
-     *
-     * @return string
+     * This method is for those cases when developer want to simply render his
+     * view and grab HTML himself.
      */
-    public function renderJSON($force_echo = true)
+    public function render(): string
     {
-        try {
-            $this->renderAll();
+        $this->renderAll();
 
-            return json_encode(['success' => true,
-                                'message' => 'Success',
-                                'atkjs'   => $this->getJS($force_echo),
-                                'html'    => $this->template->render(),
-                                'id'      => $this->name, ]);
-        } catch (\Exception $exception) {
-            $l = $this->add(new self());
-            if ($exception instanceof \atk4\core\Exception) {
-                $l->template->setHTML('Content', $exception->getHTML());
-            } elseif ($exception instanceof \Error) {
-                $l->add(new self(['ui' => 'message', get_class($exception).': '.
-                                                            $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
-                    'error', ]));
-                $l->add(new Text())->set(nl2br($exception->getTraceAsString()));
-            } else {
-                $l->add(new self(['ui' => 'message', get_class($exception).': '.$exception->getMessage(), 'error']));
-            }
+        $js = $this->getJs();
 
-            return json_encode(['success' => false,
-                                'message' => $l->getHTML(), ]);
-        }
+        return ($js !== '' ? $this->getApp()->getTag('script', [], '$(function () {' . $js . ';});') : '')
+               . $this->renderTemplateToHtml();
+    }
+
+    /**
+     * This method is to render view to place inside a Fomantic-UI Tab.
+     */
+    public function renderToTab(): array
+    {
+        $this->renderAll();
+
+        return [
+            'atkjs' => $this->getJsRenderActions(),
+            'html' => $this->renderTemplateToHtml(),
+        ];
+    }
+
+    /**
+     * Render View using JSON format.
+     */
+    public function renderToJsonArr(): array
+    {
+        $this->renderAll();
+
+        return [
+            'success' => true,
+            'atkjs' => $this->getJs(),
+            'html' => $this->renderTemplateToHtml(),
+            'id' => $this->name,
+        ];
     }
 
     /**
@@ -747,15 +719,15 @@ class View implements jsExpressionable
      *
      * @return string
      */
-    public function getHTML()
+    public function getHtml()
     {
-        if (isset($_GET['__atk_reload']) && $_GET['__atk_reload'] == $this->name) {
-            $this->app->terminate($this->renderJSON());
+        if (isset($_GET['__atk_reload']) && $_GET['__atk_reload'] === $this->name) {
+            $this->getApp()->terminateJson($this);
         }
 
         $this->renderAll();
 
-        return $this->template->render();
+        return $this->renderTemplateToHtml();
     }
 
     // }}}
@@ -764,7 +736,7 @@ class View implements jsExpressionable
 
     /**
      * Views in Agile UI can assign javascript actions to themselves. This
-     * is done by calling $view->js() method which returns instance of jsChain
+     * is done by calling $view->js() method which returns instance of JsChain
      * object that is initialized to the object itself. Normally this chain
      * will map into $('#object_id') and calling additional methods will map
      * into additional calls.
@@ -776,353 +748,408 @@ class View implements jsExpressionable
      *
      * (Do not make mistake by specifying "true" instead of true)
      *
-     * action = false will still return jsChain but will not bind it.
+     * action = false will still return JsChain but will not bind it.
      * You can bind it by passing object into on() method.
      *
      * 1. Calling with arguments:
-     *
-     * $view->js();                   // technically does nothing
-     * $a = $view->js()->hide();      // creates chain for hiding $view but does not
-     *                                // bind to event yet.
+     * $view->js(); // technically does nothing
+     * $a = $view->js()->hide(); // creates chain for hiding $view but does not bind to event yet.
      *
      * 2. Binding existing chains
-     * $img->on('mouseenter', $a);    // binds previously defined chain to event on
-     *                                // event of $img.
+     * $img->on('mouseenter', $a); // binds previously defined chain to event on event of $img.
      *
-     * Produced code: $('#img_id').on('mouseenter', function(ev){ ev.preventDefault();
-     *    $('#view1').hide(); });
+     * Produced code: $('#img_id').on('mouseenter', function (event) {
+     *     event.preventDefault();
+     *     event.stopPropagation();
+     *     $('#view1').hide();
+     * });
      *
-     * 3. $button->on('click',$form->js()->submit());
-     *                                // clicking button will result in form submit
+     * 3. $button->on('click', $form->js()->submit()); // clicking button will result in form submit
      *
      * 4. $view->js(true)->find('.current')->text($text);
      *
      * Will convert calls to jQuery chain into JavaScript string:
-     *  $('#view').find('.current').text('abc');    // The $text will be json-encoded
-     *                                              // to avoid JS injection.
+     *  $('#view').find('.current').text('abc'); // the text will be JSON encoded to avoid JS injection
      *
-     * Documentation:
+     * @param bool|string $when Event when chain will be executed
+     * @param ($when is false ? null : JsExpressionable|null) $action   JavaScript action
+     * @param string|self|null $selector If you wish to override jQuery($selector)
      *
-     * @link http://agile-ui.readthedocs.io/en/latest/js.html
-     *
-     * @param string|bool|null $when     Event when chain will be executed
-     * @param jsExpression     $action   JavaScript action
-     * @param string           $selector If you wish to override jQuery($selector)
-     *
-     * @return jQuery
+     * @return ($action is null ? Jquery : null)
      */
-    public function js($when = null, $action = null, $selector = null)
+    public function js($when = false, $action = null, $selector = null)
     {
-        if ($selector) {
-            $chain = new jQuery($selector);
+        // binding on a specific event
+        // TODO allow only boolean $when, otherwise user should use self::on() method
+        if (!is_bool($when)) {
+            return $this->on($when, $selector, $action);
+        }
+
+        if ($action !== null) {
+            $res = null;
         } else {
-            $chain = new jQuery($this);
-        }
-
-        // Substitute $when to make it better work as a array key
-        if ($when === true) {
-            $this->_js_actions[$when][] = $chain;
-
-            if ($action) {
-                $this->_js_actions[$when][] = $action;
+            $action = new Jquery($this);
+            if ($selector) {
+                $action->find($selector);
             }
-
-            return $chain;
+            $res = $action;
         }
 
-        if ($when === false || $when === null) {
-            return $chain;
+        if ($when === true) {
+            $this->_jsActions[$when][] = $action;
         }
 
-        // next - binding on a specific event
-        $action = (new jQuery($this))
-            ->bind($when, new jsFunction([$chain, $action]));
+        return $res;
+    }
 
-        $this->_js_actions[$when][] = $action;
+    /**
+     * Create Vue.js instance.
+     * Vue.js instance can be created from Atk4\Ui\View.
+     *
+     * Component managed and defined by atk does not need componentDefinition variable name
+     * because these are already loaded within the atk js namespace.
+     * When creating your own component externally, you must supply the variable name holding
+     * your Vue component definition. This definition must be also accessible within the window javascript
+     * object. This way, you do not need to load Vue js file since it has already being include within
+     * atkjs-ui.js build.
+     *
+     * If the external component use other components, it is possible to register them using
+     * vueService getVue() method. This method return the current Vue object.
+     * ex: atk.vueService.getVue().component('external_component', externalComponent). This is the same
+     * as Vue.component() method.
+     *
+     * @param string                $component           The component name
+     * @param array                 $initData            The component properties passed as the initData prop.
+     *                                                   This is the initial data pass to your main component via the initData bind property
+     *                                                   of the vue component instance created via the vueService.
+     * @param JsExpressionable|null $componentDefinition component definition object
+     * @param string|self|null      $selector            the selector for creating the base root object in Vue
+     *
+     * @return $this
+     */
+    public function vue($component, $initData = [], $componentDefinition = null, $selector = null)
+    {
+        if (!$selector) {
+            $selector = '#' . $this->getHtmlId();
+        }
 
-        return $chain;
+        if ($componentDefinition) {
+            $chain = (new JsVueService())->createVue($selector, $component, $componentDefinition, $initData);
+        } else {
+            $chain = (new JsVueService())->createAtkVue($selector, $component, $initData);
+        }
+
+        $this->js(true, $chain);
+
+        return $this;
+    }
+
+    /**
+     * Emit an event on atkEvent bus.
+     *
+     * example of adding a listener on for an emit event.
+     *
+     * atk.eventBus.on('eventName', (data) => {
+     *     console.log(data)
+     * });
+     *
+     * Note: In order to make sure your event is unique within atk, you can
+     * use the view name in it.
+     *    $this->jsEmitEvent($this->name . '-my-event', $data)
+     */
+    public function jsEmitEvent(string $eventName, array $eventData = []): JsChain
+    {
+        return (new JsChain('atk.eventBus'))->emit($eventName, $eventData);
+    }
+
+    /**
+     * Get Local and Session web storage associated with this view.
+     * Web storage can be retrieved using a $view->jsReload() request.
+     */
+    public function jsGetStoreData(): array
+    {
+        $data = [];
+        $data['local'] = $this->getApp()->decodeJson($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null');
+        $data['session'] = $this->getApp()->decodeJson($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null');
+
+        return $data;
+    }
+
+    /**
+     * Clear Web storage data associated with this view.
+     */
+    public function jsClearStoreData(bool $useSession = false): JsExpressionable
+    {
+        $type = $useSession ? 'session' : 'local';
+
+        $name = $this->name;
+        if (!$name) {
+            throw new Exception('View property name needs to be set');
+        }
+
+        return (new JsChain('atk.dataService'))->clearData($name, $type);
+    }
+
+    /**
+     * Add Web storage for this specific view.
+     * Data will be store as json value where key name
+     * will be the name of this view.
+     *
+     * Data added to web storage is merge against previous value.
+     *  $v->jsAddStoreData(['args' => ['path' => '.']]);
+     *  $v->jsAddStoreData(['args' => ['path' => '/'], 'fields' => ['name' => 'test']]]);
+     *
+     *  Final store value will be: ['args' => ['path' => '/'], 'fields' => ['name' => 'test']];
+     */
+    public function jsAddStoreData(array $data, bool $useSession = false): JsExpressionable
+    {
+        $type = $useSession ? 'session' : 'local';
+
+        $name = $this->name;
+        if (!$name) {
+            throw new Exception('View property name needs to be set');
+        }
+
+        return (new JsChain('atk.dataService'))->addJsonData($name, $this->getApp()->encodeJson($data), $type);
     }
 
     /**
      * Returns JS for reloading View.
      *
-     * @param array $args
+     * @param array                 $args
+     * @param JsExpressionable|null $afterSuccess
+     * @param array                 $apiConfig
      *
-     * @return \atk4\ui\jsReload
+     * @return JsReload
      */
-    public function jsReload($args = [])
+    public function jsReload($args = [], $afterSuccess = null, $apiConfig = []): JsExpressionable
     {
-        return new jsReload($this, $args);
+        return new JsReload($this, $args, $afterSuccess, $apiConfig);
     }
 
     /**
      * Views in Agile Toolkit can assign javascript actions to themselves. This
      * is done by calling $view->js() or $view->on().
      *
-     * on() method is similar to jQuery on() method.
+     * on() method is similar to jQuery on(event, [selector, ] action) method.
      *
-     * on(event, [selector,] action)
+     * When no $action is passed, the on() method returns a chain corresponding to the affected element.
      *
-     * Method on() also returns a chain, that will correspond affected element.
-     * Here are some ways to use on();
+     * Here are some ways to use on():
      *
+     * // clicking on button will make the $view disappear
      * $button->on('click', $view->js()->hide());
      *
-     *   // clicking on button will make the $view dissapear
-     *
+     * // clicking on <a class="clickable"> will make it's parent disappear
      * $view->on('click', 'a[data=clickable]')->parent()->hide();
-     *
-     *   // clicking on <a class="clickable"> will make it's parent dissapear
      *
      * Finally, it's also possible to use PHP closure as an action:
      *
-     * $view->on('click', 'a', function($js, $data){
+     * $view->on('click', 'a', function (Jquery $js, $data) {
      *   if (!$data['clickable']) {
-     *      return new jsExpression('alert([])', ['This record is not clickable'])
+     *      return new JsExpression('alert([])', ['This record is not clickable'])
      *   }
      *   return $js->parent()->hide();
      * });
      *
-     * For more information on how this works, see documentation:
+     * @param string $event JavaScript event
+     * @param ($action is object ? string : ($action is null ? string : never)|JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction) $selector Optional jQuery-style selector
+     * @param ($selector is string|null ? JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction : array) $action code to execute
      *
-     * @link http://agile-ui.readthedocs.io/en/latest/js.html
-     *
-     * @param string           $event    JavaScript event
-     * @param string           $selector Optional jQuery-style selector
-     * @param jsChain|callable $action   code to execute
-     * @param array            $defaults Options
-     *
-     * @throws Exception
-     *
-     * @return jQuery
+     * @return ($selector is null|string ? ($action is null ? Jquery : null) : ($action is null|array ? Jquery : null))
      */
-    public function on($event, $selector = null, $action = null, $defaults = null)
+    public function on(string $event, $selector = null, $action = null, array $defaults = [])
     {
         // second argument may be omitted
-        if (!is_string($selector) && (is_null($action) || is_array($action))) {
-            $defaults = $action;
+        if ($selector !== null && !is_string($selector) && ($action === null || is_array($action)) && $defaults === []) {
+            $defaults = $action ?? [];
             $action = $selector;
             $selector = null;
         }
 
-        $arguments = isset($defaults['args']) ? $defaults['args'] : [];
-        if (is_null($defaults)) {
-            $defaults = [];
-        }
+        // check for arguments
+        $arguments = $defaults['args'] ?? [];
+        unset($defaults['args']);
 
-        // all non-key items of defaults are actually arguments
+        // all values with int keys of defaults are arguments
         foreach ($defaults as $key => $value) {
-            if (is_numeric($key)) {
+            if (is_int($key)) {
                 $arguments[] = $value;
                 unset($defaults[$key]);
             }
         }
 
-        $actions = [];
-        $actions['preventDefault'] = true;
-        $actions['stopPropagation'] = true;
-        if (isset($defaults['preventDefault'])) {
-            $actions['preventDefault'] = $defaults['preventDefault'];
-        }
-        if (isset($defaults['stopPropagation'])) {
-            $actions['stopPropagation'] = $defaults['stopPropagation'];
+        if ($action !== null) {
+            $res = null;
+        } else {
+            $action = new Jquery();
+            $res = $action;
         }
 
-        if (is_callable($action) || (is_array($action) && isset($action[0]) && is_callable($action[0]))) {
-            // if callable $action is passed, then execute ajaxec()
+        // set preventDefault and stopPropagation by default
+        $eventStatements = [];
+        $eventStatements['preventDefault'] = $defaults['preventDefault'] ?? true;
+        $eventStatements['stopPropagation'] = $defaults['stopPropagation'] ?? true;
 
+        $lazyJsRenderFx = function (\Closure $fx): JsExpressionable {
+            return new class($fx) implements JsExpressionable {
+                public \Closure $fx;
+
+                /**
+                 * @param \Closure(JsExpressionable): JsExpressionable $fx
+                 */
+                public function __construct(\Closure $fx)
+                {
+                    $this->fx = $fx;
+                }
+
+                public function jsRender(): string
+                {
+                    return ($this->fx)()->jsRender();
+                }
+            };
+        };
+
+        // dealing with callback action
+        if ($action instanceof \Closure || (is_array($action) && ($action[0] ?? null) instanceof \Closure)) {
+            $actions = [];
             if (is_array($action)) {
                 $urlData = $action;
                 unset($urlData[0]);
+                foreach ($urlData as $a) {
+                    $actions[] = $a;
+                }
                 $action = $action[0];
-            } else {
-                $urlData = [];
             }
 
             // create callback, that will include event as part of the full name
-            $this->_add($cb = new jsCallback(), ['desired_name' => $event]);
-
-            $cb->set(function () use ($action) {
-                $args = func_get_args();
-                $args[0] = new jQuery(new jsExpression('this'));
-
-                return call_user_func_array($action, $args);
-            }, $arguments);
-
-            if (isset($defaults['confirm'])) {
-                $cb->setConfirm($defaults['confirm']);
+            $cb = JsCallback::addTo($this, [], [['desired_name' => $event]]);
+            if ($defaults['apiConfig'] ?? null) {
+                $cb->apiConfig = $defaults['apiConfig'];
             }
 
-            $actions[] = $cb;
-        //$thisAction->api(['on'=>'now', 'url'=>$cb->getJSURL(), 'urlData'=>$urlData, 'obj'=>new jsExpression('this')]);
-        } elseif ($action) {
-            // otherwise include
-            $actions[] = $action;
-        }
+            $cb->set(function ($chain, ...$args) use ($action) {
+                return $action($chain, ...$args);
+            }, $arguments);
 
-        $chain = new jQuery();
-        $actions[] = $chain;
+            $actions[] = $lazyJsRenderFx(fn () => $cb->jsExecute());
+        } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof UserAction\SharedExecutor || $action instanceof Model\UserAction) {
+            $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->createExecutor($action, $this) : $action;
 
-        $action = new jsFunction($actions);
+            $setupNonSharedExecutorFx = function (UserAction\ExecutorInterface $ex) use (&$defaults, &$arguments): void {
+                /** @var AbstractView&UserAction\ExecutorInterface $ex https://github.com/phpstan/phpstan/issues/3770 */
+                $ex = $ex;
 
-        if ($selector) {
-            $this->js(true)->on($event, $selector, $action);
+                if (isset($arguments['id'])) {
+                    $arguments[$ex->name] = $arguments['id'];
+                    unset($arguments['id']);
+                } elseif (isset($arguments[0])) {
+                    // if id is not specify we assume arguments[0] is the model id.
+                    $arguments[$ex->name] = $arguments[0];
+                    unset($arguments[0]);
+                }
+
+                if ($ex instanceof UserAction\JsCallbackExecutor) {
+                    $confirmation = $ex->getAction()->getConfirmation();
+                    if ($confirmation) {
+                        $defaults['confirm'] = $confirmation;
+                    }
+                    if ($defaults['apiConfig'] ?? null) {
+                        $ex->apiConfig = $defaults['apiConfig'];
+                    }
+                }
+            };
+
+            if ($ex instanceof UserAction\SharedExecutor) {
+                $setupNonSharedExecutorFx($ex->getExecutor());
+                $actions = [$ex->getExecutor() instanceof UserAction\JsCallbackExecutor
+                    ? $lazyJsRenderFx(fn () => $ex->jsExecute($arguments))
+                    : $ex->jsExecute($arguments)];
+            } elseif ($ex instanceof UserAction\JsExecutorInterface && $ex instanceof self) {
+                $setupNonSharedExecutorFx($ex);
+                $ex->executeModelAction();
+                $actions = [$ex->jsExecute($arguments)];
+            } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
+                $setupNonSharedExecutorFx($ex);
+                $ex->executeModelAction();
+                $actions = [$lazyJsRenderFx(fn () => $ex->jsExecute($arguments))];
+            } else {
+                throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or UserAction\JsExecutorInterface');
+            }
+        } elseif ($action instanceof JsCallback) {
+            $actions = [$lazyJsRenderFx(fn () => $action->jsExecute())];
         } else {
-            $this->js(true)->on($event, $action);
+            $actions = [$action];
         }
 
-        return $chain;
+        // Do we need confirm action.
+        if ($defaults['confirm'] ?? null) {
+            array_unshift($eventStatements, new JsExpression('$.atkConfirm({ message: [confirm], onApprove: [action], options: { button: { ok: [ok], cancel: [cancel] } }, context: this })', [
+                'confirm' => $defaults['confirm'],
+                'action' => new JsFunction([], $actions),
+                'ok' => $defaults['ok'] ?? 'Ok',
+                'cancel' => $defaults['cancel'] ?? 'Cancel',
+            ]));
+        } else {
+            $eventStatements = array_merge($eventStatements, $actions);
+        }
+
+        $eventFunction = new JsFunction([], $eventStatements);
+        $eventChain = new Jquery($this);
+        if ($selector) {
+            $eventChain->on($event, $selector, $eventFunction);
+        } else {
+            $eventChain->on($event, $eventFunction);
+        }
+
+        $this->_jsActions[$event][] = $eventChain;
+
+        return $res;
+    }
+
+    public function getHtmlId(): string
+    {
+        $this->assertIsInitialized();
+
+        return $this->name;
     }
 
     /**
-     * Convert View into a value in case it happens to be inside our json_encode (as argument to jsChain).
-     *
-     * @throws Exception
-     *
-     * @return string
+     * Return rendered js actions as a string.
      */
-    public function jsRender()
+    public function getJsRenderActions(): string
     {
-        if (!$this->_initialized) {
-            throw new Exception('Render tree must be initialized before materializing jsChains.');
+        $actions = [];
+        foreach ($this->_jsActions as $eventActions) {
+            foreach ($eventActions as $action) {
+                $actions[] = $action->jsRender();
+            }
         }
 
-        return json_encode('#'.$this->id);
+        return implode('; ', $actions);
     }
 
     /**
      * Get JavaScript objects from this render tree.
      *
-     * @param bool $force_echo
+     * TODO dedup with getJsRenderActions()
      *
      * @return string
      */
-    public function getJS($force_echo = false)
+    public function getJs()
     {
         $actions = [];
-
-        foreach ($this->_js_actions as $eventActions) {
+        foreach ($this->_jsActions as $eventActions) {
             foreach ($eventActions as $action) {
                 $actions[] = $action;
             }
         }
 
-        if (!$actions) {
+        if (count($actions) === 0) {
             return '';
         }
 
-        $actions['indent'] = '';
-
-        if (!$force_echo && $this->app && $this->app->hasMethod('jsReady')) {
-            $this->app->jsReady($actions);
-
-            return '';
-        }
-
-        // delegate $action rendering in hosting app if exist.
-        if ($this->app && $this->app->hasMethod('getViewJS')) {
-            return $this->app->getViewJS($actions);
-        }
-
-        $ready = new jsFunction($actions);
-
-        return "<script>\n".
-            (new jQuery($ready))->jsRender().
-            '</script>';
-    }
-
-    // }}}
-
-    // {{{ Sticky URLs
-
-    /** @var array stickyGet arguments */
-    public $stickyArgs = [];
-
-    /** @var array Cached stickyGet arguments */
-    public $_stickyArgsCached = null;
-
-    /**
-     * Build an URL which this view can use for js call-backs. It should
-     * be guaranteed that requesting returned URL would at some point call
-     * $this->init().
-     *
-     * @param array $page
-     *
-     * @return string
-     */
-    public function jsURL($page = [])
-    {
-        return $this->app->jsURL($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
-    }
-
-    /**
-     * Build an URL which this view can use for call-backs. It should
-     * be guaranteed that requesting returned URL would at some point call
-     * $this->init().
-     *
-     * @param string|array $page URL as string or array with page name as first element and other GET arguments
-     *
-     * @return string
-     */
-    public function url($page = [])
-    {
-        return $this->app->url($page, false, array_merge($this->_getStickyArgs($this->name), $this->stickyArgs));
-    }
-
-    /**
-     * Needed for tracking which view in a render tree called url().
-     *
-     * @internal
-     *
-     * @var [type]
-     */
-    public $_triggerBy = null;
-
-    /**
-     * Get sticky arguments defined by the view and parents (including API).
-     *
-     * @param string $triggerBy If exception occurs, will know which view called url()
-     *
-     * @return array
-     */
-    public function _getStickyArgs($triggerBy)
-    {
-        $this->_triggerBy = $triggerBy;
-        if ($this->owner && $this->owner instanceof self) {
-            $this->_stickyArgsCached = array_merge($this->owner->_getStickyArgs($triggerBy), $this->stickyArgs);
-        } else {
-            $this->_stickyArgsCached = [];
-        }
-
-        return $this->_stickyArgsCached;
-    }
-
-    /**
-     * Mark GET argument as sticky. Calling url() on this view or any
-     * sub-views will embedd the value of this GET argument.
-     *
-     * If GET argument is empty or false, it won't make into URL.
-     *
-     * If GET argument is not presently set you can specify a 2nd argument
-     * to forge-set the GET argument for current view and it's sub-views.
-     *
-     * @param string $name
-     * @param string $newValue
-     *
-     * @return string
-     */
-    public function stickyGet($name, $newValue = null)
-    {
-        if ($newValue) {
-            $this->stickyArgs[$name] = $newValue;
-
-            return $newValue;
-        }
-        if (isset($_GET[$name])) {
-            $this->stickyArgs[$name] = $_GET[$name];
-
-            return $_GET[$name];
-        }
+        return (new JsExpression('[]()', [new JsFunction([], $actions)]))->jsRender();
     }
 
     // }}}

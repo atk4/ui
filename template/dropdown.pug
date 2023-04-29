@@ -1,0 +1,13 @@
+<div {$attributes}>
+    .text {$Content}
+    i.dropdown.icon
+    .menu
+        | {rows}
+        | {row}
+        .item(data-value="{$id}")
+            | {$name}
+        |
+        | {/}
+        | {/}
+</div>
+= "\n"

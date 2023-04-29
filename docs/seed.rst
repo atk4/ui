@@ -2,9 +2,9 @@
 Purpose of the Seed
 ===================
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
-Agile UI relies on wide varietty of objects. For example :php:class:`Button` relies on
+Agile UI relies on wide variety of objects. For example :php:class:`Button` relies on
 :php:class:`Icon` object for its rendering. As a developer can create Icon object first,
 then pass it to the button::
 
@@ -12,14 +12,14 @@ then pass it to the button::
     $button = new Button('Hello');
     $button->icon = $icon;
 
-or you can divert icon creation until later by using Array / String for :php:attr:`Button::$icon` 
+or you can divert icon creation until later by using Array / String for :php:attr:`Button::$icon`
 property::
 
     $button = new Button('Hello');
     $button->icon = 'book';
 
 When you don't provide an object - string/array value is called "Seed" and will be used to
-locate and load class dynamically just when it's needed. 
+locate and load class dynamically just when it's needed.
 
 Seed has many advantages:
 
@@ -36,34 +36,34 @@ Growing Seed
 To grow a seed you need a factory. Factory is a trait implemented in atk4/core and used by all
 ATK UI classes::
 
-    $object = $app->factory($seed);
+    $object = Factory::factory($seed);
 
 In most cases you don't need to call factory yourself, methods which accept object/seed combinations
 will do it for you::
 
-    $app->add('Button');
-    // app will create instance of class \atk4\ui\Button
+    Button::addTo($app);
+    // app will create instance of class \Atk4\Ui\Button
 
 Seed, Object and Render Tree
 ----------------------------
 
 When calling :php:meth:`View::add()` not only your seed becomes an object, but it is also added to
-the :ref:`render tree`. 
+the :ref:`render tree`.
 
-Seeed Components
-================
+Seed Components
+===============
 
 For more information about seeds, merging seeds, factories and namespaces, see https://agile-core.readthedocs.io/.
 
 The most important points of a seed such as this one::
 
-    $seed = ['Button', 'hello', 'big red', 'icon'=>['book', 'red']];
+    $seed = [Button::class, 'hello', 'class.big red' => true, 'icon' => ['book', 'red']];
 
 are:
 
- - Element with index 0 is name of the class mapped into namespace \atk4\ui (by default).
+ - Element with index 0 is name of the class mapped into namespace \Atk4\Ui (by default).
  - Elements with numeric indexes 'hello' and 'big red' are passed to constructor of Button
- - Elements with named arguments are asigned to properties after invocation of constructor
+ - Elements with named arguments are assigned to properties after invocation of constructor
 
 Alternative ways to use Seed
 ----------------------------
@@ -71,37 +71,37 @@ Alternative ways to use Seed
 Some constructors may accept array as the first argument. It is also treated as a seed
 but without class (because class is already set)::
 
-    $button = new Button(['hello', 'big red', 'icon'=>['book', 'red']]);
+    $button = new Button(['hello', 'class.big red' => true, 'icon' => ['book', 'class.red' => true]]);
 
 It is alternatively possible to pass object as index 0 of the seed. In this case
 constructor is already invoked, so passing numeric values is not possible, but
 you still can pass some property values::
 
-    $seed = [new Button('hello', 'big red'), 'icon'=>['book', 'red']];
+    $seed = [new Button('hello', 'class.big red' => true), 'icon' => ['book', 'class.red' => true]];
 
 Additional cases
 ----------------
 
 An individual object may add more ways to deal with seed. For example, when adding columns
-to your Table you can specify seed for the decorator: :php:class:`atk4\\ui\\TableColumn\\Generic`::
+to your Table you can specify seed for the decorator: :php:class:`Atk4\\Ui\\\Table\\Column`::
 
-    $table->addColumn('salary', 'Money');
-
-    // or
-
-    $table->addColumn('salary', ['Money']);
+    $table->addColumn('salary', [\Atk4\Ui\Table\Column\Money::class]);
 
     // or
 
-    $table->addColumn('salary', new \atk4\ui\TableColumn\Money());
+    $table->addColumn('salary', [\Atk4\Ui\Table\Column\Money::class]);
 
     // or
 
-    $table->addColumn('salary', [new \atk4\ui\TableColumn\Money()]);
+    $table->addColumn('salary', new \Atk4\Ui\Table\Column\Money());
 
-Note that addColumn uses default namespace of \atk4\ui\TableColumn when seeding objects. Some
+    // or
+
+    $table->addColumn('salary', [new \Atk4\Ui\Table\Column\Money()]);
+
+Note that addColumn uses default namespace of `\\Atk4\\Ui\\Table\\Column` when seeding objects. Some
 other methods that use seeds are:
 
  - :php:meth:`Table::addColumn()`
- - :php:meth:`Form::addField()`
+ - :php:meth:`Form::addControl()`
 

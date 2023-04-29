@@ -1,7 +1,11 @@
 <?php
 
-namespace atk4\ui;
+declare(strict_types=1);
 
-class Exception extends \atk4\core\Exception
+namespace Atk4\Ui;
+
+use Atk4\Core\Exception as CoreException;
+
+class Exception extends CoreException
 {
 }

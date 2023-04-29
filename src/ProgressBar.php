@@ -1,24 +1,18 @@
 <?php
 
-namespace atk4\ui;
+declare(strict_types=1);
+
+namespace Atk4\Ui;
+
+use Atk4\Ui\Js\JsExpressionable;
 
 /**
- * Class implements ProgressBar.
- *
- * $bar = $app->add([
- *  'ProgressBar',
- *  10,
- *  'label' => 'Processing files',
- *  ]);
+ * $bar = ProgressBar::addTo($app, [10, 'label' => 'Processing files']);.
  */
 class ProgressBar extends View
 {
-    /**
-     * Contains a text label to display under the bar. Null/false will disable the label.
-     *
-     * @var string|null|false
-     */
-    public $label = null;
+    /** @var string|false|null Contains a text label to display under the bar. Null/false will disable the label. */
+    public $label;
 
     public $ui = 'progress';
 
@@ -26,52 +20,45 @@ class ProgressBar extends View
 
     /**
      * Value that appears on a progress bar. Set it through constructor, e.g.
-     * $app->add(['ProgressBar', 20]);.
+     * ProgressBar::addTo($app, [20]);.
      *
      * @var int
      */
     public $value = 0;
 
-    /**
-     * Indicates a maximum value of a progress bar.
-     *
-     * @var int
-     */
+    /** @var int Indicates a maximum value of a progress bar. */
     public $max = 100;
 
-    public function __construct($value = 0, $label = null, $class = null)
+    /**
+     * @param array|string $label
+     */
+    public function __construct(int $value = 0, $label = [])
     {
         $this->value = $value;
 
-        parent::__construct($label, $class);
+        parent::__construct($label);
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
-        $this->js(true)->progress(['percent'=>$this->value]);
+        $this->js(true)->progress(['percent' => $this->value]);
 
-        return parent::renderView();
+        parent::renderView();
     }
 
     /**
      * Return js action for incrementing progress by one.
-     *
-     * @return jsExpressionable
      */
-    public function jsIncrement()
+    public function jsIncrement(): JsExpressionable
     {
         return $this->js()->progress('increment');
     }
 
     /**
      * Return js action for setting value (client-side).
-     *
-     * @param int $value new value
-     *
-     * @return jsExpressionable
      */
-    public function jsValue($value)
+    public function jsValue(int $value): JsExpressionable
     {
-        return $this->js()->progress(['percent'=>(int) $value]);
+        return $this->js()->progress(['percent' => $value]);
     }
 }

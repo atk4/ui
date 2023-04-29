@@ -1,0 +1,19 @@
+<{_element}div{/} {$attributes}>
+| {Step}
+<div {$attributes}>
+| {hasIcon}
+<i class="{icon}configure{/} icon"></i>
+| {/hasIcon}
+.content
+    .title {title}No steps in this Wizard{/}
+    .description {description}Use $wizard->addStep() to define steps.{/}
+</div>
+| {/Step}
+</{_element}div{/}>
+.ui.attached.segment
+    | {$Content}
+.ui.bottom.attached.segment
+    .ui.grid
+        .eight.wide.column {$Left}
+        .eight.wide.right.aligned.column {$Right}
+= "\n"

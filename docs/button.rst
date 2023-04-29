@@ -5,13 +5,13 @@
 Button
 ======
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Button
 
 Implements a clickable button::
 
-    $button = $app->add(['Button', 'Click me']);
+    $button = Button::addTo($app, ['Click me']);
 
 The Button will typically inherit all same properties of a :php:class:`View`. The base class "View"
 implements many useful methods already, such as::
@@ -26,9 +26,9 @@ Alternatvie syntax if you wish to initialize object yourself::
     $app->add($button);
 
 
-You can refer to the Semantic UI documentation for Button to find out more about available classes: http://semantic-ui.com/elements/button.html.
+You can refer to the Fomantic-UI documentation for Button to find out more about available classes: https://fomantic-ui.com/elements/button.html.
 
-Demo: http://ui.agiletoolkit.org/demos/button.php
+Demo: https://ui.agiletoolkit.org/demos/button.php
 
 Button Icon
 -----------
@@ -37,11 +37,11 @@ Button Icon
 
 Property $icon will place icon on your button and can be specified in one of the following two ways::
 
-    $button = $app->add(['Button', 'Like', 'blue', 'icon'=>'thumbs up']);
+    $button = Button::addTo($app, ['Like', 'class.blue' => true, 'icon' => 'thumbs up']);
 
     // or
 
-    $button = $app->add(['Button', 'Like', 'blue', 'icon'=>new Icon('thumbs up')]);
+    $button = Button::addTo($app, ['Like', 'class.blue' => true, 'icon' => new Icon('thumbs up')]);
 
 or if you prefer initializing objects::
 
@@ -56,7 +56,7 @@ or if you prefer initializing objects::
 Setting this will display icon on the right of the button::
 
 
-    $button = $app->add(['Button', 'Next', 'iconRight'=>'right arrow']);
+    $button = Button::addTo($app, ['Next', 'iconRight' => 'right arrow']);
 
 Apart from being on the right, the same rules apply as :php:attr:`Button::$icon`. Both
 icons cannot be specified simultaniously.
@@ -67,11 +67,11 @@ Button Bar
 Buttons can be aranged into a bar. You would need to create a :php:class:`View` component
 with property ``ui='buttons'`` and add your other buttons inside::
 
-    $bar = $app->add(['ui'=>'vertical buttons']);
+    $bar = View::addTo($app, ['ui' => 'vertical buttons']);
 
-    $bar->add(['Button', 'Play', 'icon'=>'play']);
-    $bar->add(['Button', 'Pause', 'icon'=>'pause']);
-    $bar->add(['Button', 'Shuffle', 'icon'=>'shuffle']);
+    Button::addTo($bar, ['Play', 'icon' => 'play']);
+    Button::addTo($bar, ['Pause', 'icon' => 'pause']);
+    Button::addTo($bar, ['Shuffle', 'icon' => 'shuffle']);
 
 At this point using alternative syntax where you initialize objects yourself becomes a bit too complex and lengthy::
 
@@ -101,26 +101,26 @@ Linking
 
 Will link button to a destination URL or page::
 
-    $button->link('http://google.com/');
+    $button->link('https://google.com/');
     // or
-    $button->link(['details', 'id'=>123]);
+    $button->link(['details', 'id' => 123]);
 
 If array is used, it's routed to :php:meth:`App::url`
 
 For other JavaScript actions you can use :ref:`js`::
 
-    $button->js('click', new jsExpression('document.location.reload()'));
+    $button->on('click', new JsExpression('document.location.reload()'));
 
 Complex Buttons
 ---------------
 
 
 
-Knowledge of the Semantic UI button (http://semantic-ui.com/elements/button.html) can help you
+Knowledge of the Fomantic-UI button (https://fomantic-ui.com/elements/button.html) can help you
 in creating more complex buttons::
 
-    $forks = new Button(['labeled'=> true]); // Button, not Buttons!
-    $forks->add(new Button(['Forks', 'blue']))->add(new Icon('fork'));
-    $forks->add(new Label(['1,048', 'basic blue left pointing']));
+    $forks = new Button(['labeled' => true]); // Button, not Buttons!
+    Icon::addTo(Button::addTo($forks, ['Forks', 'class.blue' => true]), ['fork']);
+    Label::addTo($forks, ['1,048', 'class.basic blue left pointing' => true]);
     $app->add($forks);
 

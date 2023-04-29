@@ -1,38 +1,40 @@
 <?php
 
-namespace atk4\ui\tests;
+declare(strict_types=1);
 
-use atk4\ui\View;
+namespace Atk4\Ui\Tests;
+
+use Atk4\Core\Phpunit\TestCase;
+use Atk4\Ui\View;
 
 /**
  * Multiple tests to ensure that adding views through various patterns initializes them
  * nicely still.
  */
-class RenderTreeTest extends \atk4\core\PHPUnit_AgileTestCase
+class RenderTreeTest extends TestCase
 {
-    /**
-     * Test constructor.
-     */
-    public function testBasic()
-    {
-        $b = new View();
-        $b->render();
+    use CreateAppTrait;
 
-        $this->assertNotNull($b->app);
-        $this->assertNotNull($b->template);
+    public function testBasic(): void
+    {
+        $view = new View();
+        $view->setApp($this->createApp());
+        $view->render();
+
+        $view->getApp();
+        static::assertNotNull($view->template);
     }
 
-    public function testBasicNest1()
+    public function testBasicNested(): void
     {
-        $b = new View();
+        $view = new View();
+        $view2 = View::addTo($view);
+        $view->setApp($this->createApp());
+        $view->render();
 
-        $b2 = $b->add(new View());
+        $view2->getApp();
+        static::assertNotNull($view2->template);
 
-        $b->render();
-
-        $this->assertNotNull($b2->app);
-        $this->assertNotNull($b2->template);
-
-        $this->assertSame($b2->app, $b->app);
+        static::assertSame($view2->getApp(), $view->getApp());
     }
 }

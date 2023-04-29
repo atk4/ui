@@ -1,6 +1,8 @@
 <?php
 
-namespace atk4\ui;
+declare(strict_types=1);
+
+namespace Atk4\Ui;
 
 class Label extends View
 {
@@ -12,23 +14,17 @@ class Label extends View
      *
      * @var View|array|string
      */
-    public $icon = null;
+    public $icon;
 
     /**
      * Icon to the right of the label.
      *
-     * @see $icon
-     *
      * @var View|array|string
      */
-    public $iconRight = null;
+    public $iconRight;
 
-    /**
-     * Add "Detail" to label.
-     *
-     * @var string|null|false
-     */
-    public $detail = null;
+    /** @var string|false|null Add "Detail" to label. */
+    public $detail;
 
     /**
      * Image to the left of the label. Cannot be used with label. If string
@@ -36,43 +32,41 @@ class Label extends View
      *
      * @var View|array|string
      */
-    public $image = null;
+    public $image;
 
     /**
      * Image to the right of the label.
      *
-     * @see $image
-     *
      * @var View|array|string
      */
-    public $imageRight = null;
+    public $imageRight;
 
     public $defaultTemplate = 'label.html';
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->icon) {
-            $this->icon = $this->add(new Icon($this->icon), 'BeforeContent');
+            $this->icon = Icon::addTo($this, [$this->icon], ['BeforeContent']);
         }
 
         if ($this->image) {
-            $this->image = $this->add(new Image($this->image), 'BeforeContent');
+            $this->image = Image::addTo($this, [$this->image], ['BeforeContent']);
             $this->addClass('image');
         }
 
-        if (isset($this->detail)) {
-            $this->detail = $this->add(new View($this->detail), 'AfterContent')->addClass('detail');
+        if ($this->detail) {
+            $this->detail = View::addTo($this, [$this->detail], ['AfterContent'])->addClass('detail');
         }
 
         if ($this->iconRight) {
-            $this->iconRight = $this->add(new Icon($this->iconRight), 'AfterContent');
+            $this->iconRight = Icon::addTo($this, [$this->iconRight], ['AfterContent']);
         }
 
         if ($this->imageRight) {
-            $this->imageRight = $this->add(new Image($this->imageRight), 'AfterContent');
+            $this->imageRight = Image::addTo($this, [$this->imageRight], ['AfterContent']);
             $this->addClass('image');
         }
 
-        return parent::renderView();
+        parent::renderView();
     }
 }

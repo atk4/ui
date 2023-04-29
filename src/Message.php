@@ -1,60 +1,45 @@
 <?php
 
-namespace atk4\ui;
+declare(strict_types=1);
+
+namespace Atk4\Ui;
 
 /**
- * Class implements Messages (a visual box).
- *
- * Specify type = info | warning | error | success
- *
- * $page->add([
- *  'Message',
- *  'type' => 'error',
- *  'text' => 'Unable to save your document',
- *  ])
- *  ->text->addParagraph('')
+ * Message::addTo($page, [
+ *     'type' => 'error',
+ *     'text' => 'Unable to save your document',
+ * ])
+ * ->text->addParagraph('').
  */
 class Message extends View
 {
-    /**
-     * Set to info | warning | error | success | positie | negative.
-     *
-     * @var string
-     */
-    public $type = null;
+    /** @var 'info'|'warning'|'success'|'error'|null */
+    public $type;
 
-    /**
-     * Contains a text to be included below.
-     *
-     * @var Text|false
-     */
-    public $text = null;
+    /** @var Text|false|null Contains a text to be included below. */
+    public $text;
 
-    /**
-     * Specify icon to be displayed.
-     *
-     * @var string
-     */
-    public $icon = null;
+    /** @var Icon|string Specify icon to be displayed. */
+    public $icon;
 
     public $ui = 'message';
 
     public $defaultTemplate = 'message.html';
 
-    public function init()
+    protected function init(): void
     {
         parent::init();
 
         if ($this->text !== false) {
             if ($this->text) {
-                $this->text = $this->add(new Text($this->text));
+                $this->text = Text::addTo($this, [$this->text]);
             } else {
-                $this->text = $this->add(new Text());
+                $this->text = Text::addTo($this);
             }
         }
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         if ($this->type) {
             $this->addClass($this->type);
@@ -73,6 +58,6 @@ class Message extends View
             $this->content = null;
         }
 
-        return parent::renderView();
+        parent::renderView();
     }
 }

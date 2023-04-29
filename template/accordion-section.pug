@@ -1,0 +1,7 @@
+div(class="title", {$attributes})
+    i(class="{$icon} icon")
+    | {title}Title{/}
+div(class="content ui basic segment" data-path="{$path}")
+    div(id="{$itemId}")
+        | {$Content}
+= "\n"

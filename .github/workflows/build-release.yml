@@ -1,0 +1,47 @@
+name: Build release
+
+on:
+  push:
+    branches:
+      - 'release/*'
+
+jobs:
+  autocommit:
+    name: Build Release
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/mvorisek/image-php:latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Install PHP dependencies
+        run: composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
+
+      - name: Update composer.json
+        run: >-
+          composer config --unset version && php -r '
+          $f = __DIR__ . "/composer.json";
+          $data = json_decode(file_get_contents($f), true);
+          foreach ($data as $k => $v) {
+              if (preg_match("~^(.+)-release$~", $k, $matches)) {
+                  $data[$matches[1]] = $data[$k]; unset($data[$k]);
+              }
+          }
+          $str = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n";
+          echo $str;
+          file_put_contents($f, $str);
+          '
+
+      - name: Commit
+        run: |
+          git config --global user.name "$(git show -s --format='%an')"
+          git config --global user.email "$(git show -s --format='%ae')"
+          git add . -N && (git diff --exit-code || git commit -a -m "Branch for stable release")
+
+      - name: Push
+        uses: ad-m/github-push-action@master
+        with:
+          branch: ${{ github.ref }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}

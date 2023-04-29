@@ -30,7 +30,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.todo',
     'sphinx.ext.coverage',
-    'sphinxcontrib.phpdomain'
+    'sphinxcontrib.phpdomain',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -47,7 +47,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Agile UI'
-copyright = u'2016-2017, Agile Toolkit'
+copyright = u'2016-2019, Agile Toolkit'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -232,7 +232,7 @@ latex_elements = {
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'agile-data', u'Agile UI Documentation',
-     [u'Agile Toolkit'], 1)
+     [u'Agile Toolkit'], 1),
 ]
 
 # If true, show URL addresses after external links.
@@ -264,7 +264,7 @@ texinfo_documents = [
 
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'http://docs.python.org/': None}
+intersphinx_mapping = {'https://docs.python.org/': None}
 
 from sphinx.highlighting import lexers
 from pygments.lexers.web import PhpLexer

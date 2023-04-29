@@ -1,119 +1,107 @@
 <?php
 
-// vim:ts=4:sw=4:et:fdm=marker:fdl=0
+declare(strict_types=1);
 
-namespace atk4\ui;
+namespace Atk4\Ui;
 
-/**
- * Wizard widget.
- */
+use Atk4\Core\Factory;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
+
 class Wizard extends View
 {
-    use \atk4\core\SessionTrait;
+    use SessionTrait;
 
     public $defaultTemplate = 'wizard.html';
-    public $ui = 'steps';
+    public $ui = 'steps top attached';
 
-    /**
-     * Callback, that triggers selection of a step.
-     *
-     * @var callable
-     */
-    public $stepCallback = null;
+    /** @var string Get argument for this wizard. */
+    public $urlTrigger;
 
-    /**
-     * List of steps.
-     *
-     * @var array
-     */
+    /** @var array List of steps. */
     public $steps = [];
 
-    /**
-     * Current step.
-     *
-     * @var int
-     */
-    public $currentStep = null;
+    /** @var int Current step. */
+    public $currentStep;
 
-    /**
-     * Button for going to previous step.
-     *
-     * @var Button
-     */
-    public $buttonPrev = null;
+    /** @var Button Button for going to previous step. */
+    public $buttonPrev;
+    /** @var Button Button for going to next step. */
+    public $buttonNext;
+    /** @var Button */
+    public $buttonFinish;
 
-    /**
-     * Buttor for going to next step.
-     *
-     * @var Button
-     */
-    public $buttonNext = null;
+    /** @var HtmlTemplate */
+    private $stepTemplate;
 
     /**
      * Icon that will be used on all steps by default.
-     *  - 'empty' , since no such icon exists, no visible icon will be used unless step is completed
-     *  - 'square outline', use this (or any other) Semantic UI icon by default
-     *  - false,  disables icons alltogether (or using checkboxes for completed steps).
+     *  - 'empty', since no such icon exists, no visible icon will be used unless step is completed
+     *  - 'square outline', use this (or any other) Fomantic-UI icon by default
+     *  - false, disables icons alltogether (or using checkboxes for completed steps).
      *
      * @var string|false
      */
     public $defaultIcon = 'empty'; // 'square outline'
 
-    public function init()
+    protected function init(): void
     {
         parent::init();
-        $this->stepCallback = $this->add(['Callback', 'urlTrigger'=>$this->name]);
 
-        $this->currentStep = $this->stepCallback->triggered() ?: 0;
+        if (!$this->urlTrigger) {
+            $this->urlTrigger = $this->name;
+        }
+
+        $this->currentStep = (int) ($this->stickyGet($this->urlTrigger) ?? 0);
 
         $this->stepTemplate = $this->template->cloneRegion('Step');
         $this->template->del('Step');
 
         // add buttons
         if ($this->currentStep) {
-            $this->buttonPrev = $this->add(['Button', 'Back', 'basic'], 'Left');
-            $this->buttonPrev->link($this->stepCallback->getURL($this->currentStep - 1));
+            $this->buttonPrev = Button::addTo($this, ['Back', 'class.basic' => true], ['Left']);
+            $this->buttonPrev->link($this->getUrl($this->currentStep - 1));
         }
 
-        $this->buttonNext = $this->add(['Button', 'Next', 'primary'], 'Right');
-        $this->buttonFinish = $this->add(['Button', 'Finish', 'primary'], 'Right');
+        $this->buttonNext = Button::addTo($this, ['Next', 'class.primary' => true], ['Right']);
+        $this->buttonFinish = Button::addTo($this, ['Finish', 'class.primary' => true], ['Right']);
 
-        $this->buttonNext->link($this->stepCallback->getURL($this->currentStep + 1));
+        $this->buttonNext->link($this->getUrl($this->currentStep + 1));
+    }
+
+    protected function getUrl(int $step): string
+    {
+        return $this->url([$this->urlTrigger => $step]);
     }
 
     /**
      * Adds step to the wizard.
      *
-     * @param mixed $name     Name of tab or Tab object
-     * @param mixed $callback Optional callback action or URL (or array with url + parameters)
+     * @param string|array|WizardStep $name
+     * @param \Closure($this): void   $fx
      *
-     * @return View
+     * @return WizardStep
      */
-    public function addStep($name, $callback)
+    public function addStep($name, \Closure $fx)
     {
-        $step = $this->factory([
-            'Step',
-            'wizard'  => $this,
-            'template'=> clone $this->stepTemplate,
-            'sequence'=> count($this->steps),
-        ], $name);
+        $step = Factory::factory([
+            WizardStep::class,
+            'wizard' => $this,
+            'template' => clone $this->stepTemplate,
+            'sequence' => count($this->steps),
+        ], is_string($name) ? [$name] : $name);
 
         // add tabs menu item
         $this->steps[] = $this->add($step, 'Step');
 
-        if (!$this->stepCallback->triggered()) {
-            $_GET[$this->stepCallback->urlTrigger] = 0;
-        }
-
-        if ($step->sequence == $this->currentStep) {
+        if ($step->sequence === $this->currentStep) {
             $step->addClass('active');
-
-            $this->stepCallback->set($callback, [$this]);
+            $fx($this);
         } elseif ($step->sequence < $this->currentStep) {
             $step->addClass('completed');
         }
 
-        if ($step->icon == null) {
+        if ($step->icon === null) {
             $step->icon = $this->defaultIcon;
         }
 
@@ -124,32 +112,33 @@ class Wizard extends View
      * Adds an extra screen to show user when he goes beyond last step.
      * There won't be "back" button on this step anymore.
      *
-     * @param callable $callback Virtual page
+     * @param \Closure($this): void $fx
      */
-    public function addFinish($callback)
+    public function addFinish(\Closure $fx): void
     {
-        if (count($this->steps) == $this->currentStep + 1) {
-            $this->buttonFinish->link($this->stepCallback->getURL(count($this->steps)));
-        } elseif ($this->currentStep == count($this->steps)) {
+        if (count($this->steps) === $this->currentStep + 1) {
+            $this->buttonFinish->link($this->getUrl(count($this->steps)));
+        } elseif ($this->currentStep === count($this->steps)) {
             $this->buttonPrev->destroy();
             $this->buttonNext->addClass('disabled')->set('Completed');
             $this->buttonFinish->destroy();
 
-            $this->app->catch_runaway_callbacks = false;
-            call_user_func($callback, $this);
+            $fx($this);
         } else {
             $this->buttonFinish->destroy();
         }
     }
 
-    public function add($seed, $region = null)
+    public function add($seed, $region = null): AbstractView
     {
         $result = parent::add($seed, $region);
 
         if ($result instanceof Form) {
             // mingle with the button icon
-            $result->buttonSave->destroy();
-            $result->buttonSave = null;
+            if ($result->buttonSave !== null) {
+                $result->buttonSave->destroy();
+                $result->buttonSave = null;
+            }
 
             $this->buttonNext->on('click', $result->js()->submit());
         }
@@ -158,46 +147,42 @@ class Wizard extends View
     }
 
     /**
-     * Get URL to next step. Will respect stickyGET.
-     *
-     * @return string URL to next step.
+     * Get URL to next step. Will respect stickyGet.
      */
-    public function urlNext()
+    public function urlNext(): string
     {
-        return $this->stepCallback->getURL($this->currentStep + 1);
+        return $this->getUrl($this->currentStep + 1);
     }
 
     /**
-     * Get URL to previous step. Will respect stickyGET.
-     *
-     * @return string URL to previous step.
+     * Generate JS that will navigate to next step URL.
      */
-    public function jsNext()
+    public function jsNext(): JsExpressionable
     {
-        return new jsExpression('document.location = []', [$this->urlNext()]);
+        return new JsExpression('document.location = []', [$this->urlNext()]);
     }
 
-    public function recursiveRender()
+    protected function recursiveRender(): void
     {
         if (!$this->steps) {
-            $this->addStep(['No Steps Defined', 'icon'=>'configure', 'description'=>'use $wizard->addStep() now'], function ($p) {
-                $p->add(['Message', 'Step content will appear here', 'type'=>'error', 'text'=>'Specify callback to addStep() which would populate this area.']);
+            $this->addStep(['No Steps Defined', 'icon' => 'configure', 'description' => 'use $wizard->addStep() now'], function (self $p) {
+                Message::addTo($p, ['Step content will appear here', 'type' => 'error', 'text' => 'Specify callback to addStep() which would populate this area.']);
             });
         }
 
-        if (count($this->steps) == $this->currentStep + 1) {
+        if (count($this->steps) === $this->currentStep + 1) {
             $this->buttonNext->destroy();
         }
 
         parent::recursiveRender();
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
         // Set proper width to the wizard
         $c = count($this->steps);
         $enumeration = ['one', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
-        $this->ui = $enumeration[$c].' '.$this->ui;
+        $this->ui = $enumeration[$c] . ' ' . $this->ui;
 
         if ($c > 6) {
             $this->addClass('mini');

@@ -2,13 +2,13 @@
 .. _breadcrumb:
 
 ==========
-BreadCrumb
+Breadcrumb
 ==========
 
-.. php:namespace:: atk4\ui
-.. php:class:: BreadCrumb
+.. php:namespace:: Atk4\Ui
+.. php:class:: Breadcrumb
 
-Implement navigational BreadCrumb, by using https://semantic-ui.com/collections/breadcrumb.html
+Implement navigational Breadcrumb, by using https://fomantic-ui.com/collections/breadcrumb.html
 
 Basic Usage
 ===========
@@ -18,7 +18,7 @@ Basic Usage
 
 Here is a simple usage::
 
-    $crumb = $app->add('BreadCrumb');
+    $crumb = Breadcrumb::addTo($app);
     $crumb->addCrumb('User', ['user']);
     $crumb->addCrumb('Preferences', ['user_preferences']);
     $crumb->set('Change Password');
@@ -30,7 +30,7 @@ be passed to url() (:php:meth:`View::url`).
 Changing Divider
 ================
 
-.. php:attr:: $dividerClass
+.. php:attr:: dividerClass
 
 By default value `right angle icon` is used, but you can change it to `right chevron icon` or simply set to empty string `""`
 to use slash.
@@ -39,7 +39,7 @@ to use slash.
 Working with Path
 =================
 
-.. php:attr:: $path
+.. php:attr:: path
 .. php:method: popTitle()
 
 Calling addCrumb adds more elements into the $path property. Each element there would contain 3 hash values:
@@ -48,31 +48,30 @@ Calling addCrumb adds more elements into the $path property. Each element there 
  - link - where to go if clicked
  - divider - which divider to use after the crumb
 
-By default `divider` is set to :php:attr:`BreadCrumb::dividerClass`. You may also manipulate $path array yourself.
+By default `divider` is set to :php:attr:`Breadcrumb::dividerClass`. You may also manipulate $path array yourself.
 For example the next code will use some logic::
 
-    $crumb = $app->add('BreadCrumb');
+    $crumb = Breadcrumb::addTo($app);
     $crumb->addCrumb('Users', []);
 
-    $m = new User($app->db);
+    $model = new User($app->db);
 
-    if ($id = $app->stickyGet('user_id')) {
-
+    $id = $app->stickyGet('user_id');
+    if ($id) {
         // perhaps we edit individual user?
-        $m->load($id);
-        $crumb->addCrumb($m['name'], []);
+        $model = $model->load($id);
+        $crumb->addCrumb($model->get('name'), []);
 
 
         // here we can check for additional criteria and display a deeper level on the crumb
 
 
-        $app->add('Form')->setModel($m);
+        Form::addTo($app)->setModel($model);
     } else {
-
         // display list of users
-        $table = $app->add('Table');
-        $table->setModel($m);
-        $table->addDecorator(['name', ['Link', [], ['user_id'=>'id']);
+        $table = Table::addTo($app);
+        $table->setModel($model);
+        $table->addDecorator(['name', [\Atk4\Ui\Table\Column\Link::class, [], ['user_id' => 'id']);
     }
 
     $crumb->popTitle();

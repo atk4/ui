@@ -1,102 +1,92 @@
 <?php
 
-namespace atk4\ui\tests;
+declare(strict_types=1);
 
-use atk4\ui\Table;
-use atk4\ui\TableColumn\Template;
+namespace Atk4\Ui\Tests;
 
-class GridTest extends \atk4\core\PHPUnit_AgileTestCase
+use Atk4\Core\Phpunit\TestCase;
+use Atk4\Data\Model;
+use Atk4\Data\Persistence;
+use Atk4\Ui\Table;
+
+class GridTest extends TestCase
 {
+    use CreateAppTrait;
+    use TableTestTrait;
+
+    /** @var MyModel */
     public $m;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $a = [];
-        $a[1] = ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'];
-        $a[2] = ['id' => 2, 'email' => 'test@yahoo.com', 'password' => 'secret'];
+        parent::setUp();
 
-        $this->m = new MyModel(new \atk4\data\Persistence_Array($a));
+        $a = [
+            1 => ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'],
+            2 => ['id' => 2, 'email' => 'test@yahoo.com', 'password' => 'secret'],
+        ];
+        $this->m = new MyModel(new Persistence\Array_($a));
     }
 
-    public function test1()
+    public function test1(): void
     {
         $t = new Table();
-        $t->init();
-        $t->setModel($this->m, false);
+        $t->setApp($this->createApp());
+        $t->invokeInit();
+        $t->setModel($this->m, []);
 
         $t->addColumn('email');
-        $t->addColumn(null, new Template('password={$password}'));
+        $t->addColumn(null, new Table\Column\Template('password={$password}'));
 
-        $this->assertEquals('<td>{$email}</td><td>password={$password}</td>', $t->getDataRowHTML());
-        $this->assertEquals(
+        static::assertSame('<td>{$email}</td><td>password={$password}</td>', $t->getDataRowHtml());
+        static::assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>password=abc123</td></tr>',
-            $this->extract($t)
+            $this->extractTableRow($t)
         );
     }
 
-    public function test1a()
+    public function test2(): void
     {
         $t = new Table();
-        $t->init();
-        $t->setModel($this->m, false);
+        $t->setApp($this->createApp());
+        $t->invokeInit();
+        $t->setModel($this->m, []);
 
         $t->addColumn('email');
-        $t->addColumn('password');
+        $t->addColumn('password', [Table\Column\Password::class]);
 
-        $this->assertEquals('<td>{$email}</td><td>***</td>', $t->getDataRowHTML());
-        $this->assertEquals(
+        static::assertSame('<td>{$email}</td><td>***</td>', $t->getDataRowHtml());
+        static::assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>***</td></tr>',
-            $this->extract($t)
+            $this->extractTableRow($t)
         );
     }
 
-    public function test2()
+    public function test3(): void
     {
         $t = new Table();
-        $t->init();
+        $t->setApp($this->createApp());
+        $t->invokeInit();
         $t->setModel($this->m, ['email']);
-        $t->addColumn(null, 'Delete');
+        $del = $t->addColumn(null, [Table\Column\Delete::class]);
 
-        $this->assertEquals('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="delete"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHTML());
-        $this->assertEquals(
-            '<tr data-id="1"><td>test@test.com</td><td><a href="#" title="Delete test@test.com?" class="delete"><i class="ui red trash icon"></i>Delete</a></td></tr>',
-            $this->extract($t)
+        static::assertSame('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="' . $del->shortName . '"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHtml());
+        static::assertSame(
+            '<tr data-id="1"><td>test@test.com</td><td><a href="#" title="Delete test@test.com?" class="' . $del->shortName . '"><i class="ui red trash icon"></i>Delete</a></td></tr>',
+            $this->extractTableRow($t)
         );
-    }
-
-    public function test3()
-    {
-        $t = new Table();
-        $t->init();
-        $t->setModel($this->m, ['email']);
-        $t->addColumn('xtra', null, ['type' => 'password']);
-
-        $this->assertEquals('<td>{$email}</td><td>***</td>', $t->getDataRowHTML());
-        $this->assertEquals(
-            '<tr data-id="1"><td>test@test.com</td><td>***</td></tr>',
-            $this->extract($t)
-        );
-    }
-
-    public function extract($t)
-    {
-        // extract only <tr> out
-        $val = $t->render();
-        preg_match('/<.*data-id="1".*/m', $val, $matches);
-
-        return $matches[0];
     }
 }
 
-class MyModel extends \atk4\data\Model
+class MyModel extends Model
 {
-    public $title_field = 'email';
+    public ?string $titleField = 'email';
 
-    public function init()
+    protected function init(): void
     {
         parent::init();
 
         $this->addField('email');
-        $this->addField('password', ['type' => 'password']);
+        $this->addField('password');
     }
 }

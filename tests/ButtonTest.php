@@ -1,18 +1,23 @@
 <?php
 
-namespace atk4\ui\tests;
+declare(strict_types=1);
 
-use atk4\ui\Button;
-use atk4\ui\Icon;
+namespace Atk4\Ui\Tests;
 
-class ButtonTest extends \atk4\core\PHPUnit_AgileTestCase
+use Atk4\Core\Phpunit\TestCase;
+use Atk4\Ui\Button;
+
+class ButtonTest extends TestCase
 {
+    use CreateAppTrait;
+
     /**
-     * Test constructor.
+     * @doesNotPerformAssertions
      */
-    public function testButtonIcon()
+    public function testButtonIcon(): void
     {
         $b = new Button(['Load', 'icon' => 'pause']);
+        $b->setApp($this->createApp());
         $b->render();
     }
 }

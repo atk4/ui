@@ -1,55 +1,108 @@
-/*global __dirname, require, module*/
-
+const path = require('node:path');
 const webpack = require('webpack');
-const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
-const path = require('path');
-const env  = require('yargs').argv.env; // use --env with webpack 2
+const { VueLoaderPlugin } = require('vue-loader');
+const TerserPlugin = require('terser-webpack-plugin');
+const VueFomanticUi = require('vue-fomantic-ui'); // eslint-disable-line import/no-unresolved
 
-let libraryName = 'atk';
+module.exports = (env) => {
+    const isProduction = env === undefined ? false /* for eslint-import-resolver-webpack */ : env.production;
+    const srcDir = path.resolve(__dirname, './src');
+    const publicDir = path.resolve(__dirname, '../public');
+    const libraryName = 'atk';
+    const filename = libraryName + 'js-ui';
 
-let plugins = [
-  new webpack.DefinePlugin({
-    _ATKVERSION_ : JSON.stringify(require("./package.json").version)
-  })
-], outputFile;
+    const prodPerformance = {
+        hints: false,
+        maxEntrypointSize: 640 * 1024,
+        maxAssetSize: 640 * 1024,
+    };
 
-if (env === 'build') {
-  plugins.push(new UglifyJsPlugin({ minimize: true }));
-  outputFile = libraryName + 'js-ui.min.js';
-} else {
-  outputFile = libraryName + 'js-ui.js';
-}
-
-const config = {
-  entry: __dirname + '/src/agile-toolkit-ui.js',
-  devtool: 'source-map',
-  output: {
-    path: __dirname + '/../public',
-    filename: outputFile,
-    library: libraryName,
-    libraryTarget: 'umd',
-    umdNamedDefine: true,
-  },
-  module: {
-    rules: [
-      {
-        test: /(\.jsx|\.js)$/,
-        loader: 'babel-loader',
-        exclude: /(node_modules|bower_components)/
-      }//,
-      // {
-      //   test: /(\.jsx|\.js)$/,
-      //   loader: "eslint-loader",
-      //   exclude: /node_modules/
-      // }
-    ]
-  },
-  externals: {jquery: 'jQuery', draggable: 'Draggable'},
-  resolve: {
-    modules: [path.resolve('./src'), path.join(__dirname, 'node_modules')],
-    extensions: ['.json', '.js'],
-  },
-  plugins: plugins
+    return {
+        entry: { [filename]: srcDir + '/main.js' },
+        mode: isProduction ? 'production' : 'development',
+        devtool: 'source-map',
+        performance: isProduction ? prodPerformance : {},
+        output: {
+            path: publicDir,
+            filename: isProduction ? 'js/[name].min.js' : 'js/[name].js',
+            library: libraryName,
+            libraryTarget: 'umd',
+            libraryExport: 'default',
+            umdNamedDefine: true,
+        },
+        optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    defaultVendors: false,
+                    vendorVueFlatpickr: {
+                        test: /[/\\]node_modules[/\\](flatpickr|vue-flatpickr-component)[/\\]/,
+                        name: 'vendor-vue-flatpickr',
+                    },
+                    vendorVue: {
+                        test: /[/\\]node_modules[/\\](?!(vue-flatpickr-component|vue-query-builder)[/\\])([^/\\]+[.-])?vue([.-][^/\\]+)?[/\\]/,
+                        name: 'vendor-vue',
+                    },
+                    vendor: {
+                        test: /[/\\]node_modules[/\\](?!(([^/\\]+[.-])?vue([.-][^/\\]+)?|flatpickr)[/\\])/,
+                        name: 'vendor',
+                    },
+                },
+            },
+            minimizer: [
+                new TerserPlugin({
+                    terserOptions: {
+                        output: {
+                            comments: false,
+                        },
+                    },
+                    extractComments: false,
+                }),
+            ],
+        },
+        module: {
+            rules: [
+                {
+                    test: /(\.js|\.jsx)$/,
+                    enforce: 'pre',
+                    loader: 'source-map-loader',
+                },
+                {
+                    test: /(\.js|\.jsx)$/,
+                    loader: 'babel-loader',
+                    exclude: /node_modules/,
+                },
+                {
+                    test: /\.vue$/,
+                    loader: 'vue-loader',
+                },
+                {
+                    test: /\.css$/,
+                    use: [
+                        'style-loader',
+                        'css-loader',
+                    ],
+                },
+            ],
+        },
+        externals: { 'external/jquery': 'jQuery' },
+        resolve: {
+            alias: {
+                atk$: srcDir + '/setup-atk.js',
+                vue$: 'vue/dist/vue.esm-bundler.js',
+            },
+            modules: [
+                srcDir,
+                'node_modules',
+            ],
+            extensions: ['.js', '.vue'],
+        },
+        plugins: [
+            new webpack.DefinePlugin({
+                __VUE_OPTIONS_API__: true,
+                __VUE_PROD_DEVTOOLS__: false,
+                __VUE_FOMANTICUI_COMPONENT_NAMES__: JSON.stringify(Object.keys(VueFomanticUi).filter((v) => v.startsWith('Sui'))),
+            }),
+            new VueLoaderPlugin(),
+        ],
+    };
 };
-
-module.exports = config;

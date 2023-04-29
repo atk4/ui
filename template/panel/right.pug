@@ -1,0 +1,10 @@
+div({$attributes})
+    .ui.right.aligned.basic.segment
+        i.atk-panel-warning(class="{$WarningIcon} icon")
+        a.atk-panel-close(href="javascript:void(0)")
+            i(class="{$CloseIcon} icon")
+    .ui.centered.inline.loader(style="position: absolute; top: 25%; left: 50%;")
+    .ui.basic.segment
+        | {$Content}
+    | {$LoadContent}
+= "\n"

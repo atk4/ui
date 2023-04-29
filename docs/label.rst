@@ -6,16 +6,16 @@
 Label
 =====
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 
 .. php:class:: Label
 
 Labels can be used in many different cases, either as a stand-alone objects, inside tables or inside
 other components.
 
-To see what possible classes you can use on the Label, see: http://semantic-ui.com/elements/label.html.
+To see what possible classes you can use on the Label, see: https://fomantic-ui.com/elements/label.html.
 
-Demo: http://ui.agiletoolkit.org/demos/label.php
+Demo: https://ui.agiletoolkit.org/demos/label.php
 
 Basic Usage
 ===========
@@ -23,11 +23,11 @@ Basic Usage
 First argument of constructor or first element in array passed to constructor will be the text that will
 appear on the label::
 
-    $label = $app->add(['Label', 'hello world']);
+    $label = Label::addTo($app, ['hello world']);
 
-    // or 
+    // or
 
-    $label = new \atk4\ui\Label('hello world');
+    $label = new \Atk4\Ui\Label('hello world');
     $app->add($label);
 
 
@@ -50,12 +50,12 @@ Icons
 
 There are two properties (icon, iconRight) but you can set only one at a time::
 
-    $app->add(['Label', '23', 'icon'=>'mail']);
-    $app->add(['Label', 'new', 'iconRight'=>'delete']);
+    Label::addTo($app, ['23', 'icon' => 'mail']);
+    Label::addTo($app, ['new', 'iconRight' => 'delete']);
 
 You can also specify icon as an object::
 
-    $app->add(['Label', 'new', 'iconRight'=>new \atk4\ui\Icon('delete')]);
+    Label::addTo($app, ['new', 'iconRight' => new \Atk4\Ui\Icon('delete')]);
 
 For more information, see: :php:class:`Icon`
 
@@ -64,15 +64,15 @@ Image
 
 Image cannot be specified at the same time with the icon, but you can use PNG/GIF/JPG image on your label::
 
-    $img = 'https://cdn.rawgit.com/atk4/ui/07208a0af84109f0d6e3553e242720d8aeedb784/public/logo.png';
-    $app->add(['Label', 'Coded in PHP', 'image'=>$img]);
+    $img = $app->cdn['atk'] . '/logo.png';
+    Label::addTo($app, ['Coded in PHP', 'image' => $img]);
 
 Detail
 ======
 
 You can specify "detail" component to your label::
 
-    $app->add(['Label', 'Number of lines', 'detail'=>'33']);
+    Label::addTo($app, ['Number of lines', 'detail' => '33']);
 
 Groups
 ======
@@ -80,41 +80,41 @@ Groups
 Label can be part of the group, but you would need to either use custom HTML template or
 composition::
 
-    $group = $app->add(['View', false, 'blue tag', 'ui'=>'labels']);
-    $group->add(['Label', '$9.99']);
-    $group->add(['Label', '$19.99', 'red tag']);
-    $group->add(['Label', '$24.99']);
+    $group = View::addTo($app, ['class.blue tag' => true, 'ui' => 'labels']);
+    Label::addTo($group, ['$9.99']);
+    Label::addTo($group, ['$19.99', 'class.red tag' => true]);
+    Label::addTo($group, ['$24.99']);
 
 Combining classes
 =================
 
-Based on Semantic UI documentation, you can add more classes to your labels::
+Based on Fomantic-UI documentation, you can add more classes to your labels::
 
-    $columns = $app->add('Columns');
+    $columns = Columns::addTo($app);
 
     $c = $columns->addColumn();
-    $col = $c->add(['View', 'ui'=>'raised segment']);
+    $col = View::addTo($c, ['ui' => 'raised segment']);
 
     // attach label to the top of left column
-    $col->add(['Label', 'Left Column', 'top attached', 'icon'=>'book']);
+    Label::addTo($col, ['Left Column', 'class.top attached' => true, 'icon' => 'book']);
 
     // ribbon around left column
-    $col->add(['Label', 'Lorem', 'red ribbon', 'icon'=>'cut']);
+    Label::addTo($col, ['Lorem', 'class.red ribbon' => true, 'icon' => 'cut']);
 
     // add some content inside column
-    $col->add(['LoremIpsum', 'size'=>1]);
+    LoremIpsum::addTo($col, ['size' => 1]);
 
     $c = $columns->addColumn();
-    $col = $c->add(['View', 'ui'=>'raised segment']);
+    $col = View::addTo($c, ['ui' => 'raised segment']);
 
     // attach label to the top of right column
-    $col->add(['Label', 'Right Column', 'top attached', 'icon'=>'book']);
+    Label::addTo($col, ['Right Column', 'class.top attached' => true, 'icon' => 'book']);
 
     // some content
-    $col->add(['LoremIpsum', 'size'=>1]);
+    LoremIpsum::addTo($col, ['size' => 1]);
 
-    // right bottom corner label 
-    $col->add(['Label', 'Ipsum', 'orange bottom right attached', 'icon'=>'cut']);
+    // right bottom corner label
+    Label::addTo($col, ['Ipsum', 'class.orange bottom right attached' => true, 'icon' => 'cut']);
 
 Added labels into Table
 =======================
@@ -122,10 +122,10 @@ Added labels into Table
 You can even use label inside a table, but because table renders itself by repeating periodically, then
 the following code is needed::
 
-    $table->addHook('getHTMLTags', function ($table, $row) {
-        if ($row->id == 1) {
+    $table->onHook(\Atk4\Ui\Table\Column::HOOK_GET_HTML_TAGS, function (Table $table, Model $row) {
+        if ($row->getId() == 1) {
             return [
-                'name'=> $table->app->getTag('div', ['class'=>'ui ribbon label'], $row['name']),
+                'name' => $table->getApp()->getTag('div', ['class' => 'ui ribbon label'], $row->get('name')),
             ];
         }
     });

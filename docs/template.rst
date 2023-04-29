@@ -5,7 +5,7 @@
 Introduction
 ============
 
-Agile UI relies on a lightweigt built-in template engine to manipulate templates.
+Agile UI relies on a lightweight built-in template engine to manipulate templates.
 The design goals of a template engine are:
 
 - Avoid any logic inside template
@@ -26,22 +26,18 @@ Tags
 
 the usage of `{` denotes a "tag" inside your HTML, which must be followed by
 alpha-numeric identifier and a closing `}`. Tag needs to be closed with either
-`{/mytag}` or `{/}`. 
+`{/mytag}` or `{/}`.
 
 The following code will initialize template inside a PHP code::
 
     $t = new Template('Hello, {mytag}world{/}');
 
-Once template is initialized you can `render()` it any-time to get string
+Once template is initialized you can `renderToHtml()` it any-time to get string
 "Hello, world". You can also change tag value::
 
     $t->set('mytag', 'Agile UI');
 
-    // or 
-
-    $t['mytag'] = 'Agile UI';
-
-    echo $t->render();  // "Hello, Agile UI".
+    echo $t->renderToHtml(); // "Hello, Agile UI".
 
 Tags may also be self-closing::
 
@@ -66,8 +62,8 @@ We call region a tag, that may contain other tags. Example::
 When this template is parsed, region 'Content' will contain tags
 $user and $amount. Although technically you can still use `set()`
 to change value of a tag even if it's inside a region, we often
-use Region to deligate rendering to another View (more about this
-in section for Views). 
+use Region to delegate rendering to another View (more about this
+in section for Views).
 
 There are some operations you can do with a region, such as::
 
@@ -75,11 +71,11 @@ There are some operations you can do with a region, such as::
 
     $main_template->del('Content');
 
-    $content->set(['user'=>'Joe', 'amount'=>100]);
-    $main_template->append('Content', $content->render());
+    $content->set('user', 'Joe')->set('amount', 100);
+    $main_template->dangerouslyAppendHtml('Content', $content->renderToHtml());
 
-    $content->set(['user'=>'Billy', 'amount'=>50]);
-    $main_template->append('Content', $content->render());
+    $content->set('user', 'Billy')->set('amount', 50);
+    $main_template->dangerouslyAppendHtml('Content', $content->renderToHtml());
 
 Usage in Agile UI
 -----------------
@@ -89,18 +85,18 @@ engine directly, but you would be able to use it through views::
 
 
     $v = new View('my_template.html');
-    $v['name'] = 'Mr. Boss';
+    $v->set('name', 'Mr. Boss');
 
     $lister = new Lister($v, 'Content');
     $lister->setModel($userlist);
 
-    echo $v->render();
+    echo $v->renderToHtml();
 
 The code above will work like this:
 
 1. View will load and parse template.
 
-2. Using $v['name'] will set value of the tag inside template directly.
+2. Using $v->get('name') will set value of the tag inside template directly.
 
 3. Lister will clone region 'Content' from my_template.
 
@@ -134,17 +130,22 @@ constructor:
 
 Alternatively, if you wish to load template from a file:
 
-.. php:method:: load($file)
+.. php:method:: loadFromFile($filename)
 
     Read file and load contents as a template.
 
-.. php:method:: loadTemplateFromString($string)
+.. php:method:: tryLoadFromFile($filename)
+
+    Try loading the template. Returns false if template couldn't be loaded. This can be used
+    if you attempt to load template from various locations.
+
+.. php:method:: loadFromString($string)
 
     Same as using constructor.
 
 If the template is already loaded, you can load another template from
 another source which will override the existing one.
-  
+
 Template Parsing
 ----------------
 
@@ -165,14 +166,13 @@ same way as empty tag. (``{$elephant}``)
 
 Region — typically a multiple lines HTML and text between opening and
 closing tag which can contain a nested tags. Regions are typically named
-with CamelCase, while other tags are named using ``snake_case``::
+with PascalCase, while other tags are named using ``snake_case``::
 
     some text before
     {ElephantBlock}
-      Hello, {$name}.
+        Hello, {$name}.
 
-      by {sender}John Smith{/}
-
+        by {sender}John Smith{/}
     {/ElephantBlock}
     some text after
 
@@ -191,10 +191,10 @@ Template engine in Agile Toolkit can be used independently, without views
 if you require so. A typical workflow would be:
 
 1. Load template using :php:meth:`GiTemplate::loadTemplate` or
-   :php:meth:`GiTemplate::loadTemplateFromString`.
+   :php:meth:`GiTemplate::loadFromString`.
 
 2. Set tag and region values with :php:meth:`GiTemplate::set`.
-3. Render template with :php:meth:`GiTemplate::render`.
+3. Render template with :php:meth:`GiTemplate::renderToHtml`.
 
 
 Template use together with Views
@@ -219,7 +219,7 @@ When an input is added into a Form, it adopts a "FormLine" region. While the
 nested tags would be identical, the markup around them would be dependent on
 form layout.
 
-This approach allows you affect the way how :php:class:`Form_Field` is rendered
+This approach allows you affect the way how :php:class:`Form\Control` is rendered
 without having to provide it with custom template, but simply relying on template
 of a Form.
 
@@ -233,12 +233,8 @@ of a Form.
 +---------------------------------------------------+-------------------------------------------------------+
 | Various cases within templates based on condition | cloneRegion or get, then use set()                    |
 +---------------------------------------------------+-------------------------------------------------------+
-| Custom handling certain tags or regions           | :php:meth:`GiTemplate::eachTag` with a callback       |
-+---------------------------------------------------+-------------------------------------------------------+
 | Filters (to-upper, escape)                        | all tags are escaped automatically, but               |
 |                                                   | other filters are not supported (yet)                 |
-+---------------------------------------------------+-------------------------------------------------------+
-| Template inclusion                                | Generally discouraged, but can be done with eachTag() |
 +---------------------------------------------------+-------------------------------------------------------+
 
 Using Template Engine directly
@@ -251,17 +247,13 @@ how it's done is important to completely grasp Agile Toolkit underpinnings.
 Loading template
 ----------------
 
-.. php:method:: loadTemplateFromString(string)
+.. php:method:: loadFromString(string)
 
     Initialize current template from the supplied string
 
-.. php:method:: loadTemplate(filename)
+.. php:method:: loadFromFile(filename)
 
     Locate (using :php:class:`PathFinder`) and read template from file
-
-.. php:method:: reload()
-
-    Will attempt to re-load template from it's original source.
 
 .. php:method:: __clone()
 
@@ -289,13 +281,13 @@ Template can be loaded from either file or string by using one of
 following commands::
 
 
-    $template = $this->add('GiTemplate');
+    $template = GiTemplate::addTo($this);
 
-    $template->loadTemplateFromString('Hello, {name}world{/}');
+    $template->loadFromString('Hello, {name}world{/}');
 
 To load template from file::
 
-    $template->loadTemplate('mytemplate');
+    $template->loadFromFile('mytemplate');
 
 And place the following inside ``template/mytemplate.html``::
 
@@ -312,7 +304,7 @@ Changing template contents
     Escapes and inserts value inside a tag. If passed a hash, then each
     key is used as a tag, and corresponding value is inserted.
 
-.. php:method:: setHTML(tag, value)
+.. php:method:: dangerouslySetHtml(tag, value)
 
     Identical but will not escape. Will also accept hash similar to set()
 
@@ -320,21 +312,28 @@ Changing template contents
 
     Escape and add value to existing tag.
 
-.. php:method:: appendHTML(tag, value)
+.. php:method:: tryAppend(tag, value)
+
+    Attempts to append value to existing but will do nothing if tag does not exist.
+
+.. php:method:: dangerouslyAppendHtml(tag, value)
 
     Similar to append, but will not escape.
 
+.. php:method:: tryDangerouslyAppendHtml(tag, value)
+
+    Attempts to append non-escaped value, but will do nothing if tag does not exist.
 
 Example::
 
-    $template = $this->add('GiTemplate');
+    $template = GiTemplate::addTo($this);
 
-    $template->loadTemplateFromString('Hello, {name}world{/}');
+    $template->loadFromString('Hello, {name}world{/}');
 
     $template->set('name', 'John');
-    $template->appendHTML('name', '&nbsp;<i class="icon-heart"></i>');
+    $template->dangerouslyAppendHtml('name', '&nbsp;<i class="icon-heart"></i>');
 
-    echo $template->render();
+    echo $template->renderToHtml();
 
 
 Using ArrayAccess with Templates
@@ -342,26 +341,26 @@ Using ArrayAccess with Templates
 
 You may use template object as array for simplified syntax::
 
-    $template['name'] = 'John';
+    $template->set('name', 'John');
 
-    if(isset($template['has_title'])) {
-        unset($template['has_title']);
+    if ($template->hasTag('has_title')) {
+        $template->del('has_title');
     }
 
 
 Rendering template
 ------------------
 
-.. php:method:: render
+.. php:method:: renderToHtml
 
     Converts template into one string by removing tag markers.
 
 Ultimately we want to convert template into something useful. Rendering
 will return contents of the template without tags::
 
-    $result=$template->render();
+    $result = $template->renderToHtml();
 
-    $this->add('Text')->set($result);
+    \Atk4\Ui\Text::addTo($this)->set($result);
     // Will output "Hello, World"
 
 
@@ -377,67 +376,67 @@ Let's assume you have the following template in ``template/envelope.html``::
 
     <div class="sender">
     {Sender}
-      {$name},
-      Address: {$street}
-               {$city} {$zip}
+        {$name},
+        Address: {$street}
+                 {$city} {$zip}
     {/Sender}
     </div>
 
     <div class="recipient">
     {Recipient}
-      {$name},
-      Address: {$street}
-               {$city} {$zip}
+        {$name},
+        Address: {$street}
+                 {$city} {$zip}
     {/Recipient}
     </div>
 
 You can use the following code to manipulate the template above::
 
-    $template = $this->add('GiTemplate');
-    $template->loadTemplate('envelope');        // templates/envelope.html
+    $template = GiTemplate::addTo($this);
+    $template->loadFromFile('envelope'); // templates/envelope.html
 
     // Split into multiple objects for processing
-    $sender    = $template->cloneRegion('Sender');
+    $sender = $template->cloneRegion('Sender');
     $recipient = $template->cloneRegion('Recipient');
 
     // Set data to each sub-template separately
-    $sender    ->set($sender_data);
-    $recipient ->set($recipient_data);
+    $sender->set($sender_data);
+    $recipient->set($recipient_data);
 
     // render sub-templates, insert into master template
-    $template->set('Sender',    $sender   ->render());
-    $template->set('Recipient', $recipient->render());
+    $template->dangerouslySetHtml('Sender', $sender->renderToHtml());
+    $template->dangerouslySetHtml('Recipient', $recipient->renderToHtml());
 
     // get final result
-    $result=$template->render();
+    $result = $template->renderToHtml();
 
 Same thing using Agile Toolkit Views::
 
-    $envelope = $this->add('View',null,null, ['envelope']);
+    $envelope = \Atk4\Ui\View::addTo($this, [], [null], null, ['envelope']);
 
-    $sender    = $envelope->add('View', null, 'Sender',    'Sender');
-    $recipient = $envelope->add('View', null, 'Recipient', 'Recipient');
+    $sender = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender', 'Sender');
+    $recipient = \Atk4\Ui\View::addTo($envelope, [], [null], 'Recipient', 'Recipient');
 
-    $sender    ->tempalte->set($sender_data);
-    $recipient ->tempalte->set($recipient_data);
+    $sender->template->set($sender_data);
+    $recipient->template->set($recipient_data);
 
 We do not need to manually render anything in this scenario. Also the
-template of $sender and $recipient objects will be appropriatelly cloned
+template of $sender and $recipient objects will be appropriately cloned
 from regions of $envelope and then substituted back after render.
 
 In this example I've usd a basic :php:class:`View` class, however I could
 have used my own View object with some more sophisticated presentation logic.
 The only affect on the example would be name of the class, the rest of
-presentation logic would be abstracted inside view's ``render()`` method.
+presentation logic would be abstracted inside view's ``renderToHtml()`` method.
 
-Other opreations with tags
+Other operations with tags
 --------------------------
 
 .. php:method:: del(tag)
 
     Empties contents of tag within a template.
 
-.. php:method:: isSet(tag)
+.. php:method:: hasTag(tag)
 
     Returns ``true`` if tag exists in a template.
 
@@ -457,41 +456,29 @@ Agile Toolkit template engine allows you to use same tag several times::
     Roses are {color}red{/}
     Violets are {color}blue{/}
 
-If you execute ``set('color','green')`` then contents of both tags will
-be affected. Similarly if you call ``append('color','-ish')`` then the
+If you execute ``set('color', 'green')`` then contents of both tags will
+be affected. Similarly if you call ``append('color', '-ish')`` then the
 text will be appended to both tags.
 
-You can also use ``eachTag()`` to iterate through those tags.
+Conditional tags
+----------------
 
-.. php:method:: eachTag
+Agile Toolkit template engine allows you to use so called conditional tags
+which will automatically remove template regions if tag value is empty.
+Conditional tags notation is trailing question mark symbol.
 
-    Executues a call-back for each tag
+Consider this example::
 
-The format of the callback is::
+    My {email?}e-mail {$email}{/email?} {phone?}phone {$phone}{/?}.
 
-    function processTag($contents, $tag) {
-        return ucwords($contents);
-    }
+This will only show text "e-mail" and email address if email tag value is
+set to not empty value. Same for "phone" tag.
+So if you execute ``set('email', null)`` and ``set('phone', 123)`` then this
+template will automatically render as::
 
+    My  phone 123.
 
-If your callback function defines second argument, then it will receive
-"unique" tag name which can be used to access template directly. This
-makes sense if you want to add object into that region. You can't insert
-object into SMlite template, however every view in the system will have
-it's template pre-initialized for you
-
-The following template will implement the ``include`` functionality for
-your template::
-
-    $template->eachTag('include', function($content, $tag) use($template) {
-        $t = $template->newInstance();
-        $t->loadTemplate($content);
-        $template->set($tag, $t->render());
-    });
-
-See also: :ref:`templates and views`
-
-.. todo:: fix this reference
+Note that zero value is treated as not empty value!
 
 Views and Templates
 ===================
@@ -508,7 +495,7 @@ Default template for a view
 By default view object will execute :php:meth:`defaultTemplate()` method which
 returns name of the template. This function must return array with
 one or two elements. First element is the name of the template which
-will be passed to ``loadTemplate()``. Second argument is optional and is
+will be passed to ``loadFromFile()``. Second argument is optional and is
 name of the region, which will be cloned. This allows you to have
 multiple views load data from same template but use different region.
 
@@ -517,8 +504,9 @@ clone region with such a name from parent's template. This can be used
 by your "menu" implementation, which will clone parent's template's tag
 instead to hook into some specific template::
 
-    function defaultTemplate(){
-        return [ 'greeting' ];   // uses templates/greeting.html
+    public function defaultTemplate()
+    {
+        return ['greeting']; // uses templates/greeting.html
     }
 
 Redefining template for view during adding
@@ -533,7 +521,7 @@ some pages. If you frequently use view with a different template, it
 might be better to define a new View class and re-define
 ``defaultTemplate()`` method instead::
 
-    $this->add('MyObject',null,null,array('greeting'));
+    MyObject::addTo($this, ['greeting']);
 
 Accessing view's template
 -------------------------
@@ -542,8 +530,8 @@ Template is available by the time ``init()`` is called and you can
 access it from inside the object or from outside through "template"
 property::
 
-    $grid=$this->add('Grid',null,null,array('grid_with_hint'));
-    $grid->template->trySet('my_hint','Changing value of a grid hint here!');
+    $grid = \Atk4\Ui\Grid::addTo($this, [], [null], null, array('grid_with_hint'));
+    $grid->template->trySet('my_hint', 'Changing value of a grid hint here!');
 
 In this example we have instructed to use a different template for grid,
 which would contain a new tag "my\_hint" somewhere. If you try to change
@@ -554,7 +542,7 @@ How views render themselves
 ---------------------------
 
 Agile Toolkit perform object initialization first. When all the objects
-are initialized global rendering takes place. Each object's ``render()``
+are initialized global rendering takes place. Each object's ``renderToHtml()``
 method is executed in order. The job of each view is to create output
 based on it's template and then insert it into the region of owner's
 template. It's actually quite similar to our Sender/Recipient example
@@ -568,28 +556,16 @@ implemented using generic views.
 
 ::
 
-    $envelope=$this->add('View',null,null,array('envelope'));
+    $envelope = \Atk4\Ui\View::addTo($this, [], [null], null, array('envelope'));
 
     // 3rd argument is output region, 4th is template location
-    $sender=$envelope->add('View',null,'Sender','Sender');
-    $receiver=$envelope->add('View',null,'Receiver','Receiver');
+    $sender = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender', 'Sender');
+    $receiver = \Atk4\Ui\View::addTo($envelope, [], [null], 'Receiver', 'Receiver');
 
     $sender->template->trySet($sender_data);
     $receiver->template->trySet($receiver_data);
 
 ..  templates and views
-
-Using Views with Templates efficiently
---------------------------------------
-
-For maximum efficiency you should consider using Views and Templates
-in combination to achieve the result. The example which was previously
-mentioned under :php:meth:`GiTemplate::eachTag`::
-
-    $view->template->eachTag('include', function($content, $tag) use($view) {
-        $view->add('View', null, $tag, [$content]);
-    });
-
 
 
 Best Practices
@@ -608,7 +584,7 @@ working with HTML or the output will not be rendered in a regular way
 Organize templates into directories
 -----------------------------------
 
-Typically templates directory will have subdirectories: "page", "view",
+Typically templates directory will have sub-directories: "page", "view",
 "form" etc. Your custom template for one of the pages should be inside
 "page" directory, such as page/contact.html. If you are willing to have
 a generic layout which you will use by multiple pages, then instead of
@@ -620,9 +596,9 @@ other projects developed using Agile Toolkit.
 Naming of tags
 --------------
 
-Tags use two type of naming - CamelCase and underscore\_lowercase. Tags
+Tags use two type of naming - PascalCase and underscore\_lowercase. Tags
 are case sensitive. The larger regions which are typically used for
-cloning or by adding new objects into it are named with CamelCase.
+cloning or by adding new objects into it are named with PascalCase.
 Examples would be: "Menu", "Content" and "Recipient". The lowercase and
 underscore is used for short variables which would be inserted into
 template directly such as "name" or "zip".
@@ -632,21 +608,15 @@ Globally Recognized Tags
 
 
 Agile Toolkit View will automatically substitute several tags with the values.
-The tag {$_id} is automatically replaced with a unique name by a View.
+The tag {$attributes} is automatically replaced with a attributes incl. ``id``
+(unique name of a View), ``class`` and ``style``.
 
 There are more templates which are being substituted:
 
 - {page}logout{/} - will be replaced with relative URL to the page
-- {public}images/logo.png{/} - will replace with URL to a public asset
+- {public}logo.png{/} - will replace with URL to a public asset
 - {css}css/file.css{/} - will replace with URL link to a CSS file
 - {js}jquery.validator.js{/} - will replace with URL to JavaScript file
-
-Avoid using the next two tags, which are obsolete:
-
-- {$atk_path} - will insert URL leading to atk4 public folder
-- {$base_path} - will insert URL leading to public folder of the project
-
-.. todo:: base_path might be pointing to a base folder and not public
 
 
 Application (API) has a function :php:`App_Web::setTags` which is called for
@@ -675,24 +645,24 @@ under ``$template->template`::
 
     // template property:
     array (
-      0 => 'Hello ',
-      'subject#1' => array (
-        0 => 'world',
-      ),
-      1 => '!!',
+        'Hello ',
+        'subject#0' => array (
+            'world',
+        ),
+        1 => '!!',
     )
 
 Property tags would contain::
 
     array (
-      'subject'=> array( &array ),
-      'subject#1'=> array( &array )
+        'subject#0' => array( &array ),
+        'subject#1' => array( &array )
     )
 
 As a result each tag will be stored under it's actual name and the name with
 unique "#1" appended (in case there are multiple instances of same tag).
 This allow ``$smlite->get()`` to quickly retrieve contents of
-appropriate tag and it will also allow ``render()`` to reconstruct the
+appropriate tag and it will also allow ``renderToHtml()`` to reconstruct the
 output efficiently.
 
 

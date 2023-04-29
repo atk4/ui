@@ -1,6 +1,8 @@
 <?php
 
-namespace atk4\ui;
+declare(strict_types=1);
+
+namespace Atk4\Ui;
 
 class Image extends View
 {

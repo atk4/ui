@@ -1,0 +1,42 @@
+<table {$attributes}>
+thead
+    | {Head}
+    tr {$cells}
+    |
+    | {/}
+    | {$SubHead}
+
+tbody
+    | {Body}
+
+    | {Row}
+    tr(data-id="{$dataId}")
+        | {$cells}
+
+    |
+    | {/}
+
+    | {Empty}
+    tr
+        td(colspan="{$columns}") No records.
+    |
+    | {/}
+
+    | {/Body}
+
+| {hasFoot}
+tfoot
+    | {Foot}
+
+    | {Totals}
+    tr {$cells}
+    |
+    | {/}
+
+    | {$Paginator}
+
+    | {/}
+| {/}
+
+</table>
+= "\n"

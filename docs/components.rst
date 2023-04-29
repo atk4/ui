@@ -47,6 +47,7 @@ control over even the small elements.
     image
     message
     tabs
+    accordion
     helloworld
 
 
@@ -61,11 +62,11 @@ Interactive components rely on :ref:`callback`, :ref:`virtualpage` or :ref:`sse`
 just as you would add any other component, yet they will send additional requests, like loading additional data or executing
 other code. Here is how interractive components will typically communicate:
 
-1. request by browser is made. 
-2. :php:class:`App` asks :php:class:`Console` to render HTML+JavaScript. 
-3. JavaScript invokes AJAX request using a :php:class:`Callback` URL. 
+1. request by browser is made.
+2. :php:class:`App` asks :php:class:`Console` to render HTML + JavaScript.
+3. JavaScript invokes AJAX request using a :php:class:`Callback` URL.
 4. Callback invokes user-defined PHP code, which will generate some :php:meth:`Console::output()`.
-5. Response is encoded and 
+5. Response is encoded and
 6. sent back to the browser either as JSON or :ref:`sse`.
 
 
@@ -77,6 +78,8 @@ other code. Here is how interractive components will typically communicate:
     progressbar
     popup
     wizard
+    rightpanel
+    dataexecutor
 
 
 Composite components

@@ -1,66 +1,95 @@
 <?php
 
-namespace atk4\ui;
+declare(strict_types=1);
+
+namespace Atk4\Ui;
+
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpressionable;
 
 /**
  * This class add modal dialog to a page.
  *
  * Modal are added to the layout but their content is hidden by default.
- * $modal->show() is the triggered needed to actually display the modal.
+ * $modal->jsShow() is the triggered needed to actually display the modal.
  *
  * Modal can be use as a regular view, simply by adding other view to it.
- *  $modal->add(['Message', 'title'=>'Welcome to Agile Toolkit')->text('Your text here').
+ *  Message::addTo($modal, ['title' => 'Welcome to Agile Toolkit'])->text('Your text here');
  *
  * Modal can add content dynamically via CallbackLater.
- *  $modal->set(function ($modal) {
- *     $modal->add('Form');
- * });
+ *  $modal->set(function (View $p) {
+ *     Form::addTo($p);
+ *  });
  *
- * Modal can use semantic-ui predefine method onApprove or onDeny by passing
+ * Modal can use Fomantic-UI predefine method onApprove or onDeny by passing
  * a jsAction to Modal::addDenyAction or Modal::addApproveAction method. It will not close until the jsAction return true.
- *  $modal->addDenyAction('No', new \atk4\ui\jsExpression('function(){window.alert("Can\'t do that."); return false;}'));
- *  $modal->addApproveAction('Yes', new \atk4\ui\jsExpression('function(){window.alert("You\'re good to go!");}'));
+ *  $modal->addDenyAction('No', new JsExpression('function () { window.alert(\'Cannot do that.\'); return false; }'));
+ *  $modal->addApproveAction('Yes', new JsExpression('function () { window.alert(\'You are good to go!\'); }'));
  *
  * You may also prevent modal from closing via the esc or dimmed area click using $modal->notClosable().
- *
- * Some helper methods are also available to set: transition time, transition type or modal settings from semantic-ui.
  */
 class Modal extends View
 {
-    public $defaultTemplate = 'modal.html';
-    public $title = 'Modal title';
-    public $loading_label = 'Loading...';
     public $ui = 'modal';
-    public $fx = [];
-    public $cb = null;
-    public $cb_view = null;
-    public $args = [];
+    public $defaultTemplate = 'modal.html';
 
-    //now only supported json type response.
+    /** @var string|null Set null for no title */
+    public $title;
+    /** @var string */
+    public $loadingLabel = 'Loading...';
+    /** @var string */
+    public $headerCss = 'header';
+    /** @var \Closure(View): void|null */
+    public $fx;
+    /** @var CallbackLater|null */
+    public $cb;
+    /** @var View|null */
+    public $cbView;
+    /** @var array */
+    public $args = [];
+    /** @var array */
+    public $options = [];
+
+    /** @var string Currently only "json" response type is supported. */
     public $type = 'json';
 
-    public function init()
+    /** @var array Add ability to add css classes to "content" div. */
+    public $contentCss = ['img', 'content', 'atk-dialog-content'];
+
+    /**
+     * If true, the <div class="actions"> at the bottom of the modal is
+     * shown. Automatically set to true if any actions are added.
+     *
+     * @var bool
+     */
+    public $showActions = false;
+
+    protected function init(): void
     {
         parent::init();
-        $this->template->trySet('title', $this->title);
+
+        $this->getApp()->registerPortals($this);
     }
 
     /**
      * Set callback function for this modal.
+     * $fx is set as an array in order to comply with View::set().
+     * TODO Rename this function and break BC?
      *
-     * @param array|string $fx
-     * @param array|string $arg2
-     *
-     * @throws Exception
+     * @param \Closure(View): void $fx
+     * @param never                $ignore
      *
      * @return $this
      */
-    public function set($fx = [], $arg2 = null)
+    public function set($fx = null, $ignore = null)
     {
-        if (!is_object($fx) && !($fx instanceof Closure)) {
-            throw new Exception('Error: Need to pass a function to Modal::set()');
+        if (!$fx instanceof \Closure) {
+            throw new \TypeError('$fx must be of type Closure');
+        } elseif (func_num_args() > 1) {
+            throw new Exception('Only one argument is needed by Modal::set()');
         }
-        $this->fx = [$fx];
+
+        $this->fx = $fx;
         $this->enableCallback();
 
         return $this;
@@ -69,47 +98,56 @@ class Modal extends View
     /**
      * Add View to be loaded in this modal and
      * attach CallbackLater to it.
-     * The cb_view only will be loaded dynamically within modal
+     * The cbView only will be loaded dynamically within modal
      * div.atk-content.
      */
-    public function enableCallback()
+    public function enableCallback(): void
     {
-        $this->cb_view = $this->add('View');
-        $this->cb = $this->cb_view->add('CallbackLater');
+        $this->cbView = View::addTo($this);
+        $this->cbView->stickyGet('__atk_m', $this->name);
+        if (!$this->cb) {
+            $this->cb = CallbackLater::addTo($this->cbView);
+        }
 
         $this->cb->set(function () {
-            if ($this->cb->triggered() && $this->fx) {
-                $this->fx[0]($this->cb_view);
-            }
-            $this->app->terminate($this->cb_view->renderJSON());
+            ($this->fx)($this->cbView);
+            $this->cb->terminateJson($this->cbView);
         });
     }
 
     /**
-     * Set modal to show on page.
-     * Will trigger modal to be show on page.
-     * ex: $button->on('click', $modal->show());.
+     * Add CSS classes to "content" div.
      *
-     * @param array $args
-     *
-     * @return mixed
+     * @param string|array $class
      */
-    public function show($args = [])
+    public function addContentCss($class): void
     {
-        $js_chain = $this->js();
-        if (!empty($args)) {
-            $js_chain->data(['args' => $args]);
+        $this->contentCss = array_merge($this->contentCss, is_string($class) ? [$class] : $class);
+    }
+
+    /**
+     * Show modal on page.
+     *
+     * Example: $button->on('click', $modal->jsShow());
+     *
+     * @return JsChain
+     */
+    public function jsShow(array $args = []): JsExpressionable
+    {
+        $chain = $this->js();
+        if ($args !== []) {
+            $chain->data(['args' => $args]);
         }
 
-        return $js_chain->modal('show');
+        return $chain->modal('show');
     }
 
     /**
      * Hide modal from page.
      *
-     * @return mixed
+     * @return JsChain
      */
-    public function hide()
+    public function jsHide(): JsExpressionable
     {
         return $this->js()->modal('hide');
     }
@@ -117,45 +155,14 @@ class Modal extends View
     /**
      * Set modal option.
      *
-     * @param $option
-     * @param $value
+     * @param string $option
+     * @param mixed  $value
      *
      * @return $this
      */
     public function setOption($option, $value)
     {
-        $this->options['modal_option'][$option] = $value;
-
-        return $this;
-    }
-
-    /**
-     * Set modal options passing an array.
-     *
-     * @param $options
-     *
-     * @return $this
-     */
-    public function setOptions($options)
-    {
-        if (isset($this->options['modal_option'])) {
-            $this->options['modal_option'] = array_merge($this->options['modal_option'], $options);
-        } else {
-            $this->options['modal_option'] = $options;
-        }
-
-        return $this;
-    }
-
-    /**
-     * Whether any change in modal DOM should automatically refresh cached positions.
-     * Allow modal window to add scrolling when adding content dynamically after modal creation.
-     *
-     * @return $this
-     */
-    public function observeChanges()
-    {
-        $this->setOptions(['observeChanges' => true]);
+        $this->options[$option] = $value;
 
         return $this;
     }
@@ -167,64 +174,25 @@ class Modal extends View
      */
     public function addScrolling()
     {
-        $this->addClass('scrolling');
+        $this->addContentCss('scrolling');
 
         return $this;
-    }
-
-    /**
-     * Set modal transition.
-     *
-     * @param $transition_type
-     *
-     * @return $this
-     */
-    public function transition($transition_type)
-    {
-        $this->settings('transition', $transition_type);
-
-        return $this;
-    }
-
-    /**
-     * Set modal transition duration.
-     *
-     * @param $time
-     *
-     * @return $this
-     */
-    public function duration($time)
-    {
-        $this->settings('duration', $time);
-
-        return $this;
-    }
-
-    /**
-     * Add modal settings.
-     *
-     * @param $setting_option
-     * @param $value
-     */
-    public function settings($setting_option, $value)
-    {
-        $this->options['setting'][$setting_option] = $value;
     }
 
     /**
      * Add a deny action to modal.
      *
-     * @param $label.
-     * @param $jsAction : Javascript action that will run when deny is click.
+     * @param string           $label
+     * @param JsExpressionable $jsAction will run when deny is click
      *
      * @return $this
      */
-    public function addDenyAction($label, $jsAction)
+    public function addDenyAction($label, JsExpressionable $jsAction)
     {
-        $b = new Button();
-        $b->set($label)->addClass('red cancel');
-        $this->addButtonAction($b);
-        $this->options['modal_option']['onDeny'] = $jsAction;
+        $button = new Button();
+        $button->set($label)->addClass('red cancel');
+        $this->addButtonAction($button);
+        $this->options['onDeny'] = $jsAction;
 
         return $this;
     }
@@ -232,17 +200,17 @@ class Modal extends View
     /**
      * Add an approve action button to modal.
      *
-     * @param $label.
-     * @param $jsAction : Javascript action that will run when approve is click.
+     * @param string           $label
+     * @param JsExpressionable $jsAction will run when deny is click
      *
      * @return $this
      */
-    public function addApproveAction($label, $jsAction)
+    public function addApproveAction($label, JsExpressionable $jsAction)
     {
         $b = new Button();
         $b->set($label)->addClass('green ok');
         $this->addButtonAction($b);
-        $this->options['modal_option']['onApprove'] = $jsAction;
+        $this->options['onApprove'] = $jsAction;
 
         return $this;
     }
@@ -250,13 +218,14 @@ class Modal extends View
     /**
      * Add an action button to modal.
      *
-     * @param $button
+     * @param View $button
      *
      * @return $this
      */
     public function addButtonAction($button)
     {
         $this->add($button, 'actions');
+        $this->showActions = true;
 
         return $this;
     }
@@ -268,39 +237,49 @@ class Modal extends View
      */
     public function notClosable()
     {
-        $this->options['modal_option']['closable'] = false;
+        $this->options['closable'] = false;
 
         return $this;
     }
 
-    public function renderView()
+    protected function renderView(): void
     {
+        $data = [];
         $data['type'] = $this->type;
-        $data['label'] = $this->loading_label;
+        $data['loadingLabel'] = $this->loadingLabel;
 
-        if (!empty($this->fx)) {
-            $data['uri'] = $this->cb->getJSURL();
-        }
-
-        // call modal creation first
-        if (isset($this->options['modal_option'])) {
-            $this->js(true)->modal($this->options['modal_option']);
+        if ($this->title) {
+            $this->template->trySet('title', $this->title);
+            $this->template->trySet('headerCss', $this->headerCss);
         } else {
-            $this->js(true)->modal();
+            // fix top modal corner rounding, first div must not be empty (must not be lower than 5px)
+            // https://github.com/fomantic/Fomantic-UI/blob/2.9.0/src/definitions/modules/modal.less#L43
+            $this->template->loadFromString(preg_replace('~<div class="\{\$headerCss\}">\{\$title\}</div>\s*~', '', $this->template->toLoadableString(), 1));
         }
 
-        //add setting if available.
-        if (isset($this->options['setting'])) {
-            foreach ($this->options['setting'] as $key => $value) {
-                $this->js(true)->modal('setting', $key, $value);
-            }
+        if ($this->contentCss) {
+            $this->template->trySet('contentCss', implode(' ', $this->contentCss));
         }
 
-        if (!isset($this->options['modal_option']['closable']) || $this->options['modal_option']['closable']) {
-            $this->template->trySet('close', 'icon close');
+        if ($this->fx !== null) {
+            $data['url'] = $this->cb->getJsUrl();
         }
 
-        if (!empty($this->args)) {
+        if (!$this->showActions) {
+            $this->template->del('ActionContainer');
+        }
+
+        $this->js(true)->modal($this->options);
+
+        if (!isset($this->options['closable']) || $this->options['closable']) {
+            $this->template->trySet('closeIcon', 'close');
+        } else {
+            // fix no extra space for icon
+            // TODO should be replaced with i tag render
+            $this->template->loadFromString(preg_replace('~<i class="\{\$closeIcon\} icon"></i>~', '', $this->template->toLoadableString(), 1));
+        }
+
+        if ($this->args) {
             $data['args'] = $this->args;
         }
         $this->js(true)->data($data);

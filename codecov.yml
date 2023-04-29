@@ -1,2 +1,9 @@
-ignore:
-  - demos
+comment: false
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 0.015
+    patch: false
+    changes: false

@@ -1,165 +1,155 @@
 <?php
 
-namespace atk4\ui;
+declare(strict_types=1);
 
-use atk4\core\AppScopeTrait;
-use atk4\core\DIContainerTrait;
-use atk4\core\InitializerTrait;
-use atk4\core\TrackableTrait;
+namespace Atk4\Ui;
+
+use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 
 /**
  * Add this object to your render tree and it will expose a unique URL which, when
  * executed directly will perform a PHP callback that you set().
  *
- * $button = $layout->add('Button');
+ * Callback function run when triggered, i.e. when it's urlTrigger param value is present in the $_GET request.
+ * The current callback will be set within the $_GET[Callback::URL_QUERY_TARGET] and will be set to urlTrigger as well.
+ *
+ * $button = Button::addTo($layout);
  * $button->set('Click to do something')->link(
- *      $button
- *          ->add('Callback')
- *          ->set(function(){
+ *      Callback::addTo($button)
+ *          ->set(function () {
  *              do_something();
  *          })
- *          ->getURL()
+ *          ->getUrl()
  *  );
  */
-class Callback
+class Callback extends AbstractView
 {
-    use TrackableTrait;
-    use AppScopeTrait;
-    use DIContainerTrait;
-    use InitializerTrait {
-        init as _init;
+    public const URL_QUERY_TRIGGER_PREFIX = '__atk_cb_';
+    public const URL_QUERY_TARGET = '__atk_cbtarget';
+
+    /** @var string Specify a custom GET trigger. */
+    protected $urlTrigger;
+
+    /** @var bool Allow this callback to trigger during a reload. */
+    public $triggerOnReload = true;
+
+    public function add(AbstractView $object, array $args = []): AbstractView
+    {
+        throw new Exception('Callback cannot contain children');
     }
 
-    /**
-     * Will look for trigger in the POST data. Will not care about URL, but
-     * $_POST[$this->postTrigger] must be set.
-     *
-     * @var string|bool
-     */
-    public $postTrigger = false;
-
-    /**
-     * Contains either false if callback wasn't triggered or the value passed
-     * as an argument to a call-back.
-     *
-     * e.g. following URL of getURL('test') will result in $triggered = 'test';
-     *
-     * @var string|false
-     */
-    public $triggered = false;
-
-    /**
-     * Specify a custom GET trigger here.
-     *
-     * @var string|null
-     */
-    public $urlTrigger = null;
-
-    /**
-     * Initialize object and set default properties.
-     *
-     * @param array|string $defaults
-     */
-    public function __construct($defaults = [])
+    protected function init(): void
     {
-        $this->setDefaults($defaults);
+        $this->getApp(); // assert has App
+
+        parent::init();
+
+        $this->setUrlTrigger($this->urlTrigger);
     }
 
-    /**
-     * Initialization.
-     */
-    public function init()
+    public function setUrlTrigger(string $trigger = null): void
     {
-        $this->_init();
+        $this->urlTrigger = $trigger ?? $this->name;
 
-        if (!$this->urlTrigger) {
-            $this->urlTrigger = $this->name;
-        }
+        $this->getOwner()->stickyGet(self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger);
+    }
 
-        if ($this->postTrigger === true) {
-            $this->postTrigger = $this->name;
-        }
-
-        $this->owner->stickyGet($this->urlTrigger);
-
-        if (!$this->app) {
-            throw new Exception(['Call-back must be part of a RenderTree']);
-        }
+    public function getUrlTrigger(): string
+    {
+        return $this->urlTrigger;
     }
 
     /**
      * Executes user-specified action when call-back is triggered.
      *
-     * @param callable $callback
-     * @param array    $args
+     * @template T
      *
-     * @return mixed|null
+     * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): T $fx
+     * @param array                                                                             $fxArgs
+     *
+     * @phpstan-return T|null
      */
-    public function set($callback, $args = [])
+    public function set($fx = null, $fxArgs = null)
     {
-        if ($this->postTrigger) {
-            if (isset($_POST[$this->postTrigger])) {
-                $this->app->catch_runaway_callbacks = false;
-                $this->triggered = $_POST[$this->postTrigger];
-
-                $t = $this->app->run_called;
-                $this->app->run_called = true;
-                $ret = call_user_func_array($callback, $args);
-                $this->app->run_called = $t;
-
-                return $ret;
+        if ($this->isTriggered() && $this->canTrigger()) {
+            try {
+                return $fx(...($fxArgs ?? []));
+            } catch (\Exception $e) {
+                // catch and wrap an exception using a custom Error class to prevent "Callback requested, but never reached"
+                // exception which is hard to understand/locate as thrown from the main app context
+                throw new UnhandledCallbackExceptionError('', 0, $e);
             }
-        } else {
-            if (isset($_GET[$this->urlTrigger])) {
-                $this->app->catch_runaway_callbacks = false;
-                $this->triggered = $_GET[$this->urlTrigger];
+        }
 
-                $t = $this->app->run_called;
-                $this->app->run_called = true;
-                $this->owner->stickyGet($this->urlTrigger);
-                $ret = call_user_func_array($callback, $args);
-                //$this->app->stickyForget($this->name);
-                $this->app->run_called = $t;
+        return null;
+    }
 
-                return $ret;
-            }
+    /**
+     * Terminate this callback by rendering the given view.
+     */
+    public function terminateJson(View $view): void
+    {
+        if ($this->canTerminate()) {
+            $this->getApp()->terminateJson($view);
         }
     }
 
     /**
-     * Is callback triggered?
-     *
-     * @return bool
+     * Return true if urlTrigger is part of the request.
      */
-    public function triggered()
+    public function isTriggered(): bool
     {
-        return isset($_GET[$this->urlTrigger]) ? $_GET[$this->urlTrigger] : false;
+        return isset($_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger]);
+    }
+
+    /**
+     * Return callback triggered value.
+     */
+    public function getTriggeredValue(): string
+    {
+        return $_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger] ?? '';
+    }
+
+    /**
+     * Only current callback can terminate.
+     */
+    public function canTerminate(): bool
+    {
+        return isset($_GET[self::URL_QUERY_TARGET]) && $_GET[self::URL_QUERY_TARGET] === $this->urlTrigger;
+    }
+
+    /**
+     * Allow callback to be triggered or not.
+     */
+    public function canTrigger(): bool
+    {
+        return $this->triggerOnReload || !isset($_GET['__atk_reload']);
     }
 
     /**
      * Return URL that will trigger action on this call-back. If you intend to request
-     * the URL direcly in your browser (as iframe, new tab, or document location), you
-     * should use getURL instead.
-     *
-     * @param string $mode
-     *
-     * @return string
+     * the URL directly in your browser (as iframe, new tab, or document location), you
+     * should use getUrl instead.
      */
-    public function getJSURL($mode = 'ajax')
+    public function getJsUrl(string $value = 'ajax'): string
     {
-        return $this->owner->jsURL([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
+        return $this->getOwner()->jsUrl($this->getUrlArguments($value));
     }
 
     /**
      * Return URL that will trigger action on this call-back. If you intend to request
-     * the URL loading from inside JavaScript, it's always advised to use getJSURL instead.
-     *
-     * @param string $mode
-     *
-     * @return string
+     * the URL loading from inside JavaScript, it's always advised to use getJsUrl instead.
      */
-    public function getURL($mode = 'callback')
+    public function getUrl(string $value = 'callback'): string
     {
-        return $this->owner->url([$this->urlTrigger => $mode, '__atk_callback'=>1], (bool) $this->postTrigger);
+        return $this->getOwner()->url($this->getUrlArguments($value));
+    }
+
+    /**
+     * Return proper url argument for this callback.
+     */
+    private function getUrlArguments(string $value = null): array
+    {
+        return [self::URL_QUERY_TARGET => $this->urlTrigger, self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger => $value ?? $this->getTriggeredValue()];
     }
 }

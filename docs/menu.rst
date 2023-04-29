@@ -5,10 +5,10 @@
 Menu
 ====
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 .. php:class:: Menu
 
-Menu implements horizontal or vertical multi-level menu by using Semantic UI's 'menu'.
+Menu implements horizontal or vertical multi-level menu by using Fomantic-UI 'menu'.
 
 Using Menu
 ==========
@@ -17,7 +17,7 @@ Using Menu
 
 Here is a simple usage::
 
-    $menu = $app->add('Menu');
+    $menu = Menu::addTo($app);
     $menu->addItem('foo');
     $menu->addItem('bar');
 
@@ -29,9 +29,9 @@ to make menu vertical::
 Decorating Menu Items
 =====================
 
-See :php:class:`Item` for more options::
+See :php:class:`MenuItem` for more options::
 
-    $menu->addItem(['foo', 'icon'=>'book']);
+    $menu->addItem(['foo', 'icon' => 'book']);
 
 Specifying Links and Actions
 ============================
@@ -39,7 +39,7 @@ Specifying Links and Actions
 Menu items can use links and actions::
 
     $menu->addItem('foo', 'test.php');
-    $menu->addItem('bar', new jsModal('Test'));
+    $menu->addItem('bar', new JsModal('Test'));
 
 Creating sub-menus
 ==================
@@ -53,7 +53,7 @@ menu you can also use groups. For horizontal menu, you can use addRightMenu.
 
 ::
 
-    $menu = $app->add('Menu');
+    $menu = Menu::addTo($app);
     $menu->addItem('foo');
     $sub = $menu->addMenu('Some Bars');
     $sub->addItem('bar 1');
@@ -69,12 +69,12 @@ Advanced Use
 
 You can add other elements inside menu. Refer to demos/menu.php.
 
-Item
+MenuItem
 ====
 
-.. php:class:: Item
+.. php:class:: MenuItem
 
-.. php:attr:: $label
+.. php:attr:: label
 
 .. php::attr:: $icon
 

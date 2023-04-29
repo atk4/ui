@@ -1,13 +1,20 @@
 <?php
 
-namespace atk4\ui;
+declare(strict_types=1);
+
+namespace Atk4\Ui;
+
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpressionable;
 
 /**
- * Class implements Loader, which is a View that will dynamically render it's content.
+ * Dynamically render it's content.
  * To provide content for a loader, use set() callback.
  */
 class Loader extends View
 {
+    public $ui = 'segment';
+
     /**
      * Shim is a filler object that is displayed inside loader while the actual content is fetched
      * from the server. You may supply an object here or a seed. This view will be replaced
@@ -19,7 +26,7 @@ class Loader extends View
     public $shim;
 
     /**
-     * Specify which event will cause Loader to begen fetching it's actual data. In some cases
+     * Specify which event will cause Loader to begin fetching it's actual data. In some cases
      * you would want to wait. You can set a custom JavaScript event name then trigger() it.
      *
      * Default value is `true` which means loading will take place as soon as possible. Setting this
@@ -29,20 +36,23 @@ class Loader extends View
      */
     public $loadEvent = true;
 
-    public $ui = 'ui segment';
+    /** @var Callback for triggering */
+    public $cb;
 
-    /** @var callable for triggering */
-    protected $cb;
+    /** @var array Url arguments. */
+    public $urlArgs = [];
 
-    public function init()
+    protected function init(): void
     {
         parent::init();
 
-        if (!$this->shim) {
-            $this->shim = ['View', 'class' => ['padded segment'], 'style' => ['min-height' => '7em']];
+        if (!$this->shim) { // @phpstan-ignore-line
+            $this->shim = [View::class, 'class' => ['padded segment'], 'style' => ['min-height' => '5em']];
         }
 
-        $this->cb = $this->add('Callback');
+        if (!$this->cb) { // @phpstan-ignore-line
+            $this->cb = Callback::addTo($this);
+        }
     }
 
     /**
@@ -50,34 +60,31 @@ class Loader extends View
      *
      * The loader view is pass as an argument to the loader callback function.
      * This allow to easily update the loader view content within the callback.
-     *  $l1 = $layout->add('Loader');
-     *  $l1->set(function ($loader_view) {
+     *  $l1 = Loader::addTo($layout);
+     *  $l1->set(function (Loader $p) {
      *    do_long_processing_action();
-     *    $loader_view->set('new content');
+     *    $p->set('new content');
      *  });
      *
      * Or
      *  $l1->set([$my_object, 'run_long_process']);
      *
-     * NOTE: default values are like that due ot PHP 7.0 warning:
-     * Declaration of atk4\ui\Loader::set($fx, $args = Array) should be compatible with atk4\ui\View::set($arg1 = Array, $arg2 = NULL)
-     *
-     * @param callable $fx
-     * @param array    $args
-     *
-     * @throws Exception
+     * @param \Closure($this): void $fx
+     * @param never                 $ignore
      *
      * @return $this
      */
-    public function set($fx = [], $args = null)
+    public function set($fx = null, $ignore = null)
     {
-        if (!is_callable($fx)) {
-            throw new Exception('Error: Need to pass a callable function to Loader::set()');
+        if (!$fx instanceof \Closure) {
+            throw new \TypeError('$fx must be of type Closure');
+        } elseif (func_num_args() > 1) {
+            throw new Exception('Only one argument is needed by Loader::set()');
         }
 
         $this->cb->set(function () use ($fx) {
-            call_user_func($fx, $this);
-            $this->app->terminate($this->renderJSON());
+            $fx($this);
+            $this->cb->terminateJson($this);
         });
 
         return $this;
@@ -87,30 +94,32 @@ class Loader extends View
      * Automatically call the jsLoad on a supplied event unless it was already triggered
      * or if user have invoked jsLoad manually.
      */
-    public function renderView()
+    protected function renderView(): void
     {
-        if (!$this->cb->triggered()) {
+        if (!$this->cb->isTriggered()) {
             if ($this->loadEvent) {
-                $this->js($this->loadEvent, $this->jsLoad());
+                $this->js($this->loadEvent, $this->jsLoad($this->urlArgs));
             }
             $this->add($this->shim);
         }
 
-        return parent::renderView();
+        parent::renderView();
     }
 
     /**
      * Return a js action that will trigger the loader to start.
      *
-     * @param array $args
+     * @param string $storeName
      *
-     * @return mixed
+     * @return JsChain
      */
-    public function jsLoad($args = [])
+    public function jsLoad(array $args = [], array $apiConfig = [], $storeName = null): JsExpressionable
     {
         return $this->js()->atkReloadView([
-            'uri'         => $this->cb->getJSURL(),
-            'uri_options' => $args,
+            'url' => $this->cb->getUrl(),
+            'urlOptions' => $args,
+            'apiConfig' => $apiConfig !== [] ? $apiConfig : null,
+            'storeName' => $storeName,
         ]);
     }
 }

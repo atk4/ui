@@ -1,0 +1,16 @@
+div({$attributes})
+    .ui.padded.grid
+        .row.atk-maestro-menu-title
+            .two.wide.column.atk-submenu-toggle
+                div
+                    i.caret.right.icon
+            .eleven.wide.column.atk-menu-group-title
+                header
+                    | {$title}
+            .three.wide.column
+                | {$Icon}
+        .row.atk-maestro-menu-items
+            .sixteen.wide.column
+                .menu
+                    | {$Content}
+= "\n"

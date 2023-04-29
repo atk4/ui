@@ -1,268 +1,502 @@
 <?php
 
-namespace atk4\ui;
+declare(strict_types=1);
+
+namespace Atk4\Ui;
+
+use Atk4\Core\AppScopeTrait;
+use Atk4\Core\DiContainerTrait;
+use Atk4\Core\DynamicMethodTrait;
+use Atk4\Core\ExceptionRenderer;
+use Atk4\Core\Factory;
+use Atk4\Core\HookTrait;
+use Atk4\Core\TraitUtil;
+use Atk4\Core\WarnDynamicPropertyTrait;
+use Atk4\Data\Persistence;
+use Atk4\Ui\Exception\ExitApplicationError;
+use Atk4\Ui\Exception\LateOutputError;
+use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Persistence\Ui as UiPersistence;
+use Atk4\Ui\UserAction\ExecutorFactory;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7\Response;
+use Nyholm\Psr7Server\ServerRequestCreator;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Log\LoggerInterface;
 
 class App
 {
-    use \atk4\core\InitializerTrait {
-        init as _init;
-    }
+    use AppScopeTrait;
+    use DiContainerTrait;
+    use DynamicMethodTrait;
+    use HookTrait;
 
-    use \atk4\core\HookTrait;
-    use \atk4\core\DynamicMethodTrait;
-    use \atk4\core\FactoryTrait;
-    use \atk4\core\AppScopeTrait;
-    use \atk4\core\DIContainerTrait;
+    public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
+    public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
 
-    // @var array|false Location where to load JS/CSS files
+    /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
-        'atk'              => 'https://cdn.rawgit.com/atk4/ui/1.4.5/public',
-        'jquery'           => 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1',
-        'serialize-object' => 'https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0',
-        'semantic-ui'      => 'https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1',
-        'calendar'         => 'https://cdn.rawgit.com/mdehoog/Semantic-UI-Calendar/0.0.8/dist',
+        'atk' => '/public',
+        'jquery' => '/public/external/jquery/dist',
+        'fomantic-ui' => '/public/external/fomantic-ui/dist',
+        'flatpickr' => '/public/external/flatpickr/dist',
+        'chart.js' => '/public/external/chart.js/dist', // for atk4/chart
     ];
 
-    // @var string Version of Agile UI
-    public $version = '1.4.5';
+    /** @var ExecutorFactory App wide executor factory object for Model user action. */
+    protected $executorFactory;
 
-    // @var string Name of application
+    /**
+     * @var string Version of Agile UI
+     *
+     * @TODO remove, no longer needed for CDN versioning as we bundle all resources
+     */
+    public $version = '5.0-dev';
+
+    /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
 
-    // @var Layout\Generic
-    public $layout = null; // the top-most view object
+    /** @var Layout the top-most view object */
+    public $layout;
 
-    // @var string
-    public $template_dir = null;
+    /** @var string|array Set one or more directories where templates should reside. */
+    public $templateDir;
 
-    // @var string Name of skin
-    public $skin = 'semantic-ui';
+    /** @var bool Will replace an exception handler with our own, that will output errors nicely. */
+    public $catchExceptions = true;
 
-    /**
-     * Will replace an exception handler with our own, that will output errors nicely.
-     *
-     * @var bool
-     */
-    public $catch_exceptions = true;
+    /** @var bool Will display error if callback wasn't triggered. */
+    public $catchRunawayCallbacks = true;
 
-    /**
-     * Will display error if callback wasn't triggered.
-     *
-     * @var bool
-     */
-    public $catch_runaway_callbacks = true;
-
-    /**
-     * Will always run application even if developer didn't explicitly executed run();.
-     *
-     * @var bool
-     */
-    public $always_run = true;
+    /** @var bool Will always run application even if developer didn't explicitly executed run();. */
+    public $alwaysRun = true;
 
     /**
      * Will be set to true after app->run() is called, which may be done automatically
      * on exit.
-     *
-     * @var bool
      */
-    public $run_called = false;
-
-    // @var bool
-    public $_cwd_restore = true;
+    public bool $runCalled = false;
 
     /**
-     * function setModel(MyModel $m);.
-     *
-     * is considered 'WARNING' even though MyModel descends from the parent class. This
-     * is not an incompatible class. We want to write clean PHP code and therefore this
-     * warning is disabled by default until it's fixed correctly in PHP.
-     *
-     * See: http://stackoverflow.com/a/42840762/204819
-     *
-     * @var bool
+     * Will be set to true, when exit is called. Sometimes exit is intercepted by shutdown
+     * handler and we don't want to execute 'beforeExit' multiple times.
      */
-    public $fix_incompatible = true;
+    private bool $exitCalled = false;
 
-    // @var bool
-    public $is_rendering = false;
+    public bool $isRendering = false;
 
-    // @var Persistence\UI
-    public $ui_persistence = null;
+    /** @var UiPersistence */
+    public $uiPersistence;
+
+    /** @var View|null For internal use */
+    public $html;
+
+    /** @var LoggerInterface|null Target for objects with DebugTrait */
+    public $logger;
+
+    /** @var Persistence|Persistence\Sql */
+    public $db;
+
+    /** @var App\SessionManager */
+    public $session;
+
+    private ServerRequestInterface $request;
+
+    private ResponseInterface $response;
+
+    /** @var array<string, View> Modal view that need to be rendered using json output. */
+    private $portals = [];
 
     /**
-     * @var View For internal use
-     */
-    public $html = null;
-
-    /**
-     * @var LoggerInterface, target for objects with DebugTrait
-     */
-    public $logger = null;
-
-    /**
-     * Constructor.
+     * @var string used in method App::url to build the url
      *
-     * @param array $defaults
+     * Used only in method App::url
+     * Remove and re-add the extension of the file during parsing requests and building urls
      */
-    public function __construct($defaults = [])
+    protected $urlBuildingExt = '.php';
+
+    /** @var bool Call exit in place of throw Exception when Application need to exit. */
+    public $callExit = true;
+
+    /** @var string|null */
+    public $page;
+
+    /** @var array global sticky arguments */
+    protected array $stickyGetArguments = [
+        '__atk_json' => false,
+        '__atk_tab' => false,
+    ];
+
+    /** @var class-string */
+    public $templateClass = HtmlTemplate::class;
+
+    public function __construct(array $defaults = [])
     {
-        $this->app = $this;
+        if (isset($defaults['request'])) {
+            $this->request = $defaults['request'];
+            unset($defaults['request']);
+        } else {
+            $requestFactory = new Psr17Factory();
+            $requestCreator = new ServerRequestCreator($requestFactory, $requestFactory, $requestFactory, $requestFactory);
 
-        // Process defaults
-        if (is_string($defaults)) {
-            $defaults = ['title' => $defaults];
-        }
-
-        if (isset($defaults[0])) {
-            $defaults['title'] = $defaults[0];
-            unset($defaults[0]);
-        }
-
-        /*
-        if (is_array($defaults)) {
-            throw new Exception(['Constructor requires array argument', 'arg' => $defaults]);
-        }*/
-        $this->setDefaults($defaults);
-        /*
-
-        foreach ($defaults as $key => $val) {
-            if (is_array($val)) {
-                $this->$key = array_merge(isset($this->$key) && is_array($this->$key) ? $this->$key : [], $val);
-            } elseif (!is_null($val)) {
-                $this->$key = $val;
+            $noGlobals = [];
+            foreach (['_GET', '_COOKIE', '_FILES'] as $k) {
+                if (!array_key_exists($k, $GLOBALS)) {
+                    $noGlobals[] = $k;
+                    $GLOBALS[$k] = [];
+                }
+            }
+            try {
+                $this->request = $requestCreator->fromGlobals();
+            } finally {
+                foreach ($noGlobals as $k) {
+                    unset($GLOBALS[$k]);
+                }
             }
         }
-         */
 
-        // Set up template folder
-        $this->template_dir = __DIR__.'/../template/'.$this->skin;
+        if (isset($defaults['response'])) {
+            $this->response = $defaults['response'];
+            unset($defaults['response']);
+        } else {
+            $this->response = new Response();
+        }
+
+        // disable caching by default
+        $this->setResponseHeader('Cache-Control', 'no-store');
+
+        $this->setApp($this);
+
+        $this->setDefaults($defaults);
+
+        $this->setupTemplateDirs();
+
+        foreach ($this->cdn as $k => $v) {
+            if (str_starts_with($v, '/') && !str_starts_with($v, '//')) {
+                $this->cdn[$k] = $this->createRequestPathFromLocalPath(__DIR__ . '/..' . $v);
+            }
+        }
 
         // Set our exception handler
-        if ($this->catch_exceptions) {
-            set_exception_handler(function ($exception) {
-                return $this->caughtException($exception);
+        if ($this->catchExceptions) {
+            set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
+            set_error_handler(static function (int $severity, string $msg, string $file, int $line): bool {
+                if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
+                    $isFirstFrame = true;
+                    foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
+                        // allow to suppress any warning outside Atk4
+                        if ($isFirstFrame) {
+                            $isFirstFrame = false;
+                            if (!isset($frame['class']) || !str_starts_with($frame['class'], 'Atk4\\')) {
+                                return false;
+                            }
+                        }
+
+                        // allow to suppress undefined property warning
+                        if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
+                            && $frame['function'] === 'warnPropertyDoesNotExist') {
+                            return false;
+                        }
+                    }
+                }
+
+                throw new \ErrorException($msg, 0, $severity, $file, $line);
             });
-        }
-
-        if (!$this->_initialized) {
-            //$this->init();
-        }
-
-        if ($this->fix_incompatible) {
-            if (PHP_MAJOR_VERSION >= 7) {
-                set_error_handler(function ($errno, $errstr) {
-                    return strpos($errstr, 'Declaration of') === 0;
-                }, E_WARNING);
-            }
+            http_response_code(500);
         }
 
         // Always run app on shutdown
-        if ($this->always_run) {
-            if ($this->_cwd_restore) {
-                $this->_cwd_restore = getcwd();
-            }
-
-            register_shutdown_function(function () {
-                if (is_string($this->_cwd_restore)) {
-                    chdir($this->_cwd_restore);
-                }
-
-                if (!$this->run_called) {
-                    try {
-                        $this->run();
-                    } catch (\Exception $e) {
-                        $this->caughtException($e);
-                    }
-                }
-                exit;
-            });
+        if ($this->alwaysRun) {
+            $this->setupAlwaysRun();
         }
 
-        // Set up UI persistence
-        if (!isset($this->ui_persistence)) {
-            $this->ui_persistence = new Persistence\UI();
+        if ($this->uiPersistence === null) {
+            $this->uiPersistence = new UiPersistence();
         }
+
+        if ($this->session === null) {
+            $this->session = new App\SessionManager();
+        }
+
+        // setting up default executor factory.
+        $this->executorFactory = Factory::factory([ExecutorFactory::class]);
+    }
+
+    /**
+     * Register a portal view.
+     * Fomantic-ui Modal or atk Panel are teleported in HTML template
+     * within specific location. This will keep track
+     * of them when terminating app using json.
+     *
+     * @param Modal|Panel\Right $portal
+     */
+    public function registerPortals($portal): void
+    {
+        // TODO in https://github.com/atk4/ui/pull/1771 it has been discovered this method causes DOM code duplication,
+        // for some reasons, it seems even not needed, at least all Unit & Behat tests pass
+        // must be investigated
+        // $this->portals[$portal->name] = $portal;
+    }
+
+    public function setExecutorFactory(ExecutorFactory $factory): void
+    {
+        $this->executorFactory = $factory;
+    }
+
+    public function getExecutorFactory(): ExecutorFactory
+    {
+        return $this->executorFactory;
+    }
+
+    protected function setupTemplateDirs(): void
+    {
+        if ($this->templateDir === null) {
+            $this->templateDir = [];
+        } elseif (!is_array($this->templateDir)) {
+            $this->templateDir = [$this->templateDir];
+        }
+
+        $this->templateDir[] = dirname(__DIR__) . '/template';
+    }
+
+    protected function callBeforeExit(): void
+    {
+        if (!$this->exitCalled) {
+            $this->exitCalled = true;
+            $this->hook(self::HOOK_BEFORE_EXIT);
+        }
+    }
+
+    /**
+     * @return never
+     */
+    public function callExit(): void
+    {
+        $this->callBeforeExit();
+
+        if (!$this->callExit) {
+            // case process is not in shutdown mode
+            // App as already done everything
+            // App need to stop output
+            // set_handler to catch/trap any exception
+            set_exception_handler(static function (\Throwable $t): void {});
+            // raise exception to be trapped and stop execution
+            throw new ExitApplicationError();
+        }
+
+        exit;
     }
 
     /**
      * Catch exception.
-     *
-     * @param mixed $exception
      */
-    public function caughtException($exception)
+    public function caughtException(\Throwable $exception): void
     {
-        $this->catch_runaway_callbacks = false;
-
-        $l = new \atk4\ui\App();
-        $l->catch_runaway_callbacks = false;
-        $l->initLayout('Centered');
-        if ($exception instanceof \atk4\core\Exception) {
-            $l->layout->template->setHTML('Content', $exception->getHTML());
-        } elseif ($exception instanceof \Error) {
-            $l->layout->add(['Message', get_class($exception).': '.
-                $exception->getMessage().' (in '.$exception->getFile().':'.$exception->getLine().')',
-                'error', ]);
-            $l->layout->add(['Text', nl2br($exception->getTraceAsString())]);
-        } else {
-            $l->layout->add(['Message', get_class($exception).': '.$exception->getMessage(), 'error']);
+        if ($exception instanceof LateOutputError) {
+            $this->outputLateOutputError($exception);
         }
-        $l->layout->template->tryDel('Header');
-        $l->run();
-        $this->run_called = true;
+
+        while ($exception instanceof UnhandledCallbackExceptionError) {
+            $exception = $exception->getPrevious();
+        }
+
+        $this->catchRunawayCallbacks = false;
+
+        // just replace layout to avoid any extended App->_construct problems
+        // it will maintain everything as in the original app StickyGet, logger, Events
+        $this->html = null;
+        $this->initLayout([Layout\Centered::class]);
+
+        $this->layout->template->dangerouslySetHtml('Content', $this->renderExceptionHtml($exception));
+
+        // remove header
+        $this->layout->template->tryDel('Header');
+
+        if (($this->isJsUrlRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
+                && !isset($_GET['__atk_tab'])) {
+            $this->outputResponseJson([
+                'success' => false,
+                'message' => $this->layout->getHtml(),
+            ]);
+        } else {
+            $this->setResponseStatusCode(500);
+            $this->run();
+        }
+
+        // Process is already in shutdown/stop
+        // no need of call exit function
+        $this->callBeforeExit();
+    }
+
+    public function getRequest(): ServerRequestInterface
+    {
+        return $this->request;
+    }
+
+    public function getResponse(): ResponseInterface
+    {
+        return $this->response;
+    }
+
+    protected function assertHeadersNotSent(): void
+    {
+        if (headers_sent()
+            && \PHP_SAPI !== 'cli' // for phpunit
+            && $this->response->getHeaderLine('Content-Type') !== 'text/event-stream' // for SSE
+        ) {
+            $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
+            if ($this->catchExceptions) {
+                $this->caughtException($lateError);
+                $this->outputLateOutputError($lateError);
+            }
+
+            throw $lateError;
+        }
     }
 
     /**
-     * Outputs debug info.
-     *
-     * @param string $str
+     * @return $this
      */
-    public function outputDebug($str)
+    public function setResponseStatusCode(int $statusCode): self
     {
-        echo 'DEBUG:'.$str.'<br/>';
+        $this->assertHeadersNotSent();
+
+        $this->response = $this->response->withStatus($statusCode);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setResponseHeader(string $name, string $value): self
+    {
+        $this->assertHeadersNotSent();
+
+        if ($value === '') {
+            $this->response = $this->response->withoutHeader($name);
+        } else {
+            $name = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                return strtoupper($matches[0]);
+            }, strtolower($name));
+
+            $this->response = $this->response->withHeader($name, $value);
+        }
+
+        return $this;
     }
 
     /**
      * Will perform a preemptive output and terminate. Do not use this
-     * directly, instead call it form Callback, jsCallback or similar
+     * directly, instead call it form Callback, JsCallback or similar
      * other classes.
      *
-     * @param string $output
+     * @param string|StreamInterface|array $output Array type is supported only for JSON response
+     *
+     * @return never
      */
-    public function terminate($output = null)
+    public function terminate($output = ''): void
     {
-        if ($output !== null) {
-            echo $output;
+        $type = preg_replace('~;.*~', '', strtolower($this->response->getHeaderLine('Content-Type'))); // in LC without charset
+        if ($type === '') {
+            throw new Exception('Content type must be always set');
         }
-        $this->run_called = true; // prevent shutdown function from triggering.
-        exit;
+
+        if ($output instanceof StreamInterface) {
+            $this->response = $this->response->withBody($output);
+            $this->outputResponse('');
+        } elseif ($type === 'application/json') {
+            if (is_string($output)) {
+                $output = $this->decodeJson($output);
+            }
+            $output['portals'] = $this->getRenderedPortals();
+
+            $this->outputResponseJson($output);
+        } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
+            // ugly hack for TABS
+            // because Fomantic-UI tab only deal with html and not JSON
+            // we need to hack output to include app modal.
+            $ids = [];
+            $remove_function = '';
+            foreach ($this->getRenderedPortals() as $key => $modal) {
+                // add modal rendering to output
+                $ids[] = '#' . $key;
+                $output['atkjs'] .= '; ' . $modal['js'];
+                $output['html'] .= $modal['html'];
+            }
+            if (count($ids) > 0) {
+                $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . implode(', ', $ids) . '\').remove();';
+            }
+
+            $output = $this->getTag('script', [], '$(function () {' . $remove_function . $output['atkjs'] . '});')
+                . $output['html'];
+
+            $this->outputResponseHtml($output);
+        } elseif ($type === 'text/html') {
+            $this->outputResponseHtml($output);
+        } else {
+            $this->outputResponse($output);
+        }
+
+        $this->runCalled = true; // prevent shutdown function from triggering
+        $this->callExit();
+    }
+
+    /**
+     * @param string|array|View|HtmlTemplate $output
+     *
+     * @return never
+     */
+    public function terminateHtml($output): void
+    {
+        if ($output instanceof View) {
+            $output = $output->render();
+        } elseif ($output instanceof HtmlTemplate) {
+            $output = $output->renderToHtml();
+        }
+
+        $this->setResponseHeader('Content-Type', 'text/html');
+        $this->terminate($output);
+    }
+
+    /**
+     * @param string|array|View $output
+     *
+     * @return never
+     */
+    public function terminateJson($output): void
+    {
+        if ($output instanceof View) {
+            $output = $output->renderToJsonArr();
+        }
+
+        $this->setResponseHeader('Content-Type', 'application/json');
+        $this->terminate($output);
     }
 
     /**
      * Initializes layout.
      *
-     * @param string|Layout\Generic $layout
-     * @param array                 $options
+     * @param Layout|array $seed
      *
      * @return $this
      */
-    public function initLayout($layout, $options = [])
+    public function initLayout($seed)
     {
-        $layout = $this->factory($layout, null, 'Layout');
-        /*
-        if (is_string($layout)) {
-            $layout = $this->normalizeClassNameApp($layout, 'Layout');
-            $layout = new $layout($options);
-        }
-        */
-        $layout->app = $this;
+        $layout = Layout::fromSeed($seed);
+        $layout->setApp($this);
 
-        if (!$this->html) {
+        if ($this->html === null) {
             $this->html = new View(['defaultTemplate' => 'html.html']);
-            $this->html->app = $this;
-            $this->html->init();
+            $this->html->setApp($this);
+            $this->html->invokeInit();
         }
 
-        $this->layout = $this->html->add($layout);
+        $this->layout = $this->html->add($layout); // @phpstan-ignore-line
 
         $this->initIncludes();
 
@@ -272,31 +506,36 @@ class App
     /**
      * Initialize JS and CSS includes.
      */
-    public function initIncludes()
+    public function initIncludes(): void
     {
+        /** @var bool */
+        $minified = true;
+
         // jQuery
-        $url = isset($this->cdn['jquery']) ? $this->cdn['jquery'] : '../public';
-        $this->requireJS($url.'/jquery.min.js');
+        $this->requireJs($this->cdn['jquery'] . '/jquery' . ($minified ? '.min' : '') . '.js');
 
-        // Semantic UI
-        $url = isset($this->cdn['semantic-ui']) ? $this->cdn['semantic-ui'] : '../public';
-        $this->requireJS($url.'/semantic.min.js');
-        $this->requireCSS($url.'/semantic.css');
+        // Fomantic-UI
+        $this->requireJs($this->cdn['fomantic-ui'] . '/semantic' . ($minified ? '.min' : '') . '.js');
+        $this->requireCss($this->cdn['fomantic-ui'] . '/semantic' . ($minified ? '.min' : '') . '.css');
 
-        // Serialize Object
-        $url = isset($this->cdn['serialize-object']) ? $this->cdn['serialize-object'] : '../public';
-        $this->requireJS($url.'/jquery.serialize-object.min.js');
-
-        // Calendar
-        $url = isset($this->cdn['calendar']) ? $this->cdn['calendar'] : '../public';
-        $this->requireJS($url.'/calendar.min.js');
-        $this->requireCSS($url.'/calendar.css');
+        // flatpickr - TODO should be load only when needed
+        // needs https://github.com/atk4/ui/issues/1875
+        $this->requireJs($this->cdn['flatpickr'] . '/flatpickr' . ($minified ? '.min' : '') . '.js');
+        $this->requireCss($this->cdn['flatpickr'] . '/flatpickr' . ($minified ? '.min' : '') . '.css');
+        if ($this->uiPersistence->locale !== 'en') {
+            $this->requireJs($this->cdn['flatpickr'] . '/l10n/' . $this->uiPersistence->locale . '.js');
+            $this->html->js(true, new JsExpression('flatpickr.localize(window.flatpickr.l10ns.' . $this->uiPersistence->locale . ')'));
+        }
 
         // Agile UI
-        $url = isset($this->cdn['atk']) ? $this->cdn['atk'] : '../public';
-        $this->requireJS($url.'/atkjs-ui.min.js');
-        $this->requireJS($url.'/agileui.js');
-        $this->requireCSS($url.'/agileui.css');
+        $this->requireJs($this->cdn['atk'] . '/js/atkjs-ui' . ($minified ? '.min' : '') . '.js');
+        $this->requireCss($this->cdn['atk'] . '/css/agileui.min.css');
+
+        // Set js bundle dynamic loading path.
+        $this->html->template->tryDangerouslySetHtml(
+            'InitJsBundle',
+            (new JsExpression('window.__atkBundlePublicPath = [];', [$this->cdn['atk']]))->jsRender()
+        );
     }
 
     /**
@@ -305,278 +544,261 @@ class App
      *
      * @param string $style CSS rules, like ".foo { background: red }".
      */
-    public function addStyle($style)
+    public function addStyle($style): void
     {
-        if (!$this->html) {
-            throw new Exception(['App does not know how to add style']);
-        }
-        $this->html->template->appendHTML('HEAD', $this->getTag('style', $style));
+        $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('style', [], $style));
     }
 
     /**
-     * Normalizes class name.
+     * Add a new object into the app. You will need to have Layout first.
      *
-     * @param string $name
+     * @param AbstractView      $object
+     * @param string|array|null $region
      *
-     * @return string
+     * @return ($object is View ? View : AbstractView)
      */
-    public function normalizeClassNameApp($name)
+    public function add($object, $region = null): AbstractView
     {
-        return '\\'.__NAMESPACE__.'\\'.$name;
-    }
-
-    /**
-     * Create object and associate it with this app.
-     *
-     * @return object
-     */
-    public function add()
-    {
-        if ($this->layout) {
-            return call_user_func_array([$this->layout, 'add'], func_get_args());
-        } else {
-            list($obj) = func_get_args();
-
-            if (!is_object($obj)) {
-                throw new Exception(['Incorrect use of App::add. First parameter should be object.']);
-            }
-
-            $obj->app = $this;
-
-            return $obj;
+        if (!$this->layout) { // @phpstan-ignore-line
+            throw (new Exception('App layout is missing'))
+                ->addSolution('$app->initLayout() must be called first');
         }
+
+        return $this->layout->add($object, $region);
     }
 
     /**
      * Runs app and echo rendered template.
      */
-    public function run()
+    public function run(): void
     {
-        $this->run_called = true;
-        $this->hook('beforeRender');
-        $this->is_rendering = true;
+        $isExitException = false;
+        try {
+            $this->runCalled = true;
+            $this->hook(self::HOOK_BEFORE_RENDER);
+            $this->isRendering = true;
 
-        // if no App layout set
-        if (!isset($this->html)) {
-            throw new Exception(['App layout should be set.']);
+            $this->html->template->set('title', $this->title);
+            $this->html->renderAll();
+            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], '$(function () {' . $this->html->getJs() . ';});'));
+            $this->isRendering = false;
+
+            if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catchRunawayCallbacks) {
+                throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
+                    ->addMoreInfo('callback', $_GET[Callback::URL_QUERY_TARGET]);
+            }
+
+            $output = $this->html->template->renderToHtml();
+        } catch (ExitApplicationError $e) {
+            $output = '';
+            $isExitException = true;
         }
 
-        $this->html->template->set('title', $this->title);
-        $this->html->renderAll();
-        $this->html->template->appendHTML('HEAD', $this->html->getJS());
-        $this->is_rendering = false;
-        $this->hook('beforeOutput');
-
-        if (isset($_GET['__atk_callback']) && $this->catch_runaway_callbacks) {
-            $this->terminate('!! Callback requested, but never reached. You may be missing some arguments in '.$_SERVER['REQUEST_URI']);
+        if (!$this->exitCalled) { // output already sent by terminate()
+            if ($this->isJsUrlRequest()) {
+                $this->outputResponseJson($output);
+            } else {
+                $this->outputResponseHtml($output);
+            }
         }
 
-        echo $this->html->template->render();
+        if ($isExitException) {
+            $this->callExit();
+        }
     }
 
     /**
-     * Initialize app.
+     * Load template by template file name.
+     *
+     * @return HtmlTemplate
      */
-    public function init()
+    public function loadTemplate(string $filename)
     {
-        $this->_init();
-    }
+        $template = new $this->templateClass();
+        $template->setApp($this);
 
-    /**
-     * Load template.
-     *
-     * @param string $name
-     *
-     * @return Template
-     */
-    public function loadTemplate($name)
-    {
-        $template = new Template();
-        $template->app = $this;
-        if (in_array($name[0], ['.', '/', '\\']) || strpos($name, ':\\') !== false) {
-            $template->load($name);
-        } else {
-            $template->load($this->template_dir.'/'.$name);
+        if ((['.' => true, '/' => true, '\\' => true][substr($filename, 0, 1)] ?? false) || str_contains($filename, ':\\')) {
+            return $template->loadFromFile($filename);
         }
 
-        return $template;
-    }
-
-    public $db = null;
-
-    public function dbConnect($dsn, $user = null, $password = null, $args = [])
-    {
-        return $this->db = $this->add(\atk4\data\Persistence::connect($dsn, $user, $password, $args));
-    }
-
-    protected function getRequestURI()
-    {
-        if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
-            $request_uri = $_SERVER['HTTP_X_REWRITE_URL'];
-        } elseif (isset($_SERVER['REQUEST_URI'])) { // Apache
-            $request_uri = $_SERVER['REQUEST_URI'];
-        } elseif (isset($_SERVER['ORIG_PATH_INFO'])) { // IIS 5.0, PHP as CGI
-            $request_uri = $_SERVER['ORIG_PATH_INFO'];
-        // This one comes without QUERY string
-        } else {
-            $request_uri = '';
+        $dirs = is_array($this->templateDir) ? $this->templateDir : [$this->templateDir];
+        foreach ($dirs as $dir) {
+            $t = $template->tryLoadFromFile($dir . '/' . $filename);
+            if ($t !== false) {
+                return $t;
+            }
         }
-        $request_uri = explode('?', $request_uri, 2);
 
-        return $request_uri[0];
+        throw (new Exception('Cannot find template file'))
+            ->addMoreInfo('filename', $filename)
+            ->addMoreInfo('templateDir', $this->templateDir);
+    }
+
+    protected function getRequestUrl(): string
+    {
+        return $this->request->getUri()->getPath();
+    }
+
+    protected function createRequestPathFromLocalPath(string $localPath): string
+    {
+        // $localPath does not need realpath() as the path is expected to be built using __DIR__
+        // which has symlinks resolved
+
+        static $requestUrlPath = null;
+        static $requestLocalPath = null;
+        if ($requestUrlPath === null) {
+            if (\PHP_SAPI === 'cli') { // for phpunit
+                $requestUrlPath = '/';
+                $requestLocalPath = \Closure::bind(function () {
+                    return dirname((new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory());
+                }, null, ExceptionRenderer\Html::class)();
+            } else {
+                $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+                $requestUrlPath = $request->getBasePath();
+                $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME'));
+            }
+        }
+        $fs = new \Symfony\Component\Filesystem\Filesystem();
+        $localPathRelative = $fs->makePathRelative($localPath, dirname($requestLocalPath));
+        $res = '/' . $fs->makePathRelative($requestUrlPath . '/' . $localPathRelative, '/');
+        // fix https://github.com/symfony/symfony/pull/40051
+        if (str_ends_with($res, '/') && !str_ends_with($localPath, '/')) {
+            $res = substr($res, 0, -1);
+        }
+
+        return $res;
     }
 
     /**
-     * @var null
+     * Make current get argument with specified name automatically appended to all generated URLs.
      */
-    public $page = null;
+    public function stickyGet(string $name, bool $isDeleting = false): ?string
+    {
+        $this->stickyGetArguments[$name] = !$isDeleting;
+
+        return $_GET[$name] ?? null;
+    }
 
     /**
-     * Build a URL that application can use for js call-backs. Some framework integration will use a different routing
-     * mechanism for NON-HTML response.
-     *
-     * @param array|string $page           URL as string or array with page name as first element and other GET arguments
-     * @param bool         $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extra_args     Additional URL arguments
-     *
-     * @return string
+     * Remove sticky GET which was set by stickyGet.
      */
-    public function jsURL($page = [], $needRequestUri = false, $extra_args = [])
+    public function stickyForget(string $name): void
     {
-        return $this->url($page, $needRequestUri, $extra_args);
+        unset($this->stickyGetArguments[$name]);
     }
 
     /**
      * Build a URL that application can use for loading HTML data.
      *
-     * @param array|string $page           URL as string or array with page name as first element and other GET arguments
-     * @param bool         $needRequestUri Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extra_args     Additional URL arguments
-     *
-     * @return string
+     * @param array|string $page                URL as string or array with page name as first element and other GET arguments
+     * @param bool         $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function url($page = [], $needRequestUri = false, $extra_args = [])
+    public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
-        if ($needRequestUri) {
-            return $_SERVER['REQUEST_URI'];
+        if ($useRequestUrl) {
+            $page = $_SERVER['REQUEST_URI'];
         }
 
-        $sticky = $this->sticky_get_arguments;
-        $result = $extra_args;
-
         if ($this->page === null) {
-            $uri = $this->getRequestURI();
-
-            if (substr($uri, -1, 1) == '/') {
+            $requestUrl = $this->getRequestUrl();
+            if (substr($requestUrl, -1, 1) === '/') {
                 $this->page = 'index';
             } else {
-                $this->page = basename($uri, '.php');
+                $this->page = basename($requestUrl, $this->urlBuildingExt);
             }
         }
 
-        // if page passed as string, then simply use it
+        $pagePath = '';
         if (is_string($page)) {
-            return $page;
+            $page_arr = explode('?', $page, 2);
+            $pagePath = $page_arr[0];
+            parse_str($page_arr[1] ?? '', $page);
+        } else {
+            $pagePath = $page[0] ?? $this->page; // use current page by default
+            unset($page[0]);
+            if ($pagePath) {
+                $pagePath .= $this->urlBuildingExt;
+            }
         }
 
-        // use current page by default
-        if (!isset($page[0])) {
-            $page[0] = $this->page;
-        }
+        $args = $extraRequestUrlArgs;
 
-        //add sticky arguments
-        if (is_array($sticky) && !empty($sticky)) {
-            foreach ($sticky as $key => $val) {
-                if ($val === true) {
-                    if (isset($_GET[$key])) {
-                        $val = $_GET[$key];
-                    } else {
-                        continue;
-                    }
-                }
-                if (!isset($result[$key])) {
-                    $result[$key] = $val;
-                }
+        // add sticky arguments
+        foreach ($this->stickyGetArguments as $k => $v) {
+            if ($v && isset($_GET[$k])) {
+                $args[$k] = $_GET[$k];
+            } else {
+                unset($args[$k]);
             }
         }
 
         // add arguments
-        foreach ($page as $arg => $val) {
-            if ($arg === 0) {
-                continue;
-            }
-
-            if ($val === null || $val === false) {
-                unset($result[$arg]);
+        foreach ($page as $k => $v) {
+            if ($v === null || $v === false) {
+                unset($args[$k]);
             } else {
-                $result[$arg] = $val;
+                $args[$k] = $v;
             }
         }
 
         // put URL together
-        $args = http_build_query($result);
-        $url = ($page[0] ? $page[0].'.php' : '').($args ? '?'.$args : '');
+        $pageQuery = http_build_query($args, '', '&', \PHP_QUERY_RFC3986);
+        $url = $pagePath . ($pageQuery ? '?' . $pageQuery : '');
 
         return $url;
     }
 
     /**
-     * Make current get argument with specified name automatically appended to all generated URLs.
+     * Build a URL that application can use for js call-backs. Some framework integration will use a different routing
+     * mechanism for NON-HTML response.
      *
-     * @param string $name
-     *
-     * @return string|null
+     * @param array|string $page                URL as string or array with page name as first element and other GET arguments
+     * @param bool         $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function stickyGet($name)
+    public function jsUrl($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
-        if (isset($_GET[$name])) {
-            $this->sticky_get_arguments[$name] = $_GET[$name];
+        // append to the end but allow override
+        $extraRequestUrlArgs = array_merge($extraRequestUrlArgs, ['__atk_json' => 1], $extraRequestUrlArgs);
 
-            return $_GET[$name];
-        }
+        return $this->url($page, $useRequestUrl, $extraRequestUrlArgs);
     }
 
     /**
-     * @var array global sticky arguments
+     * Request was made using App::jsUrl().
      */
-    protected $sticky_get_arguments = [];
-
-    /**
-     * Remove sticky GET which was set by stickyGET.
-     *
-     * @param string $name
-     */
-    public function stickyForget($name)
+    public function isJsUrlRequest(): bool
     {
-        unset($this->sticky_get_arguments[$name]);
+        return isset($_GET['__atk_json']) && $_GET['__atk_json'] !== '0';
     }
 
     /**
-     * Adds additional JS script include in aplication template.
+     * Adds additional JS script include in application template.
      *
      * @param string $url
-     * @param bool   $isAsync Whether or not you want Async loading.
-     * @param bool   $isDefer Whether or not you want Defer loading.
+     * @param bool   $isAsync whether or not you want Async loading
+     * @param bool   $isDefer whether or not you want Defer loading
      *
      * @return $this
      */
-    public function requireJS($url, $isAsync = false, $isDefer = false)
+    public function requireJs($url, $isAsync = false, $isDefer = false)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '')."\n");
+        $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', ['src' => $url, 'defer' => $isDefer, 'async' => $isAsync], '') . "\n");
 
         return $this;
     }
 
     /**
-     * Adds additional CSS stylesheet include in aplication template.
+     * Adds additional CSS stylesheet include in application template.
      *
      * @param string $url
      *
      * @return $this
      */
-    public function requireCSS($url)
+    public function requireCss($url)
     {
-        $this->html->template->appendHTML('HEAD', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url])."\n");
+        $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('link/', ['rel' => 'stylesheet', 'type' => 'text/css', 'href' => $url]) . "\n");
 
         return $this;
     }
@@ -586,12 +808,11 @@ class App
      *
      * @param array|string $page Destination page
      */
-    public function redirect($page)
+    public function redirect($page, bool $permanent = false): void
     {
-        header('Location: '.$this->url($page));
-
-        $this->run_called = true; // prevent shutdown function from triggering.
-        exit;
+        $this->setResponseStatusCode($permanent ? 301 : 302);
+        $this->setResponseHeader('location', $this->url($page));
+        $this->terminateHtml('');
     }
 
     /**
@@ -599,189 +820,386 @@ class App
      *
      * @param string|array $page Destination URL or page/arguments
      */
-    public function jsRedirect($page)
+    public function jsRedirect($page, bool $newWindow = false): JsExpressionable
     {
-        return new jsExpression('document.location = []', [$this->url($page)]);
+        return new JsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
+    }
+
+    public function isVoidTag(string $tag): bool
+    {
+        return [
+            'area' => true, 'base' => true, 'br' => true, 'col' => true, 'embed' => true,
+            'hr' => true, 'img' => true, 'input' => true, 'link' => true, 'meta' => true,
+            'param' => true, 'source' => true, 'track' => true, 'wbr' => true,
+        ][strtolower($tag)] ?? false;
     }
 
     /**
      * Construct HTML tag with supplied attributes.
      *
-     * $html = getTag('img/', ['src'=>'foo.gif','border'=>0]);
-     * // "<img src="foo.gif" border="0"/>"
+     * $html = getTag('img/', ['src' => 'foo.gif', 'border' => 0])
+     * --> "<img src="foo.gif" border="0">"
      *
      *
      * The following rules are respected:
      *
-     * 1. all array key=>val elements appear as attributes with value escaped.
-     * getTag('div/', ['data'=>'he"llo']);
-     * --> <div data="he\"llo"/>
+     * 1. all array key => val elements appear as attributes with value escaped.
+     * getTag('input/', ['value' => 'he"llo'])
+     * --> <input value="he&quot;llo">
      *
-     * 2. boolean value true will add attribute without value
-     * getTag('td', ['nowrap'=>true]);
-     * --> <td nowrap>
+     * 2. true value will add attribute without value
+     * getTag('td', ['nowrap' => true])
+     * --> <td nowrap="nowrap">
      *
-     * 3. null and false value will ignore the attribute
-     * getTag('img', ['src'=>false]);
+     * 3. false value will ignore the attribute
+     * getTag('img/', ['src' => false])
      * --> <img>
      *
-     * 4. passing key 0=>"val" will re-define the element itself
-     * getTag('img', ['input', 'type'=>'picture']);
-     * --> <input type="picture" src="foo.gif">
+     * 4. passing key 0 => "val" will re-define the element itself
+     * getTag('div', ['a', 'href' => 'picture'])
+     * --> <a href="picture">
      *
-     * 5. use '/' at end of tag to close it.
-     * getTag('img/', ['src'=>'foo.gif']);
-     * --> <img src="foo.gif"/>
+     * 5. use '/' at end of tag to self-close it (self closing slash is not rendered because of HTML5 void tag)
+     * getTag('img/', ['src' => 'foo.gif'])
+     * --> <img src="foo.gif">
      *
      * 6. if main tag is self-closing, overriding it keeps it self-closing
-     * getTag('img/', ['input', 'type'=>'picture']);
-     * --> <input type="picture" src="foo.gif"/>
+     * getTag('img/', ['input', 'type' => 'picture'])
+     * --> <input type="picture">
      *
      * 7. simple way to close tag. Any attributes to closing tags are ignored
-     * getTag('/td');
+     * getTag('/td')
      * --> </td>
      *
-     * 7b. except for 0=>'newtag'
-     * getTag('/td', ['th', 'align'=>'left']);
+     * 7b. except for 0 => 'newtag'
+     * getTag('/td', ['th', 'align' => 'left'])
      * --> </th>
      *
      * 8. using $value will add value inside tag. It will also encode value.
-     * getTag('a', ['href'=>'foo.html'] ,'click here >>');
+     * getTag('a', ['href' => 'foo.html'], 'click here >>')
      * --> <a href="foo.html">click here &gt;&gt;</a>
      *
-     * 9. you may skip attribute argument.
-     * getTag('b','text in bold');
-     * --> <b>text in bold</b>
-     *
-     * 10. pass array as 3rd parameter to nest tags. Each element can be either string (inserted as-is) or
+     * 9. pass array as 3rd parameter to nest tags. Each element can be either string (inserted as-is) or
      * array (passed to getTag recursively)
-     * getTag('a', ['href'=>'foo.html'], [['b','click here'], ' for fun']);
+     * getTag('a', ['href' => 'foo.html'], [['b', 'click here'], ' for fun'])
      * --> <a href="foo.html"><b>click here</b> for fun</a>
      *
-     * 11. extended example:
-     * getTag('a', ['href'=>'hello'], [
-     *    ['b', 'class'=>'red', [
-     *        ['i', 'class'=>'blue', 'welcome']
+     * 10. extended example:
+     * getTag('a', ['href' => 'hello'], [
+     *    ['b', 'class' => 'red', [
+     *        ['i', 'class' => 'blue', 'welcome']
      *    ]]
-     * ]);
+     * ])
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
-     * @param string|array $tag
-     * @param string       $attr
-     * @param string|array $value
-     *
-     * @return string
+     * @param array<0|string, string|bool>                                                                              $attr
+     * @param string|array<int, array{0?: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
      */
-    public function getTag($tag = null, $attr = null, $value = null)
+    public function getTag(string $tag = null, array $attr = [], $value = null): string
     {
-        if ($tag === null) {
-            $tag = 'div';
-        } elseif (is_array($tag)) {
-            $tmp = $tag;
+        $tag = strtolower($tag === null ? 'div' : $tag);
+        $tagOrig = $tag;
 
-            if (isset($tmp[0])) {
-                $tag = $tmp[0];
+        $isOpening = true;
+        $isClosing = false;
+        if (substr($tag, 0, 1) === '/') {
+            $tag = substr($tag, 1);
+            $isOpening = false;
+            $isClosing = true;
+        } elseif (substr($tag, -1) === '/') {
+            $tag = substr($tag, 0, -1);
+            $isClosing = true;
+        }
 
-                if (is_array($tag)) {
-                    // OH a bunch of tags
-                    $output = '';
-                    foreach ($tmp as $subtag) {
-                        //var_dump($subtag);
-                        $output .= $this->getTag($subtag);
-                    }
+        $isVoid = $this->isVoidTag($tag);
+        if ($isVoid
+            ? $isOpening && !$isClosing || !$isOpening || $value !== null
+            : $isOpening && $isClosing
+        ) {
+            throw (new Exception('Wrong void tag usage'))
+                ->addMoreInfo('tag', $tagOrig)
+                ->addMoreInfo('isVoid', $isVoid);
+        }
 
-                    return $output;
+        if (isset($attr[0])) {
+            if ($isClosing) {
+                if ($isOpening) {
+                    $tag = $attr[0] . '/';
+                } else {
+                    $tag = '/' . $attr[0];
                 }
-
-                unset($tmp[0]);
             } else {
-                $tag = 'div';
+                $tag = $attr[0];
             }
+            unset($attr[0]);
 
-            if (isset($tmp[1])) {
-                $value = $tmp[1];
-                unset($tmp[1]);
-            } else {
-                $value = null;
-            }
-
-            $attr = $tmp;
-        }
-        if ($tag[0] === '<') {
-            return $tag;
-        }
-        if (is_string($attr)) {
-            $value = $attr;
-            $attr = null;
+            return $this->getTag($tag, $attr, $value);
         }
 
-        if (is_string($value)) {
-            $value = $this->encodeHTML($value);
-        } elseif (is_array($value)) {
+        if ($value !== null) {
             $result = [];
-            foreach ($value as $v) {
+            foreach (is_scalar($value) ? [$value] : $value as $v) {
                 if (is_array($v)) {
                     $result[] = $this->getTag(...$v);
-                } else {
+                } elseif (['script' => true, 'style' => true][$tag] ?? false) {
+                    if ($tag === 'script' && $v !== '') {
+                        $result[] = '\'use strict\'; ';
+                    }
+                    // see https://mathiasbynens.be/notes/etago
+                    $result[] = preg_replace('~(?<=<)(?=/\s*' . preg_quote($tag, '~') . '|!--)~', '\\\\', $v);
+                } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behaviour, only directly passed strings were escaped
                     $result[] = $v;
+                } else {
+                    $result[] = $this->encodeHtml($v);
                 }
             }
+
             $value = implode('', $result);
         }
 
-        if (!$attr) {
-            return "<$tag>".($value !== null ? $value."</$tag>" : '');
-        }
         $tmp = [];
-        if (substr($tag, -1) == '/') {
-            $tag = substr($tag, 0, -1);
-            $postfix = '/';
-        } elseif (substr($tag, 0, 1) == '/') {
-            if (isset($attr[0])) {
-                return '</'.$attr[0].'>';
-            }
-
-            return '<'.$tag.'>';
-        } else {
-            $postfix = '';
-        }
         foreach ($attr as $key => $val) {
             if ($val === false) {
                 continue;
             }
+
             if ($val === true) {
-                $tmp[] = "$key";
-            } elseif ($key === 0) {
-                $tag = $val;
+                $val = $key;
+            }
+
+            $val = (string) $val;
+            $tmp[] = $key . '="' . $this->encodeHtml($val) . '"';
+        }
+
+        if ($isClosing && !$isOpening) {
+            return '</' . $tag . '>';
+        }
+
+        return '<' . $tag . ($tmp !== [] ? ' ' . implode(' ', $tmp) : '') . ($isClosing && !$isVoid ? ' /' : '') . '>'
+            . ($value !== null ? $value . '</' . $tag . '>' : '');
+    }
+
+    /**
+     * Encodes string - convert all applicable chars to HTML entities.
+     */
+    public function encodeHtml(string $value): string
+    {
+        return htmlspecialchars($value, \ENT_HTML5 | \ENT_QUOTES | \ENT_SUBSTITUTE, 'UTF-8');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function decodeJson(string $json)
+    {
+        $data = json_decode($json, true, 512, \JSON_BIGINT_AS_STRING | \JSON_THROW_ON_ERROR);
+
+        return $data;
+    }
+
+    /**
+     * @param mixed $data
+     */
+    public function encodeJson($data, bool $forceObject = false): string
+    {
+        if (is_array($data) || is_object($data)) {
+            $checkNoObjectFx = function ($v) {
+                if (is_object($v)) {
+                    throw (new Exception('Object to JSON encode is not supported'))
+                        ->addMoreInfo('value', $v);
+                }
+            };
+
+            if (is_object($data)) {
+                $checkNoObjectFx($data);
             } else {
-                $tmp[] = "$key=\"".$this->encodeAttribute($val).'"';
+                array_walk_recursive($data, $checkNoObjectFx);
             }
         }
 
-        return "<$tag".($tmp ? (' '.implode(' ', $tmp)) : '').$postfix.'>'.($value !== null ? $value."</$tag>" : '');
+        $options = \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT;
+        if ($forceObject) {
+            $options |= \JSON_FORCE_OBJECT;
+        }
+
+        $json = json_encode($data, $options | \JSON_THROW_ON_ERROR, 512);
+
+        // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
+        // replace large JSON integers only, do not replace anything in JSON/JS strings
+        $json = preg_replace_callback('~"(?:[^"\\\\]+|\\\\.)*+"\K|\'(?:[^\'\\\\]+|\\\\.)*+\'\K'
+            . '|(?:^|[{\[,:])[ \n\r\t]*\K-?[1-9]\d{15,}(?=[ \n\r\t]*(?:$|[}\],:]))~s', function ($matches) {
+                if ($matches[0] === '' || abs((int) $matches[0]) < (2 ** 53)) {
+                    return $matches[0];
+                }
+
+                return '"' . $matches[0] . '"';
+            }, $json);
+
+        return $json;
     }
 
     /**
-     * Encodes string - removes HTML special chars.
+     * Return exception message using HTML block and Fomantic-UI formatting. It's your job
+     * to put it inside boilerplate HTML and output, e.g:.
      *
-     * @param string $val
-     *
-     * @return string
+     *   $app = new App();
+     *   $app->initLayout([Layout\Centered::class]);
+     *   $app->layout->template->dangerouslySetHtml('Content', $e->getHtml());
+     *   $app->run();
+     *   $app->callBeforeExit();
      */
-    public function encodeAttribute($val)
+    public function renderExceptionHtml(\Throwable $exception): string
     {
-        return htmlspecialchars($val);
+        return (string) new ExceptionRenderer\Html($exception);
+    }
+
+    protected function setupAlwaysRun(): void
+    {
+        register_shutdown_function(
+            function () {
+                if (!$this->runCalled) {
+                    try {
+                        $this->run();
+                    } catch (ExitApplicationError $e) {
+                        // let the process go and stop on ->callExit below
+                    } catch (\Throwable $e) {
+                        // set_exception_handler does not work in shutdown
+                        // https://github.com/php/php-src/issues/10695
+                        $this->caughtException($e);
+                    }
+
+                    // call with true to trigger beforeExit event
+                    $this->callBeforeExit();
+                }
+            }
+        );
+    }
+
+    // RESPONSES
+
+    /**
+     * @internal should be called only from self::outputResponse() and self::outputLateOutputError()
+     */
+    protected function emitResponse(): void
+    {
+        http_response_code($this->response->getStatusCode());
+
+        foreach ($this->response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header($name . ': ' . $value, false);
+            }
+        }
+
+        $stream = $this->response->getBody();
+        if ($stream->isSeekable()) {
+            $stream->rewind();
+        }
+
+        // for streaming response
+        if (!$stream->isReadable()) {
+            return;
+        }
+
+        while (!$stream->eof()) {
+            echo $stream->read(16 * 1024);
+        }
     }
 
     /**
-     * Encodes string - removes HTML entities.
-     *
-     * @param string $val
-     *
-     * @return string
+     * Output Response to the client.
      */
-    public function encodeHTML($val)
+    protected function outputResponse(string $data): void
     {
-        return htmlentities($val);
+        foreach (ob_get_status(true) as $status) {
+            if ($status['buffer_used'] !== 0) {
+                $lateError = new LateOutputError('Unexpected output detected');
+                if ($this->catchExceptions) {
+                    $this->caughtException($lateError);
+                    $this->outputLateOutputError($lateError);
+                }
+
+                throw $lateError;
+            }
+        }
+
+        $this->assertHeadersNotSent();
+
+        // TODO hack for SSE
+        // https://github.com/atk4/ui/pull/1706#discussion_r757819527
+        if (headers_sent() && $this->response->getHeaderLine('Content-Type') === 'text/event-stream') {
+            echo $data;
+
+            return;
+        }
+
+        if ($data !== '') {
+            $this->response->getBody()->write($data);
+        }
+
+        $this->emitResponse();
+    }
+
+    /**
+     * @return never
+     */
+    protected function outputLateOutputError(LateOutputError $exception): void
+    {
+        $this->response = $this->response->withStatus(500);
+
+        // late error means headers were already sent to the client, so remove all response headers,
+        // to avoid throwing late error in loop
+        foreach (array_keys($this->response->getHeaders()) as $name) {
+            $this->response = $this->response->withoutHeader($name);
+        }
+
+        $this->response = $this->response->withBody((new Psr17Factory())->createStream("\n"
+            . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!'
+            . "\n"));
+        $this->emitResponse();
+
+        $this->runCalled = true; // prevent shutdown function from triggering
+
+        exit(1); // should be never reached from phpunit because we set catchExceptions = false
+    }
+
+    /**
+     * Output HTML response to the client.
+     */
+    private function outputResponseHtml(string $data): void
+    {
+        $this->setResponseHeader('Content-Type', 'text/html');
+        $this->outputResponse($data);
+    }
+
+    /**
+     * Output JSON response to the client.
+     *
+     * @param string|array $data
+     */
+    private function outputResponseJson($data): void
+    {
+        if (!is_string($data)) {
+            $data = $this->encodeJson($data);
+        }
+
+        $this->setResponseHeader('Content-Type', 'application/json');
+        $this->outputResponse($data);
+    }
+
+    /**
+     * Generated html and js for portal view registered to app.
+     */
+    private function getRenderedPortals(): array
+    {
+        // prevent looping (calling App::terminateJson() recursively) if JsReload is used in Modal
+        unset($_GET['__atk_reload']);
+
+        $portals = [];
+        foreach ($this->portals as $view) {
+            $portals[$view->name]['html'] = $view->getHtml();
+            $portals[$view->name]['js'] = $view->getJsRenderActions();
+        }
+
+        return $portals;
     }
 }

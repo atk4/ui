@@ -1,52 +1,51 @@
 <?php
 
-namespace atk4\ui\tests;
+declare(strict_types=1);
 
-class ListerTest extends \atk4\core\PHPUnit_AgileTestCase
+namespace Atk4\Ui\Tests;
+
+use Atk4\Core\Phpunit\TestCase;
+use Atk4\Ui\Exception;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Lister;
+use Atk4\Ui\View;
+
+class ListerTest extends TestCase
 {
+    use CreateAppTrait;
+
     /**
-     * Can use lister with custom template.
+     * @doesNotPerformAssertions
      */
-    public function testListerRender()
+    public function testListerRender(): void
     {
-        $v = new \atk4\ui\View();
-        $v->init();
-        $l = $v->add(['Lister', 'defaultTemplate'=>'lister.html']);
+        $v = new View();
+        $v->setApp($this->createApp());
+        $v->invokeInit();
+        $l = Lister::addTo($v, ['defaultTemplate' => 'lister.html']);
         $l->setSource(['foo', 'bar']);
     }
 
     /**
      * Or clone lister's template from parent.
      */
-    public function testListerRender2()
+    public function testListerRender2(): void
     {
-        $v = new \atk4\ui\View(['template'=>new \atk4\ui\Template('hello{list}, world{/list}')]);
-        $v->init();
-        $l = $v->add(['Lister'], 'list');
+        $v = new View(['template' => new HtmlTemplate('hello{list}, world{/list}')]);
+        $v->setApp($this->createApp());
+        $v->invokeInit();
+        $l = Lister::addTo($v, [], ['list']);
         $l->setSource(['foo', 'bar']);
-        $this->assertEquals('hello, world, world', $v->render());
+        static::assertSame('hello, world, world', $v->render());
     }
 
-    /**
-     * Or clone lister's template from parent.
-     */
-    public function testListerRender3()
+    public function testAddAfterRender(): void
     {
-        $v = new \atk4\ui\View(['template'=>new \atk4\ui\Template('hello{list}, world{/list}')]);
-        $v->init();
-        $l = $v->add(['Lister', 'defaultTemplate'=>'lister.html']);
-        $l->setSource(['foo', 'bar']);
-        $this->assertRegExp('|<div class="content"><a class="header" href="\?id=1">bar</a>|i', $l->render());
-    }
+        $v = new View();
+        $v->setApp($this->createApp());
+        $v->invokeInit();
 
-    /**
-     * @expectedException Exception
-     */
-    public function testAddAfterRender()
-    {
-        $v = new \atk4\ui\View();
-        $v->init();
-        $l = $v->add('Lister');
-        $l->setSource(['foo', 'bar']);
+        $this->expectException(Exception::class);
+        Lister::addTo($v);
     }
 }

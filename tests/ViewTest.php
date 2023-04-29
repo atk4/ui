@@ -1,33 +1,49 @@
 <?php
 
-namespace atk4\ui\tests;
+declare(strict_types=1);
 
-class ViewTest extends \atk4\core\PHPUnit_AgileTestCase
+namespace Atk4\Ui\Tests;
+
+use Atk4\Core\Phpunit\TestCase;
+use Atk4\Ui\Exception;
+use Atk4\Ui\View;
+
+class ViewTest extends TestCase
 {
-    /**
-     * Test redering multiple times.
-     */
-    public function testMultipleRender()
+    use CreateAppTrait;
+
+    public function testMultipleTimesRender(): void
     {
-        $v = new \atk4\ui\View();
+        $v = new View();
         $v->set('foo');
 
+        $v->setApp($this->createApp());
         $a = $v->render();
         $b = $v->render();
-        $this->assertEquals($a, $b);
+        static::assertSame($a, $b);
     }
 
-    /**
-     * @expectedException Exception
-     */
-    public function testAddAfterRender()
+    public function testAddAfterRender(): void
     {
-        $v = new \atk4\ui\View();
+        $v = new View();
         $v->set('foo');
 
-        $a = $v->render();
-        $v->add('View');  // this should fail. No adding after rendering.
-        $b = $v->render();
-        $this->assertEquals($a, $b);
+        $v->setApp($this->createApp());
+        $v->render();
+
+        $this->expectException(Exception::class);
+        View::addTo($v); // no adding after rendering
+    }
+
+    public function testVoidTagRender(): void
+    {
+        $v = new View();
+        $v->setApp($this->createApp());
+        static::assertSame('<div id="atk"></div>', $v->render());
+
+        $v = new View();
+        $v->element = 'img';
+        $v->setApp($this->createApp());
+        static::assertSame('<img id="atk">', $v->render());
     }
 }

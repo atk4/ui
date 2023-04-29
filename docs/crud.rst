@@ -2,13 +2,13 @@
 .. _crud:
 
 ====
-CRUD
+Crud
 ====
 
-.. php:namespace:: atk4\ui
-.. php:class:: CRUD
+.. php:namespace:: Atk4\Ui
+.. php:class:: Crud
 
-CRUD class offers a very usable extension to :php:class:`Grid` class, which automatically adds actions for deleting,
+Crud class offers a very usable extension to :php:class:`Grid` class, which automatically adds actions for deleting,
 updating and adding records as well as linking them with corresponding Model actions.
 
 .. important:: If you only wish to display a non-interractive table use :php:class:`Table` class. If you need to
@@ -16,23 +16,23 @@ updating and adding records as well as linking them with corresponding Model act
     mechanism (such as edit data on separate page, not inside a modal), use :php:class:`Grid`
 
 
-.. important:: ATK Addon - MasterCRUD implements a higher-level multi-model management solution, that takes
-    advantage of model relations and traversal to create multiple levels of CRUDs: https://github.com/atk4/mastercrud
+.. important:: ATK Addon - MasterCrud implements a higher-level multi-model management solution, that takes
+    advantage of model relations and traversal to create multiple levels of Cruds: https://github.com/atk4/mastercrud
 
-Using CRUD
+Using Crud
 ==========
 
-The basic usage of CRUD is::
+The basic usage of Crud is::
 
-    $app->add('CRUD')->setModel(new Country($app->db));
+    Crud::addTo($app)->setModel(new Country($app->db));
 
-Users are now able to fully interract with the table. There are ways to restrict which "rows" and which "columns" user
+Users are now able to fully interact with the table. There are ways to restrict which "rows" and which "columns" user
 can access. First we can only allow user to read, manage and delete only countries that are part of European Union::
 
     $eu_countries = new Country($app->db);
     $eu_countries->addCondition('is_eu', true);
 
-    $app->add('CRUD')->setModel($eu_countries);
+    Crud::addTo($app)->setModel($eu_countries);
 
 After that column `is_eu` will not be editable to the user anymore as it will be marked `system` by `addCondition`.
 
@@ -41,114 +41,100 @@ You can also specify which columns you would like to see on the grid::
     $crud->setModel($eu_countries, ['name']);
 
 This restriction will apply to both viewing and editing, but you can fine-tune that by specifying one of many
-parameters to CRUD.
+parameters to Crud.
 
 Disabling Actions
 =================
 
-.. php:attr:: canCreate
-.. php:attr:: canUpdate
-.. php:attr:: canDelete
+By default Crud allows all four operations - creating, reading, updating and deleting. These action is set by default in model
+action. It is possible to disable these default actions by setting their system property to true in your model::
 
-By default CRUD allows all four operations - creating, reading, updating and deleting. CRUD cannot function
-without read operation, but the other operations can be explicitly disabled::
+    $eu_countries->getUserAction('edit')->sytem = true;
 
-    $app->add(['CRUD', 'canDelete'=>false]);
+Model action using system property set to true, will not be display in Crud. Note that action must be setup prior to use
+`$crud->setModel($eu_countries)`
 
-Specifying Fields
-=================
+Specifying Fields (for different views)
+=======================================
 
-.. php:attr:: fieldsDefault
-.. php:attr:: fieldsCreate
-.. php:attr:: fieldsRead
-.. php:attr:: fieldsUpdate
+.. php:attr:: displayFields
 
-Through those properties you can specify which fields to use. setModel() second argument will set `fieldsDefault` but
-if it's not passed, then you can inject fieldsDefault property during creation of setModel. Alternatively
-you can override which fields will be used for the corresponding mode by specifying the property::
+Only fields name set in this property will be display in Grid. Leave empty for all fields.
 
-    $crud=$this->add([
-        'CRUD',
-        'fieldsRead'=>['name'], // only field 'name' will be visible in table
-        'fieldsUpdate'=>['name', 'surname'] // fields 'name' and 'surname' will be accessible in edit form
-    ]);
+.. php:attr:: editFields
 
-Custom Form
-===========
+If you'd like to have different fields in the grid of the CRUD, but you need more/different fields in the editting modal (which opens when clicking on an entry),
+you can choose here the fields that are available in the editting modal window.
 
-:php:class:`Form` in Agile UI allows you to use many different things, such as custom layouts. With CRUD you can
-specify your own form to use, which can be either an object or a seed::
+.. important:: Both views (overview and editting view) refer to the same model, just the fields shown in either of them differ
 
-    class UserForm extends \atk4\ui\Form {
-        function setModel($m, $fields = null) {
-            parent::setModel($m, false);
+Example::
 
-            $gr = $this->addGroup('Name');
-            $gr->addField('first_name');
-            $gr->addField('middle_name');
-            $gr->addField('last_name');
+    $crud = \Atk4\Ui\Crud::addTo($app);
+    $model = new \Atk4\Data\Model($app->db);
+    $crud->displayFields(['field1, field2']);
+    $crud->editFields(['field1, field2, field3, field4']);
 
-            $this->addField('email');
+.. php:attr:: addFields
 
-            return $this->model;
-        }
-    }
-
-    $crud=$this->add([
-        'CRUD',
-        'formDefault'=>new UserForm();
-    ])->setModel($big_model);
+Through those properties you can specify which fields to use when form is display for add and edit action.
+Field name add here will have priorities over the action fields properties. When set to null, the action fields property
+will be used.
 
 
-Custom Page
-===========
+Custom Form Behavior
+====================
 
-.. php:attr:: pageDefault
-.. php:attr:: pageCreate
-.. php:attr:: pageUpdate
+:php:class:`Form` in Agile UI allows you to use many different things, such as custom layouts. With Crud you can
+specify your own form behavior using a callback for action::
 
-You can also specify a custom class for your Page. Normally it's a :php:class:`VirtualPage` but you
-can extend it to introduce your own style or add more components than just a form::
+    // callback for model action add form.
+    $g->onFormAdd(function (Form $form, ModalExecutor $ex) {
+        $form->js(true, $form->getControl('name')->jsInput()->val('Entering value via javascript'));
+    });
 
-    class TwoPanels extends \atk4\ui\VirtualPage {
+    // callback for model action edit form.
+    $g->onFormEdit(function (Form $form, ModalExecutor $ex) {
+        $form->js(true, $form->getControl('name')->jsInput()->attr('readonly', true));
+    });
 
-        function add($v, $p = null) {
+    // callback for both model action edit and add.
+    $g->onFormAddEdit(function (Form $form, ModalExecutor $ex) {
+        $form->onSubmit(function (Form $form) use ($ex) {
+            return new \Atk4\Ui\Js\JsBlock([
+                $ex->hide(),
+                new \Atk4\Ui\Js\JsToast('Submit all right! This demo does not saved data.'),
+            ]);
+        });
+    });
 
-            // is called with the form
-            $col = parent::add('Columns');
+Callback function will receive the Form and ActionExecutor as arguments.
 
-            $col_l = $col->addColumn();
-            $v = $col_l->add($v);
 
-            $col_r = $col->addColumn();
-            $col_r->add('Table')->setModel($this->owner->model->ref('Invoices'));
+Changing titles
+===============
 
-            return $v;
-        }
-    }
+.. important:: Changing the title of the CRUD's grid view must be done before setting the model.
+  Changing the title of the modal of a CRUD's modal window must be done after loading the model.
+  Otherwise the changes will have no effect.
 
-    $crud=$this->add([
-        'CRUD',
-        'pageDefault'=>new TwoPanels();
-    ])->setModel(new Client($app->db));
+Here's an example::
+
+    $crud = \Atk4\Ui\Crud::addTo($app);
+    $model = new \Atk4\Data\Model($app->db);
+    $model->getUserAction('add')->description = 'New title for adding a record'; // the button of the overview - must be loaded before setting model
+    $crud->setModel($model);
+    $model->getUserAction('add')->ui['executor']->title = 'New title for modal'; // the button of the modal - must be rendered after setting model
+
 
 
 Notification
 ============
 
 .. php:attr:: notifyDefault
-.. php:attr:: notifyCreate
-.. php:attr:: notifyUpdate
+.. php:attr:: saveMsg
+.. php:attr:: deleteMsg
+.. php:attr:: defaultMsg
 
-When data is saved, properties `$notifyDefault` can contain a custom notification action. By default it uses :php:class:`jsNotify`
-which will display green strip on top of the page. You can either override it or add additional actions::
-
-    $crud=$this->add([
-        'CRUD',
-        'notifyDefault'=>[
-            new \atk4\ui\jsNotify(['Custom Notification', 'color'=>'blue']),
-            $otherview->jsReload();
-            // both actions will be executed
-        ]
-    ])->setModel(new Client($app->db));
-
+When a model action execute in Crud, a notification to user is display. You can specify your notifier default seed using
+`$notifyDefault`. The notifier message may be set via `$saveMsg`, `$deleteMsg` or `$defaultMsg` property.

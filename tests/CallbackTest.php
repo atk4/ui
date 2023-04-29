@@ -1,215 +1,242 @@
 <?php
 
-namespace atk4\ui\tests;
+declare(strict_types=1);
 
-class AppMock extends \atk4\ui\App
+namespace Atk4\Ui\Tests;
+
+use Atk4\Core\Phpunit\TestCase;
+use Atk4\Ui\AbstractView;
+use Atk4\Ui\App;
+use Atk4\Ui\Callback;
+use Atk4\Ui\CallbackLater;
+use Atk4\Ui\Layout;
+use Atk4\Ui\View;
+use Atk4\Ui\VirtualPage;
+
+class AppMock extends App
 {
-    public $terminated = false;
-
-    public function terminate($output = null)
+    /**
+     * Overriden to allow multiple App::run() calls, prevent sending headers when headers are already sent.
+     */
+    protected function outputResponse(string $data): void
     {
-        $this->terminate = true;
+        echo $data;
     }
 }
 
-class CallbackTest extends \atk4\core\PHPUnit_AgileTestCase
+class CallbackTest extends TestCase
 {
-    /**
-     * Test constructor.
-     */
-    private $regex = '/^..DOCTYPE/';
+    /** @var string */
+    private $htmlDoctypeRegex = '~^<!DOCTYPE~';
 
+    /** @var App */
     public $app;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->app = new AppMock(['always_run' => false]);
-        $this->app->initLayout('Centered');
+        parent::setUp();
+
+        $this->app = new AppMock(['alwaysRun' => false, 'catchExceptions' => false]);
+        $this->app->initLayout([Layout\Centered::class]);
     }
 
-    public function testCallback()
+    protected function tearDown(): void
     {
+        unset($_GET);
+        unset($_POST);
+
+        parent::tearDown();
+    }
+
+    /**
+     * @param Callback|VirtualPage $cb
+     */
+    protected function simulateCallbackTriggering(AbstractView $cb): void
+    {
+        $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . $cb->getUrlTrigger()] = '1';
+    }
+
+    public function testCallback(): void
+    {
+        $cb = Callback::addTo($this->app);
+
+        $this->simulateCallbackTriggering($cb);
+
         $var = null;
-
-        $app = $this->app;
-
-        $cb = $app->add('Callback');
-
-        // simulate triggering
-        $_GET[$cb->name] = true;
-
-        $cb->set(function ($x) use (&$var) {
+        $cb->set(function (int $x) use (&$var) {
             $var = $x;
         }, [34]);
 
-        $this->assertEquals(34, $var);
+        static::assertSame(34, $var);
+        static::assertSame('1', $cb->getTriggeredValue());
     }
 
-    public function testCallbackNotFiring()
+    public function testCallbackTrigger(): void
     {
+        $cb = Callback::addTo($this->app);
+        static::assertSame($this->app->layout->name . '_' . $cb->shortName, $cb->getUrlTrigger());
+
+        $cb = Callback::addTo($this->app, ['urlTrigger' => 'test']);
+        static::assertSame('test', $cb->getUrlTrigger());
+    }
+
+    public function testViewUrlCallback(): void
+    {
+        $cbApp = Callback::addTo($this->app, ['urlTrigger' => 'aa']);
+        $v1 = View::addTo($this->app);
+        $cb = Callback::addTo($v1, ['urlTrigger' => 'bb']);
+
+        $this->simulateCallbackTriggering($cbApp);
+        $this->simulateCallbackTriggering($cb);
+
+        $expectedUrlCbApp = '?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=callback&' . Callback::URL_QUERY_TARGET . '=aa';
+        $expectedUrlCb = '?' . /* Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=1&' . */ Callback::URL_QUERY_TRIGGER_PREFIX . 'bb=callback&' . Callback::URL_QUERY_TARGET . '=bb';
+        static::assertSame($expectedUrlCbApp, $cbApp->getUrl());
+        static::assertSame($expectedUrlCb, $cb->getUrl());
+
+        // URL must remain the same when urlTrigger is set but name is changed
+        $cbApp->name = 'aax';
+        $cb->name = 'bbx';
+        static::assertSame($expectedUrlCbApp, $cbApp->getUrl());
+        static::assertSame($expectedUrlCb, $cb->getUrl());
+
         $var = null;
-
-        $app = $this->app;
-
-        $cb = $app->add('Callback');
-
-        // don't simulate triggering
-        $cb->set(function ($x) use (&$var) {
+        $cb->set(function (int $x) use (&$var, $v1) {
+            $v3 = View::addTo($v1);
+            static::assertSame('test.php', $v3->url(['test']));
             $var = $x;
         }, [34]);
 
-        $this->assertEquals(null, $var);
+        $v2 = View::addTo($v1);
+        $v2->stickyGet('g1', '1');
+
+        static::assertSame(34, $var);
+        static::assertSame('test.php?g1=1', $v2->url(['test']));
     }
 
-    public function testCallbackPOST()
+    public function testCallbackNotFiring(): void
     {
+        $cb = Callback::addTo($this->app);
+
+        // do NOT simulate triggering in this test
+
         $var = null;
-
-        $app = $this->app;
-
-        $cb = $app->add(['Callback', 'postTrigger' => 'go']);
-
-        // simulate triggering
-        $_POST['go'] = true;
-
-        $cb->set(function ($x) use (&$var) {
+        $cb->set(function (int $x) use (&$var) {
             $var = $x;
         }, [34]);
 
-        $this->assertEquals(34, $var);
+        static::assertNull($var);
     }
 
-    public function testCallbackLater()
+    public function testCallbackLater(): void
     {
+        $cb = CallbackLater::addTo($this->app);
+
+        $this->simulateCallbackTriggering($cb);
+
         $var = null;
-
-        $app = $this->app;
-
-        $cb = $app->add('CallbackLater');
-
-        // simulate triggering
-        $_GET[$cb->name] = true;
-
-        $cb->set(function ($x) use (&$var) {
+        $cb->set(function (int $x) use (&$var) {
             $var = $x;
         }, [34]);
 
-        $this->assertEquals(null, $var);
+        static::assertNull($var);
 
-        $this->expectOutputRegex($this->regex);
-        $app->run();
+        $this->expectOutputRegex($this->htmlDoctypeRegex);
+        $this->app->run();
 
-        $this->assertEquals(34, $var);
+        static::assertSame(34, $var);
     }
 
-    public function testCallbackLaterNested()
+    public function testCallbackLaterNested(): void
     {
+        $cb = CallbackLater::addTo($this->app);
+
+        $this->simulateCallbackTriggering($cb);
+
         $var = null;
+        $cb->set(function (int $x) use (&$var) {
+            $cb2 = CallbackLater::addTo($this->app);
 
-        $app = $this->app;
+            $this->simulateCallbackTriggering($cb2);
 
-        $cb = $app->add('CallbackLater');
-
-        // simulate triggering
-        $_GET[$cb->name] = true;
-        $_GET[$cb->name.'_2'] = true;
-
-        $cb->set(function ($x) use (&$var, $app, &$cbname) {
-            $cb2 = $app->add('CallbackLater');
-            $cbname = $cb2->name;
-            $cb2->set(function ($y) use (&$var) {
+            $cb2->set(function (int $y) use (&$var) {
                 $var = $y;
             }, [$x]);
         }, [34]);
 
-        $this->assertEquals(null, $var);
+        static::assertNull($var);
 
-        $this->expectOutputRegex($this->regex);
-        $app->run();
+        $this->expectOutputRegex($this->htmlDoctypeRegex);
+        $this->app->run();
 
-        $this->assertEquals(34, $var);
+        static::assertSame(34, $var);
     }
 
-    public function testCallbackLaterNotFiring()
+    public function testCallbackLaterNotFiring(): void
     {
-        $var = null;
-
-        $app = $this->app;
-
-        $cb = $app->add('CallbackLater');
+        $cb = CallbackLater::addTo($this->app);
 
         // don't simulate triggering
-        $cb->set(function ($x) use (&$var) {
+        $var = null;
+        $cb->set(function (int $x) use (&$var) {
             $var = $x;
         }, [34]);
 
-        $this->assertEquals(null, $var);
+        static::assertNull($var);
 
-        $this->expectOutputRegex($this->regex);
-        $app->run();
+        $this->expectOutputRegex($this->htmlDoctypeRegex);
+        $this->app->run();
 
-        $this->assertEquals(null, $var);
+        static::assertNull($var); // @phpstan-ignore-line
     }
 
-    public function testVirtualPage()
+    public function testVirtualPage(): void
     {
+        $vp = VirtualPage::addTo($this->app);
+
+        $this->simulateCallbackTriggering($vp);
+
         $var = null;
-
-        $app = $this->app;
-
-        $vp = $app->add('VirtualPage');
-        $vp->set(function ($p) use (&$var) {
+        $vp->set(function (VirtualPage $p) use (&$var) {
             $var = 25;
         });
 
-        // simulate triggering
-        $_GET[$vp->name] = true;
-
-        $this->expectOutputRegex('/^..DOCTYPE/');
-        $app->run();
-        $this->assertEquals(25, $var);
+        $this->expectOutputRegex('~^..DOCTYPE~');
+        $this->app->run();
+        static::assertSame(25, $var);
     }
 
-    public function testVirtualPageCustomTrigger()
+    public function testVirtualPageCustomTrigger(): void
     {
+        $vp = VirtualPage::addTo($this->app, ['urlTrigger' => 'bah']);
+
+        $this->simulateCallbackTriggering($vp);
+
         $var = null;
-
-        $app = $this->app;
-
-        $vp = $app->add(['VirtualPage', 'urlTrigger'=>'bah']);
-        $vp->set(function ($p) use (&$var) {
+        $vp->set(function (VirtualPage $p) use (&$var) {
             $var = 25;
         });
 
-        // simulate triggering
-        $_GET['bah'] = true;
-
-        $this->expectOutputRegex('/^..DOCTYPE/');
-        $app->run();
-        $this->assertEquals(25, $var);
+        $this->expectOutputRegex('~^..DOCTYPE~');
+        $this->app->run();
+        static::assertSame(25, $var);
     }
 
-    public $var = null;
+    /** @var int */
+    private $varPull230;
 
-    public function callPull230()
+    public function testPull230(): void
     {
-        $this->var = 26;
-    }
+        $vp = VirtualPage::addTo($this->app);
 
-    public function testPull230()
-    {
-        $var = null;
+        $this->simulateCallbackTriggering($vp);
 
-        $app = $this->app;
+        $vp->set(function () {
+            $this->varPull230 = 26;
+        });
 
-        $vp = $app->add('VirtualPage');
-        $vp->set([$this, 'callPull230']);
-
-        // simulate triggering
-        $_GET[$vp->name] = true;
-
-        $this->expectOutputRegex('/^..DOCTYPE/');
-        $app->run();
-        $this->assertEquals(26, $this->var);
+        $this->expectOutputRegex('~^..DOCTYPE~');
+        $this->app->run();
+        static::assertSame(26, $this->varPull230);
     }
 }

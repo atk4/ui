@@ -6,51 +6,49 @@
 Purpose of App class
 ====================
 
-.. php:namespace:: atk4\ui
+.. php:namespace:: Atk4\Ui
 .. php:class:: App
 
-App is a mandatory object that's essential for Agile UI to operate. If you don't create App object explicitly, it
-will be automatically created if you execute `$component->init()` or `$component->render()`.
+App is a mandatory object that's essential for Agile UI to operate. You should create instance
+of an App class yourself before other components::
 
-In most use-scenarios, however, you would create instance of an App class yourself before other components::
-
-    $app = new \atk4\ui\App('My App');
-    $app->initLayout('Centered');
-    $app->add('LoremIpsum');
+    $app = new \Atk4\Ui\App('My App');
+    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+    LoremIpsum::addTo($app);
 
 As you add one component into another, they will automatically inherit reference to App class. App
 class is an ideal place to have all your environment configured and all the dependencies defined that
 other parts of your applications may require.
 
-Most standard classes, however, will refrain from having too much asumptions about the App class,
-to keep overal code portable.
+Most standard classes, however, will refrain from having too much assumptions about the App class,
+to keep overall code portable.
 
 There may be some cases, when it's necessary to have multiple $app objects, for example if you are
 executing unit-tests, you may want to create new App instance. If your application encounters
 exception, it will catch it and create a new App instance to display error message ensuring that the
 error is not repeated.
 
-Using App for Injecting Depedencies
------------------------------------
+Using App for Injecting Dependencies
+------------------------------------
 Since App class becomes available for all objects and components of Agile Toolkit, you may add
 properties into the App class::
 
-    $app->db = new \atk4\ui\Persistence_SQL($dsn);
+    $app->db = new \Atk4\Data\Persistence\Sql($dsn);
 
     // later anywhere in the code:
 
-    $m = new MyModel($this->app->db);
+    $m = new MyModel($this->getApp()->db);
 
 .. IMPORTANT:: $app->db is NOT a standard property. If you use this property, that's your own convention.
 
-Using App for Injecting Behaviour
----------------------------------
-You may use App class hook to impact behaviour of your application:
+Using App for Injecting Behavior
+--------------------------------
+You may use App class hook to impact behavior of your application:
 
  - using hooks to globally impact object initialization
- - override methods to create different behaviour, for example url() method may use advanced router logic
+ - override methods to create different behavior, for example url() method may use advanced router logic
    to create beautiful URLs.
- - you may re-define set-up of :php:class:`Persistence\UI` and affect how data is loaded from UI.
+ - you may re-define set-up of :php:class:`Persistence\Ui` and affect how data is loaded from UI.
  - load templates from different files
  - use a different CDN settings for static files
 
@@ -61,46 +59,47 @@ App class may initialize some resources for you including user authentication an
 My next example defines property `$user` and `$system` for the app class to indicate a system which is currently
 active. (See :ref:`system_pattern`)::
 
-    class Warehouse extends \atk4\ui\App
+    class Warehouse extends \Atk4\Ui\App
     {
         public $user;
         public $company;
 
-        function __construct($auth = true) {
+        public function __construct(bool $auth = true)
+        {
             parent::__construct('Warehouse App v0.4');
 
             // My App class will establish database connection
-            $this->db = new \atk4\data\Persistence_SQL($_CLEARDB_DATABASE_URL['DSN']);
-            $this->db->app = $this;
+            $this->db = new \Atk4\Data\Persistence\Sql($_CLEARDB_DATABASE_URL['DSN']);
+            $this->db->setApp($this);
 
             // My App class provides access to a currently logged user and currently selected system.
-            $this->user = new User($this->db);
-            $this->company = new Company($this->db);
             session_start();
 
             // App class may be used for pages that do not require authentication
             if (!$auth) {
-                $this->initLayout('Centered');
+                $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
+
                 return;
             }
 
-            // Load User from database based on session data
+            // Load user from database based on session data
             if (isset($_SESSION['user_id'])) {
-                $this->user->tryLoad($_SESSION['user_id']);
+                $user = new User($this->db);
+                $this->user = $user->tryLoad($_SESSION['user_id']);
             }
 
             // Make sure user is valid
-            if(!$this->user->loaded()) {
-                $this->initLayout('Centered');
-                $this->add(['Message', 'Login Required', 'error']);
-                $this->add(['Button', 'Login', 'primary'])->link('index.php');
+            if ($this->user === null) {
+                $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
+                Message::addTo($this, ['Login Required', 'type' => 'error']);
+                Button::addTo($this, ['Login', 'class.primary' => true])->link('index.php');
                 exit;
             }
 
             // Load company data (System) for present user
             $this->company = $this->user->ref('company_id');
 
-            $this->initLayout('Admin');
+            $this->initLayout([\Atk4\Ui\Layout\Admin::class]);
 
             // Add more initialization here, such as a populating menu.
         }
@@ -110,7 +109,7 @@ After declaring your Application class like this, you can use it conveniently an
 
     include'vendor/autoload.php';
     $app = new Warehouse();
-    $app->add('CRUD')
+    Crud::addTo($app)
         ->setModel($app->system->ref('Order'));
 
 
@@ -120,10 +119,10 @@ Quick Usage and Page pattern
 A lot of the documentation for Agile UI uses a principle of initializing App object first, then, manually
 add the UI elements using a procedural approach::
 
-    $app->add('HelloWorld');
+    HelloWorld::addTo($app);
 
 There is another approach in which your application will determine which Page class should be used for
-executing the request, subsequently creating setting it up and letting it populate UI (This behaviour is
+executing the request, subsequently creating setting it up and letting it populate UI (This behavior is
 similar to Agile Toolkit prior to 4.3).
 
 In Agile UI this pattern is implemented through a 3rd party add-on for :ref:`page_manager` and routing. See also
@@ -133,20 +132,20 @@ Clean-up and simplification
 ---------------------------
 
 .. php:method:: run()
-.. php:attr:: run_called
-.. php:attr:: is_rendering
-.. php:attr:: always_run
+.. php:attr:: runCalled
+.. php:attr:: isRendering
+.. php:attr:: alwaysRun
 
 App also does certain actions to simplify handling of the application. For instance, App class will
 render itself automatically at the end of the application, so you can safely add objects into the `App`
 without actually triggering a global execution process::
 
-    $app->add('HelloWorld');
+    HelloWorld::addTo($app);
 
     // Next line is optional
     $app->run();
 
-If you do not want the application to automatically execute `run()` you can either set `$always_run` to false
+If you do not want the application to automatically execute `run()` you can either set `$alwaysRun` to false
 or use :php:meth:`terminate()` to the app with desired output.
 
 Exception handling
@@ -158,7 +157,7 @@ Exception handling
 By default, App will also catch unhandled exceptions and will present them nicely to the user. If you have a
 better plan for exception, place your code inside a try-catch block.
 
-When Exception is caught, it's displayed using a 'Centered' layout and execution of original application is
+When Exception is caught, it's displayed using a Layout\Centered layout and execution of original application is
 terminated.
 
 Integration with other Frameworks
@@ -167,27 +166,23 @@ If you use Agile UI in conjunction with another framework, then you may be using
 that implements tighter integration with the host application or full-stack framework.
 
 
-.. php:method:: requireJS()
+.. php:method:: requireJs()
 
 Method to include additional JavaScript file in page::
 
-    $app->requireJS('https://code.jquery.com/jquery-3.1.1.js');
-    $app->requireJS('https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js');
+    $app->requireJs('https://example.com/file.min.js');
 
-Using of CDN servers is always better than storing external libraries locally.
-Most of the time CDN servers are faster (cached) and more reliable.
+.. php:method:: requireCss($url)
 
-.. php:method:: requireCSS($url)
+Method to include additional CSS style sheet in page::
 
-Method to include additional CSS stylesheet in page::
-
-    $app->requireCSS('//semantic-ui.com/dist/semantic.css');
+    $app->requireCss('https://example.com/file.min.css');
 
 .. php:method:: initIncludes()
 
 Initializes all includes required by Agile UI. You may extend this class to add more includes.
 
-.. php:method:: getRequestURI()
+.. php:method:: getRequestUrl()
 
 Decodes current request without any arguments. If you are changing URL generation pattern, you
 probably need to change this method to properly identify the current page. See :php:class:`App::url()`
@@ -198,7 +193,7 @@ Loading Templates for Views
 .. php:method:: loadTemplate($name)
 
 Views use :php:attr:`View::$defaultTemplate` to specify which template they are using. By default
-those are loaded from `vendor/atk4/ui/templates/semantic-ui` however by overriding this method,
+those are loaded from `vendor/atk4/ui/template` however by overriding this method,
 you can specify extended logic.
 
 You may override this method if you are using a different CSS framework.
@@ -210,8 +205,7 @@ Utilities by App
 App provides various utilities that are used by other components.
 
 .. php:method:: getTag()
-.. php:method:: encodeAttribute()
-.. php:method:: encodeHTML()
+.. php:method:: encodeHtml()
 
 Apart from basic utility, App class provides several mechanisms that are helpful for components.
 
@@ -222,15 +216,15 @@ Sticky GET Arguments
 .. php:method:: stickyForget()
 
 Problem: sometimes certain PHP code will only be executed when GET arguments are passed. For example,
-you may have a file `detail.php` which expects `order_id` parameter and would contain a `CRUD` component.
+you may have a file `detail.php` which expects `order_id` parameter and would contain a `Crud` component.
 
-Since `CRUD` component is interractive, it may want to generate request to itself, but it must also
+Since the `Crud` component is interactive, it may want to generate requests to itself, but it must also
 include `order_id` otherwise the scope will be incomplete. Agile UI solves that with StickyGet arguments::
 
     $order_id = $app->stickyGet('order_id');
     $crud->setModel($order->load($order_id)->ref('Payment'));
 
-This make sure that pagination, editing, addition or any other operation that CRUD implements will always
+This make sure that pagination, editing, addition or any other operation that Crud implements will always
 address same model scope.
 
 If you need to generate URL that respects stickyGet arguments, use :php:meth:`App::url()`.
@@ -248,27 +242,26 @@ to provide a simple way to redirect for users who are not familiar with JavaScri
 so well.  Example::
 
     if (!isset($_GET['age'])) {
-        $app->redirect(['age'=>18]);
+        $app->redirect(['age' => 18]);
     }
 
-    $app->add(['Button', 'Increase age'])
-        ->on('click', $app->jsRedirect(['age'=>$_GET['age']+1]));
+    Button::addTo($app, ['Increase age'])
+        ->on('click', $app->jsRedirect(['age' => $_GET['age'] + 1]));
 
 No much magic in these methods.
 
 Database Connection
 -------------------
 
-.. php:method:: dbConnect(dsn, $user = null, $password = null, $args = [])
+.. php:property:: db
 
-(Arguments are identical to `Persistence::connect <http://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`_.
+If your `App` needs a DB connection, set this property to an instance of `Persistence`.
 
-This method should be used instead of manually calling Persistence::connect. This will
-properly propogate Persistence's "api" property to $this, so that you can refrence::
+    Example:
 
-    $this->app->...
+    $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 
-inside your model code.
+See `Persistence::connect <https://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`
 
 Execution Termination
 ---------------------
@@ -280,15 +273,15 @@ call-back is triggered and need to respond with some JSON.
 
 You can also use this method to output debug data. Here is comparison to var_dump::
 
-    // var_dump($my_var);  // does not stop execution, draws UI anyway
+    // var_dump($my_var); // does not stop execution, draws UI anyway
 
-    $this->app->terminate(var_export($my_var)); // stops execution.
+    $this->getApp()->terminate(var_export($my_var)); // stops execution.
 
 
 Execution state
 ---------------
 
-.. php:attr:: is_rendering
+.. php:attr:: isRendering
 
 Will be true if the application is currently rendering recursively through the Render Tree.
 
@@ -299,22 +292,22 @@ Links
 
 Method to generate links between pages. Specified with associative array::
 
-    $url = $app->url(['contact', 'from'=>'John Smith']);
+    $url = $app->url(['contact', 'from' => 'John Smith']);
 
 This method must respond with a properly formatted url, such as::
 
     contact.php?from=John+Smith
 
 If value with key 0 is specified ('contact') it will be used as the name of the page. By
-default url() will use page as "contact.php?.." however you can define different behaviour
+default url() will use page as "contact.php?.." however you can define different behavior
 through :ref:`page_manager`.
 
 The url() method will automatically append values of arguments mentioned to `stickyGet()`,
 but if you need URL to drop any sticky value, specify value explicitly as `false`.
 
-.. php:method:: jsURL(callback_page)
+.. php:method:: jsUrl(callback_page)
 
-Use jsURL for creating callback, which return non-HTML output. This may be routed differently
+Use jsUrl for creating callback, which return non-HTML output. This may be routed differently
 by a host framework (https://github.com/atk4/ui/issues/369).
 
 
@@ -322,7 +315,7 @@ by a host framework (https://github.com/atk4/ui/issues/369).
 Includes
 --------
 
-.. php:method:: requireJS($url)
+.. php:method:: requireJs($url)
 
 Includes header into the <head> class that will load JavaScript file from a specified URL.
 This will be used by components that rely on external JavaScript libraries.
@@ -330,12 +323,16 @@ This will be used by components that rely on external JavaScript libraries.
 Hooks
 -----
 
-Application implements HookTrait (http://agile-core.readthedocs.io/en/develop/hook.html)
+Application implements HookTrait (https://agile-core.readthedocs.io/en/develop/hook.html)
 and the following hooks are available:
 
  - beforeRender
  - beforeOutput
+ - beforeExit
 
+Hook beforeExit is called just when application is about to be terminated. If you are
+using :php:attr:`App::$alwaysRun` = true, then this hook is guaranteed to execute always
+after output was sent. ATK will avoid calling this hook multiple times.
 
 .. note:: beforeOutput and beforeRender are not executed if $app->terminate() is called, even
     if parameter is passed.
@@ -350,16 +347,16 @@ at some point initialize internal 'App' class that will assist with various task
 
 Having composition of multiple components will allow them to share the app object::
 
-    $grid = new \atk4\ui\Grid();
+    $grid = new \Atk4\Ui\Grid();
     $grid->setModel($user);
-    $grid->addPaginator();          // initialize and populare paginator
-    $grid->addButton('Test');       // initialize and populate toolbar
+    $grid->addPaginator(); // initialize and populate paginator
+    $grid->addButton('Test'); // initialize and populate toolbar
 
     echo $grid->render();
 
 All of the objects created above - button, grid, toolbar and paginator will share the same
 value for the 'app' property. This value is carried into new objects through AppScopeTrait
-(http://agile-core.readthedocs.io/en/develop/appscope.html).
+(https://agile-core.readthedocs.io/en/develop/appscope.html).
 
 Adding the App
 --------------
@@ -383,28 +380,57 @@ Adding the Layout
 
 Layout can be initialized through the app like this::
 
-    $app->initLayout('Centered');
+    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
 This will initialize two new views inside the app::
 
     $app->html
     $app->layout
 
-The first view is a HTML boilerplate - containing HEAD / BODY tags but not the body
+The first view is a HTML boilerplate - containing head / body tags but not the body
 contents. It is a standard html5 doctype template.
 
-The layout will be selected based on your choice - 'Centered', 'Admin' etc. This will
-not only change the overal page outline, but will also introduce some additional views.
+The layout will be selected based on your choice - Layout\Centered, Layout\Admin etc. This will
+not only change the overall page outline, but will also introduce some additional views.
 
-Going with the 'Admin' layout will populate some menu objects. Each layout may come with
-several views that you can populate::
+Each layout, depending on it's content, may come with several views that you can populate.
 
-    $app->initLayout('Admin');
+Admin Layout
+------------
+.. php:namespace:: Atk4\Ui\Layout
+.. php:class:: Admin
+
+Agile Toolkit comes with a ready to use admin layout for your application. The layout is built
+with top, left and right menu objects.
+
+.. php:attr:: menuLeft
+
+Populating the left menu object is simply a matter of adding the right menu items to the layout menu::
+
+    $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
+    $layout = $app->layout;
 
     // Add item into menu
-    $app->layout->menu->addItem('User Admin', 'admin');
-    // or simply which does the same thing
-    $app->menu->addItem('User Admin', 'admin');
+    $layout->menuLeft->addItem(['Welcome Page', 'icon' => 'gift'], ['index']);
+    $layout->menuLeft->addItem(['Layouts', 'icon' => 'object group'], ['layouts']);
+
+    $EditGroup = $layout->menuLeft->addGroup(['Edit', 'icon' => 'edit']);
+    $EditGroup->addItem('Basics', ['edit/basic']);
+
+.. php:attr:: menu
+
+This is the top menu of the admin layout. You can add other item to the top menu using::
+
+    Button::addTo($layout->menu->addItem(), ['View Source', 'class.teal' => true, 'icon' => 'github'])
+        ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\Js\JsExpression('document.location = [];', [$url . $f]));
+
+.. php:attr:: menuRight
+
+The top right dropdown menu.
+
+.. php:attr:: isMenuLeftVisible
+
+Whether or not the left menu is open on page load or not. Default is true.
 
 
 Integration with Legacy Apps
@@ -424,7 +450,7 @@ You should be able to find 3rd party Layout implementations that may even be com
 some custom templates and views. The concept of a "Theme" in Agile UI consists of
 offering of the following 3 things:
 
- - custom CSS build from Semantic UI
+ - custom CSS build from Fomantic-UI
  - custom Layout(s) along with documentation
  - additional or tweaked Views
 

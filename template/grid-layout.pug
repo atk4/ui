@@ -1,0 +1,9 @@
+div({$attributes})
+  | {rows}{row}
+  div(class="{$width} column row")
+    | {column}
+    .column
+      div(class="{$columnClass}") {$Content}
+    | {/column}
+  | {/row}{/rows}
+= "\n"

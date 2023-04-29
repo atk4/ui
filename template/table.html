@@ -1,0 +1,26 @@
+<table {$attributes}>
+<thead>{Head}
+  <tr>{$cells}</tr>
+  {/}
+  {$SubHead}
+</thead>
+<tbody>
+  {Body}
+  {Row}
+  <tr data-id="{$dataId}">{$cells}</tr>
+  {/}
+  {Empty}
+  <tr>
+    <td colspan="{$columns}">No records.</td>
+  </tr>
+  {/}
+  {/Body}
+</tbody>{hasFoot}
+<tfoot>
+  {Foot}
+  {Totals}
+  <tr>{$cells}</tr>
+  {/}
+  {$Paginator}
+  {/}
+</tfoot>{/}</table>

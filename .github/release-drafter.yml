@@ -1,0 +1,9 @@
+categories:
+  - title: "Major features"
+    labels:
+      - "MAJOR"
+  - title: "Breaking changes"
+    labels:
+      - "BC-break"
+  - title: "Other changes"
+template: $CHANGES
