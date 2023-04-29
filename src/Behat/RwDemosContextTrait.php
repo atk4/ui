@@ -47,7 +47,7 @@ trait RwDemosContextTrait
         return $db;
     }
 
-    protected function createDatabaseModelsSingle(string $table): Model
+    protected function createDatabaseModelFromTable(string $table): Model
     {
         $db = $this->getDemosDb();
         $schemaManager = $db->getConnection()->createSchemaManager();
@@ -68,12 +68,12 @@ trait RwDemosContextTrait
 
     protected function createDatabaseModels(): void
     {
-        $models = [];
+        $modelByTable = [];
         foreach ($this->databaseBackupTables as $table) {
-            $models[$table] = $this->createDatabaseModelsSingle($table);
+            $modelByTable[$table] = $this->createDatabaseModelFromTable($table);
         }
 
-        $this->databaseBackupModels = $models;
+        $this->databaseBackupModels = $modelByTable;
     }
 
     protected function createDatabaseBackup(): void
