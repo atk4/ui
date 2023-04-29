@@ -552,7 +552,6 @@ class Table extends Lister
                                 $t[$key] = ($t[$key] === null ? 0 : $t[$key]);
                                 // increment
                                 $t[$key]++;
-var_dump($t);
                                 break;
                             case 'min':
                                 // set initial value
