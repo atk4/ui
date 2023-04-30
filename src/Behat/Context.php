@@ -89,10 +89,11 @@ class Context extends RawMinkContext implements BehatContext
 
     protected function getFinishedScript(): string
     {
-        return 'document.readyState === \'complete\''
-            . ' && typeof jQuery !== \'undefined\' && jQuery.active === 0'
-            . ' && document.querySelectorAll(\'.ui.animating:not(.looping)\').length === 0'
-            . ' && typeof atk !== \'undefined\' && atk.vueService.areComponentsLoaded()';
+        return 'document.readyState === \'complete\' && typeof jQuery !== \'undefined\' && typeof atk !== \'undefined\''
+            . ' && jQuery.active === 0' // no jQuery AJAX request, https://github.com/jquery/jquery/blob/3.6.4/src/ajax.js#L582
+            . ' && jQuery.timers.length === 0' // no jQuery animation, https://github.com/jquery/jquery/blob/3.6.4/src/effects/animatedSelector.js#L10
+            . ' && document.querySelectorAll(\'.ui.animating:not(.looping)\').length === 0' // no Fomantic-UI animation, https://github.com/fomantic/Fomantic-UI/blob/2.9.2/src/definitions/modules/dimmer.js#L358
+            . ' && atk.vueService.areComponentsLoaded()';
     }
 
     /**
