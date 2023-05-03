@@ -294,8 +294,6 @@ class Context extends RawMinkContext implements BehatContext
     public function iPressButton(string $btnLabel): void
     {
         $button = $this->findElement(null, 'xpath(//div[text()="' . $btnLabel . '"])');
-        // fix "is out of bounds of viewport width and height" for Firefox
-        $button->focus();
         $button->click();
     }
 
