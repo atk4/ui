@@ -22,7 +22,9 @@ class Context extends RawMinkContext implements BehatContext
 
     public function getSession($name = null): MinkSession
     {
-        return new MinkSession($this->getMink()->getSession($name));
+        $session = $this->getMink()->getSession($name);
+
+        return new MinkSession($session->getDriver(), $session->getSelectorsHandler());
     }
 
     public function assertSession($name = null): WebAssert
