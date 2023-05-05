@@ -8,10 +8,7 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
 
-/**
- * Implement a callback for a column header dropdown menu.
- */
-class JsHeader extends JsCallback
+class JsHeaderDropdownCallback extends JsCallback
 {
     /**
      * Function to call when header menu item is select.

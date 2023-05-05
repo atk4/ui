@@ -84,8 +84,7 @@ class Column
                 'position' => 'bottom left',
                 'movePopup' => $this->columnData ? true : false,
                 'target' => $this->columnData ? 'th[data-column=' . $this->columnData . ']' : false,
-                'distanceAway' => 10,
-                'offset' => -2,
+                'distanceAway' => -12,
             ]
         );
         $popup->stopClickEvent = true;
@@ -152,7 +151,7 @@ class Column
      *
      * @param array<int, array> $items
      *
-     * @return Column\JsHeader
+     * @return Column\JsHeaderDropdownCallback
      */
     public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null): JsCallback
     {
@@ -165,7 +164,7 @@ class Column
             ],
         ]];
 
-        $cb = Column\JsHeader::addTo($this->table);
+        $cb = Column\JsHeaderDropdownCallback::addTo($this->table);
 
         $function = new JsExpression('function (value, text, item) {
             if (value === undefined || value === \'\' || value === null) {
