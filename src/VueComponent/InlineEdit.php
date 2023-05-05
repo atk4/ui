@@ -6,7 +6,6 @@ namespace Atk4\Ui\VueComponent;
 
 use Atk4\Data\Model;
 use Atk4\Data\ValidationException;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
@@ -67,7 +66,7 @@ class InlineEdit extends View
      * A default one is supply if this is null.
      * It receive the error ($e) as parameter.
      *
-     * @var \Closure|null
+     * @var \Closure(ValidationException, string): string|null
      */
     public $formatErrorMsg;
 
@@ -131,11 +130,6 @@ class InlineEdit extends View
         }
     }
 
-    /**
-     * On success notifier.
-     *
-     * @return JsToast
-     */
     public function jsSuccess(string $message): JsExpressionable
     {
         return new JsToast([
@@ -146,11 +140,7 @@ class InlineEdit extends View
     }
 
     /**
-     * On validation error notifier.
-     *
      * @param string $message
-     *
-     * @return JsToast
      */
     public function jsError($message): JsExpressionable
     {
@@ -163,19 +153,9 @@ class InlineEdit extends View
         ]);
     }
 
-    /**
-     * Renders View.
-     */
     protected function renderView(): void
     {
         parent::renderView();
-
-        $type = $this->model && $this->fieldName ? $this->model->getField($this->fieldName)->type : 'string';
-        $type = $type === 'string' ? 'text' : $type;
-
-        if ($type !== 'text' && $type !== 'integer') {
-            throw new Exception('Only string or number field can be edited inline. Field Type = ' . $type);
-        }
 
         if ($this->model && $this->model->isLoaded()) {
             $initValue = $this->model->get($this->fieldName);
@@ -189,7 +169,7 @@ class InlineEdit extends View
             'initValue' => $initValue,
             'url' => $this->cb->getJsUrl(),
             'saveOnBlur' => $this->saveOnBlur,
-            'options' => ['fieldName' => $fieldName, 'fieldType' => $type, 'inputCss' => $this->inputCss],
+            'options' => ['fieldName' => $fieldName, 'inputCss' => $this->inputCss],
         ]);
     }
 }
