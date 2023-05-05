@@ -102,7 +102,7 @@ class InlineEdit extends View
                     $this->model->set($this->fieldName, $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($this->fieldName), $value));
                     $this->model->save();
 
-                    return $this->jsSuccess('Update successfully');
+                    return $this->jsSuccess('Update saved');
                 } catch (ValidationException $e) {
                     $this->getApp()->terminateJson([
                         'success' => true,
