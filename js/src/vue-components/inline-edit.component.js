@@ -78,17 +78,6 @@ export default {
         clearError: function () {
             this.hasError = false;
         },
-        flashError: function (count = 4) {
-            if (count === 0) {
-                this.hasError = false;
-
-                return;
-            }
-            this.hasError = !this.hasError;
-            setTimeout(() => {
-                this.flashError(count - 1);
-            }, 300);
-        },
         update: function () {
             const that = this;
             $(this.$el).api({
