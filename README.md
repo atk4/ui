@@ -1,8 +1,8 @@
-# Agile UI - Low-code PHP Framework for Web Apps
+# Agile UI - Robust and easy to use PHP Framework for Web Apps
 
-[Agile Toolkit](https://agiletoolkit.org/) is a Low Code framework written in PHP. Agile UI implement server side rendering engine and over 50 UI generic components for interacting with your Data Model.
+Agile UI implement server side rendering engine and over 50 UI generic components for interacting with your data.
 
-Agile UI is quickest way for building back-end UI, admin interfaces, data management systems for medium and large projects designed around roles, complex logic, formulas.
+Agile UI is the quickest way for building back-end UI, admin interfaces, data management systems for medium and large projects designed around roles, complex logic, formulas...
 
  - Agile UI relies on abstract data. It could be stored in SQL, NoSQL or in external API.
  - Agile UI adjusts to your data model. If you change your model structure, UI will reflect that.
