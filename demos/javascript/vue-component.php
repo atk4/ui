@@ -27,11 +27,16 @@ $model = $model->loadAny();
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
 Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
 
-$inline_edit = VueComponent\InlineEdit::addTo($app);
-$inline_edit->fieldName = $model->fieldName()->name;
-$inline_edit->setModel($model);
+View::addTo($app)->set('with autoSave');
+$inlineEditWithAutoSave = VueComponent\InlineEdit::addTo($app, ['autoSave' => true]);
+$inlineEditWithAutoSave->fieldName = $model->fieldName()->name;
+$inlineEditWithAutoSave->setModel($model);
 
-$inline_edit->onChange(function (string $value) use ($app) {
+View::addTo($app)->set('with onChange callback');
+$inlineEditWithCallback = VueComponent\InlineEdit::addTo($app);
+$inlineEditWithCallback->fieldName = $model->fieldName()->name;
+$inlineEditWithCallback->setModel($model);
+$inlineEditWithCallback->onChange(function (string $value) use ($app) {
     $view = new Message();
     $view->setApp($app);
     $view->invokeInit();

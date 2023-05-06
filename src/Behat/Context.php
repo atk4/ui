@@ -213,11 +213,11 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @return array{'css'|'xpath', string}
+     * @return array{ 'css'|'xpath', string }
      */
     protected function parseSelector(string $selector): array
     {
-        if (preg_match('~^xpath\((.+)\)$~s', $selector, $matches)) {
+        if (preg_match('~^\(*//~s', $selector)) {
             // add support for standard CSS class selector
             $xpath = preg_replace_callback(
                 '~\'(?:[^\']+|\'\')*+\'\K|"(?:[^"]+|"")*+"\K|(?<=\w)\.([\w\-]+)~s',
@@ -228,7 +228,7 @@ class Context extends RawMinkContext implements BehatContext
 
                     return '[contains(concat(\' \', normalize-space(@class), \' \'), \' ' . $matches[1] . ' \')]';
                 },
-                $matches[1]
+                $selector
             );
 
             return ['xpath', $xpath];
@@ -293,7 +293,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iPressButton(string $btnLabel): void
     {
-        $button = $this->findElement(null, 'xpath(//div[text()="' . $btnLabel . '"])');
+        $button = $this->findElement(null, '//div[text()="' . $btnLabel . '"]');
         $button->click();
     }
 
@@ -303,7 +303,7 @@ class Context extends RawMinkContext implements BehatContext
     public function iPressMenuButton(string $btnLabel, string $selector): void
     {
         $menu = $this->findElement(null, $selector);
-        $link = $this->findElement($menu, 'xpath(//a[text()="' . $btnLabel . '"])');
+        $link = $this->findElement($menu, '//a[text()="' . $btnLabel . '"]');
         $this->getSession()->executeScript('$(\'#' . $link->getAttribute('id') . '\').click()');
     }
 
@@ -312,7 +312,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSeeButton(string $buttonLabel): void
     {
-        $this->findElement(null, 'xpath(//div[text()="' . $buttonLabel . '"])');
+        $this->findElement(null, '//div[text()="' . $buttonLabel . '"]');
     }
 
     /**
@@ -320,7 +320,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function idontSeeButton(string $text): void
     {
-        $element = $this->findElement(null, 'xpath(//div[text()="' . $text . '"])');
+        $element = $this->findElement(null, '//div[text()="' . $text . '"]');
         if (!str_contains($element->getAttribute('style'), 'display: none')) {
             throw new \Exception('Element with text "' . $text . '" must be invisible');
         }
@@ -335,7 +335,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickLink(string $label): void
     {
-        $this->findElement(null, 'xpath(//a[text()="' . $label . '"])')->click();
+        $this->findElement(null, '//a[text()="' . $label . '"]')->click();
     }
 
     /**
@@ -374,7 +374,7 @@ class Context extends RawMinkContext implements BehatContext
     public function iPressModalButton(string $buttonLabel): void
     {
         $modal = $this->findElement(null, '.modal.visible.active.front');
-        $btn = $this->findElement($modal, 'xpath(//div[text()="' . $buttonLabel . '"])');
+        $btn = $this->findElement($modal, '//div[text()="' . $buttonLabel . '"]');
         $btn->click();
     }
 
@@ -391,7 +391,7 @@ class Context extends RawMinkContext implements BehatContext
             : '"' . $text . '"';
 
         $modal = $this->findElement(null, '.modal.visible.active.front');
-        $this->findElement($modal, 'xpath(//' . $selector . '[text()[normalize-space()=' . $textEncoded . ']])');
+        $this->findElement($modal, '//' . $selector . '[text()[normalize-space()=' . $textEncoded . ']]');
     }
 
     /**
@@ -440,7 +440,7 @@ class Context extends RawMinkContext implements BehatContext
     public function panelIsOpenWithText(string $text, string $selector = 'div'): void
     {
         $panel = $this->findElement(null, '.atk-right-panel.atk-visible');
-        $this->findElement($panel, 'xpath(//' . $selector . '[text()[normalize-space()="' . $text . '"]])');
+        $this->findElement($panel, '//' . $selector . '[text()[normalize-space()="' . $text . '"]]');
     }
 
     /**
@@ -459,7 +459,7 @@ class Context extends RawMinkContext implements BehatContext
     public function iPressPanelButton(string $buttonLabel): void
     {
         $panel = $this->findElement(null, '.atk-right-panel.atk-visible');
-        $btn = $this->findElement($panel, 'xpath(//div[text()="' . $buttonLabel . '"])');
+        $btn = $this->findElement($panel, '//div[text()="' . $buttonLabel . '"]');
         $btn->click();
     }
 
@@ -473,7 +473,7 @@ class Context extends RawMinkContext implements BehatContext
     public function iClickTabWithTitle(string $tabTitle): void
     {
         $tabMenu = $this->findElement(null, '.ui.tabular.menu');
-        $link = $this->findElement($tabMenu, 'xpath(//a[text()="' . $tabTitle . '"])');
+        $link = $this->findElement($tabMenu, '//a[text()="' . $tabTitle . '"]');
 
         $this->getSession()->executeScript('$(\'#' . $link->getAttribute('id') . '\').click()');
     }
@@ -532,14 +532,14 @@ class Context extends RawMinkContext implements BehatContext
     public function iSelectValueInLookup(string $value, string $inputName): void
     {
         // get dropdown item from Fomantic-UI which is direct parent of input html element
-        $lookupElem = $this->findElement(null, 'xpath(//input[@name="' . $inputName . '"]/parent::div)');
+        $lookupElem = $this->findElement(null, '//input[@name="' . $inputName . '"]/parent::div');
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
         $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'show\')');
         $this->jqueryWait('$(\'#' . $lookupElem->getAttribute('id') . '\').hasClass(\'visible\')');
 
         // select value
-        $valueElem = $this->findElement($lookupElem, 'xpath(//div[text()="' . $value . '"])');
+        $valueElem = $this->findElement($lookupElem, '//div[text()="' . $value . '"]');
         $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'set selected\', ' . $valueElem->getAttribute('data-value') . ');');
         $this->jqueryWait();
 
@@ -556,7 +556,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSelectFile(string $inputName, string $fileContent, string $fileName): void
     {
-        $element = $this->findElement(null, 'xpath(//input[@name="' . $inputName . '" and @type="hidden"]/following-sibling::input[@type="file"])');
+        $element = $this->findElement(null, '//input[@name="' . $inputName . '" and @type="hidden"]/following-sibling::input[@type="file"]');
         $this->getSession()->executeScript(<<<'EOF'
             const dataTransfer = new DataTransfer();
             dataTransfer.items.add(new File([new Uint8Array(arguments[1])], arguments[2]));
