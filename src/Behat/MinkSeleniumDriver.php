@@ -65,7 +65,7 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
 
         $waitUniqueKey = '__wait__' . hash('sha256', microtime(true) . random_bytes(64));
         $this->executeScript(
-            'window.syn[arguments[1]] = true; window.syn.' . $action . '(arguments[0], arguments[1], () => delete window.syn[arguments[1]]);',
+            'window.syn[arguments[2]] = true; window.syn.' . $action . '(arguments[0], arguments[1], () => delete window.syn[arguments[2]]);',
             [$element, $options, $waitUniqueKey]
         );
         $this->wait(5000, 'typeof window.syn[arguments[0]] === \'undefined\'', [$waitUniqueKey]);
