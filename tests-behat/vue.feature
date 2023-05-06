@@ -7,8 +7,11 @@ Feature: Vue
     Then Toast display should contain text "Update saved"
     Given I am on "javascript/vue-component.php"
     Then I check if input value for "(//input[@name='atk_fp_country__name'])[1]" match text "test autoSave"
-    When I fill field using "(//input[@name='atk_fp_country__name'])[1]" with "Germany"
+    When I fill field using "(//input[@name='atk_fp_country__name'])[1]" with "germany"
     Then Toast display should contain text "Country name must be unique."
+    Then I check if input value for "(//input[@name='atk_fp_country__name'])[1]" match text "germany"
+    When I write "[escape]" into selector "(//input[@name='atk_fp_country__name'])[1]"
+    Then I check if input value for "(//input[@name='atk_fp_country__name'])[1]" match text "test autoSave"
 
   Scenario: testing InlineEdit - /w onChange callback
     Given I am on "javascript/vue-component.php"
