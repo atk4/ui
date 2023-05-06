@@ -86,7 +86,11 @@ class TypeDate extends Column\FilterModel
                         $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
                         $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
                     }
-                    $model->addCondition($model->expr('[field] between [value] and [value2]', ['field' => $model->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $model->addCondition($model->expr('[field] between [value] and [value2]', [
+                        'field' => $model->getField($filter['name']),
+                        'value' => $value,
+                        'value2' => $value2,
+                    ]));
 
                     break;
                 default:
