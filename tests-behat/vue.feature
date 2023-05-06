@@ -1,6 +1,6 @@
 Feature: Vue
 
-  Scenario: testing InlineEdit - auto save
+  Scenario: testing InlineEdit - /w autoSave
     Given I am on "javascript/vue-component.php"
     When I persist DB changes across requests
     When I fill field using "(//input[@name='atk_fp_country__name'])[1]" with "test autoSave"
@@ -10,7 +10,7 @@ Feature: Vue
     When I fill field using "(//input[@name='atk_fp_country__name'])[1]" with "Germany"
     Then Toast display should contain text "Country name must be unique."
 
-  Scenario: testing InlineEdit - custom save callback
+  Scenario: testing InlineEdit - /w onChange callback
     Given I am on "javascript/vue-component.php"
     When I fill field using "(//input[@name='atk_fp_country__name'])[2]" with "test callback"
     Then I should see "new value: test callback"

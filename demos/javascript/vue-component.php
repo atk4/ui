@@ -32,11 +32,11 @@ $inlineEditWithAutoSave = VueComponent\InlineEdit::addTo($app, ['autoSave' => tr
 $inlineEditWithAutoSave->fieldName = $model->fieldName()->name;
 $inlineEditWithAutoSave->setModel($model);
 
-View::addTo($app)->set('with custom callback');
-$inlineEditWithCustomCallback = VueComponent\InlineEdit::addTo($app);
-$inlineEditWithCustomCallback->fieldName = $model->fieldName()->name;
-$inlineEditWithCustomCallback->setModel($model);
-$inlineEditWithCustomCallback->onChange(function (string $value) use ($app) {
+View::addTo($app)->set('with onChange callback');
+$inlineEditWithCallback = VueComponent\InlineEdit::addTo($app);
+$inlineEditWithCallback->fieldName = $model->fieldName()->name;
+$inlineEditWithCallback->setModel($model);
+$inlineEditWithCallback->onChange(function (string $value) use ($app) {
     $view = new Message();
     $view->setApp($app);
     $view->invokeInit();
