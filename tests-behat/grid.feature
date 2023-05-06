@@ -36,3 +36,12 @@ Feature: Grid
     When I click using selector "//div[@id='grid']//tr[2]//a"
     Then No toast should be displayed
     Then PATCH MINK the url should match "~_unit-test/grid-rowclick.php#test~"
+
+  Scenario: popup column header
+    Given I am on "collection/tablecolumnmenu.php"
+    Then I should not see "Name popup"
+    When I click using selector "(//th//div.atk-table-dropdown)[1]/i"
+    Then I should see "Name popup"
+    Then I should not see "This popup is loaded dynamically"
+    When I click using selector "(//th//div.atk-table-dropdown)[2]/i"
+    Then I should see "This popup is loaded dynamically"
