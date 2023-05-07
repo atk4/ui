@@ -12,6 +12,7 @@ class TableColumnTest extends TestCase
     public function testTooManyArgumentsConstructorError(): void
     {
         $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Too many method arguments');
         new Column([], []);
     }
 }

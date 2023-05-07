@@ -69,6 +69,7 @@ class ViewTest extends TestCase
     public function testTooManyArgumentsConstructorError(): void
     {
         $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Too many method arguments');
         new View([], []);
     }
 
@@ -78,7 +79,8 @@ class ViewTest extends TestCase
         $vInner = new View();
 
         $this->expectException(\Error::class);
-        $v->add($vInner, null, []);
+        $this->expectExceptionMessage('Too many method arguments');
+        $v->add($vInner, [], []);
     }
 
     public function testTooManyArgumentsAdd2Error(): void
@@ -87,7 +89,8 @@ class ViewTest extends TestCase
         $vInner = new View();
 
         $this->expectException(\Error::class);
-        $v->add($vInner, null, []); // @phpstan-ignore-line
+        $this->expectExceptionMessage('Too many method arguments');
+        $v->add($vInner, [], []);
     }
 
     public function testSetModelTwiceException(): void
