@@ -69,7 +69,7 @@ class ViewTest extends TestCase
     public function testTooManyArgumentsConstructorError(): void
     {
         $this->expectException(\Error::class);
-        new View([], []); // @phpstan-ignore-line
+        new View([], []);
     }
 
     public function testTooManyArgumentsAddError(): void
@@ -78,7 +78,7 @@ class ViewTest extends TestCase
         $vInner = new View();
 
         $this->expectException(\Error::class);
-        $v->add($vInner, null, []); // @phpstan-ignore-line
+        $v->add($vInner, null, []);
     }
 
     public function testTooManyArgumentsAdd2Error(): void

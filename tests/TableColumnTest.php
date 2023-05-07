@@ -12,6 +12,6 @@ class TableColumnTest extends TestCase
     public function testTooManyArgumentsConstructorError(): void
     {
         $this->expectException(\Error::class);
-        new Column([], []); // @phpstan-ignore-line
+        new Column([], []);
     }
 }
