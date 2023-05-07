@@ -66,6 +66,23 @@ class ViewTest extends TestCase
         static::assertTrue($vInner->isInitialized());
     }
 
+    public function testAddDelayedParentInit(): void
+    {
+        $v = new class() extends AbstractView { };
+        $vInner = new View();
+
+        $v->add($vInner);
+        static::assertFalse($v->isInitialized());
+        static::assertFalse($vInner->isInitialized());
+
+        $vLayout = new View();
+        $vLayout->setApp($this->createApp());
+        $vLayout->add($v);
+
+        static::assertTrue($v->isInitialized());
+        static::assertTrue($vInner->isInitialized());
+    }
+
     public function testTooManyArgumentsConstructorError(): void
     {
         $this->expectException(\Error::class);
@@ -83,7 +100,7 @@ class ViewTest extends TestCase
         $v->add($vInner, [], []);
     }
 
-    public function testTooManyArgumentsAdd2Error(): void
+    public function testTooManyArgumentsAddParentError(): void
     {
         $v = new class() extends AbstractView { };
         $vInner = new View();
