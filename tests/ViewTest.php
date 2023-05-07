@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Data\Model;
 use Atk4\Ui\AbstractView;
 use Atk4\Ui\Exception;
 use Atk4\Ui\View;
@@ -87,5 +88,29 @@ class ViewTest extends TestCase
 
         $this->expectException(\Error::class);
         $v->add($vInner, null, []); // @phpstan-ignore-line
+    }
+
+    public function testSetModelTwiceException(): void
+    {
+        $v = new View();
+        $m1 = new Model();
+        $m2 = new Model();
+        $v->setModel($m1);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Different model is already set');
+        $v->setModel($m2);
+    }
+
+    public function testSetSourceZeroKeyException(): void
+    {
+        $v = new View();
+        $v->setSource(['a', 'b']);
+
+        $v = new View();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Source data contains unsupported zero key');
+        $v->setSource(['a', 2 => 'b']);
     }
 }
