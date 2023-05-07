@@ -300,9 +300,18 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @When I press button :arg1
      */
-    public function iPressButton(string $btnLabel): void
+    public function iPressButtonText(string $btnLabel): void
     {
         $button = $this->findElement(null, '//div[text()="' . $btnLabel . '"]');
+        $button->click();
+    }
+
+    /**
+     * @When I press button using selector :selector
+     */
+    public function iPressButton(string $selector): void
+    {
+        $button = $this->findElement(null, $selector);
         $button->click();
     }
 

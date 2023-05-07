@@ -51,7 +51,7 @@ class FilterPopup extends Popup
 
         $this->form = Form::addTo($this)->addClass('');
         $this->form->buttonSave->addClass('');
-        $this->form->addGroup('Where ' . $this->field->getCaption() . ' :');
+        $this->form->addGroup('Where ' . $this->field->getCaption() . ':');
 
         $this->form->buttonSave->set('Set');
 
