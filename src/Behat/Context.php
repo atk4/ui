@@ -99,16 +99,16 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Wait till jQuery AJAX request finished and no animation is perform.
      */
-    protected function jqueryWait(string $extraWaitCondition = 'true', int $maxWaitdurationMs = 5000): void
+    protected function jqueryWait(string $extraWaitCondition = 'true', array $args = [], int $maxWaitdurationMs = 5000): void
     {
         $finishedScript = '(' . $this->getFinishedScript() . ') && (' . $extraWaitCondition . ')';
 
         $s = microtime(true);
         $c = 0;
         while (microtime(true) - $s <= $maxWaitdurationMs / 1000) {
-            $this->getSession()->wait($maxWaitdurationMs, $finishedScript);
+            $this->getSession()->wait($maxWaitdurationMs, $finishedScript, $args);
             usleep(10_000);
-            if ($this->getSession()->evaluateScript($finishedScript)) {
+            if ($this->getSession()->evaluateScript($finishedScript, $args)) { // TODO wait() uses evaluateScript(), dedup
                 if (++$c >= 2) {
                     return;
                 }
@@ -546,20 +546,20 @@ class Context extends RawMinkContext implements BehatContext
         $lookupElem = $this->findElement(null, '//input[@name="' . $inputName . '"]/parent::div');
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
-        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'show\')');
-        $this->jqueryWait('$(\'#' . $lookupElem->getAttribute('id') . '\').hasClass(\'visible\')');
+        $this->getSession()->executeScript('$(arguments[0]).dropdown(\'show\')', [$lookupElem]);
+        $this->jqueryWait('$(arguments[0]).hasClass(\'visible\')', [$lookupElem]);
 
         // select value
         $valueElem = $this->findElement($lookupElem, '//div[text()="' . $value . '"]');
-        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'set selected\', ' . $valueElem->getAttribute('data-value') . ');');
+        $this->getSession()->executeScript('$(arguments[0]).dropdown(\'set selected\', ' . $valueElem->getAttribute('data-value') . ');', [$lookupElem]);
         $this->jqueryWait();
 
         // hide dropdown and wait till fully closed
-        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'hide\');');
+        $this->getSession()->executeScript('$(arguments[0]).dropdown(\'hide\');', [$lookupElem]);
         $this->jqueryWait();
         // for unknown reasons, dropdown very often remains visible in CI, so hide twice
-        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'hide\');');
-        $this->jqueryWait('!$(\'#' . $lookupElem->getAttribute('id') . '\').hasClass(\'visible\')');
+        $this->getSession()->executeScript('$(arguments[0]).dropdown(\'hide\');', [$lookupElem]);
+        $this->jqueryWait('!$(arguments[0]).hasClass(\'visible\')', [$lookupElem]);
     }
 
     /**
