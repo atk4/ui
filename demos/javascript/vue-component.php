@@ -21,21 +21,22 @@ View::addTo($app, ['ui' => 'divider']);
 
 // Inline Edit
 
-$model = new Country($app->db);
-$model = $model->loadAny();
+$entity = (new Country($app->db))
+    ->setOrder(Country::hinting()->fieldName()->id)
+    ->loadAny();
 
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
 Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
 
 View::addTo($app)->set('with autoSave');
 $inlineEditWithAutoSave = VueComponent\InlineEdit::addTo($app, ['autoSave' => true]);
-$inlineEditWithAutoSave->fieldName = $model->fieldName()->name;
-$inlineEditWithAutoSave->setModel($model);
+$inlineEditWithAutoSave->fieldName = $entity->fieldName()->name;
+$inlineEditWithAutoSave->setModel($entity);
 
 View::addTo($app)->set('with onChange callback');
 $inlineEditWithCallback = VueComponent\InlineEdit::addTo($app);
-$inlineEditWithCallback->fieldName = $model->fieldName()->name;
-$inlineEditWithCallback->setModel($model);
+$inlineEditWithCallback->fieldName = $entity->fieldName()->name;
+$inlineEditWithCallback->setModel($entity);
 $inlineEditWithCallback->onChange(function (string $value) use ($app) {
     $view = new Message();
     $view->setApp($app);
