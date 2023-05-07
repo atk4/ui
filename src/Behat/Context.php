@@ -361,7 +361,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickPaginatorPage(string $pageNumber): void
     {
-        $this->getSession()->executeScript('$(\'a.item[data-page=' . $pageNumber . ']\').click()');
+        $element = $this->findElement(null, 'a.item[data-page=' . $pageNumber . ']');
+        $element->click();
     }
 
     /**
@@ -418,7 +419,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickCloseModal(): void
     {
-        $this->getSession()->executeScript('$(\'.modal.visible.active.front > i.icon.close\')[0].click()');
+        $modal = $this->findElement(null, '.modal.visible.active.front');
+        $closeIcon = $this->findElement($modal, '//i.icon.close');
+        $closeIcon->click();
     }
 
     /**
@@ -483,8 +486,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $tabMenu = $this->findElement(null, '.ui.tabular.menu');
         $link = $this->findElement($tabMenu, '//a[text()="' . $tabTitle . '"]');
-
-        $this->getSession()->executeScript('$(\'#' . $link->getAttribute('id') . '\').click()');
+        $link->click();
     }
 
     /**
@@ -710,8 +712,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $column = $this->findElement(null, "th[data-column='" . $columnName . "']");
         $icon = $this->findElement($column, 'i');
-
-        $this->getSession()->executeScript('$(\'#' . $icon->getAttribute('id') . '\').click()');
+        $icon->click();
     }
 
     /**
