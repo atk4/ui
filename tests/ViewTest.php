@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Ui\AbstractView;
 use Atk4\Ui\Exception;
 use Atk4\Ui\View;
 
@@ -62,5 +63,29 @@ class ViewTest extends TestCase
 
         static::assertTrue($v->isInitialized());
         static::assertTrue($vInner->isInitialized());
+    }
+
+    public function testTooManyArgumentsConstructorError(): void
+    {
+        $this->expectException(\Error::class);
+        new View([], []); // @phpstan-ignore-line
+    }
+
+    public function testTooManyArgumentsAddError(): void
+    {
+        $v = new View();
+        $vInner = new View();
+
+        $this->expectException(\Error::class);
+        $v->add($vInner, null, []); // @phpstan-ignore-line
+    }
+
+    public function testTooManyArgumentsAdd2Error(): void
+    {
+        $v = new class() extends AbstractView { };
+        $vInner = new View();
+
+        $this->expectException(\Error::class);
+        $v->add($vInner, null, []); // @phpstan-ignore-line
     }
 }
