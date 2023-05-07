@@ -45,3 +45,6 @@ Feature: Grid
     Then I should not see "This popup is loaded dynamically"
     When I click using selector "(//th//div.atk-table-dropdown)[2]/i"
     Then I should see "This popup is loaded dynamically"
+    When I click using selector "(//th//div.atk-table-dropdown)[3]/div.dropdown"
+    When I click using selector "(//th//div.atk-table-dropdown)[3]/div.dropdown/div.menu/div.item[2]"
+    Then Toast display should contain text "Title item: Reorder"
