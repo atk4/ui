@@ -87,7 +87,7 @@ export default {
                 method: 'POST',
                 onComplete: function (r, e) {
                     if (r.hasValidationError) {
-                        that.clearError();
+                        that.hasError = true;
                     } else {
                         that.lastValueValid = that.value;
                     }

@@ -56,7 +56,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function closeAllToasts(BeforeStepScope $event): void
     {
-        if (!$this->getSession()->getDriver()->isStarted()) {
+        if (!$this->getSession()->isStarted()) {
             return;
         }
 
@@ -72,7 +72,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function waitUntilLoadingAndAnimationFinished(AfterStepScope $event): void
     {
-        if (!$this->getSession()->getDriver()->isStarted()) {
+        if (!$this->getSession()->isStarted()) {
             return;
         }
 
@@ -274,6 +274,15 @@ class Context extends RawMinkContext implements BehatContext
     public function iWait(int $ms): void
     {
         $this->getSession()->wait($ms);
+    }
+
+    /**
+     * @When I write :arg1 into selector :selector
+     */
+    public function iPressWrite(string $text, string $selector): void
+    {
+        $elem = $this->findElement(null, $selector);
+        $this->getSession()->keyboardWrite($elem, $text);
     }
 
     /**
