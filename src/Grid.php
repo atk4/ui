@@ -450,10 +450,6 @@ class Grid extends View
      */
     public function addActionMenuFromModel(string $appliesTo = null): void
     {
-        if (!$this->model) {
-            throw new Exception('Model not set, set it prior to add item');
-        }
-
         foreach ($this->model->getUserActions($appliesTo) as $action) {
             $this->addActionMenuItem($action);
         }
