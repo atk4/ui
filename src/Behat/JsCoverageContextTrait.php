@@ -63,8 +63,19 @@ trait JsCoverageContextTrait
                     return res;
                 };
 
+                if (window.__coverage_beforeunload__ !== true) {
+                    window.addEventListener('beforeunload', () => {
+                        const navigateCoverages = JSON.parse(window.sessionStorage.getItem('__coverage_navigate__') ?? '[]');
+                        navigateCoverages.push(transformCoverageFx(window.__coverage__));
+                        window.sessionStorage.setItem('__coverage_navigate__', JSON.stringify(navigateCoverages));
+                    });
+                    window.__coverage_beforeunload__ = true;
+                }
+                const navigateCoverages = JSON.parse(window.sessionStorage.getItem('__coverage_navigate__') ?? '[]');
+                window.sessionStorage.removeItem('__coverage_navigate__');
+
                 const res = [];
-                for (const coverage of [windowCoverage]) {
+                for (const coverage of [windowCoverage, ...navigateCoverages]) {
                     res.push(transformCoverageFx(coverage));
                 }
 
