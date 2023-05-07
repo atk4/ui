@@ -23,7 +23,7 @@ class ViewTest extends TestCase
         static::assertSame($a, $b);
     }
 
-    public function testAddAfterRender(): void
+    public function testAddAfterRenderException(): void
     {
         $v = new View();
         $v->set('foo');
@@ -32,7 +32,7 @@ class ViewTest extends TestCase
         $v->render();
 
         $this->expectException(Exception::class);
-        View::addTo($v); // no adding after rendering
+        View::addTo($v);
     }
 
     public function testVoidTagRender(): void
@@ -45,5 +45,22 @@ class ViewTest extends TestCase
         $v->element = 'img';
         $v->setApp($this->createApp());
         static::assertSame('<img id="atk">', $v->render());
+    }
+
+    public function testAddDelayedInit(): void
+    {
+        $v = new View();
+        $vInner = new View();
+
+        $v->add($vInner);
+        static::assertFalse($v->isInitialized());
+        static::assertFalse($vInner->isInitialized());
+
+        $vLayout = new View();
+        $vLayout->setApp($this->createApp());
+        $vLayout->add($v);
+
+        static::assertTrue($v->isInitialized());
+        static::assertTrue($vInner->isInitialized());
     }
 }
