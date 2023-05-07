@@ -31,14 +31,16 @@ trait JsCoverageContextTrait
         }
 
         $seenPaths = array_keys($this->jsCoverage);
-        $coverage = $this->getSession()->evaluateScript(<<<'EOF'
+        $coverages = $this->getSession()->evaluateScript(<<<'EOF'
             return (function (seenPaths) {
                 seenPaths = new Set(seenPaths);
-                const istanbulCoverage = window.__coverage__;
-                if (typeof istanbulCoverage !== 'object') {
+
+                const windowCoverage = window.__coverage__;
+                if (typeof windowCoverage !== 'object') {
                     throw new Error('"window.__coverage__" is not defined');
                 }
 
+                const transformCoverageFx = function (istanbulCoverage) {
                     const res = {};
                     Object.entries(istanbulCoverage).forEach(([path, data]) => {
                         const resSingle = {};
@@ -46,6 +48,7 @@ trait JsCoverageContextTrait
                             if (['statementMap', 'fnMap', 'branchMap'].includes(k) && seenPaths.has(path)) {
                                 return;
                             }
+
                             if (typeof v === 'object') {
                                 const vKeys = Object.keys(v);
                                 if (JSON.stringify(vKeys) === JSON.stringify(vKeys.map((v, k) => k.toString()))) {
@@ -57,11 +60,19 @@ trait JsCoverageContextTrait
                         res[path] = resSingle;
                     });
 
+                    return res;
+                };
+
+                const res = [];
+                for (const coverage of [windowCoverage]) {
+                    res.push(transformCoverageFx(coverage));
+                }
+
                 return res;
             })(arguments[0]);
             EOF, [$seenPaths]);
 
-        foreach ([$coverage] as $coverage) {
+        foreach ($coverages as $coverage) {
             foreach ($coverage as $path => $data) {
                 if (!isset($this->jsCoverage[$path])) {
                     $this->jsCoverage[$path] = $data;
