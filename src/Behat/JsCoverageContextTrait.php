@@ -77,6 +77,9 @@ trait JsCoverageContextTrait
                 const res = [];
                 for (const coverage of [windowCoverage, ...navigateCoverages]) {
                     res.push(transformCoverageFx(coverage));
+                    Object.keys(coverage).forEach((path) => {
+                        seenPaths.add(path);
+                    });
                 }
 
                 return res;
