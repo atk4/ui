@@ -66,7 +66,7 @@ class ViewTest extends TestCase
         static::assertTrue($vInner->isInitialized());
     }
 
-    public function testAddDelayedParentInit(): void
+    public function testAddDelayedAbstractViewInit(): void
     {
         $v = new class() extends AbstractView { };
         $vInner = new View();
@@ -100,7 +100,7 @@ class ViewTest extends TestCase
         $v->add($vInner, [], []);
     }
 
-    public function testTooManyArgumentsAddParentError(): void
+    public function testTooManyArgumentsAbstractViewAddError(): void
     {
         $v = new class() extends AbstractView { };
         $vInner = new View();
