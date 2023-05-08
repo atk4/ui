@@ -556,9 +556,6 @@ class Context extends RawMinkContext implements BehatContext
 
         // hide dropdown and wait till fully closed
         $this->getSession()->executeScript('$(arguments[0]).dropdown(\'hide\');', [$lookupElem]);
-        $this->jqueryWait();
-        // for unknown reasons, dropdown very often remains visible in CI, so hide twice
-        $this->getSession()->executeScript('$(arguments[0]).dropdown(\'hide\');', [$lookupElem]);
         $this->jqueryWait('!$(arguments[0]).hasClass(\'visible\')', [$lookupElem]);
     }
 
