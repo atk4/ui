@@ -361,7 +361,7 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickPaginatorPage(string $pageNumber): void
     {
-        $element = $this->findElement(null, 'a.item[data-page=' . $pageNumber . ']');
+        $element = $this->findElement(null, 'a.item[data-page="' . $pageNumber . '"]');
         $element->click();
     }
 
@@ -542,8 +542,10 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSelectValueInLookup(string $value, string $inputName): void
     {
+        $isXpath = $this->parseSelector($inputName)[0] === 'xpath';
+
         // get dropdown item from Fomantic-UI which is direct parent of input html element
-        $lookupElem = $this->findElement(null, '//input[@name="' . $inputName . '"]/parent::div');
+        $lookupElem = $this->findElement(null, ($isXpath ? $inputName : '//input[@name="' . $inputName . '"]') . '/parent::div');
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
         $this->getSession()->executeScript('$(arguments[0]).dropdown(\'show\')', [$lookupElem]);
@@ -551,7 +553,7 @@ class Context extends RawMinkContext implements BehatContext
 
         // select value
         $valueElem = $this->findElement($lookupElem, '//div[text()="' . $value . '"]');
-        $this->getSession()->executeScript('$(arguments[0]).dropdown(\'set selected\', ' . $valueElem->getAttribute('data-value') . ');', [$lookupElem]);
+        $this->getSession()->executeScript('$(arguments[0]).dropdown(\'set selected\', arguments[1]);', [$lookupElem, $valueElem->getAttribute('data-value')]);
         $this->jqueryWait();
 
         // hide dropdown and wait till fully closed
