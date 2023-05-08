@@ -25,10 +25,6 @@ class Checkbox extends Form\Control
 
     public function __construct($label = [])
     {
-        if (func_num_args() > 1) { // prevent bad usage
-            throw new \Error('Too many method arguments');
-        }
-
         parent::__construct($label);
 
         $this->label = $this->content;

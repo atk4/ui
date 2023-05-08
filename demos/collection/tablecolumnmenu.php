@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Grid;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Table;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
@@ -40,9 +41,9 @@ $colSurname->addPopup()->set(function (View $pop) {
     Text::addTo($pop)->set('This popup is loaded dynamically');
 });
 
-// Another dropdown menu.
+// another dropdown menu
 $colTitle->addDropdown(['Change', 'Reorder', 'Update'], function (string $item) {
-    return 'Title item: ' . $item;
+    return new JsToast(['message' => 'Title item: ' . $item]);
 });
 
 // -----------------------------------------------------------------------------

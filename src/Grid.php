@@ -141,26 +141,6 @@ class Grid extends View
     }
 
     /**
-     * Set Table\Column\Actions seed.
-     *
-     * @param array $seed
-     */
-    public function setActionDecorator($seed): void
-    {
-        $this->actionButtonsDecorator = $seed;
-    }
-
-    /**
-     * Set Table\Column\ActionMenu seed.
-     *
-     * @param array $seed
-     */
-    public function setActionMenuDecorator($seed): void
-    {
-        $this->actionMenuDecorator = $seed;
-    }
-
-    /**
      * Add new column to grid. If column with this name already exists,
      * an. Simply calls Table::addColumn(), so check that method out.
      *
@@ -450,10 +430,6 @@ class Grid extends View
      */
     public function addActionMenuFromModel(string $appliesTo = null): void
     {
-        if (!$this->model) {
-            throw new Exception('Model not set, set it prior to add item');
-        }
-
         foreach ($this->model->getUserActions($appliesTo) as $action) {
             $this->addActionMenuItem($action);
         }

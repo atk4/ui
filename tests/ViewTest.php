@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Data\Model;
+use Atk4\Ui\AbstractView;
 use Atk4\Ui\Exception;
 use Atk4\Ui\View;
 
@@ -23,7 +25,7 @@ class ViewTest extends TestCase
         static::assertSame($a, $b);
     }
 
-    public function testAddAfterRender(): void
+    public function testAddAfterRenderException(): void
     {
         $v = new View();
         $v->set('foo');
@@ -32,7 +34,7 @@ class ViewTest extends TestCase
         $v->render();
 
         $this->expectException(Exception::class);
-        View::addTo($v); // no adding after rendering
+        View::addTo($v);
     }
 
     public function testVoidTagRender(): void
@@ -45,5 +47,90 @@ class ViewTest extends TestCase
         $v->element = 'img';
         $v->setApp($this->createApp());
         static::assertSame('<img id="atk">', $v->render());
+    }
+
+    public function testAddDelayedInit(): void
+    {
+        $v = new View();
+        $vInner = new View();
+
+        $v->add($vInner);
+        static::assertFalse($v->isInitialized());
+        static::assertFalse($vInner->isInitialized());
+
+        $vLayout = new View();
+        $vLayout->setApp($this->createApp());
+        $vLayout->add($v);
+
+        static::assertTrue($v->isInitialized());
+        static::assertTrue($vInner->isInitialized());
+    }
+
+    public function testAddDelayedAbstractViewInit(): void
+    {
+        $v = new class() extends AbstractView { };
+        $vInner = new View();
+
+        $v->add($vInner);
+        static::assertFalse($v->isInitialized());
+        static::assertFalse($vInner->isInitialized());
+
+        $vLayout = new View();
+        $vLayout->setApp($this->createApp());
+        $vLayout->add($v);
+
+        static::assertTrue($v->isInitialized());
+        static::assertTrue($vInner->isInitialized());
+    }
+
+    public function testTooManyArgumentsConstructorError(): void
+    {
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Too many method arguments');
+        new View([], []);
+    }
+
+    public function testTooManyArgumentsAddError(): void
+    {
+        $v = new View();
+        $vInner = new View();
+
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Too many method arguments');
+        $v->add($vInner, [], []);
+    }
+
+    public function testTooManyArgumentsAbstractViewAddError(): void
+    {
+        $v = new class() extends AbstractView { };
+        $vInner = new View();
+
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Too many method arguments');
+        $v->add($vInner, [], []);
+    }
+
+    public function testSetModelTwiceException(): void
+    {
+        $v = new View();
+        $m1 = new Model();
+        $m2 = new Model();
+        $v->setModel($m1);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Different model is already set');
+        $v->setModel($m2);
+    }
+
+    public function testSetSourceZeroKeyException(): void
+    {
+        $v = new View();
+        $v->setSource(['a', 'b']);
+
+        $v = new View();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Source data contains unsupported zero key');
+        $v->setSource(['a', 2 => 'b']);
     }
 }

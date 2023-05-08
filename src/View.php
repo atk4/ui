@@ -7,6 +7,7 @@ namespace Atk4\Ui;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
@@ -1122,11 +1123,11 @@ class View extends AbstractView
         $actions = [];
         foreach ($this->_jsActions as $eventActions) {
             foreach ($eventActions as $action) {
-                $actions[] = $action->jsRender();
+                $actions[] = $action;
             }
         }
 
-        return implode('; ', $actions);
+        return (new JsBlock($actions))->jsRender();
     }
 
     /**

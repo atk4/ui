@@ -99,16 +99,16 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Wait till jQuery AJAX request finished and no animation is perform.
      */
-    protected function jqueryWait(string $extraWaitCondition = 'true', int $maxWaitdurationMs = 5000): void
+    protected function jqueryWait(string $extraWaitCondition = 'true', array $args = [], int $maxWaitdurationMs = 5000): void
     {
         $finishedScript = '(' . $this->getFinishedScript() . ') && (' . $extraWaitCondition . ')';
 
         $s = microtime(true);
         $c = 0;
         while (microtime(true) - $s <= $maxWaitdurationMs / 1000) {
-            $this->getSession()->wait($maxWaitdurationMs, $finishedScript);
+            $this->getSession()->wait($maxWaitdurationMs, $finishedScript, $args);
             usleep(10_000);
-            if ($this->getSession()->evaluateScript($finishedScript)) {
+            if ($this->getSession()->evaluateScript($finishedScript, $args)) { // TODO wait() uses evaluateScript(), dedup
                 if (++$c >= 2) {
                     return;
                 }
@@ -313,7 +313,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $menu = $this->findElement(null, $selector);
         $link = $this->findElement($menu, '//a[text()="' . $btnLabel . '"]');
-        $this->getSession()->executeScript('$(\'#' . $link->getAttribute('id') . '\').click()');
+        $link->click();
     }
 
     /**
@@ -353,7 +353,7 @@ class Context extends RawMinkContext implements BehatContext
     public function iClickUsingSelector(string $selector): void
     {
         $element = $this->findElement(null, $selector);
-        $this->getSession()->executeScript('$(arguments[0]).click()', [$element]);
+        $element->click();
     }
 
     /**
@@ -361,7 +361,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickPaginatorPage(string $pageNumber): void
     {
-        $this->getSession()->executeScript('$(\'a.item[data-page=' . $pageNumber . ']\').click()');
+        $element = $this->findElement(null, 'a.item[data-page="' . $pageNumber . '"]');
+        $element->click();
     }
 
     /**
@@ -418,7 +419,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickCloseModal(): void
     {
-        $this->getSession()->executeScript('$(\'.modal.visible.active.front > i.icon.close\')[0].click()');
+        $modal = $this->findElement(null, '.modal.visible.active.front');
+        $closeIcon = $this->findElement($modal, '//i.icon.close');
+        $closeIcon->click();
     }
 
     /**
@@ -483,8 +486,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $tabMenu = $this->findElement(null, '.ui.tabular.menu');
         $link = $this->findElement($tabMenu, '//a[text()="' . $tabTitle . '"]');
-
-        $this->getSession()->executeScript('$(\'#' . $link->getAttribute('id') . '\').click()');
+        $link->click();
     }
 
     /**
@@ -540,24 +542,23 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSelectValueInLookup(string $value, string $inputName): void
     {
+        $isSelectorXpath = $this->parseSelector($inputName)[0] === 'xpath';
+
         // get dropdown item from Fomantic-UI which is direct parent of input html element
-        $lookupElem = $this->findElement(null, '//input[@name="' . $inputName . '"]/parent::div');
+        $lookupElem = $this->findElement(null, ($isSelectorXpath ? $inputName : '//input[@name="' . $inputName . '"]') . '/parent::div');
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
-        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'show\')');
-        $this->jqueryWait('$(\'#' . $lookupElem->getAttribute('id') . '\').hasClass(\'visible\')');
+        $this->getSession()->executeScript('$(arguments[0]).dropdown(\'show\')', [$lookupElem]);
+        $this->jqueryWait('$(arguments[0]).hasClass(\'visible\')', [$lookupElem]);
 
         // select value
         $valueElem = $this->findElement($lookupElem, '//div[text()="' . $value . '"]');
-        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'set selected\', ' . $valueElem->getAttribute('data-value') . ');');
+        $this->getSession()->executeScript('$(arguments[0]).dropdown(\'set selected\', arguments[1]);', [$lookupElem, $valueElem->getAttribute('data-value')]);
         $this->jqueryWait();
 
         // hide dropdown and wait till fully closed
-        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'hide\');');
-        $this->jqueryWait();
-        // for unknown reasons, dropdown very often remains visible in CI, so hide twice
-        $this->getSession()->executeScript('$(\'#' . $lookupElem->getAttribute('id') . '\').dropdown(\'hide\');');
-        $this->jqueryWait('!$(\'#' . $lookupElem->getAttribute('id') . '\').hasClass(\'visible\')');
+        $this->getSession()->executeScript('$(arguments[0]).dropdown(\'hide\');', [$lookupElem]);
+        $this->jqueryWait('!$(arguments[0]).hasClass(\'visible\')', [$lookupElem]);
     }
 
     /**
@@ -710,8 +711,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $column = $this->findElement(null, "th[data-column='" . $columnName . "']");
         $icon = $this->findElement($column, 'i');
-
-        $this->getSession()->executeScript('$(\'#' . $icon->getAttribute('id') . '\').click()');
+        $icon->click();
     }
 
     /**
