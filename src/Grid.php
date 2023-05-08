@@ -141,26 +141,6 @@ class Grid extends View
     }
 
     /**
-     * Set Table\Column\Actions seed.
-     *
-     * @param array $seed
-     */
-    public function setActionDecorator($seed): void
-    {
-        $this->actionButtonsDecorator = $seed;
-    }
-
-    /**
-     * Set Table\Column\ActionMenu seed.
-     *
-     * @param array $seed
-     */
-    public function setActionMenuDecorator($seed): void
-    {
-        $this->actionMenuDecorator = $seed;
-    }
-
-    /**
      * Add new column to grid. If column with this name already exists,
      * an. Simply calls Table::addColumn(), so check that method out.
      *
