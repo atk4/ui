@@ -333,20 +333,6 @@ class Lookup extends Input
     }
 
     /**
-     * Set Fomantic-UI Api settings to use with dropdown.
-     *
-     * @param array $config
-     *
-     * @return $this
-     */
-    public function setApiConfig($config)
-    {
-        $this->apiConfig = array_merge($this->apiConfig, $config);
-
-        return $this;
-    }
-
-    /**
      * Override this method if you want to add more logic to the initialization of the auto-complete field.
      *
      * @param Jquery $chain

@@ -16,8 +16,6 @@ use Atk4\Ui\View;
 
 class ScopeBuilder extends Form\Control
 {
-    use VueLookupTrait;
-
     public $renderLabel = false;
 
     public array $options = [
@@ -294,8 +292,6 @@ class ScopeBuilder extends Form\Control
     {
         parent::setModel($model);
 
-        $this->initVueLookupCallback();
-
         $this->buildQuery($model);
     }
 
@@ -364,7 +360,6 @@ class ScopeBuilder extends Form\Control
         }
 
         if ($field->hasReference()) {
-            $props['url'] = $this->dataCb->getUrl();
             $props['reference'] = $field->shortName;
             $props['search'] = true;
         }

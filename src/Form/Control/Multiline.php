@@ -80,8 +80,6 @@ use Atk4\Ui\View;
  */
 class Multiline extends Form\Control
 {
-    use VueLookupTrait;
-
     /** @var HtmlTemplate|null The template needed for the multiline view. */
     public $multiLineTemplate;
 
@@ -411,8 +409,6 @@ class Multiline extends Form\Control
     {
         parent::setModel($model);
 
-        $this->initVueLookupCallback();
-
         if ($fieldNames === null) {
             $fieldNames = array_keys($model->getFields('not system'));
         }
@@ -546,7 +542,6 @@ class Multiline extends Form\Control
         }
 
         if ($field->hasReference()) {
-            $props['config']['url'] = $this->dataCb->getUrl();
             $props['config']['reference'] = $field->shortName;
             $props['config']['search'] = true;
         }

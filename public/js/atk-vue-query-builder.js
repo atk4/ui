@@ -82,9 +82,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-
-
 
 
 
@@ -93,7 +90,6 @@ __webpack_require__.r(__webpack_exports__);
  *
  * Properties:
  * config:
- * url: the callback URL. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
  * reference: the reference field name associate with model or hasOne name. This field name will be sent along with URL callback parameter as of 'field=name'.
  * Note: The remaining config object may contain any or SuiDropdown { props: value } pair.
  *
@@ -107,8 +103,7 @@ __webpack_require__.r(__webpack_exports__);
             v-bind="dropdownProps"
             ref="drop"
             :modelValue="getDropdownValue(modelValue)"
-            ` /* :loading="isLoading" */ + `@update:modelValue="onUpdate"
-            @filtered="onFiltered"
+            @update:modelValue="onUpdate"
         ></SuiDropdown>`,
   props: ['config', 'modelValue', 'optionalValue'],
   data: function () {
@@ -121,7 +116,6 @@ __webpack_require__.r(__webpack_exports__);
     return {
       dropdownProps: otherConfig,
       url: url || null,
-      isLoading: false,
       field: reference,
       query: '',
       temp: ''
@@ -139,49 +133,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     onUpdate: function (value) {
       this.$emit('update:modelValue', value.value);
-    },
-    /**
-     * Receive user input text for search.
-     */
-    onFiltered: function (inputValue) {
-      if (inputValue) {
-        this.isLoading = true;
-      }
-      if (!this.onFiltered.debouncedFx) {
-        this.onFiltered.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_3__["default"].createDebouncedFx(() => {
-          this.onFiltered.debouncedFx = null;
-          if (this.query !== this.temp) {
-            this.query = this.temp;
-            if (this.query) {
-              this.fetchItems(this.query);
-            }
-          }
-        }, 250);
-      }
-      this.temp = inputValue;
-      this.onFiltered.debouncedFx(this);
-    },
-    /**
-     * Fetch new data from server.
-     */
-    fetchItems: async function (q) {
-      try {
-        const data = {
-          atkVueLookupQuery: q,
-          atkVueLookupField: this.field
-        };
-        const response = await atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.suiFetch(this.url, {
-          method: 'get',
-          data: data
-        });
-        if (response.success) {
-          this.dropdownProps.options = response.results;
-        }
-      } catch (e) {
-        console.error(e);
-      } finally {
-        this.isLoading = false;
-      }
     }
   }
 });
