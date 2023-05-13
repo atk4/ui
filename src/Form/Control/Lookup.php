@@ -154,7 +154,7 @@ class Lookup extends Input
      *
      * @return never
      */
-    public function outputApiResponse()
+    public function outputApiResponse(): void
     {
         $this->getApp()->terminateJson([
             'success' => true,
