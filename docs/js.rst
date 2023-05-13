@@ -513,10 +513,10 @@ The following will **not** work::
     // JsModal requires its contents to be put into a Virtual Page
     $vp = \Atk4\Ui\VirtualPage::addTo($app);
     $form = \Atk4\Ui\Form::addTo($vp);
-    $form->setModel(clone $model);
+    $form->setModel($model);
 
     $table = \Atk4\Ui\Table::addTo($app);
-    $table->setModel(clone $model));
+    $table->setModel($model));
 
     $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
     $button->on('click', new \Atk4\Ui\Js\JsModal('JSModal Title', $vp));
@@ -537,11 +537,11 @@ Table needs to be first! The following works::
 
     // This needs to be first
     $table = \Atk4\Ui\Table::addTo($app);
-    $table->setModel(clone $model));
+    $table->setModel($model));
 
     $vp = \Atk4\Ui\VirtualPage::addTo($app);
     $form = \Atk4\Ui\Form::addTo($vp);
-    $form->setModel(clone $model);
+    $form->setModel($model);
 
     $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
     $button->on('click', new \Atk4\Ui\Js\JsModal('JSModal Title', $vp));
@@ -566,7 +566,7 @@ VirtualPage content is rendered. To force yourself to put things in order you ca
     $vp = \Atk4\Ui\VirtualPage::addTo($app);
     $vp->set(function (\Atk4\Ui\VirtualPage $p) use ($table, $model) {
         $form = \Atk4\Ui\Form::addTo($p);
-        $form->setModel(clone $model);
+        $form->setModel($model);
         $form->onSubmit(function (Form $form) use ($table) {
             $form->model->save();
 
