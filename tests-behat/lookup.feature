@@ -18,11 +18,13 @@ Feature: Lookup
 
   Scenario: Testing lookup add
     Given I am on "form-control/lookup.php"
+    Then I check if text in "//div.text[../input[@name='country2']]" match text ""
     Then I press button "Add New"
-    When I fill in "atk_fp_country__name" with "New country"
+    When I fill in "atk_fp_country__name" with "Plusia"
     When I fill in "atk_fp_country__iso" with "AA"
     When I fill in "atk_fp_country__iso3" with "AAA"
     When I fill in "atk_fp_country__numcode" with "88"
     When I fill in "atk_fp_country__phonecode" with "8"
     Then I press Modal button "Save"
-    Then Toast display should contain text 'Country action "add" with "New country" entity was executed.'
+    Then Toast display should contain text 'Country action "add" with "Plusia" entity was executed.'
+    Then I check if text in "//div.text[../input[@name='country2']]" match text "Plusia"

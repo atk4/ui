@@ -29,14 +29,11 @@ Label::addTo($form, ['Lookup countries', 'class.top attached' => true], ['AboveC
 
 $model = new Model($app->db, ['table' => 'test']);
 
-// Without Lookup
+// lookup without plus button
 $model->hasOne('country1', ['model' => [Country::class]]);
 
-// With Lookup
-$model->hasOne('country2', ['model' => [Country::class], 'ui' => ['form' => [
-    DemoLookup::class,
-    'plus' => true,
-]]]);
+// lookup with plus button
+$model->hasOne('country2', ['model' => [Country::class], 'ui' => ['form' => ['plus' => true]]]);
 
 $form->setModel($model->createEntity());
 

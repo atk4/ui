@@ -15,6 +15,7 @@ use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsModal;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\VirtualPage;
 
 class Lookup extends Input
@@ -247,14 +248,16 @@ class Lookup extends Input
         $vp->set(function (VirtualPage $p) {
             $form = Form::addTo($p);
 
-            $entity = (clone $this->model)->setOnlyFields($this->plus['fields'] ?? null)->createEntity();
-
-            $form->setModel($entity);
+            $entity = $this->model->createEntity();
+            $form->setModel($entity, $this->plus['fields'] ?? null);
 
             $form->onSubmit(function (Form $form) {
-                $form->model->save();
+                $msg = $form->model->getUserAction('add')->execute();
 
                 $res = new JsBlock();
+                if (is_string($msg)) {
+                    $res->addStatement(new JsToast($msg));
+                }
                 $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
 
                 $row = $this->renderRow($form->model);
