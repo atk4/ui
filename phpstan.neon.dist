@@ -52,6 +52,9 @@ parameters:
             path: 'demos/form-control/upload.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onDelete\(\)\.$~'
         -
+            path: 'demos/form-control/tree-item-selector.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onItem\(\)\.$~'
+        -
             path: 'demos/form-control/upload.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::clearThumbnail\(\)\.$~'
         -

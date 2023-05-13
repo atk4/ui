@@ -24,18 +24,33 @@ $items = [
                         'id' => 502,
                     ],
                     [
-                        'name' => 'Google Pixels',
+                        'name' => 'Google Pixel',
                         'id' => 503,
                     ],
                 ],
             ],
             ['name' => 'Tv', 'id' => 501, 'nodes' => []],
-            ['name' => 'Radio', 'id' => 601, 'nodes' => []],
+            ['name' => 'Radio', 'id' => 601],
         ],
     ],
-    ['name' => 'Cleaner', 'id' => 201, 'nodes' => []],
-    ['name' => 'Appliances', 'id' => 301, 'nodes' => []],
+    ['name' => 'Cleaner', 'id' => 201],
+    ['name' => 'Appliances', 'id' => 301],
 ];
+
+$pathFromIdFx = function (array $items, int $id) use (&$pathFromIdFx): ?string {
+    foreach ($items as $item) {
+        if (($item['id'] ?? false) === $id) {
+            return $item['name'];
+        }
+
+        $itemRes = $pathFromIdFx($item['nodes'] ?? [], $id);
+        if ($itemRes !== null) {
+            return $item['name'] . ' > ' . $itemRes;
+        }
+    }
+
+    return null;
+};
 
 Header::addTo($app, ['Tree item selector']);
 
@@ -43,16 +58,16 @@ $form = Form::addTo($app);
 $control = $form->addControl('tree', [Form\Control\TreeItemSelector::class, 'treeItems' => $items, 'caption' => 'Multiple selection:'], ['type' => 'json']);
 $control->set([201, 301, 503]);
 
-// $control->onItem(function (array $value) use ($app) {
-//    return new JsToast($app->encodeJson($value));
-// });
+$control->onItem(function (array $values) use ($pathFromIdFx, $items) {
+    return new JsToast('Selected: ' . implode(',<br>', array_map(fn ($v) => $pathFromIdFx($items, $v), $values)));
+});
 
 $control = $form->addControl('tree1', [Form\Control\TreeItemSelector::class, 'treeItems' => $items, 'allowMultiple' => false, 'caption' => 'Single selection:']);
-$control->set(502);
+$control->set(503);
 
-// $control->onItem(function (int $value) {
-//    return new JsToast('Received ' . $value);
-// });
+$control->onItem(function (int $value) use ($pathFromIdFx, $items) {
+    return new JsToast('Selected: ' . $pathFromIdFx($items, $value));
+});
 
 $form->onSubmit(function (Form $form) use ($app) {
     $response = [
