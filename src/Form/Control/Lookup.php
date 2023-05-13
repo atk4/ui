@@ -9,7 +9,6 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\CallbackLater;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
@@ -172,10 +171,6 @@ class Lookup extends Input
      */
     public function getData($limit = true): array
     {
-        if (!$this->model) {
-            throw new Exception('Model must be set for Lookup');
-        }
-
         $this->applyLimit($limit);
 
         $this->applySearchConditions();
