@@ -293,17 +293,6 @@ class Crud extends Grid
     }
 
     /**
-     * Set callback for edit action in Crud.
-     * Callback function will receive the Edit Form and Executor as param.
-     *
-     * @param \Closure(Form, UserAction\ModalExecutor): void $fx
-     */
-    public function onFormEdit(\Closure $fx): void
-    {
-        $this->setOnActions('edit', $fx);
-    }
-
-    /**
      * Set callback for add action in Crud.
      * Callback function will receive the Add Form and Executor as param.
      *
@@ -315,6 +304,17 @@ class Crud extends Grid
     }
 
     /**
+     * Set callback for edit action in Crud.
+     * Callback function will receive the Edit Form and Executor as param.
+     *
+     * @param \Closure(Form, UserAction\ModalExecutor): void $fx
+     */
+    public function onFormEdit(\Closure $fx): void
+    {
+        $this->setOnActions('edit', $fx);
+    }
+
+    /**
      * Set callback for both edit and add action form.
      * Callback function will receive Forms and Executor as param.
      *
@@ -322,8 +322,8 @@ class Crud extends Grid
      */
     public function onFormAddEdit(\Closure $fx): void
     {
-        $this->onFormEdit($fx);
         $this->onFormAdd($fx);
+        $this->onFormEdit($fx);
     }
 
     /**
