@@ -72,7 +72,7 @@ $form->onSubmit(static function (Form $form) {
     $view = new Message('Date field vs control:');
     $view->setApp($form->getApp());
     $view->invokeInit();
-    $view->text->addHtml($message);
+    $view->text->dangerouslyAddHtml($message);
 
     return $view;
 });

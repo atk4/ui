@@ -27,7 +27,7 @@ $wizard->addStep('User Interface', static function (Wizard $page) {
     $t->addParagraph(<<<'EOF'
         Agile Toolkit is a "Low Code Framework" written in PHP. It is designed to simplify all aspects of web application creation:
         EOF);
-    $t->addHtml(<<<'EOF'
+    $t->dangerouslyAddHtml(<<<'EOF'
         <ul>
             <li>No front-end coding necessary (like JavaScript)</li>
             <li>No Database coding required (like SQL)</li>
@@ -39,7 +39,7 @@ $wizard->addStep('User Interface', static function (Wizard $page) {
 
     $t->addParagraph('Your ATK code instead takes a more declarative approach. You work with things like:');
 
-    $t->addHtml(<<<'EOF'
+    $t->dangerouslyAddHtml(<<<'EOF'
         <ul>
             <li>Models and fields</li>
             <li>Model User actions</li>
@@ -164,7 +164,7 @@ $wizard->addStep('Business Model', static function (Wizard $page) {
     $t->addParagraph(<<<'EOF'
         This code shows you a combination of 3 objects:
         EOF);
-    $t->addHtml(<<<'EOF'
+    $t->dangerouslyAddHtml(<<<'EOF'
         <ul>
         <li>Form - a generic view that can display and handle any form</li>
         <li>Model - defines fields for a business object</li>

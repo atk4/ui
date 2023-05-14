@@ -21,7 +21,7 @@ class PromotionText extends View
             Agile Toolkit base package includes:
             EOF);
 
-        $t->addHtml(<<<'EOF'
+        $t->dangerouslyAddHtml(<<<'EOF'
             <ul>
             <li>Over 40 ready-to-use and nicely styled UI components</li>
             <li>Over 10 ways to build interraction</li>
