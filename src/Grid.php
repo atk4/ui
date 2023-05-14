@@ -540,7 +540,7 @@ class Grid extends View
         }
 
         $isDesc = false;
-        if ($sortBy && $sortBy[0] === '-') {
+        if ($sortBy && substr($sortBy, 0, 1) === '-') {
             $isDesc = true;
             $sortBy = substr($sortBy, 1);
         }
