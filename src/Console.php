@@ -320,7 +320,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     protected function execRaw(string $command, array $args = [])
     {
-        $command = escapeshellcmd($command);
         $args = array_map(fn ($v) => escapeshellarg($v), $args);
 
         $spec = [1 => ['pipe', 'w'], 2 => ['pipe', 'w']]; // we want stdout and stderr
