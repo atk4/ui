@@ -25,6 +25,12 @@ class Text extends View
         return $this->content;
     }
 
+    #[\Override]
+    public function set($text)
+    {
+        $this->content = $this->getApp()->encodeHtml($text);
+    }
+
     /**
      * Adds HTML paragraph.
      *
