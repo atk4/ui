@@ -44,7 +44,7 @@ class Text extends View
      *
      * @return $this
      */
-    public function addHtml(string $html)
+    public function dangerouslyAddHtml(string $html)
     {
         $this->content .= $html;
 

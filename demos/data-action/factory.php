@@ -24,7 +24,7 @@ $msg = Message::addTo($app, [
 ]);
 $msg->text->addParagraph('');
 
-$msg->text->addHtml('Override Executor class may be applied globally, via the App instance like below, or per <a href="factory-view.php">View instance</a>.');
+$msg->text->dangerouslyAddHtml('Override Executor class may be applied globally, via the App instance like below, or per <a href="factory-view.php">View instance</a>.');
 
 $msg->text->addParagraph('In this example, Crud and Card button was changed and set through the App instance.');
 
