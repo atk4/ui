@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 use Atk4\Ui\HtmlTemplate;
 
 class HtmlTemplateTest extends TestCase
 {
+    use CreateAppTrait;
+
     protected static function assertSameTemplate(string $expectedTemplateStr, HtmlTemplate $template): void
     {
         $expectedTemplate = new HtmlTemplate($expectedTemplateStr);
@@ -93,8 +96,11 @@ class HtmlTemplateTest extends TestCase
 
         // del tests
         $t->del('foo');
+        $t->del(['foo']);
         static::assertSameTemplate('{$foo} guys', $t);
+        $t->tryDel('foo');
         $t->tryDel('non_existent_tag');
+        $t->tryDel(['a', 'b']);
         static::assertSameTemplate('{$foo} guys', $t);
 
         // set tests
@@ -177,6 +183,21 @@ class HtmlTemplateTest extends TestCase
         static::assertSameTemplate('{foo}Hello{/} guys and {bar}welcome{/} here', $t);
     }
 
+    public function testSetFromEntity(): void
+    {
+        $model = new Model();
+        $model->addField('foo');
+        $model->addField('bar');
+        $entity = $model->createEntity();
+        $entity->set('foo', 'Hello');
+        $entity->set('bar', '<br>');
+
+        $t = new HtmlTemplate('{$foo} {$bar}');
+        $t->setApp($this->createApp());
+        $t->set($entity);
+        static::assertSameTemplate('{foo}Hello{/foo} {bar}&lt;br&gt;{/bar}', $t);
+    }
+
     public function testTagNotDefinedException(): void
     {
         $t = new HtmlTemplate('{$foo}');
@@ -184,5 +205,44 @@ class HtmlTemplateTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Tag is not defined in template');
         $t->set('bar', 'test');
+    }
+
+    public function testSetHtmlFromEntityException(): void
+    {
+        $t = new HtmlTemplate();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('HTML is not allowed to be dangerously set from Model');
+        $t->dangerouslySetHtml(new Model());
+    }
+
+    public function testSetEmptyTagException(): void
+    {
+        $t = new HtmlTemplate();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Tag must be non-empty string');
+        $t->set('', 'test');
+    }
+
+    public function testParseNotOpenedTagException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Template parse error: tag was not opened');
+        new HtmlTemplate('{/}');
+    }
+
+    public function testParseNotOpenedTag2Exception(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Template parse error: tag was not opened');
+        new HtmlTemplate('{foo}{/bar}');
+    }
+
+    public function testParseNotClosedTagException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Template parse error: tag is not closed');
+        new HtmlTemplate('{foo}');
     }
 }
