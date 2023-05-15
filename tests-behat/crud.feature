@@ -18,6 +18,23 @@ Feature: Crud
     Then I should see "United Kingdom"
     Then I should not see "No records"
 
+  Scenario: add after search and sort
+    # cover https://github.com/atk4/ui/commit/d42b07fbcc340d4e24f87056ddafdb94036c3cfa
+    # TODO generalize JS reload with component reload
+    When I click using selector "//th.sortable[//div[text()='Name']]"
+    Then I should see "United Kingdom"
+    Then I press menu button "Add Country" using selector ".ui.menu.atk-grid-menu"
+    Then I fill in "atk_fp_country__name" with "Test 2"
+    Then I fill in "atk_fp_country__iso" with "TT"
+    Then I fill in "atk_fp_country__iso3" with "TTT"
+    Then I fill in "atk_fp_country__numcode" with "123"
+    Then I fill in "atk_fp_country__phonecode" with "1"
+    Then I press Modal button "Save"
+    Then Toast display should contain text 'Country action "add" with "Test 2" entity was executed.'
+    # TODO add should keep search
+    # related with https://github.com/atk4/ui/issues/526 (list newly added record first)
+    Then I search grid for "united kingdo"
+
   Scenario: edit
     Then I press button "Edit"
     Then Modal is open with text "Edit Country"
