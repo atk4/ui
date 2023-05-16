@@ -96,7 +96,7 @@ class Dropdown extends Input
      *     ];
      * }
      *
-     * @var \Closure|null
+     * @var \Closure(mixed, int|string|null): array{value: mixed, title: mixed, icon?: mixed}|null
      */
     public $renderRowFunction;
 
