@@ -54,7 +54,7 @@
         "stylelint": "^14.16.0",
         "stylelint-config-standard": "^29.0.0",
         "terser-webpack-plugin": "^5.3.6",
-        "vue-loader": "^17.0.0",
+        "vue-loader": "^17.1.2",
         "webpack": "^5.74.0",
         "webpack-cli": "^4.10.0"
     }
