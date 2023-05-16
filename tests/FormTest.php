@@ -225,6 +225,42 @@ class FormTest extends TestCase
         static::assertStringNotContainsString('disabled', $input->render());
         static::assertStringNotContainsString('readonly', $input->render());
     }
+
+    public function testUploadNoUploadCallbackException(): void
+    {
+        $input = new Form\Control\Upload();
+        $input->setApp($this->createApp());
+        $input->invokeInit();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing onUpload callback');
+        try {
+            $_GET = [Callback::URL_QUERY_TARGET => $input->cb->getUrlTrigger()];
+            $_POST = ['fUploadAction' => Form\Control\Upload::UPLOAD_ACTION];
+            $input->render();
+        } finally {
+            unset($_GET);
+            unset($_POST);
+        }
+    }
+
+    public function testUploadNoDeleteCallbackException(): void
+    {
+        $input = new Form\Control\Upload();
+        $input->setApp($this->createApp());
+        $input->invokeInit();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing onDelete callback');
+        try {
+            $_GET = [Callback::URL_QUERY_TARGET => $input->cb->getUrlTrigger()];
+            $_POST = ['fUploadAction' => Form\Control\Upload::DELETE_ACTION];
+            $input->render();
+        } finally {
+            unset($_GET);
+            unset($_POST);
+        }
+    }
 }
 
 class AppFormTestMock extends App
