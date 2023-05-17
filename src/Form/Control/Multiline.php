@@ -771,9 +771,7 @@ class Multiline extends Form\Control
     {
         $dummyFields = $this->getExpressionFields($entity);
         foreach ($dummyFields as $k => $field) {
-            if (!$field->expr instanceof \Closure) {
-                $dummyFields[$k]->expr = $this->getDummyExpression($field, $entity);
-            }
+            $dummyFields[$k]->expr = $this->getDummyExpression($field, $entity);
         }
 
         if ($dummyFields === []) {
@@ -830,6 +828,9 @@ class Multiline extends Form\Control
     private function getDummyExpression(SqlExpressionField $exprField, Model $entity)
     {
         $expr = $exprField->expr;
+        if ($expr instanceof \Closure) {
+            $expr = $exprField->getDsqlExpression($entity->getModel()->expr(''));
+        }
         if ($expr instanceof Persistence\Sql\Expression) {
             $expr = \Closure::bind(fn () => $expr->template, null, Persistence\Sql\Expression::class)();
         }
