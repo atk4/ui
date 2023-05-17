@@ -103,7 +103,7 @@ Lets say a User can have many email addresses, but you want to store them in a s
 
 Using a form with User model won't automatically add a Multiline to edit the related email addresses.
 
-.. php:method:: setReferenceModel(string $refModelName, Model $modelEntity = null, array $fieldNames = []): Model
+.. php:method:: setReferenceModel(string $refModelName, Model $entity = null, array $fieldNames = []): Model
 
 If you want to edit them along with the user, Multiline need to be set up accordingly using the setReferenceModel method::
 
