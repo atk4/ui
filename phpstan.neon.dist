@@ -125,7 +125,10 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\ExecutorInterface::onHook\(\)\.$~'
         -
             path: 'src/Crud.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\UserAction\\JsExecutorInterface::stickyGet\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\JsExecutorInterface::stickyGet\(\)\.$~'
+        -
+            path: 'src/Crud.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\ExecutorInterface::onHook\(\)\.$~'
         -
             path: 'src/Form.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::addButton\(\)\.$~'
@@ -300,6 +303,9 @@ parameters:
         -
             path: 'src/CardDeck.php'
             message: '~^Property Atk4\\Ui\\CardDeck::\$paginator \(Atk4\\Ui\\Paginator\|false\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
+        -
+            path: 'src/Form/Control/Input.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Input::prepareRenderButton\(\) should return Atk4\\Ui\\Button but returns \(Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\ExecutorInterface\)\|Atk4\\Ui\\View\.$~'
         -
             path: 'src/Form/AbstractLayout.php'
             message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) should return Atk4\\Ui\\Form\\Control but returns Atk4\\Ui\\View\.$~'

@@ -41,7 +41,7 @@ class Lookup extends Input
      *
      * If left null, then search will be performed on a model's title field
      *
-     * @var array|\Closure|null
+     * @var list<string>|\Closure(Model, string): void|null
      */
     public $search;
 
@@ -53,7 +53,7 @@ class Lookup extends Input
      * with dependency
      * Then model of the 'state' field can be limited to states of the currently selected 'country'.
      *
-     * @var \Closure|null
+     * @var \Closure(Model, array<string, mixed>): void|null
      */
     public $dependency;
 

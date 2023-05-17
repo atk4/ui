@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
@@ -100,10 +101,10 @@ class Dropdown extends Input
      */
     public $renderRowFunction;
 
-    /** @var object Subtemplate for a single dropdown item. */
+    /** @var HtmlTemplate Subtemplate for a single dropdown item. */
     protected $_tItem;
 
-    /** @var object Subtemplate for an icon for a single dropdown item. */
+    /** @var HtmlTemplate Subtemplate for an icon for a single dropdown item. */
     protected $_tIcon;
 
     protected function init(): void

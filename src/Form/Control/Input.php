@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Data\Model\UserAction;
+use Atk4\Ui\AbstractView;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Icon;
 use Atk4\Ui\Label;
 use Atk4\Ui\UserAction\ExecutorFactory;
+use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\UserAction\JsCallbackExecutor;
 
 class Input extends Form\Control
@@ -38,11 +40,11 @@ class Input extends Form\Control
      * the field and you can fit currency symbol "$" inside a label for example.
      * For Input field label will appear on the left.
      *
-     * @var string|object
+     * @var string|Label
      */
     public $label;
 
-    /** @var string|object Set label that will appear to the right of the input field. */
+    /** @var string|Label Set label that will appear to the right of the input field. */
     public $labelRight;
 
     /** @var Button|array|null */
@@ -121,8 +123,8 @@ class Input extends Form\Control
     /**
      * Used only from renderView().
      *
-     * @param string|object $label Label class or object
-     * @param string        $spot  Template spot
+     * @param string|Label $label Label class or object
+     * @param string       $spot  Template spot
      *
      * @return Label
      */
@@ -145,8 +147,8 @@ class Input extends Form\Control
     /**
      * Used only from renderView().
      *
-     * @param string|array|object $button Button class or object
-     * @param string              $spot   Template spot
+     * @param string|array|Button|UserAction|(AbstractView&ExecutorInterface) $button Button class or object
+     * @param string $spot Template spot
      *
      * @return Button
      */

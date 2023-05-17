@@ -32,7 +32,7 @@ class Crud extends Grid
     /** @var bool|null should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
 
-    /** @var array<string, array{item: MenuItem, executor: object}> Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
+    /** @var array<string, array{item: MenuItem, executor: AbstractView&ExecutorInterface}> Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
     private array $menuItems = [];
 
     /** Model single scope action to include in table action column. Will include all single scope actions if empty. */
@@ -135,7 +135,7 @@ class Crud extends Grid
      * can setup Input field via javascript prior to display form or change form submit event
      * handler.
      *
-     * @return object
+     * @return AbstractView&ExecutorInterface
      */
     protected function initActionExecutor(Model\UserAction $action)
     {
@@ -243,7 +243,7 @@ class Crud extends Grid
     /**
      * Return proper action executor base on model action.
      *
-     * @return object
+     * @return AbstractView&ExecutorInterface
      */
     protected function getExecutor(Model\UserAction $action)
     {
