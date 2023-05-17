@@ -142,7 +142,7 @@ class HtmlTemplate
      * If tag contains another tag trees, these tag trees are emptied.
      *
      * @param string|array<string, string>|Model $tag
-     * @param ($tag is array|Model ? null : string|null) $value
+     * @param ($tag is array|Model ? never : string|null) $value
      */
     protected function _setOrAppend($tag, string $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
     {
@@ -208,7 +208,7 @@ class HtmlTemplate
      * would read and set multiple region values from $_GET array.
      *
      * @param string|array<string, string>|Model $tag
-     * @param ($tag is array|Model ? null : string|null) $value
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -224,7 +224,7 @@ class HtmlTemplate
      * $tag.
      *
      * @param string|array<string, string>|Model $tag
-     * @param ($tag is array|Model ? null : string|null) $value
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -240,7 +240,7 @@ class HtmlTemplate
      * encoding, so you must be sure to sanitize.
      *
      * @param string|array<string, string>|Model $tag
-     * @param ($tag is array|Model ? null : string|null) $value
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -256,7 +256,7 @@ class HtmlTemplate
      * $tag.
      *
      * @param string|array<string, string>|Model $tag
-     * @param ($tag is array|Model ? null : string|null) $value
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -271,7 +271,7 @@ class HtmlTemplate
      * Add more content inside a tag.
      *
      * @param string|array<string, string>|Model $tag
-     * @param ($tag is array|Model ? null : string|null) $value
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -287,7 +287,7 @@ class HtmlTemplate
      * $tag.
      *
      * @param string|array<string, string>|Model $tag
-     * @param ($tag is array|Model ? null : string|null) $value
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -303,7 +303,7 @@ class HtmlTemplate
      * encoding, so you must be sure to sanitize.
      *
      * @param string|array<string, string>|Model $tag
-     * @param ($tag is array|Model ? null : string|null) $value
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -319,7 +319,7 @@ class HtmlTemplate
      * $tag.
      *
      * @param string|array<string, string>|Model $tag
-     * @param ($tag is array|Model ? null : string|null) $value
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
