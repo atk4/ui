@@ -690,8 +690,7 @@ class Multiline extends Form\Control
             case 'on-change':
                 $response = call_user_func($this->onChangeFunction, $this->typeCastLoadValues($this->getApp()->decodeJson($_POST['rows'])), $this->form);
                 $this->renderCallback->terminateAjax($this->renderCallback->getAjaxec($response));
-
-                break;
+                // TODO JsCallback::terminateAjax() should return never
         }
     }
 

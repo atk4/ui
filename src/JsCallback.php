@@ -106,7 +106,7 @@ class JsCallback extends Callback
      * which is returned to frontend.
      *
      * @param string|null $ajaxec
-     * @param ($success is true ? null : string)      $msg     General message, typically won't be displayed
+     * @param ($success is true ? null : string) $msg General message, typically won't be displayed
      * @param bool $success Was request successful or not
      */
     public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
