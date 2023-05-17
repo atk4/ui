@@ -47,7 +47,11 @@ $lookup = $form->addControl('country', [
         }
     },
     'placeholder' => 'Selection depends on Dropdown above',
-    'search' => [Country::hinting()->fieldName()->name, Country::hinting()->fieldName()->iso, Country::hinting()->fieldName()->iso3],
+    'search' => [
+        Country::hinting()->fieldName()->name,
+        Country::hinting()->fieldName()->iso,
+        Country::hinting()->fieldName()->iso3,
+    ],
 ]);
 
 $form->onSubmit(function (Form $form) {
@@ -79,7 +83,11 @@ $lookup = $form->addControl('country', [
         }
     },
     'multiple' => true,
-    'search' => [Country::hinting()->fieldName()->name, Country::hinting()->fieldName()->iso, Country::hinting()->fieldName()->iso3],
+    'search' => [
+        Country::hinting()->fieldName()->name,
+        Country::hinting()->fieldName()->iso,
+        Country::hinting()->fieldName()->iso3,
+    ],
 ]);
 
 $form->onSubmit(function (Form $form) {

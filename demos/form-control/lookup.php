@@ -41,7 +41,11 @@ $form->addControl('country3', [
     Form\Control\Lookup::class,
     'model' => new Country($app->db),
     'placeholder' => 'Search for country by name or iso value',
-    'search' => ['name', 'iso', 'iso3'],
+    'search' => [
+        Country::hinting()->fieldName()->name,
+        Country::hinting()->fieldName()->iso,
+        Country::hinting()->fieldName()->iso3,
+    ],
 ]);
 
 $form->onSubmit(function (Form $form) {
