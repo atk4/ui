@@ -825,13 +825,16 @@ class Multiline extends Form\Control
      * Ex: total field expression = [qty] * [price] will return 4 * 100
      * where qty and price current value are 4 and 100 respectively.
      *
-     * @return mixed
+     * @return string
      */
     private function getDummyExpression(SqlExpressionField $exprField, Model $model)
     {
         $expr = $exprField->expr;
-        $matches = [];
+        if ($expr instanceof Persistence\Sql\Expression) {
+            $expr = \Closure::bind(fn () => $expr->template, null, Persistence\Sql\Expression::class)();
+        }
 
+        $matches = [];
         preg_match_all('~\[[a-z0-9_]*\]|{[a-z0-9_]*}~i', $expr, $matches);
 
         foreach ($matches[0] as $match) {
