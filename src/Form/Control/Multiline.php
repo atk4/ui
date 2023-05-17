@@ -771,6 +771,7 @@ class Multiline extends Form\Control
     {
         $dummyFields = $this->getExpressionFields($entity);
         foreach ($dummyFields as $k => $field) {
+            $dummyFields[$k] = clone $field;
             $dummyFields[$k]->expr = $this->getDummyExpression($field, $entity);
         }
 
