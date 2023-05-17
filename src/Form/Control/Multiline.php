@@ -683,7 +683,7 @@ class Multiline extends Form\Control
     {
         switch ($_POST['__atkml_action'] ?? null) {
             case 'update-row':
-                $entity = $this->setDummyModelValue($this->model->createEntity());
+                $entity = $this->createDummyEntityFromPost($this->model);
                 $expressionValues = array_merge($this->getExpressionValues($entity), $this->getCallbackValues($entity));
                 $this->getApp()->terminateJson(['success' => true, 'expressions' => $expressionValues]);
                 // no break - expression above always terminate
@@ -719,9 +719,9 @@ class Multiline extends Form\Control
      * Looks inside the POST of the request and loads data into model.
      * Allow to Run expression base on post row value.
      */
-    private function setDummyModelValue(Model $entity): Model
+    private function createDummyEntityFromPost(Model $model): Model
     {
-        $entity = clone $entity; // for clearing "required"
+        $entity = (clone $model)->createEntity(); // clone for clearing "required"
 
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['name'];
