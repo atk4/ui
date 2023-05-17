@@ -76,7 +76,7 @@ $group = $form->addGroup('Lookup');
 $model = new Country($app->db);
 
 $group->addControl('Lookup_norm', [
-    DemoLookup::class,
+    Form\Control\Lookup::class,
     'model' => new Country($app->db),
     'plus' => true,
 ])->set($model->loadAny()->getId());

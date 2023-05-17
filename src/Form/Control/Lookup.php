@@ -9,13 +9,13 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\CallbackLater;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsModal;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\VirtualPage;
 
 class Lookup extends Input
@@ -41,7 +41,7 @@ class Lookup extends Input
      *
      * If left null, then search will be performed on a model's title field
      *
-     * @var array|\Closure|null
+     * @var list<string>|\Closure(Model, string): void|null
      */
     public $search;
 
@@ -53,7 +53,7 @@ class Lookup extends Input
      * with dependency
      * Then model of the 'state' field can be limited to states of the currently selected 'country'.
      *
-     * @var \Closure|null
+     * @var \Closure(Model, array<string, mixed>): void|null
      */
     public $dependency;
 
@@ -112,7 +112,7 @@ class Lookup extends Input
      * Define callback for generating the row data
      * If left empty default callback Lookup::defaultRenderRow is used.
      *
-     * @var \Closure|null
+     * @var \Closure($this, Model): array{value: mixed, title: mixed}|null
      */
     public $renderRowFunction;
 
@@ -155,7 +155,7 @@ class Lookup extends Input
      *
      * @return never
      */
-    public function outputApiResponse()
+    public function outputApiResponse(): void
     {
         $this->getApp()->terminateJson([
             'success' => true,
@@ -172,10 +172,6 @@ class Lookup extends Input
      */
     public function getData($limit = true): array
     {
-        if (!$this->model) {
-            throw new Exception('Model must be set for Lookup');
-        }
-
         $this->applyLimit($limit);
 
         $this->applySearchConditions();
@@ -252,14 +248,16 @@ class Lookup extends Input
         $vp->set(function (VirtualPage $p) {
             $form = Form::addTo($p);
 
-            $entity = (clone $this->model)->setOnlyFields($this->plus['fields'] ?? null)->createEntity();
-
-            $form->setModel($entity);
+            $entity = $this->model->createEntity();
+            $form->setModel($entity, $this->plus['fields'] ?? null);
 
             $form->onSubmit(function (Form $form) {
-                $form->model->save();
+                $msg = $form->model->getUserAction('add')->execute();
 
                 $res = new JsBlock();
+                if (is_string($msg)) {
+                    $res->addStatement(new JsToast($msg));
+                }
                 $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
 
                 $row = $this->renderRow($form->model);

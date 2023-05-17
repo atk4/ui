@@ -690,8 +690,7 @@ class Multiline extends Form\Control
             case 'on-change':
                 $response = call_user_func($this->onChangeFunction, $this->typeCastLoadValues($this->getApp()->decodeJson($_POST['rows'])), $this->form);
                 $this->renderCallback->terminateAjax($this->renderCallback->getAjaxec($response));
-
-                break;
+                // TODO JsCallback::terminateAjax() should return never
         }
     }
 
@@ -747,63 +746,7 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Return values associated to field expression.
-     */
-    private function getExpressionValues(Model $model): array
-    {
-        $dummyFields = $this->getExpressionFields($model);
-        $formatValues = [];
-
-        foreach ($dummyFields as $k => $field) {
-            if (!$field->expr instanceof \Closure) {
-                $dummyFields[$k]->expr = $this->getDummyExpression($field, $model);
-            }
-        }
-
-        if ($dummyFields !== []) {
-            $dummyModel = new Model($model->getModel()->getPersistence(), ['table' => $model->table]);
-            $dummyModel->removeField('id');
-            $dummyModel->idField = $model->idField;
-
-            $createExprFromValueFx = function ($v) use ($dummyModel): Persistence\Sql\Expression {
-                if (is_int($v)) {
-                    // TODO hack for multiline.php test for PostgreSQL
-                    // related with https://github.com/atk4/data/pull/989
-                    return $dummyModel->expr((string) $v);
-                }
-
-                return $dummyModel->expr('[]', [$v]);
-            };
-
-            foreach ($model->getFields() as $field) {
-                $dummyModel->addExpression($field->shortName, [
-                    'expr' => isset($dummyFields[$field->shortName])
-                        ? $dummyFields[$field->shortName]->expr
-                        : ($field->shortName === $dummyModel->idField
-                            ? '-1'
-                            : $createExprFromValueFx($model->getModel()->getPersistence()->typecastSaveField($field, $field->get($model)))),
-                    'type' => $field->type,
-                    'actual' => $field->actual,
-                ]);
-            }
-            $dummyModel->setLimit(1); // TODO must work with empty table, no table should be used
-            $values = $dummyModel->loadOne()->get();
-            unset($values[$model->idField]);
-
-            foreach ($values as $f => $value) {
-                if (isset($dummyFields[$f])) {
-                    $field = $model->getField($f);
-                    $formatValues[$f] = $this->getApp()->uiPersistence->typecastSaveField($field, $value);
-                }
-            }
-        }
-
-        return $formatValues;
-    }
-
-    /**
-     * Get all field expression in model, but only evaluate expression used in
-     * rowFields.
+     * Get all field expression in model, but only evaluate expression used in rowFields.
      *
      * @return array<string, SqlExpressionField>
      */
@@ -811,7 +754,7 @@ class Multiline extends Form\Control
     {
         $fields = [];
         foreach ($model->getFields() as $field) {
-            if (!$field instanceof SqlExpressionField || !in_array($field->shortName, $this->rowFields, true)) {
+            if (!in_array($field->shortName, $this->rowFields, true) || !$field instanceof SqlExpressionField) {
                 continue;
             }
 
@@ -819,6 +762,62 @@ class Multiline extends Form\Control
         }
 
         return $fields;
+    }
+
+    /**
+     * Return values associated to field expression.
+     */
+    private function getExpressionValues(Model $model): array
+    {
+        $dummyFields = $this->getExpressionFields($model);
+        foreach ($dummyFields as $k => $field) {
+            if (!$field->expr instanceof \Closure) {
+                $dummyFields[$k]->expr = $this->getDummyExpression($field, $model);
+            }
+        }
+
+        if ($dummyFields === []) {
+            return [];
+        }
+
+        $dummyModel = new Model($model->getModel()->getPersistence(), ['table' => $model->table]);
+        $dummyModel->removeField('id');
+        $dummyModel->idField = $model->idField;
+
+        $createExprFromValueFx = function ($v) use ($dummyModel): Persistence\Sql\Expression {
+            if (is_int($v)) {
+                // TODO hack for multiline.php test for PostgreSQL
+                // related with https://github.com/atk4/data/pull/989
+                return $dummyModel->expr((string) $v);
+            }
+
+            return $dummyModel->expr('[]', [$v]);
+        };
+
+        foreach ($model->getFields() as $field) {
+            $dummyModel->addExpression($field->shortName, [
+                'expr' => isset($dummyFields[$field->shortName])
+                    ? $dummyFields[$field->shortName]->expr
+                    : ($field->shortName === $dummyModel->idField
+                        ? '-1'
+                        : $createExprFromValueFx($model->getModel()->getPersistence()->typecastSaveField($field, $field->get($model)))),
+                'type' => $field->type,
+                'actual' => $field->actual,
+            ]);
+        }
+        $dummyModel->setLimit(1); // TODO must work with empty table, no table should be used
+        $values = $dummyModel->loadOne()->get();
+        unset($values[$model->idField]);
+
+        $formatValues = [];
+        foreach ($values as $f => $value) {
+            if (isset($dummyFields[$f])) {
+                $field = $model->getField($f);
+                $formatValues[$f] = $this->getApp()->uiPersistence->typecastSaveField($field, $value);
+            }
+        }
+
+        return $formatValues;
     }
 
     /**

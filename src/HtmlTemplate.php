@@ -43,7 +43,7 @@ class HtmlTemplate
     }
 
     /**
-     * @param string|array $tag
+     * @param string|list<string> $tag
      */
     public function hasTag($tag): bool
     {
@@ -141,7 +141,8 @@ class HtmlTemplate
      *
      * If tag contains another tag trees, these tag trees are emptied.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>|Model $tag
+     * @param ($tag is array|Model ? never : string|null) $value
      */
     protected function _setOrAppend($tag, string $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
     {
@@ -206,7 +207,8 @@ class HtmlTemplate
      *
      * would read and set multiple region values from $_GET array.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>|Model $tag
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -221,7 +223,8 @@ class HtmlTemplate
      * Same as set(), but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>|Model $tag
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -236,7 +239,8 @@ class HtmlTemplate
      * Set value of a tag to a HTML content. The value is set without
      * encoding, so you must be sure to sanitize.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>|Model $tag
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -251,7 +255,8 @@ class HtmlTemplate
      * See dangerouslySetHtml() but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>|Model $tag
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -265,7 +270,8 @@ class HtmlTemplate
     /**
      * Add more content inside a tag.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>|Model $tag
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -280,7 +286,8 @@ class HtmlTemplate
      * Same as append(), but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>|Model $tag
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -295,7 +302,8 @@ class HtmlTemplate
      * Add more content inside a tag. The content is appended without
      * encoding, so you must be sure to sanitize.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>|Model $tag
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -310,7 +318,8 @@ class HtmlTemplate
      * Same as dangerouslyAppendHtml(), but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>|Model $tag
+     * @param ($tag is array|Model ? never : string|null) $value
      *
      * @return $this
      */
@@ -325,7 +334,7 @@ class HtmlTemplate
      * Empty contents of specified region. If region contains sub-hierarchy,
      * it will be also removed.
      *
-     * @param string|array $tag
+     * @param string|list<string> $tag
      *
      * @return $this
      */
@@ -353,7 +362,7 @@ class HtmlTemplate
     /**
      * Similar to del() but won't throw exception if tag is not present.
      *
-     * @param string|array $tag
+     * @param string|list<string> $tag
      *
      * @return $this
      */

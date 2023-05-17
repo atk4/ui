@@ -465,11 +465,6 @@ class Grid extends View
      */
     public function addDropdown(string $columnName, $items, \Closure $fx, $icon = 'caret square down', $menuId = null): void
     {
-        if (!isset($this->table->columns[$columnName])) {
-            throw (new Exception('Column does not exist'))
-                ->addMoreInfo('name', $columnName);
-        }
-
         $column = $this->table->columns[$columnName];
 
         if (!$menuId) {
@@ -492,9 +487,6 @@ class Grid extends View
      */
     public function addPopup($columnName, $popup = null, $icon = 'caret square down')
     {
-        if (!isset($this->table->columns[$columnName])) {
-            throw new Exception('The column where you want to add popup does not exist: ' . $columnName);
-        }
         $column = $this->table->columns[$columnName];
 
         return $column->addPopup($popup, $icon);
@@ -540,7 +532,7 @@ class Grid extends View
         }
 
         $isDesc = false;
-        if ($sortBy && $sortBy[0] === '-') {
+        if ($sortBy && substr($sortBy, 0, 1) === '-') {
             $isDesc = true;
             $sortBy = substr($sortBy, 1);
         }

@@ -48,3 +48,16 @@ Feature: Grid
     When I click using selector "(//th//div.atk-table-dropdown)[3]/div.dropdown"
     When I click using selector "(//th//div.atk-table-dropdown)[3]/div.dropdown/div.menu/div.item[2]"
     Then Toast display should contain text "Title item: Reorder"
+
+  Scenario: sort
+    Given I am on "collection/grid.php"
+    When I click using selector "//th.sortable[//div[text()='Name']]"
+    Then I should see "Andorra"
+    Then I should not see "Zambia"
+    When I click using selector "//th.sortable[//div[text()='Name']]"
+    Then I should see "Zambia"
+    Then I should not see "Andorra"
+    When I click using selector "//th.sortable[//div[text()='Name']]"
+    When I click using selector "//th.sortable[//div[text()='Name']]"
+    Then I should see "Andorra"
+    Then I should not see "Zambia"

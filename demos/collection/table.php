@@ -61,7 +61,10 @@ $table->onHook(Table\Column::HOOK_GET_HTML_TAGS, function (Table $table, Model $
     }
 });
 
-$table->addTotals(['name' => 'Totals:', 'salary' => ['sum']]);
+$table->addTotals([
+    'name' => 'Totals:',
+    'salary' => ['sum'],
+]);
 
 $myArray = [
     ['name' => 'Vinny', 'surname' => 'Sihra', 'birthdate' => '1973-02-03', 'cv' => 'I am <strong>BIG</strong> Vinny'],
