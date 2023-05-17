@@ -426,17 +426,17 @@ class Multiline extends Form\Control
      * Otherwise, form will try to save 'multiline' field value as an array when form is save.
      * $multiline = $form->addControl('multiline', [Multiline::class], ['neverPersist' => true])
      */
-    public function setReferenceModel(string $refModelName, Model $modelEntity = null, array $fieldNames = []): void
+    public function setReferenceModel(string $refModelName, Model $entity = null, array $fieldNames = []): void
     {
-        if ($modelEntity === null) {
+        if ($entity === null) {
             if (!$this->form->model->isEntity()) {
                 throw new Exception('Model entity is not set');
             }
 
-            $modelEntity = $this->form->model;
+            $entity = $this->form->model;
         }
 
-        $this->setModel($modelEntity->ref($refModelName), $fieldNames);
+        $this->setModel($entity->ref($refModelName), $fieldNames);
     }
 
     /**
@@ -683,8 +683,8 @@ class Multiline extends Form\Control
     {
         switch ($_POST['__atkml_action'] ?? null) {
             case 'update-row':
-                $model = $this->setDummyModelValue($this->model->createEntity());
-                $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
+                $entity = $this->createDummyEntityFromPost($this->model);
+                $expressionValues = array_merge($this->getExpressionValues($entity), $this->getCallbackValues($entity));
                 $this->getApp()->terminateJson(['success' => true, 'expressions' => $expressionValues]);
                 // no break - expression above always terminate
             case 'on-change':
@@ -697,17 +697,17 @@ class Multiline extends Form\Control
     /**
      * Return values associated with callback field.
      */
-    private function getCallbackValues(Model $model): array
+    private function getCallbackValues(Model $entity): array
     {
         $values = [];
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['name'];
-            if ($fieldName === $model->idField) {
+            if ($fieldName === $entity->idField) {
                 continue;
             }
-            $field = $model->getField($fieldName);
+            $field = $entity->getField($fieldName);
             if ($field instanceof CallbackField) {
-                $value = ($field->expr)($model);
+                $value = ($field->expr)($entity);
                 $values[$fieldName] = $this->getApp()->uiPersistence->typecastSaveField($field, $value);
             }
         }
@@ -719,30 +719,30 @@ class Multiline extends Form\Control
      * Looks inside the POST of the request and loads data into model.
      * Allow to Run expression base on post row value.
      */
-    private function setDummyModelValue(Model $model): Model
+    private function createDummyEntityFromPost(Model $model): Model
     {
-        $model = clone $model; // for clearing "required"
+        $entity = (clone $model)->createEntity(); // clone for clearing "required"
 
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['name'];
-            if ($fieldName === $model->idField) {
+            if ($fieldName === $entity->idField) {
                 continue;
             }
 
-            $field = $model->getField($fieldName);
+            $field = $entity->getField($fieldName);
 
             $value = $this->getApp()->uiPersistence->typecastLoadField($field, $_POST[$fieldName] ?? null);
             if ($field->isEditable()) {
                 try {
                     $field->required = false;
-                    $model->set($fieldName, $value);
+                    $entity->set($fieldName, $value);
                 } catch (ValidationException $e) {
                     // bypass validation at this point
                 }
             }
         }
 
-        return $model;
+        return $entity;
     }
 
     /**
@@ -767,22 +767,21 @@ class Multiline extends Form\Control
     /**
      * Return values associated to field expression.
      */
-    private function getExpressionValues(Model $model): array
+    private function getExpressionValues(Model $entity): array
     {
-        $dummyFields = $this->getExpressionFields($model);
+        $dummyFields = $this->getExpressionFields($entity);
         foreach ($dummyFields as $k => $field) {
-            if (!$field->expr instanceof \Closure) {
-                $dummyFields[$k]->expr = $this->getDummyExpression($field, $model);
-            }
+            $dummyFields[$k] = clone $field;
+            $dummyFields[$k]->expr = $this->getDummyExpression($field, $entity);
         }
 
         if ($dummyFields === []) {
             return [];
         }
 
-        $dummyModel = new Model($model->getModel()->getPersistence(), ['table' => $model->table]);
+        $dummyModel = new Model($entity->getModel()->getPersistence(), ['table' => $entity->table]);
         $dummyModel->removeField('id');
-        $dummyModel->idField = $model->idField;
+        $dummyModel->idField = $entity->idField;
 
         $createExprFromValueFx = function ($v) use ($dummyModel): Persistence\Sql\Expression {
             if (is_int($v)) {
@@ -794,25 +793,25 @@ class Multiline extends Form\Control
             return $dummyModel->expr('[]', [$v]);
         };
 
-        foreach ($model->getFields() as $field) {
+        foreach ($entity->getFields() as $field) {
             $dummyModel->addExpression($field->shortName, [
                 'expr' => isset($dummyFields[$field->shortName])
                     ? $dummyFields[$field->shortName]->expr
                     : ($field->shortName === $dummyModel->idField
                         ? '-1'
-                        : $createExprFromValueFx($model->getModel()->getPersistence()->typecastSaveField($field, $field->get($model)))),
+                        : $createExprFromValueFx($entity->getModel()->getPersistence()->typecastSaveField($field, $field->get($entity)))),
                 'type' => $field->type,
                 'actual' => $field->actual,
             ]);
         }
         $dummyModel->setLimit(1); // TODO must work with empty table, no table should be used
         $values = $dummyModel->loadOne()->get();
-        unset($values[$model->idField]);
+        unset($values[$entity->idField]);
 
         $formatValues = [];
         foreach ($values as $f => $value) {
             if (isset($dummyFields[$f])) {
-                $field = $model->getField($f);
+                $field = $entity->getField($f);
                 $formatValues[$f] = $this->getApp()->uiPersistence->typecastSaveField($field, $value);
             }
         }
@@ -825,22 +824,28 @@ class Multiline extends Form\Control
      * Ex: total field expression = [qty] * [price] will return 4 * 100
      * where qty and price current value are 4 and 100 respectively.
      *
-     * @return mixed
+     * @return string
      */
-    private function getDummyExpression(SqlExpressionField $exprField, Model $model)
+    private function getDummyExpression(SqlExpressionField $exprField, Model $entity)
     {
         $expr = $exprField->expr;
-        $matches = [];
+        if ($expr instanceof \Closure) {
+            $expr = $exprField->getDsqlExpression($entity->getModel()->expr(''));
+        }
+        if ($expr instanceof Persistence\Sql\Expression) {
+            $expr = \Closure::bind(fn () => $expr->template, null, Persistence\Sql\Expression::class)();
+        }
 
+        $matches = [];
         preg_match_all('~\[[a-z0-9_]*\]|{[a-z0-9_]*}~i', $expr, $matches);
 
         foreach ($matches[0] as $match) {
             $fieldName = substr($match, 1, -1);
-            $field = $model->getField($fieldName);
+            $field = $entity->getField($fieldName);
             if ($field instanceof SqlExpressionField) {
-                $expr = str_replace($match, $this->getDummyExpression($field, $model), $expr);
+                $expr = str_replace($match, $this->getDummyExpression($field, $entity), $expr);
             } else {
-                $expr = str_replace($match, $this->getValueForExpression($exprField, $fieldName, $model), $expr);
+                $expr = str_replace($match, $this->getValueForExpression($exprField, $fieldName, $entity), $expr);
             }
         }
 
@@ -853,17 +858,17 @@ class Multiline extends Form\Control
      *
      * @return string
      */
-    private function getValueForExpression(Field $exprField, string $fieldName, Model $model)
+    private function getValueForExpression(Field $exprField, string $fieldName, Model $entity)
     {
         switch ($exprField->type) {
             case 'integer':
             case 'float':
             case 'atk4_money':
-                $value = (string) ($model->get($fieldName) ?? 0);
+                $value = (string) ($entity->get($fieldName) ?? 0);
 
                 break;
             default:
-                $value = '"' . $model->get($fieldName) . '"';
+                $value = '"' . $entity->get($fieldName) . '"';
         }
 
         return $value;
