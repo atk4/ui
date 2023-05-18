@@ -6,6 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
+use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\App;
 use Atk4\Ui\Callback;
@@ -224,6 +225,22 @@ class FormTest extends TestCase
         $input->setApp($this->createApp());
         self::assertStringNotContainsString('disabled', $input->render());
         self::assertStringNotContainsString('readonly', $input->render());
+    }
+
+    public function testCheckboxWithNonBooleanException(): void
+    {
+        $input = new Form\Control\Checkbox();
+        $input->setApp($this->createApp());
+        $input->invokeInit();
+
+        $m = new Model();
+        $m->addField('foo');
+        $input->entityField = new EntityFieldPair($m->createEntity(), 'foo');
+        $input->entityField->set('1');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Checkbox form control requires field with boolean type');
+        $input->render();
     }
 
     public function testUploadNoUploadCallbackException(): void
