@@ -36,7 +36,7 @@ class ListerTest extends TestCase
         $v->invokeInit();
         $l = Lister::addTo($v, [], ['list']);
         $l->setSource(['foo', 'bar']);
-        static::assertSame('hello, world, world', $v->render());
+        self::assertSame('hello, world, world', $v->render());
     }
 
     public function testAddAfterRender(): void
