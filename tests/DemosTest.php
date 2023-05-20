@@ -180,7 +180,7 @@ class DemosTest extends TestCase
                 } catch (DemosTestExitError $e) {
                 }
             } finally {
-                static::assertSame('', ob_get_clean());
+                self::assertSame('', ob_get_clean());
                 $this->resetSuperglobals();
             }
 

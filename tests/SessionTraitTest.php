@@ -62,7 +62,7 @@ class SessionTraitTest extends TestCase
 
         self::assertFalse(isset($_SESSION));
         $m->atomicSession(function (): void {
-            static::assertTrue(isset($_SESSION));
+            self::assertTrue(isset($_SESSION));
         });
         self::assertFalse(isset($_SESSION));
     }
@@ -78,13 +78,13 @@ class SessionTraitTest extends TestCase
         // value as string
         $m->memorize('foo', 'bar');
         $m->atomicSession(function () use ($m): void {
-            static::assertSame('bar', $_SESSION['__atk_session'][$m->name]['foo']);
+            self::assertSame('bar', $_SESSION['__atk_session'][$m->name]['foo']);
         }, true);
 
         // value as null
         $m->memorize('foo', null);
         $m->atomicSession(function () use ($m): void {
-            static::assertNull($_SESSION['__atk_session'][$m->name]['foo']);
+            self::assertNull($_SESSION['__atk_session'][$m->name]['foo']);
         }, true);
 
         // value as object
@@ -92,7 +92,7 @@ class SessionTraitTest extends TestCase
         $o->foo = 'x';
         $m->memorize('foo', $o);
         $m->atomicSession(function () use ($m, $o): void {
-            static::assertSame(serialize($o), serialize($_SESSION['__atk_session'][$m->name]['foo']));
+            self::assertSame(serialize($o), serialize($_SESSION['__atk_session'][$m->name]['foo']));
         }, true);
     }
 

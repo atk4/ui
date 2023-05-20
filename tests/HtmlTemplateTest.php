@@ -41,11 +41,11 @@ class HtmlTemplateTest extends TestCase
     public function testGetTagTree(): void
     {
         $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        static::assertSameTagTree('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}', $t->getTagTree('_top'));
+        self::assertSameTagTree('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}', $t->getTagTree('_top'));
 
         $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
         $tagTreeFoo = $t->getTagTree('foo');
-        static::assertSameTagTree('hello', $tagTreeFoo);
+        self::assertSameTagTree('hello', $tagTreeFoo);
 
         $tagTreeFoo->getChildren()[0]->set('good bye');
         self::assertSameTemplate('{foo}good bye{/}, cruel {bar}world{/}. {foo}good bye{/}', /* not possible with dual renderer $t */ $tagTreeFoo->getParentTemplate());

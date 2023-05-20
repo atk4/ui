@@ -103,7 +103,7 @@ class CallbackTest extends TestCase
         $var = null;
         $cb->set(function (int $x) use (&$var, $v1) {
             $v3 = View::addTo($v1);
-            static::assertSame('test.php', $v3->url(['test']));
+            self::assertSame('test.php', $v3->url(['test']));
             $var = $x;
         }, [34]);
 
