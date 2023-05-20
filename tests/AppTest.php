@@ -16,7 +16,7 @@ class AppTest extends TestCase
     {
         $app = $this->createApp();
 
-        static::assertInstanceOf(
+        self::assertInstanceOf(
             HtmlTemplate::class,
             $app->loadTemplate('html.html')
         );
@@ -30,7 +30,7 @@ class AppTest extends TestCase
         $app = $this->createApp();
         $app->templateClass = get_class($anotherTemplateClass);
 
-        static::assertInstanceOf(
+        self::assertInstanceOf(
             get_class($anotherTemplateClass),
             $app->loadTemplate('html.html')
         );
@@ -42,13 +42,13 @@ class AppTest extends TestCase
         $app->setResponseHeader('cache-control', '');
 
         $app->setResponseHeader('content-type', 'Xy');
-        static::assertSame(['Content-Type' => ['Xy']], $app->getResponse()->getHeaders());
+        self::assertSame(['Content-Type' => ['Xy']], $app->getResponse()->getHeaders());
 
         $app->setResponseHeader('CONTENT-type', 'xY');
-        static::assertSame(['Content-Type' => ['xY']], $app->getResponse()->getHeaders());
+        self::assertSame(['Content-Type' => ['xY']], $app->getResponse()->getHeaders());
 
         $app->setResponseHeader('content-TYPE', '');
-        static::assertSame([], $app->getResponse()->getHeaders());
+        self::assertSame([], $app->getResponse()->getHeaders());
     }
 
     public function testUnexpectedOutputLateError(): void
@@ -64,7 +64,7 @@ class AppTest extends TestCase
             $this->expectExceptionMessage('Unexpected output detected');
             $app->terminateHtml('');
         } finally {
-            static::assertSame($testStr, ob_get_contents());
+            self::assertSame($testStr, ob_get_contents());
             ob_end_clean();
         }
     }
