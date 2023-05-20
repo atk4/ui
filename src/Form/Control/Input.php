@@ -72,7 +72,7 @@ class Input extends Form\Control
     /**
      * Set attribute which is added directly to the <input> tag, not the surrounding <div>.
      *
-     * @param string|int|array<string, string|int> $name
+     * @param string|int|array<string, string|int>  $name
      * @param ($name is array ? never : string|int) $value
      *
      * @return $this
@@ -148,7 +148,7 @@ class Input extends Form\Control
      * Used only from renderView().
      *
      * @param string|array|Button|UserAction|(AbstractView&ExecutorInterface) $button Button class or object
-     * @param string $spot Template spot
+     * @param string                                                          $spot   Template spot
      *
      * @return Button
      */

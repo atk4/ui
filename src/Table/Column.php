@@ -127,8 +127,8 @@ class Column
      * Add a dropdown header menu.
      *
      * @param \Closure(string, string): (JsExpressionable|View|string|void) $fx
-     * @param string      $icon
-     * @param string|null $menuId the menu name
+     * @param string                                                        $icon
+     * @param string|null                                                   $menuId the menu name
      */
     public function addDropdown(array $items, \Closure $fx, $icon = 'caret square down', $menuId = null): void
     {

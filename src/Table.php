@@ -131,8 +131,8 @@ class Table extends Lister
      * If you don't want table column to be associated with model field, then
      * pass $name parameter as null.
      *
-     * @param string|null        $name            Data model field name
-     * @param array|Table\Column $columnDecorator
+     * @param string|null                             $name            Data model field name
+     * @param array|Table\Column                      $columnDecorator
      * @param ($name is null ? array{} : array|Field) $field
      *
      * @return Table\Column
@@ -304,8 +304,8 @@ class Table extends Lister
      * name and size.
      *
      * @param \Closure(Jquery, mixed): (JsExpressionable|View|string|void) $fx             a callback function with columns widths as parameter
-     * @param array<int, int> $widths         ex: [100, 200, 300, 100]
-     * @param array           $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
+     * @param array<int, int>                                              $widths         ex: [100, 200, 300, 100]
+     * @param array                                                        $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
      *
      * @return $this
      */
