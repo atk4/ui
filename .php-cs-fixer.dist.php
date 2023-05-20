@@ -59,7 +59,7 @@ return (new PhpCsFixer\Config())
         // also prevent bounding of unwanted variables for GC
         'use_arrow_functions' => false,
 
-        'phpdoc_var_without_name' => false, // remove once PHP CS Fixer is upgraded to v3.17
+        'phpdoc_var_without_name' => false, // remove once https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues/6959 is fixed
         'php_unit_test_case_static_method_calls' => ['call_type' => 'self'], // remove once PHP CS Fixer is upgraded to v3.17
     ])
     ->setFinder($finder)
