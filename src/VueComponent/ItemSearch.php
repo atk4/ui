@@ -12,7 +12,7 @@ use Atk4\Ui\View;
  */
 class ItemSearch extends View
 {
-    /** @var View|string the atk4 View to be reloaded or a jQuery ID selector string View to be reloaded that contains data to be filtered. */
+    /** @var View|string the atk4 View to be reloaded or a id selector string View to be reloaded that contains data to be filtered. */
     public $reload;
 
     /** @var string The initial query. */
