@@ -168,14 +168,15 @@ class Form extends View
         }
 
         // allow to submit by pressing an enter key when child control is focused
-        $this->on('submit', new JsExpression('if (event.target === this) { $([]).form(\'submit\'); }', [$this->formElement]));
+        $jsSubmit = $this->js(false, null, $this->formElement)->form('submit');
+        $this->on('submit', new JsExpression('if (event.target === this) { []; }', [$jsSubmit]));
 
         // Add save button in layout
         if ($this->buttonSave) {
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
-            $this->buttonSave->on('click', $this->js(false, null, $this->formElement)->form('submit'));
-            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { $([]).form(\'submit\'); }', [$this->formElement]));
+            $this->buttonSave->on('click', $jsSubmit);
+            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { []; }', [$jsSubmit]));
         }
     }
 
