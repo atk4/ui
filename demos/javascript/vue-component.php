@@ -117,7 +117,7 @@ $clockTemplate = new HtmlTemplate(<<<'EOF'
     {$script}
     EOF);
 
-// Injecting script but normally you would create a separate js file and include it in your page.
+// Injecting script but normally you would create a separate JS file and include it in your page.
 $clockScript = $app->getTag('script', [], <<<'EOF'
     let myClock = {
         template: `
@@ -162,7 +162,7 @@ $clockScript = $app->getTag('script', [], <<<'EOF'
     };
     EOF);
 
-// Creating the clock view and injecting js.
+// Creating the clock view and injecting JS.
 $clock = View::addTo($app, ['template' => $clockTemplate]);
 $clock->template->dangerouslySetHtml('script', $clockScript);
 
@@ -176,6 +176,6 @@ $clockStyle = [
 // creating vue using an external definition.
 $clock->vue('my-clock', ['styles' => $clockStyle], new JsExpression('myClock'));
 
-$btn = Button::addTo($app, ['Change Style']);
-$btn->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));
+$button = Button::addTo($app, ['Change Style']);
+$button->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));
 View::addTo($app, ['element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);

@@ -321,7 +321,7 @@ record into the database.
 
 Agile UI allows for a component to do just that without any extra effort from
 you (such as setting up API routes). To make this possible, a component
-must be able to use unique URLs which will trigger the call-back.
+must be able to use unique URLs which will trigger the callback.
 
 To see how this is implemented, read about :ref:`callback`
 

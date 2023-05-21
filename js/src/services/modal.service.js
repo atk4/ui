@@ -81,7 +81,7 @@ class ModalService {
             args = data.args;
         }
 
-        // check for data type, usually json or html
+        // check for data type, usually JSON or HTML
         if (data.type === 'json') {
             args = $.extend(true, args, { __atk_json: 1 });
         }
@@ -111,7 +111,7 @@ class ModalService {
                         // TODO this if should be removed
                         response.success = false;
                         response.isServiceError = true;
-                        response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
+                        response.message = 'Modal service error: Empty HTML, unable to replace modal content from server response';
                     } else {
                         // content is replace no need to do it in api
                         response.id = null;

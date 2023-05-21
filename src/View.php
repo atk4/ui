@@ -1045,7 +1045,7 @@ class View extends AbstractView
                     $arguments[$ex->name] = $arguments['id'];
                     unset($arguments['id']);
                 } elseif (isset($arguments[0])) {
-                    // if id is not specify we assume arguments[0] is the model id.
+                    // if "id" is not specified we assume arguments[0] is the model ID.
                     $arguments[$ex->name] = $arguments[0];
                     unset($arguments[0]);
                 }

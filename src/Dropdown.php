@@ -44,7 +44,7 @@ class Dropdown extends Lister
      */
     public function onChange(\Closure $fx): void
     {
-        // setting dropdown option for using callback url.
+        // setting dropdown option for using callback URL.
         $this->dropdownOptions['onChange'] = new JsFunction(['value', 'name', 't'], [
             new JsExpression(
                 'if ($(this).data(\'currentValue\') != value) { $(this).atkAjaxec({ url: [url], urlOptions: { item: value } }); $(this).data(\'currentValue\', value); }',

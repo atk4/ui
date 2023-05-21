@@ -44,7 +44,7 @@ Preview Executor
 .. php:class:: PreviewExecutor
 
 This executor is specifically set in order to display the $preview property of the current model UserAction.
-You can select to display the preview using regular console type container, regular text or using html content.
+You can select to display the preview using regular console type container, regular text or using HTML content.
 
 Form Executor
 =============
@@ -63,7 +63,7 @@ This executor will display a form but instead of filling form control with model
 $args property. This is used when you need to ask user about an argument value prior to execute the action.
 The type of form control type to be used in form will depend on how $args is setup within the model UserAction.
 
-Js Callaback Executor
+JS Callaback Executor
 =====================
 
 .. php:class:: JsCallbackExecutor
@@ -166,7 +166,7 @@ Existing executor type can be change or added globally for all your user model a
     ExecutorFactory::registerTypeExecutor(string $type, array $seed): void
 
 This will set a type to your own executor class. For example, a custom executor class can be set as a MODAL_EXECUTOR type
-and all model user action that use this type will be execute using this custom executor instance.
+and all model user action that use this type will be executed using this custom executor instance.
 
 Type may also be registered per specific model user action via this method::
 
@@ -272,7 +272,7 @@ Example of overriding executor assign to a button.::
     $myAction = $model->getUserAction('my_action');
     $myAction->ui['executor'] = $myExecutor;
 
-    $btn->on('click', $myAction);
+    $button->on('click', $myAction);
 
 Demo
 ----

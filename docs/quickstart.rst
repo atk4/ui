@@ -226,7 +226,7 @@ Next we need to add Components that are capable of manipulating the data::
 .. [#] `setModel` provides a way to bind Component with Data Model and Data Persistence.
 
 .. [#] `Form` relies on a special Callback feature of Agile UI to automatically handle onSubmit
-    call-back, pre-load form values into the model, so that you could simply
+    callback, pre-load form values into the model, so that you could simply
 
 .. [#] Save the record into that session data. Form automatically captures validation errors.
 

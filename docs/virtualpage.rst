@@ -26,7 +26,7 @@ To help you understand when to use VirtualPage here is the example:
  - Clicking the Button would dynamically load contents of VirtualPage inside a Modal window.
 
 This pattern is very easy to implement and is used by many components to transparently provide dynamic functionality.
-Next is an example where :php:class:`Tabs` has support for call-back for generating dynamic content for the tab::
+Next is an example where :php:class:`Tabs` has support for callback for generating dynamic content for the tab::
 
     $tabs->addTab('Dynamic Tab Content', function (VirtualPage $vp) {
         \Atk4\Ui\LoremIpsum::addTo($vp);

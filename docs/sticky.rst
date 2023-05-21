@@ -7,7 +7,7 @@ Ability to automatically generate callback URLs is one of the unique features in
 With most UI widgets they would rely on a specific URL to be available or would require
 you to define them.
 
-With Agile UI the backend URLs are created dynamically by using unique names and call-backs.
+With Agile UI the backend URLs are created dynamically by using unique names and callbacks.
 
 There is one problem, however. What if View (and the callbacks too) are created conditionally?
 
@@ -20,7 +20,7 @@ The next code creates Loader area which will display a console. Result is - nest
     });
 
 What if you need to pass a variable `client_id` to display on console output? Technically you
-would need to tweak the call-back url of "Loader" and also callback url of "Console".
+would need to tweak the callback URL of "Loader" and also callback URL of "Console".
 
 Sticky GET is a better approach. It works like this::
 

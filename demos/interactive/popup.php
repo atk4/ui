@@ -170,7 +170,7 @@ $shelf = $itemShelfClass::addTo($app);
 
 // Here we are facing a pretty interesting problem. If you attempt to put "Cart" object inside a popup directly,
 // it won't work, because it will be located inside the menu item's DOM tree and, although hidden, will be
-// impacted by some css rules of the menu.
+// impacted by some CSS rules of the menu.
 //
 // This can happen when your popup content is non-trivial. So we are moving Popup into the app and linking up
 // the triggers. Now, since it's outside, we can't use a single jsAction to reload menu item (along with label)
@@ -215,7 +215,7 @@ $cartPopup->set(function (View $popup) use ($cart) {
 
 // Add item shelf below menu and link it with the cart
 $shelf->linkCart($cart, new JsBlock([
-    // array is a valid js action. Will relad cart item (along with drop-down and label)
+    // array is a valid JS action. Will relad cart item (along with drop-down and label)
     $cartOutterLabel->jsReload(),
 
     // also will hide current item from the shelf

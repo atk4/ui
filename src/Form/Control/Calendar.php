@@ -84,8 +84,8 @@ class Calendar extends Input
     /**
      * Get the FlatPickr instance of this input in order to
      * get it's properties like selectedDates or run it's methods.
-     * Ex: clearing date via js
-     *     $btn->on('click', $f->getControl('date')->getJsInstance()->clear());.
+     * Ex: clearing date via JS
+     *     $button->on('click', $f->getControl('date')->getJsInstance()->clear());.
      *
      * @return JsChain
      */

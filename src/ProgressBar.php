@@ -47,7 +47,7 @@ class ProgressBar extends View
     }
 
     /**
-     * Return js action for incrementing progress by one.
+     * Return JS action for incrementing progress by one.
      */
     public function jsIncrement(): JsExpressionable
     {
@@ -55,7 +55,7 @@ class ProgressBar extends View
     }
 
     /**
-     * Return js action for setting value (client-side).
+     * Return JS action for setting value.
      */
     public function jsValue(int $value): JsExpressionable
     {

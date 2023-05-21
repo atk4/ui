@@ -62,7 +62,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
      * Make sure modal id is unique.
      * Since User action can be added via callbacks, we need
      * to make sure that view id is properly set for loader and button
-     * js action to run properly.
+     * JS action to run properly.
      */
     protected function afterActionInit(Model\UserAction $action): void
     {
@@ -103,7 +103,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
     {
         $this->action = $this->executeModelActionLoad($this->action);
 
-        $this->jsSetBtnState($this->loader, $this->step);
+        $this->jsSetButtonsState($this->loader, $this->step);
         $this->jsSetListState($this->loader, $this->step);
         $this->runSteps();
     }
@@ -130,7 +130,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
     }
 
     /**
-     * Return proper js statement need after action execution.
+     * Return proper JS statement need after action execution.
      *
      * @param mixed      $obj
      * @param string|int $id

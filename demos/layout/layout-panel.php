@@ -30,8 +30,8 @@ Header::addTo($app, ['Right Panel', 'subHeader' => 'Content on the fly!']);
 Header::addTo($app, ['Static', 'size' => 4, 'subHeader' => 'Panel may have static content only.']);
 $panel = Panel\Right::addTo($app, ['dynamic' => []]);
 Message::addTo($panel, ['This panel contains only static content.']);
-$btn = Button::addTo($app, ['Open Static']);
-$btn->on('click', $panel->jsOpen());
+$button = Button::addTo($app, ['Open Static']);
+$button->on('click', $panel->jsOpen());
 View::addTo($app, ['ui' => 'divider']);
 
 // PANEL_1
@@ -40,13 +40,13 @@ Header::addTo($app, ['Dynamic', 'size' => 4, 'subHeader' => 'Panel can load cont
 $panel1 = Panel\Right::addTo($app);
 
 Message::addTo($panel1, ['This panel will load content dynamically below according to button select on the right.']);
-$btn = Button::addTo($app, ['Button 1']);
-$btn->js(true)->data('btn', '1');
-$btn->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
+$button = Button::addTo($app, ['Button 1']);
+$button->js(true)->data('btn', '1');
+$button->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
 
-$btn = Button::addTo($app, ['Button 2']);
-$btn->js(true)->data('btn', '2');
-$btn->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
+$button = Button::addTo($app, ['Button 2']);
+$button->js(true)->data('btn', '2');
+$button->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
 
 $view = View::addTo($app, ['ui' => 'segment']);
 $text = Text::addTo($view);

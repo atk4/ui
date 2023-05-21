@@ -59,7 +59,7 @@ class Form extends View
 
     /**
      * Html <form> element, all inner form controls are linked to it on render
-     * with html form="form_id" attribute.
+     * with HTML form="form_id" attribute.
      *
      * @var View
      */
@@ -114,8 +114,8 @@ class Form extends View
     public array $controlDisplayRules = [];
 
     /**
-     * Default css selector for JsConditionalForm.
-     * Should match the css class name of the control.
+     * Default CSS selector for JsConditionalForm.
+     * Should match the CSS class name of the control.
      * Fomantic-UI use the class name "field".
      *
      * @var string
@@ -140,7 +140,7 @@ class Form extends View
         // where to add your fields.
         $this->initLayout();
 
-        // set css loader for this form
+        // set CSS loader for this form
         $this->setApiConfig(['stateContext' => $this]);
 
         $this->cb = JsCallback::addTo($this, [], [['desired_name' => 'submit']]);
@@ -168,14 +168,15 @@ class Form extends View
         }
 
         // allow to submit by pressing an enter key when child control is focused
-        $this->on('submit', new JsExpression('if (event.target === this) { $([]).form(\'submit\'); }', [$this->formElement]));
+        $jsSubmit = $this->js(false, null, $this->formElement)->form('submit');
+        $this->on('submit', new JsExpression('if (event.target === this) { []; }', [$jsSubmit]));
 
         // Add save button in layout
         if ($this->buttonSave) {
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
-            $this->buttonSave->on('click', $this->js(false, null, $this->formElement)->form('submit'));
-            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { $([]).form(\'submit\'); }', [$this->formElement]));
+            $this->buttonSave->on('click', $jsSubmit);
+            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { []; }', [$jsSubmit]));
         }
     }
 

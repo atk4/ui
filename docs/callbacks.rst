@@ -19,7 +19,7 @@ PHP callback::
         return $j->text(rand(1, 100));
     });
 
-This creates call-back route transparently which is triggered automatically during the 'click' event.
+This creates callback route transparently which is triggered automatically during the 'click' event.
 To make this work seamlessly there are several classes at play. This documentation chapter will walk
 you through the callback mechanisms of Agile UI.
 
@@ -103,7 +103,7 @@ much more preferred way is to use :php:attr:`$triggered`.
 
 You use property `triggered` to detect if callback was executed or not, without short-circuting the
 execution with set() and terminate(). This can be helpful sometimes when you need to affect the
-rendering of the page through a special call-back link. The next example will change color of
+rendering of the page through a special callback link. The next example will change color of
 the label regardless of the callback function::
 
     $label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);

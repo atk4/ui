@@ -35,16 +35,16 @@ trait StepExecutorTrait
     public $loaderShim = [];
 
     /** @var Button The action step prev button. */
-    protected $prevStepBtn;
+    protected $prevStepButton;
 
     /** @var Button The action next step button. */
-    protected $nextStepBtn;
+    protected $nextStepButton;
 
     /** @var Button The execute action button. */
-    protected $execActionBtn;
+    protected $execActionButton;
 
-    /** @var View View holding buttons. */
-    protected $btns;
+    /** @var View */
+    protected $buttonsView;
 
     /** @var UserAction The action to execute. */
     public $action;
@@ -153,7 +153,7 @@ trait StepExecutorTrait
         $this->setFormField($form, $this->getActionData('args'), $this->step);
 
         // setup exec, next and prev button handler for this step
-        $this->jsSetSubmitBtn($page, $form, $this->step);
+        $this->jsSetSubmitButton($page, $form, $this->step);
         $this->jsSetPrevHandler($page, $this->step);
 
         $form->onSubmit(function (Form $form) {
@@ -174,7 +174,7 @@ trait StepExecutorTrait
         $this->setFormField($form, $this->getActionData('fields'), $this->step);
 
         // setup exec, next and prev button handler for this step
-        $this->jsSetSubmitBtn($page, $form, $this->step);
+        $this->jsSetSubmitButton($page, $form, $this->step);
         $this->jsSetPrevHandler($page, $this->step);
 
         if (!$form->hookHasCallbacks(Form::HOOK_SUBMIT)) {
@@ -203,13 +203,13 @@ trait StepExecutorTrait
                 $this->name => $this->action->getEntity()->getId(),
             ], ['method' => 'post'], $this->loader->name);
 
-            $page->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([], [$chain])));
+            $page->js(true, $this->prevStepButton->js()->on('click', new JsFunction([], [$chain])));
         }
 
         // setup executor button to perform action
         $page->js(
             true,
-            $this->execActionBtn->js()->on('click', new JsFunction([], [
+            $this->execActionButton->js()->on('click', new JsFunction([], [
                 $this->loader->jsLoad(
                     [
                         'step' => 'final',
@@ -333,23 +333,23 @@ trait StepExecutorTrait
 
     protected function createButtonBar(Model\UserAction $action): View
     {
-        $this->btns = (new View())->setStyle(['min-height' => '24px']);
-        $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->setStyle(['float' => 'left !important']);
-        $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'class.blue' => true]);
-        $this->execActionBtn = $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MODAL_BUTTON);
-        $this->btns->add($this->execActionBtn);
+        $this->buttonsView = (new View())->setStyle(['min-height' => '24px']);
+        $this->prevStepButton = Button::addTo($this->buttonsView, ['Prev'])->setStyle(['float' => 'left !important']);
+        $this->nextStepButton = Button::addTo($this->buttonsView, ['Next', 'class.blue' => true]);
+        $this->execActionButton = $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MODAL_BUTTON);
+        $this->buttonsView->add($this->execActionButton);
 
-        return $this->btns;
+        return $this->buttonsView;
     }
 
     /**
-     * Generate js for setting Buttons state based on current step.
+     * Generate JS for setting Buttons state based on current step.
      */
-    protected function jsSetBtnState(View $view, string $step): void
+    protected function jsSetButtonsState(View $view, string $step): void
     {
         if (count($this->steps) === 1) {
-            $view->js(true, $this->prevStepBtn->js()->hide());
-            $view->js(true, $this->nextStepBtn->js()->hide());
+            $view->js(true, $this->prevStepButton->js()->hide());
+            $view->js(true, $this->nextStepButton->js()->hide());
         } else {
             $view->js(true, $this->jsSetPrevState($step));
             $view->js(true, $this->jsSetNextState($step));
@@ -357,51 +357,51 @@ trait StepExecutorTrait
         }
 
         // reset button handler
-        $view->js(true, $this->execActionBtn->js()->off());
-        $view->js(true, $this->nextStepBtn->js()->off());
-        $view->js(true, $this->prevStepBtn->js()->off());
-        $view->js(true, $this->nextStepBtn->js()->removeClass('disabled'));
-        $view->js(true, $this->execActionBtn->js()->removeClass('disabled'));
+        $view->js(true, $this->execActionButton->js()->off());
+        $view->js(true, $this->nextStepButton->js()->off());
+        $view->js(true, $this->prevStepButton->js()->off());
+        $view->js(true, $this->nextStepButton->js()->removeClass('disabled'));
+        $view->js(true, $this->execActionButton->js()->removeClass('disabled'));
     }
 
     /**
-     * Generate js for Next btn state.
+     * Generate JS for Next button state.
      */
     protected function jsSetNextState(string $step): JsExpressionable
     {
         if ($this->isLastStep($step)) {
-            return $this->nextStepBtn->js()->hide();
+            return $this->nextStepButton->js()->hide();
         }
 
-        return $this->nextStepBtn->js()->show();
+        return $this->nextStepButton->js()->show();
     }
 
     /**
-     * Generated js for Prev btn state.
+     * Generated JS for Prev button state.
      */
     protected function jsSetPrevState(string $step): JsExpressionable
     {
         if ($this->isFirstStep($step)) {
-            return $this->prevStepBtn->js()->hide();
+            return $this->prevStepButton->js()->hide();
         }
 
-        return $this->prevStepBtn->js()->show();
+        return $this->prevStepButton->js()->show();
     }
 
     /**
-     * Generate js for Exec button state.
+     * Generate JS for Exec button state.
      */
     protected function jsSetExecState(string $step): JsExpressionable
     {
         if ($this->isLastStep($step)) {
-            return $this->execActionBtn->js()->show();
+            return $this->execActionButton->js()->show();
         }
 
-        return $this->execActionBtn->js()->hide();
+        return $this->execActionButton->js()->hide();
     }
 
     /**
-     * Generate js function for Previous button.
+     * Generate JS function for Previous button.
      */
     protected function jsSetPrevHandler(View $view, string $step): void
     {
@@ -412,25 +412,24 @@ trait StepExecutorTrait
                 $this->name => $this->action->getEntity()->getId(),
             ], ['method' => 'post'], $this->loader->name);
 
-            $view->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([], [$chain])));
+            $view->js(true, $this->prevStepButton->js()->on('click', new JsFunction([], [$chain])));
         }
     }
 
     /**
      * Determine which button is responsible for submitting form on a specific step.
      */
-    protected function jsSetSubmitBtn(View $view, Form $form, string $step): void
+    protected function jsSetSubmitButton(View $view, Form $form, string $step): void
     {
-        if ($this->isLastStep($step)) {
-            $view->js(true, $this->execActionBtn->js()->on('click', new JsFunction([], [$form->js(false, null, $form->formElement)->form('submit')])));
-        } else {
-            // submit on next
-            $view->js(true, $this->nextStepBtn->js()->on('click', new JsFunction([], [$form->js(false, null, $form->formElement)->form('submit')])));
-        }
+        $button = $this->isLastStep($step)
+            ? $this->execActionButton
+            : $this->nextStepButton; // submit on next
+
+        $view->js(true, $button->js()->on('click', new JsFunction([], [$form->js(false, null, $form->formElement)->form('submit')])));
     }
 
     /**
-     * Get proper js after submitting a form in a step.
+     * Get proper JS after submitting a form in a step.
      *
      * @return JsBlock|View
      */

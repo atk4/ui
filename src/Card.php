@@ -25,8 +25,8 @@ use Atk4\Ui\UserAction\SharedExecutor;
  *
  * Multiple model can be used to display various content on each card section.
  * When using model or models, the first model that get set via setModel method
- * will have it's idField set as data-id html attribute for the card. Thus making
- * the id available via javascript (new Jquery())->data('id')
+ * will have it's idField set as data-id HTML attribute for the card. Thus making
+ * the ID available via javascript (new Jquery())->data('id')
  */
 class Card extends View
 {
@@ -55,14 +55,14 @@ class Card extends View
     /** @var string|View|null A description inside the Card content. */
     public $description;
 
-    /** @var array|Button|null A button or an array of Buttons */
+    /** @var array|Button|null */
     public $buttons;
 
     /** @var bool How buttons are display inside button container */
     public $hasFluidButton = true;
 
-    /** @var View|null The button Container for Button */
-    public $btnContainer;
+    /** @var View|null */
+    public $buttonContainer;
 
     /** @var bool Display model field as table inside card holder content */
     public $useTable = false;
@@ -144,15 +144,15 @@ class Card extends View
      */
     public function getButtonContainer()
     {
-        if (!$this->btnContainer) {
-            $this->btnContainer = $this->addExtraContent(new View(['ui' => 'buttons']));
+        if (!$this->buttonContainer) {
+            $this->buttonContainer = $this->addExtraContent(new View(['ui' => 'buttons']));
             $this->getButtonContainer()->addClass('wrapping');
             if ($this->hasFluidButton) {
                 $this->getButtonContainer()->addClass('fluid');
             }
         }
 
-        return $this->btnContainer;
+        return $this->buttonContainer;
     }
 
     /**
@@ -214,13 +214,13 @@ class Card extends View
      */
     public function addClickAction(Model\UserAction $action, Button $button = null, array $args = [], string $confirm = null): self
     {
-        $btn = $this->addButton($button ?? $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::CARD_BUTTON));
+        $button = $this->addButton($button ?? $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::CARD_BUTTON));
 
         $cardDeck = $this->getClosestOwner(CardDeck::class);
 
         $defaults = [];
 
-        // Setting arg for model id. $args[0] is consider to hold a model id, i.e. as a js expression.
+        // Setting arg for model ID. $args[0] is consider to hold a model ID, i.e. as a JS expression.
         if ($this->model && $this->model->isLoaded() && !isset($args[0])) {
             $defaults[] = $this->model->getId();
             if ($cardDeck === null && !$action->isOwnerEntity()) {
@@ -252,7 +252,7 @@ class Card extends View
             }
         }
 
-        $btn->on('click', $cardDeck !== null ? $cardDeck->sharedExecutorsContainer->getExecutor($action) : $action, $defaults);
+        $button->on('click', $cardDeck !== null ? $cardDeck->sharedExecutorsContainer->getExecutor($action) : $action, $defaults);
 
         return $this;
     }
@@ -331,8 +331,8 @@ class Card extends View
             $seed = Factory::factory([Button::class], $seed);
         }
 
-        $btn = $this->getButtonContainer()->add($seed);
+        $button = $this->getButtonContainer()->add($seed);
 
-        return $btn;
+        return $button;
     }
 }

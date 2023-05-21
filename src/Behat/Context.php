@@ -300,19 +300,19 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @When I press button :arg1
      */
-    public function iPressButton(string $btnLabel): void
+    public function iPressButton(string $buttonLabel): void
     {
-        $button = $this->findElement(null, '//div[text()="' . $btnLabel . '"]');
+        $button = $this->findElement(null, '//div[text()="' . $buttonLabel . '"]');
         $button->click();
     }
 
     /**
      * @Then I press menu button :arg1 using selector :selector
      */
-    public function iPressMenuButton(string $btnLabel, string $selector): void
+    public function iPressMenuButton(string $buttonLabel, string $selector): void
     {
         $menu = $this->findElement(null, $selector);
-        $link = $this->findElement($menu, '//a[text()="' . $btnLabel . '"]');
+        $link = $this->findElement($menu, '//a[text()="' . $buttonLabel . '"]');
         $link->click();
     }
 
@@ -384,8 +384,8 @@ class Context extends RawMinkContext implements BehatContext
     public function iPressModalButton(string $buttonLabel): void
     {
         $modal = $this->findElement(null, '.modal.visible.active.front');
-        $btn = $this->findElement($modal, '//div[text()="' . $buttonLabel . '"]');
-        $btn->click();
+        $button = $this->findElement($modal, '//div[text()="' . $buttonLabel . '"]');
+        $button->click();
     }
 
     /**
@@ -471,8 +471,8 @@ class Context extends RawMinkContext implements BehatContext
     public function iPressPanelButton(string $buttonLabel): void
     {
         $panel = $this->findElement(null, '.atk-right-panel.atk-visible');
-        $btn = $this->findElement($panel, '//div[text()="' . $buttonLabel . '"]');
-        $btn->click();
+        $button = $this->findElement($panel, '//div[text()="' . $buttonLabel . '"]');
+        $button->click();
     }
 
     // }}}
@@ -544,7 +544,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $isSelectorXpath = $this->parseSelector($inputName)[0] === 'xpath';
 
-        // get dropdown item from Fomantic-UI which is direct parent of input html element
+        // get dropdown item from Fomantic-UI which is direct parent of input HTML element
         $lookupElem = $this->findElement(null, ($isSelectorXpath ? $inputName : '//input[@name="' . $inputName . '"]') . '/parent::div');
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
@@ -837,7 +837,7 @@ class Context extends RawMinkContext implements BehatContext
     // }}}
 
     /**
-     * Find a dropdown component within an html element
+     * Find a dropdown component within an HTML element
      * and check if value is set in dropdown.
      */
     private function assertDropdownValue(NodeElement $element, string $value, string $selector): void
@@ -848,7 +848,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * Find a select input type within an html element
+     * Find a select input type within an HTML element
      * and check if value is selected.
      */
     private function assertSelectedValue(NodeElement $element, string $value, string $selector): void
@@ -859,7 +859,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * Find an input within an html element and check
+     * Find an input within an HTML element and check
      * if value is set.
      */
     private function assertInputValue(NodeElement $element, string $value, string $selector = 'input'): void

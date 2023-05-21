@@ -40,7 +40,7 @@ You can set default value and interact with a form control using JavaScript::
 
 When used stand-alone, Form\Controls will produce a basic HTML (I have omitted id=)::
 
-    <div class="ui  input">
+    <div class="ui input">
         <input name="line" type="text" placeholder="" value="hello world">
     </div>
 
@@ -134,7 +134,7 @@ change their value.
 
 .. php:attr:: disabled
 
-Disabled form controls can be  seend in form, cannot be focused and will not be submitted. And of course we
+Disabled form controls can be seen in form, cannot be focused and will not be submitted. And of course we
 don't allow to change their value. Disabled form controls are used for read only model fields for example.
 
 

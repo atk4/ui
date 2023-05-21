@@ -54,11 +54,11 @@ $leftColumn = $columns->addColumn();
 
 Header::addTo($rightColumn, [
     'JsCallbackExecutor',
-    'subHeader' => 'Path argument is set via POST url when setting actions in executor.',
+    'subHeader' => 'Path argument is set via POST URL when setting actions in executor.',
 ]);
 // Explicitly adding an Action executor.
 $executor = UserAction\JsCallbackExecutor::addTo($rightColumn);
-// Passing Model action to executor and action argument via url.
+// Passing Model action to executor and action argument via URL.
 $executor->setAction($action->getActionForEntity($files->createEntity()));
 // Setting user response after model action get execute.
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
@@ -66,8 +66,8 @@ $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
 });
 $executor->executeModelAction(['path' => '.']);
 
-$btn = Button::addTo($rightColumn, ['Import File']);
-$btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);
+$button = Button::addTo($rightColumn, ['Import File']);
+$button->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);
 
 Header::addTo($rightColumn, ['BasicExecutor']);
 $executor = UserAction\BasicExecutor::addTo($rightColumn, ['executorButton' => [Button::class, 'Import', 'class.primary' => true]]);

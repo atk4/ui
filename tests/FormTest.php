@@ -6,6 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
+use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\App;
 use Atk4\Ui\Callback;
@@ -122,7 +123,7 @@ class FormTest extends TestCase
 
     public function assertFormControlError(string $field, string $error): void
     {
-        $n = preg_match_all('~form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
+        $n = preg_match_all('~\.form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
         self::assertGreaterThan(0, $n);
         $matched = false;
         foreach ($matchesAll as $matches) {
@@ -137,7 +138,7 @@ class FormTest extends TestCase
 
     public function assertFromControlNoErrors(string $field): void
     {
-        $n = preg_match_all('~form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
+        $n = preg_match_all('~\.form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
         self::assertGreaterThan(0, $n);
         foreach ($matchesAll as $matches) {
             if ($matches[1] === $field) {
@@ -224,6 +225,22 @@ class FormTest extends TestCase
         $input->setApp($this->createApp());
         self::assertStringNotContainsString('disabled', $input->render());
         self::assertStringNotContainsString('readonly', $input->render());
+    }
+
+    public function testCheckboxWithNonBooleanException(): void
+    {
+        $input = new Form\Control\Checkbox();
+        $input->setApp($this->createApp());
+        $input->invokeInit();
+
+        $m = new Model();
+        $m->addField('foo');
+        $input->entityField = new EntityFieldPair($m->createEntity(), 'foo');
+        $input->entityField->set('1');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Checkbox form control requires field with boolean type');
+        $input->render();
     }
 
     public function testUploadNoUploadCallbackException(): void

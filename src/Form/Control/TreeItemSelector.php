@@ -19,7 +19,7 @@ use Atk4\Ui\View;
  * The input value is store as an array type when allowMultiple is set to true, otherwise, will
  * store one single value when set to false.
  *
- * Only item id are store within the input field.
+ * Only item ID are store within the input field.
  *
  * see demos/tree-item-selector.php to see how tree items are build.
  */
@@ -32,7 +32,7 @@ class TreeItemSelector extends Form\Control
     public $itemSelector;
 
     /**
-     * The css class selector for where to apply loading class name.
+     * The CSS class selector for where to apply loading class name.
      * Loading class name is set during on Item callback.
      *
      * @var string
@@ -44,8 +44,8 @@ class TreeItemSelector extends Form\Control
 
     /**
      * The list of items.
-     * Item must have at least one name and one id.
-     * Only the id value, from a single node, are returned i.e. not the group id value.
+     * Item must have at least one name and one ID.
+     * Only the ID value, from a single node, are returned i.e. not the group ID value.
      *
      * Each item may have it's own children by adding nodes children to it.
      * $items = [

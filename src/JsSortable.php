@@ -9,14 +9,14 @@ use Atk4\Ui\Js\JsExpressionable;
 
 class JsSortable extends JsCallback
 {
-    /** @var string The html element that contains others element for reordering. */
+    /** @var string The HTML element that contains others element for reordering. */
     public $container = 'tbody';
 
-    /** @var string The html element inside the container that need reordering. */
+    /** @var string The HTML element inside the container that need reordering. */
     public $draggable = 'tr';
 
     /**
-     * The data label set as data-label attribute on the html element.
+     * The data label set as data-label attribute on the HTML element.
      *  The callback will send source parameter on the moved element using this attribute.
      *  default to data-id.
      *
@@ -28,7 +28,7 @@ class JsSortable extends JsCallback
     public $dataLabel = 'id';
 
     /**
-     * The css class name of the handle element for dragging purpose.
+     * The CSS class name of the handle element for dragging purpose.
      * If null, the entire element become the dragging handle.
      *
      * @var string|null
@@ -79,7 +79,7 @@ class JsSortable extends JsCallback
     }
 
     /**
-     * Return js action to retrieve order.
+     * Return JS action to retrieve order.
      *
      * @param array|null $urlOptions
      *

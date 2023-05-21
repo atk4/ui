@@ -217,7 +217,7 @@ class Multiline extends Form\Control
                 }
             }
 
-            // remove __atml id from array field.
+            // remove __atml ID from array field
             if ($this->form->model->getField($this->shortName)->type === 'json') {
                 $rows = [];
                 foreach ($this->rowData as $key => $cols) {
@@ -278,7 +278,7 @@ class Multiline extends Form\Control
 
     /**
      * Get Multiline initial field value. Value is based on model set and will
-     * output data rows as json string value.
+     * output data rows as JSON string value.
      */
     public function getValue(): string
     {
@@ -386,7 +386,7 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Finds and returns Multiline row id.
+     * Finds and returns Multiline row ID.
      */
     private function getMlRowId(array $row): ?string
     {

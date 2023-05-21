@@ -18,7 +18,7 @@ class JsToast implements JsExpressionable
     /** @var array Various setting options as per Fomantic-UI toast module. */
     public array $settings = [];
 
-    /** @var string default css class for toast */
+    /** @var string default CSS class for toast */
     public $defaultCss = 'success';
 
     /**
@@ -32,7 +32,7 @@ class JsToast implements JsExpressionable
             $this->settings['message'] = $settings;
         }
 
-        // set default css class
+        // set default CSS class
         if (!array_key_exists('class', $this->settings)) {
             $this->settings['class'] = $this->defaultCss;
         }

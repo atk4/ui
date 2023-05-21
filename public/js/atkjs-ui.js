@@ -42,7 +42,7 @@ __webpack_require__.r(__webpack_exports__);
  * Because atk table use overflow: scroll, Dropdown is not
  * display on top of table.
  *
- * This utility will properly set css style for dropdown menu to be displayed correctly.
+ * This utility will properly set CSS style for dropdown menu to be displayed correctly.
  */
 function showTableDropdown() {
   // getting element composing dropdown.
@@ -88,7 +88,7 @@ function showTableDropdown() {
 }
 
 /**
- * Reset css and handler when hiding dropdown.
+ * Reset CSS and handler when hiding dropdown.
  */
 function hideTableDropdown() {
   // reset positioning.
@@ -830,9 +830,9 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
       if (!this.textInput.val()) {
         this.fileInput.click();
       } else {
-        // When upload is complete a js action can be send to set an id
+        // When upload is complete a JS action can be send to set an ID
         // to the uploaded file via the jQuery data property.
-        // Check if that id exist and send it with
+        // Check if that ID exist and send it with
         // delete callback, If not, default to file name.
         let id = this.$el.data().fileId;
         if (id === '' || id === undefined || id === null) {
@@ -852,7 +852,7 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
   }
 
   /**
-   * Set the action button html content.
+   * Set the action button HTML content.
    * Set the input text content.
    */
   setState(mode) {
@@ -940,7 +940,7 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
   }
 
   /**
-   * Return the html content for erase action button.
+   * Return the HTML content for erase action button.
    *
    * @returns {string}
    */
@@ -1251,7 +1251,7 @@ __webpack_require__.r(__webpack_exports__);
  * To use other container, simply set container and draggable accordingly.
  * $sortable = JsSortable::addTo($lister, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
  *
- * Element containing specific css class can be used as the handle for dragging element, if null
+ * Element containing specific CSS class can be used as the handle for dragging element, if null
  * is pass, than the entire element is used.
  */
 class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
@@ -1463,7 +1463,7 @@ __webpack_require__.r(__webpack_exports__);
  * default options are:
  * padding: 20         The amount of padding needed prior to request a page load.
  * initialPage: 1      The initial page load when calling this plugin.
- * appendTo: null      The html element where new content should be append to.
+ * appendTo: null      The HTML element where new content should be append to.
  * stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call. if null, then a default loader will be apply to the bottom of the $inner element.
  */
 class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
@@ -1596,7 +1596,7 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
   /**
    * Use response to append content to element and setup next content to be loaded.
    * Set response.id to null in order for apiService.onSuccess to bypass
-   * replacing html content. Js return from server response will still be execute.
+   * replacing HTML content. JS returned from server response will still be executed.
    */
   onComplete(response, element) {
     this.removeLoader();
@@ -1737,7 +1737,7 @@ class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default
       }
       return;
     }
-    // html element for display or hiding menu items. Usually a div containning an icon.
+    // HTML element for display or hiding menu items. Usually a div containning an icon.
     this.toggler = this.$el.find(this.settings.toggleSelector);
     this.addClickHandler();
     if (this.hasBase()) {
@@ -1785,8 +1785,8 @@ class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default
   }
 
   /**
-   * Check if menu container for menu items contains the css visible class name.
-   * Usually means that the menu items in a group are being display by css rule.
+   * Check if menu container for menu items contains the CSS visible class name.
+   * Usually means that the menu items in a group are being display by CSS rule.
    *
    * @returns {*}
    */
@@ -1822,17 +1822,17 @@ class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default
 AtkSidenavPlugin.DEFAULTS = {
   base: 'index.php',
   menuItemsSelector: '.atk-maestro-menu-items',
-  // The css selector where menu items are contain.
+  // The CSS selector where menu items are contain.
   menuGroupTitleSelector: '.atk-menu-group-title',
-  // The css selector for menu group title.
+  // The CSS selector for menu group title.
   toggleSelector: '.atk-submenu-toggle',
-  // the css selector that will show or hide sub menu.
+  // the CSS selector that will show or hide sub menu.
   visibleCssClass: 'atk-visible',
-  // Display an item when this css class is set.
+  // Display an item when this CSS class is set.
   menuGroupActiveClass: 'active',
-  // the css class to set when a menu group is active.
+  // the CSS class to set when a menu group is active.
   menuItemActiveClass: 'active',
-  // the css class to set when a menu item in a group is active.
+  // the CSS class to set when a menu item in a group is active.
   firstItemSelector: 'a',
   // the selector for the first menu item in a group, where click will be trigger.
   icon: {
@@ -1927,7 +1927,7 @@ class ApiService {
   }
 
   /**
-   * Execute js code.
+   * Execute JS code.
    *
    * This function should be called using .call() by passing proper context for 'this'.
    * ex: apiService.evalResponse.call(this, code)
@@ -1990,7 +1990,7 @@ class ApiService {
         }
 
         if (response.portals) {
-          // Create app portal from json response.
+          // Create app portal from JSON response.
           const portals = Object.keys(response.portals);
           for (const portalID of portals) {
             const m = external_jquery__WEBPACK_IMPORTED_MODULE_4___default()('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
@@ -2030,11 +2030,11 @@ class ApiService {
    * Handle a server response failure.
    */
   onFailure(response) {
-    // if json is returned, it should contain the error within message property
+    // if JSON is returned, it should contain the error within message property
     if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
       atk__WEBPACK_IMPORTED_MODULE_5__["default"].apiService.showErrorModal(response.message);
     } else {
-      // check if we have html returned by server with <body> content.
+      // check if we have HTML returned by server with <body> content.
       const body = response.match(/<body[^>]*>[\S\s]*<\/body>/gi);
       if (body) {
         atk__WEBPACK_IMPORTED_MODULE_5__["default"].apiService.showErrorModal(body);
@@ -2047,7 +2047,7 @@ class ApiService {
   /**
    * Make our own ajax request test if need to.
    * if a plugin must call $.ajax or $.getJson directly instead of Fomantic-UI api,
-   * we could send the json response to this.
+   * we could send the JSON response to this.
    */
   atkProcessExternalResponse(response) {
     let content = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
@@ -2060,7 +2060,7 @@ class ApiService {
 
   /**
    * Will wrap Fomantic-UI api call into a Promise.
-   * Can be used to retrieve json data from the server.
+   * Can be used to retrieve JSON data from the server.
    * Using this will bypass regular successTest i.e. any
    * atkjs (javascript) return from server will not be evaluated.
    *
@@ -2183,7 +2183,7 @@ class DataService {
   }
 
   /**
-   * Check for valid json string.
+   * Check for valid JSON string.
    *
    * @returns {boolean}
    */
@@ -2255,7 +2255,7 @@ class DataService {
 
   /**
    * Similar to set data but make sure that value is
-   * a valid json string prior to set data.
+   * a valid JSON string prior to set data.
    */
   setJsonData(item, value) {
     let type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'local';
@@ -2268,7 +2268,7 @@ class DataService {
   /**
    * Will either create or merge with existing data.
    * Merging is done with Object assign, prioritizing new value.
-   * Previous data, if exist, and value must be a valid json string.
+   * Previous data, if exist, and value must be a valid JSON string.
    */
   addJsonData(item, value) {
     let type = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'local';
@@ -2576,7 +2576,7 @@ class ModalService {
       args = data.args;
     }
 
-    // check for data type, usually json or html
+    // check for data type, usually JSON or HTML
     if (data.type === 'json') {
       args = external_jquery__WEBPACK_IMPORTED_MODULE_4___default().extend(true, args, {
         __atk_json: 1
@@ -2604,7 +2604,7 @@ class ModalService {
             // TODO this if should be removed
             response.success = false;
             response.isServiceError = true;
-            response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
+            response.message = 'Modal service error: Empty HTML, unable to replace modal content from server response';
           } else {
             // content is replace no need to do it in api
             response.id = null;
@@ -2755,11 +2755,11 @@ class PanelService {
    * Open the panel.
    * Params expected the following arguments:
    * triggered: A string or jQuery object that will triggered panel to open.
-   * activeCss: Either an object containing a jQuery selector with a css class or css class.
+   * activeCss: Either an object containing a jQuery selector with a CSS class or CSS class.
    * - As an Object: element: the jQuery selector within the triggered element;
    * -               css:     the css class to applying to the triggered element when panel is open.
    *
-   * As a css class: the css class to applied to the triggered element when panel open.
+   * As a CSS class: the CSS class to applied to the triggered element when panel open.
    *
    * @param {object} params
    */
@@ -2927,14 +2927,14 @@ class PanelService {
 
   /**
    * Set triggering element that fire the panel to open.
-   * If panel is open by html element, you can specified class on these
+   * If panel is open by HTML element, you can specified class on these
    * elements that will be add or remove, depending on the panel state.
-   * Thus, creating a visual onto which html element has fire the event.
+   * Thus, creating a visual onto which HTML element has fire the event.
    */
   setTriggerElement(id, trigger, params) {
     this.setPropertyValue(id, 'triggerElement', trigger);
 
-    // Do we need to setup css class on triggering element.
+    // Do we need to setup CSS class on triggering element.
     if (params.activeCSS) {
       let element;
       let css;
@@ -3000,7 +3000,7 @@ class PanelService {
   }
 
   /**
-   * Removed a css class to a jQuery element.
+   * Removed a CSS class to a jQuery element.
    * This should normally be your triggering panel element.
    */
   deActivated(element, css) {
@@ -3010,7 +3010,7 @@ class PanelService {
   }
 
   /**
-   * Add a css class name to a jQuery element.
+   * Add a CSS class name to a jQuery element.
    * This should normally be your triggering panel element.
    */
   activated(element, css) {
@@ -3137,7 +3137,7 @@ class PopupService {
             if (result.length === 0) {
               response.success = false;
               response.isServiceError = true;
-              response.message = 'Popup service error: Empty html, unable to replace popup content from server response';
+              response.message = 'Popup service error: Empty HTML, unable to replace popup content from server response';
             } else {
               response.id = null;
               $popup.data('hascontent', true);
@@ -3722,9 +3722,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * Define atk global options.
- * In Js:
+ * In JS:
  * atk.options.set('name', 'value');
- * In Php:
+ * In PHP:
  * (new JsChain('atk.options')->set('name', 'value');
  */
 atk__WEBPACK_IMPORTED_MODULE_2__["default"].options = function () {

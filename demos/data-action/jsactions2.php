@@ -41,6 +41,6 @@ $buttons = View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
 // Create a button for every action in Country model.
 foreach ($country->getUserActions() as $action) {
     $b = Button::addTo($buttons, [$action->getCaption()]);
-    // Assign action to button using current model id as url arguments.
+    // Assign action to button using current model id as URL arguments.
     $b->on('click', $action, ['args' => ['id' => $countryId]]);
 }

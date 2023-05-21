@@ -43,7 +43,7 @@ class VpExecutor extends View implements JsExecutorInterface
     public $stepListItems = ['args' => 'Fill argument(s)', 'fields' => 'Edit Record(s)', 'preview' => 'Preview', 'final' => 'Complete'];
 
     /** @var array */
-    public $cancelBtnSeed = [Button::class, ['Cancel', 'class.small left floated basic blue' => true, 'icon' => 'left arrow']];
+    public $cancelButtonSeed = [Button::class, ['Cancel', 'class.small left floated basic blue' => true, 'icon' => 'left arrow']];
 
     protected function init(): void
     {
@@ -56,7 +56,7 @@ class VpExecutor extends View implements JsExecutorInterface
     {
         $this->vp = VirtualPage::addTo($this);
         /** @var Button $b */
-        $b = $this->vp->add(Factory::factory($this->cancelBtnSeed));
+        $b = $this->vp->add(Factory::factory($this->cancelButtonSeed));
         $b->link($this->getApp()->url());
         View::addTo($this->vp, ['ui' => 'clearing divider']);
 
@@ -73,7 +73,7 @@ class VpExecutor extends View implements JsExecutorInterface
      * Make sure modal id is unique.
      * Since User action can be added via callbacks, we need
      * to make sure that view id is properly set for loader and button
-     * js action to run properly.
+     * JS action to run properly.
      */
     protected function afterActionInit(Model\UserAction $action): void
     {
@@ -115,7 +115,7 @@ class VpExecutor extends View implements JsExecutorInterface
         $this->action = $this->executeModelActionLoad($this->action);
 
         $this->vp->set(function () {
-            $this->jsSetBtnState($this->loader, $this->step);
+            $this->jsSetButtonsState($this->loader, $this->step);
             $this->jsSetListState($this->loader, $this->step);
             $this->runSteps();
         });
@@ -143,7 +143,7 @@ class VpExecutor extends View implements JsExecutorInterface
     }
 
     /**
-     * Return proper js statement need after action execution.
+     * Return proper JS statement need after action execution.
      *
      * @param mixed      $obj
      * @param string|int $id

@@ -28,8 +28,8 @@ use Atk4\Ui\View;
  * ModalExecutor modal view may be generated via callbacks.
  * These modal are added to app->html view if not already added
  * and the api service take care of generating them when output
- * in json via callback. It is important that these ModalExecutor modals
- * stay within the page html content for loader to run each steps properly.
+ * in JSON via callback. It is important that these ModalExecutor modals
+ * stay within the page HTML content for loader to run each steps properly.
  */
 class ModalExecutor extends Modal implements JsExecutorInterface
 {
@@ -59,7 +59,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      * Make sure modal id is unique.
      * Since User action can be added via callbacks, we need
      * to make sure that view id is properly set for loader and button
-     * js action to run properly.
+     * JS action to run properly.
      */
     protected function afterActionInit(Model\UserAction $action): void
     {
@@ -97,7 +97,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
         // Add buttons to modal for next and previous.
         $this->addButtonAction($this->createButtonBar($this->action));
-        $this->jsSetBtnState($this->loader, $this->step);
+        $this->jsSetButtonsState($this->loader, $this->step);
         $this->runSteps();
     }
 
@@ -151,7 +151,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     }
 
     /**
-     * Return proper js statement need after action execution.
+     * Return proper JS statement need after action execution.
      *
      * @param mixed      $obj
      * @param string|int $id

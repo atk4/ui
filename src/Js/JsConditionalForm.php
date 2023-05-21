@@ -17,7 +17,7 @@ class JsConditionalForm implements JsExpressionable
     /** @var array|null The field rules for that form. */
     public $fieldRules;
 
-    /** @var string The html class name parent for input. */
+    /** @var string The HTML class name parent for input. */
     public $selector;
 
     public function __construct(Form $form, array $rules = null, string $selector = '.field')

@@ -265,7 +265,7 @@ __webpack_require__.r(__webpack_exports__);
       return [...new Set(jointArray)];
     },
     /**
-     * Get all id from all chidren node.
+     * Get all ID from all chidren node.
      *
      * @returns {Array.<string>}
      */
@@ -342,7 +342,7 @@ __webpack_require__.r(__webpack_exports__);
       return document.getElementsByName(this.getRootData().field)[0];
     },
     /**
-     * Send data using callback url.
+     * Send data using callback URL.
      */
     postValue: function () {
       external_jquery__WEBPACK_IMPORTED_MODULE_20___default()(this.$el).parents('.' + this.getRootData().options.loader).api({

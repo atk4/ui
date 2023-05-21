@@ -46,7 +46,7 @@ class Link extends Table\Column
     /**
      * When constructing a URL using 'page', this specifies list of values which will be added
      * to the destination URL. For example if you set $args = ['document_id' => 'id'] then row value
-     * of ['id'] will be added to url's property "document_id".
+     * of ['id'] will be added to URL's property "document_id".
      *
      * For a full example:
      *  $page = ['example', 'type' => 'client'];
@@ -78,7 +78,7 @@ class Link extends Table\Column
      */
     public $target;
 
-    /** @var bool add download in the tag to force download from the url. */
+    /** @var bool add download in the tag to force download from the URL. */
     public $forceDownload = false;
 
     /**

@@ -108,11 +108,11 @@ class App
 
     private ResponseInterface $response;
 
-    /** @var array<string, View> Modal view that need to be rendered using json output. */
+    /** @var array<string, View> Modal view that need to be rendered using JSON output. */
     private $portals = [];
 
     /**
-     * @var string used in method App::url to build the url
+     * @var string used in method App::url to build the URL
      *
      * Used only in method App::url
      * Remove and re-add the extension of the file during parsing requests and building urls
@@ -230,7 +230,7 @@ class App
      * Register a portal view.
      * Fomantic-ui Modal or atk Panel are teleported in HTML template
      * within specific location. This will keep track
-     * of them when terminating app using json.
+     * of them when terminating app using JSON.
      *
      * @param Modal|Panel\Right $portal
      */
@@ -418,7 +418,7 @@ class App
             $this->outputResponseJson($output);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
             // ugly hack for TABS
-            // because Fomantic-UI tab only deal with html and not JSON
+            // because Fomantic-UI tab only deal with HTML and not JSON
             // we need to hack output to include app modal.
             $ids = [];
             $remove_function = '';
@@ -531,7 +531,7 @@ class App
         $this->requireJs($this->cdn['atk'] . '/js/atkjs-ui' . ($minified ? '.min' : '') . '.js');
         $this->requireCss($this->cdn['atk'] . '/css/agileui.min.css');
 
-        // Set js bundle dynamic loading path.
+        // set JS bundle dynamic loading path
         $this->html->template->tryDangerouslySetHtml(
             'InitJsBundle',
             (new JsExpression('window.__atkBundlePublicPath = [];', [$this->cdn['atk']]))->jsRender()
@@ -750,7 +750,7 @@ class App
     }
 
     /**
-     * Build a URL that application can use for js call-backs. Some framework integration will use a different routing
+     * Build a URL that application can use for JS callbacks. Some framework integration will use a different routing
      * mechanism for NON-HTML response.
      *
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
@@ -1187,7 +1187,7 @@ class App
     }
 
     /**
-     * Generated html and js for portal view registered to app.
+     * Generated HTML and JS for portal view registered to app.
      */
     private function getRenderedPortals(): array
     {

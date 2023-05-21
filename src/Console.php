@@ -72,7 +72,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * @param \Closure($this): void $fx    callback which will be executed while displaying output inside console
      * @param bool|string           $event "true" would mean to execute on page load, string would indicate
-     *                                     js event. See first argument for View::js()
+     *                                     JS event. See first argument for View::js()
      *
      * @return $this
      */
