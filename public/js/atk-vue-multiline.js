@@ -487,7 +487,7 @@ __webpack_require__.r(__webpack_exports__);
                         <SuiTableHeaderCell />
                         <SuiTableHeaderCell :colspan="getSpan" textAlign="right">
                             <SuiButtonGroup>
-                                <SuiButton ref="addBtn" size="small" type="button" icon :disabled="isLimitReached" @click.stop.prevent="onAdd">
+                                <SuiButton ref="addButton" size="small" type="button" icon :disabled="isLimitReached" @click.stop.prevent="onAdd">
                                     <SuiIcon name="plus" />
                                 </SuiButton>
                                 <SuiButton size="small" type="button" icon :disabled="isDeleteDisable" @click.stop.prevent="onDelete">
@@ -663,12 +663,12 @@ __webpack_require__.r(__webpack_exports__);
     /**
      * Send on change action to server.
      * Use regular api call in order
-     * for return js to be fully evaluated.
+     * for return JS to be fully evaluated.
      */
     fetchOnUpdateAction: function () {
       let fieldName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
       if (this.hasChangeCb && (fieldName === null || this.eventFields.includes(fieldName))) {
-        external_jquery__WEBPACK_IMPORTED_MODULE_8___default()(this.$refs.addBtn.$el).api({
+        external_jquery__WEBPACK_IMPORTED_MODULE_8___default()(this.$refs.addButton.$el).api({
           on: 'now',
           url: this.data.url,
           method: 'POST',
@@ -683,7 +683,7 @@ __webpack_require__.r(__webpack_exports__);
       const data = {
         ...row
       };
-      const context = this.$refs.addBtn.$el;
+      const context = this.$refs.addButton.$el;
       data.__atkml_action = 'update-row';
       try {
         return await atk__WEBPACK_IMPORTED_MODULE_9__["default"].apiService.suiFetch(this.data.url, {
