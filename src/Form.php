@@ -135,6 +135,7 @@ class Form extends View
         parent::init();
 
         $this->formElement = View::addTo($this, ['element' => 'form', 'shortName' => 'form'], ['FormElementOnly']);
+        $this->on('submit', new JsExpression('if (event.target === this) { []; }', [$this->js(false, null, $this->formElement)->form('submit')]));
 
         // Initialize layout, so when you call addControl / setModel next time, form will know
         // where to add your fields.
@@ -167,14 +168,11 @@ class Form extends View
                 ->addMoreInfo('layout', $this->layout);
         }
 
-        // allow to submit by pressing an enter key when child control is focused
-        $jsSubmit = $this->js()->form('submit');
-        $this->on('submit', new JsExpression('if (event.target === this) { []; }', [$jsSubmit]));
-
-        // Add save button in layout
+        // add save button in layout
         if ($this->buttonSave) {
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
+            $jsSubmit = $this->js()->form('submit');
             $this->buttonSave->on('click', $jsSubmit);
             $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { []; }', [$jsSubmit]));
         }
@@ -509,7 +507,9 @@ class Form extends View
 
     public function fixOwningFormAttrInRenderedHtml(string $html): string
     {
-        return preg_replace('~<(button|fieldset|input|output|select|textarea)(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $html);
+        return preg_replace_callback('~<(?:button|fieldset|input|output|select|textarea)(?!\w| form=")~i', function ($matches) {
+            return $matches[0] . ' form="' . $this->getApp()->encodeHtml($this->formElement->name) . '"';
+        }, $html);
     }
 
     /**
