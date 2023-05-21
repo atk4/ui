@@ -62,11 +62,11 @@ class JsSearch extends View
     /** @var string */
     public $filterIcon = 'filter';
     /** @var string */
-    public $btnSearchIcon = 'search';
+    public $buttonSearchIcon = 'search';
     /** @var string */
-    public $btnRemoveIcon = 'red remove';
+    public $buttonRemoveIcon = 'red remove';
     /** @var string|null */
-    public $btnStyle;
+    public $buttonStyle;
 
     protected function init(): void
     {
@@ -81,14 +81,14 @@ class JsSearch extends View
             $this->template->trySet('Placeholder', $this->placeHolder);
         }
 
-        if ($this->btnStyle) {
-            $this->template->trySet('buttonStyle', $this->btnStyle);
+        if ($this->buttonStyle) {
+            $this->template->trySet('buttonStyle', $this->buttonStyle);
         }
 
         $this->template->set('Button', $this->button);
         $this->template->set('FilterIcon', $this->filterIcon);
-        $this->template->set('BtnSearchIcon', $this->btnSearchIcon);
-        $this->template->set('BtnRemoveIcon', $this->btnRemoveIcon);
+        $this->template->set('ButtonSearchIcon', $this->buttonSearchIcon);
+        $this->template->set('ButtonRemoveIcon', $this->buttonRemoveIcon);
 
         $this->js(true)->atkJsSearch([
             'url' => $this->reload->jsUrl(),

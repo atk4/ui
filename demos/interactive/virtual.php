@@ -45,11 +45,11 @@ $msg->text->addParagraph('Virtual page content are not rendered on page load. Th
 $msg->text->addParagraph('Click button below to trigger it.');
 
 // button that trigger virtual page.
-$btn = Button::addTo($app, ['More info on Car']);
-$btn->link($virtualPage->cb->getUrl() . '&p_id=Car');
+$button = Button::addTo($app, ['More info on Car']);
+$button->link($virtualPage->cb->getUrl() . '&p_id=Car');
 
-$btn = Button::addTo($app, ['More info on Bike']);
-$btn->link($virtualPage->cb->getUrl() . '&p_id=Bike');
+$button = Button::addTo($app, ['More info on Bike']);
+$button->link($virtualPage->cb->getUrl() . '&p_id=Bike');
 
 // Test 1 - Basic reloading
 Header::addTo($app, ['Virtual Page Logic']);

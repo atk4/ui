@@ -361,14 +361,19 @@ class Grid extends View
      */
     public function addExecutorButton(UserAction\ExecutorInterface $executor, Button $button = null)
     {
-        $btn = $button ? $this->add($button) : $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_BUTTON);
+        if ($button !== null) {
+            $this->add($button);
+        } else {
+            $button = $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_BUTTON);
+        }
+
         $confirmation = $executor->getAction()->getConfirmation();
         if (!$confirmation) {
             $confirmation = '';
         }
         $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
 
-        return $this->getActionButtons()->addButton($btn, $executor, $confirmation, $disabled);
+        return $this->getActionButtons()->addButton($button, $executor, $confirmation, $disabled);
     }
 
     private function getActionButtons(): Table\Column\ActionButtons

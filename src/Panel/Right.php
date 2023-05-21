@@ -132,19 +132,19 @@ class Right extends View implements Loadable
      * js flyoutService will prevent closing of Flyout if a confirmation modal
      * is attached to it and flyoutService detect that the current open flyoutContent has warning on.
      */
-    public function addConfirmation(string $msg, string $title = 'Closing panel!', string $okBtn = null, string $cancelBtn = null): void
+    public function addConfirmation(string $msg, string $title = 'Closing panel!', string $okButton = null, string $cancelButton = null): void
     {
-        if (!$okBtn) {
-            $okBtn = (new Button(['Ok']))->addClass('ok');
+        if (!$okButton) {
+            $okButton = (new Button(['Ok']))->addClass('ok');
         }
 
-        if (!$cancelBtn) {
-            $cancelBtn = (new Button(['Cancel']))->addClass('cancel');
+        if (!$cancelButton) {
+            $cancelButton = (new Button(['Cancel']))->addClass('cancel');
         }
         $this->closeModal = $this->getApp()->add(array_merge($this->defaultModal, ['title' => $title]));
         $this->closeModal->add([View::class, $msg, 'element' => 'p']);
-        $this->closeModal->addButtonAction(Factory::factory($okBtn));
-        $this->closeModal->addButtonAction(Factory::factory($cancelBtn));
+        $this->closeModal->addButtonAction(Factory::factory($okButton));
+        $this->closeModal->addButtonAction(Factory::factory($cancelButton));
 
         $this->closeModal->notClosable();
     }

@@ -272,7 +272,7 @@ Example of overriding executor assign to a button.::
     $myAction = $model->getUserAction('my_action');
     $myAction->ui['executor'] = $myExecutor;
 
-    $btn->on('click', $myAction);
+    $button->on('click', $myAction);
 
 Demo
 ----

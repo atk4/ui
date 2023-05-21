@@ -214,7 +214,7 @@ class Card extends View
      */
     public function addClickAction(Model\UserAction $action, Button $button = null, array $args = [], string $confirm = null): self
     {
-        $btn = $this->addButton($button ?? $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::CARD_BUTTON));
+        $button = $this->addButton($button ?? $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::CARD_BUTTON));
 
         $cardDeck = $this->getClosestOwner(CardDeck::class);
 
@@ -252,7 +252,7 @@ class Card extends View
             }
         }
 
-        $btn->on('click', $cardDeck !== null ? $cardDeck->sharedExecutorsContainer->getExecutor($action) : $action, $defaults);
+        $button->on('click', $cardDeck !== null ? $cardDeck->sharedExecutorsContainer->getExecutor($action) : $action, $defaults);
 
         return $this;
     }
@@ -331,8 +331,8 @@ class Card extends View
             $seed = Factory::factory([Button::class], $seed);
         }
 
-        $btn = $this->getButtonContainer()->add($seed);
+        $button = $this->getButtonContainer()->add($seed);
 
-        return $btn;
+        return $button;
     }
 }

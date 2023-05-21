@@ -43,7 +43,7 @@ class VpExecutor extends View implements JsExecutorInterface
     public $stepListItems = ['args' => 'Fill argument(s)', 'fields' => 'Edit Record(s)', 'preview' => 'Preview', 'final' => 'Complete'];
 
     /** @var array */
-    public $cancelBtnSeed = [Button::class, ['Cancel', 'class.small left floated basic blue' => true, 'icon' => 'left arrow']];
+    public $cancelButtonSeed = [Button::class, ['Cancel', 'class.small left floated basic blue' => true, 'icon' => 'left arrow']];
 
     protected function init(): void
     {
@@ -56,7 +56,7 @@ class VpExecutor extends View implements JsExecutorInterface
     {
         $this->vp = VirtualPage::addTo($this);
         /** @var Button $b */
-        $b = $this->vp->add(Factory::factory($this->cancelBtnSeed));
+        $b = $this->vp->add(Factory::factory($this->cancelButtonSeed));
         $b->link($this->getApp()->url());
         View::addTo($this->vp, ['ui' => 'clearing divider']);
 
@@ -115,7 +115,7 @@ class VpExecutor extends View implements JsExecutorInterface
         $this->action = $this->executeModelActionLoad($this->action);
 
         $this->vp->set(function () {
-            $this->jsSetBtnState($this->loader, $this->step);
+            $this->jsSetButtonsState($this->loader, $this->step);
             $this->jsSetListState($this->loader, $this->step);
             $this->runSteps();
         });

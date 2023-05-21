@@ -176,6 +176,6 @@ $clockStyle = [
 // creating vue using an external definition.
 $clock->vue('my-clock', ['styles' => $clockStyle], new JsExpression('myClock'));
 
-$btn = Button::addTo($app, ['Change Style']);
-$btn->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));
+$button = Button::addTo($app, ['Change Style']);
+$button->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));
 View::addTo($app, ['element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);

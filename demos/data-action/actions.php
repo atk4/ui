@@ -66,8 +66,8 @@ $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
 });
 $executor->executeModelAction(['path' => '.']);
 
-$btn = Button::addTo($rightColumn, ['Import File']);
-$btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);
+$button = Button::addTo($rightColumn, ['Import File']);
+$button->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);
 
 Header::addTo($rightColumn, ['BasicExecutor']);
 $executor = UserAction\BasicExecutor::addTo($rightColumn, ['executorButton' => [Button::class, 'Import', 'class.primary' => true]]);
