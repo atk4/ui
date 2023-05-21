@@ -108,7 +108,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->title ??= $action->getDescription();
         $this->step = $this->stickyGet('step');
 
-        $this->jsSetBtnState($this);
+        $this->jsSetButtonsState($this);
 
         return $this;
     }
@@ -121,7 +121,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->action = $this->executeModelActionLoad($this->action);
 
         $this->loader->set(function (Loader $p) {
-            $this->jsSetBtnState($p);
+            $this->jsSetButtonsState($p);
             if ($this->step === 'exec') {
                 $this->doFinal($p);
             } else {
@@ -133,7 +133,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Reset button state.
      */
-    protected function jsSetBtnState(View $view): void
+    protected function jsSetButtonsState(View $view): void
     {
         $view->js(true, $this->ok->js()->off());
         $view->js(true, $this->cancel->js()->off());

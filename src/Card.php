@@ -55,14 +55,14 @@ class Card extends View
     /** @var string|View|null A description inside the Card content. */
     public $description;
 
-    /** @var array|Button|null A button or an array of Buttons */
+    /** @var array|Button|null */
     public $buttons;
 
     /** @var bool How buttons are display inside button container */
     public $hasFluidButton = true;
 
-    /** @var View|null The button Container for Button */
-    public $btnContainer;
+    /** @var View|null */
+    public $buttonContainer;
 
     /** @var bool Display model field as table inside card holder content */
     public $useTable = false;
@@ -144,15 +144,15 @@ class Card extends View
      */
     public function getButtonContainer()
     {
-        if (!$this->btnContainer) {
-            $this->btnContainer = $this->addExtraContent(new View(['ui' => 'buttons']));
+        if (!$this->buttonContainer) {
+            $this->buttonContainer = $this->addExtraContent(new View(['ui' => 'buttons']));
             $this->getButtonContainer()->addClass('wrapping');
             if ($this->hasFluidButton) {
                 $this->getButtonContainer()->addClass('fluid');
             }
         }
 
-        return $this->btnContainer;
+        return $this->buttonContainer;
     }
 
     /**

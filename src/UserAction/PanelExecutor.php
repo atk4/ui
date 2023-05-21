@@ -103,7 +103,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
     {
         $this->action = $this->executeModelActionLoad($this->action);
 
-        $this->jsSetBtnState($this->loader, $this->step);
+        $this->jsSetButtonsState($this->loader, $this->step);
         $this->jsSetListState($this->loader, $this->step);
         $this->runSteps();
     }
