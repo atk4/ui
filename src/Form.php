@@ -295,7 +295,7 @@ class Form extends View
             return JsBlock::fromHookResult($this->hook(self::HOOK_DISPLAY_ERROR, [$fieldName, $errorMessage]));
         }
 
-        return new JsBlock([$this->js(false, null, $this->formElement)->form('add prompt', $fieldName, $errorMessage)]);
+        return new JsBlock([$this->js()->form('add prompt', $fieldName, $errorMessage)]);
     }
 
     /**
