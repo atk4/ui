@@ -421,12 +421,11 @@ trait StepExecutorTrait
      */
     protected function jsSetSubmitBtn(View $view, Form $form, string $step): void
     {
-        if ($this->isLastStep($step)) {
-            $view->js(true, $this->execActionBtn->js()->on('click', new JsFunction([], [$form->js(false, null, $form->formElement)->form('submit')])));
-        } else {
-            // submit on next
-            $view->js(true, $this->nextStepBtn->js()->on('click', new JsFunction([], [$form->js(false, null, $form->formElement)->form('submit')])));
-        }
+        $button = $this->isLastStep($step)
+            ? $this->execActionBtn
+            : $this->nextStepBtn; // submit on next
+
+        $view->js(true, $button->js()->on('click', new JsFunction([], [$form->js(false, null, $form->formElement)->form('submit')])));
     }
 
     /**
