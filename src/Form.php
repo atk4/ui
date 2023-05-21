@@ -547,7 +547,8 @@ class Form extends View
      */
     public function ajaxSubmit(): void
     {
-        $this->js(true)->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
+        $this->js(true, null, $this->formElement)
+            ->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
 
         $this->js(true, null, $this->formElement)
             ->api(array_merge(['url' => $this->cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig));
