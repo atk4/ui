@@ -59,7 +59,7 @@ class Form extends View
 
     /**
      * Html <form> element, all inner form controls are linked to it on render
-     * with html form="form_id" attribute.
+     * with HTML form="form_id" attribute.
      *
      * @var View
      */
@@ -114,8 +114,8 @@ class Form extends View
     public array $controlDisplayRules = [];
 
     /**
-     * Default css selector for JsConditionalForm.
-     * Should match the css class name of the control.
+     * Default CSS selector for JsConditionalForm.
+     * Should match the CSS class name of the control.
      * Fomantic-UI use the class name "field".
      *
      * @var string
@@ -140,7 +140,7 @@ class Form extends View
         // where to add your fields.
         $this->initLayout();
 
-        // set css loader for this form
+        // set CSS loader for this form
         $this->setApiConfig(['stateContext' => $this]);
 
         $this->cb = JsCallback::addTo($this, [], [['desired_name' => 'submit']]);

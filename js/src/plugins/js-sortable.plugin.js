@@ -17,7 +17,7 @@ import AtkPlugin from './atk.plugin';
  * To use other container, simply set container and draggable accordingly.
  * $sortable = JsSortable::addTo($lister, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
  *
- * Element containing specific css class can be used as the handle for dragging element, if null
+ * Element containing specific CSS class can be used as the handle for dragging element, if null
  * is pass, than the entire element is used.
  */
 export default class AtkJsSortablePlugin extends AtkPlugin {

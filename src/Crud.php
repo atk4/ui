@@ -53,7 +53,7 @@ class Crud extends Grid
     /** @var array<int, array<string, \Closure(Form, UserAction\ModalExecutor): void>> Callback containers for model action. */
     public $onActions = [];
 
-    /** @var mixed recently deleted record id. */
+    /** @var mixed recently deleted record ID. */
     private $deletedId;
 
     protected function init(): void
@@ -93,7 +93,7 @@ class Crud extends Grid
 
         parent::setModel($model, $this->displayFields);
 
-        // Grab model id when using delete. Must be set before delete action execute.
+        // Grab model ID when using delete. Must be set before delete action execute.
         $this->model->onHook(Model::HOOK_AFTER_DELETE, function (Model $model) {
             $this->deletedId = $model->getId();
         });
@@ -159,7 +159,7 @@ class Crud extends Grid
     }
 
     /**
-     * Return proper js statement for afterExecute hook on action executor
+     * Return proper JS statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      *
      * @param string|null $return
@@ -189,7 +189,7 @@ class Crud extends Grid
     }
 
     /**
-     * Return proper js actions depending on action modifier type.
+     * Return proper JS actions depending on action modifier type.
      */
     protected function getJsGridAction(Model\UserAction $action): ?JsExpressionable
     {
@@ -200,7 +200,7 @@ class Crud extends Grid
 
                 break;
             case Model\UserAction::MODIFIER_DELETE:
-                // use deleted record id to remove row, fallback to closest tr if id is not available.
+                // use deleted record ID to remove row, fallback to closest tr if ID is not available.
                 $js = $this->deletedId
                     ? $this->js(false, null, 'tr[data-id="' . $this->deletedId . '"]')
                     : (new Jquery())->closest('tr');
@@ -228,7 +228,7 @@ class Crud extends Grid
     }
 
     /**
-     * Setup js for firing menu action.
+     * Setup JS for firing menu action.
      */
     protected function setItemsAction(): void
     {

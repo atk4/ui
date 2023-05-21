@@ -39,7 +39,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
-    /** @var string css class for modal size. */
+    /** @var string CSS class for modal size. */
     public $size = 'tiny';
 
     /** @var string|null */
@@ -58,7 +58,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     }
 
     /**
-     * Properly set element id for this modal.
+     * Properly set element ID for this modal.
      */
     protected function afterActionInit(Model\UserAction $action): void
     {
@@ -187,7 +187,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     }
 
     /**
-     * Return proper js statement when action execute.
+     * Return proper JS statement when action execute.
      *
      * @param mixed      $obj
      * @param string|int $id

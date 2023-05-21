@@ -16,11 +16,11 @@ use Atk4\Ui\View;
 /**
  * Javascript Action executor.
  *
- * Will execute a model action using a js Event.
+ * Will execute a model action using a JS Event.
  *
  * Usage:
  * When use with View::on method, then JsCallbackExecutor executor is automatically create.
- *  $button->on('click', $model->getUserAction('delete'), [4, 'confirm' => 'This will delete record with id 4. Are you sure?']);
+ *  $button->on('click', $model->getUserAction('delete'), [4, 'confirm' => 'This will delete record with ID 4. Are you sure?']);
  *
  * Manual setup.
  * $action = $model->getUserAction('delete')

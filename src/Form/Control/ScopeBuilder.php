@@ -27,7 +27,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Max depth of nested conditions allowed.
      * Corresponds to VueQueryBulder maxDepth.
-     * Maximum support by js component is 10.
+     * Maximum support by JS component is 10.
      */
     public int $maxDepth = 5;
 
@@ -442,7 +442,7 @@ class ScopeBuilder extends Form\Control
     }
 
     /**
-     * Return an array of items id and name for a field.
+     * Return an array of items ID and name for a field.
      * Return field enum, values or reference values.
      */
     protected function getFieldItems(Field $field, ?int $limit = 250): array

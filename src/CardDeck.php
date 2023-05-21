@@ -177,7 +177,7 @@ class CardDeck extends View
     }
 
     /**
-     * Setup js for firing menu action - copied from Crud - TODO deduplicate.
+     * Setup JS for firing menu action - copied from Crud - TODO deduplicate.
      */
     protected function setItemsAction(): void
     {
@@ -215,7 +215,7 @@ class CardDeck extends View
     }
 
     /**
-     * Return proper js statement for afterExecute hook on action executor
+     * Return proper JS statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      *
      * @param string|JsExpressionable|Model|null $return

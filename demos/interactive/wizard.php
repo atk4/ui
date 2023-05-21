@@ -44,7 +44,7 @@ $wizard->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database C
 });
 
 // Alternatvely, you may access buttonNext , buttonPrev properties of a wizard
-// and set a custom js action or even set a different link. You can use recall()
+// and set a custom JS action or even set a different link. You can use recall()
 // to access some values that were recorded on another steps.
 $wizard->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon' => 'table'], function (Wizard $wizard) {
     if (isset($_GET['name'])) {
@@ -69,7 +69,7 @@ $wizard->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon'
 });
 
 // Steps may contain interractive elements. You can disable navigational buttons
-// and enable them as you see fit. Use handy js method to trigger advancement to
+// and enable them as you see fit. Use handy JS method to trigger advancement to
 // the next step.
 $wizard->addStep(['Migration', 'description' => 'Create or update table', 'icon' => 'database'], function (Wizard $wizard) {
     $console = Console::addTo($wizard);

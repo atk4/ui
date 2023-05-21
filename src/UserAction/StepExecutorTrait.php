@@ -343,7 +343,7 @@ trait StepExecutorTrait
     }
 
     /**
-     * Generate js for setting Buttons state based on current step.
+     * Generate JS for setting Buttons state based on current step.
      */
     protected function jsSetBtnState(View $view, string $step): void
     {
@@ -365,7 +365,7 @@ trait StepExecutorTrait
     }
 
     /**
-     * Generate js for Next btn state.
+     * Generate JS for Next btn state.
      */
     protected function jsSetNextState(string $step): JsExpressionable
     {
@@ -377,7 +377,7 @@ trait StepExecutorTrait
     }
 
     /**
-     * Generated js for Prev btn state.
+     * Generated JS for Prev btn state.
      */
     protected function jsSetPrevState(string $step): JsExpressionable
     {
@@ -389,7 +389,7 @@ trait StepExecutorTrait
     }
 
     /**
-     * Generate js for Exec button state.
+     * Generate JS for Exec button state.
      */
     protected function jsSetExecState(string $step): JsExpressionable
     {
@@ -401,7 +401,7 @@ trait StepExecutorTrait
     }
 
     /**
-     * Generate js function for Previous button.
+     * Generate JS function for Previous button.
      */
     protected function jsSetPrevHandler(View $view, string $step): void
     {
@@ -429,7 +429,7 @@ trait StepExecutorTrait
     }
 
     /**
-     * Get proper js after submitting a form in a step.
+     * Get proper JS after submitting a form in a step.
      *
      * @return JsBlock|View
      */

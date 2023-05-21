@@ -50,7 +50,7 @@ Dynamic Accordion Section
 =========================
 
 Dynamic sections are based around implementation of :php:class:`VirtualPage` and allow you
-to pass a call-back which will be triggered when user clicks on the section title.::
+to pass a callback which will be triggered when user clicks on the section title.::
 
     $acc = Accordion::addTo($app);
 

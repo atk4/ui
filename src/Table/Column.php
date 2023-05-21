@@ -95,7 +95,7 @@ class Column
     /**
      * Setup popup header action.
      *
-     * @param string $class the css class for filter icon
+     * @param string $class the CSS class for filter icon
      * @param string $id
      */
     public function setHeaderPopup($class, $id): void
@@ -247,7 +247,7 @@ class Column
      * added through addClass and setAttr.
      *
      * @param string       $position 'head', 'body' or 'tail'
-     * @param string|array $value    either html or array defining HTML structure, see App::getTag help
+     * @param string|array $value    either HTML or array defining HTML structure, see App::getTag help
      * @param array        $attr     extra attributes to apply on the tag
      */
     public function getTag(string $position, $value, array $attr = []): string
@@ -365,7 +365,7 @@ class Column
 
     /**
      * Return associative array of tags to be filled with pre-rendered HTML on
-     * a column-basis. Will not be invoked if html-output is turned off for the table.
+     * a column-basis. Will not be invoked if HTML output is turned off for the table.
      *
      * @return array<string, string>
      */

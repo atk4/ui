@@ -6,7 +6,7 @@ namespace Atk4\Ui;
 
 /**
  * A Search input field that will reload View
- * using the view->url with a _q arguments attach to url.
+ * using the view->url with a _q arguments attach to URL.
  */
 class JsSearch extends View
 {
@@ -45,7 +45,7 @@ class JsSearch extends View
     /**
      * Whether or not this search will reload a view
      * or the entire page.
-     * If search query need to be control via an url parameter only
+     * If search query need to be control via an URL parameter only
      * set this to false.
      *
      * @var bool default to true
@@ -57,7 +57,7 @@ class JsSearch extends View
         return parent::link($url, $target);
     }
 
-    /** @var string ui css classes */
+    /** @var string ui CSS classes */
     public $button = 'ui mini transparent basic button';
     /** @var string */
     public $filterIcon = 'filter';

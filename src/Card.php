@@ -25,8 +25,8 @@ use Atk4\Ui\UserAction\SharedExecutor;
  *
  * Multiple model can be used to display various content on each card section.
  * When using model or models, the first model that get set via setModel method
- * will have it's idField set as data-id html attribute for the card. Thus making
- * the id available via javascript (new Jquery())->data('id')
+ * will have it's idField set as data-id HTML attribute for the card. Thus making
+ * the ID available via javascript (new Jquery())->data('id')
  */
 class Card extends View
 {
@@ -220,7 +220,7 @@ class Card extends View
 
         $defaults = [];
 
-        // Setting arg for model id. $args[0] is consider to hold a model id, i.e. as a js expression.
+        // Setting arg for model ID. $args[0] is consider to hold a model ID, i.e. as a JS expression.
         if ($this->model && $this->model->isLoaded() && !isset($args[0])) {
             $defaults[] = $this->model->getId();
             if ($cardDeck === null && !$action->isOwnerEntity()) {

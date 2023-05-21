@@ -73,7 +73,7 @@ class VpExecutor extends View implements JsExecutorInterface
      * Make sure modal id is unique.
      * Since User action can be added via callbacks, we need
      * to make sure that view id is properly set for loader and button
-     * js action to run properly.
+     * JS action to run properly.
      */
     protected function afterActionInit(Model\UserAction $action): void
     {
@@ -143,7 +143,7 @@ class VpExecutor extends View implements JsExecutorInterface
     }
 
     /**
-     * Return proper js statement need after action execution.
+     * Return proper JS statement need after action execution.
      *
      * @param mixed      $obj
      * @param string|int $id

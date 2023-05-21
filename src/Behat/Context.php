@@ -544,7 +544,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $isSelectorXpath = $this->parseSelector($inputName)[0] === 'xpath';
 
-        // get dropdown item from Fomantic-UI which is direct parent of input html element
+        // get dropdown item from Fomantic-UI which is direct parent of input HTML element
         $lookupElem = $this->findElement(null, ($isSelectorXpath ? $inputName : '//input[@name="' . $inputName . '"]') . '/parent::div');
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
@@ -837,7 +837,7 @@ class Context extends RawMinkContext implements BehatContext
     // }}}
 
     /**
-     * Find a dropdown component within an html element
+     * Find a dropdown component within an HTML element
      * and check if value is set in dropdown.
      */
     private function assertDropdownValue(NodeElement $element, string $value, string $selector): void
@@ -848,7 +848,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * Find a select input type within an html element
+     * Find a select input type within an HTML element
      * and check if value is selected.
      */
     private function assertSelectedValue(NodeElement $element, string $value, string $selector): void
@@ -859,7 +859,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * Find an input within an html element and check
+     * Find an input within an HTML element and check
      * if value is set.
      */
     private function assertInputValue(NodeElement $element, string $value, string $selector = 'input'): void

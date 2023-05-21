@@ -32,7 +32,7 @@ class JsModal extends JsExpression
      * Set additional option for this JsModal.
      *
      * Valuable option are headerCss and label:
-     *  'headerCss' -> customize css class name for the header.
+     *  'headerCss' -> customize CSS class name for the header.
      *      ex: changing color text for header
      *      $jsModal->setOption('headerCss', 'ui blue header');
      *
@@ -40,11 +40,11 @@ class JsModal extends JsExpression
      *      ex: changing default 'Loading...' for no text
      *      $jsModal->setOption('loadingLabel', '');
      *
-     *   'modalCss' -> customize css class name for the entire modal.
+     *   'modalCss' -> customize CSS class name for the entire modal.
      *      ex: making modal fullscreen
      *      $jsModal->setOption('modalCss', 'fullscreen');
      *
-     *   'contentCss' -> customize css class name for Modal content.
+     *   'contentCss' -> customize CSS class name for Modal content.
      *       ex: making content scrollable
      *       $jsModal->setOption('contentCss', 'scrolling');
      *       Note: Default to 'image' for backward compatibility.

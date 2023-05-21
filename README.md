@@ -72,7 +72,7 @@ Open PHP in the browser and observe a fully working and good looking form:
 
 ![subscribe](docs/images/subscribe.png)
 
-ATK UI relies on https://fomantic-ui.com CSS framework to render the form beautifully. It also implements submission call-back in a very straightforward way. The demo also demonstrates use of JavaScript action, which can make objects interract with each-other (e.g. Form submit reloads Table).
+ATK UI relies on https://fomantic-ui.com CSS framework to render the form beautifully. It also implements submission callback in a very straightforward way. The demo also demonstrates use of JavaScript action, which can make objects interract with each-other (e.g. Form submit reloads Table).
 
 ### Database Integration with ATK Data
 

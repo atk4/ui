@@ -54,7 +54,7 @@ class InlineEdit extends View
      */
     public $saveOnBlur = true;
 
-    /** @var string Default css for the input div. */
+    /** @var string Default CSS for the input div. */
     public $inputCss = 'ui right icon input';
 
     /**

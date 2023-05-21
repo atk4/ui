@@ -32,7 +32,7 @@ class Table extends Lister
     public $columns = [];
 
     /**
-     * Allows you to inject HTML into table using getHtmlTags hook and column call-backs.
+     * Allows you to inject HTML into table using getHtmlTags hook and column callbacks.
      * Switch this feature off to increase performance at expense of some row-specific HTML.
      *
      * @var bool
@@ -90,7 +90,7 @@ class Table extends Lister
 
     /**
      * Make action columns in table use
-     * the collapsing css class.
+     * the collapsing CSS class.
      * An action cell that is collapsing will
      * only uses as much space as required.
      *
@@ -335,9 +335,9 @@ class Table extends Lister
      * Add a dynamic paginator, i.e. when user is scrolling content.
      *
      * @param int    $ipp          number of item per page to start with
-     * @param array  $options      an array with js Scroll plugin options
+     * @param array  $options      an array with JS Scroll plugin options
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
-     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
+     * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
      */
@@ -541,9 +541,9 @@ class Table extends Lister
     }
 
     /**
-     * Remove a row in table using javascript using a model id.
+     * Remove a row in table using javascript using a model ID.
      *
-     * @param string $id         the model id where row need to be removed
+     * @param string $id         the model ID where row need to be removed
      * @param string $transition the transition effect
      *
      * @return Jquery

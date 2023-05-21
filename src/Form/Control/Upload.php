@@ -23,10 +23,10 @@ class Upload extends Input
     public $action;
 
     /**
-     * The uploaded file id.
-     * This id is return on form submit.
+     * The uploaded file ID.
+     * This ID is return on form submit.
      * If not set, will default to file name.
-     * file id is also sent with onDelete Callback.
+     * file ID is also sent with onDelete Callback.
      *
      * @var string|null
      */
@@ -74,11 +74,11 @@ class Upload extends Input
     }
 
     /**
-     * Allow to set file id and file name
-     *  - fileId will be the file id sent with onDelete callback.
+     * Allow to set file ID and file name
+     *  - fileId will be the file ID sent with onDelete callback.
      *  - fileName is the field value display to user.
      *
-     * @param string      $fileId   Field id for onDelete Callback
+     * @param string      $fileId   Field ID for onDelete Callback
      * @param string|null $fileName Field name display to user
      *
      * @return $this

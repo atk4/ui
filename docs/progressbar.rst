@@ -18,7 +18,7 @@ Basic Usage
 
 .. php:method:: jsValue($value)
 
-After adding a console to your :ref:`render_tree`, you just need to set a call-back::
+After adding a console to your :ref:`render_tree`, you just need to set a callback::
 
     // Add progressbar showing 0 (out of 100)
     $bar = ProgressBar::addTo($app);
@@ -41,6 +41,6 @@ jsValue() of your progress bar and adjust the display value.
 
 Demo: https://ui.agiletoolkit.org/demos/progressbar.php
 
-:php:class:`Console` also implements method :php:meth:`Console::send`  so you can use it to send progress
+:php:class:`Console` also implements method :php:meth:`Console::send` so you can use it to send progress
 updates of your progress-bar.
 

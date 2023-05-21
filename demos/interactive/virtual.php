@@ -81,7 +81,7 @@ Button::addTo($bar)->set('No title')->on('click', new JsModal(null, $virtualPage
 
 View::addTo($app, ['ui' => 'hidden divider']);
 $text = Text::addTo($app);
-$text->addParagraph('Can also be trigger from a js event, like clicking on a table row.');
+$text->addParagraph('Can also be trigger from a JS event, like clicking on a table row.');
 $table = Table::addTo($app, ['class.celled' => true]);
 $table->setModel(new SomeData());
 

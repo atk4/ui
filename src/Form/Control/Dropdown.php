@@ -56,7 +56,7 @@ class Dropdown extends Input
     public $isMultiple = false;
 
     /**
-     * Here a custom function for creating the html of each dropdown option
+     * Here a custom function for creating the HTML of each dropdown option
      * can be defined. The function gets each row of the model/values property as first parameter.
      * if used with $values property, gets the key of this element as second parameter.
      * When using with a model, the second parameter is null and can be ignored.
@@ -155,7 +155,7 @@ class Dropdown extends Input
     }
 
     /**
-     * Set js dropdown() specific option;.
+     * Set JS dropdown() specific option;.
      *
      * @param string $option
      * @param mixed  $value
@@ -166,7 +166,7 @@ class Dropdown extends Input
     }
 
     /**
-     * Set js dropdown() options.
+     * Set JS dropdown() options.
      *
      * @param array $options
      */
@@ -176,7 +176,7 @@ class Dropdown extends Input
     }
 
     /**
-     * Render js for dropdown.
+     * Render JS for dropdown.
      */
     protected function jsRenderDropdown(): JsExpressionable
     {
@@ -184,7 +184,7 @@ class Dropdown extends Input
     }
 
     /**
-     * Render values as html for Dropdown.
+     * Render values as HTML for Dropdown.
      */
     protected function htmlRenderValue(): void
     {
@@ -202,7 +202,7 @@ class Dropdown extends Input
                     $this->_addCallBackRow($row);
                 }
             } else {
-                // for standard model rendering, only load id and title field
+                // for standard model rendering, only load ID and title field
                 $this->model->setOnlyFields([$this->model->titleField, $this->model->idField]);
                 $this->_renderItemsForModel();
             }

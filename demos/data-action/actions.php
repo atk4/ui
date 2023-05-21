@@ -54,11 +54,11 @@ $leftColumn = $columns->addColumn();
 
 Header::addTo($rightColumn, [
     'JsCallbackExecutor',
-    'subHeader' => 'Path argument is set via POST url when setting actions in executor.',
+    'subHeader' => 'Path argument is set via POST URL when setting actions in executor.',
 ]);
 // Explicitly adding an Action executor.
 $executor = UserAction\JsCallbackExecutor::addTo($rightColumn);
-// Passing Model action to executor and action argument via url.
+// Passing Model action to executor and action argument via URL.
 $executor->setAction($action->getActionForEntity($files->createEntity()));
 // Setting user response after model action get execute.
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {

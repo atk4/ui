@@ -7,9 +7,9 @@ import urlHelper from './helpers/url.helper';
 
 /**
  * Define atk global options.
- * In Js:
+ * In JS:
  * atk.options.set('name', 'value');
- * In Php:
+ * In PHP:
  * (new JsChain('atk.options')->set('name', 'value');
  */
 atk.options = (function () {

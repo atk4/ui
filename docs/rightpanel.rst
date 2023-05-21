@@ -56,11 +56,11 @@ Initializing a panel with onOpen callback::
 
 This method may take up to three arguments.
 
-    $args: an array of data property to carry with the callback url. Let's say that you triggering element
-    as a data property name id (data-id) then if specify, the data id value will be sent as a get argument
-    with the callback url.
+    $args: an array of data property to carry with the callback URL. Let's say that you triggering element
+    as a data property name ID (data-id) then if specify, the data ID value will be sent as a get argument
+    with the callback URL.
 
-    $activeCss: a string representing the active state of the triggering element. This css class will be applied
+    $activeCss: a string representing the active state of the triggering element. This CSS class will be applied
     to the trigger element as long as the panel remains open. This help visualize, which element has trigger the
     panel opening.
 

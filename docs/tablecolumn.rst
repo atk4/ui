@@ -274,7 +274,7 @@ Triggers a modal dialog when you click on the button. See description on :php:me
         return 'Loaded "' . $g->model->load($id)->get('name') . '" from ID=' . $id;
     });
 
-Note that in this case ID is automatically passed to your call-back.
+Note that in this case ID is automatically passed to your callback.
 
 Checkbox
 --------

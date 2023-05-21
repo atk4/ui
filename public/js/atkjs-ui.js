@@ -1596,7 +1596,7 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
   /**
    * Use response to append content to element and setup next content to be loaded.
    * Set response.id to null in order for apiService.onSuccess to bypass
-   * replacing html content. Js return from server response will still be execute.
+   * replacing html content. JS return from server response will still be execute.
    */
   onComplete(response, element) {
     this.removeLoader();
@@ -3722,7 +3722,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * Define atk global options.
- * In Js:
+ * In JS:
  * atk.options.set('name', 'value');
  * In Php:
  * (new JsChain('atk.options')->set('name', 'value');
