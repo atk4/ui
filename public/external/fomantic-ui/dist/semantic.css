@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.3-beta.20+1e3f606
+ * # Fomantic UI - 2.9.3-beta.35+34abb0e
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -33699,16 +33699,16 @@ Floated Menu / Item
   display: none;
 }
 
-.ui.wrapping.menu:not(.tabular) .item:last-of-type,
-.ui.wrapping.menu:not(.tabular) .item:last-child {
+.ui.wrapping.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) .item:last-of-type,
+.ui.wrapping.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) .item:last-child {
   border-right: 1px solid rgba(34, 36, 38, 0.1);
 }
 
-.ui.wrapped.menu:not(.tabular) .item:first-child {
+.ui.wrapped.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) .item:first-child {
   border-bottom-left-radius: 0;
 }
 
-.ui.wrapped.menu:not(.tabular) .item:last-child {
+.ui.wrapped.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) .item:last-child {
   border-top-right-radius: 0;
 }
 
@@ -41369,6 +41369,12 @@ a.inverted.ui.card:hover,
   box-shadow: -1px 0 0 #555;
 }
 
+.ui.disabled.comments,
+.ui.comments .disabled.comment {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
 /*******************************
          Theme Overrides
 *******************************/
@@ -42301,6 +42307,12 @@ a.inverted.ui.card:hover,
 
 .ui.inverted.divided.items > .item:first-child {
   border-top: none;
+}
+
+.ui.disabled.items,
+.ui.items > .disabled.item {
+  opacity: 0.45;
+  pointer-events: none;
 }
 
 /*******************************
@@ -43627,9 +43639,12 @@ a.inverted.ui.card:hover,
   cursor: auto;
   position: relative;
   display: block;
-  padding-left: 1.85714em;
   outline: none;
   font-size: 1em;
+}
+
+.ui.checkbox:not(.invisible) label {
+  padding-left: 1.85714em;
 }
 
 .ui.checkbox label::before {
@@ -43704,8 +43719,8 @@ a.inverted.ui.card:hover,
   border-color: rgba(34, 36, 38, 0.35);
 }
 
-.ui.checkbox label:hover,
-.ui.checkbox + label:hover {
+.ui.checkbox:not(.invisible) label:hover,
+.ui.checkbox:not(.invisible) + label:hover {
   color: rgba(0, 0, 0, 0.8);
 }
 
@@ -43722,7 +43737,7 @@ a.inverted.ui.card:hover,
   color: rgba(0, 0, 0, 0.95);
 }
 
-.ui.checkbox input:active ~ label {
+.ui.checkbox:not(.invisible) input:active ~ label {
   color: rgba(0, 0, 0, 0.95);
 }
 
@@ -43739,7 +43754,7 @@ a.inverted.ui.card:hover,
   color: rgba(0, 0, 0, 0.95);
 }
 
-.ui.checkbox input:focus ~ label {
+.ui.checkbox:not(.invisible) input:focus ~ label {
   color: rgba(0, 0, 0, 0.95);
 }
 
@@ -44267,6 +44282,58 @@ a.inverted.ui.card:hover,
 
 .ui.ui.inverted.toggle.checkbox input:focus:checked ~ label::before {
   background-color: #0d71bb;
+}
+
+/* --------------
+         Invisible
+    --------------- */
+
+.ui.invisible.checkbox:not(.compact) {
+  display: block;
+}
+
+.ui.invisible.checkbox input {
+  left: -99999px;
+  position: absolute;
+}
+
+.ui.invisible.checkbox label::before,
+.ui.invisible.checkbox label::after {
+  display: none;
+}
+
+.ui.invisible.checkbox label {
+  transition: all 0.1s ease;
+}
+
+.ui.ui.ui.ui.ui.invisible.checkbox input:not(:checked) + label {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15) inset;
+  color: inherit;
+}
+
+.ui.ui.ui.ui.ui.invisible.checkbox input:not(:checked):not(:hover):focus + label:not(.image) {
+  box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.35) inset;
+}
+
+.ui.ui.ui.ui.ui.invisible.checkbox input:not(:checked) + label.image,
+.basic.ui.ui.ui.ui.ui.invisible.checkbox input:not(:checked) + label {
+  box-shadow: none;
+}
+
+.ui.invisible.checkbox input:not(:checked) + label.image {
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.ui.invisible.checkbox input:not(:checked):not(:hover):focus + label.image {
+  opacity: 0.75;
+}
+
+.ui.invisible.checkbox input:not(:checked)[disabled] + label.image,
+.disabled.ui.invisible.checkbox input:not(:checked) + label.image {
+  opacity: 0.25;
 }
 
 /* --------------------
@@ -53090,6 +53157,17 @@ a.ui.nag {
   border-bottom: 1px solid rgba(34, 36, 38, 0.1);
   transition: background 0.1s ease, border-color 0.1s ease;
   padding: 0.85714286em 1.14285714em;
+}
+
+.ui.horizontal.category.search > .results .category,
+.ui.horizontal.category.search > .results .category > .name,
+.ui.horizontal.category.search > .results .category > .results {
+  display: block;
+}
+
+.ui.horizontal.category.search > .results .category > .results {
+  width: 100%;
+  border-left: 0;
 }
 
 /*******************************
