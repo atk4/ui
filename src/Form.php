@@ -529,10 +529,17 @@ class Form extends View
 
     public function setupAjaxSubmit(): void
     {
-        $this->js(true)->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
+        $this->js(true)->form(array_merge([
+            'on' => 'blur',
+            'inline' => true,
+        ], $this->formConfig));
 
-        $this->js(true, null, $this->formElement)
-            ->api(array_merge(['on' => 'submit', 'url' => $this->cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig));
+        $this->formElement->js(true)->api(array_merge([
+            'on' => 'submit',
+            'url' => $this->cb->getJsUrl(),
+            'method' => 'POST',
+            'serializeForm' => true,
+        ], $this->apiConfig));
 
         // [name] in selector is to suppress https://github.com/fomantic/Fomantic-UI/commit/facbca003cf0da465af7d44af41462e736d3eb8b
         // console errors from Multiline/vue fields
