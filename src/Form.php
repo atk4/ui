@@ -147,20 +147,11 @@ class Form extends View
 
     protected function initLayout(): void
     {
-        // TODO simplify
-        if ($this->layout === null) {
-            $this->layout = [Form\Layout::class]; // @phpstan-ignore-line
+        if (!is_object($this->layout)) { // @phpstan-ignore-line
+            $this->layout = Factory::factory($this->layout ?? [Form\Layout::class]); // @phpstan-ignore-line
         }
-
-        if (is_string($this->layout) || is_array($this->layout)) { // @phpstan-ignore-line
-            $this->layout = $this->add(Factory::factory($this->layout, ['form' => $this])); // @phpstan-ignore-line
-        } elseif (is_object($this->layout)) { // @phpstan-ignore-line
-            $this->layout->form = $this;
-            $this->add($this->layout);
-        } else {
-            throw (new Exception('Unsupported specification of form layout. Can be array, string or object'))
-                ->addMoreInfo('layout', $this->layout);
-        }
+        $this->layout->form = $this;
+        $this->add($this->layout);
 
         // add save button in layout
         if ($this->buttonSave) {
