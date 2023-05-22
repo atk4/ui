@@ -135,9 +135,8 @@ class Form extends View
         parent::init();
 
         $this->formElement = View::addTo($this, ['element' => 'form', 'shortName' => 'form'], ['FormElementOnly']);
+        $this->on('submit', new JsExpression('if (event.target === this) { []; }', [$this->formElement->js()->trigger('submit')]));
 
-        // Initialize layout, so when you call addControl / setModel next time, form will know
-        // where to add your fields.
         $this->initLayout();
 
         // set CSS loader for this form
@@ -146,35 +145,19 @@ class Form extends View
         $this->cb = JsCallback::addTo($this, [], [['desired_name' => 'submit']]);
     }
 
-    /**
-     * Initialize form layout. You can inject custom layout
-     * if you 'layout' => .. to constructor.
-     */
     protected function initLayout(): void
     {
-        // TODO simplify
-        if ($this->layout === null) {
-            $this->layout = [Form\Layout::class]; // @phpstan-ignore-line
+        if (!is_object($this->layout)) { // @phpstan-ignore-line
+            $this->layout = Factory::factory($this->layout ?? [Form\Layout::class]); // @phpstan-ignore-line
         }
+        $this->layout->form = $this;
+        $this->add($this->layout);
 
-        if (is_string($this->layout) || is_array($this->layout)) { // @phpstan-ignore-line
-            $this->layout = $this->add(Factory::factory($this->layout, ['form' => $this])); // @phpstan-ignore-line
-        } elseif (is_object($this->layout)) { // @phpstan-ignore-line
-            $this->layout->form = $this;
-            $this->add($this->layout);
-        } else {
-            throw (new Exception('Unsupported specification of form layout. Can be array, string or object'))
-                ->addMoreInfo('layout', $this->layout);
-        }
-
-        // allow to submit by pressing an enter key when child control is focused
-        $jsSubmit = $this->js(false, null, $this->formElement)->form('submit');
-        $this->on('submit', new JsExpression('if (event.target === this) { []; }', [$jsSubmit]));
-
-        // Add save button in layout
+        // add save button in layout
         if ($this->buttonSave) {
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
+            $jsSubmit = $this->js()->form('submit');
             $this->buttonSave->on('click', $jsSubmit);
             $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { []; }', [$jsSubmit]));
         }
@@ -227,7 +210,7 @@ class Form extends View
     {
         $entity->assertIsEntity();
 
-        // Model is set for the form and also for the current layout
+        // set model for the form and also for the current layout
         try {
             parent::setModel($entity);
 
@@ -492,7 +475,7 @@ class Form extends View
 
     protected function renderView(): void
     {
-        $this->ajaxSubmit();
+        $this->setupAjaxSubmit();
         if ($this->controlDisplayRules !== []) {
             $this->js(true, new JsConditionalForm($this, $this->controlDisplayRules, $this->controlDisplaySelector));
         }
@@ -509,7 +492,9 @@ class Form extends View
 
     public function fixOwningFormAttrInRenderedHtml(string $html): string
     {
-        return preg_replace('~<(button|fieldset|input|output|select|textarea)(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $html);
+        return preg_replace_callback('~<(?:button|fieldset|input|output|select|textarea)(?!\w| form=")~i', function ($matches) {
+            return $matches[0] . ' form="' . $this->getApp()->encodeHtml($this->formElement->name) . '"';
+        }, $html);
     }
 
     /**
@@ -542,15 +527,19 @@ class Form extends View
         return $this;
     }
 
-    /**
-     * Does ajax submit.
-     */
-    public function ajaxSubmit(): void
+    public function setupAjaxSubmit(): void
     {
-        $this->js(true)->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
+        $this->js(true)->form(array_merge([
+            'on' => 'blur',
+            'inline' => true,
+        ], $this->formConfig));
 
-        $this->js(true, null, $this->formElement)
-            ->api(array_merge(['url' => $this->cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig));
+        $this->formElement->js(true)->api(array_merge([
+            'on' => 'submit',
+            'url' => $this->cb->getJsUrl(),
+            'method' => 'POST',
+            'serializeForm' => true,
+        ], $this->apiConfig));
 
         // [name] in selector is to suppress https://github.com/fomantic/Fomantic-UI/commit/facbca003cf0da465af7d44af41462e736d3eb8b
         // console errors from Multiline/vue fields

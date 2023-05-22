@@ -75,9 +75,9 @@ class FilterPopup extends Popup
                 $model->clearData();
 
                 return new JsBlock([
-                    $this->form->js(false, null, $this->form->formElement)->form('reset'),
+                    $this->form->js()->form('reset'),
                     new JsReload($this->reload),
-                    (new Jquery($this->colTrigger))->trigger('click'),
+                    (new Jquery($this->colTrigger))->click(),
                 ]);
             });
     }

@@ -425,7 +425,7 @@ trait StepExecutorTrait
             ? $this->execActionButton
             : $this->nextStepButton; // submit on next
 
-        $view->js(true, $button->js()->on('click', new JsFunction([], [$form->js(false, null, $form->formElement)->form('submit')])));
+        $view->js(true, $button->js()->on('click', new JsFunction([], [$form->js()->form('submit')])));
     }
 
     /**
