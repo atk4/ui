@@ -137,8 +137,6 @@ class Form extends View
         $this->formElement = View::addTo($this, ['element' => 'form', 'shortName' => 'form'], ['FormElementOnly']);
         $this->on('submit', new JsExpression('if (event.target === this) { []; }', [$this->js(false, null, $this->formElement)->form('submit')]));
 
-        // Initialize layout, so when you call addControl / setModel next time, form will know
-        // where to add your fields.
         $this->initLayout();
 
         // set CSS loader for this form
@@ -147,10 +145,6 @@ class Form extends View
         $this->cb = JsCallback::addTo($this, [], [['desired_name' => 'submit']]);
     }
 
-    /**
-     * Initialize form layout. You can inject custom layout
-     * if you 'layout' => .. to constructor.
-     */
     protected function initLayout(): void
     {
         // TODO simplify
@@ -225,7 +219,7 @@ class Form extends View
     {
         $entity->assertIsEntity();
 
-        // Model is set for the form and also for the current layout
+        // set model for the form and also for the current layout
         try {
             parent::setModel($entity);
 
@@ -490,7 +484,7 @@ class Form extends View
 
     protected function renderView(): void
     {
-        $this->ajaxSubmit();
+        $this->setupAjaxSubmit();
         if ($this->controlDisplayRules !== []) {
             $this->js(true, new JsConditionalForm($this, $this->controlDisplayRules, $this->controlDisplaySelector));
         }
@@ -542,10 +536,7 @@ class Form extends View
         return $this;
     }
 
-    /**
-     * Does ajax submit.
-     */
-    public function ajaxSubmit(): void
+    public function setupAjaxSubmit(): void
     {
         $this->js(true)->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
 
