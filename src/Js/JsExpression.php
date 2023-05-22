@@ -53,13 +53,12 @@ class JsExpression implements JsExpressionable
                     return $value;
                 }
 
-                if ($value instanceof JsExpressionable) {
-                    $value = '(' . $value->jsRender() . ')';
-                } else {
-                    $value = $this->_jsEncode($value);
+                $valueStr = $this->_jsEncode($value);
+                if ($value instanceof JsExpressionable && !str_ends_with($valueStr, ';')) {
+                    $valueStr = '(' . $valueStr . ')';
                 }
 
-                return $value;
+                return $valueStr;
             },
             $this->template
         );
