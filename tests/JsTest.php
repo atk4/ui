@@ -228,6 +228,17 @@ class JsTest extends TestCase
             EOF, $jsBlock->jsRender());
     }
 
+    public function testBlockInExpression(): void
+    {
+        $jsExpression = new JsExpression('a()');
+        $jsBlock = new JsBlock([$jsExpression]);
+        $jsExpressionWithJsBlock = new JsExpression('[]', [$jsBlock]);
+
+        self::assertSame('(a())', (new JsExpression('[]', [$jsExpression]))->jsRender());
+        self::assertSame('a();', (new JsExpression('[]', [$jsBlock]))->jsRender());
+        self::assertSame('a();', (new JsExpression('[]', [$jsExpressionWithJsBlock]))->jsRender());
+    }
+
     public function testBlockInvalidStringTypeException(): void
     {
         $this->expectException(\TypeError::class);

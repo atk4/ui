@@ -135,7 +135,7 @@ class Form extends View
         parent::init();
 
         $this->formElement = View::addTo($this, ['element' => 'form', 'shortName' => 'form'], ['FormElementOnly']);
-        $this->on('submit', new JsExpression('if (event.target === this) { []; }', [$this->formElement->js()->trigger('submit')]));
+        $this->on('submit', new JsExpression('if (event.target === this) { [] }', [new JsBlock([$this->formElement->js()->trigger('submit')])]));
 
         $this->initLayout();
 
@@ -159,7 +159,7 @@ class Form extends View
             $this->buttonSave->setAttr('tabindex', 0);
             $jsSubmit = $this->js()->form('submit');
             $this->buttonSave->on('click', $jsSubmit);
-            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { []; }', [$jsSubmit]));
+            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { [] }', [new JsBlock([$jsSubmit])]));
         }
     }
 
