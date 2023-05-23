@@ -67,3 +67,12 @@ Feature: Form
     When I fill in "phone1" with "12345x"
     Then I should not see "Phone 2"
     Then I should not see "Phone 3"
+
+    Then I should not see "Check all language that apply"
+    Then I should not see "Css"
+    When I click using selector "//label[text()='I am a developper']"
+    Then I should see "Check all language that apply"
+    Then I should see "Css"
+    When I click using selector "//label[text()='I am a developper']"
+    Then I should not see "Check all language that apply"
+    Then I should not see "Css"
