@@ -3761,9 +3761,9 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].createDebouncedFx = function (func, 
 };
 
 /**
-* Utilities function that you can execute
-* from atk context. Usage: atk.utils.redirect('url');
-*/
+ * Utilities function that you can execute from atk context.
+ * Usage: atk.utils.redirect('url');
+ */
 atk__WEBPACK_IMPORTED_MODULE_2__["default"].utils = {
   redirect: function (url, params) {
     document.location = atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper.appendParams(url, params);
