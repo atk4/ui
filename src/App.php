@@ -508,8 +508,7 @@ class App
      */
     public function initIncludes(): void
     {
-        /** @var bool */
-        $minified = true;
+        $minified = !file_exists(__DIR__ . '/../.git');
 
         // jQuery
         $this->requireJs($this->cdn['jquery'] . '/jquery' . ($minified ? '.min' : '') . '.js');

@@ -142,7 +142,7 @@ class VueService {
         });
     }
 
-    /*
+    /**
      * Add component to vues container.
      * Group apps that are using the same component.
      */

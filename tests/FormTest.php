@@ -46,11 +46,23 @@ class FormTest extends TestCase
         self::assertSame($f->getControl('test'), $f->layout->getControl('test'));
     }
 
+    public function testAddControlAlreadyExistsException(): void
+    {
+        $t = new Form();
+        $t->setApp($this->createApp());
+        $t->invokeInit();
+        $t->addControl('foo');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Form field already exists');
+        $t->addControl('foo');
+    }
+
     /**
      * @param \Closure(Model): void  $submitFx
      * @param \Closure(string): void $checkExpectedErrorsFx
      */
-    public function assertSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
+    public function assertFormSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
     {
         $wasSubmitCalled = false;
         $_POST = $postData;
@@ -102,7 +114,7 @@ class FormTest extends TestCase
         self::assertSame('John', $f->model->get('name'));
 
         // fake some POST data
-        $this->assertSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], function (Model $m) {
+        $this->assertFormSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], function (Model $m) {
             // field has default, but form didn't send value back
             self::assertNull($m->get('name'));
 
@@ -113,10 +125,10 @@ class FormTest extends TestCase
         });
     }
 
-    public function testTextarea(): void
+    public function testTextareaSubmit(): void
     {
         $this->form->addControl('Textarea');
-        $this->assertSubmit(['Textarea' => '0'], function (Model $m) {
+        $this->assertFormSubmit(['Textarea' => '0'], function (Model $m) {
             self::assertSame('0', $m->get('Textarea'));
         });
     }
@@ -163,7 +175,7 @@ class FormTest extends TestCase
         $m = $m->createEntity();
         $this->form->setModel($m);
 
-        $this->assertSubmit(['opt1' => '2', 'opt3_z' => '0', 'opt4' => '', 'opt4_z' => '0'], null, function (string $formError) {
+        $this->assertFormSubmit(['opt1' => '2', 'opt3_z' => '0', 'opt4' => '', 'opt4_z' => '0'], null, function (string $formError) {
             // dropdown validates to make sure option is proper
             $this->assertFormControlError('opt1', 'not one of the allowed values');
 
@@ -191,7 +203,7 @@ class FormTest extends TestCase
         $catchReached = false;
         try {
             try {
-                $this->assertSubmit(['foo' => 'x'], function (Model $model) use (&$submitReached) {
+                $this->assertFormSubmit(['foo' => 'x'], function (Model $model) use (&$submitReached) {
                     $submitReached = true;
                     $model->set('bar', null);
                 });

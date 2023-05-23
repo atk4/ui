@@ -81,7 +81,7 @@ class Control extends View
 
         if ($this->form && $this->entityField) {
             if (isset($this->form->controls[$this->entityField->getFieldName()])) {
-                throw (new Exception('Form already has a field with the same name'))
+                throw (new Exception('Form field already exists'))
                     ->addMoreInfo('name', $this->entityField->getFieldName());
             }
             $this->form->controls[$this->entityField->getFieldName()] = $this;

@@ -88,6 +88,12 @@ parameters:
             path: 'demos/form/form2.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$iconLeft\.$~'
         -
+            path: 'demos/form/jscondform.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::activate\(\)\.$~'
+        -
+            path: 'demos/form/jscondform.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::addSection\(\)\.$~'
+        -
             path: 'demos/init-app.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Layout&Atk4\\Ui\\Layout\\NavigableInterface::\$menu\.$~'
         -

@@ -20,17 +20,6 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/*
- * Apart from demonstrating the form, this example uses an alternative way of rendering the layouts.
- * Here we don't create application object explicitly, instead we use our custom template
- * with a generic layout.
- *
- * We then render everything recursively (renderAll) and plug accumulated JavaScript inside the <head> tag,
- * echoing results after.
- *
- * This approach will also prevent your application from registering shutdown handler or catching error,
- * so we will need to do a bit of work about that too.
- */
 $tabs = Tabs::addTo($app);
 
 // -----------------------------------------------------------------------------

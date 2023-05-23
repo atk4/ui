@@ -304,12 +304,6 @@ class Stat extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->currency, ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
         $this->addField($this->fieldName()->currency_symbol, ['neverPersist' => true]);
         $this->onHook(Model::HOOK_AFTER_LOAD, function (self $model) {
-            /* implementation for "intl"
-            $locale = 'en-UK';
-            $fmt = new \NumberFormatter($locale . '@currency=' . $model->currency, NumberFormatter::CURRENCY);
-            $model->currency_symbol = $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
-             */
-
             $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
             $model->currency_symbol = $map[$model->currency] ?? '?';
         });

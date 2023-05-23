@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Card;
+use Atk4\Ui\CardDeck;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
@@ -62,7 +63,7 @@ $wizard->addStep('Define User Action', function (Wizard $page) {
         $country = new Country($owner->getApp()->db);
 
         $country->addUserAction('send_message', function (Country $entity) {
-            return 'sent to ' . $entity->get($entity->fieldName()->name);
+            return 'Sent to ' . $entity->get($entity->fieldName()->name);
         });
         $country = $country->loadAny();
 
@@ -151,27 +152,6 @@ $wizard->addStep('Arguments', function (Wizard $page) {
     });
 });
 
-/*
-$wizard->addStep('More Ways', function (Wizard $page) {
-    Demo::addTo($page, ['leftWidth' => 5, 'rightWidth' => 11])->setCodeAndCall(function (View $owner) {
-        $model = new Stat($owner->getApp()->db);
-        $model->addUserAction('mail', [
-            'fields' => ['currency_field'],
-            'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'callback' => function () {
-                return 'testing';
-            },
-            'description' => 'Email testing',
-        ]);
-        $owner->add('CardDeck')
-            ->setModel(
-                $model,
-                ['description']
-            );
-    });
-});
-*/
-
 $wizard->addStep('Crud integration', function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(<<<'EOF'
@@ -188,11 +168,11 @@ $wizard->addStep('Crud integration', function (Wizard $page) {
         };
         $country->addUserAction('mail', [
             'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'preview' => function (Model $model) {
-                return 'here is email preview for ' . $model->get('name');
+            'preview' => function (Country $model) {
+                return 'Here is email preview for ' . $model->name;
             },
-            'callback' => function (Model $model) {
-                return 'email sent to ' . $model->get('name');
+            'callback' => function (Country $model) {
+                return 'Email sent to ' . $model->name;
             },
             'description' => 'Email testing',
         ]);
@@ -205,6 +185,25 @@ $wizard->addStep('Crud integration', function (Wizard $page) {
         );
         Crud::addTo($owner, ['ipp' => 5])
             ->setModel($country, [$country->fieldName()->name, $country->fieldName()->iso]);
+    });
+
+    Demo::addTo($page, ['leftWidth' => 6, 'rightWidth' => 10])->setCodeAndCall(function (View $owner) {
+        $model = new Stat($owner->getApp()->db);
+
+        $model->addUserAction('mail', [
+            'fields' => [$model->fieldName()->currency],
+            'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
+            'callback' => function (Stat $model) {
+                return 'Email sent in ' . $model->currency . ' currency';
+            },
+            'description' => 'Email testing',
+        ]);
+
+        CardDeck::addTo($owner)
+            ->setModel(
+                $model,
+                [$model->fieldName()->description]
+            );
     });
 });
 
