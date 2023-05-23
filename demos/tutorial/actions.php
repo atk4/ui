@@ -152,29 +152,6 @@ $wizard->addStep('Arguments', function (Wizard $page) {
     });
 });
 
-/*
-$wizard->addStep('More Ways', function (Wizard $page) {
-    Demo::addTo($page, ['leftWidth' => 6, 'rightWidth' => 10])->setCodeAndCall(function (View $owner) {
-        $model = new Stat($owner->getApp()->db);
-
-        $model->addUserAction('mail', [
-            'fields' => [$model->fieldName()->currency],
-            'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'callback' => function (Stat $model) {
-                return 'Email sent in ' . $model->currency . ' currency';
-            },
-            'description' => 'Email testing',
-        ]);
-
-        CardDeck::addTo($owner)
-            ->setModel(
-                $model,
-                [$model->fieldName()->description]
-            );
-    });
-});
-*/
-
 $wizard->addStep('Crud integration', function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(<<<'EOF'
@@ -208,6 +185,25 @@ $wizard->addStep('Crud integration', function (Wizard $page) {
         );
         Crud::addTo($owner, ['ipp' => 5])
             ->setModel($country, [$country->fieldName()->name, $country->fieldName()->iso]);
+    });
+
+    Demo::addTo($page, ['leftWidth' => 6, 'rightWidth' => 10])->setCodeAndCall(function (View $owner) {
+        $model = new Stat($owner->getApp()->db);
+
+        $model->addUserAction('mail', [
+            'fields' => [$model->fieldName()->currency],
+            'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
+            'callback' => function (Stat $model) {
+                return 'Email sent in ' . $model->currency . ' currency';
+            },
+            'description' => 'Email testing',
+        ]);
+
+        CardDeck::addTo($owner)
+            ->setModel(
+                $model,
+                [$model->fieldName()->description]
+            );
     });
 });
 
