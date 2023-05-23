@@ -2308,15 +2308,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_esnext_array_group_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.array.group.js */ "./node_modules/core-js/modules/esnext.array.group.js");
 /* harmony import */ var core_js_modules_esnext_array_group_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_array_group_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
-/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-
-
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 
 
 
@@ -2330,11 +2324,11 @@ __webpack_require__.r(__webpack_exports__);
  */
 class FormService {
   constructor() {
-    this.formSettings = (external_jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings);
+    this.formSettings = (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn.form.settings);
     // collection of jQuery form object where preventLeave is set
     this.prevents = [];
     window.addEventListener('beforeunload', event => {
-      for (const $el of atk__WEBPACK_IMPORTED_MODULE_8__["default"].formService.prevents) {
+      for (const $el of atk__WEBPACK_IMPORTED_MODULE_6__["default"].formService.prevents) {
         if ($el.data('__atkCheckDirty') && $el.data('isDirty')) {
           event.returnValue = 'unsaved';
           break;
@@ -2344,9 +2338,9 @@ class FormService {
   }
   getDefaultFomanticSettings() {
     return [{
-      rules: external_jquery__WEBPACK_IMPORTED_MODULE_7___default().extend(true, {}, (external_jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings.rules), {
+      rules: external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(true, {}, (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn.form.settings.rules), {
         rules: {
-          notEmpty: (external_jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings.rules.empty),
+          notEmpty: (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn.form.settings.rules.empty),
           isVisible: this.isVisible,
           isEqual: this.isEqual
         }
@@ -2356,7 +2350,7 @@ class FormService {
     }];
   }
   onSuccess() {
-    atk__WEBPACK_IMPORTED_MODULE_8__["default"].formService.clearDirtyForm(external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this).attr('id'));
+    atk__WEBPACK_IMPORTED_MODULE_6__["default"].formService.clearDirtyForm(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).attr('id'));
     return true;
   }
 
@@ -2365,7 +2359,7 @@ class FormService {
    * input changed before leaving page.
    */
   preventFormLeave(id) {
-    const $form = external_jquery__WEBPACK_IMPORTED_MODULE_7___default()('#' + id);
+    const $form = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('#' + id);
     $form.data('__atkCheckDirty', true);
     $form.on('change.__atkCanLeave', 'input, textarea', () => {
       $form.data('isDirty', true);
@@ -2388,7 +2382,7 @@ class FormService {
    * @returns {boolean}
    */
   isVisible() {
-    return external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this).is(':visible');
+    return external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).is(':visible');
   }
   isEqual(value, compare) {
     return Number.parseInt(value, 10) === Number.parseInt(compare, 10);
@@ -2397,26 +2391,22 @@ class FormService {
   /**
    * Validate a field using our own or Fomantic-UI validation rule function.
    *
-   * @param   {$}             form      Form containing the field.
+   * @param   {$}             $form     Form containing the field.
    * @param   {string}        fieldName Name of field
    * @param   {string|object} rule      Rule to apply test.
    * @returns {*|false}
    */
-  validateField(form, fieldName, rule) {
+  validateField($form, fieldName, rule) {
     rule = this.normalizeRule(rule);
     const ruleFunction = this.getRuleFunction(this.getRuleName(rule));
-    if (ruleFunction) {
-      const $field = this.getField(form, fieldName);
-      if (!$field) {
-        console.error('You are validating a field that does not exist: ' + fieldName);
-        return false;
-      }
-      const value = this.getFieldValue($field);
-      const ancillary = this.getAncillaryValue(rule);
-      return ruleFunction.call($field, value, ancillary);
+    if (!ruleFunction) {
+      console.error('Rule does not exist: ' + this.getRuleName(rule));
+      return false;
     }
-    console.error('Rule does not exist: ' + this.getRuleName(rule));
-    return false;
+    const $field = this.getField($form, fieldName);
+    const value = this.getFieldValue($field);
+    const ancillary = this.getAncillaryValue(rule);
+    return ruleFunction.call($field, value, ancillary);
   }
   normalizeRule(rule) {
     if (typeof rule === 'string') {
@@ -2428,12 +2418,12 @@ class FormService {
     return rule;
   }
   getDefaultSelector() {
-    return (external_jquery__WEBPACK_IMPORTED_MODULE_7___default().fn.form.settings.selector.group);
+    return (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn.form.settings.selector.group);
   }
   getContainer($field, selector) {
     const $container = $field.closest(selector);
     if ($container.length > 1) {
-      // radio button.
+      // radio button
       return this.getContainer($container.parent(), selector);
     }
     if ($container.length === 0) {
@@ -2441,17 +2431,8 @@ class FormService {
     }
     return $container;
   }
-  getField(form, identifier) {
-    if (form.find('#' + identifier).length > 0) {
-      return form.find('#' + identifier);
-    }
-    if (form.find('[name="' + identifier + '"]').length > 0) {
-      return form.find('[name="' + identifier + '"]');
-    }
-    if (form.find('[name="' + identifier + '[]"]').length > 0) {
-      return form.find('[name="' + identifier + '[]"]');
-    }
-    return false;
+  getField($form, identifier) {
+    return $form.form('get field', identifier);
   }
   getFieldValue($field) {
     const value = $field.length > 1 ? $field.filter(':checked').val() // radio button
