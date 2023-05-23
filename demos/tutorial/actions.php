@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Card;
+use Atk4\Ui\CardDeck;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
@@ -153,8 +154,9 @@ $wizard->addStep('Arguments', function (Wizard $page) {
 
 /*
 $wizard->addStep('More Ways', function (Wizard $page) {
-    Demo::addTo($page, ['leftWidth' => 5, 'rightWidth' => 11])->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page, ['leftWidth' => 6, 'rightWidth' => 10])->setCodeAndCall(function (View $owner) {
         $model = new Stat($owner->getApp()->db);
+
         $model->addUserAction('mail', [
             'fields' => ['currency_field'],
             'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
@@ -163,10 +165,11 @@ $wizard->addStep('More Ways', function (Wizard $page) {
             },
             'description' => 'Email testing',
         ]);
-        $owner->add('CardDeck')
+
+        CardDeck::addTo($owner)
             ->setModel(
                 $model,
-                ['description']
+                [$model->fieldName()->description]
             );
     });
 });

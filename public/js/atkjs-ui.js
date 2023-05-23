@@ -3405,7 +3405,7 @@ class VueService {
     });
   }
 
-  /*
+  /**
    * Add component to vues container.
    * Group apps that are using the same component.
    */
@@ -3760,7 +3760,7 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].createDebouncedFx = function (func, 
   return debouncedFx;
 };
 
-/*
+/**
 * Utilities function that you can execute
 * from atk context. Usage: atk.utils.redirect('url');
 */

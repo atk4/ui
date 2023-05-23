@@ -70,7 +70,7 @@ atk.createDebouncedFx = function (func, wait, options) {
     return debouncedFx;
 };
 
-/*
+/**
 * Utilities function that you can execute
 * from atk context. Usage: atk.utils.redirect('url');
 */
