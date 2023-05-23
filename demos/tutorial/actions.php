@@ -63,7 +63,7 @@ $wizard->addStep('Define User Action', function (Wizard $page) {
         $country = new Country($owner->getApp()->db);
 
         $country->addUserAction('send_message', function (Country $entity) {
-            return 'sent to ' . $entity->get($entity->fieldName()->name);
+            return 'Sent to ' . $entity->get($entity->fieldName()->name);
         });
         $country = $country->loadAny();
 
@@ -158,10 +158,10 @@ $wizard->addStep('More Ways', function (Wizard $page) {
         $model = new Stat($owner->getApp()->db);
 
         $model->addUserAction('mail', [
-            'fields' => ['currency_field'],
+            'fields' => [$model->fieldName()->currency],
             'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'callback' => function () {
-                return 'testing';
+            'callback' => function (Stat $model) {
+                return 'Email sent in ' . $model->currency . ' currency';
             },
             'description' => 'Email testing',
         ]);
@@ -191,11 +191,11 @@ $wizard->addStep('Crud integration', function (Wizard $page) {
         };
         $country->addUserAction('mail', [
             'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'preview' => function (Model $model) {
-                return 'here is email preview for ' . $model->get('name');
+            'preview' => function (Country $model) {
+                return 'Here is email preview for ' . $model->name;
             },
-            'callback' => function (Model $model) {
-                return 'email sent to ' . $model->get('name');
+            'callback' => function (Country $model) {
+                return 'Email sent to ' . $model->name;
             },
             'description' => 'Email testing',
         ]);
