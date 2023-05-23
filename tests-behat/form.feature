@@ -53,3 +53,17 @@ Feature: Form
     Then I hide js modal
     When I press Modal button "Save"
     Then Modal is open with text "Atk4\Core\Exception: Test exception II."
+
+  Scenario: test conditional form
+    Given I am on "form/jscondform.php"
+    Then I should not see "Phone 2"
+    Then I should not see "Phone 3"
+    When I fill in "phone1" with "1234"
+    Then I should not see "Phone 2"
+    When I fill in "phone1" with "12345"
+    Then I should see "Phone 2"
+    When I fill in "phone2" with "12345"
+    Then I should see "Phone 3"
+    When I fill in "phone1" with "12345x"
+    Then I should not see "Phone 2"
+    Then I should not see "Phone 3"
