@@ -135,7 +135,13 @@ class Form extends View
         parent::init();
 
         $this->formElement = View::addTo($this, ['element' => 'form', 'shortName' => 'form'], ['FormElementOnly']);
-        $this->on('submit', new JsExpression('if (event.target === this) { [] }', [new JsBlock([$this->formElement->js()->trigger('submit')])]));
+
+        // redirect submit event to native form element
+        $this->on(
+            'submit',
+            new JsExpression('if (event.target === this) { event.stopImmediatePropagation(); [] }', [new JsBlock([$this->formElement->js()->trigger('submit')])]),
+            ['stopPropagation' => false]
+        );
 
         $this->initLayout();
 

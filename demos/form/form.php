@@ -86,7 +86,9 @@ $form = Form::addTo($tab);
 $form->addControl('email1');
 $form->buttonSave->set('Save1');
 $form->onSubmit(function (Form $form) {
-    return $form->jsError('email1', 'some error action ' . random_int(1, 100));
+    if ($form->getControl('email1')->entityField->get() !== 'pass@bar') {
+        return $form->jsError('email1', 'some error action ' . random_int(1, 100));
+    }
 });
 
 Header::addTo($tab, ['..or success message']);
