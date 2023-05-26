@@ -83,35 +83,16 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
                 $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
             }
 
-            $errors = $this->_hasAllArguments();
-            if ($errors) {
-                $js = new JsToast(['title' => 'Error', 'message' => 'Missing Arguments: ' . implode(', ', $errors), 'class' => 'error']);
-            } else {
-                $return = $this->action->execute(...$values);
-                $success = $this->jsSuccess instanceof \Closure
-                    ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $return)
-                    : $this->jsSuccess;
+            $return = $this->action->execute(...$values);
 
-                $js = JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) // @phpstan-ignore-line
-                    ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
-            }
+            $success = $this->jsSuccess instanceof \Closure
+                ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $return)
+                : $this->jsSuccess;
+
+            $js = JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) // @phpstan-ignore-line
+                ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
 
             return $js;
         }, array_map(fn () => true, $this->action->args));
-    }
-
-    /**
-     * Check if all argument values have been provided.
-     */
-    private function _hasAllArguments(): array
-    {
-        $errors = [];
-        foreach ($this->action->args as $key => $val) {
-            if (!isset($this->args[$key])) {
-                $errors[] = $key;
-            }
-        }
-
-        return $errors;
     }
 }
