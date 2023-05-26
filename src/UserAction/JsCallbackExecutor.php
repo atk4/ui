@@ -66,7 +66,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 
     public function executeModelAction(array $args = []): void
     {
-        $this->set(function (Jquery $j) {
+        $this->set(function (Jquery $j, ...$values) {
             $id = $this->getApp()->uiPersistence->typecastLoadField(
                 $this->action->getModel()->getField($this->action->getModel()->idField),
                 $_POST['c0'] ?? $_POST[$this->name] ?? null
@@ -87,12 +87,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
             if ($errors) {
                 $js = new JsToast(['title' => 'Error', 'message' => 'Missing Arguments: ' . implode(', ', $errors), 'class' => 'error']);
             } else {
-                $args = [];
-                foreach ($this->action->args as $key => $val) {
-                    $args[] = $_POST[$key] ?? $this->args[$key];
-                }
-
-                $return = $this->action->execute(...$args);
+                $return = $this->action->execute(...$values);
                 $success = $this->jsSuccess instanceof \Closure
                     ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $return)
                     : $this->jsSuccess;
