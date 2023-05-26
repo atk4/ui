@@ -127,7 +127,6 @@ class BasicExecutor extends View implements ExecutorInterface
     public function executeModelAction(): JsBlock
     {
         $args = [];
-
         foreach ($this->action->args as $key => $val) {
             $args[] = $this->arguments[$key];
         }
