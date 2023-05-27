@@ -54,11 +54,6 @@ class Input extends Form\Control
     public $actionLeft;
 
     /**
-     * Specify width for Fomantic-UI grid. For "four wide" use 'four'.
-     */
-    public $width;
-
-    /**
      * Additional attributes directly for the <input> tag can be added:
      * ['attribute_name' => 'attribute_value'], e.g.
      * ['autocomplete' => 'new-password'].
