@@ -70,14 +70,17 @@ Button::addTo($bar)->set('No layout at all')->link($virtualPage->getUrl('cut'));
 Header::addTo($app, ['Inside Modal', 'subHeader' => 'Virtual page content can be display using JsModal Class.']);
 
 $bar = View::addTo($app, ['ui' => 'buttons']);
-Button::addTo($bar)->set('Load in Modal')->on('click', new JsModal('My Popup Title', $virtualPage->getJsUrl('cut')));
+Button::addTo($bar)->set('Load in Modal')
+    ->on('click', new JsModal('My Popup Title', $virtualPage->getJsUrl('cut')));
 
-Button::addTo($bar)->set('Simulate slow load')->on('click', new JsModal('My Popup Title', $virtualPage->getJsUrl('cut') . '&slow=true'));
+Button::addTo($bar)->set('Simulate slow load')
+    ->on('click', new JsModal('My Popup Title', $virtualPage->getJsUrl('cut') . '&slow=true'));
 if (isset($_GET['slow'])) {
     sleep(1);
 }
 
-Button::addTo($bar)->set('No title')->on('click', new JsModal(null, $virtualPage->getJsUrl('cut')));
+Button::addTo($bar)->set('No title')
+    ->on('click', new JsModal(null, $virtualPage->getJsUrl('cut')));
 
 View::addTo($app, ['ui' => 'hidden divider']);
 $text = Text::addTo($app);

@@ -72,10 +72,11 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
 // $grid->addExecutorButton($deleteExecutor, new Button(['icon' => 'times circle outline']));
 
 $sel = $grid->addSelection();
-$grid->menu->addItem('show selection')->on('click', new JsExpression(
-    'alert(\'Selected: \' + [])',
-    [$sel->jsChecked()]
-));
+$grid->menu->addItem('show selection')
+    ->on('click', new JsExpression(
+        'alert(\'Selected: \' + [])',
+        [$sel->jsChecked()]
+    ));
 
 // Setting ipp with an array will add an ItemPerPageSelector to paginator.
 $grid->setIpp([10, 25, 50, 100]);

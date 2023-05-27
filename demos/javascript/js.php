@@ -26,7 +26,8 @@ $b->js(true)->hide();
 $b = Button::addTo($app, ['name' => 'b2'])->set('Hide on click Button');
 $b->js('click')->hide();
 
-Button::addTo($app, ['Redirect'])->on('click', null, $app->jsRedirect(['foo' => 'bar']));
+Button::addTo($app, ['Redirect'])
+    ->on('click', null, $app->jsRedirect(['foo' => 'bar']));
 
 if (isset($_GET['foo']) && $_GET['foo'] === 'bar') {
     $app->redirect(['foo' => 'baz']);

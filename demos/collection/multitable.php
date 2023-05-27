@@ -93,7 +93,8 @@ $vp = VirtualPage::addTo($app)->set(function (VirtualPage $vp) use ($model) {
     $vp->js(true)->closest('.modal')->find('.header')->remove();
 });
 
-Button::addTo($app, ['Re-Import From Filesystem', 'class.top attached' => true])->on('click', new JsModal('Now importing ... ', $vp));
+Button::addTo($app, ['Re-Import From Filesystem', 'class.top attached' => true])
+    ->on('click', new JsModal('Now importing ... ', $vp));
 
 $finderClass::addTo($app, ['bottom attached segment'])
     ->setModel($model->setLimit(10), [$model->fieldName()->SubFolder]);

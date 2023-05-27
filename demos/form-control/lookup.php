@@ -91,4 +91,5 @@ $modal = Modal::addTo($app)->set(function (View $p) {
     $a = Form\Control\Lookup::addTo($p, ['placeholder' => 'Search country', 'label' => 'Country: ']);
     $a->setModel(new Country($p->getApp()->db));
 });
-Button::addTo($app, ['Open Lookup on a Modal window'])->on('click', $modal->jsShow());
+Button::addTo($app, ['Open Lookup on a Modal window'])
+    ->on('click', $modal->jsShow());

@@ -31,7 +31,8 @@ with JavaScript::
 
     $bar->value = 5; // sets this value instead of 0
 
-    Button::addTo($app, ['charge up the battery'])->on('click', $bar2->jsValue(100));
+    Button::addTo($app, ['charge up the battery'])
+        ->on('click', $bar2->jsValue(100));
 
 Updating Progress in RealTime
 =============================
