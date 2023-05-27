@@ -19,9 +19,6 @@ class Demo extends Columns
     /** @var bool */
     public static $isInitialized = false;
 
-    /** @var string */
-    public $highlightDefaultStyle = 'dark';
-
     /** @var int */
     public $leftWidth = 8;
     /** @var int */
@@ -75,8 +72,8 @@ class Demo extends Columns
     public function highLightCode(): void
     {
         if (!self::$isInitialized) {
-            $this->getApp()->requireCss('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.16.2/styles/' . $this->highlightDefaultStyle . '.min.css');
-            $this->getApp()->requireJs('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.16.2/highlight.min.js');
+            $this->getApp()->requireCss($this->getApp()->cdn['highlight.js'] . '/styles/github-dark-dimmed.min.css');
+            $this->getApp()->requireJs($this->getApp()->cdn['highlight.js'] . '/highlight.min.js');
             $this->js(true, (new JsChain('hljs'))->initHighlighting());
             self::$isInitialized = true;
         }

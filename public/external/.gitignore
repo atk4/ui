@@ -6,6 +6,14 @@
 !/*/
 /*/*
 
+!/@highlightjs/cdn-assets/
+/@highlightjs/cdn-assets/*
+!/@highlightjs/cdn-assets/LICENS*
+!/@highlightjs/cdn-assets/*.js
+!/@highlightjs/cdn-assets/styles/
+/@highlightjs/cdn-assets/styles/*
+!/@highlightjs/cdn-assets/styles/github-dark-dimmed*.css
+
 !/@shopify/draggable/
 /@shopify/draggable/*
 !/@shopify/draggable/LICENS*

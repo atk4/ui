@@ -201,7 +201,8 @@ To indicate how custom binding works::
     });
 
 
-    \Atk4\Ui\Button::addTo($app, ['Load data'])->on('click', $loader->js()->trigger('kaboom'));
+    \Atk4\Ui\Button::addTo($app, ['Load data'])
+        ->on('click', $loader->js()->trigger('kaboom'));
 
 This approach allow you to trigger loader from inside JavaScript easily. See also: https://api.jquery.com/trigger/
 
@@ -224,7 +225,8 @@ Next example will display DataTable, but will allow you to replace data with a f
         ->setModel($data)
         ->addCondition('year', $app->stickyGet('year'));
 
-    \Atk4\Ui\Button::addTo($box, ['Edit Data Settings'])->on('click', $loader->js()->trigger('edit'));
+    \Atk4\Ui\Button::addTo($box, ['Edit Data Settings'])
+        ->on('click', $loader->js()->trigger('edit'));
 
     $loader->set(function (\Atk4\Ui\Loader $p) {
         $form = \Atk4\Ui\Form::addTo($p);

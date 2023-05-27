@@ -40,7 +40,7 @@ class Control extends View
     /** @var bool rendered or not input label in generic Form\Layout template. */
     public $renderLabel = true;
 
-    /** @var string */
+    /** @var string Specify width for Fomantic-UI grid. For "four wide" use 'four'. */
     public $width;
 
     /**

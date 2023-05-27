@@ -155,7 +155,6 @@ class JsSse extends JsCallback
     }
 
     /**
-     * Initialise this sse.
      * It will ignore user abort by default.
      */
     protected function initSse(): void

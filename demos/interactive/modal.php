@@ -31,22 +31,28 @@ $bar = View::addTo($app, ['ui' => 'buttons']);
 
 $modal = Modal::addTo($app, ['title' => 'Add a name']);
 LoremIpsum::addTo($modal);
-Button::addTo($modal, ['Hide'])->on('click', $modal->jsHide());
+Button::addTo($modal, ['Hide'])
+    ->on('click', $modal->jsHide());
 
 $modalNoTitle = Modal::addTo($app, ['title' => false]);
 LoremIpsum::addTo($modalNoTitle);
-Button::addTo($modalNoTitle, ['Hide'])->on('click', $modalNoTitle->jsHide());
+Button::addTo($modalNoTitle, ['Hide'])
+    ->on('click', $modalNoTitle->jsHide());
 
 $modalScrolling = Modal::addTo($app, ['title' => 'Long Content that Scrolls inside Modal']);
 $modalScrolling->addScrolling();
 LoremIpsum::addTo($modalScrolling);
 LoremIpsum::addTo($modalScrolling);
 LoremIpsum::addTo($modalScrolling);
-Button::addTo($modalScrolling, ['Hide'])->on('click', $modalScrolling->jsHide());
+Button::addTo($modalScrolling, ['Hide'])
+    ->on('click', $modalScrolling->jsHide());
 
-Button::addTo($bar, ['Show'])->on('click', $modal->jsShow());
-Button::addTo($bar, ['No Title'])->on('click', $modalNoTitle->jsShow());
-Button::addTo($bar, ['Scrolling Content'])->on('click', $modalScrolling->jsShow());
+Button::addTo($bar, ['Show'])
+    ->on('click', $modal->jsShow());
+Button::addTo($bar, ['No Title'])
+    ->on('click', $modalNoTitle->jsShow());
+Button::addTo($bar, ['Scrolling Content'])
+    ->on('click', $modalScrolling->jsShow());
 
 // Modal demos.
 
@@ -92,7 +98,8 @@ $vp1Modal->set(function (View $p) use ($vp2Modal) {
 $vp2Modal->set(function (View $p) use ($vp3Modal) {
     ViewTester::addTo($p);
     Message::addTo($p, [$_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
-    Button::addTo($p)->set('Third modal')->on('click', $vp3Modal->jsShow());
+    Button::addTo($p)->set('Third modal')
+        ->on('click', $vp3Modal->jsShow());
 });
 
 $bar = View::addTo($app, ['ui' => 'buttons']);

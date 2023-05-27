@@ -418,18 +418,22 @@ producing content of your dialog::
     $modal = \Atk4\Ui\Modal::addTo($app, ['Modal Title']);
     $modal->set(function (View $p) use ($modal) {
         \Atk4\Ui\LoremIpsum::addTo($p);
-        \Atk4\Ui\Button::addTo($p, ['Hide'])->on('click', $modal->jsHide());
+        \Atk4\Ui\Button::addTo($p, ['Hide'])
+            ->on('click', $modal->jsHide());
     });
 
-    \Atk4\Ui\Button::addTo($app, ['Show'])->on('click', $modal->jsShow());
+    \Atk4\Ui\Button::addTo($app, ['Show'])
+        ->on('click', $modal->jsShow());
 
 Modal will render as a HTML `<div>` block but will be hidden. Alternatively you can use Modal without loadable content::
 
     $modal = \Atk4\Ui\Modal::addTo($app, ['Modal Title']);
     \Atk4\Ui\LoremIpsum::addTo($modal);
-    \Atk4\Ui\Button::addTo($modal, ['Hide'])->on('click', $modal->jsHide());
+    \Atk4\Ui\Button::addTo($modal, ['Hide'])
+        ->on('click', $modal->jsHide());
 
-    \Atk4\Ui\Button::addTo($app, ['Show'])->on('click', $modal->jsShow());
+    \Atk4\Ui\Button::addTo($app, ['Show'])
+        ->on('click', $modal->jsShow());
 
 The second way is more convenient for creating static content, such as Terms of Service.
 

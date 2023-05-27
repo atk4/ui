@@ -71,9 +71,12 @@ $control = $form->addControl('date_action', [
     'caption' => 'Javascript action',
     'options' => ['clickOpens' => false],
 ])->set(new \DateTime());
-$control->addAction(['Today', 'icon' => 'calendar day'])->on('click', $control->getJsInstance()->setDate($app->uiPersistence->typecastSaveField($control->entityField->getField(), new \DateTime())));
-$control->addAction(['Select...', 'icon' => 'calendar'])->on('click', $control->getJsInstance()->open());
-$control->addAction(['Clear', 'icon' => 'times red'])->on('click', $control->getJsInstance()->clear());
+$control->addAction(['Today', 'icon' => 'calendar day'])
+    ->on('click', $control->getJsInstance()->setDate($app->uiPersistence->typecastSaveField($control->entityField->getField(), new \DateTime())));
+$control->addAction(['Select...', 'icon' => 'calendar'])
+    ->on('click', $control->getJsInstance()->open());
+$control->addAction(['Clear', 'icon' => 'times red'])
+    ->on('click', $control->getJsInstance()->clear());
 
 $form->onSubmit(function (Form $form) use ($app) {
     return new JsToast($app->encodeJson($form->model->get()));

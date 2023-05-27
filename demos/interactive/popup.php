@@ -285,4 +285,5 @@ View::addTo($inputPopup)->set('You can use this field to search data.');
 $button = Button::addTo($app, [null, 'icon' => 'volume down']);
 $buttonPopup = Popup::addTo($app, [$button, 'triggerOn' => 'hover'])->setHoverable();
 
-Form\Control\Checkbox::addTo($buttonPopup, ['Just On/Off', 'class.slider' => true])->on('change', $button->js()->find('.icon')->toggleClass('up down'));
+Form\Control\Checkbox::addTo($buttonPopup, ['Just On/Off', 'class.slider' => true])
+    ->on('change', $button->js()->find('.icon')->toggleClass('up down'));

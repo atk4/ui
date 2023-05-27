@@ -47,16 +47,11 @@ class Input extends Form\Control
     /** @var string|Label Set label that will appear to the right of the input field. */
     public $labelRight;
 
-    /** @var Button|array|null */
+    /** @var Button|array|UserAction|null */
     public $action;
 
-    /** @var Button|array|null */
+    /** @var Button|array|UserAction|null */
     public $actionLeft;
-
-    /**
-     * Specify width for Fomantic-UI grid. For "four wide" use 'four'.
-     */
-    public $width;
 
     /**
      * Additional attributes directly for the <input> tag can be added:
@@ -163,9 +158,7 @@ class Input extends Form\Control
                 : $button;
             $button = $this->add($this->getExecutorFactory()->createTrigger($executor->getAction()), $spot);
             if ($executor->getAction()->args) {
-                $val_as_arg = array_keys($executor->getAction()->args)[0];
-
-                $button->on('click', $executor, ['args' => [$val_as_arg => $this->jsInput()->val()]]);
+                $button->on('click', $executor, ['args' => [array_key_first($executor->getAction()->args) => $this->jsInput()->val()]]);
             } else {
                 $button->on('click', $executor);
             }
