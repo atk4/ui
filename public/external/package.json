@@ -2,6 +2,7 @@
     "name": "atk-external",
     "private": true,
     "dependencies": {
+        "@highlightjs/cdn-assets": "^11.8.0",
         "@shopify/draggable": "^1.0.0-beta.12",
         "chart.js": "^3.9.1",
         "flatpickr": "^4.6.11",

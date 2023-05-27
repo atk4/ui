@@ -44,6 +44,7 @@ class App
         'jquery' => '/public/external/jquery/dist',
         'fomantic-ui' => '/public/external/fomantic-ui/dist',
         'flatpickr' => '/public/external/flatpickr/dist',
+        'highlight.js' => '/public/external/@highlightjs/cdn-assets',
         'chart.js' => '/public/external/chart.js/dist', // for atk4/chart
     ];
 
