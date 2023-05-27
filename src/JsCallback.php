@@ -81,7 +81,7 @@ class JsCallback extends Callback
 
             $values = [];
             foreach (array_keys($this->args) as $key) {
-                $values[] = $_POST[$key] ?? null;
+                $values[] = $_POST[$key];
             }
 
             $response = $fx($chain, ...$values);
