@@ -64,7 +64,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         }
     }
 
-    public function executeModelAction(array $args = []): void
+    public function executeModelAction(): void
     {
         $this->set(function (Jquery $j, ...$values) {
             $id = $this->getApp()->uiPersistence->typecastLoadField(
@@ -97,7 +97,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
             }
 
             return $js;
-        }, $args);
+        }, array_map(fn () => true, $this->action->args));
     }
 
     /**
