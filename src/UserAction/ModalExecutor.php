@@ -61,7 +61,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      * to make sure that view id is properly set for loader and button
      * JS action to run properly.
      */
-    protected function afterActionInit(Model\UserAction $action): void
+    protected function afterActionInit(): void
     {
         $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->loader->loadEvent = false;
@@ -72,10 +72,10 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
-        $this->afterActionInit($action);
+        $this->afterActionInit();
 
         // get necessary step need prior to execute action.
-        $this->steps = $this->getSteps($action);
+        $this->steps = $this->getSteps();
         if ($this->steps) {
             $this->title ??= $action->getDescription();
 
@@ -96,7 +96,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->action = $this->executeModelActionLoad($this->action);
 
         // Add buttons to modal for next and previous.
-        $this->addButtonAction($this->createButtonBar($this->action));
+        $this->addButtonAction($this->createButtonBar());
         $this->jsSetButtonsState($this->loader, $this->step);
         $this->runSteps();
     }

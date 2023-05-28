@@ -60,7 +60,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Properly set element ID for this modal.
      */
-    protected function afterActionInit(Model\UserAction $action): void
+    protected function afterActionInit(): void
     {
         // Add buttons to modal for next and previous.
         $buttonsView = (new View())->setStyle(['min-height' => '24px']);
@@ -103,7 +103,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
-        $this->afterActionInit($action);
+        $this->afterActionInit();
 
         $this->title ??= $action->getDescription();
         $this->step = $this->stickyGet('step');

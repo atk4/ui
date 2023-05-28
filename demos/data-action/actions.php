@@ -30,7 +30,7 @@ $action = $files->addUserAction('import_from_filesystem', [
     'description' => 'Import file in a specify path.',
     // Display information prior to execute the action.
     // ModalExecutor or PreviewExecutor will display preview.
-    'preview' => function (Model $model, $path) {
+    'preview' => function (Model $model, string $path) {
         return 'Execute Import using path: "' . $path . '"';
     },
     // Argument needed to run the callback action method.
@@ -64,10 +64,9 @@ $executor->setAction($action->getActionForEntity($files->createEntity()));
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
     return new JsToast('Files imported');
 });
-$executor->executeModelAction(['path' => '.']);
 
 $button = Button::addTo($rightColumn, ['Import File']);
-$button->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);
+$button->on('click', $executor, ['args' => ['path' => '.'], 'confirm' => 'This will import a lot of file. Are you sure?']);
 
 Header::addTo($rightColumn, ['BasicExecutor']);
 $executor = UserAction\BasicExecutor::addTo($rightColumn, ['executorButton' => [Button::class, 'Import', 'class.primary' => true]]);

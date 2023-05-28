@@ -12,7 +12,7 @@ use Atk4\Ui\Js\JsExpressionable;
 
 class JsCallback extends Callback
 {
-    /** @var array Holds information about arguments passed in to the callback. */
+    /** @var array<string, string|JsExpressionable> Holds information about arguments passed in to the callback. */
     public $args = [];
 
     /** @var string Text to display as a confirmation. Set with setConfirm(..). */
@@ -71,7 +71,7 @@ class JsCallback extends Callback
         $this->args = [];
         foreach ($args ?? [] as $key => $val) {
             if (is_int($key)) {
-                $key = 'c' . $key;
+                $key = $this->name . '_c' . $key;
             }
             $this->args[$key] = $val;
         }
@@ -80,7 +80,7 @@ class JsCallback extends Callback
             $chain = new Jquery();
 
             $values = [];
-            foreach ($this->args as $key => $value) {
+            foreach (array_keys($this->args) as $key) {
                 $values[] = $_POST[$key] ?? null;
             }
 

@@ -369,13 +369,11 @@ class Form extends View
      * Returns JS Chain that targets INPUT element of a specified field. This method is handy
      * if you wish to set a value to a certain field.
      *
-     * @param string $name Name of control
-     *
      * @return Jquery
      */
-    public function jsInput($name): JsExpressionable
+    public function jsInput(string $name): JsExpressionable
     {
-        return $this->layout->getControl($name)->js()->find('input');
+        return $this->layout->getControl($name)->jsInput();
     }
 
     // }}}
@@ -547,8 +545,9 @@ class Form extends View
             'serializeForm' => true,
         ], $this->apiConfig));
 
-        // [name] in selector is to suppress https://github.com/fomantic/Fomantic-UI/commit/facbca003cf0da465af7d44af41462e736d3eb8b
-        // console errors from Multiline/vue fields
+        // fix remove prompt for dropdown
+        // https://github.com/fomantic/Fomantic-UI/issues/2797
+        // [name] in selector is to suppress https://github.com/fomantic/Fomantic-UI/commit/facbca003cf0da465af7d44af41462e736d3eb8b console errors from Multiline/vue fields
         $this->on('change', '.field input[name], .field textarea[name], .field select[name]', $this->js()->form('remove prompt', new JsExpression('$(this).attr(\'name\')')));
 
         if (!$this->canLeave) {

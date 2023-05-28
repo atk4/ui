@@ -28,10 +28,9 @@ class Calendar extends Input
     /**
      * Set Flatpickr option.
      *
-     * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      */
-    public function setOption($name, $value): void
+    public function setOption(string $name, $value): void
     {
         $this->options[$name] = $value;
     }
