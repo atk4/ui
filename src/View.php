@@ -1028,7 +1028,7 @@ class View extends AbstractView
                 $cb->apiConfig = $defaults['apiConfig'];
             }
 
-            $cb->set(function ($chain, ...$args) use ($action) {
+            $cb->set(function (Jquery $chain, ...$args) use ($action) {
                 return $action($chain, ...$args);
             }, $arguments);
 

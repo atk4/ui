@@ -681,7 +681,7 @@ class Multiline extends Form\Control
      */
     private function outputJson(): void
     {
-        switch ($_POST['__atkml_action'] ?? null) {
+        switch ($_POST['__atkml_action']) {
             case 'update-row':
                 $entity = $this->createDummyEntityFromPost($this->model);
                 $expressionValues = array_merge($this->getExpressionValues($entity), $this->getCallbackValues($entity));
@@ -731,7 +731,7 @@ class Multiline extends Form\Control
 
             $field = $entity->getField($fieldName);
 
-            $value = $this->getApp()->uiPersistence->typecastLoadField($field, $_POST[$fieldName] ?? null);
+            $value = $this->getApp()->uiPersistence->typecastLoadField($field, $_POST[$fieldName]);
             if ($field->isEditable()) {
                 try {
                     $field->required = false;

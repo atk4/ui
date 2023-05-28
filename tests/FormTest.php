@@ -65,7 +65,7 @@ class FormTest extends TestCase
     public function assertFormSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
     {
         $wasSubmitCalled = false;
-        $_POST = $postData;
+        $_POST = array_merge(array_map(fn () => '', $this->form->controls), $postData);
         try {
             // trigger callback
             $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . 'atk_submit'] = 'ajax';
@@ -115,8 +115,8 @@ class FormTest extends TestCase
 
         // fake some POST data
         $this->assertFormSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], function (Model $m) {
-            // field has default, but form didn't send value back
-            self::assertNull($m->get('name'));
+            // field has default, but form send back empty value
+            self::assertSame('', $m->get('name'));
 
             self::assertSame('john@yahoo.com', $m->get('email'));
 
@@ -148,7 +148,7 @@ class FormTest extends TestCase
         self::assertTrue($matched, 'Form control ' . $field . ' did not produce error');
     }
 
-    public function assertFromControlNoErrors(string $field): void
+    public function assertFormControlNoErrors(string $field): void
     {
         $n = preg_match_all('~\.form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
         self::assertGreaterThan(0, $n);
@@ -159,7 +159,7 @@ class FormTest extends TestCase
         }
     }
 
-    public function testSubmitError(): void
+    public function testFormSubmitError(): void
     {
         $m = new Model();
 
@@ -180,11 +180,11 @@ class FormTest extends TestCase
             $this->assertFormControlError('opt1', 'not one of the allowed values');
 
             // user didn't select any option here
-            $this->assertFromControlNoErrors('opt2');
+            $this->assertFormControlNoErrors('opt2');
 
             // dropdown insists for value to be there
-            $this->assertFormControlError('opt3', 'Must not be null');
-            $this->assertFromControlNoErrors('opt3_z');
+            $this->assertFormControlNoErrors('opt3');
+            $this->assertFormControlNoErrors('opt3_z');
             $this->assertFormControlError('opt4', 'Must not be empty');
             $this->assertFormControlError('opt4_z', 'Must not be empty');
         });
