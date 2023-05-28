@@ -11,6 +11,7 @@ use Atk4\Ui\Callback;
 use Atk4\Ui\Console;
 use Atk4\Ui\Exception;
 use Atk4\Ui\JsCallback;
+use Atk4\Ui\JsSse;
 use Atk4\Ui\Loader;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Popup;
@@ -172,6 +173,7 @@ class ViewTest extends TestCase
         return [
             [Console::class],
             [JsCallback::class],
+            [JsSse::class],
             [Loader::class],
             [Modal::class],
             [Popup::class],

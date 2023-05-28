@@ -56,9 +56,9 @@ Header::addTo($app, ['SSE operation with user confirmation']);
 $sse = JsSse::addTo($app);
 $button = Button::addTo($app, ['Click me to change my text']);
 
-$button->on('click', $sse->set(function (Jquery $jsChain) use ($sse, $button) {
+$button->on('click', $sse->set(function (Jquery $jsChain, string $newButtonText) use ($sse, $button) {
     $sse->send($button->js()->text('Please wait for 2 seconds...'));
     sleep(2);
 
-    return $button->js()->text($sse->args['newButtonText']);
+    return $button->js()->text($newButtonText);
 }, ['newButtonText' => 'This is my new text!']), ['confirm' => 'Please confirm that you wish to continue']);
