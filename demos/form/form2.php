@@ -38,7 +38,7 @@ $nameInput->addAction(['Check Duplicate', 'iconRight' => 'search'])
         }
 
         return new JsToast('This country name can be added.');
-    }, ['args' => ['_n' => $nameInput->jsInput()->val()]]);
+    }, ['args' => [$nameInput->jsInput()->val()]]);
 
 // form codes field group
 $formCodes = $form->addGroup(['Codes']);
