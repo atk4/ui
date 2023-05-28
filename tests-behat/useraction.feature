@@ -66,3 +66,11 @@ Feature: UserAction executor and UserConfirmation modal
     Then Panel is open with text "Gender = m / Age = 22"
     Then I press Panel button "Multi Step"
     Then Toast display should contain text "Thank you Mr. at age 22"
+
+  Scenario: testing JsCallbackExecutor with form input argument
+    Given I am on "tutorial/actions.php"
+    When I click link "Next"
+    When I click link "Next"
+    When I fill field using "//input[../div[text()='Greet']]" with "Laura"
+    When I press button "Greet"
+    Then Toast display should contain text "Hi Laura"
