@@ -6,7 +6,8 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Columns;
 use Atk4\Ui\Exception;
-use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\View;
 
 class Demo extends Columns
@@ -64,7 +65,10 @@ class Demo extends Columns
         $code = $this->extractCodeFromClosure($fx);
 
         $this->highLightCode();
-        View::addTo(View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])->addClass($lang)->set($code);
+        View::addTo(View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])
+            ->addClass('language-' . $lang)
+            ->set($code)
+            ->js(true)->each(new JsFunction(['i, el'], [new JsExpression('hljs.highlightElement(el)')]));
 
         $fx($this->right);
     }
@@ -74,7 +78,6 @@ class Demo extends Columns
         if (!self::$isInitialized) {
             $this->getApp()->requireCss($this->getApp()->cdn['highlight.js'] . '/styles/github-dark-dimmed.min.css');
             $this->getApp()->requireJs($this->getApp()->cdn['highlight.js'] . '/highlight.min.js');
-            $this->js(true, (new JsChain('hljs'))->initHighlighting());
             self::$isInitialized = true;
         }
     }

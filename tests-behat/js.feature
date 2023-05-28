@@ -1,5 +1,4 @@
 Feature: JS
-  Test javascript
 
   Scenario:
     Given I am on "javascript/js.php"
