@@ -530,9 +530,9 @@ class ScopeBuilder extends Form\Control
      */
     public function queryToCondition(array $query): Scope\Condition
     {
-        $key = $query['rule'] ?? null;
-        $operator = $query['operator'] ?? null;
-        $value = $query['value'] ?? null;
+        $key = $query['rule'];
+        $operator = $query['operator'];
+        $value = $query['value'];
 
         switch ($operator) {
             case self::OPERATOR_EMPTY:
