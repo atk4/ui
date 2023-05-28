@@ -64,10 +64,9 @@ $executor->setAction($action->getActionForEntity($files->createEntity()));
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
     return new JsToast('Files imported');
 });
-$executor->executeModelAction(['path' => '.']);
 
 $button = Button::addTo($rightColumn, ['Import File']);
-$button->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);
+$button->on('click', $executor, ['args' => ['path' => '.'], 'confirm' => 'This will import a lot of file. Are you sure?']);
 
 Header::addTo($rightColumn, ['BasicExecutor']);
 $executor = UserAction\BasicExecutor::addTo($rightColumn, ['executorButton' => [Button::class, 'Import', 'class.primary' => true]]);
