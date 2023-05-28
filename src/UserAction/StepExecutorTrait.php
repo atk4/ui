@@ -257,16 +257,16 @@ trait StepExecutorTrait
     /**
      * Get how many steps is required for this action.
      */
-    protected function getSteps(UserAction $action): array
+    protected function getSteps(): array
     {
         $steps = [];
-        if ($action->args) {
+        if ($this->action->args) {
             $steps[] = 'args';
         }
-        if ($action->fields) {
+        if ($this->action->fields) {
             $steps[] = 'fields';
         }
-        if ($action->preview) {
+        if ($this->action->preview) {
             $steps[] = 'preview';
         }
 
@@ -331,12 +331,12 @@ trait StepExecutorTrait
         return $this->step;
     }
 
-    protected function createButtonBar(Model\UserAction $action): View
+    protected function createButtonBar(): View
     {
         $this->buttonsView = (new View())->setStyle(['min-height' => '24px']);
         $this->prevStepButton = Button::addTo($this->buttonsView, ['Prev'])->setStyle(['float' => 'left !important']);
         $this->nextStepButton = Button::addTo($this->buttonsView, ['Next', 'class.blue' => true]);
-        $this->execActionButton = $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MODAL_BUTTON);
+        $this->execActionButton = $this->getExecutorFactory()->createTrigger($this->action, ExecutorFactory::MODAL_BUTTON);
         $this->buttonsView->add($this->execActionButton);
 
         return $this->buttonsView;
