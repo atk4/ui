@@ -95,10 +95,10 @@ class InlineEdit extends View
         }
 
         if ($this->autoSave && $this->model->isLoaded()) {
-            $value = $_POST['value'] ?? null;
-            $this->cb->set(function () use ($value) {
+            $this->cb->set(function () {
+                $postValue = $_POST['value'];
                 try {
-                    $this->model->set($this->fieldName, $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($this->fieldName), $value));
+                    $this->model->set($this->fieldName, $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($this->fieldName), $postValue));
                     $this->model->save();
 
                     return $this->jsSuccess('Update saved');
@@ -106,7 +106,7 @@ class InlineEdit extends View
                     $this->getApp()->terminateJson([
                         'success' => true,
                         'hasValidationError' => true,
-                        'atkjs' => $this->jsError(($this->formatErrorMsg)($e, $value))->jsRender(),
+                        'atkjs' => $this->jsError(($this->formatErrorMsg)($e, $postValue))->jsRender(),
                     ]);
                 }
             });
