@@ -681,7 +681,7 @@ class Multiline extends Form\Control
      */
     private function outputJson(): void
     {
-        switch ($_POST['__atkml_action'] ?? null) {
+        switch ($_POST['__atkml_action']) {
             case 'update-row':
                 $entity = $this->createDummyEntityFromPost($this->model);
                 $expressionValues = array_merge($this->getExpressionValues($entity), $this->getCallbackValues($entity));
