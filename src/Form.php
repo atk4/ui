@@ -460,7 +460,7 @@ class Form extends View
             try {
                 // save field value only if field was editable in form at all
                 if (!$control->readOnly && !$control->disabled) {
-                    $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $_POST[$k] ?? null));
+                    $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $_POST[$k]));
                 }
             } catch (\Exception $e) {
                 $messages = [];
