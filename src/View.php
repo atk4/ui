@@ -264,8 +264,6 @@ class View extends AbstractView
      *
      * @param AbstractView      $object
      * @param string|array|null $region
-     *
-     * @return ($object is self ? self : AbstractView)
      */
     public function add($object, $region = null): AbstractView
     {

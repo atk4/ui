@@ -51,6 +51,7 @@ class Menu extends View
             array_unshift($item, MenuItem::class);
         }
 
+        /** @var MenuItem */
         $item = $this->add($item);
 
         if (is_string($action) || is_array($action)) {

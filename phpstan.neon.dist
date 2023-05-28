@@ -19,9 +19,6 @@ parameters:
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
         -
-            path: 'demos/_includes/Demo.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::initHighlighting\(\)\.$~'
-        -
             path: 'demos/collection/grid.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\ExecutorInterface::onHook\(\)\.$~'
         -
@@ -155,9 +152,6 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::createVue\(\)\.$~'
         -
             path: 'src/Menu.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setElement\(\)\.$~'
-        -
-            path: 'src/Menu.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::addClass\(\)\.$~'
         -
             path: 'src/Panel/Right.php'
@@ -213,7 +207,7 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\View::setPath\(\)\.$~'
         -
             path: 'src/Tabs.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setElement\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setAttr\(\)\.$~'
         -
             path: 'src/UserAction/VpExecutor.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::redirect\(\)\.$~'
