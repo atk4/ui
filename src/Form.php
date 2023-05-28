@@ -369,13 +369,11 @@ class Form extends View
      * Returns JS Chain that targets INPUT element of a specified field. This method is handy
      * if you wish to set a value to a certain field.
      *
-     * @param string $name Name of control
-     *
      * @return Jquery
      */
-    public function jsInput($name): JsExpressionable
+    public function jsInput(string $name): JsExpressionable
     {
-        return $this->layout->getControl($name)->js()->find('input');
+        return $this->layout->getControl($name)->jsInput();
     }
 
     // }}}
