@@ -29,6 +29,6 @@ Feature: Table Filter
     Then I select value "Is Yes" in lookup "//div.popup[6]//input[@name='op']"
     When I click using selector "//div.popup[6]//div[text()='Set']"
     Then I should see "United Kingdom"
-    Then I press menu button "Clear Filters" using selector ".ui.menu.atk-grid-menu"
+    Then I press button "Clear Filters"
     Then I should not see "United Kingdom"
     Then I should see "Australia"

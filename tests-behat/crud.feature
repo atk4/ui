@@ -4,7 +4,7 @@ Feature: Crud
     Given I am on "_unit-test/crud.php"
 
   Scenario: add
-    Then I press menu button "Add Country" using selector ".ui.menu.atk-grid-menu"
+    Then I press button "Add Country"
     Then I fill in "atk_fp_country__name" with "Test"
     Then I fill in "atk_fp_country__iso" with "TT"
     Then I fill in "atk_fp_country__iso3" with "TTT"
@@ -23,7 +23,7 @@ Feature: Crud
     # TODO generalize JS reload with component reload
     When I click using selector "//th.sortable[//div[text()='Name']]"
     Then I should see "United Kingdom"
-    Then I press menu button "Add Country" using selector ".ui.menu.atk-grid-menu"
+    Then I press button "Add Country"
     Then I fill in "atk_fp_country__name" with "Test 2"
     Then I fill in "atk_fp_country__iso" with "TT"
     Then I fill in "atk_fp_country__iso3" with "TTT"

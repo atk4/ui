@@ -4,7 +4,7 @@ Feature: CardDeck
     Given I am on "_unit-test/card-deck.php"
 
   Scenario: add
-    Then I press menu button "Add Country" using selector ".atk-card-deck .ui.menu"
+    Then I press button "Add Country"
     Then I fill in "atk_fp_country__name" with "Test"
     Then I fill in "atk_fp_country__iso" with "TT"
     Then I fill in "atk_fp_country__iso3" with "TTT"
