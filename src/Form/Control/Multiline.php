@@ -731,7 +731,7 @@ class Multiline extends Form\Control
 
             $field = $entity->getField($fieldName);
 
-            $value = $this->getApp()->uiPersistence->typecastLoadField($field, $_POST[$fieldName] ?? null);
+            $value = $this->getApp()->uiPersistence->typecastLoadField($field, $_POST[$fieldName]);
             if ($field->isEditable()) {
                 try {
                     $field->required = false;
