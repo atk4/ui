@@ -123,7 +123,7 @@ $wizard->addStep('Arguments', function (Wizard $page) {
                     'type' => 'string',
                 ],
             ],
-            'callback' => function (Model $model, $name) {
+            'callback' => function (Model $model, string $name) {
                 return 'Hi ' . $name;
             },
         ]);
