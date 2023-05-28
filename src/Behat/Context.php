@@ -307,16 +307,6 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I press menu button :arg1 using selector :selector
-     */
-    public function iPressMenuButton(string $buttonLabel, string $selector): void
-    {
-        $menu = $this->findElement(null, $selector);
-        $link = $this->findElement($menu, '//a[text()="' . $buttonLabel . '"]');
-        $link->click();
-    }
-
-    /**
      * @Then I see button :arg1
      */
     public function iSeeButton(string $buttonLabel): void
@@ -485,7 +475,7 @@ class Context extends RawMinkContext implements BehatContext
     public function iClickTabWithTitle(string $tabTitle): void
     {
         $tabMenu = $this->findElement(null, '.ui.tabular.menu');
-        $link = $this->findElement($tabMenu, '//a[text()="' . $tabTitle . '"]');
+        $link = $this->findElement($tabMenu, '//div[text()="' . $tabTitle . '"]');
         $link->click();
     }
 

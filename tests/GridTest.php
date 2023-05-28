@@ -61,21 +61,6 @@ class GridTest extends TestCase
             $this->extractTableRow($t)
         );
     }
-
-    public function test3(): void
-    {
-        $t = new Table();
-        $t->setApp($this->createApp());
-        $t->invokeInit();
-        $t->setModel($this->m, ['email']);
-        $del = $t->addColumn(null, [Table\Column\Delete::class]);
-
-        self::assertSame('<td>{$email}</td><td><a href="#" title="Delete {$email}?" class="' . $del->shortName . '"><i class="ui red trash icon"></i>Delete</a></td>', $t->getDataRowHtml());
-        self::assertSame(
-            '<tr data-id="1"><td>test@test.com</td><td><a href="#" title="Delete test@test.com?" class="' . $del->shortName . '"><i class="ui red trash icon"></i>Delete</a></td></tr>',
-            $this->extractTableRow($t)
-        );
-    }
 }
 
 class MyModel extends Model

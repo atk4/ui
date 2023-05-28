@@ -190,7 +190,8 @@ class View extends AbstractView
      */
     public function link($url, $target = null)
     {
-        $this->element = 'a';
+        $this->setElement('a');
+
         if (is_string($url)) {
             $this->setAttr('href', $url);
         } else {
@@ -263,8 +264,6 @@ class View extends AbstractView
      *
      * @param AbstractView      $object
      * @param string|array|null $region
-     *
-     * @return ($object is self ? self : AbstractView)
      */
     public function add($object, $region = null): AbstractView
     {

@@ -67,7 +67,6 @@ class Tabs extends View
         }
 
         $tab = $this->add(Factory::mergeSeeds(['class' => ['item'], 'settings' => $settings], $tab), 'Menu')
-            ->setElement('a')
             ->setAttr('data-tab', $tab->name);
 
         if (!$this->activeTabName) {
