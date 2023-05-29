@@ -45,7 +45,7 @@
         "eslint-import-resolver-webpack": "^0.13.2",
         "eslint-plugin-import": "^2.26.0",
         "eslint-plugin-jsdoc": "^39.3.25",
-        "eslint-plugin-unicorn": "^45.0.0",
+        "eslint-plugin-unicorn": "^46.0.0",
         "eslint-plugin-vue": "^9.6.0",
         "postcss-less": "^6.0.0",
         "prettier": "^2.8.1",
