@@ -307,6 +307,7 @@ class AtkPlugin {
    *
    * @param   {string}    fn   string representing the method name to execute.
    * @param   {Array.<*>} args array of arguments need for the method to execute.
+   *
    * @returns {*}
    */
   call(fn, args) {
@@ -2081,6 +2082,7 @@ class ApiService {
    *
    * @param   {string}       url      the URL to fetch data
    * @param   {object}       settings the Fomantic-UI api settings object.
+   *
    * @returns {Promise<any>}
    */
   suiFetch(url) {
@@ -2406,6 +2408,7 @@ class FormService {
    * @param   {$}             $form     Form containing the field.
    * @param   {string}        fieldName Name of field
    * @param   {string|object} rule      Rule to apply test.
+   *
    * @returns {*|false}
    */
   validateField($form, fieldName, rule) {
