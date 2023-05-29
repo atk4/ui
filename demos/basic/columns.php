@@ -71,10 +71,8 @@ Header::addTo($page, ['Add elements into columns and using classes']);
 
 // Example box component with some content, good for putting into columns.
 
-/** @var View $boxClass */
 $boxClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
     public $ui = 'segment';
-    public $content = false;
 
     protected function init(): void
     {

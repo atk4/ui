@@ -9,7 +9,7 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Menu;
 use Atk4\Ui\Message;
@@ -31,22 +31,28 @@ $bar = View::addTo($app, ['ui' => 'buttons']);
 
 $modal = Modal::addTo($app, ['title' => 'Add a name']);
 LoremIpsum::addTo($modal);
-Button::addTo($modal, ['Hide'])->on('click', $modal->jsHide());
+Button::addTo($modal, ['Hide'])
+    ->on('click', $modal->jsHide());
 
 $modalNoTitle = Modal::addTo($app, ['title' => false]);
 LoremIpsum::addTo($modalNoTitle);
-Button::addTo($modalNoTitle, ['Hide'])->on('click', $modalNoTitle->jsHide());
+Button::addTo($modalNoTitle, ['Hide'])
+    ->on('click', $modalNoTitle->jsHide());
 
 $modalScrolling = Modal::addTo($app, ['title' => 'Long Content that Scrolls inside Modal']);
 $modalScrolling->addScrolling();
 LoremIpsum::addTo($modalScrolling);
 LoremIpsum::addTo($modalScrolling);
 LoremIpsum::addTo($modalScrolling);
-Button::addTo($modalScrolling, ['Hide'])->on('click', $modalScrolling->jsHide());
+Button::addTo($modalScrolling, ['Hide'])
+    ->on('click', $modalScrolling->jsHide());
 
-Button::addTo($bar, ['Show'])->on('click', $modal->jsShow());
-Button::addTo($bar, ['No Title'])->on('click', $modalNoTitle->jsShow());
-Button::addTo($bar, ['Scrolling Content'])->on('click', $modalScrolling->jsShow());
+Button::addTo($bar, ['Show'])
+    ->on('click', $modal->jsShow());
+Button::addTo($bar, ['No Title'])
+    ->on('click', $modalNoTitle->jsShow());
+Button::addTo($bar, ['Scrolling Content'])
+    ->on('click', $modalScrolling->jsShow());
 
 // Modal demos.
 
@@ -92,7 +98,8 @@ $vp1Modal->set(function (View $p) use ($vp2Modal) {
 $vp2Modal->set(function (View $p) use ($vp3Modal) {
     ViewTester::addTo($p);
     Message::addTo($p, [$_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
-    Button::addTo($p)->set('Third modal')->on('click', $vp3Modal->jsShow());
+    Button::addTo($p)->set('Third modal')
+        ->on('click', $vp3Modal->jsShow());
 });
 
 $bar = View::addTo($app, ['ui' => 'buttons']);
@@ -159,7 +166,7 @@ $stepModal = Modal::addTo($app, ['title' => 'Multi step actions']);
 
 // Add buttons to modal for next and previous actions.
 $action = new View(['ui' => 'buttons']);
-$prevAction = new Button(['Prev', 'class.labeled' => true, 'icon' => 'left arrow']);
+$prevAction = new Button(['Prev', 'icon' => 'left arrow']);
 $nextAction = new Button(['Next', 'iconRight' => 'right arrow']);
 
 $action->add($prevAction);
@@ -187,10 +194,10 @@ $stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
     if ($page === 1) {
         Message::addTo($p)->set('Thanks for choosing us. We will be asking some questions along the way.');
         $session->memorize('success', true);
-        $p->js(true, $prevAction->js(true)->show());
-        $p->js(true, $nextAction->js(true)->show());
+        $p->js(true, $prevAction->js()->show());
+        $p->js(true, $nextAction->js()->show());
         $p->js(true, $prevAction->js()->addClass('disabled'));
-        $p->js(true, $nextAction->js(true)->removeClass('disabled'));
+        $p->js(true, $nextAction->js()->removeClass('disabled'));
     } elseif ($page === 2) {
         $modelRegister = new Model(new Persistence\Array_());
         $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
@@ -200,26 +207,26 @@ $stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
 
         $form->onSubmit(function (Form $form) use ($nextAction, $session) {
             if ($form->model->get('name') !== 'John') {
-                return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
+                return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
             }
 
             $session->memorize('success', true);
             $session->memorize('name', $form->model->get('name'));
 
             $js = [];
-            $js[] = $form->success('Thank you, ' . $form->model->get('name') . ' you can go on!');
+            $js[] = $form->jsSuccess('Thank you, ' . $form->model->get('name') . ' you can go on!');
             $js[] = $nextAction->js()->removeClass('disabled');
 
             return $js;
         });
         $p->js(true, $prevAction->js()->removeClass('disabled'));
-        $p->js(true, $nextAction->js(true)->addClass('disabled'));
+        $p->js(true, $nextAction->js()->addClass('disabled'));
     } elseif ($page === 3) {
         $name = $session->recall('name');
         Message::addTo($p)->set("Thank you {$name} for visiting us! We will be in touch");
         $session->memorize('success', true);
-        $p->js(true, $prevAction->js(true)->hide());
-        $p->js(true, $nextAction->js(true)->hide());
+        $p->js(true, $prevAction->js()->hide());
+        $p->js(true, $nextAction->js()->hide());
     }
 });
 

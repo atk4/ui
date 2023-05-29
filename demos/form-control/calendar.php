@@ -6,9 +6,9 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\GridLayout;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsFunction;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsFunction;
+use Atk4\Ui\Js\JsToast;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -29,7 +29,7 @@ $app->uiPersistence->timeFormat = 'H:i:s';
 $form->addControl('time_h_i_s', [Form\Control\Calendar::class, 'type' => 'time', 'caption' => 'Time using 24 hrs with seconds picker'])
     ->set(new \DateTime());
 
-$form->addControl('datetime', [Form\Control\Calendar::class, 'type' => 'datetime', 'caption' => 'Datetime (M d, Y H:i:s)'])
+$form->addControl('datetime', [Form\Control\Calendar::class, 'type' => 'datetime', 'caption' => 'Datetime (M j, Y H:i:s)'])
     ->set(new \DateTime());
 
 $app->uiPersistence->dateFormat = 'F d, Y';
@@ -71,9 +71,12 @@ $control = $form->addControl('date_action', [
     'caption' => 'Javascript action',
     'options' => ['clickOpens' => false],
 ])->set(new \DateTime());
-$control->addAction(['Today', 'icon' => 'calendar day'])->on('click', $control->getJsInstance()->setDate($app->uiPersistence->typecastSaveField($control->entityField->getField(), new \DateTime())));
-$control->addAction(['Select...', 'icon' => 'calendar'])->on('click', $control->getJsInstance()->open());
-$control->addAction(['Clear', 'icon' => 'times red'])->on('click', $control->getJsInstance()->clear());
+$control->addAction(['Today', 'icon' => 'calendar day'])
+    ->on('click', $control->getJsInstance()->setDate($app->uiPersistence->typecastSaveField($control->entityField->getField(), new \DateTime())));
+$control->addAction(['Select...', 'icon' => 'calendar'])
+    ->on('click', $control->getJsInstance()->open());
+$control->addAction(['Clear', 'icon' => 'times red'])
+    ->on('click', $control->getJsInstance()->clear());
 
 $form->onSubmit(function (Form $form) use ($app) {
     return new JsToast($app->encodeJson($form->model->get()));

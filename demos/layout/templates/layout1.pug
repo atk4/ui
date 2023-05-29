@@ -2,14 +2,14 @@ doctype html
 html
   head
     // Standard Meta
-    meta(charset='utf-8')
-    meta(name='viewport', content='width=device-width, initial-scale=1.0, maximum-scale=1.0')
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
     // Site Properties
     title Rainas homepage
-    link(rel='stylesheet', type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.css')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0/jquery.serialize-object.min.js')
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js')
+    link(rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.css")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0/jquery.serialize-object.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.10/semantic.min.js")
     style.
       @media (min-height: 320px) {
         .ui.footer.form-page { /* Increased specificity for SO snippet priority */
@@ -23,14 +23,14 @@ html
       }
   body
     .ui.inverted.fixed.horizontal.menu
-        a.header.item(href='#')
+        a.header.item(href="#")
           | UI Test Layout 2
         .ui.simple.dropdown.item
           | Basic Examples
           i.dropdown.icon
           .menu
-            a.item(href='layout.php') Layout test
-            a.item(href='index.php') Back to other tests
+            a.item(href="layout.php") Layout test
+            a.item(href="index.php") Back to other tests
 
     .ui.main.basic.segment
        h3 Nominal Acitivity Report
@@ -62,20 +62,20 @@ html
           .field
             .ui.left.icon.input
               i.calendar.icon
-              input(type='text', name='email', placeholder='From')
+              input(type="text" name="email" placeholder="From")
           .field
             .ui.left.icon.input
               i.calendar.icon
-              input(type='text', name='email', placeholder='To')
+              input(type="text" name="email" placeholder="To")
 
           .field
             .ui.checkbox
-              input(type='checkbox', name='suppress0')
+              input(type="checkbox" name="suppress0")
               label Suppress 0s
 
           .field
             .ui.checkbox
-              input(type='checkbox', name='suppress0')
+              input(type="checkbox" name="suppress0")
               label Show Descriptions
 
         .ui.teal.submit.button

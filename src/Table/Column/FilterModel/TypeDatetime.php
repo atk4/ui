@@ -66,7 +66,7 @@ class TypeDatetime extends Column\FilterModel
     public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();
-        if (isset($filter['id'])) {
+        if ($filter !== null) {
             switch ($filter['op']) {
                 case 'empty':
                     $model->addCondition($filter['name'], '=', null);
@@ -86,7 +86,11 @@ class TypeDatetime extends Column\FilterModel
                         $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
                         $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
                     }
-                    $model->addCondition($model->expr('[field] between [value] and [value2]', ['field' => $model->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $model->addCondition($model->expr('[field] between [value] and [value2]', [
+                        'field' => $model->getField($filter['name']),
+                        'value' => $value,
+                        'value2' => $value2,
+                    ]));
 
                     break;
                 case '!=':
@@ -101,7 +105,11 @@ class TypeDatetime extends Column\FilterModel
                         $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
                     }
                     $between_condition = $filter['op'] === '!=' ? 'not between' : 'between';
-                    $model->addCondition($model->expr('[field] ' . $between_condition . ' [value] and [value2]', ['field' => $model->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $model->addCondition($model->expr('[field] ' . $between_condition . ' [value] and [value2]', [
+                        'field' => $model->getField($filter['name']),
+                        'value' => $value,
+                        'value2' => $value2,
+                    ]));
 
                     break;
                 case '>':

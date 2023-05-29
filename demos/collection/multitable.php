@@ -8,9 +8,9 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsModal;
-use Atk4\Ui\JsReload;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsModal;
+use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Table;
 use Atk4\Ui\VirtualPage;
 
@@ -29,7 +29,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
         $this->addClass('internally celled');
 
         // lets add our first table here
-        $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
+        $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->setStyle('cursor', 'pointer');
         $table->setModel($model, [$model->titleField]);
 
         $selections = explode(',', $_GET[$this->name] ?? '');
@@ -68,7 +68,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
             $pushModel = $pushModel->ref($ref);
             $pushModel->setOrder([File::hinting()->fieldName()->is_folder => 'desc', File::hinting()->fieldName()->name]);
 
-            $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->addStyle('cursor', 'pointer');
+            $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->setStyle('cursor', 'pointer');
             $table->setModel($pushModel->setLimit(10), [$pushModel->titleField]);
 
             if ($selections) {
@@ -93,8 +93,8 @@ $vp = VirtualPage::addTo($app)->set(function (VirtualPage $vp) use ($model) {
     $vp->js(true)->closest('.modal')->find('.header')->remove();
 });
 
-Button::addTo($app, ['Re-Import From Filesystem', 'class.top attached' => true])->on('click', new JsModal('Now importing ... ', $vp));
+Button::addTo($app, ['Re-Import From Filesystem', 'class.top attached' => true])
+    ->on('click', new JsModal('Now importing ... ', $vp));
 
-$finderClass::addTo($app, ['bottom attached'])
-    ->addClass('top attached segment')
+$finderClass::addTo($app, ['bottom attached segment'])
     ->setModel($model->setLimit(10), [$model->fieldName()->SubFolder]);

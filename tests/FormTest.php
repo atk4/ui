@@ -6,6 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
+use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\App;
 use Atk4\Ui\Callback;
@@ -16,6 +17,8 @@ use Mvorisek\Atk4\Hintable\Phpstan\PhpstanUtil;
 
 class FormTest extends TestCase
 {
+    use CreateAppTrait;
+
     /** @var Form|null */
     public $form;
 
@@ -39,14 +42,30 @@ class FormTest extends TestCase
         $f = $this->form;
         $f->addControl('test');
 
-        static::assertInstanceOf(Form\Control::class, $f->getControl('test'));
-        static::assertSame($f->getControl('test'), $f->layout->getControl('test'));
+        self::assertInstanceOf(Form\Control::class, $f->getControl('test'));
+        self::assertSame($f->getControl('test'), $f->layout->getControl('test'));
     }
 
-    public function assertSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
+    public function testAddControlAlreadyExistsException(): void
+    {
+        $t = new Form();
+        $t->setApp($this->createApp());
+        $t->invokeInit();
+        $t->addControl('foo');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Form field already exists');
+        $t->addControl('foo');
+    }
+
+    /**
+     * @param \Closure(Model): void  $submitFx
+     * @param \Closure(string): void $checkExpectedErrorsFx
+     */
+    public function assertFormSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
     {
         $wasSubmitCalled = false;
-        $_POST = $postData;
+        $_POST = array_merge(array_map(fn () => '', $this->form->controls), $postData);
         try {
             // trigger callback
             $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . 'atk_submit'] = 'ajax';
@@ -63,14 +82,14 @@ class FormTest extends TestCase
             $res = AppFormTestMock::assertInstanceOf($this->form->getApp())->output;
 
             if ($checkExpectedErrorsFx !== null) {
-                static::assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');
-                static::assertNotSame('', $res['atkjs']); // will output useful error
+                self::assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');
+                self::assertNotSame('', $res['atkjs']); // will output useful error
                 $this->formError = $res['atkjs'];
 
                 $checkExpectedErrorsFx($res['atkjs']);
             } else {
-                static::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
-                static::assertSame('', $res['atkjs']);
+                self::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
+                self::assertNull($res['atkjs']);
             }
 
             $this->form = null; // we shouldn't submit form twice!
@@ -92,47 +111,47 @@ class FormTest extends TestCase
         $m = $m->createEntity();
         $f->setModel($m, ['name', 'email']);
 
-        static::assertSame('John', $f->model->get('name'));
+        self::assertSame('John', $f->model->get('name'));
 
         // fake some POST data
-        $this->assertSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], function (Model $m) {
-            // field has default, but form didn't send value back
-            static::assertNull($m->get('name'));
+        $this->assertFormSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], function (Model $m) {
+            // field has default, but form send back empty value
+            self::assertSame('', $m->get('name'));
 
-            static::assertSame('john@yahoo.com', $m->get('email'));
+            self::assertSame('john@yahoo.com', $m->get('email'));
 
             // security check, unspecified field must not be changed
-            static::assertFalse($m->get('is_admin'));
+            self::assertFalse($m->get('is_admin'));
         });
     }
 
-    public function testTextarea(): void
+    public function testTextareaSubmit(): void
     {
         $this->form->addControl('Textarea');
-        $this->assertSubmit(['Textarea' => '0'], function (Model $m) {
-            static::assertSame('0', $m->get('Textarea'));
+        $this->assertFormSubmit(['Textarea' => '0'], function (Model $m) {
+            self::assertSame('0', $m->get('Textarea'));
         });
     }
 
     public function assertFormControlError(string $field, string $error): void
     {
-        $n = preg_match_all('~form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
-        static::assertGreaterThan(0, $n);
+        $n = preg_match_all('~\.form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
+        self::assertGreaterThan(0, $n);
         $matched = false;
         foreach ($matchesAll as $matches) {
             if ($matches[1] === $field) {
                 $matched = true;
-                static::assertStringContainsString($error, $matches[2], 'Regarding control ' . $field . ' error message');
+                self::assertStringContainsString($error, $matches[2], 'Regarding control ' . $field . ' error message');
             }
         }
 
-        static::assertTrue($matched, 'Form control ' . $field . ' did not produce error');
+        self::assertTrue($matched, 'Form control ' . $field . ' did not produce error');
     }
 
-    public function assertFromControlNoErrors(string $field): void
+    public function assertFormControlNoErrors(string $field): void
     {
-        $n = preg_match_all('~form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
-        static::assertGreaterThan(0, $n);
+        $n = preg_match_all('~\.form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
+        self::assertGreaterThan(0, $n);
         foreach ($matchesAll as $matches) {
             if ($matches[1] === $field) {
                 throw new Exception('Form control ' . $field . ' unexpected error: ' . $matches[2]);
@@ -140,7 +159,7 @@ class FormTest extends TestCase
         }
     }
 
-    public function testSubmitError(): void
+    public function testFormSubmitError(): void
     {
         $m = new Model();
 
@@ -156,16 +175,16 @@ class FormTest extends TestCase
         $m = $m->createEntity();
         $this->form->setModel($m);
 
-        $this->assertSubmit(['opt1' => '2', 'opt3_z' => '0', 'opt4' => '', 'opt4_z' => '0'], null, function (string $formError) {
+        $this->assertFormSubmit(['opt1' => '2', 'opt3_z' => '0', 'opt4' => '', 'opt4_z' => '0'], null, function (string $formError) {
             // dropdown validates to make sure option is proper
             $this->assertFormControlError('opt1', 'not one of the allowed values');
 
             // user didn't select any option here
-            $this->assertFromControlNoErrors('opt2');
+            $this->assertFormControlNoErrors('opt2');
 
             // dropdown insists for value to be there
-            $this->assertFormControlError('opt3', 'Must not be null');
-            $this->assertFromControlNoErrors('opt3_z');
+            $this->assertFormControlNoErrors('opt3');
+            $this->assertFormControlNoErrors('opt3_z');
             $this->assertFormControlError('opt4', 'Must not be empty');
             $this->assertFormControlError('opt4_z', 'Must not be empty');
         });
@@ -184,13 +203,13 @@ class FormTest extends TestCase
         $catchReached = false;
         try {
             try {
-                $this->assertSubmit(['foo' => 'x'], function (Model $model) use (&$submitReached) {
+                $this->assertFormSubmit(['foo' => 'x'], function (Model $model) use (&$submitReached) {
                     $submitReached = true;
                     $model->set('bar', null);
                 });
             } catch (UnhandledCallbackExceptionError $e) {
                 $catchReached = true;
-                static::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore-line
+                self::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore-line
 
                 $this->expectException(ValidationException::class);
                 $this->expectExceptionMessage('Must not be null');
@@ -198,25 +217,78 @@ class FormTest extends TestCase
                 throw $e->getPrevious();
             }
         } finally {
-            static::assertTrue($submitReached);
-            static::assertTrue($catchReached);
+            self::assertTrue($submitReached);
+            self::assertTrue($catchReached);
         }
     }
 
     public function testNoDisabledAttrWithHiddenType(): void
     {
-        $input = new Form\Control\Input();
+        $input = new Form\Control\Line();
         $input->disabled = true;
         $input->readOnly = true;
-        static::assertStringContainsString(' disabled="disabled"', $input->render());
-        static::assertStringContainsString(' readonly="readonly"', $input->render());
+        $input->setApp($this->createApp());
+        self::assertStringContainsString(' disabled="disabled"', $input->render());
+        self::assertStringContainsString(' readonly="readonly"', $input->render());
 
-        $input = new Form\Control\Input();
+        $input = new Form\Control\Hidden();
         $input->disabled = true;
         $input->readOnly = true;
-        $input->inputType = 'hidden';
-        static::assertStringNotContainsString('disabled', $input->render());
-        static::assertStringNotContainsString('readonly', $input->render());
+        $input->setApp($this->createApp());
+        self::assertStringNotContainsString('disabled', $input->render());
+        self::assertStringNotContainsString('readonly', $input->render());
+    }
+
+    public function testCheckboxWithNonBooleanException(): void
+    {
+        $input = new Form\Control\Checkbox();
+        $input->setApp($this->createApp());
+        $input->invokeInit();
+
+        $m = new Model();
+        $m->addField('foo');
+        $input->entityField = new EntityFieldPair($m->createEntity(), 'foo');
+        $input->entityField->set('1');
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Checkbox form control requires field with boolean type');
+        $input->render();
+    }
+
+    public function testUploadNoUploadCallbackException(): void
+    {
+        $input = new Form\Control\Upload();
+        $input->setApp($this->createApp());
+        $input->invokeInit();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing onUpload callback');
+        try {
+            $_GET = [Callback::URL_QUERY_TARGET => $input->cb->getUrlTrigger()];
+            $_POST = ['fUploadAction' => Form\Control\Upload::UPLOAD_ACTION];
+            $input->render();
+        } finally {
+            unset($_GET);
+            unset($_POST);
+        }
+    }
+
+    public function testUploadNoDeleteCallbackException(): void
+    {
+        $input = new Form\Control\Upload();
+        $input->setApp($this->createApp());
+        $input->invokeInit();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing onDelete callback');
+        try {
+            $_GET = [Callback::URL_QUERY_TARGET => $input->cb->getUrlTrigger()];
+            $_POST = ['fUploadAction' => Form\Control\Upload::DELETE_ACTION];
+            $input->render();
+        } finally {
+            unset($_GET);
+            unset($_POST);
+        }
     }
 }
 
@@ -225,7 +297,7 @@ class AppFormTestMock extends App
     /** @var string|array */
     public $output;
 
-    public function terminate($output = '', array $headers = []): void
+    public function terminate($output = ''): void
     {
         $this->output = $output;
 

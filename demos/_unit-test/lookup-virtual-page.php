@@ -6,8 +6,8 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\Grid;
-use Atk4\Ui\JsModal;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsModal;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\VirtualPage;
 
 /** @var \Atk4\Ui\App $app */

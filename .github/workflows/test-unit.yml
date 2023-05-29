@@ -82,7 +82,7 @@ jobs:
         php: ['7.4', '8.0', '8.1', '8.2']
         type: ['Phpunit', 'Phpunit Lowest']
         include:
-          - php: '8.1' # TODO replace with 'latest' once it represents at least PHP 8.1
+          - php: 'latest'
             type: 'Phpunit Burn'
     env:
       LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == '8.0' && matrix.type == 'Phpunit' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
@@ -292,22 +292,26 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - name: Install JS dependencies (only for Slow)
-        if: matrix.type == 'Chrome Slow'
+      - name: Install JS dependencies (only for coverage or Slow)
+        if: env.LOG_COVERAGE || matrix.type == 'Chrome Slow'
         run: |
-          mv public public.orig
-          mkdir public public/css public/external
-          cp public.orig/.gitattributes public
-          cp public.orig/.gitignore public
-          cp public.orig/logo.png public
-          cp public.orig/css/agileui.less public/css
-          cp public.orig/external/.gitignore public/external
-          cp public.orig/external/package.json public/external
-          cp public.orig/external/package-lock.json public/external
-          cp public.orig/external/postinstall.js public/external
-          npm install --loglevel=error -g pug-cli less less-plugin-clean-css uglify-js
-          (cd js && npm ci --loglevel=error)
-          (cd public/external && npm ci --loglevel=error && git clean -dxfq .)
+          if [ -n "$LOG_COVERAGE" ]; then
+            (cd js && npm install --package-lock-only --save-dev babel-plugin-istanbul nyc && npm ci --loglevel=error)
+          else
+            mv public public.orig
+            mkdir public public/css public/external
+            cp public.orig/.gitattributes public
+            cp public.orig/.gitignore public
+            cp public.orig/logo.png public
+            cp public.orig/css/agileui.less public/css
+            cp public.orig/external/.gitignore public/external
+            cp public.orig/external/package.json public/external
+            cp public.orig/external/package-lock.json public/external
+            cp public.orig/external/postinstall.js public/external
+            npm install --loglevel=error -g pug-cli less less-plugin-clean-css uglify-js
+            (cd js && npm ci --loglevel=error)
+            (cd public/external && npm ci --loglevel=error && git clean -dxfq .)
+          fi
 
       - name: Lint JS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
@@ -326,10 +330,15 @@ jobs:
         run: |
           lessc public/css/agileui.less public/css/agileui.min.css --clean-css="--s1 --advanced" --source-map
 
-      - name: Compile JS files (only for Slow)
-        if: matrix.type == 'Chrome Slow'
+      - name: Compile JS files (only for coverage or Slow)
+        if: env.LOG_COVERAGE || matrix.type == 'Chrome Slow'
         run: |
-          (cd js && npm run build)
+          if [ -n "$LOG_COVERAGE" ]; then
+            rm -r public/js
+            (cd js && ISTANBUL_COVERAGE=1 npm run build)
+          else
+            (cd js && npm run build)
+          fi
 
       - name: Diff compiled files (only for Slow)
         if: matrix.type == 'Chrome Slow'
@@ -337,13 +346,6 @@ jobs:
           diff -ru public.orig public
           diff -ru template.orig template
           rm -r public.orig template.orig
-
-      - name: Instrument & recompile JS files (only for coverage)
-        if: env.LOG_COVERAGE
-        run: |
-          rm -r public/js
-          (cd js && npm install --package-lock-only --save-dev nyc && npm ci --loglevel=error)
-          (cd js && npx nyc instrument --in-place . && npx webpack --env production)
 
       - name: Install PHP dependencies
         run: |
@@ -439,7 +441,7 @@ jobs:
           ls -l coverage | wc -l
           php -d memory_limit=2G vendor/bin/phpcov merge coverage/ --clover coverage/merged.xml
           ls -l coverage/js | wc -l
-          (cd js && npx nyc report --temp-dir ../coverage/js --report-dir ../coverage/js --reporter=clover)
+          (cd js && npx nyc report --temp-dir ../coverage/js --report-dir ../coverage/js -e vue --reporter=clover)
           # fix never reached condition is rendered to clover with falsecount > 0
           # https://github.com/istanbuljs/istanbuljs/issues/695
           sed -i -E 's~count="0" type="cond" truecount="0" falsecount="[1-9]+[0-9]*"~count="0" type="cond" truecount="0" falsecount="0"~' coverage/js/clover.xml

@@ -21,12 +21,16 @@ class HtmlTemplate
     public const TOP_TAG = '_top';
 
     /** @var array<string, string|false> */
-    private static $_filesCache = [];
+    private static array $_realpathCache = [];
+    /** @var array<string, string|false> */
+    private static array $_filesCache = [];
+
+    private static ?self $_parseCacheParentTemplate = null;
     /** @var array<string, array<string, TagTree>> */
-    private static $_parseCache = [];
+    private static array $_parseCache = [];
 
     /** @var array<string, TagTree> */
-    private $tagTrees;
+    private array $tagTrees;
 
     public function __construct(string $template = '')
     {
@@ -39,7 +43,7 @@ class HtmlTemplate
     }
 
     /**
-     * @param string|array $tag
+     * @param string|list<string> $tag
      */
     public function hasTag($tag): bool
     {
@@ -60,9 +64,9 @@ class HtmlTemplate
     public function getTagTree(string $tag): TagTree
     {
         if (!isset($this->tagTrees[$tag])) {
-            throw (new Exception('Tag not found in template'))
+            throw (new Exception('Tag is not defined in template'))
                 ->addMoreInfo('tag', $tag)
-                ->addMoreInfo('template_tags', array_keys($this->tagTrees));
+                ->addMoreInfo('template_tags', array_diff(array_keys($this->tagTrees), [self::TOP_TAG]));
         }
 
         return $this->tagTrees[$tag];
@@ -83,6 +87,9 @@ class HtmlTemplate
         $this->tagTrees = $this->cloneTagTrees($this->tagTrees);
     }
 
+    /**
+     * @return static
+     */
     public function cloneRegion(string $tag): self
     {
         $template = new static();
@@ -110,7 +117,11 @@ class HtmlTemplate
     protected function _unsetFromTagTree(TagTree $tagTree, int $k): void
     {
         \Closure::bind(function () use ($tagTree, $k) {
-            unset($tagTree->children[$k]);
+            if ($k === array_key_last($tagTree->children)) {
+                array_pop($tagTree->children);
+            } else {
+                unset($tagTree->children[$k]);
+            }
         }, null, TagTree::class)();
     }
 
@@ -130,10 +141,10 @@ class HtmlTemplate
      *
      * If tag contains another tag trees, these tag trees are emptied.
      *
-     * @param string|array|Model $tag
-     * @param string             $value
+     * @param string|array<string, string>|Model          $tag
+     * @param ($tag is array|Model ? never : string|null) $value
      */
-    protected function _setOrAppend($tag, $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
+    protected function _setOrAppend($tag, string $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
     {
         if ($tag instanceof Model) {
             if (!$encodeHtml) {
@@ -154,19 +165,14 @@ class HtmlTemplate
         }
 
         if (!is_string($tag) || $tag === '') {
-            throw (new Exception('Tag must be not empty string'))
+            throw (new Exception('Tag must be non-empty string'))
                 ->addMoreInfo('tag', $tag)
                 ->addMoreInfo('value', $value);
         }
 
-        if (!is_scalar($value) && $value !== null) { // @phpstan-ignore-line
-            throw (new Exception('Value must be scalar'))
-                ->addMoreInfo('tag', $tag)
-                ->addMoreInfo('value', $value);
+        if ($value === null) {
+            $value = '';
         }
-
-        // TODO remove later in favor of strong string type
-        $value = (string) $value;
 
         $htmlValue = new HtmlValue();
         if ($encodeHtml) {
@@ -201,10 +207,12 @@ class HtmlTemplate
      *
      * would read and set multiple region values from $_GET array.
      *
-     * @param string|array|Model $tag
-     * @param string             $value
+     * @param string|array<string, string>|Model          $tag
+     * @param ($tag is array|Model ? never : string|null) $value
+     *
+     * @return $this
      */
-    public function set($tag, $value = null): self
+    public function set($tag, string $value = null): self
     {
         $this->_setOrAppend($tag, $value, true, false);
 
@@ -215,10 +223,12 @@ class HtmlTemplate
      * Same as set(), but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array|Model $tag
-     * @param string             $value
+     * @param string|array<string, string>|Model          $tag
+     * @param ($tag is array|Model ? never : string|null) $value
+     *
+     * @return $this
      */
-    public function trySet($tag, $value = null): self
+    public function trySet($tag, string $value = null): self
     {
         $this->_setOrAppend($tag, $value, true, false, false);
 
@@ -229,10 +239,12 @@ class HtmlTemplate
      * Set value of a tag to a HTML content. The value is set without
      * encoding, so you must be sure to sanitize.
      *
-     * @param string|array|Model $tag
-     * @param string             $value
+     * @param string|array<string, string>|Model          $tag
+     * @param ($tag is array|Model ? never : string|null) $value
+     *
+     * @return $this
      */
-    public function dangerouslySetHtml($tag, $value = null): self
+    public function dangerouslySetHtml($tag, string $value = null): self
     {
         $this->_setOrAppend($tag, $value, false, false);
 
@@ -243,10 +255,12 @@ class HtmlTemplate
      * See dangerouslySetHtml() but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array|Model $tag
-     * @param string             $value
+     * @param string|array<string, string>|Model          $tag
+     * @param ($tag is array|Model ? never : string|null) $value
+     *
+     * @return $this
      */
-    public function tryDangerouslySetHtml($tag, $value = null): self
+    public function tryDangerouslySetHtml($tag, string $value = null): self
     {
         $this->_setOrAppend($tag, $value, false, false, false);
 
@@ -256,10 +270,12 @@ class HtmlTemplate
     /**
      * Add more content inside a tag.
      *
-     * @param string|array|Model $tag
-     * @param string             $value
+     * @param string|array<string, string>|Model          $tag
+     * @param ($tag is array|Model ? never : string|null) $value
+     *
+     * @return $this
      */
-    public function append($tag, $value): self
+    public function append($tag, ?string $value): self
     {
         $this->_setOrAppend($tag, $value, true, true);
 
@@ -270,10 +286,12 @@ class HtmlTemplate
      * Same as append(), but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array|Model $tag
-     * @param string             $value
+     * @param string|array<string, string>|Model          $tag
+     * @param ($tag is array|Model ? never : string|null) $value
+     *
+     * @return $this
      */
-    public function tryAppend($tag, $value): self
+    public function tryAppend($tag, ?string $value): self
     {
         $this->_setOrAppend($tag, $value, true, true, false);
 
@@ -284,10 +302,12 @@ class HtmlTemplate
      * Add more content inside a tag. The content is appended without
      * encoding, so you must be sure to sanitize.
      *
-     * @param string|array|Model $tag
-     * @param string             $value
+     * @param string|array<string, string>|Model          $tag
+     * @param ($tag is array|Model ? never : string|null) $value
+     *
+     * @return $this
      */
-    public function dangerouslyAppendHtml($tag, $value): self
+    public function dangerouslyAppendHtml($tag, ?string $value): self
     {
         $this->_setOrAppend($tag, $value, false, true);
 
@@ -298,10 +318,12 @@ class HtmlTemplate
      * Same as dangerouslyAppendHtml(), but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array|Model $tag
-     * @param string             $value
+     * @param string|array<string, string>|Model          $tag
+     * @param ($tag is array|Model ? never : string|null) $value
+     *
+     * @return $this
      */
-    public function tryDangerouslyAppendHtml($tag, $value): self
+    public function tryDangerouslyAppendHtml($tag, ?string $value): self
     {
         $this->_setOrAppend($tag, $value, false, true, false);
 
@@ -312,7 +334,9 @@ class HtmlTemplate
      * Empty contents of specified region. If region contains sub-hierarchy,
      * it will be also removed.
      *
-     * @param string|array $tag
+     * @param string|list<string> $tag
+     *
+     * @return $this
      */
     public function del($tag): self
     {
@@ -338,7 +362,9 @@ class HtmlTemplate
     /**
      * Similar to del() but won't throw exception if tag is not present.
      *
-     * @param string|array $tag
+     * @param string|list<string> $tag
+     *
+     * @return $this
      */
     public function tryDel($tag): self
     {
@@ -357,6 +383,9 @@ class HtmlTemplate
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function loadFromFile(string $filename): self
     {
         if ($this->tryLoadFromFile($filename) !== false) {
@@ -374,24 +403,39 @@ class HtmlTemplate
      */
     public function tryLoadFromFile(string $filename)
     {
-        $filename = realpath($filename);
+        // realpath() is slow on Windows, so cache it and dedup only directories
+        $filenameBase = basename($filename);
+        $filename = dirname($filename);
+        if (!isset(self::$_realpathCache[$filename])) {
+            self::$_realpathCache[$filename] = realpath($filename);
+        }
+        $filename = self::$_realpathCache[$filename];
+        if ($filename === false) {
+            return false;
+        }
+        $filename .= '/' . $filenameBase;
+
         if (!isset(self::$_filesCache[$filename])) {
-            $data = $filename !== false ? file_get_contents($filename) : false;
+            $data = @file_get_contents($filename);
             if ($data !== false) {
                 $data = preg_replace('~(?:\r\n?|\n)$~s', '', $data); // always trim end NL
             }
             self::$_filesCache[$filename] = $data;
         }
 
-        if (self::$_filesCache[$filename] === false) {
+        $str = self::$_filesCache[$filename];
+        if ($str === false) {
             return false;
         }
 
-        $this->loadFromString(self::$_filesCache[$filename]);
+        $this->loadFromString($str);
 
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function loadFromString(string $str): self
     {
         $this->parseTemplate($str);
@@ -445,7 +489,7 @@ class HtmlTemplate
 
     protected function parseTemplate(string $str): void
     {
-        $cKey = $str;
+        $cKey = static::class . "\0" . $str;
         if (!isset(self::$_parseCache[$cKey])) {
             // expand self-closing tags {$tag} -> {tag}{/tag}
             $str = preg_replace('~\{\$([\w\-:]+)\}~', '{\1}{/\1}', $str);
@@ -456,9 +500,27 @@ class HtmlTemplate
             $this->tagTrees = [];
             try {
                 $this->tagTrees[self::TOP_TAG] = $this->parseTemplateTree($inputReversed);
-                self::$_parseCache[$cKey] = $this->tagTrees;
+                $tagTrees = $this->tagTrees;
+
+                if (self::$_parseCacheParentTemplate === null) {
+                    $cKeySelfEmpty = self::class . "\0";
+                    self::$_parseCache[$cKeySelfEmpty] = [];
+                    try {
+                        self::$_parseCacheParentTemplate = new self();
+                    } finally {
+                        unset(self::$_parseCache[$cKeySelfEmpty]);
+                    }
+                }
+                $parentTemplate = self::$_parseCacheParentTemplate;
+
+                \Closure::bind(function () use ($tagTrees, $parentTemplate) {
+                    foreach ($tagTrees as $tagTree) {
+                        $tagTree->parentTemplate = $parentTemplate;
+                    }
+                }, null, TagTree::class)();
+                self::$_parseCache[$cKey] = $tagTrees;
             } finally {
-                $this->tagTrees = null; // @phpstan-ignore-line
+                $this->tagTrees = [];
             }
         }
 

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Form;
-use Atk4\Ui\JsExpression;
 use Atk4\Ui\Lister;
 
 class Radio extends Form\Control
 {
     public $ui = false;
+    public array $class = ['grouped', 'fields'];
 
     public $defaultTemplate = 'form/control/radio.html';
 
@@ -57,10 +57,6 @@ class Radio extends Form\Control
 
     public function onChange($expr, $defaults = []): void
     {
-        if (is_string($expr)) {
-            $expr = new JsExpression($expr);
-        }
-
         if (is_bool($defaults)) {
             $defaults = $defaults ? [] : ['preventDefault' => false, 'stopPropagation' => false];
         }

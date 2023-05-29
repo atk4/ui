@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsReload;
+
 class Paginator extends View
 {
     public $ui = 'pagination menu';

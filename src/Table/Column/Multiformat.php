@@ -14,9 +14,12 @@ use Atk4\Ui\Table;
  */
 class Multiformat extends Table\Column
 {
-    /** @var \Closure Method to execute which will return array of seeds for decorators */
+    /** @var \Closure(Model, Field|null): array Method to execute which will return array of seeds for decorators */
     public $callback;
 
+    /**
+     * @param \Closure(Model, Field|null): array $callback
+     */
     public function __construct(\Closure $callback)
     {
         parent::__construct();
@@ -35,20 +38,19 @@ class Multiformat extends Table\Column
         // we need to smartly wrap things up
         $name = $field->shortName;
         $cell = null;
-        $cnt = count($decorators);
         $td_attr = [];
         $html_tags = [];
-        foreach ($decorators as $c) {
+        foreach ($decorators as $cKey => $c) {
             if (!is_object($c)) {
                 $c = $this->getOwner()->decoratorFactory($field, $c);
             }
             $c = Table\Column::assertInstanceOf($c);
 
-            if (--$cnt) {
+            if ($cKey !== array_key_last($decorators)) {
                 $html = $c->getDataCellTemplate($field);
                 $td_attr = $c->getTagAttributes('body', $td_attr);
             } else {
-                // Last formatter, ask it to give us whole rendering
+                // last formatter, ask it to give us whole rendering
                 $html = $c->getDataCellHtml($field, $td_attr);
             }
 

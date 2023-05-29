@@ -12,7 +12,6 @@ use Atk4\Ui\Table;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/** @var Model $modelColorClass */
 $modelColorClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
     protected function init(): void
     {
@@ -90,7 +89,6 @@ $modelColorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
                     [
                         'min' => 1,
                         'max' => 3,
-                        'steps' => 3,
                         'colors' => [
                             '#FF0000',
                             '#FFFF00',
@@ -127,7 +125,7 @@ foreach (range(1, 10) as $id) {
         'value_not_always_present' => random_int(0, 100) > 50 ? 'have value' : '',
         'interests' => '1st label, 2nd label',
         'rating' => random_int(100, 300) / 100,
-        'note' => 'lorem ipsum lorem dorem lorem',
+        'note' => $id !== 3 ? 'lorem ipsum lorem dorem lorem' : null,
     ]);
 }
 

@@ -4,28 +4,31 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpressionable;
+
 class JsSortable extends JsCallback
 {
-    /** @var string The html element that contains others element for reordering. */
+    /** @var string The HTML element that contains others element for reordering. */
     public $container = 'tbody';
 
-    /** @var string The html element inside the container that need reordering. */
+    /** @var string The HTML element inside the container that need reordering. */
     public $draggable = 'tr';
 
     /**
-     * The data label set as data-label attribute on the html element.
+     * The data label set as data-label attribute on the HTML element.
      *  The callback will send source parameter on the moved element using this attribute.
      *  default to data-id.
      *
      * If the data-{label} attribute is not set for each list element, then the $_POST['order']
-     * value will be empty. Only orgIdx and newIdx will be sent in callback request.
+     * value will be empty. Only origIndex and newIndex will be sent in callback request.
      *
      * @var string
      */
     public $dataLabel = 'id';
 
     /**
-     * The css class name of the handle element for dragging purpose.
+     * The CSS class name of the handle element for dragging purpose.
      * If null, the entire element become the dragging handle.
      *
      * @var string|null
@@ -60,27 +63,29 @@ class JsSortable extends JsCallback
 
     /**
      * Callback when container has been reorder.
+     *
+     * @param \Closure(list<string>, string, int, int): (JsExpressionable|View|string|void) $fx
      */
     public function onReorder(\Closure $fx): void
     {
         $this->set(function () use ($fx) {
             $sortOrders = explode(',', $_POST['order']);
             $source = $_POST['source'];
-            $newIdx = (int) $_POST['newIdx'];
-            $orgIdx = (int) $_POST['orgIdx'];
+            $newIndex = (int) $_POST['newIndex'];
+            $origIndex = (int) $_POST['origIndex'];
 
-            return $fx($sortOrders, $source, $newIdx, $orgIdx);
+            return $fx($sortOrders, $source, $newIndex, $origIndex);
         });
     }
 
     /**
-     * Return js action to retrieve order.
+     * Return JS action to retrieve order.
      *
      * @param array|null $urlOptions
      *
      * @return JsChain
      */
-    public function jsSendSortOrders($urlOptions = null)
+    public function jsSendSortOrders($urlOptions = null): JsExpressionable
     {
         return $this->view->js()->atkJsSortable('sendSortOrders', [$urlOptions]);
     }

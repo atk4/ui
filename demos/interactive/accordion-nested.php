@@ -41,7 +41,7 @@ $addAccordionFunc = function ($view, int $maxDepth, int $level = 0) use (&$addAc
         $form = Form::addTo($vp);
         $form->addControl('email');
         $form->onSubmit(function (Form $form) {
-            return $form->success('Subscribed ' . $form->model->get('email') . ' to newsletter.');
+            return $form->jsSuccess('Subscribed ' . $form->model->get('email') . ' to newsletter.');
         });
 
         $addAccordionFunc($vp, $maxDepth, $level + 1);

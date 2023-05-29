@@ -16,9 +16,9 @@ require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Executor Factory in App instance', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['factory']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
-// Overriding basic ExecutorFactory in order to change Card button.
+// overriding basic ExecutorFactory in order to change Card button
 $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends ExecutorFactory {
     public $buttonPrimaryColor = 'green';
 
@@ -56,6 +56,9 @@ $country = new Country($app->db);
 DemoActionsUtil::setupDemoActions($country);
 $country = $country->loadBy($country->fieldName()->iso, 'fr');
 $country->name .= ' NO RELOAD';
+// suppress dirty field exception
+// https://github.com/atk4/data/blob/35dd7b7d95909cfe574b15e32b7cc57c39a16a58/src/Model/UserAction.php#L164
+unset($country->getDirtyRef()[$country->fieldName()->name]);
 
 $cardActions = Card::addTo($app, ['useLabel' => true, 'executorFactory' => new $myFactory()]);
 $cardActions->setModel($country);

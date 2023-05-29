@@ -1,26 +1,26 @@
-import multilineReadOnly from './multiline-readonly.component';
+import multilineReadonly from './multiline-readonly.component';
 import multilineTextarea from './multiline-textarea.component';
 import atkDatePicker from '../share/atk-date-picker';
 import atkLookup from '../share/atk-lookup';
 
 export default {
-    name: 'atk-multiline-cell',
+    name: 'AtkMultilineCell',
     template: `
-    <component :is="getComponent()"
-        :fluid="true"
-        class="fluid"
-        @input="onInput"
-        @onChange="onChange"
-        v-model="inputValue"
-        :name="inputName"
-        ref="cell"
-        v-bind="getComponentProps()"></component>
-  `,
+        <component
+            :is="getComponent()"
+            v-bind="getComponentProps()"
+            ref="cell"
+            :fluid="true"
+            class="fluid"
+            :name="inputName"
+            v-model="inputValue"
+            @update:modelValue="onInput"
+        ></component>`,
     components: {
-        'atk-multiline-readonly': multilineReadOnly,
-        'atk-multiline-textarea': multilineTextarea,
-        'atk-date-picker': atkDatePicker,
-        'atk-lookup': atkLookup,
+        AtkMultilineReadonly: multilineReadonly,
+        AtkMultilineTextarea: multilineTextarea,
+        AtkDatePicker: atkDatePicker,
+        AtkLookup: atkLookup,
     },
     props: ['cellData', 'fieldValue'],
     data: function () {
@@ -31,34 +31,21 @@ export default {
             inputValue: this.fieldValue,
         };
     },
+    emits: ['updateValue'],
     methods: {
         getComponent: function () {
             return this.cellData.definition.component;
         },
         getComponentProps: function () {
-            if (this.getComponent() === 'atk-multiline-readonly') {
+            if (this.getComponent() === 'AtkMultilineReadonly') {
                 return { readOnlyValue: this.fieldValue };
             }
 
             return this.cellData.definition.componentProps;
         },
         onInput: function (value) {
-            this.inputValue = this.getTypeValue(value);
-            this.$emit('update-value', this.fieldName, this.inputValue);
-        },
-        onChange: function (value) {
-            this.onInput(value);
-        },
-        /**
-         * return input value based on their type.
-         */
-        getTypeValue: function (value) {
-            let r = value;
-            if (this.type === 'boolean') {
-                r = value.target.checked;
-            }
-
-            return r;
+            this.inputValue = value;
+            this.$emit('updateValue', this.fieldName, this.inputValue);
         },
     },
 };

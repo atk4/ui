@@ -3,10 +3,10 @@ Feature: Calendar
   Scenario:
     Given I am on "_unit-test/calendar-input.php"
 
-  Scenario: field using format M d, Y
-    Then I set calendar input name 'field' with value 'Jan 01, 2021'
+  Scenario: field using format M j, Y
+    Then I set calendar input name 'field' with value 'Jan 1, 2021'
     When I press button "field"
-    Then I should see "Jan 01, 2021"
+    Then I should see "Jan 1, 2021"
     Then I hide js modal
 
   Scenario: input using format Y-m-d

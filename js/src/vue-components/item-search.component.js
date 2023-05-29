@@ -7,27 +7,27 @@ import atk from 'atk';
  * The request is send using Fomantic-UI api.
  *
  * Properties need for this component are:
- *
  * context: string, a jQuery selector where the 'loading' class will be apply by Fomantic-UI - default to this component.
  * url:     string, the URL to call.
  * q:       string, the initial string for the query. Useful if this search is part of the relaod.
  * reload:  string, an Id selector for jQuery, '#' is append automatically.
  */
-
-const template = `<div class="atk-item-search" :class="inputCss">
-      <input class="ui"
-        v-model="query"
-        type="text" placeholder="Search..."
-        @keyup="onKeyup"
-        @keyup.esc="onEscape"
-        name="atk-vue-search" />
-        <i class="atk-search-icon" :class="classIcon"></i><span style="width: 12px; cursor: pointer;" @click="onClear"></span>
-    </div>
-`;
-
 export default {
-    name: 'atk-item-search',
-    template: template,
+    name: 'AtkItemSearch',
+    template: `
+        <div class="atk-item-search" :class="inputCss">
+            <input
+                class="ui"
+                v-model="query"
+                type="text"
+                name="atk-vue-search"
+                placeholder="Search..."
+                @keyup="onKeyup"
+                @keyup.esc="onEscape"
+            />
+            <i class="atk-search-icon" :class="classIcon" />
+            <span style="width: 12px; cursor: pointer;" @click="onClear" />
+        </div>`,
     props: {
         context: String,
         url: String,
@@ -48,7 +48,7 @@ export default {
     computed: {
         classIcon: function () {
             return {
-                'search icon': (this.query === null || this.query === ''),
+                'search icon': this.query === null || this.query === '',
                 'remove icon': this.query !== null,
             };
         },
@@ -100,7 +100,7 @@ export default {
                 url: this.url,
                 data: options,
                 method: 'GET',
-                stateContext: (this.context) ? $(this.context) : $(this.$el),
+                stateContext: this.context ? $(this.context) : $(this.$el),
                 onComplete: function (e, r) {
                     that.isActive = false;
                 },

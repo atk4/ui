@@ -6,15 +6,15 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
-use Atk4\Ui\JsReload;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsReload;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Table;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-if ($id = $_GET['id'] ?? null) {
+if ($_GET['id'] ?? null) {
     $app->layout->js(true, new JsToast('Details link is in simulation mode.'));
 }
 
@@ -23,8 +23,6 @@ $bb = View::addTo($app, ['ui' => 'buttons']);
 $table = Table::addTo($app, ['class.celled' => true]);
 Button::addTo($bb, ['Refresh Table', 'icon' => 'refresh'])
     ->on('click', new JsReload($table));
-
-$bb->on('click', $table->js()->reload());
 
 $table->setModel(new SomeData(), []);
 
@@ -63,7 +61,10 @@ $table->onHook(Table\Column::HOOK_GET_HTML_TAGS, function (Table $table, Model $
     }
 });
 
-$table->addTotals(['name' => 'Totals:', 'salary' => ['sum']]);
+$table->addTotals([
+    'name' => 'Totals:',
+    'salary' => ['sum'],
+]);
 
 $myArray = [
     ['name' => 'Vinny', 'surname' => 'Sihra', 'birthdate' => '1973-02-03', 'cv' => 'I am <strong>BIG</strong> Vinny'],

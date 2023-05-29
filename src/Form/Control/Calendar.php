@@ -4,33 +4,33 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsFunction;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsFunction;
 
-/**
- * Date/Time picker attached to a form control.
- */
 class Calendar extends Input
 {
+    public string $inputType = 'text';
+
     /**
-     * Set this to 'date', 'time', 'datetime'.
+     * @var 'date'|'time'|'datetime'
      */
     public string $type = 'date';
 
     /**
-     * Any other options you'd like to pass to flatpickr JS.
+     * Any other options you'd like to pass to Flatpickr JS.
      * See https://flatpickr.js.org/options/ for all possible options.
      */
     public array $options = [];
 
     /**
-     * Set flatpickr option.
+     * Set Flatpickr option.
      *
-     * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      */
-    public function setOption($name, $value): void
+    public function setOption(string $name, $value): void
     {
         $this->options[$name] = $value;
     }
@@ -68,26 +68,27 @@ class Calendar extends Input
         parent::renderView();
     }
 
+    /**
+     * @param JsExpressionable $expr
+     */
     public function onChange($expr, $default = []): void
     {
-        if (is_string($expr)) {
-            $expr = new JsExpression($expr);
-        }
-        if (!is_array($expr)) {
+        if (!$expr instanceof JsBlock) {
             $expr = [$expr];
         }
 
-        // flatpickr on change event
         $this->options['onChange'] = new JsFunction(['date', 'text', 'mode'], $expr);
     }
 
     /**
-     * Get the flatPickr instance of this input in order to
+     * Get the FlatPickr instance of this input in order to
      * get it's properties like selectedDates or run it's methods.
-     * Ex: clearing date via js
-     *     $btn->on('click', $f->getControl('date')->getJsInstance()->clear());.
+     * Ex: clearing date via JS
+     *     $button->on('click', $f->getControl('date')->getJsInstance()->clear());.
+     *
+     * @return JsChain
      */
-    public function getJsInstance(): JsExpression
+    public function getJsInstance(): JsExpressionable
     {
         return (new Jquery('#' . $this->name . '_input'))->get(0)->_flatpickr;
     }

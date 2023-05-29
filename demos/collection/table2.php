@@ -7,8 +7,8 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Header;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Lister;
 use Atk4\Ui\Table;
 
@@ -49,7 +49,10 @@ $table->onHook(Lister::HOOK_BEFORE_ROW, function (Table $table) {
 });
 
 $table->template->dangerouslyAppendHtml('Foot', $app->getTag('tr', ['class' => 'center aligned'], [['td', ['colspan' => '2'], 'This will appear above totals']]));
-$table->addTotals(['action' => 'Totals:', 'amount' => ['sum']]);
+$table->addTotals([
+    'action' => 'Totals:',
+    'amount' => ['sum'],
+]);
 
 Header::addTo($app, ['Columns with multiple formats', 'subHeader' => 'Single column can use logic to swap out formatters', 'icon' => 'table']);
 

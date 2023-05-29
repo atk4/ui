@@ -8,6 +8,7 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
+use Atk4\Data\Persistence;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
@@ -15,9 +16,6 @@ use Atk4\Ui\View;
 
 class ScopeBuilder extends Form\Control
 {
-    use VueLookupTrait;
-
-    /** @var bool Do not render label for this input. */
     public $renderLabel = false;
 
     public array $options = [
@@ -29,7 +27,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Max depth of nested conditions allowed.
      * Corresponds to VueQueryBulder maxDepth.
-     * Maximum support by js component is 10.
+     * Maximum support by JS component is 10.
      */
     public int $maxDepth = 5;
 
@@ -44,7 +42,7 @@ class ScopeBuilder extends Form\Control
 
     /**
      * The date, time or datetime options:
-     * 'flatpickr' - any of flatpickr options
+     * 'flatpickr' - any of Flatpickr options
      * 'useDefault' - when true, will init date, time or datetime to current.
      */
     public array $atkdDateOptions = [
@@ -52,7 +50,7 @@ class ScopeBuilder extends Form\Control
         'flatpickr' => [],
     ];
 
-    /** Atk-lookup and Fomantic-UI dropdown options. */
+    /** AtkLookup and Fomantic-UI dropdown options. */
     public array $atkLookupOptions = [
         'ui' => 'small basic button',
     ];
@@ -210,7 +208,7 @@ class ScopeBuilder extends Form\Control
         'lookup' => [
             'type' => 'custom-component',
             'inputType' => 'lookup',
-            'component' => 'atk-lookup',
+            'component' => 'AtkLookup',
             'operators' => self::ENUM_OPERATORS,
             'componentProps' => [__CLASS__, 'getLookupProps'],
         ],
@@ -244,21 +242,21 @@ class ScopeBuilder extends Form\Control
         ],
         'date' => [
             'type' => 'custom-component',
-            'component' => 'atk-date-picker',
+            'component' => 'AtkDatePicker',
             'inputType' => 'date',
             'operators' => self::DATE_OPERATORS,
             'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
         'datetime' => [
             'type' => 'custom-component',
-            'component' => 'atk-date-picker',
+            'component' => 'AtkDatePicker',
             'inputType' => 'datetime',
             'operators' => self::DATE_OPERATORS,
             'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
         'time' => [
             'type' => 'custom-component',
-            'component' => 'atk-date-picker',
+            'component' => 'AtkDatePicker',
             'inputType' => 'time',
             'operators' => self::DATE_OPERATORS,
             'componentProps' => [__CLASS__, 'getDatePickerProps'],
@@ -274,7 +272,7 @@ class ScopeBuilder extends Form\Control
         parent::init();
 
         if (!$this->scopeBuilderTemplate) {
-            $this->scopeBuilderTemplate = new HtmlTemplate('<div id="{$_id}" class="ui"><atk-query-builder v-bind="initData"></atk-query-builder></div>');
+            $this->scopeBuilderTemplate = new HtmlTemplate('<div {$attributes}><atk-query-builder v-bind="initData"></atk-query-builder></div>');
         }
 
         $this->scopeBuilderView = View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
@@ -282,7 +280,7 @@ class ScopeBuilder extends Form\Control
         if ($this->form) {
             $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
                 $key = $this->entityField->getFieldName();
-                $postRawData[$key] = static::queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
+                $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
             });
         }
     }
@@ -293,8 +291,6 @@ class ScopeBuilder extends Form\Control
     public function setModel(Model $model): void
     {
         parent::setModel($model);
-
-        $this->initVueLookupCallback();
 
         $this->buildQuery($model);
     }
@@ -326,13 +322,13 @@ class ScopeBuilder extends Form\Control
             $scope = $model->scope();
         }
 
-        $this->query = static::scopeToQuery($scope, $inputsMap)['query'];
+        $this->query = $this->scopeToQuery($scope, $inputsMap)['query'];
     }
 
     /**
      * Add the field rules to use in VueQueryBuilder.
      */
-    protected function addFieldRule(Field $field): self
+    protected function addFieldRule(Field $field): void
     {
         if ($field->enum || $field->values) {
             $type = 'enum';
@@ -349,16 +345,14 @@ class ScopeBuilder extends Form\Control
         ], $field->ui['scopebuilder'] ?? []), $field);
 
         $this->rules[] = $rule;
-
-        return $this;
     }
 
     /**
-     * Set property for atk-lookup component.
+     * Set property for AtkLookup component.
      */
     protected function getLookupProps(Field $field): array
     {
-        // set any of sui-dropdown props via this property. Will be applied globally.
+        // set any of SuiDropdown props via this property. Will be applied globally.
         $props = $this->atkLookupOptions;
         $items = $this->getFieldItems($field, 10);
         foreach ($items as $value => $text) {
@@ -366,7 +360,6 @@ class ScopeBuilder extends Form\Control
         }
 
         if ($field->hasReference()) {
-            $props['url'] = $this->dataCb->getUrl();
             $props['reference'] = $field->shortName;
             $props['search'] = true;
         }
@@ -377,7 +370,7 @@ class ScopeBuilder extends Form\Control
     }
 
     /**
-     * Set property for atk-date-picker component.
+     * Set property for AtkDatePicker component.
      */
     protected function getDatePickerProps(Field $field): array
     {
@@ -405,7 +398,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Add rules on the referenced model fields.
      */
-    protected function addReferenceRules(Field $field): self
+    protected function addReferenceRules(Field $field): void
     {
         if ($field->hasReference()) {
             $reference = $field->getReference();
@@ -428,8 +421,6 @@ class ScopeBuilder extends Form\Control
                 $this->addFieldRule($theirField);
             }
         }
-
-        return $this;
     }
 
     protected function getRule(string $type, array $defaults = [], Field $field = null): array
@@ -442,14 +433,7 @@ class ScopeBuilder extends Form\Control
         }
 
         $options = $defaults['options'] ?? [];
-
-        // 'options' is atk specific so not necessary to pass it to VueQueryBuilder
         unset($defaults['options']);
-
-        // when $rule is callable
-        if (is_callable($rule)) {
-            $rule = call_user_func($rule, $field, $options);
-        }
 
         // map all values for callables and merge with defaults
         return array_merge(array_map(function ($value) use ($field, $options) {
@@ -458,17 +442,17 @@ class ScopeBuilder extends Form\Control
     }
 
     /**
-     * Return an array of items id and name for a field.
+     * Return an array of items ID and name for a field.
      * Return field enum, values or reference values.
      */
     protected function getFieldItems(Field $field, ?int $limit = 250): array
     {
         $items = [];
-        if ($field->enum) {
+        if ($field->enum !== null) {
             $items = array_slice($field->enum, 0, $limit);
             $items = array_combine($items, $items);
         }
-        if ($field->values && is_array($field->values)) {
+        if ($field->values !== null) {
             $items = array_slice($field->values, 0, $limit, true);
         } elseif ($field->hasReference()) {
             $model = $field->getReference()->refModel($this->model);
@@ -519,19 +503,19 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts an VueQueryBuilder query array to Condition or Scope.
      */
-    public static function queryToScope(array $query): Scope\AbstractScope
+    public function queryToScope(array $query): Scope\AbstractScope
     {
         $type = $query['type'] ?? 'query-builder-group';
         $query = $query['query'] ?? $query;
 
         switch ($type) {
             case 'query-builder-group':
-                $components = array_map(fn ($v) => static::queryToScope($v), $query['children']);
+                $components = array_map(fn ($v) => $this->queryToScope($v), $query['children']);
                 $scope = new Scope($components, $query['logicalOperator']);
 
                 break;
             case 'query-builder-rule':
-                $scope = static::queryToCondition($query);
+                $scope = $this->queryToCondition($query);
 
                 break;
             default:
@@ -544,11 +528,11 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts an VueQueryBuilder rule array to Condition or Scope.
      */
-    public static function queryToCondition(array $query): Scope\Condition
+    public function queryToCondition(array $query): Scope\Condition
     {
-        $key = $query['rule'] ?? null;
-        $operator = (string) ($query['operator'] ?? null);
-        $value = $query['value'] ?? null;
+        $key = $query['rule'];
+        $operator = $query['operator'];
+        $value = $query['value'];
 
         switch ($operator) {
             case self::OPERATOR_EMPTY:
@@ -573,7 +557,7 @@ class ScopeBuilder extends Form\Control
                 break;
             case self::OPERATOR_IN:
             case self::OPERATOR_NOT_IN:
-                $value = explode(static::detectDelimiter($value), (string) $value);
+                $value = explode($this->detectDelimiter($value), $value);
 
                 break;
         }
@@ -588,20 +572,20 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts Scope or Condition to VueQueryBuilder query array.
      */
-    public static function scopeToQuery(Scope\AbstractScope $scope, array $inputsMap = []): array
+    public function scopeToQuery(Scope\AbstractScope $scope, array $inputsMap = []): array
     {
         $query = [];
         if ($scope instanceof Scope\Condition) {
             $query = [
                 'type' => 'query-builder-rule',
-                'query' => static::conditionToQuery($scope, $inputsMap),
+                'query' => $this->conditionToQuery($scope, $inputsMap),
             ];
         }
 
         if ($scope instanceof Scope) {
             $children = [];
             foreach ($scope->getNestedConditions() as $nestedCondition) {
-                $children[] = static::scopeToQuery($nestedCondition, $inputsMap);
+                $children[] = $this->scopeToQuery($nestedCondition, $inputsMap);
             }
 
             $query = [
@@ -619,7 +603,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts a Condition to VueQueryBuilder query array.
      */
-    public static function conditionToQuery(Scope\Condition $condition, array $inputsMap = []): array
+    public function conditionToQuery(Scope\Condition $condition, array $inputsMap = []): array
     {
         if (is_string($condition->key)) {
             $rule = $condition->key;
@@ -678,15 +662,17 @@ class ScopeBuilder extends Form\Control
         return [
             'rule' => $rule,
             'operator' => $operator,
-            'value' => $value,
-            'option' => static::getOption($inputType, $value, $condition),
+            'value' => $value instanceof \DateTimeInterface ? (new Persistence\Array_())->typecastSaveField($this->model->getField($rule), $value) : $value, // TODO an UI typecasting hack to pass CI
+            'option' => $this->getConditionOption($inputType, $value, $condition),
         ];
     }
 
     /**
      * Return extra value option associate with certain inputType or null otherwise.
+     *
+     * @param mixed $value
      */
-    protected static function getOption(string $type, string $value, Condition $condition): ?array
+    protected function getConditionOption(string $type, $value, Condition $condition): ?array
     {
         $option = null;
         switch ($type) {
@@ -715,7 +701,7 @@ class ScopeBuilder extends Form\Control
      *
      * @phpstan-return non-empty-string
      */
-    public static function detectDelimiter(string $value): string
+    public function detectDelimiter(string $value): string
     {
         $matches = [];
         foreach (static::$listDelimiters as $delimiter) {

@@ -1,13 +1,11 @@
 export default {
-    name: 'atk-textarea',
-    template: '<textarea v-model="text" @input="handleChange"></textarea>',
-    props: { value: [String, Number] },
-    data: function () {
-        return { text: this.value };
-    },
+    name: 'AtkMultilineTextarea',
+    template: '<textarea v-model="modelValue" @input="onInput" />',
+    props: ['modelValue'],
+    emits: ['update:modelValue'],
     methods: {
-        handleChange: function (event) {
-            this.$emit('input', event.target.value);
+        onInput: function (event) {
+            this.$emit('update:modelValue', event.target.value);
         },
     },
 };

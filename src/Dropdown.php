@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsFunction;
+
 class Dropdown extends Lister
 {
     public $ui = 'dropdown';
@@ -35,14 +40,14 @@ class Dropdown extends Lister
      *          return 'New selected item: ' . $item;
      *      });.
      *
-     * @param \Closure $fx handler where new selected Item value is passed too
+     * @param \Closure(string): (JsExpressionable|View|string|void) $fx handler where new selected Item value is passed too
      */
     public function onChange(\Closure $fx): void
     {
-        // setting dropdown option for using callback url.
+        // setting dropdown option for using callback URL.
         $this->dropdownOptions['onChange'] = new JsFunction(['value', 'name', 't'], [
             new JsExpression(
-                "if ($(this).data('currentValue') != value) { $(this).atkAjaxec({ url: [url], urlOptions: { item: value } }); $(this).data('currentValue', value); }",
+                'if ($(this).data(\'currentValue\') != value) { $(this).atkAjaxec({ url: [url], urlOptions: { item: value } }); $(this).data(\'currentValue\', value); }',
                 ['url' => $this->cb->getJsUrl()]
             ), ]);
 

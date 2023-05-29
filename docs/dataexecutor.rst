@@ -20,7 +20,7 @@ Executor Interface
 
 .. php:namespace:: Atk4\Ui\UserAction
 
-All executors must implement the Executor or JsExecutor interface.
+All executors must implement the ExecutorInterface or JsExecutorInterface interface.
 
 .. php:interface:: ExecutorInterface
 .. php:interface:: JsExecutorInterface
@@ -44,7 +44,7 @@ Preview Executor
 .. php:class:: PreviewExecutor
 
 This executor is specifically set in order to display the $preview property of the current model UserAction.
-You can select to display the preview using regular console type container, regular text or using html content.
+You can select to display the preview using regular console type container, regular text or using HTML content.
 
 Form Executor
 =============
@@ -63,7 +63,7 @@ This executor will display a form but instead of filling form control with model
 $args property. This is used when you need to ask user about an argument value prior to execute the action.
 The type of form control type to be used in form will depend on how $args is setup within the model UserAction.
 
-Js Callaback Executor
+JS Callaback Executor
 =====================
 
 .. php:class:: JsCallbackExecutor
@@ -136,9 +136,9 @@ The Executor Factory
 
 Executor factory is responsible for creating proper executor type in regards to the model user action being used.
 
-The factory create method::
+The factory createExecutor method::
 
-    ExecutorFactory::create(UserAction $action, View $owner, $requiredType = null)
+    ExecutorFactory::createExecutor(UserAction $action, View $owner, $requiredType = null)
 
 Based on parameter passed to the method, it will return proper executor for the model user action.
 
@@ -147,13 +147,13 @@ for that specific type.
 
 When required is not set, it will first look for a specific executor that has been already register for the model/action.
 
-If no executor type is found, then the create method will determine one, based on the model user action properties:
+If no executor type is found, then the createExecutor method will determine one, based on the model user action properties:
 
 - if action contains a callable confirmation property, then, the executor create is based on CONFIRMATION_EXECUTOR type;
 - if action contains use either, fields, argument or preview properties, then, the executor create is based on MODAL_EXECUTOR type;
 - if action does not use any of the above properties, then, the executor create is based on JS_EXECUTOR type.
 
-The create method also add the executor to the View passed as argument. However, note that when an executor View parent
+The createExecutor method also add the executor to the View passed as argument. However, note that when an executor View parent
 class is of type Modal, then it will be attached to the $app->html view instead. This is because Modal view in ui needs
 to be added to $app->html view in order to work correctly on reload.
 
@@ -166,7 +166,7 @@ Existing executor type can be change or added globally for all your user model a
     ExecutorFactory::registerTypeExecutor(string $type, array $seed): void
 
 This will set a type to your own executor class. For example, a custom executor class can be set as a MODAL_EXECUTOR type
-and all model user action that use this type will be execute using this custom executor instance.
+and all model user action that use this type will be executed using this custom executor instance.
 
 Type may also be registered per specific model user action via this method::
 
@@ -187,7 +187,7 @@ For example, you need a custom executor to be created when using a specific mode
     //...
     ExecutorFactory::registerExecutor($action, [MySpecialFormExecutor::class]);
 
-Then, when ExecutorFactory::create method is called for this $action, MySpecialExecutor instance will be create in order
+Then, when ExecutorFactory::createExecutor method is called for this $action, MySpecialExecutor instance will be create in order
 to run this user model action.
 
 Triggering model user action
@@ -272,7 +272,7 @@ Example of overriding executor assign to a button.::
     $myAction = $model->getUserAction('my_action');
     $myAction->ui['executor'] = $myExecutor;
 
-    $btn->on('click', $myAction);
+    $button->on('click', $myAction);
 
 Demo
 ----

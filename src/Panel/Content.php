@@ -28,7 +28,7 @@ class Content extends View implements LoadableContent
     }
 
     /**
-     * Return callback url for panel options.
+     * Return callback URL for panel options.
      */
     public function getCallbackUrl(): string
     {
@@ -45,6 +45,8 @@ class Content extends View implements LoadableContent
 
     /**
      * Will load content into callback.
+     *
+     * @param \Closure($this): void $fx
      */
     public function onLoad(\Closure $fx): void
     {
@@ -55,7 +57,7 @@ class Content extends View implements LoadableContent
     }
 
     /**
-     * Return an array of css selector where content will be
+     * Return an array of CSS selector where content will be
      * cleared on reload.
      */
     public function getClearSelector(): array

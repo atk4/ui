@@ -15,14 +15,13 @@ namespace Atk4\Ui;
  */
 class VirtualPage extends View
 {
+    public $ui = 'container';
+
     /** @var Callback */
     public $cb;
 
     /** @var string|null specify custom callback trigger for the URL (see Callback::$urlTrigger) */
     protected $urlTrigger;
-
-    /** @var string UI container class */
-    public $ui = 'container';
 
     protected function init(): void
     {
@@ -40,18 +39,18 @@ class VirtualPage extends View
     /**
      * Set callback function of virtual page.
      *
-     * @param \Closure $fx
-     * @param array    $args arguments for \Closure
+     * @param \Closure($this, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $fx
+     * @param array                                                                                       $fxArgs
      *
      * @return $this
      */
-    public function set($fx = null, $args = [])
+    public function set($fx = null, $fxArgs = [])
     {
         if (!$fx instanceof \Closure) {
-            throw new Exception('Virtual page requires a Closure');
+            throw new \TypeError('$fx must be of type Closure');
         }
 
-        $this->cb->set($fx, array_merge([$this], $args));
+        $this->cb->set($fx, [$this, ...$fxArgs]);
 
         return $this;
     }
@@ -94,12 +93,13 @@ class VirtualPage extends View
             return parent::getHtml();
         }
 
-        if ($mode = $this->cb->getTriggeredValue()) {
+        $mode = $this->cb->getTriggeredValue();
+        if ($mode) {
             // special treatment for popup
             if ($mode === 'popup') {
                 $this->getApp()->html->template->set('title', $this->getApp()->title);
                 $this->getApp()->html->template->dangerouslySetHtml('Content', parent::getHtml());
-                $this->getApp()->html->template->dangerouslyAppendHtml('Head', $this->getApp()->getTag('script', [], '$(function () {' . $this->getJs() . ';});'));
+                $this->getApp()->html->template->dangerouslyAppendHtml('Head', $this->getApp()->getTag('script', [], '$(function () { ' . $this->getJs() . '; });'));
 
                 $this->getApp()->terminateHtml($this->getApp()->html->template);
             }
@@ -127,7 +127,13 @@ class VirtualPage extends View
         }
 
         $this->getApp()->layout->template->dangerouslySetHtml('Content', parent::getHtml());
-        $this->getApp()->layout->_jsActions = array_merge($this->getApp()->layout->_jsActions, $this->_jsActions);
+
+        // collect JS from everywhere
+        foreach ($this->_jsActions as $when => $actions) {
+            foreach ($actions as $action) {
+                $this->getApp()->layout->_jsActions[$when][] = $action;
+            }
+        }
 
         $this->getApp()->html->template->dangerouslySetHtml('Content', $this->getApp()->layout->template->renderToHtml());
 

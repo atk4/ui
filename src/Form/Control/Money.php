@@ -6,6 +6,8 @@ namespace Atk4\Ui\Form\Control;
 
 class Money extends Input
 {
+    public string $inputType = 'text';
+
     public function getValue()
     {
         $res = parent::getValue();

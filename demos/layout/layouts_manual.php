@@ -19,4 +19,5 @@ Lister::addTo($layout, [], ['Report'])
 $app->html = null;
 $app->initLayout([Layout::class]);
 
+$layout->setApp($app);
 Text::addTo($app->layout)->addHtml($layout->render());

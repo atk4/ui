@@ -14,18 +14,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _multiline_row_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./multiline-row.component */ "./src/vue-components/multiline/multiline-row.component.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-multiline-body',
+  name: 'AtkMultilineBody',
   template: `
-    <sui-table-body>
-      <atk-multiline-row v-for="(row, idx) in rows" :key="row.__atkml"
-      @onTabLastColumn="onTabLastColumn(idx)"
-      :fields="fields"
-      :rowId="row.__atkml"
-      :isDeletable="isDeletableRow(row)"
-      :rowValues="row"
-      :error="getError(row.__atkml)"></atk-multiline-row>
-    </sui-table-body>
-  `,
+        <SuiTableBody>
+            <AtkMultilineRow
+                :fields="fields"
+                v-for="(row, i) in rows" :key="row.__atkml"
+                :rowId="row.__atkml"
+                :isDeletable="isDeletableRow(row)"
+                :rowValues="row"
+                :errors="getRowErrors(row.__atkml)"
+                @onTabLastColumn="onTabLastColumn(i)"
+            ></AtkMultilineRow>
+        </SuiTableBody>`,
   props: ['fieldDefs', 'rowData', 'deletables', 'errors'],
   data: function () {
     return {
@@ -34,27 +35,25 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function () {},
   components: {
-    'atk-multiline-row': _multiline_row_component__WEBPACK_IMPORTED_MODULE_0__["default"]
+    AtkMultilineRow: _multiline_row_component__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   computed: {
     rows: function () {
       return this.rowData;
     }
   },
+  emits: ['onTabLastRow'],
   methods: {
-    onTabLastColumn: function (idx) {
-      if (idx + 1 === this.rowData.length) {
+    onTabLastColumn: function (rowIndex) {
+      if (rowIndex + 1 === this.rowData.length) {
         this.$emit('onTabLastRow');
       }
     },
     isDeletableRow: function (row) {
-      return this.deletables.indexOf(row.__atkml) > -1;
+      return this.deletables.includes(row.__atkml);
     },
-    getError: function (rowId) {
-      if (rowId in this.errors) {
-        return this.errors[rowId];
-      }
-      return null;
+    getRowErrors: function (rowId) {
+      return this.errors[rowId] ?? [];
     }
   }
 });
@@ -80,23 +79,23 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-multiline-cell',
+  name: 'AtkMultilineCell',
   template: `
-    <component :is="getComponent()"
-        :fluid="true"
-        class="fluid"
-        @input="onInput"
-        @onChange="onChange"
-        v-model="inputValue"
-        :name="inputName"
-        ref="cell"
-        v-bind="getComponentProps()"></component>
-  `,
+        <component
+            :is="getComponent()"
+            v-bind="getComponentProps()"
+            ref="cell"
+            :fluid="true"
+            class="fluid"
+            :name="inputName"
+            v-model="inputValue"
+            @update:modelValue="onInput"
+        ></component>`,
   components: {
-    'atk-multiline-readonly': _multiline_readonly_component__WEBPACK_IMPORTED_MODULE_0__["default"],
-    'atk-multiline-textarea': _multiline_textarea_component__WEBPACK_IMPORTED_MODULE_1__["default"],
-    'atk-date-picker': _share_atk_date_picker__WEBPACK_IMPORTED_MODULE_2__["default"],
-    'atk-lookup': _share_atk_lookup__WEBPACK_IMPORTED_MODULE_3__["default"]
+    AtkMultilineReadonly: _multiline_readonly_component__WEBPACK_IMPORTED_MODULE_0__["default"],
+    AtkMultilineTextarea: _multiline_textarea_component__WEBPACK_IMPORTED_MODULE_1__["default"],
+    AtkDatePicker: _share_atk_date_picker__WEBPACK_IMPORTED_MODULE_2__["default"],
+    AtkLookup: _share_atk_lookup__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   props: ['cellData', 'fieldValue'],
   data: function () {
@@ -107,12 +106,13 @@ __webpack_require__.r(__webpack_exports__);
       inputValue: this.fieldValue
     };
   },
+  emits: ['updateValue'],
   methods: {
     getComponent: function () {
       return this.cellData.definition.component;
     },
     getComponentProps: function () {
-      if (this.getComponent() === 'atk-multiline-readonly') {
+      if (this.getComponent() === 'AtkMultilineReadonly') {
         return {
           readOnlyValue: this.fieldValue
         };
@@ -120,21 +120,8 @@ __webpack_require__.r(__webpack_exports__);
       return this.cellData.definition.componentProps;
     },
     onInput: function (value) {
-      this.inputValue = this.getTypeValue(value);
-      this.$emit('update-value', this.fieldName, this.inputValue);
-    },
-    onChange: function (value) {
-      this.onInput(value);
-    },
-    /**
-     * return input value based on their type.
-     */
-    getTypeValue: function (value) {
-      let r = value;
-      if (this.type === 'boolean') {
-        r = value.target.checked;
-      }
-      return r;
+      this.inputValue = value;
+      this.$emit('updateValue', this.fieldName, this.inputValue);
     }
   }
 });
@@ -151,44 +138,52 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.for-each.js */ "./node_modules/core-js/modules/esnext.async-iterator.for-each.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "./node_modules/core-js/modules/esnext.iterator.for-each.js");
-/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-
-
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
 
 
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-multiline-header',
+  name: 'AtkMultilineHeader',
   template: `
-     <sui-table-header>
-       <sui-table-row v-if="hasError()">
-        <sui-table-cell :style="{ background: 'none' }"></sui-table-cell>
-        <sui-table-cell :style="{ background: 'none' }" state="error" v-for="(column, idx) in columns" :key="idx" v-if="column.isVisible" :textAlign="getTextAlign(column)"><sui-icon name="attention" v-if="getErrorMsg(column)"></sui-icon>{{getErrorMsg(column)}}</sui-table-cell>
-      </sui-table-row>
-       <sui-table-row v-if="hasCaption()">
-        <sui-table-headerCell :colspan="getVisibleColumns()">{{caption}}</sui-table-headerCell>
-       </sui-table-row>
-        <sui-table-row :verticalAlign="'top'">
-        <sui-table-header-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDeleteAll" :checked.prop="isChecked" :indeterminate.prop="isIndeterminate" ref="check"></sui-table-header-cell>
-        <sui-table-header-cell v-for="(column, idx) in columns" :key="idx" v-if="column.isVisible" :textAlign="getTextAlign(column)">
-         <div>{{column.caption}}</div>
-         <div :style="{ position: 'absolute', top: '-22px' }" v-if="false"><sui-label pointing="below" basic color="red" v-if="getErrorMsg(column)">{{getErrorMsg(column)}}</sui-label></div>
-        </sui-table-header-cell>
-      </sui-table-row>
-    </sui-table-header>
-  `,
-  props: ['fields', 'state', 'errors', 'caption'],
+        <SuiTableHeader>
+            <SuiTableRow v-if="hasError()">
+                <SuiTableCell :style="{ background: 'none' }" />
+                <SuiTableCell :style="{ background: 'none' }"
+                    error="true"
+                    v-for="column in filterVisibleColumns(columns)"
+                    :textAlign="getTextAlign(column)"
+                >
+                    <SuiIcon v-if="getErrorMsg(column)" name="attention" />
+                    {{getErrorMsg(column)}}
+                </SuiTableCell>
+            </SuiTableRow>
+            <SuiTableRow v-if="hasCaption()">
+                <SuiTableHeaderCell :colspan="getVisibleColumns()">{{caption}}</SuiTableHeaderCell>
+            </SuiTableRow>
+            <SuiTableRow :verticalAlign="'top'">
+                <SuiTableHeaderCell :width=1 textAlign="center">
+                    <input ref="check" type="checkbox" :checked="isChecked" :indeterminate="isIndeterminate" @input="onToggleDeleteAll" />
+                </SuiTableHeaderCell>
+                <SuiTableHeaderCell
+                    v-for="column in filterVisibleColumns(columns)"
+                    :width=column.cellProps.width
+                    :textAlign="getTextAlign(column)"
+                >
+                    <div>{{column.caption}}</div>
+                    <div v-if="false" :style="{ position: 'absolute', top: '-22px' }">
+                        <SuiLabel v-if="getErrorMsg(column)" pointing="below" basic color="red">{{getErrorMsg(column)}}</SuiLabel>
+                    </div>
+                </SuiTableHeaderCell>
+            </SuiTableRow>
+        </SuiTableHeader>`,
+  props: ['fields', 'selectionState', 'errors', 'caption'],
   data: function () {
     return {
       columns: this.fields,
@@ -196,9 +191,12 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    filterVisibleColumns: function (columns) {
+      return columns.filter(v => v.isVisible);
+    },
     onToggleDeleteAll: function () {
       this.$nextTick(() => {
-        atk__WEBPACK_IMPORTED_MODULE_5__["default"].eventBus.emit(this.$root.$el.id + '-toggle-delete-all', {
+        atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete-all', {
           isOn: this.$refs.check.checked
         });
       });
@@ -210,17 +208,19 @@ __webpack_require__.r(__webpack_exports__);
           case 'integer':
           case 'float':
           case 'atk4_money':
-            align = 'right';
-            break;
+            {
+              align = 'right';
+              break;
+            }
         }
       }
       return align;
     },
     getVisibleColumns: function () {
       let count = 1; // add deletable column;
-      this.columns.forEach(field => {
+      for (const field of this.columns) {
         count = field.isVisible ? count + 1 : count;
-      });
+      }
       return count;
     },
     hasError: function () {
@@ -232,8 +232,8 @@ __webpack_require__.r(__webpack_exports__);
     getErrorMsg: function (column) {
       if (this.hasError()) {
         const rows = Object.keys(this.errors);
-        for (let i = 0; i < rows.length; i++) {
-          const error = this.errors[rows[i]].filter(col => col.name === column.name);
+        for (const row of rows) {
+          const error = this.errors[row].filter(col => col.name === column.name);
           if (error.length > 0) {
             return error[0].msg;
           }
@@ -244,10 +244,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     isIndeterminate: function () {
-      return this.state === 'indeterminate';
+      return this.selectionState === 'indeterminate';
     },
     isChecked: function () {
-      return this.state === 'on';
+      return this.selectionState === 'on';
     }
   }
 });
@@ -268,8 +268,8 @@ __webpack_require__.r(__webpack_exports__);
  * Simply display a readonly value.
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'AtkMultilineReadonly',
   template: '<div>{{readOnlyValue}}</div>',
-  name: 'atk-multiline-readonly',
   props: ['readOnlyValue']
 });
 
@@ -291,8 +291,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-/* harmony import */ var _multiline_cell_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./multiline-cell.component */ "./src/vue-components/multiline/multiline-cell.component.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.some.js */ "./node_modules/core-js/modules/esnext.async-iterator.some.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.some.js */ "./node_modules/core-js/modules/esnext.iterator.some.js");
+/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _multiline_cell_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./multiline-cell.component */ "./src/vue-components/multiline/multiline-cell.component.js");
+
+
 
 
 
@@ -300,33 +306,42 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * This will create a table td element using sui-table-cell.
+ * This will create a table td element using SuiTableCell.
  * The td element is created only if column as set isVisible = true;
  * The td element will add a multiline cell element.
  * the multiline cell will set it's own template component depending on the fieldType.
  * getValue
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-multiline-row',
+  name: 'AtkMultilineRow',
   template: `
-    <sui-table-row :verticalAlign="'middle'">
-        <sui-table-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDelete" v-model="toDelete"></sui-table-cell>
-        <sui-table-cell @keydown.tab="onTab(idx)" v-for="(column, idx) in columns" :key="idx" :state="getErrorState(column)" v-bind="column.cellProps" :style="{ overflow: 'visible' }" v-if="column.isVisible">
-         <atk-multiline-cell
-           :cellData="column"
-           @update-value="onUpdateValue"
-           :fieldValue="getValue(column)"></atk-multiline-cell>
-        </sui-table-cell>
-    </sui-table-row>
-  `,
-  props: ['fields', 'rowId', 'isDeletable', 'rowValues', 'error'],
+        <SuiTableRow :verticalAlign="'middle'">
+            <SuiTableCell textAlign="center">
+                <input type="checkbox" v-model="toDelete" @input="onToggleDelete" />
+            </SuiTableCell>
+            <SuiTableCell
+                v-for="(column, i) in filterVisibleColumns(columns)"
+                v-bind="column.cellProps"
+                :width=null
+                :error="hasColumnError(column)"
+                :style="{ overflow: 'visible' }"
+                @keydown.tab="onTab(i)"
+            >
+                <AtkMultilineCell
+                    :cellData="column"
+                    :fieldValue="getValue(column)"
+                    @updateValue="onUpdateValue"
+                ></AtkMultilineCell>
+            </SuiTableCell>
+        </SuiTableRow>`,
+  props: ['fields', 'rowId', 'isDeletable', 'rowValues', 'errors'],
   data: function () {
     return {
       columns: this.fields
     };
   },
   components: {
-    'atk-multiline-cell': _multiline_cell_component__WEBPACK_IMPORTED_MODULE_4__["default"]
+    AtkMultilineCell: _multiline_cell_component__WEBPACK_IMPORTED_MODULE_6__["default"]
   },
   computed: {
     /**
@@ -343,20 +358,18 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
   },
+  emits: ['onTabLastColumn'],
   methods: {
-    onTab: function (idx) {
-      if (idx === this.columns.filter(column => column.isEditable).length) {
+    filterVisibleColumns: function (columns) {
+      return columns.filter(v => v.isVisible);
+    },
+    onTab: function (columnIndex) {
+      if (columnIndex === this.columns.filter(column => column.isEditable).length) {
         this.$emit('onTabLastColumn');
       }
     },
-    getErrorState: function (column) {
-      if (this.error) {
-        const error = this.error.filter(e => column.name === e.name);
-        if (error.length > 0) {
-          return 'error';
-        }
-      }
-      return null;
+    hasColumnError: function (column) {
+      return this.errors.some(v => column.name === v.name);
     },
     getColumnWidth: function (column) {
       return column.fieldOptions ? column.fieldOptions.width : null;
@@ -365,12 +378,12 @@ __webpack_require__.r(__webpack_exports__);
       this.isEditing = true;
     },
     onToggleDelete: function (e) {
-      atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.id + '-toggle-delete', {
+      atk__WEBPACK_IMPORTED_MODULE_5__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete', {
         rowId: this.rowId
       });
     },
     onUpdateValue: function (fieldName, value) {
-      atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.id + '-update-row', {
+      atk__WEBPACK_IMPORTED_MODULE_5__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-update-row', {
         rowId: this.rowId,
         fieldName: fieldName,
         value: value
@@ -395,19 +408,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-textarea',
-  template: '<textarea v-model="text" @input="handleChange"></textarea>',
-  props: {
-    value: [String, Number]
-  },
-  data: function () {
-    return {
-      text: this.value
-    };
-  },
+  name: 'AtkMultilineTextarea',
+  template: '<textarea v-model="modelValue" @input="onInput" />',
+  props: ['modelValue'],
+  emits: ['update:modelValue'],
   methods: {
-    handleChange: function (event) {
-      this.$emit('input', event.target.value);
+    onInput: function (event) {
+      this.$emit('update:modelValue', event.target.value);
     }
   }
 });
@@ -424,25 +431,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.for-each.js */ "./node_modules/core-js/modules/esnext.async-iterator.for-each.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.for-each.js */ "./node_modules/core-js/modules/esnext.iterator.for-each.js");
-/* harmony import */ var core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_for_each_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "./node_modules/core-js/modules/es.array.push.js");
+/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.json.parse.js */ "./node_modules/core-js/modules/esnext.json.parse.js");
+/* harmony import */ var core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
 /* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
-/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-/* harmony import */ var _multiline_body_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./multiline-body.component */ "./src/vue-components/multiline/multiline-body.component.js");
-/* harmony import */ var _multiline_header_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./multiline-header.component */ "./src/vue-components/multiline/multiline-header.component.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.some.js */ "./node_modules/core-js/modules/esnext.async-iterator.some.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/esnext.iterator.some.js */ "./node_modules/core-js/modules/esnext.iterator.some.js");
+/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
+/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _multiline_body_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./multiline-body.component */ "./src/vue-components/multiline/multiline-body.component.js");
+/* harmony import */ var _multiline_header_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./multiline-header.component */ "./src/vue-components/multiline/multiline-header.component.js");
+
+
 
 
 
@@ -455,25 +468,43 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-multiline',
-  template: `<div>
-                <sui-table v-bind="tableProp">
-                  <atk-multiline-header :fields="fieldData" :state="getMainToggleState" :errors="errors" :caption="caption"></atk-multiline-header>
-                  <atk-multiline-body @onTabLastRow="onTabLastRow" :fieldDefs="fieldData" :rowData="rowData" :deletables="getDeletables" :errors="errors"></atk-multiline-body>
-                  <sui-table-footer>
-                    <sui-table-row>
-                        <sui-table-header-cell />
-                        <sui-table-header-cell :colspan="getSpan" textAlign="right">
-                        <div is="sui-button-group">
-                         <sui-button size="small" @click.stop.prevent="onAdd" type="button" icon="plus" ref="addBtn" :disabled="isLimitReached"></sui-button>
-                         <sui-button size="small" @click.stop.prevent="onDelete" type="button" icon="trash" :disabled="isDeleteDisable"></sui-button>
-                         </div>
-                        </sui-table-header-cell>
-                    </sui-table-row>
-                  </sui-table-footer>
-                </sui-table>
-                <div><input :form="form" :name="name" type="hidden" :value="value" ref="atkmlInput"></div>
-             </div>`,
+  name: 'AtkMultiline',
+  template: `
+        <div>
+            <SuiTable v-bind="tableProp">
+                <AtkMultilineHeader
+                    :fields="fieldData"
+                    :selectionState="getMainToggleState"
+                    :errors="errors"
+                    :caption="caption"
+                ></AtkMultilineHeader>
+                <AtkMultilineBody
+                    :fieldDefs="fieldData"
+                    :rowData="rowData"
+                    :deletables="getDeletables"
+                    :errors="errors"
+                    @onTabLastRow="onTabLastRow"
+                ></AtkMultilineBody>
+                <SuiTableFooter>
+                    <SuiTableRow>
+                        <SuiTableHeaderCell />
+                        <SuiTableHeaderCell :colspan="getSpan" textAlign="right">
+                            <SuiButtonGroup>
+                                <SuiButton ref="addButton" size="small" type="button" icon :disabled="isLimitReached" @click.stop.prevent="onAdd">
+                                    <SuiIcon name="plus" />
+                                </SuiButton>
+                                <SuiButton size="small" type="button" icon :disabled="isDeleteDisable" @click.stop.prevent="onDelete">
+                                    <SuiIcon name="trash" />
+                                </SuiButton>
+                            </SuiButtonGroup>
+                        </SuiTableHeaderCell>
+                    </SuiTableRow>
+                </SuiTableFooter>
+            </SuiTable>
+            <div>
+                <input ref="atkmlInput" :form="form" :name="name" type="hidden" :value="valueJson" />
+            </div>
+        </div>`,
   props: {
     data: Object
   },
@@ -487,9 +518,8 @@ __webpack_require__.r(__webpack_exports__);
     };
     return {
       form: this.data.formName,
-      value: this.data.inputValue,
+      valueJson: this.data.inputValue,
       name: this.data.inputName,
-      // form input name where to set multiline content value.
       rowData: [],
       fieldData: this.data.fields || [],
       eventFields: this.data.eventFields || [],
@@ -499,37 +529,37 @@ __webpack_require__.r(__webpack_exports__);
       caption: this.data.caption || null,
       tableProp: {
         ...tableDefault,
-        ...(this.data.tableProps || {})
+        ...this.data.tableProps
       }
     };
   },
   components: {
-    'atk-multiline-body': _multiline_body_component__WEBPACK_IMPORTED_MODULE_9__["default"],
-    'atk-multiline-header': _multiline_header_component__WEBPACK_IMPORTED_MODULE_10__["default"]
+    AtkMultilineHeader: _multiline_header_component__WEBPACK_IMPORTED_MODULE_12__["default"],
+    AtkMultilineBody: _multiline_body_component__WEBPACK_IMPORTED_MODULE_11__["default"]
   },
   mounted: function () {
-    this.rowData = this.buildRowData(this.value ? this.value : '[]');
+    this.rowData = this.buildRowData(this.valueJson ?? '[]');
     this.updateInputValue();
-    atk__WEBPACK_IMPORTED_MODULE_8__["default"].eventBus.on(this.$root.$el.id + '-update-row', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_10__["default"].eventBus.on(this.$root.$el.parentElement.id + '-update-row', payload => {
       this.onUpdate(payload.rowId, payload.fieldName, payload.value);
     });
-    atk__WEBPACK_IMPORTED_MODULE_8__["default"].eventBus.on(this.$root.$el.id + '-toggle-delete', payload => {
-      const idx = this.deletables.indexOf(payload.rowId);
-      if (idx > -1) {
-        this.deletables.splice(idx, 1);
+    atk__WEBPACK_IMPORTED_MODULE_10__["default"].eventBus.on(this.$root.$el.parentElement.id + '-toggle-delete', payload => {
+      const i = this.deletables.indexOf(payload.rowId);
+      if (i !== -1) {
+        this.deletables.splice(i, 1);
       } else {
         this.deletables.push(payload.rowId);
       }
     });
-    atk__WEBPACK_IMPORTED_MODULE_8__["default"].eventBus.on(this.$root.$el.id + '-toggle-delete-all', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_10__["default"].eventBus.on(this.$root.$el.parentElement.id + '-toggle-delete-all', payload => {
       this.deletables = [];
       if (payload.isOn) {
-        this.rowData.forEach(row => {
+        for (const row of this.rowData) {
           this.deletables.push(row.__atkml);
-        });
+        }
       }
     });
-    atk__WEBPACK_IMPORTED_MODULE_8__["default"].eventBus.on(this.$root.$el.id + '-multiline-rows-error', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_10__["default"].eventBus.on(this.$root.$el.parentElement.id + '-multiline-rows-error', payload => {
       this.errors = {
         ...payload.errors
       };
@@ -546,20 +576,20 @@ __webpack_require__.r(__webpack_exports__);
       this.rowData.push(newRow);
       this.updateInputValue();
       if (this.data.afterAdd && typeof this.data.afterAdd === 'function') {
-        this.data.afterAdd(JSON.parse(this.value));
+        this.data.afterAdd(JSON.parse(this.valueJson));
       }
       this.fetchExpression(newRow.__atkml);
-      this.fetchOnChangeAction();
+      this.fetchOnUpdateAction();
     },
     onDelete: function () {
-      this.deletables.forEach(atkmlId => {
+      for (const atkmlId of this.deletables) {
         this.deleteRow(atkmlId);
-      });
+      }
       this.deletables = [];
       this.updateInputValue();
-      this.fetchOnChangeAction();
+      this.fetchOnUpdateAction();
       if (this.data.afterDelete && typeof this.data.afterDelete === 'function') {
-        this.data.afterDelete(JSON.parse(this.value));
+        this.data.afterDelete(JSON.parse(this.valueJson));
       }
     },
     onUpdate: function (atkmlId, fieldName, value) {
@@ -567,10 +597,10 @@ __webpack_require__.r(__webpack_exports__);
       this.clearError(atkmlId, fieldName);
       this.updateInputValue();
       if (!this.onUpdate.debouncedFx) {
-        this.onUpdate.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_8__["default"].createDebouncedFx(() => {
+        this.onUpdate.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_10__["default"].createDebouncedFx(() => {
           this.onUpdate.debouncedFx = null;
           this.fetchExpression(atkmlId);
-          this.fetchOnChangeAction(fieldName);
+          this.fetchOnUpdateAction(fieldName);
         }, 250);
       }
       this.onUpdate.debouncedFx.call(this);
@@ -581,9 +611,9 @@ __webpack_require__.r(__webpack_exports__);
      */
     createRow: function (fields) {
       const row = {};
-      fields.forEach(field => {
+      for (const field of fields) {
         row[field.name] = field.default;
-      });
+      }
       row.__atkml = this.getUUID();
       return row;
     },
@@ -595,11 +625,11 @@ __webpack_require__.r(__webpack_exports__);
      * Update the value of the field in rowData.
      */
     updateFieldInRow: function (atkmlId, fieldName, value) {
-      this.rowData.forEach(row => {
+      for (const row of this.rowData) {
         if (row.__atkml === atkmlId) {
           row[fieldName] = value;
         }
-      });
+      }
     },
     clearError: function (atkmlId, fieldName) {
       if (atkmlId in this.errors) {
@@ -615,39 +645,39 @@ __webpack_require__.r(__webpack_exports__);
      * as JSON string.
      */
     updateInputValue: function () {
-      this.value = JSON.stringify(this.rowData);
+      this.valueJson = JSON.stringify(this.rowData);
     },
     /**
      * Build rowData from JSON string.
      */
     buildRowData: function (jsonValue) {
       const rows = JSON.parse(jsonValue);
-      rows.forEach(row => {
+      for (const row of rows) {
         row.__atkml = this.getUUID();
-      });
+      }
       return rows;
     },
     /**
      * Check if one of the field use expression.
      */
     hasExpression: function () {
-      return this.fieldData.filter(field => field.isExpr).length > 0;
+      return this.fieldData.some(field => field.isExpr);
     },
     /**
      * Send on change action to server.
      * Use regular api call in order
-     * for return js to be fully evaluated.
+     * for return JS to be fully evaluated.
      */
-    fetchOnChangeAction: function () {
+    fetchOnUpdateAction: function () {
       let fieldName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      if (this.hasChangeCb && (fieldName === null || this.eventFields.indexOf(fieldName) > -1)) {
-        external_jquery__WEBPACK_IMPORTED_MODULE_7___default()(this.$refs.addBtn.$el).api({
+      if (this.hasChangeCb && (fieldName === null || this.eventFields.includes(fieldName))) {
+        external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(this.$refs.addButton.$el).api({
           on: 'now',
           url: this.data.url,
           method: 'POST',
           data: {
             __atkml_action: 'on-change',
-            rows: this.value
+            rows: this.valueJson
           }
         });
       }
@@ -656,10 +686,10 @@ __webpack_require__.r(__webpack_exports__);
       const data = {
         ...row
       };
-      const context = this.$refs.addBtn.$el;
+      const context = this.$refs.addButton.$el;
       data.__atkml_action = 'update-row';
       try {
-        return await atk__WEBPACK_IMPORTED_MODULE_8__["default"].apiService.suiFetch(this.data.url, {
+        return await atk__WEBPACK_IMPORTED_MODULE_10__["default"].apiService.suiFetch(this.data.url, {
           data: data,
           method: 'POST',
           stateContext: context
@@ -674,14 +704,14 @@ __webpack_require__.r(__webpack_exports__);
     fetchExpression: async function (atkmlId) {
       if (this.hasExpression()) {
         const row = this.findRow(atkmlId);
-        // server will return expression field - value if define.
+        // server will return expression field/value if defined
         if (row) {
           const resp = await this.postData(row);
           if (resp.expressions) {
             const fields = Object.keys(resp.expressions);
-            fields.forEach(field => {
+            for (const field of fields) {
               this.updateFieldInRow(atkmlId, field, resp.expressions[field]);
-            });
+            }
             this.updateInputValue();
           }
         }
@@ -697,7 +727,7 @@ __webpack_require__.r(__webpack_exports__);
      * UUID v4 generator.
      */
     getUUID: function () {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replaceAll(/[xy]/g, c => {
         const r = Math.floor(Math.random() * 16);
         const v = c === 'x' ? r : r & (0x3 | 0x8); // eslint-disable-line no-bitwise
 
@@ -717,18 +747,14 @@ __webpack_require__.r(__webpack_exports__);
      * deletables entries.
      */
     getMainToggleState: function () {
-      let state = 'off';
+      let res = 'off';
       if (this.deletables.length > 0) {
-        if (this.deletables.length === this.rowData.length) {
-          state = 'on';
-        } else {
-          state = 'indeterminate';
-        }
+        res = this.deletables.length === this.rowData.length ? 'on' : 'indeterminate';
       }
-      return state;
+      return res;
     },
     isDeleteDisable: function () {
-      return !this.deletables.length > 0;
+      return this.deletables.length === 0;
     },
     isLimitReached: function () {
       if (this.data.rowLimit === 0) {
@@ -755,50 +781,51 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * Wrapper for vue-flatpickr-component component.
+ *
  * https://github.com/ankurk91/vue-flatpickr-component
  *
- * Props:
- * config: Any of flatpickr options
- *
- * Will emit a dateChange event when date is set.
+ * Properties:
+ * config: Any of Flatpickr options
  */
-
-const template = '<flatpickr-picker v-model="date" :config="flatPickr" @on-change="onChange"></flatpickr-picker>';
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-date-picker',
-  template: template,
-  props: ['config', 'value'],
+  name: 'AtkDatePicker',
+  template: `
+        <FlatpickrPicker
+            :config="flatPickr"
+            :modelValue="getFlatpickrValue(modelValue)"
+            @update:modelValue="onUpdate"
+        />`,
+  props: ['config', 'modelValue'],
   data: function () {
     const {
       useDefault,
-      ...fpickr
+      ...otherConfig
     } = this.config;
-    if (useDefault && !fpickr.defaultDate && !this.value) {
-      fpickr.defaultDate = new Date();
-    } else if (this.value) {
-      fpickr.defaultDate = this.value;
+    if (useDefault && !otherConfig.defaultDate && !this.modelValue) {
+      otherConfig.defaultDate = new Date();
+    } else if (this.modelValue) {
+      otherConfig.defaultDate = this.modelValue;
     }
-    if (!fpickr.locale) {
-      fpickr.locale = flatpickr.l10ns.default;
+    if (!otherConfig.locale) {
+      otherConfig.locale = flatpickr.l10ns.default;
     }
     return {
-      flatPickr: fpickr,
-      date: null
+      flatPickr: otherConfig
     };
   },
+  emits: ['setDefault'],
   mounted: function () {
     // if value is not set but default date is, then emit proper string value to parent.
-    if (!this.value && this.flatPickr.defaultDate) {
-      if (this.flatPickr.defaultDate instanceof Date) {
-        this.$emit('setDefault', flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat));
-      } else {
-        this.$emit('setDefault', this.flatPickr.defaultDate);
-      }
+    if (!this.modelValue && this.flatPickr.defaultDate) {
+      this.onUpdate(this.flatPickr.defaultDate instanceof Date ? flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat) : this.flatPickr.defaultDate);
     }
   },
   methods: {
-    onChange: function (date) {
-      this.$emit('onChange', flatpickr.formatDate(date[0], this.flatPickr.dateFormat));
+    getFlatpickrValue: function (value) {
+      return value;
+    },
+    onUpdate: function (value) {
+      this.$emit('update:modelValue', value);
     }
   }
 });
@@ -815,49 +842,46 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
+/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
+
 
 
 /**
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
  *
- * Props:
+ * Properties:
  * config:
- * url: the callback URL. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
  * reference: the reference field name associate with model or hasOne name. This field name will be sent along with URL callback parameter as of 'field=name'.
- * ui: the css class name to apply to dropdown.
- * Note: The remaining config object may contain any or sui-dropdown { props: value } pair.
+ * Note: The remaining config object may contain any or SuiDropdown { props: value } pair.
  *
- * value: The selected value.
+ * modelValue: The selected value.
  * optionalValue: The initial list of options for the dropdown.
  */
-
-const template = `<sui-dropdown
-                    ref="drop"
-                    v-bind="dropdownProps"
-                    :loading="isLoading"
-                    @input="onChange"
-                    @filtered="onFiltered"
-                    v-model="current"
-                    :class="css"></sui-dropdown>`;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'atk-lookup',
-  template: template,
-  props: ['config', 'value', 'optionalValue'],
+  name: 'AtkLookup',
+  template: `
+        <SuiDropdown
+            v-bind="dropdownProps"
+            ref="drop"
+            :modelValue="getDropdownValue(modelValue)"
+            @update:modelValue="onUpdate"
+        ></SuiDropdown>`,
+  props: ['config', 'modelValue', 'optionalValue'],
   data: function () {
     const {
       url,
       reference,
-      ui,
-      ...suiDropdown
+      ...otherConfig
     } = this.config;
-    suiDropdown.selection = true;
+    otherConfig.selection = true;
     return {
-      dropdownProps: suiDropdown,
-      current: this.value,
+      dropdownProps: otherConfig,
       url: url || null,
-      css: [ui],
-      isLoading: false,
       field: reference,
       query: '',
       temp: ''
@@ -868,55 +892,67 @@ const template = `<sui-dropdown
       this.dropdownProps.options = Array.isArray(this.optionalValue) ? this.optionalValue : [this.optionalValue];
     }
   },
+  emits: ['update:modelValue'],
   methods: {
-    onChange: function (value) {
-      this.$emit('onChange', value);
+    getDropdownValue: function (value) {
+      return this.dropdownProps.options.find(item => item.value === value);
     },
-    /**
-     * Receive user input text for search.
-     */
-    onFiltered: function (inputValue) {
-      if (inputValue) {
-        this.isLoading = true;
-      }
-      if (!this.onFiltered.debouncedFx) {
-        this.onFiltered.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_0__["default"].createDebouncedFx(() => {
-          this.onFiltered.debouncedFx = null;
-          if (this.query !== this.temp) {
-            this.query = this.temp;
-            if (this.query) {
-              this.fetchItems(this.query);
-            }
-          }
-        }, 250);
-      }
-      this.temp = inputValue;
-      this.onFiltered.debouncedFx(this);
-    },
-    /**
-     * Fetch new data from server.
-     */
-    fetchItems: async function (q) {
-      try {
-        const data = {
-          atkVueLookupQuery: q,
-          atkVueLookupField: this.field
-        };
-        const response = await atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService.suiFetch(this.url, {
-          method: 'get',
-          data: data
-        });
-        if (response.success) {
-          this.dropdownProps.options = response.results;
-        }
-      } catch (e) {
-        console.error(e);
-      } finally {
-        this.isLoading = false;
-      }
+    onUpdate: function (value) {
+      this.$emit('update:modelValue', value.value);
     }
   }
 });
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.async-iterator.some.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.async-iterator.some.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var $some = (__webpack_require__(/*! ../internals/async-iterator-iteration */ "./node_modules/core-js/internals/async-iterator-iteration.js").some);
+
+// `AsyncIterator.prototype.some` method
+// https://github.com/tc39/proposal-async-iterator-helpers
+$({ target: 'AsyncIterator', proto: true, real: true }, {
+  some: function some(predicate) {
+    return $some(this, predicate);
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.iterator.some.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.iterator.some.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var iterate = __webpack_require__(/*! ../internals/iterate */ "./node_modules/core-js/internals/iterate.js");
+var aCallable = __webpack_require__(/*! ../internals/a-callable */ "./node_modules/core-js/internals/a-callable.js");
+var anObject = __webpack_require__(/*! ../internals/an-object */ "./node_modules/core-js/internals/an-object.js");
+var getIteratorDirect = __webpack_require__(/*! ../internals/get-iterator-direct */ "./node_modules/core-js/internals/get-iterator-direct.js");
+
+// `Iterator.prototype.some` method
+// https://github.com/tc39/proposal-iterator-helpers
+$({ target: 'Iterator', proto: true, real: true }, {
+  some: function some(predicate) {
+    anObject(this);
+    aCallable(predicate);
+    var record = getIteratorDirect(this);
+    var counter = 0;
+    return iterate(record, function (value, stop) {
+      if (predicate(value, counter++)) return stop();
+    }, { IS_RECORD: true, INTERRUPTED: true }).stopped;
+  }
+});
+
 
 /***/ })
 

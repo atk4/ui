@@ -6,8 +6,8 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsExpressionable;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpressionable;
 
 class Checkbox extends Form\Control
 {
@@ -25,10 +25,6 @@ class Checkbox extends Form\Control
 
     public function __construct($label = [])
     {
-        if (func_num_args() > 1) { // prevent bad usage
-            throw new \Error('Too many method arguments');
-        }
-
         parent::__construct($label);
 
         $this->label = $this->content;
@@ -37,12 +33,6 @@ class Checkbox extends Form\Control
 
     protected function init(): void
     {
-        // TODO exception should be generalized for type acceptable for any form control
-        if ($this->entityField && $this->entityField->getField()->type !== 'boolean') {
-            throw (new Exception('Checkbox form control requires field with boolean type'))
-                ->addMoreInfo('type', $this->entityField->getField()->type);
-        }
-
         parent::init();
 
         // checkboxes are annoying because they don't send value when they are
@@ -61,11 +51,16 @@ class Checkbox extends Form\Control
             $this->template->set('Content', $this->label);
         }
 
+        if ($this->entityField && !is_bool($this->entityField->get() ?? false)) {
+            throw (new Exception('Checkbox form control requires field with boolean type'))
+                ->addMoreInfo('type', $this->entityField->getField()->type)
+                ->addMoreInfo('value', $this->entityField->get());
+        }
+
         if ($this->entityField ? $this->entityField->get() : $this->content) {
             $this->template->dangerouslySetHtml('checked', 'checked="checked"');
         }
 
-        // We don't want this displayed, because it can only affect "checked" status anyway
         $this->content = null;
 
         if ($this->readOnly) {
@@ -79,8 +74,6 @@ class Checkbox extends Form\Control
 
         $this->js(true)->checkbox();
 
-        $this->content = null; // no content again
-
         parent::renderView();
     }
 
@@ -92,7 +85,7 @@ class Checkbox extends Form\Control
      *
      * @return Jquery
      */
-    public function jsChecked($when = false, $action = null)
+    public function jsChecked($when = false, $action = null): JsExpressionable
     {
         return $this->jsInput($when, $action)->get(0)->checked;
     }

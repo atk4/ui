@@ -18,7 +18,7 @@ class CardSection extends View
     public $glue = ': ';
 
     /** @var array<int, string> */
-    public $tableClass = ['ui', 'fixed', 'small'];
+    public $tableClass = ['fixed', 'small'];
 
     protected function init(): void
     {
@@ -70,13 +70,16 @@ class CardSection extends View
             if ($model->titleField === $field) {
                 continue;
             }
-            $label = $model->getField($field)->getCaption();
-            $value = $this->issetApp() ? $this->getApp()->uiPersistence->typecastSaveField($model->getField($field), $model->get($field)) : $model->get($field);
+
+            $value = $this->getApp()->uiPersistence->typecastSaveField($model->getField($field), $model->get($field));
             if ($useLabel) {
+                $label = $model->getField($field)->getCaption();
                 $value = $label . $this->glue . $value;
             }
 
-            $this->addDescription($value);
+            if ($value) {
+                $this->addDescription($value);
+            }
         }
     }
 

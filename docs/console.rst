@@ -23,7 +23,7 @@ Basic Usage
 .. php:method:: send($callback)
 
 
-After adding a console to your :ref:`render_tree`, you just need to set a call-back::
+After adding a console to your :ref:`render_tree`, you just need to set a callback::
 
     $console = Console::addTo($app);
     $console->set(function (Console $console) {
@@ -31,7 +31,7 @@ After adding a console to your :ref:`render_tree`, you just need to set a call-b
         $console->output('hello');
         echo 'world'; // also will be redirected to console
         sleep(2);
-        $console->send(new \Atk4\Ui\JsExpression('alert([])', ['The wait is over']));
+        $console->send(new \Atk4\Ui\Js\JsExpression('alert([])', ['The wait is over']));
     });
 
 Console uses :ref:`sse` which works pretty much out-of-the-box with the modern browsers and unlike websockets
@@ -96,7 +96,7 @@ Method exec can be executed directly on the $console or inside the callback::
         $console->eval();
     });
 
-Without call-back, eval will wrap itself into a callback but you can only execute a single command. When using callback
+Without callback, eval will wrap itself into a callback but you can only execute a single command. When using callback
 form, you can execute multiple commands::
 
     Console::addTo($app)->set(function (Console $c) {

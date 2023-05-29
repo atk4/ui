@@ -6,16 +6,20 @@ namespace Atk4\Ui;
 
 class GridLayout extends View
 {
+    public $ui = 'grid';
+
+    public $defaultTemplate = 'grid-layout.html';
+
     /** @var int Number of rows */
     protected $rows = 1;
 
-    /** @var int Number of columns */
+    /** @var int<1, 16> Number of columns */
     protected $columns = 2;
 
-    /** @var array columns CSS wide classes */
-    protected $words = [
-        '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
-        'thirteen', 'fourteen', 'fifteen', 'sixteen',
+    /** @var array<int, string> */
+    protected $cssWideClasses = [
+        1 => 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+        'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
     ];
 
     /** @var HtmlTemplate */
@@ -24,14 +28,6 @@ class GridLayout extends View
     protected $tRow;
     /** @var HtmlTemplate */
     protected $tCol;
-    /** @var HtmlTemplate */
-    public $template;
-
-    /** @var string Fomantic-UI CSS class */
-    public $ui = 'grid';
-
-    /** @var string Template file */
-    public $defaultTemplate = 'grid-layout.html';
 
     /** @var string CSS class for columns view */
     public $columnClass = '';
@@ -93,10 +89,10 @@ class GridLayout extends View
             };
             $cloneTagTreeFx($tmp->getTagTree('rows'));
 
-        // TODO prune unreachable nodes
-        // $template->rebuildTagsIndex();
+            // TODO prune unreachable nodes
+            // $template->rebuildTagsIndex();
         }, null, HtmlTemplate::class)();
 
-        $this->addClass($this->words[$this->columns] . ' column');
+        $this->addClass($this->cssWideClasses[$this->columns] . ' column');
     }
 }

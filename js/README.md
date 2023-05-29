@@ -1,4 +1,4 @@
-# Agile Toolkit js package
+# Agile Toolkit JS package
 
 The javascript package is necessary to run Agile Toolkit UI. It provide necessary
 jQuery plugin needed for Atk4\Ui and also provide app wide services for Fomantic-UI module.
@@ -81,13 +81,13 @@ Any change made to the source, will also be re-compile automatically when using 
 #### Analyzing bundle profile
 
 Bundle profile may be analyze using various tools. npm script are availabe for producing
-the json file for this.
+the JSON file for this.
 
 ```
     npm run profile
 ```
 
-This command will create a profile json file `atkjs-bundle-profile.json` with bundle information inside the profile folder. You can use this file with your
+This command will create a profile JSON file `atkjs-bundle-profile.json` with bundle information inside the profile folder. You can use this file with your
 favorite bundle analyzer.
 
 Another npm script is available for analyzing the bundle using the webpack-bundle-analyzer tool.

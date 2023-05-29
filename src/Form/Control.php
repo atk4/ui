@@ -9,13 +9,15 @@ use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsExpressionable;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\View;
 
 /**
  * Provides generic functionality for a form control.
+ *
+ * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
  */
 class Control extends View
 {
@@ -38,7 +40,7 @@ class Control extends View
     /** @var bool rendered or not input label in generic Form\Layout template. */
     public $renderLabel = true;
 
-    /** @var string */
+    /** @var string Specify width for Fomantic-UI grid. For "four wide" use 'four'. */
     public $width;
 
     /**
@@ -79,7 +81,7 @@ class Control extends View
 
         if ($this->form && $this->entityField) {
             if (isset($this->form->controls[$this->entityField->getFieldName()])) {
-                throw (new Exception('Form already has a field with the same name'))
+                throw (new Exception('Form field already exists'))
                     ->addMoreInfo('name', $this->entityField->getFieldName());
             }
             $this->form->controls[$this->entityField->getFieldName()] = $this;
@@ -91,19 +93,17 @@ class Control extends View
      * the model, then the model's value will also be affected.
      *
      * @param mixed $value
-     * @param mixed $junk
+     * @param never $ignore
      *
      * @return $this
      */
-    public function set($value = null, $junk = null)
+    public function set($value = null, $ignore = null)
     {
         if ($this->entityField) {
             $this->entityField->set($value);
-
-            return $this;
+        } else {
+            $this->content = $value;
         }
-
-        $this->content = $value;
 
         return $this;
     }
@@ -134,7 +134,7 @@ class Control extends View
      * Shorthand method for on('change') event.
      * Some input fields, like Calendar, could call this differently.
      *
-     * If $expr is string or JsExpression, then it will execute it instantly.
+     * If $expr is JsExpressionable, then it will execute it instantly.
      * If $expr is callback method, then it'll make additional request to webserver.
      *
      * Could be preferable to set useDefault to false. For example when
@@ -142,19 +142,14 @@ class Control extends View
      * Otherwise, change handler will not be propagate to all handlers.
      *
      * Examples:
-     * $control->onChange('console.log(\'changed\')');
      * $control->onChange(new JsExpression('console.log(\'changed\')'));
-     * $control->onChange('$(this).parents(\'.form\').form(\'submit\')');
+     * $control->onChange(new JsExpression('$(this).parents(\'.form\').form(\'submit\')'));
      *
-     * @param string|JsExpression|array|\Closure $expr
-     * @param array|bool                         $defaults
+     * @param JsExpressionable|JsCallbackSetClosure|array{JsCallbackSetClosure} $expr
+     * @param array|bool                                                        $defaults
      */
     public function onChange($expr, $defaults = []): void
     {
-        if (is_string($expr)) {
-            $expr = new JsExpression($expr);
-        }
-
         if (is_bool($defaults)) {
             $defaults = $defaults ? [] : ['preventDefault' => false, 'stopPropagation' => false];
         }
@@ -173,7 +168,7 @@ class Control extends View
      *
      * @return Jquery
      */
-    public function jsInput($when = false, $action = null)
+    public function jsInput($when = false, $action = null): JsExpressionable
     {
         return $this->js($when, $action, '#' . $this->name . '_input');
     }

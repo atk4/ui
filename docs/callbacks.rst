@@ -19,7 +19,7 @@ PHP callback::
         return $j->text(rand(1, 100));
     });
 
-This creates call-back route transparently which is triggered automatically during the 'click' event.
+This creates callback route transparently which is triggered automatically during the 'click' event.
 To make this work seamlessly there are several classes at play. This documentation chapter will walk
 you through the callback mechanisms of Agile UI.
 
@@ -103,7 +103,7 @@ much more preferred way is to use :php:attr:`$triggered`.
 
 You use property `triggered` to detect if callback was executed or not, without short-circuting the
 execution with set() and terminate(). This can be helpful sometimes when you need to affect the
-rendering of the page through a special call-back link. The next example will change color of
+rendering of the page through a special callback link. The next example will change color of
 the label regardless of the callback function::
 
     $label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
@@ -168,7 +168,7 @@ Here is example of JsReload::
     $view = \Atk4\Ui\View::addTo($app, ['ui' => 'tertiary green inverted segment']);
     $button = \Atk4\Ui\Button::addTo($app, ['Reload Lorem']);
 
-    $button->on('click', new \Atk4\Ui\JsReload($view));
+    $button->on('click', new \Atk4\Ui\Js\JsReload($view));
 
     \Atk4\Ui\LoremIpsum::addTo($view);
 
@@ -210,7 +210,7 @@ When you trigger callback, you'll see the output::
     {"success": true, "message": "Success", "eval": "alert(\"ok\")"}
 
 This is how JsCallback renders actions and sends them back to the browser. In order to retrieve and execute actions,
-you'll need a JavaScript routine. Luckily JsCallback also implements JsExpressionable, so it, in itself is an action.
+you'll need a JavaScript routine. Luckily JsCallback can be passed to :php:meth:`View::on()` as a JS action.
 
 Let me try this again. JsCallback is an :ref:`js_action` which will execute request towards a callback-URL that will
 execute PHP method returning one or more :ref:`js_action` which will be received and executed by the original action.
@@ -277,12 +277,12 @@ will send browser screen width back to the callback::
     $label = \Atk4\Ui\Label::addTo($app);
     $cb = \Atk4\Ui\JsCallback::addTo($label);
 
-    $cb->set(function (\Atk4\Ui\Jquery $j, $arg1) {
+    $cb->set(function (\Atk4\Ui\Js\Jquery $j, $arg1) {
         return 'width is ' . $arg1;
-    }, [new \Atk4\Ui\JsExpression( '$(window).width()' )]);
+    }, [new \Atk4\Ui\Js\JsExpression('$(window).width()')]);
 
     $label->detail = $cb->getUrl();
-    $label->js('click', $cb);
+    $label->on('click', $cb);
 
 In here you see that I'm using a 2nd argument to $cb->set() to specify arguments, which, I'd like to fetch from the
 browser. Those arguments are passed to the callback and eventually arrive as $arg1 inside my callback. The :php:meth:`View::on()`
@@ -292,7 +292,7 @@ also supports argument passing::
 
     $label->on('click', function (Jquery $j, $arg1) {
         return 'width is ' . $arg1;
-    }, ['confirm' => 'sure?', 'args' => [new \Atk4\Ui\JsExpression( '$(window).width()' )]]);
+    }, ['confirm' => 'sure?', 'args' => [new \Atk4\Ui\Js\JsExpression('$(window).width()')]]);
 
 If you do not need to specify confirm, you can actually pass arguments in a key-less array too::
 
@@ -300,7 +300,7 @@ If you do not need to specify confirm, you can actually pass arguments in a key-
 
     $label->on('click', function (Jquery $j, $arg1) {
         return 'width is ' . $arg1;
-    }, [new \Atk4\Ui\JsExpression( '$(window).width()' )]);
+    }, [new \Atk4\Ui\Js\JsExpression('$(window).width()')]);
 
 
 Refering to event origin

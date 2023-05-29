@@ -1,33 +1,50 @@
 import atk from 'atk';
 
 export default {
-    name: 'atk-multiline-header',
+    name: 'AtkMultilineHeader',
     template: `
-     <sui-table-header>
-       <sui-table-row v-if="hasError()">
-        <sui-table-cell :style="{ background: 'none' }"></sui-table-cell>
-        <sui-table-cell :style="{ background: 'none' }" state="error" v-for="(column, idx) in columns" :key="idx" v-if="column.isVisible" :textAlign="getTextAlign(column)"><sui-icon name="attention" v-if="getErrorMsg(column)"></sui-icon>{{getErrorMsg(column)}}</sui-table-cell>
-      </sui-table-row>
-       <sui-table-row v-if="hasCaption()">
-        <sui-table-headerCell :colspan="getVisibleColumns()">{{caption}}</sui-table-headerCell>
-       </sui-table-row>
-        <sui-table-row :verticalAlign="'top'">
-        <sui-table-header-cell width="one" textAlign="center"><input type="checkbox" @input="onToggleDeleteAll" :checked.prop="isChecked" :indeterminate.prop="isIndeterminate" ref="check"></sui-table-header-cell>
-        <sui-table-header-cell v-for="(column, idx) in columns" :key="idx" v-if="column.isVisible" :textAlign="getTextAlign(column)">
-         <div>{{column.caption}}</div>
-         <div :style="{ position: 'absolute', top: '-22px' }" v-if="false"><sui-label pointing="below" basic color="red" v-if="getErrorMsg(column)">{{getErrorMsg(column)}}</sui-label></div>
-        </sui-table-header-cell>
-      </sui-table-row>
-    </sui-table-header>
-  `,
-    props: ['fields', 'state', 'errors', 'caption'],
+        <SuiTableHeader>
+            <SuiTableRow v-if="hasError()">
+                <SuiTableCell :style="{ background: 'none' }" />
+                <SuiTableCell :style="{ background: 'none' }"
+                    error="true"
+                    v-for="column in filterVisibleColumns(columns)"
+                    :textAlign="getTextAlign(column)"
+                >
+                    <SuiIcon v-if="getErrorMsg(column)" name="attention" />
+                    {{getErrorMsg(column)}}
+                </SuiTableCell>
+            </SuiTableRow>
+            <SuiTableRow v-if="hasCaption()">
+                <SuiTableHeaderCell :colspan="getVisibleColumns()">{{caption}}</SuiTableHeaderCell>
+            </SuiTableRow>
+            <SuiTableRow :verticalAlign="'top'">
+                <SuiTableHeaderCell :width=1 textAlign="center">
+                    <input ref="check" type="checkbox" :checked="isChecked" :indeterminate="isIndeterminate" @input="onToggleDeleteAll" />
+                </SuiTableHeaderCell>
+                <SuiTableHeaderCell
+                    v-for="column in filterVisibleColumns(columns)"
+                    :width=column.cellProps.width
+                    :textAlign="getTextAlign(column)"
+                >
+                    <div>{{column.caption}}</div>
+                    <div v-if="false" :style="{ position: 'absolute', top: '-22px' }">
+                        <SuiLabel v-if="getErrorMsg(column)" pointing="below" basic color="red">{{getErrorMsg(column)}}</SuiLabel>
+                    </div>
+                </SuiTableHeaderCell>
+            </SuiTableRow>
+        </SuiTableHeader>`,
+    props: ['fields', 'selectionState', 'errors', 'caption'],
     data: function () {
         return { columns: this.fields, isDeleteAll: false };
     },
     methods: {
+        filterVisibleColumns: function (columns) {
+            return columns.filter((v) => v.isVisible);
+        },
         onToggleDeleteAll: function () {
             this.$nextTick(() => {
-                atk.eventBus.emit(this.$root.$el.id + '-toggle-delete-all', { isOn: this.$refs.check.checked });
+                atk.eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete-all', { isOn: this.$refs.check.checked });
             });
         },
         getTextAlign: function (column) {
@@ -36,10 +53,11 @@ export default {
                 switch (column.type) {
                     case 'integer':
                     case 'float':
-                    case 'atk4_money':
+                    case 'atk4_money': {
                         align = 'right';
 
                         break;
+                    }
                 }
             }
 
@@ -47,9 +65,9 @@ export default {
         },
         getVisibleColumns: function () {
             let count = 1; // add deletable column;
-            this.columns.forEach((field) => {
+            for (const field of this.columns) {
                 count = field.isVisible ? count + 1 : count;
-            });
+            }
 
             return count;
         },
@@ -62,8 +80,8 @@ export default {
         getErrorMsg: function (column) {
             if (this.hasError()) {
                 const rows = Object.keys(this.errors);
-                for (let i = 0; i < rows.length; i++) {
-                    const error = this.errors[rows[i]].filter((col) => col.name === column.name);
+                for (const row of rows) {
+                    const error = this.errors[row].filter((col) => col.name === column.name);
                     if (error.length > 0) {
                         return error[0].msg;
                     }
@@ -75,10 +93,10 @@ export default {
     },
     computed: {
         isIndeterminate: function () {
-            return this.state === 'indeterminate';
+            return this.selectionState === 'indeterminate';
         },
         isChecked: function () {
-            return this.state === 'on';
+            return this.selectionState === 'on';
         },
     },
 };

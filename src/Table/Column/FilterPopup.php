@@ -8,8 +8,9 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsReload;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Popup;
 use Atk4\Ui\View;
 
@@ -23,14 +24,14 @@ class FilterPopup extends Popup
     /** @var Form The form associate with this FilterPopup. */
     public $form;
 
-    /** @var Field The table field that need filtering. */
-    public $field;
+    /** The table field that need filtering. */
+    public Field $field;
 
     /** @var View|null The view associated with this filter popup that needs to be reloaded. */
     public $reload;
 
     /**
-     * The Table Column triggering the poupup.
+     * The Table Column triggering the popup.
      * This is need to simulate click in order to properly
      * close the popup window on "Clear".
      *
@@ -50,15 +51,16 @@ class FilterPopup extends Popup
 
         $this->form = Form::addTo($this)->addClass('');
         $this->form->buttonSave->addClass('');
-        $this->form->addGroup('Where ' . $this->field->getCaption() . ' :');
+        $this->form->addGroup('Where ' . $this->field->getCaption() . ':');
 
         $this->form->buttonSave->set('Set');
 
         $this->form->setControlsDisplayRules($model->getFormDisplayRules());
 
         // load data associated with this popup.
-        if ($data = $model->recallData()) {
-            $model->setMulti($data);
+        $filter = $model->recallData();
+        if ($filter !== null) {
+            $model->setMulti($filter);
         }
         $this->form->setModel($model);
 
@@ -72,11 +74,11 @@ class FilterPopup extends Popup
             ->on('click', function (Jquery $j) use ($model) {
                 $model->clearData();
 
-                return [
-                    $this->form->js(false, null, $this->form->formElement)->form('reset'),
+                return new JsBlock([
+                    $this->form->js()->form('reset'),
                     new JsReload($this->reload),
-                    (new Jquery($this->colTrigger))->trigger('click'),
-                ];
+                    (new Jquery($this->colTrigger))->click(),
+                ]);
             });
     }
 
@@ -85,15 +87,13 @@ class FilterPopup extends Popup
      */
     public function isFilterOn(): bool
     {
-        return ($this->recallData() ?? '') !== '';
+        return $this->recallData() !== null;
     }
 
     /**
      * Recall model data.
-     *
-     * @return mixed
      */
-    public function recallData()
+    public function recallData(): ?array
     {
         return $this->form->model->recallData();
     }

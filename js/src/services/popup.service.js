@@ -6,28 +6,23 @@ import atk from 'atk';
 class PopupService {
     getDefaultFomanticSettings() {
         return [
+            {},
             {
-            },
-            {
-                onCreate: this.onCreate,
                 onShow: this.onShow,
-                onHide: this.onHide,
-                onRemove: this.onRemove,
             },
         ];
     }
 
     /**
-     * OnShow callback when a popup is trigger.
-     * Will check if popup needs to be setup dynamically using a callback.
+     * Check if popup needs to be setup dynamically using a callback.
      */
     onShow($module) {
         const $popup = this;
         const data = $popup.data();
         if (data.url !== '' && data.url !== undefined) {
-            // Only load if we are not using data.cache or content has not been loaded yet.
+            // only load if we are not using data.cache or content has not been loaded yet
             if (!data.cache || !data.hascontent) {
-                // display default loader while waiting for content.
+                // display default loader while waiting for content
                 $popup.html(atk.popupService.getLoaderHtml());
                 $popup.api({
                     on: 'now',
@@ -39,7 +34,7 @@ class PopupService {
                         if (result.length === 0) {
                             response.success = false;
                             response.isServiceError = true;
-                            response.message = 'Popup service error: Empty html, unable to replace popup content from server response';
+                            response.message = 'Popup service error: Empty HTML, unable to replace popup content from server response';
                         } else {
                             response.id = null;
                             $popup.data('hascontent', true);
@@ -48,23 +43,6 @@ class PopupService {
                 });
             }
         }
-    }
-
-    onHide() {}
-
-    /**
-     * Only call when popup are created from metadata
-     * and trigger action is fired.
-     */
-    onCreate() {
-        // console.log('onCreate');
-    }
-
-    /**
-     * Called only if onCreate was called.
-     */
-    onRemove() {
-        // console.log('onRemove');
     }
 
     getLoaderHtml() {

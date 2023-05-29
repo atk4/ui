@@ -31,35 +31,18 @@ abstract class AbstractView
     use StaticAddToTrait;
     use TrackableTrait;
 
-    /** @var string Default name of the element. */
-    public $defaultName = 'atk';
-
     /**
      * If add() method is called, but current view is not part of render tree yet,
      * then arguments to add() are simply stored in this array. When the view is
      * initialized by calling init() or adding into App or another initialized View,
      * then add() will be re-invoked with the contents of this array.
      *
-     * @var array<int, array{self, array}>
+     * @var array<int, array{self, array}>|null
      */
-    protected array $_addLater = [];
+    protected ?array $_addLater = [];
 
     /** Will be set to true after rendered. This is so that we don't render view twice. */
     protected bool $_rendered = false;
-
-    /**
-     * For the absence of the application, we would add a very
-     * simple one.
-     */
-    protected function initDefaultApp(): void
-    {
-        $this->setApp(new App([
-            'catchExceptions' => false,
-            'alwaysRun' => false,
-            'catchRunawayCallbacks' => false,
-        ]));
-        $this->getApp()->invokeInit();
-    }
 
     /**
      * Called when view becomes part of render tree. You can override it but avoid
@@ -67,21 +50,18 @@ abstract class AbstractView
      */
     protected function init(): void
     {
-        if (!$this->issetApp()) {
-            $this->initDefaultApp();
-        }
-
         if ($this->name === null) {
-            $this->name = $this->defaultName;
+            $this->name = 'atk';
         }
 
         $this->_init();
 
-        // add default objects
-        foreach ($this->_addLater as [$object, $args]) {
-            $this->add($object, $args);
+        if ($this->_addLater !== null) {
+            foreach ($this->_addLater as [$object, $args]) {
+                $this->add($object, $args);
+            }
+            $this->_addLater = null;
         }
-        $this->_addLater = [];
     }
 
     /**

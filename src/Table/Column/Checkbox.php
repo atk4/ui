@@ -6,7 +6,9 @@ namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
 use Atk4\Ui\Exception;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Table;
 
 /**
@@ -21,13 +23,12 @@ class Checkbox extends Table\Column
      * Return action which will calculate and return array of all Checkbox IDs, e.g.
      *
      * [3, 5, 20]
-     *
-     * @return JsExpression
      */
-    public function jsChecked()
+    public function jsChecked(): JsExpressionable
     {
-        return new JsExpression('$(' . $this->table->jsRender() . ').find(\'.checked.' . $this->class . '\').closest(\'tr\').map(function () { '
-            . 'return $(this).data(\'id\'); }).get().join(\',\')');
+        return (new Jquery($this->table))->find('.checked.' . $this->class)->closest('tr')
+            ->map(new \Atk4\Ui\Js\JsFunction([], [new JsExpression('return $(this).data(\'id\')')]))
+            ->get()->join(',');
     }
 
     protected function init(): void

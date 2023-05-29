@@ -12,12 +12,15 @@ use Atk4\Ui\View;
 
 class ListerTest extends TestCase
 {
+    use CreateAppTrait;
+
     /**
      * @doesNotPerformAssertions
      */
     public function testListerRender(): void
     {
         $v = new View();
+        $v->setApp($this->createApp());
         $v->invokeInit();
         $l = Lister::addTo($v, ['defaultTemplate' => 'lister.html']);
         $l->setSource(['foo', 'bar']);
@@ -29,15 +32,17 @@ class ListerTest extends TestCase
     public function testListerRender2(): void
     {
         $v = new View(['template' => new HtmlTemplate('hello{list}, world{/list}')]);
+        $v->setApp($this->createApp());
         $v->invokeInit();
         $l = Lister::addTo($v, [], ['list']);
         $l->setSource(['foo', 'bar']);
-        static::assertSame('hello, world, world', $v->render());
+        self::assertSame('hello, world, world', $v->render());
     }
 
     public function testAddAfterRender(): void
     {
         $v = new View();
+        $v->setApp($this->createApp());
         $v->invokeInit();
 
         $this->expectException(Exception::class);

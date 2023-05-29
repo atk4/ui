@@ -17,15 +17,15 @@ Button::addTo($app, ['Dynamic scroll in Table', 'class.small left floated basic 
     ->link(['scroll-table']);
 Button::addTo($app, ['Dynamic scroll in Grid', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['scroll-grid']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 Header::addTo($app, ['Dynamic scroll in Container']);
 
 $view = View::addTo($app)->addClass('ui basic segment atk-scroller');
 
-$scrollContainer = View::addTo($view)->addClass('ui segment')->addStyle(['max-height' => '400px', 'overflow-y' => 'scroll']);
+$scrollContainer = View::addTo($view)->addClass('ui segment')->setStyle(['max-height' => '400px', 'overflow-y' => 'scroll']);
 
-$listerTemplate = '<div id="{$_id}">{List}<div id="{$_id}" class="ui segment" style="height: 60px;"><i class="{$'
+$listerTemplate = '<div {$attributes}>{List}<div id="{$_id}" class="ui segment" style="height: 60px;"><i class="{$'
     . Country::hinting()->fieldName()->iso . '} flag"></i> {$'
     . Country::hinting()->fieldName()->name . '}</div>{/}{$Content}</div>';
 

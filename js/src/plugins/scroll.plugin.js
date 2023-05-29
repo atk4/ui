@@ -7,7 +7,7 @@ import AtkPlugin from './atk.plugin';
  * default options are:
  * padding: 20         The amount of padding needed prior to request a page load.
  * initialPage: 1      The initial page load when calling this plugin.
- * appendTo: null      The html element where new content should be append to.
+ * appendTo: null      The HTML element where new content should be append to.
  * stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call. if null, then a default loader will be apply to the bottom of the $inner element.
  */
 export default class AtkScrollPlugin extends AtkPlugin {
@@ -40,7 +40,7 @@ export default class AtkScrollPlugin extends AtkPlugin {
             this.setTableHeader();
         } else {
             // check if scroll apply vs Window or inside our element.
-            this.isWindow = (this.$el.css('overflow-y') === 'visible');
+            this.isWindow = this.$el.css('overflow-y') === 'visible';
             this.$scroll = this.isWindow ? $(window) : this.$el;
             // is Inner the element itself or it's children.
             this.$inner = this.isWindow ? this.$el : this.$el.children();
@@ -84,10 +84,10 @@ export default class AtkScrollPlugin extends AtkPlugin {
      * Check if scrolling require adding content.
      */
     onScroll(event) {
-        const borderTopWidth = parseInt(this.$el.css('borderTopWidth'), 10);
+        const borderTopWidth = Number.parseInt(this.$el.css('borderTopWidth'), 10);
         const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth;
         // this.$el padding top value.
-        const paddingTop = parseInt(this.$el.css('paddingTop'), 10) + borderTopWidthInt;
+        const paddingTop = Number.parseInt(this.$el.css('paddingTop'), 10) + borderTopWidthInt;
         // Either the scroll bar position using window or the container element top position otherwise.
         const topHeight = this.isWindow ? $(window).scrollTop() : this.$scroll.offset().top;
         // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
@@ -141,7 +141,7 @@ export default class AtkScrollPlugin extends AtkPlugin {
     /**
      * Use response to append content to element and setup next content to be loaded.
      * Set response.id to null in order for apiService.onSuccess to bypass
-     * replacing html content. Js return from server response will still be execute.
+     * replacing HTML content. JS returned from server response will still be executed.
      */
     onComplete(response, element) {
         this.removeLoader();

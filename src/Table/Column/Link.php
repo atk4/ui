@@ -46,7 +46,7 @@ class Link extends Table\Column
     /**
      * When constructing a URL using 'page', this specifies list of values which will be added
      * to the destination URL. For example if you set $args = ['document_id' => 'id'] then row value
-     * of ['id'] will be added to url's property "document_id".
+     * of ['id'] will be added to URL's property "document_id".
      *
      * For a full example:
      *  $page = ['example', 'type' => 'client'];
@@ -72,13 +72,13 @@ class Link extends Table\Column
 
     /**
      * Set html5 target attribute in tag
-     * possible values : _blank | _parent | _self | _top | frame#name.
+     * possible values: _blank | _parent | _self | _top | frame#name.
      *
      * @var string|null
      */
     public $target;
 
-    /** @var bool add download in the tag to force download from the url. */
+    /** @var bool add download in the tag to force download from the URL. */
     public $forceDownload = false;
 
     /**
@@ -151,7 +151,7 @@ class Link extends Table\Column
         $p = $this->page ?? [];
 
         foreach ($this->args as $key => $val) {
-            if (is_numeric($key)) {
+            if (is_int($key)) {
                 $key = $val;
             }
 

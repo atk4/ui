@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Data\Model;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsExpressionable;
 
 class Menu extends View
 {
@@ -48,11 +51,12 @@ class Menu extends View
             array_unshift($item, MenuItem::class);
         }
 
-        $item = $this->add($item)->setElement('a');
+        /** @var MenuItem */
+        $item = $this->add($item);
 
         if (is_string($action) || is_array($action)) {
             $url = $this->url($action);
-            $item->setAttr('href', $url);
+            $item->link($url);
         } elseif ($action) {
             $item->on('click', null, $action);
         }
@@ -173,8 +177,10 @@ class Menu extends View
     {
         if ($this->activateOnClick && $this->ui === 'menu') {
             // Fomantic-UI need some JS magic
-            $this->on('click', 'a.item', $this->js()->find('.active')->removeClass('active'), ['preventDefault' => false, 'stopPropagation' => false]);
-            $this->on('click', 'a.item', null, ['preventDefault' => false, 'stopPropagation' => false])->addClass('active');
+            $this->on('click', 'a.item', new JsBlock([
+                $this->js()->find('.active')->removeClass('active'),
+                (new Jquery())->addClass('active'),
+            ]), ['preventDefault' => false, 'stopPropagation' => false]);
         }
 
         if ($this->content) {

@@ -38,13 +38,13 @@ $divider = Factory::factory([View::class], ['name' => false, 'class' => ['divide
 $modelHeader = Factory::factory([View::class], ['name' => false, 'class' => ['header'], 'content' => 'Model Actions']);
 Icon::addTo($modelHeader, ['content' => 'database']);
 
-$jsHeader = Factory::factory([View::class], ['name' => false, 'class' => ['header'], 'content' => 'Js Actions']);
+$jsHeader = Factory::factory([View::class], ['name' => false, 'class' => ['header'], 'content' => 'JS Actions']);
 Icon::addTo($jsHeader, ['content' => 'file code']);
 
 $grid->addActionMenuItem($jsHeader);
 // Beside model user action, grid menu items can also execute javascript.
-$grid->addActionMenuItem('Js Callback', function () {
-    return (new View())->set('Js Callback done!');
+$grid->addActionMenuItem('JS Callback', function () {
+    return (new View())->set('JS Callback done!');
 }, 'Are you sure?');
 
 $grid->addActionMenuItem($divider);
@@ -56,7 +56,7 @@ foreach ($country->getUserActions(UserAction::APPLIES_TO_SINGLE_RECORD) as $acti
     if (in_array($action->shortName, ['add', 'edit', 'delete'], true)) {
         continue;
     }
-    $grid->addExecutorMenuItem($executor = $app->getExecutorFactory()->create($action, $grid));
+    $grid->addExecutorMenuItem($executor = $app->getExecutorFactory()->createExecutor($action, $grid));
 }
 
 $grid->ipp = 10;

@@ -11,8 +11,7 @@ class ApiService {
 
     getDefaultFomanticSettings() {
         return [
-            {
-            },
+            {},
             {
                 // override supported via "../setup-fomantic-ui.js", both callbacks are always evaluated
                 successTest: this.successTest,
@@ -25,7 +24,7 @@ class ApiService {
     }
 
     /**
-     * Execute js code.
+     * Execute JS code.
      *
      * This function should be called using .call() by passing proper context for 'this'.
      * ex: apiService.evalResponse.call(this, code)
@@ -37,12 +36,11 @@ class ApiService {
     }
 
     /**
-     * Check server response and clear api.data object.
+     * Check server response.
      *
      * @returns {boolean}
      */
     successTest(response) {
-        this.data = {};
         if (response.success) {
             return true;
         }
@@ -71,7 +69,7 @@ class ApiService {
      * To avoid conflict, property name in response was change from eval to atkjs.
      * Which mean response.atkjs now contains code to be eval.
      */
-    onSuccess(response, element) {
+    onSuccess(response) {
         try {
             if (response.success) {
                 if (response.html && response.id) {
@@ -92,28 +90,28 @@ class ApiService {
                     }
                 }
                 if (response.portals) {
-                    // Create app portal from json response.
+                    // Create app portal from JSON response.
                     const portals = Object.keys(response.portals);
-                    portals.forEach((portalID) => {
+                    for (const portalID of portals) {
                         const m = $('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
                         if (m.length === 0) {
                             $(document.body).append(response.portals[portalID].html);
                             atk.apiService.evalResponse(response.portals[portalID].js);
                         }
-                    });
+                    }
                 }
                 if (response.atkjs) {
                     atk.apiService.evalResponse.call(this, response.atkjs);
                 }
                 if (atk.apiService.afterSuccessCallbacks.length > 0) {
                     const callbacks = atk.apiService.afterSuccessCallbacks;
-                    callbacks.forEach((callback) => {
+                    for (const callback of callbacks) {
                         atk.apiService.evalResponse.call(this, callback);
-                    });
+                    }
                     atk.apiService.afterSuccessCallbacks.splice(0);
                 }
             } else if (response.isServiceError) {
-                throw Error(response.message);
+                throw new Error(response.message);
             }
         } catch (e) {
             atk.apiService.showErrorModal(atk.apiService.getErrorHtml(e.message));
@@ -132,12 +130,12 @@ class ApiService {
      * Handle a server response failure.
      */
     onFailure(response) {
-        // if json is returned, it should contain the error within message property
+        // if JSON is returned, it should contain the error within message property
         if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
             atk.apiService.showErrorModal(response.message);
         } else {
-            // check if we have html returned by server with <body> content.
-            const body = response.match(/<body[^>]*>[\s\S]*<\/body>/gi);
+            // check if we have HTML returned by server with <body> content.
+            const body = response.match(/<body[^>]*>[\S\s]*<\/body>/gi);
             if (body) {
                 atk.apiService.showErrorModal(body);
             } else {
@@ -149,7 +147,7 @@ class ApiService {
     /**
      * Make our own ajax request test if need to.
      * if a plugin must call $.ajax or $.getJson directly instead of Fomantic-UI api,
-     * we could send the json response to this.
+     * we could send the JSON response to this.
      */
     atkProcessExternalResponse(response, content = null) {
         if (response.success) {
@@ -161,7 +159,7 @@ class ApiService {
 
     /**
      * Will wrap Fomantic-UI api call into a Promise.
-     * Can be used to retrieve json data from the server.
+     * Can be used to retrieve JSON data from the server.
      * Using this will bypass regular successTest i.e. any
      * atkjs (javascript) return from server will not be evaluated.
      *
@@ -206,7 +204,7 @@ class ApiService {
      */
     showErrorModal(errorMsg) {
         if (atk.modalService.modals.length > 0) {
-            const $modal = $(atk.modalService.modals[atk.modalService.modals.length - 1]);
+            const $modal = $(atk.modalService.modals.at(-1));
             if ($modal.data('closeOnLoadingError')) {
                 $modal.removeData('closeOnLoadingError').modal('hide');
             }

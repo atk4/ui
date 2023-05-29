@@ -50,7 +50,7 @@ Dynamic Tabs
 ============
 
 Dynamic tabs are based around implementation of :php:class:`VirtualPage` and allow you
-to pass a call-back which will be triggered when user clicks on the tab.
+to pass a callback which will be triggered when user clicks on the tab.
 
 Note that tab contents are refreshed including any values you put on the form::
 
@@ -70,7 +70,7 @@ Note that tab contents are refreshed including any values you put on the form::
         $form->setModel($m_register);
         $form->onSubmit(function (Form $form) {
             if ($form->model->get('name') !== 'John') {
-                return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
+                return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
             }
         });
     });

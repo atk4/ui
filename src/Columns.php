@@ -22,10 +22,10 @@ class Columns extends View
     /** @var int|false Sum of all column widths added so far. */
     protected $calculatedWidth = 0;
 
-    /** @var array Allows Grid to calculate widths automatically. */
-    public $sizes = [
-        '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
-        'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
+    /** @var array<int, string> */
+    protected $cssWideClasses = [
+        1 => 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
+        'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
     ];
 
     /**
@@ -46,8 +46,8 @@ class Columns extends View
 
         $column = View::addTo($this, $defaults);
 
-        if ($size && isset($this->sizes[$size])) {
-            $column->addClass($this->sizes[$size] . ' wide');
+        if ($size && isset($this->cssWideClasses[$size])) {
+            $column->addClass($this->cssWideClasses[$size] . ' wide');
             $this->calculatedWidth = false;
         } elseif ($this->calculatedWidth !== false) {
             ++$this->calculatedWidth;
@@ -78,8 +78,8 @@ class Columns extends View
             $this->content = null;
         }
 
-        if (isset($this->sizes[$width])) {
-            $this->addClass($this->sizes[$width] . ' column');
+        if (isset($this->cssWideClasses[$width])) {
+            $this->addClass($this->cssWideClasses[$width] . ' column');
         }
 
         parent::renderView();

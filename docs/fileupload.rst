@@ -77,7 +77,7 @@ Example showing the onUpload callback on the UploadImage field::
 
     $img->onUpload(function (array $postFile) use ($form, $img) {
         if ($postFile['error'] !== 0) {
-            return $form->error('img', 'Error uploading image.');
+            return $form->jsError('img', 'Error uploading image.');
         }
 
         // Do file processing here...
@@ -86,7 +86,7 @@ Example showing the onUpload callback on the UploadImage field::
         $img->setFileId('123456');
 
         // can also return a notifier.
-        return new \Atk4\Ui\JsToast([
+        return new \Atk4\Ui\Js\JsToast([
             'message' => 'File is uploaded!',
             'class' => 'success',
         ]);
@@ -97,7 +97,7 @@ The fileId is set to file name by default if omitted::
 
     $form->onSubmit(function (Form $form) {
         // implement submission here
-        return $form->success('Thanks for submitting file: ' . $form->model->get('img'));
+        return $form->jsSuccess('Thanks for submitting file: ' . $form->model->get('img'));
     });
 
 onDelete
@@ -120,7 +120,7 @@ Example showing the onDelete callback on the UploadImage field::
         // reset thumbanil
         $img->clearThumbnail('./images/default.png');
 
-        return new \Atk4\Ui\JsToast([
+        return new \Atk4\Ui\Js\JsToast([
             'message' => $fileId . ' has been removed!',
             'class' => 'success',
         ]);
@@ -140,7 +140,7 @@ UploadImage form control inherits all of the Upload properties plus these ones:
 
 The thumbnail view associated with the form control.
 
-.. php:attr:: thumnailRegion
+.. php:attr:: thumbnailRegion
 
 The region in input template where to add the thumbnail view, default to AfterAfterInput region.
 
