@@ -45,16 +45,23 @@ module.exports = {
         'jsdoc/require-param-description': 'off',
         'jsdoc/require-returns': 'off',
         'jsdoc/require-returns-description': 'off',
-        'jsdoc/tag-lines': ['error', 'never', { startLines: 1 }],
+        'jsdoc/tag-lines': ['error', 'never', {
+            startLines: 1,
+        }],
         'linebreak-style': ['error', 'unix'],
         'max-len': 'off',
-        'no-console': ['error', { allow: ['warn', 'error'] }],
+        'no-console': ['error', {
+            allow: ['warn', 'error'],
+        }],
         'no-nested-ternary': 'off',
         'no-param-reassign': 'off',
         'no-plusplus': 'off',
         'no-restricted-syntax': 'off',
         'no-underscore-dangle': 'off',
-        'no-unused-vars': ['error', { vars: 'all', args: 'none' }],
+        'no-unused-vars': ['error', {
+            vars: 'all',
+            args: 'none',
+        }],
         'object-shorthand': ['error', 'never'],
         'padding-line-between-statements': ['error', {
             blankLine: 'always',
