@@ -38,7 +38,7 @@ class Header extends View
     protected function renderView(): void
     {
         if ($this->size) {
-            if (is_numeric($this->size)) {
+            if (is_int($this->size)) {
                 $this->setElement('h' . $this->size);
             } else {
                 $this->addClass($this->size);
@@ -68,7 +68,7 @@ class Header extends View
         if (!$this->icon && !$this->elements) {
             $this->template->del('hasContent');
             $this->template->set('title', $this->content);
-            $this->content = false;
+            $this->content = null;
         }
 
         parent::renderView();

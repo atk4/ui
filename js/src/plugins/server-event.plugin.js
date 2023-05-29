@@ -11,18 +11,18 @@ export default class AtkServerEventPlugin extends AtkPlugin {
             element.addClass('loading');
         }
 
-        this.source.onmessage = function (e) {
+        this.source.addEventListener('message', (e) => {
             atk.apiService.atkProcessExternalResponse(JSON.parse(e.data));
-        };
+        });
 
-        this.source.onerror = (e) => {
+        this.source.addEventListener('error', (e) => {
             if (e.eventPhase === EventSource.CLOSED) {
                 if (hasLoader) {
                     element.removeClass('loading');
                 }
                 this.source.close();
             }
-        };
+        });
 
         this.source.addEventListener('atkSseAction', (e) => {
             atk.apiService.atkProcessExternalResponse(JSON.parse(e.data));

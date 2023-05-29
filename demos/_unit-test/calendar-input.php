@@ -12,15 +12,16 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$output = function (?\DateTime $dt, string $format) {
+$output = function (?\DateTime $dt, string $format) use ($app) {
     $view = new Message();
+    $view->setApp($app);
     $view->invokeInit();
     $view->text->addHtml($dt === null ? 'empty' : $dt->format($format));
 
     return $view;
 };
 
-Header::addTo($app, ['Testing flatpickr using Behat']);
+Header::addTo($app, ['Testing Flatpickr using Behat']);
 $form = Form::addTo($app);
 $c = $form->addControl('field', [], ['type' => 'date']);
 $form->buttonSave->set($c->shortName);

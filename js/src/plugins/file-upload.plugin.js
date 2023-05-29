@@ -66,9 +66,9 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
             if (!this.textInput.val()) {
                 this.fileInput.click();
             } else {
-                // When upload is complete a js action can be send to set an id
+                // When upload is complete a JS action can be send to set an ID
                 // to the uploaded file via the jQuery data property.
-                // Check if that id exist and send it with
+                // Check if that ID exist and send it with
                 // delete callback, If not, default to file name.
                 let id = this.$el.data().fileId;
                 if (id === '' || id === undefined || id === null) {
@@ -88,12 +88,12 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
     }
 
     /**
-     * Set the action button html content.
+     * Set the action button HTML content.
      * Set the input text content.
      */
     setState(mode) {
         switch (mode) {
-            case 'delete':
+            case 'delete': {
                 this.action.html(this.getEraseContent);
                 setTimeout(() => {
                     this.bar.progress('reset');
@@ -101,7 +101,8 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
                 }, 1000);
 
                 break;
-            case 'upload':
+            }
+            case 'upload': {
                 this.action.html(this.actionContent);
                 this.textInput.val('');
                 this.fileInput.val('');
@@ -109,6 +110,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
                 this.$el.data().fileId = null;
 
                 break;
+            }
         }
     }
 
@@ -139,10 +141,10 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
         // setup progress bar update via xhr.
         const xhrCb = () => {
             const xhr = new window.XMLHttpRequest();
-            xhr.upload.addEventListener('progress', (evt) => {
-                if (evt.lengthComputable) {
-                    const percentComplete = evt.loaded / evt.total;
-                    this.bar.progress('set percent', parseInt(percentComplete * 100, 10));
+            xhr.upload.addEventListener('progress', (event) => {
+                if (event.lengthComputable) {
+                    const percentComplete = event.loaded / event.total;
+                    this.bar.progress('set percent', Number.parseInt(percentComplete * 100, 10));
                 }
             }, false);
 
@@ -156,7 +158,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
             { fUploadAction: 'upload' },
             this.settings.url,
             completeCb,
-            xhrCb,
+            xhrCb
         );
     }
 
@@ -179,12 +181,12 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
     }
 
     /**
-     * Return the html content for erase action button.
+     * Return the HTML content for erase action button.
      *
      * @returns {string}
      */
     getEraseContent() {
-        return '<i class="red remove icon" style=""></i>';
+        return '<i class="red remove icon"></i>';
     }
 }
 

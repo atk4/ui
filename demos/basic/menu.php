@@ -20,7 +20,7 @@ $menu->addItem('baz');
 $dropdown = UiDropdown::addTo($menu, ['With Callback', 'dropdownOptions' => ['on' => 'hover']]);
 $dropdown->setSource(['a', 'b', 'c']);
 $dropdown->onChange(function (string $itemId) {
-    return 'New seleced item id: ' . $itemId;
+    return 'New seleced item ID: ' . $itemId;
 });
 
 $submenu = $menu->addMenu('Sub-menu');
@@ -34,12 +34,12 @@ $submenu->addItem('two');
 $menu = Menu::addTo($app, ['vertical pointing']);
 $menu->addItem(['Inbox', 'label' => ['123', 'class.teal left pointing' => true]]);
 $menu->addItem('Spam');
-Form\Control\Input::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
+Form\Control\Line::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
 
 $menu = Menu::addTo($app, ['secondary vertical pointing']);
 $menu->addItem(['Inbox', 'label' => ['123', 'class.teal left pointing' => true]]);
 $menu->addItem('Spam');
-Form\Control\Input::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
+Form\Control\Line::addTo($menu->addItem(), ['placeholder' => 'Search', 'icon' => 'search'])->addClass('transparent');
 $menu = Menu::addTo($app, ['vertical']);
 $group = $menu->addGroup('Products');
 $group->addItem('Enterprise');

@@ -38,7 +38,7 @@ It only takes 2 PHP lines to create a fully working form::
     $form = Form::addTo($app);
     $form->addControl('email');
 
-The form component can be further tweaked by setting a custom call-back handler
+The form component can be further tweaked by setting a custom callback handler
 directly in PHP::
 
     $form->onSubmit(function (Form $form) {
@@ -137,8 +137,8 @@ Layout and Form Controls
 ========================
 
 Although Form extends the View class, controls are not added into Form directly but rather use
-a View layout for it in order to create their html element. In other words, layout attached to the form
-is responsible of rendering html for fields.
+a View layout for it in order to create their HTML element. In other words, layout attached to the form
+is responsible of rendering HTML for fields.
 
 When Form is first initialized, it will provide and set a default Generic layout within the form.
 Then using :php:meth:`Form::addControl()` will rely on that layout to add form control to it and render it properly.
@@ -297,16 +297,16 @@ example displays a registration form for a User::
     // submit event
     $form->onSubmit(function (Form $form) {
         if ($form->model->get('password') != $form->model->get('password_verify')) {
-            return $form->error('password_verify', 'Passwords do not match');
+            return $form->jsError('password_verify', 'Passwords do not match');
         }
 
         if (!$form->model->get('accept_terms')) {
-            return $form->error('accept_terms', 'Read and accept terms');
+            return $form->jsError('accept_terms', 'Read and accept terms');
         }
 
         $form->model->save(); // will only store email / password
 
-        return $form->success('Thank you. Check your email now');
+        return $form->jsSuccess('Thank you. Check your email now');
     });
 
 Field Type vs Form Control
@@ -471,7 +471,7 @@ As far as form is concerned:
 - Form submit handler will rely on ``Model::save()`` (https://agile-data.readthedocs.io/en/develop/persistence.html#Model::save)
   not to throw validation exception.
 
-- Form submit handler will also interpret use of :php:meth:`Form::error` by displaying errors that
+- Form submit handler will also interpret use of :php:meth:`Form::jsError` by displaying errors that
   do not originate inside Model save logic.
 
 Example use of Model's validate() method::
@@ -516,13 +516,13 @@ Form Submit Handling
 
 .. php:method:: onSubmit($callback)
 
-    Specify a PHP call-back that will be executed on successful form submission.
+    Specify a PHP callback that will be executed on successful form submission.
 
-.. php:method:: error($field, $message)
+.. php:method:: jsError($field, $message)
 
     Create and return :php:class:`JsChain` action that will indicate error on a form control.
 
-.. php:method:: success($title, [$sub_title])
+.. php:method:: jsSuccess($title, [$sub_title])
 
     Create and return :php:class:`JsChain` action, that will replace form with a success message.
 
@@ -545,16 +545,16 @@ that would perform the check can be defined displaying error or success messages
 
     $form->onSubmit(function (Form $form) {
         if (!$form->model->get('terms')) {
-            return $form->error('terms', 'You must accept terms and conditions');
+            return $form->jsError('terms', 'You must accept terms and conditions');
         }
 
         $form->model->save();
 
-        return $form->success('Registration Successful', 'We will call you soon.');
+        return $form->jsSuccess('Registration Successful', 'We will call you soon.');
     });
 
 Callback function can return one or multiple JavaScript actions. Methods such as
-:php:meth:`error()` or :php:meth:`success()` will help initialize those actions for your form.
+:php:meth:`jsError()` or :php:meth:`jsSuccess()` will help initialize those actions for your form.
 Here is a code that can be used to output multiple errors at once. Errors were intentionally not grouped
 with a message about failure to accept of terms and conditions::
 
@@ -562,24 +562,24 @@ with a message about failure to accept of terms and conditions::
         $errors = [];
 
         if (!$form->model->get('name')) {
-            $errors[] = $form->error('name', 'Name must be specified');
+            $errors[] = $form->jsError('name', 'Name must be specified');
         }
 
         if (!$form->model->get('surname')) {
-            $errors[] = $form->error('surname', 'Surname must be specified');
+            $errors[] = $form->jsError('surname', 'Surname must be specified');
         }
 
         if ($errors) {
-            return $errors;
+            return new \Atk4\Ui\Js\JsBlock($errors);
         }
 
         if (!$form->model->get('terms')) {
-            return $form->error('terms', 'You must accept terms and conditions');
+            return $form->jsError('terms', 'You must accept terms and conditions');
         }
 
         $form->model->save();
 
-        return $form->success('Registration Successful', 'We will call you soon.');
+        return $form->jsSuccess('Registration Successful', 'We will call you soon.');
     });
 
 So far Agile UI / Agile Data does not come with a validation library but

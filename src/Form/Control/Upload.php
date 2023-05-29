@@ -6,23 +6,24 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
-use Atk4\Ui\JsExpressionable;
 
+/**
+ * @phpstan-type PhpFileArray array{error: int, name: string}
+ */
 class Upload extends Input
 {
     public $defaultTemplate = 'form/control/upload.html';
 
     public string $inputType = 'hidden';
 
-    /** @var Button|array|null The action button to open file browser dialog. */
-    public $action;
-
     /**
-     * The uploaded file id.
-     * This id is return on form submit.
+     * The uploaded file ID.
+     * This ID is return on form submit.
      * If not set, will default to file name.
-     * file id is also sent with onDelete Callback.
+     * file ID is also sent with onDelete Callback.
      *
      * @var string|null
      */
@@ -52,7 +53,7 @@ class Upload extends Input
     /** Whether callback has been defined or not. */
     public bool $hasDeleteCb = false;
 
-    /** @var array<int, JsExpressionable> */
+    /** @var list<JsExpressionable> */
     public $jsActions = [];
 
     public const UPLOAD_ACTION = 'upload';
@@ -70,11 +71,11 @@ class Upload extends Input
     }
 
     /**
-     * Allow to set file id and file name
-     *  - fileId will be the file id sent with onDelete callback.
+     * Allow to set file ID and file name
+     *  - fileId will be the file ID sent with onDelete callback.
      *  - fileName is the field value display to user.
      *
-     * @param string      $fileId   Field id for onDelete Callback
+     * @param string      $fileId   Field ID for onDelete Callback
      * @param string|null $fileName Field name display to user
      *
      * @return $this
@@ -132,6 +133,8 @@ class Upload extends Input
 
     /**
      * Call when user is uploading a file.
+     *
+     * @param \Closure(PhpFileArray, PhpFileArray, PhpFileArray, PhpFileArray, PhpFileArray, PhpFileArray, PhpFileArray, PhpFileArray, PhpFileArray, PhpFileArray): JsExpressionable $fx
      */
     public function onUpload(\Closure $fx): void
     {
@@ -167,23 +170,25 @@ class Upload extends Input
                     );
                 }
 
-                return $this->jsActions;
+                return new JsBlock($this->jsActions);
             });
         }
     }
 
     /**
      * Call when user is removing an already upload file.
+     *
+     * @param \Closure(string): JsExpressionable $fx
      */
     public function onDelete(\Closure $fx): void
     {
         $this->hasDeleteCb = true;
         if (($_POST['fUploadAction'] ?? null) === self::DELETE_ACTION) {
             $this->cb->set(function () use ($fx) {
-                $fileId = $_POST['fUploadId'] ?? null;
+                $fileId = $_POST['fUploadId'];
                 $this->addJsAction($fx($fileId));
 
-                return $this->jsActions;
+                return new JsBlock($this->jsActions);
             });
         }
     }

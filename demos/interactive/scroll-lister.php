@@ -15,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Dynamic scroll in Table', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
     ->link(['scroll-table']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 Header::addTo($app, ['Dynamic scroll in Lister']);
 

@@ -8,7 +8,7 @@ import AtkPlugin from './atk.plugin';
 export default class AtkColumnResizerPlugin extends AtkPlugin {
     main() {
         this.settings.onResize = this.onResize.bind(this);
-        this.resizable = new Resizer(this.$el[0], ({ ...this.settings.atkDefaults, ...this.settings }));
+        this.resizable = new Resizer(this.$el[0], { ...this.settings.atkDefaults, ...this.settings });
 
         // reset padding class.
         this.$el.removeClass('grip-padding');
@@ -33,7 +33,7 @@ export default class AtkColumnResizerPlugin extends AtkPlugin {
             const columns = this.$el.find('th');
 
             const widths = [];
-            columns.each((idx, item) => {
+            columns.each((i, item) => {
                 widths.push({ column: $(item).data('column'), size: $(item).outerWidth() });
             });
 

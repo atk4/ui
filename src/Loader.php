@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpressionable;
+
 /**
  * Dynamically render it's content.
  * To provide content for a loader, use set() callback.
  */
 class Loader extends View
 {
+    public $ui = 'segment';
+
     /**
      * Shim is a filler object that is displayed inside loader while the actual content is fetched
      * from the server. You may supply an object here or a seed. This view will be replaced
@@ -30,9 +35,6 @@ class Loader extends View
      * @var bool|string
      */
     public $loadEvent = true;
-
-    /** @var string defautl css class */
-    public $ui = 'ui segment';
 
     /** @var Callback for triggering */
     public $cb;
@@ -67,14 +69,15 @@ class Loader extends View
      * Or
      *  $l1->set([$my_object, 'run_long_process']);
      *
-     * @param \Closure $fx
+     * @param \Closure($this): void $fx
+     * @param never                 $ignore
      *
      * @return $this
      */
     public function set($fx = null, $ignore = null)
     {
         if (!$fx instanceof \Closure) {
-            throw new Exception('Need to pass a function to Loader::set()');
+            throw new \TypeError('$fx must be of type Closure');
         } elseif (func_num_args() > 1) {
             throw new Exception('Only one argument is needed by Loader::set()');
         }
@@ -104,13 +107,13 @@ class Loader extends View
     }
 
     /**
-     * Return a js action that will trigger the loader to start.
+     * Return a JS action that will trigger the loader to start.
      *
      * @param string $storeName
      *
      * @return JsChain
      */
-    public function jsLoad(array $args = [], array $apiConfig = [], $storeName = null)
+    public function jsLoad(array $args = [], array $apiConfig = [], $storeName = null): JsExpressionable
     {
         return $this->js()->atkReloadView([
             'url' => $this->cb->getUrl(),

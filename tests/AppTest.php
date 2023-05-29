@@ -5,25 +5,18 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
-use Atk4\Ui\App;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\HtmlTemplate;
 
 class AppTest extends TestCase
 {
-    protected function createApp(): App
-    {
-        return new App([
-            'catchExceptions' => false,
-            'alwaysRun' => false,
-        ]);
-    }
+    use CreateAppTrait;
 
     public function testTemplateClassDefault(): void
     {
         $app = $this->createApp();
 
-        static::assertInstanceOf(
+        self::assertInstanceOf(
             HtmlTemplate::class,
             $app->loadTemplate('html.html')
         );
@@ -37,10 +30,25 @@ class AppTest extends TestCase
         $app = $this->createApp();
         $app->templateClass = get_class($anotherTemplateClass);
 
-        static::assertInstanceOf(
+        self::assertInstanceOf(
             get_class($anotherTemplateClass),
             $app->loadTemplate('html.html')
         );
+    }
+
+    public function testHeaderNormalize(): void
+    {
+        $app = $this->createApp();
+        $app->setResponseHeader('cache-control', '');
+
+        $app->setResponseHeader('content-type', 'Xy');
+        self::assertSame(['Content-Type' => ['Xy']], $app->getResponse()->getHeaders());
+
+        $app->setResponseHeader('CONTENT-type', 'xY');
+        self::assertSame(['Content-Type' => ['xY']], $app->getResponse()->getHeaders());
+
+        $app->setResponseHeader('content-TYPE', '');
+        self::assertSame([], $app->getResponse()->getHeaders());
     }
 
     public function testUnexpectedOutputLateError(): void
@@ -56,7 +64,7 @@ class AppTest extends TestCase
             $this->expectExceptionMessage('Unexpected output detected');
             $app->terminateHtml('');
         } finally {
-            static::assertSame($testStr, ob_get_contents());
+            self::assertSame($testStr, ob_get_contents());
             ob_end_clean();
         }
     }

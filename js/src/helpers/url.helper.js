@@ -7,21 +7,23 @@ export default {
      * @returns {object}
      */
     parseParams: function (url) {
-        const query = url.includes('?') ? url.substring(url.indexOf('?') + 1) : '';
+        const query = url.includes('?') ? url.slice(url.indexOf('?') + 1) : '';
 
-        return (query.length > 0 ? query.split('&') : [])
-            .reduce((obj, queryPart) => {
+        const res = {};
+        for (const queryPart of query.split('&')) {
+            if (queryPart.length > 0) {
                 let k = queryPart;
                 let v = null;
                 if (k.includes('=')) {
-                    v = k.substring(k.indexOf('=') + 1);
-                    k = k.substring(0, k.indexOf('='));
+                    v = k.slice(k.indexOf('=') + 1);
+                    k = k.slice(0, k.indexOf('='));
                 }
 
-                obj[decodeURIComponent(k)] = decodeURIComponent(v);
+                res[decodeURIComponent(k)] = decodeURIComponent(v);
+            }
+        }
 
-                return obj;
-            }, {});
+        return res;
     },
 
     /**
@@ -50,11 +52,11 @@ export default {
      * @returns {string}
      */
     removeParam: function (url, param) {
-        const query = url.includes('?') ? url.substring(url.indexOf('?') + 1) : '';
+        const query = url.includes('?') ? url.slice(url.indexOf('?') + 1) : '';
         const newParams = (query.length > 0 ? query.split('&') : [])
             .filter((queryPart) => decodeURIComponent(queryPart.split('=')[0]) !== param);
 
-        return url.substring(0, url.indexOf('?'))
+        return url.slice(0, Math.max(0, url.indexOf('?')))
                 + (newParams.length > 0 ? '?' + newParams.join('&') : '');
     },
 

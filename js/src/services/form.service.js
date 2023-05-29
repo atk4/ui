@@ -7,20 +7,17 @@ import atk from 'atk';
 class FormService {
     constructor() {
         this.formSettings = $.fn.form.settings;
-        // A collection of jQuery form object where preventLeave is set.
+        // collection of jQuery form object where preventLeave is set
         this.prevents = [];
-        window.onbeforeunload = function (event) {
-            atk.formService.prevents.forEach((el) => {
-                if (el.data('__atkCheckDirty') && el.data('isDirty')) {
-                    const message = 'unsaved';
-                    if (event) {
-                        event.returnValue = message;
-                    }
+        window.addEventListener('beforeunload', (event) => {
+            for (const $el of atk.formService.prevents) {
+                if ($el.data('__atkCheckDirty') && $el.data('isDirty')) {
+                    event.returnValue = 'unsaved';
 
-                    return message;
+                    break;
                 }
-            });
-        };
+            }
+        });
     }
 
     getDefaultFomanticSettings() {
@@ -65,9 +62,9 @@ class FormService {
      */
     clearDirtyForm(id) {
         const forms = this.prevents.filter(($form) => $form.attr('id') === id);
-        forms.forEach(($form) => {
+        for (const $form of forms) {
             $form.data('isDirty', false);
-        });
+        }
     }
 
     /**
@@ -78,35 +75,31 @@ class FormService {
     }
 
     isEqual(value, compare) {
-        return parseInt(value, 10) === parseInt(compare, 10);
+        return Number.parseInt(value, 10) === Number.parseInt(compare, 10);
     }
 
     /**
      * Validate a field using our own or Fomantic-UI validation rule function.
      *
-     * @param   {$}             form      Form containing the field.
+     * @param   {$}             $form     Form containing the field.
      * @param   {string}        fieldName Name of field
      * @param   {string|object} rule      Rule to apply test.
      * @returns {*|false}
      */
-    validateField(form, fieldName, rule) {
+    validateField($form, fieldName, rule) {
         rule = this.normalizeRule(rule);
         const ruleFunction = this.getRuleFunction(this.getRuleName(rule));
-        if (ruleFunction) {
-            const $field = this.getField(form, fieldName);
-            if (!$field) {
-                console.error('You are validating a field that does not exist: ' + fieldName);
+        if (!ruleFunction) {
+            console.error('Rule does not exist: ' + this.getRuleName(rule));
 
-                return false;
-            }
-            const value = this.getFieldValue($field);
-            const ancillary = this.getAncillaryValue(rule);
-
-            return ruleFunction.call($field, value, ancillary);
+            return false;
         }
-        console.error('Rule does not exist: ' + this.getRuleName(rule));
 
-        return false;
+        const $field = this.getField($form, fieldName);
+        const value = this.getFieldValue($field);
+        const ancillary = this.getAncillaryValue(rule);
+
+        return ruleFunction.call($field, value, ancillary);
     }
 
     normalizeRule(rule) {
@@ -124,7 +117,7 @@ class FormService {
     getContainer($field, selector) {
         const $container = $field.closest(selector);
         if ($container.length > 1) {
-            // radio button.
+            // radio button
             return this.getContainer($container.parent(), selector);
         } if ($container.length === 0) {
             return null;
@@ -133,28 +126,14 @@ class FormService {
         return $container;
     }
 
-    getField(form, identifier) {
-        if (form.find('#' + identifier).length > 0) {
-            return form.find('#' + identifier);
-        }
-        if (form.find('[name="' + identifier + '"]').length > 0) {
-            return form.find('[name="' + identifier + '"]');
-        }
-        if (form.find('[name="' + identifier + '[]"]').length > 0) {
-            return form.find('[name="' + identifier + '[]"]');
-        }
-
-        return false;
+    getField($form, identifier) {
+        return $form.form('get field', identifier);
     }
 
     getFieldValue($field) {
-        let value;
-        if ($field.length > 1) {
-            // radio button.
-            value = $field.filter(':checked').val();
-        } else {
-            value = $field.val();
-        }
+        const value = $field.length > 1
+            ? $field.filter(':checked').val() // radio button
+            : $field.val();
 
         return value;
     }
@@ -169,7 +148,7 @@ class FormService {
             return false;
         }
 
-        return (rule.value === undefined || rule.value === null)
+        return rule.value === undefined || rule.value === null
             ? rule.type.match(this.formSettings.regExp.bracket)[1] + ''
             : rule.value;
     }
@@ -183,7 +162,7 @@ class FormService {
     }
 
     isBracketedRule(rule) {
-        return (rule.type && rule.type.match(this.formSettings.regExp.bracket));
+        return rule.type && rule.type.match(this.formSettings.regExp.bracket);
     }
 }
 

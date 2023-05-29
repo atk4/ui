@@ -6,6 +6,8 @@ namespace Atk4\Ui;
 
 use Atk4\Core\DebugTrait;
 use Atk4\Core\TraitUtil;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsExpressionable;
 
 /**
  * Console is a black square component resembling terminal window. It can be programmed
@@ -68,16 +70,16 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * While inside a callback you may execute runCommand or setModel multiple times.
      *
-     * @param \Closure    $fx    callback which will be executed while displaying output inside console
-     * @param bool|string $event "true" would mean to execute on page load, string would indicate
-     *                           js event. See first argument for View::js()
+     * @param \Closure($this): void $fx    callback which will be executed while displaying output inside console
+     * @param bool|string           $event "true" would mean to execute on page load, string would indicate
+     *                                     JS event. See first argument for View::js()
      *
      * @return $this
      */
     public function set($fx = null, $event = null)
     {
         if (!$fx instanceof \Closure) {
-            throw new Exception('Please specify the $callback argument');
+            throw new \TypeError('$fx must be of type Closure');
         }
 
         if ($event !== null) {
@@ -90,38 +92,33 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
         $this->sse->set(function () use ($fx) {
             $this->sseInProgress = true;
-
-            if ($this->issetApp()) {
-                $oldLogger = $this->getApp()->logger;
-                $this->getApp()->logger = $this;
-            }
-
-            ob_start(function (string $content) {
-                if ($this->_outputBypass || $content === '' /* needed as self::output() adds NL */) {
-                    return $content;
-                }
-
-                $output = '';
-                $this->sse->echoFunction = function (string $str) use (&$output) {
-                    $output .= $str;
-                };
-                $this->output($content);
-                $this->sse->echoFunction = false;
-
-                return $output;
-            }, 1);
-
+            $oldLogger = $this->getApp()->logger;
+            $this->getApp()->logger = $this;
             try {
-                $fx($this);
-            } catch (\Throwable $e) {
-                $this->outputHtmlWithoutPre('<div class="ui segment">{0}</div>', [$this->getApp()->renderExceptionHtml($e)]);
-            }
+                ob_start(function (string $content) {
+                    if ($this->_outputBypass || $content === '' /* needed as self::output() adds NL */) {
+                        return $content;
+                    }
 
-            if ($this->issetApp()) {
-                $this->getApp()->logger = $oldLogger; // @phpstan-ignore-line
-            }
+                    $output = '';
+                    $this->sse->echoFunction = function (string $str) use (&$output) {
+                        $output .= $str;
+                    };
+                    $this->output($content);
+                    $this->sse->echoFunction = false;
 
-            $this->sseInProgress = false;
+                    return $output;
+                }, 1);
+
+                try {
+                    $fx($this);
+                } catch (\Throwable $e) {
+                    $this->outputHtmlWithoutPre('<div class="ui segment">{0}</div>', [$this->getApp()->renderExceptionHtml($e)]);
+                }
+            } finally {
+                $this->sseInProgress = false;
+                $this->getApp()->logger = $oldLogger;
+            }
         });
 
         if ($this->event) {
@@ -131,14 +128,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
         return $this;
     }
 
-    /**
-     * Return JavaScript expression to execute console.
-     *
-     * @return JsExpressionable
-     */
-    public function jsExecute()
+    public function jsExecute(): JsBlock
     {
-        return $this->sse;
+        return $this->sse->jsExecute();
     }
 
     private function escapeOutputHtml(string $message): string
@@ -218,15 +210,18 @@ class Console extends View implements \Psr\Log\LoggerInterface
         }, $messageHtml);
 
         $this->_outputBypass = true;
-        $this->sse->send($this->js()->append($messageHtml));
-        $this->_outputBypass = false;
+        try {
+            $this->sse->send($this->js()->append($messageHtml));
+        } finally {
+            $this->_outputBypass = false;
+        }
 
         return $this;
     }
 
     protected function renderView(): void
     {
-        $this->addStyle('overflow-x', 'auto');
+        $this->setStyle('overflow-x', 'auto');
 
         parent::renderView();
     }
@@ -234,15 +229,16 @@ class Console extends View implements \Psr\Log\LoggerInterface
     /**
      * Executes a JavaScript action.
      *
-     * @param JsExpressionable $js
-     *
      * @return $this
      */
-    public function send($js)
+    public function send(JsExpressionable $js)
     {
         $this->_outputBypass = true;
-        $this->sse->send($js);
-        $this->_outputBypass = false;
+        try {
+            $this->sse->send($js);
+        } finally {
+            $this->_outputBypass = false;
+        }
 
         return $this;
     }
@@ -290,8 +286,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 throw new Exception('Unexpected stream_select() result');
             }
 
-            $stat = proc_get_status($proc);
-            if (!$stat['running']) {
+            $status = proc_get_status($proc);
+            if (!$status['running']) {
                 proc_close($proc);
 
                 break;
@@ -314,7 +310,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             }
         }
 
-        $this->lastExitCode = $stat['exitcode'];
+        $this->lastExitCode = $status['exitcode'];
 
         return $this->lastExitCode ? false : true;
     }
@@ -324,7 +320,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     protected function execRaw(string $command, array $args = [])
     {
-        $command = escapeshellcmd($command);
         $args = array_map(fn ($v) => escapeshellarg($v), $args);
 
         $spec = [1 => ['pipe', 'w'], 2 => ['pipe', 'w']]; // we want stdout and stderr
@@ -394,7 +389,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
                     $object->getApp()->logger = $loggerBak; // @phpstan-ignore-line
                 }
                 if (TraitUtil::hasTrait($object, DebugTrait::class)) {
-                    $object->debug = $debugBak; // @phpstan-ignore-line
+                    $object->debug = $debugBak;
                 }
             }
         } else {

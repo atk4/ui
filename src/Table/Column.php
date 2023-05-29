@@ -6,11 +6,13 @@ namespace Atk4\Ui\Table;
 
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use Atk4\Ui\Jquery;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
-use Atk4\Ui\JsExpression;
 use Atk4\Ui\Popup;
 use Atk4\Ui\Table;
+use Atk4\Ui\View;
 
 /**
  * Implements Column helper for table.
@@ -82,8 +84,7 @@ class Column
                 'position' => 'bottom left',
                 'movePopup' => $this->columnData ? true : false,
                 'target' => $this->columnData ? 'th[data-column=' . $this->columnData . ']' : false,
-                'distanceAway' => 10,
-                'offset' => -2,
+                'distanceAway' => -12,
             ]
         );
         $popup->stopClickEvent = true;
@@ -94,7 +95,7 @@ class Column
     /**
      * Setup popup header action.
      *
-     * @param string $class the css class for filter icon
+     * @param string $class the CSS class for filter icon
      * @param string $id
      */
     public function setHeaderPopup($class, $id): void
@@ -125,8 +126,9 @@ class Column
     /**
      * Add a dropdown header menu.
      *
-     * @param string      $icon
-     * @param string|null $menuId the menu name
+     * @param \Closure(string, string): (JsExpressionable|View|string|void) $fx
+     * @param string                                                        $icon
+     * @param string|null                                                   $menuId the menu name
      */
     public function addDropdown(array $items, \Closure $fx, $icon = 'caret square down', $menuId = null): void
     {
@@ -147,11 +149,11 @@ class Column
      * This method return a callback where you can detect
      * menu item change via $cb->onMenuItem($item) function.
      *
-     * @param array $items
+     * @param array<int, array> $items
      *
-     * @return JsCallback
+     * @return Column\JsHeaderDropdownCallback
      */
-    public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null)
+    public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null): JsCallback
     {
         $this->hasHeaderAction = true;
         $id = $this->name . '_ac';
@@ -162,23 +164,24 @@ class Column
             ],
         ]];
 
-        $cb = Column\JsHeader::addTo($this->table);
+        $cb = Column\JsHeaderDropdownCallback::addTo($this->table);
 
-        $function = 'function (value, text, item) {
-            if (value === undefined || value === \'\' || value === null) { return; }
-            $(this)
-            .api({
+        $function = new JsExpression('function (value, text, item) {
+            if (value === undefined || value === \'\' || value === null) {
+                return;
+            }
+            $(this).api({
                 on: \'now\',
                 url: \'' . $cb->getJsUrl() . '\',
                 data: { item: value, id: $(this).data(\'menu-id\') }
             });
-         }';
+        }');
 
         $chain = new Jquery('#' . $id);
         $chain->dropdown([
             'action' => 'hide',
             'values' => $items,
-            'onChange' => new JsExpression($function),
+            'onChange' => $function,
         ]);
 
         // will stop grid column from being sorted.
@@ -244,7 +247,7 @@ class Column
      * added through addClass and setAttr.
      *
      * @param string       $position 'head', 'body' or 'tail'
-     * @param string|array $value    either html or array defining HTML structure, see App::getTag help
+     * @param string|array $value    either HTML or array defining HTML structure, see App::getTag help
      * @param array        $attr     extra attributes to apply on the tag
      */
     public function getTag(string $position, $value, array $attr = []): string
@@ -266,7 +269,8 @@ class Column
      */
     public function getHeaderCellHtml(Field $field = null, $value = null): string
     {
-        if ($tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value])) {
+        $tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value]);
+        if ($tags) {
             return reset($tags);
         }
 
@@ -361,7 +365,7 @@ class Column
 
     /**
      * Return associative array of tags to be filled with pre-rendered HTML on
-     * a column-basis. Will not be invoked if html-output is turned off for the table.
+     * a column-basis. Will not be invoked if HTML output is turned off for the table.
      *
      * @return array<string, string>
      */

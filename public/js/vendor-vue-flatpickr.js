@@ -1,3 +1,4 @@
+"use strict";
 (self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["vendor-vue-flatpickr"],{
 
 /***/ "./node_modules/flatpickr/dist/esm/index.js":
@@ -6,7 +7,6 @@
   \**************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -2075,11 +2075,10 @@ if (typeof window !== "undefined") {
   \*********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "english": () => (/* binding */ english)
+/* harmony export */   english: () => (/* binding */ english)
 /* harmony export */ });
 var english = {
     weekdays: {
@@ -2163,11 +2162,10 @@ var english = {
   \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "HOOKS": () => (/* binding */ HOOKS),
-/* harmony export */   "defaults": () => (/* binding */ defaults)
+/* harmony export */   HOOKS: () => (/* binding */ HOOKS),
+/* harmony export */   defaults: () => (/* binding */ defaults)
 /* harmony export */ });
 var HOOKS = [
     "onChange",
@@ -2262,18 +2260,17 @@ var defaults = {
   \********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "calculateSecondsSinceMidnight": () => (/* binding */ calculateSecondsSinceMidnight),
-/* harmony export */   "compareDates": () => (/* binding */ compareDates),
-/* harmony export */   "compareTimes": () => (/* binding */ compareTimes),
-/* harmony export */   "createDateFormatter": () => (/* binding */ createDateFormatter),
-/* harmony export */   "createDateParser": () => (/* binding */ createDateParser),
-/* harmony export */   "duration": () => (/* binding */ duration),
-/* harmony export */   "getDefaultHours": () => (/* binding */ getDefaultHours),
-/* harmony export */   "isBetween": () => (/* binding */ isBetween),
-/* harmony export */   "parseSeconds": () => (/* binding */ parseSeconds)
+/* harmony export */   calculateSecondsSinceMidnight: () => (/* binding */ calculateSecondsSinceMidnight),
+/* harmony export */   compareDates: () => (/* binding */ compareDates),
+/* harmony export */   compareTimes: () => (/* binding */ compareTimes),
+/* harmony export */   createDateFormatter: () => (/* binding */ createDateFormatter),
+/* harmony export */   createDateParser: () => (/* binding */ createDateParser),
+/* harmony export */   duration: () => (/* binding */ duration),
+/* harmony export */   getDefaultHours: () => (/* binding */ getDefaultHours),
+/* harmony export */   isBetween: () => (/* binding */ isBetween),
+/* harmony export */   parseSeconds: () => (/* binding */ parseSeconds)
 /* harmony export */ });
 /* harmony import */ var _formatting__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./formatting */ "./node_modules/flatpickr/dist/esm/utils/formatting.js");
 /* harmony import */ var _types_options__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../types/options */ "./node_modules/flatpickr/dist/esm/types/options.js");
@@ -2431,15 +2428,14 @@ function getDefaultHours(config) {
   \******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "clearNode": () => (/* binding */ clearNode),
-/* harmony export */   "createElement": () => (/* binding */ createElement),
-/* harmony export */   "createNumberInput": () => (/* binding */ createNumberInput),
-/* harmony export */   "findParent": () => (/* binding */ findParent),
-/* harmony export */   "getEventTarget": () => (/* binding */ getEventTarget),
-/* harmony export */   "toggleClass": () => (/* binding */ toggleClass)
+/* harmony export */   clearNode: () => (/* binding */ clearNode),
+/* harmony export */   createElement: () => (/* binding */ createElement),
+/* harmony export */   createNumberInput: () => (/* binding */ createNumberInput),
+/* harmony export */   findParent: () => (/* binding */ findParent),
+/* harmony export */   getEventTarget: () => (/* binding */ getEventTarget),
+/* harmony export */   toggleClass: () => (/* binding */ toggleClass)
 /* harmony export */ });
 function toggleClass(elem, className, bool) {
     if (bool === true)
@@ -2505,13 +2501,12 @@ function getEventTarget(event) {
   \*************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "formats": () => (/* binding */ formats),
-/* harmony export */   "monthToStr": () => (/* binding */ monthToStr),
-/* harmony export */   "revFormat": () => (/* binding */ revFormat),
-/* harmony export */   "tokenRegex": () => (/* binding */ tokenRegex)
+/* harmony export */   formats: () => (/* binding */ formats),
+/* harmony export */   monthToStr: () => (/* binding */ monthToStr),
+/* harmony export */   revFormat: () => (/* binding */ revFormat),
+/* harmony export */   tokenRegex: () => (/* binding */ tokenRegex)
 /* harmony export */ });
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils */ "./node_modules/flatpickr/dist/esm/utils/index.js");
 
@@ -2658,13 +2653,12 @@ var formats = {
   \********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "arrayify": () => (/* binding */ arrayify),
-/* harmony export */   "debounce": () => (/* binding */ debounce),
-/* harmony export */   "int": () => (/* binding */ int),
-/* harmony export */   "pad": () => (/* binding */ pad)
+/* harmony export */   arrayify: () => (/* binding */ arrayify),
+/* harmony export */   debounce: () => (/* binding */ debounce),
+/* harmony export */   int: () => (/* binding */ int),
+/* harmony export */   pad: () => (/* binding */ pad)
 /* harmony export */ });
 var pad = function (number, length) {
     if (length === void 0) { length = 2; }
@@ -2693,7 +2687,6 @@ var arrayify = function (obj) {
   \************************************************************/
 /***/ (() => {
 
-"use strict";
 
 if (typeof Object.assign !== "function") {
     Object.assign = function (target) {
@@ -2720,13 +2713,280 @@ if (typeof Object.assign !== "function") {
 
 /***/ }),
 
-/***/ "./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js":
-/*!************************************************************************!*\
-  !*** ./node_modules/vue-flatpickr-component/dist/vue-flatpickr.min.js ***!
-  \************************************************************************/
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ "./node_modules/vue-flatpickr-component/dist/esm/component.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/vue-flatpickr-component/dist/esm/component.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-!function(t,e){ true?module.exports=e(__webpack_require__(/*! flatpickr */ "./node_modules/flatpickr/dist/esm/index.js")):0}("undefined"!=typeof self?self:this,(function(t){return function(t){var e={};function n(r){if(e[r])return e[r].exports;var o=e[r]={i:r,l:!1,exports:{}};return t[r].call(o.exports,o,o.exports,n),o.l=!0,o.exports}return n.m=t,n.c=e,n.d=function(t,e,r){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:r})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var o in t)n.d(r,o,function(e){return t[e]}.bind(null,o));return r},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=1)}([function(e,n){e.exports=t},function(t,e,n){"use strict";n.r(e),n.d(e,"Component",(function(){return p})),n.d(e,"Plugin",(function(){return d}));var r=n(0),o=n.n(r),i=["onChange","onClose","onDestroy","onMonthChange","onOpen","onYearChange"];function u(){return(u=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var n=arguments[e];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(t[r]=n[r])}return t}).apply(this,arguments)}var a=function(t){return t.replace(/([a-z])([A-Z])/g,"$1-$2").toLowerCase()},f=function(t){return t&&t.length?t:null},l=function(t){return u({},t)},s=i.concat(["onValueUpdate","onDayCreate","onParseConfig","onReady","onPreCalendarPosition","onKeyDown"]),c=["locale","showMonths"],p={name:"flat-pickr",render:function(t){return t("input",{attrs:{type:"text","data-input":!0},props:{disabled:this.disabled},on:{input:this.onInput}})},props:{value:{default:null,required:!0,validator:function(t){return null===t||t instanceof Date||"string"==typeof t||t instanceof String||t instanceof Array||"number"==typeof t}},config:{type:Object,default:function(){return{wrap:!1,defaultDate:null}}},events:{type:Array,default:function(){return i}},disabled:{type:Boolean,default:!1}},data:function(){return{fp:null}},mounted:function(){var t=this;if(!this.fp){var e=l(this.config);this.events.forEach((function(n){var r,i=o.a.defaultConfig[n]||[];e[n]=(r=e[n]||[],r instanceof Array?r:[r]).concat(i,(function(){for(var e=arguments.length,r=new Array(e),o=0;o<e;o++)r[o]=arguments[o];t.$emit.apply(t,[a(n)].concat(r))}))})),e.defaultDate=this.value||e.defaultDate,this.fp=new o.a(this.getElem(),e),this.fpInput().addEventListener("blur",this.onBlur),this.$on("on-close",this.onClose),this.$watch("disabled",this.watchDisabled,{immediate:!0})}},methods:{getElem:function(){return this.config.wrap?this.$el.parentNode:this.$el},onInput:function(t){var e=this,n=t.target;this.$nextTick((function(){e.$emit("input",f(n.value))}))},fpInput:function(){return this.fp.altInput||this.fp.input},onBlur:function(t){this.$emit("blur",f(t.target.value))},onClose:function(t,e){this.$emit("input",f(e))},watchDisabled:function(t){t?this.fpInput().setAttribute("disabled",t):this.fpInput().removeAttribute("disabled")}},watch:{config:{deep:!0,handler:function(t){var e=this,n=l(t);s.forEach((function(t){delete n[t]})),this.fp.set(n),c.forEach((function(t){void 0!==n[t]&&e.fp.set(t,n[t])}))}},value:function(t){t!==f(this.$el.value)&&this.fp&&this.fp.setDate(t,!0)}},beforeDestroy:function(){this.fp&&(this.fpInput().removeEventListener("blur",this.onBlur),this.fp.destroy(),this.fp=null)}},d=function(t,e){var n="flat-pickr";"string"==typeof e&&(n=e),t.component(n,p)};p.install=d;e.default=p}]).default}));
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var flatpickr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flatpickr */ "./node_modules/flatpickr/dist/esm/index.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./events */ "./node_modules/vue-flatpickr-component/dist/esm/events.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./util */ "./node_modules/vue-flatpickr-component/dist/esm/util.js");
+
+
+
+
+// Keep a copy of all events for later use
+const allEvents = [..._events__WEBPACK_IMPORTED_MODULE_2__.includedEvents, ..._events__WEBPACK_IMPORTED_MODULE_2__.excludedEvents];
+// Passing these properties in `fp.set()` method will cause flatpickr to trigger some callbacks
+const configCallbacks = ['locale', 'showMonths'];
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,vue__WEBPACK_IMPORTED_MODULE_1__.defineComponent)({
+    name: 'FlatPickr',
+    compatConfig: {
+        MODE: 3,
+    },
+    render() {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_1__.h)('input', {
+            type: 'text',
+            'data-input': true,
+            disabled: this.disabled,
+            onInput: this.onInput,
+        });
+    },
+    emits: [
+        'blur',
+        'update:modelValue',
+        ...allEvents.map(_util__WEBPACK_IMPORTED_MODULE_3__.camelToKebab)
+    ],
+    props: {
+        modelValue: {
+            type: [String, Number, Date, Array, null],
+            required: true,
+        },
+        // https://flatpickr.js.org/options/
+        config: {
+            type: Object,
+            default: () => ({
+                defaultDate: null,
+                wrap: false,
+            })
+        },
+        events: {
+            type: Array,
+            default: () => _events__WEBPACK_IMPORTED_MODULE_2__.includedEvents
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+    },
+    data() {
+        return {
+            fp: null, //todo make it non-reactive
+        };
+    },
+    mounted() {
+        // Return early if flatpickr is already loaded
+        /* istanbul ignore if */
+        if (this.fp)
+            return;
+        // Init flatpickr
+        this.fp = (0,flatpickr__WEBPACK_IMPORTED_MODULE_0__["default"])(this.getElem(), this.prepareConfig());
+        // Attach blur event
+        this.fpInput().addEventListener('blur', this.onBlur);
+        // Immediate watch will fail before fp is set,
+        // so we need to start watching after mount
+        this.$watch('disabled', this.watchDisabled, {
+            immediate: true
+        });
+    },
+    methods: {
+        prepareConfig() {
+            // Don't mutate original object on parent component
+            let safeConfig = Object.assign({}, this.config);
+            this.events.forEach((hook) => {
+                // Respect global callbacks registered via setDefault() method
+                let globalCallbacks = flatpickr__WEBPACK_IMPORTED_MODULE_0__["default"].defaultConfig[hook] || [];
+                // Inject our own method along with user's callbacks
+                let localCallback = (...args) => {
+                    this.$emit((0,_util__WEBPACK_IMPORTED_MODULE_3__.camelToKebab)(hook), ...args);
+                };
+                // Overwrite with merged array
+                safeConfig[hook] = (0,_util__WEBPACK_IMPORTED_MODULE_3__.arrayify)(safeConfig[hook] || []).concat(globalCallbacks, localCallback);
+            });
+            const onCloseCb = this.onClose.bind(this);
+            safeConfig['onClose'] = (0,_util__WEBPACK_IMPORTED_MODULE_3__.arrayify)(safeConfig['onClose'] || []).concat(onCloseCb);
+            // Set initial date without emitting any event
+            safeConfig.defaultDate = this.modelValue || safeConfig.defaultDate;
+            return safeConfig;
+        },
+        /**
+         * Get the HTML node where flatpickr to be attached
+         * Bind on parent element if wrap is true
+         */
+        getElem() {
+            return this.config.wrap ? this.$el.parentNode : this.$el;
+        },
+        /**
+         * Watch for value changed by date-picker itself and notify parent component
+         */
+        onInput(event) {
+            const input = event.target;
+            // Let's wait for DOM to be updated
+            (0,vue__WEBPACK_IMPORTED_MODULE_1__.nextTick)().then(() => {
+                this.$emit('update:modelValue', (0,_util__WEBPACK_IMPORTED_MODULE_3__.nullify)(input.value));
+            });
+        },
+        fpInput() {
+            return this.fp.altInput || this.fp.input;
+        },
+        /**
+         * Blur event is required by many validation libraries
+         */
+        onBlur(event) {
+            this.$emit('blur', (0,_util__WEBPACK_IMPORTED_MODULE_3__.nullify)(event.target.value));
+        },
+        /**
+         * Flatpickr does not emit input event in some cases
+         */
+        onClose(selectedDates, dateStr) {
+            this.$emit('update:modelValue', dateStr);
+        },
+        /**
+         * Watch for the disabled property and sets the value to the real input.
+         */
+        watchDisabled(newState) {
+            if (newState) {
+                this.fpInput().setAttribute('disabled', '');
+            }
+            else {
+                this.fpInput().removeAttribute('disabled');
+            }
+        }
+    },
+    watch: {
+        /**
+         * Watch for any config changes and redraw date-picker
+         */
+        config: {
+            deep: true,
+            handler(newConfig) {
+                if (!this.fp)
+                    return;
+                let safeConfig = Object.assign({}, newConfig);
+                // Workaround: Don't pass hooks to configs again otherwise
+                // previously registered hooks will stop working
+                // Notice: we are looping through all events
+                // This also means that new callbacks can not be passed once component has been initialized
+                allEvents.forEach((hook) => {
+                    delete safeConfig[hook];
+                });
+                this.fp.set(safeConfig);
+                // Workaround: Allow to change locale dynamically
+                configCallbacks.forEach((name) => {
+                    if (typeof safeConfig[name] !== 'undefined') {
+                        this.fp.set(name, safeConfig[name]);
+                    }
+                });
+            }
+        },
+        /**
+         * Watch for changes from parent component and update DOM
+         */
+        modelValue(newValue) {
+            var _a;
+            // Prevent updates if v-model value is same as input's current value
+            if (!this.$el || newValue === (0,_util__WEBPACK_IMPORTED_MODULE_3__.nullify)(this.$el.value))
+                return;
+            // Notify flatpickr instance that there is a change in value
+            (_a = this.fp) === null || _a === void 0 ? void 0 : _a.setDate(newValue, true);
+        }
+    },
+    beforeUnmount() {
+        /* istanbul ignore else */
+        if (!this.fp)
+            return;
+        this.fpInput().removeEventListener('blur', this.onBlur);
+        this.fp.destroy();
+        this.fp = null;
+    }
+}));
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-flatpickr-component/dist/esm/events.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/vue-flatpickr-component/dist/esm/events.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   excludedEvents: () => (/* binding */ excludedEvents),
+/* harmony export */   includedEvents: () => (/* binding */ includedEvents)
+/* harmony export */ });
+const includedEvents = [
+    'onChange',
+    'onClose',
+    'onDestroy',
+    'onMonthChange',
+    'onOpen',
+    'onYearChange',
+];
+// Let's not emit these events by default
+const excludedEvents = [
+    'onValueUpdate',
+    'onDayCreate',
+    'onParseConfig',
+    'onReady',
+    'onPreCalendarPosition',
+    'onKeyDown',
+];
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-flatpickr-component/dist/esm/index.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/vue-flatpickr-component/dist/esm/index.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./component */ "./node_modules/vue-flatpickr-component/dist/esm/component.js");
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_component__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-flatpickr-component/dist/esm/util.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/vue-flatpickr-component/dist/esm/util.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   arrayify: () => (/* binding */ arrayify),
+/* harmony export */   camelToKebab: () => (/* binding */ camelToKebab),
+/* harmony export */   nullify: () => (/* binding */ nullify)
+/* harmony export */ });
+function camelToKebab(string) {
+    return string.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+}
+function arrayify(obj) {
+    return obj instanceof Array
+        ? obj
+        : [obj];
+}
+function nullify(value) {
+    return (value && value.length)
+        ? value
+        : null;
+}
+
+
 
 /***/ })
 

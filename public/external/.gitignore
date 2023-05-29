@@ -6,6 +6,14 @@
 !/*/
 /*/*
 
+!/@highlightjs/cdn-assets/
+/@highlightjs/cdn-assets/*
+!/@highlightjs/cdn-assets/LICENS*
+!/@highlightjs/cdn-assets/*.js
+!/@highlightjs/cdn-assets/styles/
+/@highlightjs/cdn-assets/styles/*
+!/@highlightjs/cdn-assets/styles/github-dark-dimmed*.css
+
 !/@shopify/draggable/
 /@shopify/draggable/*
 !/@shopify/draggable/LICENS*
@@ -69,9 +77,3 @@
 !/twemoji/assets/svg/1f3f4-e0067-e0062-e0065-e006e-e0067-e007f.svg
 !/twemoji/assets/svg/1f3f4-e0067-e0062-e0073-e0063-e0074-e007f.svg
 !/twemoji/assets/svg/1f3f4-e0067-e0062-e0077-e006c-e0073-e007f.svg
-
-!/vue-clock2/LICENS*
-!/vue-clock2/dist/
-/vue-clock2/dist/*
-!/vue-clock2/dist/*.js
-!/vue-clock2/dist/*.js.map

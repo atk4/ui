@@ -197,7 +197,7 @@ Form and Crud Components
 Next we need to add Components that are capable of manipulating the data::
 
     $col = \Atk4\Ui\Columns::addTo($app, ['divided']);
-    $col_reload = new \Atk4\Ui\JsReload($col);
+    $col_reload = new \Atk4\Ui\Js\JsReload($col);
 
     $form = \Atk4\Ui\Form::addTo($col->addColumn());
     $form->setModel(new ToDoItem($s));
@@ -226,7 +226,7 @@ Next we need to add Components that are capable of manipulating the data::
 .. [#] `setModel` provides a way to bind Component with Data Model and Data Persistence.
 
 .. [#] `Form` relies on a special Callback feature of Agile UI to automatically handle onSubmit
-    call-back, pre-load form values into the model, so that you could simply
+    callback, pre-load form values into the model, so that you could simply
 
 .. [#] Save the record into that session data. Form automatically captures validation errors.
 
@@ -252,7 +252,7 @@ another. In our example replace right column (label 17) with the following code:
     $grid->setModel(new ToDoItem($s));
 
     $grid->menu->addItem('Complete Selected',
-        new \Atk4\Ui\JsReload($grid->table, [
+        new \Atk4\Ui\Js\JsReload($grid->table, [
             'delete' => $grid->addSelection()->jsChecked(),
         ])
     );

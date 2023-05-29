@@ -8,10 +8,10 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Grid;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsExpression;
-use Atk4\Ui\JsReload;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsReload;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Message;
 use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\BasicExecutor;
@@ -28,6 +28,13 @@ $model->addUserAction('test', function (Model $model) {
 
 $grid->setModel($model);
 
+// add country flag column
+$grid->addColumn('flag', [
+    Table\Column\CountryFlag::class,
+    'codeField' => $model->fieldName()->iso,
+    'nameField' => $model->fieldName()->name,
+]);
+
 // Adding Quicksearch on Name field using auto query.
 $grid->addQuickSearch([$model->fieldName()->name], true);
 
@@ -42,7 +49,7 @@ $grid->menu->addItem(['Delete All', 'icon' => 'trash', 'class.red active' => tru
 $grid->addColumn(null, [Table\Column\Template::class, 'hello<b>world</b>']);
 
 // Creating a button for executing model test user action.
-$grid->addExecutorButton($grid->getExecutorFactory()->create($model->getUserAction('test'), $grid));
+$grid->addExecutorButton($grid->getExecutorFactory()->createExecutor($model->getUserAction('test'), $grid));
 
 $grid->addActionButton('Say HI', function (Jquery $j, $id) use ($grid) {
     $model = Country::assertInstanceOf($grid->model);
@@ -55,7 +62,7 @@ $grid->addModalAction(['icon' => 'external'], 'Modal Test', function (View $p, $
 });
 
 // Creating an executor for delete action.
-$deleteExecutor = $grid->getExecutorFactory()->create($model->getUserAction('delete'), $grid);
+$deleteExecutor = $grid->getExecutorFactory()->createExecutor($model->getUserAction('delete'), $grid);
 $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
     return [
         (new Jquery())->closest('tr')->transition('fade left'),
@@ -100,10 +107,11 @@ $callback = function ($m, $ids) use ($grid) {
 
 $grid->addModalBulkAction(['Delete selected', 'icon' => 'trash', 'class.orange active' => true], $callback);
 
-$grid->menu->addItem('show selection')->on('click', new JsExpression(
-    'alert(\'Selected: \' + [])',
-    [$sel->jsChecked()]
-));
+$grid->menu->addItem('show selection')
+    ->on('click', new JsExpression(
+        'alert(\'Selected: \' + [])',
+        [$sel->jsChecked()]
+    ));
 
 // Setting ipp with an array will add an ItemPerPageSelector to paginator.
 $grid->setIpp([10, 25, 50, 100]);

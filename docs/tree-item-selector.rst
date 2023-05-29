@@ -16,9 +16,9 @@ Attributes
 
 .. php:attr:: treeItems
 
-The list of items to be render by the components as an array. End item must at least contains a name and id value. Name will be display
-within the list structure and id will be collect when user add or remove them.
-Items are grouped together by using nodes forming a category in the list. Id value is not mandatory for a group.
+The list of items to be render by the components as an array. End item must at least contains a name and ID value. Name will be display
+within the list structure and ID will be collect when user add or remove them.
+Items are grouped together by using nodes forming a category in the list. ID value is not mandatory for a group.
 
 The TreeItemSelector will automatically create group of items based on the treeItems array. It will create a group when an item contains a nodes key within
 the treeItems array and that nodes key is not empty. Below is a sample of a group name call Electronics using two children nodes.::
@@ -92,12 +92,12 @@ It is possible to run a callback function every time an item is select on the li
 set by the user.::
 
     $control->onItem(function (array $value) {
-        return new \Atk4\Ui\JsToast($this->getApp()->encodeJson($value));
+        return new \Atk4\Ui\Js\JsToast($this->getApp()->encodeJson($value));
     });
 
 Note
 ====
 
-This form control component is made to collect id's of end item only, i.e. item with no children nodes, and will be working in recursive selection
+This form control component is made to collect ID's of end item only, i.e. item with no children nodes, and will be working in recursive selection
 mode when allowMultiple is set to true. Recursive selection mean that when user click on a group, it will automatically select or unselect children
 of that group depending on the state of the group when clicked. Be aware of this when building your item tree.

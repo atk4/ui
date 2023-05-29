@@ -70,18 +70,18 @@ class PanelService {
      * Open the panel.
      * Params expected the following arguments:
      * triggered: A string or jQuery object that will triggered panel to open.
-     * activeCss: Either an object containing a jQuery selector with a css class or css class.
+     * activeCss: Either an object containing a jQuery selector with a CSS class or CSS class.
      * - As an Object: element: the jQuery selector within the triggered element;
      * -               css:     the css class to applying to the triggered element when panel is open.
      *
-     * As a css class: the css class to applied to the triggered element when panel open.
+     * As a CSS class: the CSS class to applied to the triggered element when panel open.
      *
      * @param {object} params
      */
     openPanel(params) {
         // if no id is provide, then get the first one.
         // no id mean the first panel in list.
-        const panelId = (params.openId) ? params.openId : Object.keys(this.service.panels[0])[0];
+        const panelId = params.openId ?? Object.keys(this.service.panels[0])[0];
         // save our open param.
         this.service.currentParams = params;
         if (this.isSameElement(panelId, params.triggered)) {
@@ -142,11 +142,10 @@ class PanelService {
         if (this.getPropertyValue(id, 'url')) {
             // Convert our array of args to object.
             // Args must be defined as data-attributeName in the triggered element.
-            const args = params.reloadArgs.reduce((obj, item) => {
-                obj[item] = params.triggered.data(item);
-
-                return obj;
-            }, {});
+            const args = {};
+            for (const k of params.reloadArgs) {
+                args[k] = params.triggered.data(k);
+            }
             // add URL argument if pass to panel
             if (params.urlArgs !== undefined) {
                 $.extend(args, params.urlArgs);
@@ -247,14 +246,14 @@ class PanelService {
 
     /**
      * Set triggering element that fire the panel to open.
-     * If panel is open by html element, you can specified class on these
+     * If panel is open by HTML element, you can specified class on these
      * elements that will be add or remove, depending on the panel state.
-     * Thus, creating a visual onto which html element has fire the event.
+     * Thus, creating a visual onto which HTML element has fire the event.
      */
     setTriggerElement(id, trigger, params) {
         this.setPropertyValue(id, 'triggerElement', trigger);
 
-        // Do we need to setup css class on triggering element.
+        // Do we need to setup CSS class on triggering element.
         if (params.activeCSS) {
             let element;
             let css;
@@ -314,14 +313,14 @@ class PanelService {
         const triggerElement = this.getPropertyValue(id, 'triggerElement');
         let isSame = false;
         if (el && triggerElement) {
-            isSame = (el.length === triggerElement.length && el.length === el.filter(triggerElement).length);
+            isSame = el.length === triggerElement.length && el.length === el.filter(triggerElement).length;
         }
 
         return isSame;
     }
 
     /**
-     * Removed a css class to a jQuery element.
+     * Removed a CSS class to a jQuery element.
      * This should normally be your triggering panel element.
      */
     deActivated(element, css) {
@@ -331,7 +330,7 @@ class PanelService {
     }
 
     /**
-     * Add a css class name to a jQuery element.
+     * Add a CSS class name to a jQuery element.
      * This should normally be your triggering panel element.
      */
     activated(element, css) {
@@ -366,7 +365,7 @@ class PanelService {
      * @returns {boolean}
      */
     needConfirmation(id) {
-        return (this.getPropertyValue(id, 'modal') && this.isWarningOn(id));
+        return this.getPropertyValue(id, 'modal') && this.isWarningOn(id);
     }
 
     /**
@@ -375,9 +374,9 @@ class PanelService {
     clearPanelContent(id) {
         const $panel = this.getPropertyValue(id, '$panel');
         const clearables = this.getPropertyValue(id, 'clearable');
-        clearables.forEach((clearable) => {
+        for (const clearable of clearables) {
             $panel.find(clearable).html('');
-        });
+        }
     }
 
     /**
@@ -388,11 +387,11 @@ class PanelService {
      * @param {*}      value the value.
      */
     setPropertyValue(id, prop, value) {
-        this.service.panels.forEach((panel) => {
+        for (const panel of this.service.panels) {
             if (panel[id]) {
                 panel[id][prop] = value;
             }
-        });
+        }
     }
 
     /**
@@ -403,11 +402,11 @@ class PanelService {
      */
     getPropertyValue(id, prop = null) {
         let value = null;
-        this.service.panels.forEach((panel) => {
+        for (const panel of this.service.panels) {
             if (panel[id]) {
                 value = prop ? panel[id][prop] : panel[id];
             }
-        });
+        }
 
         return value;
     }

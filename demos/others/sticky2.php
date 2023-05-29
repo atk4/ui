@@ -7,8 +7,8 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Button;
 use Atk4\Ui\Console;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsReload;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsReload;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Label;
 use Atk4\Ui\Loader;
 use Atk4\Ui\Table;
@@ -33,9 +33,10 @@ if (isset($_GET['name'])) {
     View::addTo($frame, ['ui' => 'hidden divider']);
 
     // nested interractive elemetns will respect lockal sticky get
-    Button::addTo($frame, ['Triggering callback here will inherit color'])->on('click', function () {
-        return new JsToast('Color was = ' . $_GET['name']);
-    });
+    Button::addTo($frame, ['Triggering callback here will inherit color'])
+        ->on('click', function () {
+            return new JsToast('Color was = ' . $_GET['name']);
+        });
 
     // Next we have loader, which will dynamically load console which will dynamically output "success" message.
     Loader::addTo($frame)->set(function (Loader $p) {
@@ -50,9 +51,10 @@ $t->setSource(['Red', 'Green', 'Blue']);
 $t->addDecorator('name', [Table\Column\Link::class, [], ['name']]);
 
 $frame = View::addTo($app, ['ui' => 'green segment']);
-Button::addTo($frame, ['does not inherit sticky get'])->on('click', function () use ($app) {
-    return new JsToast('$_GET = ' . $app->encodeJson($_GET));
-});
+Button::addTo($frame, ['does not inherit sticky get'])
+    ->on('click', function () use ($app) {
+        return new JsToast('$_GET = ' . $app->encodeJson($_GET));
+    });
 
 Header::addTo($app, ['Use of View::url()']);
 

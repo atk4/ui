@@ -14,7 +14,6 @@ use Atk4\Ui\Table;
  * [ColorRating::class, [
  *     'min' => 1,
  *     'max' => 3,
- *     'steps' => 3,
  *     'colors' => [
  *         '#FF0000',
  *         '#FFFF00',
@@ -26,17 +25,11 @@ class ColorRating extends Table\Column
 {
     /** @var float Minimum value of the gradient. */
     public $min;
-
     /** @var float Maximum value of the gradient. */
     public $max;
-    /** @var int Step to be calculated between colors, must be greater than 1. */
-    public $steps = 1;
 
-    /** @var array Hex colors ['#FF0000', '#00FF00'] from red to green. */
+    /** @var array Hex colors. */
     public $colors = ['#FF0000', '#00FF00'];
-
-    /** @var array Store the generated Hex color based on the number of steps. */
-    protected $gradients = [];
 
     /** @var bool Define if values lesser than min have no color. */
     public $lessThanMinNoColor = false;
@@ -52,78 +45,8 @@ class ColorRating extends Table\Column
             throw new Exception('Min must be lower than Max');
         }
 
-        if ($this->steps === 0) {
-            throw new Exception('Step must be at least 1');
-        }
-
         if (count($this->colors) < 2) {
-            throw new Exception('Colors must be more than 1');
-        }
-
-        $this->createGradients();
-    }
-
-    private function createGradients(): void
-    {
-        $colorFrom = '';
-
-        foreach ($this->colors as $idx => $color) {
-            // skip first
-            if ($idx === 0) {
-                $colorFrom = $color;
-
-                continue;
-            }
-
-            // if already add remove last
-            // because on first iteraction of ->createGradientSingle
-            // will create a duplicate
-            if (count($this->gradients) > 0) {
-                array_pop($this->gradients);
-            }
-
-            $this->createGradientSingle($this->gradients, $colorFrom, $color, $this->steps + 1);
-            $colorFrom = $color;
-        }
-    }
-
-    private function createGradientSingle(array &$gradients, string $hexFrom, string $hexTo, int $steps): void
-    {
-        $hexFrom = trim($hexFrom, '#');
-        $hexTo = trim($hexTo, '#');
-
-        $fromRgb = [
-            'r' => hexdec(substr($hexFrom, 0, 2)),
-            'g' => hexdec(substr($hexFrom, 2, 2)),
-            'b' => hexdec(substr($hexFrom, 4, 2)),
-        ];
-
-        $toRgb = [
-            'r' => hexdec(substr($hexTo, 0, 2)),
-            'g' => hexdec(substr($hexTo, 2, 2)),
-            'b' => hexdec(substr($hexTo, 4, 2)),
-        ];
-
-        $stepRgb = [
-            'r' => ($fromRgb['r'] - $toRgb['r']) / $steps,
-            'g' => ($fromRgb['g'] - $toRgb['g']) / $steps,
-            'b' => ($fromRgb['b'] - $toRgb['b']) / $steps,
-        ];
-
-        for ($i = 0; $i <= $steps; ++$i) {
-            $rgb = [
-                'r' => floor($fromRgb['r'] - $stepRgb['r'] * $i),
-                'g' => floor($fromRgb['g'] - $stepRgb['g'] * $i),
-                'b' => floor($fromRgb['b'] - $stepRgb['b'] * $i),
-            ];
-
-            $hexRgb = [
-                'r' => sprintf('%02x', $rgb['r']),
-                'g' => sprintf('%02x', $rgb['g']),
-                'b' => sprintf('%02x', $rgb['b']),
-            ];
-
-            $gradients[] = '#' . implode('', $hexRgb);
+            throw new Exception('At least 2 colors must be set');
         }
     }
 
@@ -147,11 +70,8 @@ class ColorRating extends Table\Column
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $value = $field->get($row);
-        if ($value === null) {
-            return parent::getHtmlTags($row, $field);
-        }
 
-        $color = $this->getColorFromValue($value);
+        $color = $value === null ? null : $this->getColorFromValue($value);
 
         if ($color === null) {
             return parent::getHtmlTags($row, $field);
@@ -164,20 +84,56 @@ class ColorRating extends Table\Column
 
     private function getColorFromValue(float $value): ?string
     {
-        if ($value <= $this->min) {
-            return $this->lessThanMinNoColor ? null : $this->gradients[0];
+        if ($value < $this->min) {
+            if ($this->lessThanMinNoColor) {
+                return null;
+            }
+
+            $value = $this->min;
         }
 
-        if ($value >= $this->max) {
-            return $this->moreThanMaxNoColor ? null : end($this->gradients);
+        if ($value > $this->max) {
+            if ($this->moreThanMaxNoColor) {
+                return null;
+            }
+
+            $value = $this->max;
         }
 
-        $gradientsCount = count($this->gradients) - 1;
-        $refValue = ($value - $this->min) / ($this->max - $this->min);
-        $refIndex = $gradientsCount * $refValue;
+        $colorIndex = (count($this->colors) - 1) * ($value - $this->min) / ($this->max - $this->min);
 
-        $index = (int) floor($refIndex);
+        $color = $this->interpolateColor(
+            $this->colors[floor($colorIndex)],
+            $this->colors[ceil($colorIndex)],
+            $colorIndex - floor($colorIndex)
+        );
 
-        return $this->gradients[$index];
+        return $color;
+    }
+
+    protected function interpolateColor(string $hexFrom, string $hexTo, float $value): string
+    {
+        $hexFrom = ltrim($hexFrom, '#');
+        $hexTo = ltrim($hexTo, '#');
+
+        $fromRgb = [
+            'r' => hexdec(substr($hexFrom, 0, 2)),
+            'g' => hexdec(substr($hexFrom, 2, 2)),
+            'b' => hexdec(substr($hexFrom, 4, 2)),
+        ];
+
+        $toRgb = [
+            'r' => hexdec(substr($hexTo, 0, 2)),
+            'g' => hexdec(substr($hexTo, 2, 2)),
+            'b' => hexdec(substr($hexTo, 4, 2)),
+        ];
+
+        $rgb = [
+            'r' => round($fromRgb['r'] + $value * ($toRgb['r'] - $fromRgb['r'])),
+            'g' => round($fromRgb['g'] + $value * ($toRgb['g'] - $fromRgb['g'])),
+            'b' => round($fromRgb['b'] + $value * ($toRgb['b'] - $fromRgb['b'])),
+        ];
+
+        return '#' . sprintf('%02x%02x%02x', $rgb['r'], $rgb['g'], $rgb['b']);
     }
 }

@@ -12,6 +12,7 @@ use Atk4\Ui\Table;
 
 class TableColumnColorRatingTest extends TestCase
 {
+    use CreateAppTrait;
     use TableTestTrait;
 
     /** @var Table */
@@ -30,8 +31,9 @@ class TableColumnColorRatingTest extends TestCase
         $m = new Model($db, ['table' => 'table']);
         $m->addField('name');
         $m->addField('ref');
-        $m->addField('rating');
+        $m->addField('rating', ['type' => 'integer']);
         $this->table = new Table();
+        $this->table->setApp($this->createApp());
         $this->table->invokeInit();
         $this->table->setModel($m, ['name', 'ref', 'rating']);
     }
@@ -41,7 +43,6 @@ class TableColumnColorRatingTest extends TestCase
         $rating = $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 0,
             'max' => 2,
-            'steps' => 3,
             'colors' => [
                 '#FF0000',
                 '#FFFF00',
@@ -49,12 +50,12 @@ class TableColumnColorRatingTest extends TestCase
             ],
         ]]);
 
-        static::assertSame(
+        self::assertSame(
             '<td>{$name}</td><td>{$ref}</td><td style="{$' . $this->getColumnStyle($rating) . '}">{$rating}</td>',
             $this->table->getDataRowHtml()
         );
 
-        static::assertSame(
+        self::assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="background-color: #00ff00;">3</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -65,7 +66,6 @@ class TableColumnColorRatingTest extends TestCase
         $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 0,
             'max' => 2,
-            'steps' => 3,
             'colors' => [
                 '#FF0000',
                 '#FFFF00',
@@ -74,7 +74,7 @@ class TableColumnColorRatingTest extends TestCase
             'moreThanMaxNoColor' => true,
         ]]);
 
-        static::assertSame(
+        self::assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="">3</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -85,7 +85,6 @@ class TableColumnColorRatingTest extends TestCase
         $rating = $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 4,
             'max' => 10,
-            'steps' => 3,
             'colors' => [
                 '#FF0000',
                 '#FFFF00',
@@ -93,12 +92,12 @@ class TableColumnColorRatingTest extends TestCase
             ],
         ]]);
 
-        static::assertSame(
+        self::assertSame(
             '<td>{$name}</td><td>{$ref}</td><td style="{$' . $this->getColumnStyle($rating) . '}">{$rating}</td>',
             $this->table->getDataRowHtml()
         );
 
-        static::assertSame(
+        self::assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="background-color: #ff0000;">3</td></tr>',
             $this->extractTableRow($this->table)
         );
@@ -109,7 +108,6 @@ class TableColumnColorRatingTest extends TestCase
         $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 4,
             'max' => 10,
-            'steps' => 3,
             'colors' => [
                 '#FF0000',
                 '#FFFF00',
@@ -118,19 +116,18 @@ class TableColumnColorRatingTest extends TestCase
             'lessThanMinNoColor' => true,
         ]]);
 
-        static::assertSame(
+        self::assertSame(
             '<tr data-id="1"><td>bar</td><td>ref123</td><td style="">3</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
 
-    public function testExceptionMinGreaterThanMax(): void
+    public function testMinGreaterThanMaxException(): void
     {
         $this->expectException(Exception::class);
         $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 3,
             'max' => 1,
-            'steps' => 3,
             'colors' => [
                 '#FF0000',
                 '#FFFF00',
@@ -139,13 +136,12 @@ class TableColumnColorRatingTest extends TestCase
         ]]);
     }
 
-    public function testExceptionMinEqualsMax(): void
+    public function testMinEqualsMaxException(): void
     {
         $this->expectException(Exception::class);
         $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 3,
             'max' => 3,
-            'steps' => 3,
             'colors' => [
                 '#FF0000',
                 '#FFFF00',
@@ -154,28 +150,12 @@ class TableColumnColorRatingTest extends TestCase
         ]]);
     }
 
-    public function testExceptionZeroSteps(): void
+    public function testLessThan2ColorsException(): void
     {
         $this->expectException(Exception::class);
         $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 1,
             'max' => 3,
-            'steps' => 0,
-            'colors' => [
-                '#FF0000',
-                '#FFFF00',
-                '#00FF00',
-            ],
-        ]]);
-    }
-
-    public function testExceptionLessThan2ColorsDefined(): void
-    {
-        $this->expectException(Exception::class);
-        $this->table->addDecorator('rating', [Table\Column\ColorRating::class, [
-            'min' => 1,
-            'max' => 3,
-            'steps' => 3,
             'colors' => [
                 '#FF0000',
             ],

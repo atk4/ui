@@ -15,6 +15,7 @@ cache
 *.cache.*
 
 /demos/db.php
+/demos/db-behat-rw.txt
 /demos/_demo-data/db.sqlite
 /demos/_demo-data/db.sqlite-journal
 /phpunit.xml

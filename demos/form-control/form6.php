@@ -6,7 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Columns;
 use Atk4\Ui\Form;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\View;
 
 /** @var \Atk4\Ui\App $app */

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\HookTrait;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsExpressionable;
 
-/**
- * Implements a class that can be mapped into arbitrary JavaScript expression.
- */
 class JsSse extends JsCallback
 {
     use HookTrait;
@@ -41,9 +41,9 @@ class JsSse extends JsCallback
         }
     }
 
-    public function jsRender(): string
+    public function jsExecute(): JsBlock
     {
-        $this->getApp(); // assert has App
+        $this->assertIsInitialized();
 
         $options = ['url' => $this->getJsUrl()];
         if ($this->showLoader) {
@@ -53,15 +53,29 @@ class JsSse extends JsCallback
             $options['closeBeforeUnload'] = $this->closeBeforeUnload;
         }
 
-        return (new Jquery())->atkServerEvent($options)->jsRender();
+        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)]);
+    }
+
+    public function set($fx = null, $args = null)
+    {
+        if (!$fx instanceof \Closure) {
+            throw new \TypeError('$fx must be of type Closure');
+        }
+
+        return parent::set(function (Jquery $chain) use ($fx, $args) {
+            // TODO replace EventSource to support POST
+            // https://github.com/Yaffle/EventSource
+            // https://github.com/mpetazzoni/sse.js
+            // https://github.com/EventSource/eventsource
+            // https://github.com/byjg/jquery-sse
+            return $fx($chain, ...array_values($args ?? []));
+        });
     }
 
     /**
      * Sending an SSE action.
-     *
-     * @param JsExpressionable $action
      */
-    public function send($action, bool $success = true): void
+    public function send(JsExpressionable $action, bool $success = true): void
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
@@ -120,7 +134,7 @@ class JsSse extends JsCallback
         // output headers and content
         $app = $this->getApp();
         \Closure::bind(static function () use ($app, $content): void {
-            $app->outputResponse($content, []);
+            $app->outputResponse($content);
         }, null, $app)();
     }
 
@@ -157,7 +171,6 @@ class JsSse extends JsCallback
     }
 
     /**
-     * Initialise this sse.
      * It will ignore user abort by default.
      */
     protected function initSse(): void

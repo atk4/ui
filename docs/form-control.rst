@@ -35,12 +35,12 @@ You can set default value and interact with a form control using JavaScript::
 
 
     $button = \Atk4\Ui\Button::addTo($app, ['check value']);
-    $button->on('click', new \Atk4\Ui\JsExpression('alert(\'control value is: \' + [])', [$control->jsInput()->val()]));
+    $button->on('click', new \Atk4\Ui\Js\JsExpression('alert(\'control value is: \' + [])', [$control->jsInput()->val()]));
 
 
 When used stand-alone, Form\Controls will produce a basic HTML (I have omitted id=)::
 
-    <div class="ui  input">
+    <div class="ui input">
         <input name="line" type="text" placeholder="" value="hello world">
     </div>
 
@@ -58,7 +58,7 @@ page and the following HTML is now produced::
 
     <div class="field">
         <label for="atk_admin_form_generic_name_input">Name</label>
-        <div id="atk_admin_form_generic_name" class="ui input" style="">
+        <div id="atk_admin_form_generic_name" class="ui input">
             <input name="name" type="text" placeholder="" id="atk_admin_form_generic_name_input" value="">
         </div>
     </div>
@@ -134,7 +134,7 @@ change their value.
 
 .. php:attr:: disabled
 
-Disabled form controls can be  seend in form, cannot be focused and will not be submitted. And of course we
+Disabled form controls can be seen in form, cannot be focused and will not be submitted. And of course we
 don't allow to change their value. Disabled form controls are used for read only model fields for example.
 
 
@@ -224,7 +224,7 @@ element. For example, `icon` property:
     Adds icon into the input form control. Default - `icon` will appear on the right, while `leftIcon`
     will display icon on the left.
 
-Here are few ways to specify `icon` to an Input::
+Here are few ways to specify `icon` to an Input/Line::
 
     // compact
     Line::addTo($page, ['icon' => 'search']);
@@ -296,21 +296,21 @@ onChange event
 .. php:method:: onChange($expression)
 
 It's prefferable to use this short-hand version of on('change', 'input', $expression) method.
-$expression argument can be string, JsExpression, array of JsExpressions or even PHP callback function.
+$expression argument can be JS expression or PHP callback function.
 
     // simple string
     $f1 = $form->addControl('f1');
-    $f1->onChange('console.log(\'f1 changed\')');
+    $f1->onChange(\Atk4\Ui\Js\JsExpression('console.log(\'f1 changed\')'));
 
     // callback
     $f2 = $form->addControl('f2');
     $f2->onChange(function () {
-        return new \Atk4\Ui\JsExpression('console.log(\'f2 changed\')');
+        return new \Atk4\Ui\Js\JsExpression('console.log(\'f2 changed\')');
     });
 
     // Calendar form control - wraps in function call with arguments date, text and mode
     $c1 = $form->addControl('c1', new \Atk4\Ui\Form\Control\Calendar(['type' => 'date']));
-    $c1->onChange('console.log(\'c1 changed: \' + date + \', \' + text + \', \' + mode)');
+    $c1->onChange(\Atk4\Ui\Js\JsExpression('console.log(\'c1 changed: \' + date + \', \' + text + \', \' + mode)'));
 
 
 Dropdown

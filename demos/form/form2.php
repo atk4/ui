@@ -8,8 +8,9 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
-use Atk4\Ui\Jquery;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Label;
 
 /** @var \Atk4\Ui\App $app */
@@ -29,14 +30,15 @@ $form->setModel((new Country($app->db))->createEntity(), []);
 
 // form basic field group
 $formAddress = $form->addGroup('Basic Country Information');
-$name = $formAddress->addControl(Country::hinting()->fieldName()->name, ['width' => 'sixteen']);
-$name->addAction(['Check Duplicate', 'iconRight' => 'search'])->on('click', function (Jquery $jquery, string $name) use ($app, $form) {
-    if ((new Country($app->db))->tryLoadBy(Country::hinting()->fieldName()->name, $name) !== null) {
-        return $form->js()->form('add prompt', Country::hinting()->fieldName()->name, 'This country name is already added.');
-    }
+$nameInput = $formAddress->addControl(Country::hinting()->fieldName()->name, ['width' => 'sixteen']);
+$nameInput->addAction(['Check Duplicate', 'iconRight' => 'search'])
+    ->on('click', function (Jquery $jquery, string $name) use ($app, $form) {
+        if ((new Country($app->db))->tryLoadBy(Country::hinting()->fieldName()->name, $name) !== null) {
+            return $form->js()->form('add prompt', Country::hinting()->fieldName()->name, 'This country name is already added.');
+        }
 
-    return new JsToast('This country name can be added.');
-}, ['args' => ['_n' => $name->jsInput()->val()]]);
+        return new JsToast('This country name can be added.');
+    }, ['args' => [$nameInput->jsInput()->val()]]);
 
 // form codes field group
 $formCodes = $form->addGroup(['Codes']);
@@ -64,25 +66,24 @@ $form->onSubmit(function (Form $form) {
     // In-form validation
     $errors = [];
     if (mb_strlen($form->model->get('first_name')) < 3) {
-        $errors[] = $form->error('first_name', 'too short, ' . $form->model->get('first_name'));
+        $errors[] = $form->jsError('first_name', 'too short, ' . $form->model->get('first_name'));
     }
     if (mb_strlen($form->model->get('last_name')) < 5) {
-        $errors[] = $form->error('last_name', 'too short');
+        $errors[] = $form->jsError('last_name', 'too short');
     }
 
     // Model validation. We do it manually because we are not using Model::save() method in demo mode.
     foreach ($countryEntity->validate('save') as $k => $error) {
-        $errors[] = $form->error($k, $error);
+        $errors[] = $form->jsError($k, $error);
     }
 
     if ($errors) {
-        return $errors;
+        return new JsBlock($errors);
     }
 
     return new JsToast($countryEntity->getUserAction('add')->execute());
 });
 
-/** @var Model $personClass */
 $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
     public $table = 'person';
 

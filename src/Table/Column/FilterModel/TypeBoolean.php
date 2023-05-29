@@ -15,14 +15,17 @@ class TypeBoolean extends Column\FilterModel
     {
         parent::init();
 
-        $this->op->values = ['true' => 'Is Yes', 'false' => 'Is No'];
+        $this->op->values = [
+            'true' => 'Is Yes',
+            'false' => 'Is No',
+        ];
         $this->op->default = 'true';
     }
 
     public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();
-        if (isset($filter['id'])) {
+        if ($filter !== null) {
             $model->addCondition($filter['name'], $filter['op'] === 'true');
         }
 

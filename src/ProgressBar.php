@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\JsExpressionable;
+
 /**
  * $bar = ProgressBar::addTo($app, [10, 'label' => 'Processing files']);.
  */
@@ -45,21 +47,17 @@ class ProgressBar extends View
     }
 
     /**
-     * Return js action for incrementing progress by one.
-     *
-     * @return JsExpressionable
+     * Return JS action for incrementing progress by one.
      */
-    public function jsIncrement()
+    public function jsIncrement(): JsExpressionable
     {
         return $this->js()->progress('increment');
     }
 
     /**
-     * Return js action for setting value (client-side).
-     *
-     * @return JsExpressionable
+     * Return JS action for setting value.
      */
-    public function jsValue(int $value)
+    public function jsValue(int $value): JsExpressionable
     {
         return $this->js()->progress(['percent' => $value]);
     }

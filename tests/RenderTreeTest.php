@@ -13,24 +13,28 @@ use Atk4\Ui\View;
  */
 class RenderTreeTest extends TestCase
 {
+    use CreateAppTrait;
+
     public function testBasic(): void
     {
         $view = new View();
+        $view->setApp($this->createApp());
         $view->render();
 
         $view->getApp();
-        static::assertNotNull($view->template);
+        self::assertNotNull($view->template);
     }
 
     public function testBasicNested(): void
     {
         $view = new View();
         $view2 = View::addTo($view);
+        $view->setApp($this->createApp());
         $view->render();
 
         $view2->getApp();
-        static::assertNotNull($view2->template);
+        self::assertNotNull($view2->template);
 
-        static::assertSame($view2->getApp(), $view->getApp());
+        self::assertSame($view2->getApp(), $view->getApp());
     }
 }

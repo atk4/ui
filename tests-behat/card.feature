@@ -4,8 +4,7 @@ Feature: Card
     Given I am on "data-action/factory-view.php"
     Then I click using selector "i.eye.icon"
     Then Modal is open with text "Display Preview prior to run the action"
-    # TODO fix
-    # Then Modal is open with text "Previewing country France NO RELOAD"
+    Then Modal is open with text "Previewing country France NO RELOAD"
     Then I press Modal button "Preview"
     Then Toast display should contain text "Success: Done previewing France"
 

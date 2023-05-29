@@ -103,7 +103,7 @@ Lets say a User can have many email addresses, but you want to store them in a s
 
 Using a form with User model won't automatically add a Multiline to edit the related email addresses.
 
-.. php:method:: setReferenceModel(string $refModelName, Model $modelEntity = null, array $fieldNames = []): Model
+.. php:method:: setReferenceModel(string $refModelName, Model $entity = null, array $fieldNames = []): Model
 
 If you want to edit them along with the user, Multiline need to be set up accordingly using the setReferenceModel method::
 
@@ -150,8 +150,8 @@ Lets use the example of demos/multiline.php::
             parent::init();
 
             $this->addField('item', ['required' => true, 'default' => 'item']);
-            $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
-            $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => ['sui-table-cell' => ['width' => 2]]]]);
+            $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]]]);
+            $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]]]);
             $this->addExpression('total', ['expr' => function (Model $row) {
                 return $row->get('qty') * $row->get('box');
             }, 'type' => 'integer']);
@@ -203,7 +203,7 @@ Use the $componentProps property of Multiline in order to apply 'Props' to compo
 
 .. php:attr:: componentProps
 
-Example of changing all Dropdown(sui-dropdown) within Multiline::
+Example of changing all Dropdown(SuiDropdown) within Multiline::
 
     $ml = $form->addControl('ml', [Multiline::class, 'compponentProps' => [Multiline::SELECT => ['floating' => true]]]);
 
@@ -224,7 +224,7 @@ Specific field components Props may be applied using the 'ui' field property whe
 Note on Multiline control
 -------------------------
 
-Each control inside Multiline is wrap within a table cell(sui-table-cell) component and this component can be customize as
+Each control inside Multiline is wrap within a table cell(SuiTableCell) component and this component can be customize as
 well using the 'ui' property of the model's field::
 
     $this->addExpression('total', [
@@ -237,7 +237,7 @@ well using the 'ui' property of the model's field::
 
 Table appearance within Multiline
 ---------------------------------
-Table(sui-table) Props can be set using $tableProps property of Multiline::
+Table(SuiTable) Props can be set using $tableProps property of Multiline::
 
     $ml = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'blue']]);
 

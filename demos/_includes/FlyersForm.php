@@ -7,7 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsToast;
 
 class FlyersForm extends Form
 {

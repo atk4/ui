@@ -6,7 +6,8 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
-use Atk4\Ui\Jquery;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
 
@@ -18,7 +19,7 @@ use Atk4\Ui\View;
  * The input value is store as an array type when allowMultiple is set to true, otherwise, will
  * store one single value when set to false.
  *
- * Only item id are store within the input field.
+ * Only item ID are store within the input field.
  *
  * see demos/tree-item-selector.php to see how tree items are build.
  */
@@ -31,7 +32,7 @@ class TreeItemSelector extends Form\Control
     public $itemSelector;
 
     /**
-     * The css class selector for where to apply loading class name.
+     * The CSS class selector for where to apply loading class name.
      * Loading class name is set during on Item callback.
      *
      * @var string
@@ -43,8 +44,8 @@ class TreeItemSelector extends Form\Control
 
     /**
      * The list of items.
-     * Item must have at least one name and one id.
-     * Only the id value, from a single node, are returned i.e. not the group id value.
+     * Item must have at least one name and one ID.
+     * Only the ID value, from a single node, are returned i.e. not the group ID value.
      *
      * Each item may have it's own children by adding nodes children to it.
      * $items = [
@@ -73,10 +74,10 @@ class TreeItemSelector extends Form\Control
     {
         parent::init();
 
-        $this->addClass(['ui', 'vertical', 'segment', 'basic', $this->loaderCssName])->addStyle(['padding' => '0px!important']);
+        $this->addClass(['ui', 'vertical', 'segment', 'basic', $this->loaderCssName])->setStyle(['padding' => '0px!important']);
 
         if (!$this->itemSelectorTemplate) {
-            $this->itemSelectorTemplate = new HtmlTemplate('<div id="{$_id}" class="ui list" style="margin-left: 16px;"><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
+            $this->itemSelectorTemplate = new HtmlTemplate('<div class="ui list" style="margin-left: 16px;" {$attributes}><atk-tree-item-selector v-bind="initData"></atk-tree-item-selector><div class="ui hidden divider"></div>{$Input}</div>');
         }
 
         $this->itemSelector = View::addTo($this, ['template' => $this->itemSelectorTemplate]);
@@ -86,6 +87,8 @@ class TreeItemSelector extends Form\Control
      * Provide a function to be executed when clicking an item in tree selector.
      * The executing function will receive an array with item state in it
      * when allowMultiple is true or a single value when false.
+     *
+     * @param \Closure(mixed): (JsExpressionable|View|string|void) $fx
      */
     public function onItem(\Closure $fx): void
     {
@@ -97,16 +100,6 @@ class TreeItemSelector extends Form\Control
 
             return $fx($value);
         }, ['data' => 'value']);
-    }
-
-    /**
-     * @return $this
-     */
-    public function setTreeItems(array $treeItems)
-    {
-        $this->treeItems = $treeItems;
-
-        return $this;
     }
 
     /**
@@ -137,7 +130,7 @@ class TreeItemSelector extends Form\Control
 
         $this->itemSelector->template->tryDangerouslySetHtml('Input', $this->getInput());
 
-        $this->itemSelector->vue('atk-tree-item-selector', [
+        $this->itemSelector->vue('AtkTreeItemSelector', [
             'item' => ['id' => 'atk-root', 'nodes' => $this->treeItems],
             'values' => [], // need empty for Vue reactivity.
             'field' => $this->shortName,

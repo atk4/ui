@@ -23,12 +23,12 @@ class UploadService {
         data,
         uploadUrl,
         completeCb = function (r, c) {},
-        xhrCb = function () { return new window.XMLHttpRequest(); },
+        xhrCb = function () { return new window.XMLHttpRequest(); }
     ) {
         const formData = new FormData();
 
         for (let i = 0; i < files.length; i++) {
-            const param = (i === 0) ? 'file' : 'file-' + i;
+            const param = i === 0 ? 'file' : 'file-' + i;
             formData.append(param, files.item(i));
         }
 

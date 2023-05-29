@@ -20,7 +20,7 @@ Popup can also operate with dynamic content::
 
     $button = Button::addTo($app, ['Click me']);
     Popup::addTo($app, [$button])
-        ->set('hello world with rand='.rand(1, 100));
+        ->set('hello world with rand=' . rand(1, 100));
 
 Pop-up should be added into a viewport which will define boundaries of a pop-up, but it will
 be positioned relative to the $button. Popup remains invisible until it's triggered by event of $button.

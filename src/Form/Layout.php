@@ -36,7 +36,7 @@ class Layout extends AbstractLayout
     /** @var bool Set true if you want fields to appear in-line. */
     public $inline = false;
 
-    /** @var HtmlTemplate|null Template holding input html. */
+    /** @var HtmlTemplate|null Template holding input HTML. */
     public $inputTemplate;
 
     /** @var array Seed for creating input hint View used in this layout. */
@@ -220,6 +220,7 @@ class Layout extends AbstractLayout
                 } else {
                     $hint->set($element->hint);
                 }
+                $hint->setApp($this->getApp());
                 $template->dangerouslySetHtml('Hint', $hint->getHtml());
             } elseif ($template->hasTag('Hint')) {
                 $template->del('Hint');
@@ -232,10 +233,12 @@ class Layout extends AbstractLayout
             }
         }
 
-        // Now collect JS from everywhere
-        foreach ($this->elements as $element) {
-            if ($element->_jsActions) { // @phpstan-ignore-line
-                $this->_jsActions = array_merge_recursive($this->_jsActions, $element->_jsActions);
+        // collect JS from everywhere
+        foreach ($this->elements as $view) {
+            foreach ($view->_jsActions as $when => $actions) { // @phpstan-ignore-line
+                foreach ($actions as $action) {
+                    $this->_jsActions[$when][] = $action;
+                }
             }
         }
     }

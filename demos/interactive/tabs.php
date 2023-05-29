@@ -40,9 +40,10 @@ $tabs->addTab('Dynamic Lorem Ipsum', function (VirtualPage $vp) {
 
 // modal tab
 $tabs->addTab('Modal popup', function (VirtualPage $vp) {
-    Button::addTo($vp, ['Load Lorem'])->on('click', Modal::addTo($vp)->set(function (View $p) {
-        LoremIpsum::addTo($p, ['size' => 2]);
-    })->jsShow());
+    Button::addTo($vp, ['Load Lorem'])
+        ->on('click', Modal::addTo($vp)->set(function (View $p) {
+            LoremIpsum::addTo($p, ['size' => 2]);
+        })->jsShow());
 });
 
 // dynamic tab
@@ -56,7 +57,7 @@ $tabs->addTab('Dynamic Form', function (VirtualPage $vp) {
     $form->setModel($modelRegister->createEntity());
     $form->onSubmit(function (Form $form) {
         if ($form->model->get('name') !== 'John') {
-            return $form->error('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
+            return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
         }
     });
 });

@@ -32,11 +32,15 @@ class TypeNumber extends Column\FilterModel
     public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();
-        if (isset($filter['id'])) {
+        if ($filter !== null) {
             switch ($filter['op']) {
                 case 'between':
                     $model->addCondition(
-                        $model->expr('[field] between [value] and [range]', ['field' => $model->getField($filter['name']), 'value' => $filter['value'], 'range' => $filter['range']])
+                        $model->expr('[field] between [value] and [range]', [
+                            'field' => $model->getField($filter['name']),
+                            'value' => $filter['value'],
+                            'range' => $filter['range'],
+                        ])
                     );
 
                     break;

@@ -7,7 +7,8 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
-use Atk4\Ui\JsExpression;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Tabs;
 use Atk4\Ui\View;
 
@@ -43,7 +44,7 @@ $values = [
 ];
 $group->addControl('d_norm', [Form\Control\Dropdown::class, 'values' => $values, 'width' => 'three'])->set('globe');
 $group->addControl('d_read', [Form\Control\Dropdown::class, 'values' => $values, 'readOnly' => true, 'width' => 'three'])->set('globe'); // allows to change value
-$group->addControl('d_disb', [Form\Control\Dropdown::class, 'values' => $values, 'disabled' => true, 'width' => 'three'])->set('globe'); // css disabled, but can focus with Tab and change value
+$group->addControl('d_disb', [Form\Control\Dropdown::class, 'values' => $values, 'disabled' => true, 'width' => 'three'])->set('globe'); // CSS disabled, but can focus with Tab and change value
 
 $group = $form->addGroup('Radio');
 
@@ -75,7 +76,7 @@ $group = $form->addGroup('Lookup');
 $model = new Country($app->db);
 
 $group->addControl('Lookup_norm', [
-    DemoLookup::class,
+    Form\Control\Lookup::class,
     'model' => new Country($app->db),
     'plus' => true,
 ])->set($model->loadAny()->getId());
@@ -153,34 +154,30 @@ $form = Form::addTo($app);
 $group = $form->addGroup('Calendar');
 $c1 = $group->addControl('c1', new Form\Control\Calendar(['type' => 'date']));
 $c2 = $group->addControl('c2', new Form\Control\Calendar(['type' => 'date']));
-$c3 = $group->addControl('c3', new Form\Control\Calendar(['type' => 'date']));
 
-$c1->onChange('console.log(\'c1 changed: \' + date + \', \' + text + \', \' + mode)');
-$c2->onChange(new JsExpression('console.log(\'c2 changed: \' + date + \', \' + text + \', \' + mode)'));
-$c3->onChange([
-    new JsExpression('console.log(\'c3 changed: \' + date + \', \' + text + \', \' + mode)'),
-    new JsExpression('console.log(\'c3 really changed: \' + date + \', \' + text + \', \' + mode)'),
-]);
+$c1->onChange(new JsExpression('console.log(\'c1 changed: \' + date + \', \' + text + \', \' + mode)'));
+$c2->onChange(new JsBlock([
+    new JsExpression('console.log(\'c2 changed: \' + date + \', \' + text + \', \' + mode)'),
+    new JsExpression('console.log(\'c2 really changed: \' + date + \', \' + text + \', \' + mode)'),
+]));
 
 $group = $form->addGroup('Line');
 $f1 = $group->addControl('f1');
 $f2 = $group->addControl('f2');
 $f3 = $group->addControl('f3');
-$f4 = $group->addControl('f4');
 
-$f1->onChange('console.log(\'f1 changed\')');
-$f2->onChange(new JsExpression('console.log(\'f2 changed\')'));
-$f3->onChange([
-    new JsExpression('console.log(\'f3 changed\')'),
-    new JsExpression('console.log(\'f3 really changed\')'),
-]);
-$f4->onChange(function () {
-    return new JsExpression('console.log(\'f4 changed\')');
+$f1->onChange(new JsExpression('console.log(\'f1 changed\')'));
+$f2->onChange(new JsBlock([
+    new JsExpression('console.log(\'f2 changed\')'),
+    new JsExpression('console.log(\'f2 really changed\')'),
+]));
+$f3->onChange(function () {
+    return new JsExpression('console.log(\'f3 changed\')');
 });
 
 $group = $form->addGroup('CheckBox');
 $b1 = $group->addControl('b1', new Form\Control\Checkbox());
-$b1->onChange('console.log(\'b1 changed\')');
+$b1->onChange(new JsExpression('console.log(\'b1 changed\')'));
 
 $group = $form->addGroup(['Dropdown', 'width' => 'three']);
 $d1 = $group->addControl('d1', new Form\Control\Dropdown([
@@ -191,7 +188,7 @@ $d1 = $group->addControl('d1', new Form\Control\Dropdown([
         'file' => ['File', 'icon' => 'file'],
     ],
 ]));
-$d1->onChange('console.log(\'Dropdown changed\')');
+$d1->onChange(new JsExpression('console.log(\'Dropdown changed\')'));
 
 $group = $form->addGroup('Radio');
 $r1 = $group->addControl('r1', new Form\Control\Radio([
@@ -202,7 +199,7 @@ $r1 = $group->addControl('r1', new Form\Control\Radio([
         'File',
     ],
 ]));
-$r1->onChange('console.log(\'radio changed\')');
+$r1->onChange(new JsExpression('console.log(\'radio changed\')'));
 
 Header::addTo($app, ['Line ends of Textarea']);
 

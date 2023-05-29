@@ -17,7 +17,7 @@ require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Loader Example - page 1', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
     ->link(['loader']);
-View::addTo($app, ['ui' => 'ui clearing divider']);
+View::addTo($app, ['ui' => 'clearing divider']);
 
 $c = Columns::addTo($app);
 
@@ -26,7 +26,7 @@ $grid->setModel(new Country($app->db), [Country::hinting()->fieldName()->name]);
 
 $countryLoader = Loader::addTo($c->addColumn(), ['loadEvent' => false, 'shim' => [Text::class, 'Select country on your left']]);
 
-$grid->table->onRowClick($countryLoader->jsLoad(['id' => $grid->table->jsRow()->data('id')]));
+$grid->table->onRowClick($countryLoader->jsLoad(['id' => $grid->jsRow()->data('id')]));
 
 $countryLoader->set(function (Loader $p) {
     Form::addTo($p)->setModel((new Country($p->getApp()->db))->load($_GET['id']));

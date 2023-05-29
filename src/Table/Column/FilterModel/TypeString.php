@@ -13,14 +13,20 @@ class TypeString extends Column\FilterModel
     {
         parent::init();
 
-        $this->op->values = ['is' => 'Is', 'is not' => 'Is Not', 'contains' => 'Contains', 'start' => 'Start with', 'end' => 'End with'];
+        $this->op->values = [
+            'is' => 'Is',
+            'is not' => 'Is Not',
+            'contains' => 'Contains',
+            'start' => 'Start with',
+            'end' => 'End with',
+        ];
         $this->op->default = 'is';
     }
 
     public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();
-        if (isset($filter['id'])) {
+        if ($filter !== null) {
             switch ($filter['op']) {
                 case 'is':
                     $model->addCondition($filter['name'], $filter['value']);

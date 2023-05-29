@@ -40,11 +40,11 @@ $.extend = $.fn.extend = new Proxy($.fn.extend, { // eslint-disable-line no-mult
             && $.isPlainObject(args[secondIndex])
         ) {
             let name = null;
-            Object.keys(fomanticServicesMap).forEach((n) => {
+            for (const n of Object.keys(fomanticServicesMap)) {
                 if (args[secondIndex] === $.fn[n].settings) {
                     name = n;
                 }
-            });
+            }
             if (name !== null) {
                 const [customSettings, forcedSettings] = fomanticServicesMap[name].getDefaultFomanticSettings();
 
@@ -64,22 +64,38 @@ $.extend = $.fn.extend = new Proxy($.fn.extend, { // eslint-disable-line no-mult
                         } else if (name === 'api' && prop === 'onSuccess') {
                             obj[prop] = function (response, $module, xhr) {
                                 origValue(response, $module, xhr);
+
                                 return value.call(this, response, $module, xhr);
                             };
                         } else if (name === 'api' && prop === 'onFailure') {
                             obj[prop] = function (response, $module, xhr) {
                                 origValue(response, $module, xhr);
+
                                 return value.call(this, response, $module, xhr);
                             };
                         } else if (name === 'api' && prop === 'onAbort') {
                             obj[prop] = function (errorMessage, $module, xhr) {
                                 origValue(errorMessage, $module, xhr);
+
                                 return value.call(this, errorMessage, $module, xhr);
                             };
                         } else if (name === 'api' && prop === 'onError') {
                             obj[prop] = function (errorMessage, $module, xhr) {
                                 origValue(errorMessage, $module, xhr);
+
                                 return value.call(this, errorMessage, $module, xhr);
+                            };
+                        } else if (name === 'form' && prop === 'onSuccess') {
+                            obj[prop] = function (event, values) {
+                                origValue(event, values);
+
+                                return value.call(this, event, values);
+                            };
+                        } else if (name === 'modal' && prop === 'onHidden') {
+                            obj[prop] = function (element) {
+                                origValue(element);
+
+                                return value.call(element);
                             };
                         } else {
                             throw new Error('Fomantic-UI "' + name + '.' + prop + '" setting cannot be customized outside atk');
@@ -89,7 +105,7 @@ $.extend = $.fn.extend = new Proxy($.fn.extend, { // eslint-disable-line no-mult
                     },
                 });
 
-                $.extend(true, newSettings, ...args.slice(secondIndex + 1), customSettings);
+                $.extend(true, newSettings, customSettings, ...args.slice(secondIndex + 1));
 
                 return newSettings;
             }

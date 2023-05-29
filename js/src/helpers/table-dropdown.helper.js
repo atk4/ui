@@ -6,7 +6,7 @@ import throttle from 'lodash/throttle';
  * Because atk table use overflow: scroll, Dropdown is not
  * display on top of table.
  *
- * This utility will properly set css style for dropdown menu to be displayed correctly.
+ * This utility will properly set CSS style for dropdown menu to be displayed correctly.
  */
 function showTableDropdown() {
     // getting element composing dropdown.
@@ -55,7 +55,7 @@ function showTableDropdown() {
 }
 
 /**
- * Reset css and handler when hiding dropdown.
+ * Reset CSS and handler when hiding dropdown.
  */
 function hideTableDropdown() {
     // reset positioning.

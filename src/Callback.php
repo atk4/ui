@@ -35,7 +35,7 @@ class Callback extends AbstractView
 
     public function add(AbstractView $object, array $args = []): AbstractView
     {
-        throw new Exception('Callback cannot contains children');
+        throw new Exception('Callback cannot contain children');
     }
 
     protected function init(): void
@@ -60,18 +60,20 @@ class Callback extends AbstractView
     }
 
     /**
-     * Executes user-specified action when call-back is triggered.
+     * Executes user-specified action when callback is triggered.
      *
-     * @param \Closure $fx
-     * @param array    $args
+     * @template T
      *
-     * @return mixed
+     * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): T $fx
+     * @param array                                                                             $fxArgs
+     *
+     * @phpstan-return T|null
      */
-    public function set($fx = null, $args = null)
+    public function set($fx = null, $fxArgs = null)
     {
         if ($this->isTriggered() && $this->canTrigger()) {
             try {
-                return $fx(...($args ?? []));
+                return $fx(...($fxArgs ?? []));
             } catch (\Exception $e) {
                 // catch and wrap an exception using a custom Error class to prevent "Callback requested, but never reached"
                 // exception which is hard to understand/locate as thrown from the main app context
@@ -125,7 +127,7 @@ class Callback extends AbstractView
     }
 
     /**
-     * Return URL that will trigger action on this call-back. If you intend to request
+     * Return URL that will trigger action on this callback. If you intend to request
      * the URL directly in your browser (as iframe, new tab, or document location), you
      * should use getUrl instead.
      */
@@ -135,7 +137,7 @@ class Callback extends AbstractView
     }
 
     /**
-     * Return URL that will trigger action on this call-back. If you intend to request
+     * Return URL that will trigger action on this callback. If you intend to request
      * the URL loading from inside JavaScript, it's always advised to use getJsUrl instead.
      */
     public function getUrl(string $value = 'callback'): string
@@ -144,7 +146,7 @@ class Callback extends AbstractView
     }
 
     /**
-     * Return proper url argument for this callback.
+     * Return proper URL argument for this callback.
      */
     private function getUrlArguments(string $value = null): array
     {

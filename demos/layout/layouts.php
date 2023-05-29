@@ -35,5 +35,5 @@ $i = View::addTo($app, ['class.green' => true, 'ui' => 'segment'])->setElement('
 foreach ($buttons as $k => $args) {
     Button::addTo($tb)
         ->set([$args['title'], 'iconRight' => 'down arrow'])
-        ->js('click', $i->js()->attr('src', $app->url($args['page'])));
+        ->on('click', $i->js()->attr('src', $app->url($args['page'])));
 }

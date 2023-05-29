@@ -9,7 +9,7 @@ use Atk4\Core\NameTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
-use Atk4\Data\Types\Types as CustomTypes;
+use Atk4\Data\Type\Types as CustomTypes;
 use Atk4\Ui\App;
 use Atk4\Ui\SessionTrait;
 use Doctrine\DBAL\Types\Types;
@@ -32,8 +32,8 @@ abstract class FilterModel extends Model
     /** @var bool Determines if this field shouldn't have a value field, and use only op field. */
     public $noValueField = false;
 
-    /** @var Field The field where this filter need to query data. */
-    public $lookupField;
+    /** The field where this filter need to query data. */
+    public Field $lookupField;
 
     public function __construct(App $app, array $defaults = [])
     {
@@ -96,9 +96,6 @@ abstract class FilterModel extends Model
         $this->afterInit();
     }
 
-    /**
-     * Perform further initialization.
-     */
     public function afterInit(): void
     {
         $this->addField('name', ['default' => $this->lookupField->shortName, 'system' => true]);
@@ -116,12 +113,9 @@ abstract class FilterModel extends Model
         });
     }
 
-    /**
-     * Recall filter model data.
-     */
-    public function recallData(): array
+    public function recallData(): ?array
     {
-        return $this->recall('data', []);
+        return $this->recall('data');
     }
 
     /**
@@ -142,9 +136,6 @@ abstract class FilterModel extends Model
         return [];
     }
 
-    /**
-     * Check if this model is using session or not.
-     */
     public function clearData(): void
     {
         $this->forget();

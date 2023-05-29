@@ -14,6 +14,10 @@ class Lister extends View
     public const HOOK_BEFORE_ROW = self::class . '@beforeRow';
     public const HOOK_AFTER_ROW = self::class . '@afterRow';
 
+    public $ui = 'list';
+
+    public $defaultTemplate;
+
     /**
      * Lister repeats part of it's template. This property will contain
      * the repeating part. Clones from {row}. If your template does not
@@ -25,8 +29,6 @@ class Lister extends View
 
     /** @var HtmlTemplate|null Lister use this part of template in case there are no elements in it. */
     public $tEmpty;
-
-    public $defaultTemplate;
 
     /** @var JsPaginator|null A dynamic paginator attach to window scroll event. */
     public $jsPaginator;
@@ -75,9 +77,9 @@ class Lister extends View
      * When this happen, content will be reload x number of items.
      *
      * @param int    $ipp          Number of item per page
-     * @param array  $options      an array with js Scroll plugin options
+     * @param array  $options      an array with JS Scroll plugin options
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
-     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
+     * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
      */
@@ -100,7 +102,7 @@ class Lister extends View
             // let client know that there are no more records
             $jsonArr['noMoreScrollPages'] = $this->_renderedRowsCount < $ipp;
 
-            // return json response
+            // return JSON response
             $this->getApp()->terminateJson($jsonArr);
         });
 
@@ -123,9 +125,6 @@ class Lister extends View
             return;
         }
 
-        // Generate template for data row
-        $this->tRow->trySet('_id', $this->name);
-
         // Iterate data rows
         $this->_renderedRowsCount = 0;
 
@@ -133,9 +132,11 @@ class Lister extends View
         // then also backup/tryfinally would be not needed
         // the same in Table class
         $modelBackup = $this->model;
+        $tRowBackup = $this->tRow;
         try {
             foreach ($this->model as $this->model) {
                 $this->currentRow = $this->model;
+                $this->tRow = clone $tRowBackup;
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
                 }
@@ -146,6 +147,7 @@ class Lister extends View
             }
         } finally {
             $this->model = $modelBackup;
+            $this->tRow = $tRowBackup;
         }
 
         // empty message
@@ -178,7 +180,7 @@ class Lister extends View
 
         $this->tRow->trySet('_title', $this->model->getTitle());
         $this->tRow->trySet('_href', $this->url(['id' => $this->currentRow->getId()]));
-        $this->tRow->trySet('_id', $this->currentRow->getId());
+        $this->tRow->trySet('_id', $this->name . '-' . $this->currentRow->getId());
 
         $html = $this->tRow->renderToHtml();
         if ($this->template->hasTag('rows')) {
@@ -201,7 +203,10 @@ class Lister extends View
 
         // https://github.com/atk4/ui/issues/1932
         if ($region !== null) {
-            $this->_jsActions[true] = array_merge([$this->js()->off()], $this->_jsActions[true]);
+            if (!isset($this->_jsActions['click'])) {
+                $this->_jsActions['click'] = [];
+            }
+            array_unshift($this->_jsActions['click'], $this->js()->off());
         }
 
         return [

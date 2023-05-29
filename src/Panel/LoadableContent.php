@@ -14,12 +14,14 @@ interface LoadableContent
     public function setCb(Callback $cb): void;
 
     /**
-     * Return js Callback url string.
+     * Return JS callback URL string.
      */
     public function getCallbackUrl(): string;
 
     /**
      * The callback for loading content.
+     *
+     * @param \Closure($this): void $fx
      */
     public function onLoad(\Closure $fx): void;
 }

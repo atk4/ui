@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Atk4\Ui\Table\Column;
 
 use Atk4\Data\Field;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsSortable;
 use Atk4\Ui\Table;
+use Atk4\Ui\View;
 
 /**
  * Implement drag handler column for sorting table.
@@ -32,6 +34,8 @@ class DragHandler extends Table\Column
 
     /**
      * Callback when table has been reorder using handle.
+     *
+     * @param \Closure(list<string>, string, int, int): (JsExpressionable|View|string|void) $fx
      */
     public function onReorder(\Closure $fx): void
     {

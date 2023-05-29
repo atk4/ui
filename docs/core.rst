@@ -149,7 +149,7 @@ Callbacks
 =========
 
 By relying on the ability of generating :ref:`unique_name`, it's possible to create several classes
-for implementing PHP call-backs. They follow the pattern:
+for implementing PHP callbacks. They follow the pattern:
 
  - present something on the page (maybe)
  - generate URL with unique parameter

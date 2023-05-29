@@ -11,6 +11,12 @@ use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Data\Reference\ContainsMany;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Form\Control;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsConditionalForm;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 
 class Form extends View
 {
@@ -28,7 +34,7 @@ class Form extends View
     public $ui = 'form';
     public $defaultTemplate = 'form.html';
 
-    /** @var Callback Callback handling form submission. */
+    /** @var JsCallback Callback handling form submission. */
     public $cb;
 
     /**
@@ -39,7 +45,7 @@ class Form extends View
      * Note:
      * When using your own change handler
      * on an input field, set useDefault parameter to false.
-     * ex: $input->onChange('console.log(), false)
+     * ex: $input->onChange(new JsExpression('console.log()), false)
      * Otherwise, change event is not propagate to all event handler
      * and leaving page might not be prevent.
      *
@@ -53,7 +59,7 @@ class Form extends View
 
     /**
      * Html <form> element, all inner form controls are linked to it on render
-     * with html form="form_id" attribute.
+     * with HTML form="form_id" attribute.
      *
      * @var View
      */
@@ -65,8 +71,6 @@ class Form extends View
     /** @var array<string, Control> List of form controls currently registered with this form. */
     public $controls = [];
 
-    public $content = false;
-
     /**
      * Will point to the Save button. If you don't want to have save button, then set this to false
      * or destroy it. Initialized by initLayout().
@@ -77,9 +81,10 @@ class Form extends View
 
     /**
      * When form is submitted successfully, this template is used by method
-     * success() to replace form contents.
+     * jsSuccess() to replace form contents.
      *
      * WARNING: may be removed in the future as we refactor into using Message class
+     *          and remove the form-success.html template then.
      *
      * @var string
      */
@@ -109,8 +114,8 @@ class Form extends View
     public array $controlDisplayRules = [];
 
     /**
-     * Default css selector for JsConditionalForm.
-     * Should match the css class name of the control.
+     * Default CSS selector for JsConditionalForm.
+     * Should match the CSS class name of the control.
      * Fomantic-UI use the class name "field".
      *
      * @var string
@@ -131,46 +136,36 @@ class Form extends View
 
         $this->formElement = View::addTo($this, ['element' => 'form', 'shortName' => 'form'], ['FormElementOnly']);
 
-        // Initialize layout, so when you call addControl / setModel next time, form will know
-        // where to add your fields.
+        // redirect submit event to native form element
+        $this->on(
+            'submit',
+            new JsExpression('if (event.target === this) { event.stopImmediatePropagation(); [] }', [new JsBlock([$this->formElement->js()->trigger('submit')])]),
+            ['stopPropagation' => false]
+        );
+
         $this->initLayout();
 
-        // set css loader for this form
-        $this->setApiConfig(['stateContext' => '#' . $this->name]);
+        // set CSS loader for this form
+        $this->setApiConfig(['stateContext' => $this]);
 
         $this->cb = JsCallback::addTo($this, [], [['desired_name' => 'submit']]);
     }
 
-    /**
-     * Initialize form layout. You can inject custom layout
-     * if you 'layout' => .. to constructor.
-     */
     protected function initLayout(): void
     {
-        // TODO simplify
-        if ($this->layout === null) {
-            $this->layout = [Form\Layout::class]; // @phpstan-ignore-line
+        if (!is_object($this->layout)) { // @phpstan-ignore-line
+            $this->layout = Factory::factory($this->layout ?? [Form\Layout::class]); // @phpstan-ignore-line
         }
+        $this->layout->form = $this;
+        $this->add($this->layout);
 
-        if (is_string($this->layout) || is_array($this->layout)) {
-            $this->layout = $this->add(Factory::factory($this->layout, ['form' => $this])); // @phpstan-ignore-line
-        } elseif (is_object($this->layout)) {
-            $this->layout->form = $this;
-            $this->add($this->layout);
-        } else {
-            throw (new Exception('Unsupported specification of form layout. Can be array, string or object'))
-                ->addMoreInfo('layout', $this->layout);
-        }
-
-        // allow to submit by pressing an enter key when child control is focused
-        $this->on('submit', new JsExpression('if (event.target === this) { $([name]).form(\'submit\'); }', ['name' => '#' . $this->formElement->name]));
-
-        // Add save button in layout
+        // add save button in layout
         if ($this->buttonSave) {
             $this->buttonSave = $this->layout->addButton($this->buttonSave);
             $this->buttonSave->setAttr('tabindex', 0);
-            $this->buttonSave->on('click', $this->js(false, null, $this->formElement)->form('submit'));
-            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { $([name]).form(\'submit\'); }', ['name' => '#' . $this->formElement->name]));
+            $jsSubmit = $this->js()->form('submit');
+            $this->buttonSave->on('click', $jsSubmit);
+            $this->buttonSave->on('keypress', new JsExpression('if (event.keyCode === 13) { [] }', [new JsBlock([$jsSubmit])]));
         }
     }
 
@@ -199,7 +194,7 @@ class Form extends View
     public function setGroupDisplayRules($rules = [], $selector = '.atk-form-group')
     {
         if (is_object($selector)) {
-            $selector = $selector->jsRender();
+            $selector = '#' . $selector->getHtmlId();
         }
 
         $this->controlDisplayRules = $rules;
@@ -217,53 +212,50 @@ class Form extends View
      *
      * @param array<int, string>|null $fields
      */
-    public function setModel(Model $model, array $fields = null): void
+    public function setModel(Model $entity, array $fields = null): void
     {
-        $model->assertIsEntity();
+        $entity->assertIsEntity();
 
-        // Model is set for the form and also for the current layout
+        // set model for the form and also for the current layout
         try {
-            parent::setModel($model);
+            parent::setModel($entity);
 
-            $this->layout->setModel($model, $fields);
+            $this->layout->setModel($entity, $fields);
         } catch (Exception $e) {
-            throw $e->addMoreInfo('model', $model);
+            throw $e->addMoreInfo('model', $entity);
         }
     }
 
     /**
      * Adds callback in submit hook.
      *
+     * @param \Closure($this): (JsExpressionable|View|string|void) $fx
+     *
      * @return $this
      */
-    public function onSubmit(\Closure $callback)
+    public function onSubmit(\Closure $fx)
     {
-        $this->onHook(self::HOOK_SUBMIT, $callback);
+        $this->onHook(self::HOOK_SUBMIT, $fx);
 
         $this->cb->set(function () {
             try {
                 $this->loadPost();
+
                 $response = $this->hook(self::HOOK_SUBMIT);
-
-                if (!$response) {
-                    if (!$this->model instanceof \Atk4\Ui\Misc\ProxyModel) {
-                        $this->model->save();
-
-                        return $this->success('Form data has been saved');
-                    }
-
-                    return new JsExpression('console.log([])', ['Form submission is not handled']);
+                // TODO JsBlock::fromHookResult() cannot be used here as long as the result can contain View
+                if (is_array($response) && count($response) === 1) {
+                    $response = reset($response);
                 }
 
                 return $response;
             } catch (ValidationException $e) {
-                $response = [];
+                $response = new JsBlock();
                 foreach ($e->errors as $field => $error) {
                     if (!isset($this->controls[$field])) {
                         throw $e;
                     }
 
-                    $response[] = $this->error($field, $error);
+                    $response->addStatement($this->jsError($field, $error));
                 }
 
                 return $response;
@@ -286,21 +278,16 @@ class Form extends View
     /**
      * Causes form to generate error.
      *
-     * @param string $fieldName Field name
-     * @param string $str       Error message
-     *
-     * @return JsChain|array<int, JsChain>
+     * @param string $errorMessage
      */
-    public function error($fieldName, $str)
+    public function jsError(string $fieldName, $errorMessage): JsExpressionable
     {
         // by using this hook you can overwrite default behavior of this method
         if ($this->hookHasCallbacks(self::HOOK_DISPLAY_ERROR)) {
-            return $this->hook(self::HOOK_DISPLAY_ERROR, [$fieldName, $str]);
+            return JsBlock::fromHookResult($this->hook(self::HOOK_DISPLAY_ERROR, [$fieldName, $errorMessage]));
         }
 
-        $jsError = [$this->js()->form('add prompt', $fieldName, $str)];
-
-        return $jsError;
+        return new JsBlock([$this->js()->form('add prompt', $fieldName, $errorMessage)]);
     }
 
     /**
@@ -309,15 +296,13 @@ class Form extends View
      * @param View|string $success     Success message or a View to display in modal
      * @param string      $subHeader   Sub-header
      * @param bool        $useTemplate Backward compatibility
-     *
-     * @return JsChain
      */
-    public function success($success = 'Success', $subHeader = null, $useTemplate = true)
+    public function jsSuccess($success = 'Success', $subHeader = null, bool $useTemplate = true): JsExpressionable
     {
         $response = null;
         // by using this hook you can overwrite default behavior of this method
         if ($this->hookHasCallbacks(self::HOOK_DISPLAY_SUCCESS)) {
-            return $this->hook(self::HOOK_DISPLAY_SUCCESS, [$success, $subHeader]);
+            return JsBlock::fromHookResult($this->hook(self::HOOK_DISPLAY_SUCCESS, [$success, $subHeader]));
         }
 
         if ($success instanceof View) {
@@ -384,13 +369,11 @@ class Form extends View
      * Returns JS Chain that targets INPUT element of a specified field. This method is handy
      * if you wish to set a value to a certain field.
      *
-     * @param string $name Name of control
-     *
      * @return Jquery
      */
-    public function jsInput($name)
+    public function jsInput(string $name): JsExpressionable
     {
-        return $this->layout->getControl($name)->js()->find('input');
+        return $this->layout->getControl($name)->jsInput();
     }
 
     // }}}
@@ -477,7 +460,7 @@ class Form extends View
             try {
                 // save field value only if field was editable in form at all
                 if (!$control->readOnly && !$control->disabled) {
-                    $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $_POST[$k] ?? null));
+                    $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $_POST[$k]));
                 }
             } catch (\Exception $e) {
                 $messages = [];
@@ -496,7 +479,7 @@ class Form extends View
 
     protected function renderView(): void
     {
-        $this->ajaxSubmit();
+        $this->setupAjaxSubmit();
         if ($this->controlDisplayRules !== []) {
             $this->js(true, new JsConditionalForm($this, $this->controlDisplayRules, $this->controlDisplaySelector));
         }
@@ -513,7 +496,9 @@ class Form extends View
 
     public function fixOwningFormAttrInRenderedHtml(string $html): string
     {
-        return preg_replace('~<(button|fieldset|input|output|select|textarea)(?!\w| form=")~i', '$0 form="' . $this->formElement->name . '"', $html);
+        return preg_replace_callback('~<(?:button|fieldset|input|output|select|textarea)(?!\w| form=")~i', function ($matches) {
+            return $matches[0] . ' form="' . $this->getApp()->encodeHtml($this->formElement->name) . '"';
+        }, $html);
     }
 
     /**
@@ -546,17 +531,24 @@ class Form extends View
         return $this;
     }
 
-    /**
-     * Does ajax submit.
-     */
-    public function ajaxSubmit(): void
+    public function setupAjaxSubmit(): void
     {
-        $this->js(true)->form(array_merge(['inline' => true, 'on' => 'blur'], $this->formConfig));
+        $this->js(true)->form(array_merge([
+            'on' => 'blur',
+            'inline' => true,
+        ], $this->formConfig));
 
-        $this->js(true, null, $this->formElement)
-            ->api(array_merge(['url' => $this->cb->getJsUrl(), 'method' => 'POST', 'serializeForm' => true], $this->apiConfig));
+        $this->formElement->js(true)->api(array_merge([
+            'on' => 'submit',
+            'url' => $this->cb->getJsUrl(),
+            'method' => 'POST',
+            'serializeForm' => true,
+        ], $this->apiConfig));
 
-        $this->on('change', 'input, textarea, select', $this->js()->form('remove prompt', new JsExpression('$(this).attr(\'name\')')));
+        // fix remove prompt for dropdown
+        // https://github.com/fomantic/Fomantic-UI/issues/2797
+        // [name] in selector is to suppress https://github.com/fomantic/Fomantic-UI/commit/facbca003cf0da465af7d44af41462e736d3eb8b console errors from Multiline/vue fields
+        $this->on('change', '.field input[name], .field textarea[name], .field select[name]', $this->js()->form('remove prompt', new JsExpression('$(this).attr(\'name\')')));
 
         if (!$this->canLeave) {
             $this->js(true, (new JsChain('atk.formService'))->preventFormLeave($this->name));

@@ -1,29 +1,11 @@
-/**
- * Webpack v4 configuration file.
- *
- * Use mode from env variable pass to webpack in order to
- * differentiate build mode.
- * Use a function that return configuration object based
- * on env variable.
- *
- * Using Development
- * - set webpack config mode to development
- *
- * Using Production
- * - set webpack config mode to production
- * - change name of output file by adding .min
- *
- * Module export will output default value
- * using libraryExport: 'default' for backward
- * compatibility with previous release of the library.
- */
-const path = require('path');
+const path = require('node:path');
+const webpack = require('webpack');
 const { VueLoaderPlugin } = require('vue-loader');
 const TerserPlugin = require('terser-webpack-plugin');
+const VueFomanticUi = require('vue-fomantic-ui'); // eslint-disable-line import/no-unresolved
 
 module.exports = (env) => {
-    // determine which mode
-    const isProduction = env.production;
+    const isProduction = env === undefined ? false /* for eslint-import-resolver-webpack */ : env.production;
     const srcDir = path.resolve(__dirname, './src');
     const publicDir = path.resolve(__dirname, '../public');
     const libraryName = 'atk';
@@ -51,20 +33,17 @@ module.exports = (env) => {
         optimization: {
             splitChunks: {
                 cacheGroups: {
+                    defaultVendors: false,
                     vendorVueFlatpickr: {
-                        test: /[\\/]node_modules[\\/](flatpickr|vue-flatpickr-component)[\\/]/,
+                        test: /[/\\]node_modules[/\\](flatpickr|vue-flatpickr-component)[/\\]/,
                         name: 'vendor-vue-flatpickr',
                     },
-                    vendorVueQueryBuilder: {
-                        test: /[\\/]node_modules[\\/]vue-query-builder[\\/]/,
-                        name: 'vendor-vue-query-builder',
-                    },
                     vendorVue: {
-                        test: /[\\/]node_modules[\\/](?!(vue-flatpickr-component|vue-query-builder)[\\/])([^\\/]+[-.])?vue([-.][^\\/]+)?[\\/]/,
+                        test: /[/\\]node_modules[/\\](?!(vue-flatpickr-component|vue-query-builder)[/\\])([^/\\]+[.-])?vue([.-][^/\\]+)?[/\\]/,
                         name: 'vendor-vue',
                     },
                     vendor: {
-                        test: /[\\/]node_modules[\\/](?!(([^\\/]+[-.])?vue([-.][^\\/]+)?|flatpickr)[\\/])/,
+                        test: /[/\\]node_modules[/\\](?!(([^/\\]+[.-])?vue([.-][^/\\]+)?|flatpickr)[/\\])/,
                         name: 'vendor',
                     },
                 },
@@ -92,17 +71,13 @@ module.exports = (env) => {
                     loader: 'babel-loader',
                     exclude: /node_modules/,
                 },
-                // load .vue file
                 {
                     test: /\.vue$/,
                     loader: 'vue-loader',
                 },
-                // this will apply to both plain .css files
-                // AND <style> blocks in .vue files
                 {
                     test: /\.css$/,
                     use: [
-                        'vue-style-loader',
                         'style-loader',
                         'css-loader',
                     ],
@@ -113,18 +88,20 @@ module.exports = (env) => {
         resolve: {
             alias: {
                 atk$: srcDir + '/setup-atk.js',
-                vue$: 'vue/dist/vue.esm.js',
+                vue$: 'vue/dist/vue.esm-bundler.js',
             },
             modules: [
                 srcDir,
                 'node_modules',
             ],
-            extensions: [
-                '.json',
-                '.js',
-            ],
+            extensions: ['.js', '.vue'],
         },
         plugins: [
+            new webpack.DefinePlugin({
+                __VUE_OPTIONS_API__: true,
+                __VUE_PROD_DEVTOOLS__: false,
+                __VUE_FOMANTICUI_COMPONENT_NAMES__: JSON.stringify(Object.keys(VueFomanticUi).filter((v) => v.startsWith('Sui'))),
+            }),
             new VueLoaderPlugin(),
         ],
     };

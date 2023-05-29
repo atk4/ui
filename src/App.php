@@ -10,15 +10,22 @@ use Atk4\Core\DynamicMethodTrait;
 use Atk4\Core\ExceptionRenderer;
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
-use Atk4\Core\InitializerTrait;
 use Atk4\Core\TraitUtil;
 use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationError;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7\Response;
+use Nyholm\Psr7Server\ServerRequestCreator;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -27,14 +34,9 @@ class App
     use DiContainerTrait;
     use DynamicMethodTrait;
     use HookTrait;
-    use InitializerTrait {
-        init as private _init;
-    }
 
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
     public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
-
-    protected const HEADER_STATUS_CODE = 'atk4-status-code';
 
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
@@ -42,6 +44,7 @@ class App
         'jquery' => '/public/external/jquery/dist',
         'fomantic-ui' => '/public/external/fomantic-ui/dist',
         'flatpickr' => '/public/external/flatpickr/dist',
+        'highlight.js' => '/public/external/@highlightjs/cdn-assets',
         'chart.js' => '/public/external/chart.js/dist', // for atk4/chart
     ];
 
@@ -53,7 +56,7 @@ class App
      *
      * @TODO remove, no longer needed for CDN versioning as we bundle all resources
      */
-    public $version = '4.0-dev';
+    public $version = '5.0-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -102,17 +105,15 @@ class App
     /** @var App\SessionManager */
     public $session;
 
-    /** @var array<string, string> Extra HTTP headers to send on exit. */
-    protected array $responseHeaders = [
-        self::HEADER_STATUS_CODE => '200',
-        'cache-control' => 'no-store', // disable caching by default
-    ];
+    private ServerRequestInterface $request;
 
-    /** @var array<string, View> Modal view that need to be rendered using json output. */
+    private ResponseInterface $response;
+
+    /** @var array<string, View> Modal view that need to be rendered using JSON output. */
     private $portals = [];
 
     /**
-     * @var string used in method App::url to build the url
+     * @var string used in method App::url to build the URL
      *
      * Used only in method App::url
      * Remove and re-add the extension of the file during parsing requests and building urls
@@ -136,6 +137,39 @@ class App
 
     public function __construct(array $defaults = [])
     {
+        if (isset($defaults['request'])) {
+            $this->request = $defaults['request'];
+            unset($defaults['request']);
+        } else {
+            $requestFactory = new Psr17Factory();
+            $requestCreator = new ServerRequestCreator($requestFactory, $requestFactory, $requestFactory, $requestFactory);
+
+            $noGlobals = [];
+            foreach (['_GET', '_COOKIE', '_FILES'] as $k) {
+                if (!array_key_exists($k, $GLOBALS)) {
+                    $noGlobals[] = $k;
+                    $GLOBALS[$k] = [];
+                }
+            }
+            try {
+                $this->request = $requestCreator->fromGlobals();
+            } finally {
+                foreach ($noGlobals as $k) {
+                    unset($GLOBALS[$k]);
+                }
+            }
+        }
+
+        if (isset($defaults['response'])) {
+            $this->response = $defaults['response'];
+            unset($defaults['response']);
+        } else {
+            $this->response = new Response();
+        }
+
+        // disable caching by default
+        $this->setResponseHeader('Cache-Control', 'no-store');
+
         $this->setApp($this);
 
         $this->setDefaults($defaults);
@@ -151,32 +185,29 @@ class App
         // Set our exception handler
         if ($this->catchExceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
-            set_error_handler(
-                static function (int $severity, string $msg, string $file, int $line): bool {
-                    if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
-                        $isFirstFrame = true;
-                        foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
-                            // allow to suppress any warning outside Atk4
-                            if ($isFirstFrame) {
-                                $isFirstFrame = false;
-                                if (!isset($frame['class']) || !str_starts_with($frame['class'], 'Atk4\\')) {
-                                    return false;
-                                }
-                            }
-
-                            // allow to suppress undefined property warning
-                            if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
-                                && $frame['function'] === 'warnPropertyDoesNotExist') {
+            set_error_handler(static function (int $severity, string $msg, string $file, int $line): bool {
+                if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
+                    $isFirstFrame = true;
+                    foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
+                        // allow to suppress any warning outside Atk4
+                        if ($isFirstFrame) {
+                            $isFirstFrame = false;
+                            if (!isset($frame['class']) || !str_starts_with($frame['class'], 'Atk4\\')) {
                                 return false;
                             }
                         }
-                    }
 
-                    throw new \ErrorException($msg, 0, $severity, $file, $line);
-                },
-                \E_ALL
-            );
-            $this->outputResponseUnsafe('', [self::HEADER_STATUS_CODE => '500']);
+                        // allow to suppress undefined property warning
+                        if (isset($frame['class']) && TraitUtil::hasTrait($frame['class'], WarnDynamicPropertyTrait::class)
+                            && $frame['function'] === 'warnPropertyDoesNotExist') {
+                            return false;
+                        }
+                    }
+                }
+
+                throw new \ErrorException($msg, 0, $severity, $file, $line);
+            });
+            http_response_code(500);
         }
 
         // Always run app on shutdown
@@ -200,7 +231,7 @@ class App
      * Register a portal view.
      * Fomantic-ui Modal or atk Panel are teleported in HTML template
      * within specific location. This will keep track
-     * of them when terminating app using json.
+     * of them when terminating app using JSON.
      *
      * @param Modal|Panel\Right $portal
      */
@@ -302,26 +333,30 @@ class App
         $this->callBeforeExit();
     }
 
-    /**
-     * Normalize HTTP headers to associative array with LC keys.
-     *
-     * @param array<string, string> $headers
-     *
-     * @return array<string, string>
-     */
-    protected function normalizeHeaders(array $headers): array
+    public function getRequest(): ServerRequestInterface
     {
-        $res = [];
-        foreach ($headers as $k => $v) {
-            if (is_numeric($k) && ($p = strpos($v, ':')) !== false) {
-                $k = substr($v, 0, $p);
-                $v = substr($v, $p + 1);
+        return $this->request;
+    }
+
+    public function getResponse(): ResponseInterface
+    {
+        return $this->response;
+    }
+
+    protected function assertHeadersNotSent(): void
+    {
+        if (headers_sent()
+            && \PHP_SAPI !== 'cli' // for phpunit
+            && $this->response->getHeaderLine('Content-Type') !== 'text/event-stream' // for SSE
+        ) {
+            $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
+            if ($this->catchExceptions) {
+                $this->caughtException($lateError);
+                $this->outputLateOutputError($lateError);
             }
 
-            $res[strtolower(trim($k))] = trim($v);
+            throw $lateError;
         }
-
-        return $res;
     }
 
     /**
@@ -329,7 +364,9 @@ class App
      */
     public function setResponseStatusCode(int $statusCode): self
     {
-        $this->setResponseHeader(self::HEADER_STATUS_CODE, (string) $statusCode);
+        $this->assertHeadersNotSent();
+
+        $this->response = $this->response->withStatus($statusCode);
 
         return $this;
     }
@@ -339,14 +376,16 @@ class App
      */
     public function setResponseHeader(string $name, string $value): self
     {
-        $arr = $this->normalizeHeaders([$name => $value]);
-        $value = reset($arr);
-        $name = array_key_first($arr);
+        $this->assertHeadersNotSent();
 
-        if ($value !== '') {
-            $this->responseHeaders[$name] = $value;
+        if ($value === '') {
+            $this->response = $this->response->withoutHeader($name);
         } else {
-            unset($this->responseHeaders[$name]);
+            $name = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+                return strtoupper($matches[0]);
+            }, strtolower($name));
+
+            $this->response = $this->response->withHeader($name, $value);
         }
 
         return $this;
@@ -357,35 +396,30 @@ class App
      * directly, instead call it form Callback, JsCallback or similar
      * other classes.
      *
-     * @param string|array          $output  Array type is supported only for JSON response
-     * @param array<string, string> $headers content-type header must be always set or consider using App::terminateHtml() or App::terminateJson() methods
+     * @param string|StreamInterface|array $output Array type is supported only for JSON response
      *
      * @return never
      */
-    public function terminate($output = '', array $headers = []): void
+    public function terminate($output = ''): void
     {
-        $headers = $this->normalizeHeaders($headers);
-        if (!isset($headers['content-type'])) {
-            $this->responseHeaders = $this->normalizeHeaders($this->responseHeaders);
-            if (!isset($this->responseHeaders['content-type'])) {
-                throw new Exception('Content type must be always set');
-            }
-
-            $headers['content-type'] = $this->responseHeaders['content-type'];
+        $type = preg_replace('~;.*~', '', strtolower($this->response->getHeaderLine('Content-Type'))); // in LC without charset
+        if ($type === '') {
+            throw new Exception('Content type must be always set');
         }
 
-        $type = preg_replace('~;.*~', '', strtolower($headers['content-type'])); // in LC without charset
-
-        if ($type === 'application/json') {
+        if ($output instanceof StreamInterface) {
+            $this->response = $this->response->withBody($output);
+            $this->outputResponse('');
+        } elseif ($type === 'application/json') {
             if (is_string($output)) {
                 $output = $this->decodeJson($output);
             }
             $output['portals'] = $this->getRenderedPortals();
 
-            $this->outputResponseJson($output, $headers);
+            $this->outputResponseJson($output);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
             // ugly hack for TABS
-            // because Fomantic-UI tab only deal with html and not JSON
+            // because Fomantic-UI tab only deal with HTML and not JSON
             // we need to hack output to include app modal.
             $ids = [];
             $remove_function = '';
@@ -402,11 +436,11 @@ class App
             $output = $this->getTag('script', [], '$(function () {' . $remove_function . $output['atkjs'] . '});')
                 . $output['html'];
 
-            $this->outputResponseHtml($output, $headers);
+            $this->outputResponseHtml($output);
         } elseif ($type === 'text/html') {
-            $this->outputResponseHtml($output, $headers);
+            $this->outputResponseHtml($output);
         } else {
-            $this->outputResponse($output, $headers);
+            $this->outputResponse($output);
         }
 
         $this->runCalled = true; // prevent shutdown function from triggering
@@ -418,7 +452,7 @@ class App
      *
      * @return never
      */
-    public function terminateHtml($output, array $headers = []): void
+    public function terminateHtml($output): void
     {
         if ($output instanceof View) {
             $output = $output->render();
@@ -426,10 +460,8 @@ class App
             $output = $output->renderToHtml();
         }
 
-        $this->terminate(
-            $output,
-            array_merge($this->normalizeHeaders($headers), ['content-type' => 'text/html'])
-        );
+        $this->setResponseHeader('Content-Type', 'text/html');
+        $this->terminate($output);
     }
 
     /**
@@ -437,16 +469,14 @@ class App
      *
      * @return never
      */
-    public function terminateJson($output, array $headers = []): void
+    public function terminateJson($output): void
     {
         if ($output instanceof View) {
             $output = $output->renderToJsonArr();
         }
 
-        $this->terminate(
-            $output,
-            array_merge($this->normalizeHeaders($headers), ['content-type' => 'application/json'])
-        );
+        $this->setResponseHeader('Content-Type', 'application/json');
+        $this->terminate($output);
     }
 
     /**
@@ -479,8 +509,7 @@ class App
      */
     public function initIncludes(): void
     {
-        /** @var bool */
-        $minified = true;
+        $minified = !file_exists(__DIR__ . '/../.git');
 
         // jQuery
         $this->requireJs($this->cdn['jquery'] . '/jquery' . ($minified ? '.min' : '') . '.js');
@@ -502,7 +531,7 @@ class App
         $this->requireJs($this->cdn['atk'] . '/js/atkjs-ui' . ($minified ? '.min' : '') . '.js');
         $this->requireCss($this->cdn['atk'] . '/css/agileui.min.css');
 
-        // Set js bundle dynamic loading path.
+        // set JS bundle dynamic loading path
         $this->html->template->tryDangerouslySetHtml(
             'InitJsBundle',
             (new JsExpression('window.__atkBundlePublicPath = [];', [$this->cdn['atk']]))->jsRender()
@@ -579,21 +608,11 @@ class App
     }
 
     /**
-     * Initialize app.
-     */
-    protected function init(): void
-    {
-        $this->_init();
-    }
-
-    /**
      * Load template by template file name.
-     *
-     * @param string $filename
      *
      * @return HtmlTemplate
      */
-    public function loadTemplate($filename)
+    public function loadTemplate(string $filename)
     {
         $template = new $this->templateClass();
         $template->setApp($this);
@@ -617,23 +636,14 @@ class App
 
     protected function getRequestUrl(): string
     {
-        if (isset($_SERVER['HTTP_X_REWRITE_URL'])) { // IIS
-            $requestUrl = $_SERVER['HTTP_X_REWRITE_URL'];
-        } elseif (isset($_SERVER['REQUEST_URI'])) { // Apache
-            $requestUrl = $_SERVER['REQUEST_URI'];
-        } elseif (isset($_SERVER['ORIG_PATH_INFO'])) { // IIS 5.0, PHP as CGI
-            $requestUrl = $_SERVER['ORIG_PATH_INFO'];
-        // This one comes without QUERY string
-        } else {
-            $requestUrl = '';
-        }
-        $requestUrl = explode('?', $requestUrl, 2);
-
-        return $requestUrl[0];
+        return $this->request->getUri()->getPath();
     }
 
     protected function createRequestPathFromLocalPath(string $localPath): string
     {
+        // $localPath does not need realpath() as the path is expected to be built using __DIR__
+        // which has symlinks resolved
+
         static $requestUrlPath = null;
         static $requestLocalPath = null;
         if ($requestUrlPath === null) {
@@ -645,7 +655,7 @@ class App
             } else {
                 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
                 $requestUrlPath = $request->getBasePath();
-                $requestLocalPath = $request->server->get('SCRIPT_FILENAME');
+                $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME'));
             }
         }
         $fs = new \Symfony\Component\Filesystem\Filesystem();
@@ -740,7 +750,7 @@ class App
     }
 
     /**
-     * Build a URL that application can use for js call-backs. Some framework integration will use a different routing
+     * Build a URL that application can use for JS callbacks. Some framework integration will use a different routing
      * mechanism for NON-HTML response.
      *
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
@@ -800,7 +810,9 @@ class App
      */
     public function redirect($page, bool $permanent = false): void
     {
-        $this->terminateHtml('', ['location' => $this->url($page), self::HEADER_STATUS_CODE => $permanent ? '301' : '302']);
+        $this->setResponseStatusCode($permanent ? 301 : 302);
+        $this->setResponseHeader('location', $this->url($page));
+        $this->terminateHtml('');
     }
 
     /**
@@ -808,7 +820,7 @@ class App
      *
      * @param string|array $page Destination URL or page/arguments
      */
-    public function jsRedirect($page, bool $newWindow = false): JsExpression
+    public function jsRedirect($page, bool $newWindow = false): JsExpressionable
     {
         return new JsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
     }
@@ -990,6 +1002,21 @@ class App
      */
     public function encodeJson($data, bool $forceObject = false): string
     {
+        if (is_array($data) || is_object($data)) {
+            $checkNoObjectFx = function ($v) {
+                if (is_object($v)) {
+                    throw (new Exception('Object to JSON encode is not supported'))
+                        ->addMoreInfo('value', $v);
+                }
+            };
+
+            if (is_object($data)) {
+                $checkNoObjectFx($data);
+            } else {
+                array_walk_recursive($data, $checkNoObjectFx);
+            }
+        }
+
         $options = \JSON_UNESCAPED_SLASHES | \JSON_PRESERVE_ZERO_FRACTION | \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT;
         if ($forceObject) {
             $options |= \JSON_FORCE_OBJECT;
@@ -1036,8 +1063,8 @@ class App
                     } catch (ExitApplicationError $e) {
                         // let the process go and stop on ->callExit below
                     } catch (\Throwable $e) {
-                        // process is already in shutdown
-                        // must be forced to catch exception
+                        // set_exception_handler does not work in shutdown
+                        // https://github.com/php/php-src/issues/10695
                         $this->caughtException($e);
                     }
 
@@ -1051,51 +1078,38 @@ class App
     // RESPONSES
 
     /**
-     * This can be overridden for future PSR-7 implementation.
-     *
-     * @param array<string, string> $headersNew
-     *
-     * @internal should be called only from self::outputResponse()
+     * @internal should be called only from self::outputResponse() and self::outputLateOutputError()
      */
-    protected function outputResponseUnsafe(string $data, array $headersNew): void
+    protected function emitResponse(): void
     {
-        $isCli = \PHP_SAPI === 'cli'; // for phpunit
+        http_response_code($this->response->getStatusCode());
 
-        if (!headers_sent() || $isCli) {
-            foreach ($headersNew as $k => $v) {
-                if (!$isCli) {
-                    if ($k === self::HEADER_STATUS_CODE) {
-                        http_response_code($v === (string) (int) $v ? (int) $v : 500);
-                    } else {
-                        $kCamelCase = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
-                            return strtoupper($matches[0]);
-                        }, $k);
-
-                        header($kCamelCase . ': ' . $v);
-                    }
-                }
+        foreach ($this->response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header($name . ': ' . $value, false);
             }
         }
 
-        echo $data;
-    }
+        $stream = $this->response->getBody();
+        if ($stream->isSeekable()) {
+            $stream->rewind();
+        }
 
-    /** @var array<string, string> */
-    private static array $_sentHeaders = [];
+        // for streaming response
+        if (!$stream->isReadable()) {
+            return;
+        }
+
+        while (!$stream->eof()) {
+            echo $stream->read(16 * 1024);
+        }
+    }
 
     /**
      * Output Response to the client.
-     *
-     * @param array<string, string> $headers
      */
-    protected function outputResponse(string $data, array $headers): void
+    protected function outputResponse(string $data): void
     {
-        $this->responseHeaders = $this->normalizeHeaders($this->responseHeaders);
-        $headersAll = array_merge($this->responseHeaders, $this->normalizeHeaders($headers));
-        unset($headers);
-        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
-        unset($headersAll);
-
         foreach (ob_get_status(true) as $status) {
             if ($status['buffer_used'] !== 0) {
                 $lateError = new LateOutputError('Unexpected output detected');
@@ -1108,23 +1122,21 @@ class App
             }
         }
 
-        $isCli = \PHP_SAPI === 'cli'; // for phpunit
+        $this->assertHeadersNotSent();
 
-        if (count($headersNew) > 0 && headers_sent() && !$isCli) {
-            $lateError = new LateOutputError('Headers already sent, more headers cannot be set at this stage');
-            if ($this->catchExceptions) {
-                $this->caughtException($lateError);
-                $this->outputLateOutputError($lateError);
-            }
+        // TODO hack for SSE
+        // https://github.com/atk4/ui/pull/1706#discussion_r757819527
+        if (headers_sent() && $this->response->getHeaderLine('Content-Type') === 'text/event-stream') {
+            echo $data;
 
-            throw $lateError;
+            return;
         }
 
-        foreach ($headersNew as $k => $v) {
-            self::$_sentHeaders[$k] = $v;
+        if ($data !== '') {
+            $this->response->getBody()->write($data);
         }
 
-        $this->outputResponseUnsafe($data, $headersNew);
+        $this->emitResponse();
     }
 
     /**
@@ -1132,17 +1144,18 @@ class App
      */
     protected function outputLateOutputError(LateOutputError $exception): void
     {
-        $plainTextMessage = "\n" . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!' . "\n";
+        $this->response = $this->response->withStatus(500);
 
-        $headersAll = $this->normalizeHeaders(['content-type' => 'text/plain', self::HEADER_STATUS_CODE => '500']);
-        $headersNew = array_diff_assoc($headersAll, self::$_sentHeaders);
-        unset($headersAll);
-
-        foreach ($headersNew as $k => $v) {
-            self::$_sentHeaders[$k] = $v;
+        // late error means headers were already sent to the client, so remove all response headers,
+        // to avoid throwing late error in loop
+        foreach (array_keys($this->response->getHeaders()) as $name) {
+            $this->response = $this->response->withoutHeader($name);
         }
 
-        $this->outputResponseUnsafe($plainTextMessage, $headersNew);
+        $this->response = $this->response->withBody((new Psr17Factory())->createStream("\n"
+            . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!'
+            . "\n"));
+        $this->emitResponse();
 
         $this->runCalled = true; // prevent shutdown function from triggering
 
@@ -1151,37 +1164,30 @@ class App
 
     /**
      * Output HTML response to the client.
-     *
-     * @param array<string, string> $headers
      */
-    private function outputResponseHtml(string $data, array $headers = []): void
+    private function outputResponseHtml(string $data): void
     {
-        $this->outputResponse(
-            $data,
-            array_merge($this->normalizeHeaders($headers), ['content-type' => 'text/html'])
-        );
+        $this->setResponseHeader('Content-Type', 'text/html');
+        $this->outputResponse($data);
     }
 
     /**
      * Output JSON response to the client.
      *
-     * @param string|array          $data
-     * @param array<string, string> $headers
+     * @param string|array $data
      */
-    private function outputResponseJson($data, array $headers = []): void
+    private function outputResponseJson($data): void
     {
         if (!is_string($data)) {
             $data = $this->encodeJson($data);
         }
 
-        $this->outputResponse(
-            $data,
-            array_merge($this->normalizeHeaders($headers), ['content-type' => 'application/json'])
-        );
+        $this->setResponseHeader('Content-Type', 'application/json');
+        $this->outputResponse($data);
     }
 
     /**
-     * Generated html and js for portal view registered to app.
+     * Generated HTML and JS for portal view registered to app.
      */
     private function getRenderedPortals(): array
     {

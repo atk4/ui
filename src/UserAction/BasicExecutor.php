@@ -9,8 +9,9 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Header;
-use Atk4\Ui\JsExpressionable;
-use Atk4\Ui\JsToast;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
@@ -44,7 +45,7 @@ class BasicExecutor extends View implements ExecutorInterface
     /** @var array list of validated arguments */
     protected $validArguments = [];
 
-    /** @var JsExpressionable|\Closure JsExpression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     protected $jsSuccess;
 
     public function getAction(): Model\UserAction
@@ -122,13 +123,10 @@ class BasicExecutor extends View implements ExecutorInterface
 
     /**
      * Will call $action->execute() with the correct arguments.
-     *
-     * @return mixed
      */
-    public function executeModelAction()
+    public function executeModelAction(): JsBlock
     {
         $args = [];
-
         foreach ($this->action->args as $key => $val) {
             $args[] = $this->arguments[$key];
         }
@@ -139,8 +137,8 @@ class BasicExecutor extends View implements ExecutorInterface
             ? ($this->jsSuccess)($this, $this->action->getModel())
             : $this->jsSuccess;
 
-        return $this->hook(self::HOOK_AFTER_EXECUTE, [$return]) // @phpstan-ignore-line
-            ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : '')));
+        return JsBlock::fromHookResult($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) // @phpstan-ignore-line
+            ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
     }
 
     /**

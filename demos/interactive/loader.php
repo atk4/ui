@@ -29,7 +29,7 @@ Loader::addTo($app)->set(function (Loader $p) {
     Header::addTo($p, ['Loader #1']);
     LoremIpsum::addTo($p, ['size' => 1]);
 
-    // Any dynamic views can perform call-backs just fine
+    // Any dynamic views can perform callbacks just fine
     ViewTester::addTo($p);
 
     // Loader may be inside another loader, works fine.
@@ -51,13 +51,15 @@ Loader::addTo($app)->set(function (Loader $p) {
     });
 
     // button may contain load event.
-    Button::addTo($p, ['Load Segment Manually (2s)', 'class.red' => true])->js('click', $loader->jsLoad(['color' => 'red']));
-    Button::addTo($p, ['Load Segment Manually (2s)', 'class.blue' => true])->js('click', $loader->jsLoad(['color' => 'blue']));
+    Button::addTo($p, ['Load Segment Manually (2s)', 'class.red' => true])
+        ->on('click', $loader->jsLoad(['color' => 'red']));
+    Button::addTo($p, ['Load Segment Manually (2s)', 'class.blue' => true])
+        ->on('click', $loader->jsLoad(['color' => 'blue']));
 });
 
 // Example 2 - Loader with custom body.
 Loader::addTo($app, [
-    'ui' => '', // this will prevent "loading spinner" from showing
+    'ui' => false, // this will prevent "loading spinner" from showing
     'shim' => [ // shim is displayed while content is leaded
         Message::class,
         'Generating LoremIpsum, please wait...',

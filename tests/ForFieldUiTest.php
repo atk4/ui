@@ -27,6 +27,8 @@ class MyTestModel extends Model
  */
 class ForFieldUiTest extends TestCase
 {
+    use CreateAppTrait;
+
     /** @var Model */
     public $m;
 
@@ -40,30 +42,33 @@ class ForFieldUiTest extends TestCase
 
     public function testModelLevel(): void
     {
-        static::assertTrue($this->m->getField('no_persist_but_show_in_ui')->isEditable());
+        self::assertTrue($this->m->getField('no_persist_but_show_in_ui')->isEditable());
     }
 
     public function testRegularField(): void
     {
         $f = new Form();
+        $f->setApp($this->createApp());
         $f->invokeInit();
         $f->setModel($this->m->createEntity());
-        static::assertFalse($f->getControl('regular_field')->readOnly);
+        self::assertFalse($f->getControl('regular_field')->readOnly);
     }
 
     public function testJustDataField(): void
     {
         $f = new Form();
+        $f->setApp($this->createApp());
         $f->invokeInit();
         $f->setModel($this->m->createEntity(), ['just_for_data']);
-        static::assertTrue($f->getControl('just_for_data')->readOnly);
+        self::assertTrue($f->getControl('just_for_data')->readOnly);
     }
 
     public function testShowInUi(): void
     {
         $f = new Form();
+        $f->setApp($this->createApp());
         $f->invokeInit();
         $f->setModel($this->m->createEntity());
-        static::assertFalse($f->getControl('no_persist_but_show_in_ui')->readOnly);
+        self::assertFalse($f->getControl('no_persist_but_show_in_ui')->readOnly);
     }
 }
