@@ -46,7 +46,7 @@ class ModalService {
     onHide() {
         const s = atk.modalService;
 
-        if (s.modals.length === 0 || s.modals[s.modals.length - 1] !== this) {
+        if (s.modals.length === 0 || s.modals.at(-1) !== this) {
             throw new Error('Unexpected modal to hide - modal is not front');
         }
         s.modals.pop();
@@ -67,7 +67,7 @@ class ModalService {
     addModal($modal) {
         // hide other modals
         if (this.modals.length > 1) {
-            const $prevModal = $(this.modals[this.modals.length - 2]);
+            const $prevModal = $(this.modals.at(-2));
             if ($prevModal.hasClass('visible')) {
                 $prevModal.css('visibility', 'hidden');
                 $prevModal.addClass('__hiddenNotFront');
@@ -132,7 +132,7 @@ class ModalService {
 
         // hide other modals
         if (this.modals.length > 0) {
-            const $prevModal = $(this.modals[this.modals.length - 1]);
+            const $prevModal = $(this.modals.at(-1));
             if ($prevModal.hasClass('__hiddenNotFront')) {
                 $prevModal.css('visibility', '');
                 $prevModal.addClass('visible');

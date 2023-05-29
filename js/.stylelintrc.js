@@ -7,13 +7,9 @@ module.exports = {
         'at-rule-empty-line-before': null,
         'at-rule-name-case': null,
         'color-function-notation': 'legacy',
-        'color-hex-case': 'lower',
-        indentation: 4,
-        linebreaks: 'unix',
         'max-line-length': null,
         'no-descending-specificity': null,
         'rule-empty-line-before': null,
-        'string-quotes': 'double',
 
         // TODO
         'no-duplicate-selectors': null, // 3 errors
