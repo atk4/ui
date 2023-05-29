@@ -73,6 +73,7 @@ module.exports = {
             },
         }],
         'unicorn/catch-error-name': 'off',
+        'unicorn/expiring-todo-comments': 'off', // TODO remove once eslint is fixed and "npm run lint" will pass
         'unicorn/no-array-callback-reference': 'off',
         'unicorn/no-lonely-if': 'off',
         'unicorn/no-negated-condition': 'off',
