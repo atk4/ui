@@ -204,7 +204,7 @@ class ApiService {
      */
     showErrorModal(errorMsg) {
         if (atk.modalService.modals.length > 0) {
-            const $modal = $(atk.modalService.modals[atk.modalService.modals.length - 1]);
+            const $modal = $(atk.modalService.modals.at(-1));
             if ($modal.data('closeOnLoadingError')) {
                 $modal.removeData('closeOnLoadingError').modal('hide');
             }
