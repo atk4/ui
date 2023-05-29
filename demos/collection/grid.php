@@ -9,6 +9,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Grid;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Js\JsToast;
@@ -76,7 +77,7 @@ $sel = $grid->addSelection();
 // Executing a modal on a bulk selection
 $callback = function ($m, $ids) use ($grid) {
     if (!$ids) {
-        $msg = Message::addTo($m, [
+        Message::addTo($m, [
             'No records were selected.',
             'type' => 'error',
             'icon' => 'times',
@@ -87,20 +88,25 @@ $callback = function ($m, $ids) use ($grid) {
             'type' => 'warning',
             'icon' => 'warning',
         ]);
-        $msg->text->addParagraph('Ids that will be deleted:');
+        $msg->text->addParagraph('IDs to be deleted:');
         foreach ($ids as $id) {
             $msg->text->addParagraph($id);
         }
-        $f = Form::addTo($m);
-        $f->buttonSave->set('Delete');
-        $f->buttonSave->icon = 'trash';
-        $f->onSubmit(function ($f) use ($grid, $ids) {
-            // iterate trough the selected id and delete them.
-            foreach ($ids as $id) {
-                $grid->model->delete($id);
-            }
+        $form = Form::addTo($m);
+        $form->buttonSave->set('Delete');
+        $form->buttonSave->icon = 'trash';
+        $form->onSubmit(function (Form $form) use ($grid, $ids) {
+            // iterate trough the selected IDs and delete them
+            $grid->model->atomic(function () use ($grid, $ids) {
+                foreach ($ids as $id) {
+                    $grid->model->delete($id);
+                }
+            });
 
-            return [[$grid->jsReload(), $f->success()]];
+            return new JsBlock([
+                $grid->jsReload(),
+                $form->jsSuccess(),
+            ]);
         });
     }
 };
