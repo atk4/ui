@@ -2079,7 +2079,7 @@ if (typeof window !== "undefined") {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "english": () => (/* binding */ english)
+/* harmony export */   english: () => (/* binding */ english)
 /* harmony export */ });
 var english = {
     weekdays: {
@@ -2166,8 +2166,8 @@ var english = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "HOOKS": () => (/* binding */ HOOKS),
-/* harmony export */   "defaults": () => (/* binding */ defaults)
+/* harmony export */   HOOKS: () => (/* binding */ HOOKS),
+/* harmony export */   defaults: () => (/* binding */ defaults)
 /* harmony export */ });
 var HOOKS = [
     "onChange",
@@ -2265,15 +2265,15 @@ var defaults = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "calculateSecondsSinceMidnight": () => (/* binding */ calculateSecondsSinceMidnight),
-/* harmony export */   "compareDates": () => (/* binding */ compareDates),
-/* harmony export */   "compareTimes": () => (/* binding */ compareTimes),
-/* harmony export */   "createDateFormatter": () => (/* binding */ createDateFormatter),
-/* harmony export */   "createDateParser": () => (/* binding */ createDateParser),
-/* harmony export */   "duration": () => (/* binding */ duration),
-/* harmony export */   "getDefaultHours": () => (/* binding */ getDefaultHours),
-/* harmony export */   "isBetween": () => (/* binding */ isBetween),
-/* harmony export */   "parseSeconds": () => (/* binding */ parseSeconds)
+/* harmony export */   calculateSecondsSinceMidnight: () => (/* binding */ calculateSecondsSinceMidnight),
+/* harmony export */   compareDates: () => (/* binding */ compareDates),
+/* harmony export */   compareTimes: () => (/* binding */ compareTimes),
+/* harmony export */   createDateFormatter: () => (/* binding */ createDateFormatter),
+/* harmony export */   createDateParser: () => (/* binding */ createDateParser),
+/* harmony export */   duration: () => (/* binding */ duration),
+/* harmony export */   getDefaultHours: () => (/* binding */ getDefaultHours),
+/* harmony export */   isBetween: () => (/* binding */ isBetween),
+/* harmony export */   parseSeconds: () => (/* binding */ parseSeconds)
 /* harmony export */ });
 /* harmony import */ var _formatting__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./formatting */ "./node_modules/flatpickr/dist/esm/utils/formatting.js");
 /* harmony import */ var _types_options__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../types/options */ "./node_modules/flatpickr/dist/esm/types/options.js");
@@ -2434,12 +2434,12 @@ function getDefaultHours(config) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "clearNode": () => (/* binding */ clearNode),
-/* harmony export */   "createElement": () => (/* binding */ createElement),
-/* harmony export */   "createNumberInput": () => (/* binding */ createNumberInput),
-/* harmony export */   "findParent": () => (/* binding */ findParent),
-/* harmony export */   "getEventTarget": () => (/* binding */ getEventTarget),
-/* harmony export */   "toggleClass": () => (/* binding */ toggleClass)
+/* harmony export */   clearNode: () => (/* binding */ clearNode),
+/* harmony export */   createElement: () => (/* binding */ createElement),
+/* harmony export */   createNumberInput: () => (/* binding */ createNumberInput),
+/* harmony export */   findParent: () => (/* binding */ findParent),
+/* harmony export */   getEventTarget: () => (/* binding */ getEventTarget),
+/* harmony export */   toggleClass: () => (/* binding */ toggleClass)
 /* harmony export */ });
 function toggleClass(elem, className, bool) {
     if (bool === true)
@@ -2508,10 +2508,10 @@ function getEventTarget(event) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "formats": () => (/* binding */ formats),
-/* harmony export */   "monthToStr": () => (/* binding */ monthToStr),
-/* harmony export */   "revFormat": () => (/* binding */ revFormat),
-/* harmony export */   "tokenRegex": () => (/* binding */ tokenRegex)
+/* harmony export */   formats: () => (/* binding */ formats),
+/* harmony export */   monthToStr: () => (/* binding */ monthToStr),
+/* harmony export */   revFormat: () => (/* binding */ revFormat),
+/* harmony export */   tokenRegex: () => (/* binding */ tokenRegex)
 /* harmony export */ });
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils */ "./node_modules/flatpickr/dist/esm/utils/index.js");
 
@@ -2661,10 +2661,10 @@ var formats = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "arrayify": () => (/* binding */ arrayify),
-/* harmony export */   "debounce": () => (/* binding */ debounce),
-/* harmony export */   "int": () => (/* binding */ int),
-/* harmony export */   "pad": () => (/* binding */ pad)
+/* harmony export */   arrayify: () => (/* binding */ arrayify),
+/* harmony export */   debounce: () => (/* binding */ debounce),
+/* harmony export */   int: () => (/* binding */ int),
+/* harmony export */   pad: () => (/* binding */ pad)
 /* harmony export */ });
 var pad = function (number, length) {
     if (length === void 0) { length = 2; }
