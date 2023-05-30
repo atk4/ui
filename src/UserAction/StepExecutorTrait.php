@@ -196,11 +196,10 @@ trait StepExecutorTrait
             $this->action->getEntity()->setMulti($fields);
         }
 
-        $prev = $this->getPreviousStep($this->step);
-        if ($prev !== null) {
+        if (!$this->isFirstStep($this->step)) {
             $chain = $this->loader->jsLoad(
                 [
-                    'step' => $prev,
+                    'step' => $this->getPreviousStep($this->step),
                     $this->name => $this->action->getEntity()->getId(),
                 ],
                 ['method' => 'POST'],
@@ -277,57 +276,28 @@ trait StepExecutorTrait
         return $steps;
     }
 
-    protected function getNextStep(string $step): ?string
+    protected function isFirstStep(string $step): bool
     {
-        $next = null;
-        if (!$this->isLastStep($step)) {
-            foreach ($this->steps as $k => $s) {
-                if ($step === $s) {
-                    $next = $this->steps[$k + 1];
-
-                    break;
-                }
-            }
-        }
-
-        return $next;
-    }
-
-    protected function getPreviousStep(string $step): ?string
-    {
-        $prev = null;
-
-        if (!$this->isFirstStep($step)) {
-            foreach ($this->steps as $k => $s) {
-                if ($s === $step) {
-                    $prev = $this->steps[$k - 1];
-
-                    break;
-                }
-            }
-        }
-
-        return $prev;
+        return $this->steps[array_key_first($this->steps)] === $step;
     }
 
     protected function isLastStep(string $step): bool
     {
-        $isLast = false;
-        $step_count = count($this->steps);
-        foreach ($this->steps as $k => $s) {
-            if ($s === $step) {
-                $isLast = $k === $step_count - 1;
-
-                break;
-            }
-        }
-
-        return $isLast;
+        return $this->steps[array_key_last($this->steps)] === $step;
     }
 
-    protected function isFirstStep(string $step): bool
+    protected function getPreviousStep(string $step): string
     {
-        return $step === $this->steps[0];
+        $steps = array_values($this->steps);
+
+        return $steps[array_search($step, $steps, true) - 1];
+    }
+
+    protected function getNextStep(string $step): string
+    {
+        $steps = array_values($this->steps);
+
+        return $steps[array_search($step, $steps, true) + 1];
     }
 
     protected function getStep(): string
@@ -409,11 +379,10 @@ trait StepExecutorTrait
      */
     protected function jsSetPrevHandler(View $view, string $step): void
     {
-        $prev = $this->getPreviousStep($step);
-        if ($prev !== null) {
+        if (!$this->isFirstStep($step)) {
             $chain = $this->loader->jsLoad(
                 [
-                    'step' => $prev,
+                    'step' => $this->getPreviousStep($step),
                     $this->name => $this->action->getEntity()->getId(),
                 ],
                 ['method' => 'POST'],
