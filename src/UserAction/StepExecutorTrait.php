@@ -197,11 +197,15 @@ trait StepExecutorTrait
         }
 
         $prev = $this->getPreviousStep($this->step);
-        if ($prev) {
-            $chain = $this->loader->jsLoad([
-                'step' => $prev,
-                $this->name => $this->action->getEntity()->getId(),
-            ], ['method' => 'POST'], $this->loader->name);
+        if ($prev !== null) {
+            $chain = $this->loader->jsLoad(
+                [
+                    'step' => $prev,
+                    $this->name => $this->action->getEntity()->getId(),
+                ],
+                ['method' => 'POST'],
+                $this->loader->name
+            );
 
             $page->js(true, $this->prevStepButton->js()->on('click', new JsFunction([], [$chain])));
         }
@@ -406,11 +410,15 @@ trait StepExecutorTrait
     protected function jsSetPrevHandler(View $view, string $step): void
     {
         $prev = $this->getPreviousStep($step);
-        if ($prev) {
-            $chain = $this->loader->jsLoad([
-                'step' => $prev,
-                $this->name => $this->action->getEntity()->getId(),
-            ], ['method' => 'POST'], $this->loader->name);
+        if ($prev !== null) {
+            $chain = $this->loader->jsLoad(
+                [
+                    'step' => $prev,
+                    $this->name => $this->action->getEntity()->getId(),
+                ],
+                ['method' => 'POST'],
+                $this->loader->name
+            );
 
             $view->js(true, $this->prevStepButton->js()->on('click', new JsFunction([], [$chain])));
         }
@@ -444,10 +452,14 @@ trait StepExecutorTrait
                 // store data and setup reload
                 $js = new JsBlock([
                     $this->loader->jsAddStoreData($this->actionData, true),
-                    $this->loader->jsLoad([
-                        'step' => $this->getNextStep($step),
-                        $this->name => $this->action->getEntity()->getId(),
-                    ], ['method' => 'POST'], $this->loader->name),
+                    $this->loader->jsLoad(
+                        [
+                            'step' => $this->getNextStep($step),
+                            $this->name => $this->action->getEntity()->getId(),
+                        ],
+                        ['method' => 'POST'],
+                        $this->loader->name
+                    ),
                 ]);
             }
 
