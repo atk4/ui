@@ -84,8 +84,7 @@ class Column
                 'position' => 'bottom left',
                 'movePopup' => $this->columnData ? true : false,
                 'target' => $this->columnData ? 'th[data-column=' . $this->columnData . ']' : false,
-                'distanceAway' => 10,
-                'offset' => -2,
+                'distanceAway' => -12,
             ]
         );
         $popup->stopClickEvent = true;
@@ -96,7 +95,7 @@ class Column
     /**
      * Setup popup header action.
      *
-     * @param string $class the css class for filter icon
+     * @param string $class the CSS class for filter icon
      * @param string $id
      */
     public function setHeaderPopup($class, $id): void
@@ -128,8 +127,8 @@ class Column
      * Add a dropdown header menu.
      *
      * @param \Closure(string, string): (JsExpressionable|View|string|void) $fx
-     * @param string      $icon
-     * @param string|null $menuId the menu name
+     * @param string                                                        $icon
+     * @param string|null                                                   $menuId the menu name
      */
     public function addDropdown(array $items, \Closure $fx, $icon = 'caret square down', $menuId = null): void
     {
@@ -152,7 +151,7 @@ class Column
      *
      * @param array<int, array> $items
      *
-     * @return Column\JsHeader
+     * @return Column\JsHeaderDropdownCallback
      */
     public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null): JsCallback
     {
@@ -165,7 +164,7 @@ class Column
             ],
         ]];
 
-        $cb = Column\JsHeader::addTo($this->table);
+        $cb = Column\JsHeaderDropdownCallback::addTo($this->table);
 
         $function = new JsExpression('function (value, text, item) {
             if (value === undefined || value === \'\' || value === null) {
@@ -248,7 +247,7 @@ class Column
      * added through addClass and setAttr.
      *
      * @param string       $position 'head', 'body' or 'tail'
-     * @param string|array $value    either html or array defining HTML structure, see App::getTag help
+     * @param string|array $value    either HTML or array defining HTML structure, see App::getTag help
      * @param array        $attr     extra attributes to apply on the tag
      */
     public function getTag(string $position, $value, array $attr = []): string
@@ -366,7 +365,7 @@ class Column
 
     /**
      * Return associative array of tags to be filled with pre-rendered HTML on
-     * a column-basis. Will not be invoked if html-output is turned off for the table.
+     * a column-basis. Will not be invoked if HTML output is turned off for the table.
      *
      * @return array<string, string>
      */

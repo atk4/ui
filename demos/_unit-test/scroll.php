@@ -16,7 +16,7 @@ $grid = Grid::addTo($app);
 $grid->setModel($model);
 
 $makeClickJsToastFx = function (string $source) use ($grid) {
-    return new JsToast(['message' => new JsExpression('[] + [] + []', [$source, ' clicked: ', $grid->table->jsRow()->data('id')])]);
+    return new JsToast(['message' => new JsExpression('[] + [] + []', [$source, ' clicked: ', $grid->jsRow()->data('id')])]);
 };
 
 $grid->addActionButton(['icon' => 'bell'], $makeClickJsToastFx('action'));

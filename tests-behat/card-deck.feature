@@ -4,7 +4,7 @@ Feature: CardDeck
     Given I am on "_unit-test/card-deck.php"
 
   Scenario: add
-    Then I press menu button "Add Country" using selector ".atk-card-deck .ui.menu"
+    Then I press button "Add Country"
     Then I fill in "atk_fp_country__name" with "Test"
     Then I fill in "atk_fp_country__iso" with "TT"
     Then I fill in "atk_fp_country__iso3" with "TTT"
@@ -29,6 +29,10 @@ Feature: CardDeck
     Then I press button "Delete"
     Then I press Modal button "Ok"
     Then Toast display should contain text 'Country action "delete" with "United Kingdom" entity was executed.'
-    # TODO CardDeck reload is fired in separate AJAX request, thus the changes
-    # cannot be tested with Behat, as reverted in the first request
-    # Then I should not see "United Kingdom"
+
+  Scenario: delete - with unlocked DB
+    When I persist DB changes across requests
+    Then I press button "Delete"
+    Then I press Modal button "Ok"
+    Then Toast display should contain text 'Record has been deleted!'
+    Then I should not see "United Kingdom"

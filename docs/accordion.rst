@@ -50,7 +50,7 @@ Dynamic Accordion Section
 =========================
 
 Dynamic sections are based around implementation of :php:class:`VirtualPage` and allow you
-to pass a call-back which will be triggered when user clicks on the section title.::
+to pass a callback which will be triggered when user clicks on the section title.::
 
     $acc = Accordion::addTo($app);
 
@@ -70,13 +70,13 @@ Accordion class has some wrapper method in order to control the accordion module
 
 For example, you can set a button that, when clicked, will toggle an accordion section::
 
-    $btn = Button::addTo($bar, ['Toggle Section 1']);
+    $button = Button::addTo($bar, ['Toggle Section 1']);
 
     $acc = Accordion::addTo($app, ['type' => ['styled', 'fluid']]);
     $section1 = LoremIpsum::addTo($acc->addSection('Static Text'));
     $section2 = LoremIpsum::addTo($acc->addSection('Static Text'));
 
-    $btn->on('click', $acc->jsToggle($section_1));
+    $button->on('click', $acc->jsToggle($section_1));
 
 Accordion Module settings
 =========================

@@ -26,6 +26,16 @@ try {
 
 trait ModelPreventModificationTrait
 {
+    protected function isAllowDbModifications(): bool
+    {
+        static $rw = null;
+        if ($rw === null) {
+            $rw = file_exists(__DIR__ . '/db-behat-rw.txt');
+        }
+
+        return $rw;
+    }
+
     public function atomic(\Closure $fx)
     {
         $eRollback = new \Exception('Prevent modification');
@@ -34,7 +44,9 @@ trait ModelPreventModificationTrait
             parent::atomic(function () use ($fx, $eRollback, &$res) {
                 $res = $fx();
 
-                throw $eRollback;
+                if (!$this->isAllowDbModifications()) {
+                    throw $eRollback;
+                }
             });
         } catch (\Exception $e) {
             if ($e !== $eRollback) {
@@ -60,7 +72,11 @@ trait ModelPreventModificationTrait
             $callbackBackup = $action->callback;
             try {
                 $action->callback = $originalCallback;
-                $action->execute(...$args);
+                $res = $action->execute(...$args);
+
+                if ($this->isAllowDbModifications()) {
+                    return $res;
+                }
             } finally {
                 $action->callback = $callbackBackup;
             }
@@ -288,12 +304,6 @@ class Stat extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->currency, ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
         $this->addField($this->fieldName()->currency_symbol, ['neverPersist' => true]);
         $this->onHook(Model::HOOK_AFTER_LOAD, function (self $model) {
-            /* implementation for "intl"
-            $locale = 'en-UK';
-            $fmt = new \NumberFormatter($locale . '@currency=' . $model->currency, NumberFormatter::CURRENCY);
-            $model->currency_symbol = $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
-             */
-
             $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
             $model->currency_symbol = $map[$model->currency] ?? '?';
         });

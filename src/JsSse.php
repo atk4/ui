@@ -56,6 +56,22 @@ class JsSse extends JsCallback
         return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)]);
     }
 
+    public function set($fx = null, $args = null)
+    {
+        if (!$fx instanceof \Closure) {
+            throw new \TypeError('$fx must be of type Closure');
+        }
+
+        return parent::set(function (Jquery $chain) use ($fx, $args) {
+            // TODO replace EventSource to support POST
+            // https://github.com/Yaffle/EventSource
+            // https://github.com/mpetazzoni/sse.js
+            // https://github.com/EventSource/eventsource
+            // https://github.com/byjg/jquery-sse
+            return $fx($chain, ...array_values($args ?? []));
+        });
+    }
+
     /**
      * Sending an SSE action.
      */
@@ -155,7 +171,6 @@ class JsSse extends JsCallback
     }
 
     /**
-     * Initialise this sse.
      * It will ignore user abort by default.
      */
     protected function initSse(): void

@@ -107,7 +107,7 @@ class Loader extends View
     }
 
     /**
-     * Return a js action that will trigger the loader to start.
+     * Return a JS action that will trigger the loader to start.
      *
      * @param string $storeName
      *

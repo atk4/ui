@@ -77,9 +77,9 @@ class Lister extends View
      * When this happen, content will be reload x number of items.
      *
      * @param int    $ipp          Number of item per page
-     * @param array  $options      an array with js Scroll plugin options
+     * @param array  $options      an array with JS Scroll plugin options
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
-     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
+     * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
      */
@@ -102,7 +102,7 @@ class Lister extends View
             // let client know that there are no more records
             $jsonArr['noMoreScrollPages'] = $this->_renderedRowsCount < $ipp;
 
-            // return json response
+            // return JSON response
             $this->getApp()->terminateJson($jsonArr);
         });
 

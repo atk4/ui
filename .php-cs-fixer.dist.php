@@ -9,8 +9,8 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@PhpCsFixer' => true,
         '@PhpCsFixer:risky' => true,
-        '@PHP74Migration:risky' => true,
         '@PHP74Migration' => true,
+        '@PHP74Migration:risky' => true,
 
         // required by PSR-12
         'concat_space' => [
@@ -58,6 +58,8 @@ return (new PhpCsFixer\Config())
         // fn => without curly brackets is less readable,
         // also prevent bounding of unwanted variables for GC
         'use_arrow_functions' => false,
+
+        'phpdoc_var_without_name' => false, // remove once https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues/6959 is fixed
     ])
     ->setFinder($finder)
     ->setCacheFile(sys_get_temp_dir() . '/php-cs-fixer.' . md5(__DIR__) . '.cache');

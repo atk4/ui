@@ -8,7 +8,7 @@ namespace Atk4\Ui\Js;
  * Transparent mapper that will actually translate into JavaScript code. Used
  * as a glue between Views and your actual JavaScript code.
  *
- * IMPORTANT: all methods in this class are prepended with '_', to avoid clashes with js-mapping
+ * IMPORTANT: all methods in this class are prepended with '_', to avoid clashes with JS mapping
  * IMPORTANT: extend first, see Jquery class for example
  */
 class JsChain extends JsExpression
@@ -110,7 +110,7 @@ class JsChain extends JsExpression
                 $args = $chain[1];
             }
 
-            $res .= preg_match('~^(?!\d)\w+$~su', $name) ? '.' . $name : '[' . $this->_jsEncode($name) . ']';
+            $res .= preg_match('~^(?!\d)\w+$~Du', $name) ? '.' . $name : '[' . $this->_jsEncode($name) . ']';
             if ($args !== null) {
                 $res .= $this->_renderArgs($args);
             }

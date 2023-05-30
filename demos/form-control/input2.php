@@ -44,7 +44,7 @@ $values = [
 ];
 $group->addControl('d_norm', [Form\Control\Dropdown::class, 'values' => $values, 'width' => 'three'])->set('globe');
 $group->addControl('d_read', [Form\Control\Dropdown::class, 'values' => $values, 'readOnly' => true, 'width' => 'three'])->set('globe'); // allows to change value
-$group->addControl('d_disb', [Form\Control\Dropdown::class, 'values' => $values, 'disabled' => true, 'width' => 'three'])->set('globe'); // css disabled, but can focus with Tab and change value
+$group->addControl('d_disb', [Form\Control\Dropdown::class, 'values' => $values, 'disabled' => true, 'width' => 'three'])->set('globe'); // CSS disabled, but can focus with Tab and change value
 
 $group = $form->addGroup('Radio');
 
@@ -76,7 +76,7 @@ $group = $form->addGroup('Lookup');
 $model = new Country($app->db);
 
 $group->addControl('Lookup_norm', [
-    DemoLookup::class,
+    Form\Control\Lookup::class,
     'model' => new Country($app->db),
     'plus' => true,
 ])->set($model->loadAny()->getId());

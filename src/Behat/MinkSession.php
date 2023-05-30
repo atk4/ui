@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Behat;
 
 use Atk4\Core\WarnDynamicPropertyTrait;
+use Behat\Mink\Element\NodeElement;
 
 class MinkSession extends \Behat\Mink\Session
 {
@@ -35,5 +36,10 @@ class MinkSession extends \Behat\Mink\Session
     public function wait($time, $condition = 'false', array $args = [])
     {
         return $this->getDriver()->wait($time, $condition, $args);
+    }
+
+    public function keyboardWrite(NodeElement $element, string $text): void
+    {
+        $this->getDriver()->keyboardWrite($element->getXpath(), $text);
     }
 }

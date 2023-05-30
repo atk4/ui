@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.3-beta.4+bda537d
+ * # Fomantic UI - 2.9.3-beta.37+7e5e3ff
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -736,7 +736,7 @@ input::selection {
 
 /* Specificity hack */
 
-.ui.loading.loading.loading.loading.loading.loading.button {
+.ui.ui.ui.ui.ui.ui.loading.button {
   position: relative;
   cursor: default;
   text-shadow: none !important;
@@ -5483,8 +5483,16 @@ input::selection {
     max-height: 11.25em;
   }
 
+  .ui.scrolling.container.short.resizable {
+    height: 11.25em;
+  }
+
   .ui.scrolling.container[class*="very short"] {
     max-height: 7.5em;
+  }
+
+  .ui.scrolling.container[class*="very short"].resizable {
+    height: 7.5em;
   }
 
   .ui.scrolling.container {
@@ -5495,8 +5503,16 @@ input::selection {
     max-height: 30em;
   }
 
+  .ui.scrolling.container.long.resizable {
+    height: 30em;
+  }
+
   .ui.scrolling.container[class*="very long"] {
     max-height: 45em;
+  }
+
+  .ui.scrolling.container[class*="very long"].resizable {
+    height: 45em;
   }
 }
 
@@ -5505,20 +5521,40 @@ input::selection {
     max-height: 13.5em;
   }
 
+  .ui.scrolling.container.short.resizable {
+    height: 13.5em;
+  }
+
   .ui.scrolling.container[class*="very short"] {
     max-height: 9em;
+  }
+
+  .ui.scrolling.container[class*="very short"].resizable {
+    height: 9em;
   }
 
   .ui.scrolling.container {
     max-height: 18em;
   }
 
+  .ui.scrolling.container.resizable {
+    height: 18em;
+  }
+
   .ui.scrolling.container.long {
     max-height: 36em;
   }
 
+  .ui.scrolling.container.long.resizable {
+    height: 36em;
+  }
+
   .ui.scrolling.container[class*="very long"] {
     max-height: 54em;
+  }
+
+  .ui.scrolling.container[class*="very long"].resizable {
+    height: 54em;
   }
 }
 
@@ -5527,20 +5563,40 @@ input::selection {
     max-height: 18em;
   }
 
+  .ui.scrolling.container.short.resizable {
+    height: 18em;
+  }
+
   .ui.scrolling.container[class*="very short"] {
     max-height: 12em;
+  }
+
+  .ui.scrolling.container[class*="very short"].resizable {
+    height: 12em;
   }
 
   .ui.scrolling.container {
     max-height: 24em;
   }
 
+  .ui.scrolling.container.resizable {
+    height: 24em;
+  }
+
   .ui.scrolling.container.long {
     max-height: 48em;
   }
 
+  .ui.scrolling.container.long.resizable {
+    height: 48em;
+  }
+
   .ui.scrolling.container[class*="very long"] {
     max-height: 72em;
+  }
+
+  .ui.scrolling.container[class*="very long"].resizable {
+    height: 72em;
   }
 }
 
@@ -5549,21 +5605,46 @@ input::selection {
     max-height: 22.5em;
   }
 
+  .ui.scrolling.container.short.resizable {
+    height: 22.5em;
+  }
+
   .ui.scrolling.container[class*="very short"] {
     max-height: 15em;
+  }
+
+  .ui.scrolling.container[class*="very short"].resizable {
+    height: 15em;
   }
 
   .ui.scrolling.container {
     max-height: 30em;
   }
 
+  .ui.scrolling.container.resizable {
+    height: 30em;
+  }
+
   .ui.scrolling.container.long {
     max-height: 60em;
+  }
+
+  .ui.scrolling.container.long.resizable {
+    height: 60em;
   }
 
   .ui.scrolling.container[class*="very long"] {
     max-height: 90em;
   }
+
+  .ui.scrolling.container[class*="very long"].resizable {
+    height: 90em;
+  }
+}
+
+.ui.resizable.scrolling.container {
+  resize: vertical;
+  max-height: none;
 }
 
 /*******************************
@@ -6317,7 +6398,8 @@ i.flag.cyprus::before {
 }
 
 i.flag.cz::before,
-i.flag.czechia::before {
+i.flag.czechia::before,
+i.flag.czech.republic::before {
   background-image: url("../../twemoji/assets/svg/1f1e8-1f1ff.svg");
 }
 
@@ -17830,7 +17912,7 @@ img.ui.bordered.image {
            Loading
     --------------------- */
 
-.ui.loading.loading.input > i.icon::before {
+.ui.ui.loading.input > i.icon::before {
   position: absolute;
   content: "";
   top: 50%;
@@ -17842,7 +17924,7 @@ img.ui.bordered.image {
   border: 0.2em solid rgba(0, 0, 0, 0.1);
 }
 
-.ui.loading.loading.input > i.icon::after {
+.ui.ui.loading.input > i.icon::after {
   position: absolute;
   content: "";
   top: 50%;
@@ -17893,27 +17975,6 @@ img.ui.bordered.image {
     --------------------- */
 
 .ui.input.error > input {
-  background-color: #fff6f6;
-  border-color: #e0b4b4;
-  color: #9f3a38;
-  box-shadow: none;
-}
-
-.ui.input > input:not(:-ms-input-placeholder):invalid {
-  background-color: #fff6f6;
-  border-color: #e0b4b4;
-  color: #9f3a38;
-  box-shadow: none;
-}
-
-.ui.input > input:not(:placeholder-shown):invalid {
-  background-color: #fff6f6;
-  border-color: #e0b4b4;
-  color: #9f3a38;
-  box-shadow: none;
-}
-
-.ui.input > input:not(:-ms-input-placeholder):invalid {
   background-color: #fff6f6;
   border-color: #e0b4b4;
   color: #9f3a38;
@@ -18727,13 +18788,6 @@ img.ui.bordered.image {
 .ui.file.input input[type="file"]::file-selector-button:hover {
   background: #cacbcd;
   color: rgba(0, 0, 0, 0.6);
-}
-
-.ui.form .field input[type="file"]:required:invalid,
-.ui.file.input input[type="file"]:required:invalid {
-  color: #9f3a38;
-  background: #fff6f6;
-  border-color: #e0b4b4;
 }
 
 input[type="file"].ui.invisible.file.input,
@@ -20084,7 +20138,24 @@ a.ui.label {
   border-top-color: inherit;
 }
 
-/* Inside Table */
+.ui.ui.center.ribbon.label {
+  top: calc(50% - 1em);
+  z-index: 1;
+}
+
+.ui.bottom.ribbon.label::after {
+  bottom: 100%;
+  top: auto;
+  border-width: 1.2em 1.2em 0 0;
+}
+
+.ui.bottom[class*="right ribbon"].label::after {
+  border-width: 1.2em 0 0 1.2em;
+  border-color: transparent;
+  border-left-color: inherit;
+}
+
+/* Inside Image */
 
 .ui.image > .ribbon.label,
 .ui.card .image > .ribbon.label {
@@ -20101,6 +20172,12 @@ a.ui.label {
 .ui.image > .ui[class*="right ribbon"].label {
   left: calc(100% + -0.05rem + 1.2em);
   padding-left: 0.833em;
+}
+
+.ui.card .image > .ui.bottom.ribbon.label,
+.ui.image > .ui.bottom.ribbon.label {
+  bottom: 1rem;
+  top: auto;
 }
 
 /* Inside Table */
@@ -22467,18 +22544,18 @@ ol.ui.list ol li,
   transition: 0.1s color ease;
 }
 
-.ui.link.list.list a.item:hover,
-.ui.link.list.list .item a:not(.ui):hover {
+.ui.ui.link.list a.item:hover,
+.ui.ui.link.list .item a:not(.ui):hover {
   color: rgba(0, 0, 0, 0.8);
 }
 
-.ui.link.list.list a.item:active,
-.ui.link.list.list .item a:not(.ui):active {
+.ui.ui.link.list a.item:active,
+.ui.ui.link.list .item a:not(.ui):active {
   color: rgba(0, 0, 0, 0.9);
 }
 
-.ui.link.list.list .active.item,
-.ui.link.list.list .active.item a:not(.ui) {
+.ui.ui.link.list .active.item,
+.ui.ui.link.list .active.item a:not(.ui) {
   color: rgba(0, 0, 0, 0.95);
 }
 
@@ -22490,18 +22567,18 @@ ol.ui.list ol li,
   color: rgba(255, 255, 255, 0.5);
 }
 
-.ui.inverted.link.list.list a.item:hover,
-.ui.inverted.link.list.list .item a:not(.ui):hover {
+.ui.ui.inverted.link.list a.item:hover,
+.ui.ui.inverted.link.list .item a:not(.ui):hover {
   color: #ffffff;
 }
 
-.ui.inverted.link.list.list a.item:active,
-.ui.inverted.link.list.list .item a:not(.ui):active {
+.ui.ui.inverted.link.list a.item:active,
+.ui.ui.inverted.link.list .item a:not(.ui):active {
   color: #ffffff;
 }
 
-.ui.inverted.link.list.list a.active.item,
-.ui.inverted.link.list.list .active.item a:not(.ui) {
+.ui.ui.inverted.link.list a.active.item,
+.ui.ui.inverted.link.list .active.item a:not(.ui) {
   color: #ffffff;
 }
 
@@ -23137,16 +23214,16 @@ ol.ui.suffixed.list li::before,
 
 /* Speeds */
 
-.ui.fast.loading.loading::after,
-.ui.fast.loading.loading .input > i.icon::after,
-.ui.fast.loading.loading > i.icon::after,
+.ui.ui.fast.loading::after,
+.ui.ui.fast.loading .input > i.icon::after,
+.ui.ui.fast.loading > i.icon::after,
 .ui.fast.loader::after {
   animation-duration: 0.3s;
 }
 
-.ui.slow.loading.loading::after,
-.ui.slow.loading.loading .input > i.icon::after,
-.ui.slow.loading.loading > i.icon::after,
+.ui.ui.slow.loading::after,
+.ui.ui.slow.loading .input > i.icon::after,
+.ui.ui.slow.loading > i.icon::after,
 .ui.slow.loader::after {
   animation-duration: 0.9s;
 }
@@ -23379,378 +23456,378 @@ ol.ui.suffixed.list li::before,
        Colors
 -------------------- */
 
-.ui.primary.elastic.loader.loader::before,
+.ui.ui.primary.elastic.loader::before,
 .ui.primary.basic.elastic.loading.button::before,
 .ui.primary.basic.elastic.loading.button::after,
-.ui.primary.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.primary.elastic.loading.loading.loading .input > i.icon::before,
-.ui.primary.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.primary.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.primary.loading.loading.loading.loading .input > i.icon::after,
-.ui.primary.loading.loading.loading.loading > i.icon::after,
-.ui.primary.loader.loader.loader::after {
+.ui.ui.ui.primary.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.primary.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.primary.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.primary.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.primary.loading .input > i.icon::after,
+.ui.ui.ui.ui.primary.loading > i.icon::after,
+.ui.ui.ui.primary.loader::after {
   color: #2185d0;
 }
 
 .ui.inverted.primary.elastic.loader::before,
-.ui.inverted.primary.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.primary.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.primary.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.primary.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.primary.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.primary.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.primary.loader.loader.loader::after {
+.ui.ui.ui.inverted.primary.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.primary.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.primary.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.primary.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.primary.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.primary.loading > i.icon::after,
+.ui.ui.ui.inverted.primary.loader::after {
   color: #54c8ff;
 }
 
-.ui.secondary.elastic.loader.loader::before,
+.ui.ui.secondary.elastic.loader::before,
 .ui.secondary.basic.elastic.loading.button::before,
 .ui.secondary.basic.elastic.loading.button::after,
-.ui.secondary.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.secondary.elastic.loading.loading.loading .input > i.icon::before,
-.ui.secondary.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.secondary.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.secondary.loading.loading.loading.loading .input > i.icon::after,
-.ui.secondary.loading.loading.loading.loading > i.icon::after,
-.ui.secondary.loader.loader.loader::after {
+.ui.ui.ui.secondary.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.secondary.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.secondary.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.secondary.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.secondary.loading .input > i.icon::after,
+.ui.ui.ui.ui.secondary.loading > i.icon::after,
+.ui.ui.ui.secondary.loader::after {
   color: #1b1c1d;
 }
 
 .ui.inverted.secondary.elastic.loader::before,
-.ui.inverted.secondary.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.secondary.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.secondary.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.secondary.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.secondary.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.secondary.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.secondary.loader.loader.loader::after {
+.ui.ui.ui.inverted.secondary.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.secondary.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.secondary.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.secondary.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.secondary.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.secondary.loading > i.icon::after,
+.ui.ui.ui.inverted.secondary.loader::after {
   color: #545454;
 }
 
-.ui.red.elastic.loader.loader::before,
+.ui.ui.red.elastic.loader::before,
 .ui.red.basic.elastic.loading.button::before,
 .ui.red.basic.elastic.loading.button::after,
-.ui.red.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.red.elastic.loading.loading.loading .input > i.icon::before,
-.ui.red.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.red.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.red.loading.loading.loading.loading .input > i.icon::after,
-.ui.red.loading.loading.loading.loading > i.icon::after,
-.ui.red.loader.loader.loader::after {
+.ui.ui.ui.red.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.red.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.red.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.red.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.red.loading .input > i.icon::after,
+.ui.ui.ui.ui.red.loading > i.icon::after,
+.ui.ui.ui.red.loader::after {
   color: #db2828;
 }
 
 .ui.inverted.red.elastic.loader::before,
-.ui.inverted.red.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.red.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.red.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.red.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.red.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.red.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.red.loader.loader.loader::after {
+.ui.ui.ui.inverted.red.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.red.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.red.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.red.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.red.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.red.loading > i.icon::after,
+.ui.ui.ui.inverted.red.loader::after {
   color: #ff695e;
 }
 
-.ui.orange.elastic.loader.loader::before,
+.ui.ui.orange.elastic.loader::before,
 .ui.orange.basic.elastic.loading.button::before,
 .ui.orange.basic.elastic.loading.button::after,
-.ui.orange.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.orange.elastic.loading.loading.loading .input > i.icon::before,
-.ui.orange.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.orange.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.orange.loading.loading.loading.loading .input > i.icon::after,
-.ui.orange.loading.loading.loading.loading > i.icon::after,
-.ui.orange.loader.loader.loader::after {
+.ui.ui.ui.orange.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.orange.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.orange.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.orange.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.orange.loading .input > i.icon::after,
+.ui.ui.ui.ui.orange.loading > i.icon::after,
+.ui.ui.ui.orange.loader::after {
   color: #f2711c;
 }
 
 .ui.inverted.orange.elastic.loader::before,
-.ui.inverted.orange.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.orange.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.orange.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.orange.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.orange.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.orange.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.orange.loader.loader.loader::after {
+.ui.ui.ui.inverted.orange.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.orange.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.orange.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.orange.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.orange.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.orange.loading > i.icon::after,
+.ui.ui.ui.inverted.orange.loader::after {
   color: #ff851b;
 }
 
-.ui.yellow.elastic.loader.loader::before,
+.ui.ui.yellow.elastic.loader::before,
 .ui.yellow.basic.elastic.loading.button::before,
 .ui.yellow.basic.elastic.loading.button::after,
-.ui.yellow.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.yellow.elastic.loading.loading.loading .input > i.icon::before,
-.ui.yellow.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.yellow.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.yellow.loading.loading.loading.loading .input > i.icon::after,
-.ui.yellow.loading.loading.loading.loading > i.icon::after,
-.ui.yellow.loader.loader.loader::after {
+.ui.ui.ui.yellow.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.yellow.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.yellow.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.yellow.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.yellow.loading .input > i.icon::after,
+.ui.ui.ui.ui.yellow.loading > i.icon::after,
+.ui.ui.ui.yellow.loader::after {
   color: #fbbd08;
 }
 
 .ui.inverted.yellow.elastic.loader::before,
-.ui.inverted.yellow.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.yellow.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.yellow.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.yellow.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.yellow.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.yellow.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.yellow.loader.loader.loader::after {
+.ui.ui.ui.inverted.yellow.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.yellow.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.yellow.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.yellow.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.yellow.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.yellow.loading > i.icon::after,
+.ui.ui.ui.inverted.yellow.loader::after {
   color: #ffe21f;
 }
 
-.ui.olive.elastic.loader.loader::before,
+.ui.ui.olive.elastic.loader::before,
 .ui.olive.basic.elastic.loading.button::before,
 .ui.olive.basic.elastic.loading.button::after,
-.ui.olive.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.olive.elastic.loading.loading.loading .input > i.icon::before,
-.ui.olive.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.olive.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.olive.loading.loading.loading.loading .input > i.icon::after,
-.ui.olive.loading.loading.loading.loading > i.icon::after,
-.ui.olive.loader.loader.loader::after {
+.ui.ui.ui.olive.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.olive.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.olive.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.olive.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.olive.loading .input > i.icon::after,
+.ui.ui.ui.ui.olive.loading > i.icon::after,
+.ui.ui.ui.olive.loader::after {
   color: #b5cc18;
 }
 
 .ui.inverted.olive.elastic.loader::before,
-.ui.inverted.olive.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.olive.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.olive.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.olive.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.olive.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.olive.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.olive.loader.loader.loader::after {
+.ui.ui.ui.inverted.olive.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.olive.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.olive.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.olive.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.olive.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.olive.loading > i.icon::after,
+.ui.ui.ui.inverted.olive.loader::after {
   color: #d9e778;
 }
 
-.ui.green.elastic.loader.loader::before,
+.ui.ui.green.elastic.loader::before,
 .ui.green.basic.elastic.loading.button::before,
 .ui.green.basic.elastic.loading.button::after,
-.ui.green.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.green.elastic.loading.loading.loading .input > i.icon::before,
-.ui.green.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.green.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.green.loading.loading.loading.loading .input > i.icon::after,
-.ui.green.loading.loading.loading.loading > i.icon::after,
-.ui.green.loader.loader.loader::after {
+.ui.ui.ui.green.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.green.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.green.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.green.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.green.loading .input > i.icon::after,
+.ui.ui.ui.ui.green.loading > i.icon::after,
+.ui.ui.ui.green.loader::after {
   color: #21ba45;
 }
 
 .ui.inverted.green.elastic.loader::before,
-.ui.inverted.green.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.green.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.green.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.green.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.green.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.green.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.green.loader.loader.loader::after {
+.ui.ui.ui.inverted.green.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.green.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.green.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.green.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.green.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.green.loading > i.icon::after,
+.ui.ui.ui.inverted.green.loader::after {
   color: #2ecc40;
 }
 
-.ui.teal.elastic.loader.loader::before,
+.ui.ui.teal.elastic.loader::before,
 .ui.teal.basic.elastic.loading.button::before,
 .ui.teal.basic.elastic.loading.button::after,
-.ui.teal.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.teal.elastic.loading.loading.loading .input > i.icon::before,
-.ui.teal.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.teal.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.teal.loading.loading.loading.loading .input > i.icon::after,
-.ui.teal.loading.loading.loading.loading > i.icon::after,
-.ui.teal.loader.loader.loader::after {
+.ui.ui.ui.teal.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.teal.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.teal.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.teal.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.teal.loading .input > i.icon::after,
+.ui.ui.ui.ui.teal.loading > i.icon::after,
+.ui.ui.ui.teal.loader::after {
   color: #00b5ad;
 }
 
 .ui.inverted.teal.elastic.loader::before,
-.ui.inverted.teal.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.teal.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.teal.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.teal.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.teal.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.teal.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.teal.loader.loader.loader::after {
+.ui.ui.ui.inverted.teal.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.teal.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.teal.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.teal.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.teal.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.teal.loading > i.icon::after,
+.ui.ui.ui.inverted.teal.loader::after {
   color: #6dffff;
 }
 
-.ui.blue.elastic.loader.loader::before,
+.ui.ui.blue.elastic.loader::before,
 .ui.blue.basic.elastic.loading.button::before,
 .ui.blue.basic.elastic.loading.button::after,
-.ui.blue.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.blue.elastic.loading.loading.loading .input > i.icon::before,
-.ui.blue.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.blue.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.blue.loading.loading.loading.loading .input > i.icon::after,
-.ui.blue.loading.loading.loading.loading > i.icon::after,
-.ui.blue.loader.loader.loader::after {
+.ui.ui.ui.blue.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.blue.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.blue.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.blue.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.blue.loading .input > i.icon::after,
+.ui.ui.ui.ui.blue.loading > i.icon::after,
+.ui.ui.ui.blue.loader::after {
   color: #2185d0;
 }
 
 .ui.inverted.blue.elastic.loader::before,
-.ui.inverted.blue.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.blue.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.blue.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.blue.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.blue.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.blue.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.blue.loader.loader.loader::after {
+.ui.ui.ui.inverted.blue.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.blue.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.blue.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.blue.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.blue.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.blue.loading > i.icon::after,
+.ui.ui.ui.inverted.blue.loader::after {
   color: #54c8ff;
 }
 
-.ui.violet.elastic.loader.loader::before,
+.ui.ui.violet.elastic.loader::before,
 .ui.violet.basic.elastic.loading.button::before,
 .ui.violet.basic.elastic.loading.button::after,
-.ui.violet.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.violet.elastic.loading.loading.loading .input > i.icon::before,
-.ui.violet.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.violet.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.violet.loading.loading.loading.loading .input > i.icon::after,
-.ui.violet.loading.loading.loading.loading > i.icon::after,
-.ui.violet.loader.loader.loader::after {
+.ui.ui.ui.violet.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.violet.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.violet.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.violet.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.violet.loading .input > i.icon::after,
+.ui.ui.ui.ui.violet.loading > i.icon::after,
+.ui.ui.ui.violet.loader::after {
   color: #6435c9;
 }
 
 .ui.inverted.violet.elastic.loader::before,
-.ui.inverted.violet.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.violet.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.violet.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.violet.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.violet.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.violet.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.violet.loader.loader.loader::after {
+.ui.ui.ui.inverted.violet.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.violet.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.violet.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.violet.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.violet.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.violet.loading > i.icon::after,
+.ui.ui.ui.inverted.violet.loader::after {
   color: #a291fb;
 }
 
-.ui.purple.elastic.loader.loader::before,
+.ui.ui.purple.elastic.loader::before,
 .ui.purple.basic.elastic.loading.button::before,
 .ui.purple.basic.elastic.loading.button::after,
-.ui.purple.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.purple.elastic.loading.loading.loading .input > i.icon::before,
-.ui.purple.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.purple.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.purple.loading.loading.loading.loading .input > i.icon::after,
-.ui.purple.loading.loading.loading.loading > i.icon::after,
-.ui.purple.loader.loader.loader::after {
+.ui.ui.ui.purple.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.purple.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.purple.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.purple.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.purple.loading .input > i.icon::after,
+.ui.ui.ui.ui.purple.loading > i.icon::after,
+.ui.ui.ui.purple.loader::after {
   color: #a333c8;
 }
 
 .ui.inverted.purple.elastic.loader::before,
-.ui.inverted.purple.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.purple.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.purple.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.purple.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.purple.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.purple.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.purple.loader.loader.loader::after {
+.ui.ui.ui.inverted.purple.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.purple.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.purple.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.purple.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.purple.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.purple.loading > i.icon::after,
+.ui.ui.ui.inverted.purple.loader::after {
   color: #dc73ff;
 }
 
-.ui.pink.elastic.loader.loader::before,
+.ui.ui.pink.elastic.loader::before,
 .ui.pink.basic.elastic.loading.button::before,
 .ui.pink.basic.elastic.loading.button::after,
-.ui.pink.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.pink.elastic.loading.loading.loading .input > i.icon::before,
-.ui.pink.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.pink.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.pink.loading.loading.loading.loading .input > i.icon::after,
-.ui.pink.loading.loading.loading.loading > i.icon::after,
-.ui.pink.loader.loader.loader::after {
+.ui.ui.ui.pink.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.pink.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.pink.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.pink.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.pink.loading .input > i.icon::after,
+.ui.ui.ui.ui.pink.loading > i.icon::after,
+.ui.ui.ui.pink.loader::after {
   color: #e03997;
 }
 
 .ui.inverted.pink.elastic.loader::before,
-.ui.inverted.pink.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.pink.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.pink.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.pink.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.pink.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.pink.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.pink.loader.loader.loader::after {
+.ui.ui.ui.inverted.pink.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.pink.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.pink.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.pink.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.pink.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.pink.loading > i.icon::after,
+.ui.ui.ui.inverted.pink.loader::after {
   color: #ff8edf;
 }
 
-.ui.brown.elastic.loader.loader::before,
+.ui.ui.brown.elastic.loader::before,
 .ui.brown.basic.elastic.loading.button::before,
 .ui.brown.basic.elastic.loading.button::after,
-.ui.brown.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.brown.elastic.loading.loading.loading .input > i.icon::before,
-.ui.brown.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.brown.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.brown.loading.loading.loading.loading .input > i.icon::after,
-.ui.brown.loading.loading.loading.loading > i.icon::after,
-.ui.brown.loader.loader.loader::after {
+.ui.ui.ui.brown.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.brown.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.brown.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.brown.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.brown.loading .input > i.icon::after,
+.ui.ui.ui.ui.brown.loading > i.icon::after,
+.ui.ui.ui.brown.loader::after {
   color: #a5673f;
 }
 
 .ui.inverted.brown.elastic.loader::before,
-.ui.inverted.brown.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.brown.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.brown.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.brown.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.brown.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.brown.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.brown.loader.loader.loader::after {
+.ui.ui.ui.inverted.brown.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.brown.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.brown.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.brown.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.brown.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.brown.loading > i.icon::after,
+.ui.ui.ui.inverted.brown.loader::after {
   color: #d67c1c;
 }
 
-.ui.grey.elastic.loader.loader::before,
+.ui.ui.grey.elastic.loader::before,
 .ui.grey.basic.elastic.loading.button::before,
 .ui.grey.basic.elastic.loading.button::after,
-.ui.grey.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.grey.elastic.loading.loading.loading .input > i.icon::before,
-.ui.grey.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.grey.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.grey.loading.loading.loading.loading .input > i.icon::after,
-.ui.grey.loading.loading.loading.loading > i.icon::after,
-.ui.grey.loader.loader.loader::after {
+.ui.ui.ui.grey.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.grey.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.grey.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.grey.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.grey.loading .input > i.icon::after,
+.ui.ui.ui.ui.grey.loading > i.icon::after,
+.ui.ui.ui.grey.loader::after {
   color: #767676;
 }
 
 .ui.inverted.grey.elastic.loader::before,
-.ui.inverted.grey.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.grey.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.grey.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.grey.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.grey.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.grey.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.grey.loader.loader.loader::after {
+.ui.ui.ui.inverted.grey.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.grey.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.grey.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.grey.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.grey.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.grey.loading > i.icon::after,
+.ui.ui.ui.inverted.grey.loader::after {
   color: #dcddde;
 }
 
-.ui.black.elastic.loader.loader::before,
+.ui.ui.black.elastic.loader::before,
 .ui.black.basic.elastic.loading.button::before,
 .ui.black.basic.elastic.loading.button::after,
-.ui.black.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.black.elastic.loading.loading.loading .input > i.icon::before,
-.ui.black.elastic.loading.loading.loading.loading > i.icon::before,
-.ui.black.loading.loading.loading.loading:not(.usual):not(.button)::after,
-.ui.black.loading.loading.loading.loading .input > i.icon::after,
-.ui.black.loading.loading.loading.loading > i.icon::after,
-.ui.black.loader.loader.loader::after {
+.ui.ui.ui.black.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.black.elastic.loading .input > i.icon::before,
+.ui.ui.ui.ui.black.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.black.loading:not(.usual):not(.button)::after,
+.ui.ui.ui.ui.black.loading .input > i.icon::after,
+.ui.ui.ui.ui.black.loading > i.icon::after,
+.ui.ui.ui.black.loader::after {
   color: #1b1c1d;
 }
 
 .ui.inverted.black.elastic.loader::before,
-.ui.inverted.black.elastic.loading.loading.loading:not(.segment):not(.segments):not(.card)::before,
-.ui.inverted.black.elastic.loading.loading.loading .input > i.icon::before,
-.ui.inverted.black.elastic.loading.loading.loading > i.icon::before,
-.ui.inverted.black.loading.loading.loading.loading:not(.usual)::after,
-.ui.inverted.black.loading.loading.loading.loading .input > i.icon::after,
-.ui.inverted.black.loading.loading.loading.loading > i.icon::after,
-.ui.inverted.black.loader.loader.loader::after {
+.ui.ui.ui.inverted.black.elastic.loading:not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.inverted.black.elastic.loading .input > i.icon::before,
+.ui.ui.ui.inverted.black.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.inverted.black.loading:not(.usual)::after,
+.ui.ui.ui.ui.inverted.black.loading .input > i.icon::after,
+.ui.ui.ui.ui.inverted.black.loading > i.icon::after,
+.ui.ui.ui.inverted.black.loader::after {
   color: #545454;
 }
 
-.ui.elastic.loader.loader::before,
-.ui.elastic.loading.loading.loading::before,
-.ui.elastic.loading.loading.loading .input > i.icon::before,
-.ui.elastic.loading.loading.loading > i.icon::before,
-.ui.loading.loading.loading.loading:not(.usual)::after,
-.ui.loading.loading.loading.loading .input > i.icon::after,
-.ui.loading.loading.loading.loading > i.icon::after,
-.ui.loader.loader.loader::after {
+.ui.ui.elastic.loader::before,
+.ui.ui.ui.elastic.loading::before,
+.ui.ui.ui.elastic.loading .input > i.icon::before,
+.ui.ui.ui.elastic.loading > i.icon::before,
+.ui.ui.ui.ui.loading:not(.usual)::after,
+.ui.ui.ui.ui.loading .input > i.icon::after,
+.ui.ui.ui.ui.loading > i.icon::after,
+.ui.ui.ui.loader::after {
   border-color: currentColor;
 }
 
-.ui.elastic.loading.loading.loading.loading.button:not(.inverted):not(.basic)::before {
+.ui.ui.ui.ui.elastic.loading.button:not(.inverted):not(.basic)::before {
   color: #fff;
 }
 
@@ -23759,7 +23836,7 @@ ol.ui.suffixed.list li::before,
   color: #767676;
 }
 
-.ui.double.loading.loading.loading.loading.button::after {
+.ui.ui.ui.ui.double.loading.button::after {
   border-bottom-color: currentColor;
 }
 
@@ -23790,33 +23867,33 @@ ol.ui.suffixed.list li::before,
   margin-right: auto;
 }
 
-.ui.loading.loading.loading.loading.loading.loading::after,
-.ui.loading.loading.loading.loading.loading.loading .input > i.icon::after,
-.ui.loading.loading.loading.loading.loading.loading > i.icon::after,
-.ui.loader.loader.loader.loader.loader::after {
+.ui.ui.ui.ui.ui.ui.loading::after,
+.ui.ui.ui.ui.ui.ui.loading .input > i.icon::after,
+.ui.ui.ui.ui.ui.ui.loading > i.icon::after,
+.ui.ui.ui.ui.ui.loader::after {
   border-left-color: transparent;
   border-right-color: transparent;
 }
 
-.ui.loading.loading.loading.loading.loading.loading.loading:not(.double)::after,
-.ui.loading.loading.loading.loading.loading.loading.loading:not(.double) .input > i.icon::after,
-.ui.loading.loading.loading.loading.loading.loading.loading:not(.double) > i.icon::after,
-.ui.loader.loader.loader.loader.loader.loader:not(.double)::after {
+.ui.ui.ui.ui.ui.ui.ui.loading:not(.double)::after,
+.ui.ui.ui.ui.ui.ui.ui.loading:not(.double) .input > i.icon::after,
+.ui.ui.ui.ui.ui.ui.ui.loading:not(.double) > i.icon::after,
+.ui.ui.ui.ui.ui.ui.loader:not(.double)::after {
   border-bottom-color: transparent;
 }
 
-.ui.loading.loading.loading.loading.loading.loading.card::after,
-.ui.loading.loading.loading.loading.loading.loading.segments::after,
-.ui.loading.loading.loading.loading.loading.loading.segment::after,
-.ui.loading.loading.loading.loading.loading.loading.form::after {
+.ui.ui.ui.ui.ui.ui.loading.card::after,
+.ui.ui.ui.ui.ui.ui.loading.segments::after,
+.ui.ui.ui.ui.ui.ui.loading.segment::after,
+.ui.ui.ui.ui.ui.ui.loading.form::after {
   border-left-color: rgba(0, 0, 0, 0.1);
   border-right-color: rgba(0, 0, 0, 0.1);
 }
 
-.ui.loading.loading.loading.loading.loading.loading.card:not(.double)::after,
-.ui.loading.loading.loading.loading.loading.loading.segments:not(.double)::after,
-.ui.loading.loading.loading.loading.loading.loading.segment:not(.double)::after,
-.ui.loading.loading.loading.loading.loading.loading.form:not(.double)::after {
+.ui.ui.ui.ui.ui.ui.loading.card:not(.double)::after,
+.ui.ui.ui.ui.ui.ui.loading.segments:not(.double)::after,
+.ui.ui.ui.ui.ui.ui.loading.segment:not(.double)::after,
+.ui.ui.ui.ui.ui.ui.loading.form:not(.double)::after {
   border-bottom-color: rgba(0, 0, 0, 0.1);
 }
 
@@ -23832,18 +23909,18 @@ ol.ui.suffixed.list li::before,
   color: #767676;
 }
 
-.ui.elastic.loading.loading:not(.form):not(.segment):not(.segments):not(.card)::after,
-.ui.elastic.loading.loading .input > i.icon::after,
-.ui.elastic.loading.loading > i.icon::after,
-.ui.elastic.loader.loader::after {
+.ui.ui.elastic.loading:not(.form):not(.segment):not(.segments):not(.card)::after,
+.ui.ui.elastic.loading .input > i.icon::after,
+.ui.ui.elastic.loading > i.icon::after,
+.ui.ui.elastic.loader::after {
   animation: loader 1s infinite cubic-bezier(0.27, 1.05, 0.92, 0.61);
   animation-delay: 0.3s;
 }
 
-.ui.elastic.loading.loading.loading:not(.form):not(.segment):not(.segments):not(.card)::before,
-.ui.elastic.loading.loading.loading .input > i.icon::before,
-.ui.elastic.loading.loading.loading > i.icon::before,
-.ui.elastic.loader.loader::before {
+.ui.ui.ui.elastic.loading:not(.form):not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.elastic.loading .input > i.icon::before,
+.ui.ui.ui.elastic.loading > i.icon::before,
+.ui.ui.elastic.loader::before {
   animation: elastic-loader 1s infinite cubic-bezier(0.27, 1.05, 0.92, 0.61);
   -moz-animation: currentcolor-elastic-loader 1s infinite cubic-bezier(0.27, 1.05, 0.92, 0.61);
   border-right-color: transparent;
@@ -23853,33 +23930,33 @@ ol.ui.suffixed.list li::before,
   animation: loader 8s infinite linear;
 }
 
-.ui.slow.elastic.loading.loading:not(.form):not(.segment):not(.segments):not(.card)::after,
-.ui.slow.elastic.loading.loading .input > i.icon::after,
-.ui.slow.elastic.loading.loading > i.icon::after,
-.ui.slow.elastic.loader.loader::after {
+.ui.ui.slow.elastic.loading:not(.form):not(.segment):not(.segments):not(.card)::after,
+.ui.ui.slow.elastic.loading .input > i.icon::after,
+.ui.ui.slow.elastic.loading > i.icon::after,
+.ui.ui.slow.elastic.loader::after {
   animation-duration: 1.5s;
   animation-delay: 0.45s;
 }
 
-.ui.slow.elastic.loading.loading.loading:not(.form):not(.segment):not(.segments):not(.card)::before,
-.ui.slow.elastic.loading.loading.loading .input > i.icon::before,
-.ui.slow.elastic.loading.loading.loading > i.icon::before,
-.ui.slow.elastic.loader.loader::before {
+.ui.ui.ui.slow.elastic.loading:not(.form):not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.slow.elastic.loading .input > i.icon::before,
+.ui.ui.ui.slow.elastic.loading > i.icon::before,
+.ui.ui.slow.elastic.loader::before {
   animation-duration: 1.5s;
 }
 
-.ui.fast.elastic.loading.loading:not(.form):not(.segment):not(.segments):not(.card)::after,
-.ui.fast.elastic.loading.loading .input > i.icon::after,
-.ui.fast.elastic.loading.loading > i.icon::after,
-.ui.fast.elastic.loader.loader::after {
+.ui.ui.fast.elastic.loading:not(.form):not(.segment):not(.segments):not(.card)::after,
+.ui.ui.fast.elastic.loading .input > i.icon::after,
+.ui.ui.fast.elastic.loading > i.icon::after,
+.ui.ui.fast.elastic.loader::after {
   animation-duration: 0.66s;
   animation-delay: 0.2s;
 }
 
-.ui.fast.elastic.loading.loading.loading:not(.form):not(.segment):not(.segments):not(.card)::before,
-.ui.fast.elastic.loading.loading.loading .input > i.icon::before,
-.ui.fast.elastic.loading.loading.loading > i.icon::before,
-.ui.fast.elastic.loader.loader::before {
+.ui.ui.ui.fast.elastic.loading:not(.form):not(.segment):not(.segments):not(.card)::before,
+.ui.ui.ui.fast.elastic.loading .input > i.icon::before,
+.ui.ui.ui.fast.elastic.loading > i.icon::before,
+.ui.ui.fast.elastic.loader::before {
   animation-duration: 0.66s;
 }
 
@@ -24849,6 +24926,9 @@ ol.ui.suffixed.list li::before,
   margin: 3em 0;
   box-shadow: "";
   z-index: auto;
+  background-color: #fff;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  color: rgba(0, 0, 0, 0.87);
 }
 
 .ui.piled.segment:first-child {
@@ -24863,7 +24943,7 @@ ol.ui.suffixed.list li::before,
 .ui.piled.segments::before,
 .ui.piled.segment::after,
 .ui.piled.segment::before {
-  background-color: #fff;
+  background-color: inherit;
   visibility: visible;
   content: "";
   display: block;
@@ -24871,8 +24951,14 @@ ol.ui.suffixed.list li::before,
   left: 0;
   position: absolute;
   width: 100%;
-  border: 1px solid rgba(34, 36, 38, 0.15);
+  border: inherit;
   box-shadow: "";
+}
+
+.ui.inverted.piled.segment {
+  background-color: #1b1c1d;
+  border: 1px solid #555;
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .ui.piled.segments::before,
@@ -24907,6 +24993,13 @@ ol.ui.suffixed.list li::before,
 
 .ui.piled.segment[class*="bottom attached"]:last-child {
   margin-bottom: 0;
+}
+
+@supports selector(:has(.f)) {
+  *:has(> .ui.piled.segment) {
+    z-index: 0;
+    position: relative;
+  }
 }
 
 /* -------------------
@@ -24947,12 +25040,17 @@ ol.ui.suffixed.list li::before,
 
 /* Inverted */
 
+.ui.stacked.inverted.segments,
+.ui.stacked.inverted.segment {
+  border: 1px solid rgba(225, 225, 225, 0.5);
+}
+
 .ui.stacked.inverted.segments::before,
-.ui.stacked.inverted.segments::after,
 .ui.stacked.inverted.segment::before,
+.ui.stacked.inverted.segments::after,
 .ui.stacked.inverted.segment::after {
   background-color: rgba(0, 0, 0, 0.03);
-  border-top: 1px solid rgba(34, 36, 38, 0.35);
+  border-top: 1px solid rgba(225, 225, 225, 0.5);
 }
 
 /* -------------------
@@ -25011,9 +25109,14 @@ ol.ui.suffixed.list li::before,
            Raised
     -------------------- */
 
-.ui.raised.raised.segments,
-.ui.raised.raised.segment {
+.ui.ui.raised.segments,
+.ui.ui.raised.segment {
   box-shadow: 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15);
+}
+
+.ui.ui.inverted.raised.segments,
+.ui.ui.inverted.raised.segment {
+  box-shadow: 0 2px 4px 0 rgba(225, 225, 225, 0.1), 0 2px 10px 0 rgba(225, 225, 225, 0.5);
 }
 
 /*******************************
@@ -25193,6 +25296,7 @@ ol.ui.suffixed.list li::before,
   -ms-user-select: none;
   user-select: none;
   transition: all 0s linear;
+  min-height: 4.5em;
 }
 
 .ui.loading.segments::before,
@@ -25256,121 +25360,173 @@ ol.ui.suffixed.list li::before,
        Colors
 -------------------- */
 
-.ui.red.segment.segment.segment.segment.segment:not(.inverted) {
+.ui.ui.ui.ui.ui.red.segment:not(.inverted) {
   border-top: 2px solid #db2828;
 }
 
-.ui.inverted.red.segment.segment.segment.segment.segment {
+.ui.ui.ui.ui.ui.inverted.red.segment {
   background-color: #db2828;
   color: #fff;
 }
 
-.ui.orange.segment.segment.segment.segment.segment:not(.inverted) {
+.ui.ui.inverted.red.segment:not(.piled) {
+  border-color: #db2828;
+}
+
+.ui.ui.ui.ui.ui.orange.segment:not(.inverted) {
   border-top: 2px solid #f2711c;
 }
 
-.ui.inverted.orange.segment.segment.segment.segment.segment {
+.ui.ui.ui.ui.ui.inverted.orange.segment {
   background-color: #f2711c;
   color: #fff;
 }
 
-.ui.yellow.segment.segment.segment.segment.segment:not(.inverted) {
+.ui.ui.inverted.orange.segment:not(.piled) {
+  border-color: #f2711c;
+}
+
+.ui.ui.ui.ui.ui.yellow.segment:not(.inverted) {
   border-top: 2px solid #fbbd08;
 }
 
-.ui.inverted.yellow.segment.segment.segment.segment.segment {
+.ui.ui.ui.ui.ui.inverted.yellow.segment {
   background-color: #fbbd08;
   color: #fff;
 }
 
-.ui.olive.segment.segment.segment.segment.segment:not(.inverted) {
+.ui.ui.inverted.yellow.segment:not(.piled) {
+  border-color: #fbbd08;
+}
+
+.ui.ui.ui.ui.ui.olive.segment:not(.inverted) {
   border-top: 2px solid #b5cc18;
 }
 
-.ui.inverted.olive.segment.segment.segment.segment.segment {
+.ui.ui.ui.ui.ui.inverted.olive.segment {
   background-color: #b5cc18;
   color: #fff;
 }
 
-.ui.green.segment.segment.segment.segment.segment:not(.inverted) {
+.ui.ui.inverted.olive.segment:not(.piled) {
+  border-color: #b5cc18;
+}
+
+.ui.ui.ui.ui.ui.green.segment:not(.inverted) {
   border-top: 2px solid #21ba45;
 }
 
-.ui.inverted.green.segment.segment.segment.segment.segment {
+.ui.ui.ui.ui.ui.inverted.green.segment {
   background-color: #21ba45;
   color: #fff;
 }
 
-.ui.teal.segment.segment.segment.segment.segment:not(.inverted) {
+.ui.ui.inverted.green.segment:not(.piled) {
+  border-color: #21ba45;
+}
+
+.ui.ui.ui.ui.ui.teal.segment:not(.inverted) {
   border-top: 2px solid #00b5ad;
 }
 
-.ui.inverted.teal.segment.segment.segment.segment.segment {
+.ui.ui.ui.ui.ui.inverted.teal.segment {
   background-color: #00b5ad;
   color: #fff;
 }
 
-.ui.blue.segment.segment.segment.segment.segment:not(.inverted) {
+.ui.ui.inverted.teal.segment:not(.piled) {
+  border-color: #00b5ad;
+}
+
+.ui.ui.ui.ui.ui.blue.segment:not(.inverted) {
   border-top: 2px solid #2185d0;
 }
 
-.ui.inverted.blue.segment.segment.segment.segment.segment {
+.ui.ui.ui.ui.ui.inverted.blue.segment {
   background-color: #2185d0;
   color: #fff;
 }
 
-.ui.violet.segment.segment.segment.segment.segment:not(.inverted) {
+.ui.ui.inverted.blue.segment:not(.piled) {
+  border-color: #2185d0;
+}
+
+.ui.ui.ui.ui.ui.violet.segment:not(.inverted) {
   border-top: 2px solid #6435c9;
 }
 
-.ui.inverted.violet.segment.segment.segment.segment.segment {
+.ui.ui.ui.ui.ui.inverted.violet.segment {
   background-color: #6435c9;
   color: #fff;
 }
 
-.ui.purple.segment.segment.segment.segment.segment:not(.inverted) {
+.ui.ui.inverted.violet.segment:not(.piled) {
+  border-color: #6435c9;
+}
+
+.ui.ui.ui.ui.ui.purple.segment:not(.inverted) {
   border-top: 2px solid #a333c8;
 }
 
-.ui.inverted.purple.segment.segment.segment.segment.segment {
+.ui.ui.ui.ui.ui.inverted.purple.segment {
   background-color: #a333c8;
   color: #fff;
 }
 
-.ui.pink.segment.segment.segment.segment.segment:not(.inverted) {
+.ui.ui.inverted.purple.segment:not(.piled) {
+  border-color: #a333c8;
+}
+
+.ui.ui.ui.ui.ui.pink.segment:not(.inverted) {
   border-top: 2px solid #e03997;
 }
 
-.ui.inverted.pink.segment.segment.segment.segment.segment {
+.ui.ui.ui.ui.ui.inverted.pink.segment {
   background-color: #e03997;
   color: #fff;
 }
 
-.ui.brown.segment.segment.segment.segment.segment:not(.inverted) {
+.ui.ui.inverted.pink.segment:not(.piled) {
+  border-color: #e03997;
+}
+
+.ui.ui.ui.ui.ui.brown.segment:not(.inverted) {
   border-top: 2px solid #a5673f;
 }
 
-.ui.inverted.brown.segment.segment.segment.segment.segment {
+.ui.ui.ui.ui.ui.inverted.brown.segment {
   background-color: #a5673f;
   color: #fff;
 }
 
-.ui.grey.segment.segment.segment.segment.segment:not(.inverted) {
+.ui.ui.inverted.brown.segment:not(.piled) {
+  border-color: #a5673f;
+}
+
+.ui.ui.ui.ui.ui.grey.segment:not(.inverted) {
   border-top: 2px solid #767676;
 }
 
-.ui.inverted.grey.segment.segment.segment.segment.segment {
+.ui.ui.ui.ui.ui.inverted.grey.segment {
   background-color: #767676;
   color: #fff;
 }
 
-.ui.black.segment.segment.segment.segment.segment:not(.inverted) {
+.ui.ui.inverted.grey.segment:not(.piled) {
+  border-color: #767676;
+}
+
+.ui.ui.ui.ui.ui.black.segment:not(.inverted) {
   border-top: 2px solid #1b1c1d;
 }
 
-.ui.inverted.black.segment.segment.segment.segment.segment {
+.ui.ui.ui.ui.ui.inverted.black.segment {
   background-color: #1b1c1d;
   color: #fff;
+}
+
+.ui.ui.inverted.black.segment:not(.piled) {
+  border-color: #1b1c1d;
 }
 
 /* -------------------
@@ -25597,20 +25753,40 @@ ol.ui.suffixed.list li::before,
     max-height: 11.25em;
   }
 
+  .ui.scrolling.segment.short.resizable {
+    height: 11.25em;
+  }
+
   .ui.scrolling.segment[class*="very short"] {
     max-height: 7.5em;
+  }
+
+  .ui.scrolling.segment[class*="very short"].resizable {
+    height: 7.5em;
   }
 
   .ui.scrolling.segment {
     max-height: 15em;
   }
 
+  .ui.scrolling.segment.resizable {
+    height: 15em;
+  }
+
   .ui.scrolling.segment.long {
     max-height: 30em;
   }
 
+  .ui.scrolling.segment.long.resizable {
+    height: 30em;
+  }
+
   .ui.scrolling.segment[class*="very long"] {
     max-height: 45em;
+  }
+
+  .ui.scrolling.segment[class*="very long"].resizable {
+    height: 45em;
   }
 }
 
@@ -25619,20 +25795,40 @@ ol.ui.suffixed.list li::before,
     max-height: 13.5em;
   }
 
+  .ui.scrolling.segment.short.resizable {
+    height: 13.5em;
+  }
+
   .ui.scrolling.segment[class*="very short"] {
     max-height: 9em;
+  }
+
+  .ui.scrolling.segment[class*="very short"].resizable {
+    height: 9em;
   }
 
   .ui.scrolling.segment {
     max-height: 18em;
   }
 
+  .ui.scrolling.segment.resizable {
+    height: 18em;
+  }
+
   .ui.scrolling.segment.long {
     max-height: 36em;
   }
 
+  .ui.scrolling.segment.long.resizable {
+    height: 36em;
+  }
+
   .ui.scrolling.segment[class*="very long"] {
     max-height: 54em;
+  }
+
+  .ui.scrolling.segment[class*="very long"].resizable {
+    height: 54em;
   }
 }
 
@@ -25641,20 +25837,40 @@ ol.ui.suffixed.list li::before,
     max-height: 18em;
   }
 
+  .ui.scrolling.segment.short.resizable {
+    height: 18em;
+  }
+
   .ui.scrolling.segment[class*="very short"] {
     max-height: 12em;
+  }
+
+  .ui.scrolling.segment[class*="very short"].resizable {
+    height: 12em;
   }
 
   .ui.scrolling.segment {
     max-height: 24em;
   }
 
+  .ui.scrolling.segment.resizable {
+    height: 24em;
+  }
+
   .ui.scrolling.segment.long {
     max-height: 48em;
   }
 
+  .ui.scrolling.segment.long.resizable {
+    height: 48em;
+  }
+
   .ui.scrolling.segment[class*="very long"] {
     max-height: 72em;
+  }
+
+  .ui.scrolling.segment[class*="very long"].resizable {
+    height: 72em;
   }
 }
 
@@ -25663,21 +25879,46 @@ ol.ui.suffixed.list li::before,
     max-height: 22.5em;
   }
 
+  .ui.scrolling.segment.short.resizable {
+    height: 22.5em;
+  }
+
   .ui.scrolling.segment[class*="very short"] {
     max-height: 15em;
+  }
+
+  .ui.scrolling.segment[class*="very short"].resizable {
+    height: 15em;
   }
 
   .ui.scrolling.segment {
     max-height: 30em;
   }
 
+  .ui.scrolling.segment.resizable {
+    height: 30em;
+  }
+
   .ui.scrolling.segment.long {
     max-height: 60em;
+  }
+
+  .ui.scrolling.segment.long.resizable {
+    height: 60em;
   }
 
   .ui.scrolling.segment[class*="very long"] {
     max-height: 90em;
   }
+
+  .ui.scrolling.segment[class*="very long"].resizable {
+    height: 90em;
+  }
+}
+
+.ui.resizable.scrolling.segment {
+  resize: vertical;
+  max-height: none;
 }
 
 /* -------------------
@@ -27305,6 +27546,12 @@ span.ui.massive.text {
   color: #9f3a38;
 }
 
+@supports selector(:has(.f)) {
+  .ui.form .fields:has(.error) > label {
+    color: #9f3a38;
+  }
+}
+
 .ui.form .fields.error .field .ui.label,
 .ui.form .field.error .ui.label {
   background-color: #ecd1d1;
@@ -27357,23 +27604,7 @@ span.ui.massive.text {
   box-shadow: none;
 }
 
-.ui.form .field input:not(:-ms-input-placeholder):invalid {
-  color: #9f3a38;
-  background: #fff6f6;
-  border-color: #e0b4b4;
-  border-radius: "";
-  box-shadow: none;
-}
-
-.ui.form .field input:not(:placeholder-shown):invalid {
-  color: #9f3a38;
-  background: #fff6f6;
-  border-color: #e0b4b4;
-  border-radius: "";
-  box-shadow: none;
-}
-
-.ui.form .field input:not(:-ms-input-placeholder):invalid {
+.ui.form:not(.initial) .field input:invalid {
   color: #9f3a38;
   background: #fff6f6;
   border-color: #e0b4b4;
@@ -27545,6 +27776,12 @@ span.ui.massive.text {
   color: #ecd1d1;
 }
 
+@supports selector(:has(.f)) {
+  .ui.inverted.form .fields:has(.error) > label {
+    color: #ecd1d1;
+  }
+}
+
 /* On Form */
 
 .ui.form.info .info.message:not(:empty) {
@@ -27583,6 +27820,12 @@ span.ui.massive.text {
 .ui.ui.form .fields.info .field .input,
 .ui.ui.form .field.info .input {
   color: #276f86;
+}
+
+@supports selector(:has(.f)) {
+  .ui.form .fields:has(.info) > label {
+    color: #276f86;
+  }
 }
 
 .ui.form .fields.info .field .ui.label,
@@ -27801,6 +28044,12 @@ span.ui.massive.text {
   color: #c6e3e9;
 }
 
+@supports selector(:has(.f)) {
+  .ui.inverted.form .fields:has(.info) > label {
+    color: #c6e3e9;
+  }
+}
+
 /* On Form */
 
 .ui.form.success .success.message:not(:empty) {
@@ -27839,6 +28088,12 @@ span.ui.massive.text {
 .ui.ui.form .fields.success .field .input,
 .ui.ui.form .field.success .input {
   color: #2c662d;
+}
+
+@supports selector(:has(.f)) {
+  .ui.form .fields:has(.success) > label {
+    color: #2c662d;
+  }
 }
 
 .ui.form .fields.success .field .ui.label,
@@ -28057,6 +28312,12 @@ span.ui.massive.text {
   color: #b9d1ad;
 }
 
+@supports selector(:has(.f)) {
+  .ui.inverted.form .fields:has(.success) > label {
+    color: #b9d1ad;
+  }
+}
+
 /* On Form */
 
 .ui.form.warning .warning.message:not(:empty) {
@@ -28095,6 +28356,12 @@ span.ui.massive.text {
 .ui.ui.form .fields.warning .field .input,
 .ui.ui.form .field.warning .input {
   color: #573a08;
+}
+
+@supports selector(:has(.f)) {
+  .ui.form .fields:has(.warning) > label {
+    color: #573a08;
+  }
 }
 
 .ui.form .fields.warning .field .ui.label,
@@ -28313,6 +28580,12 @@ span.ui.massive.text {
   color: #d7ccb5;
 }
 
+@supports selector(:has(.f)) {
+  .ui.inverted.form .fields:has(.warning) > label {
+    color: #d7ccb5;
+  }
+}
+
 /* --------------------
            Disabled
     --------------------- */
@@ -28382,10 +28655,11 @@ span.ui.massive.text {
          Required Field
     --------------------- */
 
-.ui.form .required.fields:not(.grouped) > .field > label::after,
+.ui.form .required.fields:not(.grouped):not(.inline) > .field > label::after,
+.ui.form .required.fields.inline > label::after,
 .ui.form .required.fields.grouped > label::after,
 .ui.form .required.field > label::after,
-.ui.form .required.fields:not(.grouped) > .field > .checkbox::after,
+.ui.form .required.fields:not(.grouped):not(.inline) > .field > .checkbox::after,
 .ui.form .required.field > .checkbox::after,
 .ui.form label.required::after {
   margin: -0.2em 0 0 0.2em;
@@ -28393,7 +28667,8 @@ span.ui.massive.text {
   color: #db2828;
 }
 
-.ui.form .required.fields:not(.grouped) > .field > label::after,
+.ui.form .required.fields:not(.grouped):not(.inline) > .field > label::after,
+.ui.form .required.fields.inline > label::after,
 .ui.form .required.fields.grouped > label::after,
 .ui.form .required.field > label::after,
 .ui.form label.required::after {
@@ -28401,11 +28676,17 @@ span.ui.massive.text {
   vertical-align: top;
 }
 
-.ui.form .required.fields:not(.grouped) > .field > .checkbox::after,
+.ui.form .required.fields:not(.grouped):not(.inline) > .field > .checkbox::after,
 .ui.form .required.field > .checkbox::after {
   position: absolute;
   top: 0;
   left: 100%;
+}
+
+.ui.ui.ui.ui.form .fields > label:empty::after,
+.ui.ui.ui.ui.form .field > label:empty::after {
+  content: " ";
+  display: inline-block;
 }
 
 /*******************************
@@ -30186,8 +30467,8 @@ span.ui.massive.text {
 .ui[class*="left aligned"].grid > .column,
 .ui[class*="left aligned"].grid > .row > .column,
 .ui.grid > [class*="left aligned"].row > .column,
-.ui.grid > [class*="left aligned"].column.column,
-.ui.grid > .row > [class*="left aligned"].column.column {
+.ui.ui.grid > [class*="left aligned"].column,
+.ui.ui.grid > .row > [class*="left aligned"].column {
   text-align: left;
   align-self: inherit;
 }
@@ -30197,8 +30478,8 @@ span.ui.massive.text {
 .ui[class*="center aligned"].grid > .column,
 .ui[class*="center aligned"].grid > .row > .column,
 .ui.grid > [class*="center aligned"].row > .column,
-.ui.grid > [class*="center aligned"].column.column,
-.ui.grid > .row > [class*="center aligned"].column.column {
+.ui.ui.grid > [class*="center aligned"].column,
+.ui.ui.grid > .row > [class*="center aligned"].column {
   text-align: center;
   align-self: inherit;
 }
@@ -30212,8 +30493,8 @@ span.ui.massive.text {
 .ui[class*="right aligned"].grid > .column,
 .ui[class*="right aligned"].grid > .row > .column,
 .ui.grid > [class*="right aligned"].row > .column,
-.ui.grid > [class*="right aligned"].column.column,
-.ui.grid > .row > [class*="right aligned"].column.column {
+.ui.ui.grid > [class*="right aligned"].column,
+.ui.ui.grid > .row > [class*="right aligned"].column {
   text-align: right;
   align-self: inherit;
 }
@@ -30223,8 +30504,8 @@ span.ui.massive.text {
 .ui.justified.grid > .column,
 .ui.justified.grid > .row > .column,
 .ui.grid > .justified.row > .column,
-.ui.grid > .justified.column.column,
-.ui.grid > .row > .justified.column.column {
+.ui.ui.grid > .justified.column,
+.ui.ui.grid > .row > .justified.column {
   text-align: justify;
   -webkit-hyphens: auto;
   -ms-hyphens: auto;
@@ -30532,91 +30813,91 @@ span.ui.massive.text {
 
   .ui[class*="two column"].doubling.grid > .row > .column,
   .ui[class*="two column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="two column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="two column"].doubling.row > .column {
     width: 100% !important;
   }
 
   .ui[class*="three column"].doubling.grid > .row > .column,
   .ui[class*="three column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="three column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="three column"].doubling.row > .column {
     width: 50% !important;
   }
 
   .ui[class*="four column"].doubling.grid > .row > .column,
   .ui[class*="four column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="four column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="four column"].doubling.row > .column {
     width: 50% !important;
   }
 
   .ui[class*="five column"].doubling.grid > .row > .column,
   .ui[class*="five column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="five column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="five column"].doubling.row > .column {
     width: 33.33333333% !important;
   }
 
   .ui[class*="six column"].doubling.grid > .row > .column,
   .ui[class*="six column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="six column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="six column"].doubling.row > .column {
     width: 33.33333333% !important;
   }
 
   .ui[class*="seven column"].doubling.grid > .row > .column,
   .ui[class*="seven column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="seven column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="seven column"].doubling.row > .column {
     width: 33.33333333% !important;
   }
 
   .ui[class*="eight column"].doubling.grid > .row > .column,
   .ui[class*="eight column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="eight column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="eight column"].doubling.row > .column {
     width: 25% !important;
   }
 
   .ui[class*="nine column"].doubling.grid > .row > .column,
   .ui[class*="nine column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="nine column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="nine column"].doubling.row > .column {
     width: 25% !important;
   }
 
   .ui[class*="ten column"].doubling.grid > .row > .column,
   .ui[class*="ten column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="ten column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="ten column"].doubling.row > .column {
     width: 20% !important;
   }
 
   .ui[class*="eleven column"].doubling.grid > .row > .column,
   .ui[class*="eleven column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="eleven column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="eleven column"].doubling.row > .column {
     width: 20% !important;
   }
 
   .ui[class*="twelve column"].doubling.grid > .row > .column,
   .ui[class*="twelve column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="twelve column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="twelve column"].doubling.row > .column {
     width: 16.66666667% !important;
   }
 
   .ui[class*="thirteen column"].doubling.grid > .row > .column,
   .ui[class*="thirteen column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="thirteen column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="thirteen column"].doubling.row > .column {
     width: 16.66666667% !important;
   }
 
   .ui[class*="fourteen column"].doubling.grid > .row > .column,
   .ui[class*="fourteen column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="fourteen column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="fourteen column"].doubling.row > .column {
     width: 14.28571429% !important;
   }
 
   .ui[class*="fifteen column"].doubling.grid > .row > .column,
   .ui[class*="fifteen column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="fifteen column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="fifteen column"].doubling.row > .column {
     width: 14.28571429% !important;
   }
 
   .ui[class*="sixteen column"].doubling.grid > .row > .column,
   .ui[class*="sixteen column"].doubling.grid > .column:not(.row),
-  .ui.grid > [class*="sixteen column"].doubling.row.row > .column {
+  .ui.ui.grid > [class*="sixteen column"].doubling.row > .column {
     width: 12.5% !important;
   }
 }
@@ -30640,91 +30921,91 @@ span.ui.massive.text {
 
   .ui[class*="two column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="two column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="two column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="two column"].doubling:not(.stackable).row > .column {
     width: 100% !important;
   }
 
   .ui[class*="three column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="three column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="three column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="three column"].doubling:not(.stackable).row > .column {
     width: 50% !important;
   }
 
   .ui[class*="four column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="four column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="four column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="four column"].doubling:not(.stackable).row > .column {
     width: 50% !important;
   }
 
   .ui[class*="five column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="five column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="five column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="five column"].doubling:not(.stackable).row > .column {
     width: 50% !important;
   }
 
   .ui[class*="six column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="six column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="six column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="six column"].doubling:not(.stackable).row > .column {
     width: 50% !important;
   }
 
   .ui[class*="seven column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="seven column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="seven column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="seven column"].doubling:not(.stackable).row > .column {
     width: 50% !important;
   }
 
   .ui[class*="eight column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="eight column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="eight column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="eight column"].doubling:not(.stackable).row > .column {
     width: 50% !important;
   }
 
   .ui[class*="nine column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="nine column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="nine column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="nine column"].doubling:not(.stackable).row > .column {
     width: 33.33333333% !important;
   }
 
   .ui[class*="ten column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="ten column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="ten column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="ten column"].doubling:not(.stackable).row > .column {
     width: 33.33333333% !important;
   }
 
   .ui[class*="eleven column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="eleven column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="eleven column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="eleven column"].doubling:not(.stackable).row > .column {
     width: 33.33333333% !important;
   }
 
   .ui[class*="twelve column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="twelve column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="twelve column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="twelve column"].doubling:not(.stackable).row > .column {
     width: 33.33333333% !important;
   }
 
   .ui[class*="thirteen column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="thirteen column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="thirteen column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="thirteen column"].doubling:not(.stackable).row > .column {
     width: 33.33333333% !important;
   }
 
   .ui[class*="fourteen column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="fourteen column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="fourteen column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="fourteen column"].doubling:not(.stackable).row > .column {
     width: 25% !important;
   }
 
   .ui[class*="fifteen column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="fifteen column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="fifteen column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="fifteen column"].doubling:not(.stackable).row > .column {
     width: 25% !important;
   }
 
   .ui[class*="sixteen column"].doubling:not(.stackable).grid > .row > .column,
   .ui[class*="sixteen column"].doubling:not(.stackable).grid > .column:not(.row),
-  .ui.grid > [class*="sixteen column"].doubling:not(.stackable).row.row > .column {
+  .ui.ui.grid > [class*="sixteen column"].doubling:not(.stackable).row > .column {
     width: 25% !important;
   }
 }
@@ -30821,31 +31102,31 @@ span.ui.massive.text {
 /* Mobile Only Hide */
 
 @media only screen and (max-width: 767.98px) {
-  .ui[class*="tablet only"].grid.grid.grid:not(.mobile),
-  .ui.grid.grid.grid > [class*="tablet only"].row:not(.mobile),
-  .ui.grid.grid.grid > [class*="tablet only"].column:not(.mobile),
-  .ui.grid.grid.grid > .row > [class*="tablet only"].column:not(.mobile) {
+  .ui.ui.ui[class*="tablet only"].grid:not(.mobile),
+  .ui.ui.ui.grid > [class*="tablet only"].row:not(.mobile),
+  .ui.ui.ui.grid > [class*="tablet only"].column:not(.mobile),
+  .ui.ui.ui.grid > .row > [class*="tablet only"].column:not(.mobile) {
     display: none !important;
   }
 
-  .ui[class*="computer only"].grid.grid.grid:not(.mobile),
-  .ui.grid.grid.grid > [class*="computer only"].row:not(.mobile),
-  .ui.grid.grid.grid > [class*="computer only"].column:not(.mobile),
-  .ui.grid.grid.grid > .row > [class*="computer only"].column:not(.mobile) {
+  .ui.ui.ui[class*="computer only"].grid:not(.mobile),
+  .ui.ui.ui.grid > [class*="computer only"].row:not(.mobile),
+  .ui.ui.ui.grid > [class*="computer only"].column:not(.mobile),
+  .ui.ui.ui.grid > .row > [class*="computer only"].column:not(.mobile) {
     display: none !important;
   }
 
-  .ui[class*="large screen only"].grid.grid.grid:not(.mobile),
-  .ui.grid.grid.grid > [class*="large screen only"].row:not(.mobile),
-  .ui.grid.grid.grid > [class*="large screen only"].column:not(.mobile),
-  .ui.grid.grid.grid > .row > [class*="large screen only"].column:not(.mobile) {
+  .ui.ui.ui[class*="large screen only"].grid:not(.mobile),
+  .ui.ui.ui.grid > [class*="large screen only"].row:not(.mobile),
+  .ui.ui.ui.grid > [class*="large screen only"].column:not(.mobile),
+  .ui.ui.ui.grid > .row > [class*="large screen only"].column:not(.mobile) {
     display: none !important;
   }
 
-  .ui[class*="widescreen only"].grid.grid.grid:not(.mobile),
-  .ui.grid.grid.grid > [class*="widescreen only"].row:not(.mobile),
-  .ui.grid.grid.grid > [class*="widescreen only"].column:not(.mobile),
-  .ui.grid.grid.grid > .row > [class*="widescreen only"].column:not(.mobile) {
+  .ui.ui.ui[class*="widescreen only"].grid:not(.mobile),
+  .ui.ui.ui.grid > [class*="widescreen only"].row:not(.mobile),
+  .ui.ui.ui.grid > [class*="widescreen only"].column:not(.mobile),
+  .ui.ui.ui.grid > .row > [class*="widescreen only"].column:not(.mobile) {
     display: none !important;
   }
 }
@@ -30853,31 +31134,31 @@ span.ui.massive.text {
 /* Tablet Only Hide */
 
 @media only screen and (min-width: 768px) and (max-width: 991.98px) {
-  .ui[class*="mobile only"].grid.grid.grid:not(.tablet),
-  .ui.grid.grid.grid > [class*="mobile only"].row:not(.tablet),
-  .ui.grid.grid.grid > [class*="mobile only"].column:not(.tablet),
-  .ui.grid.grid.grid > .row > [class*="mobile only"].column:not(.tablet) {
+  .ui.ui.ui[class*="mobile only"].grid:not(.tablet),
+  .ui.ui.ui.grid > [class*="mobile only"].row:not(.tablet),
+  .ui.ui.ui.grid > [class*="mobile only"].column:not(.tablet),
+  .ui.ui.ui.grid > .row > [class*="mobile only"].column:not(.tablet) {
     display: none !important;
   }
 
-  .ui[class*="computer only"].grid.grid.grid:not(.tablet),
-  .ui.grid.grid.grid > [class*="computer only"].row:not(.tablet),
-  .ui.grid.grid.grid > [class*="computer only"].column:not(.tablet),
-  .ui.grid.grid.grid > .row > [class*="computer only"].column:not(.tablet) {
+  .ui.ui.ui[class*="computer only"].grid:not(.tablet),
+  .ui.ui.ui.grid > [class*="computer only"].row:not(.tablet),
+  .ui.ui.ui.grid > [class*="computer only"].column:not(.tablet),
+  .ui.ui.ui.grid > .row > [class*="computer only"].column:not(.tablet) {
     display: none !important;
   }
 
-  .ui[class*="large screen only"].grid.grid.grid:not(.mobile),
-  .ui.grid.grid.grid > [class*="large screen only"].row:not(.mobile),
-  .ui.grid.grid.grid > [class*="large screen only"].column:not(.mobile),
-  .ui.grid.grid.grid > .row > [class*="large screen only"].column:not(.mobile) {
+  .ui.ui.ui[class*="large screen only"].grid:not(.mobile),
+  .ui.ui.ui.grid > [class*="large screen only"].row:not(.mobile),
+  .ui.ui.ui.grid > [class*="large screen only"].column:not(.mobile),
+  .ui.ui.ui.grid > .row > [class*="large screen only"].column:not(.mobile) {
     display: none !important;
   }
 
-  .ui[class*="widescreen only"].grid.grid.grid:not(.mobile),
-  .ui.grid.grid.grid > [class*="widescreen only"].row:not(.mobile),
-  .ui.grid.grid.grid > [class*="widescreen only"].column:not(.mobile),
-  .ui.grid.grid.grid > .row > [class*="widescreen only"].column:not(.mobile) {
+  .ui.ui.ui[class*="widescreen only"].grid:not(.mobile),
+  .ui.ui.ui.grid > [class*="widescreen only"].row:not(.mobile),
+  .ui.ui.ui.grid > [class*="widescreen only"].column:not(.mobile),
+  .ui.ui.ui.grid > .row > [class*="widescreen only"].column:not(.mobile) {
     display: none !important;
   }
 }
@@ -30885,31 +31166,31 @@ span.ui.massive.text {
 /* Computer Only Hide */
 
 @media only screen and (min-width: 992px) and (max-width: 1199.98px) {
-  .ui[class*="mobile only"].grid.grid.grid:not(.computer),
-  .ui.grid.grid.grid > [class*="mobile only"].row:not(.computer),
-  .ui.grid.grid.grid > [class*="mobile only"].column:not(.computer),
-  .ui.grid.grid.grid > .row > [class*="mobile only"].column:not(.computer) {
+  .ui.ui.ui[class*="mobile only"].grid:not(.computer),
+  .ui.ui.ui.grid > [class*="mobile only"].row:not(.computer),
+  .ui.ui.ui.grid > [class*="mobile only"].column:not(.computer),
+  .ui.ui.ui.grid > .row > [class*="mobile only"].column:not(.computer) {
     display: none !important;
   }
 
-  .ui[class*="tablet only"].grid.grid.grid:not(.computer),
-  .ui.grid.grid.grid > [class*="tablet only"].row:not(.computer),
-  .ui.grid.grid.grid > [class*="tablet only"].column:not(.computer),
-  .ui.grid.grid.grid > .row > [class*="tablet only"].column:not(.computer) {
+  .ui.ui.ui[class*="tablet only"].grid:not(.computer),
+  .ui.ui.ui.grid > [class*="tablet only"].row:not(.computer),
+  .ui.ui.ui.grid > [class*="tablet only"].column:not(.computer),
+  .ui.ui.ui.grid > .row > [class*="tablet only"].column:not(.computer) {
     display: none !important;
   }
 
-  .ui[class*="large screen only"].grid.grid.grid:not(.mobile),
-  .ui.grid.grid.grid > [class*="large screen only"].row:not(.mobile),
-  .ui.grid.grid.grid > [class*="large screen only"].column:not(.mobile),
-  .ui.grid.grid.grid > .row > [class*="large screen only"].column:not(.mobile) {
+  .ui.ui.ui[class*="large screen only"].grid:not(.mobile),
+  .ui.ui.ui.grid > [class*="large screen only"].row:not(.mobile),
+  .ui.ui.ui.grid > [class*="large screen only"].column:not(.mobile),
+  .ui.ui.ui.grid > .row > [class*="large screen only"].column:not(.mobile) {
     display: none !important;
   }
 
-  .ui[class*="widescreen only"].grid.grid.grid:not(.mobile),
-  .ui.grid.grid.grid > [class*="widescreen only"].row:not(.mobile),
-  .ui.grid.grid.grid > [class*="widescreen only"].column:not(.mobile),
-  .ui.grid.grid.grid > .row > [class*="widescreen only"].column:not(.mobile) {
+  .ui.ui.ui[class*="widescreen only"].grid:not(.mobile),
+  .ui.ui.ui.grid > [class*="widescreen only"].row:not(.mobile),
+  .ui.ui.ui.grid > [class*="widescreen only"].column:not(.mobile),
+  .ui.ui.ui.grid > .row > [class*="widescreen only"].column:not(.mobile) {
     display: none !important;
   }
 }
@@ -30917,24 +31198,24 @@ span.ui.massive.text {
 /* Large Screen Only Hide */
 
 @media only screen and (min-width: 1200px) and (max-width: 1919.98px) {
-  .ui[class*="mobile only"].grid.grid.grid:not(.computer),
-  .ui.grid.grid.grid > [class*="mobile only"].row:not(.computer),
-  .ui.grid.grid.grid > [class*="mobile only"].column:not(.computer),
-  .ui.grid.grid.grid > .row > [class*="mobile only"].column:not(.computer) {
+  .ui.ui.ui[class*="mobile only"].grid:not(.computer),
+  .ui.ui.ui.grid > [class*="mobile only"].row:not(.computer),
+  .ui.ui.ui.grid > [class*="mobile only"].column:not(.computer),
+  .ui.ui.ui.grid > .row > [class*="mobile only"].column:not(.computer) {
     display: none !important;
   }
 
-  .ui[class*="tablet only"].grid.grid.grid:not(.computer),
-  .ui.grid.grid.grid > [class*="tablet only"].row:not(.computer),
-  .ui.grid.grid.grid > [class*="tablet only"].column:not(.computer),
-  .ui.grid.grid.grid > .row > [class*="tablet only"].column:not(.computer) {
+  .ui.ui.ui[class*="tablet only"].grid:not(.computer),
+  .ui.ui.ui.grid > [class*="tablet only"].row:not(.computer),
+  .ui.ui.ui.grid > [class*="tablet only"].column:not(.computer),
+  .ui.ui.ui.grid > .row > [class*="tablet only"].column:not(.computer) {
     display: none !important;
   }
 
-  .ui[class*="widescreen only"].grid.grid.grid:not(.mobile),
-  .ui.grid.grid.grid > [class*="widescreen only"].row:not(.mobile),
-  .ui.grid.grid.grid > [class*="widescreen only"].column:not(.mobile),
-  .ui.grid.grid.grid > .row > [class*="widescreen only"].column:not(.mobile) {
+  .ui.ui.ui[class*="widescreen only"].grid:not(.mobile),
+  .ui.ui.ui.grid > [class*="widescreen only"].row:not(.mobile),
+  .ui.ui.ui.grid > [class*="widescreen only"].column:not(.mobile),
+  .ui.ui.ui.grid > .row > [class*="widescreen only"].column:not(.mobile) {
     display: none !important;
   }
 }
@@ -30942,17 +31223,17 @@ span.ui.massive.text {
 /* Widescreen Only Hide */
 
 @media only screen and (min-width: 1920px) {
-  .ui[class*="mobile only"].grid.grid.grid:not(.computer),
-  .ui.grid.grid.grid > [class*="mobile only"].row:not(.computer),
-  .ui.grid.grid.grid > [class*="mobile only"].column:not(.computer),
-  .ui.grid.grid.grid > .row > [class*="mobile only"].column:not(.computer) {
+  .ui.ui.ui[class*="mobile only"].grid:not(.computer),
+  .ui.ui.ui.grid > [class*="mobile only"].row:not(.computer),
+  .ui.ui.ui.grid > [class*="mobile only"].column:not(.computer),
+  .ui.ui.ui.grid > .row > [class*="mobile only"].column:not(.computer) {
     display: none !important;
   }
 
-  .ui[class*="tablet only"].grid.grid.grid:not(.computer),
-  .ui.grid.grid.grid > [class*="tablet only"].row:not(.computer),
-  .ui.grid.grid.grid > [class*="tablet only"].column:not(.computer),
-  .ui.grid.grid.grid > .row > [class*="tablet only"].column:not(.computer) {
+  .ui.ui.ui[class*="tablet only"].grid:not(.computer),
+  .ui.ui.ui.grid > [class*="tablet only"].row:not(.computer),
+  .ui.ui.ui.grid > [class*="tablet only"].column:not(.computer),
+  .ui.ui.ui.grid > .row > [class*="tablet only"].column:not(.computer) {
     display: none !important;
   }
 }
@@ -33033,9 +33314,14 @@ Floated Menu / Item
 }
 
 /* -------------------
-      Evenly Sized
--------------------- */
+          Evenly Sized
+    -------------------- */
 
+.ui[class*="equal width"].menu > .item {
+  flex: 1;
+}
+
+.ui[class*="equal width"].menu > .item,
 .ui.item.menu,
 .ui.item.menu .item {
   width: 100%;
@@ -33047,10 +33333,12 @@ Floated Menu / Item
   justify-content: center;
 }
 
+.ui.attached[class*="equal width"].menu:not(.tabular),
 .ui.attached.item.menu:not(.tabular) {
   margin: 0 -1px !important;
 }
 
+.ui[class*="equal width"].menu > .item:last-child::before,
 .ui.item.menu .item:last-child::before {
   display: none;
 }
@@ -33411,16 +33699,16 @@ Floated Menu / Item
   display: none;
 }
 
-.ui.wrapping.menu:not(.tabular) .item:last-of-type,
-.ui.wrapping.menu:not(.tabular) .item:last-child {
+.ui.wrapping.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) .item:last-of-type,
+.ui.wrapping.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) .item:last-child {
   border-right: 1px solid rgba(34, 36, 38, 0.1);
 }
 
-.ui.wrapped.menu:not(.tabular) .item:first-child {
+.ui.wrapped.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) .item:first-child {
   border-bottom-left-radius: 0;
 }
 
-.ui.wrapped.menu:not(.tabular) .item:last-child {
+.ui.wrapped.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) .item:last-child {
   border-top-right-radius: 0;
 }
 
@@ -34777,20 +35065,40 @@ Floated Menu / Item
     max-height: 6.74983929em;
   }
 
+  .resizable.ui.scrolling.table.short > tbody {
+    height: 6.74983929em;
+  }
+
   .ui.scrolling.table[class*="very short"] > tbody {
     max-height: 4.49989286em;
+  }
+
+  .resizable.ui.scrolling.table[class*="very short"] > tbody {
+    height: 4.49989286em;
   }
 
   .ui.scrolling.table > tbody {
     max-height: 8.99978571em;
   }
 
+  .resizable.ui.scrolling.table > tbody {
+    height: 8.99978571em;
+  }
+
   .ui.scrolling.table.long > tbody {
     max-height: 17.99957143em;
   }
 
+  .resizable.ui.scrolling.table.long > tbody {
+    height: 17.99957143em;
+  }
+
   .ui.scrolling.table[class*="very long"] > tbody {
     max-height: 26.99935714em;
+  }
+
+  .resizable.ui.scrolling.table[class*="very long"] > tbody {
+    height: 26.99935714em;
   }
 
   .ui.overflowing.table.short {
@@ -34823,20 +35131,40 @@ Floated Menu / Item
     max-height: 8.99978571em;
   }
 
+  .resizable.ui.scrolling.table.short > tbody {
+    height: 8.99978571em;
+  }
+
   .ui.scrolling.table[class*="very short"] > tbody {
     max-height: 5.99985714em;
+  }
+
+  .resizable.ui.scrolling.table[class*="very short"] > tbody {
+    height: 5.99985714em;
   }
 
   .ui.scrolling.table > tbody {
     max-height: 11.99971429em;
   }
 
+  .resizable.ui.scrolling.table > tbody {
+    height: 11.99971429em;
+  }
+
   .ui.scrolling.table.long > tbody {
     max-height: 23.99942857em;
   }
 
+  .resizable.ui.scrolling.table.long > tbody {
+    height: 23.99942857em;
+  }
+
   .ui.scrolling.table[class*="very long"] > tbody {
     max-height: 35.99914286em;
+  }
+
+  .resizable.ui.scrolling.table[class*="very long"] > tbody {
+    height: 35.99914286em;
   }
 }
 
@@ -34845,20 +35173,40 @@ Floated Menu / Item
     max-height: 13.49967857em;
   }
 
+  .resizable.ui.scrolling.table.short > tbody {
+    height: 13.49967857em;
+  }
+
   .ui.scrolling.table[class*="very short"] > tbody {
     max-height: 8.99978571em;
+  }
+
+  .resizable.ui.scrolling.table[class*="very short"] > tbody {
+    height: 8.99978571em;
   }
 
   .ui.scrolling.table > tbody {
     max-height: 17.99957143em;
   }
 
+  .resizable.ui.scrolling.table > tbody {
+    height: 17.99957143em;
+  }
+
   .ui.scrolling.table.long > tbody {
     max-height: 35.99914286em;
   }
 
+  .resizable.ui.scrolling.table.long > tbody {
+    height: 35.99914286em;
+  }
+
   .ui.scrolling.table[class*="very long"] > tbody {
     max-height: 53.99871429em;
+  }
+
+  .resizable.ui.scrolling.table[class*="very long"] > tbody {
+    height: 53.99871429em;
   }
 }
 
@@ -34867,20 +35215,40 @@ Floated Menu / Item
     max-height: 17.99957143em;
   }
 
+  .resizable.ui.scrolling.table.short > tbody {
+    height: 17.99957143em;
+  }
+
   .ui.scrolling.table[class*="very short"] > tbody {
     max-height: 11.99971429em;
+  }
+
+  .resizable.ui.scrolling.table[class*="very short"] > tbody {
+    height: 11.99971429em;
   }
 
   .ui.scrolling.table > tbody {
     max-height: 23.99942857em;
   }
 
+  .resizable.ui.scrolling.table > tbody {
+    height: 23.99942857em;
+  }
+
   .ui.scrolling.table.long > tbody {
     max-height: 47.99885714em;
   }
 
+  .resizable.ui.scrolling.table.long > tbody {
+    height: 47.99885714em;
+  }
+
   .ui.scrolling.table[class*="very long"] > tbody {
     max-height: 71.99828571em;
+  }
+
+  .resizable.ui.scrolling.table[class*="very long"] > tbody {
+    height: 71.99828571em;
   }
 }
 
@@ -34988,6 +35356,11 @@ Floated Menu / Item
   scrollbar-arrow-color: #323232;
   /* firefox: first color thumb, second track */
   scrollbar-color: rgba(255, 255, 255, 0.25) rgba(255, 255, 255, 0.1);
+}
+
+.ui.resizable.scrolling.table > tbody {
+  resize: vertical;
+  max-height: none;
 }
 
 /* --------------
@@ -40996,6 +41369,12 @@ a.inverted.ui.card:hover,
   box-shadow: -1px 0 0 #555;
 }
 
+.ui.disabled.comments,
+.ui.comments .disabled.comment {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
 /*******************************
          Theme Overrides
 *******************************/
@@ -41928,6 +42307,12 @@ a.inverted.ui.card:hover,
 
 .ui.inverted.divided.items > .item:first-child {
   border-top: none;
+}
+
+.ui.disabled.items,
+.ui.items > .disabled.item {
+  opacity: 0.45;
+  pointer-events: none;
 }
 
 /*******************************
@@ -43254,9 +43639,12 @@ a.inverted.ui.card:hover,
   cursor: auto;
   position: relative;
   display: block;
-  padding-left: 1.85714em;
   outline: none;
   font-size: 1em;
+}
+
+.ui.checkbox:not(.invisible) label {
+  padding-left: 1.85714em;
 }
 
 .ui.checkbox label::before {
@@ -43331,8 +43719,8 @@ a.inverted.ui.card:hover,
   border-color: rgba(34, 36, 38, 0.35);
 }
 
-.ui.checkbox label:hover,
-.ui.checkbox + label:hover {
+.ui.checkbox:not(.invisible) label:hover,
+.ui.checkbox:not(.invisible) + label:hover {
   color: rgba(0, 0, 0, 0.8);
 }
 
@@ -43349,7 +43737,7 @@ a.inverted.ui.card:hover,
   color: rgba(0, 0, 0, 0.95);
 }
 
-.ui.checkbox input:active ~ label {
+.ui.checkbox:not(.invisible) input:active ~ label {
   color: rgba(0, 0, 0, 0.95);
 }
 
@@ -43366,7 +43754,7 @@ a.inverted.ui.card:hover,
   color: rgba(0, 0, 0, 0.95);
 }
 
-.ui.checkbox input:focus ~ label {
+.ui.checkbox:not(.invisible) input:focus ~ label {
   color: rgba(0, 0, 0, 0.95);
 }
 
@@ -43896,6 +44284,58 @@ a.inverted.ui.card:hover,
   background-color: #0d71bb;
 }
 
+/* --------------
+         Invisible
+    --------------- */
+
+.ui.invisible.checkbox:not(.compact) {
+  display: block;
+}
+
+.ui.invisible.checkbox input {
+  left: -99999px;
+  position: absolute;
+}
+
+.ui.invisible.checkbox label::before,
+.ui.invisible.checkbox label::after {
+  display: none;
+}
+
+.ui.invisible.checkbox label {
+  transition: all 0.1s ease;
+}
+
+.ui.ui.ui.ui.ui.invisible.checkbox input:not(:checked) + label {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.15) inset;
+  color: inherit;
+}
+
+.ui.ui.ui.ui.ui.invisible.checkbox input:not(:checked):not(:hover):focus + label:not(.image) {
+  box-shadow: 0 0 0 1px rgba(34, 36, 38, 0.35) inset;
+}
+
+.ui.ui.ui.ui.ui.invisible.checkbox input:not(:checked) + label.image,
+.basic.ui.ui.ui.ui.ui.invisible.checkbox input:not(:checked) + label {
+  box-shadow: none;
+}
+
+.ui.invisible.checkbox input:not(:checked) + label.image {
+  opacity: 0.5;
+  filter: grayscale(1);
+}
+
+.ui.invisible.checkbox input:not(:checked):not(:hover):focus + label.image {
+  opacity: 0.75;
+}
+
+.ui.invisible.checkbox input:not(:checked)[disabled] + label.image,
+.disabled.ui.invisible.checkbox input:not(:checked) + label.image {
+  opacity: 0.25;
+}
+
 /* --------------------
         Size
 --------------------- */
@@ -44257,7 +44697,7 @@ body.dimmable > .dimmer {
   background: rgba(0, 0, 0, 0.45);
 }
 
-.very.light.light.light.light.dimmer {
+.very.very.very.very.light.dimmer {
   background: rgba(0, 0, 0, 0.25);
 }
 
@@ -44286,7 +44726,7 @@ body.dimmable > .dimmer {
   background: rgba(255, 255, 255, 0.45);
 }
 
-.very.light.light.light.light.inverted.dimmer {
+.very.very.very.very.light.inverted.dimmer {
   background: rgba(255, 255, 255, 0.25);
 }
 
@@ -45306,7 +45746,7 @@ select.ui.dropdown {
   margin-left: 1.5em;
 }
 
-.ui.dropdown:not(.selection) > .remove.icon {
+.ui.dropdown:not(.selection):not(.multiple) > .remove.icon {
   margin-top: -1.35em;
 }
 
@@ -45379,6 +45819,19 @@ select.ui.dropdown {
   height: 1.71428571em;
 }
 
+.ui.multiple.dropdown:not(.selection):not(.labeled) > .dropdown.icon {
+  right: -1.5em;
+}
+
+.ui.multiple.dropdown:not(.selection):not(.labeled) > .remove.icon {
+  margin-right: -1.5em;
+}
+
+.ui.multiple.dropdown:not(.selection):not(.labeled):not(.search) > .remove.icon ~ .text.default,
+.ui.multiple.dropdown:not(.selection):not(.labeled) > .text.default:first-child {
+  overflow: inherit;
+}
+
 /* -----------------
           Multiple Search
         ----------------- */
@@ -45419,6 +45872,15 @@ select.ui.dropdown {
 
 .ui.multiple.search.dropdown.button {
   min-width: 14em;
+}
+
+.ui.multiple.search.dropdown > span.sizer {
+  display: none;
+}
+
+.ui.multiple.search.dropdown:not(.selection) > .remove.icon + input.search,
+.ui.multiple.search.dropdown:not(.selection) > input.search:first-child {
+  min-width: 5.05em;
 }
 
 /* --------------
@@ -45941,8 +46403,8 @@ select.ui.dropdown {
   border-top: 1px solid rgba(34, 36, 38, 0.15);
 }
 
-.ui.scrolling.dropdown .menu .item.item.item,
-.ui.dropdown .scrolling.menu > .item.item.item {
+.ui.ui.ui.scrolling.dropdown .menu .item,
+.ui.ui.ui.dropdown .scrolling.menu > .item {
   border-top: none;
 }
 
@@ -45970,12 +46432,22 @@ select.ui.dropdown {
   .ui.dropdown .scrolling.menu {
     max-height: 10.28571429rem;
   }
+
+  .ui.scrolling.resizable.dropdown .menu,
+  .ui.dropdown .scrolling.resizable.menu {
+    height: 10.28571429rem;
+  }
 }
 
 @media only screen and (min-width: 768px) {
   .ui.scrolling.dropdown .menu,
   .ui.dropdown .scrolling.menu {
     max-height: 15.42857143rem;
+  }
+
+  .ui.scrolling.resizable.dropdown .menu,
+  .ui.dropdown .scrolling.resizable.menu {
+    height: 15.42857143rem;
   }
 }
 
@@ -45984,6 +46456,11 @@ select.ui.dropdown {
   .ui.dropdown .scrolling.menu {
     max-height: 20.57142857rem;
   }
+
+  .ui.scrolling.resizable.dropdown .menu,
+  .ui.dropdown .scrolling.resizable.menu {
+    height: 20.57142857rem;
+  }
 }
 
 @media only screen and (min-width: 1920px) {
@@ -45991,6 +46468,17 @@ select.ui.dropdown {
   .ui.dropdown .scrolling.menu {
     max-height: 20.57142857rem;
   }
+
+  .ui.scrolling.resizable.dropdown .menu,
+  .ui.dropdown .scrolling.resizable.menu {
+    height: 20.57142857rem;
+  }
+}
+
+.ui.scrolling.resizable.dropdown .menu,
+.ui.dropdown .scrolling.resizable.menu {
+  resize: vertical;
+  max-height: none;
 }
 
 /* --------------------
@@ -47940,12 +48428,11 @@ body.pushable > .pusher {
 }
 
 .scrolling.dimmable > .dimmer {
-  justify-content: flex-start;
+  justify-content: center;
   position: fixed;
 }
 
 .scrolling.dimmable:not(body) > .dimmer {
-  justify-content: center;
   position: absolute;
 }
 
@@ -47955,8 +48442,13 @@ body.pushable > .pusher {
   overscroll-behavior: none;
 }
 
+.modals.dimmer .ui.scrolling.modal.fullscreen {
+  top: 0;
+}
+
 .modals.dimmer .ui.scrolling.modal:not(.fullscreen) {
   margin: 2rem auto;
+  top: 1em;
 }
 
 /* Fix for Firefox, Edge, IE11 */
@@ -47991,6 +48483,11 @@ body.pushable > .pusher {
   overflow: auto;
   -ms-scroll-chaining: none;
   overscroll-behavior: none;
+}
+
+.ui.modal > .resizable.scrolling.content {
+  resize: vertical;
+  max-height: none;
 }
 
 .ui.overlay.fullscreen.modal > .content {
@@ -48757,7 +49254,6 @@ a.ui.nag {
   width: 0.71428571em;
   height: 0.71428571em;
   background: #fff;
-  transform: rotate(45deg);
   z-index: 1901;
   box-shadow: 1px 1px 0 0 #bababc;
 }
@@ -48786,37 +49282,27 @@ a.ui.nag {
   z-index: 1900;
 }
 
-/* Default Position (Top Center) */
-
-[data-tooltip]:not([data-position])::before {
-  top: auto;
-  right: auto;
-  bottom: 100%;
-  left: 50%;
-  background: #fff;
-  margin-left: -0.07142857rem;
-  margin-bottom: 0.14285714rem;
-}
-
-[data-tooltip]:not([data-position])::after {
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 100%;
-  margin-bottom: 0.5em;
-}
-
 /* Animation */
 
 [data-tooltip]::before,
 [data-tooltip]::after {
   pointer-events: none;
-  visibility: hidden;
   opacity: 0;
-  transition: transform 0.1s ease, opacity 0.1s ease;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+[data-tooltip]::after,
+[data-tooltip]:hover::before {
+  transition-delay: 0.04s;
+}
+
+[data-tooltip]::before,
+[data-tooltip]:hover::after {
+  transition-delay: 0s;
 }
 
 [data-tooltip]::before {
-  transform: rotate(45deg) scale(0) !important;
+  transform: rotate(45deg) scale(0.8);
   transform-origin: center top;
 }
 
@@ -48824,38 +49310,40 @@ a.ui.nag {
   transform-origin: center bottom;
 }
 
+[data-tooltip][data-variation~="visible"]::before,
+[data-tooltip][data-variation~="visible"]::after,
 [data-tooltip]:hover::before,
 [data-tooltip]:hover::after {
-  visibility: visible;
   pointer-events: auto;
   opacity: 1;
 }
 
 [data-tooltip]:hover::before {
-  transform: rotate(45deg) scale(1) !important;
+  transform: rotate(45deg) scale(1);
 }
 
 /* Animation Position */
 
-[data-tooltip]::after,
+[data-tooltip]:not([data-position])::after,
 [data-tooltip][data-position="top center"]::after,
 [data-tooltip][data-position="bottom center"]::after {
-  transform: translateX(-50%) scale(0) !important;
+  transform: translateX(-50%) scale(0.8);
 }
 
-[data-tooltip]:hover::after,
+[data-tooltip]:not([data-position]):hover::after,
+[data-tooltip][data-position="top center"]:hover::after,
 [data-tooltip][data-position="bottom center"]:hover::after {
-  transform: translateX(-50%) scale(1) !important;
+  transform: translateX(-50%) scale(1);
 }
 
 [data-tooltip][data-position="left center"]::after,
 [data-tooltip][data-position="right center"]::after {
-  transform: translateY(-50%) scale(0) !important;
+  transform: translateY(-50%) scale(0.8);
 }
 
 [data-tooltip][data-position="left center"]:hover::after,
 [data-tooltip][data-position="right center"]:hover::after {
-  transform: translateY(-50%) scale(1) !important;
+  transform: translateY(-50%) scale(1);
   -moz-transform: translateY(-50%) scale(1.0001) !important;
 }
 
@@ -48863,14 +49351,14 @@ a.ui.nag {
 [data-tooltip][data-position="top right"]::after,
 [data-tooltip][data-position="bottom left"]::after,
 [data-tooltip][data-position="bottom right"]::after {
-  transform: scale(0) !important;
+  transform: scale(0.8);
 }
 
 [data-tooltip][data-position="top left"]:hover::after,
 [data-tooltip][data-position="top right"]:hover::after,
 [data-tooltip][data-position="bottom left"]:hover::after,
 [data-tooltip][data-position="bottom right"]:hover::after {
-  transform: scale(1) !important;
+  transform: scale(1);
 }
 
 [data-tooltip][data-variation~="fixed"]::after {
@@ -48899,12 +49387,12 @@ a.ui.nag {
 /* Arrow */
 
 [data-tooltip][data-inverted]::before {
-  box-shadow: none !important;
+  box-shadow: none;
 }
 
 /* Arrow Position */
 
-[data-tooltip][data-inverted]::before {
+[data-tooltip]:not([data-position])[data-inverted]::before {
   background: #1b1c1d;
 }
 
@@ -48925,17 +49413,18 @@ a.ui.nag {
   background: #fff;
 }
 
-/* Top Center */
+/* Top Center (default) */
 
+[data-tooltip]:not([data-position])::after,
 [data-position="top center"][data-tooltip]::after {
   top: auto;
   right: auto;
   left: 50%;
   bottom: 100%;
-  transform: translateX(-50%);
   margin-bottom: 0.5em;
 }
 
+[data-tooltip]:not([data-position])::before,
 [data-position="top center"][data-tooltip]::before {
   top: auto;
   right: auto;
@@ -48996,7 +49485,6 @@ a.ui.nag {
   right: auto;
   left: 50%;
   top: 100%;
-  transform: translateX(-50%);
   margin-top: 0.5em;
 }
 
@@ -49049,7 +49537,6 @@ a.ui.nag {
   right: 100%;
   top: 50%;
   margin-right: 0.5em;
-  transform: translateY(-50%);
 }
 
 [data-position="left center"][data-tooltip]::before {
@@ -49067,7 +49554,6 @@ a.ui.nag {
   left: 100%;
   top: 50%;
   margin-left: 0.5em;
-  transform: translateY(-50%);
 }
 
 [data-position="right center"][data-tooltip]::before {
@@ -49126,6 +49612,22 @@ a.ui.nag {
 
 [data-position="right center"][data-tooltip]::after {
   transform-origin: left center;
+}
+
+[data-position="top left"][data-tooltip]::after {
+  transform-origin: bottom left;
+}
+
+[data-position="top right"][data-tooltip]::after {
+  transform-origin: bottom right;
+}
+
+[data-position="bottom left"][data-tooltip]::after {
+  transform-origin: top left;
+}
+
+[data-position="bottom right"][data-tooltip]::after {
+  transform-origin: top right;
 }
 
 /* --------------
@@ -49472,7 +49974,7 @@ a.ui.nag {
 
 .ui.inverted.popup::before {
   background-color: #1b1c1d;
-  box-shadow: none !important;
+  box-shadow: none;
 }
 
 .ui.ui.ui.primary.popup::before,
@@ -52657,6 +53159,17 @@ a.ui.nag {
   padding: 0.85714286em 1.14285714em;
 }
 
+.ui.horizontal.category.search > .results .category,
+.ui.horizontal.category.search > .results .category > .name,
+.ui.horizontal.category.search > .results .category > .results {
+  display: block;
+}
+
+.ui.horizontal.category.search > .results .category > .results {
+  width: 100%;
+  border-left: 0;
+}
+
 /*******************************
            Variations
 *******************************/
@@ -52680,11 +53193,19 @@ a.ui.nag {
   .ui.scrolling.search > .results {
     max-height: 12.17714286em;
   }
+
+  .resizable.ui.scrolling.search > .results {
+    height: 12.17714286em;
+  }
 }
 
 @media only screen and (min-width: 768px) {
   .ui.scrolling.search > .results {
     max-height: 18.26571429em;
+  }
+
+  .resizable.ui.scrolling.search > .results {
+    height: 18.26571429em;
   }
 }
 
@@ -52692,12 +53213,25 @@ a.ui.nag {
   .ui.scrolling.search > .results {
     max-height: 24.35428571em;
   }
+
+  .resizable.ui.scrolling.search > .results {
+    height: 24.35428571em;
+  }
 }
 
 @media only screen and (min-width: 1920px) {
   .ui.scrolling.search > .results {
     max-height: 36.53142857em;
   }
+
+  .resizable.ui.scrolling.search > .results {
+    height: 36.53142857em;
+  }
+}
+
+.ui.scrolling.resizable.search > .results {
+  resize: vertical;
+  max-height: none;
 }
 
 @media only screen and (max-width: 767.98px) {
@@ -53871,6 +54405,12 @@ body.pushable > .pusher {
 .ui.toast-container .toast-box.hoverfloating:hover {
   box-shadow: 0 2px 4px 0 rgba(34, 36, 38, 0.12), 0 2px 10px 0 rgba(34, 36, 38, 0.15);
   border: 1px solid rgba(34, 36, 38, 0.12);
+}
+
+.ui.toast-container .toast-box.inverted.floating,
+.ui.toast-container .toast-box.inverted.hoverfloating:hover {
+  box-shadow: 0 2px 4px 0 rgba(225, 225, 225, 0.1), 0 2px 10px 0 rgba(225, 225, 225, 0.5);
+  border: 1px solid rgba(225, 225, 225, 0.5);
 }
 
 .ui.toast-container .toast-box.compact,

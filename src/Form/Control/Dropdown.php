@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
@@ -55,7 +56,7 @@ class Dropdown extends Input
     public $isMultiple = false;
 
     /**
-     * Here a custom function for creating the html of each dropdown option
+     * Here a custom function for creating the HTML of each dropdown option
      * can be defined. The function gets each row of the model/values property as first parameter.
      * if used with $values property, gets the key of this element as second parameter.
      * When using with a model, the second parameter is null and can be ignored.
@@ -96,14 +97,14 @@ class Dropdown extends Input
      *     ];
      * }
      *
-     * @var \Closure|null
+     * @var \Closure(mixed, int|string|null): array{value: mixed, title: mixed, icon?: mixed}|null
      */
     public $renderRowFunction;
 
-    /** @var object Subtemplate for a single dropdown item. */
+    /** @var HtmlTemplate Subtemplate for a single dropdown item. */
     protected $_tItem;
 
-    /** @var object Subtemplate for an icon for a single dropdown item. */
+    /** @var HtmlTemplate Subtemplate for an icon for a single dropdown item. */
     protected $_tIcon;
 
     protected function init(): void
@@ -154,7 +155,7 @@ class Dropdown extends Input
     }
 
     /**
-     * Set js dropdown() specific option;.
+     * Set JS dropdown() specific option;.
      *
      * @param string $option
      * @param mixed  $value
@@ -165,7 +166,7 @@ class Dropdown extends Input
     }
 
     /**
-     * Set js dropdown() options.
+     * Set JS dropdown() options.
      *
      * @param array $options
      */
@@ -175,7 +176,7 @@ class Dropdown extends Input
     }
 
     /**
-     * Render js for dropdown.
+     * Render JS for dropdown.
      */
     protected function jsRenderDropdown(): JsExpressionable
     {
@@ -183,7 +184,7 @@ class Dropdown extends Input
     }
 
     /**
-     * Render values as html for Dropdown.
+     * Render values as HTML for Dropdown.
      */
     protected function htmlRenderValue(): void
     {
@@ -201,7 +202,7 @@ class Dropdown extends Input
                     $this->_addCallBackRow($row);
                 }
             } else {
-                // for standard model rendering, only load id and title field
+                // for standard model rendering, only load ID and title field
                 $this->model->setOnlyFields([$this->model->titleField, $this->model->idField]);
                 $this->_renderItemsForModel();
             }

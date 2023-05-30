@@ -12,13 +12,13 @@ use Atk4\Ui\View;
  */
 class ItemSearch extends View
 {
-    /** @var View|string the atk4 View to be reloaded or a jquery id selector string View to be reloaded that contains data to be filtered. */
+    /** @var View|string the atk4 View to be reloaded or a id selector string View to be reloaded that contains data to be filtered. */
     public $reload;
 
     /** @var string The initial query. */
     public $q;
 
-    /** @var string The css for the input field. */
+    /** @var string The CSS for the input field. */
     public $inputCss = 'ui input right icon transparent';
 
     /**
@@ -30,7 +30,7 @@ class ItemSearch extends View
     public $inputTimeOut = 250;
 
     /**
-     * The jquery selector where you need to add the Fomantic-UI 'loading' class.
+     * The jQuery selector where you need to add the Fomantic-UI 'loading' class.
      * Default to reload selector.
      *
      * @var View
@@ -81,7 +81,7 @@ class ItemSearch extends View
         $this->class = [];
         parent::renderView();
 
-        // reloadId is the view id selector name that needs to be reloaded.
+        // reloadId is the view ID selector name that needs to be reloaded.
         // this will be pass as get argument to __atk_reload.
         if ($this->reload instanceof View) {
             $reloadId = $this->reload->name;

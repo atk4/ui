@@ -28,8 +28,8 @@ the :ref:`dynamic` property and set it to false.
 Opening of the panel is done via a javascript event. Here, we simply register a click event on a button that will open
 the panel::
 
-    $btn = Button::addTo($app, ['Open Static']);
-    $btn->on('click', $panel->jsOpen());
+    $button = Button::addTo($app, ['Open Static']);
+    $button->on('click', $panel->jsOpen());
 
 Loading content dynamically
 ---------------------------
@@ -42,13 +42,13 @@ Initializing a panel with onOpen callback::
 
     $panel_1 = $app->layout->addRightPanel(new \Atk4\Ui\Panel\Right());
     Message::addTo($panel_1, ['This panel will load content dynamically below according to button select on the right.']);
-    $btn = Button::addTo($app, ['Button 1']);
-    $btn->js(true)->data('btn', '1');
-    $btn->on('click', $panel_1->jsOpen(['btn'], 'orange'));
+    $button = Button::addTo($app, ['Button 1']);
+    $button->js(true)->data('btn', '1');
+    $button->on('click', $panel_1->jsOpen(['btn'], 'orange'));
 
     $panel_1->onOpen(function (Panel\Content $p) {
-        $btn_number = $_GET['btn'] ?? null;
-        $text =  'You loaded panel content using button #' . $btn_number;
+        $buttonNumber = $_GET['btn'] ?? null;
+        $text =  'You loaded panel content using button #' . $buttonNumber;
         Message::addTo($p, ['Panel 1', 'text' => $text]);
     });
 
@@ -56,11 +56,11 @@ Initializing a panel with onOpen callback::
 
 This method may take up to three arguments.
 
-    $args: an array of data property to carry with the callback url. Let's say that you triggering element
-    as a data property name id (data-id) then if specify, the data id value will be sent as a get argument
-    with the callback url.
+    $args: an array of data property to carry with the callback URL. Let's say that you triggering element
+    as a data property name ID (data-id) then if specify, the data ID value will be sent as a get argument
+    with the callback URL.
 
-    $activeCss: a string representing the active state of the triggering element. This css class will be applied
+    $activeCss: a string representing the active state of the triggering element. This CSS class will be applied
     to the trigger element as long as the panel remains open. This help visualize, which element has trigger the
     panel opening.
 

@@ -141,31 +141,11 @@ class Grid extends View
     }
 
     /**
-     * Set Table\Column\Actions seed.
-     *
-     * @param array $seed
-     */
-    public function setActionDecorator($seed): void
-    {
-        $this->actionButtonsDecorator = $seed;
-    }
-
-    /**
-     * Set Table\Column\ActionMenu seed.
-     *
-     * @param array $seed
-     */
-    public function setActionMenuDecorator($seed): void
-    {
-        $this->actionMenuDecorator = $seed;
-    }
-
-    /**
      * Add new column to grid. If column with this name already exists,
      * an. Simply calls Table::addColumn(), so check that method out.
      *
-     * @param string|null        $name            Data model field name
-     * @param array|Table\Column $columnDecorator
+     * @param string|null                             $name            Data model field name
+     * @param array|Table\Column                      $columnDecorator
      * @param ($name is null ? array{} : array|Field) $field
      *
      * @return Table\Column
@@ -263,9 +243,9 @@ class Grid extends View
      * Add dynamic scrolling paginator.
      *
      * @param int    $ipp          number of item per page to start with
-     * @param array  $options      an array with js Scroll plugin options
+     * @param array  $options      an array with JS Scroll plugin options
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
-     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
+     * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
      */
@@ -294,9 +274,9 @@ class Grid extends View
      *
      * @param int    $ipp             number of item per page to start with
      * @param int    $containerHeight number of pixel the table container should be
-     * @param array  $options         an array with js Scroll plugin options
+     * @param array  $options         an array with JS Scroll plugin options
      * @param View   $container       The container holding the lister for scrolling purpose. Default to view owner.
-     * @param string $scrollRegion    A specific template region to render. Render output is append to container html element.
+     * @param string $scrollRegion    A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
      */
@@ -307,14 +287,14 @@ class Grid extends View
             'hasFixTableHeader' => true,
             'tableContainerHeight' => $containerHeight,
         ]);
-        // adding a state context to js scroll plugin.
+        // adding a state context to JS scroll plugin.
         $options = array_merge(['stateContext' => $this->container], $options);
 
         return $this->addJsPaginator($ipp, $options, $container, $scrollRegion);
     }
 
     /**
-     * Add Search input field using js action.
+     * Add Search input field using JS action.
      * By default, will query server when using Enter key on input search field.
      * You can change it to query server on each keystroke by passing $autoQuery true,.
      *
@@ -381,14 +361,19 @@ class Grid extends View
      */
     public function addExecutorButton(UserAction\ExecutorInterface $executor, Button $button = null)
     {
-        $btn = $button ? $this->add($button) : $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_BUTTON);
+        if ($button !== null) {
+            $this->add($button);
+        } else {
+            $button = $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_BUTTON);
+        }
+
         $confirmation = $executor->getAction()->getConfirmation();
         if (!$confirmation) {
             $confirmation = '';
         }
         $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
 
-        return $this->getActionButtons()->addButton($btn, $executor, $confirmation, $disabled);
+        return $this->getActionButtons()->addButton($button, $executor, $confirmation, $disabled);
     }
 
     private function getActionButtons(): Table\Column\ActionButtons
@@ -450,10 +435,6 @@ class Grid extends View
      */
     public function addActionMenuFromModel(string $appliesTo = null): void
     {
-        if (!$this->model) {
-            throw new Exception('Model not set, set it prior to add item');
-        }
-
         foreach ($this->model->getUserActions($appliesTo) as $action) {
             $this->addActionMenuItem($action);
         }
@@ -481,19 +462,14 @@ class Grid extends View
     /**
      * Add a dropdown menu to header column.
      *
-     * @param string $columnName the name of column where to add dropdown
-     * @param array  $items      the menu items to add
-     * @param \Closure(string): (JsExpressionable|View|string|void) $fx the callback function to execute when an item is selected
-     * @param string $icon   the icon
-     * @param string $menuId the menu id return by callback
+     * @param string                                                $columnName the name of column where to add dropdown
+     * @param array                                                 $items      the menu items to add
+     * @param \Closure(string): (JsExpressionable|View|string|void) $fx         the callback function to execute when an item is selected
+     * @param string                                                $icon       the icon
+     * @param string                                                $menuId     the menu ID return by callback
      */
     public function addDropdown(string $columnName, $items, \Closure $fx, $icon = 'caret square down', $menuId = null): void
     {
-        if (!isset($this->table->columns[$columnName])) {
-            throw (new Exception('Column does not exist'))
-                ->addMoreInfo('name', $columnName);
-        }
-
         $column = $this->table->columns[$columnName];
 
         if (!$menuId) {
@@ -516,9 +492,6 @@ class Grid extends View
      */
     public function addPopup($columnName, $popup = null, $icon = 'caret square down')
     {
-        if (!isset($this->table->columns[$columnName])) {
-            throw new Exception('The column where you want to add popup does not exist: ' . $columnName);
-        }
         $column = $this->table->columns[$columnName];
 
         return $column->addPopup($popup, $icon);
@@ -531,7 +504,7 @@ class Grid extends View
      * @param string|array|View                 $button
      * @param string                            $title
      * @param \Closure(View, string|null): void $callback
-     * @param array                             $args     extra url argument for callback
+     * @param array                             $args     extra URL argument for callback
      *
      * @return View
      */
@@ -541,7 +514,7 @@ class Grid extends View
     }
 
     /**
-     * Get sortBy value from url parameter.
+     * Get sortBy value from URL parameter.
      */
     public function getSortBy(): ?string
     {
@@ -564,7 +537,7 @@ class Grid extends View
         }
 
         $isDesc = false;
-        if ($sortBy && $sortBy[0] === '-') {
+        if ($sortBy && substr($sortBy, 0, 1) === '-') {
             $isDesc = true;
             $sortBy = substr($sortBy, 1);
         }

@@ -31,7 +31,6 @@ __webpack_require__.r(__webpack_exports__);
             <input
                 :class="options.inlineCss"
                 :name="options.fieldName"
-                :type="options.fieldType"
                 v-model="value"
                 @keyup="onKeyup"
                 @focus="onFocus"
@@ -48,13 +47,13 @@ __webpack_require__.r(__webpack_exports__);
   data: function () {
     return {
       value: this.initValue,
-      temp: this.initValue,
+      lastValueValid: this.initValue,
       hasError: false
     };
   },
   computed: {
     isDirty: function () {
-      return this.temp !== this.value;
+      return this.lastValueValid !== this.value;
     }
   },
   methods: {
@@ -62,12 +61,11 @@ __webpack_require__.r(__webpack_exports__);
       if (this.hasError) {
         this.clearError();
       } else {
-        this.temp = this.value;
+        this.lastValueValid = this.value;
       }
     },
     onKeyup: function (e) {
       const key = e.keyCode;
-      this.clearError();
       if (key === 13) {
         this.onEnter();
       } else if (key === 27) {
@@ -75,15 +73,16 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     onBlur: function () {
-      if (this.isDirty && this.saveOnBlur) {
-        this.update();
-      } else {
-        this.value = this.temp; // TODO will not save the value on 2nd edit and submit via enter
+      if (this.isDirty) {
+        if (this.saveOnBlur) {
+          this.update();
+        } else {
+          this.value = this.lastValueValid;
+        }
       }
     },
-
     onEscape: function () {
-      this.value = this.temp;
+      this.value = this.lastValueValid;
       this.$el.querySelector('input').blur();
     },
     onEnter: function () {
@@ -93,17 +92,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     clearError: function () {
       this.hasError = false;
-    },
-    flashError: function () {
-      let count = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 4;
-      if (count === 0) {
-        this.hasError = false;
-        return;
-      }
-      this.hasError = !this.hasError;
-      setTimeout(() => {
-        this.flashError(count - 1);
-      }, 300);
     },
     update: function () {
       const that = this;
@@ -118,7 +106,7 @@ __webpack_require__.r(__webpack_exports__);
           if (r.hasValidationError) {
             that.hasError = true;
           } else {
-            that.temp = that.value;
+            that.lastValueValid = that.value;
           }
         }
       });

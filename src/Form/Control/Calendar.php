@@ -10,13 +10,12 @@ use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 
-/**
- * Date/Time picker attached to a form control.
- */
 class Calendar extends Input
 {
+    public string $inputType = 'text';
+
     /**
-     * Set this to 'date', 'time', 'datetime'.
+     * @var 'date'|'time'|'datetime'
      */
     public string $type = 'date';
 
@@ -29,10 +28,9 @@ class Calendar extends Input
     /**
      * Set Flatpickr option.
      *
-     * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      */
-    public function setOption($name, $value): void
+    public function setOption(string $name, $value): void
     {
         $this->options[$name] = $value;
     }
@@ -85,8 +83,8 @@ class Calendar extends Input
     /**
      * Get the FlatPickr instance of this input in order to
      * get it's properties like selectedDates or run it's methods.
-     * Ex: clearing date via js
-     *     $btn->on('click', $f->getControl('date')->getJsInstance()->clear());.
+     * Ex: clearing date via JS
+     *     $button->on('click', $f->getControl('date')->getJsInstance()->clear());.
      *
      * @return JsChain
      */

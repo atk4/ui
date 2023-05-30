@@ -40,7 +40,7 @@ class Control extends View
     /** @var bool rendered or not input label in generic Form\Layout template. */
     public $renderLabel = true;
 
-    /** @var string */
+    /** @var string Specify width for Fomantic-UI grid. For "four wide" use 'four'. */
     public $width;
 
     /**
@@ -81,7 +81,7 @@ class Control extends View
 
         if ($this->form && $this->entityField) {
             if (isset($this->form->controls[$this->entityField->getFieldName()])) {
-                throw (new Exception('Form already has a field with the same name'))
+                throw (new Exception('Form field already exists'))
                     ->addMoreInfo('name', $this->entityField->getFieldName());
             }
             $this->form->controls[$this->entityField->getFieldName()] = $this;
@@ -146,7 +146,7 @@ class Control extends View
      * $control->onChange(new JsExpression('$(this).parents(\'.form\').form(\'submit\')'));
      *
      * @param JsExpressionable|JsCallbackSetClosure|array{JsCallbackSetClosure} $expr
-     * @param array|bool $defaults
+     * @param array|bool                                                        $defaults
      */
     public function onChange($expr, $defaults = []): void
     {

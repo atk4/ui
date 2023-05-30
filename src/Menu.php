@@ -51,11 +51,12 @@ class Menu extends View
             array_unshift($item, MenuItem::class);
         }
 
-        $item = $this->add($item)->setElement('a');
+        /** @var MenuItem */
+        $item = $this->add($item);
 
         if (is_string($action) || is_array($action)) {
             $url = $this->url($action);
-            $item->setAttr('href', $url);
+            $item->link($url);
         } elseif ($action) {
             $item->on('click', null, $action);
         }

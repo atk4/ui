@@ -26,7 +26,7 @@ To help you understand when to use VirtualPage here is the example:
  - Clicking the Button would dynamically load contents of VirtualPage inside a Modal window.
 
 This pattern is very easy to implement and is used by many components to transparently provide dynamic functionality.
-Next is an example where :php:class:`Tabs` has support for call-back for generating dynamic content for the tab::
+Next is an example where :php:class:`Tabs` has support for callback for generating dynamic content for the tab::
 
     $tabs->addTab('Dynamic Tab Content', function (VirtualPage $vp) {
         \Atk4\Ui\LoremIpsum::addTo($vp);
@@ -201,7 +201,8 @@ To indicate how custom binding works::
     });
 
 
-    \Atk4\Ui\Button::addTo($app, ['Load data'])->on('click', $loader->js()->trigger('kaboom'));
+    \Atk4\Ui\Button::addTo($app, ['Load data'])
+        ->on('click', $loader->js()->trigger('kaboom'));
 
 This approach allow you to trigger loader from inside JavaScript easily. See also: https://api.jquery.com/trigger/
 
@@ -224,7 +225,8 @@ Next example will display DataTable, but will allow you to replace data with a f
         ->setModel($data)
         ->addCondition('year', $app->stickyGet('year'));
 
-    \Atk4\Ui\Button::addTo($box, ['Edit Data Settings'])->on('click', $loader->js()->trigger('edit'));
+    \Atk4\Ui\Button::addTo($box, ['Edit Data Settings'])
+        ->on('click', $loader->js()->trigger('edit'));
 
     $loader->set(function (\Atk4\Ui\Loader $p) {
         $form = \Atk4\Ui\Form::addTo($p);

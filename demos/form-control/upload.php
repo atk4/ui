@@ -21,7 +21,7 @@ $control = $form->addControl('file', [Form\Control\Upload::class, ['accept' => [
 // $control->set('a_generated_token');
 
 $img->onDelete(function (string $fileId) use ($img) {
-    $img->clearThumbnail('./images/default.png');
+    $img->clearThumbnail();
 
     return new JsToast([
         'title' => 'Delete successfully',
@@ -43,7 +43,7 @@ $img->onUpload(function (array $postFile) use ($form, $img) {
     // This will get caught by JsCallback and show via modal.
     // new Blabla();
 
-    // js Action can be return.
+    // JS Action can be return.
     // if using form, can return an error to form control directly.
     // return $form->jsError('file', 'Unable to upload file.');
 

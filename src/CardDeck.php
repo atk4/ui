@@ -166,7 +166,7 @@ class CardDeck extends View
         if ($this->useAction && $this->menu) {
             foreach ($this->getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
                 $executor = $this->initActionExecutor($action);
-                $this->menuActions[$k]['btn'] = $this->menu->addItem(
+                $this->menuActions[$k]['button'] = $this->menu->addItem(
                     $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MENU_ITEM)
                 );
                 $this->menuActions[$k]['executor'] = $executor;
@@ -177,14 +177,14 @@ class CardDeck extends View
     }
 
     /**
-     * Setup js for firing menu action - copied from Crud - TODO deduplicate.
+     * Setup JS for firing menu action - copied from Crud - TODO deduplicate.
      */
     protected function setItemsAction(): void
     {
         foreach ($this->menuActions as $item) {
             // hack - render executor action via MenuItem::on() into container
-            $item['btn']->on('click.atk_crud_item', $item['executor']);
-            $jsAction = array_pop($item['btn']->_jsActions['click.atk_crud_item']);
+            $item['button']->on('click.atk_crud_item', $item['executor']);
+            $jsAction = array_pop($item['button']->_jsActions['click.atk_crud_item']);
             $this->container->js(true, $jsAction);
         }
     }
@@ -215,7 +215,7 @@ class CardDeck extends View
     }
 
     /**
-     * Return proper js statement for afterExecute hook on action executor
+     * Return proper JS statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      *
      * @param string|JsExpressionable|Model|null $return

@@ -21,17 +21,23 @@ View::addTo($app, ['ui' => 'divider']);
 
 // Inline Edit
 
-$model = new Country($app->db);
-$model = $model->loadAny();
+$entity = (new Country($app->db))
+    ->setOrder(Country::hinting()->fieldName()->id)
+    ->loadAny();
 
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
 Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
 
-$inline_edit = VueComponent\InlineEdit::addTo($app);
-$inline_edit->fieldName = $model->fieldName()->name;
-$inline_edit->setModel($model);
+View::addTo($app)->set('with autoSave');
+$inlineEditWithAutoSave = VueComponent\InlineEdit::addTo($app, ['autoSave' => true]);
+$inlineEditWithAutoSave->fieldName = $entity->fieldName()->name;
+$inlineEditWithAutoSave->setModel($entity);
 
-$inline_edit->onChange(function (string $value) use ($app) {
+View::addTo($app)->set('with onChange callback');
+$inlineEditWithCallback = VueComponent\InlineEdit::addTo($app);
+$inlineEditWithCallback->fieldName = $entity->fieldName()->name;
+$inlineEditWithCallback->setModel($entity);
+$inlineEditWithCallback->onChange(function (string $value) use ($app) {
     $view = new Message();
     $view->setApp($app);
     $view->invokeInit();
@@ -111,7 +117,7 @@ $clockTemplate = new HtmlTemplate(<<<'EOF'
     {$script}
     EOF);
 
-// Injecting script but normally you would create a separate js file and include it in your page.
+// Injecting script but normally you would create a separate JS file and include it in your page.
 $clockScript = $app->getTag('script', [], <<<'EOF'
     let myClock = {
         template: `
@@ -156,7 +162,7 @@ $clockScript = $app->getTag('script', [], <<<'EOF'
     };
     EOF);
 
-// Creating the clock view and injecting js.
+// Creating the clock view and injecting JS.
 $clock = View::addTo($app, ['template' => $clockTemplate]);
 $clock->template->dangerouslySetHtml('script', $clockScript);
 
@@ -170,6 +176,6 @@ $clockStyle = [
 // creating vue using an external definition.
 $clock->vue('my-clock', ['styles' => $clockStyle], new JsExpression('myClock'));
 
-$btn = Button::addTo($app, ['Change Style']);
-$btn->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));
+$button = Button::addTo($app, ['Change Style']);
+$button->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));
 View::addTo($app, ['element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);

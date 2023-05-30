@@ -36,7 +36,11 @@ class TypeNumber extends Column\FilterModel
             switch ($filter['op']) {
                 case 'between':
                     $model->addCondition(
-                        $model->expr('[field] between [value] and [range]', ['field' => $model->getField($filter['name']), 'value' => $filter['value'], 'range' => $filter['range']])
+                        $model->expr('[field] between [value] and [range]', [
+                            'field' => $model->getField($filter['name']),
+                            'value' => $filter['value'],
+                            'range' => $filter['range'],
+                        ])
                     );
 
                     break;

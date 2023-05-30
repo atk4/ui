@@ -5,22 +5,21 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Data\Model\UserAction;
+use Atk4\Ui\AbstractView;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Icon;
 use Atk4\Ui\Label;
 use Atk4\Ui\UserAction\ExecutorFactory;
+use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\UserAction\JsCallbackExecutor;
 
-/**
- * Input element for a form control.
- */
 class Input extends Form\Control
 {
     public $ui = 'input';
     public $defaultTemplate = 'form/control/input.html';
 
-    public string $inputType = 'text';
+    public string $inputType;
 
     /** @var string */
     public $placeholder = '';
@@ -41,23 +40,18 @@ class Input extends Form\Control
      * the field and you can fit currency symbol "$" inside a label for example.
      * For Input field label will appear on the left.
      *
-     * @var string|object
+     * @var string|Label
      */
     public $label;
 
-    /** @var string|object Set label that will appear to the right of the input field. */
+    /** @var string|Label Set label that will appear to the right of the input field. */
     public $labelRight;
 
-    /** @var Button|array|null */
+    /** @var Button|array|UserAction|null */
     public $action;
 
-    /** @var Button|array|null */
+    /** @var Button|array|UserAction|null */
     public $actionLeft;
-
-    /**
-     * Specify width for Fomantic-UI grid. For "four wide" use 'four'.
-     */
-    public $width;
 
     /**
      * Additional attributes directly for the <input> tag can be added:
@@ -73,7 +67,7 @@ class Input extends Form\Control
     /**
      * Set attribute which is added directly to the <input> tag, not the surrounding <div>.
      *
-     * @param string|int|array<string, string|int> $name
+     * @param string|int|array<string, string|int>  $name
      * @param ($name is array ? never : string|int) $value
      *
      * @return $this
@@ -124,8 +118,8 @@ class Input extends Form\Control
     /**
      * Used only from renderView().
      *
-     * @param string|object $label Label class or object
-     * @param string        $spot  Template spot
+     * @param string|Label $label Label class or object
+     * @param string       $spot  Template spot
      *
      * @return Label
      */
@@ -148,8 +142,8 @@ class Input extends Form\Control
     /**
      * Used only from renderView().
      *
-     * @param string|array|object $button Button class or object
-     * @param string              $spot   Template spot
+     * @param string|array|Button|UserAction|(AbstractView&ExecutorInterface) $button Button class or object
+     * @param string                                                          $spot   Template spot
      *
      * @return Button
      */
@@ -164,9 +158,7 @@ class Input extends Form\Control
                 : $button;
             $button = $this->add($this->getExecutorFactory()->createTrigger($executor->getAction()), $spot);
             if ($executor->getAction()->args) {
-                $val_as_arg = array_keys($executor->getAction()->args)[0];
-
-                $button->on('click', $executor, ['args' => [$val_as_arg => $this->jsInput()->val()]]);
+                $button->on('click', $executor, ['args' => [array_key_first($executor->getAction()->args) => $this->jsInput()->val()]]);
             } else {
                 $button->on('click', $executor);
             }

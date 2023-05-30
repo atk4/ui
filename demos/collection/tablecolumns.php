@@ -125,7 +125,7 @@ foreach (range(1, 10) as $id) {
         'value_not_always_present' => random_int(0, 100) > 50 ? 'have value' : '',
         'interests' => '1st label, 2nd label',
         'rating' => random_int(100, 300) / 100,
-        'note' => 'lorem ipsum lorem dorem lorem',
+        'note' => $id !== 3 ? 'lorem ipsum lorem dorem lorem' : null,
     ]);
 }
 

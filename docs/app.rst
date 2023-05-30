@@ -269,7 +269,7 @@ Execution Termination
 .. php:method:: terminate(output)
 
 Used when application flow needs to be terminated preemptively. For example when
-call-back is triggered and need to respond with some JSON.
+callback is triggered and need to respond with some JSON.
 
 You can also use this method to output debug data. Here is comparison to var_dump::
 
@@ -294,7 +294,7 @@ Method to generate links between pages. Specified with associative array::
 
     $url = $app->url(['contact', 'from' => 'John Smith']);
 
-This method must respond with a properly formatted url, such as::
+This method must respond with a properly formatted URL, such as::
 
     contact.php?from=John+Smith
 
@@ -422,7 +422,8 @@ Populating the left menu object is simply a matter of adding the right menu item
 This is the top menu of the admin layout. You can add other item to the top menu using::
 
     Button::addTo($layout->menu->addItem(), ['View Source', 'class.teal' => true, 'icon' => 'github'])
-        ->setAttr('target', '_blank')->on('click', new \Atk4\Ui\Js\JsExpression('document.location = [];', [$url . $f]));
+        ->setAttr('target', '_blank')
+        ->on('click', new \Atk4\Ui\Js\JsExpression('document.location = [];', [$url . $f]));
 
 .. php:attr:: menuRight
 

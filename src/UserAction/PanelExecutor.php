@@ -62,9 +62,9 @@ class PanelExecutor extends Right implements JsExecutorInterface
      * Make sure modal id is unique.
      * Since User action can be added via callbacks, we need
      * to make sure that view id is properly set for loader and button
-     * js action to run properly.
+     * JS action to run properly.
      */
-    protected function afterActionInit(Model\UserAction $action): void
+    protected function afterActionInit(): void
     {
         $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim, 'loadEvent' => false]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
@@ -73,14 +73,14 @@ class PanelExecutor extends Right implements JsExecutorInterface
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
-        $this->afterActionInit($action);
+        $this->afterActionInit();
 
         // get necessary step need prior to execute action.
-        $this->steps = $this->getSteps($action);
+        $this->steps = $this->getSteps();
         if ($this->steps) {
             $this->header->set($this->title ?? $action->getDescription());
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
-            $this->add($this->createButtonBar($this->action)->setStyle(['text-align' => 'end']));
+            $this->add($this->createButtonBar()->setStyle(['text-align' => 'end']));
             $this->addStepList();
         }
 
@@ -103,7 +103,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
     {
         $this->action = $this->executeModelActionLoad($this->action);
 
-        $this->jsSetBtnState($this->loader, $this->step);
+        $this->jsSetButtonsState($this->loader, $this->step);
         $this->jsSetListState($this->loader, $this->step);
         $this->runSteps();
     }
@@ -130,7 +130,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
     }
 
     /**
-     * Return proper js statement need after action execution.
+     * Return proper JS statement need after action execution.
      *
      * @param mixed      $obj
      * @param string|int $id

@@ -16,7 +16,6 @@ export default {
             <input
                 :class="options.inlineCss"
                 :name="options.fieldName"
-                :type="options.fieldType"
                 v-model="value"
                 @keyup="onKeyup"
                 @focus="onFocus"
@@ -33,13 +32,13 @@ export default {
     data: function () {
         return {
             value: this.initValue,
-            temp: this.initValue,
+            lastValueValid: this.initValue,
             hasError: false,
         };
     },
     computed: {
         isDirty: function () {
-            return this.temp !== this.value;
+            return this.lastValueValid !== this.value;
         },
     },
     methods: {
@@ -47,12 +46,11 @@ export default {
             if (this.hasError) {
                 this.clearError();
             } else {
-                this.temp = this.value;
+                this.lastValueValid = this.value;
             }
         },
         onKeyup: function (e) {
             const key = e.keyCode;
-            this.clearError();
             if (key === 13) {
                 this.onEnter();
             } else if (key === 27) {
@@ -60,14 +58,16 @@ export default {
             }
         },
         onBlur: function () {
-            if (this.isDirty && this.saveOnBlur) {
-                this.update();
-            } else {
-                this.value = this.temp; // TODO will not save the value on 2nd edit and submit via enter
+            if (this.isDirty) {
+                if (this.saveOnBlur) {
+                    this.update();
+                } else {
+                    this.value = this.lastValueValid;
+                }
             }
         },
         onEscape: function () {
-            this.value = this.temp;
+            this.value = this.lastValueValid;
             this.$el.querySelector('input').blur();
         },
         onEnter: function () {
@@ -77,17 +77,6 @@ export default {
         },
         clearError: function () {
             this.hasError = false;
-        },
-        flashError: function (count = 4) {
-            if (count === 0) {
-                this.hasError = false;
-
-                return;
-            }
-            this.hasError = !this.hasError;
-            setTimeout(() => {
-                this.flashError(count - 1);
-            }, 300);
         },
         update: function () {
             const that = this;
@@ -100,7 +89,7 @@ export default {
                     if (r.hasValidationError) {
                         that.hasError = true;
                     } else {
-                        that.temp = that.value;
+                        that.lastValueValid = that.value;
                     }
                 },
             });

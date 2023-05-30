@@ -46,7 +46,7 @@ class ModalService {
     onHide() {
         const s = atk.modalService;
 
-        if (s.modals.length === 0 || s.modals[s.modals.length - 1] !== this) {
+        if (s.modals.length === 0 || s.modals.at(-1) !== this) {
             throw new Error('Unexpected modal to hide - modal is not front');
         }
         s.modals.pop();
@@ -67,7 +67,7 @@ class ModalService {
     addModal($modal) {
         // hide other modals
         if (this.modals.length > 1) {
-            const $prevModal = $(this.modals[this.modals.length - 2]);
+            const $prevModal = $(this.modals.at(-2));
             if ($prevModal.hasClass('visible')) {
                 $prevModal.css('visibility', 'hidden');
                 $prevModal.addClass('__hiddenNotFront');
@@ -81,7 +81,7 @@ class ModalService {
             args = data.args;
         }
 
-        // check for data type, usually json or html
+        // check for data type, usually JSON or HTML
         if (data.type === 'json') {
             args = $.extend(true, args, { __atk_json: 1 });
         }
@@ -111,7 +111,7 @@ class ModalService {
                         // TODO this if should be removed
                         response.success = false;
                         response.isServiceError = true;
-                        response.message = 'Modal service error: Empty html, unable to replace modal content from server response';
+                        response.message = 'Modal service error: Empty HTML, unable to replace modal content from server response';
                     } else {
                         // content is replace no need to do it in api
                         response.id = null;
@@ -132,7 +132,7 @@ class ModalService {
 
         // hide other modals
         if (this.modals.length > 0) {
-            const $prevModal = $(this.modals[this.modals.length - 1]);
+            const $prevModal = $(this.modals.at(-1));
             if ($prevModal.hasClass('__hiddenNotFront')) {
                 $prevModal.css('visibility', '');
                 $prevModal.addClass('visible');

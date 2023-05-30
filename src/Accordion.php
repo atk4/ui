@@ -111,7 +111,7 @@ class Accordion extends View
     }
 
     /**
-     * Return an accordion js behavior command
+     * Return an accordion JS behavior command
      * as in Fomantic-UI behavior for Accordion module.
      * Ex: toggle an accordion from it's index value.
      * $accordion->jsBehavior('toggle', 1).

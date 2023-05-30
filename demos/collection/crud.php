@@ -82,7 +82,7 @@ $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
 
         $result = parent::addFormTo($left);
 
-        if ($this->action->getEntity()->get(File::hinting()->fieldName()->is_folder)) {
+        if (File::assertInstanceOf($this->action->getEntity())->is_folder) {
             Grid::addTo($right, ['menu' => false, 'ipp' => 5])
                 ->setModel(File::assertInstanceOf($this->getAction()->getModel())->SubFolder);
         } else {

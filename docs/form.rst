@@ -38,7 +38,7 @@ It only takes 2 PHP lines to create a fully working form::
     $form = Form::addTo($app);
     $form->addControl('email');
 
-The form component can be further tweaked by setting a custom call-back handler
+The form component can be further tweaked by setting a custom callback handler
 directly in PHP::
 
     $form->onSubmit(function (Form $form) {
@@ -137,8 +137,8 @@ Layout and Form Controls
 ========================
 
 Although Form extends the View class, controls are not added into Form directly but rather use
-a View layout for it in order to create their html element. In other words, layout attached to the form
-is responsible of rendering html for fields.
+a View layout for it in order to create their HTML element. In other words, layout attached to the form
+is responsible of rendering HTML for fields.
 
 When Form is first initialized, it will provide and set a default Generic layout within the form.
 Then using :php:meth:`Form::addControl()` will rely on that layout to add form control to it and render it properly.
@@ -516,7 +516,7 @@ Form Submit Handling
 
 .. php:method:: onSubmit($callback)
 
-    Specify a PHP call-back that will be executed on successful form submission.
+    Specify a PHP callback that will be executed on successful form submission.
 
 .. php:method:: jsError($field, $message)
 

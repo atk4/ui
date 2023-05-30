@@ -25,10 +25,6 @@ class Checkbox extends Form\Control
 
     public function __construct($label = [])
     {
-        if (func_num_args() > 1) { // prevent bad usage
-            throw new \Error('Too many method arguments');
-        }
-
         parent::__construct($label);
 
         $this->label = $this->content;
@@ -37,12 +33,6 @@ class Checkbox extends Form\Control
 
     protected function init(): void
     {
-        // TODO exception should be generalized for type acceptable for any form control
-        if ($this->entityField && $this->entityField->getField()->type !== 'boolean') {
-            throw (new Exception('Checkbox form control requires field with boolean type'))
-                ->addMoreInfo('type', $this->entityField->getField()->type);
-        }
-
         parent::init();
 
         // checkboxes are annoying because they don't send value when they are
@@ -59,6 +49,12 @@ class Checkbox extends Form\Control
     {
         if ($this->label) {
             $this->template->set('Content', $this->label);
+        }
+
+        if ($this->entityField && !is_bool($this->entityField->get() ?? false)) {
+            throw (new Exception('Checkbox form control requires field with boolean type'))
+                ->addMoreInfo('type', $this->entityField->getField()->type)
+                ->addMoreInfo('value', $this->entityField->get());
         }
 
         if ($this->entityField ? $this->entityField->get() : $this->content) {

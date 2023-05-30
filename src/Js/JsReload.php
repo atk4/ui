@@ -17,7 +17,7 @@ class JsReload implements JsExpressionable
     /** Specifies which view to reload. Use constructor to set. */
     public View $view;
 
-    /** @var JsExpressionable|null A Js function to execute after reload is complete and onSuccess is execute. */
+    /** @var JsExpressionable|null A JS function to execute after reload is complete and onSuccess is execute. */
     public $afterSuccess;
 
     /** @var array<string, string|int|JsExpressionable> Added at the end of your URL. */

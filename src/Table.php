@@ -32,7 +32,7 @@ class Table extends Lister
     public $columns = [];
 
     /**
-     * Allows you to inject HTML into table using getHtmlTags hook and column call-backs.
+     * Allows you to inject HTML into table using getHtmlTags hook and column callbacks.
      * Switch this feature off to increase performance at expense of some row-specific HTML.
      *
      * @var bool
@@ -41,9 +41,9 @@ class Table extends Lister
 
     /**
      * Determines a strategy on how totals will be calculated. Do not touch those fields
-     * direcly, instead use addTotals().
+     * directly, instead use addTotals().
      *
-     * @var array|false
+     * @var array<string, string|array{ string|\Closure(mixed, string, $this): (int|float) }>|false
      */
     public $totalsPlan = false;
 
@@ -90,7 +90,7 @@ class Table extends Lister
 
     /**
      * Make action columns in table use
-     * the collapsing css class.
+     * the collapsing CSS class.
      * An action cell that is collapsing will
      * only uses as much space as required.
      *
@@ -131,8 +131,8 @@ class Table extends Lister
      * If you don't want table column to be associated with model field, then
      * pass $name parameter as null.
      *
-     * @param string|null        $name            Data model field name
-     * @param array|Table\Column $columnDecorator
+     * @param string|null                             $name            Data model field name
+     * @param array|Table\Column                      $columnDecorator
      * @param ($name is null ? array{} : array|Field) $field
      *
      * @return Table\Column
@@ -142,7 +142,7 @@ class Table extends Lister
         $this->assertIsInitialized();
 
         if ($name !== null && isset($this->columns[$name])) {
-            throw (new Exception('Column already exists'))
+            throw (new Exception('Table column already exists'))
                 ->addMoreInfo('name', $name);
         }
 
@@ -191,7 +191,7 @@ class Table extends Lister
     /**
      * Set Popup action for columns filtering.
      *
-     * @param array $cols an array with colomns name that need filtering
+     * @param array $cols an array with columns name that need filtering
      */
     public function setFilterColumn($cols = null): void
     {
@@ -199,7 +199,7 @@ class Table extends Lister
             throw new Exception('Model need to be defined in order to use column filtering');
         }
 
-        // set filter to all column when null.
+        // set filter to all column when null
         if (!$cols) {
             foreach ($this->model->getFields() as $key => $field) {
                 if (isset($this->columns[$key])) {
@@ -208,17 +208,16 @@ class Table extends Lister
             }
         }
 
-        // create column popup.
+        // create column popup
         foreach ($cols as $colName) {
             $col = $this->getColumn($colName);
-            if ($col) {
-                $pop = $col->addPopup(new Table\Column\FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
-                if ($pop->isFilterOn()) {
-                    $col->setHeaderPopupIcon('table-filter-on');
-                }
-                // apply condition according to popup form.
-                $this->model = $pop->setFilterCondition($this->model);
+
+            $pop = $col->addPopup(new Table\Column\FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
+            if ($pop->isFilterOn()) {
+                $col->setHeaderPopupIcon('table-filter-on');
             }
+            // apply condition according to popup form
+            $this->model = $pop->setFilterCondition($this->model);
         }
     }
 
@@ -232,7 +231,7 @@ class Table extends Lister
     public function addDecorator(string $name, $seed)
     {
         if (!isset($this->columns[$name])) {
-            throw (new Exception('Column does not exist'))
+            throw (new Exception('Table column does not exist'))
                 ->addMoreInfo('name', $name);
         }
 
@@ -259,7 +258,7 @@ class Table extends Lister
     /**
      * Return column instance or first instance if using decorator.
      *
-     * @return mixed
+     * @return Table\Column
      */
     protected function getColumn(string $name)
     {
@@ -305,8 +304,8 @@ class Table extends Lister
      * name and size.
      *
      * @param \Closure(Jquery, mixed): (JsExpressionable|View|string|void) $fx             a callback function with columns widths as parameter
-     * @param array<int, int> $widths         ex: [100, 200, 300, 100]
-     * @param array           $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
+     * @param array<int, int>                                              $widths         ex: [100, 200, 300, 100]
+     * @param array                                                        $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
      *
      * @return $this
      */
@@ -336,9 +335,9 @@ class Table extends Lister
      * Add a dynamic paginator, i.e. when user is scrolling content.
      *
      * @param int    $ipp          number of item per page to start with
-     * @param array  $options      an array with js Scroll plugin options
+     * @param array  $options      an array with JS Scroll plugin options
      * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
-     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
+     * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
      */
@@ -357,7 +356,7 @@ class Table extends Lister
      *   'total' => ['sum']
      * ].
      *
-     * @param array $plan
+     * @param array<string, string|array{ string|\Closure(mixed, string, $this): (int|float) }> $plan
      */
     public function addTotals($plan = []): void
     {
@@ -471,7 +470,7 @@ class Table extends Lister
         $this->tRow->set($this->model);
 
         if ($this->useHtmlTags) {
-            // Prepare row-specific HTML tags.
+            // prepare row-specific HTML tags
             $html_tags = [];
 
             foreach ($this->hook(Table\Column::HOOK_GET_HTML_TAGS, [$this->model]) as $ret) {
@@ -542,9 +541,9 @@ class Table extends Lister
     }
 
     /**
-     * Remove a row in table using javascript using a model id.
+     * Remove a row in table using javascript using a model ID.
      *
-     * @param string $id         the model id where row need to be removed
+     * @param string $id         the model ID where row need to be removed
      * @param string $transition the transition effect
      *
      * @return Jquery
@@ -569,11 +568,9 @@ class Table extends Lister
                     $this->totals[$key] = 0;
                 }
 
-                // closure support
-                // arguments - current value, key, Table object
                 if ($f instanceof \Closure) {
                     $this->totals[$key] += ($f($this->model->get($key), $key, $this) ?? 0);
-                } elseif (is_string($f)) { // built-in methods
+                } elseif (is_string($f)) {
                     switch ($f) {
                         case 'sum':
                             $this->totals[$key] += $this->model->get($key);
@@ -596,8 +593,8 @@ class Table extends Lister
 
                             break;
                         default:
-                            throw (new Exception('Aggregation method does not exist'))
-                                ->addMoreInfo('method', $f);
+                            throw (new Exception('Unsupported table aggregate function'))
+                                ->addMoreInfo('name', $f);
                     }
                 }
             }
@@ -607,10 +604,8 @@ class Table extends Lister
     /**
      * Responds with the HTML to be inserted in the header row that would
      * contain captions of all columns.
-     *
-     * @return string
      */
-    public function getHeaderRowHtml()
+    public function getHeaderRowHtml(): string
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
@@ -634,10 +629,8 @@ class Table extends Lister
     /**
      * Responds with HTML to be inserted in the footer row that would
      * contain totals for all columns.
-     *
-     * @return string
      */
-    public function getTotalsRowHtml()
+    public function getTotalsRowHtml(): string
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
@@ -650,7 +643,6 @@ class Table extends Lister
 
             // if totals plan is set as array, then show formatted value
             if (is_array($this->totalsPlan[$name])) {
-                // todo - format
                 $field = $this->model->getField($name);
                 $output[] = $column->getTotalsCellHtml($field, $this->totals[$name]);
 
@@ -666,14 +658,12 @@ class Table extends Lister
 
     /**
      * Collects cell templates from all the columns and combine them into row template.
-     *
-     * @return string
      */
-    public function getDataRowHtml()
+    public function getDataRowHtml(): string
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            // If multiple formatters are defined, use the first for the header cell
+            // if multiple formatters are defined, use the first for the header cell
             $field = !is_int($name) ? $this->model->getField($name) : null;
 
             if (!is_array($column)) {

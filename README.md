@@ -1,8 +1,8 @@
-# Agile UI - Low-code PHP Framework for Web Apps
+# Agile UI - Robust and easy to use PHP Framework for Web Apps
 
-[Agile Toolkit](https://agiletoolkit.org/) is a Low Code framework written in PHP. Agile UI implement server side rendering engine and over 50 UI generic components for interacting with your Data Model.
+Agile UI implement server side rendering engine and over 50 UI generic components for interacting with your data.
 
-Agile UI is quickest way for building back-end UI, admin interfaces, data management systems for medium and large projects designed around roles, complex logic, formulas.
+Agile UI is the quickest way for building back-end UI, admin interfaces, data management systems for medium and large projects designed around roles, complex logic, formulas...
 
  - Agile UI relies on abstract data. It could be stored in SQL, NoSQL or in external API.
  - Agile UI adjusts to your data model. If you change your model structure, UI will reflect that.
@@ -11,7 +11,7 @@ Agile UI is quickest way for building back-end UI, admin interfaces, data manage
  - Agile UI is compact - single file, several lines of code - that's all it takes.
  - Agile UI is extensible - integrates VueJS for custom components and interactive behaviours.
 
-![Build](https://github.com/atk4/ui/workflows/Unit/badge.svg)
+[![Build](https://github.com/atk4/ui/workflows/Unit/badge.svg)](https://github.com/atk4/ui/actions?query=workflow%3AUnit+branch%3Adevelop)
 [![CodeCov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
 [![GitHub release](https://img.shields.io/github/release/atk4/ui.svg)](CHANGELOG.md)
 [![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
@@ -72,7 +72,7 @@ Open PHP in the browser and observe a fully working and good looking form:
 
 ![subscribe](docs/images/subscribe.png)
 
-ATK UI relies on https://fomantic-ui.com CSS framework to render the form beautifully. It also implements submission call-back in a very straightforward way. The demo also demonstrates use of JavaScript action, which can make objects interract with each-other (e.g. Form submit reloads Table).
+ATK UI relies on https://fomantic-ui.com CSS framework to render the form beautifully. It also implements submission callback in a very straightforward way. The demo also demonstrates use of JavaScript action, which can make objects interract with each-other (e.g. Form submit reloads Table).
 
 ### Database Integration with ATK Data
 
@@ -81,7 +81,7 @@ To get most of ATK UI, use [ATK Data](https://github.com/atk4/data) to describe 
 [Crud](https://ui.agiletoolkit.org/demos/crud.php) is a fully-interractive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
 
 ``` php
-$app = new \Atk4\Ui\App('hello world');
+$app = new \Atk4\Ui\App(['title' => 'hello world']);
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 

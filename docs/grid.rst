@@ -154,9 +154,10 @@ additionally place this column before any other column inside a grid. You can us
 method to reference value of selected checkboxes inside any :ref:`js_action`::
 
     $sel = $grid->addSelection();
-    $grid->menu->addItem('show selection')->on('click', new \Atk4\Ui\Js\JsExpression(
-        'alert(\'Selected: \' + [])', [$sel->jsChecked()]
-    ));
+    $grid->menu->addItem('show selection')
+        ->on('click', new \Atk4\Ui\Js\JsExpression(
+            'alert(\'Selected: \' + [])', [$sel->jsChecked()]
+        ));
 
 Sorting
 =======

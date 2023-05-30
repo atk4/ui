@@ -16,8 +16,6 @@ use Atk4\Ui\View;
 
 class ScopeBuilder extends Form\Control
 {
-    use VueLookupTrait;
-
     public $renderLabel = false;
 
     public array $options = [
@@ -29,7 +27,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Max depth of nested conditions allowed.
      * Corresponds to VueQueryBulder maxDepth.
-     * Maximum support by js component is 10.
+     * Maximum support by JS component is 10.
      */
     public int $maxDepth = 5;
 
@@ -294,8 +292,6 @@ class ScopeBuilder extends Form\Control
     {
         parent::setModel($model);
 
-        $this->initVueLookupCallback();
-
         $this->buildQuery($model);
     }
 
@@ -364,7 +360,6 @@ class ScopeBuilder extends Form\Control
         }
 
         if ($field->hasReference()) {
-            $props['url'] = $this->dataCb->getUrl();
             $props['reference'] = $field->shortName;
             $props['search'] = true;
         }
@@ -447,7 +442,7 @@ class ScopeBuilder extends Form\Control
     }
 
     /**
-     * Return an array of items id and name for a field.
+     * Return an array of items ID and name for a field.
      * Return field enum, values or reference values.
      */
     protected function getFieldItems(Field $field, ?int $limit = 250): array
@@ -535,9 +530,9 @@ class ScopeBuilder extends Form\Control
      */
     public function queryToCondition(array $query): Scope\Condition
     {
-        $key = $query['rule'] ?? null;
-        $operator = $query['operator'] ?? null;
-        $value = $query['value'] ?? null;
+        $key = $query['rule'];
+        $operator = $query['operator'];
+        $value = $query['value'];
 
         switch ($operator) {
             case self::OPERATOR_EMPTY:

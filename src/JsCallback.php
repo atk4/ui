@@ -12,7 +12,7 @@ use Atk4\Ui\Js\JsExpressionable;
 
 class JsCallback extends Callback
 {
-    /** @var array Holds information about arguments passed in to the callback. */
+    /** @var array<string, string|JsExpressionable> Holds information about arguments passed in to the callback. */
     public $args = [];
 
     /** @var string Text to display as a confirmation. Set with setConfirm(..). */
@@ -28,7 +28,7 @@ class JsCallback extends Callback
      * Usually JsCallback should not allow to trigger during a reload.
      * Consider reloading a form, if triggering is allowed during the reload process
      * then $form->model could be saved during that reload which can lead to unexpected result
-     * if model id is not properly handled.
+     * if model ID is not properly handled.
      *
      * @var bool
      */
@@ -71,7 +71,7 @@ class JsCallback extends Callback
         $this->args = [];
         foreach ($args ?? [] as $key => $val) {
             if (is_int($key)) {
-                $key = 'c' . $key;
+                $key = $this->name . '_c' . $key;
             }
             $this->args[$key] = $val;
         }
@@ -80,8 +80,8 @@ class JsCallback extends Callback
             $chain = new Jquery();
 
             $values = [];
-            foreach ($this->args as $key => $value) {
-                $values[] = $_POST[$key] ?? null;
+            foreach (array_keys($this->args) as $key) {
+                $values[] = $_POST[$key];
             }
 
             $response = $fx($chain, ...$values);
@@ -105,9 +105,9 @@ class JsCallback extends Callback
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
      *
-     * @param string|null $ajaxec
-     * @param ($success is true ? null : string)      $msg     General message, typically won't be displayed
-     * @param bool $success Was request successful or not
+     * @param string|null                        $ajaxec
+     * @param ($success is true ? null : string) $msg     General message, typically won't be displayed
+     * @param bool                               $success Was request successful or not
      */
     public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
     {
@@ -145,7 +145,7 @@ class JsCallback extends Callback
     }
 
     /**
-     * Transform response into proper js Action and return it.
+     * Transform response into proper JS Action and return it.
      *
      * @param View|string|JsExpressionable $response
      */

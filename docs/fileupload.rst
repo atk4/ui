@@ -140,7 +140,7 @@ UploadImage form control inherits all of the Upload properties plus these ones:
 
 The thumbnail view associated with the form control.
 
-.. php:attr:: thumnailRegion
+.. php:attr:: thumbnailRegion
 
 The region in input template where to add the thumbnail view, default to AfterAfterInput region.
 

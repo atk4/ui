@@ -32,7 +32,7 @@ class Crud extends Grid
     /** @var bool|null should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
 
-    /** @var array<string, array{item: MenuItem, executor: object}> Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
+    /** @var array<string, array{item: MenuItem, executor: AbstractView&ExecutorInterface}> Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
     private array $menuItems = [];
 
     /** Model single scope action to include in table action column. Will include all single scope actions if empty. */
@@ -53,7 +53,7 @@ class Crud extends Grid
     /** @var array<int, array<string, \Closure(Form, UserAction\ModalExecutor): void>> Callback containers for model action. */
     public $onActions = [];
 
-    /** @var mixed recently deleted record id. */
+    /** @var mixed recently deleted record ID. */
     private $deletedId;
 
     protected function init(): void
@@ -93,7 +93,7 @@ class Crud extends Grid
 
         parent::setModel($model, $this->displayFields);
 
-        // Grab model id when using delete. Must be set before delete action execute.
+        // Grab model ID when using delete. Must be set before delete action execute.
         $this->model->onHook(Model::HOOK_AFTER_DELETE, function (Model $model) {
             $this->deletedId = $model->getId();
         });
@@ -135,7 +135,7 @@ class Crud extends Grid
      * can setup Input field via javascript prior to display form or change form submit event
      * handler.
      *
-     * @return object
+     * @return AbstractView&ExecutorInterface
      */
     protected function initActionExecutor(Model\UserAction $action)
     {
@@ -159,7 +159,7 @@ class Crud extends Grid
     }
 
     /**
-     * Return proper js statement for afterExecute hook on action executor
+     * Return proper JS statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      *
      * @param string|null $return
@@ -189,7 +189,7 @@ class Crud extends Grid
     }
 
     /**
-     * Return proper js actions depending on action modifier type.
+     * Return proper JS actions depending on action modifier type.
      */
     protected function getJsGridAction(Model\UserAction $action): ?JsExpressionable
     {
@@ -200,7 +200,7 @@ class Crud extends Grid
 
                 break;
             case Model\UserAction::MODIFIER_DELETE:
-                // use deleted record id to remove row, fallback to closest tr if id is not available.
+                // use deleted record ID to remove row, fallback to closest tr if ID is not available.
                 $js = $this->deletedId
                     ? $this->js(false, null, 'tr[data-id="' . $this->deletedId . '"]')
                     : (new Jquery())->closest('tr');
@@ -228,7 +228,7 @@ class Crud extends Grid
     }
 
     /**
-     * Setup js for firing menu action.
+     * Setup JS for firing menu action.
      */
     protected function setItemsAction(): void
     {
@@ -243,7 +243,7 @@ class Crud extends Grid
     /**
      * Return proper action executor base on model action.
      *
-     * @return object
+     * @return AbstractView&ExecutorInterface
      */
     protected function getExecutor(Model\UserAction $action)
     {
@@ -293,17 +293,6 @@ class Crud extends Grid
     }
 
     /**
-     * Set callback for edit action in Crud.
-     * Callback function will receive the Edit Form and Executor as param.
-     *
-     * @param \Closure(Form, UserAction\ModalExecutor): void $fx
-     */
-    public function onFormEdit(\Closure $fx): void
-    {
-        $this->setOnActions('edit', $fx);
-    }
-
-    /**
      * Set callback for add action in Crud.
      * Callback function will receive the Add Form and Executor as param.
      *
@@ -315,6 +304,17 @@ class Crud extends Grid
     }
 
     /**
+     * Set callback for edit action in Crud.
+     * Callback function will receive the Edit Form and Executor as param.
+     *
+     * @param \Closure(Form, UserAction\ModalExecutor): void $fx
+     */
+    public function onFormEdit(\Closure $fx): void
+    {
+        $this->setOnActions('edit', $fx);
+    }
+
+    /**
      * Set callback for both edit and add action form.
      * Callback function will receive Forms and Executor as param.
      *
@@ -322,8 +322,8 @@ class Crud extends Grid
      */
     public function onFormAddEdit(\Closure $fx): void
     {
-        $this->onFormEdit($fx);
         $this->onFormAdd($fx);
+        $this->onFormEdit($fx);
     }
 
     /**

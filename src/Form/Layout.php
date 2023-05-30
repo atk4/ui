@@ -36,7 +36,7 @@ class Layout extends AbstractLayout
     /** @var bool Set true if you want fields to appear in-line. */
     public $inline = false;
 
-    /** @var HtmlTemplate|null Template holding input html. */
+    /** @var HtmlTemplate|null Template holding input HTML. */
     public $inputTemplate;
 
     /** @var array Seed for creating input hint View used in this layout. */

@@ -72,7 +72,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * @param \Closure($this): void $fx    callback which will be executed while displaying output inside console
      * @param bool|string           $event "true" would mean to execute on page load, string would indicate
-     *                                     js event. See first argument for View::js()
+     *                                     JS event. See first argument for View::js()
      *
      * @return $this
      */
@@ -320,7 +320,6 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     protected function execRaw(string $command, array $args = [])
     {
-        $command = escapeshellcmd($command);
         $args = array_map(fn ($v) => escapeshellarg($v), $args);
 
         $spec = [1 => ['pipe', 'w'], 2 => ['pipe', 'w']]; // we want stdout and stderr

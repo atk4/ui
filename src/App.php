@@ -25,6 +25,7 @@ use Nyholm\Psr7\Response;
 use Nyholm\Psr7Server\ServerRequestCreator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -43,6 +44,7 @@ class App
         'jquery' => '/public/external/jquery/dist',
         'fomantic-ui' => '/public/external/fomantic-ui/dist',
         'flatpickr' => '/public/external/flatpickr/dist',
+        'highlight.js' => '/public/external/@highlightjs/cdn-assets',
         'chart.js' => '/public/external/chart.js/dist', // for atk4/chart
     ];
 
@@ -107,11 +109,11 @@ class App
 
     private ResponseInterface $response;
 
-    /** @var array<string, View> Modal view that need to be rendered using json output. */
+    /** @var array<string, View> Modal view that need to be rendered using JSON output. */
     private $portals = [];
 
     /**
-     * @var string used in method App::url to build the url
+     * @var string used in method App::url to build the URL
      *
      * Used only in method App::url
      * Remove and re-add the extension of the file during parsing requests and building urls
@@ -229,7 +231,7 @@ class App
      * Register a portal view.
      * Fomantic-ui Modal or atk Panel are teleported in HTML template
      * within specific location. This will keep track
-     * of them when terminating app using json.
+     * of them when terminating app using JSON.
      *
      * @param Modal|Panel\Right $portal
      */
@@ -394,7 +396,7 @@ class App
      * directly, instead call it form Callback, JsCallback or similar
      * other classes.
      *
-     * @param string|array $output Array type is supported only for JSON response
+     * @param string|StreamInterface|array $output Array type is supported only for JSON response
      *
      * @return never
      */
@@ -405,7 +407,10 @@ class App
             throw new Exception('Content type must be always set');
         }
 
-        if ($type === 'application/json') {
+        if ($output instanceof StreamInterface) {
+            $this->response = $this->response->withBody($output);
+            $this->outputResponse('');
+        } elseif ($type === 'application/json') {
             if (is_string($output)) {
                 $output = $this->decodeJson($output);
             }
@@ -414,7 +419,7 @@ class App
             $this->outputResponseJson($output);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
             // ugly hack for TABS
-            // because Fomantic-UI tab only deal with html and not JSON
+            // because Fomantic-UI tab only deal with HTML and not JSON
             // we need to hack output to include app modal.
             $ids = [];
             $remove_function = '';
@@ -504,8 +509,7 @@ class App
      */
     public function initIncludes(): void
     {
-        /** @var bool */
-        $minified = true;
+        $minified = !file_exists(__DIR__ . '/../.git');
 
         // jQuery
         $this->requireJs($this->cdn['jquery'] . '/jquery' . ($minified ? '.min' : '') . '.js');
@@ -527,7 +531,7 @@ class App
         $this->requireJs($this->cdn['atk'] . '/js/atkjs-ui' . ($minified ? '.min' : '') . '.js');
         $this->requireCss($this->cdn['atk'] . '/css/agileui.min.css');
 
-        // Set js bundle dynamic loading path.
+        // set JS bundle dynamic loading path
         $this->html->template->tryDangerouslySetHtml(
             'InitJsBundle',
             (new JsExpression('window.__atkBundlePublicPath = [];', [$this->cdn['atk']]))->jsRender()
@@ -746,7 +750,7 @@ class App
     }
 
     /**
-     * Build a URL that application can use for js call-backs. Some framework integration will use a different routing
+     * Build a URL that application can use for JS callbacks. Some framework integration will use a different routing
      * mechanism for NON-HTML response.
      *
      * @param array|string $page                URL as string or array with page name as first element and other GET arguments
@@ -1097,7 +1101,7 @@ class App
         }
 
         while (!$stream->eof()) {
-            echo $stream->read(4096);
+            echo $stream->read(16 * 1024);
         }
     }
 
@@ -1128,7 +1132,10 @@ class App
             return;
         }
 
-        $this->response->getBody()->write($data);
+        if ($data !== '') {
+            $this->response->getBody()->write($data);
+        }
+
         $this->emitResponse();
     }
 
@@ -1145,9 +1152,9 @@ class App
             $this->response = $this->response->withoutHeader($name);
         }
 
-        $this->response->getBody()->write("\n"
+        $this->response = $this->response->withBody((new Psr17Factory())->createStream("\n"
             . '!! FATAL UI ERROR: ' . $exception->getMessage() . ' !!'
-            . "\n");
+            . "\n"));
         $this->emitResponse();
 
         $this->runCalled = true; // prevent shutdown function from triggering
@@ -1180,7 +1187,7 @@ class App
     }
 
     /**
-     * Generated html and js for portal view registered to app.
+     * Generated HTML and JS for portal view registered to app.
      */
     private function getRenderedPortals(): array
     {

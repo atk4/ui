@@ -99,7 +99,7 @@ class VirtualPage extends View
             if ($mode === 'popup') {
                 $this->getApp()->html->template->set('title', $this->getApp()->title);
                 $this->getApp()->html->template->dangerouslySetHtml('Content', parent::getHtml());
-                $this->getApp()->html->template->dangerouslyAppendHtml('Head', $this->getApp()->getTag('script', [], '$(function () {' . $this->getJs() . ';});'));
+                $this->getApp()->html->template->dangerouslyAppendHtml('Head', $this->getApp()->getTag('script', [], '$(function () { ' . $this->getJs() . '; });'));
 
                 $this->getApp()->terminateHtml($this->getApp()->html->template);
             }
