@@ -413,7 +413,7 @@ trait StepExecutorTrait
     protected function jsStepSubmit(string $step)
     {
         try {
-            if ($this->isLastStep($step)) {
+            if (count($this->steps) === 1) {
                 // collect argument and execute action
                 $return = $this->action->execute(...$this->getActionArgs($this->getActionData('args')));
                 $js = $this->jsGetExecute($return, $this->action->getEntity()->getId());
@@ -423,7 +423,7 @@ trait StepExecutorTrait
                     $this->loader->jsAddStoreData($this->actionData, true),
                     $this->loader->jsLoad(
                         [
-                            'step' => $this->getNextStep($step),
+                            'step' => $this->isLastStep($step) ? 'final' : $this->getNextStep($step),
                             $this->name => $this->action->getEntity()->getId(),
                         ],
                         ['method' => 'POST'],
