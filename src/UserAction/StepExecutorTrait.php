@@ -201,7 +201,7 @@ trait StepExecutorTrait
             $chain = $this->loader->jsLoad([
                 'step' => $prev,
                 $this->name => $this->action->getEntity()->getId(),
-            ], ['method' => 'post'], $this->loader->name);
+            ], ['method' => 'POST'], $this->loader->name);
 
             $page->js(true, $this->prevStepButton->js()->on('click', new JsFunction([], [$chain])));
         }
@@ -215,7 +215,7 @@ trait StepExecutorTrait
                         'step' => 'final',
                         $this->name => $this->action->getEntity()->getId(),
                     ],
-                    ['method' => 'post'],
+                    ['method' => 'POST'],
                     $this->loader->name
                 ),
             ]))
@@ -410,7 +410,7 @@ trait StepExecutorTrait
             $chain = $this->loader->jsLoad([
                 'step' => $prev,
                 $this->name => $this->action->getEntity()->getId(),
-            ], ['method' => 'post'], $this->loader->name);
+            ], ['method' => 'POST'], $this->loader->name);
 
             $view->js(true, $this->prevStepButton->js()->on('click', new JsFunction([], [$chain])));
         }
@@ -447,7 +447,7 @@ trait StepExecutorTrait
                     $this->loader->jsLoad([
                         'step' => $this->getNextStep($step),
                         $this->name => $this->action->getEntity()->getId(),
-                    ], ['method' => 'post'], $this->loader->name),
+                    ], ['method' => 'POST'], $this->loader->name),
                 ]);
             }
 

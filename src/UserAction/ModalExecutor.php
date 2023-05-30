@@ -107,7 +107,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             $this->jsShow(),
             $this->js()->data('closeOnLoadingError', true),
             $this->loader->jsLoad($urlArgs, [
-                'method' => 'post',
+                'method' => 'POST',
                 'onSuccess' => new JsFunction([], [$this->js()->removeData('closeOnLoadingError')]),
             ]),
         ]);
@@ -130,7 +130,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             // use modal for stepping action.
             $urlArgs['step'] = $this->step;
             if ($this->action->enabled) {
-                $view->on($when, $selector, $this->jsShowAndLoad($urlArgs, ['method' => 'post']));
+                $view->on($when, $selector, $this->jsShowAndLoad($urlArgs, ['method' => 'POST']));
             } else {
                 $view->addClass('disabled');
             }
@@ -147,7 +147,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
         $urlArgs['step'] = $this->step;
 
-        return $this->jsShowAndLoad($urlArgs, ['method' => 'post']);
+        return $this->jsShowAndLoad($urlArgs, ['method' => 'POST']);
     }
 
     /**
