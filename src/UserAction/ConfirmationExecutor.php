@@ -80,7 +80,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             $this->jsShow(),
             $this->js()->data('closeOnLoadingError', true),
             $this->loader->jsLoad($urlArgs, [
-                'method' => 'post',
+                'method' => 'POST',
                 'onSuccess' => new JsFunction([], [$this->js()->removeData('closeOnLoadingError')]),
             ]),
         ]);
@@ -92,7 +92,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             throw new Exception('Action must be set prior to assign trigger');
         }
 
-        return $this->jsShowAndLoad($urlArgs, ['method' => 'post']);
+        return $this->jsShowAndLoad($urlArgs, ['method' => 'POST']);
     }
 
     public function getAction(): UserAction
@@ -155,7 +155,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
                         'step' => 'exec',
                         $this->name => $this->action->getEntity()->getId(),
                     ],
-                    ['method' => 'post']
+                    ['method' => 'POST']
                 ),
             ]))
         );

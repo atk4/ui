@@ -307,6 +307,7 @@ class AtkPlugin {
    *
    * @param   {string}    fn   string representing the method name to execute.
    * @param   {Array.<*>} args array of arguments need for the method to execute.
+   *
    * @returns {*}
    */
   call(fn, args) {
@@ -1007,7 +1008,7 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
     this.searchAction = this.$el.find('.atk-search-button');
     this.searchIcon = this.searchAction.find('i.atk-search-icon');
     this.removeIcon = this.searchAction.find('i.atk-remove-icon').hide();
-    this.$el.data('preValue', '');
+    this.$el.data('previousValue', '');
     this.setInputAction();
     this.setSearchAction();
     this.onEscapeKeyAction();
@@ -1041,13 +1042,13 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
           this.setFilterState(false);
           this.textInput.val('');
         });
-      } else if (e.target.value !== this.$el.data('preValue')) {
+      } else if (e.target.value !== this.$el.data('previousValue')) {
         this.doSearch(this.settings.url, e.target.value, options, () => {
           this.setButtonState(true);
           this.setFilterState(true);
         });
       }
-      this.$el.data('preValue', e.target.value);
+      this.$el.data('previousValue', e.target.value);
     }, this.settings.timeOut));
   }
 
@@ -1062,15 +1063,15 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
           this.setButtonState(true);
           this.setFilterState(true);
         });
-        this.$el.data('preValue', e.target.value);
+        this.$el.data('previousValue', e.target.value);
       } else if (e.keyCode === 27 && e.target.value || e.keyCode === 13 && e.target.value === '') {
         this.doSearch(this.settings.url, null, options, () => {
           this.setButtonState(false);
           this.setFilterState(false);
         });
-        this.$el.data('preValue', '');
+        this.$el.data('previousValue', '');
         this.textInput.val('');
-      } else if (this.$el.data('preValue') !== e.target.value) {
+      } else if (this.$el.data('previousValue') !== e.target.value) {
         this.setButtonState(false);
       }
     });
@@ -1103,7 +1104,7 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
           this.setFilterState(false);
         });
         this.textInput.val('');
-        this.$el.data('preValue', '');
+        this.$el.data('previousValue', '');
       }
       if (!this.state.button && this.textInput.val()) {
         this.doSearch(this.settings.url, this.textInput.val(), options, () => {
@@ -1124,7 +1125,7 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
     this.textInput.val(text);
     this.setButtonState(true);
     this.setFilterState(true);
-    this.$el.data('preValue', text);
+    this.$el.data('previousValue', text);
   }
 
   /**
@@ -2081,6 +2082,7 @@ class ApiService {
    *
    * @param   {string}       url      the URL to fetch data
    * @param   {object}       settings the Fomantic-UI api settings object.
+   *
    * @returns {Promise<any>}
    */
   suiFetch(url) {
@@ -2406,6 +2408,7 @@ class FormService {
    * @param   {$}             $form     Form containing the field.
    * @param   {string}        fieldName Name of field
    * @param   {string|object} rule      Rule to apply test.
+   *
    * @returns {*|false}
    */
   validateField($form, fieldName, rule) {
@@ -2559,11 +2562,11 @@ class ModalService {
   addModal($modal) {
     // hide other modals
     if (this.modals.length > 1) {
-      const $prevModal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.modals.at(-2));
-      if ($prevModal.hasClass('visible')) {
-        $prevModal.css('visibility', 'hidden');
-        $prevModal.addClass('__hiddenNotFront');
-        $prevModal.removeClass('visible');
+      const $previousModal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.modals.at(-2));
+      if ($previousModal.hasClass('visible')) {
+        $previousModal.css('visibility', 'hidden');
+        $previousModal.addClass('__hiddenNotFront');
+        $previousModal.removeClass('visible');
       }
     }
     const data = $modal.data();
@@ -2620,14 +2623,14 @@ class ModalService {
 
     // hide other modals
     if (this.modals.length > 0) {
-      const $prevModal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.modals.at(-1));
-      if ($prevModal.hasClass('__hiddenNotFront')) {
-        $prevModal.css('visibility', '');
-        $prevModal.addClass('visible');
-        $prevModal.removeClass('__hiddenNotFront');
+      const $previousModal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.modals.at(-1));
+      if ($previousModal.hasClass('__hiddenNotFront')) {
+        $previousModal.css('visibility', '');
+        $previousModal.addClass('visible');
+        $previousModal.removeClass('__hiddenNotFront');
         // recenter modal, needed even with observeChanges enabled
         // https://github.com/fomantic/Fomantic-UI/issues/2476
-        $prevModal.modal('refresh');
+        $previousModal.modal('refresh');
       }
     }
   }

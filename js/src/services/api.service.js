@@ -171,6 +171,7 @@ class ApiService {
      *
      * @param   {string}       url      the URL to fetch data
      * @param   {object}       settings the Fomantic-UI api settings object.
+     *
      * @returns {Promise<any>}
      */
     suiFetch(url, settings = {}, el = 'body') {

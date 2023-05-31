@@ -166,23 +166,23 @@ $stepModal = Modal::addTo($app, ['title' => 'Multi step actions']);
 
 // Add buttons to modal for next and previous actions.
 $action = new View(['ui' => 'buttons']);
-$prevAction = new Button(['Prev', 'icon' => 'left arrow']);
+$previousAction = new Button(['Previous', 'icon' => 'left arrow']);
 $nextAction = new Button(['Next', 'iconRight' => 'right arrow']);
 
-$action->add($prevAction);
+$action->add($previousAction);
 $action->add($nextAction);
 
 $stepModal->addButtonAction($action);
 
 // Set modal functionality. Will changes content according to page being displayed.
-$stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
+$stepModal->set(function (View $p) use ($session, $previousAction, $nextAction) {
     $page = $session->recall('page', 1);
     $success = $session->recall('success', false);
     if (isset($_GET['move'])) {
         if ($_GET['move'] === 'next' && $success) {
             ++$page;
         }
-        if ($_GET['move'] === 'prev' && $page > 1) {
+        if ($_GET['move'] === 'previous' && $page > 1) {
             --$page;
         }
         $session->memorize('success', false);
@@ -194,9 +194,9 @@ $stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
     if ($page === 1) {
         Message::addTo($p)->set('Thanks for choosing us. We will be asking some questions along the way.');
         $session->memorize('success', true);
-        $p->js(true, $prevAction->js()->show());
+        $p->js(true, $previousAction->js()->show());
         $p->js(true, $nextAction->js()->show());
-        $p->js(true, $prevAction->js()->addClass('disabled'));
+        $p->js(true, $previousAction->js()->addClass('disabled'));
         $p->js(true, $nextAction->js()->removeClass('disabled'));
     } elseif ($page === 2) {
         $modelRegister = new Model(new Persistence\Array_());
@@ -219,25 +219,23 @@ $stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
 
             return $js;
         });
-        $p->js(true, $prevAction->js()->removeClass('disabled'));
+        $p->js(true, $previousAction->js()->removeClass('disabled'));
         $p->js(true, $nextAction->js()->addClass('disabled'));
     } elseif ($page === 3) {
         $name = $session->recall('name');
         Message::addTo($p)->set("Thank you {$name} for visiting us! We will be in touch");
         $session->memorize('success', true);
-        $p->js(true, $prevAction->js()->hide());
+        $p->js(true, $previousAction->js()->hide());
         $p->js(true, $nextAction->js()->hide());
     }
 });
 
-// Bind next action to modal next button.
-$nextAction->on('click', $stepModal->js()->atkReloadView(
-    ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'next']]
+$previousAction->on('click', $stepModal->js()->atkReloadView(
+    ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'previous']]
 ));
 
-// Bin prev action to modal previous button.
-$prevAction->on('click', $stepModal->js()->atkReloadView(
-    ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'prev']]
+$nextAction->on('click', $stepModal->js()->atkReloadView(
+    ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'next']]
 ));
 
 // Bind display modal to page display button.

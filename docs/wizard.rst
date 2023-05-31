@@ -81,12 +81,12 @@ started with 0.
 When Wizard is initialized, it will set currentStep to a number (0, 1, 2, ..) corresponding to your steps
 and finish callback, if you have specified it.
 
-.. php:attr:: buttonPrev
+.. php:attr:: buttonPrevious
 .. php:attr:: buttonNext
 .. php:attr:: buttonFinish
 
 Those properties will be initialized with the buttons, but some of them may be destroyed by the render step,
-if the button is not applicable. For example, first step should not have "prev" button. You can change label
+if the button is not applicable. For example, first step should not have "Previous" button. You can change label
 or icon on existing button.
 
 
