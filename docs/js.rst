@@ -370,7 +370,6 @@ and the actual View objects. For example, to match the size of `$right_container
 with the size of `$left_container`::
 
     $heights = [];
-
     foreach ($left_container->elements as $left_box) {
         $heights[] = $left_box->js()->height();
     }

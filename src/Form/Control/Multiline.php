@@ -249,7 +249,6 @@ class Multiline extends Form\Control
     protected function typeCastLoadValues(array $values): array
     {
         $dataRows = [];
-
         foreach ($values as $k => $row) {
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
