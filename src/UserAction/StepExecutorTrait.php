@@ -154,7 +154,7 @@ trait StepExecutorTrait
 
         // setup execute, next and previous button handler for this step
         $this->jsSetSubmitButton($page, $form, $this->step);
-        $this->jsSetPrevHandler($page, $this->step);
+        $this->jsSetPreviousHandler($page, $this->step);
 
         $form->onSubmit(function (Form $form) {
             // collect arguments
@@ -175,7 +175,7 @@ trait StepExecutorTrait
 
         // setup execute, next and previous button handler for this step
         $this->jsSetSubmitButton($page, $form, $this->step);
-        $this->jsSetPrevHandler($page, $this->step);
+        $this->jsSetPreviousHandler($page, $this->step);
 
         if (!$form->hookHasCallbacks(Form::HOOK_SUBMIT)) {
             $form->onSubmit(function (Form $form) {
@@ -325,7 +325,7 @@ trait StepExecutorTrait
             $view->js(true, $this->previousStepButton->js()->hide());
             $view->js(true, $this->nextStepButton->js()->hide());
         } else {
-            $view->js(true, $this->jsSetPrevState($step));
+            $view->js(true, $this->jsSetPreviousState($step));
             $view->js(true, $this->jsSetNextState($step));
             $view->js(true, $this->jsSetExecState($step));
         }
@@ -353,7 +353,7 @@ trait StepExecutorTrait
     /**
      * Generated JS for Previous button state.
      */
-    protected function jsSetPrevState(string $step): JsExpressionable
+    protected function jsSetPreviousState(string $step): JsExpressionable
     {
         if ($this->isFirstStep($step)) {
             return $this->previousStepButton->js()->hide();
@@ -377,7 +377,7 @@ trait StepExecutorTrait
     /**
      * Generate JS function for Previous button.
      */
-    protected function jsSetPrevHandler(View $view, string $step): void
+    protected function jsSetPreviousHandler(View $view, string $step): void
     {
         if (!$this->isFirstStep($step)) {
             $chain = $this->loader->jsLoad(
