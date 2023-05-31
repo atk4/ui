@@ -56,7 +56,7 @@ class DemoActionsUtil
             },
         ]);
 
-        $country->addUserAction('edit_argument_prev', [
+        $country->addUserAction('edit_argument_preview', [
             'caption' => 'Argument/Preview',
             'description' => 'Ask for argument "Age" and display preview prior to execute',
             'args' => [
