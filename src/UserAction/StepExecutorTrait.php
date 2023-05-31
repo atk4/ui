@@ -35,7 +35,7 @@ trait StepExecutorTrait
     public $loaderShim = [];
 
     /** @var Button The action step prev button. */
-    protected $prevStepButton;
+    protected $previousStepButton;
 
     /** @var Button The action next step button. */
     protected $nextStepButton;
@@ -206,7 +206,7 @@ trait StepExecutorTrait
                 $this->loader->name
             );
 
-            $page->js(true, $this->prevStepButton->js()->on('click', new JsFunction([], [$chain])));
+            $page->js(true, $this->previousStepButton->js()->on('click', new JsFunction([], [$chain])));
         }
 
         // setup executor button to perform action
@@ -308,7 +308,7 @@ trait StepExecutorTrait
     protected function createButtonBar(): View
     {
         $this->buttonsView = (new View())->setStyle(['min-height' => '24px']);
-        $this->prevStepButton = Button::addTo($this->buttonsView, ['Prev'])->setStyle(['float' => 'left !important']);
+        $this->previousStepButton = Button::addTo($this->buttonsView, ['Prev'])->setStyle(['float' => 'left !important']);
         $this->nextStepButton = Button::addTo($this->buttonsView, ['Next', 'class.blue' => true]);
         $this->execActionButton = $this->getExecutorFactory()->createTrigger($this->action, ExecutorFactory::MODAL_BUTTON);
         $this->buttonsView->add($this->execActionButton);
@@ -322,7 +322,7 @@ trait StepExecutorTrait
     protected function jsSetButtonsState(View $view, string $step): void
     {
         if (count($this->steps) === 1) {
-            $view->js(true, $this->prevStepButton->js()->hide());
+            $view->js(true, $this->previousStepButton->js()->hide());
             $view->js(true, $this->nextStepButton->js()->hide());
         } else {
             $view->js(true, $this->jsSetPrevState($step));
@@ -333,7 +333,7 @@ trait StepExecutorTrait
         // reset button handler
         $view->js(true, $this->execActionButton->js()->off());
         $view->js(true, $this->nextStepButton->js()->off());
-        $view->js(true, $this->prevStepButton->js()->off());
+        $view->js(true, $this->previousStepButton->js()->off());
         $view->js(true, $this->nextStepButton->js()->removeClass('disabled'));
         $view->js(true, $this->execActionButton->js()->removeClass('disabled'));
     }
@@ -356,10 +356,10 @@ trait StepExecutorTrait
     protected function jsSetPrevState(string $step): JsExpressionable
     {
         if ($this->isFirstStep($step)) {
-            return $this->prevStepButton->js()->hide();
+            return $this->previousStepButton->js()->hide();
         }
 
-        return $this->prevStepButton->js()->show();
+        return $this->previousStepButton->js()->show();
     }
 
     /**
@@ -389,7 +389,7 @@ trait StepExecutorTrait
                 $this->loader->name
             );
 
-            $view->js(true, $this->prevStepButton->js()->on('click', new JsFunction([], [$chain])));
+            $view->js(true, $this->previousStepButton->js()->on('click', new JsFunction([], [$chain])));
         }
     }
 
