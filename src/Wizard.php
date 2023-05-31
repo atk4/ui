@@ -25,7 +25,7 @@ class Wizard extends View
     public $currentStep;
 
     /** @var Button Button for going to previous step. */
-    public $buttonPrev;
+    public $buttonPrevious;
     /** @var Button Button for going to next step. */
     public $buttonNext;
     /** @var Button */
@@ -59,8 +59,8 @@ class Wizard extends View
 
         // add buttons
         if ($this->currentStep) {
-            $this->buttonPrev = Button::addTo($this, ['Back', 'class.basic' => true], ['Left']);
-            $this->buttonPrev->link($this->getUrl($this->currentStep - 1));
+            $this->buttonPrevious = Button::addTo($this, ['Back', 'class.basic' => true], ['Left']);
+            $this->buttonPrevious->link($this->getUrl($this->currentStep - 1));
         }
 
         $this->buttonNext = Button::addTo($this, ['Next', 'class.primary' => true], ['Right']);
@@ -119,7 +119,7 @@ class Wizard extends View
         if (count($this->steps) === $this->currentStep + 1) {
             $this->buttonFinish->link($this->getUrl(count($this->steps)));
         } elseif ($this->currentStep === count($this->steps)) {
-            $this->buttonPrev->destroy();
+            $this->buttonPrevious->destroy();
             $this->buttonNext->addClass('disabled')->set('Completed');
             $this->buttonFinish->destroy();
 
