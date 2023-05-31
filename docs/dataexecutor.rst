@@ -203,7 +203,7 @@ The method is::
 This method return an instance object for the proper type. When no type is supply, a default View Button obeject
 is returned.
 
-As per execucor type, it is also possible to add or change already register type via the registerTrigger method::
+As per executor type, it is also possible to add or change already register type via the registerTrigger method::
 
     ExecutorFactory::registerTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false): void
 

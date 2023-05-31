@@ -122,7 +122,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
         $this->loader->set(function (Loader $p) {
             $this->jsSetButtonsState($p);
-            if ($this->step === 'exec') {
+            if ($this->step === 'execute') {
                 $this->doFinal($p);
             } else {
                 $this->doConfirmation($p);
@@ -152,7 +152,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             $this->ok->js()->on('click', new JsFunction([], [
                 $this->loader->jsLoad(
                     [
-                        'step' => 'exec',
+                        'step' => 'execute',
                         $this->name => $this->action->getEntity()->getId(),
                     ],
                     ['method' => 'POST']
