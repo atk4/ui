@@ -20,7 +20,7 @@ use Atk4\Ui\View;
 trait StepExecutorTrait
 {
     /** @var array<int, string> The steps need to complete the action. */
-    protected $steps;
+    protected array $steps;
 
     /** @var string current step. */
     protected $step;

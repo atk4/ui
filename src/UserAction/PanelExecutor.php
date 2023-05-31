@@ -77,7 +77,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
 
         // get necessary step need prior to execute action.
         $this->steps = $this->getSteps();
-        if ($this->steps) {
+        if ($this->steps !== []) {
             $this->header->set($this->title ?? $action->getDescription());
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
             $this->add($this->createButtonBar()->setStyle(['text-align' => 'end']));

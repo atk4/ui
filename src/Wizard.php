@@ -18,8 +18,8 @@ class Wizard extends View
     /** @var string Get argument for this wizard. */
     public $urlTrigger;
 
-    /** @var array List of steps. */
-    public $steps = [];
+    /** @var array<int, WizardStep> List of steps. */
+    public array $steps = [];
 
     /** @var int Current step. */
     public $currentStep;
@@ -164,7 +164,7 @@ class Wizard extends View
 
     protected function recursiveRender(): void
     {
-        if (!$this->steps) {
+        if ($this->steps === []) {
             $this->addStep(['No Steps Defined', 'icon' => 'configure', 'description' => 'use $wizard->addStep() now'], function (self $p) {
                 Message::addTo($p, ['Step content will appear here', 'type' => 'error', 'text' => 'Specify callback to addStep() which would populate this area.']);
             });
