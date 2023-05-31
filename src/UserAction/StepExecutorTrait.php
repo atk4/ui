@@ -34,7 +34,7 @@ trait StepExecutorTrait
     /** @var array */
     public $loaderShim = [];
 
-    /** @var Button The action step prev button. */
+    /** @var Button The action step previous button. */
     protected $previousStepButton;
 
     /** @var Button The action next step button. */
@@ -152,7 +152,7 @@ trait StepExecutorTrait
         // set args value if available
         $this->setFormField($form, $this->getActionData('args'), $this->step);
 
-        // setup exec, next and prev button handler for this step
+        // setup execute, next and previous button handler for this step
         $this->jsSetSubmitButton($page, $form, $this->step);
         $this->jsSetPrevHandler($page, $this->step);
 
@@ -173,7 +173,7 @@ trait StepExecutorTrait
         // set Fields value if set from another step
         $this->setFormField($form, $this->getActionData('fields'), $this->step);
 
-        // setup exec, next and prev button handler for this step
+        // setup execute, next and previous button handler for this step
         $this->jsSetSubmitButton($page, $form, $this->step);
         $this->jsSetPrevHandler($page, $this->step);
 
@@ -308,7 +308,7 @@ trait StepExecutorTrait
     protected function createButtonBar(): View
     {
         $this->buttonsView = (new View())->setStyle(['min-height' => '24px']);
-        $this->previousStepButton = Button::addTo($this->buttonsView, ['Prev'])->setStyle(['float' => 'left !important']);
+        $this->previousStepButton = Button::addTo($this->buttonsView, ['Previous'])->setStyle(['float' => 'left !important']);
         $this->nextStepButton = Button::addTo($this->buttonsView, ['Next', 'class.blue' => true]);
         $this->execActionButton = $this->getExecutorFactory()->createTrigger($this->action, ExecutorFactory::MODAL_BUTTON);
         $this->buttonsView->add($this->execActionButton);
@@ -351,7 +351,7 @@ trait StepExecutorTrait
     }
 
     /**
-     * Generated JS for Prev button state.
+     * Generated JS for Previous button state.
      */
     protected function jsSetPrevState(string $step): JsExpressionable
     {
@@ -363,7 +363,7 @@ trait StepExecutorTrait
     }
 
     /**
-     * Generate JS for Exec button state.
+     * Generate JS for Execute button state.
      */
     protected function jsSetExecState(string $step): JsExpressionable
     {
