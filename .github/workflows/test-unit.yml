@@ -316,6 +316,7 @@ jobs:
       - name: Lint JS files (only for Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
+          cp public/external/postinstall.js js
           (cd js && npm run lint)
 
       - name: Compile HTML files (only for Slow)
