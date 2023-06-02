@@ -55,7 +55,6 @@ class PreviewExecutor extends BasicExecutor
     public function executePreview()
     {
         $args = [];
-
         foreach ($this->action->args as $key => $val) {
             $args[] = $this->arguments[$key];
         }

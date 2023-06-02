@@ -41,7 +41,7 @@ trait StepExecutorTrait
     protected $nextStepButton;
 
     /** @var Button The execute action button. */
-    protected $execActionButton;
+    protected $executeActionButton;
 
     /** @var View */
     protected $buttonsView;
@@ -212,7 +212,7 @@ trait StepExecutorTrait
         // setup executor button to perform action
         $page->js(
             true,
-            $this->execActionButton->js()->on('click', new JsFunction([], [
+            $this->executeActionButton->js()->on('click', new JsFunction([], [
                 $this->loader->jsLoad(
                     [
                         'step' => 'final',
@@ -310,8 +310,8 @@ trait StepExecutorTrait
         $this->buttonsView = (new View())->setStyle(['min-height' => '24px']);
         $this->previousStepButton = Button::addTo($this->buttonsView, ['Previous'])->setStyle(['float' => 'left !important']);
         $this->nextStepButton = Button::addTo($this->buttonsView, ['Next', 'class.blue' => true]);
-        $this->execActionButton = $this->getExecutorFactory()->createTrigger($this->action, ExecutorFactory::MODAL_BUTTON);
-        $this->buttonsView->add($this->execActionButton);
+        $this->executeActionButton = $this->getExecutorFactory()->createTrigger($this->action, ExecutorFactory::MODAL_BUTTON);
+        $this->buttonsView->add($this->executeActionButton);
 
         return $this->buttonsView;
     }
@@ -327,15 +327,15 @@ trait StepExecutorTrait
         } else {
             $view->js(true, $this->jsSetPreviousState($step));
             $view->js(true, $this->jsSetNextState($step));
-            $view->js(true, $this->jsSetExecState($step));
+            $view->js(true, $this->jsSetExecuteState($step));
         }
 
         // reset button handler
-        $view->js(true, $this->execActionButton->js()->off());
+        $view->js(true, $this->executeActionButton->js()->off());
         $view->js(true, $this->nextStepButton->js()->off());
         $view->js(true, $this->previousStepButton->js()->off());
         $view->js(true, $this->nextStepButton->js()->removeClass('disabled'));
-        $view->js(true, $this->execActionButton->js()->removeClass('disabled'));
+        $view->js(true, $this->executeActionButton->js()->removeClass('disabled'));
     }
 
     /**
@@ -365,13 +365,13 @@ trait StepExecutorTrait
     /**
      * Generate JS for Execute button state.
      */
-    protected function jsSetExecState(string $step): JsExpressionable
+    protected function jsSetExecuteState(string $step): JsExpressionable
     {
         if ($this->isLastStep($step)) {
-            return $this->execActionButton->js()->show();
+            return $this->executeActionButton->js()->show();
         }
 
-        return $this->execActionButton->js()->hide();
+        return $this->executeActionButton->js()->hide();
     }
 
     /**
@@ -399,7 +399,7 @@ trait StepExecutorTrait
     protected function jsSetSubmitButton(View $view, Form $form, string $step): void
     {
         $button = $this->isLastStep($step)
-            ? $this->execActionButton
+            ? $this->executeActionButton
             : $this->nextStepButton; // submit on next
 
         $view->js(true, $button->js()->on('click', new JsFunction([], [$form->js()->form('submit')])));
@@ -434,7 +434,7 @@ trait StepExecutorTrait
 
             return $js;
         } catch (ValidationException $e) {
-            throw $e;
+            throw $e; // handled by Form::onSubmit() method
         } catch (\Throwable $e) {
             $msg = new Message(['Error executing ' . $this->action->caption, 'type' => 'error', 'class.red' => true]);
             $msg->setApp($this->getApp());
@@ -470,7 +470,6 @@ trait StepExecutorTrait
     protected function getActionPreview()
     {
         $args = [];
-
         foreach ($this->action->args as $key => $val) {
             $args[] = $this->getActionData('args')[$key];
         }
@@ -484,7 +483,6 @@ trait StepExecutorTrait
     protected function getActionArgs(array $data): array
     {
         $args = [];
-
         foreach ($this->action->args as $key => $val) {
             $args[] = $data[$key];
         }
