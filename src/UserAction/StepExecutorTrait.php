@@ -177,14 +177,12 @@ trait StepExecutorTrait
         $this->jsSetSubmitButton($page, $form, $this->step);
         $this->jsSetPreviousHandler($page, $this->step);
 
-        if (!$form->hookHasCallbacks(Form::HOOK_SUBMIT)) {
-            $form->onSubmit(function (Form $form) {
-                // collect fields defined in Model\UserAction
-                $this->setActionDataFromModel('fields', $form->model, $this->action->fields);
+        $form->onSubmit(function (Form $form) {
+            // collect fields defined in Model\UserAction
+            $this->setActionDataFromModel('fields', $form->model, $this->action->fields);
 
-                return $this->jsStepSubmit($this->step);
-            });
-        }
+            return $this->jsStepSubmit($this->step);
+        });
     }
 
     protected function doPreview(View $page): void
