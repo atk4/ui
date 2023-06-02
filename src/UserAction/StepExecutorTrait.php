@@ -7,6 +7,7 @@ namespace Atk4\Ui\UserAction;
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
+use Atk4\Data\Persistence\Array_;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
@@ -70,6 +71,9 @@ trait StepExecutorTrait
     /** @var string */
     public $finalMsg = 'Complete!';
 
+    /** @var array An extended copy of UserAction arguments. It contains original action arguments and arguments set by '__atk_model'. */
+    private $cloneArgs;
+
     /**
      * Utility for setting Title for each step.
      */
@@ -107,12 +111,47 @@ trait StepExecutorTrait
         return $form;
     }
 
+    /**
+     * Set model for userAction arguments.
+     * Override existing argument with model definition.
+     */
+    protected function initActionArguments(): Model
+    {
+        $args = $this->getAction()->args;
+        if (array_key_exists('__atk_model', $args)) {
+            /** @var Model $argsModel */
+            $argsModel = Factory::factory($args['__atk_model']);
+            // if seed is supplied, we need to initialize
+            if (!$argsModel->isInitialized()) {
+                $argsModel->invokeInit();
+            }
+
+            unset($args['__atk_model']);
+        } else {
+            $argsModel = new Model(new Array_([]));
+        }
+
+        foreach ($args as $key => $val) {
+            $argsModel->addField($key, $val);
+        }
+
+        $this->cloneArgs = [];
+        // set userAction args using model field
+        foreach ($argsModel->getFields('editable') as $k => $field) {
+            $this->cloneArgs[$k] = $field->shortName;
+        }
+
+        return $argsModel;
+    }
+
     protected function runSteps(): void
     {
-        $this->loader->set(function (Loader $p) {
+        $argModel = $this->initActionArguments();
+
+        $this->loader->set(function (Loader $p) use ($argModel) {
             switch ($this->step) {
                 case 'args':
-                    $this->doArgs($p);
+                    $this->doArgs($p, $argModel);
 
                     break;
                 case 'fields':
@@ -131,23 +170,13 @@ trait StepExecutorTrait
         });
     }
 
-    protected function doArgs(View $page): void
+    protected function doArgs(View $page, Model $model): void
     {
         $this->addStepTitle($page, $this->step);
 
         $form = $this->addFormTo($page);
-        foreach ($this->action->args as $key => $val) {
-            if ($val instanceof Model) {
-                $val = ['model' => $val];
-            }
 
-            if (isset($val['model'])) {
-                $val['model'] = Factory::factory($val['model']);
-                $form->addControl($key, [Form\Control\Lookup::class])->setModel($val['model']);
-            } else {
-                $form->addControl($key, [], $val);
-            }
-        }
+        $form->setModel($model->createEntity());
 
         // set args value if available
         $this->setFormField($form, $this->getActionData('args'), $this->step);
@@ -157,8 +186,9 @@ trait StepExecutorTrait
         $this->jsSetPreviousHandler($page, $this->step);
 
         $form->onSubmit(function (Form $form) {
+            $form->model->save();
             // collect arguments
-            $this->setActionDataFromModel('args', $form->model, array_keys($form->model->getFields()));
+            $this->setActionDataFromModel('args', $form->model, array_keys($form->model->getFields('editable')));
 
             return $this->jsStepSubmit($this->step);
         });
@@ -471,7 +501,7 @@ trait StepExecutorTrait
     {
         $args = [];
 
-        foreach ($this->action->args as $key => $val) {
+        foreach ($this->cloneArgs as $key => $val) {
             $args[] = $this->getActionData('args')[$key];
         }
 
@@ -485,7 +515,7 @@ trait StepExecutorTrait
     {
         $args = [];
 
-        foreach ($this->action->args as $key => $val) {
+        foreach ($this->cloneArgs as $key => $val) {
             $args[] = $data[$key];
         }
 

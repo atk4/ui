@@ -6,8 +6,39 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
+use Atk4\Data\Persistence\Array_;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
+
+/**
+ *  @property string $age    @Atk4\Field()
+ *  @property string $city   @Atk4\Field()
+ *  @property string $gender @Atk4\Field()
+ */
+class ArgModel extends Model
+{
+    protected function init(): void
+    {
+        parent::init();
+        $this->addField($this->fieldName()->age, ['type' => 'integer', 'required' => true, 'caption' => 'Age must be 21 or over:']);
+        $this->addField($this->fieldName()->city);
+        $this->addField($this->fieldName()->gender, [
+            'default' => 'm',
+            'ui' => ['form' => [Form\Control\Dropdown::class, 'values' => ['m' => 'Male', 'f' => 'Female']],
+            ],
+        ]);
+    }
+
+    public function validate(string $intent = null): array
+    {
+        $error = [];
+        if ($this->get(self::hinting()->fieldName()->age) < 21) {
+            $error = [self::hinting()->fieldName()->age => 'You must be at least 21 years old.'];
+        }
+
+        return array_merge($error, parent::validate($intent));
+    }
+}
 
 class DemoActionsUtil
 {
@@ -124,6 +155,24 @@ class DemoActionsUtil
                         ],
                     ],
                 ],
+            ],
+            'fields' => [$country->fieldName()->iso3],
+            'callback' => function (Country $model, int $age, string $city, string $gender) {
+                $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
+
+                return 'Thank you ' . $n . ' at age ' . $age;
+            },
+            'preview' => function (Country $model, int $age, string $city, string $gender) {
+                return 'Gender = ' . $gender . ' / Age = ' . $age;
+            },
+        ]);
+
+        $country->addUserAction('arg_using_model', [
+            'caption' => 'Arg with Model',
+            'description' => 'Ask for Arguments set via a Data\Model. Allow usage of model validate() for your arguments',
+            'args' => [
+                '__atk_model' => new ArgModel(new Array_([])),
+                'extra' => ['type' => 'string'],
             ],
             'fields' => [$country->fieldName()->iso3],
             'callback' => function (Country $model, int $age, string $city, string $gender) {
