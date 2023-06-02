@@ -213,6 +213,31 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
     });
 });
 
+const cssTokenSelectorPattern = '(?:(?:[^(){}\'",+>~;/\\s]|\'[^\'\\\\{};]*\'|"[^"\\\\{};]*")+)';
+const cssSimpleSelectorPattern = '(?:' + cssTokenSelectorPattern + '(?:\\(\\s*' + cssTokenSelectorPattern + '\\s*\\)' + cssTokenSelectorPattern + '?)*)';
+const cssSingleSelectorPattern = '(?:' + cssSimpleSelectorPattern + '(?:\\s*[ +>~]\\s*' + cssSimpleSelectorPattern + ')*)';
+
+// update Fomantic-UI ":first-child" selectors to work with immediately closed form tag
+// https://github.com/atk4/ui/issues/1970
+walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
+    updateFileSync(f, (data) => {
+        if (!f.endsWith('.css')) {
+            return;
+        }
+
+        data = data.replaceAll(new RegExp(cssSingleSelectorPattern + '(?=\\s*(,\\s*' + cssSingleSelectorPattern + '\\s*)*\\{)', 'g'), (mSingle) => (mSingle.includes(':first-child')
+            ? mSingle.replaceAll(new RegExp('^(.*?)(' + cssSimpleSelectorPattern + '):first-child(' + cssSimpleSelectorPattern + '?)(.*)$', 'g'), (m, m1, m2, m3, m4) => (m1 === '' || /\.form(?!\w|.*[ +>~])/g.test(m1.trimEnd())
+                ? m + ', '
+                    + m1.trimEnd() + (m1 !== '' ? ' ' : '')
+                    + 'form:first-child + ' + m2 + m3
+                    + (m4 !== '' ? ' ' : '') + m4.trimStart()
+                : m))
+            : mSingle));
+
+        return data;
+    });
+});
+
 // normalize EOL of text files
 walkFilesSync(__dirname, (f) => {
     updateFileSync(f, (data) => {
