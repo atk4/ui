@@ -7,14 +7,12 @@ namespace Atk4\Ui\UserAction;
 use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
-use Atk4\Data\ValidationException;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Loader;
-use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
 trait StepExecutorTrait
@@ -177,14 +175,12 @@ trait StepExecutorTrait
         $this->jsSetSubmitButton($page, $form, $this->step);
         $this->jsSetPreviousHandler($page, $this->step);
 
-        if (!$form->hookHasCallbacks(Form::HOOK_SUBMIT)) {
-            $form->onSubmit(function (Form $form) {
-                // collect fields defined in Model\UserAction
-                $this->setActionDataFromModel('fields', $form->model, $this->action->fields);
+        $form->onSubmit(function (Form $form) {
+            // collect fields defined in Model\UserAction
+            $this->setActionDataFromModel('fields', $form->model, $this->action->fields);
 
-                return $this->jsStepSubmit($this->step);
-            });
-        }
+            return $this->jsStepSubmit($this->step);
+        });
     }
 
     protected function doPreview(View $page): void
@@ -407,42 +403,29 @@ trait StepExecutorTrait
 
     /**
      * Get proper JS after submitting a form in a step.
-     *
-     * @return JsBlock|View
      */
-    protected function jsStepSubmit(string $step)
+    protected function jsStepSubmit(string $step): JsBlock
     {
-        try {
-            if (count($this->steps) === 1) {
-                // collect argument and execute action
-                $return = $this->action->execute(...$this->getActionArgs($this->getActionData('args')));
-                $js = $this->jsGetExecute($return, $this->action->getEntity()->getId());
-            } else {
-                // store data and setup reload
-                $js = new JsBlock([
-                    $this->loader->jsAddStoreData($this->actionData, true),
-                    $this->loader->jsLoad(
-                        [
-                            'step' => $this->isLastStep($step) ? 'final' : $this->getNextStep($step),
-                            $this->name => $this->action->getEntity()->getId(),
-                        ],
-                        ['method' => 'POST'],
-                        $this->loader->name
-                    ),
-                ]);
-            }
-
-            return $js;
-        } catch (ValidationException $e) {
-            throw $e; // handled by Form::onSubmit() method
-        } catch (\Throwable $e) {
-            $msg = new Message(['Error executing ' . $this->action->caption, 'type' => 'error', 'class.red' => true]);
-            $msg->setApp($this->getApp());
-            $msg->invokeInit();
-            $msg->text->content = $this->getApp()->renderExceptionHtml($e);
-
-            return $msg;
+        if (count($this->steps) === 1) {
+            // collect argument and execute action
+            $return = $this->action->execute(...$this->getActionArgs($this->getActionData('args')));
+            $js = $this->jsGetExecute($return, $this->action->getEntity()->getId());
+        } else {
+            // store data and setup reload
+            $js = new JsBlock([
+                $this->loader->jsAddStoreData($this->actionData, true),
+                $this->loader->jsLoad(
+                    [
+                        'step' => $this->isLastStep($step) ? 'final' : $this->getNextStep($step),
+                        $this->name => $this->action->getEntity()->getId(),
+                    ],
+                    ['method' => 'POST'],
+                    $this->loader->name
+                ),
+            ]);
         }
+
+        return $js;
     }
 
     protected function getActionData(string $step): array
