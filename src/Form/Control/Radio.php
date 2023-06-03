@@ -48,6 +48,10 @@ class Radio extends Form\Control
             $lister->tRow->dangerouslySetHtml('checked', $value === (string) $lister->model->getId() ? 'checked="checked"' : '');
         });
 
+        $this->js(true, null, '.ui.checkbox.radio')->checkbox([
+            'uncheckable' => !$this->entityField || ($this->entityField->getField()->nullable || !$this->entityField->getField()->required),
+        ]);
+
         parent::renderView();
     }
 
