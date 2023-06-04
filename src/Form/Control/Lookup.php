@@ -352,17 +352,17 @@ class Lookup extends Input
         }
 
         if ($this->disabled) {
-            $this->settings['allowTab'] = false;
-
+            $this->template->set('disabledClass', ' disabled');
             $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
-            $this->template->set('disabledClass', 'disabled');
-        }
 
-        if ($this->readOnly) {
+            $this->settings['allowTab'] = false;
+        } elseif ($this->readOnly) {
+            $this->template->set('disabledClass', ' read-only');
+            $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
+
             $this->settings['allowTab'] = false;
             $this->settings['apiSettings'] = null;
             $this->settings['onShow'] = new JsFunction([], [new JsExpression('return false')]);
-            $this->template->dangerouslySetHtml('readonly', 'readonly="readonly"');
         }
 
         if ($this->dependency) {

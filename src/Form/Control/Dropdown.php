@@ -33,16 +33,6 @@ class Dropdown extends Input
     /** @var string The string to set as an empty values. */
     public $empty = "\u{00a0}"; // Unicode NBSP
 
-    /**
-     * The icon to display at the dropdown menu.
-     *  The template default is set to: 'dropdown'.
-     *  Note: dropdown icon is show on the right side of the menu
-     *  while other icon are usually display on the left side.
-     *
-     * @var string|null
-     */
-    public $dropIcon;
-
     /** @var array Dropdown options as per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
 
@@ -233,15 +223,11 @@ class Dropdown extends Input
 
         if ($this->disabled) {
             $this->addClass('disabled');
-        }
+        } elseif ($this->readOnly) {
+            $this->addClass('read-only');
 
-        if ($this->readOnly) {
             $this->setDropdownOption('allowTab', false);
             $this->setDropdownOption('onShow', new JsFunction([], [new JsExpression('return false')]));
-        }
-
-        if ($this->dropIcon) {
-            $this->template->set('DropIcon', $this->dropIcon);
         }
 
         $this->template->set('DefaultText', $this->empty);
