@@ -110,8 +110,8 @@ class Input extends Form\Control
             'placeholder' => $this->inputType !== 'hidden' ? $this->placeholder : false,
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
-            'readonly' => $this->readOnly && $this->inputType !== 'hidden',
             'disabled' => $this->disabled && $this->inputType !== 'hidden',
+            'readonly' => $this->readOnly && $this->inputType !== 'hidden' && !$this->disabled,
         ], $this->inputAttr));
     }
 

@@ -16,8 +16,8 @@ class Textarea extends Input
             'rows' => $this->rows,
             'placeholder' => $this->placeholder,
             'id' => $this->name . '_input',
-            'readonly' => $this->readOnly,
             'disabled' => $this->disabled,
+            'readonly' => $this->readOnly && !$this->disabled,
         ], $this->inputAttr), $this->getValue() ?? '');
     }
 }
