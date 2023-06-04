@@ -39,13 +39,15 @@ class Radio extends Form\Control
         $this->lister->setModel($this->model);
 
         $this->lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) use ($value) {
-            if ($this->readOnly) {
-                $lister->tRow->dangerouslySetHtml('disabled', $value !== (string) $lister->model->getId() ? 'disabled="disabled"' : '');
-            } elseif ($this->disabled) {
+            if ($this->disabled) {
+                $lister->tRow->dangerouslySetHtml('disabledClass', ' disabled');
                 $lister->tRow->dangerouslySetHtml('disabled', 'disabled="disabled"');
+            } elseif ($this->readOnly) {
+                $lister->tRow->dangerouslySetHtml('disabledClass', ' read-only');
+                $lister->tRow->dangerouslySetHtml('disabled', 'readonly="readonly"');
             }
 
-            $lister->tRow->dangerouslySetHtml('checked', $value === (string) $lister->model->getId() ? 'checked="checked"' : '');
+            $lister->tRow->dangerouslySetHtml('checked', $lister->model->compare($lister->model->idField, $value) ? 'checked="checked"' : '');
         });
 
         $this->js(true, null, '.ui.checkbox.radio')->checkbox([

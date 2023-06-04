@@ -63,13 +63,12 @@ class Checkbox extends Form\Control
 
         $this->content = null;
 
-        if ($this->readOnly) {
-            $this->addClass('read-only');
-        }
-
         if ($this->disabled) {
             $this->addClass('disabled');
             $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
+        } elseif ($this->readOnly) {
+            $this->addClass('read-only');
+            $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
         }
 
         $this->js(true)->checkbox();
