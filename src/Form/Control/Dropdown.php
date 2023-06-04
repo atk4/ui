@@ -241,10 +241,10 @@ class Dropdown extends Input
         }
 
         if ($this->dropIcon) {
-            $this->template->trySet('DropIcon', $this->dropIcon);
+            $this->template->set('DropIcon', $this->dropIcon);
         }
 
-        $this->template->trySet('DefaultText', $this->empty);
+        $this->template->set('DefaultText', $this->empty);
 
         $this->htmlRenderValue();
         $this->jsRenderDropdown();

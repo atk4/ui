@@ -65,8 +65,11 @@ class Upload extends Input
 
         $this->cb = JsCallback::addTo($this);
 
-        if (!$this->action) {
-            $this->action = new Button(['icon' => 'upload', 'class.disabled' => $this->disabled || $this->readOnly]);
+        if ($this->action === null) {
+            $this->action = new Button([
+                'icon' => 'upload',
+                'class.disabled' => $this->disabled || $this->readOnly,
+            ]);
         }
     }
 
@@ -123,10 +126,8 @@ class Upload extends Input
 
     /**
      * Add a JS action to be returned to server on callback.
-     *
-     * @param JsExpressionable $action
      */
-    public function addJsAction($action): void
+    public function addJsAction(JsExpressionable $action): void
     {
         $this->jsActions[] = $action;
     }
@@ -162,7 +163,10 @@ class Upload extends Input
                     $this->setInput($fileId);
                 }
 
-                $this->addJsAction($fx(...$postFiles));
+                $jsRes = $fx(...$postFiles);
+                if ($jsRes !== null) { // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9388
+                    $this->addJsAction($jsRes);
+                }
 
                 if (count($postFiles) > 0 && reset($postFiles)['error'] === 0) {
                     $this->addJsAction(
@@ -186,7 +190,11 @@ class Upload extends Input
         if (($_POST['fUploadAction'] ?? null) === self::DELETE_ACTION) {
             $this->cb->set(function () use ($fx) {
                 $fileId = $_POST['fUploadId'];
-                $this->addJsAction($fx($fileId));
+
+                $jsRes = $fx($fileId);
+                if ($jsRes !== null) { // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9388
+                    $this->addJsAction($jsRes);
+                }
 
                 return new JsBlock($this->jsActions);
             });
@@ -195,10 +203,6 @@ class Upload extends Input
 
     protected function renderView(): void
     {
-        // need before parent rendering.
-        if ($this->disabled) {
-            $this->addClass('disabled');
-        }
         parent::renderView();
 
         if ($this->cb->canTerminate()) {
@@ -222,8 +226,10 @@ class Upload extends Input
             $this->template->dangerouslySetHtml('multiple', 'multiple="multiple"');
         }
 
+        $this->template->set('placeholderReadonly', $this->disabled ? 'disabled="disabled"' : 'readonly="readonly"');
+
         if ($this->placeholder) {
-            $this->template->trySet('PlaceHolder', $this->placeholder);
+            $this->template->set('Placeholder', $this->placeholder);
         }
 
         $this->js(true)->atkFileUpload([

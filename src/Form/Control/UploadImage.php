@@ -48,9 +48,9 @@ class UploadImage extends Upload
     public function setThumbnailSrc(string $src): void
     {
         $this->thumbnail->setAttr(['src' => $src]);
-        $action = $this->thumbnail->js();
-        $action->attr('src', $src);
-        $this->addJsAction($action);
+        $js = $this->thumbnail->js();
+        $js->attr('src', $src);
+        $this->addJsAction($js);
     }
 
     /**
@@ -58,12 +58,12 @@ class UploadImage extends Upload
      */
     public function clearThumbnail(): void
     {
-        $action = $this->thumbnail->js();
+        $js = $this->thumbnail->js();
         if ($this->defaultSrc !== null) {
-            $action->attr('src', $this->defaultSrc);
+            $js->attr('src', $this->defaultSrc);
         } else {
-            $action->removeAttr('src');
+            $js->removeAttr('src');
         }
-        $this->addJsAction($action);
+        $this->addJsAction($js);
     }
 }
