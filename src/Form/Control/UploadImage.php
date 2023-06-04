@@ -11,12 +11,7 @@ class UploadImage extends Upload
     /** @var View|null The thumbnail view to add to this input. */
     public $thumbnail;
 
-    /**
-     * The template region where to add the thumbnail view.
-     * Default to AfterAfterInput.
-     *
-     * @var string
-     */
+    /** @var string The template region where to add the thumbnail view. */
     public $thumbnailRegion = 'AfterAfterInput';
 
     /** @var string|null The default thumbnail source. */

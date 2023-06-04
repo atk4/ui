@@ -73,12 +73,12 @@ class Lister extends View
 
     /**
      * Add Dynamic paginator when scrolling content via Javascript.
-     * Will output x item in lister set per ipp until user scroll content to the end of page.
+     * Will output x item in lister set per IPP until user scroll content to the end of page.
      * When this happen, content will be reload x number of items.
      *
      * @param int    $ipp          Number of item per page
      * @param array  $options      an array with JS Scroll plugin options
-     * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
+     * @param View   $container    the container holding the lister for scrolling purpose
      * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
