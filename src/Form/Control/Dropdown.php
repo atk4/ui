@@ -223,8 +223,10 @@ class Dropdown extends Input
 
         if ($this->disabled) {
             $this->addClass('disabled');
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
         } elseif ($this->readOnly) {
             $this->addClass('read-only');
+            $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
 
             $this->setDropdownOption('allowTab', false);
             $this->setDropdownOption('onShow', new JsFunction([], [new JsExpression('return false')]));
