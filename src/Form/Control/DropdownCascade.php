@@ -114,7 +114,7 @@ class DropdownCascade extends Dropdown
     protected function renderView(): void
     {
         // multiple selection is not supported
-        $this->isMultiple = false;
+        $this->multiple = false;
 
         parent::renderView();
     }

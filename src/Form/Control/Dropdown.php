@@ -53,7 +53,7 @@ class Dropdown extends Input
      *
      * @var bool
      */
-    public $isMultiple = false;
+    public $multiple = false;
 
     /**
      * Here a custom function for creating the HTML of each dropdown option
@@ -189,7 +189,7 @@ class Dropdown extends Input
     protected function htmlRenderValue(): void
     {
         // add selection only if no value is required and Dropdown has no multiple selections enabled
-        if ($this->entityField !== null && !$this->entityField->getField()->required && !$this->isMultiple) {
+        if ($this->entityField !== null && !$this->entityField->getField()->required && !$this->multiple) {
             $this->_tItem->set('value', '');
             $this->_tItem->set('title', $this->empty);
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
@@ -219,14 +219,14 @@ class Dropdown extends Input
 
     protected function renderView(): void
     {
-        if ($this->isMultiple) {
+        if ($this->multiple) {
             $this->addClass('multiple');
         }
 
         if ($this->readOnly || $this->disabled) {
             $this->setDropdownOption('allowTab', false);
             $this->removeClass('search');
-            if ($this->isMultiple) {
+            if ($this->multiple) {
                 $this->js(true)->find('a i.delete.icon')->attr('class', 'disabled');
             }
         }

@@ -439,7 +439,7 @@ Here you can pass an array of Fomantic-UI dropdown options (https://fomantic-ui.
         'selectOnKeydown' => false,
     ]]);
 
-.. php:attr:: isMultiple
+.. php:attr:: multiple
 
 If set to true, multiple items can be selected in Dropdown. They will be sent comma seperated (value1,value2,value3) on form submit.
 
@@ -452,7 +452,7 @@ See this example from Model class init method::
         'ui' => [
             'form' => [
                 \Atk4\Ui\Form\Control\Dropdown::class,
-                'isMultiple' => true,
+                'multiple' => true,
                 'model' => $expr_model,
             ],
             'table' => [

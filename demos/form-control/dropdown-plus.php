@@ -101,7 +101,7 @@ $form->addControl('multi', [
     Form\Control\Dropdown::class,
     'caption' => 'Multiple selection',
     'empty' => 'Choose has many options needed',
-    'isMultiple' => true,
+    'multiple' => true,
     'values' => ['default' => 'Default', 'option1' => 'Option 1', 'option2' => 'Option 2'],
 ]);
 
