@@ -365,13 +365,10 @@ class Lookup extends Input
         if ($this->disabled) {
             $this->template->set('disabledClass', 'disabled');
             $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
-
-            $this->settings['allowTab'] = false;
         } elseif ($this->readOnly) {
             $this->template->set('disabledClass', 'read-only');
             $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
 
-            $this->settings['allowTab'] = false;
             $this->settings['apiSettings'] = null;
             $this->settings['onShow'] = new JsFunction([], [new JsExpression('return false')]);
         }

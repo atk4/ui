@@ -225,7 +225,6 @@ class Dropdown extends Input
         }
 
         if ($this->readOnly || $this->disabled) {
-            $this->setDropdownOption('allowTab', false);
             if ($this->multiple) {
                 $this->jsDropdown(true)->find('a i.delete.icon')->attr('class', 'disabled');
             }
@@ -238,7 +237,6 @@ class Dropdown extends Input
             $this->template->set('disabledClass', 'read-only');
             $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
 
-            $this->setDropdownOption('allowTab', false);
             $this->setDropdownOption('onShow', new JsFunction([], [new JsExpression('return false')]));
         }
 
