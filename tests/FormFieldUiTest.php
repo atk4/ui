@@ -25,7 +25,7 @@ class MyTestModel extends Model
  * Test is designed to verify that field which is explicitly editable should appear and be editable
  * even if 'neverPersist' is set to true.
  */
-class ForFieldUiTest extends TestCase
+class FormFieldUiTest extends TestCase
 {
     use CreateAppTrait;
 
