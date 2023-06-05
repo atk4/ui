@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 
 class Dropdown extends Input
 {
-    public $ui = 'dropdown fluid search selection';
     public $defaultTemplate = 'form/control/dropdown.html';
 
     public string $inputType = 'hidden';
@@ -32,16 +32,6 @@ class Dropdown extends Input
 
     /** @var string The string to set as an empty values. */
     public $empty = "\u{00a0}"; // Unicode NBSP
-
-    /**
-     * The icon to display at the dropdown menu.
-     *  The template default is set to: 'dropdown'.
-     *  Note: dropdown icon is show on the right side of the menu
-     *  while other icon are usually display on the left side.
-     *
-     * @var string|null
-     */
-    public $dropIcon;
 
     /** @var array Dropdown options as per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
@@ -176,11 +166,22 @@ class Dropdown extends Input
     }
 
     /**
+     * @param bool|string      $when
+     * @param JsExpressionable $action
+     *
+     * @return Jquery
+     */
+    protected function jsDropdown($when = false, $action = null): JsExpressionable
+    {
+        return $this->js($when, $action, 'div.ui.dropdown:has(> #' . $this->name . '_input)');
+    }
+
+    /**
      * Render JS for dropdown.
      */
     protected function jsRenderDropdown(): JsExpressionable
     {
-        return $this->js(true)->dropdown($this->dropdownOptions);
+        return $this->jsDropdown(true)->dropdown($this->dropdownOptions);
     }
 
     /**
@@ -220,31 +221,28 @@ class Dropdown extends Input
     protected function renderView(): void
     {
         if ($this->multiple) {
-            $this->addClass('multiple');
+            $this->template->dangerouslySetHtml('multipleClass', 'multiple');
         }
 
         if ($this->readOnly || $this->disabled) {
             $this->setDropdownOption('allowTab', false);
-            $this->removeClass('search');
             if ($this->multiple) {
-                $this->js(true)->find('a i.delete.icon')->attr('class', 'disabled');
+                $this->jsDropdown(true)->find('a i.delete.icon')->attr('class', 'disabled');
             }
         }
 
         if ($this->disabled) {
-            $this->addClass('disabled');
-        }
+            $this->template->set('disabledClass', 'disabled');
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
+        } elseif ($this->readOnly) {
+            $this->template->set('disabledClass', 'read-only');
+            $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
 
-        if ($this->readOnly) {
             $this->setDropdownOption('allowTab', false);
             $this->setDropdownOption('onShow', new JsFunction([], [new JsExpression('return false')]));
         }
 
-        if ($this->dropIcon) {
-            $this->template->trySet('DropIcon', $this->dropIcon);
-        }
-
-        $this->template->trySet('DefaultText', $this->empty);
+        $this->template->set('DefaultText', $this->empty);
 
         $this->htmlRenderValue();
         $this->jsRenderDropdown();

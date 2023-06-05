@@ -11,12 +11,7 @@ class UploadImage extends Upload
     /** @var View|null The thumbnail view to add to this input. */
     public $thumbnail;
 
-    /**
-     * The template region where to add the thumbnail view.
-     * Default to AfterAfterInput.
-     *
-     * @var string
-     */
+    /** @var string The template region where to add the thumbnail view. */
     public $thumbnailRegion = 'AfterAfterInput';
 
     /** @var string|null The default thumbnail source. */
@@ -53,9 +48,9 @@ class UploadImage extends Upload
     public function setThumbnailSrc(string $src): void
     {
         $this->thumbnail->setAttr(['src' => $src]);
-        $action = $this->thumbnail->js();
-        $action->attr('src', $src);
-        $this->addJsAction($action);
+        $js = $this->thumbnail->js();
+        $js->attr('src', $src);
+        $this->addJsAction($js);
     }
 
     /**
@@ -63,12 +58,12 @@ class UploadImage extends Upload
      */
     public function clearThumbnail(): void
     {
-        $action = $this->thumbnail->js();
+        $js = $this->thumbnail->js();
         if ($this->defaultSrc !== null) {
-            $action->attr('src', $this->defaultSrc);
+            $js->attr('src', $this->defaultSrc);
         } else {
-            $action->removeAttr('src');
+            $js->removeAttr('src');
         }
-        $this->addJsAction($action);
+        $this->addJsAction($js);
     }
 }

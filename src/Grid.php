@@ -244,7 +244,7 @@ class Grid extends View
      *
      * @param int    $ipp          number of item per page to start with
      * @param array  $options      an array with JS Scroll plugin options
-     * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
+     * @param View   $container    the container holding the lister for scrolling purpose
      * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
@@ -275,7 +275,7 @@ class Grid extends View
      * @param int    $ipp             number of item per page to start with
      * @param int    $containerHeight number of pixel the table container should be
      * @param array  $options         an array with JS Scroll plugin options
-     * @param View   $container       The container holding the lister for scrolling purpose. Default to view owner.
+     * @param View   $container       the container holding the lister for scrolling purpose
      * @param string $scrollRegion    A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this

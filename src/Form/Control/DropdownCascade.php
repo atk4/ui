@@ -43,12 +43,12 @@ class DropdownCascade extends Dropdown
         $expr = [
             function (Jquery $j) use ($cascadeFromValue) {
                 return new JsBlock([
-                    $this->js()->dropdown('change values', $this->getNewValues($cascadeFromValue)),
-                    $this->js()->removeClass('loading'),
+                    $this->jsDropdown()->dropdown('change values', $this->getNewValues($cascadeFromValue)),
+                    $this->jsDropdown()->removeClass('loading'),
                 ]);
             },
-            $this->js()->dropdown('clear'),
-            $this->js()->addClass('loading'),
+            $this->jsDropdown()->dropdown('clear'),
+            $this->jsDropdown()->addClass('loading'),
         ];
 
         $this->cascadeFrom->onChange($expr, ['args' => [$this->cascadeFrom->name => $this->cascadeFrom->jsInput()->val()]]);
