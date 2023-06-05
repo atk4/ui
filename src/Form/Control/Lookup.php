@@ -378,7 +378,6 @@ class Lookup extends Input
             $this->template->set('disabledClass', 'read-only');
             $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
 
-            $this->settings['apiSettings'] = null;
             $this->settings['onShow'] = new JsFunction([], [new JsExpression('return false')]);
         }
 
