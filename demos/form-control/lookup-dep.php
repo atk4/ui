@@ -23,7 +23,7 @@ $form->addControl('starts_with', [
         'b' => 'Letter B',
         'c' => 'Letter C',
     ],
-    'isMultiple' => true,
+    'multiple' => true,
     'hint' => 'Select start letter that lookup selection of Country will depend on.',
     'placeholder' => 'Search for country starting with ...',
 ]);

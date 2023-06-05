@@ -38,10 +38,6 @@ class Radio extends Form\Control
 
         $this->lister->setModel($this->model);
 
-        if ($this->disabled) {
-            $this->addClass('disabled');
-        }
-
         $this->lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) use ($value) {
             if ($this->readOnly) {
                 $lister->tRow->dangerouslySetHtml('disabled', $value !== (string) $lister->model->getId() ? 'disabled="disabled"' : '');
