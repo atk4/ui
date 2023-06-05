@@ -40,10 +40,10 @@ class Radio extends Form\Control
 
         $this->lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) use ($value) {
             if ($this->disabled) {
-                $lister->tRow->dangerouslySetHtml('disabledClass', ' disabled');
+                $lister->tRow->dangerouslySetHtml('disabledClass', 'disabled');
                 $lister->tRow->dangerouslySetHtml('disabled', 'disabled="disabled"');
             } elseif ($this->readOnly) {
-                $lister->tRow->dangerouslySetHtml('disabledClass', ' read-only');
+                $lister->tRow->dangerouslySetHtml('disabledClass', 'read-only');
                 $lister->tRow->dangerouslySetHtml('disabled', 'readonly="readonly"');
             }
 
