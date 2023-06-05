@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 
 class Dropdown extends Input
 {
-    public $ui = 'dropdown fluid search selection';
     public $defaultTemplate = 'form/control/dropdown.html';
 
     public string $inputType = 'hidden';
@@ -166,11 +166,22 @@ class Dropdown extends Input
     }
 
     /**
+     * @param bool|string      $when
+     * @param JsExpressionable $action
+     *
+     * @return Jquery
+     */
+    protected function jsDropdown($when = false, $action = null): JsExpressionable
+    {
+        return $this->js($when, $action, 'div.ui.dropdown:has(> #' . $this->name . '_input)');
+    }
+
+    /**
      * Render JS for dropdown.
      */
     protected function jsRenderDropdown(): JsExpressionable
     {
-        return $this->js(true)->dropdown($this->dropdownOptions);
+        return $this->jsDropdown(true)->dropdown($this->dropdownOptions);
     }
 
     /**
@@ -210,22 +221,21 @@ class Dropdown extends Input
     protected function renderView(): void
     {
         if ($this->multiple) {
-            $this->addClass('multiple');
+            $this->template->dangerouslySetHtml('multipleClass', 'multiple');
         }
 
         if ($this->readOnly || $this->disabled) {
             $this->setDropdownOption('allowTab', false);
-            $this->removeClass('search');
             if ($this->multiple) {
-                $this->js(true)->find('a i.delete.icon')->attr('class', 'disabled');
+                $this->jsDropdown(true)->find('a i.delete.icon')->attr('class', 'disabled');
             }
         }
 
         if ($this->disabled) {
-            $this->addClass('disabled');
+            $this->template->set('disabledClass', ' disabled');
             $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
         } elseif ($this->readOnly) {
-            $this->addClass('read-only');
+            $this->template->set('disabledClass', ' read-only');
             $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
 
             $this->setDropdownOption('allowTab', false);

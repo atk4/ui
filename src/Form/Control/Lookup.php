@@ -13,6 +13,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsModal;
 use Atk4\Ui\Js\JsToast;
@@ -130,7 +131,6 @@ class Lookup extends Input
         parent::init();
 
         $this->template->set([
-            'inputId' => $this->name . '-ac',
             'placeholder' => $this->placeholder,
         ]);
 
@@ -140,6 +140,17 @@ class Lookup extends Input
         $this->callback->set(function () {
             $this->outputApiResponse();
         });
+    }
+
+    /**
+     * @param bool|string      $when
+     * @param JsExpressionable $action
+     *
+     * @return Jquery
+     */
+    protected function jsDropdown($when = false, $action = null): JsExpressionable
+    {
+        return $this->js($when, $action, 'div.ui.dropdown:has(> #' . $this->name . '_input)');
     }
 
     /**
@@ -261,7 +272,7 @@ class Lookup extends Input
                 $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
 
                 $row = $this->renderRow($form->model);
-                $chain = new Jquery('#' . $this->name . '-ac');
+                $chain = $this->jsDropdown();
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
                 $res->addStatement($chain);
 
@@ -371,7 +382,7 @@ class Lookup extends Input
             ], $this->apiConfig['data'] ?? []);
         }
 
-        $chain = new Jquery('#' . $this->name . '-ac');
+        $chain = $this->jsDropdown();
 
         $this->initDropdown($chain);
 
