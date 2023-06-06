@@ -123,9 +123,6 @@ class App
     /** @var bool Call exit in place of throw Exception when Application need to exit. */
     public $callExit = true;
 
-    /** @var string|null */
-    public $page;
-
     /** @var array global sticky arguments */
     protected array $stickyGetArguments = [
         '__atk_json' => false,
@@ -700,22 +697,23 @@ class App
             $page = $_SERVER['REQUEST_URI'];
         }
 
-        if ($this->page === null) {
-            $requestUrl = $this->getRequestUrl();
-            if (substr($requestUrl, -1, 1) === '/') {
-                $this->page = 'index';
-            } else {
-                $this->page = basename($requestUrl, $this->urlBuildingExt);
-            }
-        }
-
         $pagePath = '';
         if (is_string($page)) {
             $page_arr = explode('?', $page, 2);
             $pagePath = $page_arr[0];
             parse_str($page_arr[1] ?? '', $page);
         } else {
-            $pagePath = $page[0] ?? $this->page; // use current page by default
+            if (isset($page[0])) {
+                $pagePath = $page[0];
+            } else {
+                // use current page by default
+                $requestUrl = $this->getRequestUrl();
+                if (substr($requestUrl, -1, 1) === '/') {
+                    $pagePath = 'index';
+                } else {
+                    $pagePath = basename($requestUrl, $this->urlBuildingExt);
+                }
+            }
             unset($page[0]);
             if ($pagePath) {
                 $pagePath .= $this->urlBuildingExt;
