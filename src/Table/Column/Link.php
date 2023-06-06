@@ -87,16 +87,16 @@ class Link extends Table\Column
     public function __construct($page = [], array $args = [], array $defaults = [])
     {
         if (is_array($page)) {
-            $page = ['page' => $page];
+            $defaults['page'] = $page;
         } else {
-            $page = ['url' => $page];
+            $defaults['url'] = $page;
         }
 
         if ($args) {
-            $page['args'] = $args;
+            $defaults['args'] = $args;
         }
 
-        parent::__construct(array_replace($defaults, $page));
+        parent::__construct($defaults);
     }
 
     protected function init(): void
