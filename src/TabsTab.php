@@ -16,13 +16,15 @@ class TabsTab extends MenuItem
     public $settings = [];
 
     /**
-     * @param string|array<0|string, string> $page
+     * Sets path for tab.
+     *
+     * @param string $path
      *
      * @return $this
      */
-    public function setPath($page)
+    public function setPath($path)
     {
-        $this->path = $this->getApp()->url($page) . '#';
+        $this->path = $this->getApp()->url($path) . '#';
 
         return $this;
     }

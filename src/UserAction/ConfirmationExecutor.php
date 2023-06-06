@@ -74,10 +74,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->loader->addClass('atk-hide-loading-content');
     }
 
-    /**
-     * @param array<string, string> $urlArgs
-     */
-    private function jsShowAndLoad(array $urlArgs): JsBlock
+    private function jsShowAndLoad(array $urlArgs, array $apiConfig): JsBlock
     {
         return new JsBlock([
             $this->jsShow(),
@@ -95,7 +92,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             throw new Exception('Action must be set prior to assign trigger');
         }
 
-        return $this->jsShowAndLoad($urlArgs);
+        return $this->jsShowAndLoad($urlArgs, ['method' => 'POST']);
     }
 
     public function getAction(): UserAction

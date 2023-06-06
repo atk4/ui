@@ -19,8 +19,8 @@ class Breadcrumb extends Lister
     /**
      * Adds a new link that will appear on the right.
      *
-     * @param string                         $section Title of link
-     * @param string|array<0|string, string> $link    Link itself
+     * @param string       $section Title of link
+     * @param string|array $link    Link itself
      *
      * @return $this
      */

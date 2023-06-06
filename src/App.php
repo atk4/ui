@@ -687,9 +687,9 @@ class App
     /**
      * Build a URL that application can use for loading HTML data.
      *
-     * @param string|array<0|string, string> $page                URL as string or array with page name as first element and other GET arguments
-     * @param bool                           $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array<string, string>          $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
+     * @param array|string $page                URL as string or array with page name as first element and other GET arguments
+     * @param bool         $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
     public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
@@ -751,9 +751,9 @@ class App
      * Build a URL that application can use for JS callbacks. Some framework integration will use a different routing
      * mechanism for NON-HTML response.
      *
-     * @param string|array<0|string, string> $page                URL as string or array with page name as first element and other GET arguments
-     * @param bool                           $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array<string, string>          $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
+     * @param array|string $page                URL as string or array with page name as first element and other GET arguments
+     * @param bool         $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array        $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
     public function jsUrl($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
@@ -804,7 +804,7 @@ class App
     /**
      * A convenient wrapper for sending user to another page.
      *
-     * @param string|array<0|string, string> $page
+     * @param array|string $page Destination page
      */
     public function redirect($page, bool $permanent = false): void
     {
@@ -816,7 +816,7 @@ class App
     /**
      * Generate action for redirecting user to another page.
      *
-     * @param string|array<0|string, string> $page
+     * @param string|array $page Destination URL or page/arguments
      */
     public function jsRedirect($page, bool $newWindow = false): JsExpressionable
     {

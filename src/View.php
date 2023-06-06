@@ -183,11 +183,12 @@ class View extends AbstractView
     /**
      * Makes view into a "<a>" element with a link.
      *
-     * @param string|array<0|string, string> $url
+     * @param string|array $url
+     * @param string       $target
      *
      * @return $this
      */
-    public function link($url, string $target = null)
+    public function link($url, $target = null)
     {
         $this->setElement('a');
 
@@ -489,23 +490,23 @@ class View extends AbstractView
     public $stickyArgs = [];
 
     /**
-     * Build an URL which this view can use for callbacks.
-     *
-     * @param string|array<0|string, string> $page URL as string or array with page name as first element and other GET arguments
-     */
-    public function url($page = []): string
-    {
-        return $this->getApp()->url($page, false, $this->_getStickyArgs());
-    }
-
-    /**
      * Build an URL which this view can use for JS callbacks.
      *
-     * @param string|array<0|string, string> $page URL as string or array with page name as first element and other GET arguments
+     * @param array $page
      */
     public function jsUrl($page = []): string
     {
         return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
+    }
+
+    /**
+     * Build an URL which this view can use for callbacks.
+     *
+     * @param string|array $page URL as string or array with page name as first element and other GET arguments
+     */
+    public function url($page = []): string
+    {
+        return $this->getApp()->url($page, false, $this->_getStickyArgs());
     }
 
     /**

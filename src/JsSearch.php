@@ -52,6 +52,11 @@ class JsSearch extends View
      */
     public $useAjax = true;
 
+    public function link($url, $target = null)
+    {
+        return parent::link($url, $target);
+    }
+
     /** @var string ui CSS classes */
     public $button = 'ui mini transparent basic button';
     /** @var string */

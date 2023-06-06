@@ -53,8 +53,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     }
 
     /**
-     * @param \Closure(): mixed     $fx
-     * @param array<string, string> $urlArgs
+     * @param \Closure(): mixed $fx
      *
      * @return mixed
      */
@@ -69,9 +68,6 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         }
     }
 
-    /**
-     * @param array<string, string> $urlArgs
-     */
     public function jsExecute(array $urlArgs = []): JsBlock
     {
         return $this->invokeFxWithUrlArgs(function () { // backup/restore $this->args and merge them with $urlArgs
