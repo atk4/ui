@@ -42,9 +42,6 @@ class UploadImage extends Upload
         return $this->thumbnail;
     }
 
-    /**
-     * Set the thumbnail img src value.
-     */
     public function setThumbnailSrc(string $src): void
     {
         $this->thumbnail->setAttr(['src' => $src]);
@@ -53,9 +50,6 @@ class UploadImage extends Upload
         $this->addJsAction($js);
     }
 
-    /**
-     * Clear the thumbnail src.
-     */
     public function clearThumbnail(): void
     {
         $js = $this->thumbnail->js();

@@ -92,12 +92,12 @@ class TableColumnLinkTest extends TestCase
 
     public function testTwoMoneys(): void
     {
-        $salary_1 = $this->table->addDecorator('name', new Table\Column\Money());
-        $salary_2 = $this->table->addColumn('salary', new Table\Column\Money());
+        $salary1 = $this->table->addDecorator('name', new Table\Column\Money());
+        $salary2 = $this->table->addColumn('salary', new Table\Column\Money());
         $this->table->addDecorator('salary', new Table\Column\Template('<b>{$salary}</b>'));
 
         self::assertSame(
-            '<td class="{$' . $this->getColumnClass($salary_1) . '} right aligned single line">{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary_2) . '} right aligned single line"><b>{$salary}</b></td>',
+            '<td class="{$' . $this->getColumnClass($salary1) . '} right aligned single line">{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary2) . '} right aligned single line"><b>{$salary}</b></td>',
             $this->table->getDataRowHtml()
         );
 

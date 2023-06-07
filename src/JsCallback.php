@@ -160,9 +160,6 @@ class JsCallback extends Callback
         return $response;
     }
 
-    /**
-     * Render View into modal.
-     */
     private function _jsRenderIntoModal(View $response): JsExpressionable
     {
         if ($response instanceof Modal) {

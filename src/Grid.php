@@ -609,9 +609,6 @@ class Grid extends View
         return $handler;
     }
 
-    /**
-     * Will set model limit according to paginator value.
-     */
     private function setModelLimitFromPaginator(): void
     {
         $this->paginator->setTotal((int) ceil($this->model->executeCountQuery() / $this->ipp));

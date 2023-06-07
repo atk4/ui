@@ -182,7 +182,7 @@ class App
             }
         }
 
-        // Set our exception handler
+        // set our exception handler
         if ($this->catchExceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
             set_error_handler(static function (int $severity, string $msg, string $file, int $line): bool {
@@ -210,7 +210,7 @@ class App
             http_response_code(500);
         }
 
-        // Always run app on shutdown
+        // always run app on shutdown
         if ($this->alwaysRun) {
             $this->setupAlwaysRun();
         }
@@ -292,9 +292,6 @@ class App
         exit;
     }
 
-    /**
-     * Catch exception.
-     */
     public function caughtException(\Throwable $exception): void
     {
         if ($exception instanceof LateOutputError) {
@@ -418,11 +415,11 @@ class App
 
             $this->outputResponseJson($output);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
-            // ugly hack for TABS
-            // because Fomantic-UI tab only deal with HTML and not JSON
-            // we need to hack output to include app modal.
+            // ugly hack for Tabs
+            // because Fomantic-UI Tab only deal with HTML and not JSON
+            // we need to hack output to include app modal
             $ids = [];
-            $remove_function = '';
+            $jsRemoveFunction = '';
             foreach ($this->getRenderedPortals() as $key => $modal) {
                 // add modal rendering to output
                 $ids[] = '#' . $key;
@@ -430,10 +427,10 @@ class App
                 $output['html'] .= $modal['html'];
             }
             if (count($ids) > 0) {
-                $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . implode(', ', $ids) . '\').remove();';
+                $jsRemoveFunction = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . implode(', ', $ids) . '\').remove();';
             }
 
-            $output = $this->getTag('script', [], '$(function () {' . $remove_function . $output['atkjs'] . '});')
+            $output = $this->getTag('script', [], '$(function () {' . $jsRemoveFunction . $output['atkjs'] . '});')
                 . $output['html'];
 
             $this->outputResponseHtml($output);
@@ -711,9 +708,9 @@ class App
 
         $pagePath = '';
         if (is_string($page)) {
-            $page_arr = explode('?', $page, 2);
-            $pagePath = $page_arr[0];
-            parse_str($page_arr[1] ?? '', $page);
+            $pageExploded = explode('?', $page, 2);
+            $pagePath = $pageExploded[0];
+            parse_str($pageExploded[1] ?? '', $page);
         } else {
             $pagePath = $page[0] ?? $this->page; // use current page by default
             unset($page[0]);
@@ -1105,9 +1102,6 @@ class App
         }
     }
 
-    /**
-     * Output Response to the client.
-     */
     protected function outputResponse(string $data): void
     {
         foreach (ob_get_status(true) as $status) {
@@ -1172,8 +1166,6 @@ class App
     }
 
     /**
-     * Output JSON response to the client.
-     *
      * @param string|array $data
      */
     private function outputResponseJson($data): void

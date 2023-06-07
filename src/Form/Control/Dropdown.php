@@ -176,17 +176,11 @@ class Dropdown extends Input
         return $this->js($when, $action, 'div.ui.dropdown:has(> #' . $this->name . '_input)');
     }
 
-    /**
-     * Render JS for dropdown.
-     */
     protected function jsRenderDropdown(): JsExpressionable
     {
         return $this->jsDropdown(true)->dropdown($this->dropdownOptions);
     }
 
-    /**
-     * Render values as HTML for Dropdown.
-     */
     protected function htmlRenderValue(): void
     {
         // add selection only if no value is required and Dropdown has no multiple selections enabled
