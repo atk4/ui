@@ -37,7 +37,6 @@ Header::addTo($app, ['URLs presented by a blank app']);
 Button::addTo($app, [$app->url()]);
 Button::addTo($app, [$app->url(['b' => 2])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => false])]);
-Button::addTo($app, [$app->url(['b' => 2, 'c' => null])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => 'abc'])]);
 
 // Sticky for xx=
@@ -45,7 +44,6 @@ Header::addTo($app, ['Now add sticky for xx=' . $app->stickyGet('xx')]);
 Button::addTo($app, [$app->url()]);
 Button::addTo($app, [$app->url(['b' => 2])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => false])]);
-Button::addTo($app, [$app->url(['b' => 2, 'c' => null])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => 'abc'])]);
 
 // Sticky for c=
@@ -53,7 +51,6 @@ Header::addTo($app, ['Now also add sticky for c=' . $app->stickyGet('c')]);
 Button::addTo($app, [$app->url()]);
 Button::addTo($app, [$app->url(['b' => 2])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => false])]);
-Button::addTo($app, [$app->url(['b' => 2, 'c' => null])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => 'abc'])]);
 
 // Various ways to build links

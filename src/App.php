@@ -733,10 +733,12 @@ class App
 
         // add arguments
         foreach ($page as $k => $v) {
-            if ($v === null || $v === false) {
+            if ($v === false) {
                 unset($args[$k]);
-            } else {
+            } elseif (is_string($v) || is_int($v)) {
                 $args[$k] = $v;
+            } else {
+                throw new \TypeError('Unexpected type: ' . get_debug_type($v));
             }
         }
 
