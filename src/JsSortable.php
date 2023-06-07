@@ -81,7 +81,7 @@ class JsSortable extends JsCallback
     /**
      * Return JS action to retrieve order.
      *
-     * @param array|null $urlOptions
+     * @param array<string, string>|null $urlOptions
      *
      * @return JsChain
      */

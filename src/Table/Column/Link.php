@@ -26,20 +26,20 @@ class Link extends Table\Column
      * If $url is set up, we will use pattern-matching to fill-in any part of this
      * with values of the model.
      *
-     * @var string|HtmlTemplate Destination definition
+     * @var string|HtmlTemplate
      */
     public $url;
 
     /**
      * If string 'example', then will be passed to $app->url('example') along with any defined arguments.
-     * If set as arrray, then non-0 key/values will be also passed to the URL:
+     * If set as array, then non-0 key/values will be also passed to the URL:
      *  $page = ['example', 'type' => '123'];.
      *
      * $url = $app->url(['example', 'type' => '123']);
      *
-     * In addition to abpove "args" refer to values picked up from a current row.
+     * In addition to above "args" refer to values picked up from a current row.
      *
-     * @var string|array|null
+     * @var string|array<0|string, mixed>|null
      */
     public $page;
 
@@ -57,7 +57,7 @@ class Link extends Table\Column
      * You can also pass non-key arguments ['id', 'title'] and they will be added up
      * as ?id=4&title=John%20Smith
      *
-     * @var array
+     * @var array<int|string, string>
      */
     public $args = [];
 
@@ -82,7 +82,8 @@ class Link extends Table\Column
     public $forceDownload = false;
 
     /**
-     * @param string|array $page
+     * @param string|array<0|string, string> $page
+     * @param array<int|string, string>      $args
      */
     public function __construct($page = [], array $args = [], array $defaults = [])
     {
@@ -92,9 +93,7 @@ class Link extends Table\Column
             $defaults['url'] = $page;
         }
 
-        if ($args) {
-            $defaults['args'] = $args;
-        }
+        $defaults['args'] = $args;
 
         parent::__construct($defaults);
     }
@@ -148,16 +147,16 @@ class Link extends Table\Column
             return ['c_' . $this->shortName => $this->url->set($rowValues)->renderToHtml()];
         }
 
-        $p = $this->page ?? [];
+        $page = $this->page ?? [];
 
         foreach ($this->args as $key => $val) {
             if (is_int($key)) {
                 $key = $val;
             }
 
-            $p[$key] = $row->get($val);
+            $page[$key] = $row->get($val);
         }
 
-        return ['c_' . $this->shortName => $this->table->url($p)];
+        return ['c_' . $this->shortName => $this->table->url($page)];
     }
 }

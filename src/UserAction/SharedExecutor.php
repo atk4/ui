@@ -31,6 +31,9 @@ class SharedExecutor
         return $this->executor;
     }
 
+    /**
+     * @param array<string, string> $urlArgs
+     */
     public function jsExecute(array $urlArgs): JsBlock
     {
         // TODO executor::jsExecute() should be called only once, registered as a custom jQuery event and then
