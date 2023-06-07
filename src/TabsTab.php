@@ -16,7 +16,7 @@ class TabsTab extends MenuItem
     public $settings = [];
 
     /**
-     * @param string|array<0|string, mixed> $page
+     * @param string|array<0|string, string|int|false> $page
      *
      * @return $this
      */

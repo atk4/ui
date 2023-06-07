@@ -39,7 +39,7 @@ class Link extends Table\Column
      *
      * In addition to above "args" refer to values picked up from a current row.
      *
-     * @var string|array<0|string, mixed>|null
+     * @var string|array<0|string, string|int|false>|null
      */
     public $page;
 
@@ -82,8 +82,7 @@ class Link extends Table\Column
     public $forceDownload = false;
 
     /**
-     * @param string|array<0|string, string> $page
-     * @param array<int|string, string>      $args
+     * @param string|array<0|string, string|int|false> $page
      */
     public function __construct($page = [], array $args = [], array $defaults = [])
     {

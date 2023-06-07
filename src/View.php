@@ -183,7 +183,7 @@ class View extends AbstractView
     /**
      * Makes view into a "<a>" element with a link.
      *
-     * @param string|array<0|string, mixed> $url
+     * @param string|array<0|string, string|int|false> $url
      *
      * @return $this
      */
@@ -491,7 +491,7 @@ class View extends AbstractView
     /**
      * Build an URL which this view can use for callbacks.
      *
-     * @param string|array<0|string, mixed> $page URL as string or array with page name as first element and other GET arguments
+     * @param string|array<0|string, string|int|false> $page URL as string or array with page name as first element and other GET arguments
      */
     public function url($page = []): string
     {
@@ -501,7 +501,7 @@ class View extends AbstractView
     /**
      * Build an URL which this view can use for JS callbacks.
      *
-     * @param string|array<0|string, mixed> $page URL as string or array with page name as first element and other GET arguments
+     * @param string|array<0|string, string|int|false> $page URL as string or array with page name as first element and other GET arguments
      */
     public function jsUrl($page = []): string
     {
