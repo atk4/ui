@@ -39,7 +39,7 @@ class Loader extends View
     /** @var Callback for triggering */
     public $cb;
 
-    /** @var array Url arguments. */
+    /** @var array URL arguments. */
     public $urlArgs = [];
 
     protected function init(): void

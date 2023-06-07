@@ -13,6 +13,8 @@ interface JsExecutorInterface extends ExecutorInterface
 {
     /**
      * Return JS expression that will trigger action executor.
+     *
+     * @param array<string, string> $urlArgs
      */
     public function jsExecute(array $urlArgs): JsBlock;
 }

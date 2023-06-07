@@ -16,7 +16,7 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-Header::addTo($app, ['Display form using Html template', 'subHeader' => 'Fully control how to display fields.']);
+Header::addTo($app, ['Display form using HTML template', 'subHeader' => 'Fully control how to display fields.']);
 
 $tabs = Tabs::addTo($app);
 

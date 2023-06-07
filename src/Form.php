@@ -58,7 +58,7 @@ class Form extends View
     public $canLeave = true;
 
     /**
-     * Html <form> element, all inner form controls are linked to it on render
+     * HTML <form> element, all inner form controls are linked to it on render
      * with HTML form="form_id" attribute.
      *
      * @var View
