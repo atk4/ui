@@ -12,7 +12,7 @@ multiple Model fields related to a single record reference into another Model.
 
 A good example is a user who can have many addresses.
 In this example, the Model `User` containsMany `Addresses`. Since the Model field addresses is defined with containsMany()
-inside the main model, Multiline will store addresses content as Json value inside the table blobl addresses field.
+inside the main model, Multiline will store addresses content as JSON value inside the table blobl addresses field.
 
 For example::
 
