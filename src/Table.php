@@ -471,11 +471,11 @@ class Table extends Lister
 
         if ($this->useHtmlTags) {
             // prepare row-specific HTML tags
-            $html_tags = [];
+            $htmlTags = [];
 
             foreach ($this->hook(Table\Column::HOOK_GET_HTML_TAGS, [$this->model]) as $ret) {
                 if (is_array($ret)) {
-                    $html_tags = array_merge($html_tags, $ret);
+                    $htmlTags = array_merge($htmlTags, $ret);
                 }
             }
 
@@ -485,15 +485,15 @@ class Table extends Lister
                 }
                 $field = is_int($name) ? null : $this->model->getField($name);
                 foreach ($columns as $column) {
-                    $html_tags = array_merge($column->getHtmlTags($this->model, $field), $html_tags);
+                    $htmlTags = array_merge($column->getHtmlTags($this->model, $field), $htmlTags);
                 }
             }
 
             // Render row and add to body
-            $this->tRow->dangerouslySetHtml($html_tags);
+            $this->tRow->dangerouslySetHtml($htmlTags);
             $this->tRow->set('dataId', (string) $this->model->getId());
             $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
-            $this->tRow->del(array_keys($html_tags));
+            $this->tRow->del(array_keys($htmlTags));
         } else {
             $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
         }
@@ -672,14 +672,14 @@ class Table extends Lister
 
             // we need to smartly wrap things up
             $cell = null;
-            $td_attr = [];
+            $tdAttr = [];
             foreach ($column as $cKey => $c) {
                 if ($cKey !== array_key_last($column)) {
                     $html = $c->getDataCellTemplate($field);
-                    $td_attr = $c->getTagAttributes('body', $td_attr);
+                    $tdAttr = $c->getTagAttributes('body', $tdAttr);
                 } else {
                     // last formatter, ask it to give us whole rendering
-                    $html = $c->getDataCellHtml($field, $td_attr);
+                    $html = $c->getDataCellHtml($field, $tdAttr);
                 }
 
                 if ($cell) {

@@ -38,8 +38,8 @@ class Multiformat extends Table\Column
         // we need to smartly wrap things up
         $name = $field->shortName;
         $cell = null;
-        $td_attr = [];
-        $html_tags = [];
+        $tdAttr = [];
+        $htmlTags = [];
         foreach ($decorators as $cKey => $c) {
             if (!is_object($c)) {
                 $c = $this->getOwner()->decoratorFactory($field, $c);
@@ -48,10 +48,10 @@ class Multiformat extends Table\Column
 
             if ($cKey !== array_key_last($decorators)) {
                 $html = $c->getDataCellTemplate($field);
-                $td_attr = $c->getTagAttributes('body', $td_attr);
+                $tdAttr = $c->getTagAttributes('body', $tdAttr);
             } else {
                 // last formatter, ask it to give us whole rendering
-                $html = $c->getDataCellHtml($field, $td_attr);
+                $html = $c->getDataCellHtml($field, $tdAttr);
             }
 
             if ($cell) {
@@ -65,13 +65,13 @@ class Multiformat extends Table\Column
                 $cell = $html;
             }
 
-            $html_tags = array_merge($c->getHtmlTags($row, $field), $html_tags);
+            $htmlTags = array_merge($c->getHtmlTags($row, $field), $htmlTags);
         }
 
         $template = new HtmlTemplate($cell);
         $template->setApp($this->getApp());
         $template->set($row);
-        $template->dangerouslySetHtml($html_tags);
+        $template->dangerouslySetHtml($htmlTags);
 
         $val = $template->renderToHtml();
 

@@ -82,17 +82,11 @@ class FilterPopup extends Popup
             });
     }
 
-    /**
-     * Check if filter is on.
-     */
     public function isFilterOn(): bool
     {
         return $this->recallData() !== null;
     }
 
-    /**
-     * Recall model data.
-     */
     public function recallData(): ?array
     {
         return $this->form->model->recallData();

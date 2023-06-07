@@ -76,9 +76,6 @@ class Right extends View implements Loadable
         $this->dynamicContent = Content::addTo($this, [], ['LoadContent']);
     }
 
-    /**
-     * Get dynamic content for this view.
-     */
     public function getDynamicContent(): LoadableContent
     {
         return $this->dynamicContent;
@@ -182,12 +179,9 @@ class Right extends View implements Loadable
         return (new Jquery('#' . $this->name . ' ' . $this->warningSelector))->toggleClass($this->warningTrigger);
     }
 
-    /**
-     * Return panel options.
-     */
     public function getPanelOptions(): array
     {
-        $panel_options = [
+        $res = [
             'id' => $this->name,
             'loader' => ['selector' => '.ui.loader', 'trigger' => 'active'], // the CSS selector and trigger class to activate loader.
             'modal' => $this->closeModal,
@@ -199,11 +193,11 @@ class Right extends View implements Loadable
         ];
 
         if ($this->dynamicContent) {
-            $panel_options['url'] = $this->getDynamicContent()->getCallbackUrl();
-            $panel_options['clearable'] = $this->getDynamicContent()->getClearSelector();
+            $res['url'] = $this->getDynamicContent()->getCallbackUrl();
+            $res['clearable'] = $this->getDynamicContent()->getClearSelector();
         }
 
-        return $panel_options;
+        return $res;
     }
 
     protected function renderView(): void

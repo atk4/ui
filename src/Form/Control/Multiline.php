@@ -243,9 +243,6 @@ class Multiline extends Form\Control
         });
     }
 
-    /**
-     * Typecast each loaded value.
-     */
     protected function typeCastLoadValues(array $values): array
     {
         $dataRows = [];
@@ -552,9 +549,6 @@ class Multiline extends Form\Control
         return $props;
     }
 
-    /**
-     * Lookup Props set based on field value.
-     */
     public function setLookupOptionValue(Field $field, string $value): void
     {
         $model = $field->getReference()->refModel($this->model);
@@ -573,7 +567,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Return a component definition.
      * Component definition require at least a name and a props array.
      */
     protected function getComponentDefinition(Field $field): array
@@ -602,9 +595,6 @@ class Multiline extends Form\Control
         return $definition;
     }
 
-    /**
-     * Return array of possible items set for a select or lookup field.
-     */
     protected function getFieldItems(Field $field, ?int $limit = 10): array
     {
         $items = [];
