@@ -100,9 +100,13 @@ class PersistenceUiTest extends TestCase
             yield [['timezone' => $tz, 'timeFormat' => 'g:i:s A'], ['type' => 'time'], $evalTime1, '10:20:00 AM'];
             yield [['timezone' => $tz, 'timeFormat' => 'g:i:s A'], ['type' => 'time'], $evalTime2, '10:20:30 AM'];
             yield [['timezone' => $tz, 'timeFormat' => 'g:i:s A'], ['type' => 'time'], $evalTime3, '10:20:30.135789 AM'];
+            yield [['timezone' => $tz, 'timeFormat' => 'g:i:s.u A'], ['type' => 'time'], $evalTime2, '10:20:30.000000 AM'];
+            yield [['timezone' => $tz, 'timeFormat' => 'g:i:s.u A'], ['type' => 'time'], $evalTime3, '10:20:30.135789 AM'];
             yield [['timezone' => $tz, 'datetimeFormat' => 'j.n.Y g:i:s A'], ['type' => 'datetime'], $evalDatetime1, '2.1.2022 10:20:00 AM'];
             yield [['timezone' => $tz, 'datetimeFormat' => 'j.n.Y g:i:s A'], ['type' => 'datetime'], $evalDatetime2, '2.1.2022 10:20:35 AM'];
-            yield [['timezone' => $tz, 'datetimeFormat' => 'j.n.Y g:i:s A'], ['type' => 'datetime'], $evalDatetime3, '2.1.2022 10:20:35.420000 AM'];
+            yield [['timezone' => $tz, 'datetimeFormat' => 'j.n.Y g:i:s A'], ['type' => 'datetime'], $evalDatetime3, '2.1.2022 10:20:35.42 AM'];
+            yield [['timezone' => $tz, 'datetimeFormat' => 'j.n.Y g:i:s.u A'], ['type' => 'datetime'], $evalDatetime2, '2.1.2022 10:20:35.000000 AM'];
+            yield [['timezone' => $tz, 'datetimeFormat' => 'j.n.Y g:i:s.u A'], ['type' => 'datetime'], $evalDatetime3, '2.1.2022 10:20:35.420000 AM'];
         }
 
         yield [[], ['type' => 'atk4_money'], 1.0, $fixSpaceToNbspFx('€ 1.00')];

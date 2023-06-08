@@ -131,6 +131,7 @@ class Ui extends Persistence
 
                     $valueHasSeconds = (int) $value->format('s') !== 0;
                     $valueHasMicroseconds = (int) $value->format('u') !== 0;
+                    $formatHasMicroseconds = str_contains($format, '.u');
                     if ($valueHasSeconds || $valueHasMicroseconds) {
                         $format = preg_replace('~(?<=:i)(?!:s)~', ':s', $format);
                     }
@@ -143,6 +144,10 @@ class Ui extends Persistence
                         $value->setTimezone(new \DateTimeZone($this->timezone));
                     }
                     $value = $value->format($format);
+
+                    if (!$formatHasMicroseconds) {
+                        $value = preg_replace('~(?<!\d|:)\d{1,2}:\d{1,2}(?::\d{1,2})?\.\d*?\K0+(?!\d)~', '', $value);
+                    }
                 }
 
                 break;
