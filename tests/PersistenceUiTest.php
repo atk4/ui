@@ -84,15 +84,25 @@ class PersistenceUiTest extends TestCase
 
         foreach (['UTC', 'Europe/Prague', 'Pacific/Honolulu', 'Australia/Sydney'] as $tz) {
             $evalDate = '$ new DateTime(\'2022-1-2 UTC\')';
-            $evalTime = '$ new DateTime(\'1970-1-1 10:20 UTC\')';
-            $evalDatetime = '$ new DateTime(\'2022-1-2 10:20:30 ' . $tz . '\')';
+            $evalTime1 = '$ new DateTime(\'1970-1-1 10:20 UTC\')';
+            $evalTime2 = '$ new DateTime(\'1970-1-1 10:20:30 UTC\')';
+            $evalTime3 = '$ new DateTime(\'1970-1-1 10:20:30.135789 UTC\')';
+            $evalDatetime1 = '$ new DateTime(\'2022-1-2 10:20 ' . $tz . '\')';
+            $evalDatetime2 = '$ new DateTime(\'2022-1-2 10:20:35 ' . $tz . '\')';
+            $evalDatetime3 = '$ new DateTime(\'2022-1-2 10:20:35.42 ' . $tz . '\')';
 
             yield [['timezone' => $tz], ['type' => 'date'], $evalDate, 'Jan 2, 2022'];
-            yield [['timezone' => $tz], ['type' => 'time'], $evalTime, '10:20'];
-            yield [['timezone' => $tz], ['type' => 'datetime'], $evalDatetime, 'Jan 2, 2022 10:20:30'];
+            yield [['timezone' => $tz], ['type' => 'time'], $evalTime1, '10:20'];
+            yield [['timezone' => $tz], ['type' => 'time'], $evalTime2, '10:20:30'];
+            yield [['timezone' => $tz], ['type' => 'time'], $evalTime3, '10:20:30.135789'];
+            yield [['timezone' => $tz], ['type' => 'datetime'], $evalDatetime2, 'Jan 2, 2022 10:20:35'];
             yield [['timezone' => $tz, 'dateFormat' => 'j.n.Y'], ['type' => 'date'], $evalDate, '2.1.2022'];
-            yield [['timezone' => $tz, 'timeFormat' => 'g:i:s A'], ['type' => 'time'], $evalTime, '10:20:00 AM'];
-            yield [['timezone' => $tz, 'datetimeFormat' => 'j.n.Y g:i:s A'], ['type' => 'datetime'], $evalDatetime, '2.1.2022 10:20:30 AM'];
+            yield [['timezone' => $tz, 'timeFormat' => 'g:i:s A'], ['type' => 'time'], $evalTime1, '10:20:00 AM'];
+            yield [['timezone' => $tz, 'timeFormat' => 'g:i:s A'], ['type' => 'time'], $evalTime2, '10:20:30 AM'];
+            yield [['timezone' => $tz, 'timeFormat' => 'g:i:s A'], ['type' => 'time'], $evalTime3, '10:20:30.135789 AM'];
+            yield [['timezone' => $tz, 'datetimeFormat' => 'j.n.Y g:i:s A'], ['type' => 'datetime'], $evalDatetime1, '2.1.2022 10:20:00 AM'];
+            yield [['timezone' => $tz, 'datetimeFormat' => 'j.n.Y g:i:s A'], ['type' => 'datetime'], $evalDatetime2, '2.1.2022 10:20:35 AM'];
+            yield [['timezone' => $tz, 'datetimeFormat' => 'j.n.Y g:i:s A'], ['type' => 'datetime'], $evalDatetime3, '2.1.2022 10:20:35.420000 AM'];
         }
 
         yield [[], ['type' => 'atk4_money'], 1.0, $fixSpaceToNbspFx('€ 1.00')];
