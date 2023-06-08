@@ -339,6 +339,37 @@ i.atk-panel-warning {
     }
 }
 
+// improve highlight.js diff
+// https://github.com/highlightjs/highlight.js/issues/3796
+pre code.hljs {
+    .hljs-addition, .hljs-deletion {
+        display: inline-block;
+        width: calc(100% + 2em);
+        margin: 0px -1em;
+        padding: 0px 1em;
+    }
+    .hljs-addition {
+        color: rgb(173, 186, 199);
+        background-color: rgba(87, 171, 90, 0.35);
+
+        .hljs-addition-added {
+            display: inline-block;
+            color: #d8dee4;
+            background-color: rgba(87, 171, 90, 0.4);
+        }
+    }
+    .hljs-deletion {
+        color: rgb(173, 186, 199);
+        background-color: rgba(229, 83, 75, 0.35);
+
+        .hljs-addition-deleted {
+            display: inline-block;
+            color: #d8dee4;
+            background-color: rgba(229, 83, 75, 0.4);
+        }
+    }
+}
+
 // Responsive
 
 @media (max-width: (@desktopWidth - 1px)) {
