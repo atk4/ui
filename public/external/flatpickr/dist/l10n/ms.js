@@ -49,6 +49,7 @@
           return "";
       },
   };
+  fp.l10ns.ms = Malaysian;
   var ms = fp.l10ns;
 
   exports.Malaysian = Malaysian;
