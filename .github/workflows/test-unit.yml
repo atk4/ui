@@ -92,7 +92,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
       mariadb:
         image: mariadb
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: --health-cmd="mariadb-admin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       postgres:
         image: postgres:12-alpine
         env:
@@ -253,7 +253,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
       mariadb:
         image: mariadb
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: --health-cmd="mariadb-admin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       postgres:
         image: postgres:12-alpine
         env:
