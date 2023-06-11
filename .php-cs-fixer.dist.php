@@ -18,11 +18,6 @@ return (new PhpCsFixer\Config())
         ],
 
         // disable some too strict rules
-        'phpdoc_types' => [
-            // keep enabled, but without "alias" group to not fix
-            // "Callback" to "callback" in phpdoc
-            'groups' => ['simple', 'meta'],
-        ],
         'phpdoc_types_order' => [
             'null_adjustment' => 'always_last',
             'sort_algorithm' => 'none',
@@ -59,7 +54,12 @@ return (new PhpCsFixer\Config())
         // also prevent bounding of unwanted variables for GC
         'use_arrow_functions' => false,
 
-        'phpdoc_var_without_name' => false, // remove once https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues/6959 is fixed
+        // TODO remove once 3.17.1 is released
+        // https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/pull/6979
+        // https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/pull/7011
+        // fixes were merged
+        'phpdoc_types' => ['groups' => ['simple', 'meta']],
+        'phpdoc_var_without_name' => false,
     ])
     ->setFinder($finder)
     ->setCacheFile(sys_get_temp_dir() . '/php-cs-fixer.' . md5(__DIR__) . '.cache');

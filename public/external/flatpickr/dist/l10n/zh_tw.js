@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global['zh-tw'] = {}));
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.zh_tw = {}));
 }(this, (function (exports) { 'use strict';
 
   var fp = typeof window !== "undefined" && window.flatpickr !== undefined
@@ -58,10 +58,10 @@
       toggleTitle: "點擊切換 12/24 小時時制",
   };
   fp.l10ns.zh_tw = MandarinTraditional;
-  var zhTw = fp.l10ns;
+  var zh_tw = fp.l10ns;
 
   exports.MandarinTraditional = MandarinTraditional;
-  exports.default = zhTw;
+  exports.default = zh_tw;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 

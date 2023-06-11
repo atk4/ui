@@ -241,7 +241,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
 // normalize EOL of text files
 walkFilesSync(__dirname, (f) => {
     updateFileSync(f, (data) => {
-        if (data.includes('\0')) {
+        if (data.includes('\0') || /\.min\./i.test(f)) {
             return;
         }
 
