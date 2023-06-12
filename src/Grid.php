@@ -518,7 +518,7 @@ class Grid extends View
      * When menu item is clicked, modal is displayed with the $title and $callback is executed through
      * VirtualPage.
      *
-     * @param string|array|MenuItem $item
+     * @param string|array|MenuItem            $item
      * @param \Closure(View, array|null): void $callback
      * @param array                            $args     extra url argument for callback
      *
