@@ -134,7 +134,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
         }
 
         foreach ($this->steps as $step) {
-            View::addTo($this->stepList)->set($this->stepListItems[$step])->addClass('item')->setAttr(['data-list-item' => $step]);
+            View::addTo($this->stepList)->set($this->stepListItems[$step])->addClass('item')->addClass('link')->setAttr(['data-list-item' => $step]);
         }
     }
 

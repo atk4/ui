@@ -115,7 +115,7 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
         $c1 = $cols->addColumn();
         Header::addTo($c1, ['size' => 'small'])->set('Snacks');
         $l1 = View::addTo($c1, ['ui' => 'list']);
-        MenuItem::addTo($l1, ['content' => 'Crisps', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l1, ['content' => 'Crisps', 'ui' => 'item'])->setElement('a'); // is item ui here needed? (multiple times in this files)
         MenuItem::addTo($l1, ['content' => 'Pork Scratchings', 'ui' => 'item'])->setElement('a');
         MenuItem::addTo($l1, ['content' => 'Candies', 'ui' => 'item'])->setElement('a');
         MenuItem::addTo($l1, ['content' => 'Sweets', 'ui' => 'item'])->setElement('a');
@@ -232,7 +232,7 @@ $shelf2 = $itemShelfClass::addTo($pop);
 // -----------------------------------------------------------------------------
 
 $userMenu = Menu::addTo($menu, ['ui' => false], ['RightMenu'])
-    ->addClass('right menu')->removeClass('item');
+    ->addClass('right menu')->removeClass('item')->removeClass('link');
 $rightMenu = $userMenu->addMenu(['', 'icon' => 'user']);
 
 // If you add popup right inside the view, it will link itself with the element. If you are adding it into other container,

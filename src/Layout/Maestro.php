@@ -23,7 +23,7 @@ class Maestro extends Admin
     public function addMenuGroup($seed): Menu
     {
         $gr = $this->menuLeft->addGroup($seed, $this->menuTemplate)->addClass('atk-maestro-sidenav');
-        $gr->removeClass('item');
+        $gr->removeClass('item')->removeClass('link');
 
         return $gr;
     }

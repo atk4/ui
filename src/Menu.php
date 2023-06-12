@@ -98,7 +98,7 @@ class Menu extends View
         }
 
         if (isset($name['icon'])) {
-            Icon::addTo($subMenu, [$name['icon']], ['Icon'])->removeClass('item');
+            Icon::addTo($subMenu, [$name['icon']], ['Icon'])->removeClass('item')->removeClass('link');
         }
 
         if (!$this->inDropdown) {
@@ -130,7 +130,7 @@ class Menu extends View
         }
 
         if (isset($name['icon'])) {
-            Icon::addTo($group, [$name['icon']], ['Icon'])->removeClass('item');
+            Icon::addTo($group, [$name['icon']], ['Icon'])->removeClass('item')->removeClass('link');
         }
 
         return $group;
@@ -143,13 +143,13 @@ class Menu extends View
      */
     public function addMenuRight()
     {
-        return (self::class)::addTo($this, ['ui' => false], ['RightMenu'])->removeClass('item')->addClass('right menu');
+        return (self::class)::addTo($this, ['ui' => false], ['RightMenu'])->removeClass('item')->removeClass('link')->addClass('right menu');
     }
 
     #[\Override]
     public function add($seed, $region = null): AbstractView
     {
-        return parent::add($seed, $region)->addClass('item');
+        return parent::add($seed, $region)->addClass('item')->addClass('link');
     }
 
     /**

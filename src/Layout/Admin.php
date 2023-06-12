@@ -74,7 +74,7 @@ class Admin extends Layout implements NavigableInterface
 
         if ($this->menuRight === null) {
             $this->menuRight = Menu::addTo($this->menu, ['ui' => false], ['RightMenu'])
-                ->addClass('right menu')->removeClass('item');
+                ->addClass('right menu')->removeClass('item')->removeClass('link');
         }
 
         if ($this->menuLeft === null) {

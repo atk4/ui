@@ -139,7 +139,7 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
 
         foreach ($this->steps as $step) {
             // TODO replace `(View::class)` with `View` once https://github.com/phpstan/phpstan/issues/10469 is fixed
-            (View::class)::addTo($this->stepList)->set($this->stepListItems[$step])->addClass('item')->setAttr(['data-list-item' => $step]);
+            (View::class)::addTo($this->stepList)->set($this->stepListItems[$step])->addClass('item')->addClass('link')->setAttr(['data-list-item' => $step]);
         }
     }
 

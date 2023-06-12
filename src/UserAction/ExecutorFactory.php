@@ -214,11 +214,11 @@ class ExecutorFactory
 
                 break;
             case self::MENU_ITEM:
-                $seed = [MenuItem::class, $this->getActionCaption($action, $type)];
+                $seed = [MenuItem::class, $this->getActionCaption($action, $type)]; // no item/class here?
 
                 break;
             case self::TABLE_MENU_ITEM:
-                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'class.item' => true];
+                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'class.item' => true, 'class.link' => true];
 
                 break;
             default:
