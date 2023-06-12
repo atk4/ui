@@ -515,30 +515,25 @@ class Grid extends View
 
     /**
      * Similar to addModalAction but apply to a multiple recors selection and display in menu.
-     * When menu item is clicked, modal is displayed with the $title and $callback is executed through VirtualPage.
+     * When menu item is clicked, modal is displayed with the $title and $callback is executed through
+     * VirtualPage.
      *
      * @param string|array|MenuItem $item
-     * @param \Closure              $callback function (View $page) {...
-     * @param array                 $args     extra url argument for callback
+     * @param \Closure(View, array|null): void $callback
+     * @param array                            $args     extra url argument for callback
      *
      * @return Jquery
      */
     public function addModalBulkAction($item, \Closure $callback, $args = [])
     {
-        if (!$this->menu) {
-            throw new Exception('Unable to add Modal Bulk Action without Menu');
-        }
-
-        $owner = $this->getOwner();
-
         if (is_string($item)) {
             $item = ['title' => $item];
         }
 
-        $modal = Modal::addTo($owner, [$item[0]]);
+        $modal = Modal::addTo($this->getOwner());
 
         $modal->set(function (View $t) use ($callback) {
-            $callback($t, $t->stickyGet($this->name) ? explode(',', $t->stickyGet($this->name)) : false);
+            $callback($t, $t->stickyGet($this->name) ? explode(',', $t->stickyGet($this->name)) : null);
         });
 
         return $this->menu->addItem($item)->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)), []);

@@ -75,15 +75,15 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
 
 $sel = $grid->addSelection();
 // Executing a modal on a bulk selection
-$callback = function ($m, $ids) use ($grid) {
+$callback = function (View $modal, ?Array $ids) use ($grid) {
     if (!$ids) {
-        Message::addTo($m, [
+        Message::addTo($modal, [
             'No records were selected.',
             'type' => 'error',
             'icon' => 'times',
         ]);
     } else {
-        $msg = Message::addTo($m, [
+        $msg = Message::addTo($modal, [
             'The selected records will be permanently deleted.',
             'type' => 'warning',
             'icon' => 'warning',
@@ -92,7 +92,7 @@ $callback = function ($m, $ids) use ($grid) {
         foreach ($ids as $id) {
             $msg->text->addParagraph($id);
         }
-        $form = Form::addTo($m);
+        $form = Form::addTo($modal);
         $form->buttonSave->set('Delete');
         $form->buttonSave->icon = 'trash';
         $form->onSubmit(function (Form $form) use ($grid, $ids) {
