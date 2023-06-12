@@ -57,8 +57,6 @@ class Layout extends AbstractLayout
     }
 
     /**
-     * Adds Button.
-     *
      * @param Button|array $seed
      *
      * @return Button
@@ -69,8 +67,6 @@ class Layout extends AbstractLayout
     }
 
     /**
-     * Adds Header in form layout.
-     *
      * @param string|array $label
      *
      * @return $this
@@ -127,9 +123,6 @@ class Layout extends AbstractLayout
         return $v;
     }
 
-    /**
-     * Recursively renders this view.
-     */
     protected function recursiveRender(): void
     {
         $labeledControl = $this->inputTemplate->cloneRegion('LabeledControl');

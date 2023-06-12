@@ -58,7 +58,7 @@ class Form extends View
     public $canLeave = true;
 
     /**
-     * Html <form> element, all inner form controls are linked to it on render
+     * HTML <form> element, all inner form controls are linked to it on render
      * with HTML form="form_id" attribute.
      *
      * @var View
@@ -390,9 +390,9 @@ class Form extends View
      * 3. $f->type is converted into seed and evaluated
      * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
      *
-     * @param array<string, mixed> $ControlSeed
+     * @param array<string, mixed> $controlSeed
      */
-    public function controlFactory(Field $field, $ControlSeed = []): Control
+    public function controlFactory(Field $field, $controlSeed = []): Control
     {
         $this->model->assertIsEntity($field->getOwner());
 
@@ -420,8 +420,8 @@ class Form extends View
             $fallbackSeed['placeholder'] = $field->ui['placeholder'];
         }
 
-        $ControlSeed = Factory::mergeSeeds(
-            $ControlSeed,
+        $controlSeed = Factory::mergeSeeds(
+            $controlSeed,
             $field->ui['form'] ?? null,
             $this->typeToControl[$field->type] ?? null,
             $fallbackSeed
@@ -433,7 +433,7 @@ class Form extends View
             'shortName' => $field->shortName,
         ];
 
-        return Factory::factory($ControlSeed, $defaults);
+        return Factory::factory($controlSeed, $defaults);
     }
 
     /**

@@ -120,9 +120,6 @@ class JsSse extends JsCallback
         flush();
     }
 
-    /**
-     * Send Data.
-     */
     private function output(string $content): void
     {
         if ($this->echoFunction) {
@@ -138,9 +135,6 @@ class JsSse extends JsCallback
         }, null, $app)();
     }
 
-    /**
-     * Send a SSE data block.
-     */
     public function sendBlock(string $id, string $data, string $eventName = null): void
     {
         if (connection_aborted()) {

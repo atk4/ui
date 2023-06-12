@@ -22,8 +22,6 @@ try {
         ->addMoreInfo('PDO error', $e->getMessage());
 }
 
-// a very basic file that sets up Agile Data to be used in some demonstrations
-
 trait ModelPreventModificationTrait
 {
     protected function isAllowDbModifications(): bool
@@ -369,9 +367,6 @@ class File extends ModelWithPrefixedFields
             ->addTitle();
     }
 
-    /**
-     * Perform import from filesystem.
-     */
     public function importFromFilesystem(string $path, bool $isSub = null): void
     {
         if ($isSub === null) {

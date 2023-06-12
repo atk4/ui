@@ -36,8 +36,8 @@ class Menu extends View
     /**
      * $seed can also be name here.
      *
-     * @param string|array|MenuItem                          $item
-     * @param string|array|JsExpressionable|Model\UserAction $action
+     * @param string|array|MenuItem                                                      $item
+     * @param string|array<0|string, string|int|false>|JsExpressionable|Model\UserAction $action
      *
      * @return MenuItem
      */

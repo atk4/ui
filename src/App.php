@@ -123,9 +123,6 @@ class App
     /** @var bool Call exit in place of throw Exception when Application need to exit. */
     public $callExit = true;
 
-    /** @var string|null */
-    public $page;
-
     /** @var array global sticky arguments */
     protected array $stickyGetArguments = [
         '__atk_json' => false,
@@ -182,7 +179,7 @@ class App
             }
         }
 
-        // Set our exception handler
+        // set our exception handler
         if ($this->catchExceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
             set_error_handler(static function (int $severity, string $msg, string $file, int $line): bool {
@@ -210,7 +207,7 @@ class App
             http_response_code(500);
         }
 
-        // Always run app on shutdown
+        // always run app on shutdown
         if ($this->alwaysRun) {
             $this->setupAlwaysRun();
         }
@@ -292,9 +289,6 @@ class App
         exit;
     }
 
-    /**
-     * Catch exception.
-     */
     public function caughtException(\Throwable $exception): void
     {
         if ($exception instanceof LateOutputError) {
@@ -418,11 +412,11 @@ class App
 
             $this->outputResponseJson($output);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
-            // ugly hack for TABS
-            // because Fomantic-UI tab only deal with HTML and not JSON
-            // we need to hack output to include app modal.
+            // ugly hack for Tabs
+            // because Fomantic-UI Tab only deal with HTML and not JSON
+            // we need to hack output to include app modal
             $ids = [];
-            $remove_function = '';
+            $jsRemoveFunction = '';
             foreach ($this->getRenderedPortals() as $key => $modal) {
                 // add modal rendering to output
                 $ids[] = '#' . $key;
@@ -430,10 +424,10 @@ class App
                 $output['html'] .= $modal['html'];
             }
             if (count($ids) > 0) {
-                $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . implode(', ', $ids) . '\').remove();';
+                $jsRemoveFunction = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . implode(', ', $ids) . '\').remove();';
             }
 
-            $output = $this->getTag('script', [], '$(function () {' . $remove_function . $output['atkjs'] . '});')
+            $output = $this->getTag('script', [], '$(function () {' . $jsRemoveFunction . $output['atkjs'] . '});')
                 . $output['html'];
 
             $this->outputResponseHtml($output);
@@ -690,9 +684,9 @@ class App
     /**
      * Build a URL that application can use for loading HTML data.
      *
-     * @param array|string $page                URL as string or array with page name as first element and other GET arguments
-     * @param bool         $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
+     * @param string|array<0|string, string|int|false> $page                URL as string or array with page name as first element and other GET arguments
+     * @param bool                                     $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
     public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
@@ -700,22 +694,23 @@ class App
             $page = $_SERVER['REQUEST_URI'];
         }
 
-        if ($this->page === null) {
-            $requestUrl = $this->getRequestUrl();
-            if (substr($requestUrl, -1, 1) === '/') {
-                $this->page = 'index';
-            } else {
-                $this->page = basename($requestUrl, $this->urlBuildingExt);
-            }
-        }
-
         $pagePath = '';
         if (is_string($page)) {
-            $page_arr = explode('?', $page, 2);
-            $pagePath = $page_arr[0];
-            parse_str($page_arr[1] ?? '', $page);
+            $pageExploded = explode('?', $page, 2);
+            $pagePath = $pageExploded[0];
+            parse_str($pageExploded[1] ?? '', $page);
         } else {
-            $pagePath = $page[0] ?? $this->page; // use current page by default
+            if (isset($page[0])) {
+                $pagePath = $page[0];
+            } else {
+                // use current page by default
+                $requestUrl = $this->getRequestUrl();
+                if (substr($requestUrl, -1, 1) === '/') {
+                    $pagePath = 'index';
+                } else {
+                    $pagePath = basename($requestUrl, $this->urlBuildingExt);
+                }
+            }
             unset($page[0]);
             if ($pagePath) {
                 $pagePath .= $this->urlBuildingExt;
@@ -735,7 +730,7 @@ class App
 
         // add arguments
         foreach ($page as $k => $v) {
-            if ($v === null || $v === false) {
+            if ($v === false) {
                 unset($args[$k]);
             } else {
                 $args[$k] = $v;
@@ -753,9 +748,9 @@ class App
      * Build a URL that application can use for JS callbacks. Some framework integration will use a different routing
      * mechanism for NON-HTML response.
      *
-     * @param array|string $page                URL as string or array with page name as first element and other GET arguments
-     * @param bool         $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
+     * @param string|array<0|string, string|int|false> $page                URL as string or array with page name as first element and other GET arguments
+     * @param bool                                     $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
     public function jsUrl($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
@@ -806,7 +801,7 @@ class App
     /**
      * A convenient wrapper for sending user to another page.
      *
-     * @param array|string $page Destination page
+     * @param string|array<0|string, string|int|false> $page
      */
     public function redirect($page, bool $permanent = false): void
     {
@@ -818,7 +813,7 @@ class App
     /**
      * Generate action for redirecting user to another page.
      *
-     * @param string|array $page Destination URL or page/arguments
+     * @param string|array<0|string, string|int|false> $page
      */
     public function jsRedirect($page, bool $newWindow = false): JsExpressionable
     {
@@ -1105,9 +1100,6 @@ class App
         }
     }
 
-    /**
-     * Output Response to the client.
-     */
     protected function outputResponse(string $data): void
     {
         foreach (ob_get_status(true) as $status) {
@@ -1172,8 +1164,6 @@ class App
     }
 
     /**
-     * Output JSON response to the client.
-     *
      * @param string|array $data
      */
     private function outputResponseJson($data): void

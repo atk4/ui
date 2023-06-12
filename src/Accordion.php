@@ -134,9 +134,9 @@ class Accordion extends View
     public function getSectionIdx(AccordionSection $section)
     {
         $idx = -1;
-        foreach ($this->sections as $key => $accordion_section) {
-            if ($accordion_section->name === $section->name) {
-                $idx = $key;
+        foreach ($this->sections as $k => $v) {
+            if ($v->name === $section->name) {
+                $idx = $k;
 
                 break;
             }

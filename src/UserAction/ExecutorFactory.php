@@ -80,7 +80,7 @@ class ExecutorFactory
     ];
 
     /**
-     * Register an executor for basic type.
+     * Register an executor for a basic type.
      */
     public function registerTypeExecutor(string $type, array $seed): void
     {

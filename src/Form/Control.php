@@ -64,14 +64,12 @@ class Control extends View
     public $hint;
 
     /**
-     * Is input field disabled?
-     * Disabled input fields are not editable and will not be submitted.
+     * Disabled field is not editable and will not be submitted.
      */
     public bool $disabled = false;
 
     /**
-     * Is input field read only?
-     * Read only input fields are not editable, but will be submitted.
+     * Read-only field is not editable, but will be submitted.
      */
     public bool $readOnly = false;
 

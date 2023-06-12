@@ -191,7 +191,6 @@ export default {
          */
         mergeArrays: function (...arrays) {
             let jointArray = [];
-
             for (const array of arrays) {
                 jointArray = [...jointArray, ...array];
             }

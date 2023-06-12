@@ -123,9 +123,6 @@ class CardDeck extends View
         $this->query = $this->stickyGet($this->search->queryArg);
     }
 
-    /**
-     * Add Paginator view to card deck.
-     */
     protected function addPaginator(): void
     {
         $seg = View::addTo($this->container, ['ui' => 'basic segment'])->setStyle('text-align', 'center');

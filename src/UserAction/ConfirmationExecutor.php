@@ -74,13 +74,16 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->loader->addClass('atk-hide-loading-content');
     }
 
-    private function jsShowAndLoad(array $urlArgs, array $apiConfig): JsBlock
+    /**
+     * @param array<string, string> $urlArgs
+     */
+    private function jsShowAndLoad(array $urlArgs): JsBlock
     {
         return new JsBlock([
             $this->jsShow(),
             $this->js()->data('closeOnLoadingError', true),
             $this->loader->jsLoad($urlArgs, [
-                'method' => 'post',
+                'method' => 'POST',
                 'onSuccess' => new JsFunction([], [$this->js()->removeData('closeOnLoadingError')]),
             ]),
         ]);
@@ -92,7 +95,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             throw new Exception('Action must be set prior to assign trigger');
         }
 
-        return $this->jsShowAndLoad($urlArgs, ['method' => 'post']);
+        return $this->jsShowAndLoad($urlArgs);
     }
 
     public function getAction(): UserAction
@@ -122,7 +125,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
         $this->loader->set(function (Loader $p) {
             $this->jsSetButtonsState($p);
-            if ($this->step === 'exec') {
+            if ($this->step === 'execute') {
                 $this->doFinal($p);
             } else {
                 $this->doConfirmation($p);
@@ -152,10 +155,10 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             $this->ok->js()->on('click', new JsFunction([], [
                 $this->loader->jsLoad(
                     [
-                        'step' => 'exec',
+                        'step' => 'execute',
                         $this->name => $this->action->getEntity()->getId(),
                     ],
-                    ['method' => 'post']
+                    ['method' => 'POST']
                 ),
             ]))
         );

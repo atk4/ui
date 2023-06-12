@@ -476,11 +476,9 @@ class DemosTest extends TestCase
         self::assertGreaterThan(0, count($outputLines));
         foreach ($outputLines as $index => $line) {
             preg_match_all($this->regexSse, $line, $matchesAll);
-            $format_match_string = implode('', $matchesAll[0] ?? ['error']);
-
             self::assertSame(
                 $line,
-                $format_match_string,
+                implode('', $matchesAll[0] ?? ['error']),
                 'Testing SSE response line ' . $index . ' with content ' . $line
             );
         }

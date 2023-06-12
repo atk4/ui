@@ -45,7 +45,13 @@ module.exports = {
         'jsdoc/require-param-description': 'off',
         'jsdoc/require-returns': 'off',
         'jsdoc/require-returns-description': 'off',
-        'jsdoc/tag-lines': ['error', 'never', {
+        'jsdoc/sort-tags': ['error', {
+            tagSequence: [
+                { tags: ['param'] },
+                { tags: ['returns'] },
+            ],
+        }],
+        'jsdoc/tag-lines': ['error', 'any', {
             startLines: 1,
         }],
         'linebreak-style': ['error', 'unix'],

@@ -18,14 +18,14 @@ class Wizard extends View
     /** @var string Get argument for this wizard. */
     public $urlTrigger;
 
-    /** @var array List of steps. */
-    public $steps = [];
+    /** @var array<int, WizardStep> List of steps. */
+    public array $steps = [];
 
     /** @var int Current step. */
     public $currentStep;
 
     /** @var Button Button for going to previous step. */
-    public $buttonPrev;
+    public $buttonPrevious;
     /** @var Button Button for going to next step. */
     public $buttonNext;
     /** @var Button */
@@ -59,8 +59,8 @@ class Wizard extends View
 
         // add buttons
         if ($this->currentStep) {
-            $this->buttonPrev = Button::addTo($this, ['Back', 'class.basic' => true], ['Left']);
-            $this->buttonPrev->link($this->getUrl($this->currentStep - 1));
+            $this->buttonPrevious = Button::addTo($this, ['Back', 'class.basic' => true], ['Left']);
+            $this->buttonPrevious->link($this->getUrl($this->currentStep - 1));
         }
 
         $this->buttonNext = Button::addTo($this, ['Next', 'class.primary' => true], ['Right']);
@@ -119,7 +119,7 @@ class Wizard extends View
         if (count($this->steps) === $this->currentStep + 1) {
             $this->buttonFinish->link($this->getUrl(count($this->steps)));
         } elseif ($this->currentStep === count($this->steps)) {
-            $this->buttonPrev->destroy();
+            $this->buttonPrevious->destroy();
             $this->buttonNext->addClass('disabled')->set('Completed');
             $this->buttonFinish->destroy();
 
@@ -164,7 +164,7 @@ class Wizard extends View
 
     protected function recursiveRender(): void
     {
-        if (!$this->steps) {
+        if ($this->steps === []) {
             $this->addStep(['No Steps Defined', 'icon' => 'configure', 'description' => 'use $wizard->addStep() now'], function (self $p) {
                 Message::addTo($p, ['Step content will appear here', 'type' => 'error', 'text' => 'Specify callback to addStep() which would populate this area.']);
             });
