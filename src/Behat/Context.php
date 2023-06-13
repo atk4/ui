@@ -510,15 +510,6 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I set calendar input name :arg1 with value :arg2
-     */
-    public function iSetCalendarInputNameWithValue(string $inputName, string $value): void
-    {
-        $script = '$(\'input[name="' . $inputName . '"]\').get(0)._flatpickr.setDate(\'' . $value . '\')';
-        $this->getSession()->executeScript($script);
-    }
-
-    /**
      * @Then I search grid for :arg1
      */
     public function iSearchGridFor(string $text): void

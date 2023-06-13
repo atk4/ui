@@ -32,8 +32,6 @@ $control = $form->addControl('date_action', [
 ])->set(new \DateTime());
 $control->addAction(['Today', 'icon' => 'calendar day'])
     ->on('click', $control->getJsInstance()->setDate($app->uiPersistence->typecastSaveField($control->entityField->getField(), new \DateTime())));
-$control->addAction(['Select...', 'icon' => 'calendar'])
-    ->on('click', $control->getJsInstance()->open());
 $control->addAction(['Clear', 'icon' => 'times red'])
     ->on('click', $control->getJsInstance()->clear());
 
@@ -53,7 +51,9 @@ $control->addAction(['Clear', 'icon' => 'times red'])
 $form->onSubmit(function (Form $form) use ($app) {
     $data = [];
     foreach ($form->model->get() as $k => $v) {
-        $data[$k] = $app->uiPersistence->typecastSaveField($form->model->getField($k), $v);
+        $data[$k] = $v !== null
+            ? $app->uiPersistence->typecastSaveField($form->model->getField($k), $v)
+            : 'empty';
     }
 
     return new JsToast(implode(', ', $data));
