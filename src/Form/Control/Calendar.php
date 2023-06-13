@@ -39,6 +39,8 @@ class Calendar extends Input
     {
         parent::init();
 
+        $this->options['allowInput'] ??= true;
+
         // setup format
         $phpFormat = $this->getApp()->uiPersistence->{$this->type . 'Format'};
         $this->options['dateFormat'] = $this->convertPhpDtFormatToFlatpickr($phpFormat);
@@ -46,9 +48,8 @@ class Calendar extends Input
         if ($this->type === 'datetime' || $this->type === 'time') {
             $this->options['enableTime'] = true;
             $this->options['time_24hr'] ??= $this->isDtFormatWith24hrTime($phpFormat);
-            $this->options['noCalendar'] = ($this->type === 'time');
+            $this->options['noCalendar'] = $this->type === 'time';
             $this->options['enableSeconds'] ??= $this->isDtFormatWithSeconds($phpFormat);
-            $this->options['allowInput'] ??= $this->isDtFormatWithMicroseconds($phpFormat);
         }
 
         // setup locale

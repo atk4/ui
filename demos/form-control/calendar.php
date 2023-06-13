@@ -32,14 +32,6 @@ $form->addControl('time_h_i_s', [Form\Control\Calendar::class, 'type' => 'time',
 $form->addControl('datetime', [Form\Control\Calendar::class, 'type' => 'datetime', 'caption' => 'Datetime (M j, Y H:i:s)'])
     ->set(new \DateTime());
 
-$app->uiPersistence->dateFormat = 'F d, Y';
-$form->addControl('date_f_d_y', [
-    Form\Control\Calendar::class,
-    'type' => 'date',
-    'caption' => 'Allow input (F d, Y)',
-    'options' => ['allowInput' => true],
-])->set(new \DateTime());
-
 $app->uiPersistence->dateFormat = 'Y-m-d';
 $form->addControl('date_js_format', [
     Form\Control\Calendar::class,

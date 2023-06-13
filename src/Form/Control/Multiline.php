@@ -489,9 +489,11 @@ class Multiline extends Form\Control
      */
     protected function getDatePickerProps(Field $field): array
     {
-        $calendar = new Calendar();
         $props = [];
         $props['config'] = $this->componentProps[self::DATE] ?? [];
+        $props['config']['allowInput'] ??= true;
+
+        $calendar = new Calendar();
         $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
         $props['config']['dateFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat);
 
@@ -500,7 +502,6 @@ class Multiline extends Form\Control
             $props['config']['time_24hr'] = $calendar->isDtFormatWith24hrTime($phpFormat);
             $props['config']['noCalendar'] = $field->type === 'time';
             $props['config']['enableSeconds'] = $calendar->isDtFormatWithSeconds($phpFormat);
-            $props['config']['allowInput'] = $calendar->isDtFormatWithMicroseconds($phpFormat);
         }
 
         return $props;

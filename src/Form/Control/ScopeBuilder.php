@@ -369,8 +369,10 @@ class ScopeBuilder extends Form\Control
      */
     protected function getDatePickerProps(Field $field): array
     {
-        $calendar = new Calendar();
         $props = $this->atkdDateOptions['flatpickr'] ?? [];
+        $props['allowInput'] ??= true;
+
+        $calendar = new Calendar();
         $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
         $props['altFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat); // why altFormat format?
         $props['dateFormat'] = 'Y-m-d';
@@ -381,7 +383,6 @@ class ScopeBuilder extends Form\Control
             $props['time_24hr'] = $calendar->isDtFormatWith24hrTime($phpFormat);
             $props['noCalendar'] = $field->type === 'time';
             $props['enableSeconds'] = $calendar->isDtFormatWithSeconds($phpFormat);
-            $props['allowInput'] = $calendar->isDtFormatWithMicroseconds($phpFormat);
             $props['dateFormat'] = $field->type === 'datetime' ? 'Y-m-d H:i:S' : 'H:i:S';
         }
 
