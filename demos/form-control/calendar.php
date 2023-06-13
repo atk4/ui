@@ -51,5 +51,10 @@ $control->addAction(['Clear', 'icon' => 'times red'])
 // ])->set(date('Y-m-d') . ', ' . date('Y-m-d', strtotime('+1 Day')) . ', ' . date('Y-m-d', strtotime('+2 Day')));
 
 $form->onSubmit(function (Form $form) use ($app) {
-    return new JsToast($app->encodeJson($form->model->get()));
+    $data = [];
+    foreach ($form->model->get() as $k => $v) {
+        $data[$k] = $app->uiPersistence->typecastSaveField($form->model->getField($k), $v);
+    }
+
+    return new JsToast(implode(', ', $data));
 });
