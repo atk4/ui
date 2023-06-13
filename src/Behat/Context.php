@@ -622,7 +622,7 @@ class Context extends RawMinkContext implements BehatContext
 
         $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
-        $this->assertInputValue($rule, $value, 'input.form-control');
+        $this->assertInputValue($rule, $value);
     }
 
     /**

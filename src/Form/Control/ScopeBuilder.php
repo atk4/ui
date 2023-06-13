@@ -8,7 +8,6 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
-use Atk4\Data\Persistence;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
@@ -654,7 +653,7 @@ class ScopeBuilder extends Form\Control
         return [
             'rule' => $rule,
             'operator' => $operator,
-            'value' => $value instanceof \DateTimeInterface ? (new Persistence\Array_())->typecastSaveField($this->model->getField($rule), $value) : $value, // TODO an UI typecasting hack to pass CI
+            'value' => $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($rule), $value),
             'option' => $this->getConditionOption($inputType, $value, $condition),
         ];
     }
