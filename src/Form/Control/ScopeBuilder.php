@@ -40,13 +40,8 @@ class ScopeBuilder extends Form\Control
     /** List of delimiters for auto-detection in order of priority. */
     public static array $listDelimiters = [';', ','];
 
-    /**
-     * The date, time or datetime options:
-     * 'flatpickr' - any of Flatpickr options
-     * 'useDefault' - when true, will init date, time or datetime to current.
-     */
+    /** The date, time or datetime options. */
     public array $atkdDateOptions = [
-        'useDefault' => false,
         'flatpickr' => [],
     ];
 
@@ -389,8 +384,6 @@ class ScopeBuilder extends Form\Control
             $props['allowInput'] = $calendar->isDtFormatWithMicroseconds($phpFormat);
             $props['dateFormat'] = $field->type === 'datetime' ? 'Y-m-d H:i:S' : 'H:i:S';
         }
-
-        $props['useDefault'] = $this->atkdDateOptions['useDefault'];
 
         return $props;
     }
