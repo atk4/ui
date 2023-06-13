@@ -374,16 +374,14 @@ class ScopeBuilder extends Form\Control
 
         $calendar = new Calendar();
         $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
-        $props['altFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat); // why altFormat format?
-        $props['dateFormat'] = 'Y-m-d';
-        $props['altInput'] = true;
-
+        $props['dateFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat, true);
         if ($field->type === 'datetime' || $field->type === 'time') {
+            $props['noCalendar'] = $field->type === 'time';
             $props['enableTime'] = true;
             $props['time_24hr'] = $calendar->isDtFormatWith24hrTime($phpFormat);
-            $props['noCalendar'] = $field->type === 'time';
-            $props['enableSeconds'] = $calendar->isDtFormatWithSeconds($phpFormat);
-            $props['dateFormat'] = $field->type === 'datetime' ? 'Y-m-d H:i:S' : 'H:i:S';
+            $props['enableSeconds'] ??= $calendar->isDtFormatWithSeconds($phpFormat);
+            $props['formatSecondsPrecision'] ??= $calendar->isDtFormatWithMicroseconds($phpFormat) ? 6 : -1;
+            $props['disableMobile'] = true;
         }
 
         return $props;

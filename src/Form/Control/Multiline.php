@@ -495,13 +495,14 @@ class Multiline extends Form\Control
 
         $calendar = new Calendar();
         $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
-        $props['config']['dateFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat);
-
+        $props['config']['dateFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat, true);
         if ($field->type === 'datetime' || $field->type === 'time') {
+            $props['config']['noCalendar'] = $field->type === 'time';
             $props['config']['enableTime'] = true;
             $props['config']['time_24hr'] = $calendar->isDtFormatWith24hrTime($phpFormat);
-            $props['config']['noCalendar'] = $field->type === 'time';
-            $props['config']['enableSeconds'] = $calendar->isDtFormatWithSeconds($phpFormat);
+            $props['config']['enableSeconds'] ??= $calendar->isDtFormatWithSeconds($phpFormat);
+            $props['config']['formatSecondsPrecision'] ??= $calendar->isDtFormatWithMicroseconds($phpFormat) ? 6 : -1;
+            $props['config']['disableMobile'] = true;
         }
 
         return $props;
