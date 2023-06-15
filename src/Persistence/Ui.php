@@ -43,7 +43,7 @@ class Ui extends Persistence
     /** @var string */
     public $timeFormat = 'H:i';
     /** @var string */
-    public $datetimeFormat = 'M j, Y H:i:s';
+    public $datetimeFormat = 'M j, Y H:i';
     /** @var int Calendar input first day of week, 0 = Sunday, 1 = Monday. */
     public $firstDayOfWeek = 0;
 
@@ -129,11 +129,25 @@ class Ui extends Persistence
                         'time' => $this->timeFormat,
                     ][$field->type];
 
+                    $valueHasSeconds = (int) $value->format('s') !== 0;
+                    $valueHasMicroseconds = (int) $value->format('u') !== 0;
+                    $formatHasMicroseconds = str_contains($format, '.u');
+                    if ($valueHasSeconds || $valueHasMicroseconds) {
+                        $format = preg_replace('~(?<=:i)(?!:s)~', ':s', $format);
+                    }
+                    if ($valueHasMicroseconds) {
+                        $format = preg_replace('~(?<=:s)(?!\.u)~', '.u', $format);
+                    }
+
                     if ($field->type === 'datetime') {
                         $value = new \DateTime($value->format('Y-m-d H:i:s.u'), $value->getTimezone());
                         $value->setTimezone(new \DateTimeZone($this->timezone));
                     }
                     $value = $value->format($format);
+
+                    if (!$formatHasMicroseconds) {
+                        $value = preg_replace('~(?<!\d|:)\d{1,2}:\d{1,2}(?::\d{1,2})?\.\d*?\K0+(?!\d)~', '', $value);
+                    }
                 }
 
                 break;
@@ -199,6 +213,13 @@ class Ui extends Persistence
                     'datetime' => $this->datetimeFormat,
                     'time' => $this->timeFormat,
                 ][$field->type];
+
+                if (preg_match('~(?<!\d|:)\d{1,2}:\d{1,2}:\d{1,2}(?!\d)~', $value)) {
+                    $format = preg_replace('~(?<=:i)(?!:s)~', ':s', $format);
+                }
+                if (preg_match('~(?<!\d|:)\d{1,2}:\d{1,2}(?::\d{1,2})?\.\d{1,9}(?!\d)~', $value)) {
+                    $format = preg_replace('~(?<=:s)(?!\.u)~', '.u', $format);
+                }
 
                 $valueOrig = $value;
                 $value = $dtClass::createFromFormat('!' . $format, $value, $field->type === 'datetime' ? new $tzClass($this->timezone) : null);

@@ -37,24 +37,7 @@ class Form extends View
     /** @var JsCallback Callback handling form submission. */
     public $cb;
 
-    /**
-     * Set this to false in order to
-     * prevent from leaving
-     * page if form is not submit.
-     *
-     * Note:
-     * When using your own change handler
-     * on an input field, set useDefault parameter to false.
-     * ex: $input->onChange(new JsExpression('console.log()), false)
-     * Otherwise, change event is not propagate to all event handler
-     * and leaving page might not be prevent.
-     *
-     * Form using Calendar field
-     * will still leave page when a calendar
-     * input value is changed.
-     *
-     * @var bool
-     */
+    /** @var bool Set this to false in order to prevent from leaving page if form is not submit. */
     public $canLeave = true;
 
     /**

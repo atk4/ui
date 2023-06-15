@@ -135,10 +135,6 @@ class Control extends View
      * If $expr is JsExpressionable, then it will execute it instantly.
      * If $expr is callback method, then it'll make additional request to webserver.
      *
-     * Could be preferable to set useDefault to false. For example when
-     * needing to clear form error or when form canLeave property is false.
-     * Otherwise, change handler will not be propagate to all handlers.
-     *
      * Examples:
      * $control->onChange(new JsExpression('console.log(\'changed\')'));
      * $control->onChange(new JsExpression('$(this).parents(\'.form\').form(\'submit\')'));

@@ -7,6 +7,7 @@ namespace Atk4\Ui\Form\Control;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 
@@ -39,16 +40,24 @@ class Calendar extends Input
     {
         parent::init();
 
+        $this->options['allowInput'] ??= true;
+
         // setup format
         $phpFormat = $this->getApp()->uiPersistence->{$this->type . 'Format'};
-        $this->options['dateFormat'] = $this->convertPhpDtFormatToFlatpickr($phpFormat);
-
+        $this->options['dateFormat'] = $this->convertPhpDtFormatToFlatpickr($phpFormat, true);
         if ($this->type === 'datetime' || $this->type === 'time') {
+            $this->options['noCalendar'] = $this->type === 'time';
             $this->options['enableTime'] = true;
-            $this->options['time_24hr'] ??= $this->isDtFormatWith24hrTime($phpFormat);
-            $this->options['noCalendar'] = ($this->type === 'time');
+            $this->options['time_24hr'] = $this->isDtFormatWith24hrTime($phpFormat);
             $this->options['enableSeconds'] ??= $this->isDtFormatWithSeconds($phpFormat);
-            $this->options['allowInput'] ??= $this->isDtFormatWithMicroseconds($phpFormat);
+            $this->options['formatSecondsPrecision'] ??= $this->isDtFormatWithMicroseconds($phpFormat) ? 6 : -1;
+            $this->options['disableMobile'] = true;
+            if (!$this->options['enableSeconds']) {
+                $this->options['formatDate'] = new JsFunction(
+                    ['date', 'format', 'locale', 'formatSecondsPrecision'],
+                    [new JsExpression('return flatpickr.formatDate(date, format, locale, formatSecondsPrecision).replace(/: ?0+(?! ?\.)(?=(?: |$))/, \'\');')]
+                );
+            }
         }
 
         // setup locale
@@ -101,8 +110,12 @@ class Calendar extends Input
         return $phpFormat;
     }
 
-    public function convertPhpDtFormatToFlatpickr(string $phpFormat): string
+    public function convertPhpDtFormatToFlatpickr(string $phpFormat, bool $enforceSeconds): string
     {
+        if ($enforceSeconds) {
+            $phpFormat = preg_replace('~: ?i\K(?!\w| ?: ?s)~', ':s', $phpFormat);
+        }
+
         $res = $this->expandPhpDtFormat($phpFormat);
         foreach ([
             '~[aA]~' => 'K',
