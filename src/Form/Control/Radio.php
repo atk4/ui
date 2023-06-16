@@ -14,10 +14,12 @@ class Radio extends Form\Control
 
     public $defaultTemplate = 'form/control/radio.html';
 
+    protected bool $fixUnsetPostGlobal = true;
+
     /** @var Lister Contains a lister that will render individual radio buttons. */
     public $lister;
 
-    /** @var array List of values. */
+    /** @var array<int|string, string> List of values. */
     public $values = [];
 
     protected function init(): void
@@ -31,7 +33,9 @@ class Radio extends Form\Control
     protected function renderView(): void
     {
         if (!$this->model) {
-            $this->setSource($this->values);
+            // we cannot use "id" column here as seeding Array_ persistence with 0 will throw "Must not be a zero"
+            $this->setSource(array_map(fn ($k, string $v) => ['k' => $k, 'name' => $v], array_keys($this->values), $this->values));
+            $this->model->idField = 'k';
         }
 
         $value = $this->entityField ? $this->entityField->get() : $this->content;
@@ -46,6 +50,8 @@ class Radio extends Form\Control
                 $lister->tRow->dangerouslySetHtml('disabledClass', 'read-only');
                 $lister->tRow->dangerouslySetHtml('disabled', 'readonly="readonly"');
             }
+
+            $lister->tRow->set('value', $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $lister->currentRow->getId()));
 
             $lister->tRow->dangerouslySetHtml('checked', $lister->model->compare($lister->model->idField, $value) ? 'checked="checked"' : '');
         });

@@ -15,6 +15,8 @@ class Checkbox extends Form\Control
 
     public $defaultTemplate = 'form/control/checkbox.html';
 
+    protected bool $fixUnsetPostGlobal = true;
+
     /**
      * Label appears to the right of the checkbox. If label is not set specifically
      * then the $caption property will be displayed as a label instead.
@@ -29,20 +31,6 @@ class Checkbox extends Form\Control
 
         $this->label = $this->content;
         $this->content = null;
-    }
-
-    protected function init(): void
-    {
-        parent::init();
-
-        // checkboxes are annoying because they don't send value when they are
-        // not ticked. We assume they are ticked and sent boolean "false" as a
-        // workaround. Otherwise send boolean "true".
-        if ($this->form) {
-            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
-                $postRawData[$this->entityField->getFieldName()] = isset($postRawData[$this->entityField->getFieldName()]);
-            });
-        }
     }
 
     protected function renderView(): void
