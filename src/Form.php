@@ -440,18 +440,19 @@ class Form extends View
 
         $errors = [];
         foreach ($this->controls as $k => $control) {
-            try {
-                // save field value only if field was editable in form at all
-                if (!$control->readOnly && !$control->disabled) {
-                    $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $_POST[$k]));
-                }
-            } catch (\Exception $e) {
-                $messages = [];
-                do {
-                    $messages[] = $e->getMessage();
-                } while ($e = $e->getPrevious());
+            // save field value only if field was editable in form at all
+            if (!$control->readOnly && !$control->disabled) {
+                $postRawValue = $_POST[$k];
+                try {
+                    $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $postRawValue));
+                } catch (\Exception $e) {
+                    $messages = [];
+                    do {
+                        $messages[] = $e->getMessage();
+                    } while (($e = $e->getPrevious()) !== null);
 
-                $errors[$k] = implode(': ', $messages);
+                    $errors[$k] = implode(': ', $messages);
+                }
             }
         }
 
