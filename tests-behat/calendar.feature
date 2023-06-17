@@ -18,8 +18,6 @@ Feature: Calendar
     Then I check if input value for "input[name='datetime']" match text "Jun 29, 2020 01:02:00.000001"
     When I fill in "datetime" with "Jun 29, 2020 1:2:0"
     Then I check if input value for "input[name='datetime']" match text "Jun 29, 2020 01:02"
-    # TODO next step is to close flatpickr calendar, flatpickr needs 2x blur with allowInput
-    When I fill in "date_action" with "Dec 8, 2050"
     When I press button "Clear"
     Then I check if input value for "input[name='date_action']" match text ""
     When I press button "Save"

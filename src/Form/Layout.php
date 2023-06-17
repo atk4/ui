@@ -220,7 +220,7 @@ class Layout extends AbstractLayout
             }
 
             if ($this->template->hasTag($element->shortName)) {
-                $this->template->tryDangerouslySetHtml($element->shortName, $template->renderToHtml());
+                $this->template->dangerouslySetHtml($element->shortName, $template->renderToHtml());
             } else {
                 $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
             }

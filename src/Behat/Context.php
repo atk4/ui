@@ -220,7 +220,7 @@ class Context extends RawMinkContext implements BehatContext
         if (preg_match('~^\(*//~s', $selector)) {
             // add support for standard CSS class selector
             $xpath = preg_replace_callback(
-                '~\'(?:[^\']+|\'\')*+\'\K|"(?:[^"]+|"")*+"\K|(?<=\w)\.([\w\-]+)~s',
+                '~\'(?:[^\']+|\'\')*+\'\K|"(?:[^"]+|"")*+"\K|(?<=\w|\*)\.([\w\-]+)~s',
                 function ($matches) {
                     if ($matches[0] === '') {
                         return '';
@@ -533,6 +533,9 @@ class Context extends RawMinkContext implements BehatContext
         $this->jqueryWait('$(arguments[0]).hasClass(\'visible\')', [$lookupElem]);
 
         // select value
+        if ($value === '') { // TODO impl. native clearable - https://github.com/atk4/ui/issues/572
+            $value = "\u{00a0}";
+        }
         $valueElem = $this->findElement($lookupElem, '//div[text()="' . $value . '"]');
         $this->getSession()->executeScript('$(arguments[0]).dropdown(\'set selected\', arguments[1]);', [$lookupElem, $valueElem->getAttribute('data-value')]);
         $this->jqueryWait();

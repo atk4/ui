@@ -63,14 +63,10 @@ class Control extends View
      */
     public $hint;
 
-    /**
-     * Disabled field is not editable and will not be submitted.
-     */
+    /** Disabled field is not editable and will not be submitted. */
     public bool $disabled = false;
 
-    /**
-     * Read-only field is not editable, but will be submitted.
-     */
+    /** Read-only field is not editable, but will be submitted. */
     public bool $readOnly = false;
 
     protected function init(): void
