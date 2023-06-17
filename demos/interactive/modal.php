@@ -16,6 +16,7 @@ use Atk4\Ui\Message;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -85,7 +86,7 @@ $vp3Modal->set(function (View $p) {
 // When $vp1Modal->jsShow() is activate, it will dynamically add this content to it.
 $vp1Modal->set(function (View $p) use ($vp2Modal) {
     ViewTester::addTo($p);
-    View::addTo($p, ['Showing lorem ipsum']); // need in behat test.
+    ViewWithContent::addTo($p, ['Showing lorem ipsum']); // need in behat test.
     LoremIpsum::addTo($p, ['size' => 2]);
     $form = Form::addTo($p);
     $form->addControl('color', [], ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);

@@ -14,6 +14,7 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Loader;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 trait StepExecutorTrait
 {
@@ -224,12 +225,12 @@ trait StepExecutorTrait
 
         switch ($this->previewType) {
             case 'console':
-                $preview = View::addTo($page, ['ui' => 'inverted black segment', 'element' => 'pre']);
+                $preview = ViewWithContent::addTo($page, ['ui' => 'inverted black segment', 'element' => 'pre']);
                 $preview->set($text);
 
                 break;
             case 'text':
-                $preview = View::addTo($page, ['ui' => 'basic segment']);
+                $preview = ViewWithContent::addTo($page, ['ui' => 'basic segment']);
                 $preview->set($text);
 
                 break;
@@ -243,7 +244,7 @@ trait StepExecutorTrait
 
     protected function doFinal(View $page): void
     {
-        View::addTo($page, ['content' => $this->finalMsg]);
+        ViewWithContent::addTo($page, ['content' => $this->finalMsg]);
         foreach ($this->getActionData('fields') as $field => $value) {
             $this->action->getEntity()->set($field, $value);
         }

@@ -13,6 +13,7 @@ use Atk4\Ui\Modal;
 use Atk4\Ui\Table;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 use Atk4\Ui\VirtualPage;
 
 /** @var \Atk4\Ui\App $app */
@@ -55,7 +56,7 @@ $button->link($virtualPage->cb->getUrl() . '&p_id=Bike');
 Header::addTo($app, ['Virtual Page Logic']);
 
 $virtualPage = VirtualPage::addTo($app); // this page will not be visible unless you trigger it specifically
-View::addTo($virtualPage, ['Contents of your pop-up here'])->addClass('ui header __atk-behat-test-content');
+ViewWithContent::addTo($virtualPage, ['Contents of your pop-up here'])->addClass('ui header __atk-behat-test-content');
 LoremIpsum::addTo($virtualPage, ['size' => 2]);
 
 Counter::addTo($virtualPage);

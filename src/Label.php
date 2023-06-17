@@ -55,7 +55,7 @@ class Label extends ViewWithContent
         }
 
         if ($this->detail) {
-            $this->detail = View::addTo($this, [$this->detail], ['AfterContent'])->addClass('detail');
+            $this->detail = ViewWithContent::addTo($this, [$this->detail], ['AfterContent'])->addClass('detail');
         }
 
         if ($this->iconRight) {

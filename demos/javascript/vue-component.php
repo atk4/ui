@@ -11,6 +11,7 @@ use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Lister;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 use Atk4\Ui\VueComponent;
 
 /** @var \Atk4\Ui\App $app */
@@ -28,12 +29,12 @@ $entity = (new Country($app->db))
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
 Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
 
-View::addTo($app)->set('with autoSave');
+ViewWithContent::addTo($app)->set('with autoSave');
 $inlineEditWithAutoSave = VueComponent\InlineEdit::addTo($app, ['autoSave' => true]);
 $inlineEditWithAutoSave->fieldName = $entity->fieldName()->name;
 $inlineEditWithAutoSave->setModel($entity);
 
-View::addTo($app)->set('with onChange callback');
+ViewWithContent::addTo($app)->set('with onChange callback');
 $inlineEditWithCallback = VueComponent\InlineEdit::addTo($app);
 $inlineEditWithCallback->fieldName = $entity->fieldName()->name;
 $inlineEditWithCallback->setModel($entity);
@@ -178,4 +179,4 @@ $clock->vue('my-clock', ['styles' => $clockStyle], new JsExpression('myClock'));
 
 $button = Button::addTo($app, ['Change Style']);
 $button->on('click', $clock->jsEmitEvent($clock->name . '-clock-change-style'));
-View::addTo($app, ['element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);
+ViewWithContent::addTo($app, ['element' => 'p', 'I am not part of the component but I can still change style using the eventBus.']);

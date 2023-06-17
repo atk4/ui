@@ -25,7 +25,7 @@ class ViewTest extends TestCase
 
     public function testMultipleTimesRender(): void
     {
-        $v = new View();
+        $v = new ViewWithContent();
         $v->set('foo');
 
         $v->setApp($this->createApp());
@@ -36,7 +36,7 @@ class ViewTest extends TestCase
 
     public function testAddAfterRenderException(): void
     {
-        $v = new View();
+        $v = new ViewWithContent();
         $v->set('foo');
 
         $v->setApp($this->createApp());
@@ -152,7 +152,7 @@ class ViewTest extends TestCase
 
     public function testSetException(): void
     {
-        $v = new View();
+        $v = new ViewWithContent();
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Not sure what to do with argument');
