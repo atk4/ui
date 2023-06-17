@@ -14,8 +14,6 @@ class Radio extends Form\Control
 
     public $defaultTemplate = 'form/control/radio.html';
 
-    protected bool $fixUnsetPostGlobal = true;
-
     /** @var Lister Contains a lister that will render individual radio buttons. */
     public $lister;
 
@@ -26,6 +24,15 @@ class Radio extends Form\Control
     {
         parent::init();
 
+        // radios are annoying because they don't send value when they are not ticked
+        if ($this->form) {
+            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
+                if (!isset($postRawData[$this->shortName])) {
+                    $postRawData[$this->shortName] = '';
+                }
+            });
+        }
+
         $this->lister = Lister::addTo($this, [], ['Radio']);
         $this->lister->tRow->set('_name', $this->shortName);
     }
@@ -34,6 +41,7 @@ class Radio extends Form\Control
     {
         if (!$this->model) {
             // we cannot use "id" column here as seeding Array_ persistence with 0 will throw "Must not be a zero"
+            // $this->setSource($this->values);
             $this->setSource(array_map(fn ($k, string $v) => ['k' => $k, 'name' => $v], array_keys($this->values), $this->values));
             $this->model->idField = 'k';
         }

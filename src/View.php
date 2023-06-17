@@ -113,6 +113,8 @@ class View extends AbstractView
      *
      * Do not try to create your own "Model" implementation, instead you must be looking for
      * your own "Persistence" implementation.
+     *
+     * @phpstan-assert !null $this->model
      */
     public function setModel(Model $model): void
     {
@@ -127,6 +129,8 @@ class View extends AbstractView
      * Sets source of the View.
      *
      * @param array $fields Limit model to particular fields
+     *
+     * @phpstan-assert !null $this->model
      */
     public function setSource(array $data, $fields = null): Model
     {

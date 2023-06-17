@@ -69,9 +69,6 @@ class Control extends View
     /** Read-only field is not editable, but will be submitted. */
     public bool $readOnly = false;
 
-    /** Input element of checkbox/radio type does not submit any value if unchecked. */
-    protected bool $fixUnsetPostGlobal = false;
-
     protected function init(): void
     {
         parent::init();
@@ -82,15 +79,6 @@ class Control extends View
                     ->addMoreInfo('name', $this->entityField->getFieldName());
             }
             $this->form->controls[$this->entityField->getFieldName()] = $this;
-        }
-
-        // checkboxes are annoying because they don't send value when they are not ticked
-        if ($this->fixUnsetPostGlobal && $this->form) {
-            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
-                if (!isset($postRawData[$this->shortName])) {
-                    $postRawData[$this->shortName] = '';
-                }
-            });
         }
     }
 
