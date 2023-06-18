@@ -76,7 +76,7 @@ For example, you can set a button that, when clicked, will toggle an accordion s
     $section1 = LoremIpsum::addTo($acc->addSection('Static Text'));
     $section2 = LoremIpsum::addTo($acc->addSection('Static Text'));
 
-    $button->on('click', $acc->jsToggle($section_1));
+    $button->on('click', $acc->jsToggle($section1));
 
 Accordion Module settings
 =========================

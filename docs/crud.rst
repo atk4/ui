@@ -29,16 +29,16 @@ The basic usage of Crud is::
 Users are now able to fully interact with the table. There are ways to restrict which "rows" and which "columns" user
 can access. First we can only allow user to read, manage and delete only countries that are part of European Union::
 
-    $eu_countries = new Country($app->db);
-    $eu_countries->addCondition('is_eu', true);
+    $euCountries = new Country($app->db);
+    $euCountries->addCondition('is_eu', true);
 
-    Crud::addTo($app)->setModel($eu_countries);
+    Crud::addTo($app)->setModel($euCountries);
 
 After that column `is_eu` will not be editable to the user anymore as it will be marked `system` by `addCondition`.
 
 You can also specify which columns you would like to see on the grid::
 
-    $crud->setModel($eu_countries, ['name']);
+    $crud->setModel($euCountries, ['name']);
 
 This restriction will apply to both viewing and editing, but you can fine-tune that by specifying one of many
 parameters to Crud.
@@ -49,10 +49,10 @@ Disabling Actions
 By default Crud allows all four operations - creating, reading, updating and deleting. These action is set by default in model
 action. It is possible to disable these default actions by setting their system property to true in your model::
 
-    $eu_countries->getUserAction('edit')->sytem = true;
+    $euCountries->getUserAction('edit')->sytem = true;
 
 Model action using system property set to true, will not be display in Crud. Note that action must be setup prior to use
-`$crud->setModel($eu_countries)`
+`$crud->setModel($euCountries)`
 
 Specifying Fields (for different views)
 =======================================

@@ -241,9 +241,9 @@ You can either specify multiple classes one-by-one or as a single string
     :param $class: CSS class name or array of class names
     :returns: $this
 
-.. php:method:: removeClass($remove_class)
+.. php:method:: removeClass($class)
 
-    :param $remove_class: string|array one or multiple clases to be removed.
+    :param $class: string|array one or multiple classes to be removed.
 
 In addition to the UI / Role classes during the render, element will
 receive extra classes from the $class property. To add extra class to
@@ -449,7 +449,7 @@ the name of the field will be used instead of the role. This is done by setting 
 Reloading a View
 ================
 
-.. php:method:: JsReload($get_arguments)
+.. php:method:: jsReload($getArgs)
 
 Agile UI makes it easy to reload any View on the page. Starting with v1.4 you can now use View::JsReload(),
 which will respond with JavaScript Action for reloading the view::

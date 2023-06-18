@@ -55,13 +55,13 @@ Header::addTo($app, ['Search using a Vue component', 'subHeader' => $subHeader])
 
 $model = new Country($app->db);
 
-$lister_template = new HtmlTemplate('<div {$attributes}>{List}<div class="ui icon label"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{$end}{/}</div>');
+$listerTemplate = new HtmlTemplate('<div {$attributes}>{List}<div class="ui icon label"><i class="{$atk_fp_country__iso} flag"></i> {$atk_fp_country__name}</div>{$end}{/}</div>');
 
 $view = View::addTo($app);
 
 $search = VueComponent\ItemSearch::addTo($view, ['ui' => 'compact segment']);
-$lister_container = View::addTo($view, ['template' => $lister_template]);
-$lister = Lister::addTo($lister_container, [], ['List']);
+$listerContainer = View::addTo($view, ['template' => $listerTemplate]);
+$lister = Lister::addTo($listerContainer, [], ['List']);
 $lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
     $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
@@ -72,7 +72,7 @@ $lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
     }
 });
 
-$search->reload = $lister_container;
+$search->reload = $listerContainer;
 $search->setModelCondition($model);
 $model->setLimit(50);
 $lister->setModel($model);

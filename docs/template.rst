@@ -67,15 +67,15 @@ in section for Views).
 
 There are some operations you can do with a region, such as::
 
-    $content = $main_template->cloneRegion('Content');
+    $content = $mainTemplate->cloneRegion('Content');
 
-    $main_template->del('Content');
+    $mainTemplate->del('Content');
 
     $content->set('user', 'Joe')->set('amount', 100);
-    $main_template->dangerouslyAppendHtml('Content', $content->renderToHtml());
+    $mainTemplate->dangerouslyAppendHtml('Content', $content->renderToHtml());
 
     $content->set('user', 'Billy')->set('amount', 50);
-    $main_template->dangerouslyAppendHtml('Content', $content->renderToHtml());
+    $mainTemplate->dangerouslyAppendHtml('Content', $content->renderToHtml());
 
 Usage in Agile UI
 -----------------
@@ -124,7 +124,7 @@ Array containing a structural representation of the template. When you
 create new template object, you can pass template as an argument to a
 constructor:
 
-.. php:method:: __construct($template_string)
+.. php:method:: __construct($templateString)
 
     Will parse template specified as an argument.
 
@@ -400,8 +400,8 @@ You can use the following code to manipulate the template above::
     $recipient = $template->cloneRegion('Recipient');
 
     // Set data to each sub-template separately
-    $sender->set($sender_data);
-    $recipient->set($recipient_data);
+    $sender->set($senderData);
+    $recipient->set($recipientData);
 
     // render sub-templates, insert into master template
     $template->dangerouslySetHtml('Sender', $sender->renderToHtml());
@@ -417,8 +417,8 @@ Same thing using Agile Toolkit Views::
     $sender = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender', 'Sender');
     $recipient = \Atk4\Ui\View::addTo($envelope, [], [null], 'Recipient', 'Recipient');
 
-    $sender->template->set($sender_data);
-    $recipient->template->set($recipient_data);
+    $sender->template->set($senderData);
+    $recipient->template->set($recipientData);
 
 We do not need to manually render anything in this scenario. Also the
 template of $sender and $recipient objects will be appropriately cloned
@@ -562,8 +562,8 @@ implemented using generic views.
     $sender = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender', 'Sender');
     $receiver = \Atk4\Ui\View::addTo($envelope, [], [null], 'Receiver', 'Receiver');
 
-    $sender->template->trySet($sender_data);
-    $receiver->template->trySet($receiver_data);
+    $sender->template->trySet($senderData);
+    $receiver->template->trySet($receiverData);
 
 ..  templates and views
 

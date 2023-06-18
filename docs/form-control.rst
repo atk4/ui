@@ -77,11 +77,11 @@ into multiple Tabs or detach form control groups or even create nested layouts::
     $tabs = \Atk4\Ui\Tabs::addTo($form, [], ['AboveControls']);
     \Atk4\Ui\View::addTo($form, ['ui' => 'divider'], ['AboveControls']);
 
-    $form_page = Form\Layout::addTo($tabs->addTab('Basic Info'), ['form' => $form]);
-    $form_page->addControl('name', new \Atk4\Ui\Form\Control\Line());
+    $formPage = Form\Layout::addTo($tabs->addTab('Basic Info'), ['form' => $form]);
+    $formPage->addControl('name', new \Atk4\Ui\Form\Control\Line());
 
-    $form_page = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
-    $form_page->addControl('age', new \Atk4\Ui\Form\Control\Line());
+    $formPage = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
+    $formPage->addControl('age', new \Atk4\Ui\Form\Control\Line());
 
     $form->onSubmit(function (Form $form) {
         return $form->model->get('name') . ' has age ' . $form->model->get('age');
@@ -283,7 +283,7 @@ When you use :php:class:`form::addControl()` it will create 'Form Control Decora
 JavaScript on Input
 -------------------
 
-.. php:method:: jsInput([$event, [$other_action]])
+.. php:method:: jsInput([$event, [$otherChain]])
 
 Input class implements method jsInput which is identical to :php:meth:`View::js`, except
 that it would target the INPUT element rather then the whole form control::
@@ -445,7 +445,7 @@ If set to true, multiple items can be selected in Dropdown. They will be sent co
 
 By default Dropdown will save values as comma-separated string value in data model, but it also supports model fields with array type.
 See this example from Model class init method::
-    $expr_model = $this->ref('Expressions');
+    $exprModel = $this->ref('Expressions');
     $this->addField('expressions', [
         'type' => 'json',
         'required' => true,
@@ -453,11 +453,11 @@ See this example from Model class init method::
             'form' => [
                 \Atk4\Ui\Form\Control\Dropdown::class,
                 'multiple' => true,
-                'model' => $expr_model,
+                'model' => $exprModel,
             ],
             'table' => [
                 'Labels',
-                'values' => $expr_model->getTitles(),
+                'values' => $exprModel->getTitles(),
             ],
         ],
     ]);

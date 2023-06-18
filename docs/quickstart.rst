@@ -197,14 +197,14 @@ Form and Crud Components
 Next we need to add Components that are capable of manipulating the data::
 
     $col = \Atk4\Ui\Columns::addTo($app, ['divided']);
-    $col_reload = new \Atk4\Ui\Js\JsReload($col);
+    $colReload = new \Atk4\Ui\Js\JsReload($col);
 
     $form = \Atk4\Ui\Form::addTo($col->addColumn());
     $form->setModel(new ToDoItem($s));
-    $form->onSubmit(function (Form $form) use ($col_reload) {
+    $form->onSubmit(function (Form $form) use ($colReload) {
         $form->model->save();
 
-        return $col_reload;
+        return $colReload;
     });
 
     \Atk4\Ui\Table::addTo($col->addColumn())
@@ -215,7 +215,7 @@ Next we need to add Components that are capable of manipulating the data::
 .. [#] We wish to position Form and Table side-by-side, so we use `\Atk4\Ui\Columns` component and
     inject a Fomantic-UI CSS class "divided" that will appear as a vertical separation line.
 
-.. [#] $col_reload is a special object which we call :ref:`js_action`. It represents a Browser-event
+.. [#] $colReload is a special object which we call :ref:`js_action`. It represents a Browser-event
     that will cause both columns to be reloaded from the server. To use this action we still have
     to bind it.
 
@@ -230,7 +230,7 @@ Next we need to add Components that are capable of manipulating the data::
 
 .. [#] Save the record into that session data. Form automatically captures validation errors.
 
-.. [#] We use `$col_reload` which we defined earlier to instruct client browser on what it needs to
+.. [#] We use `$colReload` which we defined earlier to instruct client browser on what it needs to
     do when form is successfully saved.
 
 .. [#] Very similar syntax to what we used with a form, but using with a Table for listing records.

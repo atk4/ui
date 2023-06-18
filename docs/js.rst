@@ -212,13 +212,13 @@ We are not building JavaScript code just for the exercise. Our whole point is ab
 between actual views. All views support JavaScript binding through two methods: :php:meth:`View::js()` and :php:meth:`View::on()`.
 
 .. php:class:: View
-.. php:method:: js([$event, [$other_action]])
+.. php:method:: js([$event, [$otherChain]])
 
     Return action chain that targets this view. As event you can specify `true` which will make chain automatically execute
     on document ready event. You can specify a specific JavaScript event such as `click` or `mousein`. You can also use your
     custom event that you would trigger manually. If `$event` is false or null, no event binding will be performed.
 
-    If `$other_chain` is specified together with event, it will also be bound to said event. `$other_chain` can also be
+    If `$otherChain` is specified together with event, it will also be bound to said event. `$otherChain` can also be
     a PHP closure.
 
 Several usage cases for plain `js()` method. The most basic scenario is to perform action on the view when event happens::
@@ -320,12 +320,12 @@ The JsExpression class provides the most simple implementation that can be usefu
 any JavaScript expressions. My next example will set height of right container to the sum of 2
 boxes on the left::
 
-    $h1 = $left_box1->js()->height();
-    $h2 = $left_box2->js()->height();
+    $h1 = $leftBox1->js()->height();
+    $h2 = $leftBox2->js()->height();
 
     $sum = new JsExpression('[] + []', [$h1, $h2]);
 
-    $right_box_container->js(true)->height( $sum );
+    $rightBoxContainer->js(true)->height( $sum );
 
 It is important to remember that the height of an element is a browser-side property and you
 must operate with it in your browser by passing expressions into chain.
@@ -366,15 +366,15 @@ Create a file `test.js` containing:
 
 Then load this JavaScript dependency on your page (see :php:meth:`App::includeJS()` and
 :php:meth:`App::includeCSS()`). Finally use UI code as a "glue" between your routine
-and the actual View objects. For example, to match the size of `$right_container`
-with the size of `$left_container`::
+and the actual View objects. For example, to match the size of `$rightContainer`
+with the size of `$leftContainer`::
 
     $heights = [];
-    foreach ($left_container->elements as $left_box) {
-        $heights[] = $left_box->js()->height();
+    foreach ($leftContainer->elements as $leftBox) {
+        $heights[] = $leftBox->js()->height();
     }
 
-    $right_container->js(true)->height(new JsExpression('mySum([])', [$heights]));
+    $rightContainer->js(true)->height(new JsExpression('mySum([])', [$heights]));
 
 This will map into the following JavaScript code:
 
@@ -470,17 +470,17 @@ Reloading
 
 JsReload is a JavaScript action that performs reload of a certain object::
 
-    $js_reload_table = new JsReload($table);
+    $jsReload = new JsReload($table);
 
 This action can be used similarly to any other JsExpression. For instance submitting a form can reload some
 other view::
 
-    $m_book = new Book($db);
+    $bookModel = new Book($db);
 
     $form = \Atk4\Ui\Form::addTo($app);
     $table = \Atk4\Ui\Table::addTo($app);
 
-    $form->setModel($m_book);
+    $form->setModel($bookModel);
 
     $form->onSubmit(function (Form $form) use ($table) {
         $form->model->save();
@@ -488,7 +488,7 @@ other view::
         return new \Atk4\Ui\Js\JsReload($table);
     });
 
-    $t->setModel($m_book);
+    $t->setModel($bookModel);
 
 In this example, filling out and submitting the form will result in table contents being refreshed using AJAX.
 

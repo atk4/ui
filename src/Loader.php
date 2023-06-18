@@ -66,9 +66,6 @@ class Loader extends View
      *    $p->set('new content');
      *  });
      *
-     * Or
-     *  $l1->set([$my_object, 'run_long_process']);
-     *
      * @param \Closure($this): void $fx
      * @param never                 $ignore
      *

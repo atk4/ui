@@ -52,8 +52,8 @@ You can use icon on the following components: :php:class:`Button`, :php:class:`L
 
     $menu = Menu::addTo($app);
     $menu->addItem(['Menu Item', 'icon' => 'flipped question']);
-    $sub_menu = $menu->addMenu(['Sub-menu', 'icon' => 'flipped question']);
-    $sub_menu->addItem(['Sub Item', 'icon' => 'flipped question']);
+    $subMenu = $menu->addMenu(['Sub-menu', 'icon' => 'flipped question']);
+    $subMenu->addItem(['Sub Item', 'icon' => 'flipped question']);
 
     Label::addTo($app, ['Label', 'class.right ribbon red' => true, 'icon' => 'flipped question']);
 
@@ -95,11 +95,11 @@ Composing
 
 Composing offers you another way to deal with Group icons::
 
-    $no_users = new \Atk4\Ui\View(['class.huge icons' => true, 'element' => 'i']);
-    Icon::addTo($no_users, ['big red dont']);
-    Icon::addTo($no_users, ['black user']);
+    $noUsers = new \Atk4\Ui\View(['class.huge icons' => true, 'element' => 'i']);
+    Icon::addTo($noUsers, ['big red dont']);
+    Icon::addTo($noUsers, ['black user']);
 
-    $app->add($no_users);
+    $app->add($noUsers);
 
 Icon in Your Component
 ======================
