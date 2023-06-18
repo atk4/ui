@@ -42,6 +42,7 @@ class App
     public $cdn = [
         'atk' => '/public',
         'jquery' => '/public/external/jquery/dist',
+        'diff-dom' => '/public/external/diff-dom',
         'fomantic-ui' => '/public/external/fomantic-ui/dist',
         'flatpickr' => '/public/external/flatpickr/dist',
         'highlight.js' => '/public/external/@highlightjs/cdn-assets',
@@ -512,6 +513,17 @@ class App
         $this->requireJs($this->cdn['fomantic-ui'] . '/semantic' . ($minified ? '.min' : '') . '.js');
         $this->requireCss($this->cdn['fomantic-ui'] . '/semantic' . ($minified ? '.min' : '') . '.css');
 
+        // diffDOM
+        $this->requireJs($this->cdn['diff-dom'] . '/browser/diffDOM.js');
+        // demo view-source:http://fiduswriter.github.io/diffDOM/demo/index.html
+        // man https://github.com/fiduswriter/diffDOM
+        // alternatives:
+        // https://www.npmjs.com/package/preact
+        // https://www.npmjs.com/package/virtual-dom
+        // https://vuejs.org/v2/guide/render-function.html#The-Virtual-DOM
+        // https://vuejs.org/v2/api/#Vue-compile
+        // https://stackoverflow.com/questions/32106155/can-you-force-vue-js-to-reload-re-render
+
         // flatpickr - TODO should be load only when needed
         // needs https://github.com/atk4/ui/issues/1875
         $this->requireJs($this->cdn['flatpickr'] . '/flatpickr' . ($minified ? '.min' : '') . '.js');
@@ -528,7 +540,15 @@ class App
         // set JS bundle dynamic loading path
         $this->html->template->dangerouslySetHtml(
             'InitJsBundle',
-            (new JsExpression('window.__atkBundlePublicPath = [];', [$this->cdn['atk']]))->jsRender()
+            (new JsExpression('window.__atkBundlePublicPath = [];' . "\n" . '{}', [
+                $this->cdn['atk'],
+                <<<'EOF'
+                    document.addEventListener('DOMContentLoaded', (event) => {
+                        // we need to clone this DOM or serialize incl. input values etc. (or use cloneNode(true)?)
+                        window.snapshotAfterLoad = document.documentElement.outerHTML;
+                    });
+                    EOF,
+            ]))->jsRender()
         );
     }
 

@@ -27,6 +27,11 @@
 !/chart.js/dist/*.js
 /chart.js/dist/*.esm.js
 
+!/diff-dom/LICENS*
+!/diff-dom/browser/
+/diff-dom/browser/*
+!/diff-dom/browser/*.js
+
 !/flatpickr/LICENS*
 !/flatpickr/dist/
 /flatpickr/dist/*

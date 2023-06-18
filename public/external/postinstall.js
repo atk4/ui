@@ -22,6 +22,7 @@ for (const f of [
     '@highlightjs',
     '@shopify',
     'chart.js',
+    'diff-dom',
     'flatpickr',
     'fomantic-ui',
     'jquery',
