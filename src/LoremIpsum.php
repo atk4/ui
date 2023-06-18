@@ -19,14 +19,12 @@ class LoremIpsum extends Text
     public int $words = 50;
 
     /**
-     * @param array|int $defaults
+     * @param array<string, mixed>|int $defaults
      */
     public function __construct($defaults = [])
     {
         if (is_scalar($defaults)) {
-            $this->size = $defaults;
-
-            return;
+            $defaults = ['size' => $defaults];
         }
 
         parent::__construct($defaults);

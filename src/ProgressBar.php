@@ -30,7 +30,7 @@ class ProgressBar extends View
     public $max = 100;
 
     /**
-     * @param array|string $label
+     * @param array<0|string, mixed>|string $label
      */
     public function __construct(int $value = 0, $label = [])
     {
