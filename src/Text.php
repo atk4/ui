@@ -7,7 +7,7 @@ namespace Atk4\Ui;
 /**
  * Simple text block view.
  */
-class Text extends View
+class Text extends ViewWithContent
 {
     public $defaultTemplate;
 

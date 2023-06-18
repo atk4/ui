@@ -9,7 +9,7 @@ use Atk4\Ui\Js\JsExpressionable;
 /**
  * $bar = ProgressBar::addTo($app, [10, 'label' => 'Processing files']);.
  */
-class ProgressBar extends View
+class ProgressBar extends ViewWithContent
 {
     /** @var string|false|null Contains a text label to display under the bar. Null/false will disable the label. */
     public $label;

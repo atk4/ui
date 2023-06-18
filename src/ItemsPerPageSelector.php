@@ -10,7 +10,7 @@ use Atk4\Ui\Js\JsExpression;
  * Implement an item per page length selector.
  * Set as a dropdown menu which contains the number of items per page need.
  */
-class ItemsPerPageSelector extends View
+class ItemsPerPageSelector extends ViewWithContent
 {
     public $defaultTemplate = 'pagelength.html';
     public $ui = 'selection compact dropdown';

@@ -123,7 +123,7 @@ Here is the code with comments::
      * For convenience use this with link(), which will automatically open a new window
      * too.
      */
-    class SocialAdd extends \Atk4\Ui\View
+    class SocialAdd extends \Atk4\Ui\ViewWithContent
     {
         public $social = null;
         public $icon = null;

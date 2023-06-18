@@ -16,6 +16,7 @@ use Atk4\Ui\Loader;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Popup;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 use Atk4\Ui\VirtualPage;
 
 class ViewTest extends TestCase
@@ -98,6 +99,13 @@ class ViewTest extends TestCase
         new View([], []);
     }
 
+    public function testTooManyArgumentsViewWithContentConstructorError(): void
+    {
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Too many method arguments');
+        new ViewWithContent([], []);
+    }
+
     public function testTooManyArgumentsAddError(): void
     {
         $v = new View();
@@ -162,7 +170,7 @@ class ViewTest extends TestCase
 
         $this->expectException(\Error::class);
         $this->expectExceptionMessage('$fx must be of type Closure');
-        $v->set('strlen');
+        $v->set('strlen'); // @phpstan-ignore-line
     }
 
     /**
@@ -193,7 +201,7 @@ class ViewTest extends TestCase
         $v = new $class();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Only one argument is needed by ' . preg_replace('~.+\\\\~', '', $class) . '::set()');
+        $this->expectExceptionMessage('Only one argument is needed by ' . basename($class) . '::set()');
         $v->set(function () {}, null); // @phpstan-ignore-line
     }
 
@@ -203,7 +211,7 @@ class ViewTest extends TestCase
     public function setNotOneArgumentExceptionProvider(): array
     {
         return [
-            [View::class],
+            [ViewWithContent::class],
             [Loader::class],
             [Modal::class],
             [Popup::class],

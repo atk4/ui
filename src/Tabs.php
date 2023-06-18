@@ -6,7 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 
-class Tabs extends View
+class Tabs extends ViewWithContent
 {
     public $defaultTemplate = 'tabs.html';
     public $ui = 'tabular menu';

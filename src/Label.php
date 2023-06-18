@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-class Label extends View
+class Label extends ViewWithContent
 {
     public $ui = 'label';
 
