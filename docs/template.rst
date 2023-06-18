@@ -96,7 +96,7 @@ The code above will work like this:
 
 1. View will load and parse template.
 
-2. Using $v->get('name') will set value of the tag inside template directly.
+2. Using $v->set('name') will set value of the tag inside template directly.
 
 3. Lister will clone region 'Content' from my_template.
 
@@ -627,42 +627,4 @@ implement custom handling for ``{include}`` tag here.
 
 Be considered that there are a lot of objects in Agile Toolkit and do
 not put any slow code in this function.
-
-Internals of Template Engine
-============================
-
-When template is loaded, it's represented in the memory as an array.
-Example Template::
-
-    Hello {subject}world{/}!!
-
-Content of tags are parsed recursively and will contain further arrays.
-In addition to the template tree, tags are indexed and stored inside
-"tags" property.
-
-GiTemplate converts the template into the following structure available
-under ``$template->template`::
-
-    // template property:
-    array (
-        'Hello ',
-        'subject#0' => array (
-            'world',
-        ),
-        1 => '!!',
-    )
-
-Property tags would contain::
-
-    array (
-        'subject#0' => array( &array ),
-        'subject#1' => array( &array )
-    )
-
-As a result each tag will be stored under it's actual name and the name with
-unique "#1" appended (in case there are multiple instances of same tag).
-This allow ``$smlite->get()`` to quickly retrieve contents of
-appropriate tag and it will also allow ``renderToHtml()`` to reconstruct the
-output efficiently.
-
 

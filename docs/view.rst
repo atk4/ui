@@ -221,7 +221,7 @@ which syntax you are using.
 If you are don't specify key for the properties, they will be considered an
 extra class for a view::
 
-    $view = View::addTo($app, ['inverted', 'class.orange' => true, 'ui' => 'segment']);
+    $view = View::addTo($app, ['class.orange' => true, 'ui' => 'segment']);
     $view->name = 'test-id';
 
 You can either specify multiple classes one-by-one or as a single string
