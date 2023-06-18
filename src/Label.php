@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-class Label extends View
+class Label extends ViewWithContent
 {
     public $ui = 'label';
 
@@ -55,7 +55,7 @@ class Label extends View
         }
 
         if ($this->detail) {
-            $this->detail = View::addTo($this, [$this->detail], ['AfterContent'])->addClass('detail');
+            $this->detail = ViewWithContent::addTo($this, [$this->detail], ['AfterContent'])->addClass('detail');
         }
 
         if ($this->iconRight) {

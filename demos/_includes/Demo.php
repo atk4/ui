@@ -9,6 +9,7 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 class Demo extends Columns
 {
@@ -65,7 +66,7 @@ class Demo extends Columns
         $code = $this->extractCodeFromClosure($fx);
 
         $this->highLightCode();
-        View::addTo(View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])
+        ViewWithContent::addTo(View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])
             ->addClass('language-' . $lang)
             ->set($code)
             ->js(true)->each(new JsFunction(['i, el'], [new JsExpression('hljs.highlightElement(el)')]));

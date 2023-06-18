@@ -77,9 +77,6 @@ class View extends AbstractView
      */
     public $defaultTemplate = 'element.html';
 
-    /** @var string|null Set static contents of this view. */
-    public $content;
-
     /** Change this if you want to substitute default "div" for something else. */
     public string $element = 'div';
 
@@ -89,19 +86,12 @@ class View extends AbstractView
     // {{{ Setting Things up
 
     /**
-     * @param array<0|string, mixed>|string $label
+     * @param array<string, mixed> $defaults
      */
-    public function __construct($label = [])
+    public function __construct(array $defaults = [])
     {
         if (func_num_args() > 1) { // prevent bad usage
             throw new \Error('Too many method arguments');
-        }
-
-        $defaults = is_array($label) ? $label : [$label];
-
-        if (array_key_exists(0, $defaults)) {
-            $defaults['content'] = $defaults[0];
-            unset($defaults[0]);
         }
 
         $this->setDefaults($defaults);
@@ -330,30 +320,6 @@ class View extends AbstractView
     // }}}
 
     // {{{ Manipulating classes and view properties
-
-    /**
-     * TODO this method is hard to override, drop it from View.
-     *
-     * @param string $content
-     *
-     * @return $this
-     */
-    public function set($content)
-    {
-        if (func_num_args() > 1) { // prevent bad usage
-            throw new Exception('Only one argument is needed by View::set()');
-        }
-
-        if (!is_string($content) && $content !== null) { // @phpstan-ignore-line
-            throw (new Exception('Not sure what to do with argument'))
-                ->addMoreInfo('this', $this)
-                ->addMoreInfo('arg', $content);
-        }
-
-        $this->content = $content;
-
-        return $this;
-    }
 
     /**
      * Add CSS class to element. Previously added classes are not affected.
@@ -623,10 +589,6 @@ class View extends AbstractView
                     $this->_jsActions[$when][] = $action;
                 }
             }
-        }
-
-        if ($this->content !== null) {
-            $this->template->append('Content', $this->content);
         }
     }
 

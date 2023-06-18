@@ -14,6 +14,7 @@ use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 use Atk4\Ui\VirtualPage;
 
 /**
@@ -128,7 +129,7 @@ class VpExecutor extends View implements JsExecutorInterface
         }
 
         foreach ($this->steps as $step) {
-            View::addTo($this->stepList)->set($this->stepListItems[$step])->addClass('item')->setAttr(['data-list-item' => $step]);
+            ViewWithContent::addTo($this->stepList)->set($this->stepListItems[$step])->addClass('item')->setAttr(['data-list-item' => $step]);
         }
     }
 

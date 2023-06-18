@@ -11,6 +11,7 @@ use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Modal;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 /**
  * Right Panel implementation.
@@ -139,7 +140,7 @@ class Right extends View implements Loadable
             $cancelButton = (new Button(['Cancel']))->addClass('cancel');
         }
         $this->closeModal = $this->getApp()->add(array_merge($this->defaultModal, ['title' => $title]));
-        $this->closeModal->add([View::class, $msg, 'element' => 'p']);
+        $this->closeModal->add([ViewWithContent::class, $msg, 'element' => 'p']);
         $this->closeModal->addButtonAction(Factory::factory($okButton));
         $this->closeModal->addButtonAction(Factory::factory($cancelButton));
 

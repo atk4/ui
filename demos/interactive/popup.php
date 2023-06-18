@@ -21,6 +21,7 @@ use Atk4\Ui\Message;
 use Atk4\Ui\Popup;
 use Atk4\Ui\SessionTrait;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -275,12 +276,12 @@ $button = Button::addTo($app, ['Click Me', 'class.primary' => true]);
 $buttonPopup = Popup::addTo($app, [$button]);
 
 Header::addTo($buttonPopup)->set('Using click events');
-View::addTo($buttonPopup)->set('Adding popup into button activates on click by default. Clicked popups will close if you click away.');
+ViewWithContent::addTo($buttonPopup)->set('Adding popup into button activates on click by default. Clicked popups will close if you click away.');
 
 $input = Form\Control\Line::addTo($app, ['placeholder' => 'Search users', 'icon' => 'circular search link']);
 
 $inputPopup = Popup::addTo($app, [$input, 'triggerOn' => 'focus']);
-View::addTo($inputPopup)->set('You can use this field to search data.');
+ViewWithContent::addTo($inputPopup)->set('You can use this field to search data.');
 
 $button = Button::addTo($app, [null, 'icon' => 'volume down']);
 $buttonPopup = Popup::addTo($app, [$button, 'triggerOn' => 'hover'])->setHoverable();

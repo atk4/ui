@@ -10,13 +10,14 @@ use Atk4\Ui\Header;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // Test 1 - Basic reloading
 Header::addTo($app, ['Button reloading segment']);
-$v = View::addTo($app, ['ui' => 'segment'])->set((string) random_int(1, 100));
+$v = ViewWithContent::addTo($app, ['ui' => 'segment'])->set((string) random_int(1, 100));
 Button::addTo($app, ['Reload random number'])
     ->on('click', new JsReload($v, [], new JsExpression('console.log(\'Output with afterSuccess\');')));
 
@@ -50,7 +51,7 @@ $b = Button::addTo($bar, ['Reload counter'])
 // Relading with argument
 Header::addTo($app, ['We can pass argument to reloader']);
 
-$v = View::addTo($app, ['ui' => 'segment'])->set($_GET['val'] ?? 'No value');
+$v = ViewWithContent::addTo($app, ['ui' => 'segment'])->set($_GET['val'] ?? 'No value');
 
 Button::addTo($app, ['Set value to "hello"'])
     ->on('click', new JsReload($v, ['val' => 'hello']));

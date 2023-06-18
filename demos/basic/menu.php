@@ -8,7 +8,7 @@ use Atk4\Ui\Dropdown as UiDropdown;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Menu;
-use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -52,7 +52,7 @@ $group->addItem('Dedicated');
 $menu = Menu::addTo($app, ['vertical']);
 $i = $menu->addItem();
 Header::addTo($i, ['size' => 4])->set('Promotions');
-View::addTo($i, ['element' => 'P'])->set('Check out our promotions');
+ViewWithContent::addTo($i, ['element' => 'P'])->set('Check out our promotions');
 
 // menu without any item should not show
 Menu::addTo($app);

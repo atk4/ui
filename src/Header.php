@@ -14,7 +14,7 @@ namespace Atk4\Ui;
  *
  * $h = new Header(['size' => 'large']); // make large header <div class="ui large header">..</div>
  */
-class Header extends View
+class Header extends ViewWithContent
 {
     /** @var int|string Set to 1, 2, .. 5 for page-headers or small/medium/large for content headers. */
     public $size;
@@ -54,7 +54,7 @@ class Header extends View
         }
 
         if ($this->subHeader) {
-            $this->subHeader = View::addTo($this, [$this->subHeader], ['SubHeader'])->addClass('sub header');
+            $this->subHeader = ViewWithContent::addTo($this, [$this->subHeader], ['SubHeader'])->addClass('sub header');
         }
 
         if ($this->aligned) {

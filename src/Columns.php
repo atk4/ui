@@ -7,7 +7,7 @@ namespace Atk4\Ui;
 /**
  * Vertically distributed columns based on CSS Grid system.
  */
-class Columns extends View
+class Columns extends ViewWithContent
 {
     public $ui = 'grid';
 

@@ -13,13 +13,14 @@ use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 /**
  * Provides generic functionality for a form control.
  *
  * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
  */
-class Control extends View
+class Control extends ViewWithContent
 {
     /** @var Form|null to which this field belongs */
     public $form;

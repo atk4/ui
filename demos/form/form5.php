@@ -9,12 +9,12 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\JsToast;
-use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-View::addTo($app, [
+ViewWithContent::addTo($app, [
     'Forms below focus on Data integration and automated layouts',
     'ui' => 'ignored warning message',
 ]);

@@ -7,12 +7,12 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsSse;
-use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$v = View::addTo($app)->set('This will trigger a network request for testing SSE...');
+$v = ViewWithContent::addTo($app)->set('This will trigger a network request for testing SSE...');
 
 $sse = JsSse::addTo($app);
 // URL trigger must match php_unit test in sse provider.

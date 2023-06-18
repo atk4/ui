@@ -7,6 +7,7 @@ namespace Atk4\Ui\UserAction;
 use Atk4\Ui\Button;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 class PreviewExecutor extends BasicExecutor
 {
@@ -28,12 +29,12 @@ class PreviewExecutor extends BasicExecutor
 
         switch ($this->previewType) {
             case 'console':
-                $this->preview = View::addTo($this, ['ui' => 'inverted black segment', 'element' => 'pre']);
+                $this->preview = ViewWithContent::addTo($this, ['ui' => 'inverted black segment', 'element' => 'pre']);
                 $this->preview->set($text);
 
                 break;
             case 'text':
-                $this->preview = View::addTo($this, ['ui' => 'segment']);
+                $this->preview = ViewWithContent::addTo($this, ['ui' => 'segment']);
                 $this->preview->set($text);
 
                 break;

@@ -10,6 +10,9 @@ class Breadcrumb extends Lister
 
     public $defaultTemplate = 'breadcrumb.html';
 
+    /** @var string|null */
+    public $title;
+
     /** @var array */
     public $path = [];
 
@@ -43,7 +46,7 @@ class Breadcrumb extends Lister
     public function popTitle()
     {
         $title = array_pop($this->path);
-        $this->set($title['section'] ?? '');
+        $this->title = $title['section'];
 
         return $this;
     }
@@ -68,5 +71,9 @@ class Breadcrumb extends Lister
         $this->setSource($this->path);
 
         parent::renderView();
+
+        if ($this->title !== null) {
+            $this->template->append('Content', $this->title);
+        }
     }
 }
