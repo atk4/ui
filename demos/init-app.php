@@ -88,7 +88,7 @@ $demosUrl = $rootUrl . 'demos/';
 $app->initLayout([!isset($_GET['layout']) ? Layout\Maestro::class : $app->stickyGet('layout')]);
 
 $layout = $app->layout;
-if (false && $layout instanceof Layout\NavigableInterface) {
+if ($layout instanceof Layout\NavigableInterface) {
     $layout->addMenuItem(['Welcome to Agile Toolkit', 'icon' => 'gift'], [$demosUrl . 'index']);
 
     $path = $demosUrl . 'layout/';
