@@ -346,7 +346,7 @@ use a custom decorator?
 
 This is where ``$field->ui`` comes in (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui).
 
-You can specify ``'ui' => ['form' => $decorator_seed]`` when defining your model field inside your Model::
+You can specify ``'ui' => ['form' => $decoratorSeed]`` when defining your model field inside your Model::
 
     class User extends \Atk4\Data\Model
     {
@@ -403,8 +403,8 @@ You may add form controls to sub layout directly using setModel method on the su
     $form = Form::addTo($app);
     $form->setModel($model, []);
 
-    $sub_layout = $form->layout->addSubLayout();
-    $sub_layout->setModel($model, ['first_name', 'last_name']);
+    $subLayout = $form->layout->addSubLayout();
+    $subLayout->setModel($model, ['first_name', 'last_name']);
 
 
 When using setModel() on a sub layout to add controls per sub layout instead of entire layout,
@@ -421,7 +421,7 @@ you can create a form to change profile of a currently logged user::
 
     $user = new User($db);
     $user->getField('password')->neverPersist = true; // ignore password field
-    $user = $user->load($current_user);
+    $user = $user->load($currentUserId);
 
     // Display all fields (except password) and values
     $form = Form::addTo($app);
@@ -435,7 +435,7 @@ they're marked as System (https://agile-data.readthedocs.io/en/develop/fields.ht
 see https://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields#Model::setOnlyFields::
 
     $form = Form::addTo($app);
-    $form->setModel((new User($db))->load($current_user), ['email', 'name']);
+    $form->setModel((new User($db))->load($currentUserId), ['email', 'name']);
 
 As before, field ``password`` will not be loaded from the database, but this time
 using onlyFields restriction rather then `neverPersist`.
@@ -522,7 +522,7 @@ Form Submit Handling
 
     Create and return :php:class:`JsChain` action that will indicate error on a form control.
 
-.. php:method:: jsSuccess($title, [$sub_title])
+.. php:method:: jsSuccess($title, [$subTitle])
 
     Create and return :php:class:`JsChain` action, that will replace form with a success message.
 
@@ -686,17 +686,17 @@ The following example will show how to organize fields using regular sub layout 
     $form = Form::addTo($app);
     $form->setModel($model, []);
 
-    $sub_layout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section::class]);
+    $subLayout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section::class]);
 
-    Header::addTo($sub_layout, ['Accordion Section in Form']);
-    $sub_layout->setModel($model, ['name']);
+    Header::addTo($subLayout, ['Accordion Section in Form']);
+    $subLayout->setModel($model, ['name']);
 
-    $accordion_layout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section\Accordion::class]);
+    $accordionLayout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section\Accordion::class]);
 
-    $a1 = $accordion_layout->addSection('Section 1');
+    $a1 = $accordionLayout->addSection('Section 1');
     $a1->setModel($model, ['iso', 'iso3']);
 
-    $a2 = $accordion_layout->addSection('Section 2');
+    $a2 = $accordionLayout->addSection('Section 2');
     $a2->setModel($model, ['numcode', 'phonecode']);
 
 In the example above, we first add a Generic sub layout to the existing layout of the form where one form
@@ -768,20 +768,20 @@ https://fomantic-ui.com/behaviors/form.html, so you can use any of the condition
 
 Here is a more advanced example::
 
-    $f_sub = Form::addTo($app);
-    $f_sub->addControl('name');
-    $f_sub->addControl('subscribe', [\Atk4\Ui\Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'class.toggle' => true]);
-    $f_sub->addControl('email');
-    $f_sub->addControl('gender', [\Atk4\Ui\Form\Control\Radio::class], ['enum' => ['Female', 'Male']])->set('Female');
-    $f_sub->addControl('m_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
-    $f_sub->addControl('f_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption' => 'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
+    $form = Form::addTo($app);
+    $form->addControl('name');
+    $form->addControl('subscribe', [\Atk4\Ui\Form\Control\Checkbox::class, 'Subscribe to weekly newsletter', 'class.toggle' => true]);
+    $form->addControl('email');
+    $form->addControl('gender', [\Atk4\Ui\Form\Control\Radio::class], ['enum' => ['Female', 'Male']])->set('Female');
+    $form->addControl('m_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
+    $form->addControl('f_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption' => 'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
 
     // Show email and gender when subscribe is checked.
 
     // Show m_gift when gender = 'male' and subscribe is checked.
     // Show f_gift when gender = 'female' and subscribe is checked.
 
-    $f_sub->setControlsDisplayRules([
+    $form->setControlsDisplayRules([
         'email' => ['subscribe' => 'checked'],
         'gender' => ['subscribe' => 'checked'],
         'm_gift' => ['gender' => 'isExactly[Male]', 'subscribe' => 'checked'],
@@ -791,15 +791,15 @@ Here is a more advanced example::
 You may also define multiple conditions for the form control to be visible if you wrap them inside and array::
 
 
-    $f_sub = Form::addTo($app);
-    $f_dog->addControl('race', [\Atk4\Ui\Form\Control\Line::class]);
-    $f_dog->addControl('age');
-    $f_dog->addControl('hair_cut', [\Atk4\Ui\Form\Control\Dropdown::class, 'values' => ['Short', 'Long']]);
+    $form = Form::addTo($app);
+    $form->addControl('race', [\Atk4\Ui\Form\Control\Line::class]);
+    $form->addControl('age');
+    $form->addControl('hair_cut', [\Atk4\Ui\Form\Control\Dropdown::class, 'values' => ['Short', 'Long']]);
 
     // Show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
     // OR
     // Show 'hair_cut' when race contains exactly the word 'bichon'
-    $f_dog->setControlsDisplayRules([
+    $form->setControlsDisplayRules([
         'hair_cut' => [['race' => 'contains[poodle]', 'age' => 'integer[1..5]'], ['race' => 'isExactly[bichon]']],
     ]);
 
@@ -808,31 +808,31 @@ Hiding / Showing group of field
 
 Instead of defining rules for form controls individually you can hide/show entire group::
 
-    $f_group = Form::addTo($app, ['class.segment' => true]);
-    Label::addTo($f_group, ['Work on form group too.', 'class.top attached' => true], ['AboveControls']);
+    $form = Form::addTo($app, ['class.segment' => true]);
+    Label::addTo($form, ['Work on form group too.', 'class.top attached' => true], ['AboveControls']);
 
-    $g_basic = $f_group->addGroup(['Basic Information']);
-    $g_basic->addControl('first_name', ['width' => 'eight']);
-    $g_basic->addControl('middle_name', ['width' => 'three']);
-    $g_basic->addControl('last_name', ['width' => 'five']);
+    $groupBasic = $form->addGroup(['Basic Information']);
+    $groupBasic->addControl('first_name', ['width' => 'eight']);
+    $groupBasic->addControl('middle_name', ['width' => 'three']);
+    $groupBasic->addControl('last_name', ['width' => 'five']);
 
-    $f_group->addControl('dev', [\Atk4\Ui\Form\Control\Checkbox::class, 'caption' => 'I am a developper']);
+    $form->addControl('dev', [\Atk4\Ui\Form\Control\Checkbox::class, 'caption' => 'I am a developper']);
 
-    $g_code = $f_group->addGroup(['Check all language that apply']);
-    $g_code->addControl('php', [\Atk4\Ui\Form\Control\Checkbox::class]);
-    $g_code->addControl('js', [\Atk4\Ui\Form\Control\Checkbox::class]);
-    $g_code->addControl('html', [\Atk4\Ui\Form\Control\Checkbox::class]);
-    $g_code->addControl('css', [\Atk4\Ui\Form\Control\Checkbox::class]);
+    $groupCode = $form->addGroup(['Check all language that apply']);
+    $groupCode->addControl('php', [\Atk4\Ui\Form\Control\Checkbox::class]);
+    $groupCode->addControl('js', [\Atk4\Ui\Form\Control\Checkbox::class]);
+    $groupCode->addControl('html', [\Atk4\Ui\Form\Control\Checkbox::class]);
+    $groupCode->addControl('css', [\Atk4\Ui\Form\Control\Checkbox::class]);
 
-    $g_other = $f_group->addGroup(['Others']);
-    $g_other->addControl('language', ['width' => 'eight']);
-    $g_other->addControl('favorite_pet', ['width' => 'four']);
+    $groupOther = $form->addGroup(['Others']);
+    $groupOther->addControl('language', ['width' => 'eight']);
+    $groupOther->addControl('favorite_pet', ['width' => 'four']);
 
     // To hide-show group simply select a field in that group.
     // Show group where 'php' belong when dev is checked.
     // Show group where 'language' belong when dev is checked.
 
-    $f_group->setGroupDisplayRules([
+    $form->setGroupDisplayRules([
         'php' => ['dev' => 'checked'],
         'language' => ['dev' => 'checked'],
     ]);

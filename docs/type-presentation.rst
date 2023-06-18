@@ -174,7 +174,7 @@ extending :php:class:`Persistence\Ui`::
 
     class MyApp extends App
     {
-        public function __construct($defaults = [])
+        public function __construct(array $defaults = [])
         {
             $this->uiPersistence = new MyPersistence()
 

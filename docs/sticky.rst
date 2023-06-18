@@ -51,11 +51,11 @@ initialized at all.
 
 Loader sets a local stickyGet on the $p before it's passed inside your function::
 
-    $p->stickyGet($trigger_get_name);
+    $p->stickyGet('trigger_name');
 
 This way - all the views added into this $p will carry an extra get argument::
 
-    $p->url(); // includes "$trigger_get_name=callback"
+    $p->url(); // includes "trigger_name=callback"
 
 If you call `$app->url()` it will contain `client_id` but won't contain the callbacks triggers.
 

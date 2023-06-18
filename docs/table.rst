@@ -44,7 +44,7 @@ Using with Array Data
 
 You can also use Table with Array data source like this::
 
-    $my_array = [
+    $myArray = [
         ['name' => 'Vinny', 'surname' => 'Sihra', 'birthdate' => new \DateTime('1973-02-03')],
         ['name' => 'Zoe', 'surname' => 'Shatwell', 'birthdate' => new \DateTime('1958-08-21')],
         ['name' => 'Darcy', 'surname' => 'Wild', 'birthdate' => new \DateTime('1968-11-01')],
@@ -52,7 +52,7 @@ You can also use Table with Array data source like this::
     ];
 
     $table = Table::addTo($app);
-    $table->setSource($my_array);
+    $table->setSource($myArray);
 
     $table->addColumn('name');
     $table->addColumn('surname', [\Atk4\Ui\Table\Column\Link::class, 'url' => 'details.php?surname={$surname}']);
@@ -201,17 +201,17 @@ your convenience there is a way to add multiple columns efficiently.
 .. php:method:: addColumns($names);
 
     Here, names can be an array of strings (['status', 'price']) or contain array that will be passed
-    as argument sto the addColumn method ([['total', $field_def], ['delete', $delete_column]);
+    as argument sto the addColumn method ([['total', $fieldDef], ['delete', $deleteColumn]);
 
 As a final note in this section - you can re-use column objects multiple times::
 
-    $c_gap = new \Atk4\Ui\Table\Column\Template('<td> ... <td>');
+    $colGap = new \Atk4\Ui\Table\Column\Template('<td> ... <td>');
 
-    $table->addColumn($c_gap);
+    $table->addColumn($colGap);
     $table->setModel(new Order($db), ['name', 'price', 'amount']);
-    $table->addColumn($c_gap);
+    $table->addColumn($colGap);
     $table->addColumns(['total', 'status'])
-    $table->addColumn($c_gap);
+    $table->addColumn($colGap);
 
 This will result in 3 gap columns rendered to the left, middle and right of your Table.
 
@@ -284,14 +284,14 @@ examples will show you how to display list of "files" inside your Dropbox folder
 of issues from your Github repository::
 
     // Show contents of dropbox
-    $dropbox = \Atk4\Dropbox\Persistence($db_config);
+    $dropbox = \Atk4\Dropbox\Persistence($dbConfig);
     $files = new \Atk4\Dropbox\Model\File($dropbox);
 
     Table::addTo($app)->setModel($files);
 
 
     // Show contents of dropbox
-    $github = \Atk4\Github\IssuePersistence($github_api_config);
+    $github = \Atk4\Github\IssuePersistence($githubApiConfig);
     $issues = new \Atk4\Github\Model\Issue($github);
 
     Table::addTo($app)->setModel($issues);

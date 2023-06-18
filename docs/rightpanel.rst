@@ -40,13 +40,13 @@ Loading dynamic content within panel is done via the onOpen method
 
 Initializing a panel with onOpen callback::
 
-    $panel_1 = $app->layout->addRightPanel(new \Atk4\Ui\Panel\Right());
-    Message::addTo($panel_1, ['This panel will load content dynamically below according to button select on the right.']);
+    $panel = $app->layout->addRightPanel(new \Atk4\Ui\Panel\Right());
+    Message::addTo($panel, ['This panel will load content dynamically below according to button select on the right.']);
     $button = Button::addTo($app, ['Button 1']);
     $button->js(true)->data('btn', '1');
-    $button->on('click', $panel_1->jsOpen(['btn'], 'orange'));
+    $button->on('click', $panel->jsOpen(['btn'], 'orange'));
 
-    $panel_1->onOpen(function (Panel\Content $p) {
+    $panel->onOpen(function (Panel\Content $p) {
         $buttonNumber = $_GET['btn'] ?? null;
         $text =  'You loaded panel content using button #' . $buttonNumber;
         Message::addTo($p, ['Panel 1', 'text' => $text]);

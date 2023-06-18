@@ -82,7 +82,7 @@ Example showing the onUpload callback on the UploadImage field::
 
         // Do file processing here...
 
-        $img->setThumbnailSrc('./images/' . $file_name);
+        $img->setThumbnailSrc('./images/' . $fileName);
         $img->setFileId('123456');
 
         // can also return a notifier.

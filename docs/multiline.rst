@@ -108,14 +108,14 @@ Using a form with User model won't automatically add a Multiline to edit the rel
 If you want to edit them along with the user, Multiline need to be set up accordingly using the setReferenceModel method::
 
     // Add a form to Ui in order to edit User record.
-    $user_form = \Atk4\Ui\Form::addTo($app);
-    $user_form->setModel($user->load($userId));
+    $userForm = \Atk4\Ui\Form::addTo($app);
+    $userForm->setModel($user->load($userId));
 
-    $ml = $user_form->addControl('emails', [\Atk4\Ui\Form\Control\Multiline::class]);
+    $ml = $userForm->addControl('emails', [\Atk4\Ui\Form\Control\Multiline::class]);
     $ml->setReferenceModel('Emails');
 
     // set up saving of Email on Form submit
-    $user_form->onSubmit(function (Form $form) use ($ml) {
+    $userForm->onSubmit(function (Form $form) use ($ml) {
         $form->model->save();
         // save emails record related to current user.
         $ml->saveRows();

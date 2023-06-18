@@ -115,13 +115,13 @@ Header::addTo($app, ['Table column', 'subHeader' => 'Table column decorator can 
 $model = new $modelColorClass(new Persistence\Static_([]));
 
 foreach (range(1, 10) as $id) {
-    $key_value = random_int(1, 4);
+    $keyValue = random_int(1, 4);
 
     $model->insert([
         'id' => $id,
         'name' => 'name ' . $id,
-        'key_value' => $key_value,
-        'key_value_string' => $keyValueString[$key_value],
+        'key_value' => $keyValue,
+        'key_value_string' => $keyValueString[$keyValue],
         'value_not_always_present' => random_int(0, 100) > 50 ? 'have value' : '',
         'interests' => '1st label, 2nd label',
         'rating' => random_int(100, 300) / 100,

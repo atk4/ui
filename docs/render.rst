@@ -90,19 +90,19 @@ will create its own tree independent from the main one.
 
 Agile UI sometimes uses the following approach to render element on the outside:
 
-1. Create new instance of $sub_view.
-2. Set $sub_view->name = false;
-3. Calls $view->add($sub_view);
-4. executes $sub_view->renderHtml()
+1. Create new instance of $subView.
+2. Set $subView->name = false;
+3. Calls $view->add($subView);
+4. executes $subView->renderHtml()
 
 This returns a HTML that's stripped of any ID values, still linked to the main application but will not become part of the
 render tree. This approach is useful when it's necessary to manipulate HTML and inject it directly into the template for
 example when embedding UI elements into Grid Column.
 
-Since Grid Column repeats the HTML many times, the ID values would be troublesome. Additionally, the render of a $sub_view
+Since Grid Column repeats the HTML many times, the ID values would be troublesome. Additionally, the render of a $subView
 will be automatically embedded into the column and having it appear anywhere else on the page would be troublesome.
 
-It's futile to try and extract JS chains from the $sub_tree because JS wouldn't work anyway, so this method will only work
+It's futile to try and extract JS chains from the $subView because JS wouldn't work anyway, so this method will only work
 with static components.
 
 .. _unique_name:

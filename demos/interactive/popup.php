@@ -241,7 +241,7 @@ $signup = Popup::addTo($app, [$rightMenu, 'position' => 'bottom right'])->setHov
 // This popup will be dynamically loaded.
 $signup->stickyGet('logged');
 $signup->set(function (View $pop) {
-    // contetn of the popup will be different depending on this condition.
+    // content of the popup will be different depending on this condition.
     if (isset($_GET['logged'])) {
         Message::addTo($pop, ['You are already logged in as ' . $_GET['logged']]);
         Button::addTo($pop, ['Logout', 'class.primary' => true, 'icon' => 'sign out'])

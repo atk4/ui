@@ -105,7 +105,7 @@ To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the foll
         \Atk4\Ui\LoremIpsum::addTo($p);
     });
 
-.. php:method:: getUrl($html_wrapping)
+.. php:method:: getUrl($mode)
 
     You can use this shortcut method instead of $vp->cb->getUrl().
 

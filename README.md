@@ -112,7 +112,7 @@ use \Atk4\Mastercrud\MasterCrud;
 
 // set up $app here
 
-$master_crud = MasterCrud::addTo($app)
+$masterCrud = MasterCrud::addTo($app)
     ->setModel(new User($app->db), [
         'Purchases' => [],
     ]);

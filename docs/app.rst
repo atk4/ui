@@ -221,8 +221,8 @@ you may have a file `detail.php` which expects `order_id` parameter and would co
 Since the `Crud` component is interactive, it may want to generate requests to itself, but it must also
 include `order_id` otherwise the scope will be incomplete. Agile UI solves that with StickyGet arguments::
 
-    $order_id = $app->stickyGet('order_id');
-    $crud->setModel($order->load($order_id)->ref('Payment'));
+    $orderId = $app->stickyGet('order_id');
+    $crud->setModel($order->load($orderId)->ref('Payment'));
 
 This make sure that pagination, editing, addition or any other operation that Crud implements will always
 address same model scope.
@@ -270,12 +270,6 @@ Execution Termination
 
 Used when application flow needs to be terminated preemptively. For example when
 callback is triggered and need to respond with some JSON.
-
-You can also use this method to output debug data. Here is comparison to var_dump::
-
-    // var_dump($my_var); // does not stop execution, draws UI anyway
-
-    $this->getApp()->terminate(var_export($my_var)); // stops execution.
 
 
 Execution state

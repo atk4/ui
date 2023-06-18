@@ -89,7 +89,7 @@ class View extends AbstractView
     // {{{ Setting Things up
 
     /**
-     * @param array|string $label
+     * @param array<0|string, mixed>|string $label
      */
     public function __construct($label = [])
     {
