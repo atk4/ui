@@ -85,7 +85,7 @@ engine directly, but you would be able to use it through views::
 
 
     $v = new View('my_template.html');
-    $v->set('name', 'Mr. Boss');
+    $v->template->set('name', 'Mr. Boss');
 
     $lister = new Lister($v, 'Content');
     $lister->setModel($userlist);
@@ -96,7 +96,7 @@ The code above will work like this:
 
 1. View will load and parse template.
 
-2. Using $v->set('name') will set value of the tag inside template directly.
+2. Using $v->template->set('name', ...) will set value of the tag inside template directly.
 
 3. Lister will clone region 'Content' from my_template.
 
