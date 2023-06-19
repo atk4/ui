@@ -18,12 +18,7 @@ class ItemsPerPageSelector extends View
     /** @var list<int> Default page length menu items. */
     public $pageLengthItems = [10, 25, 50, 100];
 
-    /**
-     * Default button label.
-     *  - [ipp] will be replace by the number of pages selected.
-     *
-     * @var string
-     */
+    /** @var string */
     public $label = 'Items per page:';
 
     /** @var int The current number of item per page. */
@@ -59,7 +54,6 @@ class ItemsPerPageSelector extends View
     {
         $this->cb->set(function () use ($fx) {
             $ipp = isset($_GET['ipp']) ? (int) $_GET['ipp'] : null;
-            // $this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
             $this->set((string) $ipp);
             $reload = $fx($ipp);
             if ($reload) {
