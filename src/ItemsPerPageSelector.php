@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Data\Field;
 use Atk4\Ui\Js\JsExpression;
 
 /**
@@ -16,14 +17,9 @@ class ItemsPerPageSelector extends View
     public $ui = 'selection compact dropdown';
 
     /** @var list<int> Default page length menu items. */
-    public $pageLengthItems = [10, 25, 50, 100];
+    public $pageLengthItems = [10, 100, 1000];
 
-    /**
-     * Default button label.
-     *  - [ipp] will be replace by the number of pages selected.
-     *
-     * @var string
-     */
+    /** @var string */
     public $label = 'Items per page:';
 
     /** @var int The current number of item per page. */
@@ -31,6 +27,11 @@ class ItemsPerPageSelector extends View
 
     /** @var Callback|null The callback function. */
     public $cb;
+
+    private function formatInteger(int $value): string
+    {
+        return $this->getApp()->uiPersistence->typecastSaveField(new Field(['type' => 'integer']), $value);
+    }
 
     protected function init(): void
     {
@@ -45,7 +46,7 @@ class ItemsPerPageSelector extends View
         if (!$this->currentIpp) {
             $this->currentIpp = $this->pageLengthItems[0];
         }
-        $this->set((string) $this->currentIpp);
+        $this->set($this->formatInteger($this->currentIpp));
     }
 
     /**
@@ -59,8 +60,7 @@ class ItemsPerPageSelector extends View
     {
         $this->cb->set(function () use ($fx) {
             $ipp = isset($_GET['ipp']) ? (int) $_GET['ipp'] : null;
-            // $this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
-            $this->set($ipp); // @phpstan-ignore-line TODO https://github.com/atk4/ui/issues/2016
+            $this->set($this->formatInteger($ipp));
             $reload = $fx($ipp);
             if ($reload) {
                 $this->getApp()->terminateJson($reload);
@@ -71,8 +71,8 @@ class ItemsPerPageSelector extends View
     protected function renderView(): void
     {
         $menuItems = [];
-        foreach ($this->pageLengthItems as $key => $item) {
-            $menuItems[] = ['name' => $item, 'value' => $item];
+        foreach ($this->pageLengthItems as $item) {
+            $menuItems[] = ['name' => $this->formatInteger($item), 'value' => $item];
         }
 
         $function = new JsExpression('function (value, text, item) {
