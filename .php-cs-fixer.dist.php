@@ -53,13 +53,6 @@ return (new PhpCsFixer\Config())
         // fn => without curly brackets is less readable,
         // also prevent bounding of unwanted variables for GC
         'use_arrow_functions' => false,
-
-        // TODO remove once 3.17.1 is released
-        // https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/pull/6979
-        // https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/pull/7011
-        // fixes were merged
-        'phpdoc_types' => ['groups' => ['simple', 'meta']],
-        'phpdoc_var_without_name' => false,
     ])
     ->setFinder($finder)
     ->setCacheFile(sys_get_temp_dir() . '/php-cs-fixer.' . md5(__DIR__) . '.cache');
