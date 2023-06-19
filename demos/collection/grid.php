@@ -79,4 +79,4 @@ $grid->menu->addItem('show selection')
     ));
 
 // Setting ipp with an array will add an ItemPerPageSelector to paginator.
-$grid->setIpp([10, 25, 50, 100]);
+$grid->setIpp([10, 100, 1000]);
