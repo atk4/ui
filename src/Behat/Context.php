@@ -231,6 +231,13 @@ class Context extends RawMinkContext implements BehatContext
                 $selector
             );
 
+            // add NBSP support for normalize-space() xpath function
+            $xpath = preg_replace(
+                '~(?<![\w\-])normalize-space\([^()\'"]*\)~',
+                'normalize-space(translate($0, \'' . "\u{00a0}" . '\', \' \'))',
+                $xpath
+            );
+
             return ['xpath', $xpath];
         }
 
