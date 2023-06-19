@@ -17,7 +17,7 @@ class ItemsPerPageSelector extends View
     public $ui = 'selection compact dropdown';
 
     /** @var list<int> Default page length menu items. */
-    public $pageLengthItems = [10, 25, 50, 100];
+    public $pageLengthItems = [10, 100, 1000];
 
     /** @var string */
     public $label = 'Items per page:';
