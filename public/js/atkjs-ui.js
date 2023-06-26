@@ -445,7 +445,7 @@ __webpack_require__.r(__webpack_exports__);
  * Note on rule. FormService also add two more rule to Fomantic-UI existing ones:
  * - notEmpty;
  * - isVisible;
- * - isEqual[number] for number comparaison.
+ * - isEqual[number] for number comparison.
  *
  * Here is the phrasing of the rule.
  * - Show "this field" if all condition are met.
@@ -1248,7 +1248,7 @@ __webpack_require__.r(__webpack_exports__);
  * source => the element being reorder.
  * pos => the final position of the element being reorder.
  *
- * Defaut container is set to table boddy (tbody), using table row(tr) as reoderable element.
+ * Default container is set to table body (tbody), using table row(tr) as reoderable element.
  * To use other container, simply set container and draggable accordingly.
  * $sortable = JsSortable::addTo($lister, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
  *
