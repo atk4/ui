@@ -509,7 +509,7 @@ class View extends AbstractView
 
     /**
      * Mark GET argument as sticky. Calling url() on this view or any
-     * sub-views will embedd the value of this GET argument.
+     * sub-views will embed the value of this GET argument.
      *
      * If GET argument is empty or false, it won't make into URL.
      *

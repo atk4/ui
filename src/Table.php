@@ -151,7 +151,7 @@ class Table extends Lister
         }
         $this->model->assertIsModel();
 
-        // should be vaugely consistent with Form\AbstractLayout::addControl()
+        // should be vaguely consistent with Form\AbstractLayout::addControl()
 
         if ($name === null) {
             $field = null;

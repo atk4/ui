@@ -258,7 +258,7 @@ class DemosTest extends TestCase
     /** @var string */
     protected $regexSse = '~^(id|event|data).*$~m';
 
-    public function demoFilesProvider(): array
+    public function provideDemosStatusAndHtmlResponseCases(): array
     {
         $excludeDirs = ['_demo-data', '_includes'];
         $excludeFiles = ['_unit-test/stream.php', 'layout/layouts_error.php'];
@@ -301,7 +301,7 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @dataProvider demoFilesProvider
+     * @dataProvider provideDemosStatusAndHtmlResponseCases
      */
     public function testDemosStatusAndHtmlResponse(string $path): void
     {
@@ -323,7 +323,7 @@ class DemosTest extends TestCase
         self::assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
     }
 
-    public function casesDemoGetProvider(): array
+    public function provideDemoGetCases(): array
     {
         $files = [];
         $files[] = ['others/sticky.php?xx=YEY'];
@@ -334,7 +334,7 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @dataProvider casesDemoGetProvider
+     * @dataProvider provideDemoGetCases
      */
     public function testDemoGet(string $path): void
     {
@@ -399,7 +399,7 @@ class DemosTest extends TestCase
     /**
      * Test reload and loader callback.
      */
-    public function jsonResponseProvider(): array
+    public function provideDemoAssertJsonResponseCases(): array
     {
         $files = [];
         // simple reload
@@ -414,7 +414,7 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @dataProvider jsonResponseProvider
+     * @dataProvider provideDemoAssertJsonResponseCases
      */
     public function testDemoAssertJsonResponse(string $path, string $expectedExceptionMessage = null): void
     {
@@ -444,7 +444,7 @@ class DemosTest extends TestCase
     /**
      * Test JsSse and Console.
      */
-    public function sseResponseProvider(): array
+    public function provideDemoAssertSseResponseCases(): array
     {
         $files = [];
         $files[] = ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
@@ -456,7 +456,7 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @dataProvider sseResponseProvider
+     * @dataProvider provideDemoAssertSseResponseCases
      */
     public function testDemoAssertSseResponse(string $path): void
     {
@@ -484,7 +484,7 @@ class DemosTest extends TestCase
         }
     }
 
-    public function jsonResponsePostProvider(): array
+    public function provideDemoAssertJsonResponsePostCases(): array
     {
         $files = [];
         $files[] = [
@@ -498,7 +498,7 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @dataProvider jsonResponsePostProvider
+     * @dataProvider provideDemoAssertJsonResponsePostCases
      */
     public function testDemoAssertJsonResponsePost(string $path, array $postData): void
     {
@@ -508,7 +508,7 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @dataProvider demoCallbackErrorProvider
+     * @dataProvider provideDemoCallbackErrorCases
      */
     public function testDemoCallbackError(string $path, string $expectedExceptionMessage): void
     {
@@ -524,7 +524,7 @@ class DemosTest extends TestCase
         self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
     }
 
-    public function demoCallbackErrorProvider(): array
+    public function provideDemoCallbackErrorCases(): array
     {
         return [
             [

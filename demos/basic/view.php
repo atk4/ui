@@ -63,7 +63,7 @@ View::addTo($app, ['ui' => 'segment', 'class.raised' => true, 'element' => 'pre'
 Header::addTo($app, ['Has a unique global identifier']);
 Label::addTo($app, ['Plane ID:', 'detail' => $plane->name]);
 
-Header::addTo($app, ['Can interract with JavaScript actions']);
+Header::addTo($app, ['Can interact with JavaScript actions']);
 Button::addTo($app, ['Hide plane', 'icon' => 'down arrow'])
     ->on('click', $plane->js()->hide());
 Button::addTo($app, ['Show plane', 'icon' => 'up arrow'])

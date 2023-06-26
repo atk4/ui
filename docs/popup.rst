@@ -35,7 +35,7 @@ When added into a menu, pop-up will appear on hover::
     $item = $menu->addItem('HoverMe')
     Text::addTo(Popup::addTo($app, [$item]))->set('Appears when you hover a menu item');
 
-Like many other Views of ATK, popup is an interractive element. It can load it's contents when opened::
+Like many other Views of ATK, popup is an interactive element. It can load it's contents when opened::
 
     $menu = Menu::addTo($app);
     $item = $menu->addItem('HoverMe');

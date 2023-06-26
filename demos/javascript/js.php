@@ -15,7 +15,7 @@ use Atk4\Ui\Label;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-// Demonstrates how to use interractive buttons.
+// Demonstrates how to use interactive buttons.
 Header::addTo($app, ['Basic Button']);
 
 // This button hides on page load

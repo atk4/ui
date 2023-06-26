@@ -7,7 +7,7 @@ import AtkPlugin from './atk.plugin';
  * Note on rule. FormService also add two more rule to Fomantic-UI existing ones:
  * - notEmpty;
  * - isVisible;
- * - isEqual[number] for number comparaison.
+ * - isEqual[number] for number comparison.
  *
  * Here is the phrasing of the rule.
  * - Show "this field" if all condition are met.

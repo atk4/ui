@@ -58,7 +58,7 @@ in any way you wish, before they will actuallized.
     If this object is initialized, will also initialize $object
 
     :param $object: Object or :ref:`seed` to add into render tree.
-    :param $region: When outputing HTML, which region in :php:attr:`View::$template` to use.
+    :param $region: When outputting HTML, which region in :php:attr:`View::$template` to use.
 
 
 .. php:method:: init()
@@ -420,7 +420,7 @@ Outputs:
     <div class="ui button" id="my-button3">Button</div>
 
 If ID is not specified it will be set automatically. The top-most element of a Render Tree will
-use ``id=atk`` and all of the child elements will create a derrived ID based on it's UI role.
+use ``id=atk`` and all of the child elements will create a derived ID based on it's UI role.
 
 .. code-block:: yml
 
@@ -433,11 +433,11 @@ use ``id=atk`` and all of the child elements will create a derrived ID based on 
             atk-form-button:
 
 If role is unspecified then 'view' will be used. The main benefit here is to have automatic
-allocation of all the IDs througout the render-tree ensuring that those ID's are consistent
+allocation of all the IDs throughout the render-tree ensuring that those ID's are consistent
 between page requests.
 
 It is also possible to set the "last" bit of the ID postfix. When Form controls are populated,
-the name of the field will be used instead of the role. This is done by setting 'name' propoerty.
+the name of the field will be used instead of the role. This is done by setting 'name' property.
 
 
 .. php:attr:: name

@@ -278,7 +278,7 @@ class Column
             return $this->getTag('head', $this->caption ?? '', $this->table->sortable ? ['class' => ['disabled']] : []);
         }
 
-        // if $this->caption is empty, header caption will be overriden by linked field definition
+        // if $this->caption is empty, header caption will be overridden by linked field definition
         $caption = $this->caption ?? $field->getCaption();
 
         $attr = [

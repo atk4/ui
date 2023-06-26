@@ -20,7 +20,7 @@ $menu->addItem('baz');
 $dropdown = UiDropdown::addTo($menu, ['With Callback', 'dropdownOptions' => ['on' => 'hover']]);
 $dropdown->setSource(['a', 'b', 'c']);
 $dropdown->onChange(function (string $itemId) {
-    return 'New seleced item ID: ' . $itemId;
+    return 'New selected item ID: ' . $itemId;
 });
 
 $submenu = $menu->addMenu('Sub-menu');

@@ -87,7 +87,7 @@ trait ModelPreventModificationTrait
     {
         $makeMessageFx = function (string $actionName, Model $model) {
             return $model->getModelCaption() . ' action "' . $actionName . '" with "' . $model->getTitle() . '" entity '
-                . ' was executed. In demo mode all changes are reverved.';
+                . ' was executed. In demo mode all changes are reversed.';
         };
 
         $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), function (Model $model) use ($makeMessageFx) {
@@ -528,7 +528,7 @@ class MultilineItem extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->qty, ['type' => 'integer', 'required' => true]);
         $this->addField($this->fieldName()->box, ['type' => 'integer', 'required' => true]);
         $this->addExpression($this->fieldName()->total_sql, [
-            'expr' => function (Model /* TODO self is not working bacause of clone in Multiline */ $row) {
+            'expr' => function (Model /* TODO self is not working because of clone in Multiline */ $row) {
                 return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore-line
             },
             'type' => 'integer',

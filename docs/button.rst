@@ -59,12 +59,12 @@ Setting this will display icon on the right of the button::
     $button = Button::addTo($app, ['Next', 'iconRight' => 'right arrow']);
 
 Apart from being on the right, the same rules apply as :php:attr:`Button::$icon`. Both
-icons cannot be specified simultaniously.
+icons cannot be specified simultaneously.
 
 Button Bar
 ----------
 
-Buttons can be aranged into a bar. You would need to create a :php:class:`View` component
+Buttons can be arranged into a bar. You would need to create a :php:class:`View` component
 with property ``ui='buttons'`` and add your other buttons inside::
 
     $bar = View::addTo($app, ['ui' => 'vertical buttons']);

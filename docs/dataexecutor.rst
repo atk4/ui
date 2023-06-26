@@ -200,7 +200,7 @@ The method is::
 
     ExecutorFactory::createTrigger(UserAction $action, string $type = null): View
 
-This method return an instance object for the proper type. When no type is supply, a default View Button obeject
+This method return an instance object for the proper type. When no type is supply, a default View Button object
 is returned.
 
 As per executor type, it is also possible to add or change already register type via the registerTrigger method::

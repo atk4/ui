@@ -37,7 +37,7 @@ class ItemSearch extends View
      */
     public $context;
 
-    /** @var string|null The URL argument name use for query. If null, then->>name will be assiged. */
+    /** @var string|null The URL argument name use for query. If null, then->>name will be assigned. */
     public $queryArg;
 
     public $defaultTemplate = 'item-search.html';

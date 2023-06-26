@@ -102,7 +102,7 @@ class CardDeck extends View
             $this->menu = $this->add(Factory::factory([Menu::class, 'activateOnClick' => false], $this->menu), 'Menu');
 
             if ($this->search !== false) {
-                $this->addMenuBarSeach();
+                $this->addMenuBarSearch();
             }
         }
 
@@ -114,7 +114,7 @@ class CardDeck extends View
         }
     }
 
-    protected function addMenuBarSeach(): void
+    protected function addMenuBarSearch(): void
     {
         $view = View::addTo($this->menu->addMenuRight()->addItem()->setElement('div'));
 

@@ -526,7 +526,7 @@ Form Submit Handling
 
     Create and return :php:class:`JsChain` action, that will replace form with a success message.
 
-.. php:method:: setApiConfing($config)
+.. php:method:: setApiConfig($config)
 
     Add additional parameters to Fomantic-UI .api function which does the AJAX submission of the form.
 For example, if you want the loading overlay at a different HTML element, you can define it with::
@@ -816,7 +816,7 @@ Instead of defining rules for form controls individually you can hide/show entir
     $groupBasic->addControl('middle_name', ['width' => 'three']);
     $groupBasic->addControl('last_name', ['width' => 'five']);
 
-    $form->addControl('dev', [\Atk4\Ui\Form\Control\Checkbox::class, 'caption' => 'I am a developper']);
+    $form->addControl('dev', [\Atk4\Ui\Form\Control\Checkbox::class, 'caption' => 'I am a developer']);
 
     $groupCode = $form->addGroup(['Check all language that apply']);
     $groupCode->addControl('php', [\Atk4\Ui\Form\Control\Checkbox::class]);
