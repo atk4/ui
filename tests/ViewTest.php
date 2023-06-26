@@ -154,7 +154,7 @@ class ViewTest extends TestCase
     /**
      * @param class-string<View|Callback> $class
      *
-     * @dataProvider setNotClosureProvider
+     * @dataProvider provideSetNotClosureErrorCases
      */
     public function testSetNotClosureError(string $class): void
     {
@@ -168,7 +168,7 @@ class ViewTest extends TestCase
     /**
      * @return list<list<class-string<View|Callback>>>
      */
-    public function setNotClosureProvider(): array
+    public function provideSetNotClosureErrorCases(): array
     {
         return [
             [Console::class],
@@ -186,7 +186,7 @@ class ViewTest extends TestCase
      *
      * @param class-string<View> $class
      *
-     * @dataProvider setNotOneArgumentExceptionProvider
+     * @dataProvider provideSetNotOneArgumentExceptionCases
      */
     public function testSetNotOneArgumentException(string $class): void
     {
@@ -200,7 +200,7 @@ class ViewTest extends TestCase
     /**
      * @return list<list<class-string<View>>>
      */
-    public function setNotOneArgumentExceptionProvider(): array
+    public function provideSetNotOneArgumentExceptionCases(): array
     {
         return [
             [View::class],
