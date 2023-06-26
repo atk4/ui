@@ -72,13 +72,13 @@ Open PHP in the browser and observe a fully working and good looking form:
 
 ![subscribe](docs/images/subscribe.png)
 
-ATK UI relies on https://fomantic-ui.com CSS framework to render the form beautifully. It also implements submission callback in a very straightforward way. The demo also demonstrates use of JavaScript action, which can make objects interract with each-other (e.g. Form submit reloads Table).
+ATK UI relies on https://fomantic-ui.com CSS framework to render the form beautifully. It also implements submission callback in a very straightforward way. The demo also demonstrates use of JavaScript action, which can make objects interact with each-other (e.g. Form submit reloads Table).
 
 ### Database Integration with ATK Data
 
 To get most of ATK UI, use [ATK Data](https://github.com/atk4/data) to describe your business models such as "User" or "Purchase". When you define models, you can start using some more advanced components:
 
-[Crud](https://ui.agiletoolkit.org/demos/crud.php) is a fully-interractive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
+[Crud](https://ui.agiletoolkit.org/demos/crud.php) is a fully-interactive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
 
 ``` php
 $app = new \Atk4\Ui\App(['title' => 'hello world']);
@@ -248,7 +248,7 @@ _All components can be view using the [demos](https://ui.agiletoolkit.org/demos/
 | Console | Execute server/shell commands and display progress live | 1.4 |
 | Items and Lists | Flexible and high-performance way to display lists of items. | 1.4 |
 | Wizard | Multi-step, wizard with temporary data storing. | 1.4  |
-| Actions | Vizualization of user-defined actions | 2.0 |
+| Actions | Visualization of user-defined actions | 2.0 |
 
 
 ## Add-ons and integrations

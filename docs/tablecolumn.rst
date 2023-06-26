@@ -222,7 +222,7 @@ If you wish to display movie rating "4 out of 10" based around the column "ratin
     $table->addColumn('rating', new \Atk4\Ui\Table\Column\Template('{$rating} out of 10'));
 
 Template may incorporate values from multiple fields in a data row, but current implementation
-will only work if you asign it to a primary column (by passing 1st argument to addColumn).
+will only work if you assign it to a primary column (by passing 1st argument to addColumn).
 
 (In the future it may be optional with the ability to specify caption).
 

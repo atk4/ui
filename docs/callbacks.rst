@@ -180,7 +180,7 @@ for the $view object.
 
 Should JsReload use regular 'Callback', then it wouldn't know that $view must contain LoremIpsum text.
 
-JsReload existance is only possible thanks to CallbackLater implementation.
+JsReload existence is only possible thanks to CallbackLater implementation.
 
 
 JsCallback
@@ -303,7 +303,7 @@ If you do not need to specify confirm, you can actually pass arguments in a key-
     }, [new \Atk4\Ui\Js\JsExpression('$(window).width()')]);
 
 
-Refering to event origin
+Referring to event origin
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 You might have noticed that JsCallback now passes first argument ($j) which so far, we have ignored. This argument is a

@@ -169,7 +169,7 @@ class Multiline extends Form\Control
     /**
      * Container for component that need Props set based on their field value as Lookup component.
      * Set during fieldDefinition and apply during renderView() after getValue().
-     * Must contains callable function and function will receive $model field and value as paremeter.
+     * Must contains callable function and function will receive $model field and value as parameter.
      *
      * @var array
      */

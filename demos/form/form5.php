@@ -70,7 +70,7 @@ $form = Form::addTo($cc->addColumn());
 $form->setModel($model);
 $form->onSubmit($formSubmit);
 
-// Next form won't initalize default fields, but we'll add them individually
+// Next form won't initialize default fields, but we'll add them individually
 $form = Form::addTo($cc->addColumn());
 $form->setModel($model, []);
 

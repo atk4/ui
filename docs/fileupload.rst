@@ -108,7 +108,7 @@ receive the same fileId set during the onUpload callback as function parameter.
 
 The onDelete callback function is a good place to:
 
-- validate ID (as it can technically be chenged through browser's inspector)
+- validate ID (as it can technically be changed through browser's inspector)
 - load file property from db
 - remove previously uploaded file from server or cloud,
 - delete db entry according to the fileId,

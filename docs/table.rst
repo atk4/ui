@@ -10,7 +10,7 @@ Table
 .. php:class:: Table
 
 .. important:: For columns, see :php:class:`Table\\Column`. For DIV-based lists, see :php:class:`Lister`. For an
-    interractive features see :php:class:`Grid` and :php:class:`Crud`.
+    interactive features see :php:class:`Grid` and :php:class:`Crud`.
 
 Table is the simplest way to output multiple records of structured, static data. For Un-structure output
 please see :php:class:`Lister`
@@ -97,7 +97,7 @@ if you want to execute some calculation there. (See https://agile-data.readthedo
 
 It's always a good idea to calculate column inside database. Lets create "total" column  which will
 multiply "price" and "amount" values. Use ``addExpression`` to provide in-line definition for this
-field if it's not alrady defined in ``Order::init()``::
+field if it's not already defined in ``Order::init()``::
 
     $table = Table::addTo($app);
     $order = new Order($db);
@@ -222,7 +222,7 @@ Table sorting
 .. php:attr:: sortBy
 .. php:attr:: sortDirection
 
-Table does not support an interractive sorting on it's own, (but :php:class:`Grid` does), however
+Table does not support an interactive sorting on it's own, (but :php:class:`Grid` does), however
 you can designate columns to display headers as if table were sorted::
 
     $table->sortable = true;

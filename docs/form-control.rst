@@ -53,7 +53,7 @@ Form Control can also be used inside a form like this::
     $form = \Atk4\Ui\Form::addTo($app);
     $control = $form->addControl('name', new \Atk4\Ui\Form\Control\Line());
 
-If you execute this exmple, you'll notice that Feld now has a label, it uses full width of the
+If you execute this example, you'll notice that Field now has a label, it uses full width of the
 page and the following HTML is now produced::
 
     <div class="field">
@@ -92,7 +92,7 @@ however if you do plan on adding your own form control types, it's important tha
 properly:
 
  - Generic (abstract, extends View) - Use this if form control is NOT based on `<input>`
- - Input (abstract, extends Generic) - Easiest since it alrady implements `<input>` and various
+ - Input (abstract, extends Generic) - Easiest since it already implements `<input>` and various
    ways to attach button to the input with markup of Fomantic-UI form control.
 
 Hints
@@ -193,7 +193,7 @@ by all components::
 
     $model->addField('long_text', ['type' => 'text']);
 
-.. note:: All forms will be associted with a model. If form is not explicitly linked with a model, it will create
+.. note:: All forms will be associated with a model. If form is not explicitly linked with a model, it will create
     a ProxyModel and all form controls will be created automatically in that model. As a result, all Form Control Decorators
     will be linked with Model Fields.
 
@@ -238,7 +238,7 @@ Here are few ways to specify `icon` to an Input/Line::
     Line::addTo($page, ['icon' => 'search']);
 
 The 'icon' property can be either string or a View. The string is for convenience and will
-be automatically substituted with `new Icon($icon)`. If you wish to be more specifc
+be automatically substituted with `new Icon($icon)`. If you wish to be more specific
 and pass some arguments to the icon, there are two options::
 
     // compact
@@ -295,7 +295,7 @@ onChange event
 
 .. php:method:: onChange($expression)
 
-It's prefferable to use this short-hand version of on('change', 'input', $expression) method.
+It's preferable to use this short-hand version of on('change', 'input', $expression) method.
 $expression argument can be JS expression or PHP callback function.
 
     // simple string
@@ -319,7 +319,7 @@ Dropdown
 .. php:class:: Dropdown
 
 Dropdown uses Fomantic-UI Dropdown (https://fomantic-ui.com/modules/dropdown.html). A Dropdown can be used in two ways:
-1) Set a Model to $model property. The Dropdown will render all records of the model that matchs the model's conditions.
+1) Set a Model to $model property. The Dropdown will render all records of the model that matches the model's conditions.
 2) You can define $values property to create custom Dropdown items.
 
 Usage with a Model
@@ -441,7 +441,7 @@ Here you can pass an array of Fomantic-UI dropdown options (https://fomantic-ui.
 
 .. php:attr:: multiple
 
-If set to true, multiple items can be selected in Dropdown. They will be sent comma seperated (value1,value2,value3) on form submit.
+If set to true, multiple items can be selected in Dropdown. They will be sent comma separated (value1,value2,value3) on form submit.
 
 By default Dropdown will save values as comma-separated string value in data model, but it also supports model fields with array type.
 See this example from Model class init method::

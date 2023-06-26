@@ -168,7 +168,7 @@ class Grid extends View
     }
 
     /**
-     * Add a new buton to the Grid Menu with a given text.
+     * Add a new button to the Grid Menu with a given text.
      *
      * @param string $label
      */

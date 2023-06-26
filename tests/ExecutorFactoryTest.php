@@ -137,11 +137,11 @@ class ExecutorFactoryTest extends TestCase
         $factory->registerTrigger(ExecutorFactory::TABLE_BUTTON, [Button::class, 'specific_edit_button'], $specialEditAction, true);
 
         $editButton = Button::assertInstanceOf($factory->createTrigger($editAction, ExecutorFactory::TABLE_BUTTON));
-        $secondEditButon = Button::assertInstanceOf($factory->createTrigger($secondEditAction, ExecutorFactory::TABLE_BUTTON));
+        $secondEditButton = Button::assertInstanceOf($factory->createTrigger($secondEditAction, ExecutorFactory::TABLE_BUTTON));
         $specialEditButton = Button::assertInstanceOf($factory->createTrigger($specialEditAction, ExecutorFactory::TABLE_BUTTON));
 
         self::assertSame('specific_edit_button', $specialEditButton->content);
-        self::assertSame($editButton->content, $secondEditButon->content);
+        self::assertSame($editButton->content, $secondEditButton->content);
         self::assertNotSame($editButton->content, $specialEditButton->content);
     }
 }

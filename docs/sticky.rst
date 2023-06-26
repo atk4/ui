@@ -32,7 +32,7 @@ Sticky GET is a better approach. It works like this::
         });
     });
 
-Whenever Loader, Console or any other copmonent generatens a URL, it will now include value
+Whenever Loader, Console or any other component generatens a URL, it will now include value
 of `$_GET['client_id']` and it will transparently arrive inside your code even if it takes
 multiple requests to get there.
 

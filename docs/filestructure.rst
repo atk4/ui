@@ -116,7 +116,7 @@ But you can't call it directly through the domain (that means in our case "db.ph
 Create your application
 =======================
 
-To initalize your application we need to do the following steps:
+To initialize your application we need to do the following steps:
     #) Create db.php for database
 
     #) Create init.php

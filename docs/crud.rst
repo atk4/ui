@@ -11,7 +11,7 @@ Crud
 Crud class offers a very usable extension to :php:class:`Grid` class, which automatically adds actions for deleting,
 updating and adding records as well as linking them with corresponding Model actions.
 
-.. important:: If you only wish to display a non-interractive table use :php:class:`Table` class. If you need to
+.. important:: If you only wish to display a non-interactive table use :php:class:`Table` class. If you need to
     display Data Grid with some custom actions (not update/delete/add) or if you want to use your own editing
     mechanism (such as edit data on separate page, not inside a modal), use :php:class:`Grid`
 
@@ -49,7 +49,7 @@ Disabling Actions
 By default Crud allows all four operations - creating, reading, updating and deleting. These action is set by default in model
 action. It is possible to disable these default actions by setting their system property to true in your model::
 
-    $euCountries->getUserAction('edit')->sytem = true;
+    $euCountries->getUserAction('edit')->system = true;
 
 Model action using system property set to true, will not be display in Crud. Note that action must be setup prior to use
 `$crud->setModel($euCountries)`
@@ -63,10 +63,10 @@ Only fields name set in this property will be display in Grid. Leave empty for a
 
 .. php:attr:: editFields
 
-If you'd like to have different fields in the grid of the CRUD, but you need more/different fields in the editting modal (which opens when clicking on an entry),
-you can choose here the fields that are available in the editting modal window.
+If you'd like to have different fields in the grid of the CRUD, but you need more/different fields in the editing modal (which opens when clicking on an entry),
+you can choose here the fields that are available in the editing modal window.
 
-.. important:: Both views (overview and editting view) refer to the same model, just the fields shown in either of them differ
+.. important:: Both views (overview and editing view) refer to the same model, just the fields shown in either of them differ
 
 Example::
 

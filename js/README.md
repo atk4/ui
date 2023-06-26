@@ -52,7 +52,7 @@ The plugin can now by invoke using:
     $('a').greenify();
 ```
 
-## Developping and building package.
+## Developing and building package.
 
 You may change this package to suit your own needs.
 
@@ -80,7 +80,7 @@ Any change made to the source, will also be re-compile automatically when using 
 
 #### Analyzing bundle profile
 
-Bundle profile may be analyze using various tools. npm script are availabe for producing
+Bundle profile may be analyze using various tools. npm script are available for producing
 the JSON file for this.
 
 ```
@@ -96,7 +96,7 @@ Another npm script is available for analyzing the bundle using the webpack-bundl
     npm run analyze-profile
 ```
 
-Note: In order to use this script, make sure that the webpack-bundle-analyzer package is intall
+Note: In order to use this script, make sure that the webpack-bundle-analyzer package is install
 globally.
 
 ```

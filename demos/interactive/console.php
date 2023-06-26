@@ -62,8 +62,8 @@ Console::addTo($tab)->set(function (Console $console) {
 $tab = $tabs->addTab('runMethod()', function (VirtualPage $vp) use ($testRunClass) {
     Header::addTo($vp, [
         'icon' => 'terminal',
-        'Non-interractive method invocation',
-        'subHeader' => 'console can invoke a method, which normaly would be non-interractive and can still capture debug output',
+        'Non-interactive method invocation',
+        'subHeader' => 'console can invoke a method, which normally would be non-interactive and can still capture debug output',
     ]);
     Console::addTo($vp)->runMethod($testRunClass::addTo($vp), 'generateReport');
 });

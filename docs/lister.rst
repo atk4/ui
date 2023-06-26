@@ -29,7 +29,7 @@ you should put that into file `myview.html` then use it with a view::
 
     $view = View::addTo($app, ['template' => 'myview.html']);
 
-Now your application should contain list of 3 sample countires as you have specified in HTML, but next
+Now your application should contain list of 3 sample countries as you have specified in HTML, but next
 we need to add some tags into your template::
 
     <div class="ui header">Top {limit}20{/limit} countries (alphabetically)</div>
@@ -129,7 +129,7 @@ You can make lister load page content dynamically when user is scrolling down pa
 
 The first parameter is the number of item you wish to load per page.
 The second parameter is options you want to pass to respective JS widget.
-The third paramater is the $container view holding the lister and where scrolling is applicable.
+The third parameter is the $container view holding the lister and where scrolling is applicable.
 And last parameter is CSS selector of element in which you want to do scrolling.
 
 Using without Template

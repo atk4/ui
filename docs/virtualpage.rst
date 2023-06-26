@@ -70,7 +70,7 @@ As you may know, :php:meth:`Callback::getUrl()` accepts an argument, and Virtual
 - getUrl('cut') gives you URL which will return ONLY the HTML of virtual page, no Layout or boilerplate.
 - getUrl('popup') gives you URL which will return a very minimalistic layout inside a valid HTML boilerplate, suitable for iframes or popup windows.
 
-You can experement with::
+You can experiment with::
 
     $label->detail = $vp->cb->getUrl('popup');
     $label->link($vp->cb->getUrl('popup'));
@@ -156,7 +156,7 @@ Loader needs to occupy some space.
 
 .. php:attr:: shim
 
-By default it will display a white segment with 7em height, but you can specify any other view thorugh $shim
+By default it will display a white segment with 7em height, but you can specify any other view through $shim
 property::
 
     $loader = \Atk4\Ui\Loader::addTo($app, ['shim' => [\Atk4\Ui\Message::class, 'Please wait until we load LoremIpsum...', 'class.red' => true]]);
