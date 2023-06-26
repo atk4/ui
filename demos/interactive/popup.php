@@ -172,7 +172,7 @@ $shelf = $itemShelfClass::addTo($app);
 //
 // This can happen when your popup content is non-trivial. So we are moving Popup into the app and linking up
 // the triggers. Now, since it's outside, we can't use a single jsAction to reload menu item (along with label)
-// and the contents. We could use 2 requests for reloading, but that's not good.
+// and the content. We could use 2 requests for reloading, but that's not good.
 //
 // The next idea is to make cart dynamic, so it loads when you move mouse over the menu. This probably is good,
 // as it will always be accurate, even if you added items form multiple browser tabs.
