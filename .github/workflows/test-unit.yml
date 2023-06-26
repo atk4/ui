@@ -65,6 +65,10 @@ jobs:
           composer config --unset version && composer config --unset require-release
           composer validate --strict --no-check-lock && composer normalize --dry-run --no-check-lock
 
+      - name: Check Spelling (only for CodingStyle)
+        if: matrix.type == 'CodingStyle'
+        uses: crate-ci/typos@master
+
       - name: Run Static Analysis (only for StaticAnalysis)
         if: matrix.type == 'StaticAnalysis'
         run: |
