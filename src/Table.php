@@ -569,7 +569,7 @@ class Table extends Lister
                 }
 
                 if ($f instanceof \Closure) {
-                    $this->totals[$key] += ($f($this->model->get($key), $key, $this) ?? 0);
+                    $this->totals[$key] += $f($this->model->get($key), $key, $this);
                 } elseif (is_string($f)) {
                     switch ($f) {
                         case 'sum':
