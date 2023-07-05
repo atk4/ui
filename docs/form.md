@@ -529,6 +529,7 @@ Form Submit Handling
 .. php:method:: setApiConfig($config)
 
     Add additional parameters to Fomantic-UI .api function which does the AJAX submission of the form.
+
 For example, if you want the loading overlay at a different HTML element, you can define it with::
 
     $form->setApiConfig(['stateContext' => 'my-JQuery-selector']);
@@ -722,7 +723,7 @@ form inside a segment (outline) and will make form controls appear smaller::
 For further styling see documentation on :php:class:`View`.
 
 Not-Nullable and Required Fields
-=============================
+================================
 
 ATK Data has two field flags - "nullable" and "required". Because ATK Data works with PHP
 values, the values are defined like this:

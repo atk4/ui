@@ -123,7 +123,7 @@ If you wish to to go to specific step, you can use `$wizard->stepCallback->getUr
 Finally you can get URL of the current step with `$wizard->url()` (see :php:meth:`View::url`)
 
 WizardStep
-====
+==========
 
 .. php:class:: WizardStep
 

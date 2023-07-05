@@ -304,7 +304,7 @@ If you do not need to specify confirm, you can actually pass arguments in a key-
 
 
 Referring to event origin
-^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 You might have noticed that JsCallback now passes first argument ($j) which so far, we have ignored. This argument is a
 jQuery chain for the element which received the event. We can change the response to do something with this element.

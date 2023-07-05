@@ -70,7 +70,7 @@ Advanced Use
 You can add other elements inside menu. Refer to demos/menu.php.
 
 MenuItem
-====
+========
 
 .. php:class:: MenuItem
 
