@@ -20,10 +20,10 @@ progress and output HTML of itself and any other Components you added to that pa
 
 To help you understand when to use VirtualPage here is the example:
 
- - Create a :php:class:`Button`
- - Add VirtualPage inside a button.
- - Add Form inside VirtualPage.
- - Clicking the Button would dynamically load contents of VirtualPage inside a Modal window.
+- Create a :php:class:`Button`
+- Add VirtualPage inside a button.
+- Add Form inside VirtualPage.
+- Clicking the Button would dynamically load contents of VirtualPage inside a Modal window.
 
 This pattern is very easy to implement and is used by many components to transparently provide dynamic functionality.
 Next is an example where :php:class:`Tabs` has support for callback for generating dynamic content for the tab:

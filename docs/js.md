@@ -116,23 +116,23 @@ All the above examples will map themselves into a simple and readable JavaScript
 
 Agile UI builds upon the concepts of actions and events in the following ways:
 
- - Action can be any arbitrary JavaScript with parameters:
+- Action can be any arbitrary JavaScript with parameters:
 
-   - parameters are always encoded/escaped,
-   - action can contain nested actions,
-   - you can build your own integration patterns.
+  - parameters are always encoded/escaped,
+  - action can contain nested actions,
+  - you can build your own integration patterns.
 
- - JsChain provides Action extension for JavaScript frameworks:
+- JsChain provides Action extension for JavaScript frameworks:
 
-   - Jquery is implementation of jQuery binding through JsChain,
-   - various 3rd party extensions can integrate other frameworks,
-   - any jQuery plugin will work out-of-the-box.
+  - Jquery is implementation of jQuery binding through JsChain,
+  - various 3rd party extensions can integrate other frameworks,
+  - any jQuery plugin will work out-of-the-box.
 
- - PHP closure can be used to wrap action-generation code:
+- PHP closure can be used to wrap action-generation code:
 
-   - Agile UI event will map AJAX call to the event,
-   - closure can respond with additional actions,
-   - various UI elements (such as Form) extend this concept further.
+  - Agile UI event will map AJAX call to the event,
+  - closure can respond with additional actions,
+  - various UI elements (such as Form) extend this concept further.
 
 ### Including JS/CSS
 
@@ -366,8 +366,8 @@ must operate with it in your browser by passing expressions into chain.
 
 The template language for JsExpression is super-simple:
 
- - [] will be mapped to next argument in the argument array
- - [foo] will be mapped to named argument in argument array
+- `[]` will be mapped to next argument in the argument array
+- `[foo]` will be mapped to named argument in argument array
 
 So the following lines are identical:
 

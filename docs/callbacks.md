@@ -30,9 +30,9 @@ you through the callback mechanisms of Agile UI.
 Callback is not a View. This class does not extend any other class but it does implement several important
 traits:
 
- - [TrackableTrait](https://agile-core.readthedocs.io/en/develop/container.html?highlight=trackable#trackable-trait)
- - [AppScopeTrait](https://agile-core.readthedocs.io/en/develop/appscope.html)
- - [DiContainerTrait](https://agile-core.readthedocs.io/en/develop/di.html)
+- [TrackableTrait](https://agile-core.readthedocs.io/en/develop/container.html?highlight=trackable#trackable-trait)
+- [AppScopeTrait](https://agile-core.readthedocs.io/en/develop/appscope.html)
+- [DiContainerTrait](https://agile-core.readthedocs.io/en/develop/di.html)
 
 To create a new callback, do this:
 
@@ -71,17 +71,17 @@ $cb->set(function () use ($app) {
 
 To illustrate how callbacks work, let's imagine the following workflow:
 
- - your application with the above code resides in file 'test.php`
- - when user opens 'test.php' in the browser, first 4 lines of code execute
-   but the set() will not execute "terminate". Execution will continue as normal.
- - getUrl() will provide link e.g. `test.php?app_callback=callback`
+- your application with the above code resides in file 'test.php`
+- when user opens 'test.php' in the browser, first 4 lines of code execute
+  but the set() will not execute "terminate". Execution will continue as normal.
+- getUrl() will provide link e.g. `test.php?app_callback=callback`
 
 When page renders, the user can click on a label. If they do, the browser will send
 another request to the server:
 
- - this time same request is sent but with the `?app_callback=callback` parameter
- - the :php:meth:`Callback::set()` will notice this argument and execute "terminate()"
- - terminate() will exit app execution and output 'in callback' back to user.
+- this time same request is sent but with the `?app_callback=callback` parameter
+- the :php:meth:`Callback::set()` will notice this argument and execute "terminate()"
+- terminate() will exit app execution and output 'in callback' back to user.
 
 Calling :php:meth:`App::terminate()` will prevent the default behaviour (of rendering UI) and will
 output specified string instead, stopping further execution of your application.
@@ -168,9 +168,9 @@ you are reloading are fully rendered by the time callback is executed.
 Given our knowledge of Callbacks, lets take a closer look at how JsReload actually works. So what do we
 know about :php:class:`JsReload` already?
 
- - JsReload is class implementing JsExpressionable
- - you must specify a view to JsReload
- - when triggered, the view will refresh itself on the screen.
+- JsReload is class implementing JsExpressionable
+- you must specify a view to JsReload
+- when triggered, the view will refresh itself on the screen.
 
 Here is example of JsReload:
 

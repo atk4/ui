@@ -61,10 +61,10 @@ Lister::addTo($view, [], ['Countries'])
 While most other objects in Agile UI come with their own templates, lister will prefer
 to use template inside your region. It will look for "row" and "rows" tag:
 
- 1. Create clone of {row} tag
- 2. Delete contents of {rows} tag
- 3. For each model row, populate values into {row}
- 4. Render {row} and append into {rows}
+1. Create clone of {row} tag
+2. Delete contents of {rows} tag
+3. For each model row, populate values into {row}
+4. Render {row} and append into {rows}
 
 If you refresh your page now, you should see "Andorra" duplicated 20 times. This is because
 the {row} did not contain any field tags. Lets set them up:
@@ -126,9 +126,9 @@ $lister->setSource([
 
 Your {row} template may contain few special tags:
 
- - {$_id} - will be set to ID of the record (regardless of how your id_field is called)
- - {$_title} - will be set to the title of your record (see $model->$titleField)
- - {$_href} - will point to current page but with ?id=123 extra GET argument.
+- {$_id} - will be set to ID of the record (regardless of how your id_field is called)
+- {$_title} - will be set to the title of your record (see $model->$titleField)
+- {$_href} - will point to current page but with ?id=123 extra GET argument.
 
 ## Load page content dynamically when scrolling
 

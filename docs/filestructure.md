@@ -12,55 +12,28 @@ This file structure is a recommendation and no must. It is a best practice examp
 Feel free to experiment with it and find the ideal file structure for your project.
 
 * config
-
-    * db.php
-
+  * db.php
 * public_html
-
-    * images
-
-    * index.php
-
-    * init.php
-
-    * admin.php (if needed)
-
+  * images
+  * index.php
+  * init.php
+  * admin.php (if needed)
 * projectfolder (could be named "app" for example)
-
-    * Forms
-
-        * ExampleForm1.php
-
-        * ExampleForm2.php
-
-        * UserDetailForm.php
-
-    * Models
-
-        * ExampleClass1.php
-
-        * ExampleClass2.php
-
-        * LoadAllUsers.php
-
-    * Views
-
-        * View1.php
-
-        * View2.php
-
-        * GridUserList.php
-
+  * Forms
+    * ExampleForm1.php
+    * ExampleForm2.php
+    * UserDetailForm.php
+  * Models
+    * ExampleClass1.php
+    * ExampleClass2.php
+    * LoadAllUsers.php
+  * Views
+    * View1.php
+    * View2.php
+    * GridUserList.php
 * vendor (contains all needed composer modules - don't touch them)
-
-    * atk4
-
-        * ...
-
-    * autoload.php
-
-    * ...
-
+  * autoload.php
+  * ...
 * composer.json
 
 ## Composer configuration

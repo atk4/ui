@@ -25,12 +25,12 @@ locate and load class dynamically just when it's needed.
 
 Seed has many advantages:
 
- - more readable and shorter syntax
- - easier concept for new developers and non-developers
- - can be namespace-specific
- - can improve performance - not all seeds are initialized
- - recursive syntax with property and constructor argument injection
- - allow App logic to further enhance mechanics
+- more readable and shorter syntax
+- easier concept for new developers and non-developers
+- can be namespace-specific
+- can improve performance - not all seeds are initialized
+- recursive syntax with property and constructor argument injection
+- allow App logic to further enhance mechanics
 
 ### Growing Seed
 
@@ -66,9 +66,9 @@ $seed = [Button::class, 'hello', 'class.big red' => true, 'icon' => ['book', 're
 
 are:
 
- - Element with index 0 is name of the class mapped into namespace \Atk4\Ui (by default).
- - Elements with numeric indexes 'hello' and 'big red' are passed to constructor of Button
- - Elements with named arguments are assigned to properties after invocation of constructor
+- Element with index 0 is name of the class mapped into namespace \Atk4\Ui (by default).
+- Elements with numeric indexes 'hello' and 'big red' are passed to constructor of Button
+- Elements with named arguments are assigned to properties after invocation of constructor
 
 ### Alternative ways to use Seed
 
@@ -111,6 +111,6 @@ $table->addColumn('salary', [new \Atk4\Ui\Table\Column\Money()]);
 Note that addColumn uses default namespace of `\\Atk4\\Ui\\Table\\Column` when seeding objects. Some
 other methods that use seeds are:
 
- - :php:meth:`Table::addColumn()`
- - :php:meth:`Form::addControl()`
+- :php:meth:`Table::addColumn()`
+- :php:meth:`Form::addControl()`
 

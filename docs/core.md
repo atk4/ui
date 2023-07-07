@@ -155,9 +155,9 @@ inputs user data.
 By relying on the ability of generating :ref:`unique_name`, it's possible to create several classes
 for implementing PHP callbacks. They follow the pattern:
 
- - present something on the page (maybe)
- - generate URL with unique parameter
- - if unique parameter is passed back, behave differently
+- present something on the page (maybe)
+- generate URL with unique parameter
+- if unique parameter is passed back, behave differently
 
 Once the concept is established, it can even be used on a higher level, for example:
 

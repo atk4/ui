@@ -95,9 +95,9 @@ This is further explained in documentation for :php:class:`Atk4\\Ui\\Form\\Layou
 however if you do plan on adding your own form control types, it's important that you extend it
 properly:
 
- - Generic (abstract, extends View) - Use this if form control is NOT based on `<input>`
- - Input (abstract, extends Generic) - Easiest since it already implements `<input>` and various
-   ways to attach button to the input with markup of Fomantic-UI form control.
+- Generic (abstract, extends View) - Use this if form control is NOT based on `<input>`
+- Input (abstract, extends Generic) - Easiest since it already implements `<input>` and various
+  ways to attach button to the input with markup of Fomantic-UI form control.
 
 ### Hints
 
@@ -189,9 +189,9 @@ Form Control Decorator.
 
 The rules are rather straightforward but may change in future versions of Agile UI:
 
- - if [enum](https://agile-data.readthedocs.io/en/develop/fields.html#Field::$enum) is defined, use :php:class:`Dropdown`
- - consult :php:attr:`\Atk4\Ui\Form::$typeToDecorator` property for type-to-seed association
- - type=password will use :php:class:`Password`
+- if [enum](https://agile-data.readthedocs.io/en/develop/fields.html#Field::$enum) is defined, use :php:class:`Dropdown`
+- consult :php:attr:`\Atk4\Ui\Form::$typeToDecorator` property for type-to-seed association
+- type=password will use :php:class:`Password`
 
 You always have an option to explicitly specify which field you would like to use:
 

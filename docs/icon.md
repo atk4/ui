@@ -118,17 +118,15 @@ Sometimes you want to build a component that will contain user-defined icon. Her
 an implementation for `SocialAdd` component that implements a friendly social button with
 the following features:
 
- - has a very compact usage `new SocialAdd('facebook')`
- - allow to customize icon by specifying it as string, object or injecting properties
- - allow to customize label
+- has a very compact usage `new SocialAdd('facebook')`
+- allow to customize icon by specifying it as string, object or injecting properties
+- allow to customize label
 
 Here is the code with comments:
 
 ```
 /**
-```
-     * Implements a social network add button. You can initialize the button by passing
-```
+ * Implements a social network add button. You can initialize the button by passing
  * social network as a parameter: new SocialAdd('facebook')
  * or alternatively you can specify $social, $icon and content individually:
  * new SocialAdd(['Follow on Facebook', 'social' => 'facebook', 'icon' => 'facebook f']);

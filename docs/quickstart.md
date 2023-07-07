@@ -318,5 +318,5 @@ If you have enjoyed this tutorial, we have prepared another one for you, that bu
 and multi-user application and takes advantage of database expressions, authentication and introduces
 more UI components:
 
- - https://github.com/atk4/money-lending-tutorial
- - (Demo: https://money-lending-tutorial.herokuapp.com)
+- https://github.com/atk4/money-lending-tutorial
+- (Demo: https://money-lending-tutorial.herokuapp.com)

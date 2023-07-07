@@ -23,11 +23,11 @@ it appears as requirement.
 Most of the ORMs lack several important features that are necessary
 for UI framework design:
 
- - ability to load/store data safely with conditions.
- - built-in support for column meta-information
- - field, type and table mapping
- - "onlyFields" support for efficient querying
- - domain-level model references.
+- ability to load/store data safely with conditions.
+- built-in support for column meta-information
+- field, type and table mapping
+- "onlyFields" support for efficient querying
+- domain-level model references.
 
 Agile Data is distributed under same open-source license as Agile UI
 and the rest of this documentation will assume you are using Agile

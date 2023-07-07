@@ -312,9 +312,9 @@ $button = Button::addTo($app, ['icon' => new MyAwesomeIcon('book')]);
 
 Any view has the ability to render itself. Once executed, render will perform the following:
 
- - call renderView() of a current object.
- - call recursiveRender() to recursively render sub-elements.
- - return JS code with on-dom-ready instructions along with HTML code of a current view.
+- call renderView() of a current object.
+- call recursiveRender() to recursively render sub-elements.
+- return JS code with on-dom-ready instructions along with HTML code of a current view.
 
 You must not override render() in your objects. If you are integrating Agile UI into your
 framework you shouldn't even use `render()`, but instead use `getHtml` and `getJs`.

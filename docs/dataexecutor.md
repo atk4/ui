@@ -29,9 +29,9 @@ This is the base view for most of the other action executors. This executor gene
 required that necessary arguments needed to run the action has been set.
 BasicExecutor will display:
 
-    - a button for executing the action;
-    - a header where action name and description are displayed;
-    - an error message if an action argument is missing;
+- a button for executing the action;
+- a header where action name and description are displayed;
+- an error message if an action argument is missing;
 
 ## Preview Executor
 

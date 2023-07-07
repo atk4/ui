@@ -38,10 +38,10 @@ Next, lets look at what Initialization really is and why is it important.
 Calling the init() method of a view is essential before any meaningful work can be done with it. This is important, because
 the following actions are performed:
 
- - template is loaded (or cloned from parent's template)
- - $app property is set
- - $shortName property is determined
- - unique $name is assigned.
+- template is loaded (or cloned from parent's template)
+- $app property is set
+- $shortName property is determined
+- unique $name is assigned.
 
 Many UI components rely on the above to function properly. For example, Grid will look for certain regions in its template
 to clone them into separate objects. This cloning can only take place inside init() method.

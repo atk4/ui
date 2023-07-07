@@ -120,68 +120,68 @@ $db = new \Atk4\Data\Persistence\Sql($dsn);
 
 Through the course of this example, We are performing several core actions:
 
-  - `$app` is an object representing our Web Application and abstracting
-    all the input, output, error-handling, and other technical implementation
-    details of a standard web application.
+- `$app` is an object representing our Web Application and abstracting
+   all the input, output, error-handling, and other technical implementation
+   details of a standard web application.
 
-    In most applications you would want to extend this class yourself. When
-    integrating Agile UI with MVC framework, you would be using a different
-    App class that properly integrates framework capabilities.
+   In most applications you would want to extend this class yourself. When
+   integrating Agile UI with MVC framework, you would be using a different
+   App class that properly integrates framework capabilities.
 
-    For a :ref:`component` the App class provides level of abstraction and
-    utility.
+   For a :ref:`component` the App class provides level of abstraction and
+   utility.
 
-    For full documentation see :ref:`app`.
+   For full documentation see :ref:`app`.
 
-  - `$db` this is a database persistence object. It may be a Database which is
-    either SQL or NoSQL but can also be RestAPI, a cache, or a pseudo-persistence.
+- `$db` this is a database persistence object. It may be a Database which is
+   either SQL or NoSQL but can also be RestAPI, a cache, or a pseudo-persistence.
 
-    We used `Persistence\Sql` class, which takes advantage of a standard-compliant
-    database server to speed up aggregation, multi-table, and multi-record operations.
+   We used `Persistence\Sql` class, which takes advantage of a standard-compliant
+   database server to speed up aggregation, multi-table, and multi-record operations.
 
-    For a :ref:`component` the Persistence class provides data storage abstraction
-    through the use of a Model class.
+   For a :ref:`component` the Persistence class provides data storage abstraction
+   through the use of a Model class.
 
-    Agile Data has full documentation at https://agile-data.readthedocs.io.
+   Agile Data has full documentation at https://agile-data.readthedocs.io.
 
-  - `Offer` is a Model - a database-agnostic declaration of your business entity.
-    Model object represents a data-set for specific persistence and conditions.
+- `Offer` is a Model - a database-agnostic declaration of your business entity.
+   Model object represents a data-set for specific persistence and conditions.
 
-    In our example, the object is created representing all our offer records that is then
-    passed into the Crud :ref:`component`.
+   In our example, the object is created representing all our offer records that is then
+   passed into the Crud :ref:`component`.
 
-    For a :ref:`component`, the Model represents information about the structure
-    and offers a mechanism to retrieve, store, and delete date from `$db` persistence.
+   For a :ref:`component`, the Model represents information about the structure
+   and offers a mechanism to retrieve, store, and delete date from `$db` persistence.
 
 
-  - `Crud` is a :ref:`component` class. Particularly Crud is bundled with Agile UI
-    and implements out-of-the-box interface for displaying data in a table format
-    with operations to add, delete, or edit the record.
+- `Crud` is a :ref:`component` class. Particularly Crud is bundled with Agile UI
+   and implements out-of-the-box interface for displaying data in a table format
+   with operations to add, delete, or edit the record.
 
-    Although it's not obvious from the code, Crud relies on multiple other components
-    such as :php:class:`Grid`, :php:class:`Form`, :php:class:`Menu`, :php:class:`Paginator`,
-    and :php:class:`Button`.
+   Although it's not obvious from the code, Crud relies on multiple other components
+   such as :php:class:`Grid`, :php:class:`Form`, :php:class:`Menu`, :php:class:`Paginator`,
+   and :php:class:`Button`.
 
 
 To sum up Agile UI in more technical terms:
 
- - Fully utilizes abstraction of Web technologies through components.
- - Contains concise syntax to define UI layouts in PHP.
- - Has built-in security and safety.
- - Decouples from data storage/retrieval mechanism.
- - Designed to be integrated into full-stack frameworks.
- - Abstains from duplicating field names, types, or validation logic outside of Model
-   class.
+- Fully utilizes abstraction of Web technologies through components.
+- Contains concise syntax to define UI layouts in PHP.
+- Has built-in security and safety.
+- Decouples from data storage/retrieval mechanism.
+- Designed to be integrated into full-stack frameworks.
+- Abstains from duplicating field names, types, or validation logic outside of Model
+  class.
 
 ### Best use of Agile UI
 
- - Creating admin backend UI for data entry and dashboards in shortest time and with
-   minimum amount of code.
+- Creating admin backend UI for data entry and dashboards in shortest time and with
+  minimum amount of code.
 
- - Building UI components which you are willing to use across multiple environments
-   (Laravel, WordPress, Drupal, etc)
+- Building UI components which you are willing to use across multiple environments
+  (Laravel, WordPress, Drupal, etc)
 
- - Creating MVP prototype for Web Apps.
+- Creating MVP prototype for Web Apps.
 
 
 .. _component:
@@ -274,8 +274,8 @@ that elements will look good and be consistent.
 
 Using App class will utilize a minimum of 2 templates:
 
- - html.html - boilerplate HTML code (<head>, <script>, <meta> and empty <body>)
- - layout/admin.html - responsive layout containing page elements (menu, footer, etc)
+- html.html - boilerplate HTML code (<head>, <script>, <meta> and empty <body>)
+- layout/admin.html - responsive layout containing page elements (menu, footer, etc)
 
 As you add more components, they will appear inside your layout.
 
@@ -293,9 +293,9 @@ will automatically populate a user-menu with the name of the user and log-out bu
 By design we make sure that adding a component into a Render Tree (See :ref:`view`)
 is enough, so App provides a mechanism for components to:
 
- - Depend on JS, CSS, and other assets
- - Define event handlers and actions
- - Handle callbacks
+- Depend on JS, CSS, and other assets
+- Define event handlers and actions
+- Handle callbacks
 
 ### Non-PHP dependencies
 
@@ -367,26 +367,26 @@ We recommend that you start looking at Agile UI first. Continue reading through 
 have a basic understanding of "code" and some familiarity with the PHP language.
 
 
- - QuickStart - 20-minute read and some code examples you can try.
- - Core Concept - Read if you plan to design and build your own components.
+- QuickStart - 20-minute read and some code examples you can try.
+- Core Concept - Read if you plan to design and build your own components.
 
-   - Patterns and Principles
-   - Views and common component properties/methods
-   - Component Design and UI code refactoring
-   - Injecting HTML Templates and Full-page Layouts
-   - JavaScript Event Bindings and Actions
-   - App class and Framework Integration
-   - Usage Patterns
+  - Patterns and Principles
+  - Views and common component properties/methods
+  - Component Design and UI code refactoring
+  - Injecting HTML Templates and Full-page Layouts
+  - JavaScript Event Bindings and Actions
+  - App class and Framework Integration
+  - Usage Patterns
 
- - Components - Reference for UI component classes
+- Components - Reference for UI component classes
 
-   - Button, Label, Header, Message, Menu, Column
-   - Table and Table\Column
-   - Form and Field
-   - Grid and Crud
-   - Paginator
+  - Button, Label, Header, Message, Menu, Column
+  - Table and Table\Column
+  - Form and Field
+  - Grid and Crud
+  - Paginator
 
- - Advanced Topics
+- Advanced Topics
 
 
 If you are not interested in UI and only need the Rest API, we recommend that you look
@@ -416,10 +416,10 @@ Some technologies are "pre-requirements" in other PHP frameworks, but Agile Tool
 lets you develop a perfectly functional web application even if you are NOT familiar
 with technologies such as:
 
- - HTML and Asset Management
- - JavaScript, jQuery, NPM
- - CSS styling, LESS
- - Rest API and JSON
+- HTML and Asset Management
+- JavaScript, jQuery, NPM
+- CSS styling, LESS
+- Rest API and JSON
 
 We do recommend that you come back and learn those technologies **after** you have mastered
 Agile Toolkit.
@@ -455,13 +455,13 @@ repository which also could be locally executed.
 ### Setup the demo
 
 To run the demo:
- - Create a directory called "atk4" and create a separate folder for each repo (ui, data, etc.), in this case "ui"
- - Fork the original repo into this directory
- - Copy the file "db.default.php" from the "atk4/ui/demos" subdirectory
- - Rename the copied file to "db.php"
- - Open the renamed file and edit your database details accordingly to fit to your database
- - Setup an Sqlite file database using a provided script (see below)
- - Open the demos from your browser (e.g. https://localhost/atk4/ui/demos/)
+- Create a directory called "atk4" and create a separate folder for each repo (ui, data, etc.), in this case "ui"
+- Fork the original repo into this directory
+- Copy the file "db.default.php" from the "atk4/ui/demos" subdirectory
+- Rename the copied file to "db.php"
+- Open the renamed file and edit your database details accordingly to fit to your database
+- Setup an Sqlite file database using a provided script (see below)
+- Open the demos from your browser (e.g. https://localhost/atk4/ui/demos/)
 
 ### Setup database with example data
 

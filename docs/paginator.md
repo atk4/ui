@@ -69,11 +69,11 @@ sufficiently highlighted), you should refer to Fomantic-UI or use alternative th
 
 The template for Paginator uses custom logic:
 
- - `rows` region will be populated with list of page items
- - `Item` region will be cloned and used to represent a regular page
- - `Spacer` region will be used to represent '...'
- - `FirstItem` if present, will be used for link to page "1". Otherwise `Item` is used.
- - `LastItem` if present, shows the link to last page. Otherwise `Item` is used.
+- `rows` region will be populated with list of page items
+- `Item` region will be cloned and used to represent a regular page
+- `Spacer` region will be used to represent '...'
+- `FirstItem` if present, will be used for link to page "1". Otherwise `Item` is used.
+- `LastItem` if present, shows the link to last page. Otherwise `Item` is used.
 
 Each of the above (except Spacer) may have `active`, `link` and `page` tags.
 

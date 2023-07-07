@@ -206,9 +206,9 @@ $table->addColumn('status', new \Atk4\Ui\Table\Column\Status($states));
 
 Current list of states supported:
 
- - positive (checkmark icon)
- - negative (close icon)
- - and the default/unspecified state (icon question)
+- positive (checkmark icon)
+- negative (close icon)
+- and the default/unspecified state (icon question)
 
 (list of states may be expanded further)
 

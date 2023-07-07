@@ -10,8 +10,8 @@ When looking into the default money field in Agile UI, which does carry amount, 
 the currency, there are a number of considerations when dealing with the field. The first
 important concept to understand is the distinction between data Presentation and Decoration.
 
- - Data Presentation: displaying value of the data in a different format, e.g. 123,123.00 vs 123.123,00
- - Data Decoration: adding currency symbol or calendar icon.
+- Data Presentation: displaying value of the data in a different format, e.g. 123,123.00 vs 123.123,00
+- Data Decoration: adding currency symbol or calendar icon.
 
 Agile UI believes that presentation must be consistent throughout the system. A monetary
 field will use same format on the :php:class:`Form`, :php:class:`Table` and even inside a
@@ -35,22 +35,22 @@ support for a new type.
 In the below steps, the #1 and #2 are a minimum to achieve. #3 and #4 will improve experience
 of your integration.
 
- 1. Extend UI persistence and use your class in `$app->uiPersistence`.
+1. Extend UI persistence and use your class in `$app->uiPersistence`.
 
   You need to define how to output your data as well as read it.
 
- 2. Try your new type with a standard Form control.
+2. Try your new type with a standard Form control.
 
   The value you output should read and stored back correctly.
   This ensures that standard UI will work with your new data type.
 
- 3. Create your new decorator.
+3. Create your new decorator.
 
   Such as use drop-down to select currency from a pre-defined list inside your specific class
   while extending :php:class:`Form\\Control\\Input` class. Make sure it can interpret input correctly.
   The process is explained further down in this chapter.
 
- 4. Associate the types with your decorator.
+4. Associate the types with your decorator.
 
   This happens in :php:meth:`Form::controlFactory` and :php:meth:`Table::decoratorFactory`.
 
@@ -72,14 +72,14 @@ $form->addControl('field_name', new \Atk4\Ui\Form\Control\Password());
 
 Selecting the decorator is done in the following order:
 
- - specified in second argument to UI `addColumn()` or `addControl()` (as shown above)
- - specified using `ui` property of :php:class:`\Atk4\Data\Field`:
+- specified in second argument to UI `addColumn()` or `addControl()` (as shown above)
+- specified using `ui` property of :php:class:`\Atk4\Data\Field`:
 
 ```
 $field->ui['form'] = new \Atk4\Ui\Form\Control\Password();
 ```
 
- - fallback to :php:meth:`Form::controlFactory`
+- fallback to :php:meth:`Form::controlFactory`
 
 .. note:: When talking about "fields": you need to know what kind of field you are talking about (Data or UI).
     Both **models** (Data) as well as some **views** (UI: form) use fields. They are not the same.

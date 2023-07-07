@@ -77,8 +77,8 @@ $form->model->set([
 Form also relies on a `\Atk4\Ui\Form::Layout` class and displays form controls through
 decorators defined at `\Atk4\Ui\Form::Control`. See dedicated documentation for:
 
- - :php:class:`Form::Layout`
- - :php:class:`Form::Control`
+- :php:class:`Form::Layout`
+- :php:class:`Form::Control`
 
 To tweak the UI properties of an form control input use `setInputAttr()` (and not the surrounding <div> as `setAttr()`
 would do). Here is how to set the HTML "maxlength" attribute on the generated input field:
@@ -104,28 +104,28 @@ $form->setModel(new User($db));
 
 The basic 2-line syntax will extract all the required logic from the Model including:
 
- - Fields defined for this Model will be displayed
- - Display of default values in the form
- - Depending on the field type, a form control will be selected from Form\Control namespace
- - Using :php:class:`Form\Layout\Columns` can make form more compact by splitting it into columns
- - Form control captions, placeholders, hints and other elements defined in Field::ui are respected (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui)
- - Fields that are not editable by default will not appear on the form (https://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable)
- - Field typecasting will be invoked such as for converting dates
- - Reference fields (https://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as Dropdown
- - Booleans are displayed as checkboxes but stored as defined by the model field
- - Not-nullable and Required fields will have form controls visually highlighted (https://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$nullable)
- - Validation will be performed and errors will appear on the form (NEED LINK)
- - Unless you specify a submission handler, form will save the model `User` into `$db` on successful submission.
+- Fields defined for this Model will be displayed
+- Display of default values in the form
+- Depending on the field type, a form control will be selected from Form\Control namespace
+- Using :php:class:`Form\Layout\Columns` can make form more compact by splitting it into columns
+- Form control captions, placeholders, hints and other elements defined in Field::ui are respected (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui)
+- Fields that are not editable by default will not appear on the form (https://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable)
+- Field typecasting will be invoked such as for converting dates
+- Reference fields (https://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as Dropdown
+- Booleans are displayed as checkboxes but stored as defined by the model field
+- Not-nullable and Required fields will have form controls visually highlighted (https://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$nullable)
+- Validation will be performed and errors will appear on the form (NEED LINK)
+- Unless you specify a submission handler, form will save the model `User` into `$db` on successful submission.
 
 All of the above works auto-magically, but you can tweak it even more:
 
- - Provide custom submission handler
- - Specify which form controls and in which order to display on the form
- - Override labels, form control classes
- - Group form controls or use custom layout template
- - Mix standard model fields with your own
- - Add JS Actions around fields
- - Split up form into multiple tabs
+- Provide custom submission handler
+- Specify which form controls and in which order to display on the form
+- Override labels, form control classes
+- Group form controls or use custom layout template
+- Mix standard model fields with your own
+- Add JS Actions around fields
+- Split up form into multiple tabs
 
 If your form is NOT associated with a model, then Form will automatically create a :php:class:`ProxyModel`
 and associate it with your Form. As you add form controls respective fields will also be added into ProxyModel.
@@ -134,9 +134,9 @@ and associate it with your Form. As you add form controls respective fields will
 
 Starting with Agile UI 1.3 Form has a stable API and we expect to introduce some extensions like:
 
- - Captcha form control
- - File Upload form control (see https://github.com/atk4/filestore)
- - Multi-record form
+- Captcha form control
+- File Upload form control (see https://github.com/atk4/filestore)
+- Multi-record form
 
 If you develop such a feature please let me know so that I can include it in the documentation
 and give you credit.
@@ -771,8 +771,8 @@ For further styling see documentation on :php:class:`View`.
 ATK Data has two field flags - "nullable" and "required". Because ATK Data works with PHP
 values, the values are defined like this:
 
- - nullable = value of the field can be null.
- - required = value of the field must not be empty/false/zero, null is empty too.
+- nullable = value of the field can be null.
+- required = value of the field must not be empty/false/zero, null is empty too.
 
 Form changes things slightly, because it does not allow user to enter NULL values. For
 example - string (or unspecified type) fields will contain empty string if are not

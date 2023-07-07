@@ -17,12 +17,12 @@ please see :php:class:`Lister`
 Various composite components use Table as a building block, see :php:class:`Grid` and :php:class:`Crud`.
 Main features of Table class are:
 
- - Tabular rendering using column headers on top of markup of https://fomantic-ui.com/collections/table.html.
- - Support for data decorating. (money, dates, etc)
- - Column decorators, icons, buttons, links and color.
- - Support for "Totals" row.
- - Can use Agile Data source or Static data.
- - Custom HTML, Format hooks
+- Tabular rendering using column headers on top of markup of https://fomantic-ui.com/collections/table.html.
+- Support for data decorating. (money, dates, etc)
+- Column decorators, icons, buttons, links and color.
+- Support for "Totals" row.
+- Can use Agile Data source or Static data.
+- Custom HTML, Format hooks
 
 ## Basic Usage
 
@@ -337,15 +337,15 @@ During the render process (see :php:meth:`View::renderView`) Table will perform 
 1. Generate header row.
 2. Generate template for data rows.
 3. Iterate through rows
-    3.1 Current row data is accessible through $table->model property.
-    3.2 Update Totals if :php:meth:`Table::addTotals` was used.
-    3.3 Insert row values into :php:attr:`Table::tRow`
-        3.3.1 Template relies on :ref:`uiPersistence` for formatting values
-    3.4 Collect HTML tags from 'getHtmlTags' hook.
-    3.5 Collect getHtmlTags() from columns objects
-    3.6 Inject HTML into :php:attr:`Table::tRow` template
-    3.7 Render and append row template to Table Body ({$Body})
-    3.8 Clear HTML tag values from template.
+   3.1 Current row data is accessible through $table->model property.
+   3.2 Update Totals if :php:meth:`Table::addTotals` was used.
+   3.3 Insert row values into :php:attr:`Table::tRow`
+       3.3.1 Template relies on :ref:`uiPersistence` for formatting values
+   3.4 Collect HTML tags from 'getHtmlTags' hook.
+   3.5 Collect getHtmlTags() from columns objects
+   3.6 Inject HTML into :php:attr:`Table::tRow` template
+   3.7 Render and append row template to Table Body ({$Body})
+   3.8 Clear HTML tag values from template.
 4. If no rows were displayed, then "empty message" will be shown (see :php:attr:`Table::tEmpty`).
 5. If :php:meth:`addTotals` was used, append totals row to table footer.
 
@@ -422,10 +422,10 @@ Which is concatenated with other table columns just before rendering starts. The
 actual template is formed by calling. This may be too much detail, so if you need
 to make a note on how template caching works then,
 
- - values are encapsulated for named fields.
- - values are concatenated by anonymous fields.
- - <td> properties are stacked
- - last decorator will convert array with td properties into an actual tag.
+- values are encapsulated for named fields.
+- values are concatenated by anonymous fields.
+- <td> properties are stacked
+- last decorator will convert array with td properties into an actual tag.
 
 ### Header and Footer
 

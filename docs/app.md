@@ -45,12 +45,12 @@ $m = new MyModel($this->getApp()->db);
 
 You may use App class hook to impact behavior of your application:
 
- - using hooks to globally impact object initialization
- - override methods to create different behavior, for example url() method may use advanced router logic
-   to create beautiful URLs.
- - you may re-define set-up of :php:class:`Persistence\Ui` and affect how data is loaded from UI.
- - load templates from different files
- - use a different CDN settings for static files
+- using hooks to globally impact object initialization
+- override methods to create different behavior, for example url() method may use advanced router logic
+  to create beautiful URLs.
+- you may re-define set-up of :php:class:`Persistence\Ui` and affect how data is loaded from UI.
+- load templates from different files
+- use a different CDN settings for static files
 
 ### Using App as Initializer Object
 
@@ -323,9 +323,9 @@ This will be used by components that rely on external JavaScript libraries.
 Application implements HookTrait (https://agile-core.readthedocs.io/en/develop/hook.html)
 and the following hooks are available:
 
- - beforeRender
- - beforeOutput
- - beforeExit
+- beforeRender
+- beforeOutput
+- beforeExit
 
 Hook beforeExit is called just when application is about to be terminated. If you are
 using :php:attr:`App::$alwaysRun` = true, then this hook is guaranteed to execute always
@@ -453,9 +453,9 @@ You should be able to find 3rd party Layout implementations that may even be com
 some custom templates and views. The concept of a "Theme" in Agile UI consists of
 offering of the following 3 things:
 
- - custom CSS build from Fomantic-UI
- - custom Layout(s) along with documentation
- - additional or tweaked Views
+- custom CSS build from Fomantic-UI
+- custom Layout(s) along with documentation
+- additional or tweaked Views
 
 Unique layouts can be used to change the default look and as a stand-in replacement to
 some of standard layouts or as a new and entirely different layout.
