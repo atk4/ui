@@ -8,7 +8,7 @@ With Agile UI the backend URLs are created dynamically by using unique names and
 
 There is one problem, however. What if View (and the callbacks too) are created conditionally?
 
-The next code creates Loader area which will display a console. Result is - nested callback::
+The next code creates Loader area which will display a console. Result is - nested callback:
 
 ```
 Loader::addTo($app)->set(function (Loader $p) {
@@ -21,7 +21,7 @@ Loader::addTo($app)->set(function (Loader $p) {
 What if you need to pass a variable `client_id` to display on console output? Technically you
 would need to tweak the callback URL of "Loader" and also callback URL of "Console".
 
-Sticky GET is a better approach. It works like this::
+Sticky GET is a better approach. It works like this:
 
 ```
 $app->stickyGet('client_id');
@@ -50,13 +50,13 @@ when Loader wishes to load content dynamically, it must pass extra _GET paramete
 the SAME get argument to trigger a callback for the Loader, otherwise Console wouldn't be
 initialized at all.
 
-Loader sets a local stickyGet on the $p before it's passed inside your function::
+Loader sets a local stickyGet on the $p before it's passed inside your function:
 
 ```
 $p->stickyGet('trigger_name');
 ```
 
-This way - all the views added into this $p will carry an extra get argument::
+This way - all the views added into this $p will carry an extra get argument:
 
 ```
 $p->url(); // includes "trigger_name=callback"
@@ -71,7 +71,7 @@ Agile UI views have a method View::url() which will return URL that is guarantee
 method. This is regardless of the placement of your View and also it honors all the arguments that are
 defined as sticky globally.
 
-Consider this code::
+Consider this code:
 
 ```
 $b1 = \Atk4\Ui\Button::addTo($app);

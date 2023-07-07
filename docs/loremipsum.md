@@ -17,7 +17,7 @@ LoremIpsum::addTo($app);
 
 ## Resizing
 
-You can define the length of the LoremIpsum text::
+You can define the length of the LoremIpsum text:
 
 ```
 $text = Text::addTo($app)
@@ -26,7 +26,7 @@ $text = Text::addTo($app)
 ```
 
 
-You may specify amount of text to be generated with lorem::
+You may specify amount of text to be generated with lorem:
 
 ```
 LoremIpsum::addTo($app, [1]); // just add a little one

@@ -20,13 +20,13 @@ be used as stand-alone controls.
 .. php:method:: set()
 .. php:method:: jsInput()
 
-Add any form control to your application like this::
+Add any form control to your application like this:
 
 ```
 $control = Line::addTo($app);
 ```
 
-You can set default value and interact with a form control using JavaScript::
+You can set default value and interact with a form control using JavaScript:
 
 ```
 $control->set('hello world');
@@ -37,7 +37,7 @@ $button->on('click', new \Atk4\Ui\Js\JsExpression('alert(\'control value is: \' 
 ```
 
 
-When used stand-alone, Form\Controls will produce a basic HTML (I have omitted id=)::
+When used stand-alone, Form\Controls will produce a basic HTML (I have omitted id=):
 
 ```
 <div class="ui input">
@@ -47,7 +47,7 @@ When used stand-alone, Form\Controls will produce a basic HTML (I have omitted i
 
 ### Using in-form
 
-Form Control can also be used inside a form like this::
+Form Control can also be used inside a form like this:
 
 ```
 $form = \Atk4\Ui\Form::addTo($app);
@@ -55,7 +55,7 @@ $control = $form->addControl('name', new \Atk4\Ui\Form\Control\Line());
 ```
 
 If you execute this example, you'll notice that Field now has a label, it uses full width of the
-page and the following HTML is now produced::
+page and the following HTML is now produced:
 
 ```
 <div class="field">
@@ -73,7 +73,7 @@ itself.
 ### Using in Form Layouts
 
 Form may have multiple Form Layouts and that's very useful if you need to split up form
-into multiple Tabs or detach form control groups or even create nested layouts::
+into multiple Tabs or detach form control groups or even create nested layouts:
 
 ```
 $form = \Atk4\Ui\Form::addTo($app);
@@ -108,8 +108,7 @@ although it intends to be "extra info" or "extra help" due to current limitation
 the only way we can display hint is using a gray bubble. In the future version of Agile UI we
 will update to use a more suitable form control.
 
-Hint can be specified either inside Form Control decorator seed or inside the Field::ui attribute::
-
+Hint can be specified either inside Form Control decorator seed or inside the Field::ui attribute:
 
 ```
 $form->addControl('title', [], ['values' => ['Mr', 'Mrs', 'Miss'], 'hint' => 'select one']);
@@ -117,7 +116,7 @@ $form->addControl('title', [], ['values' => ['Mr', 'Mrs', 'Miss'], 'hint' => 'se
 $form->addControl('name', ['hint' => 'Full Name Only']);
 ```
 
-Text will have HTML characters escaped. You may also specify hint value as an object::
+Text will have HTML characters escaped. You may also specify hint value as an object:
 
 ```
 $form->addControl('name', ['hint' => new \Atk4\Ui\Text(
@@ -125,7 +124,7 @@ $form->addControl('name', ['hint' => new \Atk4\Ui\Text(
 )]);
 ```
 
-or you can inject a view with a custom template::
+or you can inject a view with a custom template:
 
 ```
 $form->addControl('name', ['hint' => ['template' => new \Atk4\Ui\Template(
@@ -150,7 +149,7 @@ don't allow to change their value. Disabled form controls are used for read only
 In the examples above, we looked at how to create Form Control Decorator object explicitly.
 The most common use-case in large application is the use with Models. You would need a model, such as
 `Country` model as well as
-`Persistence $db <https://agile-data.readthedocs.io/en/develop/persistence.html>`_::
+`Persistence $db <https://agile-data.readthedocs.io/en/develop/persistence.html>`_:
 
 ```
 class Country extends \Atk4\Data\Model
@@ -172,7 +171,7 @@ class Country extends \Atk4\Data\Model
 }
 ```
 
-To create a form, the following is sufficient::
+To create a form, the following is sufficient:
 
 ```
 $form = \Atk4\Ui\Form::addTo($app);
@@ -194,14 +193,14 @@ The rules are rather straightforward but may change in future versions of Agile 
  - consult :php:attr:`\Atk4\Ui\Form::$typeToDecorator` property for type-to-seed association
  - type=password will use :php:class:`Password`
 
-You always have an option to explicitly specify which field you would like to use::
+You always have an option to explicitly specify which field you would like to use:
 
 ```
 $model->addField('long_text', ['ui' => ['rorm' => \Atk4\Ui\Form\Control\TextArea::class]]);
 ```
 
 It is recommended however, that you use type when possible, because types will be universally supported
-by all components::
+by all components:
 
 ```
 $model->addField('long_text', ['type' => 'text']);
@@ -236,7 +235,7 @@ element. For example, `icon` property:
     Adds icon into the input form control. Default - `icon` will appear on the right, while `leftIcon`
     will display icon on the left.
 
-Here are few ways to specify `icon` to an Input/Line::
+Here are few ways to specify `icon` to an Input/Line:
 
 ```
 // compact
@@ -253,7 +252,7 @@ Line::addTo($page, ['icon' => 'search']);
 
 The 'icon' property can be either string or a View. The string is for convenience and will
 be automatically substituted with `new Icon($icon)`. If you wish to be more specific
-and pass some arguments to the icon, there are two options::
+and pass some arguments to the icon, there are two options:
 
 ```
 // compact
@@ -300,7 +299,7 @@ When you use :php:class:`form::addControl()` it will create 'Form Control Decora
 .. php:method:: jsInput([$event, [$otherChain]])
 
 Input class implements method jsInput which is identical to :php:meth:`View::js`, except
-that it would target the INPUT element rather then the whole form control::
+that it would target the INPUT element rather then the whole form control:
 
 ```
 $control->jsInput(true)->val(123);
@@ -344,7 +343,7 @@ UI should render a Field as Dropdown. For example, this makes sense when a `hasO
 of records to display. Dropdown renders all records when the paged is rendered, while Lookup always sends an additional request to the server.
 :php:class:`Lookup` on the other hand is the better choice if there is lots of records (like more than 50).
 
-To render a model field as Dropdown, use the ui property of the field::
+To render a model field as Dropdown, use the ui property of the field:
 
 ```
 $model->addField('someField', ['ui' => ['form' => [\Atk4\Ui\Form\Control\Dropdown::class]]]);
@@ -353,7 +352,7 @@ $model->addField('someField', ['ui' => ['form' => [\Atk4\Ui\Form\Control\Dropdow
 ..  Customizing how a Model's records are displayed in Dropdown
 As default, Dropdown will use the `$model->idField` as value, and `$model->titleField` as title for each menu item.
 If you want to customize how a record is displayed and/or add an icon, Dropdown has the :php:meth:`Form::renderRowFunction()` to do this.
-This function is called with each model record and needs to return an array::
+This function is called with each model record and needs to return an array:
 
 ```
 $dropdown->renderRowFunction = function (Model $record) {
@@ -364,7 +363,7 @@ $dropdown->renderRowFunction = function (Model $record) {
 }
 ```
 
-You can also use this function to add an Icon to a record::
+You can also use this function to add an Icon to a record:
 
 ```
 $dropdown->renderRowFunction = function (Model $record) {
@@ -376,7 +375,7 @@ $dropdown->renderRowFunction = function (Model $record) {
 }
 ```
 
-If you'd like to even further adjust How each item is displayed (e.g. complex HTML and more model fields), you can extend the Dropdown class and create your own template with the complex HTML::
+If you'd like to even further adjust How each item is displayed (e.g. complex HTML and more model fields), you can extend the Dropdown class and create your own template with the complex HTML:
 
 ```
 class MyDropdown extends \Atk4\Ui\Dropdown
@@ -401,7 +400,7 @@ class MyDropdown extends \Atk4\Ui\Dropdown
 ```
 
 
-With the according renderRowFunction::
+With the according renderRowFunction:
 
 ```
 function (Model $record) {
@@ -419,7 +418,7 @@ Of course, the tags `value`, `title`, `icon`, `someOtherField` and `someOtherFie
 
 ### Usage with $values property
 
-If not used with a model, you can define the Dropdown values in $values array. The pattern is value => title::
+If not used with a model, you can define the Dropdown values in $values array. The pattern is value => title:
 
 ```
 $dropdown->values = [
@@ -429,7 +428,7 @@ $dropdown->values = [
 ];
 ```
 
-You can also define an Icon right away::
+You can also define an Icon right away:
 
 ```
 $dropdown->values = [
@@ -441,7 +440,7 @@ $dropdown->values = [
 ```
 
 If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.
-If you use it, use the second parameter as well, its the array key::
+If you use it, use the second parameter as well, its the array key:
 
 ```
 function (string $value, $key) {
@@ -462,7 +461,7 @@ Define a string for the empty option (no selection). Standard is non-breaking sp
 
 .. php:attr:: dropdownOptions
 
-Here you can pass an array of Fomantic-UI dropdown options (https://fomantic-ui.com/modules/dropdown.html#/settings) e.g. ::
+Here you can pass an array of Fomantic-UI dropdown options (https://fomantic-ui.com/modules/dropdown.html#/settings) e.g. :
 
 ```
 $dropdown = new Dropdown(['dropdownOptions' => [
@@ -475,7 +474,8 @@ $dropdown = new Dropdown(['dropdownOptions' => [
 If set to true, multiple items can be selected in Dropdown. They will be sent comma separated (value1,value2,value3) on form submit.
 
 By default Dropdown will save values as comma-separated string value in data model, but it also supports model fields with array type.
-See this example from Model class init method::
+See this example from Model class init method:
+
 ```
 $exprModel = $this->ref('Expressions');
 $this->addField('expressions', [
@@ -515,7 +515,7 @@ This property represent a model hasMany reference and should be an hasMany refer
 In other word, the model that will generated list value for this dropdown input is an hasMany reference of the cascadeFrom
 input model.
 
-Assume that each data model are defined and model Category has many Sub-Category and Sub-Category has many Product::
+Assume that each data model are defined and model Category has many Sub-Category and Sub-Category has many Product:
 
 ```
 $form = \Atk4\Ui\Form::addTo($app);

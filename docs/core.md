@@ -10,7 +10,7 @@ add-ons.
 
 In any Agile UI application you will always need to have an App class. Even if you do not
 create this class explicitly, components generally will do it for you. The common pattern
-is::
+is:
 
 ```
 $app = new \Atk4\Ui\App('My App');
@@ -26,7 +26,7 @@ LoremIpsum::addTo($app);
 ## Seed
 
 Agile UI is developed to be easy to read and with simple and concise syntax. We make use of
-PHP's dynamic nature, therefore two syntax patterns are supported everywhere::
+PHP's dynamic nature, therefore two syntax patterns are supported everywhere:
 
 ```
 Button::addTo($app, ['Hello']);
@@ -37,7 +37,7 @@ Button::addTo($app, ['Hello']);
 ```
 
 Method add() supports arguments in various formats and we call that "Seed". The same format
-can be used elsewhere, for example::
+can be used elsewhere, for example:
 
 ```
 $button->icon = 'book';
@@ -56,7 +56,7 @@ We call this format 'Seed'. This section will explain how and where it is used.
 Agile Toolkit allows you to create components hierarchically. Once complete, the component
 hierarchy will render itself and will present HTML output that would appear to user.
 
-You can create and link multiple UI objects together before linking them with other chunks of your UI::
+You can create and link multiple UI objects together before linking them with other chunks of your UI:
 
 ```
 $msg = new \Atk4\Ui\Message('Hey There');
@@ -73,7 +73,7 @@ To find out more about how components are linked up together and rendered, see:
 ## Sticky GET
 
 Agile UI implements advanced approach allowing any View object that you add into Render Tree to
-declare "sticky GET arguments". Here is example::
+declare "sticky GET arguments". Here is example:
 
 ```
 if (isset($_GET['message'])) {
@@ -87,7 +87,7 @@ The code is simple - if you click the button, page will appear with the message 
 there is a potential problem here. What if "Message" wanted to perform a :ref:`Callback`? What if
 we use :php:class:`Console` instead, which must display an interactive data stream?
 
-In Agile UI you can request that some $_GET arguments are preserved and included into callback urls::
+In Agile UI you can request that some $_GET arguments are preserved and included into callback urls:
 
 ```
 if ($this->getApp()->stickyGet('message')) {
@@ -132,7 +132,7 @@ Agile UI framework is focused on building User Interfaces, but quite often inter
 present data values to the user or even receive data values from user's input.
 
 Agile UI uses various techniques to present data formats, so that as a developer you wouldn't
-have to worry over the details::
+have to worry over the details:
 
 ```
 $user = new User($db);
@@ -159,7 +159,7 @@ for implementing PHP callbacks. They follow the pattern:
  - generate URL with unique parameter
  - if unique parameter is passed back, behave differently
 
-Once the concept is established, it can even be used on a higher level, for example::
+Once the concept is established, it can even be used on a higher level, for example:
 
 ```
 $button->on('click', function () {
@@ -178,7 +178,7 @@ $button->on('click', function () {
 ## VirtualPage
 
 Building on the foundation of :ref:`callback`, components :php:class:`VirtualPage` and :php:class:`Loader`
-exist to enhance other Components with dynamically loadable content. Here is example for :php:class:`Tabs`::
+exist to enhance other Components with dynamically loadable content. Here is example for :php:class:`Tabs`:
 
 ```
 $tabs = Tabs::addTo($app);

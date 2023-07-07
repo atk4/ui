@@ -10,7 +10,7 @@ Demo:  https://ui.agiletoolkit.org/demos/header.php
 
 ## Basic Usage
 
-By default header size will depend on where you add it::
+By default header size will depend on where you add it:
 
 ```
 Header::addTo($this, ['Hello, Header']);
@@ -22,7 +22,7 @@ Header::addTo($this, ['Hello, Header']);
 
 .. php:attr:: subHeader
 
-Specify size and sub-header content::
+Specify size and sub-header content:
 
 ```
 Header::addTo($seg, [
@@ -47,7 +47,7 @@ Header::addTo($seg, [
 .. php:attr:: image
 
 
-Header may specify icon or image::
+Header may specify icon or image:
 
 ```
 Header::addTo($seg, [
@@ -57,7 +57,7 @@ Header::addTo($seg, [
 ]);
 ```
 
-Here you can also specify seed for the image::
+Here you can also specify seed for the image:
 
 ```
 $img = $app->cdn['atk'] . '/logo.png';

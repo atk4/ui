@@ -19,7 +19,7 @@ work without persistent database.
 ## Installing
 
 Create a directory which is accessible by you web server. Start your command-line,
-enter this directory and execute composer command::
+enter this directory and execute composer command:
 
 ```
 composer require atk4/ui
@@ -27,7 +27,7 @@ composer require atk4/ui
 
 ## Coding "Hello, World"
 
-Open a new file `index.php` and enter the following code::
+Open a new file `index.php` and enter the following code:
 
 ```
 <?php
@@ -68,14 +68,14 @@ components that do things for you.
 By using namespaces you will be able to write less code for classes you use more often by using namespace references and
 writing clearer code.
 
-By using namespaces you will make out of this::
+By using namespaces you will make out of this:
 
 ```
 <?php
 $app = new \Atk4\Ui\App('My First App');
 ```
 
-this::
+this:
 
 ```
 <?php
@@ -87,7 +87,7 @@ $app = new App('My First App');
 This is helpful, if you use in this case "new App('...');" several times in your code (hint: normally you use "new App()" just
 once in your project, but other classes could be used more often in one file)
 
-If you call it only once in a file, just use::
+If you call it only once in a file, just use:
 
 ```
 <?php
@@ -100,7 +100,7 @@ To build our "ToDo" application, we need a good location to store list of tasks.
 the actual database and instead will use "$_SESSION" for storing data.
 
 To be able to actually run this example, create a new file todo.php in the same directory as index.php and
-create the application::
+create the application:
 
 ```
 <?php
@@ -112,7 +112,7 @@ $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
 All components of Agile Data are database-agnostic and will not concern themselves with the way how you store data.
 I will start the session and connect `persistence <https://agile-data.readthedocs.io/en/develop/persistence.html>`_
-with it::
+with it:
 
 ```
 <?php
@@ -121,7 +121,7 @@ $s = new \Atk4\Data\Persistence\Array_($_SESSION);
 ```
 
 If you're establishing a database connection that should be used throughout your whole application and in many classes,
-you can define it in the $app->db class::
+you can define it in the $app->db class:
 
 ```
 <?php
@@ -140,8 +140,7 @@ $app = new App([
 ## Data Model
 
 We need a class `Task` which describes `data model <https://agile-data.readthedocs.io/en/develop/model.html>`_ for the
-single ToDo item::
-
+single ToDo item:
 
 ```
 class ToDoItem extends \Atk4\Data\Model
@@ -177,7 +176,7 @@ As you might have noted already, Persistence and Model are defined independently
 
 ## Instantiate App using DiContainerTrait (Dependency Injection)
 
-Class App use `DiContainerTrait` which allow us to inject dependency directly in constructor::
+Class App use `DiContainerTrait` which allow us to inject dependency directly in constructor:
 
 ```
 use Monolog\Logger;
@@ -200,7 +199,7 @@ $app = new App([
 
 ## Form and Crud Components
 
-Next we need to add Components that are capable of manipulating the data::
+Next we need to add Components that are capable of manipulating the data:
 
 ```
 $col = \Atk4\Ui\Columns::addTo($app, ['divided']);
@@ -249,7 +248,7 @@ will cause table to also reload revealing new records.
 ## Grid and Crud
 
 As mentioned before, UI Components in Agile Toolkit are often interchangeable, you can swap one for
-another. In our example replace right column (label 17) with the following code::
+another. In our example replace right column (label 17) with the following code:
 
 ```
 $grid = \Atk4\Ui\Crud::addTo($col->addColumn(), [
@@ -304,7 +303,7 @@ also edit records through a dynamically loaded dialog.
 
 All of that in about 50 lines of PHP code. More importantly, this code is portable, can be used anywhere
 and does not have any complex requirements. In fact, we could wrap it up into an individual Component
-that can be invoked with just one line of code::
+that can be invoked with just one line of code:
 
 ```
 ToDoManager::addTo($app)->setModel(new ToDoItem());

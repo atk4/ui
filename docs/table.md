@@ -26,7 +26,7 @@ Main features of Table class are:
 
 ## Basic Usage
 
-The simplest way to create a table is when you use it with Agile Data model::
+The simplest way to create a table is when you use it with Agile Data model:
 
 ```
 $table = Table::addTo($app);
@@ -39,7 +39,7 @@ appropriate column types, implement type-casting and also connect your model wit
 
 ### Using with Array Data
 
-You can also use Table with Array data source like this::
+You can also use Table with Array data source like this:
 
 ```
 $myArray = [
@@ -68,7 +68,7 @@ $table->addColumn('birthdate', null, ['type' => 'date']);
 .. php:method:: addColumn($name, $columnDecorator = [], $field = null)
 
 To change the order or explicitly specify which field columns must appear, if you pass list of those
-fields as second argument to setModel::
+fields as second argument to setModel:
 
 ```
 $table = Table::addTo($app);
@@ -79,7 +79,7 @@ Table will make use of "Only Fields" feature in Agile Data to adjust query for f
 columns. See also :ref:`field_visibility`.
 
 
-You can also add individual column to your table::
+You can also add individual column to your table:
 
 ```
 $table->setModel(new Order($db), []); // [] here means - don't add any fields by default
@@ -98,7 +98,7 @@ if you want to execute some calculation there. (See https://agile-data.readthedo
 
 It's always a good idea to calculate column inside database. Lets create "total" column  which will
 multiply "price" and "amount" values. Use ``addExpression`` to provide in-line definition for this
-field if it's not already defined in ``Order::init()``::
+field if it's not already defined in ``Order::init()``:
 
 ```
 $table = Table::addTo($app);
@@ -117,7 +117,7 @@ To learn about value formatting, read documentation on :ref:`uiPersistence`.
 
 Table object does not contain any information about your fields (such as captions) but instead it will
 consult your Model for the necessary field information. If you are willing to define the type but also
-specify the caption, you can use code like this::
+specify the caption, you can use code like this:
 
 ```
 $table = Table::addTo($app);
@@ -152,7 +152,7 @@ then to save memory Table will re-use the same objects for all generic fields.
     Contains array of defined columns.
 
 `addColumn` adds a new column to the table. This method was explained above but can also be
-used to add columns without field::
+used to add columns without field:
 
 ```
 $action = $this->addColumn(null, [Table\Column\ActionButtons::class]);
@@ -177,7 +177,7 @@ just fine if column is not passed.
 
 If you do specify a string as a $name for addColumn, but no such field exist in the model, the
 method will rely on 3rd argument to create a new field for you. Here is example that calculates
-the "total" column value (as above) but using PHP math instead of doing it inside database::
+the "total" column value (as above) but using PHP math instead of doing it inside database:
 
 ```
 $table = Table::addTo($app);
@@ -190,7 +190,7 @@ $table->addColumn('total', new \Atk4\Data\Field\Calculated(function (Model $row)
 ```
 
 If you execute this code, you'll notice that the "total" column is now displayed last. If you
-wish to position it before status, you can use the final format of addColumn()::
+wish to position it before status, you can use the final format of addColumn():
 
 ```
 $table = Table::addTo($app);
@@ -212,7 +212,7 @@ your convenience there is a way to add multiple columns efficiently.
     Here, names can be an array of strings (['status', 'price']) or contain array that will be passed
     as argument sto the addColumn method ([['total', $fieldDef], ['delete', $deleteColumn]);
 
-As a final note in this section - you can re-use column objects multiple times::
+As a final note in this section - you can re-use column objects multiple times:
 
 ```
 $colGap = new \Atk4\Ui\Table\Column\Template('<td> ... <td>');
@@ -233,7 +233,7 @@ This will result in 3 gap columns rendered to the left, middle and right of your
 .. php:attr:: sortDirection
 
 Table does not support an interactive sorting on it's own, (but :php:class:`Grid` does), however
-you can designate columns to display headers as if table were sorted::
+you can designate columns to display headers as if table were sorted:
 
 ```
 $table->sortable = true;
@@ -247,7 +247,7 @@ order.
 ### JavaScript Sorting
 
 You can make your table sortable through JavaScript inside your browser. This won't work well if
-your data is paginated, because only the current page will be sorted::
+your data is paginated, because only the current page will be sorted:
 
 ```
 $table->getApp()->includeJS('https://fomantic-ui.com/javascript/library/tablesort.js');
@@ -262,8 +262,7 @@ For more information see https://github.com/kylefox/jquery-tablesort
 
 ### Injecting HTML
 
-The tag will override model value. Here is example usage of :php:meth:`Table\\Column::getHtmlTags`::
-
+The tag will override model value. Here is example usage of :php:meth:`Table\\Column::getHtmlTags`:
 
 ```
 class ExpiredColumn extends \Atk4\Ui\Table\Column
@@ -283,7 +282,7 @@ class ExpiredColumn extends \Atk4\Ui\Table\Column
 }
 ```
 
-Your column now can be added to any table::
+Your column now can be added to any table:
 
 ```
 $table->addColumn(new ExpiredColumn());
@@ -296,7 +295,7 @@ IMPORTANT: HTML injection will work unless :php:attr:`Table::useHtmlTags` proper
 Table is very similar to :php:class:`Lister` in the way how it loads and displays data. To control which
 data Table will be displaying you need to properly specify the model and persistence. The following two
 examples will show you how to display list of "files" inside your Dropbox folder and how to display list
-of issues from your Github repository::
+of issues from your Github repository:
 
 ```
 // Show contents of dropbox
@@ -365,7 +364,7 @@ nicer especially inside a table.
     is not limited to the table columns. Decorators may add an icon, change cell style, align cell
     or hide overflowing text to make table output look better.
 
-One column may have several decorators::
+One column may have several decorators:
 
 ```
 $table->addColumn('salary', new \Atk4\Ui\Table\Column\Money());
@@ -392,7 +391,7 @@ There are a few things to note:
 :php:meth:`Table\\Column\\\Money::getDataCellTemplate` is called, which returns ONLY the HTML value,
 without the <td> cell itself. Subsequently :php:meth:`Table\\Column\\\Link::getDataCellTemplate` is called
 and the '{$salary}' tag from this link is replaced by output from Money column resulting in this
-template::
+template:
 
 ```
 <a href="{$c_name_link}">£ {$salary}</a>
@@ -404,7 +403,7 @@ to add class "right aligned single line" to the <td> tag but sometimes it may al
 class "negative". The way how it's done is by defining `class="{$f_name_money}"` as one
 of the TD properties.
 
-The link does add any TD properties so the resulting "td" tag would be::
+The link does add any TD properties so the resulting "td" tag would be:
 
 ```
 ['class' => ['{$f_name_money}'] ]
@@ -413,7 +412,7 @@ The link does add any TD properties so the resulting "td" tag would be::
 ```
 
 Combined with the field template generated above it provides us with a full cell
-template::
+template:
 
 ```
 <td class="{$f_name_money}"><a href="{$c_name_link}">£ {$salary}</a></td>
@@ -466,14 +465,14 @@ See also :php:meth:`Lister::addJsPaginator`
 
 .. php:method:: resizableColumn($fx = null, $widths = null, $resizerOptions = [])
 
-Each table's column width can be resize by dragging the column right border::
+Each table's column width can be resize by dragging the column right border:
 
 ```
 $table->resizableColumn();
 ```
 
 You may specify a callback function to the method. The callback will return an array containing each
-column name in table with their new width in pixel.::
+column name in table with their new width in pixel.:
 
 ```
 $table->resizableColumn(function (Jquery $j, array $columnWidths) {
@@ -488,7 +487,7 @@ Finally you may also specify some of the resizer options - https://github.com/Ba
 ## Column attributes and classes
 
 By default Table will include ID for each row: `<tr data-id="123">`. The following code example
-demonstrates how various standard column types are relying on this property::
+demonstrates how various standard column types are relying on this property:
 
 ```
 $table->on('click', 'td', new JsExpression(
@@ -509,33 +508,33 @@ See also :ref:`js`.
 
 
 The following code will make sure that contents of the column appear on a single line by
-adding class "single line" to all body cells::
+adding class "single line" to all body cells:
 
 ```
 $table->addColumn('name', (new \Atk4\Ui\Table\Column()->addClass('single line')));
 ```
 
-If you wish to add a class to 'head' or 'foot' or 'all' cells, you can pass 2nd argument to addClass::
+If you wish to add a class to 'head' or 'foot' or 'all' cells, you can pass 2nd argument to addClass:
 
 ```
 $table->addColumn('name', (new \Atk4\Ui\Table\Column()->addClass('right aligned', 'all')));
 ```
 
-There are several ways to make your code more readable::
+There are several ways to make your code more readable:
 
 ```
 $table->addColumn('name', new \Atk4\Ui\Table\Column())
     ->addClass('right aligned', 'all');
 ```
 
-Or if you wish to use factory, the syntax is::
+Or if you wish to use factory, the syntax is:
 
 ```
 $table->addColumn('name', [\Atk4\Ui\Table\Column::class])
     ->addClass('right aligned', 'all');
 ```
 
-For setting an attribute you can use setAttr() method::
+For setting an attribute you can use setAttr() method:
 
 ```
 $table->addColumn('name', [\Atk4\Ui\Table\Column::class])
@@ -556,7 +555,7 @@ classes, you should generate your TD/TH tag through getTag method.
 
 ### Columns without fields
 
-You can add column to a table that does not link with field::
+You can add column to a table that does not link with field:
 
 ```
 $cb = $table->addColumn('CheckBox');

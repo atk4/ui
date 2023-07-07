@@ -19,7 +19,7 @@ Demo: https://ui.agiletoolkit.org/demos/console.php
 .. php:method:: send($callback)
 
 
-After adding a console to your :ref:`render_tree`, you just need to set a callback::
+After adding a console to your :ref:`render_tree`, you just need to set a callback:
 
 ```
 $console = Console::addTo($app);
@@ -44,21 +44,20 @@ and also allows you to execute shell process on the server while redirecting out
 .. php:method:: runMethod($callback);
 
 We recommend that you pack up your busineess logic into your Model methods. When it's time to call your method,
-you could either do this::
+you could either do this:
 
 ```
 $user->generateReport(30);
 ```
 
 Which would execute your own routine for some report generation, but doing it though a normal request will look like
-your site is slow and is unable to load page quick. Alternative is to run it through a console::
+your site is slow and is unable to load page quick. Alternative is to run it through a console:
 
 ```
 $console->runMethod($user, 'generateReport', [30]);
 ```
 
-This will display console to the user and will even output information from inside the model::
-
+This will display console to the user and will even output information from inside the model:
 
 ```
 use \Atk4\Core\DebugTrait();
@@ -75,7 +74,7 @@ public function generateReport($pages)
 }
 ```
 
-You can also execute static methods::
+You can also execute static methods:
 
 ```
 $console->runMethod('StaticLib', 'myStaticMethod');
@@ -87,7 +86,7 @@ $console->runMethod('StaticLib', 'myStaticMethod');
 
 .. php:argument:: lastExitCode
 
-To execute a command, use::
+To execute a command, use:
 
 ```
 $console->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1']);
@@ -96,7 +95,7 @@ $console->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1']);
 This will run a command, and will stream command output to you. Console is implemented to capture both STDOUT and STDERR in
 real-time then display it on the console using color. Console does not support ANSI output.
 
-Method exec can be executed directly on the $console or inside the callback::
+Method exec can be executed directly on the $console or inside the callback:
 
 ```
 $console->set(function (Console $console) {
@@ -105,7 +104,7 @@ $console->set(function (Console $console) {
 ```
 
 Without callback, eval will wrap itself into a callback but you can only execute a single command. When using callback
-form, you can execute multiple commands::
+form, you can execute multiple commands:
 
 ```
 Console::addTo($app)->set(function (Console $c) {
@@ -124,7 +123,7 @@ Normally it's safe to chain `exec` which ensures that execution will stack. Shou
 `exec` won't be performed.
 
 NOTE that for each invocation `exec` will spawn a new process, but if you want to execute multiple processes, you
-can wrap them into `bash -c`::
+can wrap them into `bash -c`:
 
 ```
 Console::addTo($app)->exec('bash', [

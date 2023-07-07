@@ -8,7 +8,7 @@ understand :ref:`callback`.
 
 Unlike any of the Callback classes, VirtualPage is a legitimate :php:class:`View`, but it's behavior is a little
 "different". In normal circumstances, rendering VirtualPage will result in empty string. Adding VirtualPage
-anywhere inside your :ref:`render_tree` simply won't have any visible effect::
+anywhere inside your :ref:`render_tree` simply won't have any visible effect:
 
 ```
 $vp = \Atk4\Ui\VirtualPage::addTo($layout);
@@ -26,7 +26,7 @@ To help you understand when to use VirtualPage here is the example:
  - Clicking the Button would dynamically load contents of VirtualPage inside a Modal window.
 
 This pattern is very easy to implement and is used by many components to transparently provide dynamic functionality.
-Next is an example where :php:class:`Tabs` has support for callback for generating dynamic content for the tab::
+Next is an example where :php:class:`Tabs` has support for callback for generating dynamic content for the tab:
 
 ```
 $tabs->addTab('Dynamic Tab Content', function (VirtualPage $vp) {
@@ -43,7 +43,7 @@ below).
 .. php:attr:: cb
 
 VirtuaPage relies on :php:class:`CallbackLater` object, which is stored in a property $cb. If the Callback is triggered
-through a GET argument, then VirtualPage will change it's rendering technique. Lets examine it in more detail::
+through a GET argument, then VirtualPage will change it's rendering technique. Lets examine it in more detail:
 
 ```
 $vp = \Atk4\Ui\VirtualPage::addTo($layout);
@@ -74,7 +74,7 @@ As you may know, :php:meth:`Callback::getUrl()` accepts an argument, and Virtual
 - getUrl('cut') gives you URL which will return ONLY the HTML of virtual page, no Layout or boilerplate.
 - getUrl('popup') gives you URL which will return a very minimalistic layout inside a valid HTML boilerplate, suitable for iframes or popup windows.
 
-You can experiment with::
+You can experiment with:
 
 ```
 $label->detail = $vp->cb->getUrl('popup');
@@ -86,7 +86,7 @@ Setting Callback
 
 .. php:method:: set($callback)
 
-Although VirtualPage can work without defining a callback, using one is more reliable and is always recommended::
+Although VirtualPage can work without defining a callback, using one is more reliable and is always recommended:
 
 ```
 $vp = \Atk4\Ui\VirtualPage::addTo($layout);
@@ -104,7 +104,7 @@ This code will perform identically as the previous example, however 'LoremIpsum'
 unless you are requesting VirtualPage specifically, saving some CPU time. Capability of defining callback
 also makes it possible for VirtualPage to be embedded into any :ref:`component` quite reliably.
 
-To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the following code::
+To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the following code:
 
 ```
 $tabs = \Atk4\Ui\Tabs::addTo($layout);
@@ -122,7 +122,7 @@ $tabs->addTab('Tab2', function (VirtualPage $p) { // dynamic tab
 .. php:attr:: ui
 
 When using 'popup' mode, the output appears inside a `<div class="ui container">`. If you want to change this
-class, you can set $ui property to something else. Try::
+class, you can set $ui property to something else. Try:
 
 ```
 $vp = \Atk4\Ui\VirtualPage::addTo($layout);
@@ -148,7 +148,7 @@ Comparing to VirtualPage which is a D.Y.I. solution - Loader can be used out of 
 Loader extends VirtualPage and is quite similar to it.
 
 Like with a VirtualPage - you should use `set()` to define content that will be loaded dynamically,
-while a spinner is shown to a user::
+while a spinner is shown to a user:
 
 ```
 $loader = \Atk4\Ui\Loader::addTo($app);
@@ -166,7 +166,7 @@ Loader needs to occupy some space.
 .. php:attr:: shim
 
 By default it will display a white segment with 7em height, but you can specify any other view through $shim
-property::
+property:
 
 ```
 $loader = \Atk4\Ui\Loader::addTo($app, ['shim' => [\Atk4\Ui\Message::class, 'Please wait until we load LoremIpsum...', 'class.red' => true]]);
@@ -203,7 +203,7 @@ behaviour does not work, you should set value for $loadEvent:
 - false = never load
 - "string" - bind to custom JS event
 
-To indicate how custom binding works::
+To indicate how custom binding works:
 
 ```
 $loader = \Atk4\Ui\Loader::addTo($app, ['loadEvent' => 'kaboom']);
@@ -228,8 +228,7 @@ If you execute :php:class:`JsReload` action on the Loader, it will return to ori
 Inline Editing Example
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Next example will display DataTable, but will allow you to replace data with a form temporarily::
-
+Next example will display DataTable, but will allow you to replace data with a form temporarily:
 
 ```
 $box = \Atk4\Ui\View::addTo($app, ['ui' => 'segment']);
@@ -257,7 +256,7 @@ Progress Bar
 
 .. php:attr:: progressBar = null
 
-Loader can have a progress bar. Imagine that your Loader has to run slow process 4 times::
+Loader can have a progress bar. Imagine that your Loader has to run slow process 4 times:
 
 ```
 sleep(1);
@@ -266,7 +265,7 @@ sleep(1);
 sleep(1);
 ```
 
-You can notify user about this progress through a simple code::
+You can notify user about this progress through a simple code:
 
 ```
 $loader = \Atk4\Ui\Loader::addTo($app, ['progressBar' => true]);

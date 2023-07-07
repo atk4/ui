@@ -6,7 +6,7 @@
 .. php:class:: App
 
 App is a mandatory object that's essential for Agile UI to operate. You should create instance
-of an App class yourself before other components::
+of an App class yourself before other components:
 
 ```
 $app = new \Atk4\Ui\App('My App');
@@ -29,7 +29,7 @@ error is not repeated.
 ### Using App for Injecting Dependencies
 
 Since App class becomes available for all objects and components of Agile Toolkit, you may add
-properties into the App class::
+properties into the App class:
 
 ```
 $app->db = new \Atk4\Data\Persistence\Sql($dsn);
@@ -56,7 +56,7 @@ You may use App class hook to impact behavior of your application:
 
 App class may initialize some resources for you including user authentication and work with session.
 My next example defines property `$user` and `$system` for the app class to indicate a system which is currently
-active. (See :ref:`system_pattern`)::
+active. (See :ref:`system_pattern`):
 
 ```
 class Warehouse extends \Atk4\Ui\App
@@ -106,7 +106,7 @@ class Warehouse extends \Atk4\Ui\App
 }
 ```
 
-After declaring your Application class like this, you can use it conveniently anywhere::
+After declaring your Application class like this, you can use it conveniently anywhere:
 
 ```
 include'vendor/autoload.php';
@@ -118,7 +118,7 @@ Crud::addTo($app)
 ### Quick Usage and Page pattern
 
 A lot of the documentation for Agile UI uses a principle of initializing App object first, then, manually
-add the UI elements using a procedural approach::
+add the UI elements using a procedural approach:
 
 ```
 HelloWorld::addTo($app);
@@ -140,7 +140,7 @@ In Agile UI this pattern is implemented through a 3rd party add-on for :ref:`pag
 
 App also does certain actions to simplify handling of the application. For instance, App class will
 render itself automatically at the end of the application, so you can safely add objects into the `App`
-without actually triggering a global execution process::
+without actually triggering a global execution process:
 
 ```
 HelloWorld::addTo($app);
@@ -171,7 +171,7 @@ that implements tighter integration with the host application or full-stack fram
 
 .. php:method:: requireJs()
 
-Method to include additional JavaScript file in page::
+Method to include additional JavaScript file in page:
 
 ```
 $app->requireJs('https://example.com/file.min.js');
@@ -179,7 +179,7 @@ $app->requireJs('https://example.com/file.min.js');
 
 .. php:method:: requireCss($url)
 
-Method to include additional CSS style sheet in page::
+Method to include additional CSS style sheet in page:
 
 ```
 $app->requireCss('https://example.com/file.min.css');
@@ -222,7 +222,7 @@ Problem: sometimes certain PHP code will only be executed when GET arguments are
 you may have a file `detail.php` which expects `order_id` parameter and would contain a `Crud` component.
 
 Since the `Crud` component is interactive, it may want to generate requests to itself, but it must also
-include `order_id` otherwise the scope will be incomplete. Agile UI solves that with StickyGet arguments::
+include `order_id` otherwise the scope will be incomplete. Agile UI solves that with StickyGet arguments:
 
 ```
 $orderId = $app->stickyGet('order_id');
@@ -243,7 +243,7 @@ See also :php:meth:`View::stickyGet`
 
 App implements two handy methods for handling redirects between pages. The main purpose for those is
 to provide a simple way to redirect for users who are not familiar with JavaScript and HTTP headers
-so well.  Example::
+so well.  Example:
 
 ```
 if (!isset($_GET['age'])) {
@@ -287,13 +287,13 @@ Will be true if the application is currently rendering recursively through the R
 
 .. php:method:: url(page)
 
-Method to generate links between pages. Specified with associative array::
+Method to generate links between pages. Specified with associative array:
 
 ```
 $url = $app->url(['contact', 'from' => 'John Smith']);
 ```
 
-This method must respond with a properly formatted URL, such as::
+This method must respond with a properly formatted URL, such as:
 
 ```
 contact.php?from=John+Smith
@@ -340,7 +340,7 @@ When writing an application that uses Agile UI you can either select to use indi
 or make them part of a bigger layout. If you use the component individually, then it will
 at some point initialize internal 'App' class that will assist with various tasks.
 
-Having composition of multiple components will allow them to share the app object::
+Having composition of multiple components will allow them to share the app object:
 
 ```
 $grid = new \Atk4\Ui\Grid();
@@ -357,7 +357,7 @@ value for the 'app' property. This value is carried into new objects through App
 
 ### Adding the App
 
-You can create App object on your own then add elements into it::
+You can create App object on your own then add elements into it:
 
 ```
 $app = new App('My App');
@@ -375,13 +375,13 @@ We are still not using the layout, however.
 
 ### Adding the Layout
 
-Layout can be initialized through the app like this::
+Layout can be initialized through the app like this:
 
 ```
 $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 ```
 
-This will initialize two new views inside the app::
+This will initialize two new views inside the app:
 
 ```
 $app->html
@@ -406,7 +406,7 @@ with top, left and right menu objects.
 
 .. php:attr:: menuLeft
 
-Populating the left menu object is simply a matter of adding the right menu items to the layout menu::
+Populating the left menu object is simply a matter of adding the right menu items to the layout menu:
 
 ```
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
@@ -422,7 +422,7 @@ $EditGroup->addItem('Basics', ['edit/basic']);
 
 .. php:attr:: menu
 
-This is the top menu of the admin layout. You can add other item to the top menu using::
+This is the top menu of the admin layout. You can add other item to the top menu using:
 
 ```
 Button::addTo($layout->menu->addItem(), ['View Source', 'class.teal' => true, 'icon' => 'github'])

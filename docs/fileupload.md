@@ -39,7 +39,7 @@ The button view to use for displaying the file open dialog. A default action but
 
 ## Callbacks
 
-When adding an Upload or UploadImage field to a form, onUpload and onDelete callback must be defined::
+When adding an Upload or UploadImage field to a form, onUpload and onDelete callback must be defined:
 
 ```
 $img = $form->addControl('img', [\Atk4\Ui\Form\Control\UploadImage::class, ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
@@ -67,7 +67,7 @@ The onUpload callback function is a good place to:
 - setup a file preview to display back to user,
 - notify your user of the file upload process,
 
-Example showing the onUpload callback on the UploadImage field::
+Example showing the onUpload callback on the UploadImage field:
 
 ```
 $img->onUpload(function (array $postFile) use ($form, $img) {
@@ -89,7 +89,7 @@ $img->onUpload(function (array $postFile) use ($form, $img) {
 ```
 
 When user submit the form, the form control data value that will be submitted is the fileId set during the onUpload callback.
-The fileId is set to file name by default if omitted::
+The fileId is set to file name by default if omitted:
 
 ```
 $form->onSubmit(function (Form $form) {
@@ -111,7 +111,7 @@ The onDelete callback function is a good place to:
 - delete db entry according to the fileId,
 - reset thumbnail preview,
 
-Example showing the onDelete callback on the UploadImage field::
+Example showing the onDelete callback on the UploadImage field:
 
 ```
 $img->onDelete(function (string $fileId) use ($img) {

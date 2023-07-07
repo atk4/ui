@@ -66,7 +66,7 @@ Feel free to experiment with it and find the ideal file structure for your proje
 ## Composer configuration
 
 Configure your composer.json to load the atk4 AND your project folder.
-Your composer.json could look like this::
+Your composer.json could look like this:
 
 ```
 {
@@ -119,7 +119,7 @@ To initialize your application we need to do the following steps:
 ### Create db.php for database
 
 We initialize a reusable database connection in db.php through a mysql persistence.
-Create a file called "db.php" in the directory "config"::
+Create a file called "db.php" in the directory "config":
 
 ```
 <?php
@@ -131,7 +131,7 @@ Please remember to use a database that still exists.
 ### Create init.php, index.php and / or admin.php files
 
 Create a new file in "public_html/projectfolder" and name it "init.php".
-In this file we load up our app (later) and load the database configuration::
+In this file we load up our app (later) and load the database configuration:
 
 ```
 <?php
@@ -141,7 +141,7 @@ require_once $rootdir . "../config/db.php"; // contains database configuration o
 
 ### Load Composer autoload.php (which loads up atk4) in init.php
 
-::
+:
 
 ```
 require_once $rootdir . "vendor/autoload.php"; // loads up atk4 and our project files from Composer
@@ -149,7 +149,7 @@ require_once $rootdir . "vendor/autoload.php"; // loads up atk4 and our project 
 
 ### Initialize the app class in init.php
 
-::
+:
 
 ```
 $app = new \Atk4\Ui\App('Welcome to my first app'); // initialization of our app
@@ -158,7 +158,7 @@ $app->db = $db; // defines our database for reuse in other classes
 
 ### Create index.php and admin.php
 
-If you want to write an app with a backend, create a file called "admin.php"::
+If you want to write an app with a backend, create a file called "admin.php":
 
 ```
 <?php
@@ -167,7 +167,7 @@ require_once __DIR__ . "init.php";
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 ```
 
-If you want to write an app with a frontend, create a file called "index.php"::
+If you want to write an app with a frontend, create a file called "index.php":
 
 ```
 <?php
@@ -190,7 +190,7 @@ defined in your composer.json.
 Do you remember? - If no, take a look at the beginning of this document. We defined there "MyProject" as our namespace for
 the directory "projectfolder".
 
-Open the created file "View1.php" in your editor and add the following lines::
+Open the created file "View1.php" in your editor and add the following lines:
 
 ```
 <?php
@@ -219,13 +219,13 @@ files will be autoloaded by Composer.
 
 To use our class in our app, we have to include it into our app. This can be done either through index.php or admin.php.
 
-Please add the following lines into your index.php::
+Please add the following lines into your index.php:
 
 ```
 \MyProject\Views\View1::addTo($app);
 ```
 
-or if you have added at the beginning of your index.php "use MyProject\\Views\\View1;" you can write::
+or if you have added at the beginning of your index.php "use MyProject\\Views\\View1;" you can write:
 
 ```
 View1::addTo($app);

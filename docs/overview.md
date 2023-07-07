@@ -83,8 +83,7 @@ Overview Example
 ^^^^^^^^^^^^^^^^
 
 Agile UI / Agile Data code for your app can fit into a single file. See below for
-clarifications::
-
+clarifications:
 
 ```
 <?php
@@ -194,7 +193,7 @@ self-sufficient and creating a class instance is enough to make a component work
 
 That means that components may rely on each other and even though some may appear
 very basic to you, they are relied on by some other components for maximum
-flexibility. The next example adds a "Cancel" button to a form::
+flexibility. The next example adds a "Cancel" button to a form:
 
 ```
 $button = \Atk4\Ui\Button::addTo($form, [
@@ -211,14 +210,14 @@ Agile UI. You will find Crud / Form / Grid components much more useful:
 ### Using Components
 
 Look above at the :ref:`overview_example`, component `GRID` was made part
-of application layout with a line::
+of application layout with a line:
 
 ```
 \Atk4\Ui\Crud::addTo($app);
 ```
 
 
-To render a component individually and get the HTML and JavaScript use this format::
+To render a component individually and get the HTML and JavaScript use this format:
 
 ```
 $form = new Form();
@@ -230,7 +229,7 @@ $html = $form->render();
 ```
 
 
-This would render an individual component and will return HTML::
+This would render an individual component and will return HTML:
 
 ```
 <div class="ui form">
@@ -247,7 +246,7 @@ For other use-cases please look into :php:meth:`View::render()`
 
 Factory is a mechanism which allow you to use shorter syntax for creating objects.
 The goal of Agile UI is to be simple to read and use; so taking advantage of loose types
-in PHP language allows us to use an alternative shorter syntax::
+in PHP language allows us to use an alternative shorter syntax:
 
 ```
 \Atk4\Ui\Button::addTo($form, ['Cancel', 'icon' => 'pencil'])

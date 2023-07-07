@@ -11,14 +11,14 @@ Demo: https://ui.agiletoolkit.org/demos/accordion.php
 
 ## Basic Usage
 
-Once you create an Accordion container you can then mix and match static and dynamic accodion section::
+Once you create an Accordion container you can then mix and match static and dynamic accodion section:
 
 ```
 $acc = Accordion::addTo($app);
 ```
 
 
-Adding a static content section is pretty simple::
+Adding a static content section is pretty simple:
 
 ```
 LoremIpsum::addTo($acc->addSection('Static Tab'));
@@ -33,7 +33,7 @@ Use addSection() method to add more section in an Accordion view. First paramete
 Section can be static or dynamic. Dynamic sections use :php:class:`VirtualPage` implementation mentioned above.
 You should pass Closure action as a second parameter.
 
-Example::
+Example:
 
 ```
 $t = Accordion::addTo($layout);
@@ -50,7 +50,7 @@ $t->addSection('Dynamically Loading', function (VirtualPage $vp) {
 ## Dynamic Accordion Section
 
 Dynamic sections are based around implementation of :php:class:`VirtualPage` and allow you
-to pass a callback which will be triggered when user clicks on the section title.::
+to pass a callback which will be triggered when user clicks on the section title.:
 
 ```
 $acc = Accordion::addTo($app);
@@ -69,7 +69,7 @@ Accordion class has some wrapper method in order to control the accordion module
 .. php:method:: jsToggle($section, $action = null)
 .. php:method:: jsClose($section, $action = null)
 
-For example, you can set a button that, when clicked, will toggle an accordion section::
+For example, you can set a button that, when clicked, will toggle an accordion section:
 
 ```
 $button = Button::addTo($bar, ['Toggle Section 1']);
@@ -83,7 +83,7 @@ $button->on('click', $acc->jsToggle($section1));
 
 ## Accordion Module settings
 
-It is possible to change Accordion module settings via the settings property.::
+It is possible to change Accordion module settings via the settings property.:
 
 ```
 Accordion::addTo($app, ['settings' => []]);

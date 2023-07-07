@@ -15,7 +15,7 @@ on a page. Paginator is a stand-alone component but you can use it in conjunctio
 .. php:attr:: page
 
 Place paginator in a designated spot on your page. You also should specify what's the total number of pages
-paginator should have::
+paginator should have:
 
 ```
 $paginator = Paginator::addTo($app);
@@ -27,7 +27,7 @@ pages around the current page. Paginator will automatically place links back to 
 :php:meth:`App::url()`.
 
 After initializing paginator you can use it's properties to determine current page. Quite often you'll need
-to display current page BEFORE the paginator on your page::
+to display current page BEFORE the paginator on your page:
 
 ```
 $h = Header::addTo($page);
@@ -37,7 +37,7 @@ $p = Paginator::addTo($page);
 $h->set('Page ' . $p->page . ' from ' . $p->total);
 ```
 
-Remember that values of 'page' and 'total' are integers, so you may need to do type-casting::
+Remember that values of 'page' and 'total' are integers, so you may need to do type-casting:
 
 ```
 $label->set($p->page); // will not work

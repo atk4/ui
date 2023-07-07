@@ -11,7 +11,7 @@ A good example is a user who can have many addresses.
 In this example, the Model `User` containsMany `Addresses`. Since the Model field addresses is defined with containsMany()
 inside the main model, Multiline will store addresses content as JSON value inside the table blobl addresses field.
 
-For example::
+For example:
 
 ```
 /**
@@ -62,7 +62,7 @@ You can also check LINK_TO_DEMO/multiline.php for this example
 Multiline form control is used by default when a Model field used `containsMany()` or `containsOne()`, but you can set
 up the multiline component to be used with hasMany() relation and edit related record accordingly.
 
-Lets say a User can have many email addresses, but you want to store them in a separate table.::
+Lets say a User can have many email addresses, but you want to store them in a separate table.:
 
 ```
 /**
@@ -105,7 +105,7 @@ Using a form with User model won't automatically add a Multiline to edit the rel
 
 .. php:method:: setReferenceModel(string $refModelName, Model $entity = null, array $fieldNames = []): Model
 
-If you want to edit them along with the user, Multiline need to be set up accordingly using the setReferenceModel method::
+If you want to edit them along with the user, Multiline need to be set up accordingly using the setReferenceModel method:
 
 ```
 // Add a form to Ui in order to edit User record.
@@ -142,7 +142,7 @@ normally call this method in your form onSubmit handler method.
 If a Model contains Expressions, there resulting values will automatically get updated when one of the form control value is changed.
 A loading icon on the ``+`` button will indicates that the expression values are being update.
 
-Lets use the example of demos/multiline.php::
+Lets use the example of demos/multiline.php:
 
 ```
 class InventoryItem extends \Atk4\Data\Model
@@ -171,7 +171,7 @@ The first parameter is the callback function, the second one is an array contain
 the callback when values are changed.
 You can return a single JsExpressionable or an array of JsExpressionables which then will be sent to the browser.
 
-In this case we display a message when any of the control value for 'qty' and 'box' are changed::
+In this case we display a message when any of the control value for 'qty' and 'box' are changed:
 
 ```
 $multiline->onLineChange(function (array $rows, Form $form) {
@@ -206,7 +206,7 @@ Use the $componentProps property of Multiline in order to apply 'Props' to compo
 
 .. php:attr:: componentProps
 
-Example of changing all Dropdown(SuiDropdown) within Multiline::
+Example of changing all Dropdown(SuiDropdown) within Multiline:
 
 ```
 $ml = $form->addControl('ml', [Multiline::class, 'compponentProps' => [Multiline::SELECT => ['floating' => true]]]);
@@ -214,7 +214,7 @@ $ml = $form->addControl('ml', [Multiline::class, 'compponentProps' => [Multiline
 
 ### Setting component Props per field
 
-Specific field components Props may be applied using the 'ui' field property when adding field to your model::
+Specific field components Props may be applied using the 'ui' field property when adding field to your model:
 
 ```
 $this->addField('email', [
@@ -230,7 +230,7 @@ $this->addField('password', [
 ### Note on Multiline control
 
 Each control inside Multiline is wrap within a table cell(SuiTableCell) component and this component can be customize as
-well using the 'ui' property of the model's field::
+well using the 'ui' property of the model's field:
 
 ```
 $this->addExpression('total', [
@@ -244,7 +244,7 @@ $this->addExpression('total', [
 
 ### Table appearance within Multiline
 
-Table(SuiTable) Props can be set using $tableProps property of Multiline::
+Table(SuiTable) Props can be set using $tableProps property of Multiline:
 
 ```
 $ml = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'blue']]);

@@ -11,14 +11,14 @@ Demo: https://ui.agiletoolkit.org/demos/tabs.php
 
 ## Basic Usage
 
-Once you create Tabs container you can then mix and match static and dynamic tabs::
+Once you create Tabs container you can then mix and match static and dynamic tabs:
 
 ```
 $tabs = Tabs::addTo($app);
 ```
 
 
-Adding a static content is pretty simple::
+Adding a static content is pretty simple:
 
 ```
 LoremIpsum::addTo($tabs->addTab('Static Tab'));
@@ -33,7 +33,7 @@ Use addTab() method to add more tabs in Tabs view. First parameter is a title of
 Tabs can be static or dynamic. Dynamic tabs use :php:class:`VirtualPage` implementation mentioned above.
 You should pass Closure action as a second parameter.
 
-Example::
+Example:
 
 ```
 $tabs = Tabs::addTo($layout);
@@ -52,7 +52,7 @@ $tabs->addTab('Dynamically Loading', function (VirtualPage $vp) {
 Dynamic tabs are based around implementation of :php:class:`VirtualPage` and allow you
 to pass a callback which will be triggered when user clicks on the tab.
 
-Note that tab contents are refreshed including any values you put on the form::
+Note that tab contents are refreshed including any values you put on the form:
 
 ```
 $tabs = Tabs::addTo($app);
@@ -81,7 +81,7 @@ $tabs->addTab('Dynamic Form', function (VirtualPage $vp) {
 
 .. php:method:: addTabUrl($name, $url)
 
-Tab can load external URL or a different page if you prefer that instead of VirtualPage. This works similar to iframe::
+Tab can load external URL or a different page if you prefer that instead of VirtualPage. This works similar to iframe:
 
 ```
 $tabs = Tabs::addTo($app);

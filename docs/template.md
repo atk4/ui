@@ -13,7 +13,7 @@ The design goals of a template engine are:
 
 ## Example Template
 
-Assuming that you have the following template::
+Assuming that you have the following template:
 
 ```
 Hello, {mytag}world{/}
@@ -25,14 +25,14 @@ the usage of `{` denotes a "tag" inside your HTML, which must be followed by
 alpha-numeric identifier and a closing `}`. Tag needs to be closed with either
 `{/mytag}` or `{/}`.
 
-The following code will initialize template inside a PHP code::
+The following code will initialize template inside a PHP code:
 
 ```
 $t = new Template('Hello, {mytag}world{/}');
 ```
 
 Once template is initialized you can `renderToHtml()` it any-time to get string
-"Hello, world". You can also change tag value::
+"Hello, world". You can also change tag value:
 
 ```
 $t->set('mytag', 'Agile UI');
@@ -40,13 +40,13 @@ $t->set('mytag', 'Agile UI');
 echo $t->renderToHtml(); // "Hello, Agile UI".
 ```
 
-Tags may also be self-closing::
+Tags may also be self-closing:
 
 ```
 Hello, {$mytag}
 ```
 
-is idetnical to::
+is idetnical to:
 
 ```
 Hello, {mytag}{/}
@@ -54,7 +54,7 @@ Hello, {mytag}{/}
 
 ### Regions
 
-We call region a tag, that may contain other tags. Example::
+We call region a tag, that may contain other tags. Example:
 
 ```
 Hello, {$name}
@@ -70,7 +70,7 @@ to change value of a tag even if it's inside a region, we often
 use Region to delegate rendering to another View (more about this
 in section for Views).
 
-There are some operations you can do with a region, such as::
+There are some operations you can do with a region, such as:
 
 ```
 $content = $mainTemplate->cloneRegion('Content');
@@ -87,8 +87,7 @@ $mainTemplate->dangerouslyAppendHtml('Content', $content->renderToHtml());
 ### Usage in Agile UI
 
 In practice, however, you will rarely have to work with the template
-engine directly, but you would be able to use it through views::
-
+engine directly, but you would be able to use it through views:
 
 ```
 $v = new View('my_template.html');
@@ -169,7 +168,7 @@ same way as empty tag. (``{$elephant}``)
 
 Region — typically a multiple lines HTML and text between opening and
 closing tag which can contain a nested tags. Regions are typically named
-with PascalCase, while other tags are named using ``snake_case``::
+with PascalCase, while other tags are named using ``snake_case``:
 
 ```
 some text before
@@ -277,8 +276,7 @@ how it's done is important to completely grasp Agile Toolkit underpinnings.
 
 
 Template can be loaded from either file or string by using one of
-following commands::
-
+following commands:
 
 ```
 $template = GiTemplate::addTo($this);
@@ -286,13 +284,13 @@ $template = GiTemplate::addTo($this);
 $template->loadFromString('Hello, {name}world{/}');
 ```
 
-To load template from file::
+To load template from file:
 
 ```
 $template->loadFromFile('mytemplate');
 ```
 
-And place the following inside ``template/mytemplate.html``::
+And place the following inside ``template/mytemplate.html``:
 
 ```
 Hello, {name}world{/}
@@ -328,7 +326,7 @@ directories of :ref:`resource` ``template``.
 
     Attempts to append non-escaped value, but will do nothing if tag does not exist.
 
-Example::
+Example:
 
 ```
 $template = GiTemplate::addTo($this);
@@ -345,7 +343,7 @@ echo $template->renderToHtml();
 Using ArrayAccess with Templates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You may use template object as array for simplified syntax::
+You may use template object as array for simplified syntax:
 
 ```
 $template->set('name', 'John');
@@ -362,7 +360,7 @@ if ($template->hasTag('has_title')) {
     Converts template into one string by removing tag markers.
 
 Ultimately we want to convert template into something useful. Rendering
-will return contents of the template without tags::
+will return contents of the template without tags:
 
 ```
 $result = $template->renderToHtml();
@@ -378,7 +376,7 @@ template and render it separately. For example, you may have 2 tags
 SenderAddress and ReceiverAddress each containing nested tags such as
 "name", "city", "zip". You can't use set('name') because it will affect
 both names for sender and receiver. Therefore you need to use cloning.
-Let's assume you have the following template in ``template/envelope.html``::
+Let's assume you have the following template in ``template/envelope.html``:
 
 ```
 <div class="sender">
@@ -398,7 +396,7 @@ Let's assume you have the following template in ``template/envelope.html``::
 </div>
 ```
 
-You can use the following code to manipulate the template above::
+You can use the following code to manipulate the template above:
 
 ```
 $template = GiTemplate::addTo($this);
@@ -420,7 +418,7 @@ $template->dangerouslySetHtml('Recipient', $recipient->renderToHtml());
 $result = $template->renderToHtml();
 ```
 
-Same thing using Agile Toolkit Views::
+Same thing using Agile Toolkit Views:
 
 ```
 $envelope = \Atk4\Ui\View::addTo($this, [], [null], null, ['envelope']);
@@ -461,7 +459,7 @@ presentation logic would be abstracted inside view's ``renderToHtml()`` method.
 
 ### Repeating tags
 
-Agile Toolkit template engine allows you to use same tag several times::
+Agile Toolkit template engine allows you to use same tag several times:
 
 ```
 Roses are {color}red{/}
@@ -478,7 +476,7 @@ Agile Toolkit template engine allows you to use so called conditional tags
 which will automatically remove template regions if tag value is empty.
 Conditional tags notation is trailing question mark symbol.
 
-Consider this example::
+Consider this example:
 
 ```
 My {email?}e-mail {$email}{/email?} {phone?}phone {$phone}{/?}.
@@ -487,7 +485,7 @@ My {email?}e-mail {$email}{/email?} {phone?}phone {$phone}{/?}.
 This will only show text "e-mail" and email address if email tag value is
 set to not empty value. Same for "phone" tag.
 So if you execute ``set('email', null)`` and ``set('phone', 123)`` then this
-template will automatically render as::
+template will automatically render as:
 
 ```
 My  phone 123.
@@ -517,7 +515,7 @@ multiple views load data from same template but use different region.
 Function can also return a string, in which case view will attempt to
 clone region with such a name from parent's template. This can be used
 by your "menu" implementation, which will clone parent's template's tag
-instead to hook into some specific template::
+instead to hook into some specific template:
 
 ```
 public function defaultTemplate()
@@ -535,7 +533,7 @@ approach you can use existing objects with your own templates. This
 allows you to change the look and feel of certain object for only one or
 some pages. If you frequently use view with a different template, it
 might be better to define a new View class and re-define
-``defaultTemplate()`` method instead::
+``defaultTemplate()`` method instead:
 
 ```
 MyObject::addTo($this, ['greeting']);
@@ -545,7 +543,7 @@ MyObject::addTo($this, ['greeting']);
 
 Template is available by the time ``init()`` is called and you can
 access it from inside the object or from outside through "template"
-property::
+property:
 
 ```
 $grid = \Atk4\Ui\Grid::addTo($this, [], [null], null, array('grid_with_hint'));
@@ -572,7 +570,7 @@ the 3rd argument to ``add()`` exists — "spot". By default spot is
 elsewhere. Let's see how our previous example with addresses can be
 implemented using generic views.
 
-::
+:
 
 ```
 $envelope = \Atk4\Ui\View::addTo($this, [], [null], null, array('envelope'));

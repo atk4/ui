@@ -1,7 +1,7 @@
 ### Introduction
 
 Agile UI allows you to create and combine various objects into a single Render Tree for unified rendering. Tree represents
-all the UI components that will contribute to the HTML generation. Render tree is automatically created and maintained::
+all the UI components that will contribute to the HTML generation. Render tree is automatically created and maintained:
 
 ```
 $view = new \Atk4\Ui\View();
@@ -48,7 +48,7 @@ to clone them into separate objects. This cloning can only take place inside ini
 
 ### Late initialization
 
-When you create an application and select a Layout, the layout is automatically initialized::
+When you create an application and select a Layout, the layout is automatically initialized:
 
 ```
 $app = new \Atk4\Ui\App();
@@ -57,7 +57,7 @@ $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 echo $app->layout->name; // present, because layout is initialized!
 ```
 
-After that, adding any objects into app (into layout) will initialize those objects too::
+After that, adding any objects into app (into layout) will initialize those objects too:
 
 ```
 $b = \Atk4\Ui\Button::addTo($app, ['Test1']);
@@ -66,7 +66,7 @@ echo $b->name; // present, because button was added into initialized object.
 ```
 
 If object cannot determine the path to the application, then it will remain uninitialized for some time. This is called
-"Late initialization"::
+"Late initialization":
 
 ```
 $v = new Buttons();
@@ -76,7 +76,7 @@ echo $b2->name; // not set!! Not part of render tree
 ```
 
 At this point, if you execute $v->render() it will create it's own App and will create its own render tree. On the other
-hand, if you add $v inside layout, trees will merge and the same $app will be used::
+hand, if you add $v inside layout, trees will merge and the same $app will be used:
 
 ```
 $app->add($v);
@@ -114,7 +114,7 @@ with static components.
 ### Unique Name
 
 Through adding objects into render tree (even if those are not Views) objects can assume unique names. When you create
-your application, then any object you add into your app will have a unique `name` property::
+your application, then any object you add into your app will have a unique `name` property:
 
 ```
 $b = \Atk4\Ui\Button::addTo($app);
@@ -122,7 +122,7 @@ echo $b->name;
 ```
 
 The other property of the name is that it's also "permanent". Refreshing the page guarantees your object to have the same
-name. Ultimately, you can create a View that uses it's name to store some information::
+name. Ultimately, you can create a View that uses it's name to store some information:
 
 ```
 class MyView extends View

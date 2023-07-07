@@ -12,21 +12,21 @@ Demo: https://ui.agiletoolkit.org/demos/message.php
 
 ## Basic Usage
 
-Implements basic image::
+Implements basic image:
 
 ```
 $message = new \Atk4\Ui\Message('Message Title');
 $app->add($message);
 ```
 
-Although typically you would want to specify what type of message is that::
+Although typically you would want to specify what type of message is that:
 
 ```
 $message = new \Atk4\Ui\Message(['Warning Message Title', 'type' => 'warning']);
 $app->add($message);
 ```
 
-Here is the alternative syntax::
+Here is the alternative syntax:
 
 ```
 $message = Message::addTo($app, ['Warning Message Title', 'type' => 'warning']);
@@ -37,7 +37,7 @@ $message = Message::addTo($app, ['Warning Message Title', 'type' => 'warning']);
 .. php:attr:: text
 
 Property $text is automatically initialized to :php:class:`Text` so you can call :php:meth:`Text::addParagraph`
-to add more text inside your message::
+to add more text inside your message:
 
 ```
 $message = Message::addTo($app, ['Message Title']);
@@ -50,7 +50,7 @@ $message->text->addParagraph('Second para');
 
 .. php:attr:: icon
 
-You can specify icon also::
+You can specify icon also:
 
 ```
 $message = Message::addTo($app, [

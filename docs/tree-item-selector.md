@@ -16,7 +16,7 @@ within the list structure and ID will be collect when user add or remove them.
 Items are grouped together by using nodes forming a category in the list. ID value is not mandatory for a group.
 
 The TreeItemSelector will automatically create group of items based on the treeItems array. It will create a group when an item contains a nodes key within
-the treeItems array and that nodes key is not empty. Below is a sample of a group name call Electronics using two children nodes.::
+the treeItems array and that nodes key is not empty. Below is a sample of a group name call Electronics using two children nodes.:
 
 ```
 $items = [
@@ -43,7 +43,7 @@ will be allowed.
 
 ## Basic Usage
 
-Adding a TreeItemSelector form control to a Form::
+Adding a TreeItemSelector form control to a Form:
 
 ```
 $items = [
@@ -85,7 +85,7 @@ because in multiple mode, it will collect item value as an array type.
 .. php:method:: onItem($fx)
 
 It is possible to run a callback function every time an item is select on the list. The callback function will receive the selected item
-set by the user.::
+set by the user.:
 
 ```
 $control->onItem(function (array $value) {

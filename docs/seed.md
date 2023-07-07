@@ -4,7 +4,7 @@
 
 Agile UI relies on wide variety of objects. For example :php:class:`Button` relies on
 :php:class:`Icon` object for its rendering. As a developer can create Icon object first,
-then pass it to the button::
+then pass it to the button:
 
 ```
 $icon = new Iron('book');
@@ -13,7 +13,7 @@ $button->icon = $icon;
 ```
 
 or you can divert icon creation until later by using Array / String for :php:attr:`Button::$icon`
-property::
+property:
 
 ```
 $button = new Button('Hello');
@@ -35,14 +35,14 @@ Seed has many advantages:
 ### Growing Seed
 
 To grow a seed you need a factory. Factory is a trait implemented in atk4/core and used by all
-ATK UI classes::
+ATK UI classes:
 
 ```
 $object = Factory::factory($seed);
 ```
 
 In most cases you don't need to call factory yourself, methods which accept object/seed combinations
-will do it for you::
+will do it for you:
 
 ```
 Button::addTo($app);
@@ -58,7 +58,7 @@ the :ref:`render tree`.
 
 For more information about seeds, merging seeds, factories and namespaces, see https://agile-core.readthedocs.io/.
 
-The most important points of a seed such as this one::
+The most important points of a seed such as this one:
 
 ```
 $seed = [Button::class, 'hello', 'class.big red' => true, 'icon' => ['book', 'red']];
@@ -73,7 +73,7 @@ are:
 ### Alternative ways to use Seed
 
 Some constructors may accept array as the first argument. It is also treated as a seed
-but without class (because class is already set)::
+but without class (because class is already set):
 
 ```
 $button = new Button(['hello', 'class.big red' => true, 'icon' => ['book', 'class.red' => true]]);
@@ -81,7 +81,7 @@ $button = new Button(['hello', 'class.big red' => true, 'icon' => ['book', 'clas
 
 It is alternatively possible to pass object as index 0 of the seed. In this case
 constructor is already invoked, so passing numeric values is not possible, but
-you still can pass some property values::
+you still can pass some property values:
 
 ```
 $seed = [new Button('hello', 'class.big red' => true), 'icon' => ['book', 'class.red' => true]];
@@ -90,7 +90,7 @@ $seed = [new Button('hello', 'class.big red' => true), 'icon' => ['book', 'class
 ### Additional cases
 
 An individual object may add more ways to deal with seed. For example, when adding columns
-to your Table you can specify seed for the decorator: :php:class:`Atk4\\Ui\\\Table\\Column`::
+to your Table you can specify seed for the decorator: :php:class:`Atk4\\Ui\\\Table\\Column`:
 
 ```
 $table->addColumn('salary', [\Atk4\Ui\Table\Column\Money::class]);

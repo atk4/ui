@@ -13,7 +13,7 @@ Demo: https://ui.agiletoolkit.org/demos/progressbar.php
 
 .. php:method:: jsValue($value)
 
-After adding a console to your :ref:`render_tree`, you just need to set a callback::
+After adding a console to your :ref:`render_tree`, you just need to set a callback:
 
 ```
 // Add progressbar showing 0 (out of 100)
@@ -24,7 +24,7 @@ $bar2 = ProgressBar::addTo($app, [20, '% Battery']);
 ```
 
 The value of the progress bar can be changed either before rendering, inside PHP, or after rendering
-with JavaScript::
+with JavaScript:
 
 ```
 $bar->value = 5; // sets this value instead of 0

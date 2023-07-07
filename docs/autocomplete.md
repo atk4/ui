@@ -25,7 +25,7 @@ where you add an invoice. AutoComplete implements "Plus" mode which will automat
 form where you can enter new record details.
 
 The form save will re-use the model of your auto-complete, so be sure to set() defaults and
-addCondition()s::
+addCondition()s:
 
 ```
 $form->addControl('test', [\Atk4\Ui\Form\Control\AutoComplete::class, 'plus' => true])
@@ -34,7 +34,7 @@ $form->addControl('test', [\Atk4\Ui\Form\Control\AutoComplete::class, 'plus' => 
 
 ### Specifying in Model
 
-You can also specify that you prefer to use AutoComplete inside your model definition::
+You can also specify that you prefer to use AutoComplete inside your model definition:
 
 ```
 $model->hasOne('country_id', ['model' => [Country::class], 'ui' => ['form' => [\Atk4\Ui\Form\Control\AutoComplete::class]]]);
@@ -42,7 +42,7 @@ $model->hasOne('country_id', ['model' => [Country::class], 'ui' => ['form' => [\
 
 ### Advanced Usage
 
-You can do much more with AutoComplete form control by passing dropdown settings::
+You can do much more with AutoComplete form control by passing dropdown settings:
 
 ```
 $form->addControl('test', [
@@ -62,8 +62,7 @@ $form->addControl('test', [
 ## Lookup Form Control
 
 In 1.6 we have introduced Lookup form control, which is identical to AutoComplete but additionally allows
-use of Filters::
-
+use of Filters:
 
 ```
 $form = \Atk4\Ui\Form::addTo($app, ['class.segment' => true]);

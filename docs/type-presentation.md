@@ -60,7 +60,7 @@ the standard types, unless they also offer a dedicated model.
 ## Manually Specifying Decorators
 
 When working with components, they allow to specify decorators manually, even if the type
-of the field does not seem compatible::
+of the field does not seem compatible:
 
 ```
 $table->addColumn('field_name', new \Atk4\Ui\Table\Column\Password());
@@ -73,7 +73,7 @@ $form->addControl('field_name', new \Atk4\Ui\Form\Control\Password());
 Selecting the decorator is done in the following order:
 
  - specified in second argument to UI `addColumn()` or `addControl()` (as shown above)
- - specified using `ui` property of :php:class:`\Atk4\Data\Field`::
+ - specified using `ui` property of :php:class:`\Atk4\Data\Field`:
 
 ```
 $field->ui['form'] = new \Atk4\Ui\Form\Control\Password();
@@ -94,7 +94,7 @@ Let's explore various use cases and how to properly deal with scenarios
 ### Display password in plain-text for Admin
 
 Normally password is presented as asterisks on the Grid and Form. But what if you want to
-show it without masking just for the admin? Change type in-line for the model field::
+show it without masking just for the admin? Change type in-line for the model field:
 
 ```
 $model = new User($app->db);
@@ -108,7 +108,7 @@ $crud->setModel($model);
 ### Hide account_number in specific Table
 
 This is reverse scenario. Field `account_number` needs to be stored as-is but should be
-hidden when presented. To hide it from Table::
+hidden when presented. To hide it from Table:
 
 ```
 $model = new User($app->db);
@@ -120,7 +120,7 @@ $model->addDecorator('account_number', new \Atk4\Ui\Table\Column\Password());
 ### Create a decorator for hiding credit card number
 
 If you happen to store card numbers and you only want to display the last digits in tables,
-yet make it available when editing, you could create your own :php:class:`Table\\Column` decorator::
+yet make it available when editing, you could create your own :php:class:`Table\\Column` decorator:
 
 ```
 class Masker extends \Atk4\Ui\Table\Column
@@ -147,7 +147,7 @@ it's because this technique is unreliable due to ability to exclude HTML tags wi
 
 If we always have to display card numbers with spaces, e.g. "1234 1234 1234 1234" but have
 the database store them without spaces, then this is a data formatting task best done by
-extending :php:class:`Persistence\Ui`::
+extending :php:class:`Persistence\Ui`:
 
 ```
 class MyPersistence extends Persistence\Ui

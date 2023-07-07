@@ -12,7 +12,7 @@ Implement navigational Breadcrumb, by using https://fomantic-ui.com/collections/
 .. php:method:: addCrumb()
 .. php:method:: set()
 
-Here is a simple usage::
+Here is a simple usage:
 
 ```
 $crumb = Breadcrumb::addTo($app);
@@ -44,7 +44,7 @@ Calling addCrumb adds more elements into the $path property. Each element there 
  - divider - which divider to use after the crumb
 
 By default `divider` is set to :php:attr:`Breadcrumb::dividerClass`. You may also manipulate $path array yourself.
-For example the next code will use some logic::
+For example the next code will use some logic:
 
 ```
 $crumb = Breadcrumb::addTo($app);

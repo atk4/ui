@@ -89,7 +89,7 @@ Like ModalExecutor, Confirmation executor is also based on a Modal view. It allo
 execute the action. Since UserAction::confirmation property may be set with a Closure function, this give a chance to
 return specific record information to be displayed to user prior to execute the action.
 
-Here is an example of an user action returning specific record information in the confirmation message::
+Here is an example of an user action returning specific record information in the confirmation message:
 
 ```
     $country->addUserAction('delete_country', [
@@ -125,7 +125,7 @@ other hand, if MODIFIER_UPDATE is set, then Table needs to be reloaded.
 
 Executor factory is responsible for creating proper executor type in regards to the model user action being used.
 
-The factory createExecutor method::
+The factory createExecutor method:
 
 ```
 ExecutorFactory::createExecutor(UserAction $action, View $owner, $requiredType = null)
@@ -150,7 +150,7 @@ to be added to $app->html view in order to work correctly on reload.
 
 ### Changing or adding Executor type
 
-Existing executor type can be change or added globally for all your user model actions via this method::
+Existing executor type can be change or added globally for all your user model actions via this method:
 
 ```
 ExecutorFactory::registerTypeExecutor(string $type, array $seed): void
@@ -159,13 +159,13 @@ ExecutorFactory::registerTypeExecutor(string $type, array $seed): void
 This will set a type to your own executor class. For example, a custom executor class can be set as a MODAL_EXECUTOR type
 and all model user action that use this type will be executed using this custom executor instance.
 
-Type may also be registered per specific model user action via this method::
+Type may also be registered per specific model user action via this method:
 
 ```
 ExecutorFactory::registerExecutor(UserAction $action, array $seed): void
 ```
 
-For example, you need a custom executor to be created when using a specific model user action::
+For example, you need a custom executor to be created when using a specific model user action:
 
 ```
 class MySpecialFormExecutor extends \Atk4\Ui\UserAction\ModalExecutor
@@ -190,7 +190,7 @@ to run this user model action.
 The Executor factory is also responsible for creating the UI view element, like regular, table or card button or menu
 item that will fire the model user action execution.
 
-The method is::
+The method is:
 
 ```
 ExecutorFactory::createTrigger(UserAction $action, string $type = null): View
@@ -199,7 +199,7 @@ ExecutorFactory::createTrigger(UserAction $action, string $type = null): View
 This method return an instance object for the proper type. When no type is supply, a default View Button object
 is returned.
 
-As per executor type, it is also possible to add or change already register type via the registerTrigger method::
+As per executor type, it is also possible to add or change already register type via the registerTrigger method:
 
 ```
 ExecutorFactory::registerTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false): void
@@ -207,7 +207,7 @@ ExecutorFactory::registerTrigger(string $type, $seed, UserAction $action, bool $
 
 Again, the type can be apply globally to all action using the same name or specifically for a certain model/action.
 
-For example, changing default Table button for a specific model user action when this action is used inside a crud table::
+For example, changing default Table button for a specific model user action when this action is used inside a crud table:
 
 ```
 ExecutorFactory::registerTrigger(
@@ -224,7 +224,7 @@ This button view will then be display in Crud when it use a model containing 'ma
 Overriding the ExecutorFactory class is a good way of changing the look of all trigger element within your app or
 within a specific view instance.
 
-Example of changing button for Card, Crud and Modal executor globally within your app::
+Example of changing button for Card, Crud and Modal executor globally within your app:
 
 ```
 class MyFactory extends \Atk4\Ui\UserAction\ExecutorFactory
@@ -255,7 +255,7 @@ $app->defaultExecutorFactory = $myFactory;
 
 ## Model UserAction assignment to View
 
-It is possible to assign a model UserAction to the View::on() method directly::
+It is possible to assign a model UserAction to the View::on() method directly:
 
 ```
 $button->on('click', $model->getUserAction('my_action'));
@@ -268,7 +268,7 @@ used, JsCallback will be used otherwise.
 It is possible to override this behavior by setting the $ui['executor'] property of the model UserAction, since View::on() method
 will first look for that property prior to determine which executor to use.
 
-Example of overriding executor assign to a button.::
+Example of overriding executor assign to a button.:
 
 ```
 $myAction = $model->getUserAction('my_action');

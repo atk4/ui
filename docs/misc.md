@@ -10,7 +10,7 @@ basic content arrangements.
 .. php:method:: addColumn()
 
 When you add new component to the page it will typically consume 100% width of its container. Columns
-will break down width into chunks that can be used by other elements::
+will break down width into chunks that can be used by other elements:
 
 ```
 $c = Columns::addTo($page);
@@ -18,7 +18,7 @@ LoremIpsum::addTo($c->addColumn(), [1]);
 LoremIpsum::addTo($c->addColumn(), [1]);
 ```
 
-By default width is equally divided by columns. You may specify a custom width expressed as fraction of 16::
+By default width is equally divided by columns. You may specify a custom width expressed as fraction of 16:
 
 ```
 $c = Columns::addTo($page);
@@ -27,7 +27,7 @@ LoremIpsum::addTo($c->addColumn(10), [2]); // wider column, more filler
 ```
 
 You can specify how many columns are expected in a grid, but if you do you can't specify widths of individual
-columns. This seem like a limitation of Fomantic-UI::
+columns. This seem like a limitation of Fomantic-UI:
 
 ```
 $c = Columns::addTo($page, ['width' => 4]);
@@ -38,7 +38,7 @@ Box::addTo($c->addColumn(['class.right floated' => true]), ['blue']);
 ### Rows
 
 When you add columns for a total width which is more than permitted, columns will stack below and form a second
-row. To improve and control the flow of rows better, you can specify addRow()::
+row. To improve and control the flow of rows better, you can specify addRow():
 
 ```
 $c = Columns::addTo($page, ['class.internally celled' => true]);

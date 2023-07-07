@@ -19,13 +19,13 @@ Introduced in UI v1.4
 .. php:method:: addStep($title, $callback)
 .. php:method:: addFinish($callback)
 
-Start by creating Wizard inside your render tree::
+Start by creating Wizard inside your render tree:
 
 ```
 $wizard = Wizard::addTo($app);
 ```
 
-Next add as many steps as you need specifying title and a PHP callback code for each::
+Next add as many steps as you need specifying title and a PHP callback code for each:
 
 ```
 $wizard->addStep('Welcome', function (Wizard $wizard) {
@@ -37,7 +37,7 @@ $wizard->addStep('Welcome', function (Wizard $wizard) {
 ```
 
 Your callback will also receive `$wizard` as the first argument. Method addStep returns :php:class:`WizardStep`,
-which is described below. You can also provide first argument to addStep as a seed or an object::
+which is described below. You can also provide first argument to addStep as a seed or an object:
 
 ```
 $wizard->addStep([
@@ -49,7 +49,7 @@ $wizard->addStep([
 });
 ```
 
-You may also specify a single Finish callback, which will be used when wizard is complete::
+You may also specify a single Finish callback, which will be used when wizard is complete:
 
 ```
 $wizard->addFinish(function (Wizard $wizard) {
@@ -92,7 +92,7 @@ or icon on existing button.
 ## Code Placement
 
 As you build up your wizard, you can place code inside callback or outside. It will have a different effect
-on your wizard::
+on your wizard:
 
 ```
 $wizard->buttonNext->icon = 'person';

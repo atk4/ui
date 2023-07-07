@@ -10,7 +10,7 @@ Implements Image around https://fomantic-ui.com/elements/image.html.
 
 ## Basic Usage
 
-Implements basic image::
+Implements basic image:
 
 ```
 $icon = Image::addTo($app, ['image.gif']);
@@ -20,7 +20,7 @@ You need to make sure that argument specified to Image is a valid URL to an imag
 
 ## Specify classes
 
-You can pass additional classes to an image::
+You can pass additional classes to an image:
 
 ```
 $img = $app->cdn['atk'] . '/logo.png';

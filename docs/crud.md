@@ -18,14 +18,14 @@ updating and adding records as well as linking them with corresponding Model act
 
 ## Using Crud
 
-The basic usage of Crud is::
+The basic usage of Crud is:
 
 ```
 Crud::addTo($app)->setModel(new Country($app->db));
 ```
 
 Users are now able to fully interact with the table. There are ways to restrict which "rows" and which "columns" user
-can access. First we can only allow user to read, manage and delete only countries that are part of European Union::
+can access. First we can only allow user to read, manage and delete only countries that are part of European Union:
 
 ```
 $euCountries = new Country($app->db);
@@ -36,7 +36,7 @@ Crud::addTo($app)->setModel($euCountries);
 
 After that column `is_eu` will not be editable to the user anymore as it will be marked `system` by `addCondition`.
 
-You can also specify which columns you would like to see on the grid::
+You can also specify which columns you would like to see on the grid:
 
 ```
 $crud->setModel($euCountries, ['name']);
@@ -48,7 +48,7 @@ parameters to Crud.
 ## Disabling Actions
 
 By default Crud allows all four operations - creating, reading, updating and deleting. These action is set by default in model
-action. It is possible to disable these default actions by setting their system property to true in your model::
+action. It is possible to disable these default actions by setting their system property to true in your model:
 
 ```
 $euCountries->getUserAction('edit')->system = true;
@@ -70,7 +70,7 @@ you can choose here the fields that are available in the editing modal window.
 
 .. important:: Both views (overview and editing view) refer to the same model, just the fields shown in either of them differ
 
-Example::
+Example:
 
 ```
 $crud = \Atk4\Ui\Crud::addTo($app);
@@ -88,7 +88,7 @@ will be used.
 ## Custom Form Behavior
 
 :php:class:`Form` in Agile UI allows you to use many different things, such as custom layouts. With Crud you can
-specify your own form behavior using a callback for action::
+specify your own form behavior using a callback for action:
 
 ```
 // callback for model action add form.
@@ -120,7 +120,7 @@ Callback function will receive the Form and ActionExecutor as arguments.
   Changing the title of the modal of a CRUD's modal window must be done after loading the model.
   Otherwise the changes will have no effect.
 
-Here's an example::
+Here's an example:
 
 ```
 $crud = \Atk4\Ui\Crud::addTo($app);

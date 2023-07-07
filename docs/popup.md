@@ -6,7 +6,7 @@
 
 .. php:class:: Popup
 
-Implements a popup::
+Implements a popup:
 
 ```
 $button = Button::addTo($app, ['Click me']);
@@ -15,7 +15,7 @@ HelloWorld::addTo(Popup::addTo($app, [$button]));
 
 .. php:method:: set($callback)
 
-Popup can also operate with dynamic content::
+Popup can also operate with dynamic content:
 
 ```
 $button = Button::addTo($app, ['Click me']);
@@ -30,7 +30,7 @@ If second argument in the :ref:`seed` is of class :php:class:`Button`, :php:clas
 :php:class:`MenuItem` or :php:class:`Dropdown` (note - NOT Form\Control!), pop-up will also bind itself
 to that element. The above example will automatically bind "click" event of a button to open a pop-up.
 
-When added into a menu, pop-up will appear on hover::
+When added into a menu, pop-up will appear on hover:
 
 ```
 $menu = Menu::addTo($app);
@@ -38,7 +38,7 @@ $item = $menu->addItem('HoverMe')
 Text::addTo(Popup::addTo($app, [$item]))->set('Appears when you hover a menu item');
 ```
 
-Like many other Views of ATK, popup is an interactive element. It can load it's contents when opened::
+Like many other Views of ATK, popup is an interactive element. It can load it's contents when opened:
 
 ```
 $menu = Menu::addTo($app);

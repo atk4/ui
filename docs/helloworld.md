@@ -11,7 +11,7 @@ to create a Hello World app is around a HelloWorld component".
 
 ## Basic Usage
 
-To add a "Hello, World" message::
+To add a "Hello, World" message:
 
 ```
 HelloWorld::addTo($app);
