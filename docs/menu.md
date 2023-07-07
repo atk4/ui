@@ -13,26 +13,34 @@ Menu implements horizontal or vertical multi-level menu by using Fomantic-UI 'me
 
 Here is a simple usage::
 
-    $menu = Menu::addTo($app);
-    $menu->addItem('foo');
-    $menu->addItem('bar');
+```
+$menu = Menu::addTo($app);
+$menu->addItem('foo');
+$menu->addItem('bar');
+```
 
 to make menu vertical::
 
-    $menu->addClass('vertical');
+```
+$menu->addClass('vertical');
+```
 
 ## Decorating Menu Items
 
 See :php:class:`MenuItem` for more options::
 
-    $menu->addItem(['foo', 'icon' => 'book']);
+```
+$menu->addItem(['foo', 'icon' => 'book']);
+```
 
 ## Specifying Links and Actions
 
 Menu items can use links and actions::
 
-    $menu->addItem('foo', 'test.php');
-    $menu->addItem('bar', new JsModal('Test'));
+```
+$menu->addItem('foo', 'test.php');
+$menu->addItem('bar', new JsModal('Test'));
+```
 
 ## Creating sub-menus
 
@@ -45,11 +53,13 @@ menu you can also use groups. For horizontal menu, you can use addRightMenu.
 
 ::
 
-    $menu = Menu::addTo($app);
-    $menu->addItem('foo');
-    $sub = $menu->addMenu('Some Bars');
-    $sub->addItem('bar 1');
-    $sub->addItem('bar 2');
+```
+$menu = Menu::addTo($app);
+$menu->addItem('foo');
+$sub = $menu->addMenu('Some Bars');
+$sub->addItem('bar 1');
+$sub->addItem('bar 2');
+```
 
 ## Headers
 

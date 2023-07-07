@@ -41,15 +41,17 @@ The button view to use for displaying the file open dialog. A default action but
 
 When adding an Upload or UploadImage field to a form, onUpload and onDelete callback must be defined::
 
-    $img = $form->addControl('img', [\Atk4\Ui\Form\Control\UploadImage::class, ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
+```
+$img = $form->addControl('img', [\Atk4\Ui\Form\Control\UploadImage::class, ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
 
-    $img->onUpload(function (array $postFile) {
-        // callback action here...
-    });
+$img->onUpload(function (array $postFile) {
+    // callback action here...
+});
 
-    $img->onDelete(function (string $fileId) {
-        // callback action here...
-    });
+$img->onDelete(function (string $fileId) {
+    // callback action here...
+});
+```
 
 ### onUpload
 
@@ -67,30 +69,34 @@ The onUpload callback function is a good place to:
 
 Example showing the onUpload callback on the UploadImage field::
 
-    $img->onUpload(function (array $postFile) use ($form, $img) {
-        if ($postFile['error'] !== 0) {
-            return $form->jsError('img', 'Error uploading image.');
-        }
+```
+$img->onUpload(function (array $postFile) use ($form, $img) {
+    if ($postFile['error'] !== 0) {
+        return $form->jsError('img', 'Error uploading image.');
+    }
 
-        // Do file processing here...
+    // Do file processing here...
 
-        $img->setThumbnailSrc('./images/' . $fileName);
-        $img->setFileId('123456');
+    $img->setThumbnailSrc('./images/' . $fileName);
+    $img->setFileId('123456');
 
-        // can also return a notifier.
-        return new \Atk4\Ui\Js\JsToast([
-            'message' => 'File is uploaded!',
-            'class' => 'success',
-        ]);
-    });
+    // can also return a notifier.
+    return new \Atk4\Ui\Js\JsToast([
+        'message' => 'File is uploaded!',
+        'class' => 'success',
+    ]);
+});
+```
 
 When user submit the form, the form control data value that will be submitted is the fileId set during the onUpload callback.
 The fileId is set to file name by default if omitted::
 
-    $form->onSubmit(function (Form $form) {
-        // implement submission here
-        return $form->jsSuccess('Thanks for submitting file: ' . $form->model->get('img'));
-    });
+```
+$form->onSubmit(function (Form $form) {
+    // implement submission here
+    return $form->jsSuccess('Thanks for submitting file: ' . $form->model->get('img'));
+});
+```
 
 ### onDelete
 
@@ -107,15 +113,17 @@ The onDelete callback function is a good place to:
 
 Example showing the onDelete callback on the UploadImage field::
 
-    $img->onDelete(function (string $fileId) use ($img) {
-        // reset thumbanil
-        $img->clearThumbnail('./images/default.png');
+```
+$img->onDelete(function (string $fileId) use ($img) {
+    // reset thumbanil
+    $img->clearThumbnail('./images/default.png');
 
-        return new \Atk4\Ui\Js\JsToast([
-            'message' => $fileId . ' has been removed!',
-            'class' => 'success',
-        ]);
-    });
+    return new \Atk4\Ui\Js\JsToast([
+        'message' => $fileId . ' has been removed!',
+        'class' => 'success',
+    ]);
+});
+```
 
 ## UploadImage
 

@@ -18,20 +18,22 @@ Items are grouped together by using nodes forming a category in the list. ID val
 The TreeItemSelector will automatically create group of items based on the treeItems array. It will create a group when an item contains a nodes key within
 the treeItems array and that nodes key is not empty. Below is a sample of a group name call Electronics using two children nodes.::
 
-    $items = [
-        'Electronics' => [
-            'nodes' => [
-                [
-                    'name' => 'tv',
-                    'id' => '100',
-                ],
-                [
-                    'name' => 'radio',
-                    'id' => '100',
-                ],
+```
+$items = [
+    'Electronics' => [
+        'nodes' => [
+            [
+                'name' => 'tv',
+                'id' => '100',
+            ],
+            [
+                'name' => 'radio',
+                'id' => '100',
             ],
         ],
-    ]
+    ],
+]
+```
 
 .. php:attr:: allowMultiple
 
@@ -43,35 +45,37 @@ will be allowed.
 
 Adding a TreeItemSelector form control to a Form::
 
-    $items = [
-        [
-            'name' => 'Electronics',
-            'nodes' => [
-                [
-                    'name' => 'Phone',
-                    'nodes' => [
-                        [
-                            'name' => 'iPhone',
-                            'id' => 502,
-                        ],
-                        [
-                            'name' => 'Google Pixels',
-                            'id' => 503,
-                        ],
+```
+$items = [
+    [
+        'name' => 'Electronics',
+        'nodes' => [
+            [
+                'name' => 'Phone',
+                'nodes' => [
+                    [
+                        'name' => 'iPhone',
+                        'id' => 502,
+                    ],
+                    [
+                        'name' => 'Google Pixels',
+                        'id' => 503,
                     ],
                 ],
-                ['name' => 'Tv', 'id' => 501, 'nodes' => []],
-                ['name' => 'Radio', 'id' => 601, 'nodes' => []],
             ],
+            ['name' => 'Tv', 'id' => 501, 'nodes' => []],
+            ['name' => 'Radio', 'id' => 601, 'nodes' => []],
         ],
-        ['name' => 'Cleaner', 'id' => 201, 'nodes' => []],
-        ['name' => 'Appliances', 'id' => 301, 'nodes' => []],
-    ];
+    ],
+    ['name' => 'Cleaner', 'id' => 201, 'nodes' => []],
+    ['name' => 'Appliances', 'id' => 301, 'nodes' => []],
+];
 
 
-    $form = \Atk4\Ui\Form::addTo($app);
-    $control = $form->addControl('tree', [new TreeItemSelector(['treeItems' => $items]), 'caption' => 'Select items:'], ['type' => 'json']);
-    $control->set([201, 301, 503]);
+$form = \Atk4\Ui\Form::addTo($app);
+$control = $form->addControl('tree', [new TreeItemSelector(['treeItems' => $items]), 'caption' => 'Select items:'], ['type' => 'json']);
+$control->set([201, 301, 503]);
+```
 
 Please note that when using TreeItemSelector in multiple mode, you need to specify field attribute type to 'json'
 because in multiple mode, it will collect item value as an array type.
@@ -83,9 +87,11 @@ because in multiple mode, it will collect item value as an array type.
 It is possible to run a callback function every time an item is select on the list. The callback function will receive the selected item
 set by the user.::
 
-    $control->onItem(function (array $value) {
-        return new \Atk4\Ui\Js\JsToast($this->getApp()->encodeJson($value));
-    });
+```
+$control->onItem(function (array $value) {
+    return new \Atk4\Ui\Js\JsToast($this->getApp()->encodeJson($value));
+});
+```
 
 ## Note
 

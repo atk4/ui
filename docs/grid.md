@@ -13,15 +13,19 @@ and others by relying on other components.
 
 Here is a simple usage::
 
-    Grid::addTo($app)->setModel(new Country($db));
+```
+Grid::addTo($app)->setModel(new Country($db));
+```
 
 To make your grid look nicer, you might want to add some buttons and enable quicksearch::
 
-    $grid = Grid::addTo($app);
-    $grid->setModel(new Country($db));
+```
+$grid = Grid::addTo($app);
+$grid->setModel(new Country($db));
 
-    $grid->addQuickSearch();
-    $grid->menu->addItem('Reload Grid', new \Atk4\Ui\Js\JsReload($grid));
+$grid->addQuickSearch();
+$grid->menu->addItem('Reload Grid', new \Atk4\Ui\Js\JsReload($grid));
+```
 
 ## Adding Menu Items
 
@@ -32,17 +36,23 @@ To make your grid look nicer, you might want to add some buttons and enable quic
 Grid top-bar which contains QuickSearch is implemented using Fomantic-UI "ui menu". With that
 you can add additional items and use all features of a regular :php:class:`Menu`::
 
-    $sub = $grid->menu->addMenu('Drop-down');
-    $sub->addItem('Test123');
+```
+$sub = $grid->menu->addMenu('Drop-down');
+$sub->addItem('Test123');
+```
 
 For compatibility grid supports addition of the buttons to the menu, but there are several
 Fomantic-UI limitations that wouldn't allow to format buttons nicely::
 
-    $grid->addButton('Hello');
+```
+$grid->addButton('Hello');
+```
 
 If you don't need menu, you can disable menu bar entirely::
 
-    $grid = Grid::addTo($app, ['menu' => false]);
+```
+$grid = Grid::addTo($app, ['menu' => false]);
+```
 
 ## Adding Quick Search
 
@@ -53,7 +63,9 @@ If you don't need menu, you can disable menu bar entirely::
 After you have associated grid with a model using :php:class:`View::setModel()` you can
 include quick-search component::
 
-    $grid->addQuickSearch(['name', 'surname']);
+```
+$grid->addQuickSearch(['name', 'surname']);
+```
 
 If you don't specify argument, then search will be done by a models title field.
 (https://agile-data.readthedocs.io/en/develop/model.html#title-field)
@@ -61,7 +73,9 @@ If you don't specify argument, then search will be done by a models title field.
 By default, quick search input field will query server when user press the Enter key. However, it is possible to make it
 querying the server automatically, i.e. after the user has finished typing, by setting the auto query parameter::
 
-    $grid->addQuickSearch(['name', 'surname'], true);
+```
+$grid->addQuickSearch(['name', 'surname'], true);
+```
 
 ## Paginator
 
@@ -72,11 +86,15 @@ querying the server automatically, i.e. after the user has finished typing, by s
 Grid comes with a paginator already. You can disable it by setting $paginator property to false. Alternatively you
 can provide seed for the paginator or even entire object::
 
-    $grid = Grid::addTo($app, ['paginator' => ['range' => 2]]);
+```
+$grid = Grid::addTo($app, ['paginator' => ['range' => 2]]);
+```
 
 You can use $ipp property to specify different number of items per page::
 
-    $grid->ipp = 10;
+```
+$grid->ipp = 10;
+```
 
 ### JsPaginator
 
@@ -84,7 +102,9 @@ You can use $ipp property to specify different number of items per page::
 
 JsPaginator will load table content dynamically when user scroll down the table window on screen.
 
-    $table->addJsPaginator(30);
+```
+$table->addJsPaginator(30);
+```
 
 See :php:meth:`Table::addJsPaginator`
 
@@ -115,12 +135,14 @@ See :php:meth:`Table\\Column\\\Actions::addAction`
 Similar to addAction, but when clicking a button, will open a modal dialog and execute $callback
 to populate a content::
 
-    $grid->addModalAction('Details', 'Additional Details', function (View $p, $id) use ($grid) {
-        // $id of the record which was clicked
-        // $grid->model = $grid->model->load($id);
+```
+$grid->addModalAction('Details', 'Additional Details', function (View $p, $id) use ($grid) {
+    // $id of the record which was clicked
+    // $grid->model = $grid->model->load($id);
 
-        LoremIpsum::addTo($p);
-    });
+    LoremIpsum::addTo($p);
+});
+```
 
 Calling this method multiple times will add button into same action column.
 
@@ -141,11 +163,13 @@ Grid can have a checkbox column for you to select elements. It relies on :php:cl
 additionally place this column before any other column inside a grid. You can use :php:meth:`Table\\Column\\Checkbox::jsChecked()`
 method to reference value of selected checkboxes inside any :ref:`js_action`::
 
-    $sel = $grid->addSelection();
-    $grid->menu->addItem('show selection')
-        ->on('click', new \Atk4\Ui\Js\JsExpression(
-            'alert(\'Selected: \' + [])', [$sel->jsChecked()]
-        ));
+```
+$sel = $grid->addSelection();
+$grid->menu->addItem('show selection')
+    ->on('click', new \Atk4\Ui\Js\JsExpression(
+        'alert(\'Selected: \' + [])', [$sel->jsChecked()]
+    ));
+```
 
 ## Sorting
 

@@ -86,36 +86,38 @@ Agile UI / Agile Data code for your app can fit into a single file. See below fo
 clarifications::
 
 
-    <?php
-    require_once __DIR__ . '/vendor/autoload.php';
+```
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
 
-    // Define your data structure
-    class Offer extends \Atk4\Data\Model
+// Define your data structure
+class Offer extends \Atk4\Data\Model
+{
+    public $table = 'offer';
+
+    protected function init(): void
     {
-        public $table = 'offer';
+        parent::init();
 
-        protected function init(): void
-        {
-            parent::init();
-
-            // Persistence may not have structure, so we define here
-            $this->addField('domain_name');
-            $this->addField('contact_email');
-            $this->addField('contact_phone');
-            $this->addField('date', ['type' => 'date']);
-            $this->addField('offer', ['type' => 'atk4_money']);
-            $this->addField('is_accepted', ['type' => 'boolean']);
-        }
+        // Persistence may not have structure, so we define here
+        $this->addField('domain_name');
+        $this->addField('contact_email');
+        $this->addField('contact_phone');
+        $this->addField('date', ['type' => 'date']);
+        $this->addField('offer', ['type' => 'atk4_money']);
+        $this->addField('is_accepted', ['type' => 'boolean']);
     }
+}
 
-    // Create Application object and initialize Admin Layout
-    $app = new \Atk4\Ui\App('Offer tracking system');
-    $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
+// Create Application object and initialize Admin Layout
+$app = new \Atk4\Ui\App('Offer tracking system');
+$app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 
-    // Connect to database and place a fully-interactive Crud
-    $db = new \Atk4\Data\Persistence\Sql($dsn);
-    \Atk4\Ui\Crud::addTo($app)
-        ->setModel(new Offer($db));
+// Connect to database and place a fully-interactive Crud
+$db = new \Atk4\Data\Persistence\Sql($dsn);
+\Atk4\Ui\Crud::addTo($app)
+    ->setModel(new Offer($db));
+```
 
 Through the course of this example, We are performing several core actions:
 
@@ -194,10 +196,12 @@ That means that components may rely on each other and even though some may appea
 very basic to you, they are relied on by some other components for maximum
 flexibility. The next example adds a "Cancel" button to a form::
 
-    $button = \Atk4\Ui\Button::addTo($form, [
-        'Cancel',
-        'icon' => new \Atk4\Ui\Icon('pencil'),
-    ])->link('dashboard.php');
+```
+$button = \Atk4\Ui\Button::addTo($form, [
+    'Cancel',
+    'icon' => new \Atk4\Ui\Icon('pencil'),
+])->link('dashboard.php');
+```
 
 :php:class:`Button` and :php:class:`Icon` are some of the most basic components in
 Agile UI. You will find Crud / Form / Grid components much more useful:
@@ -209,27 +213,33 @@ Agile UI. You will find Crud / Form / Grid components much more useful:
 Look above at the :ref:`overview_example`, component `GRID` was made part
 of application layout with a line::
 
-    \Atk4\Ui\Crud::addTo($app);
+```
+\Atk4\Ui\Crud::addTo($app);
+```
 
 
 To render a component individually and get the HTML and JavaScript use this format::
 
-    $form = new Form();
-    $form->setApp($app);
-    $form->invokeInit();
-    $form->setModel(new User($db));
+```
+$form = new Form();
+$form->setApp($app);
+$form->invokeInit();
+$form->setModel(new User($db));
 
-    $html = $form->render();
+$html = $form->render();
+```
 
 
 This would render an individual component and will return HTML::
 
-    <div class="ui form">
-        <form id="atk_form">
-           ... fields
-           ... buttons
-        </form>
-    </div>
+```
+<div class="ui form">
+    <form id="atk_form">
+       ... fields
+       ... buttons
+    </form>
+</div>
+```
 
 For other use-cases please look into :php:meth:`View::render()`
 
@@ -239,8 +249,10 @@ Factory is a mechanism which allow you to use shorter syntax for creating object
 The goal of Agile UI is to be simple to read and use; so taking advantage of loose types
 in PHP language allows us to use an alternative shorter syntax::
 
-    \Atk4\Ui\Button::addTo($form, ['Cancel', 'icon' => 'pencil'])
-        ->link('dashboard.php');
+```
+\Atk4\Ui\Button::addTo($form, ['Cancel', 'icon' => 'pencil'])
+    ->link('dashboard.php');
+```
 
 By default, class names specified as the first array elements passed to the add() method are
 resolved to namespace `Atk4\\Ui`; however the application class can fine-tune the
@@ -457,6 +469,7 @@ To run the demo:
 The demo also includes a script that let's you setup a Sqlite file database with an example data.
 You will find this script in the subdirectory "atk4/ui/demos/_demo-data/". To run this script,
 use the following command:
-    ```
-    php atk4/ui/demos/_demo-data/create-db.php;
-    ```
+
+```
+php atk4/ui/demos/_demo-data/create-db.php;
+```

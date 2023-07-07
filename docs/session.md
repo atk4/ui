@@ -9,15 +9,21 @@ some objects want to memorize data.  (see https://github.com/atk4/ui/blob/develo
 
 You would need 3 things. First make use of session trait::
 
-    use \Atk4\Ui\SessionTrait;
+```
+use \Atk4\Ui\SessionTrait;
+```
 
 next you may memorize any value, which will be stored independently from any other object (even of a same class)::
 
-    $this->memorize('dsn', $dsn);
+```
+$this->memorize('dsn', $dsn);
+```
 
 Later when you need the value, you can simply recall it::
 
-    $dsn = $this->recall('dsn');
+```
+$dsn = $this->recall('dsn');
+```
 
 ## Properties
 

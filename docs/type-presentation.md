@@ -62,18 +62,22 @@ the standard types, unless they also offer a dedicated model.
 When working with components, they allow to specify decorators manually, even if the type
 of the field does not seem compatible::
 
-    $table->addColumn('field_name', new \Atk4\Ui\Table\Column\Password());
+```
+$table->addColumn('field_name', new \Atk4\Ui\Table\Column\Password());
 
-    // or
+// or
 
-    $form->addControl('field_name', new \Atk4\Ui\Form\Control\Password());
+$form->addControl('field_name', new \Atk4\Ui\Form\Control\Password());
+```
 
 Selecting the decorator is done in the following order:
 
  - specified in second argument to UI `addColumn()` or `addControl()` (as shown above)
  - specified using `ui` property of :php:class:`\Atk4\Data\Field`::
 
-    $field->ui['form'] = new \Atk4\Ui\Form\Control\Password();
+```
+$field->ui['form'] = new \Atk4\Ui\Form\Control\Password();
+```
 
  - fallback to :php:meth:`Form::controlFactory`
 
@@ -92,10 +96,12 @@ Let's explore various use cases and how to properly deal with scenarios
 Normally password is presented as asterisks on the Grid and Form. But what if you want to
 show it without masking just for the admin? Change type in-line for the model field::
 
-    $model = new User($app->db);
-    $model->getField('password')->type = 'string';
+```
+$model = new User($app->db);
+$model->getField('password')->type = 'string';
 
-    $crud->setModel($model);
+$crud->setModel($model);
+```
 
 .. note:: Changing element's type to string will certainly not perform any password encryption.
 
@@ -104,30 +110,34 @@ show it without masking just for the admin? Change type in-line for the model fi
 This is reverse scenario. Field `account_number` needs to be stored as-is but should be
 hidden when presented. To hide it from Table::
 
-    $model = new User($app->db);
+```
+$model = new User($app->db);
 
-    $table->setModel($model);
-    $model->addDecorator('account_number', new \Atk4\Ui\Table\Column\Password());
+$table->setModel($model);
+$model->addDecorator('account_number', new \Atk4\Ui\Table\Column\Password());
+```
 
 ### Create a decorator for hiding credit card number
 
 If you happen to store card numbers and you only want to display the last digits in tables,
 yet make it available when editing, you could create your own :php:class:`Table\\Column` decorator::
 
-    class Masker extends \Atk4\Ui\Table\Column
+```
+class Masker extends \Atk4\Ui\Table\Column
+{
+    public function getDataCellTemplate(\Atk4\Data\Field $field = null): string
     {
-        public function getDataCellTemplate(\Atk4\Data\Field $field = null): string
-        {
-            return '**** **** **** {$mask}';
-        }
-
-        public function getHtmlTags(\Atk4\Data\Model $row, ?\Atk4\Data\Field $field): array
-        {
-            return [
-                'mask' => substr($field->get($row), -4),
-            ];
-        }
+        return '**** **** **** {$mask}';
     }
+
+    public function getHtmlTags(\Atk4\Data\Model $row, ?\Atk4\Data\Field $field): array
+    {
+        return [
+            'mask' => substr($field->get($row), -4),
+        ];
+    }
+}
+```
 
 If you are wondering, why I'm not overriding by providing HTML tag equal to the field name,
 it's because this technique is unreliable due to ability to exclude HTML tags with
@@ -139,39 +149,41 @@ If we always have to display card numbers with spaces, e.g. "1234 1234 1234 1234
 the database store them without spaces, then this is a data formatting task best done by
 extending :php:class:`Persistence\Ui`::
 
-    class MyPersistence extends Persistence\Ui
+```
+class MyPersistence extends Persistence\Ui
+{
+    protected function _typecastSaveField(\Atk4\Data\Field $field, $value)
     {
-        protected function _typecastSaveField(\Atk4\Data\Field $field, $value)
-        {
-            switch ($field->type) {
-                case 'card':
-                    $parts = str_split($value, 4);
+        switch ($field->type) {
+            case 'card':
+                $parts = str_split($value, 4);
 
-                    return implode(' ', $parts);
-            }
-
-            return parent::_typecastSaveField($field, $value);
+                return implode(' ', $parts);
         }
 
-        public function _typecastLoadField(\Atk4\Data\Field $field, $value)
-        {
-            switch ($field->type) {
-                case 'card':
-                    return str_replace(' ', '', $value);
-            }
-
-            return parent::_typecastLoadField($field, $value);
-        }
+        return parent::_typecastSaveField($field, $value);
     }
 
-    class MyApp extends App
+    public function _typecastLoadField(\Atk4\Data\Field $field, $value)
     {
-        public function __construct(array $defaults = [])
-        {
-            $this->uiPersistence = new MyPersistence()
-
-            parent::__construct($defaults);
+        switch ($field->type) {
+            case 'card':
+                return str_replace(' ', '', $value);
         }
+
+        return parent::_typecastLoadField($field, $value);
     }
+}
+
+class MyApp extends App
+{
+    public function __construct(array $defaults = [])
+    {
+        $this->uiPersistence = new MyPersistence()
+
+        parent::__construct($defaults);
+    }
+}
+```
 
 Now your 'card' type will work system-wide.

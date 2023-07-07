@@ -10,12 +10,14 @@ component.
 One example of this behavior is the format of :php:meth:`View::on` where you pass 2nd argument as a
 PHP callback::
 
-    $button = new Button();
+```
+$button = new Button();
 
-    // clicking button generates random number every time
-    $button->on('click', function (Jquery $j) {
-        return $j->text(rand(1, 100));
-    });
+// clicking button generates random number every time
+$button->on('click', function (Jquery $j) {
+    return $j->text(rand(1, 100));
+});
+```
 
 This creates callback route transparently which is triggered automatically during the 'click' event.
 To make this work seamlessly there are several classes at play. This documentation chapter will walk
@@ -34,8 +36,10 @@ traits:
 
 To create a new callback, do this::
 
-    $c = new \Atk4\Ui\Callback();
-    $app->add($c);
+```
+$c = new \Atk4\Ui\Callback();
+$app->add($c);
+```
 
 Because 'Callback' is not a View, it won't be rendered. The reason we are adding into :ref:`render_tree`
 is for it to establish a unique name which will be used to generate callback URL:
@@ -46,18 +50,22 @@ is for it to establish a unique name which will be used to generate callback URL
 
 The following example code generates unique URL::
 
-    $label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
-    $cb = \Atk4\Ui\Callback::addTo($label);
-    $label->detail = $cb->getUrl();
-    $label->link($cb->getUrl());
+```
+$label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
+$cb = \Atk4\Ui\Callback::addTo($label);
+$label->detail = $cb->getUrl();
+$label->link($cb->getUrl());
+```
 
 I have assigned generated URL to the label, so that if you click it, your browser will visit
 callback URL triggering a special action. We haven't set that action yet, so I'll do it next with
 :php:meth::`Callback::set()`::
 
-    $cb->set(function () use ($app) {
-        $app->terminate('in callback');
-    });
+```
+$cb->set(function () use ($app) {
+    $app->terminate('in callback');
+});
+```
 
 ### Callback Triggering
 
@@ -83,14 +91,16 @@ output specified string instead, stopping further execution of your application.
 The callback verifies trigger condition when you call :php:meth:`Callback::set()`. If your callback
 returns any value, the set() will return it too::
 
-    $label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
-    $cb = \Atk4\Ui\Callback::addTo($label);
-    $label->detail = $cb->getUrl();
-    $label->link($cb->getUrl());
+```
+$label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
+$cb = \Atk4\Ui\Callback::addTo($label);
+$label->detail = $cb->getUrl();
+$label->link($cb->getUrl());
 
-    if ($cb->set(function () { return true; })) {
-        $label->addClass('red');
-    }
+if ($cb->set(function () { return true; })) {
+    $label->addClass('red');
+}
+```
 
 This example uses return of the :php:meth:`Callback::set()` to add class to a label, however a
 much more preferred way is to use :php:attr:`$triggered`.
@@ -102,18 +112,20 @@ execution with set() and terminate(). This can be helpful sometimes when you nee
 rendering of the page through a special callback link. The next example will change color of
 the label regardless of the callback function::
 
-    $label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
-    $cb = \Atk4\Ui\Callback::addTo($label);
-    $label->detail = $cb->getUrl();
-    $label->link($cb->getUrl());
+```
+$label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
+$cb = \Atk4\Ui\Callback::addTo($label);
+$label->detail = $cb->getUrl();
+$label->link($cb->getUrl());
 
-    $cb->set(function () {
-        echo 123;
-    });
+$cb->set(function () {
+    echo 123;
+});
 
-    if ($cb->triggered) {
-        $label->addClass('red');
-    }
+if ($cb->triggered) {
+    $label->addClass('red');
+}
+```
 
 .. php:attr:: postTrigger
 
@@ -138,15 +150,17 @@ either at the end at beforeRender or beforeOutput hook from inside App, whicheve
 In other words this won't break the flow of your code logic, it simply won't render it. In the next example
 the $label->detail is assigned at the very end, yet callback is able to access the property::
 
-    $label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
-    $cb = \Atk4\Ui\CallbackLater::addTo($label);
+```
+$label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
+$cb = \Atk4\Ui\CallbackLater::addTo($label);
 
-    $cb->set(function () use ($app, $label) {
-        $app->terminate('Label detail is ' . $label->detail);
-    });
+$cb->set(function () use ($app, $label) {
+    $app->terminate('Label detail is ' . $label->detail);
+});
 
-    $label->detail = $cb->getUrl();
-    $label->link($cb->getUrl());
+$label->detail = $cb->getUrl();
+$label->link($cb->getUrl());
+```
 
 CallbackLater is used by several actions in Agile UI, such as JsReload(), and ensures that the component
 you are reloading are fully rendered by the time callback is executed.
@@ -160,12 +174,14 @@ know about :php:class:`JsReload` already?
 
 Here is example of JsReload::
 
-    $view = \Atk4\Ui\View::addTo($app, ['ui' => 'tertiary green inverted segment']);
-    $button = \Atk4\Ui\Button::addTo($app, ['Reload Lorem']);
+```
+$view = \Atk4\Ui\View::addTo($app, ['ui' => 'tertiary green inverted segment']);
+$button = \Atk4\Ui\Button::addTo($app, ['Reload Lorem']);
 
-    $button->on('click', new \Atk4\Ui\Js\JsReload($view));
+$button->on('click', new \Atk4\Ui\Js\JsReload($view));
 
-    \Atk4\Ui\LoremIpsum::addTo($view);
+\Atk4\Ui\LoremIpsum::addTo($view);
+```
 
 
 NOTE: that we can't perform JsReload on LoremIpsum directly, because it's a text, it needs to be inside
@@ -188,19 +204,23 @@ JsCallback implements exactly that. When you specify a handler for JsCallback, i
 which will be rendered into JavaScript in response to triggering callback's URL. Let's bring up our older example, but will
 use JsCallback class now::
 
-    $label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
-    $cb = \Atk4\Ui\JsCallback::addTo($label);
+```
+$label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
+$cb = \Atk4\Ui\JsCallback::addTo($label);
 
-    $cb->set(function () {
-        return 'ok';
-    });
+$cb->set(function () {
+    return 'ok';
+});
 
-    $label->detail = $cb->getUrl();
-    $label->link($cb->getUrl());
+$label->detail = $cb->getUrl();
+$label->link($cb->getUrl());
+```
 
 When you trigger callback, you'll see the output::
 
-    {"success": true, "message": "Success", "eval": "alert(\"ok\")"}
+```
+{"success": true, "message": "Success", "eval": "alert(\"ok\")"}
+```
 
 This is how JsCallback renders actions and sends them back to the browser. In order to retrieve and execute actions,
 you'll need a JavaScript routine. Luckily JsCallback can be passed to :php:meth:`View::on()` as a JS action.
@@ -210,23 +230,27 @@ execute PHP method returning one or more :ref:`js_action` which will be received
 
 To fully use jsAction above, here is a modified code::
 
-    $label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
-    $cb = \Atk4\Ui\JsCallback::addTo($label);
+```
+$label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
+$cb = \Atk4\Ui\JsCallback::addTo($label);
 
-    $cb->set(function () {
-        return 'ok';
-    });
+$cb->set(function () {
+    return 'ok';
+});
 
-    $label->detail = $cb->getUrl();
-    $label->on('click', $cb);
+$label->detail = $cb->getUrl();
+$label->on('click', $cb);
+```
 
 Now, that is pretty long. For your convenience, there is a shorter mechanism::
 
-    $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
+```
+$label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 
-    $label->on('click', function () {
-        return 'ok';
-    });
+$label->on('click', function () {
+    return 'ok';
+});
+```
 
 User Confirmation
 ^^^^^^^^^^^^^^^^^
@@ -238,26 +262,30 @@ is based on 'Callback' therefore code after :php:meth:`View::on()` will not be e
 
 If you set `confirm` property action will ask for user's confirmation before sending a callback::
 
-    $label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
-    $cb = \Atk4\Ui\JsCallback::addTo($label);
+```
+$label = \Atk4\Ui\Label::addTo($app, ['Callback URL:']);
+$cb = \Atk4\Ui\JsCallback::addTo($label);
 
-    $cb->confirm = 'sure?';
+$cb->confirm = 'sure?';
 
-    $cb->set(function () {
-        return 'ok';
-    });
+$cb->set(function () {
+    return 'ok';
+});
 
-    $label->detail = $cb->getUrl();
-    $label->on('click', $cb);
+$label->detail = $cb->getUrl();
+$label->on('click', $cb);
+```
 
 This is used with delete operations. When using :php:meth:`View::on()` you can pass extra argument to set the 'confirm'
 property::
 
-    $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
+```
+$label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 
-    $label->on('click', function () {
-        return 'ok';
-    }, ['confirm' => 'sure?']);
+$label->on('click', function () {
+    return 'ok';
+}, ['confirm' => 'sure?']);
+```
 
 JavaScript arguments
 ^^^^^^^^^^^^^^^^^^^^
@@ -267,33 +295,39 @@ JavaScript arguments
 It is possible to modify expression of JsCallback to pass additional arguments to it's callback. The next example
 will send browser screen width back to the callback::
 
-    $label = \Atk4\Ui\Label::addTo($app);
-    $cb = \Atk4\Ui\JsCallback::addTo($label);
+```
+$label = \Atk4\Ui\Label::addTo($app);
+$cb = \Atk4\Ui\JsCallback::addTo($label);
 
-    $cb->set(function (\Atk4\Ui\Js\Jquery $j, $arg1) {
-        return 'width is ' . $arg1;
-    }, [new \Atk4\Ui\Js\JsExpression('$(window).width()')]);
+$cb->set(function (\Atk4\Ui\Js\Jquery $j, $arg1) {
+    return 'width is ' . $arg1;
+}, [new \Atk4\Ui\Js\JsExpression('$(window).width()')]);
 
-    $label->detail = $cb->getUrl();
-    $label->on('click', $cb);
+$label->detail = $cb->getUrl();
+$label->on('click', $cb);
+```
 
 In here you see that I'm using a 2nd argument to $cb->set() to specify arguments, which, I'd like to fetch from the
 browser. Those arguments are passed to the callback and eventually arrive as $arg1 inside my callback. The :php:meth:`View::on()`
 also supports argument passing::
 
-    $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
+```
+$label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 
-    $label->on('click', function (Jquery $j, $arg1) {
-        return 'width is ' . $arg1;
-    }, ['confirm' => 'sure?', 'args' => [new \Atk4\Ui\Js\JsExpression('$(window).width()')]]);
+$label->on('click', function (Jquery $j, $arg1) {
+    return 'width is ' . $arg1;
+}, ['confirm' => 'sure?', 'args' => [new \Atk4\Ui\Js\JsExpression('$(window).width()')]]);
+```
 
 If you do not need to specify confirm, you can actually pass arguments in a key-less array too::
 
-    $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
+```
+$label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 
-    $label->on('click', function (Jquery $j, $arg1) {
-        return 'width is ' . $arg1;
-    }, [new \Atk4\Ui\Js\JsExpression('$(window).width()')]);
+$label->on('click', function (Jquery $j, $arg1) {
+    return 'width is ' . $arg1;
+}, [new \Atk4\Ui\Js\JsExpression('$(window).width()')]);
+```
 
 
 Referring to event origin
@@ -303,7 +337,9 @@ You might have noticed that JsCallback now passes first argument ($j) which so f
 jQuery chain for the element which received the event. We can change the response to do something with this element.
 Instead of `return` use::
 
-    $j->text('width is ' . $arg1);
+```
+$j->text('width is ' . $arg1);
+```
 
 Now instead of showing an alert box, label content will be changed to display window width.
 

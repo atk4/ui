@@ -13,12 +13,16 @@ Demo: https://ui.agiletoolkit.org/demos/tabs.php
 
 Once you create Tabs container you can then mix and match static and dynamic tabs::
 
-    $tabs = Tabs::addTo($app);
+```
+$tabs = Tabs::addTo($app);
+```
 
 
 Adding a static content is pretty simple::
 
-    LoremIpsum::addTo($tabs->addTab('Static Tab'));
+```
+LoremIpsum::addTo($tabs->addTab('Static Tab'));
+```
 
 You can add multiple elements into a single tab, like any other view.
 
@@ -31,15 +35,17 @@ You should pass Closure action as a second parameter.
 
 Example::
 
-    $tabs = Tabs::addTo($layout);
+```
+$tabs = Tabs::addTo($layout);
 
-    // add static tab
-    HelloWorld::addTo($tabs->addTab('Static Tab'));
+// add static tab
+HelloWorld::addTo($tabs->addTab('Static Tab'));
 
-    // add dynamic tab
-    $tabs->addTab('Dynamically Loading', function (VirtualPage $vp) {
-        LoremIpsum::addTo($vp);
-    });
+// add dynamic tab
+$tabs->addTab('Dynamically Loading', function (VirtualPage $vp) {
+    LoremIpsum::addTo($vp);
+});
+```
 
 ## Dynamic Tabs
 
@@ -48,26 +54,28 @@ to pass a callback which will be triggered when user clicks on the tab.
 
 Note that tab contents are refreshed including any values you put on the form::
 
-    $tabs = Tabs::addTo($app);
+```
+$tabs = Tabs::addTo($app);
 
-    // dynamic tab
-    $tabs->addTab('Dynamic Lorem Ipsum', function (VirtualPage $vp) {
-        LoremIpsum::addTo($vp, ['size' => 2]);
+// dynamic tab
+$tabs->addTab('Dynamic Lorem Ipsum', function (VirtualPage $vp) {
+    LoremIpsum::addTo($vp, ['size' => 2]);
+});
+
+// dynamic tab
+$tabs->addTab('Dynamic Form', function (VirtualPage $vp) {
+    $mRegister = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_($a));
+    $mRegister->addField('name', ['caption' => 'Please enter your name (John)']);
+
+    $form = Form::addTo($vp, ['class.segment' => true]);
+    $form->setModel($mRegister);
+    $form->onSubmit(function (Form $form) {
+        if ($form->model->get('name') !== 'John') {
+            return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
+        }
     });
-
-    // dynamic tab
-    $tabs->addTab('Dynamic Form', function (VirtualPage $vp) {
-        $mRegister = new \Atk4\Data\Model(new \Atk4\Data\Persistence\Array_($a));
-        $mRegister->addField('name', ['caption' => 'Please enter your name (John)']);
-
-        $form = Form::addTo($vp, ['class.segment' => true]);
-        $form->setModel($mRegister);
-        $form->onSubmit(function (Form $form) {
-            if ($form->model->get('name') !== 'John') {
-                return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
-            }
-        });
-    });
+});
+```
 
 ## URL Tabs
 
@@ -75,7 +83,9 @@ Note that tab contents are refreshed including any values you put on the form::
 
 Tab can load external URL or a different page if you prefer that instead of VirtualPage. This works similar to iframe::
 
-    $tabs = Tabs::addTo($app);
+```
+$tabs = Tabs::addTo($app);
 
-    $tabs->addTabUrl('Terms and Condition', 'terms.html');
+$tabs->addTabUrl('Terms and Condition', 'terms.html');
+```
 

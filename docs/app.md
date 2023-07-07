@@ -8,9 +8,11 @@
 App is a mandatory object that's essential for Agile UI to operate. You should create instance
 of an App class yourself before other components::
 
-    $app = new \Atk4\Ui\App('My App');
-    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
-    LoremIpsum::addTo($app);
+```
+$app = new \Atk4\Ui\App('My App');
+$app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+LoremIpsum::addTo($app);
+```
 
 As you add one component into another, they will automatically inherit reference to App class. App
 class is an ideal place to have all your environment configured and all the dependencies defined that
@@ -29,11 +31,13 @@ error is not repeated.
 Since App class becomes available for all objects and components of Agile Toolkit, you may add
 properties into the App class::
 
-    $app->db = new \Atk4\Data\Persistence\Sql($dsn);
+```
+$app->db = new \Atk4\Data\Persistence\Sql($dsn);
 
-    // later anywhere in the code:
+// later anywhere in the code:
 
-    $m = new MyModel($this->getApp()->db);
+$m = new MyModel($this->getApp()->db);
+```
 
 .. IMPORTANT:: $app->db is NOT a standard property. If you use this property, that's your own convention.
 
@@ -54,65 +58,71 @@ App class may initialize some resources for you including user authentication an
 My next example defines property `$user` and `$system` for the app class to indicate a system which is currently
 active. (See :ref:`system_pattern`)::
 
-    class Warehouse extends \Atk4\Ui\App
+```
+class Warehouse extends \Atk4\Ui\App
+{
+    public $user;
+    public $company;
+
+    public function __construct(bool $auth = true)
     {
-        public $user;
-        public $company;
+        parent::__construct('Warehouse App v0.4');
 
-        public function __construct(bool $auth = true)
-        {
-            parent::__construct('Warehouse App v0.4');
+        // My App class will establish database connection
+        $this->db = new \Atk4\Data\Persistence\Sql($_CLEARDB_DATABASE_URL['DSN']);
+        $this->db->setApp($this);
 
-            // My App class will establish database connection
-            $this->db = new \Atk4\Data\Persistence\Sql($_CLEARDB_DATABASE_URL['DSN']);
-            $this->db->setApp($this);
+        // My App class provides access to a currently logged user and currently selected system.
+        session_start();
 
-            // My App class provides access to a currently logged user and currently selected system.
-            session_start();
+        // App class may be used for pages that do not require authentication
+        if (!$auth) {
+            $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
-            // App class may be used for pages that do not require authentication
-            if (!$auth) {
-                $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
-
-                return;
-            }
-
-            // Load user from database based on session data
-            if (isset($_SESSION['user_id'])) {
-                $user = new User($this->db);
-                $this->user = $user->tryLoad($_SESSION['user_id']);
-            }
-
-            // Make sure user is valid
-            if ($this->user === null) {
-                $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
-                Message::addTo($this, ['Login Required', 'type' => 'error']);
-                Button::addTo($this, ['Login', 'class.primary' => true])->link('index.php');
-                exit;
-            }
-
-            // Load company data (System) for present user
-            $this->company = $this->user->ref('company_id');
-
-            $this->initLayout([\Atk4\Ui\Layout\Admin::class]);
-
-            // Add more initialization here, such as a populating menu.
+            return;
         }
+
+        // Load user from database based on session data
+        if (isset($_SESSION['user_id'])) {
+            $user = new User($this->db);
+            $this->user = $user->tryLoad($_SESSION['user_id']);
+        }
+
+        // Make sure user is valid
+        if ($this->user === null) {
+            $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
+            Message::addTo($this, ['Login Required', 'type' => 'error']);
+            Button::addTo($this, ['Login', 'class.primary' => true])->link('index.php');
+            exit;
+        }
+
+        // Load company data (System) for present user
+        $this->company = $this->user->ref('company_id');
+
+        $this->initLayout([\Atk4\Ui\Layout\Admin::class]);
+
+        // Add more initialization here, such as a populating menu.
     }
+}
+```
 
 After declaring your Application class like this, you can use it conveniently anywhere::
 
-    include'vendor/autoload.php';
-    $app = new Warehouse();
-    Crud::addTo($app)
-        ->setModel($app->system->ref('Order'));
+```
+include'vendor/autoload.php';
+$app = new Warehouse();
+Crud::addTo($app)
+    ->setModel($app->system->ref('Order'));
+```
 
 ### Quick Usage and Page pattern
 
 A lot of the documentation for Agile UI uses a principle of initializing App object first, then, manually
 add the UI elements using a procedural approach::
 
-    HelloWorld::addTo($app);
+```
+HelloWorld::addTo($app);
+```
 
 There is another approach in which your application will determine which Page class should be used for
 executing the request, subsequently creating setting it up and letting it populate UI (This behavior is
@@ -132,10 +142,12 @@ App also does certain actions to simplify handling of the application. For insta
 render itself automatically at the end of the application, so you can safely add objects into the `App`
 without actually triggering a global execution process::
 
-    HelloWorld::addTo($app);
+```
+HelloWorld::addTo($app);
 
-    // Next line is optional
-    $app->run();
+// Next line is optional
+$app->run();
+```
 
 If you do not want the application to automatically execute `run()` you can either set `$alwaysRun` to false
 or use :php:meth:`terminate()` to the app with desired output.
@@ -161,13 +173,17 @@ that implements tighter integration with the host application or full-stack fram
 
 Method to include additional JavaScript file in page::
 
-    $app->requireJs('https://example.com/file.min.js');
+```
+$app->requireJs('https://example.com/file.min.js');
+```
 
 .. php:method:: requireCss($url)
 
 Method to include additional CSS style sheet in page::
 
-    $app->requireCss('https://example.com/file.min.css');
+```
+$app->requireCss('https://example.com/file.min.css');
+```
 
 .. php:method:: initIncludes()
 
@@ -208,8 +224,10 @@ you may have a file `detail.php` which expects `order_id` parameter and would co
 Since the `Crud` component is interactive, it may want to generate requests to itself, but it must also
 include `order_id` otherwise the scope will be incomplete. Agile UI solves that with StickyGet arguments::
 
-    $orderId = $app->stickyGet('order_id');
-    $crud->setModel($order->load($orderId)->ref('Payment'));
+```
+$orderId = $app->stickyGet('order_id');
+$crud->setModel($order->load($orderId)->ref('Payment'));
+```
 
 This make sure that pagination, editing, addition or any other operation that Crud implements will always
 address same model scope.
@@ -227,12 +245,14 @@ App implements two handy methods for handling redirects between pages. The main 
 to provide a simple way to redirect for users who are not familiar with JavaScript and HTTP headers
 so well.  Example::
 
-    if (!isset($_GET['age'])) {
-        $app->redirect(['age' => 18]);
-    }
+```
+if (!isset($_GET['age'])) {
+    $app->redirect(['age' => 18]);
+}
 
-    Button::addTo($app, ['Increase age'])
-        ->on('click', $app->jsRedirect(['age' => $_GET['age'] + 1]));
+Button::addTo($app, ['Increase age'])
+    ->on('click', $app->jsRedirect(['age' => $_GET['age'] + 1]));
+```
 
 No much magic in these methods.
 
@@ -242,9 +262,11 @@ No much magic in these methods.
 
 If your `App` needs a DB connection, set this property to an instance of `Persistence`.
 
-    Example:
+Example:
 
-    $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
+```
+$app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
+```
 
 See `Persistence::connect <https://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`
 
@@ -267,11 +289,15 @@ Will be true if the application is currently rendering recursively through the R
 
 Method to generate links between pages. Specified with associative array::
 
-    $url = $app->url(['contact', 'from' => 'John Smith']);
+```
+$url = $app->url(['contact', 'from' => 'John Smith']);
+```
 
 This method must respond with a properly formatted URL, such as::
 
-    contact.php?from=John+Smith
+```
+contact.php?from=John+Smith
+```
 
 If value with key 0 is specified ('contact') it will be used as the name of the page. By
 default url() will use page as "contact.php?.." however you can define different behavior
@@ -316,12 +342,14 @@ at some point initialize internal 'App' class that will assist with various task
 
 Having composition of multiple components will allow them to share the app object::
 
-    $grid = new \Atk4\Ui\Grid();
-    $grid->setModel($user);
-    $grid->addPaginator(); // initialize and populate paginator
-    $grid->addButton('Test'); // initialize and populate toolbar
+```
+$grid = new \Atk4\Ui\Grid();
+$grid->setModel($user);
+$grid->addPaginator(); // initialize and populate paginator
+$grid->addButton('Test'); // initialize and populate toolbar
 
-    echo $grid->render();
+echo $grid->render();
+```
 
 All of the objects created above - button, grid, toolbar and paginator will share the same
 value for the 'app' property. This value is carried into new objects through AppScopeTrait
@@ -331,10 +359,12 @@ value for the 'app' property. This value is carried into new objects through App
 
 You can create App object on your own then add elements into it::
 
-    $app = new App('My App');
-    $app->add($grid);
+```
+$app = new App('My App');
+$app->add($grid);
 
-    echo $grid->render();
+echo $grid->render();
+```
 
 This does not change the output, but you can use the 'App' class to your advantage as a
 "Property Bag" pattern to inject your configuration. You can even use a different "App"
@@ -347,12 +377,16 @@ We are still not using the layout, however.
 
 Layout can be initialized through the app like this::
 
-    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+```
+$app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+```
 
 This will initialize two new views inside the app::
 
-    $app->html
-    $app->layout
+```
+$app->html
+$app->layout
+```
 
 The first view is a HTML boilerplate - containing head / body tags but not the body
 contents. It is a standard html5 doctype template.
@@ -374,23 +408,27 @@ with top, left and right menu objects.
 
 Populating the left menu object is simply a matter of adding the right menu items to the layout menu::
 
-    $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
-    $layout = $app->layout;
+```
+$app->initLayout([\Atk4\Ui\Layout\Admin::class]);
+$layout = $app->layout;
 
-    // Add item into menu
-    $layout->menuLeft->addItem(['Welcome Page', 'icon' => 'gift'], ['index']);
-    $layout->menuLeft->addItem(['Layouts', 'icon' => 'object group'], ['layouts']);
+// Add item into menu
+$layout->menuLeft->addItem(['Welcome Page', 'icon' => 'gift'], ['index']);
+$layout->menuLeft->addItem(['Layouts', 'icon' => 'object group'], ['layouts']);
 
-    $EditGroup = $layout->menuLeft->addGroup(['Edit', 'icon' => 'edit']);
-    $EditGroup->addItem('Basics', ['edit/basic']);
+$EditGroup = $layout->menuLeft->addGroup(['Edit', 'icon' => 'edit']);
+$EditGroup->addItem('Basics', ['edit/basic']);
+```
 
 .. php:attr:: menu
 
 This is the top menu of the admin layout. You can add other item to the top menu using::
 
-    Button::addTo($layout->menu->addItem(), ['View Source', 'class.teal' => true, 'icon' => 'github'])
-        ->setAttr('target', '_blank')
-        ->on('click', new \Atk4\Ui\Js\JsExpression('document.location = [];', [$url . $f]));
+```
+Button::addTo($layout->menu->addItem(), ['View Source', 'class.teal' => true, 'icon' => 'github'])
+    ->setAttr('target', '_blank')
+    ->on('click', new \Atk4\Ui\Js\JsExpression('document.location = [];', [$url . $f]));
+```
 
 .. php:attr:: menuRight
 

@@ -21,33 +21,41 @@ Introduced in UI v1.4
 
 Start by creating Wizard inside your render tree::
 
-    $wizard = Wizard::addTo($app);
+```
+$wizard = Wizard::addTo($app);
+```
 
 Next add as many steps as you need specifying title and a PHP callback code for each::
 
-    $wizard->addStep('Welcome', function (Wizard $wizard) {
-        Message::addTo($wizard, ['Welcome to wizard demonstration'])->text
-            ->addParagraph('Use button "Next" to advance')
-            ->addParagraph('You can specify your existing database connection string which will be used
-            to create a table for model of your choice');
-    });
+```
+$wizard->addStep('Welcome', function (Wizard $wizard) {
+    Message::addTo($wizard, ['Welcome to wizard demonstration'])->text
+        ->addParagraph('Use button "Next" to advance')
+        ->addParagraph('You can specify your existing database connection string which will be used
+        to create a table for model of your choice');
+});
+```
 
 Your callback will also receive `$wizard` as the first argument. Method addStep returns :php:class:`WizardStep`,
 which is described below. You can also provide first argument to addStep as a seed or an object::
 
-    $wizard->addStep([
-        'Set DSN',
-        'icon' => 'configure',
-        'description' => 'Database Connection String',
-    ], function (Wizard $p) {
-        // some code here
-    });
+```
+$wizard->addStep([
+    'Set DSN',
+    'icon' => 'configure',
+    'description' => 'Database Connection String',
+], function (Wizard $p) {
+    // some code here
+});
+```
 
 You may also specify a single Finish callback, which will be used when wizard is complete::
 
-    $wizard->addFinish(function (Wizard $wizard) {
-        Header::addTo($wizard, ['You are DONE', 'class.huge centered' => true]);
-    });
+```
+$wizard->addFinish(function (Wizard $wizard) {
+    Header::addTo($wizard, ['You are DONE', 'class.huge centered' => true]);
+});
+```
 
 ## Properties
 
@@ -86,11 +94,13 @@ or icon on existing button.
 As you build up your wizard, you can place code inside callback or outside. It will have a different effect
 on your wizard::
 
-    $wizard->buttonNext->icon = 'person';
+```
+$wizard->buttonNext->icon = 'person';
 
-    $wizard->addStep('Step 3', function (Wizard $wizard) {
-        $wizard->buttonNext->icon = 'book';
-    });
+$wizard->addStep('Step 3', function (Wizard $wizard) {
+    $wizard->buttonNext->icon = 'book';
+});
+```
 
 
 Step defines the callback and will execute it instantly if the step is active. If step 3 is active, the code

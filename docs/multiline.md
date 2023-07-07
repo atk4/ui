@@ -13,41 +13,43 @@ inside the main model, Multiline will store addresses content as JSON value insi
 
 For example::
 
-    /**
-     * User model
-     */
-    class User extends \Atk4\Data\Model
+```
+/**
+ * User model
+ */
+class User extends \Atk4\Data\Model
+{
+    public $table = 'user';
+
+    protected function init(): void
     {
-        public $table = 'user';
+        parent:: init();
 
-        protected function init(): void
-        {
-            parent:: init();
+        $this->addField('firstname', ['type' => 'string']);
+        $this->addField('lastname', ['type' => 'string']);
 
-            $this->addField('firstname', ['type' => 'string']);
-            $this->addField('lastname', ['type' => 'string']);
-
-            $this->containsMany('addresses', [Address::class, 'system' => false]);
-        }
+        $this->containsMany('addresses', [Address::class, 'system' => false]);
     }
+}
 
-    /**
-     * Address Model
-     */
-    class Address extends \Atk4\Data\Model
+/**
+ * Address Model
+ */
+class Address extends \Atk4\Data\Model
+{
+    protected function init(): void
     {
-        protected function init(): void
-        {
-            parent::init();
+        parent::init();
 
-            $this->addField('street_and_number', ['type' => 'string']);
-            $this->addField('zip', ['type' => 'string']);
-            $this->addField('city', ['type' => 'string']);
-            $this->addField('country', ['type' => 'string']);
-        }
+        $this->addField('street_and_number', ['type' => 'string']);
+        $this->addField('zip', ['type' => 'string']);
+        $this->addField('city', ['type' => 'string']);
+        $this->addField('country', ['type' => 'string']);
     }
+}
 
-    \Atk4\Ui\Crud::addTo($app)->setModel(new User($app->db));
+\Atk4\Ui\Crud::addTo($app)->setModel(new User($app->db));
+```
 
 This leads to a Multiline component automatically rendered for adding, editing and deleting Addresses of the current user record:
 
@@ -62,40 +64,42 @@ up the multiline component to be used with hasMany() relation and edit related r
 
 Lets say a User can have many email addresses, but you want to store them in a separate table.::
 
-    /**
-     * Email Model
-     */
-    class Email extends \Atk4\Data\Model
+```
+/**
+ * Email Model
+ */
+class Email extends \Atk4\Data\Model
+{
+    public $table = 'email';
+
+    protected function init(): void
     {
-        public $table = 'email';
+        parent::init();
 
-        protected function init(): void
-        {
-            parent::init();
+        $this->addField('email_address', ['type' => 'string']);
 
-            $this->addField('email_address', ['type' => 'string']);
-
-            $this->hasOne('user_id', [User::class]);
-        }
+        $this->hasOne('user_id', [User::class]);
     }
+}
 
-    /**
-     * User model
-     */
-    class User extends \Atk4\Data\Model
+/**
+ * User model
+ */
+class User extends \Atk4\Data\Model
+{
+    public $table = 'user';
+
+    protected function init(): void
     {
-        public $table = 'user';
+        parent:: init();
 
-        protected function init(): void
-        {
-            parent:: init();
+        $this->addField('firstname', ['type' => 'string']);
+        $this->addField('lastname', ['type' => 'string']);
 
-            $this->addField('firstname', ['type' => 'string']);
-            $this->addField('lastname', ['type' => 'string']);
-
-            $this->hasMany('Emails', [Email::class]);
-        }
+        $this->hasMany('Emails', [Email::class]);
     }
+}
+```
 
 Using a form with User model won't automatically add a Multiline to edit the related email addresses.
 
@@ -103,21 +107,23 @@ Using a form with User model won't automatically add a Multiline to edit the rel
 
 If you want to edit them along with the user, Multiline need to be set up accordingly using the setReferenceModel method::
 
-    // Add a form to Ui in order to edit User record.
-    $userForm = \Atk4\Ui\Form::addTo($app);
-    $userForm->setModel($user->load($userId));
+```
+// Add a form to Ui in order to edit User record.
+$userForm = \Atk4\Ui\Form::addTo($app);
+$userForm->setModel($user->load($userId));
 
-    $ml = $userForm->addControl('emails', [\Atk4\Ui\Form\Control\Multiline::class]);
-    $ml->setReferenceModel('Emails');
+$ml = $userForm->addControl('emails', [\Atk4\Ui\Form\Control\Multiline::class]);
+$ml->setReferenceModel('Emails');
 
-    // set up saving of Email on Form submit
-    $userForm->onSubmit(function (Form $form) use ($ml) {
-        $form->model->save();
-        // save emails record related to current user.
-        $ml->saveRows();
+// set up saving of Email on Form submit
+$userForm->onSubmit(function (Form $form) use ($ml) {
+    $form->model->save();
+    // save emails record related to current user.
+    $ml->saveRows();
 
-        return new JsToast(var_export($ml->model->export(), true));
-    });
+    return new JsToast(var_export($ml->model->export(), true));
+});
+```
 
 
 Using the example above will create a form with control from the User model as well as a Multiline control for editing
@@ -138,20 +144,22 @@ A loading icon on the ``+`` button will indicates that the expression values are
 
 Lets use the example of demos/multiline.php::
 
-    class InventoryItem extends \Atk4\Data\Model
+```
+class InventoryItem extends \Atk4\Data\Model
+{
+    protected function init(): void
     {
-        protected function init(): void
-        {
-            parent::init();
+        parent::init();
 
-            $this->addField('item', ['required' => true, 'default' => 'item']);
-            $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]]]);
-            $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]]]);
-            $this->addExpression('total', ['expr' => function (Model $row) {
-                return $row->get('qty') * $row->get('box');
-            }, 'type' => 'integer']);
-        }
+        $this->addField('item', ['required' => true, 'default' => 'item']);
+        $this->addField('qty', ['type' => 'integer', 'caption' => 'Qty / Box', 'required' => true, 'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]]]);
+        $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]]]);
+        $this->addExpression('total', ['expr' => function (Model $row) {
+            return $row->get('qty') * $row->get('box');
+        }, 'type' => 'integer']);
     }
+}
+```
 
 The 'total' expression will get updated on each field change automatically.
 
@@ -165,16 +173,18 @@ You can return a single JsExpressionable or an array of JsExpressionables which 
 
 In this case we display a message when any of the control value for 'qty' and 'box' are changed::
 
-    $multiline->onLineChange(function (array $rows, Form $form) {
-        $total = 0;
-        foreach ($rows as $row => $cols) {
-            $qty = $cols['qty'] ?? 0;
-            $box = $cols['box'] ?? 0;
-            $total += $qty * $box;
-        }
+```
+$multiline->onLineChange(function (array $rows, Form $form) {
+    $total = 0;
+    foreach ($rows as $row => $cols) {
+        $qty = $cols['qty'] ?? 0;
+        $box = $cols['box'] ?? 0;
+        $total += $qty * $box;
+    }
 
-        return new JsToast('The new Total is ' . $app->uiPersistence->typecastSaveField(new Field(['type' => 'atk4_money']), $total));
-    }, ['qty', 'box']);
+    return new JsToast('The new Total is ' . $app->uiPersistence->typecastSaveField(new Field(['type' => 'atk4_money']), $total));
+}, ['qty', 'box']);
+```
 
 ## Multiline Vue Component
 
@@ -198,39 +208,47 @@ Use the $componentProps property of Multiline in order to apply 'Props' to compo
 
 Example of changing all Dropdown(SuiDropdown) within Multiline::
 
-    $ml = $form->addControl('ml', [Multiline::class, 'compponentProps' => [Multiline::SELECT => ['floating' => true]]]);
+```
+$ml = $form->addControl('ml', [Multiline::class, 'compponentProps' => [Multiline::SELECT => ['floating' => true]]]);
+```
 
 ### Setting component Props per field
 
 Specific field components Props may be applied using the 'ui' field property when adding field to your model::
 
-    $this->addField('email', [
-        'required' => true,
-        'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'envelope', 'type' => 'email']]],
-    ]);
-    $this->addField('password', [
-        'required' => true,
-        'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'key', 'type' => 'password']]],
-    ]);
+```
+$this->addField('email', [
+    'required' => true,
+    'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'envelope', 'type' => 'email']]],
+]);
+$this->addField('password', [
+    'required' => true,
+    'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'key', 'type' => 'password']]],
+]);
+```
 
 ### Note on Multiline control
 
 Each control inside Multiline is wrap within a table cell(SuiTableCell) component and this component can be customize as
 well using the 'ui' property of the model's field::
 
-    $this->addExpression('total', [
-        'expr' => function (Model $row) {
-            return $row->get('qty') * $row->get('box');
-        },
-        'type' => 'integer',
-        'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 1, 'class' => 'blue']]],
-    ]);
+```
+$this->addExpression('total', [
+    'expr' => function (Model $row) {
+        return $row->get('qty') * $row->get('box');
+    },
+    'type' => 'integer',
+    'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 1, 'class' => 'blue']]],
+]);
+```
 
 ### Table appearance within Multiline
 
 Table(SuiTable) Props can be set using $tableProps property of Multiline::
 
-    $ml = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'blue']]);
+```
+$ml = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'blue']]);
+```
 
 ### Header
 

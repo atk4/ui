@@ -15,7 +15,9 @@ The design goals of a template engine are:
 
 Assuming that you have the following template::
 
-    Hello, {mytag}world{/}
+```
+Hello, {mytag}world{/}
+```
 
 ### Tags
 
@@ -25,32 +27,42 @@ alpha-numeric identifier and a closing `}`. Tag needs to be closed with either
 
 The following code will initialize template inside a PHP code::
 
-    $t = new Template('Hello, {mytag}world{/}');
+```
+$t = new Template('Hello, {mytag}world{/}');
+```
 
 Once template is initialized you can `renderToHtml()` it any-time to get string
 "Hello, world". You can also change tag value::
 
-    $t->set('mytag', 'Agile UI');
+```
+$t->set('mytag', 'Agile UI');
 
-    echo $t->renderToHtml(); // "Hello, Agile UI".
+echo $t->renderToHtml(); // "Hello, Agile UI".
+```
 
 Tags may also be self-closing::
 
-    Hello, {$mytag}
+```
+Hello, {$mytag}
+```
 
 is idetnical to::
 
-    Hello, {mytag}{/}
+```
+Hello, {mytag}{/}
+```
 
 ### Regions
 
 We call region a tag, that may contain other tags. Example::
 
-    Hello, {$name}
+```
+Hello, {$name}
 
-    {Content}
-    User {$user} has sent you {$amount} dollars.
-    {/Content}
+{Content}
+User {$user} has sent you {$amount} dollars.
+{/Content}
+```
 
 When this template is parsed, region 'Content' will contain tags
 $user and $amount. Although technically you can still use `set()`
@@ -60,15 +72,17 @@ in section for Views).
 
 There are some operations you can do with a region, such as::
 
-    $content = $mainTemplate->cloneRegion('Content');
+```
+$content = $mainTemplate->cloneRegion('Content');
 
-    $mainTemplate->del('Content');
+$mainTemplate->del('Content');
 
-    $content->set('user', 'Joe')->set('amount', 100);
-    $mainTemplate->dangerouslyAppendHtml('Content', $content->renderToHtml());
+$content->set('user', 'Joe')->set('amount', 100);
+$mainTemplate->dangerouslyAppendHtml('Content', $content->renderToHtml());
 
-    $content->set('user', 'Billy')->set('amount', 50);
-    $mainTemplate->dangerouslyAppendHtml('Content', $content->renderToHtml());
+$content->set('user', 'Billy')->set('amount', 50);
+$mainTemplate->dangerouslyAppendHtml('Content', $content->renderToHtml());
+```
 
 ### Usage in Agile UI
 
@@ -76,13 +90,15 @@ In practice, however, you will rarely have to work with the template
 engine directly, but you would be able to use it through views::
 
 
-    $v = new View('my_template.html');
-    $v->template->set('name', 'Mr. Boss');
+```
+$v = new View('my_template.html');
+$v->template->set('name', 'Mr. Boss');
 
-    $lister = new Lister($v, 'Content');
-    $lister->setModel($userlist);
+$lister = new Lister($v, 'Content');
+$lister->setModel($userlist);
 
-    echo $v->renderToHtml();
+echo $v->renderToHtml();
+```
 
 The code above will work like this:
 
@@ -155,13 +171,15 @@ Region — typically a multiple lines HTML and text between opening and
 closing tag which can contain a nested tags. Regions are typically named
 with PascalCase, while other tags are named using ``snake_case``::
 
-    some text before
-    {ElephantBlock}
-        Hello, {$name}.
+```
+some text before
+{ElephantBlock}
+    Hello, {$name}.
 
-        by {sender}John Smith{/}
-    {/ElephantBlock}
-    some text after
+    by {sender}John Smith{/}
+{/ElephantBlock}
+some text after
+```
 
 In the example above, ``sender`` and ``name`` are nested tags.
 
@@ -262,17 +280,23 @@ Template can be loaded from either file or string by using one of
 following commands::
 
 
-    $template = GiTemplate::addTo($this);
+```
+$template = GiTemplate::addTo($this);
 
-    $template->loadFromString('Hello, {name}world{/}');
+$template->loadFromString('Hello, {name}world{/}');
+```
 
 To load template from file::
 
-    $template->loadFromFile('mytemplate');
+```
+$template->loadFromFile('mytemplate');
+```
 
 And place the following inside ``template/mytemplate.html``::
 
-    Hello, {name}world{/}
+```
+Hello, {name}world{/}
+```
 
 GiTemplate will use :php:class:`PathFinder` to locate template in one of the
 directories of :ref:`resource` ``template``.
@@ -306,14 +330,16 @@ directories of :ref:`resource` ``template``.
 
 Example::
 
-    $template = GiTemplate::addTo($this);
+```
+$template = GiTemplate::addTo($this);
 
-    $template->loadFromString('Hello, {name}world{/}');
+$template->loadFromString('Hello, {name}world{/}');
 
-    $template->set('name', 'John');
-    $template->dangerouslyAppendHtml('name', '&nbsp;<i class="icon-heart"></i>');
+$template->set('name', 'John');
+$template->dangerouslyAppendHtml('name', '&nbsp;<i class="icon-heart"></i>');
 
-    echo $template->renderToHtml();
+echo $template->renderToHtml();
+```
 
 
 Using ArrayAccess with Templates
@@ -321,11 +347,13 @@ Using ArrayAccess with Templates
 
 You may use template object as array for simplified syntax::
 
-    $template->set('name', 'John');
+```
+$template->set('name', 'John');
 
-    if ($template->hasTag('has_title')) {
-        $template->del('has_title');
-    }
+if ($template->hasTag('has_title')) {
+    $template->del('has_title');
+}
+```
 
 ### Rendering template
 
@@ -336,10 +364,12 @@ You may use template object as array for simplified syntax::
 Ultimately we want to convert template into something useful. Rendering
 will return contents of the template without tags::
 
-    $result = $template->renderToHtml();
+```
+$result = $template->renderToHtml();
 
-    \Atk4\Ui\Text::addTo($this)->set($result);
-    // Will output "Hello, World"
+\Atk4\Ui\Text::addTo($this)->set($result);
+// Will output "Hello, World"
+```
 
 ### Template cloning
 
@@ -350,51 +380,57 @@ SenderAddress and ReceiverAddress each containing nested tags such as
 both names for sender and receiver. Therefore you need to use cloning.
 Let's assume you have the following template in ``template/envelope.html``::
 
-    <div class="sender">
-    {Sender}
-        {$name},
-        Address: {$street}
-                 {$city} {$zip}
-    {/Sender}
-    </div>
+```
+<div class="sender">
+{Sender}
+    {$name},
+    Address: {$street}
+             {$city} {$zip}
+{/Sender}
+</div>
 
-    <div class="recipient">
-    {Recipient}
-        {$name},
-        Address: {$street}
-                 {$city} {$zip}
-    {/Recipient}
-    </div>
+<div class="recipient">
+{Recipient}
+    {$name},
+    Address: {$street}
+             {$city} {$zip}
+{/Recipient}
+</div>
+```
 
 You can use the following code to manipulate the template above::
 
-    $template = GiTemplate::addTo($this);
-    $template->loadFromFile('envelope'); // templates/envelope.html
+```
+$template = GiTemplate::addTo($this);
+$template->loadFromFile('envelope'); // templates/envelope.html
 
-    // Split into multiple objects for processing
-    $sender = $template->cloneRegion('Sender');
-    $recipient = $template->cloneRegion('Recipient');
+// Split into multiple objects for processing
+$sender = $template->cloneRegion('Sender');
+$recipient = $template->cloneRegion('Recipient');
 
-    // Set data to each sub-template separately
-    $sender->set($senderData);
-    $recipient->set($recipientData);
+// Set data to each sub-template separately
+$sender->set($senderData);
+$recipient->set($recipientData);
 
-    // render sub-templates, insert into master template
-    $template->dangerouslySetHtml('Sender', $sender->renderToHtml());
-    $template->dangerouslySetHtml('Recipient', $recipient->renderToHtml());
+// render sub-templates, insert into master template
+$template->dangerouslySetHtml('Sender', $sender->renderToHtml());
+$template->dangerouslySetHtml('Recipient', $recipient->renderToHtml());
 
-    // get final result
-    $result = $template->renderToHtml();
+// get final result
+$result = $template->renderToHtml();
+```
 
 Same thing using Agile Toolkit Views::
 
-    $envelope = \Atk4\Ui\View::addTo($this, [], [null], null, ['envelope']);
+```
+$envelope = \Atk4\Ui\View::addTo($this, [], [null], null, ['envelope']);
 
-    $sender = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender', 'Sender');
-    $recipient = \Atk4\Ui\View::addTo($envelope, [], [null], 'Recipient', 'Recipient');
+$sender = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender', 'Sender');
+$recipient = \Atk4\Ui\View::addTo($envelope, [], [null], 'Recipient', 'Recipient');
 
-    $sender->template->set($senderData);
-    $recipient->template->set($recipientData);
+$sender->template->set($senderData);
+$recipient->template->set($recipientData);
+```
 
 We do not need to manually render anything in this scenario. Also the
 template of $sender and $recipient objects will be appropriately cloned
@@ -427,8 +463,10 @@ presentation logic would be abstracted inside view's ``renderToHtml()`` method.
 
 Agile Toolkit template engine allows you to use same tag several times::
 
-    Roses are {color}red{/}
-    Violets are {color}blue{/}
+```
+Roses are {color}red{/}
+Violets are {color}blue{/}
+```
 
 If you execute ``set('color', 'green')`` then contents of both tags will
 be affected. Similarly if you call ``append('color', '-ish')`` then the
@@ -442,14 +480,18 @@ Conditional tags notation is trailing question mark symbol.
 
 Consider this example::
 
-    My {email?}e-mail {$email}{/email?} {phone?}phone {$phone}{/?}.
+```
+My {email?}e-mail {$email}{/email?} {phone?}phone {$phone}{/?}.
+```
 
 This will only show text "e-mail" and email address if email tag value is
 set to not empty value. Same for "phone" tag.
 So if you execute ``set('email', null)`` and ``set('phone', 123)`` then this
 template will automatically render as::
 
-    My  phone 123.
+```
+My  phone 123.
+```
 
 Note that zero value is treated as not empty value!
 
@@ -461,7 +503,9 @@ Let's look how templates work together with View objects.
 
 .. php:method:: defaultTemplate()
 
-    Specify default template for a view.
+```
+Specify default template for a view.
+```
 
 By default view object will execute :php:meth:`defaultTemplate()` method which
 returns name of the template. This function must return array with
@@ -475,10 +519,12 @@ clone region with such a name from parent's template. This can be used
 by your "menu" implementation, which will clone parent's template's tag
 instead to hook into some specific template::
 
-    public function defaultTemplate()
-    {
-        return ['greeting']; // uses templates/greeting.html
-    }
+```
+public function defaultTemplate()
+{
+    return ['greeting']; // uses templates/greeting.html
+}
+```
 
 ### Redefining template for view during adding
 
@@ -491,7 +537,9 @@ some pages. If you frequently use view with a different template, it
 might be better to define a new View class and re-define
 ``defaultTemplate()`` method instead::
 
-    MyObject::addTo($this, ['greeting']);
+```
+MyObject::addTo($this, ['greeting']);
+```
 
 ### Accessing view's template
 
@@ -499,8 +547,10 @@ Template is available by the time ``init()`` is called and you can
 access it from inside the object or from outside through "template"
 property::
 
-    $grid = \Atk4\Ui\Grid::addTo($this, [], [null], null, array('grid_with_hint'));
-    $grid->template->trySet('my_hint', 'Changing value of a grid hint here!');
+```
+$grid = \Atk4\Ui\Grid::addTo($this, [], [null], null, array('grid_with_hint'));
+$grid->template->trySet('my_hint', 'Changing value of a grid hint here!');
+```
 
 In this example we have instructed to use a different template for grid,
 which would contain a new tag "my\_hint" somewhere. If you try to change
@@ -524,14 +574,16 @@ implemented using generic views.
 
 ::
 
-    $envelope = \Atk4\Ui\View::addTo($this, [], [null], null, array('envelope'));
+```
+$envelope = \Atk4\Ui\View::addTo($this, [], [null], null, array('envelope'));
 
-    // 3rd argument is output region, 4th is template location
-    $sender = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender', 'Sender');
-    $receiver = \Atk4\Ui\View::addTo($envelope, [], [null], 'Receiver', 'Receiver');
+// 3rd argument is output region, 4th is template location
+$sender = \Atk4\Ui\View::addTo($envelope, [], [null], 'Sender', 'Sender');
+$receiver = \Atk4\Ui\View::addTo($envelope, [], [null], 'Receiver', 'Receiver');
 
-    $sender->template->trySet($senderData);
-    $receiver->template->trySet($receiverData);
+$sender->template->trySet($senderData);
+$receiver->template->trySet($receiverData);
+```
 
 ..  templates and views
 

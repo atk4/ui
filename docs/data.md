@@ -18,10 +18,12 @@ Agile Data contains Persistence\Array_ (https://agile-data.readthedocs.io/en/dev
 implementation that load and store data in a regular PHP arrays. For the "quick and easy" solution Agile UI Views provide a
 method :php:meth:`View::setSource` which will work-around complexities and give you a syntax::
 
-    $grid->setSource([
-        1 => ['name' => 'John', 'surname' => 'Smith', 'age' => 10],
-        2 => ['name' => 'Sarah', 'surname' => 'Kelly', 'age' => 20],
-    ]);
+```
+$grid->setSource([
+    1 => ['name' => 'John', 'surname' => 'Smith', 'age' => 10],
+    2 => ['name' => 'Sarah', 'surname' => 'Kelly', 'age' => 20],
+]);
+```
 
 .. note::
     Dynamic views will not be able to identify that you are working with static data, and some features may not work properly.
@@ -34,7 +36,9 @@ method :php:meth:`View::setSource` which will work-around complexities and give 
 Writing raw SQL queries is source of many errors, both with a business logic and security. Agile Data provides great ways
 for abstracting your SQL queries, but if you have to use a raw query::
 
-    // not sure how TODO - write this section.
+```
+// not sure how TODO - write this section.
+```
 
 .. note::
     The above way to using raw queries has a performance implications, because Agile UI is optimised to work with Agile

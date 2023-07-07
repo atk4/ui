@@ -12,7 +12,9 @@ Demo:  https://ui.agiletoolkit.org/demos/header.php
 
 By default header size will depend on where you add it::
 
-    Header::addTo($this, ['Hello, Header']);
+```
+Header::addTo($this, ['Hello, Header']);
+```
 
 ## Attributes
 
@@ -22,19 +24,21 @@ By default header size will depend on where you add it::
 
 Specify size and sub-header content::
 
-    Header::addTo($seg, [
-        'H1 header',
-        'size' => 1,
-        'subHeader' => 'H1 subheader',
-    ]);
+```
+Header::addTo($seg, [
+    'H1 header',
+    'size' => 1,
+    'subHeader' => 'H1 subheader',
+]);
 
-    // or
+// or
 
-    Header::addTo($seg, [
-        'Small header',
-        'size' => 'small',
-        'subHeader' => 'small subheader',
-    ]);
+Header::addTo($seg, [
+    'Small header',
+    'size' => 'small',
+    'subHeader' => 'small subheader',
+]);
+```
 
 ## Icon and Image
 
@@ -45,19 +49,23 @@ Specify size and sub-header content::
 
 Header may specify icon or image::
 
-    Header::addTo($seg, [
-        'Header with icon',
-        'icon' => 'settings',
-        'subHeader' => 'and with sub-header',
-    ]);
+```
+Header::addTo($seg, [
+    'Header with icon',
+    'icon' => 'settings',
+    'subHeader' => 'and with sub-header',
+]);
+```
 
 Here you can also specify seed for the image::
 
-    $img = $app->cdn['atk'] . '/logo.png';
-    Header::addTo($seg, [
-        'Center-aligned header',
-        'aligned' => 'center',
-        'image' => [$img, 'class.disabled' => true],
-        'subHeader' => 'header with image',
-    ]);
+```
+$img = $app->cdn['atk'] . '/logo.png';
+Header::addTo($seg, [
+    'Center-aligned header',
+    'aligned' => 'center',
+    'image' => [$img, 'class.disabled' => true],
+    'subHeader' => 'header with image',
+]);
+```
 

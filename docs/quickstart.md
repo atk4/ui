@@ -21,19 +21,23 @@ work without persistent database.
 Create a directory which is accessible by you web server. Start your command-line,
 enter this directory and execute composer command::
 
-    composer require atk4/ui
+```
+composer require atk4/ui
+```
 
 ## Coding "Hello, World"
 
 Open a new file `index.php` and enter the following code::
 
-    <?php
-    require_once __DIR__ . '/vendor/autoload.php';
+```
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
 
-    $app = new \Atk4\Ui\App('My First App');
-    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+$app = new \Atk4\Ui\App('My First App');
+$app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
-    \Atk4\Ui\HelloWorld::addTo($app);
+\Atk4\Ui\HelloWorld::addTo($app);
+```
 
 .. rubric:: Clarifications
 
@@ -66,23 +70,29 @@ writing clearer code.
 
 By using namespaces you will make out of this::
 
-    <?php
-    $app = new \Atk4\Ui\App('My First App');
+```
+<?php
+$app = new \Atk4\Ui\App('My First App');
+```
 
 this::
 
-    <?php
-    use \Atk4\Ui\App; // just declared once at the top of your file
+```
+<?php
+use \Atk4\Ui\App; // just declared once at the top of your file
 
-    $app = new App('My First App');
+$app = new App('My First App');
+```
 
 This is helpful, if you use in this case "new App('...');" several times in your code (hint: normally you use "new App()" just
 once in your project, but other classes could be used more often in one file)
 
 If you call it only once in a file, just use::
 
-    <?php
-    $app = new \Atk4\Ui\App('My First App');
+```
+<?php
+$app = new \Atk4\Ui\App('My First App');
+```
 
 ## Data Persistence
 
@@ -92,34 +102,40 @@ the actual database and instead will use "$_SESSION" for storing data.
 To be able to actually run this example, create a new file todo.php in the same directory as index.php and
 create the application::
 
-    <?php
-    require_once __DIR__ . '/vendor/autoload.php';
+```
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
 
-    $app = new \Atk4\Ui\App('ToDo List');
-    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+$app = new \Atk4\Ui\App('ToDo List');
+$app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+```
 
 All components of Agile Data are database-agnostic and will not concern themselves with the way how you store data.
 I will start the session and connect `persistence <https://agile-data.readthedocs.io/en/develop/persistence.html>`_
 with it::
 
-    <?php
-    session_start();
-    $s = new \Atk4\Data\Persistence\Array_($_SESSION);
+```
+<?php
+session_start();
+$s = new \Atk4\Data\Persistence\Array_($_SESSION);
+```
 
 If you're establishing a database connection that should be used throughout your whole application and in many classes,
 you can define it in the $app->db class::
 
-    <?php
-    use Atk4\Data\Persistence;
-    use Atk4\Ui\App;
+```
+<?php
+use Atk4\Data\Persistence;
+use Atk4\Ui\App;
 
-    $db = Persistence::connect(DB_URI, DB_USR, DB_PWD);
+$db = Persistence::connect(DB_URI, DB_USR, DB_PWD);
 
-    $app = new App([
-        "title" => "Erp v." . ERP_VER,
-        "db" => $db,
-        "callExit" => false,
-    ]);
+$app = new App([
+    "title" => "Erp v." . ERP_VER,
+    "db" => $db,
+    "callExit" => false,
+]);
+```
 
 ## Data Model
 
@@ -127,23 +143,25 @@ We need a class `Task` which describes `data model <https://agile-data.readthedo
 single ToDo item::
 
 
-    class ToDoItem extends \Atk4\Data\Model
+```
+class ToDoItem extends \Atk4\Data\Model
+{
+    public $table = 'todo_item';
+
+    protected function init(): void
     {
-        public $table = 'todo_item';
+        parent::init();
 
-        protected function init(): void
-        {
-            parent::init();
+        $this->addField('name', ['caption' => 'Task Name', 'required' => true]);
 
-            $this->addField('name', ['caption' => 'Task Name', 'required' => true]);
-
-            $this->addField('due', [
-                'type' => 'date',
-                'caption' => 'Due Date',
-                'default' => new \DateTime('+1 week'),
-            ]);
-        }
+        $this->addField('due', [
+            'type' => 'date',
+            'caption' => 'Due Date',
+            'default' => new \DateTime('+1 week'),
+        ]);
     }
+}
+```
 
 .. rubric:: Clarifications
 
@@ -161,40 +179,44 @@ As you might have noted already, Persistence and Model are defined independently
 
 Class App use `DiContainerTrait` which allow us to inject dependency directly in constructor::
 
-    use Monolog\Logger;
-    use Monolog\Handler\StreamHandler;
+```
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
-    // create a log channel
-    $logger = new Logger('name');
-    $logger->pushHandler(new StreamHandler('path/to/your.log', Logger::WARNING));
+// create a log channel
+$logger = new Logger('name');
+$logger->pushHandler(new StreamHandler('path/to/your.log', Logger::WARNING));
 
-    use Atk4\Data\Persistence;
-    use Atk4\Ui\App;
-    $db = Persistence::connect("mysql://localhost:3306/database_name", "user", "password");
+use Atk4\Data\Persistence;
+use Atk4\Ui\App;
+$db = Persistence::connect("mysql://localhost:3306/database_name", "user", "password");
 
-    $app = new App([
-        "title" => "Your application title",
-        "db" => $db,
-        "logger" => $logger,
-    ]);
+$app = new App([
+    "title" => "Your application title",
+    "db" => $db,
+    "logger" => $logger,
+]);
+```
 
 ## Form and Crud Components
 
 Next we need to add Components that are capable of manipulating the data::
 
-    $col = \Atk4\Ui\Columns::addTo($app, ['divided']);
-    $colReload = new \Atk4\Ui\Js\JsReload($col);
+```
+$col = \Atk4\Ui\Columns::addTo($app, ['divided']);
+$colReload = new \Atk4\Ui\Js\JsReload($col);
 
-    $form = \Atk4\Ui\Form::addTo($col->addColumn());
-    $form->setModel(new ToDoItem($s));
-    $form->onSubmit(function (Form $form) use ($colReload) {
-        $form->model->save();
+$form = \Atk4\Ui\Form::addTo($col->addColumn());
+$form->setModel(new ToDoItem($s));
+$form->onSubmit(function (Form $form) use ($colReload) {
+    $form->model->save();
 
-        return $colReload;
-    });
+    return $colReload;
+});
 
-    \Atk4\Ui\Table::addTo($col->addColumn())
-        ->setModel(new ToDoItem($s));
+\Atk4\Ui\Table::addTo($col->addColumn())
+    ->setModel(new ToDoItem($s));
+```
 
 .. rubric:: Clarifications
 
@@ -229,24 +251,26 @@ will cause table to also reload revealing new records.
 As mentioned before, UI Components in Agile Toolkit are often interchangeable, you can swap one for
 another. In our example replace right column (label 17) with the following code::
 
-    $grid = \Atk4\Ui\Crud::addTo($col->addColumn(), [
-        'paginator' => false,
-        'canCreate' => false,
-        'canDelete' => false,
-    ]);
-    $grid->setModel(new ToDoItem($s));
+```
+$grid = \Atk4\Ui\Crud::addTo($col->addColumn(), [
+    'paginator' => false,
+    'canCreate' => false,
+    'canDelete' => false,
+]);
+$grid->setModel(new ToDoItem($s));
 
-    $grid->menu->addItem('Complete Selected',
-        new \Atk4\Ui\Js\JsReload($grid->table, [
-            'delete' => $grid->addSelection()->jsChecked(),
-        ])
-    );
+$grid->menu->addItem('Complete Selected',
+    new \Atk4\Ui\Js\JsReload($grid->table, [
+        'delete' => $grid->addSelection()->jsChecked(),
+    ])
+);
 
-    if (isset($_GET['delete'])) {
-        foreach (explode(',', $_GET['delete']) as $id) {
-            $grid->model->delete($id);
-        }
+if (isset($_GET['delete'])) {
+    foreach (explode(',', $_GET['delete']) as $id) {
+        $grid->model->delete($id);
     }
+}
+```
 
 .. rubric:: Clarifications
 
@@ -282,7 +306,9 @@ All of that in about 50 lines of PHP code. More importantly, this code is portab
 and does not have any complex requirements. In fact, we could wrap it up into an individual Component
 that can be invoked with just one line of code::
 
-    ToDoManager::addTo($app)->setModel(new ToDoItem());
+```
+ToDoManager::addTo($app)->setModel(new ToDoItem());
+```
 
 Just like that you could be developing more components and re-using existing ones in your current
 or next web application.

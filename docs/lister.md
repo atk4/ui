@@ -15,30 +15,36 @@ output and will probably give you most flexibility.
 The most common use is when you need to implement a certain HTML and if that HTML contains list of
 items. If your HTML looks like this::
 
-    <div class="ui header">Top 20 countries (alphabetically)</div>
-        <div class="ui icon label"><i class="ae flag"></i> Andorra</div>
-        <div class="ui icon label"><i class="cm flag"></i> Camerroon</div>
-        <div class="ui icon label"><i class="ca flag"></i> Canada</div>
-    </div>
+```
+<div class="ui header">Top 20 countries (alphabetically)</div>
+    <div class="ui icon label"><i class="ae flag"></i> Andorra</div>
+    <div class="ui icon label"><i class="cm flag"></i> Camerroon</div>
+    <div class="ui icon label"><i class="ca flag"></i> Canada</div>
+</div>
+```
 
 you should put that into file `myview.html` then use it with a view::
 
-    $view = View::addTo($app, ['template' => 'myview.html']);
+```
+$view = View::addTo($app, ['template' => 'myview.html']);
+```
 
 Now your application should contain list of 3 sample countries as you have specified in HTML, but next
 we need to add some tags into your template::
 
-    <div class="ui header">Top {limit}20{/limit} countries (alphabetically)</div>
-        {Countries}
-        {rows}
-        {row}
-        <div class="ui icon label"><i class="ae flag"></i> Andorra</div>
-        {/row}
-        <div class="ui icon label"><i class="cm flag"></i> Camerroon</div>
-        <div class="ui icon label"><i class="ca flag"></i> Canada</div>
-        {/rows}
-        {/Countries}
-    </div>
+```
+<div class="ui header">Top {limit}20{/limit} countries (alphabetically)</div>
+    {Countries}
+    {rows}
+    {row}
+    <div class="ui icon label"><i class="ae flag"></i> Andorra</div>
+    {/row}
+    <div class="ui icon label"><i class="cm flag"></i> Camerroon</div>
+    <div class="ui icon label"><i class="ca flag"></i> Canada</div>
+    {/rows}
+    {/Countries}
+</div>
+```
 
 Here the `{Countries}` region will be replaced with the lister, but the contents of
 this region will be re-used as the list template. Refresh your page and your output
@@ -46,9 +52,11 @@ should not be affected at all, because View clears out all extra template tags.
 
 Next I'll add Lister::
 
-    Lister::addTo($view, [], ['Countries'])
-        ->setModel(new Country($db))
-        ->setLimit(20);
+```
+Lister::addTo($view, [], ['Countries'])
+    ->setModel(new Country($db))
+    ->setLimit(20);
+```
 
 While most other objects in Agile UI come with their own templates, lister will prefer
 to use template inside your region. It will look for "row" and "rows" tag:
@@ -61,48 +69,58 @@ to use template inside your region. It will look for "row" and "rows" tag:
 If you refresh your page now, you should see "Andorra" duplicated 20 times. This is because
 the {row} did not contain any field tags. Lets set them up::
 
-    {row}
-    <div class="ui icon label"><i class="{iso}ae{/} flag"></i> {name}Andorra{/name}</div>
-    {/row}
+```
+{row}
+<div class="ui icon label"><i class="{iso}ae{/} flag"></i> {name}Andorra{/name}</div>
+{/row}
+```
 
 Refresh your page and you should see list of countries as expected. The flags are not showing yet,
 but I'll deal with in next section. For now, lets clean up the template by removing unnecessary tag content::
 
-    <div class="ui header">Top {limit}20{/limit} countries (alphabetically)</div>
-        {Countries}
-        {rows}
-        {row}
-        <div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>
-        {/row}
-        {/rows}
-        {/Countries}
-    </div>
+```
+<div class="ui header">Top {limit}20{/limit} countries (alphabetically)</div>
+    {Countries}
+    {rows}
+    {row}
+    <div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>
+    {/row}
+    {/rows}
+    {/Countries}
+</div>
+```
 
 Finally, Lister permits you not to use {rows} and {row} tags if entire region can be considered as a row::
 
-    <div class="ui header">Top {limit}20{/limit} countries (alphabetically)</div>
-        {Countries}
-        <div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>
-        {/Countries}
-    </div>
+```
+<div class="ui header">Top {limit}20{/limit} countries (alphabetically)</div>
+    {Countries}
+    <div class="ui icon label"><i class="{$iso} flag"></i> {$name}</div>
+    {/Countries}
+</div>
+```
 
 ## Tweaking the output
 
 Output is formatted using the standard :ref:`uiPersistence` routine, but you can also fine-tune the content
 of your tags like this::
 
-    $lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
-        $lister->currentRow->set('iso', mb_strtolower($lister->currentRow->get('iso')));
-    });
+```
+$lister->onHook(\Atk4\Ui\Lister::HOOK_BEFORE_ROW, function (\Atk4\Ui\Lister $lister) {
+    $lister->currentRow->set('iso', mb_strtolower($lister->currentRow->get('iso')));
+});
+```
 
 ## Model vs Static Source
 
 Since Lister is non-interactive, you can also set a static source for your lister to avoid hassle::
 
-    $lister->setSource([
-        ['flag' => 'ca', 'name' => 'Canada'],
-        ['flag' => 'uk', 'name' => 'UK'],
-    ]);
+```
+$lister->setSource([
+    ['flag' => 'ca', 'name' => 'Canada'],
+    ['flag' => 'uk', 'name' => 'UK'],
+]);
+```
 
 ## Special template tags
 
@@ -116,7 +134,9 @@ Your {row} template may contain few special tags:
 
 You can make lister load page content dynamically when user is scrolling down page.
 
-    $lister->addJsPaginator(20, $options = [], $container = null, $scrollRegion = null);
+```
+$lister->addJsPaginator(20, $options = [], $container = null, $scrollRegion = null);
+```
 
 The first parameter is the number of item you wish to load per page.
 The second parameter is options you want to pass to respective JS widget.
@@ -128,7 +148,9 @@ And last parameter is CSS selector of element in which you want to do scrolling.
 Agile UI comes with a one sample template for your lister, although it's not set by default,
 you can specify it explicitly::
 
-    Lister::addTo($app, ['defaultTemplate' => 'lister.html']);
+```
+Lister::addTo($app, ['defaultTemplate' => 'lister.html']);
+```
 
 This should display a list nicely formatted by Fomantic-UI, with header, links, icons and description area.
 

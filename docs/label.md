@@ -18,12 +18,14 @@ Demo: https://ui.agiletoolkit.org/demos/label.php
 First argument of constructor or first element in array passed to constructor will be the text that will
 appear on the label::
 
-    $label = Label::addTo($app, ['hello world']);
+```
+$label = Label::addTo($app, ['hello world']);
 
-    // or
+// or
 
-    $label = new \Atk4\Ui\Label('hello world');
-    $app->add($label);
+$label = new \Atk4\Ui\Label('hello world');
+$app->add($label);
+```
 
 
 Label has the following properties:
@@ -57,67 +59,77 @@ For more information, see: :php:class:`Icon`
 
 Image cannot be specified at the same time with the icon, but you can use PNG/GIF/JPG image on your label::
 
-    $img = $app->cdn['atk'] . '/logo.png';
-    Label::addTo($app, ['Coded in PHP', 'image' => $img]);
+```
+$img = $app->cdn['atk'] . '/logo.png';
+Label::addTo($app, ['Coded in PHP', 'image' => $img]);
+```
 
 ## Detail
 
 You can specify "detail" component to your label::
 
-    Label::addTo($app, ['Number of lines', 'detail' => '33']);
+```
+Label::addTo($app, ['Number of lines', 'detail' => '33']);
+```
 
 ## Groups
 
 Label can be part of the group, but you would need to either use custom HTML template or
 composition::
 
-    $group = View::addTo($app, ['class.blue tag' => true, 'ui' => 'labels']);
-    Label::addTo($group, ['$9.99']);
-    Label::addTo($group, ['$19.99', 'class.red tag' => true]);
-    Label::addTo($group, ['$24.99']);
+```
+$group = View::addTo($app, ['class.blue tag' => true, 'ui' => 'labels']);
+Label::addTo($group, ['$9.99']);
+Label::addTo($group, ['$19.99', 'class.red tag' => true]);
+Label::addTo($group, ['$24.99']);
+```
 
 ## Combining classes
 
 Based on Fomantic-UI documentation, you can add more classes to your labels::
 
-    $columns = Columns::addTo($app);
+```
+$columns = Columns::addTo($app);
 
-    $c = $columns->addColumn();
-    $col = View::addTo($c, ['ui' => 'raised segment']);
+$c = $columns->addColumn();
+$col = View::addTo($c, ['ui' => 'raised segment']);
 
-    // attach label to the top of left column
-    Label::addTo($col, ['Left Column', 'class.top attached' => true, 'icon' => 'book']);
+// attach label to the top of left column
+Label::addTo($col, ['Left Column', 'class.top attached' => true, 'icon' => 'book']);
 
-    // ribbon around left column
-    Label::addTo($col, ['Lorem', 'class.red ribbon' => true, 'icon' => 'cut']);
+// ribbon around left column
+Label::addTo($col, ['Lorem', 'class.red ribbon' => true, 'icon' => 'cut']);
 
-    // add some content inside column
-    LoremIpsum::addTo($col, ['size' => 1]);
+// add some content inside column
+LoremIpsum::addTo($col, ['size' => 1]);
 
-    $c = $columns->addColumn();
-    $col = View::addTo($c, ['ui' => 'raised segment']);
+$c = $columns->addColumn();
+$col = View::addTo($c, ['ui' => 'raised segment']);
 
-    // attach label to the top of right column
-    Label::addTo($col, ['Right Column', 'class.top attached' => true, 'icon' => 'book']);
+// attach label to the top of right column
+Label::addTo($col, ['Right Column', 'class.top attached' => true, 'icon' => 'book']);
 
-    // some content
-    LoremIpsum::addTo($col, ['size' => 1]);
+// some content
+LoremIpsum::addTo($col, ['size' => 1]);
 
-    // right bottom corner label
-    Label::addTo($col, ['Ipsum', 'class.orange bottom right attached' => true, 'icon' => 'cut']);
+// right bottom corner label
+Label::addTo($col, ['Ipsum', 'class.orange bottom right attached' => true, 'icon' => 'cut']);
+```
 
 ## Added labels into Table
 
 You can even use label inside a table, but because table renders itself by repeating periodically, then
 the following code is needed::
 
-    $table->onHook(\Atk4\Ui\Table\Column::HOOK_GET_HTML_TAGS, function (Table $table, Model $row) {
-        if ($row->getId() == 1) {
-            return [
-                'name' => $table->getApp()->getTag('div', ['class' => 'ui ribbon label'], $row->get('name')),
-            ];
-        }
-    });
+```
+$table->onHook(\Atk4\Ui\Table\Column::HOOK_GET_HTML_TAGS, function (Table $table, Model $row) {
+    if ($row->getId() == 1) {
+        return [
+            'name' => $table->getApp()->getTag('div', ['class' => 'ui ribbon label'], $row->get('name')),
+        ];
+    }
+});
+```
 
 Now while $table will be rendered, if it finds a record with id=1, it will replace $name value with a HTML tag.
 You need to make sure that 'name' column appears first on the left.

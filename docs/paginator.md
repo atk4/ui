@@ -17,8 +17,10 @@ on a page. Paginator is a stand-alone component but you can use it in conjunctio
 Place paginator in a designated spot on your page. You also should specify what's the total number of pages
 paginator should have::
 
-    $paginator = Paginator::addTo($app);
-    $paginator->total = 20;
+```
+$paginator = Paginator::addTo($app);
+$paginator->total = 20;
+```
 
 Paginator will not display links to all the 20 pages, instead it will show first, last, current page and few
 pages around the current page. Paginator will automatically place links back to your current page through
@@ -27,16 +29,20 @@ pages around the current page. Paginator will automatically place links back to 
 After initializing paginator you can use it's properties to determine current page. Quite often you'll need
 to display current page BEFORE the paginator on your page::
 
-    $h = Header::addTo($page);
-    LoremIpsum::addTo($page); // some content here
+```
+$h = Header::addTo($page);
+LoremIpsum::addTo($page); // some content here
 
-    $p = Paginator::addTo($page);
-    $h->set('Page ' . $p->page . ' from ' . $p->total);
+$p = Paginator::addTo($page);
+$h->set('Page ' . $p->page . ' from ' . $p->total);
+```
 
 Remember that values of 'page' and 'total' are integers, so you may need to do type-casting::
 
-    $label->set($p->page); // will not work
-    $label->set((string) $p->page); // works fine
+```
+$label->set($p->page); // will not work
+$label->set((string) $p->page); // works fine
+```
 
 ## Range and Logic
 
