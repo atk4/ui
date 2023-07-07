@@ -283,7 +283,7 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
 });
 ```
 
-By setting progressBar to true, Loader component will use SSE (`Server Sent Events <https://www.w3schools.com/html/html5_serversentevents.asp>`_)
+By setting progressBar to true, Loader component will use SSE ([Server Sent Events](https://www.w3schools.com/html/html5_serversentevents.asp))
 and will be sending notification about your progress. Note that currently Internet Explorer does not support SSE and it's
 up to you to create a work-around.
 

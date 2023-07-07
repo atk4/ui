@@ -445,7 +445,7 @@ is always destroyed when the modal is closed instead of only hiding it.
 .. php:method:: setOption()
 
 This class allows you to open modal dialogs and close them easily. It's based around Fomantic-UI
-`.modal(), <https://fomantic-ui.com/modules/modal.html>`_ but integrates PHP callback for dynamically
+[.modal()](https://fomantic-ui.com/modules/modal.html), but integrates PHP callback for dynamically
 producing content of your dialog:
 
 ```

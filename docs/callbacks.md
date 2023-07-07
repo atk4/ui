@@ -30,9 +30,9 @@ you through the callback mechanisms of Agile UI.
 Callback is not a View. This class does not extend any other class but it does implement several important
 traits:
 
- - `TrackableTrait <https://agile-core.readthedocs.io/en/develop/container.html?highlight=trackable#trackable-trait>`_
- - `AppScopeTrait <https://agile-core.readthedocs.io/en/develop/appscope.html>`_
- - `DiContainerTrait <https://agile-core.readthedocs.io/en/develop/di.html>`_
+ - [TrackableTrait](https://agile-core.readthedocs.io/en/develop/container.html?highlight=trackable#trackable-trait)
+ - [AppScopeTrait](https://agile-core.readthedocs.io/en/develop/appscope.html)
+ - [DiContainerTrait](https://agile-core.readthedocs.io/en/develop/di.html)
 
 To create a new callback, do this:
 

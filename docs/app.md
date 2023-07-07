@@ -268,7 +268,7 @@ Example:
 $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 ```
 
-See `Persistence::connect <https://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`
+See [Persistence::connect](https://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence)
 
 ### Execution Termination
 

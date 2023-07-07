@@ -280,6 +280,6 @@ $button->on('click', $myAction);
 ### Demo
 
 For more information on how Model UserAction are assign to button and interact with user according to their definition,
-please visit: `Assign action to button event <https://ui.agiletoolkit.org/demos/data-action/jsactions2.php>`_
+please visit: [Assign action to button event](https://ui.agiletoolkit.org/demos/data-action/jsactions2.php)
 
-You will find the UserAction definition for the demo `here <https://github.com/atk4/ui/blob/develop/demos/_includes/DemoActionsUtil.php>`_
+You will find the UserAction definition for the demo [here](https://github.com/atk4/ui/blob/develop/demos/_includes/DemoActionsUtil.php)
