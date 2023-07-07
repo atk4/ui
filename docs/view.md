@@ -28,8 +28,8 @@ The above code will produce the following HTML block:
         <button class="ui inverted orange button">Orange</button>
     </div>
 
-All of the views combined form a ``Render Tree``. In order to get the HTML output
-from all the `Views` in `Render Tree` you need to execute ``render()`` for the top-most
+All of the views combined form a `Render Tree`. In order to get the HTML output
+from all the `Views` in `Render Tree` you need to execute `render()` for the top-most
 leaf:
 
 ```
@@ -200,7 +200,7 @@ to properly initialize the class corresponding to string 'Client'.
 
 
 
-A constructor of a view often maps into a ``<div>`` tag that has a specific role
+A constructor of a view often maps into a `<div>` tag that has a specific role
 in a CSS framework. According to the principles of Agile UI, we support a
 wide varietty of roles. In some cases, a dedicated object will exist, for
 example a Button. In other cases, you can use a View and specify a UI role
@@ -317,7 +317,7 @@ Any view has the ability to render itself. Once executed, render will perform th
  - return JS code with on-dom-ready instructions along with HTML code of a current view.
 
 You must not override render() in your objects. If you are integrating Agile UI into your
-framework you shouldn't even use ``render()``, but instead use ``getHtml`` and ``getJs``.
+framework you shouldn't even use `render()`, but instead use `getHtml` and `getJs`.
 
 .. php:method:: getHtml()
 
@@ -330,7 +330,7 @@ framework you shouldn't even use ``render()``, but instead use ``getHtml`` and `
 ## Modifying rendering logic
 
 When you creating your own View, you most likely will want to change it's rendering mechanics.
-The most suitable location for that is inside ``renderView`` method.
+The most suitable location for that is inside `renderView` method.
 
 .. php:method:: renderView()
 
@@ -422,7 +422,7 @@ Or you can set $template into object inside your constructor, in which case it w
 On other hand, if your 'template' property is null, then the process of adding View inside RenderTree
 will automatically clone region of a parent.
 
-``Lister`` is a class that has no default template, and therefore you can add it like this:
+`Lister` is a class that has no default template, and therefore you can add it like this:
 
 ```
 $profile = View::addTo($app, ['template' => 'myview.html']);
@@ -430,7 +430,7 @@ $profile->setModel($user);
 Lister::addTo($profile, [], ['Tags'])->setModel($user->ref('Tags'));
 ```
 
-In this set-up a template ``myview.html`` will be populated with fields from ``$user`` model. Next,
+In this set-up a template `myview.html` will be populated with fields from `$user` model. Next,
 a Lister is added inside Tags region which will use the contents of a given tag as a default
 template, which will be repeated according to the number of referenced 'Tags' for given users and
 re-inserted back into the 'Tags' region.
@@ -457,7 +457,7 @@ Outputs:
     <div class="ui button" id="my-button3">Button</div>
 
 If ID is not specified it will be set automatically. The top-most element of a Render Tree will
-use ``id=atk`` and all of the child elements will create a derived ID based on it's UI role.
+use `id=atk` and all of the child elements will create a derived ID based on it's UI role.
 
 .. code-block:: yml
 

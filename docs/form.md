@@ -74,13 +74,14 @@ $form->model->set([
 ]);
 ```
 
-Form also relies on a ``\Atk4\Ui\Form::Layout`` class and displays form controls through
-decorators defined at ``\Atk4\Ui\Form::Control``. See dedicated documentation for:
+Form also relies on a `\Atk4\Ui\Form::Layout` class and displays form controls through
+decorators defined at `\Atk4\Ui\Form::Control`. See dedicated documentation for:
 
  - :php:class:`Form::Layout`
  - :php:class:`Form::Control`
 
-To tweak the UI properties of an form control input use ``setInputAttr()`` (and not the surrounding <div> as ``setAttr()`` would do). Here is how to set the HTML "maxlength" attribute on the generated input field:
+To tweak the UI properties of an form control input use `setInputAttr()` (and not the surrounding <div> as `setAttr()`
+would do). Here is how to set the HTML "maxlength" attribute on the generated input field:
 
 ```
 $form = \Atk4\Ui\Form::addTo($this);
@@ -114,7 +115,7 @@ The basic 2-line syntax will extract all the required logic from the Model inclu
  - Booleans are displayed as checkboxes but stored as defined by the model field
  - Not-nullable and Required fields will have form controls visually highlighted (https://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$nullable)
  - Validation will be performed and errors will appear on the form (NEED LINK)
- - Unless you specify a submission handler, form will save the model ``User`` into ``$db`` on successful submission.
+ - Unless you specify a submission handler, form will save the model `User` into `$db` on successful submission.
 
 All of the above works auto-magically, but you can tweak it even more:
 
@@ -197,14 +198,14 @@ If a field exists inside associated model, then model field definition will be u
 a base, otherwise you can specify field definition through 3rd argument. I explain
 that below in more detail.
 
-You can specify first argument ``null`` in which case control will be added without
+You can specify first argument `null` in which case control will be added without
 association with field. This will not work with regular fields, but you can add
 custom control such as CAPTCHA, which does not really need association with a
 field.
 
 ### Form Control
 
-To avoid term miss-use, we use "Field" to refer to ``\Atk4\Data\Field``. This class
+To avoid term miss-use, we use "Field" to refer to `\Atk4\Data\Field`. This class
 is documented here: https://agile-data.readthedocs.io/en/develop/fields.html
 
 Form uses a small UI component to visualize HTML input fields associated with
@@ -223,7 +224,7 @@ Agile UI comes with at least the following form controls:
 
 For some examples see: https://ui.agiletoolkit.org/demos/form3.php
 
-Field Decorator can be passed to ``addControl`` using 'string', :php:ref:`seed` or 'object':
+Field Decorator can be passed to `addControl` using 'string', :php:ref:`seed` or 'object':
 
 ```
 $form->addControl('accept_terms', [\Atk4\Ui\Form\Control\Checkbox::class]);
@@ -240,12 +241,12 @@ your own see documentation on :php:class:`Form::Control`.
 
 .. php:method:: controlFactory(\\Atk4\\Data\\Field $field, $defaults = [])
 
-If form control class is not specified (``null``) then it will be determined from
-the type of the Data control with ``controlFactory`` method.
+If form control class is not specified (`null`) then it will be determined from
+the type of the Data control with `controlFactory` method.
 
 ### Data Field
 
-Data field is the 3rd argument to ``Form::addControl()``.
+Data field is the 3rd argument to `Form::addControl()`.
 
 There are 3 ways to define Data form control using 'string', 'json' or 'object':
 
@@ -261,12 +262,12 @@ class MyBoolean extends \Atk4\Data\Field
 $form->addControl('test2', [], new MyBoolean());
 ```
 
-String will be converted into ``['caption' => $string]`` a short way to give
+String will be converted into `['caption' => $string]` a short way to give
 field a custom label. Without a custom label, Form will clean up the name (1st
 argument) by replacing '_' with spaces and uppercasing words (accept_terms
 becomes "Accept Terms")
 
-Specifying array will use the same syntax as the 2nd argument for ``\Atk4\Data\Model::addField()``.
+Specifying array will use the same syntax as the 2nd argument for `\Atk4\Data\Model::addField()`.
 (https://agile-data.readthedocs.io/en/develop/model.html#Model::addField)
 
 If field already exist inside model, then values of $field will be merged into
@@ -342,10 +343,10 @@ $form->onSubmit(function (Form $form) {
 });
 ```
 
-Field ``date1`` is defined inside a :php:class:`ProxyModel` as a date field and will
+Field `date1` is defined inside a :php:class:`ProxyModel` as a date field and will
 be automatically converted into DateTime object by Persistence typecasting.
 
-Field ``date2`` has no data type, do not confuse with ui type => date pass as second argument for Calendar field,
+Field `date2` has no data type, do not confuse with ui type => date pass as second argument for Calendar field,
 and therefore Persistence typecasting will not modify it's value and it's stored inside model as a string.
 
 The above code result in the following output:
@@ -357,13 +358,13 @@ date1 = DateTime Object ( [date] => 2017-09-03 00:00:00 .. ) and date2 = Septemb
 ### Seeding Form Control from Model
 
 In large projects you most likely won't be setting individual form controls for each Form. Instead
-you can simply use ``setModel()`` to populate all form controls from fields defined inside a model. Form does
+you can simply use `setModel()` to populate all form controls from fields defined inside a model. Form does
 have a pretty good guess about form control decorator based on the data field type, but what if you want to
 use a custom decorator?
 
-This is where ``$field->ui`` comes in (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui).
+This is where `$field->ui` comes in (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui).
 
-You can specify ``'ui' => ['form' => $decoratorSeed]`` when defining your model field inside your Model:
+You can specify `'ui' => ['form' => $decoratorSeed]` when defining your model field inside your Model:
 
 ```
 class User extends \Atk4\Data\Model
@@ -435,8 +436,8 @@ able to add them again in sub-layouts.
 
 ### Loading Values
 
-Although you can set form control values individually using ``$form->model->set('field', $value)``
-it's always nicer to load values for the database. Given a ``User`` model this is how
+Although you can set form control values individually using `$form->model->set('field', $value)`
+it's always nicer to load values for the database. Given a `User` model this is how
 you can create a form to change profile of a currently logged user:
 
 ```
@@ -461,7 +462,7 @@ $form = Form::addTo($app);
 $form->setModel((new User($db))->load($currentUserId), ['email', 'name']);
 ```
 
-As before, field ``password`` will not be loaded from the database, but this time
+As before, field `password` will not be loaded from the database, but this time
 using onlyFields restriction rather then `neverPersist`.
 
 ### Validating
@@ -491,7 +492,7 @@ As far as form is concerned:
 - Form will rely on Agile Data Typecasting (https://agile-data.readthedocs.io/en/develop/typecasting.html)
   to load values from POST data and store them in model.
 
-- Form submit handler will rely on ``Model::save()`` (https://agile-data.readthedocs.io/en/develop/persistence.html#Model::save)
+- Form submit handler will rely on `Model::save()` (https://agile-data.readthedocs.io/en/develop/persistence.html#Model::save)
   not to throw validation exception.
 
 - Form submit handler will also interpret use of :php:meth:`Form::jsError` by displaying errors that
@@ -620,7 +621,7 @@ $form->onSubmit(function (Form $form) {
 So far Agile UI / Agile Data does not come with a validation library but
 it supports usage of 3rd party validation libraries.
 
-Callback function may raise exception. If Exception is based on ``\Atk4\Core\Exception``,
+Callback function may raise exception. If Exception is based on `\Atk4\Core\Exception`,
 then the parameter "field" can be used to associate error with specific field:
 
 ```

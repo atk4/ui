@@ -71,7 +71,7 @@ icons cannot be specified simultaneously.
 ### Button Bar
 
 Buttons can be arranged into a bar. You would need to create a :php:class:`View` component
-with property ``ui='buttons'`` and add your other buttons inside:
+with property `ui='buttons'` and add your other buttons inside:
 
 ```
 $bar = View::addTo($app, ['ui' => 'vertical buttons']);

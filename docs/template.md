@@ -153,22 +153,22 @@ another source which will override the existing one.
 
 .. note:: Older documentation......
 
-Opening Tag — alphanumeric sequence of characters surrounded by ``{``
-and ``}`` (example ``{elephant}``)
+Opening Tag — alphanumeric sequence of characters surrounded by `{`
+and `}` (example `{elephant}`)
 
-Closing tag — very similar to opening tag but surrounded by ``{/`` and
-``}``. If name of the tag is omitted, then it closes a recently opened tag.
-(example ``{/elephant}`` or ``{/}``)
+Closing tag — very similar to opening tag but surrounded by `{/` and
+`}`. If name of the tag is omitted, then it closes a recently opened tag.
+(example `{/elephant}` or `{/}`)
 
 Empty tag — consists of tag immediately followed by closing tag (such as
-``{elephant}{/}``)
+`{elephant}{/}`)
 
 Self-closing tag — another way to define empty tag. It works in exactly
-same way as empty tag. (``{$elephant}``)
+same way as empty tag. (`{$elephant}`)
 
 Region — typically a multiple lines HTML and text between opening and
 closing tag which can contain a nested tags. Regions are typically named
-with PascalCase, while other tags are named using ``snake_case``:
+with PascalCase, while other tags are named using `snake_case`:
 
 ```
 some text before
@@ -180,7 +180,7 @@ some text before
 some text after
 ```
 
-In the example above, ``sender`` and ``name`` are nested tags.
+In the example above, `sender` and `name` are nested tags.
 
 Region cloning - a process when a region becomes a standalone template and
 all of it's nested tags are also preserved.
@@ -207,7 +207,7 @@ is used.
 
 - Each object corresponds to one template.
 - View inserted into another view is assigned a region inside parents
-  template, called ``spot``.
+  template, called `spot`.
 - Developer may decide to use a default template, clone region of parents
   template or use a region of a user-defined template.
 - Each View is responsible for it's unique logic such as repeats, substitutions
@@ -290,14 +290,14 @@ To load template from file:
 $template->loadFromFile('mytemplate');
 ```
 
-And place the following inside ``template/mytemplate.html``:
+And place the following inside `template/mytemplate.html`:
 
 ```
 Hello, {name}world{/}
 ```
 
 GiTemplate will use :php:class:`PathFinder` to locate template in one of the
-directories of :ref:`resource` ``template``.
+directories of :ref:`resource` `template`.
 
 ### Changing template contents
 
@@ -376,7 +376,7 @@ template and render it separately. For example, you may have 2 tags
 SenderAddress and ReceiverAddress each containing nested tags such as
 "name", "city", "zip". You can't use set('name') because it will affect
 both names for sender and receiver. Therefore you need to use cloning.
-Let's assume you have the following template in ``template/envelope.html``:
+Let's assume you have the following template in `template/envelope.html`:
 
 ```
 <div class="sender">
@@ -437,7 +437,7 @@ from regions of $envelope and then substituted back after render.
 In this example I've usd a basic :php:class:`View` class, however I could
 have used my own View object with some more sophisticated presentation logic.
 The only affect on the example would be name of the class, the rest of
-presentation logic would be abstracted inside view's ``renderToHtml()`` method.
+presentation logic would be abstracted inside view's `renderToHtml()` method.
 
 ### Other operations with tags
 
@@ -447,7 +447,7 @@ presentation logic would be abstracted inside view's ``renderToHtml()`` method.
 
 .. php:method:: hasTag(tag)
 
-    Returns ``true`` if tag exists in a template.
+    Returns `true` if tag exists in a template.
 
 .. php:method:: trySet(name, value)
 
@@ -466,8 +466,8 @@ Roses are {color}red{/}
 Violets are {color}blue{/}
 ```
 
-If you execute ``set('color', 'green')`` then contents of both tags will
-be affected. Similarly if you call ``append('color', '-ish')`` then the
+If you execute `set('color', 'green')` then contents of both tags will
+be affected. Similarly if you call `append('color', '-ish')` then the
 text will be appended to both tags.
 
 ### Conditional tags
@@ -484,7 +484,7 @@ My {email?}e-mail {$email}{/email?} {phone?}phone {$phone}{/?}.
 
 This will only show text "e-mail" and email address if email tag value is
 set to not empty value. Same for "phone" tag.
-So if you execute ``set('email', null)`` and ``set('phone', 123)`` then this
+So if you execute `set('email', null)` and `set('phone', 123)` then this
 template will automatically render as:
 
 ```
@@ -508,7 +508,7 @@ Specify default template for a view.
 By default view object will execute :php:meth:`defaultTemplate()` method which
 returns name of the template. This function must return array with
 one or two elements. First element is the name of the template which
-will be passed to ``loadFromFile()``. Second argument is optional and is
+will be passed to `loadFromFile()`. Second argument is optional and is
 name of the region, which will be cloned. This allows you to have
 multiple views load data from same template but use different region.
 
@@ -527,13 +527,13 @@ public function defaultTemplate()
 ### Redefining template for view during adding
 
 When you are adding new object, you can specify a different template to
-use. This is passed as 4th argument to ``add()`` method and has the same
-format as return value of ``defaultTemplate()`` method. Using this
+use. This is passed as 4th argument to `add()` method and has the same
+format as return value of `defaultTemplate()` method. Using this
 approach you can use existing objects with your own templates. This
 allows you to change the look and feel of certain object for only one or
 some pages. If you frequently use view with a different template, it
 might be better to define a new View class and re-define
-``defaultTemplate()`` method instead:
+`defaultTemplate()` method instead:
 
 ```
 MyObject::addTo($this, ['greeting']);
@@ -541,7 +541,7 @@ MyObject::addTo($this, ['greeting']);
 
 ### Accessing view's template
 
-Template is available by the time ``init()`` is called and you can
+Template is available by the time `init()` is called and you can
 access it from inside the object or from outside through "template"
 property:
 
@@ -558,14 +558,14 @@ view.
 ### How views render themselves
 
 Agile Toolkit perform object initialization first. When all the objects
-are initialized global rendering takes place. Each object's ``renderToHtml()``
+are initialized global rendering takes place. Each object's `renderToHtml()`
 method is executed in order. The job of each view is to create output
 based on it's template and then insert it into the region of owner's
 template. It's actually quite similar to our Sender/Recipient example
 above. Views, however, perform that automatically.
 
 In order to know "where" in parent's template output should be placed,
-the 3rd argument to ``add()`` exists — "spot". By default spot is
+the 3rd argument to `add()` exists — "spot". By default spot is
 "Content", however changing that will result in output being placed
 elsewhere. Let's see how our previous example with addresses can be
 implemented using generic views.
@@ -602,7 +602,7 @@ Typically templates directory will have sub-directories: "page", "view",
 "form" etc. Your custom template for one of the pages should be inside
 "page" directory, such as page/contact.html. If you are willing to have
 a generic layout which you will use by multiple pages, then instead of
-putting it into "page" directory, call it ``page_two_columns.html``.
+putting it into "page" directory, call it `page_two_columns.html`.
 
 You can find similar structure inside atk4/templates/shared or in some
 other projects developed using Agile Toolkit.
@@ -619,8 +619,8 @@ template directly such as "name" or "zip".
 ## Globally Recognized Tags
 
 Agile Toolkit View will automatically substitute several tags with the values.
-The tag {$attributes} is automatically replaced with a attributes incl. ``id``
-(unique name of a View), ``class`` and ``style``.
+The tag {$attributes} is automatically replaced with a attributes incl. `id`
+(unique name of a View), `class` and `style`.
 
 There are more templates which are being substituted:
 
@@ -634,7 +634,7 @@ Application (API) has a function :php:`App_Web::setTags` which is called for
 every view in the system. It's used to resolve "template" and "page"
 tags, however you can add more interesting things here. For example if
 you miss ability to include other templates from Smarty, you can
-implement custom handling for ``{include}`` tag here.
+implement custom handling for `{include}` tag here.
 
 Be considered that there are a lot of objects in Agile Toolkit and do
 not put any slow code in this function.

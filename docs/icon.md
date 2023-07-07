@@ -115,10 +115,10 @@ $app->add($noUsers);
 ## Icon in Your Component
 
 Sometimes you want to build a component that will contain user-defined icon. Here you can find
-an implementation for ``SocialAdd`` component that implements a friendly social button with
+an implementation for `SocialAdd` component that implements a friendly social button with
 the following features:
 
- - has a very compact usage ``new SocialAdd('facebook')``
+ - has a very compact usage `new SocialAdd('facebook')`
  - allow to customize icon by specifying it as string, object or injecting properties
  - allow to customize label
 

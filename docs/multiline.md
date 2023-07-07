@@ -140,7 +140,7 @@ normally call this method in your form onSubmit handler method.
 ## Multiline and Expressions
 
 If a Model contains Expressions, there resulting values will automatically get updated when one of the form control value is changed.
-A loading icon on the ``+`` button will indicates that the expression values are being update.
+A loading icon on the `+` button will indicates that the expression values are being update.
 
 Lets use the example of demos/multiline.php:
 
@@ -166,7 +166,7 @@ The 'total' expression will get updated on each field change automatically.
 ## OnLineChange Callback
 
 If you want to define a callback which gets executed when a field value in a Multiline row is changed,
-you can do so using the ``onLineChange()`` method.
+you can do so using the `onLineChange()` method.
 The first parameter is the callback function, the second one is an array containing field names that will trigger
 the callback when values are changed.
 You can return a single JsExpressionable or an array of JsExpressionables which then will be sent to the browser.
@@ -253,6 +253,6 @@ $ml = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'bl
 ### Header
 
 - The header uses the field's caption by default.
-- You can edit it by setting the ``$caption`` property.
-- If you want to hide the header, set the ``$caption`` property to an empty string ``''``.
+- You can edit it by setting the `$caption` property.
+- If you want to hide the header, set the `$caption` property to an empty string `''`.
 
