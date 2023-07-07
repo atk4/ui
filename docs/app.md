@@ -1,10 +1,6 @@
-
-
 .. _app:
 
-
-Purpose of App class
-====================
+## Purpose of App class
 
 .. php:namespace:: Atk4\Ui
 .. php:class:: App
@@ -28,8 +24,8 @@ executing unit-tests, you may want to create new App instance. If your applicati
 exception, it will catch it and create a new App instance to display error message ensuring that the
 error is not repeated.
 
-Using App for Injecting Dependencies
-------------------------------------
+### Using App for Injecting Dependencies
+
 Since App class becomes available for all objects and components of Agile Toolkit, you may add
 properties into the App class::
 
@@ -41,8 +37,8 @@ properties into the App class::
 
 .. IMPORTANT:: $app->db is NOT a standard property. If you use this property, that's your own convention.
 
-Using App for Injecting Behavior
---------------------------------
+### Using App for Injecting Behavior
+
 You may use App class hook to impact behavior of your application:
 
  - using hooks to globally impact object initialization
@@ -52,9 +48,8 @@ You may use App class hook to impact behavior of your application:
  - load templates from different files
  - use a different CDN settings for static files
 
+### Using App as Initializer Object
 
-Using App as Initializer Object
--------------------------------
 App class may initialize some resources for you including user authentication and work with session.
 My next example defines property `$user` and `$system` for the app class to indicate a system which is currently
 active. (See :ref:`system_pattern`)::
@@ -112,9 +107,7 @@ After declaring your Application class like this, you can use it conveniently an
     Crud::addTo($app)
         ->setModel($app->system->ref('Order'));
 
-
-Quick Usage and Page pattern
-----------------------------
+### Quick Usage and Page pattern
 
 A lot of the documentation for Agile UI uses a principle of initializing App object first, then, manually
 add the UI elements using a procedural approach::
@@ -128,8 +121,7 @@ similar to Agile Toolkit prior to 4.3).
 In Agile UI this pattern is implemented through a 3rd party add-on for :ref:`page_manager` and routing. See also
 :php:meth:`App::url()`
 
-Clean-up and simplification
----------------------------
+### Clean-up and simplification
 
 .. php:method:: run()
 .. php:attr:: runCalled
@@ -148,8 +140,7 @@ without actually triggering a global execution process::
 If you do not want the application to automatically execute `run()` you can either set `$alwaysRun` to false
 or use :php:meth:`terminate()` to the app with desired output.
 
-Exception handling
-------------------
+### Exception handling
 
 .. php:method:: caugthException
 .. php:attr:: catch_exception
@@ -160,8 +151,8 @@ better plan for exception, place your code inside a try-catch block.
 When Exception is caught, it's displayed using a Layout\Centered layout and execution of original application is
 terminated.
 
-Integration with other Frameworks
----------------------------------
+### Integration with other Frameworks
+
 If you use Agile UI in conjunction with another framework, then you may be using a framework-specific App class,
 that implements tighter integration with the host application or full-stack framework.
 
@@ -187,8 +178,7 @@ Initializes all includes required by Agile UI. You may extend this class to add 
 Decodes current request without any arguments. If you are changing URL generation pattern, you
 probably need to change this method to properly identify the current page. See :php:class:`App::url()`
 
-Loading Templates for Views
----------------------------
+### Loading Templates for Views
 
 .. php:method:: loadTemplate($name)
 
@@ -198,9 +188,7 @@ you can specify extended logic.
 
 You may override this method if you are using a different CSS framework.
 
-
-Utilities by App
-================
+## Utilities by App
 
 App provides various utilities that are used by other components.
 
@@ -209,8 +197,7 @@ App provides various utilities that are used by other components.
 
 Apart from basic utility, App class provides several mechanisms that are helpful for components.
 
-Sticky GET Arguments
---------------------
+### Sticky GET Arguments
 
 .. php:method:: stickyGet()
 .. php:method:: stickyForget()
@@ -231,8 +218,7 @@ If you need to generate URL that respects stickyGet arguments, use :php:meth:`Ap
 
 See also :php:meth:`View::stickyGet`
 
-Redirects
----------
+### Redirects
 
 .. php:method:: redirect(page)
 .. php:method:: jsRedirect(page)
@@ -250,8 +236,7 @@ so well.  Example::
 
 No much magic in these methods.
 
-Database Connection
--------------------
+### Database Connection
 
 .. php:property:: db
 
@@ -263,24 +248,20 @@ If your `App` needs a DB connection, set this property to an instance of `Persis
 
 See `Persistence::connect <https://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence>`
 
-Execution Termination
----------------------
+### Execution Termination
 
 .. php:method:: terminate(output)
 
 Used when application flow needs to be terminated preemptively. For example when
 callback is triggered and need to respond with some JSON.
 
-
-Execution state
----------------
+### Execution state
 
 .. php:attr:: isRendering
 
 Will be true if the application is currently rendering recursively through the Render Tree.
 
-Links
------
+### Links
 
 .. php:method:: url(page)
 
@@ -304,18 +285,14 @@ but if you need URL to drop any sticky value, specify value explicitly as `false
 Use jsUrl for creating callback, which return non-HTML output. This may be routed differently
 by a host framework (https://github.com/atk4/ui/issues/369).
 
-
-
-Includes
---------
+### Includes
 
 .. php:method:: requireJs($url)
 
 Includes header into the <head> class that will load JavaScript file from a specified URL.
 This will be used by components that rely on external JavaScript libraries.
 
-Hooks
------
+### Hooks
 
 Application implements HookTrait (https://agile-core.readthedocs.io/en/develop/hook.html)
 and the following hooks are available:
@@ -331,9 +308,7 @@ after output was sent. ATK will avoid calling this hook multiple times.
 .. note:: beforeOutput and beforeRender are not executed if $app->terminate() is called, even
     if parameter is passed.
 
-
-Application and Layout
-======================
+## Application and Layout
 
 When writing an application that uses Agile UI you can either select to use individual components
 or make them part of a bigger layout. If you use the component individually, then it will
@@ -352,8 +327,7 @@ All of the objects created above - button, grid, toolbar and paginator will shar
 value for the 'app' property. This value is carried into new objects through AppScopeTrait
 (https://agile-core.readthedocs.io/en/develop/appscope.html).
 
-Adding the App
---------------
+### Adding the App
 
 You can create App object on your own then add elements into it::
 
@@ -369,8 +343,7 @@ of GET/POST data and more.
 
 We are still not using the layout, however.
 
-Adding the Layout
------------------
+### Adding the Layout
 
 Layout can be initialized through the app like this::
 
@@ -389,8 +362,8 @@ not only change the overall page outline, but will also introduce some additiona
 
 Each layout, depending on it's content, may come with several views that you can populate.
 
-Admin Layout
-------------
+### Admin Layout
+
 .. php:namespace:: Atk4\Ui\Layout
 .. php:class:: Admin
 
@@ -427,9 +400,7 @@ The top right dropdown menu.
 
 Whether or not the left menu is open on page load or not. Default is true.
 
-
-Integration with Legacy Apps
-----------------------------
+### Integration with Legacy Apps
 
 If you use Agile UI inside a legacy application, then you may already have layout and some
 patterns or limitations may be imposed on the app. Your first job would be to properly
@@ -438,8 +409,7 @@ implement the "App" and either modification of your existing class or a new clas
 Having a healthy "App" class will ensure that all of Agile UI components will perform
 properly.
 
-3rd party Layouts
------------------
+### 3rd party Layouts
 
 You should be able to find 3rd party Layout implementations that may even be coming with
 some custom templates and views. The concept of a "Theme" in Agile UI consists of

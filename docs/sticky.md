@@ -1,7 +1,4 @@
-
-
-Introduction
-------------
+### Introduction
 
 Ability to automatically generate callback URLs is one of the unique features in Agile UI.
 With most UI widgets they would rely on a specific URL to be available or would require

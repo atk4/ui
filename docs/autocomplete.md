@@ -1,9 +1,6 @@
-
 .. _autocomplete:
 
-=========================
-AutoComplete Form Control
-=========================
+# AutoComplete Form Control
 
 .. php:namespace:: Atk4\Ui\Form\Control
 .. php:class:: AutoComplete
@@ -21,8 +18,7 @@ for AutoComplete form control. Although they look similar, there are some differ
 
 AutoComplete can be a drop-in replacement for Dropdown.
 
-Using Plus mode
----------------
+### Using Plus mode
 
 In your application, it is handy if you can automatically add a missing "client" from the form
 where you add an invoice. AutoComplete implements "Plus" mode which will automatically open a modal
@@ -34,15 +30,13 @@ addCondition()s::
     $form->addControl('test', [\Atk4\Ui\Form\Control\AutoComplete::class, 'plus' => true])
         ->setModel(new Country($db));
 
-Specifying in Model
--------------------
+### Specifying in Model
 
 You can also specify that you prefer to use AutoComplete inside your model definition::
 
     $model->hasOne('country_id', ['model' => [Country::class], 'ui' => ['form' => [\Atk4\Ui\Form\Control\AutoComplete::class]]]);
 
-Advanced Usage
---------------
+### Advanced Usage
 
 You can do much more with AutoComplete form control by passing dropdown settings::
 
@@ -59,9 +53,7 @@ You can do much more with AutoComplete form control by passing dropdown settings
         ],
     ])->setModel(new Country($db));
 
-
-Lookup Form Control
-===================
+## Lookup Form Control
 
 In 1.6 we have introduced Lookup form control, which is identical to AutoComplete but additionally allows
 use of Filters::

@@ -1,20 +1,15 @@
-
 .. php:namespace:: Atk4\Ui
 
 .. php:class:: Tabs
 
-====
-Tabs
-====
+# Tabs
 
 Tabs implement a yet another way to organize your data. The implementation is based on: https://fomantic-ui.com/elements/icon.html.
 
 
 Demo: https://ui.agiletoolkit.org/demos/tabs.php
 
-
-Basic Usage
-===========
+## Basic Usage
 
 Once you create Tabs container you can then mix and match static and dynamic tabs::
 
@@ -46,8 +41,7 @@ Example::
         LoremIpsum::addTo($vp);
     });
 
-Dynamic Tabs
-============
+## Dynamic Tabs
 
 Dynamic tabs are based around implementation of :php:class:`VirtualPage` and allow you
 to pass a callback which will be triggered when user clicks on the tab.
@@ -75,9 +69,7 @@ Note that tab contents are refreshed including any values you put on the form::
         });
     });
 
-
-URL Tabs
-========
+## URL Tabs
 
 .. php:method:: addTabUrl($name, $url)
 

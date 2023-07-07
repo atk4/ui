@@ -1,9 +1,6 @@
-
 .. _popup:
 
-=====
-Popup
-=====
+# Popup
 
 .. php:namespace:: Atk4\Ui
 

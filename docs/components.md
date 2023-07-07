@@ -1,12 +1,8 @@
-==========
-Components
-==========
+# Components
 
 Classes that extend from :php:class:`View` are called `Components` and inherit abilities to render themselves (see :ref:`render`)
 
-
-Core Components
-===============
+## Core Components
 
 Some components serve as a foundation of entire set of other components. A lot of qualities implemented by a core component is
 inherited by its descendants.
@@ -21,9 +17,7 @@ inherited by its descendants.
     fileupload
     tablecolumn
 
-Simple components
-=================
-
+## Simple components
 
 .. figure:: images/simple.png
    :scale: 30%
@@ -50,9 +44,7 @@ control over even the small elements.
     accordion
     helloworld
 
-
-Interactive components
-=======================
+## Interactive components
 
 .. figure:: images/interactive.png
    :scale: 30%
@@ -81,9 +73,7 @@ other code. Here is how interactive components will typically communicate:
     rightpanel
     dataexecutor
 
-
-Composite components
-====================
+## Composite components
 
 .. figure:: images/composite.png
    :scale: 30%

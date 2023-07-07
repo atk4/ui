@@ -1,7 +1,4 @@
-
-===========
-File Upload
-===========
+# File Upload
 
 .. figure:: images/fileupload.png
 
@@ -27,8 +24,7 @@ During upload, a progress bar will appear.
 
 .. php:class:: Upload
 
-Attributes
-==========
+## Attributes
 
 Upload control has the following properties:
 
@@ -41,9 +37,7 @@ Example would be: `['application/pdf', 'images/*']`.
 
 The button view to use for displaying the file open dialog. A default action button is used if omitted.
 
-
-Callbacks
-=========
+## Callbacks
 
 When adding an Upload or UploadImage field to a form, onUpload and onDelete callback must be defined::
 
@@ -57,9 +51,7 @@ When adding an Upload or UploadImage field to a form, onUpload and onDelete call
         // callback action here...
     });
 
-
-onUpload
---------
+### onUpload
 
 The onUpload callback get called as soon as the upload process is finished. This callback
 function will receive the `$_FILES['upfile']` array as function parameter (see https://php.net/manual/en/features.file-upload.php).
@@ -100,8 +92,7 @@ The fileId is set to file name by default if omitted::
         return $form->jsSuccess('Thanks for submitting file: ' . $form->model->get('img'));
     });
 
-onDelete
---------
+### onDelete
 
 The onDelete callback get called when user click the delete button. This callback function
 receive the same fileId set during the onUpload callback as function parameter.
@@ -126,9 +117,7 @@ Example showing the onDelete callback on the UploadImage field::
         ]);
     });
 
-
-UploadImage
-===========
+## UploadImage
 
 Similar to Upload, this is a control implementation for uploading images. Here are additional properties:
 

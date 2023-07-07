@@ -1,9 +1,6 @@
-
 .. _text:
 
-==========
-LoremIpsum
-==========
+# LoremIpsum
 
 .. php:namespace:: Atk4\Ui
 
@@ -12,13 +9,11 @@ LoremIpsum
 This class implements a standard filler-text which is so popular amongst web developers and designers.
 LoremIpsum will generate a dynamic filler text which should help you test :ref:`reloading` or layouts.
 
-Basic Usage
-===========
+## Basic Usage
 
     LoremIpsum::addTo($app);
 
-Resizing
-========
+## Resizing
 
 You can define the length of the LoremIpsum text::
 

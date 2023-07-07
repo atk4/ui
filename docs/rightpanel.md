@@ -1,9 +1,6 @@
-
 .. _rightpanel:
 
-===========
-Right Panel
-===========
+# Right Panel
 
 .. php:namespace:: Atk4\Ui\Panel
 
@@ -14,8 +11,7 @@ and can display content statically or dynamically using Loadable Content.
 
 Demo: https://ui.agiletoolkit.org/demos/layout/layout-panel.php
 
-Basic Usage
-===========
+## Basic Usage
 
 Adding a right panel to the app layout and adding content to it::
 
@@ -31,8 +27,7 @@ the panel::
     $button = Button::addTo($app, ['Open Static']);
     $button->on('click', $panel->jsOpen());
 
-Loading content dynamically
----------------------------
+### Loading content dynamically
 
 Loading dynamic content within panel is done via the onOpen method
 

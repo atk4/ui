@@ -1,9 +1,6 @@
-
-
 .. _Template:
 
-Introduction
-============
+## Introduction
 
 Agile UI relies on a lightweight built-in template engine to manipulate templates.
 The design goals of a template engine are:
@@ -14,15 +11,13 @@ The design goals of a template engine are:
 
 - Allow preserving template content as much as possible
 
-Example Template
-================
+## Example Template
 
 Assuming that you have the following template::
 
     Hello, {mytag}world{/}
 
-Tags
-----
+### Tags
 
 the usage of `{` denotes a "tag" inside your HTML, which must be followed by
 alpha-numeric identifier and a closing `}`. Tag needs to be closed with either
@@ -47,9 +42,7 @@ is idetnical to::
 
     Hello, {mytag}{/}
 
-
-Regions
--------
+### Regions
 
 We call region a tag, that may contain other tags. Example::
 
@@ -77,8 +70,7 @@ There are some operations you can do with a region, such as::
     $content->set('user', 'Billy')->set('amount', 50);
     $mainTemplate->dangerouslyAppendHtml('Content', $content->renderToHtml());
 
-Usage in Agile UI
------------------
+### Usage in Agile UI
 
 In practice, however, you will rarely have to work with the template
 engine directly, but you would be able to use it through views::
@@ -106,9 +98,7 @@ The code above will work like this:
    appending value of the rendered region back to $v. Finally the
    $v will render itself and echo result.
 
-
-Detailed Template Manipulation
-==============================
+## Detailed Template Manipulation
 
 As I have mentioned, most Views will handle template for you. You need to
 learn about template manipulations if you are designing custom view that
@@ -116,9 +106,7 @@ needs to follow some advanced patterns.
 
 .. php:class:: Template
 
-Template Loading
-----------------
-
+### Template Loading
 
 Array containing a structural representation of the template. When you
 create new template object, you can pass template as an argument to a
@@ -146,8 +134,7 @@ Alternatively, if you wish to load template from a file:
 If the template is already loaded, you can load another template from
 another source which will override the existing one.
 
-Template Parsing
-----------------
+### Template Parsing
 
 .. note:: Older documentation......
 
@@ -184,8 +171,7 @@ all of it's nested tags are also preserved.
 Top Tag - a tag representing a Region containing all of the template. Typically
 is called _top.
 
-Manually template usage pattern
--------------------------------
+### Manually template usage pattern
 
 Template engine in Agile Toolkit can be used independently, without views
 if you require so. A typical workflow would be:
@@ -196,9 +182,7 @@ if you require so. A typical workflow would be:
 2. Set tag and region values with :php:meth:`GiTemplate::set`.
 3. Render template with :php:meth:`GiTemplate::renderToHtml`.
 
-
-Template use together with Views
---------------------------------
+### Template use together with Views
 
 A UI Framework such as Agile Toolkit puts quite specific requirements
 on template system. In case with Agile Toolkit, the following pattern
@@ -237,15 +221,12 @@ of a Form.
 |                                                   | other filters are not supported (yet)                 |
 +---------------------------------------------------+-------------------------------------------------------+
 
-Using Template Engine directly
-==============================
+## Using Template Engine directly
 
 Although you might never need to use template engine, understanding
 how it's done is important to completely grasp Agile Toolkit underpinnings.
 
-
-Loading template
-----------------
+### Loading template
 
 .. php:method:: loadFromString(string)
 
@@ -296,8 +277,7 @@ And place the following inside ``template/mytemplate.html``::
 GiTemplate will use :php:class:`PathFinder` to locate template in one of the
 directories of :ref:`resource` ``template``.
 
-Changing template contents
---------------------------
+### Changing template contents
 
 .. php:method:: set(tag, value)
 
@@ -347,9 +327,7 @@ You may use template object as array for simplified syntax::
         $template->del('has_title');
     }
 
-
-Rendering template
-------------------
+### Rendering template
 
 .. php:method:: renderToHtml
 
@@ -363,9 +341,7 @@ will return contents of the template without tags::
     \Atk4\Ui\Text::addTo($this)->set($result);
     // Will output "Hello, World"
 
-
-Template cloning
-----------------
+### Template cloning
 
 When you have nested tags, you might want to extract some part of your
 template and render it separately. For example, you may have 2 tags
@@ -429,8 +405,7 @@ have used my own View object with some more sophisticated presentation logic.
 The only affect on the example would be name of the class, the rest of
 presentation logic would be abstracted inside view's ``renderToHtml()`` method.
 
-Other operations with tags
---------------------------
+### Other operations with tags
 
 .. php:method:: del(tag)
 
@@ -448,8 +423,7 @@ Other operations with tags
 
     Attempts to empty a tag. Does nothing if tag with name does not exist.
 
-Repeating tags
---------------
+### Repeating tags
 
 Agile Toolkit template engine allows you to use same tag several times::
 
@@ -460,8 +434,7 @@ If you execute ``set('color', 'green')`` then contents of both tags will
 be affected. Similarly if you call ``append('color', '-ish')`` then the
 text will be appended to both tags.
 
-Conditional tags
-----------------
+### Conditional tags
 
 Agile Toolkit template engine allows you to use so called conditional tags
 which will automatically remove template regions if tag value is empty.
@@ -480,13 +453,11 @@ template will automatically render as::
 
 Note that zero value is treated as not empty value!
 
-Views and Templates
-===================
+## Views and Templates
 
 Let's look how templates work together with View objects.
 
-Default template for a view
----------------------------
+### Default template for a view
 
 .. php:method:: defaultTemplate()
 
@@ -509,8 +480,7 @@ instead to hook into some specific template::
         return ['greeting']; // uses templates/greeting.html
     }
 
-Redefining template for view during adding
-------------------------------------------
+### Redefining template for view during adding
 
 When you are adding new object, you can specify a different template to
 use. This is passed as 4th argument to ``add()`` method and has the same
@@ -523,8 +493,7 @@ might be better to define a new View class and re-define
 
     MyObject::addTo($this, ['greeting']);
 
-Accessing view's template
--------------------------
+### Accessing view's template
 
 Template is available by the time ``init()`` is called and you can
 access it from inside the object or from outside through "template"
@@ -538,8 +507,7 @@ which would contain a new tag "my\_hint" somewhere. If you try to change
 existing tags, their output can be overwritten during rendering of the
 view.
 
-How views render themselves
----------------------------
+### How views render themselves
 
 Agile Toolkit perform object initialization first. When all the objects
 are initialized global rendering takes place. Each object's ``renderToHtml()``
@@ -567,12 +535,9 @@ implemented using generic views.
 
 ..  templates and views
 
+## Best Practices
 
-Best Practices
-==============
-
-Don't use Template Engine without views
----------------------------------------
+### Don't use Template Engine without views
 
 It is strongly advised not to use templates directly unless you have no
 other choice. Views implement consistent and flexible layer on top of
@@ -581,8 +546,7 @@ The only cases when direct use of SMlite is suggested is if you are not
 working with HTML or the output will not be rendered in a regular way
 (such as RSS feed generation or TMail)
 
-Organize templates into directories
------------------------------------
+### Organize templates into directories
 
 Typically templates directory will have sub-directories: "page", "view",
 "form" etc. Your custom template for one of the pages should be inside
@@ -593,8 +557,7 @@ putting it into "page" directory, call it ``page_two_columns.html``.
 You can find similar structure inside atk4/templates/shared or in some
 other projects developed using Agile Toolkit.
 
-Naming of tags
---------------
+### Naming of tags
 
 Tags use two type of naming - PascalCase and underscore\_lowercase. Tags
 are case sensitive. The larger regions which are typically used for
@@ -603,9 +566,7 @@ Examples would be: "Menu", "Content" and "Recipient". The lowercase and
 underscore is used for short variables which would be inserted into
 template directly such as "name" or "zip".
 
-Globally Recognized Tags
-========================
-
+## Globally Recognized Tags
 
 Agile Toolkit View will automatically substitute several tags with the values.
 The tag {$attributes} is automatically replaced with a attributes incl. ``id``

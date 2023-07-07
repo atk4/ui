@@ -1,10 +1,6 @@
-
-
 .. php:namespace:: Atk4\Ui
 
-
-Columns
-=======
+## Columns
 
 This class implements CSS Grid or ability to divide your elements into columns. If you are an expert
 designer with knowledge of HTML/CSS we recommend you to create your own layouts and templates, but
@@ -33,8 +29,7 @@ columns. This seem like a limitation of Fomantic-UI::
     Box::addTo($c->addColumn(), ['red']);
     Box::addTo($c->addColumn(['class.right floated' => true]), ['blue']);
 
-Rows
-----
+### Rows
 
 When you add columns for a total width which is more than permitted, columns will stack below and form a second
 row. To improve and control the flow of rows better, you can specify addRow()::
@@ -54,8 +49,7 @@ row. To improve and control the flow of rows better, you can specify addRow()::
 This example also uses custom class for Columns ('internally celled') that adds dividers between columns and rows.
 For more information on available classes, see https://fomantic-ui.com/collections/grid.html.
 
-Responsiveness and Performance
-------------------------------
+### Responsiveness and Performance
 
 Although you can use responsiveness with the Column class to some degree, we recommend that you create your own
 component template where you can have greater control over all classes.

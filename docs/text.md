@@ -1,8 +1,6 @@
 .. _text:
 
-====
-Text
-====
+# Text
 
 .. php:namespace:: Atk4\Ui
 
@@ -10,16 +8,14 @@ Text
 
 Text is a component for abstracting several paragraphs of text. It's usage is simple and straightforward:
 
-Basic Usage
-===========
+## Basic Usage
 
 First argument of constructor or first element in array passed to constructor will be the text that will
 appear on the label::
 
     $text = Text::addTo($app, ['here goes some text']);
 
-Paragraphs
-==========
+## Paragraphs
 
 You can define multiple paragraphs with text like this::
 
@@ -27,8 +23,7 @@ You can define multiple paragraphs with text like this::
         ->addParagraph('First Paragraph')
         ->addParagraph('Second Paragraph');
 
-HTML escaping
-=============
+## HTML escaping
 
 By default Text will not escape HTML so this will render as a bold text::
 
@@ -44,8 +39,7 @@ When you use paragraphs, escaping is performed by default::
         ->addParagraph('No alerts')
         ->addParagraph('<script>alert(1);</script>');
 
-Usage
-=====
+## Usage
 
 Text is usable in generic components, where you want to leave possibility of text injection. For instance,
 :php:class:`Message` uses text allowing you to add few paragraphs of text::
@@ -56,8 +50,7 @@ Text is usable in generic components, where you want to leave possibility of tex
     $message->text->addParagraph('First para');
     $message->text->addParagraph('Second para');
 
-Limitations
-===========
+## Limitations
 
 Text may not have embedded elements, although that may change in the future.
 

@@ -1,11 +1,8 @@
-
 .. _tablecolumn:
 
 .. php:namespace:: Atk4\Ui
 
-=======================
-Table Column Decorators
-=======================
+# Table Column Decorators
 
 Classes like :php:class:`Table` and :php:class:`Card` do not render their cell
 contents themselves. Instead they rely on Column Decorator class to position content within the
@@ -28,8 +25,7 @@ A final mention is about :php:class:`Multiformat`, which is a column decorator t
 any other decorator based on condition. This allows you to change button [Archive] for active records,
 but if record is already archived, use a template "Archived on {$archive_date}".
 
-Generic Column Decorator
-========================
+## Generic Column Decorator
 
 .. php:class:: Table\\Column
 
@@ -83,14 +79,12 @@ Sometimes you do want to inject HTML instead of using row values:
 Return array of HTML tags that will be injected into the row template. See
 :php:ref:`table_html` for further example.
 
-Column Menus and Popups
-=======================
+## Column Menus and Popups
 
 Table column may have a menu as seen in https://ui.agiletoolkit.org/demos/tablecolumnmenu.php. Menu is added
 into table column and can be linked with Popup or Menu.
 
-Basic Use
----------
+### Basic Use
 
 The simplest way to use Menus and Popups is through a wrappers: :php:meth:`Atk4\\Ui\\Grid::addDropdown` and :php:meth:`Atk4\\Ui\\Grid::addPopup`::
 
@@ -106,8 +100,7 @@ The simplest way to use Menus and Popups is through a wrappers: :php:meth:`Atk4\
 Those wrappers will invoke methods :php:meth:`Table\\Column::addDropdown` and :php:meth:`Table\\Colmun::addPopup` for
 a specified column, which are documented below.
 
-Popups
-------
+### Popups
 
 .. php:method:: addPopup()
 
@@ -135,8 +128,7 @@ You may also use :php:meth:`Atk4\\Ui\\Popup::set` method to dynamically load the
         HelloWorld::addTo($p);
     });
 
-Dropdown Menus
---------------
+### Dropdown Menus
 
 .. php:method:: addDropdown()
 
@@ -146,14 +138,11 @@ Menus will show item selection and will trigger a callback when user selects one
         return 'Title item: ' . $item;
     });
 
-
-Decorators for data types
-=========================
+## Decorators for data types
 
 In addition to :php:class:`Table\\Column`, Agile UI includes several column implementations.
 
-Link
-----
+### Link
 
 .. php:class:: Table\\Column\\Link
 
@@ -171,9 +160,7 @@ pass on some values from your model, use second argument to constructor::
 
     $table->addColumn('name', [\Atk4\Ui\Table\Column\Link::class, ['details', 'id' => 123], ['q' => 'name']]);
 
-
-Money
------
+### Money
 
 .. php:class:: Table\\Column\\Money
 
@@ -182,8 +169,7 @@ use red text (td class "negative" for Fomantic-UI). The money cells are not wrap
 
 For the actual number formatting, see :ref:`uiPersistence`
 
-Status
-------
+### Status
 
 .. php:class:: Table\\Column\\Status
 
@@ -209,8 +195,7 @@ Current list of states supported:
 
 (list of states may be expanded further)
 
-Template
---------
+### Template
 
 .. php:class:: Table\\Column\\Template
 
@@ -226,8 +211,7 @@ will only work if you assign it to a primary column (by passing 1st argument to 
 
 (In the future it may be optional with the ability to specify caption).
 
-Image
------
+### Image
 
 .. php:class:: Table\\Column\\Image
 
@@ -235,12 +219,9 @@ This column is suitable if you wish to have image in your table cell::
 
     $table->addColumn('image_url', new \Atk4\Ui\Table\Column\Image);
 
+## Interactive Decorators
 
-Interactive Decorators
-======================
-
-ActionButtons
--------------
+### ActionButtons
 
 .. php:class:: Table\\Column\\ActionButtons
 
@@ -276,8 +257,7 @@ Triggers a modal dialog when you click on the button. See description on :php:me
 
 Note that in this case ID is automatically passed to your callback.
 
-Checkbox
---------
+### Checkbox
 
 .. php:class:: Table\\Column\\Checkbox
 
@@ -295,9 +275,7 @@ click on the button, it will reload $segment component while passing all the id'
 jsChecked expression represents a JavaScript string which you can place inside a form control,
 use as argument etc.
 
-
-Multiformat
------------
+### Multiformat
 
 Sometimes your formatting may change depending on value. For example you may want to place link
 only on certain rows. For this you can use an `\\Atk4\Ui\\Table\\Column\\Multiformat` decorator::

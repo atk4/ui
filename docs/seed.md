@@ -1,6 +1,4 @@
-
-Purpose of the Seed
-===================
+## Purpose of the Seed
 
 .. php:namespace:: Atk4\Ui
 
@@ -30,8 +28,7 @@ Seed has many advantages:
  - recursive syntax with property and constructor argument injection
  - allow App logic to further enhance mechanics
 
-Growing Seed
-------------
+### Growing Seed
 
 To grow a seed you need a factory. Factory is a trait implemented in atk4/core and used by all
 ATK UI classes::
@@ -44,14 +41,12 @@ will do it for you::
     Button::addTo($app);
     // app will create instance of class \Atk4\Ui\Button
 
-Seed, Object and Render Tree
-----------------------------
+### Seed, Object and Render Tree
 
 When calling :php:meth:`View::add()` not only your seed becomes an object, but it is also added to
 the :ref:`render tree`.
 
-Seed Components
-===============
+## Seed Components
 
 For more information about seeds, merging seeds, factories and namespaces, see https://agile-core.readthedocs.io/.
 
@@ -65,8 +60,7 @@ are:
  - Elements with numeric indexes 'hello' and 'big red' are passed to constructor of Button
  - Elements with named arguments are assigned to properties after invocation of constructor
 
-Alternative ways to use Seed
-----------------------------
+### Alternative ways to use Seed
 
 Some constructors may accept array as the first argument. It is also treated as a seed
 but without class (because class is already set)::
@@ -79,8 +73,7 @@ you still can pass some property values::
 
     $seed = [new Button('hello', 'class.big red' => true), 'icon' => ['book', 'class.red' => true]];
 
-Additional cases
-----------------
+### Additional cases
 
 An individual object may add more ways to deal with seed. For example, when adding columns
 to your Table you can specify seed for the decorator: :php:class:`Atk4\\Ui\\\Table\\Column`::

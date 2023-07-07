@@ -1,17 +1,13 @@
-
 .. _menu:
 
-====
-Menu
-====
+# Menu
 
 .. php:namespace:: Atk4\Ui
 .. php:class:: Menu
 
 Menu implements horizontal or vertical multi-level menu by using Fomantic-UI 'menu'.
 
-Using Menu
-==========
+## Using Menu
 
 .. php:method: addItem($label, $action)
 
@@ -25,24 +21,20 @@ to make menu vertical::
 
     $menu->addClass('vertical');
 
-
-Decorating Menu Items
-=====================
+## Decorating Menu Items
 
 See :php:class:`MenuItem` for more options::
 
     $menu->addItem(['foo', 'icon' => 'book']);
 
-Specifying Links and Actions
-============================
+## Specifying Links and Actions
 
 Menu items can use links and actions::
 
     $menu->addItem('foo', 'test.php');
     $menu->addItem('bar', new JsModal('Test'));
 
-Creating sub-menus
-==================
+## Creating sub-menus
 
 .. php:method: addMenu($label)
 .. php:method: addGroup($label)
@@ -59,18 +51,15 @@ menu you can also use groups. For horizontal menu, you can use addRightMenu.
     $sub->addItem('bar 1');
     $sub->addItem('bar 2');
 
-Headers
-=======
+## Headers
 
 .. php:method: addHeader($label)
 
-Advanced Use
-============
+## Advanced Use
 
 You can add other elements inside menu. Refer to demos/menu.php.
 
-MenuItem
-========
+## MenuItem
 
 .. php:class:: MenuItem
 

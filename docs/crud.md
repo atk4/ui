@@ -1,9 +1,6 @@
-
 .. _crud:
 
-====
-Crud
-====
+# Crud
 
 .. php:namespace:: Atk4\Ui
 .. php:class:: Crud
@@ -19,8 +16,7 @@ updating and adding records as well as linking them with corresponding Model act
 .. important:: ATK Addon - MasterCrud implements a higher-level multi-model management solution, that takes
     advantage of model relations and traversal to create multiple levels of Cruds: https://github.com/atk4/mastercrud
 
-Using Crud
-==========
+## Using Crud
 
 The basic usage of Crud is::
 
@@ -43,8 +39,7 @@ You can also specify which columns you would like to see on the grid::
 This restriction will apply to both viewing and editing, but you can fine-tune that by specifying one of many
 parameters to Crud.
 
-Disabling Actions
-=================
+## Disabling Actions
 
 By default Crud allows all four operations - creating, reading, updating and deleting. These action is set by default in model
 action. It is possible to disable these default actions by setting their system property to true in your model::
@@ -54,8 +49,7 @@ action. It is possible to disable these default actions by setting their system 
 Model action using system property set to true, will not be display in Crud. Note that action must be setup prior to use
 `$crud->setModel($euCountries)`
 
-Specifying Fields (for different views)
-=======================================
+## Specifying Fields (for different views)
 
 .. php:attr:: displayFields
 
@@ -81,9 +75,7 @@ Through those properties you can specify which fields to use when form is displa
 Field name add here will have priorities over the action fields properties. When set to null, the action fields property
 will be used.
 
-
-Custom Form Behavior
-====================
+## Custom Form Behavior
 
 :php:class:`Form` in Agile UI allows you to use many different things, such as custom layouts. With Crud you can
 specify your own form behavior using a callback for action::
@@ -110,9 +102,7 @@ specify your own form behavior using a callback for action::
 
 Callback function will receive the Form and ActionExecutor as arguments.
 
-
-Changing titles
-===============
+## Changing titles
 
 .. important:: Changing the title of the CRUD's grid view must be done before setting the model.
   Changing the title of the modal of a CRUD's modal window must be done after loading the model.
@@ -126,10 +116,7 @@ Here's an example::
     $crud->setModel($model);
     $model->getUserAction('add')->ui['executor']->title = 'New title for modal'; // the button of the modal - must be rendered after setting model
 
-
-
-Notification
-============
+## Notification
 
 .. php:attr:: notifyDefault
 .. php:attr:: saveMsg

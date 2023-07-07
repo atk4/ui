@@ -1,17 +1,13 @@
-
 .. _breadcrumb:
 
-==========
-Breadcrumb
-==========
+# Breadcrumb
 
 .. php:namespace:: Atk4\Ui
 .. php:class:: Breadcrumb
 
 Implement navigational Breadcrumb, by using https://fomantic-ui.com/collections/breadcrumb.html
 
-Basic Usage
-===========
+## Basic Usage
 
 .. php:method:: addCrumb()
 .. php:method:: set()
@@ -27,17 +23,14 @@ Every time you call addCrumb a new one is added. With set() you can specify the 
 addCrumb also requires a URL passed as second argument which can be either a string or array (which would then
 be passed to url() (:php:meth:`View::url`).
 
-Changing Divider
-================
+## Changing Divider
 
 .. php:attr:: dividerClass
 
 By default value `right angle icon` is used, but you can change it to `right chevron icon` or simply set to empty string `""`
 to use slash.
 
-
-Working with Path
-=================
+## Working with Path
 
 .. php:attr:: path
 .. php:method: popTitle()

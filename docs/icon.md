@@ -1,9 +1,6 @@
-
 .. _icon:
 
-====
-Icon
-====
+# Icon
 
 .. php:namespace:: Atk4\Ui
 
@@ -40,8 +37,7 @@ You can also use States, Variations by passing classes to your button::
 
 .. _icon_other_comp:
 
-Using on other Components
-=========================
+## Using on other Components
 
 You can use icon on the following components: :php:class:`Button`, :php:class:`Label`, :php:class:`Header`
 :php:class:`Message`, :php:class:`Menu` and possibly some others. Here are some examples::
@@ -57,10 +53,7 @@ You can use icon on the following components: :php:class:`Button`, :php:class:`L
 
     Label::addTo($app, ['Label', 'class.right ribbon red' => true, 'icon' => 'flipped question']);
 
-
-
-Groups
-======
+## Groups
 
 Fomantic-UI support icon groups. The best way to implement is to supply :php:class:`Template` to an
 icon::
@@ -90,8 +83,7 @@ when adding::
 This technique may be helpful for you if you are creating re-usable elements and you wish to store
 Icon object in one of your public properties.
 
-Composing
----------
+### Composing
 
 Composing offers you another way to deal with Group icons::
 
@@ -101,8 +93,7 @@ Composing offers you another way to deal with Group icons::
 
     $app->add($noUsers);
 
-Icon in Your Component
-======================
+## Icon in Your Component
 
 Sometimes you want to build a component that will contain user-defined icon. Here you can find
 an implementation for ``SocialAdd`` component that implements a friendly social button with

@@ -1,9 +1,6 @@
-
 .. _message:
 
-=======
-Message
-=======
+# Message
 
 .. php:namespace:: Atk4\Ui
 
@@ -13,8 +10,7 @@ Outputs a rectangular segment with a distinctive color to convey message to the 
 
 Demo: https://ui.agiletoolkit.org/demos/message.php
 
-Basic Usage
-===========
+## Basic Usage
 
 Implements basic image::
 
@@ -30,8 +26,7 @@ Here is the alternative syntax::
 
     $message = Message::addTo($app, ['Warning Message Title', 'type' => 'warning']);
 
-Adding message text
-===================
+## Adding message text
 
 .. php:attr:: text
 
@@ -43,9 +38,7 @@ to add more text inside your message::
     $message->text->addParagraph('First para');
     $message->text->addParagraph('Second para');
 
-
-Message Icon
-============
+## Message Icon
 
 .. php:attr:: icon
 

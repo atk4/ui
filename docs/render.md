@@ -1,6 +1,4 @@
-
-Introduction
-------------
+### Introduction
 
 Agile UI allows you to create and combine various objects into a single Render Tree for unified rendering. Tree represents
 all the UI components that will contribute to the HTML generation. Render tree is automatically created and maintained::
@@ -33,8 +31,7 @@ simply set a $model property and does not really need to rely on $api etc.
 
 Next, lets look at what Initialization really is and why is it important.
 
-Initialization
---------------
+### Initialization
 
 Calling the init() method of a view is essential before any meaningful work can be done with it. This is important, because
 the following actions are performed:
@@ -47,8 +44,7 @@ the following actions are performed:
 Many UI components rely on the above to function properly. For example, Grid will look for certain regions in its template
 to clone them into separate objects. This cloning can only take place inside init() method.
 
-Late initialization
--------------------
+### Late initialization
 
 When you create an application and select a Layout, the layout is automatically initialized::
 
@@ -81,9 +77,7 @@ hand, if you add $v inside layout, trees will merge and the same $app will be us
 Agile UI will attempt to always initialize objects as soon as possible, so that you can get the most meaningful stack traces
 should there be any problems with the initialization.
 
-
-Rendering outside
------------------
+### Rendering outside
 
 It's possible for some views to be rendered outside of the app. In the previous section I speculated that calling $v->render()
 will create its own tree independent from the main one.
@@ -107,8 +101,7 @@ with static components.
 
 .. _unique_name:
 
-Unique Name
------------
+### Unique Name
 
 Through adding objects into render tree (even if those are not Views) objects can assume unique names. When you create
 your application, then any object you add into your app will have a unique `name` property::

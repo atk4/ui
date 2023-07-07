@@ -2,9 +2,7 @@
 
 .. php:class:: Console
 
-=======
-Console
-=======
+# Console
 
 .. figure:: images/console.png
 
@@ -14,9 +12,7 @@ be used do direct output from slow method or even execute commands on the server
 
 Demo: https://ui.agiletoolkit.org/demos/console.php
 
-
-Basic Usage
-===========
+## Basic Usage
 
 .. php:method:: set($callback)
 
@@ -41,8 +37,7 @@ events and displays it on a black background.
 Console integrates nicely with DebugTrait (https://agile-core.readthedocs.io/en/develop/debug.html?highlight=debug),
 and also allows you to execute shell process on the server while redirecting output in real-time.
 
-Using With Object
-=================
+## Using With Object
 
 .. php:method:: runMethod($callback);
 
@@ -76,8 +71,7 @@ You can also execute static methods::
 
     $console->runMethod('StaticLib', 'myStaticMethod');
 
-Executing Commands
-==================
+## Executing Commands
 
 .. php:method:: exec($cmd, $args);
 

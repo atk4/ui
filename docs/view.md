@@ -1,10 +1,6 @@
-
-
 .. _view:
 
-=====
-Views
-=====
+# Views
 
 Agile UI is a component framework, which follows a software patterns known as
 `Render Tree` and `Two pass HTML rendering`.
@@ -38,10 +34,7 @@ leaf::
 
 Each of the views will automatically render all of the child views.
 
-
-
-Initializing Render Tree
-========================
+## Initializing Render Tree
 
 Views use a principle of `delayed init`, which allow you to manipulate View objects
 in any way you wish, before they will actuallized.
@@ -116,8 +109,7 @@ to `Factory::factory()`, which will be responsible of instantiating the actual o
 
 (TODO: link to App:Factory)
 
-Use of $app property and Dependency Injeciton
-=============================================
+## Use of $app property and Dependency Injeciton
 
 .. php:attr:: app
 
@@ -134,8 +126,7 @@ Consider the following example::
 
 Agile UI will automatically pass your $app class to all the views.
 
-Integration with Agile Data
-===========================
+## Integration with Agile Data
 
 .. php:method:: setModel($model)
 
@@ -177,9 +168,7 @@ Or if you prefer a more consise code::
 Again, this will use `Factory` feature of your application to let you determine how
 to properly initialize the class corresponding to string 'Client'.
 
-UI Role and Classes
-===================
-
+## UI Role and Classes
 
 .. php:method:: __construct($defaults = [])
 
@@ -253,8 +242,7 @@ existing object::
 
 Classes on a view will appear in the following order: "ui blue large button"
 
-Special-purpose properties
-==========================
+## Special-purpose properties
 
 A view may define a special-purpose properties, that may modify how the
 view is rendered. For example, Button has a property 'icon', that is implemented
@@ -278,9 +266,7 @@ to your own implementation OR you can pass icon as a view::
 
     $button = Button::addTo($app, ['icon' => new MyAwesomeIcon('book')]);
 
-
-Rendering of a Tree
-===================
+## Rendering of a Tree
 
 .. php:method:: render()
 
@@ -303,9 +289,7 @@ framework you shouldn't even use ``render()``, but instead use ``getHtml`` and `
 
     Return array of JS chains that was assigned to current element or it's children.
 
-
-Modifying rendering logic
-=========================
+## Modifying rendering logic
 
 When you creating your own View, you most likely will want to change it's rendering mechanics.
 The most suitable location for that is inside ``renderView`` method.
@@ -401,8 +385,7 @@ re-inserted back into the 'Tags' region.
 
 See also :php:class:`Template`.
 
-Unique ID tag
-=============
+## Unique ID tag
 
 .. php:attr:: region
 
@@ -445,9 +428,7 @@ the name of the field will be used instead of the role. This is done by setting 
     Specify a name for the element. If container already has object with specified name, exception
     will be thrown.
 
-
-Reloading a View
-================
+## Reloading a View
 
 .. php:method:: jsReload($getArgs)
 
@@ -462,11 +443,7 @@ which will respond with JavaScript Action for reloading the view::
     // Previously:
     // $b1->on('click', new \Atk4\Ui\Js\JsReload($b2));
 
-
-
-
-Modifying Basic Elements
-========================
+## Modifying Basic Elements
 
 TODO: Move to Element.
 
@@ -479,13 +456,7 @@ add custom styles::
     $view->setStyle('align', 'right');
     $view->setAttr('href', 'https://...');
 
-
-
-
-
-Rest of yet-to-document/implement methods and properties
-========================================================
-
+## Rest of yet-to-document/implement methods and properties
 
     .. php:attr:: content
 

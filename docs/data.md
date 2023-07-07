@@ -1,9 +1,6 @@
-
-
 .. _data:
 
-Integration
------------
+### Integration
 
 Agile UI relies on Agile Data library for flexible access to user defined data sources. The purpose of this integration
 is to relieve a developer from manually creating data fetching and storing code.
@@ -15,8 +12,7 @@ bigger code footprint.
 There are no way to use Agile UI without Agile Data, however Agile Data is flexible enough to work with your own
 data sources. The rest of this chapter will explain how you can map various data structures.
 
-Static Data Arrays
-------------------
+### Static Data Arrays
 
 Agile Data contains Persistence\Array_ (https://agile-data.readthedocs.io/en/develop/design.html?highlight=array#domain-model-actions)
 implementation that load and store data in a regular PHP arrays. For the "quick and easy" solution Agile UI Views provide a
@@ -33,8 +29,7 @@ method :php:meth:`View::setSource` which will work-around complexities and give 
     for expressing your native data source. Agile UI is not optimized for setSource so its performance will generally be
     slower too.
 
-Raw SQL Queries
----------------
+### Raw SQL Queries
 
 Writing raw SQL queries is source of many errors, both with a business logic and security. Agile Data provides great ways
 for abstracting your SQL queries, but if you have to use a raw query::

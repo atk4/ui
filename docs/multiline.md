@@ -1,11 +1,8 @@
-
 .. php:namespace:: Atk4\Ui\Form\Control
 
 .. php:class:: Multiline
 
-======================
-Multiline Form Control
-======================
+# Multiline Form Control
 
 The Multiline form control is not simply a single control, but will add multiple control in order to be able to edit
 multiple Model fields related to a single record reference into another Model.
@@ -58,8 +55,7 @@ This leads to a Multiline component automatically rendered for adding, editing a
 
 You can also check LINK_TO_DEMO/multiline.php for this example
 
-Using Multiline with HasMany relation
-=======================================
+## Using Multiline with HasMany relation
 
 Multiline form control is used by default when a Model field used `containsMany()` or `containsOne()`, but you can set
 up the multiline component to be used with hasMany() relation and edit related record accordingly.
@@ -127,8 +123,7 @@ If you want to edit them along with the user, Multiline need to be set up accord
 Using the example above will create a form with control from the User model as well as a Multiline control for editing
 the Email model's field.
 
-Important
----------
+### Important
 
 It is important to note that for Email's record to be properly saved, in relation to their User record, the User model
 needs to be loaded prior to call Multiline::setReferenceModel() method.
@@ -136,8 +131,8 @@ needs to be loaded prior to call Multiline::setReferenceModel() method.
 Also note that Multiline::saveRows() method need to be called for related record to be saved in related table. You would
 normally call this method in your form onSubmit handler method.
 
-Multiline and Expressions
-=========================
+## Multiline and Expressions
+
 If a Model contains Expressions, there resulting values will automatically get updated when one of the form control value is changed.
 A loading icon on the ``+`` button will indicates that the expression values are being update.
 
@@ -160,8 +155,8 @@ Lets use the example of demos/multiline.php::
 
 The 'total' expression will get updated on each field change automatically.
 
-OnLineChange Callback
-=====================
+## OnLineChange Callback
+
 If you want to define a callback which gets executed when a field value in a Multiline row is changed,
 you can do so using the ``onLineChange()`` method.
 The first parameter is the callback function, the second one is an array containing field names that will trigger
@@ -181,9 +176,7 @@ In this case we display a message when any of the control value for 'qty' and 'b
         return new JsToast('The new Total is ' . $app->uiPersistence->typecastSaveField(new Field(['type' => 'atk4_money']), $total));
     }, ['qty', 'box']);
 
-
-Multiline Vue Component
-=======================
+## Multiline Vue Component
 
 Multiline is a Vue component by itself and rely on many others Vue components to render itself.
 Each control is render via a Vue component and the Vue component used will depend on the model
@@ -197,8 +190,8 @@ Each control being a Vue component means that they accept 'Props' that may chang
 Props on each component may be applied globally, i.e. to all control within Multiline that use that control, or
 per component.
 
-Setting component Props globally
----------------------------------
+### Setting component Props globally
+
 Use the $componentProps property of Multiline in order to apply 'Props' to component globally.
 
 .. php:attr:: componentProps
@@ -207,8 +200,7 @@ Example of changing all Dropdown(SuiDropdown) within Multiline::
 
     $ml = $form->addControl('ml', [Multiline::class, 'compponentProps' => [Multiline::SELECT => ['floating' => true]]]);
 
-Setting component Props per field
----------------------------------
+### Setting component Props per field
 
 Specific field components Props may be applied using the 'ui' field property when adding field to your model::
 
@@ -221,8 +213,7 @@ Specific field components Props may be applied using the 'ui' field property whe
         'ui' => ['multiline' => [Multiline::INPUT => ['icon' => 'key', 'type' => 'password']]],
     ]);
 
-Note on Multiline control
--------------------------
+### Note on Multiline control
 
 Each control inside Multiline is wrap within a table cell(SuiTableCell) component and this component can be customize as
 well using the 'ui' property of the model's field::
@@ -235,14 +226,14 @@ well using the 'ui' property of the model's field::
         'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 1, 'class' => 'blue']]],
     ]);
 
-Table appearance within Multiline
----------------------------------
+### Table appearance within Multiline
+
 Table(SuiTable) Props can be set using $tableProps property of Multiline::
 
     $ml = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'blue']]);
 
-Header
-------
+### Header
+
 - The header uses the field's caption by default.
 - You can edit it by setting the ``$caption`` property.
 - If you want to hide the header, set the ``$caption`` property to an empty string ``''``.

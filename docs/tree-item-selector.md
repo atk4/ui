@@ -1,18 +1,13 @@
-
 .. php:namespace:: Atk4\Ui\Form\Control
 
 .. php:class:: TreeItemSelector
 
-
-=============================
-TreeItemSelector Form Control
-=============================
+# TreeItemSelector Form Control
 
 TreeItemSelector Form Control will display a list of items in a hierarchical (tree) structure. It allow for a user to select multiple
 or single item within a tree like list structure.
 
-Attributes
-==========
+## Attributes
 
 .. php:attr:: treeItems
 
@@ -44,8 +39,7 @@ This attribute will decide into witch mode the component will run. When allowMul
 the component will allow multiple selection to be made within the list of items. Otherwise, only one selection
 will be allowed.
 
-Basic Usage
-===========
+## Basic Usage
 
 Adding a TreeItemSelector form control to a Form::
 
@@ -82,9 +76,7 @@ Adding a TreeItemSelector form control to a Form::
 Please note that when using TreeItemSelector in multiple mode, you need to specify field attribute type to 'json'
 because in multiple mode, it will collect item value as an array type.
 
-
-Callback Usage
-==============
+## Callback Usage
 
 .. php:method:: onItem($fx)
 
@@ -95,8 +87,7 @@ set by the user.::
         return new \Atk4\Ui\Js\JsToast($this->getApp()->encodeJson($value));
     });
 
-Note
-====
+## Note
 
 This form control component is made to collect ID's of end item only, i.e. item with no children nodes, and will be working in recursive selection
 mode when allowMultiple is set to true. Recursive selection mean that when user click on a group, it will automatically select or unselect children

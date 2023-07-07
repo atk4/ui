@@ -1,9 +1,6 @@
-
 .. _Lister:
 
-======
-Lister
-======
+# Lister
 
 .. php:namespace:: Atk4\Ui
 
@@ -13,8 +10,7 @@ Lister can be used to output unstructured data with your own HTML template. If y
 data in a table, see :php:class:`Table`. Lister is also the fastest way to render large amount of
 output and will probably give you most flexibility.
 
-Basic Usage
-===========
+## Basic Usage
 
 The most common use is when you need to implement a certain HTML and if that HTML contains list of
 items. If your HTML looks like this::
@@ -90,8 +86,7 @@ Finally, Lister permits you not to use {rows} and {row} tags if entire region ca
         {/Countries}
     </div>
 
-Tweaking the output
-===================
+## Tweaking the output
 
 Output is formatted using the standard :ref:`uiPersistence` routine, but you can also fine-tune the content
 of your tags like this::
@@ -100,8 +95,7 @@ of your tags like this::
         $lister->currentRow->set('iso', mb_strtolower($lister->currentRow->get('iso')));
     });
 
-Model vs Static Source
-======================
+## Model vs Static Source
 
 Since Lister is non-interactive, you can also set a static source for your lister to avoid hassle::
 
@@ -110,8 +104,7 @@ Since Lister is non-interactive, you can also set a static source for your liste
         ['flag' => 'uk', 'name' => 'UK'],
     ]);
 
-Special template tags
-=====================
+## Special template tags
 
 Your {row} template may contain few special tags:
 
@@ -119,9 +112,7 @@ Your {row} template may contain few special tags:
  - {$_title} - will be set to the title of your record (see $model->$titleField)
  - {$_href} - will point to current page but with ?id=123 extra GET argument.
 
-
-Load page content dynamically when scrolling
-============================================
+## Load page content dynamically when scrolling
 
 You can make lister load page content dynamically when user is scrolling down page.
 
@@ -132,8 +123,7 @@ The second parameter is options you want to pass to respective JS widget.
 The third parameter is the $container view holding the lister and where scrolling is applicable.
 And last parameter is CSS selector of element in which you want to do scrolling.
 
-Using without Template
-======================
+## Using without Template
 
 Agile UI comes with a one sample template for your lister, although it's not set by default,
 you can specify it explicitly::

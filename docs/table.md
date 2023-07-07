@@ -1,9 +1,6 @@
-
 .. _table:
 
-=====
-Table
-=====
+# Table
 
 .. php:namespace:: Atk4\Ui
 
@@ -27,8 +24,7 @@ Main features of Table class are:
  - Can use Agile Data source or Static data.
  - Custom HTML, Format hooks
 
-Basic Usage
-===========
+## Basic Usage
 
 The simplest way to create a table is when you use it with Agile Data model::
 
@@ -39,8 +35,7 @@ The table will be able to automatically determine all the fields defined in your
 appropriate column types, implement type-casting and also connect your model with the appropriate data source
 (database) $db.
 
-Using with Array Data
----------------------
+### Using with Array Data
 
 You can also use Table with Array data source like this::
 
@@ -62,8 +57,7 @@ You can also use Table with Array data source like this::
     handling data like this. The implementation of :php:meth:`View::setSource` will
     create a model for you with Array persistence for you anyways.
 
-Adding Columns
---------------
+### Adding Columns
 
 .. php:method:: setModel(\Atk4\Data\Model $model, $fields = null)
 
@@ -88,8 +82,7 @@ You can also add individual column to your table::
 When invoking addColumn, you have a great control over the field properties and decoration. The format
 of addColumn() is very similar to :php:meth:`Form::addControl`.
 
-Calculations
-============
+## Calculations
 
 Apart from adding columns that reflect current values of your database, there are several ways
 how you can calculate additional values. You must know the capabilities of your database server
@@ -127,13 +120,11 @@ specify the caption, you can use code like this::
 
     $table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
 
-Column Objects
---------------
+### Column Objects
 
 To read more about column objects, see :ref:`tablecolumn`
 
-Advanced Column Denifitions
----------------------------
+### Advanced Column Denifitions
 
 Table defines a method `columnFactory`, which returns Column object which is to be used to
 display values of specific model Field.
@@ -215,8 +206,7 @@ As a final note in this section - you can re-use column objects multiple times::
 
 This will result in 3 gap columns rendered to the left, middle and right of your Table.
 
-Table sorting
-=============
+## Table sorting
 
 .. php:attr:: sortable
 .. php:attr:: sortBy
@@ -232,8 +222,7 @@ you can designate columns to display headers as if table were sorted::
 This will highlight the column "name" header and will also display a sorting indicator as per sort
 order.
 
-JavaScript Sorting
-------------------
+### JavaScript Sorting
 
 You can make your table sortable through JavaScript inside your browser. This won't work well if
 your data is paginated, because only the current page will be sorted::
@@ -247,8 +236,7 @@ For more information see https://github.com/kylefox/jquery-tablesort
 
 .. _table_html:
 
-Injecting HTML
---------------
+### Injecting HTML
 
 The tag will override model value. Here is example usage of :php:meth:`Table\\Column::getHtmlTags`::
 
@@ -275,8 +263,7 @@ Your column now can be added to any table::
 
 IMPORTANT: HTML injection will work unless :php:attr:`Table::useHtmlTags` property is disabled (for performance).
 
-Table Data Handling
-===================
+## Table Data Handling
 
 Table is very similar to :php:class:`Lister` in the way how it loads and displays data. To control which
 data Table will be displaying you need to properly specify the model and persistence. The following two
@@ -309,8 +296,7 @@ all the different data persitences. (see :php:ref:`universal_data_access`)
 For most applications, however, you would be probably using internally defined models that rely on
 data stored inside your own database. Either way, several principles apply to the way how Table works.
 
-Table Rendering Steps
----------------------
+### Table Rendering Steps
 
 Once model is specified to the Table it will keep the object until render process will begin. Table
 columns can be defined any time and will be stored in the :php:attr:`Table::columns` property. Columns
@@ -334,8 +320,7 @@ During the render process (see :php:meth:`View::renderView`) Table will perform 
 4. If no rows were displayed, then "empty message" will be shown (see :php:attr:`Table::tEmpty`).
 5. If :php:meth:`addTotals` was used, append totals row to table footer.
 
-Dealing with Multiple decorators
-================================
+## Dealing with Multiple decorators
 
 .. php:method:: addDecorator($name, $columnDecorator)
 
@@ -405,33 +390,29 @@ to make a note on how template caching works then,
  - <td> properties are stacked
  - last decorator will convert array with td properties into an actual tag.
 
-Header and Footer
------------------
+### Header and Footer
+
 When using with multiple decorators, the last decorator gets to render Header cell.
 The footer (totals) uses the same approach for generating template, however a
 different methods are called from the columns: getTotalsCellTemplate
 
-Redefining
-----------
+### Redefining
 
 If you are defining your own column, you may want to re-define getDataCellTemplate. The
 getDataCellHtml can be left as-is and will be handled correctly. If you have overridden
 getDataCellHtml only, then your column will still work OK provided that it's used as a
 last decorator.
 
-Advanced Usage
-==============
+## Advanced Usage
 
 Table is a very flexible object and can be extended through various means. This chapter will focus
 on various requirements and will provide a way how to achieve that.
 
-Toolbar, Quick-search and Paginator
------------------------------------
+### Toolbar, Quick-search and Paginator
 
 See :php:class:`Grid`
 
-JsPaginator
------------
+### JsPaginator
 
 .. php:method:: addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
 
@@ -441,8 +422,7 @@ JsPaginator will load table content dynamically when user scroll down the table 
 
 See also :php:meth:`Lister::addJsPaginator`
 
-Resizable Columns
------------------
+### Resizable Columns
 
 .. php:method:: resizableColumn($fx = null, $widths = null, $resizerOptions = [])
 
@@ -461,8 +441,8 @@ Note that you may specify an array of integer representing the initial width val
 
 Finally you may also specify some of the resizer options - https://github.com/Bayer-Group/column-resizer#options
 
-Column attributes and classes
-=============================
+## Column attributes and classes
+
 By default Table will include ID for each row: `<tr data-id="123">`. The following code example
 demonstrates how various standard column types are relying on this property::
 
@@ -473,8 +453,7 @@ demonstrates how various standard column types are relying on this property::
 
 See also :ref:`js`.
 
-Static Attributes and classes
------------------------------
+### Static Attributes and classes
 
 .. php:class:: Table\\Column
 
@@ -519,16 +498,13 @@ classes, you should generate your TD/TH tag through getTag method.
     Will apply cell-based attributes or classes then use :php:meth:`App::getTag` to
     generate HTML tag and encode it's content.
 
-Columns without fields
-----------------------
+### Columns without fields
 
 You can add column to a table that does not link with field::
 
     $cb = $table->addColumn('CheckBox');
 
-
-Using dynamic values
---------------------
+### Using dynamic values
 
 Body attributes will be embedded into the template by the default :php:meth:`Table\\Column::getDataCellHtml`,
 but if you specify attribute (or class) value as a tag, then it will be auto-filled

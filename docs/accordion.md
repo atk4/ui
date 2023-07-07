@@ -1,20 +1,15 @@
-
 .. php:namespace:: Atk4\Ui
 
 .. php:class:: Accordion
 
-=========
-Accordion
-=========
+# Accordion
 
 Accordion implement another way to organize your data. The implementation is based on: https://fomantic-ui.com/modules/accordion.html.
 
 
 Demo: https://ui.agiletoolkit.org/demos/accordion.php
 
-
-Basic Usage
-===========
+## Basic Usage
 
 Once you create an Accordion container you can then mix and match static and dynamic accodion section::
 
@@ -46,8 +41,7 @@ Example::
         LoremIpsum::addTo($vp);
     });
 
-Dynamic Accordion Section
-=========================
+## Dynamic Accordion Section
 
 Dynamic sections are based around implementation of :php:class:`VirtualPage` and allow you
 to pass a callback which will be triggered when user clicks on the section title.::
@@ -59,8 +53,7 @@ to pass a callback which will be triggered when user clicks on the section title
         LoremIpsum::addTo($vp, ['size' => 2]);
     });
 
-Controlling Accordion Section via Javascript
-============================================
+## Controlling Accordion Section via Javascript
 
 Accordion class has some wrapper method in order to control the accordion module behavior.
 
@@ -78,8 +71,7 @@ For example, you can set a button that, when clicked, will toggle an accordion s
 
     $button->on('click', $acc->jsToggle($section1));
 
-Accordion Module settings
-=========================
+## Accordion Module settings
 
 It is possible to change Accordion module settings via the settings property.::
 

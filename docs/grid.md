@@ -1,9 +1,6 @@
-
 .. _grid:
 
-====
-Grid
-====
+# Grid
 
 .. php:namespace:: Atk4\Ui
 .. php:class:: Grid
@@ -12,8 +9,7 @@ If you didn't read documentation on :ref:`table` you should start with that. Whi
 data rendering, Grid component supplies various enhancements around it, such as paginator, quick-search, toolbar
 and others by relying on other components.
 
-Using Grid
-==========
+## Using Grid
 
 Here is a simple usage::
 
@@ -27,8 +23,7 @@ To make your grid look nicer, you might want to add some buttons and enable quic
     $grid->addQuickSearch();
     $grid->menu->addItem('Reload Grid', new \Atk4\Ui\Js\JsReload($grid));
 
-Adding Menu Items
-=================
+## Adding Menu Items
 
 .. php:attr:: menu
 
@@ -49,8 +44,7 @@ If you don't need menu, you can disable menu bar entirely::
 
     $grid = Grid::addTo($app, ['menu' => false]);
 
-Adding Quick Search
-===================
+## Adding Quick Search
 
 .. php:attr:: quickSearch
 
@@ -69,8 +63,7 @@ querying the server automatically, i.e. after the user has finished typing, by s
 
     $grid->addQuickSearch(['name', 'surname'], true);
 
-Paginator
-=========
+## Paginator
 
 .. php:attr:: paginator
 
@@ -85,8 +78,7 @@ You can use $ipp property to specify different number of items per page::
 
     $grid->ipp = 10;
 
-JsPaginator
------------
+### JsPaginator
 
 .. php:method:: addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
 
@@ -101,8 +93,7 @@ See :php:meth:`Table::addJsPaginator`
 Use this method if you want fixed table header when scrolling down table. In this case you have to set
 fixed height of your table container.
 
-Actions
-=======
+## Actions
 
 .. php:attr:: actions
 
@@ -135,9 +126,7 @@ Calling this method multiple times will add button into same action column.
 
 See :php:meth:`Atk4\\Ui\\Table\\Column\\Actions::addModal`
 
-
-Column Menus
-============
+## Column Menus
 
 .. php:method:: addDropdown($columnName, $items, $fx, $icon = 'caret square down', $menuId = null)
 
@@ -146,8 +135,7 @@ Column Menus
 Methods addDropdown and addPopup provide a wrapper for :php:meth:`Atk4\\Ui\\Table\\Column::addDropdown` and
 :php:meth:`Atk4\\Ui\\\Table\\Column::addPopup` methods.
 
-Selection
-=========
+## Selection
 
 Grid can have a checkbox column for you to select elements. It relies on :php:class:`Table\\Column\\Checkbox`, but will
 additionally place this column before any other column inside a grid. You can use :php:meth:`Table\\Column\\Checkbox::jsChecked()`
@@ -159,8 +147,7 @@ method to reference value of selected checkboxes inside any :ref:`js_action`::
             'alert(\'Selected: \' + [])', [$sel->jsChecked()]
         ));
 
-Sorting
-=======
+## Sorting
 
 .. php:attr:: sortable
 
@@ -172,9 +159,7 @@ of particular columns.
 
 See also :php:attr:`Table::$sortable`.
 
-
-Advanced Usage
-==============
+## Advanced Usage
 
 .. php:attr:: table
 

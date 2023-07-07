@@ -1,6 +1,4 @@
-=============
-Core Concepts
-=============
+# Core Concepts
 
 .. php:namespace:: Atk4\Ui
 
@@ -8,8 +6,7 @@ Agile Toolkit and Agile UI are built upon specific core concepts. Understanding 
 concepts is very important especially if you plan to write and distribute your own
 add-ons.
 
-App
-===
+## App
 
 In any Agile UI application you will always need to have an App class. Even if you do not
 create this class explicitly, components generally will do it for you. The common pattern
@@ -24,8 +21,8 @@ is::
 
 .. _seed:
 
-Seed
-====
+## Seed
+
 Agile UI is developed to be easy to read and with simple and concise syntax. We make use of
 PHP's dynamic nature, therefore two syntax patterns are supported everywhere::
 
@@ -48,8 +45,8 @@ We call this format 'Seed'. This section will explain how and where it is used.
 .. _render:
 .. _render_tree:
 
-Render Tree
-===========
+## Render Tree
+
 Agile Toolkit allows you to create components hierarchically. Once complete, the component
 hierarchy will render itself and will present HTML output that would appear to user.
 
@@ -65,8 +62,8 @@ To find out more about how components are linked up together and rendered, see:
 .. toctree::
     render
 
-Sticky GET
-==========
+## Sticky GET
+
 Agile UI implements advanced approach allowing any View object that you add into Render Tree to
 declare "sticky GET arguments". Here is example::
 
@@ -94,8 +91,7 @@ There are two types of "sticky" parameters, application-wide and view-specific.
 
     sticky
 
-Type Presentation
-=================
+## Type Presentation
 
 Several components are too complex to be implemented in a single class. :php:class:`Table`, for example,
 has the ability to format columns by utilizing type-specific column classes. Another example is :php:class:`Form`
@@ -107,10 +103,8 @@ by having the ability to introduce new types with consistent support throughout 
 .. toctree::
     type-presentation
 
+## Templates
 
-
-Templates
-=========
 Agile UI components store their HTML inside `*.html` template files. Those files are loaded
 and manipulated by a Template class.
 
@@ -120,10 +114,7 @@ behavior see:
 .. toctree::
     template
 
-
-
-Agile Data
-==========
+## Agile Data
 
 Agile UI framework is focused on building User Interfaces, but quite often interface must
 present data values to the user or even receive data values from user's input.
@@ -145,8 +136,7 @@ inputs user data.
 
 .. _callback:
 
-Callbacks
-=========
+## Callbacks
 
 By relying on the ability of generating :ref:`unique_name`, it's possible to create several classes
 for implementing PHP callbacks. They follow the pattern:
@@ -169,8 +159,7 @@ Once the concept is established, it can even be used on a higher level, for exam
 
 .. _virtualpage:
 
-VirtualPage
-===========
+## VirtualPage
 
 Building on the foundation of :ref:`callback`, components :php:class:`VirtualPage` and :php:class:`Loader`
 exist to enhance other Components with dynamically loadable content. Here is example for :php:class:`Tabs`::
@@ -192,10 +181,7 @@ find out how:
 
     virtualpage
 
-
-
-Documentation is coming soon.
-=============================
+## Documentation is coming soon.
 
 .. toctree::
     :maxdepth: 4

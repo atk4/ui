@@ -1,20 +1,15 @@
-
 .. php:namespace:: Atk4\Ui
 
 .. php:class:: ProgressBar
 
-===========
-ProgressBar
-===========
+# ProgressBar
 
 ProgressBar is actually a quite simple element, but it can be made quite interactive along with
 :php:class:`JsSse`.
 
 Demo: https://ui.agiletoolkit.org/demos/progressbar.php
 
-
-Basic Usage
-===========
+## Basic Usage
 
 .. php:method:: jsValue($value)
 
@@ -34,8 +29,7 @@ with JavaScript::
     Button::addTo($app, ['charge up the battery'])
         ->on('click', $bar2->jsValue(100));
 
-Updating Progress in RealTime
-=============================
+## Updating Progress in RealTime
 
 You can use real-time element such as JsSse or Console (which relies on JsSse) to execute
 jsValue() of your progress bar and adjust the display value.

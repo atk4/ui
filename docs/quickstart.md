@@ -1,9 +1,6 @@
-
 .. _quickstart:
 
-==========
-Quickstart
-==========
+# Quickstart
 
 In this section we will demonstrate how to build a very simple web application with just
 under 50 lines of PHP code. The important consideration here is that those are the ONLY
@@ -13,24 +10,20 @@ At this point you might not understand some concept, so I will provide reference
 into the documentation, but I suggest you to come back to this QuickStart to finish
 this simple tutorial.
 
-Requirements
-============
+## Requirements
 
 Agile Toolkit will work anywhere where PHP can. Find a suitable guide on how to set up
 PHP on your platform. Having a local database is a plus, but our initial application will
 work without persistent database.
 
-Installing
-==========
+## Installing
 
 Create a directory which is accessible by you web server. Start your command-line,
 enter this directory and execute composer command::
 
     composer require atk4/ui
 
-
-Coding "Hello, World"
-=====================
+## Coding "Hello, World"
 
 Open a new file `index.php` and enter the following code::
 
@@ -66,8 +59,7 @@ components that do things for you.
 
 .. _using-namespaces:
 
-Using namespaces
-================
+## Using namespaces
 
 By using namespaces you will be able to write less code for classes you use more often by using namespace references and
 writing clearer code.
@@ -92,8 +84,7 @@ If you call it only once in a file, just use::
     <?php
     $app = new \Atk4\Ui\App('My First App');
 
-Data Persistence
-================
+## Data Persistence
 
 To build our "ToDo" application, we need a good location to store list of tasks. We don't really want to mess with
 the actual database and instead will use "$_SESSION" for storing data.
@@ -130,8 +121,7 @@ you can define it in the $app->db class::
         "callExit" => false,
     ]);
 
-Data Model
-==========
+## Data Model
 
 We need a class `Task` which describes `data model <https://agile-data.readthedocs.io/en/develop/model.html>`_ for the
 single ToDo item::
@@ -167,8 +157,7 @@ single ToDo item::
 
 As you might have noted already, Persistence and Model are defined independently from each-other.
 
-Instantiate App using DiContainerTrait (Dependency Injection)
-=============================================================
+## Instantiate App using DiContainerTrait (Dependency Injection)
 
 Class App use `DiContainerTrait` which allow us to inject dependency directly in constructor::
 
@@ -189,10 +178,7 @@ Class App use `DiContainerTrait` which allow us to inject dependency directly in
         "logger" => $logger,
     ]);
 
-
-
-Form and Crud Components
-========================
+## Form and Crud Components
 
 Next we need to add Components that are capable of manipulating the data::
 
@@ -238,8 +224,7 @@ Next we need to add Components that are capable of manipulating the data::
 It is time to test our application in action. Use the form to add new record data. Saving the form
 will cause table to also reload revealing new records.
 
-Grid and Crud
-=============
+## Grid and Crud
 
 As mentioned before, UI Components in Agile Toolkit are often interchangeable, you can swap one for
 another. In our example replace right column (label 17) with the following code::
@@ -287,9 +272,7 @@ another. In our example replace right column (label 17) with the following code:
     App class will carry on with triggering the necessary code to render new HTML for the $grid->table,
     so it will reflect removal of the items.
 
-
-Conclusion
-==========
+## Conclusion
 
 We have just implemented a full-stack application with a stunning UI, advanced use of JavaScript, Form
 validation and reasonable defaults, calendar picker, multi-item selection in the grid with ability to
@@ -304,8 +287,7 @@ that can be invoked with just one line of code::
 Just like that you could be developing more components and re-using existing ones in your current
 or next web application.
 
-More Tutorials
-==============
+## More Tutorials
 
 If you have enjoyed this tutorial, we have prepared another one for you, that builds a multi-page
 and multi-user application and takes advantage of database expressions, authentication and introduces

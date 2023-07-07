@@ -1,10 +1,6 @@
-
-
 .. _label:
 
-=====
-Label
-=====
+# Label
 
 .. php:namespace:: Atk4\Ui
 
@@ -17,8 +13,7 @@ To see what possible classes you can use on the Label, see: https://fomantic-ui.
 
 Demo: https://ui.agiletoolkit.org/demos/label.php
 
-Basic Usage
-===========
+## Basic Usage
 
 First argument of constructor or first element in array passed to constructor will be the text that will
 appear on the label::
@@ -45,8 +40,7 @@ Label has the following properties:
 
 All the above can be string, array (passed to Icon, Image or View class) or an object.
 
-Icons
-=====
+## Icons
 
 There are two properties (icon, iconRight) but you can set only one at a time::
 
@@ -59,23 +53,20 @@ You can also specify icon as an object::
 
 For more information, see: :php:class:`Icon`
 
-Image
-=====
+## Image
 
 Image cannot be specified at the same time with the icon, but you can use PNG/GIF/JPG image on your label::
 
     $img = $app->cdn['atk'] . '/logo.png';
     Label::addTo($app, ['Coded in PHP', 'image' => $img]);
 
-Detail
-======
+## Detail
 
 You can specify "detail" component to your label::
 
     Label::addTo($app, ['Number of lines', 'detail' => '33']);
 
-Groups
-======
+## Groups
 
 Label can be part of the group, but you would need to either use custom HTML template or
 composition::
@@ -85,8 +76,7 @@ composition::
     Label::addTo($group, ['$19.99', 'class.red tag' => true]);
     Label::addTo($group, ['$24.99']);
 
-Combining classes
-=================
+## Combining classes
 
 Based on Fomantic-UI documentation, you can add more classes to your labels::
 
@@ -116,8 +106,7 @@ Based on Fomantic-UI documentation, you can add more classes to your labels::
     // right bottom corner label
     Label::addTo($col, ['Ipsum', 'class.orange bottom right attached' => true, 'icon' => 'cut']);
 
-Added labels into Table
-=======================
+## Added labels into Table
 
 You can even use label inside a table, but because table renders itself by repeating periodically, then
 the following code is needed::

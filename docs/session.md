@@ -1,12 +1,8 @@
-=============
-Session Trait
-=============
+# Session Trait
 
 .. php:trait:: SessionTrait
 
-
-Introduction
-============
+## Introduction
 
 SessionTrait is a simple way to let object store relevant data in the session. Specifically used in ATK UI
 some objects want to memorize data.  (see https://github.com/atk4/ui/blob/develop/src/Wizard.php#L12)
@@ -23,17 +19,14 @@ Later when you need the value, you can simply recall it::
 
     $dsn = $this->recall('dsn');
 
-
-Properties
-==========
+## Properties
 
 .. php:attr:: rootNamespace
 
     Internal property to make sure that all session data will be stored in one
     "container" (array key).
 
-Methods
-=======
+## Methods
 
 .. php:method:: startSession()
 

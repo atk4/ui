@@ -1,10 +1,6 @@
-
-
 .. _form:
 
-=====
-Forms
-=====
+# Forms
 
 .. php:namespace:: Atk4\Ui
 
@@ -30,8 +26,7 @@ So if looking for a PHP Form class, ATK Form has the most complete implementatio
 not require to fall-back into HTML / JS, perform any data conversion, load / store data and
 implement any advanced interactions such as file uploads.
 
-Basic Usage
-===========
+## Basic Usage
 
 It only takes 2 PHP lines to create a fully working form::
 
@@ -84,8 +79,7 @@ To tweak the UI properties of an form control input use ``setInputAttr()`` (and 
 The rest of this chapter will focus on Form mechanics, such as submission,
 integration with front-end, integration with Model, error handling etc.
 
-Usage with Model
-----------------
+### Usage with Model
 
 A most common use of form is if you have a working Model (https://agile-data.readthedocs.io/en/develop/model.html)::
 
@@ -121,8 +115,7 @@ All of the above works auto-magically, but you can tweak it even more:
 If your form is NOT associated with a model, then Form will automatically create a :php:class:`ProxyModel`
 and associate it with your Form. As you add form controls respective fields will also be added into ProxyModel.
 
-Extensions
-----------
+### Extensions
 
 Starting with Agile UI 1.3 Form has a stable API and we expect to introduce some extensions like:
 
@@ -133,8 +126,7 @@ Starting with Agile UI 1.3 Form has a stable API and we expect to introduce some
 If you develop such a feature please let me know so that I can include it in the documentation
 and give you credit.
 
-Layout and Form Controls
-========================
+## Layout and Form Controls
 
 Although Form extends the View class, controls are not added into Form directly but rather use
 a View layout for it in order to create their HTML element. In other words, layout attached to the form
@@ -152,8 +144,7 @@ Each sub layout may also contain specific section layout like Accordion, Columns
 
 More on Form layout and sub layout below.
 
-Adding Controls
-===============
+## Adding Controls
 
 .. php:method:: addControl($name, $decorator = [], $field = [])
 
@@ -177,8 +168,7 @@ Form control does not have to be added directly into the form. You can use a sep
     $myview = View::addTo($form, ['defaultTemplate' => './mytemplate.html']);
     Form\Control\Dropdown::addTo($myview, ['form' => $form]);
 
-Adding new controls
--------------------
+### Adding new controls
 
 First argument to addControl is the name of the form control. You cannot have multiple controls
 with the same name.
@@ -192,8 +182,7 @@ association with field. This will not work with regular fields, but you can add
 custom control such as CAPTCHA, which does not really need association with a
 field.
 
-Form Control
-------------
+### Form Control
 
 To avoid term miss-use, we use "Field" to refer to ``\Atk4\Data\Field``. This class
 is documented here: https://agile-data.readthedocs.io/en/develop/fields.html
@@ -232,8 +221,7 @@ your own see documentation on :php:class:`Form::Control`.
 If form control class is not specified (``null``) then it will be determined from
 the type of the Data control with ``controlFactory`` method.
 
-Data Field
-----------
+### Data Field
 
 Data field is the 3rd argument to ``Form::addControl()``.
 
@@ -265,8 +253,7 @@ existing field properties. This example make email field mandatory for the form:
 
     $form->addControl('email', [], ['required' => true]);
 
-addControl into Form with Existing Model
-----------------------------------------
+### addControl into Form with Existing Model
 
 If your form is using a model and you add an additional control, then the underlying model field will be created but it will
 be set as "neverPersist" (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$neverPersist).
@@ -309,8 +296,7 @@ example displays a registration form for a User::
         return $form->jsSuccess('Thank you. Check your email now');
     });
 
-Field Type vs Form Control
---------------------------
+### Field Type vs Form Control
 
 Sometimes you may wonder - should you pass form control class (Form\Control\Checkbox) or
 a data field type (['type' => 'boolean']);
@@ -336,8 +322,7 @@ The above code result in the following output::
 
     date1 = DateTime Object ( [date] => 2017-09-03 00:00:00 .. ) and date2 = September 3, 2017
 
-Seeding Form Control from Model
--------------------------------
+### Seeding Form Control from Model
 
 In large projects you most likely won't be setting individual form controls for each Form. Instead
 you can simply use ``setModel()`` to populate all form controls from fields defined inside a model. Form does
@@ -371,8 +356,7 @@ stored as a regular date. Obviously you can also specify decorator class::
 
 Without the data 'type' property, now the calendar selection will be stored as text.
 
-Using setModel()
-----------------
+### Using setModel()
 
 Although there were many examples above for the use of setModel() this method
 needs a bit more info:
@@ -395,8 +379,7 @@ by using `Form->layout->setModel()` internally.
 
 See also: https://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable
 
-Using setModel() on a sub layout
---------------------------------
+### Using setModel() on a sub layout
 
 You may add form controls to sub layout directly using setModel method on the sub layout itself.::
 
@@ -412,8 +395,7 @@ make sure you pass false as second argument when setting the model on the Form i
 Otherwise all model fields will be automatically added in Forms main layout and you will not be
 able to add them again in sub-layouts.
 
-Loading Values
---------------
+### Loading Values
 
 Although you can set form control values individually using ``$form->model->set('field', $value)``
 it's always nicer to load values for the database. Given a ``User`` model this is how
@@ -440,8 +422,7 @@ see https://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields
 As before, field ``password`` will not be loaded from the database, but this time
 using onlyFields restriction rather then `neverPersist`.
 
-Validating
-----------
+### Validating
 
 The topic of validation in web apps is quite extensive. You should start by reading what Agile Data
 has to say about validation:
@@ -511,8 +492,7 @@ This should display a following form::
 
     $form->addControl('terms', ['type' => 'boolean', 'ui' => ['caption' => 'Accept Terms and Conditions']]);
 
-Form Submit Handling
---------------------
+### Form Submit Handling
 
 .. php:method:: onSubmit($callback)
 
@@ -597,9 +577,7 @@ associated with a field. Only the main Exception message will be delivered to th
 Core Exceptions may contain some sensitive information in parameters or back-trace, but those
 will not be included in response for security reasons.
 
-
-Form Layout and Sub-layout
---------------------------
+### Form Layout and Sub-layout
 
 As stated above, when a Form object is created and form controls are added through either :php:meth:`addControl()`
 or :php:meth:`setModel()`, the form controls will appear one under each-other. This arrangement of form controls as
@@ -625,14 +603,11 @@ of labels etc.
     Creates a sub-layout, returning new instance of a :php:class:`Form\\Layout` object. You
     can also specify a header.
 
-
-Form Control Group Layout and Sub-layout
-----------------------------------------
+### Form Control Group Layout and Sub-layout
 
 Controls can be organized in groups, using method `Form::addGroup()` or as sub section using `Form\\Layout::addSubLayout()` method.
 
-Using Group
------------
+### Using Group
 
 Group will create a sub layout for you where form controls added to the group will be placed side by side in one line
 and where you can setup specific width for each field.
@@ -671,8 +646,7 @@ the error messages appearing on the right from the control::
     $group->addControl('middle_name', ['width' => 'three', 'disabled' => true]);
     $group->addControl('last_name', ['width' => 'five']);
 
-Using Sub-layout
-----------------
+### Using Sub-layout
 
 There are four specific sub layout views that you can add to your existing form layout: Generic, Accordion, Tabs and Columns.
 
@@ -712,8 +686,7 @@ is further separated in two accordion sections and form controls are added to ea
 Sub layout gives you greater control on how to display form controls within your form. For more examples on
 sub layouts please visit demo page: https://github.com/atk4/ui/blob/develop/demos/form-section.php
 
-Fomantic-UI Modifiers
----------------------
+### Fomantic-UI Modifiers
 
 There are many other classes Fomantic-UI allow you to use on a form. The next code will produce
 form inside a segment (outline) and will make form controls appear smaller::
@@ -722,8 +695,7 @@ form inside a segment (outline) and will make form controls appear smaller::
 
 For further styling see documentation on :php:class:`View`.
 
-Not-Nullable and Required Fields
-================================
+## Not-Nullable and Required Fields
 
 ATK Data has two field flags - "nullable" and "required". Because ATK Data works with PHP
 values, the values are defined like this:
@@ -741,9 +713,7 @@ a valid number (or date) and therefore will be converted to NULL.
 So in most cases you'd want "required=true" flag set on your ATK Data fields. For
 numeric field, if zero must be a permitted entry, use "nullable=false" instead.
 
-
-Conditional Form
-================
+## Conditional Form
 
 .. php:method:: setControlsDisplayRules()
 
@@ -804,8 +774,7 @@ You may also define multiple conditions for the form control to be visible if yo
         'hair_cut' => [['race' => 'contains[poodle]', 'age' => 'integer[1..5]'], ['race' => 'isExactly[bichon]']],
     ]);
 
-Hiding / Showing group of field
--------------------------------
+### Hiding / Showing group of field
 
 Instead of defining rules for form controls individually you can hide/show entire group::
 

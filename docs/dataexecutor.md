@@ -1,9 +1,6 @@
-
 .. _dataexecutor:
 
-====================
-Data Action Executor
-====================
+# Data Action Executor
 
 Data action executor in UI is parts of interactive components that can execute a Data model defined user action.
 For more details on Data Model User Action please visit: https://agile-data.readthedocs.io/en/develop/model.html#actions
@@ -15,8 +12,7 @@ an ArgumentFormExecutor. Or actions that can run using a single button can use a
 
 Demo: https://ui.agiletoolkit.org/demos/data-action/actions.php
 
-Executor Interface
-==================
+## Executor Interface
 
 .. php:namespace:: Atk4\Ui\UserAction
 
@@ -25,8 +21,7 @@ All executors must implement the ExecutorInterface or JsExecutorInterface interf
 .. php:interface:: ExecutorInterface
 .. php:interface:: JsExecutorInterface
 
-Basic Executor
-==============
+## Basic Executor
 
 .. php:class:: BasicExecutor
 
@@ -38,24 +33,21 @@ BasicExecutor will display:
     - a header where action name and description are displayed;
     - an error message if an action argument is missing;
 
-Preview Executor
-================
+## Preview Executor
 
 .. php:class:: PreviewExecutor
 
 This executor is specifically set in order to display the $preview property of the current model UserAction.
 You can select to display the preview using regular console type container, regular text or using HTML content.
 
-Form Executor
-=============
+## Form Executor
 
 .. php:class:: FormExecutor
 
 This executor will display a form where user is required to fill in either all model fields or certain model fields
 depending on the model UserAction $field property. Form control will depend on model field type.
 
-Argument Form Executor
-======================
+## Argument Form Executor
 
 .. php:class:: ArgumentFormExecutor
 
@@ -63,16 +55,14 @@ This executor will display a form but instead of filling form control with model
 $args property. This is used when you need to ask user about an argument value prior to execute the action.
 The type of form control type to be used in form will depend on how $args is setup within the model UserAction.
 
-JS Callaback Executor
-=====================
+## JS Callaback Executor
 
 .. php:class:: JsCallbackExecutor
 
 This type of executor will output proper javascript that you can assign to a view event using View::on() method.
 It is also possible to pass the UserAction argument via $_POST argument.
 
-Modal Executor
-==============
+## Modal Executor
 
 .. php:class:: ModalExecutor
 
@@ -91,8 +81,7 @@ base on the action definition within a modal view:
 The modal title default is set from the UserAction::getDescription() method but can be override using the
 Modal::$title property.
 
-Confirmation Executor
-=====================
+## Confirmation Executor
 
 .. php:class:: ConfirmationExecutor
 
@@ -115,8 +104,7 @@ Here is an example of an user action returning specific record information in th
 The modal title default is set from the UserAction::getDescription() method but can be override using the
 Modal::$title property.
 
-Executor HOOK_AFTER_EXECUTE
-============================
+## Executor HOOK_AFTER_EXECUTE
 
 Executors can use the HOOK_AFTER_EXECUTE hook in order to return javascript action after the model UserAction finish
 executing. It is use in Crud for example in order to display users of successful model UserAction execution. Either by displaying
@@ -126,8 +114,7 @@ Some Ui View component, like Crud for example, will also set javascript action t
 For example it the modifier property is set to MODIFIER_DELETE then Crud will know it has to delete a table row on the
 other hand, if MODIFIER_UPDATE is set, then Table needs to be reloaded.
 
-The Executor Factory
-====================
+## The Executor Factory
 
 .. php:class:: ExecutorFactory
 
@@ -157,9 +144,7 @@ The createExecutor method also add the executor to the View passed as argument. 
 class is of type Modal, then it will be attached to the $app->html view instead. This is because Modal view in ui needs
 to be added to $app->html view in order to work correctly on reload.
 
-
-Changing or adding Executor type
---------------------------------
+### Changing or adding Executor type
 
 Existing executor type can be change or added globally for all your user model actions via this method::
 
@@ -190,8 +175,7 @@ For example, you need a custom executor to be created when using a specific mode
 Then, when ExecutorFactory::createExecutor method is called for this $action, MySpecialExecutor instance will be create in order
 to run this user model action.
 
-Triggering model user action
-----------------------------
+### Triggering model user action
 
 The Executor factory is also responsible for creating the UI view element, like regular, table or card button or menu
 item that will fire the model user action execution.
@@ -219,8 +203,7 @@ For example, changing default Table button for a specific model user action when
 
 This button view will then be display in Crud when it use a model containing 'mail' user action.
 
-Overriding ExecutorFactory
---------------------------
+### Overriding ExecutorFactory
 
 Overriding the ExecutorFactory class is a good way of changing the look of all trigger element within your app or
 within a specific view instance.
@@ -252,9 +235,7 @@ Example of changing button for Card, Crud and Modal executor globally within you
     //...
     $app->defaultExecutorFactory = $myFactory;
 
-
-Model UserAction assignment to View
-===================================
+## Model UserAction assignment to View
 
 It is possible to assign a model UserAction to the View::on() method directly::
 
@@ -274,8 +255,7 @@ Example of overriding executor assign to a button.::
 
     $button->on('click', $myAction);
 
-Demo
-----
+### Demo
 
 For more information on how Model UserAction are assign to button and interact with user according to their definition,
 please visit: `Assign action to button event <https://ui.agiletoolkit.org/demos/data-action/jsactions2.php>`_

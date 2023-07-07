@@ -1,9 +1,6 @@
-
 .. _form-control:
 
-=============
-Form Controls
-=============
+# Form Controls
 
 .. php:namespace:: Atk4\Ui\Form
 
@@ -12,15 +9,13 @@ Form Controls
 Agile UI dedicates a separate namespace for the Form Controls. Those are
 quite simple components that present themselves as input controls: line, select, checkbox.
 
-Relationship with Form
-======================
+## Relationship with Form
 
 All Form Control Decorators can be integrated with :php:class:`Atk4\\Ui\\Form` which will
 facilitate collection and processing of data in a form. Form Control decorators can also
 be used as stand-alone controls.
 
-Stand-alone use
----------------
+### Stand-alone use
 
 .. php:method:: set()
 .. php:method:: jsInput()
@@ -44,9 +39,7 @@ When used stand-alone, Form\Controls will produce a basic HTML (I have omitted i
         <input name="line" type="text" placeholder="" value="hello world">
     </div>
 
-
-Using in-form
--------------
+### Using in-form
 
 Form Control can also be used inside a form like this::
 
@@ -67,8 +60,7 @@ The markup that surronds the button which includes Label and formatting is produ
 :php:class:`Atk4\\Ui\\Form\\Layout`, which does draw some of the information from the Form Control
 itself.
 
-Using in Form Layouts
----------------------
+### Using in Form Layouts
 
 Form may have multiple Form Layouts and that's very useful if you need to split up form
 into multiple Tabs or detach form control groups or even create nested layouts::
@@ -95,8 +87,7 @@ properly:
  - Input (abstract, extends Generic) - Easiest since it already implements `<input>` and various
    ways to attach button to the input with markup of Fomantic-UI form control.
 
-Hints
------
+### Hints
 
 .. php:attr:: hint
 
@@ -124,8 +115,7 @@ or you can inject a view with a custom template::
         'Click <a href="https://example.com/" target="_blank">here</a>'
     )]]);
 
-Read only and disabled form controls
-------------------------------------
+### Read only and disabled form controls
 
 .. php:attr:: readOnly
 
@@ -137,9 +127,7 @@ change their value.
 Disabled form controls can be seen in form, cannot be focused and will not be submitted. And of course we
 don't allow to change their value. Disabled form controls are used for read only model fields for example.
 
-
-Relationship with Model
-=======================
+## Relationship with Model
 
 In the examples above, we looked at how to create Form Control Decorator object explicitly.
 The most common use-case in large application is the use with Models. You would need a model, such as
@@ -197,8 +185,7 @@ by all components::
     a ProxyModel and all form controls will be created automatically in that model. As a result, all Form Control Decorators
     will be linked with Model Fields.
 
-Link to Model Field
--------------------
+### Link to Model Field
 
 .. php:attr:: field
 
@@ -207,8 +194,7 @@ the value of the field would be read from `$decorator->entityField->get()`.
 
 .. php:namespace:: Atk4\Ui\Form\Control
 
-Line Input Form control
-=======================
+## Line Input Form control
 
 .. php:class:: Input
 
@@ -275,13 +261,11 @@ To see how Icon interprets `new Icon(['search', 'class.big' => true])`, refer to
 
 To see various examples of form controls and their attributes see `demos/form-control/`.
 
-Integration with Form
----------------------
+### Integration with Form
 
 When you use :php:class:`form::addControl()` it will create 'Form Control Decorator'
 
-JavaScript on Input
--------------------
+### JavaScript on Input
 
 .. php:method:: jsInput([$event, [$otherChain]])
 
@@ -290,8 +274,7 @@ that it would target the INPUT element rather then the whole form control::
 
     $control->jsInput(true)->val(123);
 
-onChange event
---------------
+### onChange event
 
 .. php:method:: onChange($expression)
 
@@ -312,9 +295,7 @@ $expression argument can be JS expression or PHP callback function.
     $c1 = $form->addControl('c1', new \Atk4\Ui\Form\Control\Calendar(['type' => 'date']));
     $c1->onChange(\Atk4\Ui\Js\JsExpression('console.log(\'c1 changed: \' + date + \', \' + text + \', \' + mode)'));
 
-
-Dropdown
-========
+## Dropdown
 
 .. php:class:: Dropdown
 
@@ -322,8 +303,8 @@ Dropdown uses Fomantic-UI Dropdown (https://fomantic-ui.com/modules/dropdown.htm
 1) Set a Model to $model property. The Dropdown will render all records of the model that matches the model's conditions.
 2) You can define $values property to create custom Dropdown items.
 
-Usage with a Model
-------------------
+### Usage with a Model
+
 A Dropdown is not used as default Form Control decorator (`$model->hasOne()` uses :php:class:`Lookup`), but in your Model, you can define that
 UI should render a Field as Dropdown. For example, this makes sense when a `hasOne()` relationship only has a very limited amount (like 20)
 of records to display. Dropdown renders all records when the paged is rendered, while Lookup always sends an additional request to the server.
@@ -392,9 +373,8 @@ With the according renderRowFunction::
 
 Of course, the tags `value`, `title`, `icon`, `someOtherField` and `someOtherField2` need to be set in my_dropdown.html.
 
+### Usage with $values property
 
-Usage with $values property
----------------------------
 If not used with a model, you can define the Dropdown values in $values array. The pattern is value => title::
 
     $dropdown->values = [
@@ -422,9 +402,8 @@ If you use it, use the second parameter as well, its the array key::
         ];
     }
 
+### Dropdown Settings
 
-Dropdown Settings
------------------
 There's a bunch of settings to influence Dropdown behaviour.
 
 .. php:attr:: empty
@@ -462,9 +441,7 @@ See this example from Model class init method::
         ],
     ]);
 
-
-DropdownCascade
-===============
+## DropdownCascade
 
 .. php:class:: DropdownCascade
 
@@ -491,9 +468,7 @@ Assume that each data model are defined and model Category has many Sub-Category
     $form->addControl('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => Category::hinting()->fieldName()->SubCategories]);
     $form->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => SubCategory::hinting()->fieldName()->Products]);
 
-
-Lookup
-======
+## Lookup
 
 .. php:class:: Lookup
 

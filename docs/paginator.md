@@ -1,9 +1,6 @@
-
 .. _paginator:
 
-=========
-Paginator
-=========
+# Paginator
 
 .. php:namespace:: Atk4\Ui
 .. php:class:: Paginator
@@ -11,8 +8,7 @@ Paginator
 Paginator displays a horizontal UI menu providing links to pages when all of the content does not fit
 on a page. Paginator is a stand-alone component but you can use it in conjunction with other components.
 
-Adding and Using
-================
+## Adding and Using
 
 .. php:attr:: total
 
@@ -42,8 +38,7 @@ Remember that values of 'page' and 'total' are integers, so you may need to do t
     $label->set($p->page); // will not work
     $label->set((string) $p->page); // works fine
 
-Range and Logic
-===============
+## Range and Logic
 
 You can configure Paginator through properties.
 
@@ -61,8 +56,7 @@ the current and total pages.
 
 Returns number of current page.
 
-Template
-========
+## Template
 
 Paginator uses Fomantic-UI `ui pagination menu` so if you are unhappy with the styling (e.g: active element is not
 sufficiently highlighted), you should refer to Fomantic-UI or use alternative theme.
@@ -80,8 +74,7 @@ Each of the above (except Spacer) may have `active`, `link` and `page` tags.
 
 .. php:method:: renderItem($t, $page = null)
 
-Dynamic Reloading
-=================
+## Dynamic Reloading
 
 .. php:attr:: reload
 

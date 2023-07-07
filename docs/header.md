@@ -1,8 +1,6 @@
 .. php:namespace:: Atk4\Ui
 
-======
-Header
-======
+# Header
 
 Can be used for page or section headers.
 
@@ -10,15 +8,13 @@ Based around: https://fomantic-ui.com/elements/header.html.
 
 Demo:  https://ui.agiletoolkit.org/demos/header.php
 
-Basic Usage
-===========
+## Basic Usage
 
 By default header size will depend on where you add it::
 
     Header::addTo($this, ['Hello, Header']);
 
-Attributes
-==========
+## Attributes
 
 .. php:attr:: size
 
@@ -40,8 +36,7 @@ Specify size and sub-header content::
         'subHeader' => 'small subheader',
     ]);
 
-Icon and Image
-===============
+## Icon and Image
 
 .. php:attr:: icon
 

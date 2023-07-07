@@ -1,6 +1,4 @@
-
-VirtualPage Introduction
-------------------------
+### VirtualPage Introduction
 
 Before learning about VirtualPage, Loader and other ways of dynamic content loading, you should fully
 understand :ref:`callback`.
@@ -123,12 +121,7 @@ class, you can set $ui property to something else. Try::
     $label->detail = $vp->cb->getUrl('popup');
     $label->link($vp->cb->getUrl('popup'));
 
-
-
-
-
-Loader
-------
+### Loader
 
 .. php:class:: Loader
 

@@ -1,6 +1,4 @@
-
-Callback Introduction
----------------------
+### Callback Introduction
 
 Agile UI pursues a goal of creating a full-featured, interactive, user interface. Part of that relies
 on abstraction of Browser/Server communication.
@@ -23,8 +21,7 @@ This creates callback route transparently which is triggered automatically durin
 To make this work seamlessly there are several classes at play. This documentation chapter will walk
 you through the callback mechanisms of Agile UI.
 
-The Callback class
-------------------
+### The Callback class
 
 .. php:class:: Callback
 
@@ -62,8 +59,8 @@ callback URL triggering a special action. We haven't set that action yet, so I'l
         $app->terminate('in callback');
     });
 
-Callback Triggering
--------------------
+### Callback Triggering
+
 To illustrate how callbacks work, let's imagine the following workflow:
 
  - your application with the above code resides in file 'test.php`
@@ -81,8 +78,7 @@ another request to the server:
 Calling :php:meth:`App::terminate()` will prevent the default behaviour (of rendering UI) and will
 output specified string instead, stopping further execution of your application.
 
-Return value of set()
----------------------
+### Return value of set()
 
 The callback verifies trigger condition when you call :php:meth:`Callback::set()`. If your callback
 returns any value, the set() will return it too::
@@ -132,8 +128,7 @@ derived classes.
 Specifies which GET parameter to use for triggering. Normally it's same as `$callback->name`, but you can set it
 to anything you want. As long as you keep it unique on a current page, you should be OK.
 
-CallbackLater
--------------
+### CallbackLater
 
 .. php:class:: CallbackLater
 
@@ -182,9 +177,7 @@ Should JsReload use regular 'Callback', then it wouldn't know that $view must co
 
 JsReload existence is only possible thanks to CallbackLater implementation.
 
-
-JsCallback
-----------
+### JsCallback
 
 .. php:class:: JsCallback
 

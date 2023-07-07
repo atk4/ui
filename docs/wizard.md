@@ -1,12 +1,8 @@
-
-
 .. php:namespace:: Atk4\Ui
 
 .. php:class:: Wizard
 
-======
-Wizard
-======
+# Wizard
 
 Wizard is a high-level component, which makes use of callback to track step progression through the stages. It has an incredibly
 simple syntax for building UI and display a lovely UI for you.
@@ -18,9 +14,7 @@ Demo: https://ui.agiletoolkit.org/demos/wizard.php
 
 Introduced in UI v1.4
 
-
-Basic Usage
-===========
+## Basic Usage
 
 .. php:method:: addStep($title, $callback)
 .. php:method:: addFinish($callback)
@@ -55,8 +49,7 @@ You may also specify a single Finish callback, which will be used when wizard is
         Header::addTo($wizard, ['You are DONE', 'class.huge centered' => true]);
     });
 
-Properties
-==========
+## Properties
 
 When you create wizard you may specify some of the following options:
 
@@ -64,8 +57,7 @@ When you create wizard you may specify some of the following options:
 
 Other properties are used during the execution of the wizard.
 
-Step Tracking
-=============
+## Step Tracking
 
 .. php:attr:: stepCallback
 
@@ -89,9 +81,7 @@ Those properties will be initialized with the buttons, but some of them may be d
 if the button is not applicable. For example, first step should not have "Previous" button. You can change label
 or icon on existing button.
 
-
-Code Placement
-==============
+## Code Placement
 
 As you build up your wizard, you can place code inside callback or outside. It will have a different effect
 on your wizard::
@@ -107,8 +97,7 @@ Step defines the callback and will execute it instantly if the step is active. I
 is executed to change icon to the book. Otherwise icon will remain 'person'. Another handy technique is
 disabling the button by adding "disabled" class.
 
-Navigation
-==========
+## Navigation
 
 Wizard has few methods to help you to navigate between steps.
 
@@ -122,8 +111,7 @@ If you wish to to go to specific step, you can use `$wizard->stepCallback->getUr
 
 Finally you can get URL of the current step with `$wizard->url()` (see :php:meth:`View::url`)
 
-WizardStep
-==========
+## WizardStep
 
 .. php:class:: WizardStep
 
