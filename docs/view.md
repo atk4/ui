@@ -22,11 +22,11 @@ Button::addTo($v, ['Orange', 'class.inverted orange' => true]);
 
 The above code will produce the following HTML block:
 
-.. code-block:: html
-
-    <div class="ui inverted segment">
-        <button class="ui inverted orange button">Orange</button>
-    </div>
+```html
+<div class="ui inverted segment">
+    <button class="ui inverted orange button">Orange</button>
+</div>
+```
 
 All of the views combined form a `Render Tree`. In order to get the HTML output
 from all the `Views` in `Render Tree` you need to execute `render()` for the top-most
@@ -452,22 +452,22 @@ echo $b->render();
 
 Outputs:
 
-.. code-block:: html
-
-    <div class="ui button" id="my-button3">Button</div>
+```html
+<div class="ui button" id="my-button3">Button</div>
+```
 
 If ID is not specified it will be set automatically. The top-most element of a Render Tree will
 use `id=atk` and all of the child elements will create a derived ID based on it's UI role.
 
-.. code-block:: yml
-
-    atk:
-        atk-button:
-        atk-button2:
-        atk-form:
-            atk-form-name:
-            atk-form-surname:
-            atk-form-button:
+```yml
+atk:
+    atk-button:
+    atk-button2:
+    atk-form:
+        atk-form-name:
+        atk-form-surname:
+        atk-form-button:
+```
 
 If role is unspecified then 'view' will be used. The main benefit here is to have automatic
 allocation of all the IDs throughout the render-tree ensuring that those ID's are consistent

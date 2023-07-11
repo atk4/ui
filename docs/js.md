@@ -21,9 +21,7 @@ as possible, then associate them with your UI through actions and events.
 A great example would be `jQuery` library. It is designed to be usable with any HTML mark-up and
 by specifying selector, you can perform certain actions:
 
-.. code-block:: js
-
-```
+```js
 $('#my-long-id').hide();
 ```
 
@@ -161,9 +159,7 @@ $button->js(true)->appendTo($frame);
 
 The resulting Javascript will be:
 
-.. code-block:: js
-
-```
+```js
 $('#button-id').appendTo('#frame-id');
 ```
 
@@ -198,9 +194,7 @@ echo $chain->jsRender();
 
 will output:
 
-.. code-block:: js
-
-```
+```js
 $('#the-box-id').dropdown();
 ```
 
@@ -390,13 +384,13 @@ but you should follow a proper pattern.
 
 Create a file `test.js` containing:
 
-.. code-block:: js
-
-    function mySum(arr) {
-        return arr.reduce(function (a, b) {
-            return a + b;
-        }, 0);
-    }
+```js
+function mySum(arr) {
+    return arr.reduce(function (a, b) {
+        return a + b;
+    }, 0);
+}
+```
 
 Then load this JavaScript dependency on your page (see :php:meth:`App::includeJS()` and
 :php:meth:`App::includeCSS()`). Finally use UI code as a "glue" between your routine
@@ -414,11 +408,11 @@ $rightContainer->js(true)->height(new JsExpression('mySum([])', [$heights]));
 
 This will map into the following JavaScript code:
 
-.. code-block:: js
-
-    $('#right_container_id').height(mySum([
-        $('#left_box1').height(), $('#left_box2').height(), $('#left_box3').height(), // etc
-    ]));
+```js
+$('#right_container_id').height(mySum([
+    $('#left_box1').height(), $('#left_box2').height(), $('#left_box3').height(), // etc
+]));
+```
 
 You can further simplify JavaScript code yourself, but keep the JavaScript logic inside the `.js` files
 and leave PHP only for binding.
