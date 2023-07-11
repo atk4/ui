@@ -2,9 +2,11 @@
 
 # Forms
 
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: Form
+:::{php:class} Form
+:::
 
 One of the most important components of ATK UI is the "Form". Class :php:class:`Form`
 implements the following 4 major features:
@@ -161,7 +163,8 @@ More on Form layout and sub layout below.
 
 ## Adding Controls
 
-.. php:method:: addControl($name, $decorator = [], $field = [])
+:::{php:method} addControl($name, $decorator = [], $field = [])
+:::
 
 Create a new control on a form:
 
@@ -239,7 +242,8 @@ $form->addControl('time', $calendar);
 For more information on default form controls as well as examples on how to create
 your own see documentation on :php:class:`Form::Control`.
 
-.. php:method:: controlFactory(\\Atk4\\Data\\Field $field, $defaults = [])
+:::{php:method} controlFactory(\\Atk4\\Data\\Field $field, $defaults = [])
+:::
 
 If form control class is not specified (`null`) then it will be determined from
 the type of the Data control with `controlFactory` method.
@@ -398,9 +402,11 @@ Without the data 'type' property, now the calendar selection will be stored as t
 Although there were many examples above for the use of setModel() this method
 needs a bit more info:
 
-.. php:attr:: model
+:::{php:attr} model
+:::
 
-.. php:method:: setModel($model, [$fields])
+:::{php:method} setModel($model, [$fields])
+:::
 
 Associate form controls with existing model object and import all editable fields
 in the order in which they were defined inside model's init() method.
@@ -543,21 +549,21 @@ $form->addControl('terms', ['type' => 'boolean', 'ui' => ['caption' => 'Accept T
 
 ### Form Submit Handling
 
-.. php:method:: onSubmit($callback)
+:::{php:method} onSubmit($callback)
+Specify a PHP callback that will be executed on successful form submission.
+:::
 
-    Specify a PHP callback that will be executed on successful form submission.
+:::{php:method} jsError($field, $message)
+Create and return :php:class:`JsChain` action that will indicate error on a form control.
+:::
 
-.. php:method:: jsError($field, $message)
+:::{php:method} jsSuccess($title, [$subTitle])
+Create and return :php:class:`JsChain` action, that will replace form with a success message.
+:::
 
-    Create and return :php:class:`JsChain` action that will indicate error on a form control.
-
-.. php:method:: jsSuccess($title, [$subTitle])
-
-    Create and return :php:class:`JsChain` action, that will replace form with a success message.
-
-.. php:method:: setApiConfig($config)
-
-    Add additional parameters to Fomantic-UI .api function which does the AJAX submission of the form.
+:::{php:method} setApiConfig($config)
+Add additional parameters to Fomantic-UI .api function which does the AJAX submission of the form.
+:::
 
 For example, if you want the loading overlay at a different HTML element, you can define it with:
 
@@ -567,9 +573,9 @@ $form->setApiConfig(['stateContext' => 'my-JQuery-selector']);
 
 All available parameters can be found here: https://fomantic-ui.com/behaviors/api.html#/settings
 
-.. php:attr:: successTemplate
-
-    Name of the template which will be used to render success message.
+:::{php:attr} successTemplate
+Name of the template which will be used to render success message.
+:::
 
 To continue with the example, a new Person record can be added into the database
 but only if they have also accepted terms and conditions. An onSubmit handler
@@ -642,23 +648,23 @@ well as display of labels and structure around the form controls themselves is n
 but another object - "Form Layout". This object is responsible for the form control flow, presence
 of labels etc.
 
-.. php:method:: initLayout(Form\\Layout $layout)
+:::{php:method} initLayout(Form\\Layout $layout)
+Sets a custom Form\Layout object for a form. If not specified then form will automatically
+use Form\Layout class.
+:::
 
-    Sets a custom Form\Layout object for a form. If not specified then form will automatically
-    use Form\Layout class.
+:::{php:attr} layout
+Current form layout object.
+:::
 
-.. php:attr:: layout
+:::{php:method} addHeader($header)
+Adds a form header with a text label. Returns View.
+:::
 
-    Current form layout object.
-
-.. php:method:: addHeader($header)
-
-    Adds a form header with a text label. Returns View.
-
-.. php:method:: addGroup($header)
-
-    Creates a sub-layout, returning new instance of a :php:class:`Form\\Layout` object. You
-    can also specify a header.
+:::{php:method} addGroup($header)
+Creates a sub-layout, returning new instance of a :php:class:`Form\\Layout` object. You
+can also specify a header.
+:::
 
 ### Form Control Group Layout and Sub-layout
 
@@ -786,7 +792,8 @@ numeric field, if zero must be a permitted entry, use "nullable=false" instead.
 
 ## Conditional Form
 
-.. php:method:: setControlsDisplayRules()
+:::{php:method} setControlsDisplayRules()
+:::
 
 So far we had to present form with a set of form controls while initializing. Sometimes
 you would want to hide/display controls while user enters the data.
@@ -889,15 +896,15 @@ $form->setGroupDisplayRules([
 MOVE THIS TO SEPARATE FILE
 :::
 
-.. php:class:: Form\\Layout
+:::{php:class} Form\\Layout
+Renders HTML outline encasing form controls.
+:::
 
-    Renders HTML outline encasing form controls.
+:::{php:attr} form
+Form layout objects are always associated with a Form object.
+:::
 
-.. php:attr:: form
-
-    Form layout objects are always associated with a Form object.
-
-.. php:method:: addControl()
-
-    Same as :php:class:`Form::addControl()` but will place a form control inside this specific layout
-    or sub-layout.
+:::{php:method} addControl()
+Same as :php:class:`Form::addControl()` but will place a form control inside this specific layout
+or sub-layout.
+:::

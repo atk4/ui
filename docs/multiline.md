@@ -1,6 +1,8 @@
-.. php:namespace:: Atk4\Ui\Form\Control
+:::{php:namespace} Atk4\Ui\Form\Control
+:::
 
-.. php:class:: Multiline
+:::{php:class} Multiline
+:::
 
 # Multiline Form Control
 
@@ -104,7 +106,8 @@ class User extends \Atk4\Data\Model
 
 Using a form with User model won't automatically add a Multiline to edit the related email addresses.
 
-.. php:method:: setReferenceModel(string $refModelName, Model $entity = null, array $fieldNames = []): Model
+:::{php:method} setReferenceModel(string $refModelName, Model $entity = null, array $fieldNames = []): Model
+:::
 
 If you want to edit them along with the user, Multiline need to be set up accordingly using the setReferenceModel method:
 
@@ -195,7 +198,8 @@ field type associated with Multiline control.
 
 You will find a list of Vue component associated with each field type within the Multiline $fieldMapToComponent array.
 
-.. php:attr:: fieldMapToComponent
+:::{php:attr} fieldMapToComponent
+:::
 
 Each control being a Vue component means that they accept 'Props' that may change their look or behaviour.
 Props on each component may be applied globally, i.e. to all control within Multiline that use that control, or
@@ -205,7 +209,8 @@ per component.
 
 Use the $componentProps property of Multiline in order to apply 'Props' to component globally.
 
-.. php:attr:: componentProps
+:::{php:attr} componentProps
+:::
 
 Example of changing all Dropdown(SuiDropdown) within Multiline:
 

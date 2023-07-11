@@ -1,6 +1,8 @@
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: Accordion
+:::{php:class} Accordion
+:::
 
 # Accordion
 
@@ -26,7 +28,8 @@ LoremIpsum::addTo($acc->addSection('Static Tab'));
 
 You can add multiple elements into a single accordion section, like any other view.
 
-.. php:method:: addSection($name, $action = null, $icon = 'dropdown')
+:::{php:method} addSection($name, $action = null, $icon = 'dropdown')
+:::
 
 Use addSection() method to add more section in an Accordion view. First parameter is a title of the section.
 
@@ -65,9 +68,12 @@ $acc->addSection('Dynamic Lorem Ipsum', function (VirtualPage $vp) {
 
 Accordion class has some wrapper method in order to control the accordion module behavior.
 
-.. php:method:: jsOpen($section, $action = null)
-.. php:method:: jsToggle($section, $action = null)
-.. php:method:: jsClose($section, $action = null)
+:::{php:method} jsOpen($section, $action = null)
+:::
+:::{php:method} jsToggle($section, $action = null)
+:::
+:::{php:method} jsClose($section, $action = null)
+:::
 
 For example, you can set a button that, when clicked, will toggle an accordion section:
 

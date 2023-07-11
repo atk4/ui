@@ -2,9 +2,11 @@
 
 # Table
 
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: Table
+:::{php:class} Table
+:::
 
 :::{important}
 For columns, see :php:class:`Table\\Column`. For DIV-based lists, see :php:class:`Lister`. For an
@@ -67,9 +69,11 @@ create a model for you with Array persistence for you anyways.
 
 ### Adding Columns
 
-.. php:method:: setModel(\Atk4\Data\Model $model, $fields = null)
+:::{php:method} setModel(\Atk4\Data\Model $model, $fields = null)
+:::
 
-.. php:method:: addColumn($name, $columnDecorator = [], $field = null)
+:::{php:method} addColumn($name, $columnDecorator = [], $field = null)
+:::
 
 To change the order or explicitly specify which field columns must appear, if you pass list of those
 fields as second argument to setModel:
@@ -145,15 +149,16 @@ To read more about column objects, see :ref:`tablecolumn`
 Table defines a method `columnFactory`, which returns Column object which is to be used to
 display values of specific model Field.
 
-.. php:method:: columnFactory(\Atk4\Data\Field $field)
+:::{php:method} columnFactory(\Atk4\Data\Field $field)
+:::
 
 If the value of the field can be displayed by :php:class:`Table\\Column` then :php:class:`Table` will
 respord with object of this class. Since the default column does not contain any customization,
 then to save memory Table will re-use the same objects for all generic fields.
 
-.. php:attr:: columns
-
-    Contains array of defined columns.
+:::{php:attr} columns
+Contains array of defined columns.
+:::
 
 `addColumn` adds a new column to the table. This method was explained above but can also be
 used to add columns without field:
@@ -211,10 +216,10 @@ This way we don't populate the column through setModel() and instead populate it
 through addColumn(). This will use an identical logic (see :php:meth:`Table::columnFactory`). For
 your convenience there is a way to add multiple columns efficiently.
 
-.. php:method:: addColumns($names);
-
-    Here, names can be an array of strings (['status', 'price']) or contain array that will be passed
-    as argument sto the addColumn method ([['total', $fieldDef], ['delete', $deleteColumn]);
+:::{php:method} addColumns($names);
+Here, names can be an array of strings (['status', 'price']) or contain array that will be passed
+as argument sto the addColumn method ([['total', $fieldDef], ['delete', $deleteColumn]);
+:::
 
 As a final note in this section - you can re-use column objects multiple times:
 
@@ -232,9 +237,12 @@ This will result in 3 gap columns rendered to the left, middle and right of your
 
 ## Table sorting
 
-.. php:attr:: sortable
-.. php:attr:: sortBy
-.. php:attr:: sortDirection
+:::{php:attr} sortable
+:::
+:::{php:attr} sortBy
+:::
+:::{php:attr} sortDirection
+:::
 
 Table does not support an interactive sorting on it's own, (but :php:class:`Grid` does), however
 you can designate columns to display headers as if table were sorted:
@@ -355,9 +363,11 @@ During the render process (see :php:meth:`View::renderView`) Table will perform 
 
 ## Dealing with Multiple decorators
 
-.. php:method:: addDecorator($name, $columnDecorator)
+:::{php:method} addDecorator($name, $columnDecorator)
+:::
 
-.. php:method:: getColumnDecorators($name)
+:::{php:method} getColumnDecorators($name)
+:::
 
 Decorator is an object, responsible for wrapping column data into a table cell (td/tr). This object
 is also responsible for setting class of the column, labeling the column and somehow making it look
@@ -457,7 +467,8 @@ See :php:class:`Grid`
 
 ### JsPaginator
 
-.. php:method:: addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+:::{php:method} addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+:::
 
 JsPaginator will load table content dynamically when user scroll down the table window on screen.
 
@@ -469,7 +480,8 @@ See also :php:meth:`Lister::addJsPaginator`
 
 ### Resizable Columns
 
-.. php:method:: resizableColumn($fx = null, $widths = null, $resizerOptions = [])
+:::{php:method} resizableColumn($fx = null, $widths = null, $resizerOptions = [])
+:::
 
 Each table's column width can be resize by dragging the column right border:
 
@@ -506,11 +518,14 @@ See also :ref:`js`.
 
 ### Static Attributes and classes
 
-.. php:class:: Table\\Column
+:::{php:class} Table\\Column
+:::
 
-.. php:method:: addClass($class, $scope = 'body');
+:::{php:method} addClass($class, $scope = 'body');
+:::
 
-.. php:method:: setAttr($attribute, $value, $scope = 'body');
+:::{php:method} setAttr($attribute, $value, $scope = 'body');
+:::
 
 
 The following code will make sure that contents of the column appear on a single line by
@@ -554,10 +569,10 @@ Please note that if you are redefining :php:meth:`Table\\Column::getHeaderCellHt
 and you wish to preserve functionality of setting custom attributes and
 classes, you should generate your TD/TH tag through getTag method.
 
-.. php:method:: getTag($tag, $position, $value);
-
-    Will apply cell-based attributes or classes then use :php:meth:`App::getTag` to
-    generate HTML tag and encode it's content.
+:::{php:method} getTag($tag, $position, $value);
+Will apply cell-based attributes or classes then use :php:meth:`App::getTag` to
+generate HTML tag and encode it's content.
+:::
 
 ### Columns without fields
 

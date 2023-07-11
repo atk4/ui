@@ -1,6 +1,8 @@
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: ProgressBar
+:::{php:class} ProgressBar
+:::
 
 # ProgressBar
 
@@ -11,7 +13,8 @@ Demo: https://ui.agiletoolkit.org/demos/progressbar.php
 
 ## Basic Usage
 
-.. php:method:: jsValue($value)
+:::{php:method} jsValue($value)
+:::
 
 After adding a console to your :ref:`render_tree`, you just need to set a callback:
 

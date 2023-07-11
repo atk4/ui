@@ -1,6 +1,7 @@
 ## Purpose of the Seed
 
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
 Agile UI relies on wide variety of objects. For example :php:class:`Button` relies on
 :php:class:`Icon` object for its rendering. As a developer can create Icon object first,

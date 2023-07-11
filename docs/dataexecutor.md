@@ -14,16 +14,20 @@ Demo: https://ui.agiletoolkit.org/demos/data-action/actions.php
 
 ## Executor Interface
 
-.. php:namespace:: Atk4\Ui\UserAction
+:::{php:namespace} Atk4\Ui\UserAction
+:::
 
 All executors must implement the ExecutorInterface or JsExecutorInterface interface.
 
-.. php:interface:: ExecutorInterface
-.. php:interface:: JsExecutorInterface
+:::{php:interface} ExecutorInterface
+:::
+:::{php:interface} JsExecutorInterface
+:::
 
 ## Basic Executor
 
-.. php:class:: BasicExecutor
+:::{php:class} BasicExecutor
+:::
 
 This is the base view for most of the other action executors. This executor generally
 required that necessary arguments needed to run the action has been set.
@@ -35,21 +39,24 @@ BasicExecutor will display:
 
 ## Preview Executor
 
-.. php:class:: PreviewExecutor
+:::{php:class} PreviewExecutor
+:::
 
 This executor is specifically set in order to display the $preview property of the current model UserAction.
 You can select to display the preview using regular console type container, regular text or using HTML content.
 
 ## Form Executor
 
-.. php:class:: FormExecutor
+:::{php:class} FormExecutor
+:::
 
 This executor will display a form where user is required to fill in either all model fields or certain model fields
 depending on the model UserAction $field property. Form control will depend on model field type.
 
 ## Argument Form Executor
 
-.. php:class:: ArgumentFormExecutor
+:::{php:class} ArgumentFormExecutor
+:::
 
 This executor will display a form but instead of filling form control with model field, it will use model UserAction
 $args property. This is used when you need to ask user about an argument value prior to execute the action.
@@ -57,14 +64,16 @@ The type of form control type to be used in form will depend on how $args is set
 
 ## JS Callaback Executor
 
-.. php:class:: JsCallbackExecutor
+:::{php:class} JsCallbackExecutor
+:::
 
 This type of executor will output proper javascript that you can assign to a view event using View::on() method.
 It is also possible to pass the UserAction argument via $_POST argument.
 
 ## Modal Executor
 
-.. php:class:: ModalExecutor
+:::{php:class} ModalExecutor
+:::
 
 The ModalExecutor is base on Modal view. This is a one size fits all for model UserAction. When setting the UserAction via the
 ModelExecutor::setAction($action) method, it will automatically determine what step is require and will display each step
@@ -83,7 +92,8 @@ Modal::$title property.
 
 ## Confirmation Executor
 
-.. php:class:: ConfirmationExecutor
+:::{php:class} ConfirmationExecutor
+:::
 
 Like ModalExecutor, Confirmation executor is also based on a Modal view. It allow to display UserAction::confirmation property prior to
 execute the action. Since UserAction::confirmation property may be set with a Closure function, this give a chance to
@@ -118,9 +128,11 @@ other hand, if MODIFIER_UPDATE is set, then Table needs to be reloaded.
 
 ## The Executor Factory
 
-.. php:class:: ExecutorFactory
+:::{php:class} ExecutorFactory
+:::
 
-.. php:attr:: executorSeed
+:::{php:attr} executorSeed
+:::
 
 
 Executor factory is responsible for creating proper executor type in regards to the model user action being used.

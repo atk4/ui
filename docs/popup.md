@@ -2,9 +2,11 @@
 
 # Popup
 
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: Popup
+:::{php:class} Popup
+:::
 
 Implements a popup:
 
@@ -13,7 +15,8 @@ $button = Button::addTo($app, ['Click me']);
 HelloWorld::addTo(Popup::addTo($app, [$button]));
 ```
 
-.. php:method:: set($callback)
+:::{php:method} set($callback)
+:::
 
 Popup can also operate with dynamic content:
 

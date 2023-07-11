@@ -119,7 +119,8 @@ As I have mentioned, most Views will handle template for you. You need to
 learn about template manipulations if you are designing custom view that
 needs to follow some advanced patterns.
 
-.. php:class:: Template
+:::{php:class} Template
+:::
 
 ### Template Loading
 
@@ -127,24 +128,24 @@ Array containing a structural representation of the template. When you
 create new template object, you can pass template as an argument to a
 constructor:
 
-.. php:method:: __construct($templateString)
-
-    Will parse template specified as an argument.
+:::{php:method} __construct($templateString)
+Will parse template specified as an argument.
+:::
 
 Alternatively, if you wish to load template from a file:
 
-.. php:method:: loadFromFile($filename)
+:::{php:method} loadFromFile($filename)
+Read file and load contents as a template.
+:::
 
-    Read file and load contents as a template.
+:::{php:method} tryLoadFromFile($filename)
+Try loading the template. Returns false if template couldn't be loaded. This can be used
+if you attempt to load template from various locations.
+:::
 
-.. php:method:: tryLoadFromFile($filename)
-
-    Try loading the template. Returns false if template couldn't be loaded. This can be used
-    if you attempt to load template from various locations.
-
-.. php:method:: loadFromString($string)
-
-    Same as using constructor.
+:::{php:method} loadFromString($string)
+Same as using constructor.
+:::
 
 If the template is already loaded, you can load another template from
 another source which will override the existing one.
@@ -247,34 +248,34 @@ how it's done is important to completely grasp Agile Toolkit underpinnings.
 
 ### Loading template
 
-.. php:method:: loadFromString(string)
+:::{php:method} loadFromString(string)
+Initialize current template from the supplied string
+:::
 
-    Initialize current template from the supplied string
+:::{php:method} loadFromFile(filename)
+Locate (using :php:class:`PathFinder`) and read template from file
+:::
 
-.. php:method:: loadFromFile(filename)
-
-    Locate (using :php:class:`PathFinder`) and read template from file
-
-.. php:method:: __clone()
-
-    Will create duplicate of this template object.
+:::{php:method} __clone()
+Will create duplicate of this template object.
+:::
 
 
-.. php:attr:: template
+:::{php:attr} template
+Array structure containing a parsed variant of your template.
+:::
 
-    Array structure containing a parsed variant of your template.
+:::{php:attr} tags
+Indexed list of tags and regions within the template for speedy access.
+:::
 
-.. php:attr:: tags
+:::{php:attr} template_source
+Simply contains information about where the template have been loaded from.
+:::
 
-    Indexed list of tags and regions within the template for speedy access.
-
-.. php:attr:: template_source
-
-    Simply contains information about where the template have been loaded from.
-
-.. php:attr:: original_filename
-
-    Original template filename, if loaded from file
+:::{php:attr} original_filename
+Original template filename, if loaded from file
+:::
 
 
 Template can be loaded from either file or string by using one of
@@ -303,30 +304,30 @@ directories of :ref:`resource` `template`.
 
 ### Changing template contents
 
-.. php:method:: set(tag, value)
+:::{php:method} set(tag, value)
+Escapes and inserts value inside a tag. If passed a hash, then each
+key is used as a tag, and corresponding value is inserted.
+:::
 
-    Escapes and inserts value inside a tag. If passed a hash, then each
-    key is used as a tag, and corresponding value is inserted.
+:::{php:method} dangerouslySetHtml(tag, value)
+Identical but will not escape. Will also accept hash similar to set()
+:::
 
-.. php:method:: dangerouslySetHtml(tag, value)
+:::{php:method} append(tag, value)
+Escape and add value to existing tag.
+:::
 
-    Identical but will not escape. Will also accept hash similar to set()
+:::{php:method} tryAppend(tag, value)
+Attempts to append value to existing but will do nothing if tag does not exist.
+:::
 
-.. php:method:: append(tag, value)
+:::{php:method} dangerouslyAppendHtml(tag, value)
+Similar to append, but will not escape.
+:::
 
-    Escape and add value to existing tag.
-
-.. php:method:: tryAppend(tag, value)
-
-    Attempts to append value to existing but will do nothing if tag does not exist.
-
-.. php:method:: dangerouslyAppendHtml(tag, value)
-
-    Similar to append, but will not escape.
-
-.. php:method:: tryDangerouslyAppendHtml(tag, value)
-
-    Attempts to append non-escaped value, but will do nothing if tag does not exist.
+:::{php:method} tryDangerouslyAppendHtml(tag, value)
+Attempts to append non-escaped value, but will do nothing if tag does not exist.
+:::
 
 Example:
 
@@ -357,9 +358,9 @@ if ($template->hasTag('has_title')) {
 
 ### Rendering template
 
-.. php:method:: renderToHtml
-
-    Converts template into one string by removing tag markers.
+:::{php:method} renderToHtml
+Converts template into one string by removing tag markers.
+:::
 
 Ultimately we want to convert template into something useful. Rendering
 will return contents of the template without tags:
@@ -443,21 +444,21 @@ presentation logic would be abstracted inside view's `renderToHtml()` method.
 
 ### Other operations with tags
 
-.. php:method:: del(tag)
+:::{php:method} del(tag)
+Empties contents of tag within a template.
+:::
 
-    Empties contents of tag within a template.
+:::{php:method} hasTag(tag)
+Returns `true` if tag exists in a template.
+:::
 
-.. php:method:: hasTag(tag)
+:::{php:method} trySet(name, value)
+Attempts to set a tag, if it exists within template
+:::
 
-    Returns `true` if tag exists in a template.
-
-.. php:method:: trySet(name, value)
-
-    Attempts to set a tag, if it exists within template
-
-.. php:method:: tryDel(name)
-
-    Attempts to empty a tag. Does nothing if tag with name does not exist.
+:::{php:method} tryDel(name)
+Attempts to empty a tag. Does nothing if tag with name does not exist.
+:::
 
 ### Repeating tags
 
@@ -501,7 +502,8 @@ Let's look how templates work together with View objects.
 
 ### Default template for a view
 
-.. php:method:: defaultTemplate()
+:::{php:method} defaultTemplate()
+:::
 
 ```
 Specify default template for a view.

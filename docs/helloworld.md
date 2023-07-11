@@ -2,9 +2,11 @@
 
 # HelloWorld
 
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: HelloWorld
+:::{php:class} HelloWorld
+:::
 
 Presence of the "Hello World" component in the standard distribution is just us saying "The best way
 to create a Hello World app is around a HelloWorld component".

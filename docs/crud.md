@@ -2,8 +2,10 @@
 
 # Crud
 
-.. php:namespace:: Atk4\Ui
-.. php:class:: Crud
+:::{php:namespace} Atk4\Ui
+:::
+:::{php:class} Crud
+:::
 
 Crud class offers a very usable extension to :php:class:`Grid` class, which automatically adds actions for deleting,
 updating and adding records as well as linking them with corresponding Model actions.
@@ -63,11 +65,13 @@ Model action using system property set to true, will not be display in Crud. Not
 
 ## Specifying Fields (for different views)
 
-.. php:attr:: displayFields
+:::{php:attr} displayFields
+:::
 
 Only fields name set in this property will be display in Grid. Leave empty for all fields.
 
-.. php:attr:: editFields
+:::{php:attr} editFields
+:::
 
 If you'd like to have different fields in the grid of the CRUD, but you need more/different fields in the editing modal (which opens when clicking on an entry),
 you can choose here the fields that are available in the editing modal window.
@@ -85,7 +89,8 @@ $crud->displayFields(['field1, field2']);
 $crud->editFields(['field1, field2, field3, field4']);
 ```
 
-.. php:attr:: addFields
+:::{php:attr} addFields
+:::
 
 Through those properties you can specify which fields to use when form is display for add and edit action.
 Field name add here will have priorities over the action fields properties. When set to null, the action fields property
@@ -140,10 +145,14 @@ $model->getUserAction('add')->ui['executor']->title = 'New title for modal'; // 
 
 ## Notification
 
-.. php:attr:: notifyDefault
-.. php:attr:: saveMsg
-.. php:attr:: deleteMsg
-.. php:attr:: defaultMsg
+:::{php:attr} notifyDefault
+:::
+:::{php:attr} saveMsg
+:::
+:::{php:attr} deleteMsg
+:::
+:::{php:attr} defaultMsg
+:::
 
 When a model action execute in Crud, a notification to user is display. You can specify your notifier default seed using
 `$notifyDefault`. The notifier message may be set via `$saveMsg`, `$deleteMsg` or `$defaultMsg` property.

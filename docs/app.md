@@ -2,8 +2,10 @@
 
 ## Purpose of App class
 
-.. php:namespace:: Atk4\Ui
-.. php:class:: App
+:::{php:namespace} Atk4\Ui
+:::
+:::{php:class} App
+:::
 
 App is a mandatory object that's essential for Agile UI to operate. You should create instance
 of an App class yourself before other components:
@@ -135,10 +137,14 @@ In Agile UI this pattern is implemented through a 3rd party add-on for :ref:`pag
 
 ### Clean-up and simplification
 
-.. php:method:: run()
-.. php:attr:: runCalled
-.. php:attr:: isRendering
-.. php:attr:: alwaysRun
+:::{php:method} run()
+:::
+:::{php:attr} runCalled
+:::
+:::{php:attr} isRendering
+:::
+:::{php:attr} alwaysRun
+:::
 
 App also does certain actions to simplify handling of the application. For instance, App class will
 render itself automatically at the end of the application, so you can safely add objects into the `App`
@@ -156,8 +162,10 @@ or use :php:meth:`terminate()` to the app with desired output.
 
 ### Exception handling
 
-.. php:method:: caugthException
-.. php:attr:: catch_exception
+:::{php:method} caugthException
+:::
+:::{php:attr} catch_exception
+:::
 
 By default, App will also catch unhandled exceptions and will present them nicely to the user. If you have a
 better plan for exception, place your code inside a try-catch block.
@@ -171,7 +179,8 @@ If you use Agile UI in conjunction with another framework, then you may be using
 that implements tighter integration with the host application or full-stack framework.
 
 
-.. php:method:: requireJs()
+:::{php:method} requireJs()
+:::
 
 Method to include additional JavaScript file in page:
 
@@ -179,7 +188,8 @@ Method to include additional JavaScript file in page:
 $app->requireJs('https://example.com/file.min.js');
 ```
 
-.. php:method:: requireCss($url)
+:::{php:method} requireCss($url)
+:::
 
 Method to include additional CSS style sheet in page:
 
@@ -187,18 +197,21 @@ Method to include additional CSS style sheet in page:
 $app->requireCss('https://example.com/file.min.css');
 ```
 
-.. php:method:: initIncludes()
+:::{php:method} initIncludes()
+:::
 
 Initializes all includes required by Agile UI. You may extend this class to add more includes.
 
-.. php:method:: getRequestUrl()
+:::{php:method} getRequestUrl()
+:::
 
 Decodes current request without any arguments. If you are changing URL generation pattern, you
 probably need to change this method to properly identify the current page. See :php:class:`App::url()`
 
 ### Loading Templates for Views
 
-.. php:method:: loadTemplate($name)
+:::{php:method} loadTemplate($name)
+:::
 
 Views use :php:attr:`View::$defaultTemplate` to specify which template they are using. By default
 those are loaded from `vendor/atk4/ui/template` however by overriding this method,
@@ -210,15 +223,19 @@ You may override this method if you are using a different CSS framework.
 
 App provides various utilities that are used by other components.
 
-.. php:method:: getTag()
-.. php:method:: encodeHtml()
+:::{php:method} getTag()
+:::
+:::{php:method} encodeHtml()
+:::
 
 Apart from basic utility, App class provides several mechanisms that are helpful for components.
 
 ### Sticky GET Arguments
 
-.. php:method:: stickyGet()
-.. php:method:: stickyForget()
+:::{php:method} stickyGet()
+:::
+:::{php:method} stickyForget()
+:::
 
 Problem: sometimes certain PHP code will only be executed when GET arguments are passed. For example,
 you may have a file `detail.php` which expects `order_id` parameter and would contain a `Crud` component.
@@ -240,8 +257,10 @@ See also :php:meth:`View::stickyGet`
 
 ### Redirects
 
-.. php:method:: redirect(page)
-.. php:method:: jsRedirect(page)
+:::{php:method} redirect(page)
+:::
+:::{php:method} jsRedirect(page)
+:::
 
 App implements two handy methods for handling redirects between pages. The main purpose for those is
 to provide a simple way to redirect for users who are not familiar with JavaScript and HTTP headers
@@ -260,7 +279,8 @@ No much magic in these methods.
 
 ### Database Connection
 
-.. php:property:: db
+:::{php:property} db
+:::
 
 If your `App` needs a DB connection, set this property to an instance of `Persistence`.
 
@@ -274,20 +294,23 @@ See [Persistence::connect](https://agile-data.readthedocs.io/en/develop/persiste
 
 ### Execution Termination
 
-.. php:method:: terminate(output)
+:::{php:method} terminate(output)
+:::
 
 Used when application flow needs to be terminated preemptively. For example when
 callback is triggered and need to respond with some JSON.
 
 ### Execution state
 
-.. php:attr:: isRendering
+:::{php:attr} isRendering
+:::
 
 Will be true if the application is currently rendering recursively through the Render Tree.
 
 ### Links
 
-.. php:method:: url(page)
+:::{php:method} url(page)
+:::
 
 Method to generate links between pages. Specified with associative array:
 
@@ -308,14 +331,16 @@ through :ref:`page_manager`.
 The url() method will automatically append values of arguments mentioned to `stickyGet()`,
 but if you need URL to drop any sticky value, specify value explicitly as `false`.
 
-.. php:method:: jsUrl(callback_page)
+:::{php:method} jsUrl(callback_page)
+:::
 
 Use jsUrl for creating callback, which return non-HTML output. This may be routed differently
 by a host framework (https://github.com/atk4/ui/issues/369).
 
 ### Includes
 
-.. php:method:: requireJs($url)
+:::{php:method} requireJs($url)
+:::
 
 Includes header into the <head> class that will load JavaScript file from a specified URL.
 This will be used by components that rely on external JavaScript libraries.
@@ -402,13 +427,16 @@ Each layout, depending on it's content, may come with several views that you can
 
 ### Admin Layout
 
-.. php:namespace:: Atk4\Ui\Layout
-.. php:class:: Admin
+:::{php:namespace} Atk4\Ui\Layout
+:::
+:::{php:class} Admin
+:::
 
 Agile Toolkit comes with a ready to use admin layout for your application. The layout is built
 with top, left and right menu objects.
 
-.. php:attr:: menuLeft
+:::{php:attr} menuLeft
+:::
 
 Populating the left menu object is simply a matter of adding the right menu items to the layout menu:
 
@@ -424,7 +452,8 @@ $EditGroup = $layout->menuLeft->addGroup(['Edit', 'icon' => 'edit']);
 $EditGroup->addItem('Basics', ['edit/basic']);
 ```
 
-.. php:attr:: menu
+:::{php:attr} menu
+:::
 
 This is the top menu of the admin layout. You can add other item to the top menu using:
 
@@ -434,11 +463,13 @@ Button::addTo($layout->menu->addItem(), ['View Source', 'class.teal' => true, 'i
     ->on('click', new \Atk4\Ui\Js\JsExpression('document.location = [];', [$url . $f]));
 ```
 
-.. php:attr:: menuRight
+:::{php:attr} menuRight
+:::
 
 The top right dropdown menu.
 
-.. php:attr:: isMenuLeftVisible
+:::{php:attr} isMenuLeftVisible
+:::
 
 Whether or not the left menu is open on page load or not. Default is true.
 

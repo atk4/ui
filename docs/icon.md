@@ -2,9 +2,11 @@
 
 # Icon
 
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: Icon
+:::{php:class} Icon
+:::
 
 Implements basic icon:
 

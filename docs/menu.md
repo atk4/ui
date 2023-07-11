@@ -2,8 +2,10 @@
 
 # Menu
 
-.. php:namespace:: Atk4\Ui
-.. php:class:: Menu
+:::{php:namespace} Atk4\Ui
+:::
+:::{php:class} Menu
+:::
 
 Menu implements horizontal or vertical multi-level menu by using Fomantic-UI 'menu'.
 
@@ -71,10 +73,13 @@ You can add other elements inside menu. Refer to demos/menu.php.
 
 ## MenuItem
 
-.. php:class:: MenuItem
+:::{php:class} MenuItem
+:::
 
-.. php:attr:: label
+:::{php:attr} label
+:::
 
-.. php::attr:: $icon
+:::{php:attr} $icon
+:::
 
 Additionally you can use :php:meth:`View::addClass()` to disable or style your menu items.

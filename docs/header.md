@@ -1,4 +1,5 @@
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
 # Header
 
@@ -18,9 +19,11 @@ Header::addTo($this, ['Hello, Header']);
 
 ## Attributes
 
-.. php:attr:: size
+:::{php:attr} size
+:::
 
-.. php:attr:: subHeader
+:::{php:attr} subHeader
+:::
 
 Specify size and sub-header content:
 
@@ -42,9 +45,11 @@ Header::addTo($seg, [
 
 ## Icon and Image
 
-.. php:attr:: icon
+:::{php:attr} icon
+:::
 
-.. php:attr:: image
+:::{php:attr} image
+:::
 
 
 Header may specify icon or image:

@@ -1,6 +1,8 @@
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: Tabs
+:::{php:class} Tabs
+:::
 
 # Tabs
 
@@ -26,7 +28,8 @@ LoremIpsum::addTo($tabs->addTab('Static Tab'));
 
 You can add multiple elements into a single tab, like any other view.
 
-.. php:method:: addTab($name, $action = null)
+:::{php:method} addTab($name, $action = null)
+:::
 
 Use addTab() method to add more tabs in Tabs view. First parameter is a title of the tab.
 
@@ -79,7 +82,8 @@ $tabs->addTab('Dynamic Form', function (VirtualPage $vp) {
 
 ## URL Tabs
 
-.. php:method:: addTabUrl($name, $url)
+:::{php:method} addTabUrl($name, $url)
+:::
 
 Tab can load external URL or a different page if you prefer that instead of VirtualPage. This works similar to iframe:
 

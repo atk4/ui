@@ -2,9 +2,11 @@
 
 # Label
 
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: Label
+:::{php:class} Label
+:::
 
 Labels can be used in many different cases, either as a stand-alone objects, inside tables or inside
 other components.
@@ -30,15 +32,20 @@ $app->add($label);
 
 Label has the following properties:
 
-.. php:attr:: icon
+:::{php:attr} icon
+:::
 
-.. php:attr:: iconRight
+:::{php:attr} iconRight
+:::
 
-.. php:attr:: image
+:::{php:attr} image
+:::
 
-.. php:attr:: imageRight
+:::{php:attr} imageRight
+:::
 
-.. php:attr:: detail
+:::{php:attr} detail
+:::
 
 All the above can be string, array (passed to Icon, Image or View class) or an object.
 

@@ -1,6 +1,8 @@
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: Wizard
+:::{php:class} Wizard
+:::
 
 # Wizard
 
@@ -16,8 +18,10 @@ Introduced in UI v1.4
 
 ## Basic Usage
 
-.. php:method:: addStep($title, $callback)
-.. php:method:: addFinish($callback)
+:::{php:method} addStep($title, $callback)
+:::
+:::{php:method} addFinish($callback)
+:::
 
 Start by creating Wizard inside your render tree:
 
@@ -61,13 +65,15 @@ $wizard->addFinish(function (Wizard $wizard) {
 
 When you create wizard you may specify some of the following options:
 
-.. php:attr:: defaultIcon
+:::{php:attr} defaultIcon
+:::
 
 Other properties are used during the execution of the wizard.
 
 ## Step Tracking
 
-.. php:attr:: stepCallback
+:::{php:attr} stepCallback
+:::
 
 Wizard employs :php:class:`Callback` to maintain which step you currently are on. All steps are numbered
 started with 0.
@@ -78,14 +84,18 @@ take you to any step. You can also go backwards and re-do steps. Section below e
 enforce some restrictions.
 :::
 
-.. php:attr:: currentStep
+:::{php:attr} currentStep
+:::
 
 When Wizard is initialized, it will set currentStep to a number (0, 1, 2, ..) corresponding to your steps
 and finish callback, if you have specified it.
 
-.. php:attr:: buttonPrevious
-.. php:attr:: buttonNext
-.. php:attr:: buttonFinish
+:::{php:attr} buttonPrevious
+:::
+:::{php:attr} buttonNext
+:::
+:::{php:attr} buttonFinish
+:::
 
 Those properties will be initialized with the buttons, but some of them may be destroyed by the render step,
 if the button is not applicable. For example, first step should not have "Previous" button. You can change label
@@ -113,8 +123,10 @@ disabling the button by adding "disabled" class.
 
 Wizard has few methods to help you to navigate between steps.
 
-.. php:method:: urlNext()
-.. php:method:: jsNext()
+:::{php:method} urlNext()
+:::
+:::{php:method} jsNext()
+:::
 
 Methods starting with `url` will return a URL towards the next step. jsNext() method returns javascript action
 which will take you to the next step.
@@ -125,15 +137,20 @@ Finally you can get URL of the current step with `$wizard->url()` (see :php:meth
 
 ## WizardStep
 
-.. php:class:: WizardStep
+:::{php:class} WizardStep
+:::
 
-.. php:attr:: title
+:::{php:attr} title
+:::
 
-.. php:attr:: description
+:::{php:attr} description
+:::
 
-.. php:attr:: icon
+:::{php:attr} icon
+:::
 
-.. php:attr:: wizard
+:::{php:attr} wizard
+:::
 
 Each step of your wizard serves two roles. First is to render title and icon above the wizard and second is
 to contain a callback code.

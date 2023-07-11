@@ -4,7 +4,8 @@ Before learning about VirtualPage, Loader and other ways of dynamic content load
 understand :ref:`callback`.
 
 
-.. php:class:: VirtualPage
+:::{php:class} VirtualPage
+:::
 
 Unlike any of the Callback classes, VirtualPage is a legitimate :php:class:`View`, but it's behavior is a little
 "different". In normal circumstances, rendering VirtualPage will result in empty string. Adding VirtualPage
@@ -40,7 +41,8 @@ for developers.
 (For situations when Component does not natively support VirtualPage, you can still use :php:class:`Loader`, documented
 below).
 
-.. php:attr:: cb
+:::{php:attr} cb
+:::
 
 VirtuaPage relies on :php:class:`CallbackLater` object, which is stored in a property $cb. If the Callback is triggered
 through a GET argument, then VirtualPage will change it's rendering technique. Lets examine it in more detail:
@@ -58,7 +60,8 @@ $label->link($vp->cb->getUrl());
 This code will only show the link containing a URL, but will not show LoremIpsum text.  If you do follow the link, you'll
 see only the 'LoremIpsum' text.
 
-.. php:attr:: urlTrigger
+:::{php:attr} urlTrigger
+:::
 
 See :php:attr:`Callback::urlTrigger`.
 
@@ -66,7 +69,8 @@ See :php:attr:`Callback::urlTrigger`.
 Output Modes
 ^^^^^^^^^^^^
 
-.. php:method:: getUrl($mode = 'callback')
+:::{php:method} getUrl($mode = 'callback')
+:::
 
 VirtualPage can be used to provide you either with RAW HTML content or wrap it into boilerplate HTML.
 As you may know, :php:meth:`Callback::getUrl()` accepts an argument, and VirtualPage gives this argument meaning:
@@ -84,7 +88,8 @@ $label->link($vp->cb->getUrl('popup'));
 Setting Callback
 ^^^^^^^^^^^^^^^^
 
-.. php:method:: set($callback)
+:::{php:method} set($callback)
+:::
 
 Although VirtualPage can work without defining a callback, using one is more reliable and is always recommended:
 
@@ -115,11 +120,12 @@ $tabs->addTab('Tab2', function (VirtualPage $p) { // dynamic tab
 });
 ```
 
-.. php:method:: getUrl($mode)
+:::{php:method} getUrl($mode)
+You can use this shortcut method instead of $vp->cb->getUrl().
+:::
 
-    You can use this shortcut method instead of $vp->cb->getUrl().
-
-.. php:attr:: ui
+:::{php:attr} ui
+:::
 
 When using 'popup' mode, the output appears inside a `<div class="ui container">`. If you want to change this
 class, you can set $ui property to something else. Try:
@@ -137,9 +143,11 @@ $label->link($vp->cb->getUrl('popup'));
 
 ### Loader
 
-.. php:class:: Loader
+:::{php:class} Loader
+:::
 
-.. php:method:: set()
+:::{php:method} set()
+:::
 
 Loader is designed to delay some slow-loading content by loading it dynamically, after main
 page is rendered.
@@ -163,7 +171,8 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
 A good use-case example would be a dashboard graph. Unlike VirtualPage which is not visible to a regular render,
 Loader needs to occupy some space.
 
-.. php:attr:: shim
+:::{php:attr} shim
+:::
 
 By default it will display a white segment with 7em height, but you can specify any other view through $shim
 property:
@@ -184,7 +193,8 @@ Triggering Loader
 By default, Loader will display a spinner and will start loading it's contents as soon as DOM Ready() event fires.
 Sometimes you want to control the event.
 
-.. php:method:: jsLoad($args = [])
+:::{php:method} jsLoad($args = [])
+:::
 
 Returns JS action which will trigger loading. The action will be carried out in 2 steps:
 
@@ -193,7 +203,8 @@ Returns JS action which will trigger loading. The action will be carried out in 
 - Content will be placed inside Loader's DIV replacing shiv (or previously loaded content)
 - loading indicator will is hidden
 
-.. php:attr:: loadEvent = null
+:::{php:attr} loadEvent = null
+:::
 
 If you have NOT invoked jsLoad in your code, Loader will automatically assign it do DOM Ready(). If the automatic
 behaviour does not work, you should set value for $loadEvent:
@@ -254,7 +265,8 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
 Progress Bar
 ^^^^^^^^^^^^
 
-.. php:attr:: progressBar = null
+:::{php:attr} progressBar = null
+:::
 
 Loader can have a progress bar. Imagine that your Loader has to run slow process 4 times:
 

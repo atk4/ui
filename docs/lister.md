@@ -2,9 +2,11 @@
 
 # Lister
 
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: Lister
+:::{php:class} Lister
+:::
 
 Lister can be used to output unstructured data with your own HTML template. If you wish to output
 data in a table, see :php:class:`Table`. Lister is also the fastest way to render large amount of

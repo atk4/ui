@@ -1,6 +1,7 @@
 .. _tablecolumn:
 
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
 # Table Column Decorators
 
@@ -27,9 +28,9 @@ but if record is already archived, use a template "Archived on {$archive_date}".
 
 ## Generic Column Decorator
 
-.. php:class:: Table\\Column
-
-    Generic description of a column for :php:class:`Atk4\\Ui\\Table`
+:::{php:class} Table\\Column
+Generic description of a column for :php:class:`Atk4\\Ui\\Table`
+:::
 
 Table object relies on a separate class: `\\Atk4\\Ui\\Table\\Column` to present most of the values. The goals
 of the column object is to format anything around the actual values. The type = 'atk4_money' will result in
@@ -40,17 +41,20 @@ but first we need to look at the generic column and understand it's base capabil
 A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
 when constructing HTML:
 
-.. php:method:: getHeaderCellHtml(\Atk4\Data\Field $field): string
+:::{php:method} getHeaderCellHtml(\Atk4\Data\Field $field): string
+:::
 
 Must respond with HTML for the header cell (`<th>`) and an appropriate caption. If necessary
 will include "sorting" icons or any other controls that go in the header of the table.
 
-.. php:method:: getTotalsCellHtml(\Atk4\Data\Field $field, $value): string
+:::{php:method} getTotalsCellHtml(\Atk4\Data\Field $field, $value): string
+:::
 
 Provided with the field and the value, format the cell for the footer "totals" row. Table
 can rely on various strategies for calculating totals. See :php:meth:`Table::addTotals`.
 
-.. php:method:: getDataCellHtml(\Atk4\Data\Field $field): string
+:::{php:method} getDataCellHtml(\Atk4\Data\Field $field): string
+:::
 
 Provided with a field, this method will respond with HTML **template**. In order to keep
 performance of Web Application at the maximum, Table will execute getDataCellHtml for all the
@@ -78,7 +82,8 @@ values or if it doesn't contain any values at all.
 
 Sometimes you do want to inject HTML instead of using row values:
 
-.. php:method:: getHtmlTags($model, $field = null)
+:::{php:method} getHtmlTags($model, $field = null)
+:::
 
 Return array of HTML tags that will be injected into the row template. See
 :php:ref:`table_html` for further example.
@@ -108,7 +113,8 @@ a specified column, which are documented below.
 
 ### Popups
 
-.. php:method:: addPopup()
+:::{php:method} addPopup()
+:::
 
 To create a popup, you need to get the column decorator object. This must be the first decorator, which
 is responsible for rendering of the TH box. If you are adding column manually, :php:meth:`Atk4\\Ui\\Table::addColumn()`
@@ -140,7 +146,8 @@ $nameColumn[0]->addPopup()->set(function (View $p) {
 
 ### Dropdown Menus
 
-.. php:method:: addDropdown()
+:::{php:method} addDropdown()
+:::
 
 Menus will show item selection and will trigger a callback when user selects one of them:
 
@@ -156,7 +163,8 @@ In addition to :php:class:`Table\\Column`, Agile UI includes several column impl
 
 ### Link
 
-.. php:class:: Table\\Column\\Link
+:::{php:class} Table\\Column\\Link
+:::
 
 Put `<a href..` link over the value of the cell. The page property can be specified to constructor. There
 are two usage patterns. With the first you can specify full URL as a string:
@@ -180,7 +188,8 @@ $table->addColumn('name', [\Atk4\Ui\Table\Column\Link::class, ['details', 'id' =
 
 ### Money
 
-.. php:class:: Table\\Column\\Money
+:::{php:class} Table\\Column\\Money
+:::
 
 Helps decorating monetary values. Will align value to the right and if value is less than zero will also
 use red text (td class "negative" for Fomantic-UI). The money cells are not wrapped.
@@ -189,7 +198,8 @@ For the actual number formatting, see :ref:`uiPersistence`
 
 ### Status
 
-.. php:class:: Table\\Column\\Status
+:::{php:class} Table\\Column\\Status
+:::
 
 Allow you to set highlight class and icon based on column value. This is most suitable for columns that
 contain pre-defined values.
@@ -216,7 +226,8 @@ Current list of states supported:
 
 ### Template
 
-.. php:class:: Table\\Column\\Template
+:::{php:class} Table\\Column\\Template
+:::
 
 This column is suitable if you wish to have custom cell formatting but do not wish to go through
 the trouble of setting up your own class.
@@ -234,7 +245,8 @@ will only work if you assign it to a primary column (by passing 1st argument to 
 
 ### Image
 
-.. php:class:: Table\\Column\\Image
+:::{php:class} Table\\Column\\Image
+:::
 
 This column is suitable if you wish to have image in your table cell:
 
@@ -246,7 +258,8 @@ $table->addColumn('image_url', new \Atk4\Ui\Table\Column\Image);
 
 ### ActionButtons
 
-.. php:class:: Table\\Column\\ActionButtons
+:::{php:class} Table\\Column\\ActionButtons
+:::
 
 Can be used to add "action buttons" column to your table:
 
@@ -260,7 +273,8 @@ If you want to have label above the action column, then:
 $action = $table->addColumn(null, [Table\Column\ActionButtons::class, 'caption' => 'User Actions']);
 ```
 
-.. php:method:: addButton($button, $action, $confirm = false)
+:::{php:method} addButton($button, $action, $confirm = false)
+:::
 
 Adds another button into "Actions" column which will perform a certain JavaScript action when clicked.
 See also :php:meth:`Atk4\\Ui\\Grid::addActionButton()`:
@@ -278,7 +292,8 @@ $button = $action->addButton('Reload Table', $table->jsReload(['clicked' => $tab
 
 Moreover you may pass $action argument as a PHP callback.
 
-.. php:method:: addModal($button, $title, $callback)
+:::{php:method} addModal($button, $title, $callback)
+:::
 
 Triggers a modal dialog when you click on the button. See description on :php:meth:`Atk4\\Ui\\Grid::addModalAction()`:
 
@@ -292,9 +307,11 @@ Note that in this case ID is automatically passed to your callback.
 
 ### Checkbox
 
-.. php:class:: Table\\Column\\Checkbox
+:::{php:class} Table\\Column\\Checkbox
+:::
 
-.. php:method:: jsChecked()
+:::{php:method} jsChecked()
+:::
 
 Adding this column will render checkbox for each row. This column must not be used on a field.
 CheckBox column provides you with a handy jsChecked() method, which you can use to reference

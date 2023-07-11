@@ -2,9 +2,11 @@
 
 # Text
 
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: Text
+:::{php:class} Text
+:::
 
 Text is a component for abstracting several paragraphs of text. It's usage is simple and straightforward:
 

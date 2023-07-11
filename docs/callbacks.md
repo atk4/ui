@@ -25,7 +25,8 @@ you through the callback mechanisms of Agile UI.
 
 ### The Callback class
 
-.. php:class:: Callback
+:::{php:class} Callback
+:::
 
 Callback is not a View. This class does not extend any other class but it does implement several important
 traits:
@@ -44,9 +45,11 @@ $app->add($c);
 Because 'Callback' is not a View, it won't be rendered. The reason we are adding into :ref:`render_tree`
 is for it to establish a unique name which will be used to generate callback URL:
 
-.. php:method:: getUrl($val)
+:::{php:method} getUrl($val)
+:::
 
-.. php:method:: set
+:::{php:method} set
+:::
 
 The following example code generates unique URL:
 
@@ -105,7 +108,8 @@ if ($cb->set(function () { return true; })) {
 This example uses return of the :php:meth:`Callback::set()` to add class to a label, however a
 much more preferred way is to use :php:attr:`$triggered`.
 
-.. php:attr:: triggered
+:::{php:attr} triggered
+:::
 
 You use property `triggered` to detect if callback was executed or not, without short-circuting the
 execution with set() and terminate(). This can be helpful sometimes when you need to affect the
@@ -127,7 +131,8 @@ if ($cb->triggered) {
 }
 ```
 
-.. php:attr:: postTrigger
+:::{php:attr} postTrigger
+:::
 
 A Callback class can also use a POST variable for triggering. For this case the $callback->name should be set
 through the POST data.
@@ -135,14 +140,16 @@ through the POST data.
 Even though the functionality of Callback is very basic, it gives a very solid foundation for number of
 derived classes.
 
-.. php:attr:: urlTrigger
+:::{php:attr} urlTrigger
+:::
 
 Specifies which GET parameter to use for triggering. Normally it's same as `$callback->name`, but you can set it
 to anything you want. As long as you keep it unique on a current page, you should be OK.
 
 ### CallbackLater
 
-.. php:class:: CallbackLater
+:::{php:class} CallbackLater
+:::
 
 This class is very similar to Callback, but it will not execute immediately. Instead it will be executed
 either at the end at beforeRender or beforeOutput hook from inside App, whichever comes first.
@@ -195,7 +202,8 @@ JsReload existence is only possible thanks to CallbackLater implementation.
 
 ### JsCallback
 
-.. php:class:: JsCallback
+:::{php:class} JsCallback
+:::
 
 So far, the return value of callback handler was pretty much insignificant. But wouldn't it be great if this
 value was meaningful in some way?
@@ -258,7 +266,8 @@ User Confirmation
 The implementation perfectly hides existence of callback route, javascript action and JsCallback. The JsCallback
 is based on 'Callback' therefore code after :php:meth:`View::on()` will not be executed during triggering.
 
-.. php:attr:: confirm
+:::{php:attr} confirm
+:::
 
 If you set `confirm` property action will ask for user's confirmation before sending a callback:
 
@@ -290,7 +299,8 @@ $label->on('click', function () {
 JavaScript arguments
 ^^^^^^^^^^^^^^^^^^^^
 
-.. php:method:: set($callback, $arguments = [])
+:::{php:method} set($callback, $arguments = [])
+:::
 
 It is possible to modify expression of JsCallback to pass additional arguments to it's callback. The next example
 will send browser screen width back to the callback:

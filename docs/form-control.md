@@ -2,9 +2,11 @@
 
 # Form Controls
 
-.. php:namespace:: Atk4\Ui\Form
+:::{php:namespace} Atk4\Ui\Form
+:::
 
-.. php:class:: Control
+:::{php:class} Control
+:::
 
 Agile UI dedicates a separate namespace for the Form Controls. Those are
 quite simple components that present themselves as input controls: line, select, checkbox.
@@ -17,8 +19,10 @@ be used as stand-alone controls.
 
 ### Stand-alone use
 
-.. php:method:: set()
-.. php:method:: jsInput()
+:::{php:method} set()
+:::
+:::{php:method} jsInput()
+:::
 
 Add any form control to your application like this:
 
@@ -101,7 +105,8 @@ properly:
 
 ### Hints
 
-.. php:attr:: hint
+:::{php:attr} hint
+:::
 
 When Form Control appears in a Form, then you can specify a Hint also. It appears below the form control and
 although it intends to be "extra info" or "extra help" due to current limitation of Fomantic-UI
@@ -134,12 +139,14 @@ $form->addControl('name', ['hint' => ['template' => new \Atk4\Ui\Template(
 
 ### Read only and disabled form controls
 
-.. php:attr:: readOnly
+:::{php:attr} readOnly
+:::
 
 Read only form controls can be seen in form, can be focused and will be submitted, but we don't allow to
 change their value.
 
-.. php:attr:: disabled
+:::{php:attr} disabled
+:::
 
 Disabled form controls can be seen in form, cannot be focused and will not be submitted. And of course we
 don't allow to change their value. Disabled form controls are used for read only model fields for example.
@@ -214,28 +221,31 @@ will be linked with Model Fields.
 
 ### Link to Model Field
 
-.. php:attr:: field
+:::{php:attr} field
+:::
 
 Form decorator defines $field property which will be pointing to a field object of a model, so technically
 the value of the field would be read from `$decorator->entityField->get()`.
 
-.. php:namespace:: Atk4\Ui\Form\Control
+:::{php:namespace} Atk4\Ui\Form\Control
+:::
 
 ## Line Input Form control
 
-.. php:class:: Input
-
-    Implements View for presenting Input form controls. Based around https://fomantic-ui.com/elements/input.html.
+:::{php:class} Input
+Implements View for presenting Input form controls. Based around https://fomantic-ui.com/elements/input.html.
+:::
 
 Similar to other views, Input has various properties that you can specify directly
 or inject through constructor. Those properties will affect the look of the input
 element. For example, `icon` property:
 
-.. php:attr:: icon
-.. php:attr:: iconLeft
-
-    Adds icon into the input form control. Default - `icon` will appear on the right, while `leftIcon`
-    will display icon on the left.
+:::{php:attr} icon
+:::
+:::{php:attr} iconLeft
+Adds icon into the input form control. Default - `icon` will appear on the right, while `leftIcon`
+will display icon on the left.
+:::
 
 Here are few ways to specify `icon` to an Input/Line:
 
@@ -272,23 +282,25 @@ View's constructor will map received arguments into object properties, if they a
 or addClass() if not. See :php:meth:`View::setProperties`.
 :::
 
-.. php:attr:: placeholder
+:::{php:attr} placeholder
+Will set placeholder property.
+:::
 
-    Will set placeholder property.
+:::{php:attr} loading
+Set to "left" or "right" to display spinning loading indicator.
+:::
 
-.. php:attr:: loading
+:::{php:attr} label
+:::
+:::{php:attr} labelRight
+Convert text into :php:class:`Label` and insert it into the form control.
+:::
 
-    Set to "left" or "right" to display spinning loading indicator.
-
-.. php:attr:: label
-.. php:attr:: labelRight
-
-    Convert text into :php:class:`Label` and insert it into the form control.
-
-.. php:attr:: action
-.. php:attr:: actionLeft
-
-    Convert text into :php:class:`Button` and insert it into the form control.
+:::{php:attr} action
+:::
+:::{php:attr} actionLeft
+Convert text into :php:class:`Button` and insert it into the form control.
+:::
 
 To see various examples of form controls and their attributes see `demos/form-control/`.
 
@@ -298,7 +310,8 @@ When you use :php:class:`form::addControl()` it will create 'Form Control Decora
 
 ### JavaScript on Input
 
-.. php:method:: jsInput([$event, [$otherChain]])
+:::{php:method} jsInput([$event, [$otherChain]])
+:::
 
 Input class implements method jsInput which is identical to :php:meth:`View::js`, except
 that it would target the INPUT element rather then the whole form control:
@@ -309,7 +322,8 @@ $control->jsInput(true)->val(123);
 
 ### onChange event
 
-.. php:method:: onChange($expression)
+:::{php:method} onChange($expression)
+:::
 
 It's preferable to use this short-hand version of on('change', 'input', $expression) method.
 $expression argument can be JS expression or PHP callback function.
@@ -332,7 +346,8 @@ $c1->onChange(\Atk4\Ui\Js\JsExpression('console.log(\'c1 changed: \' + date + \'
 
 ## Dropdown
 
-.. php:class:: Dropdown
+:::{php:class} Dropdown
+:::
 
 Dropdown uses Fomantic-UI Dropdown (https://fomantic-ui.com/modules/dropdown.html). A Dropdown can be used in two ways:
 1) Set a Model to $model property. The Dropdown will render all records of the model that matches the model's conditions.
@@ -457,11 +472,13 @@ function (string $value, $key) {
 
 There's a bunch of settings to influence Dropdown behaviour.
 
-.. php:attr:: empty
+:::{php:attr} empty
+:::
 
 Define a string for the empty option (no selection). Standard is non-breaking space symbol.
 
-.. php:attr:: dropdownOptions
+:::{php:attr} dropdownOptions
+:::
 
 Here you can pass an array of Fomantic-UI dropdown options (https://fomantic-ui.com/modules/dropdown.html#/settings) e.g. :
 
@@ -471,7 +488,8 @@ $dropdown = new Dropdown(['dropdownOptions' => [
 ]]);
 ```
 
-.. php:attr:: multiple
+:::{php:attr} multiple
+:::
 
 If set to true, multiple items can be selected in Dropdown. They will be sent comma separated (value1,value2,value3) on form submit.
 
@@ -499,19 +517,22 @@ $this->addField('expressions', [
 
 ## DropdownCascade
 
-.. php:class:: DropdownCascade
+:::{php:class} DropdownCascade
+:::
 
 DropdownCascade input are extend from Dropdown input. They rely on `cascadeFrom` and `reference` property.
 For example, it could be useful when you need to narrow a product selection base on a category and a sub category.
 User will select a Category from a list, then sub category input will automatically load sub category values based on
 user category selection. Same with product list values based on sub category selection and etc.
 
-.. php:attr:: cascadeFrom
+:::{php:attr} cascadeFrom
+:::
 
 This property represent an input form control, mostly another Dropdown or DropdownCascade form control.
 The list values of this form control will be build base off the selected value of cascadeFrom input.
 
-.. php:attr:: reference
+:::{php:attr} reference
+:::
 
 This property represent a model hasMany reference and should be an hasMany reference of the cascadeFrom input model.
 In other word, the model that will generated list value for this dropdown input is an hasMany reference of the cascadeFrom
@@ -528,7 +549,8 @@ $form->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_c
 
 ## Lookup
 
-.. php:class:: Lookup
+:::{php:class} Lookup
+:::
 
 Lookup input is also based on Fomantic-UI dropdown module but with ability to dynamically request server for data it's
 data value.

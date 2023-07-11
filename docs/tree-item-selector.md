@@ -1,6 +1,8 @@
-.. php:namespace:: Atk4\Ui\Form\Control
+:::{php:namespace} Atk4\Ui\Form\Control
+:::
 
-.. php:class:: TreeItemSelector
+:::{php:class} TreeItemSelector
+:::
 
 # TreeItemSelector Form Control
 
@@ -9,7 +11,8 @@ or single item within a tree like list structure.
 
 ## Attributes
 
-.. php:attr:: treeItems
+:::{php:attr} treeItems
+:::
 
 The list of items to be render by the components as an array. End item must at least contains a name and ID value. Name will be display
 within the list structure and ID will be collect when user add or remove them.
@@ -35,7 +38,8 @@ $items = [
 ]
 ```
 
-.. php:attr:: allowMultiple
+:::{php:attr} allowMultiple
+:::
 
 This attribute will decide into witch mode the component will run. When allowMultiple is set to true (default) then
 the component will allow multiple selection to be made within the list of items. Otherwise, only one selection
@@ -82,7 +86,8 @@ because in multiple mode, it will collect item value as an array type.
 
 ## Callback Usage
 
-.. php:method:: onItem($fx)
+:::{php:method} onItem($fx)
+:::
 
 It is possible to run a callback function every time an item is select on the list. The callback function will receive the selected item
 set by the user.:

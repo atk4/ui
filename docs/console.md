@@ -1,6 +1,8 @@
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: Console
+:::{php:class} Console
+:::
 
 # Console
 
@@ -15,9 +17,11 @@ Demo: https://ui.agiletoolkit.org/demos/console.php
 
 ## Basic Usage
 
-.. php:method:: set($callback)
+:::{php:method} set($callback)
+:::
 
-.. php:method:: send($callback)
+:::{php:method} send($callback)
+:::
 
 
 After adding a console to your :ref:`render_tree`, you just need to set a callback:
@@ -42,7 +46,8 @@ and also allows you to execute shell process on the server while redirecting out
 
 ## Using With Object
 
-.. php:method:: runMethod($callback);
+:::{php:method} runMethod($callback);
+:::
 
 We recommend that you pack up your busineess logic into your Model methods. When it's time to call your method,
 you could either do this:
@@ -83,9 +88,11 @@ $console->runMethod('StaticLib', 'myStaticMethod');
 
 ## Executing Commands
 
-.. php:method:: exec($cmd, $args);
+:::{php:method} exec($cmd, $args);
+:::
 
-.. php:argument:: lastExitCode
+:::{php:argument} lastExitCode
+:::
 
 To execute a command, use:
 

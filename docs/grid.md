@@ -2,8 +2,10 @@
 
 # Grid
 
-.. php:namespace:: Atk4\Ui
-.. php:class:: Grid
+:::{php:namespace} Atk4\Ui
+:::
+:::{php:class} Grid
+:::
 
 If you didn't read documentation on :ref:`table` you should start with that. While table implements the actual
 data rendering, Grid component supplies various enhancements around it, such as paginator, quick-search, toolbar
@@ -29,7 +31,8 @@ $grid->menu->addItem('Reload Grid', new \Atk4\Ui\Js\JsReload($grid));
 
 ## Adding Menu Items
 
-.. php:attr:: menu
+:::{php:attr} menu
+:::
 
 .. php:method: addButton($label)
 
@@ -56,7 +59,8 @@ $grid = Grid::addTo($app, ['menu' => false]);
 
 ## Adding Quick Search
 
-.. php:attr:: quickSearch
+:::{php:attr} quickSearch
+:::
 
 .. php:method: addQuickSearch($fields = [], $hasAutoQuery = false)
 
@@ -79,9 +83,11 @@ $grid->addQuickSearch(['name', 'surname'], true);
 
 ## Paginator
 
-.. php:attr:: paginator
+:::{php:attr} paginator
+:::
 
-.. php:attr:: ipp
+:::{php:attr} ipp
+:::
 
 Grid comes with a paginator already. You can disable it by setting $paginator property to false. Alternatively you
 can provide seed for the paginator or even entire object:
@@ -98,7 +104,8 @@ $grid->ipp = 10;
 
 ### JsPaginator
 
-.. php:method:: addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+:::{php:method} addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+:::
 
 JsPaginator will load table content dynamically when user scroll down the table window on screen.
 
@@ -108,16 +115,19 @@ $table->addJsPaginator(30);
 
 See :php:meth:`Table::addJsPaginator`
 
-.. php:method:: addJsPaginatorInContainer($ipp, $containerHeight, $options = [], $container = null, $scrollRegion = 'Body')
+:::{php:method} addJsPaginatorInContainer($ipp, $containerHeight, $options = [], $container = null, $scrollRegion = 'Body')
+:::
 
 Use this method if you want fixed table header when scrolling down table. In this case you have to set
 fixed height of your table container.
 
 ## Actions
 
-.. php:attr:: actions
+:::{php:attr} actions
+:::
 
-.. php:method:: addActionButton($button, $action, $confirm = false)
+:::{php:method} addActionButton($button, $action, $confirm = false)
+:::
 
 :php:class:`Table` supports use of :php:class:`Table\\Column\\\Actions`, which allows to display button for each row.
 Calling addActionButton() provides a useful short-cut for creating column-based actions.
@@ -130,7 +140,8 @@ Calling this method multiple times will add button into same action column.
 
 See :php:meth:`Table\\Column\\\Actions::addAction`
 
-.. php:method:: addModalAction($button, $title, $callback)
+:::{php:method} addModalAction($button, $title, $callback)
+:::
 
 Similar to addAction, but when clicking a button, will open a modal dialog and execute $callback
 to populate a content:
@@ -150,9 +161,11 @@ See :php:meth:`Atk4\\Ui\\Table\\Column\\Actions::addModal`
 
 ## Column Menus
 
-.. php:method:: addDropdown($columnName, $items, $fx, $icon = 'caret square down', $menuId = null)
+:::{php:method} addDropdown($columnName, $items, $fx, $icon = 'caret square down', $menuId = null)
+:::
 
-.. php:method:: addPopup($columnName, $popup = null, $icon = 'caret square down')
+:::{php:method} addPopup($columnName, $popup = null, $icon = 'caret square down')
+:::
 
 Methods addDropdown and addPopup provide a wrapper for :php:meth:`Atk4\\Ui\\Table\\Column::addDropdown` and
 :php:meth:`Atk4\\Ui\\\Table\\Column::addPopup` methods.
@@ -173,7 +186,8 @@ $grid->menu->addItem('show selection')
 
 ## Sorting
 
-.. php:attr:: sortable
+:::{php:attr} sortable
+:::
 
 When grid is associated with a model that supports order, it will automatically make itself sortable. You can
 override this behaviour by setting $sortable property to `true` or `false`.
@@ -185,6 +199,7 @@ See also :php:attr:`Table::$sortable`.
 
 ## Advanced Usage
 
-.. php:attr:: table
+:::{php:attr} table
+:::
 
 You can use a different component instead of default :php:class:`Table` by injecting $table property.

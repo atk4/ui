@@ -2,8 +2,10 @@
 
 # AutoComplete Form Control
 
-.. php:namespace:: Atk4\Ui\Form\Control
-.. php:class:: AutoComplete
+:::{php:namespace} Atk4\Ui\Form\Control
+:::
+:::{php:class} AutoComplete
+:::
 
 Agile UI uses "Form\\Control\\Dropdown" by default on the form, but there is also implementation
 for AutoComplete form control. Although they look similar, there are some differences:

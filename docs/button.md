@@ -2,9 +2,11 @@
 
 # Button
 
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: Button
+:::{php:class} Button
+:::
 
 Implements a clickable button:
 
@@ -35,7 +37,8 @@ Demo: https://ui.agiletoolkit.org/demos/button.php
 
 ### Button Icon
 
-.. php:attr:: icon
+:::{php:attr} icon
+:::
 
 Property $icon will place icon on your button and can be specified in one of the following two ways:
 
@@ -57,7 +60,8 @@ $button->icon = new Icon('thumbs u');
 $app->add($button);
 ```
 
-.. php:attr:: iconRight
+:::{php:attr} iconRight
+:::
 
 Setting this will display icon on the right of the button:
 
@@ -105,7 +109,8 @@ $app->add($bar);
 
 ### Linking
 
-.. php:method:: link
+:::{php:method} link
+:::
 
 Will link button to a destination URL or page:
 

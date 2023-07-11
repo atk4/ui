@@ -140,14 +140,14 @@ for details.
 
 ## Building actions with JsExpressionable
 
-.. php:interface:: JsExpressionable
+:::{php:interface} JsExpressionable
+Allow objects of the class implementing this interface to participate in
+building JavaScript expressions.
+:::
 
-    Allow objects of the class implementing this interface to participate in
-    building JavaScript expressions.
-
-.. php:method:: jsRender
-
-    Express object as a string containing valid JavaScript statement or expression.
+:::{php:method} jsRender
+Express object as a string containing valid JavaScript statement or expression.
+:::
 
 :php:class:`View` class is supported as JsExpression argument natively and will present
 itself as a valid selector. Example:
@@ -165,10 +165,10 @@ $('#button-id').appendTo('#frame-id');
 
 ### JavaScript Chain Building
 
-.. php:class:: JsChain
-
-    Base class JsChain can be extended by other classes such as Jquery to provide transparent
-    mappers for any JavaScript framework.
+:::{php:class} JsChain
+Base class JsChain can be extended by other classes such as Jquery to provide transparent
+mappers for any JavaScript framework.
+:::
 
 Chain is a PHP object that represents one or several actions that are to be executed on the
 client side. The JsChain objects themselves are generic, so in these examples we'll be using Jquery which
@@ -182,9 +182,9 @@ $chain->dropdown();
 
 The calls to the chain are stored in the object and can be converted into JavaScript by calling :php:meth:`JsChain::jsRender()`
 
-.. php:method:: jsRender()
-
-    Converts actions recorded in JsChain into string of JavaScript code.
+:::{php:method} jsRender()
+Converts actions recorded in JsChain into string of JavaScript code.
+:::
 
 Executing:
 
@@ -203,13 +203,13 @@ It's considered very bad practice to use jsRender to output JavaScript manually.
 JavaScript binding and also decides which actions should be available while creating actions for your chain.
 :::
 
-.. php:method:: _jsEncode
-
-    JsChain will map all the other methods into JS counterparts while encoding all the arguments using `_jsEncode()`.
-    Although similar to the standard JSON encode function, this method quotes strings using single quotes
-    and recognizes :php:interface:`JsExpressionable` objects and will substitute them with the result of
-    :php:meth:`JsExpressionable::jsRender`. The result will not be escaped and any object implementing
-    :php:interface:`JsExpressionable` interface is responsible for safe JavaScript generation.
+:::{php:method} _jsEncode
+JsChain will map all the other methods into JS counterparts while encoding all the arguments using `_jsEncode()`.
+Although similar to the standard JSON encode function, this method quotes strings using single quotes
+and recognizes :php:interface:`JsExpressionable` objects and will substitute them with the result of
+:php:meth:`JsExpressionable::jsRender`. The result will not be escaped and any object implementing
+:php:interface:`JsExpressionable` interface is responsible for safe JavaScript generation.
+:::
 
 The following code is safe:
 
@@ -226,15 +226,16 @@ argument to `text()`.
 We are not building JavaScript code just for the exercise. Our whole point is ability to link that code
 between actual views. All views support JavaScript binding through two methods: :php:meth:`View::js()` and :php:meth:`View::on()`.
 
-.. php:class:: View
-.. php:method:: js([$event, [$otherChain]])
+:::{php:class} View
+:::
+:::{php:method} js([$event, [$otherChain]])
+Return action chain that targets this view. As event you can specify `true` which will make chain automatically execute
+on document ready event. You can specify a specific JavaScript event such as `click` or `mousein`. You can also use your
+custom event that you would trigger manually. If `$event` is false or null, no event binding will be performed.
 
-    Return action chain that targets this view. As event you can specify `true` which will make chain automatically execute
-    on document ready event. You can specify a specific JavaScript event such as `click` or `mousein`. You can also use your
-    custom event that you would trigger manually. If `$event` is false or null, no event binding will be performed.
-
-    If `$otherChain` is specified together with event, it will also be bound to said event. `$otherChain` can also be
-    a PHP closure.
+If `$otherChain` is specified together with event, it will also be bound to said event. `$otherChain` can also be
+a PHP closure.
+:::
 
 Several usage cases for plain `js()` method. The most basic scenario is to perform action on the view when event happens:
 
@@ -246,10 +247,10 @@ $b2 = new Button('Two');
 $b2->js('click', $b1->js()->hide());
 ```
 
-.. php:method:: on(String $event, [String selector], $callback = null)
-
-    Returns chain that will be automatically executed if $event occurs. If $callback is specified, it
-    will also be executed on event.
+:::{php:method} on(String $event, [String selector], $callback = null)
+Returns chain that will be automatically executed if $event occurs. If $callback is specified, it
+will also be executed on event.
+:::
 
 The following code will show three buttons and clicking any one will hide it. Only a single action is created:
 
@@ -294,10 +295,11 @@ $buttons->on('click', '.button', $b3->js()->hide());
 
 ## JsExpression
 
-.. php:class:: JsExpression
-.. php:method:: __construct(template, args)
-
-    Returns object that renders into template by substituting args into it.
+:::{php:class} JsExpression
+:::
+:::{php:method} __construct(template, args)
+Returns object that renders into template by substituting args into it.
+:::
 
 Sometimes you want to execute action by calling a global JavaScript method. For this
 and other cases you can use JsExpression:
@@ -429,14 +431,21 @@ is always destroyed when the modal is closed instead of only hiding it.
 
 ### Modal
 
-.. php:class:: Modal
+:::{php:class} Modal
+:::
 
-.. php:method:: set(callback)
-.. php:method:: jsShow()
-.. php:method:: jsHide()
-.. php:method:: addContentCss()
-.. php:method:: addScrolling()
-.. php:method:: setOption()
+:::{php:method} set(callback)
+:::
+:::{php:method} jsShow()
+:::
+:::{php:method} jsHide()
+:::
+:::{php:method} addContentCss()
+:::
+:::{php:method} addScrolling()
+:::
+:::{php:method} setOption()
+:::
 
 This class allows you to open modal dialogs and close them easily. It's based around Fomantic-UI
 [.modal()](https://fomantic-ui.com/modules/modal.html), but integrates PHP callback for dynamically
@@ -473,7 +482,8 @@ or `contentCss` or use the method `addContentCss()`. See the Fomantic-UI modal d
 
 ### JsModal
 
-.. php:class:: JsModal
+:::{php:class} JsModal
+:::
 
 This alternative implementation to :php:class:`Modal` is convenient for situations
 when the need to open a dialog box is not known in advance. This class is not
@@ -497,7 +507,8 @@ See `Modals and reloading`_ concerning the intricacies between jsMmodals and cal
 
 ## Reloading
 
-.. php:class:: JsReload
+:::{php:class} JsReload
+:::
 
 JsReload is a JavaScript action that performs reload of a certain object:
 
@@ -655,9 +666,11 @@ comes into play.
 
 ### Server Sent Event (JsSse)
 
-.. php:class:: JsSse
+:::{php:class} JsSse
+:::
 
-.. php:method:: send(action)
+:::{php:method} send(action)
+:::
 
 This class implements ability for your PHP code to send messages to the browser during process execution:
 

@@ -2,9 +2,11 @@
 
 # Right Panel
 
-.. php:namespace:: Atk4\Ui\Panel
+:::{php:namespace} Atk4\Ui\Panel
+:::
 
-.. php:class:: Right
+:::{php:class} Right
+:::
 
 Right panel are view attached to the app layout. They are display on demand via javascript event
 and can display content statically or dynamically using Loadable Content.
@@ -35,7 +37,8 @@ $button->on('click', $panel->jsOpen());
 
 Loading dynamic content within panel is done via the onOpen method
 
-.. php:method:: onOpen($callback)
+:::{php:method} onOpen($callback)
+:::
 
 Initializing a panel with onOpen callback:
 
@@ -53,7 +56,8 @@ $panel->onOpen(function (Panel\Content $p) {
 });
 ```
 
-.. php:method:: jsOpen
+:::{php:method} jsOpen
+:::
 
 This method may take up to three arguments.
 
