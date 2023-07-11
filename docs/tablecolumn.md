@@ -122,7 +122,9 @@ $nameColumn = $table->getColumnDecorators('name');
 LoremIpsum::addTo($nameColumn[0]->addPopup());
 ```
 
-.. important:: If content of a pop-up is too large, it may not be possible to display it on-screen. Watch for warning.
+:::{important}
+If content of a pop-up is too large, it may not be possible to display it on-screen. Watch for warning.
+:::
 
 You may also use :php:meth:`Atk4\\Ui\\Popup::set` method to dynamically load the content:
 
@@ -337,4 +339,6 @@ The callback must return array of seeds like:
 
 Multiple decorators will be created and merged.
 
-.. note:: If you are operating with large tables, code your own decorator, which would be more CPU-efficient.
+:::{note}
+If you are operating with large tables, code your own decorator, which would be more CPU-efficient.
+:::

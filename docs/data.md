@@ -25,11 +25,12 @@ $grid->setSource([
 ]);
 ```
 
-.. note::
+:::{note}
     Dynamic views will not be able to identify that you are working with static data, and some features may not work properly.
     There are no plans in Agile UI to improve ways of using "setSource", instead, you should learn more how to use Agile Data
     for expressing your native data source. Agile UI is not optimized for setSource so its performance will generally be
     slower too.
+:::
 
 ### Raw SQL Queries
 
@@ -40,7 +41,8 @@ for abstracting your SQL queries, but if you have to use a raw query:
 // not sure how TODO - write this section.
 ```
 
-.. note::
-    The above way to using raw queries has a performance implications, because Agile UI is optimised to work with Agile
-    Data.
+:::{note}
+The above way to using raw queries has a performance implications, because Agile UI is optimised to work with Agile
+Data.
+:::
 

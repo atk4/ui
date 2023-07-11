@@ -186,7 +186,9 @@ The file located in "projectfolder/Views/View1.php" becomes "MyProject\\Views\\V
 For each of your classes create a separate file. As long as you follow the name conventions all your class
 files will be autoloaded by Composer.
 
-.. warning:: Keep in mind that as soon as you have created one or more new file(s) within the projectfolder you have to run "composer dump-autoload"!!! Otherwise the newly generated file(s) and classes will not be autoloaded and are therefore unavailable in your application.
+:::{warning}
+Keep in mind that as soon as you have created one or more new file(s) within the projectfolder you have to run "composer dump-autoload"!!! Otherwise the newly generated file(s) and classes will not be autoloaded and are therefore unavailable in your application.
+:::
 
 ## Load your class in index.php
 

@@ -885,7 +885,9 @@ $form->setGroupDisplayRules([
 ]);
 ```
 
-.. todo:: MOVE THIS TO SEPARATE FILE
+:::{todo}
+MOVE THIS TO SEPARATE FILE
+:::
 
 .. php:class:: Form\\Layout
 

@@ -1,6 +1,7 @@
 # File Upload
 
-.. figure:: images/fileupload.png
+:::{figure} images/fileupload.png
+:::
 
 Upload (and UploadImage) classes implement form controls that can be used to upload files or images.
 Implementation of :php:class:`Form` in Agile UI submits data using JavaScript request and

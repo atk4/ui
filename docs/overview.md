@@ -12,7 +12,8 @@ uses Fomantic-UI (https://fomantic-ui.com) for presentation.
 
 At a glance, Agile UI consists of the following:
 
-.. figure:: images/all-atk-classes.png
+:::{figure} images/all-atk-classes.png
+:::
 
 Agile UI is designed and built for the Agile Toolkit (https://agiletoolkit.org/) platform,
 with the goal of providing a user-friendly experience when creating data-heavy API / UI
@@ -205,7 +206,8 @@ $button = \Atk4\Ui\Button::addTo($form, [
 :php:class:`Button` and :php:class:`Icon` are some of the most basic components in
 Agile UI. You will find Crud / Form / Grid components much more useful:
 
-.. figure:: images/all-atk-classes.png
+:::{figure} images/all-atk-classes.png
+:::
 
 ### Using Components
 
@@ -268,9 +270,10 @@ that elements will look good and be consistent.
 
 ### Layouts
 
-.. image:: images/layout-hierarchy.png
-    :width: 40%
-    :align: right
+:::{image} images/layout-hierarchy.png
+:width: 40%
+:align: right
+:::
 
 Using App class will utilize a minimum of 2 templates:
 
@@ -282,7 +285,8 @@ As you add more components, they will appear inside your layout.
 You'll also find that a layout class such as :php:class:`Layout\\Admin` will initialize
 some components on its own - sidebar menu, top menu.
 
-.. image:: images/admin-layout.png
+:::{image} images/admin-layout.png
+:::
 
 If you are extending your Admin Layout, be sure to maintain the same property names
 to allow other components to make use of them. For example, an authentication controller
@@ -322,9 +326,10 @@ To see how this is implemented, read about :ref:`callback`
 
 ### Virtual Pages
 
-.. image:: images/ui-component-diagram.png
-    :width: 30%
-    :align: right
+:::{image} images/ui-component-diagram.png
+:width: 30%
+:align: right
+:::
 
 Extending the concept of Callbacks, you can also define Virtual Pages. It
 is a dynamically generated URL which will respond with a partial render of
@@ -358,7 +363,9 @@ in just one day.
 You can still implement ReactJS applications by connecting it to the RestAPI
 endpoint provided by Agile Toolkit.
 
-.. warning:: information on setting up API endpoints is coming soon.
+:::{warning}
+information on setting up API endpoints is coming soon.
+:::
 
 ### Learning Agile Toolkit
 

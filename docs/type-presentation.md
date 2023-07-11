@@ -81,11 +81,13 @@ $field->ui['form'] = new \Atk4\Ui\Form\Control\Password();
 
 - fallback to :php:meth:`Form::controlFactory`
 
-.. note:: When talking about "fields": you need to know what kind of field you are talking about (Data or UI).
-    Both **models** (Data) as well as some **views** (UI: form) use fields. They are not the same.
-    Notably, Model field `ui` property contains flags like editable, visible and hidden,
-    which do have some impact on rendering, whereas UI field `ui` property (not used here)
-    designates the Fomantic-UI element to use.
+:::{note}
+When talking about "fields": you need to know what kind of field you are talking about (Data or UI).
+Both **models** (Data) as well as some **views** (UI: form) use fields. They are not the same.
+Notably, Model field `ui` property contains flags like editable, visible and hidden,
+which do have some impact on rendering, whereas UI field `ui` property (not used here)
+designates the Fomantic-UI element to use.
+:::
 
 ## Examples
 
@@ -103,7 +105,9 @@ $model->getField('password')->type = 'string';
 $crud->setModel($model);
 ```
 
-.. note:: Changing element's type to string will certainly not perform any password encryption.
+:::{note}
+Changing element's type to string will certainly not perform any password encryption.
+:::
 
 ### Hide account_number in specific Table
 

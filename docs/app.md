@@ -39,7 +39,9 @@ $app->db = new \Atk4\Data\Persistence\Sql($dsn);
 $m = new MyModel($this->getApp()->db);
 ```
 
-.. IMPORTANT:: $app->db is NOT a standard property. If you use this property, that's your own convention.
+:::{important}
+$app->db is NOT a standard property. If you use this property, that's your own convention.
+:::
 
 ### Using App for Injecting Behavior
 
@@ -331,8 +333,10 @@ Hook beforeExit is called just when application is about to be terminated. If yo
 using :php:attr:`App::$alwaysRun` = true, then this hook is guaranteed to execute always
 after output was sent. ATK will avoid calling this hook multiple times.
 
-.. note:: beforeOutput and beforeRender are not executed if $app->terminate() is called, even
-    if parameter is passed.
+:::{note}
+beforeOutput and beforeRender are not executed if $app->terminate() is called, even
+if parameter is passed.
+:::
 
 ## Application and Layout
 

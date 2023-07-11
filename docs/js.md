@@ -66,10 +66,10 @@ $action = $view->js()->text(new JsExpression('[] + []', [
 
 All of the above examples will produce a valid "Action" object that can be used further.
 
-.. important::
-
-    We never encourage writing JavaScript logic in PHP. The purpose of JS layer is for binding
-    events and actions with your generic JavaScript routines.
+:::{important}
+We never encourage writing JavaScript logic in PHP. The purpose of JS layer is for binding
+events and actions with your generic JavaScript routines.
+:::
 
 ### Events
 
@@ -198,10 +198,10 @@ will output:
 $('#the-box-id').dropdown();
 ```
 
-.. important::
-
-    It's considered very bad practice to use jsRender to output JavaScript manually. Agile UI takes care of
-    JavaScript binding and also decides which actions should be available while creating actions for your chain.
+:::{important}
+It's considered very bad practice to use jsRender to output JavaScript manually. Agile UI takes care of
+JavaScript binding and also decides which actions should be available while creating actions for your chain.
+:::
 
 .. php:method:: _jsEncode
 
@@ -371,10 +371,10 @@ $sum = new JsExpression('[0] + [1]', [$h1, $h2]);
 $sum = new JsExpression('[a] + [b]', ['a' => $h1, 'b' => $h2]);
 ```
 
-.. important::
-
-    We have specifically selected a very simple tag format as a reminder not to write
-    any code as part of JsExpression. You must not use JsExpression() for anything complex.
+:::{important}
+We have specifically selected a very simple tag format as a reminder not to write
+any code as part of JsExpression. You must not use JsExpression() for anything complex.
+:::
 
 ### Writing JavaScript code
 
@@ -491,9 +491,9 @@ $vp = \Atk4\Ui\VirtualPage::addTo($app);
 Note that this element is always destroyed as opposed to :php:class:`Modal`,
 where it is only hidden.
 
-.. important::
-
-    See `Modals and reloading`_ concerning the intricacies between jsMmodals and callbacks.
+:::{important}
+See `Modals and reloading`_ concerning the intricacies between jsMmodals and callbacks.
+:::
 
 ## Reloading
 

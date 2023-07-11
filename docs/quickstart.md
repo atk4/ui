@@ -39,7 +39,8 @@ $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 \Atk4\Ui\HelloWorld::addTo($app);
 ```
 
-.. rubric:: Clarifications
+:::{rubric} Clarifications
+:::
 
 .. [#f1] All PHP files start with `<?php`. I will omit this line in my further examples. There is no need
     to add a matching `?>` at the end.
@@ -54,7 +55,8 @@ $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
 You should see the following output:
 
-.. image:: images/helloworld.png
+:::{image} images/helloworld.png
+:::
 
 Instead of manually outputting a text "Hello, World!" we have used a standard component. This actually brilliantly
 demonstrates a core purpose of Agile Toolkit. Instead of doing a lot of things yourself, you can rely on
@@ -162,7 +164,8 @@ class ToDoItem extends \Atk4\Data\Model
 }
 ```
 
-.. rubric:: Clarifications
+:::{rubric} Clarifications
+:::
 
 .. [#f6] $table is a default table/collection/key name when persisting model data.
 
@@ -217,7 +220,8 @@ $form->onSubmit(function (Form $form) use ($colReload) {
     ->setModel(new ToDoItem($s));
 ```
 
-.. rubric:: Clarifications
+:::{rubric} Clarifications
+:::
 
 .. [#] We wish to position Form and Table side-by-side, so we use `\Atk4\Ui\Columns` component and
     inject a Fomantic-UI CSS class "divided" that will appear as a vertical separation line.
@@ -271,7 +275,8 @@ if (isset($_GET['delete'])) {
 }
 ```
 
-.. rubric:: Clarifications
+:::{rubric} Clarifications
+:::
 
 .. [#] We replace 'Table' with a 'Crud'. This is much more advanced component, that wraps
     'Table' component by providing support for editing operations and other features like

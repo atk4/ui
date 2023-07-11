@@ -53,7 +53,8 @@ class Address extends \Atk4\Data\Model
 
 This leads to a Multiline component automatically rendered for adding, editing and deleting Addresses of the current user record:
 
-.. image:: images/multiline_user_addresses.png
+:::{image} images/multiline_user_addresses.png
+:::
 
 You can also check LINK_TO_DEMO/multiline.php for this example
 

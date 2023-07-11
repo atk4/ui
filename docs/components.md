@@ -19,9 +19,10 @@ inherited by its descendants.
 
 ## Simple components
 
-.. figure:: images/simple.png
-   :scale: 30%
-   :align: right
+:::{figure} images/simple.png
+:scale: 30%
+:align: right
+:::
 
 Simple components exist for the purpose of abstraction and creating a decent interface which you can rely on when programming your
 PHP application with Agile UI. In some cases it may make sense to rely on HTML templates for the simple elements such as Icons,
@@ -46,9 +47,10 @@ control over even the small elements.
 
 ## Interactive components
 
-.. figure:: images/interactive.png
-   :scale: 30%
-   :align: right
+:::{figure} images/interactive.png
+:scale: 30%
+:align: right
+:::
 
 Interactive components rely on :ref:`callback`, :ref:`virtualpage` or :ref:`sse` to communicate with themselves in the PHP realm. You add them
 just as you would add any other component, yet they will send additional requests, like loading additional data or executing
@@ -75,9 +77,10 @@ other code. Here is how interactive components will typically communicate:
 
 ## Composite components
 
-.. figure:: images/composite.png
-   :scale: 30%
-   :align: right
+:::{figure} images/composite.png
+:scale: 30%
+:align: right
+:::
 
 Composite elements such as Grid are the bread-and-butter of Agile UI. They will pass on rendering and
 intractivity to several sub-components. Illustration shows how :php:class:`Grid` relies on :php:class:`Table` for

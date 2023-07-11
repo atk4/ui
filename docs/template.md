@@ -151,7 +151,9 @@ another source which will override the existing one.
 
 ### Template Parsing
 
-.. note:: Older documentation......
+:::{note}
+Older documentation......
+:::
 
 Opening Tag — alphanumeric sequence of characters surrounded by `{`
 and `}` (example `{elephant}`)

@@ -4,7 +4,8 @@
 
 # Console
 
-.. figure:: images/console.png
+:::{figure} images/console.png
+:::
 
 With console you can output real-time information to the user directly from PHP. It can
 be used do direct output from slow method or even execute commands on the server (such as `ping`).

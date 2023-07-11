@@ -72,9 +72,11 @@ Other properties are used during the execution of the wizard.
 Wizard employs :php:class:`Callback` to maintain which step you currently are on. All steps are numbered
 started with 0.
 
-.. important:: Wizard currently does not enforce step completion. Changing step number in the URL manually can
-    take you to any step. You can also go backwards and re-do steps. Section below explains how to make wizard
-    enforce some restrictions.
+:::{important}
+Wizard currently does not enforce step completion. Changing step number in the URL manually can
+take you to any step. You can also go backwards and re-do steps. Section below explains how to make wizard
+enforce some restrictions.
+:::
 
 .. php:attr:: currentStep
 

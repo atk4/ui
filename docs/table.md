@@ -6,8 +6,10 @@
 
 .. php:class:: Table
 
-.. important:: For columns, see :php:class:`Table\\Column`. For DIV-based lists, see :php:class:`Lister`. For an
-    interactive features see :php:class:`Grid` and :php:class:`Crud`.
+:::{important}
+For columns, see :php:class:`Table\\Column`. For DIV-based lists, see :php:class:`Lister`. For an
+interactive features see :php:class:`Grid` and :php:class:`Crud`.
+:::
 
 Table is the simplest way to output multiple records of structured, static data. For Un-structure output
 please see :php:class:`Lister`
@@ -57,9 +59,11 @@ $table->addColumn('surname', [\Atk4\Ui\Table\Column\Link::class, 'url' => 'detai
 $table->addColumn('birthdate', null, ['type' => 'date']);
 ```
 
-.. warning:: I encourage you to seek appropriate Agile Data persistence instead of
-    handling data like this. The implementation of :php:meth:`View::setSource` will
-    create a model for you with Array persistence for you anyways.
+:::{warning}
+I encourage you to seek appropriate Agile Data persistence instead of
+handling data like this. The implementation of :php:meth:`View::setSource` will
+create a model for you with Array persistence for you anyways.
+:::
 
 ### Adding Columns
 
@@ -359,10 +363,12 @@ Decorator is an object, responsible for wrapping column data into a table cell (
 is also responsible for setting class of the column, labeling the column and somehow making it look
 nicer especially inside a table.
 
-.. important:: Decorating is not formatting. If we talk "date", then in order to display it to
-    the user, date must be in a proper format. Formatting of data is done by `Persistence\Ui` and
-    is not limited to the table columns. Decorators may add an icon, change cell style, align cell
-    or hide overflowing text to make table output look better.
+:::{important}
+Decorating is not formatting. If we talk "date", then in order to display it to
+the user, date must be in a proper format. Formatting of data is done by `Persistence\Ui` and
+is not limited to the table columns. Decorators may add an icon, change cell style, align cell
+or hide overflowing text to make table output look better.
+:::
 
 One column may have several decorators:
 
