@@ -82,7 +82,7 @@ decorators defined at `\Atk4\Ui\Form::Control`. See dedicated documentation for:
 - :php:class:`Form::Layout`
 - :php:class:`Form::Control`
 
-To tweak the UI properties of an form control input use `setInputAttr()` (and not the surrounding <div> as `setAttr()`
+To tweak the UI properties of an form control input use `setInputAttr()` (and not the surrounding `<div>` as `setAttr()`
 would do). Here is how to set the HTML "maxlength" attribute on the generated input field:
 
 ```

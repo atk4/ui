@@ -277,7 +277,7 @@ that elements will look good and be consistent.
 
 Using App class will utilize a minimum of 2 templates:
 
-- html.html - boilerplate HTML code (<head>, <script>, <meta> and empty <body>)
+- html.html - boilerplate HTML code (`<head>`, `<script>`, `<meta>` and empty `<body>`)
 - layout/admin.html - responsive layout containing page elements (menu, footer, etc)
 
 As you add more components, they will appear inside your layout.

@@ -405,7 +405,7 @@ There are a few things to note:
    decorators have access to original value also. Decorator implementation is usually aware of combinations.
 
 :php:meth:`Table\Column\Money::getDataCellTemplate` is called, which returns ONLY the HTML value,
-without the <td> cell itself. Subsequently :php:meth:`Table\Column\Link::getDataCellTemplate` is called
+without the `<td>` cell itself. Subsequently :php:meth:`Table\Column\Link::getDataCellTemplate` is called
 and the '{$salary}' tag from this link is replaced by output from Money column resulting in this
 template:
 
@@ -413,9 +413,9 @@ template:
 <a href="{$c_name_link}">£ {$salary}</a>
 ```
 
-To calculate which tag should be used, a different approach is done. Attributes for <td> tag
+To calculate which tag should be used, a different approach is done. Attributes for `<td>` tag
 from Money are collected then merged with attributes of a Link class. The money column wishes
-to add class "right aligned single line" to the <td> tag but sometimes it may also use
+to add class "right aligned single line" to the `<td>` tag but sometimes it may also use
 class "negative". The way how it's done is by defining `class="{$f_name_money}"` as one
 of the TD properties.
 
@@ -440,7 +440,7 @@ to make a note on how template caching works then,
 
 - values are encapsulated for named fields.
 - values are concatenated by anonymous fields.
-- <td> properties are stacked
+- `<td>` properties are stacked
 - last decorator will convert array with td properties into an actual tag.
 
 ### Header and Footer

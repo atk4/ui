@@ -342,7 +342,7 @@ by a host framework (https://github.com/atk4/ui/issues/369).
 :::{php:method} requireJs($url)
 :::
 
-Includes header into the <head> class that will load JavaScript file from a specified URL.
+Includes header into the `<head>` class that will load JavaScript file from a specified URL.
 This will be used by components that rely on external JavaScript libraries.
 
 ### Hooks
