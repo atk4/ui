@@ -289,7 +289,7 @@ if (isset($_GET['delete'])) {
 .. [#] You are already familiar with JsReload action. This time we only wish to reload Grid's Table as
     we wouldn't want to lose any form content.
 
-.. [#] Grid's `addSelection` method will add checkbox column. Implemented through `Table\\Column\\\Checkbox`
+.. [#] Grid's `addSelection` method will add checkbox column. Implemented through `Table\Column\Checkbox`
     this object has method jsChecked() which will return another Action for collecting selected checkboxes.
     This demonstrates how Actions can be used as JavaScript expressions augmented by Components.
 

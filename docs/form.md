@@ -185,7 +185,7 @@ $form->setModel(new User($db), ['email', 'gender', 'terms']);
 ```
 
 Form control does not have to be added directly into the form. You can use a separate
-:php:class:`Form\\Layout` or even a regular view. Simply specify property :php:meth:`Form\\Control::$form`:
+:php:class:`Form\Layout` or even a regular view. Simply specify property :php:meth:`Form\Control::$form`:
 
 ```
 $myview = View::addTo($form, ['defaultTemplate' => './mytemplate.html']);
@@ -242,7 +242,7 @@ $form->addControl('time', $calendar);
 For more information on default form controls as well as examples on how to create
 your own see documentation on :php:class:`Form::Control`.
 
-:::{php:method} controlFactory(\\Atk4\\Data\\Field $field, $defaults = [])
+:::{php:method} controlFactory(\Atk4\Data\Field $field, $defaults = [])
 :::
 
 If form control class is not specified (`null`) then it will be determined from
@@ -387,7 +387,7 @@ class User extends \Atk4\Data\Model
 }
 ```
 
-The seed for the UI will be combined with the default overriding :php:attr:`Form\\Control\\Calendar::type`
+The seed for the UI will be combined with the default overriding :php:attr:`Form\Control\Calendar::type`
 to allow month/year entry by the Calendar extension, which will then be saved and
 stored as a regular date. Obviously you can also specify decorator class:
 
@@ -648,7 +648,7 @@ well as display of labels and structure around the form controls themselves is n
 but another object - "Form Layout". This object is responsible for the form control flow, presence
 of labels etc.
 
-:::{php:method} initLayout(Form\\Layout $layout)
+:::{php:method} initLayout(Form\Layout $layout)
 Sets a custom Form\Layout object for a form. If not specified then form will automatically
 use Form\Layout class.
 :::
@@ -662,13 +662,13 @@ Adds a form header with a text label. Returns View.
 :::
 
 :::{php:method} addGroup($header)
-Creates a sub-layout, returning new instance of a :php:class:`Form\\Layout` object. You
+Creates a sub-layout, returning new instance of a :php:class:`Form\Layout` object. You
 can also specify a header.
 :::
 
 ### Form Control Group Layout and Sub-layout
 
-Controls can be organized in groups, using method `Form::addGroup()` or as sub section using `Form\\Layout::addSubLayout()` method.
+Controls can be organized in groups, using method `Form::addGroup()` or as sub section using `Form\Layout::addSubLayout()` method.
 
 ### Using Group
 
@@ -722,7 +722,7 @@ $group->addControl('last_name', ['width' => 'five']);
 There are four specific sub layout views that you can add to your existing form layout: Generic, Accordion, Tabs and Columns.
 
 Generic sub layout is simply another layout view added to your existing form layout view. You add fields
-the same way as you would do for :php:class:`Form\\Layout`.
+the same way as you would do for :php:class:`Form\Layout`.
 
 Sub layout section like Accordion, Tabs or Columns will create layout specific section where you can
 organize fields in either accordion, tabs or columns.
@@ -896,7 +896,7 @@ $form->setGroupDisplayRules([
 MOVE THIS TO SEPARATE FILE
 :::
 
-:::{php:class} Form\\Layout
+:::{php:class} Form\Layout
 Renders HTML outline encasing form controls.
 :::
 

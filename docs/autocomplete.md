@@ -7,7 +7,7 @@
 :::{php:class} AutoComplete
 :::
 
-Agile UI uses "Form\\Control\\Dropdown" by default on the form, but there is also implementation
+Agile UI uses "Form\Control\Dropdown" by default on the form, but there is also implementation
 for AutoComplete form control. Although they look similar, there are some differences:
 
 - AutoComplete will perform callback to fetch values.

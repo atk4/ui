@@ -180,8 +180,8 @@ class View1 extends \Atk4\Data\View
 }
 ```
 
-"namespace MyProject\\Views;" defines the namespace to use. It reflects the folder structure of the app.
-The file located in "projectfolder/Views/View1.php" becomes "MyProject\\Views\\View1" in the namespace.
+"namespace MyProject\Views;" defines the namespace to use. It reflects the folder structure of the app.
+The file located in "projectfolder/Views/View1.php" becomes "MyProject\Views\View1" in the namespace.
 
 For each of your classes create a separate file. As long as you follow the name conventions all your class
 files will be autoloaded by Composer.
@@ -200,7 +200,7 @@ Please add the following lines into your index.php:
 \MyProject\Views\View1::addTo($app);
 ```
 
-or if you have added at the beginning of your index.php "use MyProject\\Views\\View1;" you can write:
+or if you have added at the beginning of your index.php "use MyProject\Views\View1;" you can write:
 
 ```
 View1::addTo($app);

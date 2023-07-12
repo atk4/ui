@@ -20,10 +20,10 @@ custom HTML template specified into generic :php:class:`View`.
 When it comes to decoration, the method is very dependent on the context. A form may present
 Calendar (DatePicker) or enable control icon to indicate currency.
 
-Presentation in Agile Toolkit is handled by :php:class:`Persistence\\Ui`.
+Presentation in Agile Toolkit is handled by :php:class:`Persistence\Ui`.
 
-Decoration is performed by helper classes, such as :php:class:`Form\\Control\\Calendar` or
-:php:class:`Table\\Column\\\Money`. The decorator is in control of the final output, so it can decide if
+Decoration is performed by helper classes, such as :php:class:`Form\Control\Calendar` or
+:php:class:`Table\Column\Money`. The decorator is in control of the final output, so it can decide if
 it uses the value from presentation or do some decoration on its own.
 
 ## Extending Data Types
@@ -47,7 +47,7 @@ of your integration.
 3. Create your new decorator.
 
   Such as use drop-down to select currency from a pre-defined list inside your specific class
-  while extending :php:class:`Form\\Control\\Input` class. Make sure it can interpret input correctly.
+  while extending :php:class:`Form\Control\Input` class. Make sure it can interpret input correctly.
   The process is explained further down in this chapter.
 
 4. Associate the types with your decorator.
@@ -124,7 +124,7 @@ $model->addDecorator('account_number', new \Atk4\Ui\Table\Column\Password());
 ### Create a decorator for hiding credit card number
 
 If you happen to store card numbers and you only want to display the last digits in tables,
-yet make it available when editing, you could create your own :php:class:`Table\\Column` decorator:
+yet make it available when editing, you could create your own :php:class:`Table\Column` decorator:
 
 ```
 class Masker extends \Atk4\Ui\Table\Column

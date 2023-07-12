@@ -13,7 +13,7 @@ quite simple components that present themselves as input controls: line, select,
 
 ## Relationship with Form
 
-All Form Control Decorators can be integrated with :php:class:`Atk4\\Ui\\Form` which will
+All Form Control Decorators can be integrated with :php:class:`Atk4\Ui\Form` which will
 facilitate collection and processing of data in a form. Form Control decorators can also
 be used as stand-alone controls.
 
@@ -71,7 +71,7 @@ page and the following HTML is now produced:
 ```
 
 The markup that surronds the button which includes Label and formatting is produced by
-:php:class:`Atk4\\Ui\\Form\\Layout`, which does draw some of the information from the Form Control
+:php:class:`Atk4\Ui\Form\Layout`, which does draw some of the information from the Form Control
 itself.
 
 ### Using in Form Layouts
@@ -95,7 +95,7 @@ $form->onSubmit(function (Form $form) {
 });
 ```
 
-This is further explained in documentation for :php:class:`Atk4\\Ui\\Form\\Layout` class,
+This is further explained in documentation for :php:class:`Atk4\Ui\Form\Layout` class,
 however if you do plan on adding your own form control types, it's important that you extend it
 properly:
 

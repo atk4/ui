@@ -555,7 +555,7 @@ $grid->template->trySet('my_hint', 'Changing value of a grid hint here!');
 ```
 
 In this example we have instructed to use a different template for grid,
-which would contain a new tag "my\_hint" somewhere. If you try to change
+which would contain a new tag "my_hint" somewhere. If you try to change
 existing tags, their output can be overwritten during rendering of the
 view.
 
@@ -613,7 +613,7 @@ other projects developed using Agile Toolkit.
 
 ### Naming of tags
 
-Tags use two type of naming - PascalCase and underscore\_lowercase. Tags
+Tags use two type of naming - PascalCase and underscore_lowercase. Tags
 are case sensitive. The larger regions which are typically used for
 cloning or by adding new objects into it are named with PascalCase.
 Examples would be: "Menu", "Content" and "Recipient". The lowercase and

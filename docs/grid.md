@@ -129,7 +129,7 @@ fixed height of your table container.
 :::{php:method} addActionButton($button, $action, $confirm = false)
 :::
 
-:php:class:`Table` supports use of :php:class:`Table\\Column\\\Actions`, which allows to display button for each row.
+:php:class:`Table` supports use of :php:class:`Table\Column\Actions`, which allows to display button for each row.
 Calling addActionButton() provides a useful short-cut for creating column-based actions.
 
 $button can be either a string (for a button label) or something like `['icon' => 'book']`.
@@ -138,7 +138,7 @@ If $confirm is set to true, then user will see a confirmation when he clicks on 
 
 Calling this method multiple times will add button into same action column.
 
-See :php:meth:`Table\\Column\\\Actions::addAction`
+See :php:meth:`Table\Column\Actions::addAction`
 
 :::{php:method} addModalAction($button, $title, $callback)
 :::
@@ -157,7 +157,7 @@ $grid->addModalAction('Details', 'Additional Details', function (View $p, $id) u
 
 Calling this method multiple times will add button into same action column.
 
-See :php:meth:`Atk4\\Ui\\Table\\Column\\Actions::addModal`
+See :php:meth:`Atk4\Ui\Table\Column\Actions::addModal`
 
 ## Column Menus
 
@@ -167,13 +167,13 @@ See :php:meth:`Atk4\\Ui\\Table\\Column\\Actions::addModal`
 :::{php:method} addPopup($columnName, $popup = null, $icon = 'caret square down')
 :::
 
-Methods addDropdown and addPopup provide a wrapper for :php:meth:`Atk4\\Ui\\Table\\Column::addDropdown` and
-:php:meth:`Atk4\\Ui\\\Table\\Column::addPopup` methods.
+Methods addDropdown and addPopup provide a wrapper for :php:meth:`Atk4\Ui\Table\Column::addDropdown` and
+:php:meth:`Atk4\Ui\Table\Column::addPopup` methods.
 
 ## Selection
 
-Grid can have a checkbox column for you to select elements. It relies on :php:class:`Table\\Column\\Checkbox`, but will
-additionally place this column before any other column inside a grid. You can use :php:meth:`Table\\Column\\Checkbox::jsChecked()`
+Grid can have a checkbox column for you to select elements. It relies on :php:class:`Table\Column\Checkbox`, but will
+additionally place this column before any other column inside a grid. You can use :php:meth:`Table\Column\Checkbox::jsChecked()`
 method to reference value of selected checkboxes inside any :ref:`js_action`:
 
 ```

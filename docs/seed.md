@@ -91,7 +91,7 @@ $seed = [new Button('hello', 'class.big red' => true), 'icon' => ['book', 'class
 ### Additional cases
 
 An individual object may add more ways to deal with seed. For example, when adding columns
-to your Table you can specify seed for the decorator: :php:class:`Atk4\\Ui\\\Table\\Column`:
+to your Table you can specify seed for the decorator: :php:class:`Atk4\Ui\Table\Column`:
 
 ```
 $table->addColumn('salary', [\Atk4\Ui\Table\Column\Money::class]);
@@ -109,7 +109,7 @@ $table->addColumn('salary', new \Atk4\Ui\Table\Column\Money());
 $table->addColumn('salary', [new \Atk4\Ui\Table\Column\Money()]);
 ```
 
-Note that addColumn uses default namespace of `\\Atk4\\Ui\\Table\\Column` when seeding objects. Some
+Note that addColumn uses default namespace of `\Atk4\Ui\Table\Column` when seeding objects. Some
 other methods that use seeds are:
 
 - :php:meth:`Table::addColumn()`

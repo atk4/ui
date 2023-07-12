@@ -13,7 +13,7 @@ This is in contrast to :php:class:`View` and :php:class:`Lister` which do not
 use Table/Cell and therefore Column decorator is not required.
 
 
-All column decorators in Agile UI have a base class :php:class:`Table\\Column`. Decorators will often
+All column decorators in Agile UI have a base class :php:class:`Table\Column`. Decorators will often
 look at the content of the associated value, for example :php:class:`Money` will add cell class `negative`
 only if monetary value is less than zero. The value is taken from Model's Field object.
 
@@ -28,14 +28,14 @@ but if record is already archived, use a template "Archived on {$archive_date}".
 
 ## Generic Column Decorator
 
-:::{php:class} Table\\Column
-Generic description of a column for :php:class:`Atk4\\Ui\\Table`
+:::{php:class} Table\Column
+Generic description of a column for :php:class:`Atk4\Ui\Table`
 :::
 
-Table object relies on a separate class: `\\Atk4\\Ui\\Table\\Column` to present most of the values. The goals
+Table object relies on a separate class: `\Atk4\Ui\Table\Column` to present most of the values. The goals
 of the column object is to format anything around the actual values. The type = 'atk4_money' will result in
 a custom formatting of the value, but will also require column to be right-aligned. To simplify this,
-type = 'atk4_money' will use a different column class - :php:class:`Table\\Column\\Money`. There are several others,
+type = 'atk4_money' will use a different column class - :php:class:`Table\Column\Money`. There are several others,
 but first we need to look at the generic column and understand it's base capabilities:
 
 A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
@@ -95,7 +95,7 @@ into table column and can be linked with Popup or Menu.
 
 ### Basic Use
 
-The simplest way to use Menus and Popups is through a wrappers: :php:meth:`Atk4\\Ui\\Grid::addDropdown` and :php:meth:`Atk4\\Ui\\Grid::addPopup`:
+The simplest way to use Menus and Popups is through a wrappers: :php:meth:`Atk4\Ui\Grid::addDropdown` and :php:meth:`Atk4\Ui\Grid::addPopup`:
 
 ```
 View::addTo($grid->addPopup('iso'))
@@ -108,7 +108,7 @@ $grid->addDropdown('name', ['Sort A-Z', 'Sort by Relevance'], function (string $
 });
 ```
 
-Those wrappers will invoke methods :php:meth:`Table\\Column::addDropdown` and :php:meth:`Table\\Colmun::addPopup` for
+Those wrappers will invoke methods :php:meth:`Table\Column::addDropdown` and :php:meth:`Table\Colmun::addPopup` for
 a specified column, which are documented below.
 
 ### Popups
@@ -117,8 +117,8 @@ a specified column, which are documented below.
 :::
 
 To create a popup, you need to get the column decorator object. This must be the first decorator, which
-is responsible for rendering of the TH box. If you are adding column manually, :php:meth:`Atk4\\Ui\\Table::addColumn()`
-will return it. When using model, use :php:meth:`Atk4\\Ui\\Table::getColumnDecorators`:
+is responsible for rendering of the TH box. If you are adding column manually, :php:meth:`Atk4\Ui\Table::addColumn()`
+will return it. When using model, use :php:meth:`Atk4\Ui\Table::getColumnDecorators`:
 
 ```
 $table = Table::addTo($app, ['class.celled' => true]);
@@ -132,7 +132,7 @@ LoremIpsum::addTo($nameColumn[0]->addPopup());
 If content of a pop-up is too large, it may not be possible to display it on-screen. Watch for warning.
 :::
 
-You may also use :php:meth:`Atk4\\Ui\\Popup::set` method to dynamically load the content:
+You may also use :php:meth:`Atk4\Ui\Popup::set` method to dynamically load the content:
 
 ```
 $table = Table::addTo($app, ['class.celled' => true]);
@@ -159,11 +159,11 @@ $someColumn->addDropdown(['Change', 'Reorder', 'Update'], function (string $item
 
 ## Decorators for data types
 
-In addition to :php:class:`Table\\Column`, Agile UI includes several column implementations.
+In addition to :php:class:`Table\Column`, Agile UI includes several column implementations.
 
 ### Link
 
-:::{php:class} Table\\Column\\Link
+:::{php:class} Table\Column\Link
 :::
 
 Put `<a href..` link over the value of the cell. The page property can be specified to constructor. There
@@ -188,7 +188,7 @@ $table->addColumn('name', [\Atk4\Ui\Table\Column\Link::class, ['details', 'id' =
 
 ### Money
 
-:::{php:class} Table\\Column\\Money
+:::{php:class} Table\Column\Money
 :::
 
 Helps decorating monetary values. Will align value to the right and if value is less than zero will also
@@ -198,7 +198,7 @@ For the actual number formatting, see :ref:`uiPersistence`
 
 ### Status
 
-:::{php:class} Table\\Column\\Status
+:::{php:class} Table\Column\Status
 :::
 
 Allow you to set highlight class and icon based on column value. This is most suitable for columns that
@@ -226,7 +226,7 @@ Current list of states supported:
 
 ### Template
 
-:::{php:class} Table\\Column\\Template
+:::{php:class} Table\Column\Template
 :::
 
 This column is suitable if you wish to have custom cell formatting but do not wish to go through
@@ -245,7 +245,7 @@ will only work if you assign it to a primary column (by passing 1st argument to 
 
 ### Image
 
-:::{php:class} Table\\Column\\Image
+:::{php:class} Table\Column\Image
 :::
 
 This column is suitable if you wish to have image in your table cell:
@@ -258,7 +258,7 @@ $table->addColumn('image_url', new \Atk4\Ui\Table\Column\Image);
 
 ### ActionButtons
 
-:::{php:class} Table\\Column\\ActionButtons
+:::{php:class} Table\Column\ActionButtons
 :::
 
 Can be used to add "action buttons" column to your table:
@@ -277,13 +277,13 @@ $action = $table->addColumn(null, [Table\Column\ActionButtons::class, 'caption' 
 :::
 
 Adds another button into "Actions" column which will perform a certain JavaScript action when clicked.
-See also :php:meth:`Atk4\\Ui\\Grid::addActionButton()`:
+See also :php:meth:`Atk4\Ui\Grid::addActionButton()`:
 
 ```
 $button = $action->addButton('Reload Table', $table->jsReload());
 ```
 
-Normally you would also want to pass the ID of the row which was clicked. You can use :php:meth:`Atk4\\Ui\\Table:jsRow()`
+Normally you would also want to pass the ID of the row which was clicked. You can use :php:meth:`Atk4\Ui\Table:jsRow()`
 and jQuery's data() method to reference it:
 
 ```
@@ -295,7 +295,7 @@ Moreover you may pass $action argument as a PHP callback.
 :::{php:method} addModal($button, $title, $callback)
 :::
 
-Triggers a modal dialog when you click on the button. See description on :php:meth:`Atk4\\Ui\\Grid::addModalAction()`:
+Triggers a modal dialog when you click on the button. See description on :php:meth:`Atk4\Ui\Grid::addModalAction()`:
 
 ```
 $action->addButton(['Say HI'], function (Jquery $j, $id) use ($g) {
@@ -307,7 +307,7 @@ Note that in this case ID is automatically passed to your callback.
 
 ### Checkbox
 
-:::{php:class} Table\\Column\\Checkbox
+:::{php:class} Table\Column\Checkbox
 :::
 
 :::{php:method} jsChecked()
@@ -330,7 +330,7 @@ use as argument etc.
 ### Multiformat
 
 Sometimes your formatting may change depending on value. For example you may want to place link
-only on certain rows. For this you can use an `\\Atk4\Ui\\Table\\Column\\Multiformat` decorator:
+only on certain rows. For this you can use an `\Atk4\Ui\Table\Column\Multiformat` decorator:
 
 ```
 $table->addColumn('amount', [\Atk4\Ui\Table\Column\Multiformat::class, function (Model $model) {

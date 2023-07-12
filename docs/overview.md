@@ -256,7 +256,7 @@ in PHP language allows us to use an alternative shorter syntax:
 ```
 
 By default, class names specified as the first array elements passed to the add() method are
-resolved to namespace `Atk4\\Ui`; however the application class can fine-tune the
+resolved to namespace `Atk4\Ui`; however the application class can fine-tune the
 search.
 
 Using a factory is optional. For more information see:
@@ -282,7 +282,7 @@ Using App class will utilize a minimum of 2 templates:
 
 As you add more components, they will appear inside your layout.
 
-You'll also find that a layout class such as :php:class:`Layout\\Admin` will initialize
+You'll also find that a layout class such as :php:class:`Layout\Admin` will initialize
 some components on its own - sidebar menu, top menu.
 
 :::{image} images/admin-layout.png
