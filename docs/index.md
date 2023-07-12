@@ -2,16 +2,17 @@
 
 Contents:
 
-.. toctree::
-    :maxdepth: 4
+:::{toctree}
+:maxdepth: 4
 
-    overview
-    quickstart
-    core
-    filestructure
-    components
-    js
-    advanced
+overview
+quickstart
+core
+filestructure
+components
+js
+advanced
+:::
 
 
 ..

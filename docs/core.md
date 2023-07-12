@@ -19,8 +19,9 @@ $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 LoremIpsum::addTo($app);
 ```
 
-.. toctree::
-    app
+:::{toctree}
+app
+:::
 
 .. _seed:
 
@@ -46,8 +47,9 @@ $button->icon = 'book';
 
 We call this format 'Seed'. This section will explain how and where it is used.
 
-.. toctree::
-    seed
+:::{toctree}
+seed
+:::
 
 .. _render:
 .. _render_tree:
@@ -68,8 +70,9 @@ $app->add($msg);
 
 To find out more about how components are linked up together and rendered, see:
 
-.. toctree::
-    render
+:::{toctree}
+render
+:::
 
 ## Sticky GET
 
@@ -100,9 +103,9 @@ Button::addTo($app, ['Trigger message'])->link(['message' => 'Hello World']);
 
 There are two types of "sticky" parameters, application-wide and view-specific.
 
-.. toctree::
-
-    sticky
+:::{toctree}
+sticky
+:::
 
 ## Type Presentation
 
@@ -113,8 +116,9 @@ which relies on Field-specific Form\Control component.
 Agile UI uses a specific pattern for those definitions, which makes the overall structure more extensible
 by having the ability to introduce new types with consistent support throughout the UI.
 
-.. toctree::
-    type-presentation
+:::{toctree}
+type-presentation
+:::
 
 ## Templates
 
@@ -124,8 +128,9 @@ and manipulated by a Template class.
 To learn more on how to create a custom template or how to change global template
 behavior see:
 
-.. toctree::
-    template
+:::{toctree}
+template
+:::
 
 ## Agile Data
 
@@ -146,8 +151,9 @@ $view->setModel($user);
 Next section will explain you how the Agile UI interacts with the data layer and how it outputs or
 inputs user data.
 
-.. toctree::
-    data
+:::{toctree}
+data
+:::
 
 .. _callback:
 
@@ -168,10 +174,11 @@ $button->on('click', function () {
 });
 ```
 
-.. toctree::
-    :maxdepth: 4
+:::{toctree}
+:maxdepth: 4
 
-    callbacks
+callbacks
+:::
 
 
 .. _virtualpage:
@@ -195,17 +202,19 @@ reloads every time. :php:class:`Tabs` implements this by using :php:class:`Virtu
 find out how:
 
 
-.. toctree::
-    :maxdepth: 4
+:::{toctree}
+:maxdepth: 4
 
-    virtualpage
+virtualpage
+:::
 
 ## Documentation is coming soon.
 
-.. toctree::
-    :maxdepth: 4
+:::{toctree}
+:maxdepth: 4
 
-    init
-    callback
-    stickyget
+init
+callback
+stickyget
+:::
 

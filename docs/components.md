@@ -7,15 +7,16 @@ Classes that extend from :php:class:`View` are called `Components` and inherit a
 Some components serve as a foundation of entire set of other components. A lot of qualities implemented by a core component is
 inherited by its descendants.
 
-.. toctree::
-    :maxdepth: 1
+:::{toctree}
+:maxdepth: 1
 
-    view
-    lister
-    table
-    field
-    fileupload
-    tablecolumn
+view
+lister
+table
+field
+fileupload
+tablecolumn
+:::
 
 ## Simple components
 
@@ -29,21 +30,22 @@ PHP application with Agile UI. In some cases it may make sense to rely on HTML t
 but when you are working with dynamic and generic components quite often you need to abstract HTML yet let the user have decent
 control over even the small elements.
 
-.. toctree::
-    :maxdepth: 1
+:::{toctree}
+:maxdepth: 1
 
-    button
-    label
-    text
-    loremipsum
-    header
-    beadcrumb
-    icon
-    image
-    message
-    tabs
-    accordion
-    helloworld
+button
+label
+text
+loremipsum
+header
+beadcrumb
+icon
+image
+message
+tabs
+accordion
+helloworld
+:::
 
 ## Interactive components
 
@@ -64,16 +66,17 @@ other code. Here is how interactive components will typically communicate:
 6. sent back to the browser either as JSON or :ref:`sse`.
 
 
-.. toctree::
-    :maxdepth: 1
+:::{toctree}
+:maxdepth: 1
 
-    console
-    loader
-    progressbar
-    popup
-    wizard
-    rightpanel
-    dataexecutor
+console
+loader
+progressbar
+popup
+wizard
+rightpanel
+dataexecutor
+:::
 
 ## Composite components
 
@@ -89,14 +92,15 @@ rendering the data table, but Grid will also rely on :php:class:`Menu` and :php:
 Any component automatically becomes composite if, you use :php:meth:`View::add()`.
 
 
-.. toctree::
-    :maxdepth: 1
+:::{toctree}
+:maxdepth: 1
 
-    columns
-    crud
-    grid
-    form
-    paginator
-    dropdown
+columns
+crud
+grid
+form
+paginator
+dropdown
 
-    misc
+misc
+:::
