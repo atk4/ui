@@ -37,7 +37,6 @@ By default Text will not escape HTML so this will render as a bold text:
 $text = Text::addTo($app, ['here goes <b>some bold text</b>']);
 ```
 
-
 :::{warning}
 If you are using Text for output HTML then you are doing it wrong. You should
 use a generic View and specify your HTML as a template.
@@ -67,4 +66,3 @@ $message->text->addParagraph('Second para');
 ## Limitations
 
 Text may not have embedded elements, although that may change in the future.
-

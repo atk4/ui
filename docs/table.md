@@ -16,7 +16,8 @@ interactive features see :php:class:`Grid` and :php:class:`Crud`.
 Table is the simplest way to output multiple records of structured, static data. For Un-structure output
 please see :php:class:`Lister`
 
-    .. image:: images/table.png
+:::{image} images/table.png
+:::
 
 Various composite components use Table as a building block, see :php:class:`Grid` and :php:class:`Crud`.
 Main features of Table class are:
@@ -85,7 +86,6 @@ $table->setModel(new Order($db), ['name', 'price', 'amount', 'status']);
 
 Table will make use of "Only Fields" feature in Agile Data to adjust query for fetching only the necessary
 columns. See also :ref:`field_visibility`.
-
 
 You can also add individual column to your table:
 
@@ -239,8 +239,10 @@ This will result in 3 gap columns rendered to the left, middle and right of your
 
 :::{php:attr} sortable
 :::
+
 :::{php:attr} sortBy
 :::
+
 :::{php:attr} sortDirection
 :::
 
@@ -267,8 +269,6 @@ $table->js(true)->tablesort();
 ```
 
 For more information see https://github.com/kylefox/jquery-tablesort
-
-
 
 .. _table_html:
 
@@ -315,7 +315,6 @@ $dropbox = \Atk4\Dropbox\Persistence($dbConfig);
 $files = new \Atk4\Dropbox\Model\File($dropbox);
 
 Table::addTo($app)->setModel($files);
-
 
 // Show contents of dropbox
 $github = \Atk4\Github\IssuePersistence($githubApiConfig);
@@ -527,7 +526,6 @@ See also :ref:`js`.
 :::{php:method} setAttr($attribute, $value, $scope = 'body');
 :::
 
-
 The following code will make sure that contents of the column appear on a single line by
 adding class "single line" to all body cells:
 
@@ -589,5 +587,3 @@ but if you specify attribute (or class) value as a tag, then it will be auto-fil
 with row value or injected HTML.
 
 For further examples of and advanced usage, see implementation of :php:class:`Table\Column\Status`.
-
-

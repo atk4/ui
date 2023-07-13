@@ -65,7 +65,6 @@ other code. Here is how interactive components will typically communicate:
 5. Response is encoded and
 6. sent back to the browser either as JSON or :ref:`sse`.
 
-
 :::{toctree}
 :maxdepth: 1
 
@@ -90,7 +89,6 @@ intractivity to several sub-components. Illustration shows how :php:class:`Grid`
 rendering the data table, but Grid will also rely on :php:class:`Menu` and :php:class:`Paginator` when necessary.
 
 Any component automatically becomes composite if, you use :php:meth:`View::add()`.
-
 
 :::{toctree}
 :maxdepth: 1

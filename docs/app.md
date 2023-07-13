@@ -4,6 +4,7 @@
 
 :::{php:namespace} Atk4\Ui
 :::
+
 :::{php:class} App
 :::
 
@@ -139,10 +140,13 @@ In Agile UI this pattern is implemented through a 3rd party add-on for :ref:`pag
 
 :::{php:method} run()
 :::
+
 :::{php:attr} runCalled
 :::
+
 :::{php:attr} isRendering
 :::
+
 :::{php:attr} alwaysRun
 :::
 
@@ -164,6 +168,7 @@ or use :php:meth:`terminate()` to the app with desired output.
 
 :::{php:method} caugthException
 :::
+
 :::{php:attr} catch_exception
 :::
 
@@ -177,7 +182,6 @@ terminated.
 
 If you use Agile UI in conjunction with another framework, then you may be using a framework-specific App class,
 that implements tighter integration with the host application or full-stack framework.
-
 
 :::{php:method} requireJs()
 :::
@@ -225,6 +229,7 @@ App provides various utilities that are used by other components.
 
 :::{php:method} getTag()
 :::
+
 :::{php:method} encodeHtml()
 :::
 
@@ -234,6 +239,7 @@ Apart from basic utility, App class provides several mechanisms that are helpful
 
 :::{php:method} stickyGet()
 :::
+
 :::{php:method} stickyForget()
 :::
 
@@ -259,6 +265,7 @@ See also :php:meth:`View::stickyGet`
 
 :::{php:method} redirect(page)
 :::
+
 :::{php:method} jsRedirect(page)
 :::
 
@@ -429,6 +436,7 @@ Each layout, depending on it's content, may come with several views that you can
 
 :::{php:namespace} Atk4\Ui\Layout
 :::
+
 :::{php:class} Admin
 :::
 
@@ -494,4 +502,3 @@ offering of the following 3 things:
 
 Unique layouts can be used to change the default look and as a stand-in replacement to
 some of standard layouts or as a new and entirely different layout.
-

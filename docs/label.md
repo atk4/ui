@@ -29,7 +29,6 @@ $label = new \Atk4\Ui\Label('hello world');
 $app->add($label);
 ```
 
-
 Label has the following properties:
 
 :::{php:attr} icon
@@ -140,4 +139,3 @@ $table->onHook(\Atk4\Ui\Table\Column::HOOK_GET_HTML_TAGS, function (Table $table
 
 Now while $table will be rendered, if it finds a record with id=1, it will replace $name value with a HTML tag.
 You need to make sure that 'name' column appears first on the left.
-

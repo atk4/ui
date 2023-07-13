@@ -227,7 +227,6 @@ This approach allows you affect the way how :php:class:`Form\Control` is rendere
 without having to provide it with custom template, but simply relying on template
 of a Form.
 
-
 +---------------------------------------------------+-------------------------------------------------------+
 | Popular use patterns for template engines         | How Agile Toolkit implements it                       |
 +===================================================+=======================================================+
@@ -260,7 +259,6 @@ Locate (using :php:class:`PathFinder`) and read template from file
 Will create duplicate of this template object.
 :::
 
-
 :::{php:attr} template
 Array structure containing a parsed variant of your template.
 :::
@@ -276,7 +274,6 @@ Simply contains information about where the template have been loaded from.
 :::{php:attr} original_filename
 Original template filename, if loaded from file
 :::
-
 
 Template can be loaded from either file or string by using one of
 following commands:
@@ -341,7 +338,6 @@ $template->dangerouslyAppendHtml('name', '&nbsp;<i class="icon-heart"></i>');
 
 echo $template->renderToHtml();
 ```
-
 
 Using ArrayAccess with Templates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -633,7 +629,6 @@ There are more templates which are being substituted:
 - {css}css/file.css{/} - will replace with URL link to a CSS file
 - {js}jquery.validator.js{/} - will replace with URL to JavaScript file
 
-
 Application (API) has a function :php:`App_Web::setTags` which is called for
 every view in the system. It's used to resolve "template" and "page"
 tags, however you can add more interesting things here. For example if
@@ -642,4 +637,3 @@ implement custom handling for `{include}` tag here.
 
 Be considered that there are a lot of objects in Agile Toolkit and do
 not put any slow code in this function.
-

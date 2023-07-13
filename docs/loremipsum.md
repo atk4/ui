@@ -27,7 +27,6 @@ $text = Text::addTo($app)
     ->addParagraph('Second Paragraph');
 ```
 
-
 You may specify amount of text to be generated with lorem:
 
 ```
@@ -37,5 +36,3 @@ LoremIpsum::addTo($app, [1]); // just add a little one
 
 LoremIpsum::addTo($app, [5]); // adds a lot of text
 ```
-
-

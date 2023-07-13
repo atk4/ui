@@ -9,8 +9,8 @@
 Wizard is a high-level component, which makes use of callback to track step progression through the stages. It has an incredibly
 simple syntax for building UI and display a lovely UI for you.
 
-    .. image:: images/wizard.png
-
+:::{image} images/wizard.png
+:::
 
 Demo: https://ui.agiletoolkit.org/demos/wizard.php
 
@@ -20,6 +20,7 @@ Introduced in UI v1.4
 
 :::{php:method} addStep($title, $callback)
 :::
+
 :::{php:method} addFinish($callback)
 :::
 
@@ -92,8 +93,10 @@ and finish callback, if you have specified it.
 
 :::{php:attr} buttonPrevious
 :::
+
 :::{php:attr} buttonNext
 :::
+
 :::{php:attr} buttonFinish
 :::
 
@@ -114,7 +117,6 @@ $wizard->addStep('Step 3', function (Wizard $wizard) {
 });
 ```
 
-
 Step defines the callback and will execute it instantly if the step is active. If step 3 is active, the code
 is executed to change icon to the book. Otherwise icon will remain 'person'. Another handy technique is
 disabling the button by adding "disabled" class.
@@ -125,6 +127,7 @@ Wizard has few methods to help you to navigate between steps.
 
 :::{php:method} urlNext()
 :::
+
 :::{php:method} jsNext()
 :::
 
@@ -154,10 +157,3 @@ Finally you can get URL of the current step with `$wizard->url()` (see :php:meth
 
 Each step of your wizard serves two roles. First is to render title and icon above the wizard and second is
 to contain a callback code.
-
-
-
-
-
-
-

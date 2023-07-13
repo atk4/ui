@@ -75,7 +75,6 @@ $items = [
     ['name' => 'Appliances', 'id' => 301, 'nodes' => []],
 ];
 
-
 $form = \Atk4\Ui\Form::addTo($app);
 $control = $form->addControl('tree', [new TreeItemSelector(['treeItems' => $items]), 'caption' => 'Select items:'], ['type' => 'json']);
 $control->set([201, 301, 503]);

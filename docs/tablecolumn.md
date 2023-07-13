@@ -12,7 +12,6 @@ cell.
 This is in contrast to :php:class:`View` and :php:class:`Lister` which do not
 use Table/Cell and therefore Column decorator is not required.
 
-
 All column decorators in Agile UI have a base class :php:class:`Table\Column`. Decorators will often
 look at the content of the associated value, for example :php:class:`Money` will add cell class `negative`
 only if monetary value is less than zero. The value is taken from Model's Field object.

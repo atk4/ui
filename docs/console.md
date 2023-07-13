@@ -12,7 +12,6 @@
 With console you can output real-time information to the user directly from PHP. It can
 be used do direct output from slow method or even execute commands on the server (such as `ping`).
 
-
 Demo: https://ui.agiletoolkit.org/demos/console.php
 
 ## Basic Usage
@@ -22,7 +21,6 @@ Demo: https://ui.agiletoolkit.org/demos/console.php
 
 :::{php:method} send($callback)
 :::
-
 
 After adding a console to your :ref:`render_tree`, you just need to set a callback:
 

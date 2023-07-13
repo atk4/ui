@@ -13,7 +13,8 @@ implements the following 4 major features:
 
 - Form Rendering using Fomantic-UI HTML/CSS (https://fomantic-ui.com/collections/form.html):
 
-    .. image:: images/form.png
+  :::{image} images/form.png
+  :::
 
 - Form controls are automatically populated based on your existing data model with special treatment
   for date/time, auto-complete and even file upload.
@@ -434,7 +435,6 @@ $subLayout = $form->layout->addSubLayout();
 $subLayout->setModel($model, ['first_name', 'last_name']);
 ```
 
-
 When using setModel() on a sub layout to add controls per sub layout instead of entire layout,
 make sure you pass false as second argument when setting the model on the Form itself, like above.
 Otherwise all model fields will be automatically added in Forms main layout and you will not be
@@ -532,7 +532,6 @@ class Person extends \Atk4\Data\Model
     }
 }
 ```
-
 
 We can now populate form controls based around the data fields defined in the model:
 

@@ -4,6 +4,7 @@
 
 :::{php:namespace} Atk4\Ui
 :::
+
 :::{php:class} Breadcrumb
 :::
 
@@ -13,6 +14,7 @@ Implement navigational Breadcrumb, by using https://fomantic-ui.com/collections/
 
 :::{php:method} addCrumb()
 :::
+
 :::{php:method} set()
 :::
 
@@ -64,9 +66,7 @@ if ($id) {
     $model = $model->load($id);
     $crumb->addCrumb($model->get('name'), []);
 
-
     // here we can check for additional criteria and display a deeper level on the crumb
-
 
     Form::addTo($app)->setModel($model);
 } else {
@@ -78,5 +78,3 @@ if ($id) {
 
 $crumb->popTitle();
 ```
-
-

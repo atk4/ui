@@ -114,4 +114,3 @@ other methods that use seeds are:
 
 - :php:meth:`Table::addColumn()`
 - :php:meth:`Form::addControl()`
-

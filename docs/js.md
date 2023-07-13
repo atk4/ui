@@ -228,6 +228,7 @@ between actual views. All views support JavaScript binding through two methods: 
 
 :::{php:class} View
 :::
+
 :::{php:method} js([$event, [$otherChain]])
 Return action chain that targets this view. As event you can specify `true` which will make chain automatically execute
 on document ready event. You can specify a specific JavaScript event such as `click` or `mousein`. You can also use your
@@ -297,6 +298,7 @@ $buttons->on('click', '.button', $b3->js()->hide());
 
 :::{php:class} JsExpression
 :::
+
 :::{php:method} __construct(template, args)
 Returns object that renders into template by substituting args into it.
 :::
@@ -436,14 +438,19 @@ is always destroyed when the modal is closed instead of only hiding it.
 
 :::{php:method} set(callback)
 :::
+
 :::{php:method} jsShow()
 :::
+
 :::{php:method} jsHide()
 :::
+
 :::{php:method} addContentCss()
 :::
+
 :::{php:method} addScrolling()
 :::
+
 :::{php:method} setOption()
 :::
 

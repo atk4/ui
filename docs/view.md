@@ -13,7 +13,6 @@ A View is a most fundamental object that can take part in the Render tree. All
 of the other components descend from the `View` class.
 :::
 
-
 View object is recursive. You can take one view and add another View inside of it:
 
 ```
@@ -58,7 +57,6 @@ If this object is initialized, will also initialize $object
 :param $region: When outputting HTML, which region in :php:attr:`View::$template` to use.
 :::
 
-
 :::{php:method} init()
 View will automatically execute an init() method. This will happen as soon as
 values for properties properties `app`, `id` and `path` can be determined.
@@ -79,7 +77,6 @@ $bottom = new \Atk4\Ui\Button(['Hello World', 'class.orange' => true]);
 
 $middle->add($bottom);
 $top->add($middle);
-
 
 // Still not sure if finished adding
 
@@ -149,7 +146,6 @@ Associate current view with a domain model.
 Stores currently associated model until time of rendering.
 :::
 
-
 If you have used Agile Data, you should be familiar with a concept of creating
 Models:
 
@@ -199,8 +195,6 @@ to properly initialize the class corresponding to string 'Client'.
 Indicates a role of a view for CSS framework.
 :::
 
-
-
 A constructor of a view often maps into a `<div>` tag that has a specific role
 in a CSS framework. According to the principles of Agile UI, we support a
 wide varietty of roles. In some cases, a dedicated object will exist, for
@@ -231,8 +225,6 @@ override default property before call to `init()`. Most of the components
 have been designed to work consistently either way and delay all the
 property processing until the render stage, so it should be no difference
 which syntax you are using.
-
-
 
 If you are don't specify key for the properties, they will be considered an
 extra class for a view:
@@ -396,7 +388,6 @@ behaviour, see :php:class:`App::loadTemplate()`.
 Name of the region in the owner's template where this object
 will output itself. By default 'Content'.
 
-
 Here is a best practice for using custom template:
 
 ```
@@ -481,7 +472,6 @@ between page requests.
 It is also possible to set the "last" bit of the ID postfix. When Form controls are populated,
 the name of the field will be used instead of the role. This is done by setting 'name' property.
 
-
 :::{php:attr} name
 Specify a name for the element. If container already has object with specified name, exception
 will be thrown.
@@ -509,8 +499,6 @@ $b1->on('click', $b2->jsReload());
 
 TODO: Move to Element.
 
-
-
 Most of the basic elements will allow you to manipulate their content, HTML attributes or even
 add custom styles:
 
@@ -522,24 +510,23 @@ $view->setAttr('href', 'https://...');
 
 ## Rest of yet-to-document/implement methods and properties
 
-    .. php:attr:: content
+:::{php:attr} content
+Set static contents of this view.
+:::
 
-        Set static contents of this view.
+:::{php:method} setProperties($properties)
+:param $properties:
+:::
 
+:::{php:method} setProperty($key, $val)
+:param $key:
+:param $val:
+:::
 
-    .. php:method:: setProperties($properties)
+:::{php:method} set($arg1 = [], $arg2 = null)
+:param $arg1:
+:param $arg2:
+:::
 
-        :param $properties:
-
-    .. php:method:: setProperty($key, $val)
-
-        :param $key:
-        :param $val:
-
-
-    .. php:method:: set($arg1 = [], $arg2 = null)
-
-        :param $arg1:
-        :param $arg2:
-
-    .. php:method:: recursiveRender()
+:::{php:method} recursiveRender()
+:::

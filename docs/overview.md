@@ -154,7 +154,6 @@ Through the course of this example, We are performing several core actions:
    For a :ref:`component`, the Model represents information about the structure
    and offers a mechanism to retrieve, store, and delete date from `$db` persistence.
 
-
 - `Crud` is a :ref:`component` class. Particularly Crud is bundled with Agile UI
    and implements out-of-the-box interface for displaying data in a table format
    with operations to add, delete, or edit the record.
@@ -162,7 +161,6 @@ Through the course of this example, We are performing several core actions:
    Although it's not obvious from the code, Crud relies on multiple other components
    such as :php:class:`Grid`, :php:class:`Form`, :php:class:`Menu`, :php:class:`Paginator`,
    and :php:class:`Button`.
-
 
 To sum up Agile UI in more technical terms:
 
@@ -183,7 +181,6 @@ To sum up Agile UI in more technical terms:
   (Laravel, WordPress, Drupal, etc)
 
 - Creating MVP prototype for Web Apps.
-
 
 .. _component:
 
@@ -218,7 +215,6 @@ of application layout with a line:
 \Atk4\Ui\Crud::addTo($app);
 ```
 
-
 To render a component individually and get the HTML and JavaScript use this format:
 
 ```
@@ -229,7 +225,6 @@ $form->setModel(new User($db));
 
 $html = $form->render();
 ```
-
 
 This would render an individual component and will return HTML:
 
@@ -373,7 +368,6 @@ We recommend that you start looking at Agile UI first. Continue reading through 
 :ref:`quickstart` section and try building some of the basic apps. You will need to
 have a basic understanding of "code" and some familiarity with the PHP language.
 
-
 - QuickStart - 20-minute read and some code examples you can try.
 - Core Concept - Read if you plan to design and build your own components.
 
@@ -394,7 +388,6 @@ have a basic understanding of "code" and some familiarity with the PHP language.
   - Paginator
 
 - Advanced Topics
-
 
 If you are not interested in UI and only need the Rest API, we recommend that you look
 into documentation for Agile Data (https://agile-data.readthedocs.io) and the

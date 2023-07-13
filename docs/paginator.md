@@ -4,6 +4,7 @@
 
 :::{php:namespace} Atk4\Ui
 :::
+
 :::{php:class} Paginator
 :::
 
@@ -84,7 +85,6 @@ The template for Paginator uses custom logic:
 
 Each of the above (except Spacer) may have `active`, `link` and `page` tags.
 
-
 :::{php:method} renderItem($t, $page = null)
 :::
 
@@ -96,5 +96,3 @@ Each of the above (except Spacer) may have `active`, `link` and `page` tags.
 Specifying a view here will cause paginator to only reload this particular component and not all the page entirely.
 Usually the View you specify here should also contain the paginator as well as possibly other components that
 may be related to it. This technique is used by :php:class:`Grid` and some other components.
-
-

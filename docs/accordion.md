@@ -8,7 +8,6 @@
 
 Accordion implement another way to organize your data. The implementation is based on: https://fomantic-ui.com/modules/accordion.html.
 
-
 Demo: https://ui.agiletoolkit.org/demos/accordion.php
 
 ## Basic Usage
@@ -18,7 +17,6 @@ Once you create an Accordion container you can then mix and match static and dyn
 ```
 $acc = Accordion::addTo($app);
 ```
-
 
 Adding a static content section is pretty simple:
 
@@ -70,8 +68,10 @@ Accordion class has some wrapper method in order to control the accordion module
 
 :::{php:method} jsOpen($section, $action = null)
 :::
+
 :::{php:method} jsToggle($section, $action = null)
 :::
+
 :::{php:method} jsClose($section, $action = null)
 :::
 

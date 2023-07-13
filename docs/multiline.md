@@ -129,7 +129,6 @@ $userForm->onSubmit(function (Form $form) use ($ml) {
 });
 ```
 
-
 Using the example above will create a form with control from the User model as well as a Multiline control for editing
 the Email model's field.
 
@@ -261,4 +260,3 @@ $ml = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'bl
 - The header uses the field's caption by default.
 - You can edit it by setting the `$caption` property.
 - If you want to hide the header, set the `$caption` property to an empty string `''`.
-

@@ -51,7 +51,6 @@ Header::addTo($seg, [
 :::{php:attr} image
 :::
 
-
 Header may specify icon or image:
 
 ```
@@ -73,4 +72,3 @@ Header::addTo($seg, [
     'subHeader' => 'header with image',
 ]);
 ```
-

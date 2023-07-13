@@ -180,7 +180,6 @@ $button->on('click', function () {
 callbacks
 :::
 
-
 .. _virtualpage:
 
 ## VirtualPage
@@ -201,7 +200,6 @@ As you switch between those two tabs, you'll notice that the :php:class:`Button`
 reloads every time. :php:class:`Tabs` implements this by using :php:class:`VirtualPage`, read further to
 find out how:
 
-
 :::{toctree}
 :maxdepth: 4
 
@@ -217,4 +215,3 @@ init
 callback
 stickyget
 :::
-

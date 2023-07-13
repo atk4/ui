@@ -63,5 +63,3 @@ $message = Message::addTo($app, [
     'icon' => 'battery low',
 ])->text->addParagraph('Your battery is getting low. Re-charge your Web App');
 ```
-
-

@@ -45,4 +45,3 @@ Demo: https://ui.agiletoolkit.org/demos/progressbar.php
 
 :php:class:`Console` also implements method :php:meth:`Console::send` so you can use it to send progress
 updates of your progress-bar.
-

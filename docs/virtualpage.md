@@ -3,7 +3,6 @@
 Before learning about VirtualPage, Loader and other ways of dynamic content loading, you should fully
 understand :ref:`callback`.
 
-
 :::{php:class} VirtualPage
 :::
 
@@ -64,7 +63,6 @@ see only the 'LoremIpsum' text.
 :::
 
 See :php:attr:`Callback::urlTrigger`.
-
 
 Output Modes
 ^^^^^^^^^^^^
@@ -167,7 +165,6 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
 });
 ```
 
-
 A good use-case example would be a dashboard graph. Unlike VirtualPage which is not visible to a regular render,
 Loader needs to occupy some space.
 
@@ -185,7 +182,6 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
     \Atk4\Ui\LoremIpsum::addTo($p);
 });
 ```
-
 
 Triggering Loader
 ^^^^^^^^^^^^^^^^^
@@ -223,7 +219,6 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
     \Atk4\Ui\LoremIpsum::addTo($p);
 });
 
-
 \Atk4\Ui\Button::addTo($app, ['Load data'])
     ->on('click', $loader->js()->trigger('kaboom'));
 ```
@@ -234,7 +229,6 @@ Reloading
 ^^^^^^^^^
 
 If you execute :php:class:`JsReload` action on the Loader, it will return to original state.
-
 
 Inline Editing Example
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -300,4 +294,3 @@ and will be sending notification about your progress. Note that currently Intern
 up to you to create a work-around.
 
 Agile UI will test your browser and if SSE are not supported, $progressBar will be ignored.
-

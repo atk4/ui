@@ -190,7 +190,6 @@ $button->on('click', new \Atk4\Ui\Js\JsReload($view));
 \Atk4\Ui\LoremIpsum::addTo($view);
 ```
 
-
 NOTE: that we can't perform JsReload on LoremIpsum directly, because it's a text, it needs to be inside
 a container. When JsReload is created, it transparently creates a 'CallbackLater' object inside
 `$view`. On the JavaScript side, it will execute this new route which will respond with a NEW content
@@ -339,7 +338,6 @@ $label->on('click', function (Jquery $j, $arg1) {
 }, [new \Atk4\Ui\Js\JsExpression('$(window).width()')]);
 ```
 
-
 Referring to event origin
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -354,5 +352,3 @@ $j->text('width is ' . $arg1);
 Now instead of showing an alert box, label content will be changed to display window width.
 
 There are many other applications for JsCallback, for example, it's used in :php:meth:`Form::onSubmit()`.
-
-

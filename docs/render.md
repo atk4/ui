@@ -22,7 +22,6 @@ Here is a breakdown of how the above code works:
 At this point Button is NOT element of a view just yet. This is because we can't be sure if $view will be rendered individually
 or will become child of another view. Method init() is not executed on either objects.
 
-
 4. render() method will call renderAll()
 5. renderAll will find out that the $app property of a view is not set and will initialize it with default App.
 6. renderAll will also find out that the init() has not been called for the $view and will call it.

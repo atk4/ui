@@ -4,6 +4,7 @@
 
 :::{php:namespace} Atk4\Ui
 :::
+
 :::{php:class} Crud
 :::
 
@@ -15,7 +16,6 @@ If you only wish to display a non-interactive table use :php:class:`Table` class
 display Data Grid with some custom actions (not update/delete/add) or if you want to use your own editing
 mechanism (such as edit data on separate page, not inside a modal), use :php:class:`Grid`
 :::
-
 
 :::{important}
 ATK Addon - MasterCrud implements a higher-level multi-model management solution, that takes
@@ -147,10 +147,13 @@ $model->getUserAction('add')->ui['executor']->title = 'New title for modal'; // 
 
 :::{php:attr} notifyDefault
 :::
+
 :::{php:attr} saveMsg
 :::
+
 :::{php:attr} deleteMsg
 :::
+
 :::{php:attr} defaultMsg
 :::
 

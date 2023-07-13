@@ -45,4 +45,3 @@ for abstracting your SQL queries, but if you have to use a raw query:
 The above way to using raw queries has a performance implications, because Agile UI is optimised to work with Agile
 Data.
 :::
-

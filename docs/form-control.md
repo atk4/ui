@@ -21,6 +21,7 @@ be used as stand-alone controls.
 
 :::{php:method} set()
 :::
+
 :::{php:method} jsInput()
 :::
 
@@ -35,11 +36,9 @@ You can set default value and interact with a form control using JavaScript:
 ```
 $control->set('hello world');
 
-
 $button = \Atk4\Ui\Button::addTo($app, ['check value']);
 $button->on('click', new \Atk4\Ui\Js\JsExpression('alert(\'control value is: \' + [])', [$control->jsInput()->val()]));
 ```
-
 
 When used stand-alone, Form\Controls will produce a basic HTML (I have omitted id=):
 
@@ -242,6 +241,7 @@ element. For example, `icon` property:
 
 :::{php:attr} icon
 :::
+
 :::{php:attr} iconLeft
 Adds icon into the input form control. Default - `icon` will appear on the right, while `leftIcon`
 will display icon on the left.
@@ -292,12 +292,14 @@ Set to "left" or "right" to display spinning loading indicator.
 
 :::{php:attr} label
 :::
+
 :::{php:attr} labelRight
 Convert text into :php:class:`Label` and insert it into the form control.
 :::
 
 :::{php:attr} action
 :::
+
 :::{php:attr} actionLeft
 Convert text into :php:class:`Button` and insert it into the form control.
 :::
@@ -415,7 +417,6 @@ class MyDropdown extends \Atk4\Ui\Dropdown
     }
 }
 ```
-
 
 With the according renderRowFunction:
 
@@ -557,4 +558,3 @@ data value.
 
 When clicking on a Lookup form control, it will send a query to server and start building it's list value. Typing into the
 input form control will reload list value according to search criteria.
-

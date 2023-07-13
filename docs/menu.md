@@ -4,6 +4,7 @@
 
 :::{php:namespace} Atk4\Ui
 :::
+
 :::{php:class} Menu
 :::
 

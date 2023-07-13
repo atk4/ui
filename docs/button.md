@@ -30,7 +30,6 @@ $button->addClass('big red');
 $app->add($button);
 ```
 
-
 You can refer to the Fomantic-UI documentation for Button to find out more about available classes: https://fomantic-ui.com/elements/button.html.
 
 Demo: https://ui.agiletoolkit.org/demos/button.php
@@ -139,4 +138,3 @@ Icon::addTo(Button::addTo($forks, ['Forks', 'class.blue' => true]), ['fork']);
 Label::addTo($forks, ['1,048', 'class.basic blue left pointing' => true]);
 $app->add($forks);
 ```
-

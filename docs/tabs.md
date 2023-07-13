@@ -8,7 +8,6 @@
 
 Tabs implement a yet another way to organize your data. The implementation is based on: https://fomantic-ui.com/elements/icon.html.
 
-
 Demo: https://ui.agiletoolkit.org/demos/tabs.php
 
 ## Basic Usage
@@ -18,7 +17,6 @@ Once you create Tabs container you can then mix and match static and dynamic tab
 ```
 $tabs = Tabs::addTo($app);
 ```
-
 
 Adding a static content is pretty simple:
 
@@ -92,4 +90,3 @@ $tabs = Tabs::addTo($app);
 
 $tabs->addTabUrl('Terms and Condition', 'terms.html');
 ```
-
