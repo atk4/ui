@@ -56,7 +56,7 @@ $label->detail = $vp->cb->getUrl();
 $label->link($vp->cb->getUrl());
 ```
 
-This code will only show the link containing a URL, but will not show LoremIpsum text.  If you do follow the link, you'll
+This code will only show the link containing a URL, but will not show LoremIpsum text. If you do follow the link, you'll
 see only the 'LoremIpsum' text.
 
 :::{php:attr} urlTrigger

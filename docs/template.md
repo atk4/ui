@@ -583,7 +583,7 @@ $sender->template->trySet($senderData);
 $receiver->template->trySet($receiverData);
 ```
 
-..  templates and views
+.. templates and views
 
 ## Best Practices
 

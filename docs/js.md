@@ -266,9 +266,9 @@ $buttons->on('click', '.button')->hide();
 
 // Generates:
 // $('#top-element-id').on('click', '.button', function (event) {
-//   event.preventDefault();
-//   event.stopPropagation();
-//   $(this).hide();
+//     event.preventDefault();
+//     event.stopPropagation();
+//     $(this).hide();
 // });
 ```
 

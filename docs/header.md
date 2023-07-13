@@ -7,7 +7,7 @@ Can be used for page or section headers.
 
 Based around: https://fomantic-ui.com/elements/header.html.
 
-Demo:  https://ui.agiletoolkit.org/demos/header.php
+Demo: https://ui.agiletoolkit.org/demos/header.php
 
 ## Basic Usage
 

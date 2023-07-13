@@ -6,7 +6,7 @@
 ## Introduction
 
 SessionTrait is a simple way to let object store relevant data in the session. Specifically used in ATK UI
-some objects want to memorize data.  (see https://github.com/atk4/ui/blob/develop/src/Wizard.php#L12)
+some objects want to memorize data. (see https://github.com/atk4/ui/blob/develop/src/Wizard.php#L12)
 
 You would need 3 things. First make use of session trait:
 

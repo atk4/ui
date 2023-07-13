@@ -271,7 +271,7 @@ See also :php:meth:`View::stickyGet`
 
 App implements two handy methods for handling redirects between pages. The main purpose for those is
 to provide a simple way to redirect for users who are not familiar with JavaScript and HTTP headers
-so well.  Example:
+so well. Example:
 
 ```
 if (!isset($_GET['age'])) {
