@@ -50,16 +50,20 @@ All the above can be string, array (passed to Icon, Image or View class) or an o
 
 ## Icons
 
-There are two properties (icon, iconRight) but you can set only one at a time::
+There are two properties (icon, iconRight) but you can set only one at a time:
 
-    Label::addTo($app, ['23', 'icon' => 'mail']);
-    Label::addTo($app, ['new', 'iconRight' => 'delete']);
+```
+Label::addTo($app, ['23', 'icon' => 'mail']);
+Label::addTo($app, ['new', 'iconRight' => 'delete']);
+```
 
-You can also specify icon as an object::
+You can also specify icon as an object:
 
-    Label::addTo($app, ['new', 'iconRight' => new \Atk4\Ui\Icon('delete')]);
+```
+Label::addTo($app, ['new', 'iconRight' => new \Atk4\Ui\Icon('delete')]);
+```
 
-For more information, see: :php:class:`Icon`
+For more information, see: {php:class}`Icon`
 
 ## Image
 

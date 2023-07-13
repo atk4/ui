@@ -140,4 +140,4 @@ class MyView extends View
 }
 ```
 
-This quality of Agile UI objects is further explored through :php:class:`Callback` and :php:class:`VirtualPage`
+This quality of Agile UI objects is further explored through {php:class}`Callback` and {php:class}`VirtualPage`

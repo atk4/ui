@@ -22,7 +22,7 @@ Demo: https://ui.agiletoolkit.org/demos/console.php
 :::{php:method} send($callback)
 :::
 
-After adding a console to your :ref:`render_tree`, you just need to set a callback:
+After adding a console to your {ref}`render_tree`, you just need to set a callback:
 
 ```
 $console = Console::addTo($app);
@@ -35,7 +35,7 @@ $console->set(function (Console $console) {
 });
 ```
 
-Console uses :ref:`sse` which works pretty much out-of-the-box with the modern browsers and unlike websockets
+Console uses {ref}`sse` which works pretty much out-of-the-box with the modern browsers and unlike websockets
 do not require you to set up additional ports on the server. JavaScript in a browser captures real-time
 events and displays it on a black background.
 
@@ -122,7 +122,7 @@ Console::addTo($app)->set(function (Console $c) {
 ```
 
 Method exec() will return `$this` if command was run inside callback and was successful. It will return `false` on error
-and will return `null` if called outside of callback. You may also refer to ::php:attr:`Console::lastExitCode` which
+and will return `null` if called outside of callback. You may also refer to {php:attr}`Console::lastExitCode` which
 contains exit code of the last command.
 
 Normally it's safe to chain `exec` which ensures that execution will stack. Should any command fail, the subsequent

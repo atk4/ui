@@ -196,11 +196,11 @@ is called _top.
 Template engine in Agile Toolkit can be used independently, without views
 if you require so. A typical workflow would be:
 
-1. Load template using :php:meth:`GiTemplate::loadTemplate` or
-   :php:meth:`GiTemplate::loadFromString`.
+1. Load template using {php:meth}`GiTemplate::loadTemplate` or
+   {php:meth}`GiTemplate::loadFromString`.
 
-2. Set tag and region values with :php:meth:`GiTemplate::set`.
-3. Render template with :php:meth:`GiTemplate::renderToHtml`.
+2. Set tag and region values with {php:meth}`GiTemplate::set`.
+3. Render template with {php:meth}`GiTemplate::renderToHtml`.
 
 ### Template use together with Views
 
@@ -216,23 +216,23 @@ is used.
 - Each View is responsible for it's unique logic such as repeats, substitutions
   or conditions.
 
-As example, I would like to look at how :php:class:`Form` is rendered. The template of form
+As example, I would like to look at how {php:class}`Form` is rendered. The template of form
 contains a region called "FormLine" - it represents a label and a input.
 
 When an input is added into a Form, it adopts a "FormLine" region. While the
 nested tags would be identical, the markup around them would be dependent on
 form layout.
 
-This approach allows you affect the way how :php:class:`Form\Control` is rendered
+This approach allows you affect the way how {php:class}`Form\Control` is rendered
 without having to provide it with custom template, but simply relying on template
 of a Form.
 
 +---------------------------------------------------+-------------------------------------------------------+
 | Popular use patterns for template engines         | How Agile Toolkit implements it                       |
 +===================================================+=======================================================+
-| Repeat section of template                        | :php:class:`Lister` will duplicate Region             |
+| Repeat section of template                        | {php:class}`Lister` will duplicate Region             |
 +---------------------------------------------------+-------------------------------------------------------+
-| Associate nested tags with models record          | :php:class:`View` with setModel() can do that         |
+| Associate nested tags with models record          | {php:class}`View` with setModel() can do that         |
 +---------------------------------------------------+-------------------------------------------------------+
 | Various cases within templates based on condition | cloneRegion or get, then use set()                    |
 +---------------------------------------------------+-------------------------------------------------------+
@@ -252,7 +252,7 @@ Initialize current template from the supplied string
 :::
 
 :::{php:method} loadFromFile(filename)
-Locate (using :php:class:`PathFinder`) and read template from file
+Locate (using {php:class}`PathFinder`) and read template from file
 :::
 
 :::{php:method} __clone()
@@ -296,8 +296,8 @@ And place the following inside `template/mytemplate.html`:
 Hello, {name}world{/}
 ```
 
-GiTemplate will use :php:class:`PathFinder` to locate template in one of the
-directories of :ref:`resource` `template`.
+GiTemplate will use {php:class}`PathFinder` to locate template in one of the
+directories of {ref}`resource` `template`.
 
 ### Changing template contents
 
@@ -433,7 +433,7 @@ We do not need to manually render anything in this scenario. Also the
 template of $sender and $recipient objects will be appropriately cloned
 from regions of $envelope and then substituted back after render.
 
-In this example I've usd a basic :php:class:`View` class, however I could
+In this example I've usd a basic {php:class}`View` class, however I could
 have used my own View object with some more sophisticated presentation logic.
 The only affect on the example would be name of the class, the rest of
 presentation logic would be abstracted inside view's `renderToHtml()` method.
@@ -505,7 +505,7 @@ Let's look how templates work together with View objects.
 Specify default template for a view.
 ```
 
-By default view object will execute :php:meth:`defaultTemplate()` method which
+By default view object will execute {php:meth}`defaultTemplate()` method which
 returns name of the template. This function must return array with
 one or two elements. First element is the name of the template which
 will be passed to `loadFromFile()`. Second argument is optional and is
@@ -629,7 +629,7 @@ There are more templates which are being substituted:
 - {css}css/file.css{/} - will replace with URL link to a CSS file
 - {js}jquery.validator.js{/} - will replace with URL to JavaScript file
 
-Application (API) has a function :php:`App_Web::setTags` which is called for
+Application (API) has a function {php}`App_Web::setTags` which is called for
 every view in the system. It's used to resolve "template" and "page"
 tags, however you can add more interesting things here. For example if
 you miss ability to include other templates from Smarty, you can

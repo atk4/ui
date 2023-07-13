@@ -29,7 +29,7 @@ $crumb->set('Change Password');
 
 Every time you call addCrumb a new one is added. With set() you can specify the name of the current page.
 addCrumb also requires a URL passed as second argument which can be either a string or array (which would then
-be passed to url() (:php:meth:`View::url`).
+be passed to url() ({php:meth}`View::url`).
 
 ## Changing Divider
 
@@ -51,7 +51,7 @@ Calling addCrumb adds more elements into the $path property. Each element there 
 - link - where to go if clicked
 - divider - which divider to use after the crumb
 
-By default `divider` is set to :php:attr:`Breadcrumb::dividerClass`. You may also manipulate $path array yourself.
+By default `divider` is set to {php:attr}`Breadcrumb::dividerClass`. You may also manipulate $path array yourself.
 For example the next code will use some logic:
 
 ```

@@ -23,7 +23,7 @@ Message::addTo($panel, ['This panel contains only static content.']);
 ```
 
 By default, panel content are loaded dynamically. If you want to only add static content, you need to specify
-the :ref:`dynamic` property and set it to false.
+the {ref}`dynamic` property and set it to false.
 
 Opening of the panel is done via a javascript event. Here, we simply register a click event on a button that will open
 the panel:

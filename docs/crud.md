@@ -8,13 +8,13 @@
 :::{php:class} Crud
 :::
 
-Crud class offers a very usable extension to :php:class:`Grid` class, which automatically adds actions for deleting,
+Crud class offers a very usable extension to {php:class}`Grid` class, which automatically adds actions for deleting,
 updating and adding records as well as linking them with corresponding Model actions.
 
 :::{important}
-If you only wish to display a non-interactive table use :php:class:`Table` class. If you need to
+If you only wish to display a non-interactive table use {php:class}`Table` class. If you need to
 display Data Grid with some custom actions (not update/delete/add) or if you want to use your own editing
-mechanism (such as edit data on separate page, not inside a modal), use :php:class:`Grid`
+mechanism (such as edit data on separate page, not inside a modal), use {php:class}`Grid`
 :::
 
 :::{important}
@@ -98,7 +98,7 @@ will be used.
 
 ## Custom Form Behavior
 
-:php:class:`Form` in Agile UI allows you to use many different things, such as custom layouts. With Crud you can
+{php:class}`Form` in Agile UI allows you to use many different things, such as custom layouts. With Crud you can
 specify your own form behavior using a callback for action:
 
 ```

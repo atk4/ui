@@ -3,8 +3,8 @@
 :::{php:namespace} Atk4\Ui
 :::
 
-Agile UI relies on wide variety of objects. For example :php:class:`Button` relies on
-:php:class:`Icon` object for its rendering. As a developer can create Icon object first,
+Agile UI relies on wide variety of objects. For example {php:class}`Button` relies on
+{php:class}`Icon` object for its rendering. As a developer can create Icon object first,
 then pass it to the button:
 
 ```
@@ -13,7 +13,7 @@ $button = new Button('Hello');
 $button->icon = $icon;
 ```
 
-or you can divert icon creation until later by using Array / String for :php:attr:`Button::$icon`
+or you can divert icon creation until later by using Array / String for {php:attr}`Button::$icon`
 property:
 
 ```
@@ -52,8 +52,8 @@ Button::addTo($app);
 
 ### Seed, Object and Render Tree
 
-When calling :php:meth:`View::add()` not only your seed becomes an object, but it is also added to
-the :ref:`render tree`.
+When calling {php:meth}`View::add()` not only your seed becomes an object, but it is also added to
+the {ref}`render tree`.
 
 ## Seed Components
 
@@ -91,7 +91,7 @@ $seed = [new Button('hello', 'class.big red' => true), 'icon' => ['book', 'class
 ### Additional cases
 
 An individual object may add more ways to deal with seed. For example, when adding columns
-to your Table you can specify seed for the decorator: :php:class:`Atk4\Ui\Table\Column`:
+to your Table you can specify seed for the decorator: {php:class}`Atk4\Ui\Table\Column`:
 
 ```
 $table->addColumn('salary', [\Atk4\Ui\Table\Column\Money::class]);
@@ -112,5 +112,5 @@ $table->addColumn('salary', [new \Atk4\Ui\Table\Column\Money()]);
 Note that addColumn uses default namespace of `\Atk4\Ui\Table\Column` when seeding objects. Some
 other methods that use seeds are:
 
-- :php:meth:`Table::addColumn()`
-- :php:meth:`Form::addControl()`
+- {php:meth}`Table::addColumn()`
+- {php:meth}`Form::addControl()`

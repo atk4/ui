@@ -30,7 +30,7 @@ $menu->addClass('vertical');
 
 ## Decorating Menu Items
 
-See :php:class:`MenuItem` for more options:
+See {php:class}`MenuItem` for more options:
 
 ```
 $menu->addItem(['foo', 'icon' => 'book']);
@@ -83,4 +83,4 @@ You can add other elements inside menu. Refer to demos/menu.php.
 :::{php:attr} $icon
 :::
 
-Additionally you can use :php:meth:`View::addClass()` to disable or style your menu items.
+Additionally you can use {php:meth}`View::addClass()` to disable or style your menu items.

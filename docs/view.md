@@ -53,8 +53,8 @@ Will copy $this->getApp() into $object->getApp().
 
 If this object is initialized, will also initialize $object
 
-:param $object: Object or :ref:`seed` to add into render tree.
-:param $region: When outputting HTML, which region in :php:attr:`View::$template` to use.
+:param $object: Object or {ref}`seed` to add into render tree.
+:param $region: When outputting HTML, which region in {php:attr}`View::$template` to use.
 :::
 
 :::{php:method} init()
@@ -348,12 +348,12 @@ It's important when you call parent. You wouldn't be able to affect template of 
 anymore after calling renderView.
 
 Also, note that child classes are rendered already before invocation of rederView. If you wish
-to do something before child render, override method :php:meth:`View::recursiveRender()`
+to do something before child render, override method {php:meth}`View::recursiveRender()`
 
 :::{php:attr} template
 :::
 
-Template of a current view. This attribute contains an object of a class :php:class:`Template`.
+Template of a current view. This attribute contains an object of a class {php:class}`Template`.
 You may secify this value explicitly:
 
 ```
@@ -363,7 +363,7 @@ View::addTo($app, ['template' => new \Atk4\Ui\Template('<b>hello</b>')]);
 :::{php:attr} defaultTemplate
 :::
 
-By default, if value of :php:attr:`View::$template` is not set, then it is loaded from class
+By default, if value of {php:attr}`View::$template` is not set, then it is loaded from class
 specified in `defaultTemplate`:
 
 ```
@@ -380,7 +380,7 @@ View::addTo($app, ['defaultTemplate' => __DIR__ . '/../templates/mytpl.httml']);
 
 Agile UI does not currently provide advanced search path for templates, by default the
 template is loaded from folder `vendor/atk4/ui/template`. To change this
-behaviour, see :php:class:`App::loadTemplate()`.
+behaviour, see {php:class}`App::loadTemplate()`.
 
 :::{php:attr} region
 :::
@@ -431,7 +431,7 @@ a Lister is added inside Tags region which will use the contents of a given tag 
 template, which will be repeated according to the number of referenced 'Tags' for given users and
 re-inserted back into the 'Tags' region.
 
-See also :php:class:`Template`.
+See also {php:class}`Template`.
 
 ## Unique ID tag
 

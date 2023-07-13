@@ -9,7 +9,7 @@
 :::
 
 Lister can be used to output unstructured data with your own HTML template. If you wish to output
-data in a table, see :php:class:`Table`. Lister is also the fastest way to render large amount of
+data in a table, see {php:class}`Table`. Lister is also the fastest way to render large amount of
 output and will probably give you most flexibility.
 
 ## Basic Usage
@@ -104,7 +104,7 @@ Finally, Lister permits you not to use {rows} and {row} tags if entire region ca
 
 ## Tweaking the output
 
-Output is formatted using the standard :ref:`uiPersistence` routine, but you can also fine-tune the content
+Output is formatted using the standard {ref}`uiPersistence` routine, but you can also fine-tune the content
 of your tags like this:
 
 ```

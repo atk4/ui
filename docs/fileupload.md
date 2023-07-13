@@ -4,17 +4,17 @@
 :::
 
 Upload (and UploadImage) classes implement form controls that can be used to upload files or images.
-Implementation of :php:class:`Form` in Agile UI submits data using JavaScript request and
+Implementation of {php:class}`Form` in Agile UI submits data using JavaScript request and
 therefore files should be uploaded before form submission. Process used can be described
 in steps:
 
 1. User arrives at the page with a form
 2. User selects file.
 3. File begins uploading.
-4. PHP upload callback :php:meth:`Upload::onUpload` is called, returns "file_id"
+4. PHP upload callback {php:meth}`Upload::onUpload` is called, returns "file_id"
 5. "file_id" is placed inside form.
 6. User submits the form
-7. :php:meth:`\Atk4\Ui\Form::onSubmit()` receives "file_id"
+7. {php:meth}`\Atk4\Ui\Form::onSubmit()` receives "file_id"
 
 Currently only one file can be uploaded at a time. If file is uploaded incorrectly,
 it can be removed. Both Upload and UploadImage controls contain an upload button which would

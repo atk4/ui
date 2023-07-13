@@ -53,7 +53,7 @@ $text = Text::addTo($app)
 ## Usage
 
 Text is usable in generic components, where you want to leave possibility of text injection. For instance,
-:php:class:`Message` uses text allowing you to add few paragraphs of text:
+{php:class}`Message` uses text allowing you to add few paragraphs of text:
 
 ```
 $message = Message::addTo($app, ['Message Title']);

@@ -5,36 +5,36 @@
 
 # Table Column Decorators
 
-Classes like :php:class:`Table` and :php:class:`Card` do not render their cell
+Classes like {php:class}`Table` and {php:class}`Card` do not render their cell
 contents themselves. Instead they rely on Column Decorator class to position content within the
 cell.
 
-This is in contrast to :php:class:`View` and :php:class:`Lister` which do not
+This is in contrast to {php:class}`View` and {php:class}`Lister` which do not
 use Table/Cell and therefore Column decorator is not required.
 
-All column decorators in Agile UI have a base class :php:class:`Table\Column`. Decorators will often
-look at the content of the associated value, for example :php:class:`Money` will add cell class `negative`
+All column decorators in Agile UI have a base class {php:class}`Table\Column`. Decorators will often
+look at the content of the associated value, for example {php:class}`Money` will add cell class `negative`
 only if monetary value is less than zero. The value is taken from Model's Field object.
 
-Column decorators can also function without associated value. :php:class:`Template` may have no
-fields or perhaps display multiple field values. :php:class:`Action` displays interactive buttons
-in the table. :php:class:`CheckBox` makes grid rows selectable. :php:class:`Ordering` displays
+Column decorators can also function without associated value. {php:class}`Template` may have no
+fields or perhaps display multiple field values. {php:class}`Action` displays interactive buttons
+in the table. {php:class}`CheckBox` makes grid rows selectable. {php:class}`Ordering` displays
 a draggable handle for re-ordering rows within the table.
 
-A final mention is about :php:class:`Multiformat`, which is a column decorator that can swap-in
+A final mention is about {php:class}`Multiformat`, which is a column decorator that can swap-in
 any other decorator based on condition. This allows you to change button [Archive] for active records,
 but if record is already archived, use a template "Archived on {$archive_date}".
 
 ## Generic Column Decorator
 
 :::{php:class} Table\Column
-Generic description of a column for :php:class:`Atk4\Ui\Table`
+Generic description of a column for {php:class}`Atk4\Ui\Table`
 :::
 
 Table object relies on a separate class: `\Atk4\Ui\Table\Column` to present most of the values. The goals
 of the column object is to format anything around the actual values. The type = 'atk4_money' will result in
 a custom formatting of the value, but will also require column to be right-aligned. To simplify this,
-type = 'atk4_money' will use a different column class - :php:class:`Table\Column\Money`. There are several others,
+type = 'atk4_money' will use a different column class - {php:class}`Table\Column\Money`. There are several others,
 but first we need to look at the generic column and understand it's base capabilities:
 
 A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
@@ -50,7 +50,7 @@ will include "sorting" icons or any other controls that go in the header of the 
 :::
 
 Provided with the field and the value, format the cell for the footer "totals" row. Table
-can rely on various strategies for calculating totals. See :php:meth:`Table::addTotals`.
+can rely on various strategies for calculating totals. See {php:meth}`Table::addTotals`.
 
 :::{php:method} getDataCellHtml(\Atk4\Data\Field $field): string
 :::
@@ -60,7 +60,7 @@ performance of Web Application at the maximum, Table will execute getDataCellHtm
 fields once. When iterating, a combined template will be used to display the values.
 
 The template must not incorporate field values (simply because related model will not be
-loaded just yet), but instead should resort to tags and syntax compatible with :php:class:`Template`.
+loaded just yet), but instead should resort to tags and syntax compatible with {php:class}`Template`.
 
 A sample template could be:
 
@@ -85,7 +85,7 @@ Sometimes you do want to inject HTML instead of using row values:
 :::
 
 Return array of HTML tags that will be injected into the row template. See
-:php:ref:`table_html` for further example.
+{php:ref}`table_html` for further example.
 
 ## Column Menus and Popups
 
@@ -94,7 +94,7 @@ into table column and can be linked with Popup or Menu.
 
 ### Basic Use
 
-The simplest way to use Menus and Popups is through a wrappers: :php:meth:`Atk4\Ui\Grid::addDropdown` and :php:meth:`Atk4\Ui\Grid::addPopup`:
+The simplest way to use Menus and Popups is through a wrappers: {php:meth}`Atk4\Ui\Grid::addDropdown` and {php:meth}`Atk4\Ui\Grid::addPopup`:
 
 ```
 View::addTo($grid->addPopup('iso'))
@@ -107,7 +107,7 @@ $grid->addDropdown('name', ['Sort A-Z', 'Sort by Relevance'], function (string $
 });
 ```
 
-Those wrappers will invoke methods :php:meth:`Table\Column::addDropdown` and :php:meth:`Table\Colmun::addPopup` for
+Those wrappers will invoke methods {php:meth}`Table\Column::addDropdown` and {php:meth}`Table\Colmun::addPopup` for
 a specified column, which are documented below.
 
 ### Popups
@@ -116,8 +116,8 @@ a specified column, which are documented below.
 :::
 
 To create a popup, you need to get the column decorator object. This must be the first decorator, which
-is responsible for rendering of the TH box. If you are adding column manually, :php:meth:`Atk4\Ui\Table::addColumn()`
-will return it. When using model, use :php:meth:`Atk4\Ui\Table::getColumnDecorators`:
+is responsible for rendering of the TH box. If you are adding column manually, {php:meth}`Atk4\Ui\Table::addColumn()`
+will return it. When using model, use {php:meth}`Atk4\Ui\Table::getColumnDecorators`:
 
 ```
 $table = Table::addTo($app, ['class.celled' => true]);
@@ -131,7 +131,7 @@ LoremIpsum::addTo($nameColumn[0]->addPopup());
 If content of a pop-up is too large, it may not be possible to display it on-screen. Watch for warning.
 :::
 
-You may also use :php:meth:`Atk4\Ui\Popup::set` method to dynamically load the content:
+You may also use {php:meth}`Atk4\Ui\Popup::set` method to dynamically load the content:
 
 ```
 $table = Table::addTo($app, ['class.celled' => true]);
@@ -158,7 +158,7 @@ $someColumn->addDropdown(['Change', 'Reorder', 'Update'], function (string $item
 
 ## Decorators for data types
 
-In addition to :php:class:`Table\Column`, Agile UI includes several column implementations.
+In addition to {php:class}`Table\Column`, Agile UI includes several column implementations.
 
 ### Link
 
@@ -193,7 +193,7 @@ $table->addColumn('name', [\Atk4\Ui\Table\Column\Link::class, ['details', 'id' =
 Helps decorating monetary values. Will align value to the right and if value is less than zero will also
 use red text (td class "negative" for Fomantic-UI). The money cells are not wrapped.
 
-For the actual number formatting, see :ref:`uiPersistence`
+For the actual number formatting, see {ref}`uiPersistence`
 
 ### Status
 
@@ -276,13 +276,13 @@ $action = $table->addColumn(null, [Table\Column\ActionButtons::class, 'caption' 
 :::
 
 Adds another button into "Actions" column which will perform a certain JavaScript action when clicked.
-See also :php:meth:`Atk4\Ui\Grid::addActionButton()`:
+See also {php:meth}`Atk4\Ui\Grid::addActionButton()`:
 
 ```
 $button = $action->addButton('Reload Table', $table->jsReload());
 ```
 
-Normally you would also want to pass the ID of the row which was clicked. You can use :php:meth:`Atk4\Ui\Table:jsRow()`
+Normally you would also want to pass the ID of the row which was clicked. You can use {php:meth}`Atk4\Ui\Table:jsRow()`
 and jQuery's data() method to reference it:
 
 ```
@@ -294,7 +294,7 @@ Moreover you may pass $action argument as a PHP callback.
 :::{php:method} addModal($button, $title, $callback)
 :::
 
-Triggers a modal dialog when you click on the button. See description on :php:meth:`Atk4\Ui\Grid::addModalAction()`:
+Triggers a modal dialog when you click on the button. See description on {php:meth}`Atk4\Ui\Grid::addModalAction()`:
 
 ```
 $action->addButton(['Say HI'], function (Jquery $j, $id) use ($g) {

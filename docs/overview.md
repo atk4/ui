@@ -129,10 +129,10 @@ Through the course of this example, We are performing several core actions:
    integrating Agile UI with MVC framework, you would be using a different
    App class that properly integrates framework capabilities.
 
-   For a :ref:`component` the App class provides level of abstraction and
+   For a {ref}`component` the App class provides level of abstraction and
    utility.
 
-   For full documentation see :ref:`app`.
+   For full documentation see {ref}`app`.
 
 - `$db` this is a database persistence object. It may be a Database which is
    either SQL or NoSQL but can also be RestAPI, a cache, or a pseudo-persistence.
@@ -140,7 +140,7 @@ Through the course of this example, We are performing several core actions:
    We used `Persistence\Sql` class, which takes advantage of a standard-compliant
    database server to speed up aggregation, multi-table, and multi-record operations.
 
-   For a :ref:`component` the Persistence class provides data storage abstraction
+   For a {ref}`component` the Persistence class provides data storage abstraction
    through the use of a Model class.
 
    Agile Data has full documentation at https://agile-data.readthedocs.io.
@@ -149,18 +149,18 @@ Through the course of this example, We are performing several core actions:
    Model object represents a data-set for specific persistence and conditions.
 
    In our example, the object is created representing all our offer records that is then
-   passed into the Crud :ref:`component`.
+   passed into the Crud {ref}`component`.
 
-   For a :ref:`component`, the Model represents information about the structure
+   For a {ref}`component`, the Model represents information about the structure
    and offers a mechanism to retrieve, store, and delete date from `$db` persistence.
 
-- `Crud` is a :ref:`component` class. Particularly Crud is bundled with Agile UI
+- `Crud` is a {ref}`component` class. Particularly Crud is bundled with Agile UI
    and implements out-of-the-box interface for displaying data in a table format
    with operations to add, delete, or edit the record.
 
    Although it's not obvious from the code, Crud relies on multiple other components
-   such as :php:class:`Grid`, :php:class:`Form`, :php:class:`Menu`, :php:class:`Paginator`,
-   and :php:class:`Button`.
+   such as {php:class}`Grid`, {php:class}`Form`, {php:class}`Menu`, {php:class}`Paginator`,
+   and {php:class}`Button`.
 
 To sum up Agile UI in more technical terms:
 
@@ -200,7 +200,7 @@ $button = \Atk4\Ui\Button::addTo($form, [
 ])->link('dashboard.php');
 ```
 
-:php:class:`Button` and :php:class:`Icon` are some of the most basic components in
+{php:class}`Button` and {php:class}`Icon` are some of the most basic components in
 Agile UI. You will find Crud / Form / Grid components much more useful:
 
 :::{figure} images/all-atk-classes.png
@@ -208,7 +208,7 @@ Agile UI. You will find Crud / Form / Grid components much more useful:
 
 ### Using Components
 
-Look above at the :ref:`overview_example`, component `GRID` was made part
+Look above at the {ref}`overview_example`, component `GRID` was made part
 of application layout with a line:
 
 ```
@@ -237,7 +237,7 @@ This would render an individual component and will return HTML:
 </div>
 ```
 
-For other use-cases please look into :php:meth:`View::render()`
+For other use-cases please look into {php:meth}`View::render()`
 
 ### Factory
 
@@ -259,7 +259,7 @@ https://agile-core.readthedocs.io/en/develop/factory.html
 
 ### Templates
 
-Components rely on :php:class:`Template` class for parsing and rendering their
+Components rely on {php:class}`Template` class for parsing and rendering their
 HTML. The default template is written for Fomantic-UI framework, which makes sure
 that elements will look good and be consistent.
 
@@ -277,7 +277,7 @@ Using App class will utilize a minimum of 2 templates:
 
 As you add more components, they will appear inside your layout.
 
-You'll also find that a layout class such as :php:class:`Layout\Admin` will initialize
+You'll also find that a layout class such as {php:class}`Layout\Admin` will initialize
 some components on its own - sidebar menu, top menu.
 
 :::{image} images/admin-layout.png
@@ -289,7 +289,7 @@ will automatically populate a user-menu with the name of the user and log-out bu
 
 ## Advanced techniques
 
-By design we make sure that adding a component into a Render Tree (See :ref:`view`)
+By design we make sure that adding a component into a Render Tree (See {ref}`view`)
 is enough, so App provides a mechanism for components to:
 
 - Depend on JS, CSS, and other assets
@@ -300,7 +300,7 @@ is enough, so App provides a mechanism for components to:
 
 Your component may depend on additional JavaScript libraries, CSS, or other files.
 At the present time you have to make them available through a CDN and HTTPS.
-See: :php:meth:`App::requireJs`
+See: {php:meth}`App::requireJs`
 
 ### Events and Actions
 
@@ -317,7 +317,7 @@ Agile UI allows for a component to do just that without any extra effort from
 you (such as setting up API routes). To make this possible, a component
 must be able to use unique URLs which will trigger the callback.
 
-To see how this is implemented, read about :ref:`callback`
+To see how this is implemented, read about {ref}`callback`
 
 ### Virtual Pages
 
@@ -365,7 +365,7 @@ information on setting up API endpoints is coming soon.
 ### Learning Agile Toolkit
 
 We recommend that you start looking at Agile UI first. Continue reading through the
-:ref:`quickstart` section and try building some of the basic apps. You will need to
+{ref}`quickstart` section and try building some of the basic apps. You will need to
 have a basic understanding of "code" and some familiarity with the PHP language.
 
 - QuickStart - 20-minute read and some code examples you can try.

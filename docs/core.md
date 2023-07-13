@@ -88,8 +88,8 @@ Button::addTo($app, ['Trigger message'])->link(['message' => 'Hello World']);
 ```
 
 The code is simple - if you click the button, page will appear with the message just above, however
-there is a potential problem here. What if "Message" wanted to perform a :ref:`Callback`? What if
-we use :php:class:`Console` instead, which must display an interactive data stream?
+there is a potential problem here. What if "Message" wanted to perform a {ref}`Callback`? What if
+we use {php:class}`Console` instead, which must display an interactive data stream?
 
 In Agile UI you can request that some $_GET arguments are preserved and included into callback urls:
 
@@ -109,8 +109,8 @@ sticky
 
 ## Type Presentation
 
-Several components are too complex to be implemented in a single class. :php:class:`Table`, for example,
-has the ability to format columns by utilizing type-specific column classes. Another example is :php:class:`Form`
+Several components are too complex to be implemented in a single class. {php:class}`Table`, for example,
+has the ability to format columns by utilizing type-specific column classes. Another example is {php:class}`Form`
 which relies on Field-specific Form\Control component.
 
 Agile UI uses a specific pattern for those definitions, which makes the overall structure more extensible
@@ -159,7 +159,7 @@ data
 
 ## Callbacks
 
-By relying on the ability of generating :ref:`unique_name`, it's possible to create several classes
+By relying on the ability of generating {ref}`unique_name`, it's possible to create several classes
 for implementing PHP callbacks. They follow the pattern:
 
 - present something on the page (maybe)
@@ -184,8 +184,8 @@ callbacks
 
 ## VirtualPage
 
-Building on the foundation of :ref:`callback`, components :php:class:`VirtualPage` and :php:class:`Loader`
-exist to enhance other Components with dynamically loadable content. Here is example for :php:class:`Tabs`:
+Building on the foundation of {ref}`callback`, components {php:class}`VirtualPage` and {php:class}`Loader`
+exist to enhance other Components with dynamically loadable content. Here is example for {php:class}`Tabs`:
 
 ```
 $tabs = Tabs::addTo($app);
@@ -196,8 +196,8 @@ $tabs->addTab('Second tab is dynamic', function (VirtualPage $vp) {
 });
 ```
 
-As you switch between those two tabs, you'll notice that the :php:class:`Button` label on the "Second tab"
-reloads every time. :php:class:`Tabs` implements this by using :php:class:`VirtualPage`, read further to
+As you switch between those two tabs, you'll notice that the {php:class}`Button` label on the "Second tab"
+reloads every time. {php:class}`Tabs` implements this by using {php:class}`VirtualPage`, read further to
 find out how:
 
 :::{toctree}

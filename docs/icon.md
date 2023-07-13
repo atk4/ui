@@ -20,8 +20,8 @@ Alternatively:
 $icon = Icon::addTo($app, [], ['flag'])->addClass('outline');
 ```
 
-Most commonly icon class is used for embedded icons on a :php:class:`Button`
-or inside other components (see :ref:`icon_other_comp`):
+Most commonly icon class is used for embedded icons on a {php:class}`Button`
+or inside other components (see {ref}`icon_other_comp`):
 
 ```
 $b1 = new \Atk4\Ui\Button(['Click Me', 'icon' => 'book']);
@@ -51,8 +51,8 @@ Label::addTo($app, ['Battery Low', 'class.green' => true, 'icon' => 'battery low
 
 ## Using on other Components
 
-You can use icon on the following components: :php:class:`Button`, :php:class:`Label`, :php:class:`Header`
-:php:class:`Message`, :php:class:`Menu` and possibly some others. Here are some examples:
+You can use icon on the following components: {php:class}`Button`, {php:class}`Label`, {php:class}`Header`
+{php:class}`Message`, {php:class}`Menu` and possibly some others. Here are some examples:
 
 ```
 Header::addTo($app, ['Header', 'class.red' => true, 'icon' => 'flipped question']);
@@ -68,7 +68,7 @@ Label::addTo($app, ['Label', 'class.right ribbon red' => true, 'icon' => 'flippe
 
 ## Groups
 
-Fomantic-UI support icon groups. The best way to implement is to supply :php:class:`Template` to an
+Fomantic-UI support icon groups. The best way to implement is to supply {php:class}`Template` to an
 icon:
 
 ```
@@ -180,10 +180,8 @@ class SocialAdd extends \Atk4\Ui\View
         $this->add($this->icon, 'Icon');
     }
 }
-```
 
-    // Usage Examples. Start with the most basic usage
-```
+// Usage Examples. Start with the most basic usage
 SocialAdd::addTo($app, ['instagram']);
 
 // Next specify label and separately name of social network

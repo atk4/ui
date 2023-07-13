@@ -14,16 +14,16 @@ important concept to understand is the distinction between data Presentation and
 - Data Decoration: adding currency symbol or calendar icon.
 
 Agile UI believes that presentation must be consistent throughout the system. A monetary
-field will use same format on the :php:class:`Form`, :php:class:`Table` and even inside a
-custom HTML template specified into generic :php:class:`View`.
+field will use same format on the {php:class}`Form`, {php:class}`Table` and even inside a
+custom HTML template specified into generic {php:class}`View`.
 
 When it comes to decoration, the method is very dependent on the context. A form may present
 Calendar (DatePicker) or enable control icon to indicate currency.
 
-Presentation in Agile Toolkit is handled by :php:class:`Persistence\Ui`.
+Presentation in Agile Toolkit is handled by {php:class}`Persistence\Ui`.
 
-Decoration is performed by helper classes, such as :php:class:`Form\Control\Calendar` or
-:php:class:`Table\Column\Money`. The decorator is in control of the final output, so it can decide if
+Decoration is performed by helper classes, such as {php:class}`Form\Control\Calendar` or
+{php:class}`Table\Column\Money`. The decorator is in control of the final output, so it can decide if
 it uses the value from presentation or do some decoration on its own.
 
 ## Extending Data Types
@@ -47,12 +47,12 @@ of your integration.
 3. Create your new decorator.
 
   Such as use drop-down to select currency from a pre-defined list inside your specific class
-  while extending :php:class:`Form\Control\Input` class. Make sure it can interpret input correctly.
+  while extending {php:class}`Form\Control\Input` class. Make sure it can interpret input correctly.
   The process is explained further down in this chapter.
 
 4. Associate the types with your decorator.
 
-  This happens in :php:meth:`Form::controlFactory` and :php:meth:`Table::decoratorFactory`.
+  This happens in {php:meth}`Form::controlFactory` and {php:meth}`Table::decoratorFactory`.
 
 For the third party add-ons it is only possible to provide decorators. They must rely on one of
 the standard types, unless they also offer a dedicated model.
@@ -73,13 +73,13 @@ $form->addControl('field_name', new \Atk4\Ui\Form\Control\Password());
 Selecting the decorator is done in the following order:
 
 - specified in second argument to UI `addColumn()` or `addControl()` (as shown above)
-- specified using `ui` property of :php:class:`\Atk4\Data\Field`:
+- specified using `ui` property of {php:class}`\Atk4\Data\Field`:
 
 ```
 $field->ui['form'] = new \Atk4\Ui\Form\Control\Password();
 ```
 
-- fallback to :php:meth:`Form::controlFactory`
+- fallback to {php:meth}`Form::controlFactory`
 
 :::{note}
 When talking about "fields": you need to know what kind of field you are talking about (Data or UI).
@@ -124,7 +124,7 @@ $model->addDecorator('account_number', new \Atk4\Ui\Table\Column\Password());
 ### Create a decorator for hiding credit card number
 
 If you happen to store card numbers and you only want to display the last digits in tables,
-yet make it available when editing, you could create your own :php:class:`Table\Column` decorator:
+yet make it available when editing, you could create your own {php:class}`Table\Column` decorator:
 
 ```
 class Masker extends \Atk4\Ui\Table\Column
@@ -145,13 +145,13 @@ class Masker extends \Atk4\Ui\Table\Column
 
 If you are wondering, why I'm not overriding by providing HTML tag equal to the field name,
 it's because this technique is unreliable due to ability to exclude HTML tags with
-:php:attr:`Table::$useHtmlTags`.
+{php:attr}`Table::$useHtmlTags`.
 
 ### Display credit card number with spaces
 
 If we always have to display card numbers with spaces, e.g. "1234 1234 1234 1234" but have
 the database store them without spaces, then this is a data formatting task best done by
-extending :php:class:`Persistence\Ui`:
+extending {php:class}`Persistence\Ui`:
 
 ```
 class MyPersistence extends Persistence\Ui

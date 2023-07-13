@@ -45,7 +45,7 @@ executing, all the invocations to App::url() or View::url() will contain "client
 
 In some cases, Sticky GET only make sense within a certain branch of a Render Tree. For instance,
 when Loader wishes to load content dynamically, it must pass extra _GET parameter to trigger a
-:php:class:`Callback`. Next, when Console needs to establish live SSE stream, it should include
+{php:class}`Callback`. Next, when Console needs to establish live SSE stream, it should include
 the SAME get argument to trigger a callback for the Loader, otherwise Console wouldn't be
 initialized at all.
 

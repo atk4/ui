@@ -29,7 +29,7 @@ $paginator->total = 20;
 
 Paginator will not display links to all the 20 pages, instead it will show first, last, current page and few
 pages around the current page. Paginator will automatically place links back to your current page through
-:php:meth:`App::url()`.
+{php:meth}`App::url()`.
 
 After initializing paginator you can use it's properties to determine current page. Quite often you'll need
 to display current page BEFORE the paginator on your page:
@@ -95,4 +95,4 @@ Each of the above (except Spacer) may have `active`, `link` and `page` tags.
 
 Specifying a view here will cause paginator to only reload this particular component and not all the page entirely.
 Usually the View you specify here should also contain the paginator as well as possibly other components that
-may be related to it. This technique is used by :php:class:`Grid` and some other components.
+may be related to it. This technique is used by {php:class}`Grid` and some other components.

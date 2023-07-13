@@ -1,6 +1,6 @@
 # Components
 
-Classes that extend from :php:class:`View` are called `Components` and inherit abilities to render themselves (see :ref:`render`)
+Classes that extend from {php:class}`View` are called `Components` and inherit abilities to render themselves (see {ref}`render`)
 
 ## Core Components
 
@@ -54,16 +54,16 @@ helloworld
 :align: right
 :::
 
-Interactive components rely on :ref:`callback`, :ref:`virtualpage` or :ref:`sse` to communicate with themselves in the PHP realm. You add them
+Interactive components rely on {ref}`callback`, {ref}`virtualpage` or {ref}`sse` to communicate with themselves in the PHP realm. You add them
 just as you would add any other component, yet they will send additional requests, like loading additional data or executing
 other code. Here is how interactive components will typically communicate:
 
 1. request by browser is made.
-2. :php:class:`App` asks :php:class:`Console` to render HTML + JavaScript.
-3. JavaScript invokes AJAX request using a :php:class:`Callback` URL.
-4. Callback invokes user-defined PHP code, which will generate some :php:meth:`Console::output()`.
+2. {php:class}`App` asks {php:class}`Console` to render HTML + JavaScript.
+3. JavaScript invokes AJAX request using a {php:class}`Callback` URL.
+4. Callback invokes user-defined PHP code, which will generate some {php:meth}`Console::output()`.
 5. Response is encoded and
-6. sent back to the browser either as JSON or :ref:`sse`.
+6. sent back to the browser either as JSON or {ref}`sse`.
 
 :::{toctree}
 :maxdepth: 1
@@ -85,10 +85,10 @@ dataexecutor
 :::
 
 Composite elements such as Grid are the bread-and-butter of Agile UI. They will pass on rendering and
-intractivity to several sub-components. Illustration shows how :php:class:`Grid` relies on :php:class:`Table` for
-rendering the data table, but Grid will also rely on :php:class:`Menu` and :php:class:`Paginator` when necessary.
+intractivity to several sub-components. Illustration shows how {php:class}`Grid` relies on {php:class}`Table` for
+rendering the data table, but Grid will also rely on {php:class}`Menu` and {php:class}`Paginator` when necessary.
 
-Any component automatically becomes composite if, you use :php:meth:`View::add()`.
+Any component automatically becomes composite if, you use {php:meth}`View::add()`.
 
 :::{toctree}
 :maxdepth: 1

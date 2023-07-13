@@ -25,7 +25,7 @@ class User extends \Atk4\Data\Model
 
     protected function init(): void
     {
-        parent:: init();
+        parent::init();
 
         $this->addField('firstname', ['type' => 'string']);
         $this->addField('lastname', ['type' => 'string']);
@@ -94,7 +94,7 @@ class User extends \Atk4\Data\Model
 
     protected function init(): void
     {
-        parent:: init();
+        parent::init();
 
         $this->addField('firstname', ['type' => 'string']);
         $this->addField('lastname', ['type' => 'string']);

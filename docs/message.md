@@ -39,7 +39,7 @@ $message = Message::addTo($app, ['Warning Message Title', 'type' => 'warning']);
 :::{php:attr} text
 :::
 
-Property $text is automatically initialized to :php:class:`Text` so you can call :php:meth:`Text::addParagraph`
+Property $text is automatically initialized to {php:class}`Text` so you can call {php:meth}`Text::addParagraph`
 to add more text inside your message:
 
 ```

@@ -14,7 +14,7 @@ Implements a clickable button:
 $button = Button::addTo($app, ['Click me']);
 ```
 
-The Button will typically inherit all same properties of a :php:class:`View`. The base class "View"
+The Button will typically inherit all same properties of a {php:class}`View`. The base class "View"
 implements many useful methods already, such as:
 
 ```
@@ -68,12 +68,12 @@ Setting this will display icon on the right of the button:
 $button = Button::addTo($app, ['Next', 'iconRight' => 'right arrow']);
 ```
 
-Apart from being on the right, the same rules apply as :php:attr:`Button::$icon`. Both
+Apart from being on the right, the same rules apply as {php:attr}`Button::$icon`. Both
 icons cannot be specified simultaneously.
 
 ### Button Bar
 
-Buttons can be arranged into a bar. You would need to create a :php:class:`View` component
+Buttons can be arranged into a bar. You would need to create a {php:class}`View` component
 with property `ui='buttons'` and add your other buttons inside:
 
 ```
@@ -119,9 +119,9 @@ $button->link('https://google.com/');
 $button->link(['details', 'id' => 123]);
 ```
 
-If array is used, it's routed to :php:meth:`App::url`
+If array is used, it's routed to {php:meth}`App::url`
 
-For other JavaScript actions you can use :ref:`js`:
+For other JavaScript actions you can use {ref}`js`:
 
 ```
 $button->on('click', new JsExpression('document.location.reload()'));

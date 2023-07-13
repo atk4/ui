@@ -31,7 +31,7 @@ You can add multiple elements into a single accordion section, like any other vi
 
 Use addSection() method to add more section in an Accordion view. First parameter is a title of the section.
 
-Section can be static or dynamic. Dynamic sections use :php:class:`VirtualPage` implementation mentioned above.
+Section can be static or dynamic. Dynamic sections use {php:class}`VirtualPage` implementation mentioned above.
 You should pass Closure action as a second parameter.
 
 Example:
@@ -50,7 +50,7 @@ $t->addSection('Dynamically Loading', function (VirtualPage $vp) {
 
 ## Dynamic Accordion Section
 
-Dynamic sections are based around implementation of :php:class:`VirtualPage` and allow you
+Dynamic sections are based around implementation of {php:class}`VirtualPage` and allow you
 to pass a callback which will be triggered when user clicks on the section title.:
 
 ```

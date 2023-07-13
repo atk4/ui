@@ -1,14 +1,14 @@
 ### VirtualPage Introduction
 
 Before learning about VirtualPage, Loader and other ways of dynamic content loading, you should fully
-understand :ref:`callback`.
+understand {ref}`callback`.
 
 :::{php:class} VirtualPage
 :::
 
-Unlike any of the Callback classes, VirtualPage is a legitimate :php:class:`View`, but it's behavior is a little
+Unlike any of the Callback classes, VirtualPage is a legitimate {php:class}`View`, but it's behavior is a little
 "different". In normal circumstances, rendering VirtualPage will result in empty string. Adding VirtualPage
-anywhere inside your :ref:`render_tree` simply won't have any visible effect:
+anywhere inside your {ref}`render_tree` simply won't have any visible effect:
 
 ```
 $vp = \Atk4\Ui\VirtualPage::addTo($layout);
@@ -20,13 +20,13 @@ progress and output HTML of itself and any other Components you added to that pa
 
 To help you understand when to use VirtualPage here is the example:
 
-- Create a :php:class:`Button`
+- Create a {php:class}`Button`
 - Add VirtualPage inside a button.
 - Add Form inside VirtualPage.
 - Clicking the Button would dynamically load contents of VirtualPage inside a Modal window.
 
 This pattern is very easy to implement and is used by many components to transparently provide dynamic functionality.
-Next is an example where :php:class:`Tabs` has support for callback for generating dynamic content for the tab:
+Next is an example where {php:class}`Tabs` has support for callback for generating dynamic content for the tab:
 
 ```
 $tabs->addTab('Dynamic Tab Content', function (VirtualPage $vp) {
@@ -37,13 +37,13 @@ $tabs->addTab('Dynamic Tab Content', function (VirtualPage $vp) {
 Using VirtualPage inside your component can significantly enhance usability without introducing any complexity
 for developers.
 
-(For situations when Component does not natively support VirtualPage, you can still use :php:class:`Loader`, documented
+(For situations when Component does not natively support VirtualPage, you can still use {php:class}`Loader`, documented
 below).
 
 :::{php:attr} cb
 :::
 
-VirtuaPage relies on :php:class:`CallbackLater` object, which is stored in a property $cb. If the Callback is triggered
+VirtuaPage relies on {php:class}`CallbackLater` object, which is stored in a property $cb. If the Callback is triggered
 through a GET argument, then VirtualPage will change it's rendering technique. Lets examine it in more detail:
 
 ```
@@ -62,7 +62,7 @@ see only the 'LoremIpsum' text.
 :::{php:attr} urlTrigger
 :::
 
-See :php:attr:`Callback::urlTrigger`.
+See {php:attr}`Callback::urlTrigger`.
 
 Output Modes
 ^^^^^^^^^^^^
@@ -71,7 +71,7 @@ Output Modes
 :::
 
 VirtualPage can be used to provide you either with RAW HTML content or wrap it into boilerplate HTML.
-As you may know, :php:meth:`Callback::getUrl()` accepts an argument, and VirtualPage gives this argument meaning:
+As you may know, {php:meth}`Callback::getUrl()` accepts an argument, and VirtualPage gives this argument meaning:
 
 - getUrl('cut') gives you URL which will return ONLY the HTML of virtual page, no Layout or boilerplate.
 - getUrl('popup') gives you URL which will return a very minimalistic layout inside a valid HTML boilerplate, suitable for iframes or popup windows.
@@ -105,9 +105,9 @@ $label->link($vp->cb->getUrl());
 
 This code will perform identically as the previous example, however 'LoremIpsum' will never be initialized
 unless you are requesting VirtualPage specifically, saving some CPU time. Capability of defining callback
-also makes it possible for VirtualPage to be embedded into any :ref:`component` quite reliably.
+also makes it possible for VirtualPage to be embedded into any {ref}`component` quite reliably.
 
-To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the following code:
+To illustrate, see how {php:class}`Tabs` component rely on VirtualPage, the following code:
 
 ```
 $tabs = \Atk4\Ui\Tabs::addTo($layout);
@@ -228,7 +228,7 @@ This approach allow you to trigger loader from inside JavaScript easily. See als
 Reloading
 ^^^^^^^^^
 
-If you execute :php:class:`JsReload` action on the Loader, it will return to original state.
+If you execute {php:class}`JsReload` action on the Loader, it will return to original state.
 
 Inline Editing Example
 ^^^^^^^^^^^^^^^^^^^^^^

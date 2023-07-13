@@ -41,7 +41,7 @@ $wizard->addStep('Welcome', function (Wizard $wizard) {
 });
 ```
 
-Your callback will also receive `$wizard` as the first argument. Method addStep returns :php:class:`WizardStep`,
+Your callback will also receive `$wizard` as the first argument. Method addStep returns {php:class}`WizardStep`,
 which is described below. You can also provide first argument to addStep as a seed or an object:
 
 ```
@@ -76,7 +76,7 @@ Other properties are used during the execution of the wizard.
 :::{php:attr} stepCallback
 :::
 
-Wizard employs :php:class:`Callback` to maintain which step you currently are on. All steps are numbered
+Wizard employs {php:class}`Callback` to maintain which step you currently are on. All steps are numbered
 started with 0.
 
 :::{important}
@@ -136,7 +136,7 @@ which will take you to the next step.
 
 If you wish to to go to specific step, you can use `$wizard->stepCallback->getUrl($step);`
 
-Finally you can get URL of the current step with `$wizard->url()` (see :php:meth:`View::url`)
+Finally you can get URL of the current step with `$wizard->url()` (see {php:meth}`View::url`)
 
 ## WizardStep
 

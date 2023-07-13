@@ -53,7 +53,7 @@ You may use App class hook to impact behavior of your application:
 - using hooks to globally impact object initialization
 - override methods to create different behavior, for example url() method may use advanced router logic
   to create beautiful URLs.
-- you may re-define set-up of :php:class:`Persistence\Ui` and affect how data is loaded from UI.
+- you may re-define set-up of {php:class}`Persistence\Ui` and affect how data is loaded from UI.
 - load templates from different files
 - use a different CDN settings for static files
 
@@ -61,7 +61,7 @@ You may use App class hook to impact behavior of your application:
 
 App class may initialize some resources for you including user authentication and work with session.
 My next example defines property `$user` and `$system` for the app class to indicate a system which is currently
-active. (See :ref:`system_pattern`):
+active. (See {ref}`system_pattern`):
 
 ```
 class Warehouse extends \Atk4\Ui\App
@@ -133,8 +133,8 @@ There is another approach in which your application will determine which Page cl
 executing the request, subsequently creating setting it up and letting it populate UI (This behavior is
 similar to Agile Toolkit prior to 4.3).
 
-In Agile UI this pattern is implemented through a 3rd party add-on for :ref:`page_manager` and routing. See also
-:php:meth:`App::url()`
+In Agile UI this pattern is implemented through a 3rd party add-on for {ref}`page_manager` and routing. See also
+{php:meth}`App::url()`
 
 ### Clean-up and simplification
 
@@ -162,7 +162,7 @@ $app->run();
 ```
 
 If you do not want the application to automatically execute `run()` you can either set `$alwaysRun` to false
-or use :php:meth:`terminate()` to the app with desired output.
+or use {php:meth}`terminate()` to the app with desired output.
 
 ### Exception handling
 
@@ -210,14 +210,14 @@ Initializes all includes required by Agile UI. You may extend this class to add 
 :::
 
 Decodes current request without any arguments. If you are changing URL generation pattern, you
-probably need to change this method to properly identify the current page. See :php:class:`App::url()`
+probably need to change this method to properly identify the current page. See {php:class}`App::url()`
 
 ### Loading Templates for Views
 
 :::{php:method} loadTemplate($name)
 :::
 
-Views use :php:attr:`View::$defaultTemplate` to specify which template they are using. By default
+Views use {php:attr}`View::$defaultTemplate` to specify which template they are using. By default
 those are loaded from `vendor/atk4/ui/template` however by overriding this method,
 you can specify extended logic.
 
@@ -257,9 +257,9 @@ $crud->setModel($order->load($orderId)->ref('Payment'));
 This make sure that pagination, editing, addition or any other operation that Crud implements will always
 address same model scope.
 
-If you need to generate URL that respects stickyGet arguments, use :php:meth:`App::url()`.
+If you need to generate URL that respects stickyGet arguments, use {php:meth}`App::url()`.
 
-See also :php:meth:`View::stickyGet`
+See also {php:meth}`View::stickyGet`
 
 ### Redirects
 
@@ -333,7 +333,7 @@ contact.php?from=John+Smith
 
 If value with key 0 is specified ('contact') it will be used as the name of the page. By
 default url() will use page as "contact.php?.." however you can define different behavior
-through :ref:`page_manager`.
+through {ref}`page_manager`.
 
 The url() method will automatically append values of arguments mentioned to `stickyGet()`,
 but if you need URL to drop any sticky value, specify value explicitly as `false`.
@@ -362,7 +362,7 @@ and the following hooks are available:
 - beforeExit
 
 Hook beforeExit is called just when application is about to be terminated. If you are
-using :php:attr:`App::$alwaysRun` = true, then this hook is guaranteed to execute always
+using {php:attr}`App::$alwaysRun` = true, then this hook is guaranteed to execute always
 after output was sent. ATK will avoid calling this hook multiple times.
 
 :::{note}

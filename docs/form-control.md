@@ -13,7 +13,7 @@ quite simple components that present themselves as input controls: line, select,
 
 ## Relationship with Form
 
-All Form Control Decorators can be integrated with :php:class:`Atk4\Ui\Form` which will
+All Form Control Decorators can be integrated with {php:class}`Atk4\Ui\Form` which will
 facilitate collection and processing of data in a form. Form Control decorators can also
 be used as stand-alone controls.
 
@@ -70,7 +70,7 @@ page and the following HTML is now produced:
 ```
 
 The markup that surronds the button which includes Label and formatting is produced by
-:php:class:`Atk4\Ui\Form\Layout`, which does draw some of the information from the Form Control
+{php:class}`Atk4\Ui\Form\Layout`, which does draw some of the information from the Form Control
 itself.
 
 ### Using in Form Layouts
@@ -94,7 +94,7 @@ $form->onSubmit(function (Form $form) {
 });
 ```
 
-This is further explained in documentation for :php:class:`Atk4\Ui\Form\Layout` class,
+This is further explained in documentation for {php:class}`Atk4\Ui\Form\Layout` class,
 however if you do plan on adding your own form control types, it's important that you extend it
 properly:
 
@@ -185,19 +185,19 @@ $form->setModel(new Country($db);
 ```
 
 The above will populate fields from model into the form automatically. You can use second
-argument to :php:meth:`\Atk4\Ui\Form::setModel()` to indicate which fields to display
-or rely on :ref:`field_visibility`.
+argument to {php:meth}`\Atk4\Ui\Form::setModel()` to indicate which fields to display
+or rely on {ref}`field_visibility`.
 
-When Form controls are populated, then :php:meth:`\Atk4\Ui\Form::controlFactory` is
+When Form controls are populated, then {php:meth}`\Atk4\Ui\Form::controlFactory` is
 consulted to make a decision on how to translate
 [Model Field](https://agile-data.readthedocs.io/en/develop/fields.html) into
 Form Control Decorator.
 
 The rules are rather straightforward but may change in future versions of Agile UI:
 
-- if [enum](https://agile-data.readthedocs.io/en/develop/fields.html#Field::$enum) is defined, use :php:class:`Dropdown`
-- consult :php:attr:`\Atk4\Ui\Form::$typeToDecorator` property for type-to-seed association
-- type=password will use :php:class:`Password`
+- if [enum](https://agile-data.readthedocs.io/en/develop/fields.html#Field::$enum) is defined, use {php:class}`Dropdown`
+- consult {php:attr}`\Atk4\Ui\Form::$typeToDecorator` property for type-to-seed association
+- type=password will use {php:class}`Password`
 
 You always have an option to explicitly specify which field you would like to use:
 
@@ -275,11 +275,11 @@ $line->icon = new Icon('search');
 $line->icon->addClass('big');
 ```
 
-To see how Icon interprets `new Icon(['search', 'class.big' => true])`, refer to :php:class:`Icon`.
+To see how Icon interprets `new Icon(['search', 'class.big' => true])`, refer to {php:class}`Icon`.
 
 :::{note}
 View's constructor will map received arguments into object properties, if they are defined
-or addClass() if not. See :php:meth:`View::setProperties`.
+or addClass() if not. See {php:meth}`View::setProperties`.
 :::
 
 :::{php:attr} placeholder
@@ -294,28 +294,28 @@ Set to "left" or "right" to display spinning loading indicator.
 :::
 
 :::{php:attr} labelRight
-Convert text into :php:class:`Label` and insert it into the form control.
+Convert text into {php:class}`Label` and insert it into the form control.
 :::
 
 :::{php:attr} action
 :::
 
 :::{php:attr} actionLeft
-Convert text into :php:class:`Button` and insert it into the form control.
+Convert text into {php:class}`Button` and insert it into the form control.
 :::
 
 To see various examples of form controls and their attributes see `demos/form-control/`.
 
 ### Integration with Form
 
-When you use :php:class:`form::addControl()` it will create 'Form Control Decorator'
+When you use {php:class}`form::addControl()` it will create 'Form Control Decorator'
 
 ### JavaScript on Input
 
 :::{php:method} jsInput([$event, [$otherChain]])
 :::
 
-Input class implements method jsInput which is identical to :php:meth:`View::js`, except
+Input class implements method jsInput which is identical to {php:meth}`View::js`, except
 that it would target the INPUT element rather then the whole form control:
 
 ```
@@ -357,10 +357,10 @@ Dropdown uses Fomantic-UI Dropdown (https://fomantic-ui.com/modules/dropdown.htm
 
 ### Usage with a Model
 
-A Dropdown is not used as default Form Control decorator (`$model->hasOne()` uses :php:class:`Lookup`), but in your Model, you can define that
+A Dropdown is not used as default Form Control decorator (`$model->hasOne()` uses {php:class}`Lookup`), but in your Model, you can define that
 UI should render a Field as Dropdown. For example, this makes sense when a `hasOne()` relationship only has a very limited amount (like 20)
 of records to display. Dropdown renders all records when the paged is rendered, while Lookup always sends an additional request to the server.
-:php:class:`Lookup` on the other hand is the better choice if there is lots of records (like more than 50).
+{php:class}`Lookup` on the other hand is the better choice if there is lots of records (like more than 50).
 
 To render a model field as Dropdown, use the ui property of the field:
 
@@ -370,7 +370,7 @@ $model->addField('someField', ['ui' => ['form' => [\Atk4\Ui\Form\Control\Dropdow
 
 .. Customizing how a Model's records are displayed in Dropdown
 As default, Dropdown will use the `$model->idField` as value, and `$model->titleField` as title for each menu item.
-If you want to customize how a record is displayed and/or add an icon, Dropdown has the :php:meth:`Form::renderRowFunction()` to do this.
+If you want to customize how a record is displayed and/or add an icon, Dropdown has the {php:meth}`Form::renderRowFunction()` to do this.
 This function is called with each model record and needs to return an array:
 
 ```
@@ -457,7 +457,7 @@ $dropdown->values = [
 ];
 ```
 
-If using $values property, you can also use the :php:meth:`Form::renderRowFunction()`, though there usually is no need for it.
+If using $values property, you can also use the {php:meth}`Form::renderRowFunction()`, though there usually is no need for it.
 If you use it, use the second parameter as well, its the array key:
 
 ```

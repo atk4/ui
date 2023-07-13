@@ -64,5 +64,5 @@ For more information on available classes, see https://fomantic-ui.com/collectio
 Although you can use responsiveness with the Column class to some degree, we recommend that you create your own
 component template where you can have greater control over all classes.
 
-Similarly if you intend to output a lot of data, we recommend you to use :php:class:`Lister` instead with a custom
+Similarly if you intend to output a lot of data, we recommend you to use {php:class}`Lister` instead with a custom
 template.

@@ -225,7 +225,7 @@ $form->onSubmit(function (Form $form) use ($colReload) {
 .. [#] We wish to position Form and Table side-by-side, so we use `\Atk4\Ui\Columns` component and
     inject a Fomantic-UI CSS class "divided" that will appear as a vertical separation line.
 
-.. [#] $colReload is a special object which we call :ref:`js_action`. It represents a Browser-event
+.. [#] $colReload is a special object which we call {ref}`js_action`. It represents a Browser-event
     that will cause both columns to be reloaded from the server. To use this action we still have
     to bind it.
 

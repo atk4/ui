@@ -31,7 +31,7 @@ You can add multiple elements into a single tab, like any other view.
 
 Use addTab() method to add more tabs in Tabs view. First parameter is a title of the tab.
 
-Tabs can be static or dynamic. Dynamic tabs use :php:class:`VirtualPage` implementation mentioned above.
+Tabs can be static or dynamic. Dynamic tabs use {php:class}`VirtualPage` implementation mentioned above.
 You should pass Closure action as a second parameter.
 
 Example:
@@ -50,7 +50,7 @@ $tabs->addTab('Dynamically Loading', function (VirtualPage $vp) {
 
 ## Dynamic Tabs
 
-Dynamic tabs are based around implementation of :php:class:`VirtualPage` and allow you
+Dynamic tabs are based around implementation of {php:class}`VirtualPage` and allow you
 to pass a callback which will be triggered when user clicks on the tab.
 
 Note that tab contents are refreshed including any values you put on the form:
