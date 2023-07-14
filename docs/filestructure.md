@@ -1,4 +1,4 @@
-.. _filestructure:
+(filestructure)=
 
 # File structure example & first app
 

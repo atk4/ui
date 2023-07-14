@@ -1,4 +1,4 @@
-.. _autocomplete:
+(autocomplete)=
 
 # AutoComplete Form Control
 

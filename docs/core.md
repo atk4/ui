@@ -23,7 +23,7 @@ LoremIpsum::addTo($app);
 app
 :::
 
-.. _seed:
+(seed)=
 
 ## Seed
 
@@ -51,8 +51,8 @@ We call this format 'Seed'. This section will explain how and where it is used.
 seed
 :::
 
-.. _render:
-.. _render_tree:
+(render)=
+(render_tree)=
 
 ## Render Tree
 
@@ -155,7 +155,7 @@ inputs user data.
 data
 :::
 
-.. _callback:
+(callback)=
 
 ## Callbacks
 
@@ -180,7 +180,7 @@ $button->on('click', function () {
 callbacks
 :::
 
-.. _virtualpage:
+(virtualpage)=
 
 ## VirtualPage
 

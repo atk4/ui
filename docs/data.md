@@ -1,4 +1,4 @@
-.. _data:
+(data)=
 
 ### Integration
 

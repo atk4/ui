@@ -1,4 +1,4 @@
-.. _quickstart:
+(quickstart)=
 
 # Quickstart
 
@@ -62,7 +62,7 @@ Instead of manually outputting a text "Hello, World!" we have used a standard co
 demonstrates a core purpose of Agile Toolkit. Instead of doing a lot of things yourself, you can rely on
 components that do things for you.
 
-.. _using-namespaces:
+(using-namespaces)=
 
 ## Using namespaces
 

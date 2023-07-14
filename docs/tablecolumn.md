@@ -1,4 +1,4 @@
-.. _tablecolumn:
+(tablecolumn)=
 
 :::{php:namespace} Atk4\Ui
 :::

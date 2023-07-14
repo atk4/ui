@@ -1,4 +1,4 @@
-.. _type-presentation:
+(type-presentation)=
 
 ## Formatters vs Decorators
 

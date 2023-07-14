@@ -1,4 +1,4 @@
-.. _message:
+(message)=
 
 # Message
 

@@ -1,4 +1,4 @@
-.. _popup:
+(popup)=
 
 # Popup
 

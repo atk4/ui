@@ -1,7 +1,7 @@
 :::{php:namespace} Atk4\Ui
 :::
 
-.. _js:
+(js)=
 
 # JavaScript Mapping
 
@@ -29,7 +29,7 @@ $('#my-long-id').hide();
 Agile UI provides a built-in integration for jQuery. To use jQuery and any other JavaScript library
 in Agile UI you need to understand how Actions and Events work.
 
-.. _js_action:
+(js_action)=
 
 ### Actions
 
@@ -670,7 +670,7 @@ $button->on('click', function () use ($button, $image) {
 However, it would be nice if the user was aware of the progress of your process, which is when `Server Sent Event (JsSse)`_
 comes into play.
 
-.. _sse:
+(sse)=
 
 ### Server Sent Event (JsSse)
 

@@ -1,4 +1,4 @@
-.. _Lister:
+(Lister)=
 
 # Lister
 

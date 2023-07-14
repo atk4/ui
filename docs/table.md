@@ -1,4 +1,4 @@
-.. _table:
+(table)=
 
 # Table
 
@@ -270,7 +270,7 @@ $table->js(true)->tablesort();
 
 For more information see https://github.com/kylefox/jquery-tablesort
 
-.. _table_html:
+(table_html)=
 
 ### Injecting HTML
 

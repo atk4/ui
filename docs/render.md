@@ -108,7 +108,7 @@ will be automatically embedded into the column and having it appear anywhere els
 It's futile to try and extract JS chains from the $subView because JS wouldn't work anyway, so this method will only work
 with static components.
 
-.. _unique_name:
+(unique_name)=
 
 ### Unique Name
 

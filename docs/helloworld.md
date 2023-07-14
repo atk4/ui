@@ -1,4 +1,4 @@
-.. _helloworld:
+(helloworld)=
 
 # HelloWorld
 

@@ -1,4 +1,4 @@
-.. _overview:
+(overview)=
 
 # Overview of Agile UI
 
@@ -78,7 +78,7 @@ Simple scenario:
     digging through heaps of HTML, CSS, or JS frameworks and need a solution
     which will be quick and just works.
 
-.. _overview_example:
+(overview_example)=
 
 Overview Example
 ^^^^^^^^^^^^^^^^
@@ -182,7 +182,7 @@ To sum up Agile UI in more technical terms:
 
 - Creating MVP prototype for Web Apps.
 
-.. _component:
+(component)=
 
 ## Component
 

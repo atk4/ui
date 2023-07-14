@@ -1,4 +1,4 @@
-.. _grid:
+(grid)=
 
 # Grid
 

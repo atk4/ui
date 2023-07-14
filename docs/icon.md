@@ -1,4 +1,4 @@
-.. _icon:
+(icon)=
 
 # Icon
 
@@ -47,7 +47,7 @@ Button::addTo($app, ['Click Me', 'class.red' => true, 'icon' => 'flipped big que
 Label::addTo($app, ['Battery Low', 'class.green' => true, 'icon' => 'battery low']);
 ```
 
-.. _icon_other_comp:
+(icon_other_comp)=
 
 ## Using on other Components
 

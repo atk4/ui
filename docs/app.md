@@ -1,4 +1,4 @@
-.. _app:
+(app)=
 
 ## Purpose of App class
 

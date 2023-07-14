@@ -1,4 +1,4 @@
-.. _rightpanel:
+(rightpanel)=
 
 # Right Panel
 

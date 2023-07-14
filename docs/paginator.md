@@ -1,4 +1,4 @@
-.. _paginator:
+(paginator)=
 
 # Paginator
 

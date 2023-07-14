@@ -1,4 +1,4 @@
-.. _image:
+(image)=
 
 # Image
 

@@ -1,4 +1,4 @@
-.. _view:
+(view)=
 
 # Views
 

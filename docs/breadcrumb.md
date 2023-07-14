@@ -1,4 +1,4 @@
-.. _breadcrumb:
+(breadcrumb)=
 
 # Breadcrumb
 

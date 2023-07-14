@@ -1,4 +1,4 @@
-.. _button:
+(button)=
 
 # Button
 

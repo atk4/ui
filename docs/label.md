@@ -1,4 +1,4 @@
-.. _label:
+(label)=
 
 # Label
 

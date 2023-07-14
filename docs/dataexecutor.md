@@ -1,4 +1,4 @@
-.. _dataexecutor:
+(dataexecutor)=
 
 # Data Action Executor
 

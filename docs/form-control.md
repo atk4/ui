@@ -1,4 +1,4 @@
-.. _form-control:
+(form-control)=
 
 # Form Controls
 
