@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (helloworld)=
 
 # HelloWorld
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} HelloWorld
 :::

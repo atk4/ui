@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (overview)=
 
 # Overview of Agile UI

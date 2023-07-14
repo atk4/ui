@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 # Callback Introduction
 
 Agile UI pursues a goal of creating a full-featured, interactive, user interface. Part of that relies

@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (text)=
 
 # LoremIpsum
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} LoremIpsum
 :::

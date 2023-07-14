@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 # Introduction
 
 Ability to automatically generate callback URLs is one of the unique features in Agile UI.

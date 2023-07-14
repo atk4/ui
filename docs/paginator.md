@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (paginator)=
 
 # Paginator
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Paginator
 :::

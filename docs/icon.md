@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (icon)=
 
 # Icon
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Icon
 :::

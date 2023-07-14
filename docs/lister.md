@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (Lister)=
 
 # Lister
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Lister
 :::

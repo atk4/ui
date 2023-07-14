@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (form)=
 
 # Forms
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Form
 :::

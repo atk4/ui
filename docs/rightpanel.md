@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui\Panel
+:::
+
 (rightpanel)=
 
 # Right Panel
-
-:::{php:namespace} Atk4\Ui\Panel
-:::
 
 :::{php:class} Right
 :::

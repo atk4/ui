@@ -1,12 +1,12 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (view)=
 
 # Views
 
 Agile UI is a component framework, which follows a software patterns known as
 `Render Tree` and `Two pass HTML rendering`.
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} View
 A View is a most fundamental object that can take part in the Render tree. All

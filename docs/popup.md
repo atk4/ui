@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (popup)=
 
 # Popup
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Popup
 :::

@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (label)=
 
 # Label
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Label
 :::

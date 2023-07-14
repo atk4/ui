@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (button)=
 
 # Button
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Button
 :::

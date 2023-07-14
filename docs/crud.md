@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (crud)=
 
 # Crud
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Crud
 :::

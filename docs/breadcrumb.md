@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (breadcrumb)=
 
 # Breadcrumb
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Breadcrumb
 :::

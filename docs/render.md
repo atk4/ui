@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 # Introduction
 
 Agile UI allows you to create and combine various objects into a single Render Tree for unified rendering. Tree represents

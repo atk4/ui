@@ -1,10 +1,10 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 # VirtualPage Introduction
 
 Before learning about VirtualPage, Loader and other ways of dynamic content loading, you should fully
 understand {ref}`callback`.
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} VirtualPage
 :::

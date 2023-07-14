@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (menu)=
 
 # Menu
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Menu
 :::

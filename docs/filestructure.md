@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (filestructure)=
 
 # File structure example & first app

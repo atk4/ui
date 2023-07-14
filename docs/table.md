@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (table)=
 
 # Table
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Table
 :::

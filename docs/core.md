@@ -1,7 +1,7 @@
-# Core Concepts
-
 :::{php:namespace} Atk4\Ui
 :::
+
+# Core Concepts
 
 Agile Toolkit and Agile UI are built upon specific core concepts. Understanding those
 concepts is very important especially if you plan to write and distribute your own

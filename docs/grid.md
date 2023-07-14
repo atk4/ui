@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (grid)=
 
 # Grid
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Grid
 :::

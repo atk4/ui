@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (message)=
 
 # Message
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Message
 :::

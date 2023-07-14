@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (text)=
 
 # Text
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Text
 :::

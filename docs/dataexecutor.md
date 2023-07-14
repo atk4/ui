@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Ui\UserAction
+:::
+
 (dataexecutor)=
 
 # Data Action Executor
@@ -13,9 +16,6 @@ an ArgumentFormExecutor. Or actions that can run using a single button can use a
 Demo: https://ui.agiletoolkit.org/demos/data-action/actions.php
 
 ## Executor Interface
-
-:::{php:namespace} Atk4\Ui\UserAction
-:::
 
 All executors must implement the ExecutorInterface or JsExecutorInterface interface.
 

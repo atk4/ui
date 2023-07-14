@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 # File Upload
 
 :::{figure} images/fileupload.png

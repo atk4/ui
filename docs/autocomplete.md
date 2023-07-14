@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui\Form\Control
+:::
+
 (autocomplete)=
 
 # AutoComplete Form Control
-
-:::{php:namespace} Atk4\Ui\Form\Control
-:::
 
 :::{php:class} AutoComplete
 :::

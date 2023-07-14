@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 # Components
 
 Classes that extend from {php:class}`View` are called `Components` and inherit abilities to render themselves (see {ref}`render`)

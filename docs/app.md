@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (app)=
 
 # Purpose of App class
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} App
 :::

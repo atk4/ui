@@ -1,9 +1,9 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 (image)=
 
 # Image
-
-:::{php:namespace} Atk4\Ui
-:::
 
 :::{php:class} Image
 :::

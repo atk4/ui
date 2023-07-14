@@ -1,3 +1,6 @@
+:::{php:namespace} Atk4\Ui
+:::
+
 # Agile UI Documentation
 
 Contents:
