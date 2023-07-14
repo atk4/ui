@@ -1,11 +1,11 @@
-:::{php:namespace} Atk4\Ui\Panel
+:::{php:namespace} Atk4\Ui
 :::
 
 (rightpanel)=
 
 # Right Panel
 
-:::{php:class} Right
+:::{php:class} Panel\Right
 :::
 
 Right panel are view attached to the app layout. They are display on demand via javascript event

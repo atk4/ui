@@ -1,11 +1,11 @@
-:::{php:namespace} Atk4\Ui\Form\Control
+:::{php:namespace} Atk4\Ui
 :::
 
 (autocomplete)=
 
 # AutoComplete Form Control
 
-:::{php:class} AutoComplete
+:::{php:class} Form\Control\AutoComplete
 :::
 
 Agile UI uses "Form\Control\Dropdown" by default on the form, but there is also implementation

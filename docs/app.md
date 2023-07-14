@@ -434,10 +434,7 @@ Each layout, depending on it's content, may come with several views that you can
 
 ## Admin Layout
 
-:::{php:namespace} Atk4\Ui\Layout
-:::
-
-:::{php:class} Admin
+:::{php:class} Layout\Admin
 :::
 
 Agile Toolkit comes with a ready to use admin layout for your application. The layout is built
