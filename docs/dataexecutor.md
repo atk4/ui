@@ -80,13 +80,13 @@ The ModalExecutor is base on Modal view. This is a one size fits all for model U
 ModelExecutor::setAction($action) method, it will automatically determine what step is require and will display each step
 base on the action definition within a modal view:
 
-    Step 1: Argument definition. If the action required arguments, then the modal will display a form and ask user
-    to fill argument values required by the model UserAction;
+- Step 1: Argument definition. If the action required arguments, then the modal will display a form and ask user
+  to fill argument values required by the model UserAction;
 
-    Step 2: Field definition. If the action required fields, then the modal will display a form and ask user to fill
-    field values required by the model UserAction;
+- Step 2: Field definition. If the action required fields, then the modal will display a form and ask user to fill
+  field values required by the model UserAction;
 
-    Step 3: Preview. If the action preview is set, then the modal will display it prior to execute the action.
+- Step 3: Preview. If the action preview is set, then the modal will display it prior to execute the action.
 
 The modal title default is set from the UserAction::getDescription() method but can be override using the
 Modal::$title property.

@@ -1,4 +1,4 @@
-### Introduction
+# Introduction
 
 Ability to automatically generate callback URLs is one of the unique features in Agile UI.
 With most UI widgets they would rely on a specific URL to be available or would require
@@ -37,8 +37,7 @@ Whenever Loader, Console or any other component generatens a URL, it will now in
 of `$_GET['client_id']` and it will transparently arrive inside your code even if it takes
 multiple requests to get there.
 
-Global vs Local Sticky GET
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+## Global vs Local Sticky GET
 
 In earlier example, we have called `$app->stickyGet` which creates a global stickyGet. After
 executing, all the invocations to App::url() or View::url() will contain "client_id".
@@ -63,8 +62,7 @@ $p->url(); // includes "trigger_name=callback"
 
 If you call `$app->url()` it will contain `client_id` but won't contain the callbacks triggers.
 
-View Reachability
-^^^^^^^^^^^^^^^^^
+## View Reachability
 
 Agile UI views have a method View::url() which will return URL that is guaranteed to trigger their "init"
 method. This is regardless of the placement of your View and also it honors all the arguments that are
@@ -89,8 +87,7 @@ This will display 3 buttons and each button will contain a URL which needs to be
 corresponding button to be initialized. Because middle button is inside a callback the URL for that
 will be different.
 
-Dropping sticky argument
-^^^^^^^^^^^^^^^^^^^^^^^^
+## Dropping sticky argument
 
 Sometimes you want to drop a sticky argument. If your sticky was set locally, you can drop it by calling
 either a parent's url or $app->url(), however for global sticky Get you can use either `url(['client_id' => false])`

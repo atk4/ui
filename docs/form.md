@@ -553,11 +553,11 @@ Specify a PHP callback that will be executed on successful form submission.
 :::
 
 :::{php:method} jsError($field, $message)
-Create and return {php:class}`JsChain` action that will indicate error on a form control.
+Create and return {php:class}`Js\JsChain` action that will indicate error on a form control.
 :::
 
 :::{php:method} jsSuccess($title, [$subTitle])
-Create and return {php:class}`JsChain` action, that will replace form with a success message.
+Create and return {php:class}`Js\JsChain` action, that will replace form with a success message.
 :::
 
 :::{php:method} setApiConfig($config)

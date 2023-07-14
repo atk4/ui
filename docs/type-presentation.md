@@ -1,6 +1,6 @@
 (type-presentation)=
 
-## Formatters vs Decorators
+# Formatters vs Decorators
 
 This chapter describes a common technique used by various components that wish to preserve
 extensible nature when dealing with used-defined types. Reading this chapter will also help
@@ -26,7 +26,7 @@ Decoration is performed by helper classes, such as {php:class}`Form\Control\Cale
 {php:class}`Table\Column\Money`. The decorator is in control of the final output, so it can decide if
 it uses the value from presentation or do some decoration on its own.
 
-## Extending Data Types
+# Extending Data Types
 
 If you are looking to add a new data type, such as "money + currency" combination, which would
 allow user to specify both the currency and the monetary value, you should start by adding
@@ -37,27 +37,27 @@ of your integration.
 
 1. Extend UI persistence and use your class in `$app->uiPersistence`.
 
-  You need to define how to output your data as well as read it.
+   You need to define how to output your data as well as read it.
 
 2. Try your new type with a standard Form control.
 
-  The value you output should read and stored back correctly.
-  This ensures that standard UI will work with your new data type.
+   The value you output should read and stored back correctly.
+   This ensures that standard UI will work with your new data type.
 
 3. Create your new decorator.
 
-  Such as use drop-down to select currency from a pre-defined list inside your specific class
-  while extending {php:class}`Form\Control\Input` class. Make sure it can interpret input correctly.
-  The process is explained further down in this chapter.
+   Such as use drop-down to select currency from a pre-defined list inside your specific class
+   while extending {php:class}`Form\Control\Input` class. Make sure it can interpret input correctly.
+   The process is explained further down in this chapter.
 
 4. Associate the types with your decorator.
 
-  This happens in {php:meth}`Form::controlFactory` and {php:meth}`Table::decoratorFactory`.
+   This happens in {php:meth}`Form::controlFactory` and {php:meth}`Table::decoratorFactory`.
 
 For the third party add-ons it is only possible to provide decorators. They must rely on one of
 the standard types, unless they also offer a dedicated model.
 
-## Manually Specifying Decorators
+# Manually Specifying Decorators
 
 When working with components, they allow to specify decorators manually, even if the type
 of the field does not seem compatible:
@@ -75,9 +75,9 @@ Selecting the decorator is done in the following order:
 - specified in second argument to UI `addColumn()` or `addControl()` (as shown above)
 - specified using `ui` property of {php:class}`\Atk4\Data\Field`:
 
-```
-$field->ui['form'] = new \Atk4\Ui\Form\Control\Password();
-```
+  ```
+  $field->ui['form'] = new \Atk4\Ui\Form\Control\Password();
+  ```
 
 - fallback to {php:meth}`Form::controlFactory`
 
@@ -89,11 +89,11 @@ which do have some impact on rendering, whereas UI field `ui` property (not used
 designates the Fomantic-UI element to use.
 :::
 
-## Examples
+# Examples
 
 Let's explore various use cases and how to properly deal with scenarios
 
-### Display password in plain-text for Admin
+## Display password in plain-text for Admin
 
 Normally password is presented as asterisks on the Grid and Form. But what if you want to
 show it without masking just for the admin? Change type in-line for the model field:
@@ -109,7 +109,7 @@ $crud->setModel($model);
 Changing element's type to string will certainly not perform any password encryption.
 :::
 
-### Hide account_number in specific Table
+## Hide account_number in specific Table
 
 This is reverse scenario. Field `account_number` needs to be stored as-is but should be
 hidden when presented. To hide it from Table:
@@ -121,7 +121,7 @@ $table->setModel($model);
 $model->addDecorator('account_number', new \Atk4\Ui\Table\Column\Password());
 ```
 
-### Create a decorator for hiding credit card number
+## Create a decorator for hiding credit card number
 
 If you happen to store card numbers and you only want to display the last digits in tables,
 yet make it available when editing, you could create your own {php:class}`Table\Column` decorator:
@@ -147,7 +147,7 @@ If you are wondering, why I'm not overriding by providing HTML tag equal to the 
 it's because this technique is unreliable due to ability to exclude HTML tags with
 {php:attr}`Table::$useHtmlTags`.
 
-### Display credit card number with spaces
+## Display credit card number with spaces
 
 If we always have to display card numbers with spaces, e.g. "1234 1234 1234 1234" but have
 the database store them without spaces, then this is a data formatting task best done by

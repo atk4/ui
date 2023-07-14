@@ -42,16 +42,12 @@ $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 :::{rubric} Clarifications
 :::
 
-.. [#f1] All PHP files start with `<?php`. I will omit this line in my further examples. There is no need
-    to add a matching `?>` at the end.
-
-.. [#f2] Inclusion of `autoload.php` is a standard thing to do when working with PHP / Composer.
-
-.. [#f3] The `App` class represents your web application. This line may change if you integrate Agile UI with another framework.
-
-.. [#f4] Specifies default page layout for your application. Try changing between Layout\Centered and Layout\Centered.
-
-.. [#f5] Creates new component 'HelloWorld' and adds it into Application Layout.
+- All PHP files start with `<?php`. I will omit this line in my further examples. There is no need
+  to add a matching `?>` at the end.
+- Inclusion of `autoload.php` is a standard thing to do when working with PHP / Composer.
+- The `App` class represents your web application. This line may change if you integrate Agile UI with another framework.
+- Specifies default page layout for your application. Try changing between LayoutCentered and LayoutCentered.
+- Creates new component 'HelloWorld' and adds it into Application Layout.
 
 You should see the following output:
 
@@ -166,13 +162,10 @@ class ToDoItem extends \Atk4\Data\Model
 :::{rubric} Clarifications
 :::
 
-.. [#f6] $table is a default table/collection/key name when persisting model data.
-
-.. [#f7] Second argument to addField() is optional and can contain field meta-data.
-
-.. [#f8] All Meta-data is stored but some has special meaning - 'type' will specify how UI presents the field
-
-.. [#f9] Business Model is always using native PHP types, regardless of where data is stored.
+- $table is a default table/collection/key name when persisting model data.
+- Second argument to addField() is optional and can contain field meta-data.
+- All Meta-data is stored but some has special meaning - 'type' will specify how UI presents the field
+- Business Model is always using native PHP types, regardless of where data is stored.
 
 As you might have noted already, Persistence and Model are defined independently from each-other.
 
@@ -222,28 +215,21 @@ $form->onSubmit(function (Form $form) use ($colReload) {
 :::{rubric} Clarifications
 :::
 
-.. [#] We wish to position Form and Table side-by-side, so we use `\Atk4\Ui\Columns` component and
-    inject a Fomantic-UI CSS class "divided" that will appear as a vertical separation line.
-
-.. [#] $colReload is a special object which we call {ref}`js_action`. It represents a Browser-event
-    that will cause both columns to be reloaded from the server. To use this action we still have
-    to bind it.
-
-.. [#] `Columns` class provides `addColumn()` method to equally divide layout vertically. We call
-    this method twice in our example, so two columns will be visible. Method returns a `View` where
-    we can add a Form component.
-
-.. [#] `setModel` provides a way to bind Component with Data Model and Data Persistence.
-
-.. [#] `Form` relies on a special Callback feature of Agile UI to automatically handle onSubmit
-    callback, pre-load form values into the model, so that you could simply
-
-.. [#] Save the record into that session data. Form automatically captures validation errors.
-
-.. [#] We use `$colReload` which we defined earlier to instruct client browser on what it needs to
-    do when form is successfully saved.
-
-.. [#] Very similar syntax to what we used with a form, but using with a Table for listing records.
+- We wish to position Form and Table side-by-side, so we use `\Atk4\Ui\Columns` component and
+  inject a Fomantic-UI CSS class "divided" that will appear as a vertical separation line.
+- $colReload is a special object which we call {ref}`js_action`. It represents a Browser-event
+  that will cause both columns to be reloaded from the server. To use this action we still have
+  to bind it.
+- `Columns` class provides `addColumn()` method to equally divide layout vertically. We call
+  this method twice in our example, so two columns will be visible. Method returns a `View` where
+  we can add a Form component.
+- `setModel` provides a way to bind Component with Data Model and Data Persistence.
+- `Form` relies on a special Callback feature of Agile UI to automatically handle onSubmit
+  callback, pre-load form values into the model, so that you could simply
+- Save the record into that session data. Form automatically captures validation errors.
+- We use `$colReload` which we defined earlier to instruct client browser on what it needs to
+  do when form is successfully saved.
+- Very similar syntax to what we used with a form, but using with a Table for listing records.
 
 It is time to test our application in action. Use the form to add new record data. Saving the form
 will cause table to also reload revealing new records.
@@ -277,27 +263,21 @@ if (isset($_GET['delete'])) {
 :::{rubric} Clarifications
 :::
 
-.. [#] We replace 'Table' with a 'Crud'. This is much more advanced component, that wraps
-    'Table' component by providing support for editing operations and other features like
-    pagination, quick-search, etc.
-
-.. [#] Disable create and delete features, since we have other ways to invoke that (form and checkboxes)
-
-.. [#] Grid comes with menu, where we can add items.
-
-.. [#] You are already familiar with JsReload action. This time we only wish to reload Grid's Table as
-    we wouldn't want to lose any form content.
-
-.. [#] Grid's `addSelection` method will add checkbox column. Implemented through `Table\Column\Checkbox`
-    this object has method jsChecked() which will return another Action for collecting selected checkboxes.
-    This demonstrates how Actions can be used as JavaScript expressions augmented by Components.
-
-.. [#] Reload events will execute same originating PHP script but will pass additional arguments. In this
-    case, 'delete' get argument is passed.
-
-.. [#] We use the IDs to dispose of completed tasks. Since that happens during the Reload event, the
-    App class will carry on with triggering the necessary code to render new HTML for the $grid->table,
-    so it will reflect removal of the items.
+- We replace 'Table' with a 'Crud'. This is much more advanced component, that wraps
+  'Table' component by providing support for editing operations and other features like
+  pagination, quick-search, etc.
+- Disable create and delete features, since we have other ways to invoke that (form and checkboxes)
+- Grid comes with menu, where we can add items.
+- You are already familiar with JsReload action. This time we only wish to reload Grid's Table as
+  we wouldn't want to lose any form content.
+- Grid's `addSelection` method will add checkbox column. Implemented through `Table\Column\Checkbox`
+  this object has method jsChecked() which will return another Action for collecting selected checkboxes.
+  This demonstrates how Actions can be used as JavaScript expressions augmented by Components.
+- Reload events will execute same originating PHP script but will pass additional arguments. In this
+  case, 'delete' get argument is passed.
+- We use the IDs to dispose of completed tasks. Since that happens during the Reload event, the
+  App class will carry on with triggering the necessary code to render new HTML for the $grid->table,
+  so it will reflect removal of the items.
 
 ## Conclusion
 

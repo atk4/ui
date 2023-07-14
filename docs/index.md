@@ -1,4 +1,4 @@
-## Agile UI Documentation
+# Agile UI Documentation
 
 Contents:
 
@@ -14,24 +14,7 @@ js
 advanced
 :::
 
-..
+# Indices and tables
 
-    base-components
-    core
-    layouts
-    building-components
-    menu
-    lister
-    table
-    paginator
-    grid
-    form
-    crud
-    tree
-    virtual-page
-    console
-
-## Indices and tables
-
-* {ref}`genindex`
-* {ref}`search`
+- {ref}`genindex`
+- {ref}`search`

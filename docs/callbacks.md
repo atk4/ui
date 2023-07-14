@@ -1,4 +1,4 @@
-### Callback Introduction
+# Callback Introduction
 
 Agile UI pursues a goal of creating a full-featured, interactive, user interface. Part of that relies
 on abstraction of Browser/Server communication.
@@ -23,7 +23,7 @@ This creates callback route transparently which is triggered automatically durin
 To make this work seamlessly there are several classes at play. This documentation chapter will walk
 you through the callback mechanisms of Agile UI.
 
-### The Callback class
+# The Callback class
 
 :::{php:class} Callback
 :::
@@ -70,7 +70,7 @@ $cb->set(function () use ($app) {
 });
 ```
 
-### Callback Triggering
+# Callback Triggering
 
 To illustrate how callbacks work, let's imagine the following workflow:
 
@@ -89,7 +89,7 @@ another request to the server:
 Calling {php:meth}`App::terminate()` will prevent the default behaviour (of rendering UI) and will
 output specified string instead, stopping further execution of your application.
 
-### Return value of set()
+# Return value of set()
 
 The callback verifies trigger condition when you call {php:meth}`Callback::set()`. If your callback
 returns any value, the set() will return it too:
@@ -146,7 +146,7 @@ derived classes.
 Specifies which GET parameter to use for triggering. Normally it's same as `$callback->name`, but you can set it
 to anything you want. As long as you keep it unique on a current page, you should be OK.
 
-### CallbackLater
+# CallbackLater
 
 :::{php:class} CallbackLater
 :::
@@ -199,7 +199,7 @@ Should JsReload use regular 'Callback', then it wouldn't know that $view must co
 
 JsReload existence is only possible thanks to CallbackLater implementation.
 
-### JsCallback
+# JsCallback
 
 :::{php:class} JsCallback
 :::
@@ -259,8 +259,7 @@ $label->on('click', function () {
 });
 ```
 
-User Confirmation
-^^^^^^^^^^^^^^^^^
+## User Confirmation
 
 The implementation perfectly hides existence of callback route, javascript action and JsCallback. The JsCallback
 is based on 'Callback' therefore code after {php:meth}`View::on()` will not be executed during triggering.
@@ -295,8 +294,7 @@ $label->on('click', function () {
 }, ['confirm' => 'sure?']);
 ```
 
-JavaScript arguments
-^^^^^^^^^^^^^^^^^^^^
+## JavaScript arguments
 
 :::{php:method} set($callback, $arguments = [])
 :::
@@ -338,8 +336,7 @@ $label->on('click', function (Jquery $j, $arg1) {
 }, [new \Atk4\Ui\Js\JsExpression('$(window).width()')]);
 ```
 
-Referring to event origin
-^^^^^^^^^^^^^^^^^^^^^^^^^
+## Referring to event origin
 
 You might have noticed that JsCallback now passes first argument ($j) which so far, we have ignored. This argument is a
 jQuery chain for the element which received the event. We can change the response to do something with this element.

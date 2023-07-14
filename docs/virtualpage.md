@@ -1,7 +1,10 @@
-### VirtualPage Introduction
+# VirtualPage Introduction
 
 Before learning about VirtualPage, Loader and other ways of dynamic content loading, you should fully
 understand {ref}`callback`.
+
+:::{php:namespace} Atk4\Ui
+:::
 
 :::{php:class} VirtualPage
 :::
@@ -64,8 +67,7 @@ see only the 'LoremIpsum' text.
 
 See {php:attr}`Callback::urlTrigger`.
 
-Output Modes
-^^^^^^^^^^^^
+## Output Modes
 
 :::{php:method} getUrl($mode = 'callback')
 :::
@@ -83,8 +85,7 @@ $label->detail = $vp->cb->getUrl('popup');
 $label->link($vp->cb->getUrl('popup'));
 ```
 
-Setting Callback
-^^^^^^^^^^^^^^^^
+## Setting Callback
 
 :::{php:method} set($callback)
 :::
@@ -139,7 +140,7 @@ $label->detail = $vp->cb->getUrl('popup');
 $label->link($vp->cb->getUrl('popup'));
 ```
 
-### Loader
+# Loader
 
 :::{php:class} Loader
 :::
@@ -183,8 +184,7 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
 });
 ```
 
-Triggering Loader
-^^^^^^^^^^^^^^^^^
+## Triggering Loader
 
 By default, Loader will display a spinner and will start loading it's contents as soon as DOM Ready() event fires.
 Sometimes you want to control the event.
@@ -225,13 +225,11 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
 
 This approach allow you to trigger loader from inside JavaScript easily. See also: https://api.jquery.com/trigger/
 
-Reloading
-^^^^^^^^^
+## Reloading
 
-If you execute {php:class}`JsReload` action on the Loader, it will return to original state.
+If you execute {php:class}`Js\JsReload` action on the Loader, it will return to original state.
 
-Inline Editing Example
-^^^^^^^^^^^^^^^^^^^^^^
+## Inline Editing Example
 
 Next example will display DataTable, but will allow you to replace data with a form temporarily:
 
@@ -256,8 +254,7 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
 });
 ```
 
-Progress Bar
-^^^^^^^^^^^^
+## Progress Bar
 
 :::{php:attr} progressBar = null
 :::

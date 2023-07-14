@@ -34,7 +34,7 @@ You can refer to the Fomantic-UI documentation for Button to find out more about
 
 Demo: https://ui.agiletoolkit.org/demos/button.php
 
-### Button Icon
+## Button Icon
 
 :::{php:attr} icon
 :::
@@ -71,7 +71,7 @@ $button = Button::addTo($app, ['Next', 'iconRight' => 'right arrow']);
 Apart from being on the right, the same rules apply as {php:attr}`Button::$icon`. Both
 icons cannot be specified simultaneously.
 
-### Button Bar
+## Button Bar
 
 Buttons can be arranged into a bar. You would need to create a {php:class}`View` component
 with property `ui='buttons'` and add your other buttons inside:
@@ -106,7 +106,7 @@ $bar->add($button);
 $app->add($bar);
 ```
 
-### Linking
+## Linking
 
 :::{php:method} link
 :::
@@ -127,7 +127,7 @@ For other JavaScript actions you can use {ref}`js`:
 $button->on('click', new JsExpression('document.location.reload()'));
 ```
 
-### Complex Buttons
+## Complex Buttons
 
 Knowledge of the Fomantic-UI button (https://fomantic-ui.com/elements/button.html) can help you
 in creating more complex buttons:

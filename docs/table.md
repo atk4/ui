@@ -348,15 +348,15 @@ During the render process (see {php:meth}`View::renderView`) Table will perform 
 1. Generate header row.
 2. Generate template for data rows.
 3. Iterate through rows
-   3.1 Current row data is accessible through $table->model property.
-   3.2 Update Totals if {php:meth}`Table::addTotals` was used.
-   3.3 Insert row values into {php:attr}`Table::tRow`
-       3.3.1 Template relies on {ref}`uiPersistence` for formatting values
-   3.4 Collect HTML tags from 'getHtmlTags' hook.
-   3.5 Collect getHtmlTags() from columns objects
-   3.6 Inject HTML into {php:attr}`Table::tRow` template
-   3.7 Render and append row template to Table Body ({$Body})
-   3.8 Clear HTML tag values from template.
+   1. Current row data is accessible through $table->model property.
+   2. Update Totals if {php:meth}`Table::addTotals` was used.
+   3. Insert row values into {php:attr}`Table::tRow`
+       1. Template relies on {ref}`uiPersistence` for formatting values
+   4. Collect HTML tags from 'getHtmlTags' hook.
+   5. Collect getHtmlTags() from columns objects
+   6. Inject HTML into {php:attr}`Table::tRow` template
+   7. Render and append row template to Table Body ({$Body})
+   8. Clear HTML tag values from template.
 4. If no rows were displayed, then "empty message" will be shown (see {php:attr}`Table::tEmpty`).
 5. If {php:meth}`addTotals` was used, append totals row to table footer.
 
@@ -397,9 +397,7 @@ There are a few things to note:
    column. Some tasks will be done by first decorator only, such as getting TH/header cell. Others will
    be done by all decorators, such as collecting classes / styles for the cell or wrapping formatted
    content (link, icon, template).
-
 2. formatting is always applied in same order as defined - in example above Money first, Link after.
-
 3. output of the \Atk4\Ui\Table\Column\Money decorator is used into Link decorator as if it would be value of cell, however
    decorators have access to original value also. Decorator implementation is usually aware of combinations.
 

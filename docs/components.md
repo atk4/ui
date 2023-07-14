@@ -21,8 +21,8 @@ tablecolumn
 ## Simple components
 
 :::{figure} images/simple.png
-:scale: 30%
 :align: right
+:scale: 30%
 :::
 
 Simple components exist for the purpose of abstraction and creating a decent interface which you can rely on when programming your
@@ -50,8 +50,8 @@ helloworld
 ## Interactive components
 
 :::{figure} images/interactive.png
-:scale: 30%
 :align: right
+:scale: 30%
 :::
 
 Interactive components rely on {ref}`callback`, {ref}`virtualpage` or {ref}`sse` to communicate with themselves in the PHP realm. You add them
@@ -80,8 +80,8 @@ dataexecutor
 ## Composite components
 
 :::{figure} images/composite.png
-:scale: 30%
 :align: right
+:scale: 30%
 :::
 
 Composite elements such as Grid are the bread-and-butter of Agile UI. They will pass on rendering and

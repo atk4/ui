@@ -67,7 +67,7 @@ Agile UI is designed and optimized for quick deployment into modern serverless
 architecture providers such as: Heroku, Docker, or even AWS Lambdas.
 
 Agile UI / PHP application has a minimum "start-up" time, has the best CPU usage,
-and gives you the highest efficiency and best scaling.  
+and gives you the highest efficiency and best scaling.
 
 ### 5. High-level Solution
 
@@ -80,8 +80,7 @@ Simple scenario:
 
 (overview_example)=
 
-Overview Example
-^^^^^^^^^^^^^^^^
+#### Overview Example
 
 Agile UI / Agile Data code for your app can fit into a single file. See below for
 clarifications:
@@ -122,45 +121,45 @@ $db = new \Atk4\Data\Persistence\Sql($dsn);
 Through the course of this example, We are performing several core actions:
 
 - `$app` is an object representing our Web Application and abstracting
-   all the input, output, error-handling, and other technical implementation
-   details of a standard web application.
+  all the input, output, error-handling, and other technical implementation
+  details of a standard web application.
 
-   In most applications you would want to extend this class yourself. When
-   integrating Agile UI with MVC framework, you would be using a different
-   App class that properly integrates framework capabilities.
+  In most applications you would want to extend this class yourself. When
+  integrating Agile UI with MVC framework, you would be using a different
+  App class that properly integrates framework capabilities.
 
-   For a {ref}`component` the App class provides level of abstraction and
-   utility.
+  For a {ref}`component` the App class provides level of abstraction and
+  utility.
 
-   For full documentation see {ref}`app`.
+  For full documentation see {ref}`app`.
 
 - `$db` this is a database persistence object. It may be a Database which is
-   either SQL or NoSQL but can also be RestAPI, a cache, or a pseudo-persistence.
+  either SQL or NoSQL but can also be RestAPI, a cache, or a pseudo-persistence.
 
-   We used `Persistence\Sql` class, which takes advantage of a standard-compliant
-   database server to speed up aggregation, multi-table, and multi-record operations.
+  We used `Persistence\Sql` class, which takes advantage of a standard-compliant
+  database server to speed up aggregation, multi-table, and multi-record operations.
 
-   For a {ref}`component` the Persistence class provides data storage abstraction
-   through the use of a Model class.
+  For a {ref}`component` the Persistence class provides data storage abstraction
+  through the use of a Model class.
 
-   Agile Data has full documentation at https://agile-data.readthedocs.io.
+  Agile Data has full documentation at https://agile-data.readthedocs.io.
 
 - `Offer` is a Model - a database-agnostic declaration of your business entity.
-   Model object represents a data-set for specific persistence and conditions.
+  Model object represents a data-set for specific persistence and conditions.
 
-   In our example, the object is created representing all our offer records that is then
-   passed into the Crud {ref}`component`.
+  In our example, the object is created representing all our offer records that is then
+  passed into the Crud {ref}`component`.
 
-   For a {ref}`component`, the Model represents information about the structure
-   and offers a mechanism to retrieve, store, and delete date from `$db` persistence.
+  For a {ref}`component`, the Model represents information about the structure
+  and offers a mechanism to retrieve, store, and delete date from `$db` persistence.
 
 - `Crud` is a {ref}`component` class. Particularly Crud is bundled with Agile UI
-   and implements out-of-the-box interface for displaying data in a table format
-   with operations to add, delete, or edit the record.
+  and implements out-of-the-box interface for displaying data in a table format
+  with operations to add, delete, or edit the record.
 
-   Although it's not obvious from the code, Crud relies on multiple other components
-   such as {php:class}`Grid`, {php:class}`Form`, {php:class}`Menu`, {php:class}`Paginator`,
-   and {php:class}`Button`.
+  Although it's not obvious from the code, Crud relies on multiple other components
+  such as {php:class}`Grid`, {php:class}`Form`, {php:class}`Menu`, {php:class}`Paginator`,
+  and {php:class}`Button`.
 
 To sum up Agile UI in more technical terms:
 
@@ -176,10 +175,8 @@ To sum up Agile UI in more technical terms:
 
 - Creating admin backend UI for data entry and dashboards in shortest time and with
   minimum amount of code.
-
 - Building UI components which you are willing to use across multiple environments
   (Laravel, WordPress, Drupal, etc)
-
 - Creating MVP prototype for Web Apps.
 
 (component)=
@@ -266,8 +263,8 @@ that elements will look good and be consistent.
 ### Layouts
 
 :::{image} images/layout-hierarchy.png
-:width: 40%
 :align: right
+:width: 40%
 :::
 
 Using App class will utilize a minimum of 2 templates:
@@ -322,8 +319,8 @@ To see how this is implemented, read about {ref}`callback`
 ### Virtual Pages
 
 :::{image} images/ui-component-diagram.png
-:width: 30%
 :align: right
+:width: 30%
 :::
 
 Extending the concept of Callbacks, you can also define Virtual Pages. It
@@ -369,6 +366,7 @@ We recommend that you start looking at Agile UI first. Continue reading through 
 have a basic understanding of "code" and some familiarity with the PHP language.
 
 - QuickStart - 20-minute read and some code examples you can try.
+
 - Core Concept - Read if you plan to design and build your own components.
 
   - Patterns and Principles
@@ -470,5 +468,5 @@ You will find this script in the subdirectory "atk4/ui/demos/_demo-data/". To ru
 use the following command:
 
 ```
-php atk4/ui/demos/_demo-data/create-db.php;
+php atk4/ui/demos/_demo-data/create-db.php
 ```

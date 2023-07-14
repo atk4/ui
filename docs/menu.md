@@ -60,8 +60,6 @@ $menu->addItem('bar', new JsModal('Test'));
 You can create sub-menu for either vertical or horizontal menu. For a vertical
 menu you can also use groups. For horizontal menu, you can use addRightMenu.
 
-:
-
 ```
 $menu = Menu::addTo($app);
 $menu->addItem('foo');
@@ -87,7 +85,7 @@ You can add other elements inside menu. Refer to demos/menu.php.
 :::{php:attr} label
 :::
 
-:::{php:attr} $icon
+:::{php:attr} icon
 :::
 
 Additionally you can use {php:meth}`View::addClass()` to disable or style your menu items.
