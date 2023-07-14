@@ -53,8 +53,10 @@ Will copy $this->getApp() into $object->getApp().
 
 If this object is initialized, will also initialize $object
 
-:param $object: Object or {ref}`seed` to add into render tree.
-:param $region: When outputting HTML, which region in {php:attr}`View::$template` to use.
+```{eval-rst}
+:param $object: Object or :ref:`seed` to add into render tree.
+:param $region: When outputting HTML, which region in :php:attr:`View::$template` to use.
+```
 :::
 
 :::{php:method} init()
@@ -188,7 +190,9 @@ to properly initialize the class corresponding to string 'Client'.
 ## UI Role and Classes
 
 :::{php:method} __construct($defaults = [])
+```{eval-rst}
 :param $defaults: set of default properties and classes.
+```
 :::
 
 :::{php:attr} ui
@@ -246,13 +250,17 @@ Add CSS class to element. Previously added classes are not affected.
 Multiple CSS classes can also be added if passed as space separated
 string or array of class names.
 
+```{eval-rst}
 :type $class: string|array
 :param $class: CSS class name or array of class names
 :returns: $this
+```
 :::
 
 :::{php:method} removeClass($class)
+```{eval-rst}
 :param $class: string|array one or multiple classes to be removed.
+```
 :::
 
 In addition to the UI / Role classes during the render, element will
@@ -515,17 +523,23 @@ Set static contents of this view.
 :::
 
 :::{php:method} setProperties($properties)
+```{eval-rst}
 :param $properties:
+```
 :::
 
 :::{php:method} setProperty($key, $val)
+```{eval-rst}
 :param $key:
 :param $val:
+```
 :::
 
 :::{php:method} set($arg1 = [], $arg2 = null)
+```{eval-rst}
 :param $arg1:
 :param $arg2:
+```
 :::
 
 :::{php:method} recursiveRender()
