@@ -35,7 +35,8 @@ $grid->menu->addItem('Reload Grid', new \Atk4\Ui\Js\JsReload($grid));
 :::{php:attr} menu
 :::
 
-.. php:method: addButton($label)
+:::{php:method} addButton($label)
+:::
 
 Grid top-bar which contains QuickSearch is implemented using Fomantic-UI "ui menu". With that
 you can add additional items and use all features of a regular {php:class}`Menu`:
@@ -63,7 +64,8 @@ $grid = Grid::addTo($app, ['menu' => false]);
 :::{php:attr} quickSearch
 :::
 
-.. php:method: addQuickSearch($fields = [], $hasAutoQuery = false)
+:::{php:method} addQuickSearch($fields = [], $hasAutoQuery = false)
+:::
 
 After you have associated grid with a model using {php:class}`View::setModel()` you can
 include quick-search component:

@@ -43,7 +43,9 @@ to use slash.
 
 :::{php:attr} path
 :::
-.. php:method: popTitle()
+
+:::{php:method} popTitle()
+:::
 
 Calling addCrumb adds more elements into the $path property. Each element there would contain 3 hash values:
 

@@ -1,4 +1,5 @@
-.. php:namespace: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
 .. _js:
 
