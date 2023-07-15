@@ -45,7 +45,7 @@ Download from www.agiletoolkit.org or Install ATK UI with `composer require atk4
 
 Create "index.php" file with:
 
-``` php
+```php
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -80,7 +80,7 @@ To get most of ATK UI, use [ATK Data](https://github.com/atk4/data) to describe 
 
 [Crud](https://ui.agiletoolkit.org/demos/crud.php) is a fully-interactive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
 
-``` php
+```php
 $app = new \Atk4\Ui\App(['title' => 'hello world']);
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
@@ -91,7 +91,7 @@ $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 
 ATK Data allows you to set up relations between models:
 
-``` php
+```php
 class User extends Model
 {
     protected function init(): void
@@ -107,7 +107,7 @@ class User extends Model
 
 Conventional Crud works only with a single model, but with add-on you can take advantage this relationship information: https://github.com/atk4/mastercrud
 
-``` php
+```php
 use \Atk4\Mastercrud\MasterCrud;
 
 // set up $app here
@@ -116,7 +116,6 @@ $masterCrud = MasterCrud::addTo($app)
     ->setModel(new User($app->db), [
         'Purchases' => [],
     ]);
-
 ```
 
 ### Agile UI can be styled
@@ -129,7 +128,7 @@ It's easy to create your own application styling. Here are some example UI:
 
 As of version 2.0 - Agile Toolkit offers support for User Actions. Those are easy to define in your Data Model declaration:
 
-``` php
+```php
 $this->addUserAction('archive', function (Model $m) {
     $m->set('is_archived', true);
     $this->saveAndUnload();
@@ -147,7 +146,7 @@ Agile UI has some unique features:
 
 One of the fundamental features of ATK is Callback - ability to dynamically generate a route then have JS part of the component invoke it. Thanks to this approach, code can be fluid, simple and readable:
 
-``` php
+```php
 $tabs = \Atk4\Ui\Tabs::addTo($app);
 \Atk4\Ui\Message::addTo($tabs->addTab('Intro'), ['Other tabs are loaded dynamically!']);
 
@@ -176,11 +175,11 @@ Another component implementation using a very friendly PHP syntax:
 
 You get most benefit when you use various ATK UI Components together. Try the following demo: https://ui.agiletoolkit.org/demos/interactive/wizard.php. The demo implements:
 
--   Multi-step wizard with ability to navigate forward and backward
--   Form with validation
--   Data memorization in the session
--   Table with column formatter, Messages
--   Real-time output console
+- Multi-step wizard with ability to navigate forward and backward
+- Form with validation
+- Data memorization in the session
+- Table with column formatter, Messages
+- Real-time output console
 
 With ATK it [takes about 50 lines of PHP code only](https://github.com/atk4/ui/blob/develop/demos/interactive/wizard.php) to build it all.
 
@@ -188,7 +187,7 @@ With ATK it [takes about 50 lines of PHP code only](https://github.com/atk4/ui/b
 
 It's really easy to put together a complex Admin system. Add this code to a new PHP file (tweak it with your database details, table and fields):
 
-``` php
+```php
 <?php
 
 $app = new \Atk4\Ui\App('My App');
@@ -223,9 +222,9 @@ Agile UI comes with many built-in components:
 
 _All components can be view using the [demos](https://ui.agiletoolkit.org/demos/) application._
 
-| Component                                                    | Description                                                  | Introduced |
-| ------------------------------------------------------------ | ------------------------------------------------------------ | ---------- |
-| View | Template, Render Tree and various patterns  | 0.1   |
+| Component | Description | Introduced |
+| --------- | ----------- | ---------- |
+| View | Template, Render Tree and various patterns | 0.1 |
 | Button | Button in various variations including icons, labels, styles and tags | 0.1 |
 | Input | Decoration of input fields, integration with buttons. | 0.2 |
 | JS| Assign JS events and abstraction of PHP callbacks. | 0.2 |
@@ -233,38 +232,37 @@ _All components can be view using the [demos](https://ui.agiletoolkit.org/demos/
 | Menu | Horizontal and vertical multi-dimensional menus with icons. | 0.4 |
 | Form| Validation, Interactivity, Feedback, Layouts, Field types. | 0.4 |
 | Layouts | Admin, Centered. | 0.4 |
-| Table | Formatting, Columns, Status, Link, Template, Delete. | 1.0  |
+| Table | Formatting, Columns, Status, Link, Template, Delete. | 1.0 |
 | Grid | Toolbar, Paginator, Quick-search, Expander, Actions. | 1.1 |
 | Message | Such as "Info", "Error", "Warning" or "Tip" for easy use.| 1.1 |
 | Modal | Modal dialog with dynamically loaded content. | 1.1 |
-| Reloading | Dynamically re-render part of the UI. | 1.1  |
-| Actions | Extended buttons with various interactions  | 1.1 |
+| Reloading | Dynamically re-render part of the UI. | 1.1 |
+| Actions | Extended buttons with various interactions | 1.1 |
 | Crud | Create, List, Edit and Delete records (based on Advanced Grid) | 1.1 |
 | Tabs | 4 Responsive: Admin, Centered, Site, Wide. | 1.2 |
-| Loader | Dynamically load itself and contained components inside. | 1.3  |
-| Modal View | Open/Load contained components in a dialog. | 1.3  |
-| Breadcrumb | Push links to pages for navigation. Wizard. | 1.4  |
+| Loader | Dynamically load itself and contained components inside. | 1.3 |
+| Modal View | Open/Load contained components in a dialog. | 1.3 |
+| Breadcrumb | Push links to pages for navigation. Wizard. | 1.4 |
 | ProgressBar | Interactive display of a multi-step PHP code execution progress | 1.4 |
 | Console | Execute server/shell commands and display progress live | 1.4 |
 | Items and Lists | Flexible and high-performance way to display lists of items. | 1.4 |
-| Wizard | Multi-step, wizard with temporary data storing. | 1.4  |
+| Wizard | Multi-step, wizard with temporary data storing. | 1.4 |
 | Actions | Visualization of user-defined actions | 2.0 |
-
 
 ## Add-ons and integrations
 
 Add-ons:
 
--   [MasterCrud](https://github.com/atk4/mastercrud) - Create multi-level Crud system with Breadcrumb
--   [Filestore](https://github.com/atk4/filestore) - Integrate your Form with Flysystem, uploading and storing files
--   [User Authentication and ACL](https://github.com/atk4/login) - User Log-in, Registration and Access Control for Agile UI
--   [Charts add-on](https://github.com/atk4/chart) - Modern looking and free charts with [chartJS](https://www.chartjs.org/)
--   [Audit for Models](https://github.com/atk4/audit) - Record all DB operations with Undo/Redo support for Agile Data
+- [MasterCrud](https://github.com/atk4/mastercrud) - Create multi-level Crud system with Breadcrumb
+- [Filestore](https://github.com/atk4/filestore) - Integrate your Form with Flysystem, uploading and storing files
+- [User Authentication and ACL](https://github.com/atk4/login) - User Log-in, Registration and Access Control for Agile UI
+- [Charts add-on](https://github.com/atk4/chart) - Modern looking and free charts with [chartJS](https://www.chartjs.org/)
+- [Audit for Models](https://github.com/atk4/audit) - Record all DB operations with Undo/Redo support for Agile Data
 
 Integrations:
 
--   [Agile UI for Wordpress](https://github.com/ibelar/atk-wordpress) - Write Wordpress plugin using Agile UI
--   [Laravel Agile Data](https://github.com/atk4/laravel-ad) - ServiceProvider for Agile Data
+- [Agile UI for Wordpress](https://github.com/ibelar/atk-wordpress) - Write Wordpress plugin using Agile UI
+- [Laravel Agile Data](https://github.com/atk4/laravel-ad) - ServiceProvider for Agile Data
 
 All bundled components are free and licensed under MIT license. They are installed together with Agile UI.
 
@@ -274,9 +272,9 @@ External and 3rd party components may be subject to different licensing terms.
 
 ATK UI makes active use of ATK Core and ATK Data frameworks.
 
--   [Agile UI Documentation](https://agile-ui.readthedocs.io)
--   [Agile Data Documentation](https://agile-data.readthedocs.io)
--   [Agile Core Documentation](https://agile-core.readthedocs.io)
+- [Agile UI Documentation](https://agile-ui.readthedocs.io)
+- [Agile Data Documentation](https://agile-data.readthedocs.io)
+- [Agile Core Documentation](https://agile-core.readthedocs.io)
 
 ## ATK UI Schematic
 
