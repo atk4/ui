@@ -1,2 +1,4 @@
-sphinx<1.7
-sphinxcontrib-phpdomain==0.1.4
+sphinx<5
+sphinx-rtd-theme
+sphinxcontrib-phpdomain<=0.9
+jinja2<3.1
