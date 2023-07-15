@@ -6,14 +6,14 @@
 # Data Action Executor
 
 Data action executor in UI is parts of interactive components that can execute a Data model defined user action.
-For more details on Data Model User Action please visit: https://agile-data.readthedocs.io/en/develop/model.html#actions
+For more details on Data Model User Action please visit: https://atk4-data.readthedocs.io/en/develop/model.html#actions
 
 Atk UI offers many types of action executor.
 A model user action may contain many properties. Usually, you would choose the type of executor based on the action
 definition. For example, an action that would required arguments prior to be executed can be set using
 an ArgumentFormExecutor. Or actions that can run using a single button can use a JsCallbackExecutor.
 
-Demo: https://ui.agiletoolkit.org/demos/data-action/actions.php
+Demo: https://ui.atk4.org/demos/data-action/actions.php
 
 ## Executor Interface
 
@@ -292,6 +292,6 @@ $button->on('click', $myAction);
 ### Demo
 
 For more information on how Model UserAction are assign to button and interact with user according to their definition,
-please visit: [Assign action to button event](https://ui.agiletoolkit.org/demos/data-action/jsactions2.php)
+please visit: [Assign action to button event](https://ui.atk4.org/demos/data-action/jsactions2.php)
 
 You will find the UserAction definition for the demo [here](https://github.com/atk4/ui/blob/develop/demos/_includes/DemoActionsUtil.php)

@@ -57,7 +57,7 @@ the {ref}`render tree`.
 
 # Seed Components
 
-For more information about seeds, merging seeds, factories and namespaces, see https://agile-core.readthedocs.io/.
+For more information about seeds, merging seeds, factories and namespaces, see https://atk4-core.readthedocs.io/.
 
 The most important points of a seed such as this one:
 

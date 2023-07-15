@@ -102,7 +102,7 @@ of addColumn() is very similar to {php:meth}`Form::addControl`.
 
 Apart from adding columns that reflect current values of your database, there are several ways
 how you can calculate additional values. You must know the capabilities of your database server
-if you want to execute some calculation there. (See https://agile-data.readthedocs.io/en/develop/expressions.html)
+if you want to execute some calculation there. (See https://atk4-data.readthedocs.io/en/develop/expressions.html)
 
 It's always a good idea to calculate column inside database. Lets create "total" column which will
 multiply "price" and "amount" values. Use `addExpression` to provide in-line definition for this

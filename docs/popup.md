@@ -52,6 +52,6 @@ Popup::addTo($app, [$item])->set(function (View $p) {
 });
 ```
 
-Demo: https://ui.agiletoolkit.org/demos/popup.php
+Demo: https://ui.atk4.org/demos/popup.php
 
 Fomantic-UI: https://fomantic-ui.com/modules/popup.html

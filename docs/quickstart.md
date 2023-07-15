@@ -111,7 +111,7 @@ $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 ```
 
 All components of Agile Data are database-agnostic and will not concern themselves with the way how you store data.
-I will start the session and connect [persistence](https://agile-data.readthedocs.io/en/develop/persistence.html)
+I will start the session and connect [persistence](https://atk4-data.readthedocs.io/en/develop/persistence.html)
 with it:
 
 ```
@@ -139,7 +139,7 @@ $app = new App([
 
 ## Data Model
 
-We need a class `Task` which describes [data model](https://agile-data.readthedocs.io/en/develop/model.html) for the
+We need a class `Task` which describes [data model](https://atk4-data.readthedocs.io/en/develop/model.html) for the
 single ToDo item:
 
 ```

@@ -297,7 +297,7 @@ Example:
 $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/atk');
 ```
 
-See [Persistence::connect](https://agile-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence)
+See [Persistence::connect](https://atk4-data.readthedocs.io/en/develop/persistence.html?highlight=connect#associating-with-persistence)
 
 ## Execution Termination
 
@@ -354,7 +354,7 @@ This will be used by components that rely on external JavaScript libraries.
 
 ## Hooks
 
-Application implements HookTrait (https://agile-core.readthedocs.io/en/develop/hook.html)
+Application implements HookTrait (https://atk4-core.readthedocs.io/en/develop/hook.html)
 and the following hooks are available:
 
 - beforeRender
@@ -389,7 +389,7 @@ echo $grid->render();
 
 All of the objects created above - button, grid, toolbar and paginator will share the same
 value for the 'app' property. This value is carried into new objects through AppScopeTrait
-(https://agile-core.readthedocs.io/en/develop/appscope.html).
+(https://atk4-core.readthedocs.io/en/develop/appscope.html).
 
 ## Adding the App
 

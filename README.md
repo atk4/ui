@@ -16,7 +16,7 @@ Agile UI is the quickest way for building back-end UI, admin interfaces, data ma
 [![GitHub release](https://img.shields.io/github/release/atk4/ui.svg)](CHANGELOG.md)
 [![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
 
-Quick-Links: [Documentation](https://agile-ui.readthedocs.io). [Demo-site](https://ui.agiletoolkit.org). [ATK Data](https://github.com/atk4/data). [Forum](https://forum.agiletoolkit.org/). [Chat](https://gitter.im/atk4/atk4). [Commercial support](https://www.agiletoolkit.org/contact).
+Quick-Links: [Documentation](https://atk4-ui.readthedocs.io/). [Demo-site](https://ui.atk4.org/). [ATK Data](https://github.com/atk4/data). [Forum](https://forum.agiletoolkit.org/). [Chat](https://gitter.im/atk4/atk4). [Commercial support](https://www.agiletoolkit.org/contact).
 
 ## How does Agile Toolkit work?
 
@@ -41,7 +41,7 @@ Many companies use Agile Toolkit to implement admin interface and in some cases 
 
 ### How does it work?
 
-Download from www.agiletoolkit.org or Install ATK UI with `composer require atk4/ui`
+Download from https://ui.atk4.org/ or install ATK UI with `composer require atk4/ui`
 
 Create "index.php" file with:
 
@@ -78,7 +78,7 @@ ATK UI relies on https://fomantic-ui.com CSS framework to render the form beauti
 
 To get most of ATK UI, use [ATK Data](https://github.com/atk4/data) to describe your business models such as "User" or "Purchase". When you define models, you can start using some more advanced components:
 
-[Crud](https://ui.agiletoolkit.org/demos/crud.php) is a fully-interactive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
+[Crud](https://ui.atk4.org/demos/crud.php) is a fully-interactive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
 
 ```php
 $app = new \Atk4\Ui\App(['title' => 'hello world']);
@@ -173,7 +173,7 @@ Another component implementation using a very friendly PHP syntax:
 
 ![wizard](docs/images/wizard.png)
 
-You get most benefit when you use various ATK UI Components together. Try the following demo: https://ui.agiletoolkit.org/demos/interactive/wizard.php. The demo implements:
+You get most benefit when you use various ATK UI Components together. Try the following demo: https://ui.atk4.org/demos/interactive/wizard.php. The demo implements:
 
 - Multi-step wizard with ability to navigate forward and backward
 - Form with validation
@@ -220,7 +220,7 @@ The result is here:
 
 Agile UI comes with many built-in components:
 
-_All components can be view using the [demos](https://ui.agiletoolkit.org/demos/) application._
+_All components can be view using the [demos](https://ui.atk4.org/demos/) application._
 
 | Component | Description | Introduced |
 | --------- | ----------- | ---------- |
@@ -272,9 +272,9 @@ External and 3rd party components may be subject to different licensing terms.
 
 ATK UI makes active use of ATK Core and ATK Data frameworks.
 
-- [Agile UI Documentation](https://agile-ui.readthedocs.io)
-- [Agile Data Documentation](https://agile-data.readthedocs.io)
-- [Agile Core Documentation](https://agile-core.readthedocs.io)
+- [Agile UI Documentation](https://atk4-ui.readthedocs.io/)
+- [Agile Data Documentation](https://atk4-data.readthedocs.io/)
+- [Agile Core Documentation](https://atk4-core.readthedocs.io/)
 
 ## ATK UI Schematic
 

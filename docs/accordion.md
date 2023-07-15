@@ -8,7 +8,7 @@
 
 Accordion implement another way to organize your data. The implementation is based on: https://fomantic-ui.com/modules/accordion.html.
 
-Demo: https://ui.agiletoolkit.org/demos/accordion.php
+Demo: https://ui.atk4.org/demos/accordion.php
 
 ## Basic Usage
 

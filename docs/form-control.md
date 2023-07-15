@@ -155,7 +155,7 @@ don't allow to change their value. Disabled form controls are used for read only
 In the examples above, we looked at how to create Form Control Decorator object explicitly.
 The most common use-case in large application is the use with Models. You would need a model, such as
 `Country` model as well as
-[Persistence $db](https://agile-data.readthedocs.io/en/develop/persistence.html):
+[Persistence $db](https://atk4-data.readthedocs.io/en/develop/persistence.html):
 
 ```
 class Country extends \Atk4\Data\Model
@@ -190,12 +190,12 @@ or rely on {ref}`field_visibility`.
 
 When Form controls are populated, then {php:meth}`\Atk4\Ui\Form::controlFactory` is
 consulted to make a decision on how to translate
-[Model Field](https://agile-data.readthedocs.io/en/develop/fields.html) into
+[Model Field](https://atk4-data.readthedocs.io/en/develop/fields.html) into
 Form Control Decorator.
 
 The rules are rather straightforward but may change in future versions of Agile UI:
 
-- if [enum](https://agile-data.readthedocs.io/en/develop/fields.html#Field::$enum) is defined, use {php:class}`Form\Control\Dropdown`
+- if [enum](https://atk4-data.readthedocs.io/en/develop/fields.html#Field::$enum) is defined, use {php:class}`Form\Control\Dropdown`
 - consult {php:attr}`\Atk4\Ui\Form::$typeToDecorator` property for type-to-seed association
 - type=password will use {php:class}`Form\Control\Password`
 

@@ -9,7 +9,7 @@ Agile UI is a PHP component framework for building User Interfaces entirely in P
 Although the components of Agile UI will typically use HTML, JavaScript, jQuery and
 CSS, the goal of Agile UI is to abstract them away behind easy-to-use component objects.
 
-As a framework it's closely coupled with Agile Data (https://agile-data.readthedocs.io)
+As a framework it's closely coupled with Agile Data (https://atk4-data.readthedocs.io/)
 which abstracts database interaction operations. The default UI template set
 uses Fomantic-UI (https://fomantic-ui.com) for presentation.
 
@@ -18,7 +18,7 @@ At a glance, Agile UI consists of the following:
 :::{figure} images/all-atk-classes.png
 :::
 
-Agile UI is designed and built for the Agile Toolkit (https://agiletoolkit.org/) platform,
+Agile UI is designed and built for the Agile Toolkit (https://atk4.org/) platform,
 with the goal of providing a user-friendly experience when creating data-heavy API / UI
 backends.
 
@@ -145,7 +145,7 @@ Through the course of this example, We are performing several core actions:
   For a {ref}`component` the Persistence class provides data storage abstraction
   through the use of a Model class.
 
-  Agile Data has full documentation at https://agile-data.readthedocs.io.
+  Agile Data has full documentation at https://atk4-data.readthedocs.io/.
 
 - `Offer` is a Model - a database-agnostic declaration of your business entity.
   Model object represents a data-set for specific persistence and conditions.
@@ -255,7 +255,7 @@ resolved to namespace `Atk4\Ui`; however the application class can fine-tune the
 search.
 
 Using a factory is optional. For more information see:
-https://agile-core.readthedocs.io/en/develop/factory.html
+https://atk4-core.readthedocs.io/en/develop/factory.html
 
 ### Templates
 
@@ -391,7 +391,7 @@ have a basic understanding of "code" and some familiarity with the PHP language.
 - Advanced Topics
 
 If you are not interested in UI and only need the Rest API, we recommend that you look
-into documentation for Agile Data (https://agile-data.readthedocs.io) and the
+into documentation for Agile Data (https://atk4-data.readthedocs.io/) and the
 Rest API extension (https://github.com/atk4/api) which is a work in progress.
 
 ### Application Tutorials
@@ -446,7 +446,7 @@ You can watch & use the source code of each example to find best practice exampl
 how to use atk4 in certain application cases.
 
 You can find the demo here:
-https://ui.agiletoolkit.org/demos/
+https://ui.atk4.org/demos/
 
 ## Local Demo/Sandpit
 

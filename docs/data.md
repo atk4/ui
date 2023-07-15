@@ -17,7 +17,7 @@ data sources. The rest of this chapter will explain how you can map various data
 
 # Static Data Arrays
 
-Agile Data contains Persistence\Array_ (https://agile-data.readthedocs.io/en/develop/design.html?highlight=array#domain-model-actions)
+Agile Data contains Persistence\Array_ (https://atk4-data.readthedocs.io/en/develop/design.html?highlight=array#domain-model-actions)
 implementation that load and store data in a regular PHP arrays. For the "quick and easy" solution Agile UI Views provide a
 method {php:meth}`View::setSource` which will work-around complexities and give you a syntax:
 

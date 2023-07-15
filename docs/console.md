@@ -12,7 +12,7 @@
 With console you can output real-time information to the user directly from PHP. It can
 be used do direct output from slow method or even execute commands on the server (such as `ping`).
 
-Demo: https://ui.agiletoolkit.org/demos/console.php
+Demo: https://ui.atk4.org/demos/console.php
 
 ## Basic Usage
 
@@ -39,7 +39,7 @@ Console uses {ref}`sse` which works pretty much out-of-the-box with the modern b
 do not require you to set up additional ports on the server. JavaScript in a browser captures real-time
 events and displays it on a black background.
 
-Console integrates nicely with DebugTrait (https://agile-core.readthedocs.io/en/develop/debug.html?highlight=debug),
+Console integrates nicely with DebugTrait (https://atk4-core.readthedocs.io/en/develop/debug.html?highlight=debug),
 and also allows you to execute shell process on the server while redirecting output in real-time.
 
 ## Using With Object
