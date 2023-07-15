@@ -1,7 +1,7 @@
 :::{php:namespace} Atk4\Ui
 :::
 
-:::{php:class} Form\Control\TreeItemSelector
+:::{php:class} Form_i_Control_i_TreeItemSelector
 :::
 
 # TreeItemSelector Form Control

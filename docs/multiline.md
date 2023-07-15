@@ -1,7 +1,7 @@
 :::{php:namespace} Atk4\Ui
 :::
 
-:::{php:class} Form\Control\Multiline
+:::{php:class} Form_i_Control_i_Multiline
 :::
 
 # Multiline Form Control

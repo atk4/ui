@@ -219,7 +219,7 @@ When an input is added into a Form, it adopts a "FormLine" region. While the
 nested tags would be identical, the markup around them would be dependent on
 form layout.
 
-This approach allows you affect the way how {php:class}`Form\Control` is rendered
+This approach allows you affect the way how {php:class}`Form_i_Control` is rendered
 without having to provide it with custom template, but simply relying on template
 of a Form.
 
@@ -611,7 +611,7 @@ There are more templates which are being substituted:
 - {css}css/file.css{/} - will replace with URL link to a CSS file
 - {js}jquery.validator.js{/} - will replace with URL to JavaScript file
 
-Application (API) has a function {php}`App_Web::setTags` which is called for
+Application (API) has a function {php:meth}`App_Web::setTags` which is called for
 every view in the system. It's used to resolve "template" and "page"
 tags, however you can add more interesting things here. For example if
 you miss ability to include other templates from Smarty, you can

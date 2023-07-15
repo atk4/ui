@@ -14,17 +14,17 @@ in steps:
 1. User arrives at the page with a form
 2. User selects file.
 3. File begins uploading.
-4. PHP upload callback {php:meth}`Form\Control\Upload::onUpload` is called, returns "file_id"
+4. PHP upload callback {php:meth}`Form_i_Control_i_Upload::onUpload` is called, returns "file_id"
 5. "file_id" is placed inside form.
 6. User submits the form
-7. {php:meth}`\Atk4\Ui\Form::onSubmit()` receives "file_id"
+7. {php:meth}`Form::onSubmit()` receives "file_id"
 
 Currently only one file can be uploaded at a time. If file is uploaded incorrectly,
 it can be removed. Both Upload and UploadImage controls contain an upload button which would
 open a File Selection dialog. UploadImage also implements image preview icon.
 During upload, a progress bar will appear.
 
-:::{php:class} Form\Control\Upload
+:::{php:class} Form_i_Control_i_Upload
 :::
 
 ## Attributes
@@ -134,7 +134,7 @@ $img->onDelete(function (string $fileId) use ($img) {
 
 Similar to Upload, this is a control implementation for uploading images. Here are additional properties:
 
-:::{php:class} Form\Control\UploadImage
+:::{php:class} Form_i_Control_i_UploadImage
 :::
 
 UploadImage form control inherits all of the Upload properties plus these ones:

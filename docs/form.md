@@ -110,7 +110,7 @@ The basic 2-line syntax will extract all the required logic from the Model inclu
 - Fields defined for this Model will be displayed
 - Display of default values in the form
 - Depending on the field type, a form control will be selected from Form\Control namespace
-- Using {php:class}`Form\Layout\Columns` can make form more compact by splitting it into columns
+- Using {php:class}`Form_i_Layout_i_Columns` can make form more compact by splitting it into columns
 - Form control captions, placeholders, hints and other elements defined in Field::ui are respected (https://atk4-data.readthedocs.io/en/develop/fields.html#Field::$ui)
 - Fields that are not editable by default will not appear on the form (https://atk4-data.readthedocs.io/en/develop/fields.html#Field::isEditable)
 - Field typecasting will be invoked such as for converting dates
@@ -186,7 +186,7 @@ $form->setModel(new User($db), ['email', 'gender', 'terms']);
 ```
 
 Form control does not have to be added directly into the form. You can use a separate
-{php:class}`Form\Layout` or even a regular view. Simply specify property {php:meth}`Form\Control::$form`:
+{php:class}`Form_i_Layout` or even a regular view. Simply specify property {php:meth}`Form_i_Control::$form`:
 
 ```
 $myview = View::addTo($form, ['defaultTemplate' => './mytemplate.html']);
@@ -388,7 +388,7 @@ class User extends \Atk4\Data\Model
 }
 ```
 
-The seed for the UI will be combined with the default overriding {php:attr}`Form\Control\Calendar::type`
+The seed for the UI will be combined with the default overriding {php:attr}`Form_i_Control_i_Calendar::type`
 to allow month/year entry by the Calendar extension, which will then be saved and
 stored as a regular date. Obviously you can also specify decorator class:
 
@@ -553,11 +553,11 @@ Specify a PHP callback that will be executed on successful form submission.
 :::
 
 :::{php:method} jsError($field, $message)
-Create and return {php:class}`Js\JsChain` action that will indicate error on a form control.
+Create and return {php:class}`Js_i_JsChain` action that will indicate error on a form control.
 :::
 
 :::{php:method} jsSuccess($title, [$subTitle])
-Create and return {php:class}`Js\JsChain` action, that will replace form with a success message.
+Create and return {php:class}`Js_i_JsChain` action, that will replace form with a success message.
 :::
 
 :::{php:method} setApiConfig($config)
@@ -661,7 +661,7 @@ Adds a form header with a text label. Returns View.
 :::
 
 :::{php:method} addGroup($header)
-Creates a sub-layout, returning new instance of a {php:class}`Form\Layout` object. You
+Creates a sub-layout, returning new instance of a {php:class}`Form_i_Layout` object. You
 can also specify a header.
 :::
 
@@ -721,7 +721,7 @@ $group->addControl('last_name', ['width' => 'five']);
 There are four specific sub layout views that you can add to your existing form layout: Generic, Accordion, Tabs and Columns.
 
 Generic sub layout is simply another layout view added to your existing form layout view. You add fields
-the same way as you would do for {php:class}`Form\Layout`.
+the same way as you would do for {php:class}`Form_i_Layout`.
 
 Sub layout section like Accordion, Tabs or Columns will create layout specific section where you can
 organize fields in either accordion, tabs or columns.
@@ -895,7 +895,7 @@ $form->setGroupDisplayRules([
 MOVE THIS TO SEPARATE FILE
 :::
 
-:::{php:class} Form\Layout
+:::{php:class} Form_i_Layout
 Renders HTML outline encasing form controls.
 :::
 
