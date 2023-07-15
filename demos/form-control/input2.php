@@ -123,7 +123,7 @@ $control->set('value in a form');
 
 $control = $form->addControl('surname', new Form\Control\Line([
     'hint' => [View::class, 'template' => new HtmlTemplate(
-        'Click <a href="http://example.com/" target="_blank">here</a>'
+        'Click <a href="https://example.com/" target="_blank">here</a>'
     )],
 ]));
 

@@ -20,7 +20,7 @@
     "bugs": {
         "url": "https://github.com/atk4/ui/issues"
     },
-    "homepage": "http://www.agiletoolkit.org/",
+    "homepage": "https://atk4.org/",
     "dependencies": {
         "@babel/runtime": "^7.22.3",
         "column-resizer": "^1.4.0",
