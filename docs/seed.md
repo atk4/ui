@@ -91,7 +91,7 @@ $seed = [new Button('hello', 'class.big red' => true), 'icon' => ['book', 'class
 ## Additional cases
 
 An individual object may add more ways to deal with seed. For example, when adding columns
-to your Table you can specify seed for the decorator: {php:class}`Table_i_Column`:
+to your Table you can specify seed for the decorator: {php:class}`Table\Column`:
 
 ```
 $table->addColumn('salary', [\Atk4\Ui\Table\Column\Money::class]);

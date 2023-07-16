@@ -219,7 +219,7 @@ When an input is added into a Form, it adopts a "FormLine" region. While the
 nested tags would be identical, the markup around them would be dependent on
 form layout.
 
-This approach allows you affect the way how {php:class}`Form_i_Control` is rendered
+This approach allows you affect the way how {php:class}`Form\Control` is rendered
 without having to provide it with custom template, but simply relying on template
 of a Form.
 

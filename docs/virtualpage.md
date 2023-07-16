@@ -227,7 +227,7 @@ This approach allow you to trigger loader from inside JavaScript easily. See als
 
 ## Reloading
 
-If you execute {php:class}`Js_i_JsReload` action on the Loader, it will return to original state.
+If you execute {php:class}`Js\JsReload` action on the Loader, it will return to original state.
 
 ## Inline Editing Example
 

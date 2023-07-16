@@ -53,7 +53,7 @@ You may use App class hook to impact behavior of your application:
 - using hooks to globally impact object initialization
 - override methods to create different behavior, for example url() method may use advanced router logic
   to create beautiful URLs.
-- you may re-define set-up of {php:class}`Persistence_i_Ui` and affect how data is loaded from UI.
+- you may re-define set-up of {php:class}`Persistence\Ui` and affect how data is loaded from UI.
 - load templates from different files
 - use a different CDN settings for static files
 
@@ -434,7 +434,7 @@ Each layout, depending on it's content, may come with several views that you can
 
 ## Admin Layout
 
-:::{php:class} Layout_i_Admin
+:::{php:class} Layout\Admin
 :::
 
 Agile Toolkit comes with a ready to use admin layout for your application. The layout is built

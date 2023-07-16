@@ -12,7 +12,7 @@ cell.
 This is in contrast to {php:class}`View` and {php:class}`Lister` which do not
 use Table/Cell and therefore Column decorator is not required.
 
-All column decorators in Agile UI have a base class {php:class}`Table_i_Column`. Decorators will often
+All column decorators in Agile UI have a base class {php:class}`Table\Column`. Decorators will often
 look at the content of the associated value, for example {php:class}`Money` will add cell class `negative`
 only if monetary value is less than zero. The value is taken from Model's Field object.
 
@@ -27,14 +27,14 @@ but if record is already archived, use a template "Archived on {$archive_date}".
 
 ## Generic Column Decorator
 
-:::{php:class} Table_i_Column
+:::{php:class} Table\Column
 Generic description of a column for {php:class}`Table`
 :::
 
 Table object relies on a separate class: `\Atk4\Ui\Table\Column` to present most of the values. The goals
 of the column object is to format anything around the actual values. The type = 'atk4_money' will result in
 a custom formatting of the value, but will also require column to be right-aligned. To simplify this,
-type = 'atk4_money' will use a different column class - {php:class}`Table_i_Column_i_Money`. There are several others,
+type = 'atk4_money' will use a different column class - {php:class}`Table\Column\Money`. There are several others,
 but first we need to look at the generic column and understand it's base capabilities:
 
 A class resposnible for cell formatting. This class defines 3 main methods that is used by the Table
@@ -107,7 +107,7 @@ $grid->addDropdown('name', ['Sort A-Z', 'Sort by Relevance'], function (string $
 });
 ```
 
-Those wrappers will invoke methods {php:meth}`Table_i_Column::addDropdown` and {php:meth}`Table_i_Column::addPopup` for
+Those wrappers will invoke methods {php:meth}`Table\Column::addDropdown` and {php:meth}`Table\Column::addPopup` for
 a specified column, which are documented below.
 
 ### Popups
@@ -158,11 +158,11 @@ $someColumn->addDropdown(['Change', 'Reorder', 'Update'], function (string $item
 
 ## Decorators for data types
 
-In addition to {php:class}`Table_i_Column`, Agile UI includes several column implementations.
+In addition to {php:class}`Table\Column`, Agile UI includes several column implementations.
 
 ### Link
 
-:::{php:class} Table_i_Column_i_Link
+:::{php:class} Table\Column\Link
 :::
 
 Put `<a href..` link over the value of the cell. The page property can be specified to constructor. There
@@ -187,7 +187,7 @@ $table->addColumn('name', [\Atk4\Ui\Table\Column\Link::class, ['details', 'id' =
 
 ### Money
 
-:::{php:class} Table_i_Column_i_Money
+:::{php:class} Table\Column\Money
 :::
 
 Helps decorating monetary values. Will align value to the right and if value is less than zero will also
@@ -197,7 +197,7 @@ For the actual number formatting, see {ref}`uiPersistence`
 
 ### Status
 
-:::{php:class} Table_i_Column_i_Status
+:::{php:class} Table\Column\Status
 :::
 
 Allow you to set highlight class and icon based on column value. This is most suitable for columns that
@@ -225,7 +225,7 @@ Current list of states supported:
 
 ### Template
 
-:::{php:class} Table_i_Column_i_Template
+:::{php:class} Table\Column\Template
 :::
 
 This column is suitable if you wish to have custom cell formatting but do not wish to go through
@@ -244,7 +244,7 @@ will only work if you assign it to a primary column (by passing 1st argument to 
 
 ### Image
 
-:::{php:class} Table_i_Column_i_Image
+:::{php:class} Table\Column\Image
 :::
 
 This column is suitable if you wish to have image in your table cell:
@@ -257,7 +257,7 @@ $table->addColumn('image_url', new \Atk4\Ui\Table\Column\Image);
 
 ### ActionButtons
 
-:::{php:class} Table_i_Column_i_ActionButtons
+:::{php:class} Table\Column\ActionButtons
 :::
 
 Can be used to add "action buttons" column to your table:
@@ -306,7 +306,7 @@ Note that in this case ID is automatically passed to your callback.
 
 ### Checkbox
 
-:::{php:class} Table_i_Column_i_Checkbox
+:::{php:class} Table\Column\Checkbox
 :::
 
 :::{php:method} jsChecked()

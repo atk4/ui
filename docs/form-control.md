@@ -5,7 +5,7 @@
 
 # Form Controls
 
-:::{php:class} Form_i_Control
+:::{php:class} Form\Control
 :::
 
 Agile UI dedicates a separate namespace for the Form Controls. Those are
@@ -70,7 +70,7 @@ page and the following HTML is now produced:
 ```
 
 The markup that surronds the button which includes Label and formatting is produced by
-{php:class}`Form_i_Layout`, which does draw some of the information from the Form Control
+{php:class}`Form\Layout`, which does draw some of the information from the Form Control
 itself.
 
 ### Using in Form Layouts
@@ -94,7 +94,7 @@ $form->onSubmit(function (Form $form) {
 });
 ```
 
-This is further explained in documentation for {php:class}`Form_i_Layout` class,
+This is further explained in documentation for {php:class}`Form\Layout` class,
 however if you do plan on adding your own form control types, it's important that you extend it
 properly:
 
@@ -195,9 +195,9 @@ Form Control Decorator.
 
 The rules are rather straightforward but may change in future versions of Agile UI:
 
-- if [enum](https://atk4-data.readthedocs.io/en/develop/fields.html#Field::$enum) is defined, use {php:class}`Form_i_Control_i_Dropdown`
+- if [enum](https://atk4-data.readthedocs.io/en/develop/fields.html#Field::$enum) is defined, use {php:class}`Form\Control\Dropdown`
 - consult {php:attr}`Form::$typeToDecorator` property for type-to-seed association
-- type=password will use {php:class}`Form_i_Control_i_Password`
+- type=password will use {php:class}`Form\Control\Password`
 
 You always have an option to explicitly specify which field you would like to use:
 
@@ -228,7 +228,7 @@ the value of the field would be read from `$decorator->entityField->get()`.
 
 ## Line Input Form control
 
-:::{php:class} Form_i_Control_i_Input
+:::{php:class} Form\Control\Input
 Implements View for presenting Input form controls. Based around https://fomantic-ui.com/elements/input.html.
 :::
 
@@ -345,7 +345,7 @@ $c1->onChange(\Atk4\Ui\Js\JsExpression('console.log(\'c1 changed: \' + date + \'
 
 ## Dropdown
 
-:::{php:class} Form_i_Control_i_Dropdown
+:::{php:class} Form\Control\Dropdown
 :::
 
 Dropdown uses Fomantic-UI Dropdown (https://fomantic-ui.com/modules/dropdown.html). A Dropdown can be used in two ways:
@@ -354,10 +354,10 @@ Dropdown uses Fomantic-UI Dropdown (https://fomantic-ui.com/modules/dropdown.htm
 
 ### Usage with a Model
 
-A Dropdown is not used as default Form Control decorator (`$model->hasOne()` uses {php:class}`Form_i_Control_i_Lookup`), but in your Model, you can define that
+A Dropdown is not used as default Form Control decorator (`$model->hasOne()` uses {php:class}`Form\Control\Lookup`), but in your Model, you can define that
 UI should render a Field as Dropdown. For example, this makes sense when a `hasOne()` relationship only has a very limited amount (like 20)
 of records to display. Dropdown renders all records when the paged is rendered, while Lookup always sends an additional request to the server.
-{php:class}`Form_i_Control_i_Lookup` on the other hand is the better choice if there is lots of records (like more than 50).
+{php:class}`Form\Control\Lookup` on the other hand is the better choice if there is lots of records (like more than 50).
 
 To render a model field as Dropdown, use the ui property of the field:
 
@@ -516,7 +516,7 @@ $this->addField('expressions', [
 
 ## DropdownCascade
 
-:::{php:class} Form_i_Control_i_DropdownCascade
+:::{php:class} Form\Control\DropdownCascade
 :::
 
 DropdownCascade input are extend from Dropdown input. They rely on `cascadeFrom` and `reference` property.
@@ -548,7 +548,7 @@ $form->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_c
 
 ## Lookup
 
-:::{php:class} Form_i_Control_i_Lookup
+:::{php:class} Form\Control\Lookup
 :::
 
 Lookup input is also based on Fomantic-UI dropdown module but with ability to dynamically request server for data it's
