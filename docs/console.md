@@ -44,7 +44,7 @@ and also allows you to execute shell process on the server while redirecting out
 
 ## Using With Object
 
-:::{php:method} runMethod($callback);
+:::{php:method} runMethod($callback)
 :::
 
 We recommend that you pack up your busineess logic into your Model methods. When it's time to call your method,
@@ -86,7 +86,7 @@ $console->runMethod('StaticLib', 'myStaticMethod');
 
 ## Executing Commands
 
-:::{php:method} exec($cmd, $args);
+:::{php:method} exec($cmd, $args)
 :::
 
 :::{php:argument} lastExitCode

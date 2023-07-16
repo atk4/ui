@@ -216,7 +216,7 @@ This way we don't populate the column through setModel() and instead populate it
 through addColumn(). This will use an identical logic (see {php:meth}`Table::columnFactory`). For
 your convenience there is a way to add multiple columns efficiently.
 
-:::{php:method} addColumns($names);
+:::{php:method} addColumns($names)
 Here, names can be an array of strings (['status', 'price']) or contain array that will be passed
 as argument sto the addColumn method ([['total', $fieldDef], ['delete', $deleteColumn]);
 :::
@@ -518,10 +518,10 @@ See also {ref}`js`.
 :::{php:class} Table_i_Column
 :::
 
-:::{php:method} addClass($class, $scope = 'body');
+:::{php:method} addClass($class, $scope = 'body')
 :::
 
-:::{php:method} setAttr($attribute, $value, $scope = 'body');
+:::{php:method} setAttr($attribute, $value, $scope = 'body')
 :::
 
 The following code will make sure that contents of the column appear on a single line by
@@ -565,7 +565,7 @@ Please note that if you are redefining {php:meth}`Table_i_Column::getHeaderCellH
 and you wish to preserve functionality of setting custom attributes and
 classes, you should generate your TD/TH tag through getTag method.
 
-:::{php:method} getTag($tag, $position, $value);
+:::{php:method} getTag($tag, $position, $value)
 Will apply cell-based attributes or classes then use {php:meth}`App::getTag` to
 generate HTML tag and encode it's content.
 :::
