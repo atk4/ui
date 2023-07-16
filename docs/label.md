@@ -1,17 +1,19 @@
-.. _label:
+:::{php:namespace} Atk4\Ui
+:::
+
+(label)=
 
 # Label
 
-.. php:namespace:: Atk4\Ui
-
-.. php:class:: Label
+:::{php:class} Label
+:::
 
 Labels can be used in many different cases, either as a stand-alone objects, inside tables or inside
 other components.
 
 To see what possible classes you can use on the Label, see: https://fomantic-ui.com/elements/label.html.
 
-Demo: https://ui.agiletoolkit.org/demos/label.php
+Demo: https://ui.atk4.org/demos/label.php
 
 ## Basic Usage
 
@@ -27,33 +29,41 @@ $label = new \Atk4\Ui\Label('hello world');
 $app->add($label);
 ```
 
-
 Label has the following properties:
 
-.. php:attr:: icon
+:::{php:attr} icon
+:::
 
-.. php:attr:: iconRight
+:::{php:attr} iconRight
+:::
 
-.. php:attr:: image
+:::{php:attr} image
+:::
 
-.. php:attr:: imageRight
+:::{php:attr} imageRight
+:::
 
-.. php:attr:: detail
+:::{php:attr} detail
+:::
 
 All the above can be string, array (passed to Icon, Image or View class) or an object.
 
 ## Icons
 
-There are two properties (icon, iconRight) but you can set only one at a time::
+There are two properties (icon, iconRight) but you can set only one at a time:
 
-    Label::addTo($app, ['23', 'icon' => 'mail']);
-    Label::addTo($app, ['new', 'iconRight' => 'delete']);
+```
+Label::addTo($app, ['23', 'icon' => 'mail']);
+Label::addTo($app, ['new', 'iconRight' => 'delete']);
+```
 
-You can also specify icon as an object::
+You can also specify icon as an object:
 
-    Label::addTo($app, ['new', 'iconRight' => new \Atk4\Ui\Icon('delete')]);
+```
+Label::addTo($app, ['new', 'iconRight' => new \Atk4\Ui\Icon('delete')]);
+```
 
-For more information, see: :php:class:`Icon`
+For more information, see: {php:class}`Icon`
 
 ## Image
 
@@ -133,4 +143,3 @@ $table->onHook(\Atk4\Ui\Table\Column::HOOK_GET_HTML_TAGS, function (Table $table
 
 Now while $table will be rendered, if it finds a record with id=1, it will replace $name value with a HTML tag.
 You need to make sure that 'name' column appears first on the left.
-

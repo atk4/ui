@@ -1,14 +1,16 @@
-.. _message:
+:::{php:namespace} Atk4\Ui
+:::
+
+(message)=
 
 # Message
 
-.. php:namespace:: Atk4\Ui
-
-.. php:class:: Message
+:::{php:class} Message
+:::
 
 Outputs a rectangular segment with a distinctive color to convey message to the user, based around: https://fomantic-ui.com/collections/message.html
 
-Demo: https://ui.agiletoolkit.org/demos/message.php
+Demo: https://ui.atk4.org/demos/message.php
 
 ## Basic Usage
 
@@ -34,9 +36,10 @@ $message = Message::addTo($app, ['Warning Message Title', 'type' => 'warning']);
 
 ## Adding message text
 
-.. php:attr:: text
+:::{php:attr} text
+:::
 
-Property $text is automatically initialized to :php:class:`Text` so you can call :php:meth:`Text::addParagraph`
+Property $text is automatically initialized to {php:class}`Text` so you can call {php:meth}`Text::addParagraph`
 to add more text inside your message:
 
 ```
@@ -48,7 +51,8 @@ $message->text->addParagraph('Second para');
 
 ## Message Icon
 
-.. php:attr:: icon
+:::{php:attr} icon
+:::
 
 You can specify icon also:
 
@@ -59,5 +63,3 @@ $message = Message::addTo($app, [
     'icon' => 'battery low',
 ])->text->addParagraph('Your battery is getting low. Re-charge your Web App');
 ```
-
-

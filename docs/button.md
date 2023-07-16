@@ -1,10 +1,12 @@
-.. _button:
+:::{php:namespace} Atk4\Ui
+:::
+
+(button)=
 
 # Button
 
-.. php:namespace:: Atk4\Ui
-
-.. php:class:: Button
+:::{php:class} Button
+:::
 
 Implements a clickable button:
 
@@ -12,7 +14,7 @@ Implements a clickable button:
 $button = Button::addTo($app, ['Click me']);
 ```
 
-The Button will typically inherit all same properties of a :php:class:`View`. The base class "View"
+The Button will typically inherit all same properties of a {php:class}`View`. The base class "View"
 implements many useful methods already, such as:
 
 ```
@@ -28,14 +30,14 @@ $button->addClass('big red');
 $app->add($button);
 ```
 
-
 You can refer to the Fomantic-UI documentation for Button to find out more about available classes: https://fomantic-ui.com/elements/button.html.
 
-Demo: https://ui.agiletoolkit.org/demos/button.php
+Demo: https://ui.atk4.org/demos/button.php
 
-### Button Icon
+## Button Icon
 
-.. php:attr:: icon
+:::{php:attr} icon
+:::
 
 Property $icon will place icon on your button and can be specified in one of the following two ways:
 
@@ -57,7 +59,8 @@ $button->icon = new Icon('thumbs u');
 $app->add($button);
 ```
 
-.. php:attr:: iconRight
+:::{php:attr} iconRight
+:::
 
 Setting this will display icon on the right of the button:
 
@@ -65,13 +68,13 @@ Setting this will display icon on the right of the button:
 $button = Button::addTo($app, ['Next', 'iconRight' => 'right arrow']);
 ```
 
-Apart from being on the right, the same rules apply as :php:attr:`Button::$icon`. Both
+Apart from being on the right, the same rules apply as {php:attr}`Button::$icon`. Both
 icons cannot be specified simultaneously.
 
-### Button Bar
+## Button Bar
 
-Buttons can be arranged into a bar. You would need to create a :php:class:`View` component
-with property ``ui='buttons'`` and add your other buttons inside:
+Buttons can be arranged into a bar. You would need to create a {php:class}`View` component
+with property `ui='buttons'` and add your other buttons inside:
 
 ```
 $bar = View::addTo($app, ['ui' => 'vertical buttons']);
@@ -103,9 +106,10 @@ $bar->add($button);
 $app->add($bar);
 ```
 
-### Linking
+## Linking
 
-.. php:method:: link
+:::{php:method} link
+:::
 
 Will link button to a destination URL or page:
 
@@ -115,15 +119,15 @@ $button->link('https://google.com/');
 $button->link(['details', 'id' => 123]);
 ```
 
-If array is used, it's routed to :php:meth:`App::url`
+If array is used, it's routed to {php:meth}`App::url`
 
-For other JavaScript actions you can use :ref:`js`:
+For other JavaScript actions you can use {ref}`js`:
 
 ```
 $button->on('click', new JsExpression('document.location.reload()'));
 ```
 
-### Complex Buttons
+## Complex Buttons
 
 Knowledge of the Fomantic-UI button (https://fomantic-ui.com/elements/button.html) can help you
 in creating more complex buttons:
@@ -134,4 +138,3 @@ Icon::addTo(Button::addTo($forks, ['Forks', 'class.blue' => true]), ['fork']);
 Label::addTo($forks, ['1,048', 'class.basic blue left pointing' => true]);
 $app->add($forks);
 ```
-

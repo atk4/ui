@@ -1,37 +1,23 @@
-## Agile UI Documentation
+:::{php:namespace} Atk4\Ui
+:::
+
+# Agile UI Documentation
 
 Contents:
 
-.. toctree::
-    :maxdepth: 4
+:::{toctree}
+:maxdepth: 4
 
-    overview
-    quickstart
-    core
-    filestructure
-    components
-    js
-    advanced
+overview
+quickstart
+core
+filestructure
+components
+js
+advanced
+:::
 
+# Indices and tables
 
-..
-
-    base-components
-    core
-    layouts
-    building-components
-    menu
-    lister
-    table
-    paginator
-    grid
-    form
-    crud
-    tree
-    virtual-page
-    console
-
-## Indices and tables
-
-* :ref:`genindex`
-* :ref:`search`
+- {ref}`genindex`
+- {ref}`search`

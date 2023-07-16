@@ -12,7 +12,7 @@ use Atk4\Ui\Table;
 /**
  * Implements Column helper for grid.
  * Use
- *   new Link('http://yahoo.com?id={$id}');
+ *   new Link('https://yahoo.com?id={$id}');
  * or
  *   new Link(['order', 'id' => 'id' ]);
  * or

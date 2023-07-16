@@ -1,4 +1,7 @@
-### Introduction
+:::{php:namespace} Atk4\Ui
+:::
+
+# Introduction
 
 Agile UI allows you to create and combine various objects into a single Render Tree for unified rendering. Tree represents
 all the UI components that will contribute to the HTML generation. Render tree is automatically created and maintained:
@@ -22,7 +25,6 @@ Here is a breakdown of how the above code works:
 At this point Button is NOT element of a view just yet. This is because we can't be sure if $view will be rendered individually
 or will become child of another view. Method init() is not executed on either objects.
 
-
 4. render() method will call renderAll()
 5. renderAll will find out that the $app property of a view is not set and will initialize it with default App.
 6. renderAll will also find out that the init() has not been called for the $view and will call it.
@@ -33,20 +35,20 @@ simply set a $model property and does not really need to rely on $api etc.
 
 Next, lets look at what Initialization really is and why is it important.
 
-### Initialization
+# Initialization
 
 Calling the init() method of a view is essential before any meaningful work can be done with it. This is important, because
 the following actions are performed:
 
- - template is loaded (or cloned from parent's template)
- - $app property is set
- - $shortName property is determined
- - unique $name is assigned.
+- template is loaded (or cloned from parent's template)
+- $app property is set
+- $shortName property is determined
+- unique $name is assigned.
 
 Many UI components rely on the above to function properly. For example, Grid will look for certain regions in its template
 to clone them into separate objects. This cloning can only take place inside init() method.
 
-### Late initialization
+# Late initialization
 
 When you create an application and select a Layout, the layout is automatically initialized:
 
@@ -87,7 +89,7 @@ echo $b2->name; // fully set now and unique.
 Agile UI will attempt to always initialize objects as soon as possible, so that you can get the most meaningful stack traces
 should there be any problems with the initialization.
 
-### Rendering outside
+# Rendering outside
 
 It's possible for some views to be rendered outside of the app. In the previous section I speculated that calling $v->render()
 will create its own tree independent from the main one.
@@ -109,9 +111,9 @@ will be automatically embedded into the column and having it appear anywhere els
 It's futile to try and extract JS chains from the $subView because JS wouldn't work anyway, so this method will only work
 with static components.
 
-.. _unique_name:
+(unique_name)=
 
-### Unique Name
+# Unique Name
 
 Through adding objects into render tree (even if those are not Views) objects can assume unique names. When you create
 your application, then any object you add into your app will have a unique `name` property:
@@ -141,4 +143,4 @@ class MyView extends View
 }
 ```
 
-This quality of Agile UI objects is further explored through :php:class:`Callback` and :php:class:`VirtualPage`
+This quality of Agile UI objects is further explored through {php:class}`Callback` and {php:class}`VirtualPage`

@@ -1,14 +1,17 @@
-### VirtualPage Introduction
+:::{php:namespace} Atk4\Ui
+:::
+
+# VirtualPage Introduction
 
 Before learning about VirtualPage, Loader and other ways of dynamic content loading, you should fully
-understand :ref:`callback`.
+understand {ref}`callback`.
 
+:::{php:class} VirtualPage
+:::
 
-.. php:class:: VirtualPage
-
-Unlike any of the Callback classes, VirtualPage is a legitimate :php:class:`View`, but it's behavior is a little
+Unlike any of the Callback classes, VirtualPage is a legitimate {php:class}`View`, but it's behavior is a little
 "different". In normal circumstances, rendering VirtualPage will result in empty string. Adding VirtualPage
-anywhere inside your :ref:`render_tree` simply won't have any visible effect:
+anywhere inside your {ref}`render_tree` simply won't have any visible effect:
 
 ```
 $vp = \Atk4\Ui\VirtualPage::addTo($layout);
@@ -20,13 +23,13 @@ progress and output HTML of itself and any other Components you added to that pa
 
 To help you understand when to use VirtualPage here is the example:
 
- - Create a :php:class:`Button`
- - Add VirtualPage inside a button.
- - Add Form inside VirtualPage.
- - Clicking the Button would dynamically load contents of VirtualPage inside a Modal window.
+- Create a {php:class}`Button`
+- Add VirtualPage inside a button.
+- Add Form inside VirtualPage.
+- Clicking the Button would dynamically load contents of VirtualPage inside a Modal window.
 
 This pattern is very easy to implement and is used by many components to transparently provide dynamic functionality.
-Next is an example where :php:class:`Tabs` has support for callback for generating dynamic content for the tab:
+Next is an example where {php:class}`Tabs` has support for callback for generating dynamic content for the tab:
 
 ```
 $tabs->addTab('Dynamic Tab Content', function (VirtualPage $vp) {
@@ -37,12 +40,13 @@ $tabs->addTab('Dynamic Tab Content', function (VirtualPage $vp) {
 Using VirtualPage inside your component can significantly enhance usability without introducing any complexity
 for developers.
 
-(For situations when Component does not natively support VirtualPage, you can still use :php:class:`Loader`, documented
+(For situations when Component does not natively support VirtualPage, you can still use {php:class}`Loader`, documented
 below).
 
-.. php:attr:: cb
+:::{php:attr} cb
+:::
 
-VirtuaPage relies on :php:class:`CallbackLater` object, which is stored in a property $cb. If the Callback is triggered
+VirtuaPage relies on {php:class}`CallbackLater` object, which is stored in a property $cb. If the Callback is triggered
 through a GET argument, then VirtualPage will change it's rendering technique. Lets examine it in more detail:
 
 ```
@@ -55,21 +59,21 @@ $label->detail = $vp->cb->getUrl();
 $label->link($vp->cb->getUrl());
 ```
 
-This code will only show the link containing a URL, but will not show LoremIpsum text.  If you do follow the link, you'll
+This code will only show the link containing a URL, but will not show LoremIpsum text. If you do follow the link, you'll
 see only the 'LoremIpsum' text.
 
-.. php:attr:: urlTrigger
+:::{php:attr} urlTrigger
+:::
 
-See :php:attr:`Callback::urlTrigger`.
+See {php:attr}`Callback::urlTrigger`.
 
+## Output Modes
 
-Output Modes
-^^^^^^^^^^^^
-
-.. php:method:: getUrl($mode = 'callback')
+:::{php:method} getUrl($mode = 'callback')
+:::
 
 VirtualPage can be used to provide you either with RAW HTML content or wrap it into boilerplate HTML.
-As you may know, :php:meth:`Callback::getUrl()` accepts an argument, and VirtualPage gives this argument meaning:
+As you may know, {php:meth}`Callback::getUrl()` accepts an argument, and VirtualPage gives this argument meaning:
 
 - getUrl('cut') gives you URL which will return ONLY the HTML of virtual page, no Layout or boilerplate.
 - getUrl('popup') gives you URL which will return a very minimalistic layout inside a valid HTML boilerplate, suitable for iframes or popup windows.
@@ -81,10 +85,10 @@ $label->detail = $vp->cb->getUrl('popup');
 $label->link($vp->cb->getUrl('popup'));
 ```
 
-Setting Callback
-^^^^^^^^^^^^^^^^
+## Setting Callback
 
-.. php:method:: set($callback)
+:::{php:method} set($callback)
+:::
 
 Although VirtualPage can work without defining a callback, using one is more reliable and is always recommended:
 
@@ -102,9 +106,9 @@ $label->link($vp->cb->getUrl());
 
 This code will perform identically as the previous example, however 'LoremIpsum' will never be initialized
 unless you are requesting VirtualPage specifically, saving some CPU time. Capability of defining callback
-also makes it possible for VirtualPage to be embedded into any :ref:`component` quite reliably.
+also makes it possible for VirtualPage to be embedded into any {ref}`component` quite reliably.
 
-To illustrate, see how :php:class:`Tabs` component rely on VirtualPage, the following code:
+To illustrate, see how {php:class}`Tabs` component rely on VirtualPage, the following code:
 
 ```
 $tabs = \Atk4\Ui\Tabs::addTo($layout);
@@ -115,11 +119,12 @@ $tabs->addTab('Tab2', function (VirtualPage $p) { // dynamic tab
 });
 ```
 
-.. php:method:: getUrl($mode)
+:::{php:method} getUrl($mode)
+You can use this shortcut method instead of $vp->cb->getUrl().
+:::
 
-    You can use this shortcut method instead of $vp->cb->getUrl().
-
-.. php:attr:: ui
+:::{php:attr} ui
+:::
 
 When using 'popup' mode, the output appears inside a `<div class="ui container">`. If you want to change this
 class, you can set $ui property to something else. Try:
@@ -135,11 +140,13 @@ $label->detail = $vp->cb->getUrl('popup');
 $label->link($vp->cb->getUrl('popup'));
 ```
 
-### Loader
+# Loader
 
-.. php:class:: Loader
+:::{php:class} Loader
+:::
 
-.. php:method:: set()
+:::{php:method} set()
+:::
 
 Loader is designed to delay some slow-loading content by loading it dynamically, after main
 page is rendered.
@@ -159,11 +166,11 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
 });
 ```
 
-
 A good use-case example would be a dashboard graph. Unlike VirtualPage which is not visible to a regular render,
 Loader needs to occupy some space.
 
-.. php:attr:: shim
+:::{php:attr} shim
+:::
 
 By default it will display a white segment with 7em height, but you can specify any other view through $shim
 property:
@@ -177,14 +184,13 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
 });
 ```
 
-
-Triggering Loader
-^^^^^^^^^^^^^^^^^
+## Triggering Loader
 
 By default, Loader will display a spinner and will start loading it's contents as soon as DOM Ready() event fires.
 Sometimes you want to control the event.
 
-.. php:method:: jsLoad($args = [])
+:::{php:method} jsLoad($args = [])
+:::
 
 Returns JS action which will trigger loading. The action will be carried out in 2 steps:
 
@@ -193,7 +199,8 @@ Returns JS action which will trigger loading. The action will be carried out in 
 - Content will be placed inside Loader's DIV replacing shiv (or previously loaded content)
 - loading indicator will is hidden
 
-.. php:attr:: loadEvent = null
+:::{php:attr} loadEvent = null
+:::
 
 If you have NOT invoked jsLoad in your code, Loader will automatically assign it do DOM Ready(). If the automatic
 behaviour does not work, you should set value for $loadEvent:
@@ -212,21 +219,17 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
     \Atk4\Ui\LoremIpsum::addTo($p);
 });
 
-
 \Atk4\Ui\Button::addTo($app, ['Load data'])
     ->on('click', $loader->js()->trigger('kaboom'));
 ```
 
 This approach allow you to trigger loader from inside JavaScript easily. See also: https://api.jquery.com/trigger/
 
-Reloading
-^^^^^^^^^
+## Reloading
 
-If you execute :php:class:`JsReload` action on the Loader, it will return to original state.
+If you execute {php:class}`Js_i_JsReload` action on the Loader, it will return to original state.
 
-
-Inline Editing Example
-^^^^^^^^^^^^^^^^^^^^^^
+## Inline Editing Example
 
 Next example will display DataTable, but will allow you to replace data with a form temporarily:
 
@@ -251,10 +254,10 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
 });
 ```
 
-Progress Bar
-^^^^^^^^^^^^
+## Progress Bar
 
-.. php:attr:: progressBar = null
+:::{php:attr} progressBar = null
+:::
 
 Loader can have a progress bar. Imagine that your Loader has to run slow process 4 times:
 
@@ -283,9 +286,8 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
 });
 ```
 
-By setting progressBar to true, Loader component will use SSE (`Server Sent Events <https://www.w3schools.com/html/html5_serversentevents.asp>`_)
+By setting progressBar to true, Loader component will use SSE ([Server Sent Events](https://www.w3schools.com/html/html5_serversentevents.asp))
 and will be sending notification about your progress. Note that currently Internet Explorer does not support SSE and it's
 up to you to create a work-around.
 
 Agile UI will test your browser and if SSE are not supported, $progressBar will be ignored.
-

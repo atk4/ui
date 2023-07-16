@@ -1,55 +1,63 @@
-.. _dataexecutor:
+:::{php:namespace} Atk4\Ui
+:::
+
+(dataexecutor)=
 
 # Data Action Executor
 
 Data action executor in UI is parts of interactive components that can execute a Data model defined user action.
-For more details on Data Model User Action please visit: https://agile-data.readthedocs.io/en/develop/model.html#actions
+For more details on Data Model User Action please visit: https://atk4-data.readthedocs.io/en/develop/model.html#actions
 
 Atk UI offers many types of action executor.
 A model user action may contain many properties. Usually, you would choose the type of executor based on the action
 definition. For example, an action that would required arguments prior to be executed can be set using
 an ArgumentFormExecutor. Or actions that can run using a single button can use a JsCallbackExecutor.
 
-Demo: https://ui.agiletoolkit.org/demos/data-action/actions.php
+Demo: https://ui.atk4.org/demos/data-action/actions.php
 
 ## Executor Interface
 
-.. php:namespace:: Atk4\Ui\UserAction
-
 All executors must implement the ExecutorInterface or JsExecutorInterface interface.
 
-.. php:interface:: ExecutorInterface
-.. php:interface:: JsExecutorInterface
+:::{php:interface} UserAction_i_ExecutorInterface
+:::
+
+:::{php:interface} UserAction_i_JsExecutorInterface
+:::
 
 ## Basic Executor
 
-.. php:class:: BasicExecutor
+:::{php:class} UserAction_i_BasicExecutor
+:::
 
 This is the base view for most of the other action executors. This executor generally
 required that necessary arguments needed to run the action has been set.
 BasicExecutor will display:
 
-    - a button for executing the action;
-    - a header where action name and description are displayed;
-    - an error message if an action argument is missing;
+- a button for executing the action;
+- a header where action name and description are displayed;
+- an error message if an action argument is missing;
 
 ## Preview Executor
 
-.. php:class:: PreviewExecutor
+:::{php:class} UserAction_i_PreviewExecutor
+:::
 
 This executor is specifically set in order to display the $preview property of the current model UserAction.
 You can select to display the preview using regular console type container, regular text or using HTML content.
 
 ## Form Executor
 
-.. php:class:: FormExecutor
+:::{php:class} UserAction_i_FormExecutor
+:::
 
 This executor will display a form where user is required to fill in either all model fields or certain model fields
 depending on the model UserAction $field property. Form control will depend on model field type.
 
 ## Argument Form Executor
 
-.. php:class:: ArgumentFormExecutor
+:::{php:class} UserAction_i_ArgumentFormExecutor
+:::
 
 This executor will display a form but instead of filling form control with model field, it will use model UserAction
 $args property. This is used when you need to ask user about an argument value prior to execute the action.
@@ -57,33 +65,36 @@ The type of form control type to be used in form will depend on how $args is set
 
 ## JS Callaback Executor
 
-.. php:class:: JsCallbackExecutor
+:::{php:class} UserAction_i_JsCallbackExecutor
+:::
 
 This type of executor will output proper javascript that you can assign to a view event using View::on() method.
 It is also possible to pass the UserAction argument via $_POST argument.
 
 ## Modal Executor
 
-.. php:class:: ModalExecutor
+:::{php:class} UserAction_i_ModalExecutor
+:::
 
 The ModalExecutor is base on Modal view. This is a one size fits all for model UserAction. When setting the UserAction via the
 ModelExecutor::setAction($action) method, it will automatically determine what step is require and will display each step
 base on the action definition within a modal view:
 
-    Step 1: Argument definition. If the action required arguments, then the modal will display a form and ask user
-    to fill argument values required by the model UserAction;
+- Step 1: Argument definition. If the action required arguments, then the modal will display a form and ask user
+  to fill argument values required by the model UserAction;
 
-    Step 2: Field definition. If the action required fields, then the modal will display a form and ask user to fill
-    field values required by the model UserAction;
+- Step 2: Field definition. If the action required fields, then the modal will display a form and ask user to fill
+  field values required by the model UserAction;
 
-    Step 3: Preview. If the action preview is set, then the modal will display it prior to execute the action.
+- Step 3: Preview. If the action preview is set, then the modal will display it prior to execute the action.
 
 The modal title default is set from the UserAction::getDescription() method but can be override using the
 Modal::$title property.
 
 ## Confirmation Executor
 
-.. php:class:: ConfirmationExecutor
+:::{php:class} UserAction_i_ConfirmationExecutor
+:::
 
 Like ModalExecutor, Confirmation executor is also based on a Modal view. It allow to display UserAction::confirmation property prior to
 execute the action. Since UserAction::confirmation property may be set with a Closure function, this give a chance to
@@ -92,15 +103,15 @@ return specific record information to be displayed to user prior to execute the 
 Here is an example of an user action returning specific record information in the confirmation message:
 
 ```
-    $country->addUserAction('delete_country', [
-        'caption' => 'Delete',
-        'description' => 'Delete Country',
-        'ui' => ['executor' => [\Atk4\Ui\UserAction\ConfirmationExecutor::class]],
-        'confirmation' => function (Model\UserAction $action) {
-            return 'Are you sure you want to delete this country: $action->getModel()->getTitle();
-        },
-        'callback' => 'delete',
-    ]);
+$country->addUserAction('delete_country', [
+    'caption' => 'Delete',
+    'description' => 'Delete Country',
+    'ui' => ['executor' => [\Atk4\Ui\UserAction\ConfirmationExecutor::class]],
+    'confirmation' => function (Model\UserAction $action) {
+        return 'Are you sure you want to delete this country: $action->getModel()->getTitle();
+    },
+    'callback' => 'delete',
+]);
 ```
 
 The modal title default is set from the UserAction::getDescription() method but can be override using the
@@ -118,10 +129,11 @@ other hand, if MODIFIER_UPDATE is set, then Table needs to be reloaded.
 
 ## The Executor Factory
 
-.. php:class:: ExecutorFactory
+:::{php:class} UserAction_i_ExecutorFactory
+:::
 
-.. php:attr:: executorSeed
-
+:::{php:attr} executorSeed
+:::
 
 Executor factory is responsible for creating proper executor type in regards to the model user action being used.
 
@@ -280,6 +292,6 @@ $button->on('click', $myAction);
 ### Demo
 
 For more information on how Model UserAction are assign to button and interact with user according to their definition,
-please visit: `Assign action to button event <https://ui.agiletoolkit.org/demos/data-action/jsactions2.php>`_
+please visit: [Assign action to button event](https://ui.atk4.org/demos/data-action/jsactions2.php)
 
-You will find the UserAction definition for the demo `here <https://github.com/atk4/ui/blob/develop/demos/_includes/DemoActionsUtil.php>`_
+You will find the UserAction definition for the demo [here](https://github.com/atk4/ui/blob/develop/demos/_includes/DemoActionsUtil.php)

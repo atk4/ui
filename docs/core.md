@@ -1,6 +1,7 @@
-# Core Concepts
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:namespace:: Atk4\Ui
+# Core Concepts
 
 Agile Toolkit and Agile UI are built upon specific core concepts. Understanding those
 concepts is very important especially if you plan to write and distribute your own
@@ -18,10 +19,11 @@ $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 LoremIpsum::addTo($app);
 ```
 
-.. toctree::
-    app
+:::{toctree}
+app
+:::
 
-.. _seed:
+(seed)=
 
 ## Seed
 
@@ -45,11 +47,13 @@ $button->icon = 'book';
 
 We call this format 'Seed'. This section will explain how and where it is used.
 
-.. toctree::
-    seed
+:::{toctree}
+seed
+:::
 
-.. _render:
-.. _render_tree:
+(render)=
+
+(render_tree)=
 
 ## Render Tree
 
@@ -67,8 +71,9 @@ $app->add($msg);
 
 To find out more about how components are linked up together and rendered, see:
 
-.. toctree::
-    render
+:::{toctree}
+render
+:::
 
 ## Sticky GET
 
@@ -84,8 +89,8 @@ Button::addTo($app, ['Trigger message'])->link(['message' => 'Hello World']);
 ```
 
 The code is simple - if you click the button, page will appear with the message just above, however
-there is a potential problem here. What if "Message" wanted to perform a :ref:`Callback`? What if
-we use :php:class:`Console` instead, which must display an interactive data stream?
+there is a potential problem here. What if "Message" wanted to perform a {ref}`Callback`? What if
+we use {php:class}`Console` instead, which must display an interactive data stream?
 
 In Agile UI you can request that some $_GET arguments are preserved and included into callback urls:
 
@@ -99,21 +104,22 @@ Button::addTo($app, ['Trigger message'])->link(['message' => 'Hello World']);
 
 There are two types of "sticky" parameters, application-wide and view-specific.
 
-.. toctree::
-
-    sticky
+:::{toctree}
+sticky
+:::
 
 ## Type Presentation
 
-Several components are too complex to be implemented in a single class. :php:class:`Table`, for example,
-has the ability to format columns by utilizing type-specific column classes. Another example is :php:class:`Form`
+Several components are too complex to be implemented in a single class. {php:class}`Table`, for example,
+has the ability to format columns by utilizing type-specific column classes. Another example is {php:class}`Form`
 which relies on Field-specific Form\Control component.
 
 Agile UI uses a specific pattern for those definitions, which makes the overall structure more extensible
 by having the ability to introduce new types with consistent support throughout the UI.
 
-.. toctree::
-    type-presentation
+:::{toctree}
+type-presentation
+:::
 
 ## Templates
 
@@ -123,8 +129,9 @@ and manipulated by a Template class.
 To learn more on how to create a custom template or how to change global template
 behavior see:
 
-.. toctree::
-    template
+:::{toctree}
+template
+:::
 
 ## Agile Data
 
@@ -145,19 +152,20 @@ $view->setModel($user);
 Next section will explain you how the Agile UI interacts with the data layer and how it outputs or
 inputs user data.
 
-.. toctree::
-    data
+:::{toctree}
+data
+:::
 
-.. _callback:
+(callback)=
 
 ## Callbacks
 
-By relying on the ability of generating :ref:`unique_name`, it's possible to create several classes
+By relying on the ability of generating {ref}`unique_name`, it's possible to create several classes
 for implementing PHP callbacks. They follow the pattern:
 
- - present something on the page (maybe)
- - generate URL with unique parameter
- - if unique parameter is passed back, behave differently
+- present something on the page (maybe)
+- generate URL with unique parameter
+- if unique parameter is passed back, behave differently
 
 Once the concept is established, it can even be used on a higher level, for example:
 
@@ -167,18 +175,18 @@ $button->on('click', function () {
 });
 ```
 
-.. toctree::
-    :maxdepth: 4
+:::{toctree}
+:maxdepth: 4
 
-    callbacks
+callbacks
+:::
 
-
-.. _virtualpage:
+(virtualpage)=
 
 ## VirtualPage
 
-Building on the foundation of :ref:`callback`, components :php:class:`VirtualPage` and :php:class:`Loader`
-exist to enhance other Components with dynamically loadable content. Here is example for :php:class:`Tabs`:
+Building on the foundation of {ref}`callback`, components {php:class}`VirtualPage` and {php:class}`Loader`
+exist to enhance other Components with dynamically loadable content. Here is example for {php:class}`Tabs`:
 
 ```
 $tabs = Tabs::addTo($app);
@@ -189,22 +197,22 @@ $tabs->addTab('Second tab is dynamic', function (VirtualPage $vp) {
 });
 ```
 
-As you switch between those two tabs, you'll notice that the :php:class:`Button` label on the "Second tab"
-reloads every time. :php:class:`Tabs` implements this by using :php:class:`VirtualPage`, read further to
+As you switch between those two tabs, you'll notice that the {php:class}`Button` label on the "Second tab"
+reloads every time. {php:class}`Tabs` implements this by using {php:class}`VirtualPage`, read further to
 find out how:
 
+:::{toctree}
+:maxdepth: 4
 
-.. toctree::
-    :maxdepth: 4
-
-    virtualpage
+virtualpage
+:::
 
 ## Documentation is coming soon.
 
-.. toctree::
-    :maxdepth: 4
+:::{toctree}
+:maxdepth: 4
 
-    init
-    callback
-    stickyget
-
+init
+callback
+stickyget
+:::

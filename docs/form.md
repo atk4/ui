@@ -1,26 +1,29 @@
-.. _form:
+:::{php:namespace} Atk4\Ui
+:::
+
+(form)=
 
 # Forms
 
-.. php:namespace:: Atk4\Ui
+:::{php:class} Form
+:::
 
-.. php:class:: Form
-
-One of the most important components of ATK UI is the "Form". Class :php:class:`Form`
+One of the most important components of ATK UI is the "Form". Class {php:class}`Form`
 implements the following 4 major features:
 
 - Form Rendering using Fomantic-UI HTML/CSS (https://fomantic-ui.com/collections/form.html):
 
-    .. image:: images/form.png
+  :::{image} images/form.png
+  :::
 
 - Form controls are automatically populated based on your existing data model with special treatment
   for date/time, auto-complete and even file upload.
 
 - Loading data from database and storing it back. Any persistence (SQL, NoSQL) supported by
-  ATK Data (https://agile-data.readthedocs.io/en/develop/persistence.html) can be used.
+  ATK Data (https://atk4-data.readthedocs.io/en/develop/persistence.html) can be used.
 
-- Support for Events and Actions on form controls, buttons and form callback. (:ref:`js`) Automatic
-  execution of PHP-based Submit Handler passing all the collected data (:ref:`callback`)
+- Support for Events and Actions on form controls, buttons and form callback. ({ref}`js`) Automatic
+  execution of PHP-based Submit Handler passing all the collected data ({ref}`callback`)
 
 So if looking for a PHP Form class, ATK Form has the most complete implementation which does
 not require to fall-back into HTML / JS, perform any data conversion, load / store data and
@@ -47,7 +50,7 @@ $form->onSubmit(function (Form $form) {
 ```
 
 Form is a composite component and it relies on other components to render parts
-of it. Form uses :php:class:`Button` that you can tweak to your liking:
+of it. Form uses {php:class}`Button` that you can tweak to your liking:
 
 ```
 $form->buttonSave->set('Subscribe');
@@ -74,13 +77,14 @@ $form->model->set([
 ]);
 ```
 
-Form also relies on a ``\Atk4\Ui\Form::Layout`` class and displays form controls through
-decorators defined at ``\Atk4\Ui\Form::Control``. See dedicated documentation for:
+Form also relies on a `\Atk4\Ui\Form::Layout` class and displays form controls through
+decorators defined at `\Atk4\Ui\Form::Control`. See dedicated documentation for:
 
- - :php:class:`Form::Layout`
- - :php:class:`Form::Control`
+- {php:class}`Form::Layout`
+- {php:class}`Form::Control`
 
-To tweak the UI properties of an form control input use ``setInputAttr()`` (and not the surrounding <div> as ``setAttr()`` would do). Here is how to set the HTML "maxlength" attribute on the generated input field:
+To tweak the UI properties of an form control input use `setInputAttr()` (and not the surrounding `<div>` as `setAttr()`
+would do). Here is how to set the HTML "maxlength" attribute on the generated input field:
 
 ```
 $form = \Atk4\Ui\Form::addTo($this);
@@ -93,7 +97,7 @@ integration with front-end, integration with Model, error handling etc.
 
 ### Usage with Model
 
-A most common use of form is if you have a working Model (https://agile-data.readthedocs.io/en/develop/model.html):
+A most common use of form is if you have a working Model (https://atk4-data.readthedocs.io/en/develop/model.html):
 
 ```
 // Form will automatically add a new user and save into the database
@@ -103,39 +107,39 @@ $form->setModel(new User($db));
 
 The basic 2-line syntax will extract all the required logic from the Model including:
 
- - Fields defined for this Model will be displayed
- - Display of default values in the form
- - Depending on the field type, a form control will be selected from Form\Control namespace
- - Using :php:class:`Form\Layout\Columns` can make form more compact by splitting it into columns
- - Form control captions, placeholders, hints and other elements defined in Field::ui are respected (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui)
- - Fields that are not editable by default will not appear on the form (https://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable)
- - Field typecasting will be invoked such as for converting dates
- - Reference fields (https://agile-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as Dropdown
- - Booleans are displayed as checkboxes but stored as defined by the model field
- - Not-nullable and Required fields will have form controls visually highlighted (https://agile-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$nullable)
- - Validation will be performed and errors will appear on the form (NEED LINK)
- - Unless you specify a submission handler, form will save the model ``User`` into ``$db`` on successful submission.
+- Fields defined for this Model will be displayed
+- Display of default values in the form
+- Depending on the field type, a form control will be selected from Form\Control namespace
+- Using {php:class}`Form_i_Layout_i_Columns` can make form more compact by splitting it into columns
+- Form control captions, placeholders, hints and other elements defined in Field::ui are respected (https://atk4-data.readthedocs.io/en/develop/fields.html#Field::$ui)
+- Fields that are not editable by default will not appear on the form (https://atk4-data.readthedocs.io/en/develop/fields.html#Field::isEditable)
+- Field typecasting will be invoked such as for converting dates
+- Reference fields (https://atk4-data.readthedocs.io/en/develop/references.html?highlight=hasOne#hasone-reference) displayed as Dropdown
+- Booleans are displayed as checkboxes but stored as defined by the model field
+- Not-nullable and Required fields will have form controls visually highlighted (https://atk4-data.readthedocs.io/en/develop/fields.html?highlight=required#Field::$nullable)
+- Validation will be performed and errors will appear on the form (NEED LINK)
+- Unless you specify a submission handler, form will save the model `User` into `$db` on successful submission.
 
 All of the above works auto-magically, but you can tweak it even more:
 
- - Provide custom submission handler
- - Specify which form controls and in which order to display on the form
- - Override labels, form control classes
- - Group form controls or use custom layout template
- - Mix standard model fields with your own
- - Add JS Actions around fields
- - Split up form into multiple tabs
+- Provide custom submission handler
+- Specify which form controls and in which order to display on the form
+- Override labels, form control classes
+- Group form controls or use custom layout template
+- Mix standard model fields with your own
+- Add JS Actions around fields
+- Split up form into multiple tabs
 
-If your form is NOT associated with a model, then Form will automatically create a :php:class:`ProxyModel`
+If your form is NOT associated with a model, then Form will automatically create a {php:class}`ProxyModel`
 and associate it with your Form. As you add form controls respective fields will also be added into ProxyModel.
 
 ### Extensions
 
 Starting with Agile UI 1.3 Form has a stable API and we expect to introduce some extensions like:
 
- - Captcha form control
- - File Upload form control (see https://github.com/atk4/filestore)
- - Multi-record form
+- Captcha form control
+- File Upload form control (see https://github.com/atk4/filestore)
+- Multi-record form
 
 If you develop such a feature please let me know so that I can include it in the documentation
 and give you credit.
@@ -147,7 +151,7 @@ a View layout for it in order to create their HTML element. In other words, layo
 is responsible of rendering HTML for fields.
 
 When Form is first initialized, it will provide and set a default Generic layout within the form.
-Then using :php:meth:`Form::addControl()` will rely on that layout to add form control to it and render it properly.
+Then using {php:meth}`Form::addControl()` will rely on that layout to add form control to it and render it properly.
 You may also supply your own layout when creating your form.
 
 Form layout may contain sub layouts. Each sub layout being just another layout view, it is possible
@@ -160,7 +164,8 @@ More on Form layout and sub layout below.
 
 ## Adding Controls
 
-.. php:method:: addControl($name, $decorator = [], $field = [])
+:::{php:method} addControl($name, $decorator = [], $field = [])
+:::
 
 Create a new control on a form:
 
@@ -181,7 +186,7 @@ $form->setModel(new User($db), ['email', 'gender', 'terms']);
 ```
 
 Form control does not have to be added directly into the form. You can use a separate
-:php:class:`Form\\Layout` or even a regular view. Simply specify property :php:meth:`Form\\Control::$form`:
+{php:class}`Form_i_Layout` or even a regular view. Simply specify property {php:meth}`Form_i_Control::$form`:
 
 ```
 $myview = View::addTo($form, ['defaultTemplate' => './mytemplate.html']);
@@ -197,19 +202,19 @@ If a field exists inside associated model, then model field definition will be u
 a base, otherwise you can specify field definition through 3rd argument. I explain
 that below in more detail.
 
-You can specify first argument ``null`` in which case control will be added without
+You can specify first argument `null` in which case control will be added without
 association with field. This will not work with regular fields, but you can add
 custom control such as CAPTCHA, which does not really need association with a
 field.
 
 ### Form Control
 
-To avoid term miss-use, we use "Field" to refer to ``\Atk4\Data\Field``. This class
-is documented here: https://agile-data.readthedocs.io/en/develop/fields.html
+To avoid term miss-use, we use "Field" to refer to `\Atk4\Data\Field`. This class
+is documented here: https://atk4-data.readthedocs.io/en/develop/fields.html
 
 Form uses a small UI component to visualize HTML input fields associated with
 the respective Model Field. We call this object "Form Control". All form
-controls extend from class :php:class:`Form::Control`.
+controls extend from class {php:class}`Form::Control`.
 
 Agile UI comes with at least the following form controls:
 
@@ -221,9 +226,9 @@ Agile UI comes with at least the following form controls:
 - Radio
 - Money
 
-For some examples see: https://ui.agiletoolkit.org/demos/form3.php
+For some examples see: https://ui.atk4.org/demos/form3.php
 
-Field Decorator can be passed to ``addControl`` using 'string', :php:ref:`seed` or 'object':
+Field Decorator can be passed to `addControl` using 'string', {php:ref}`seed` or 'object':
 
 ```
 $form->addControl('accept_terms', [\Atk4\Ui\Form\Control\Checkbox::class]);
@@ -236,16 +241,17 @@ $form->addControl('time', $calendar);
 ```
 
 For more information on default form controls as well as examples on how to create
-your own see documentation on :php:class:`Form::Control`.
+your own see documentation on {php:class}`Form::Control`.
 
-.. php:method:: controlFactory(\\Atk4\\Data\\Field $field, $defaults = [])
+:::{php:method} controlFactory(\Atk4\Data\Field $field, $defaults = [])
+:::
 
-If form control class is not specified (``null``) then it will be determined from
-the type of the Data control with ``controlFactory`` method.
+If form control class is not specified (`null`) then it will be determined from
+the type of the Data control with `controlFactory` method.
 
 ### Data Field
 
-Data field is the 3rd argument to ``Form::addControl()``.
+Data field is the 3rd argument to `Form::addControl()`.
 
 There are 3 ways to define Data form control using 'string', 'json' or 'object':
 
@@ -261,13 +267,13 @@ class MyBoolean extends \Atk4\Data\Field
 $form->addControl('test2', [], new MyBoolean());
 ```
 
-String will be converted into ``['caption' => $string]`` a short way to give
+String will be converted into `['caption' => $string]` a short way to give
 field a custom label. Without a custom label, Form will clean up the name (1st
 argument) by replacing '_' with spaces and uppercasing words (accept_terms
 becomes "Accept Terms")
 
-Specifying array will use the same syntax as the 2nd argument for ``\Atk4\Data\Model::addField()``.
-(https://agile-data.readthedocs.io/en/develop/model.html#Model::addField)
+Specifying array will use the same syntax as the 2nd argument for `\Atk4\Data\Model::addField()`.
+(https://atk4-data.readthedocs.io/en/develop/model.html#Model::addField)
 
 If field already exist inside model, then values of $field will be merged into
 existing field properties. This example make email field mandatory for the form:
@@ -282,7 +288,7 @@ $form->addControl('email', [], ['required' => true]);
 ### addControl into Form with Existing Model
 
 If your form is using a model and you add an additional control, then the underlying model field will be created but it will
-be set as "neverPersist" (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$neverPersist).
+be set as "neverPersist" (https://atk4-data.readthedocs.io/en/develop/fields.html#Field::$neverPersist).
 
 This is to make sure that data from custom form controls wouldn't go directly into the database. Next
 example displays a registration form for a User:
@@ -342,10 +348,10 @@ $form->onSubmit(function (Form $form) {
 });
 ```
 
-Field ``date1`` is defined inside a :php:class:`ProxyModel` as a date field and will
+Field `date1` is defined inside a {php:class}`ProxyModel` as a date field and will
 be automatically converted into DateTime object by Persistence typecasting.
 
-Field ``date2`` has no data type, do not confuse with ui type => date pass as second argument for Calendar field,
+Field `date2` has no data type, do not confuse with ui type => date pass as second argument for Calendar field,
 and therefore Persistence typecasting will not modify it's value and it's stored inside model as a string.
 
 The above code result in the following output:
@@ -357,13 +363,13 @@ date1 = DateTime Object ( [date] => 2017-09-03 00:00:00 .. ) and date2 = Septemb
 ### Seeding Form Control from Model
 
 In large projects you most likely won't be setting individual form controls for each Form. Instead
-you can simply use ``setModel()`` to populate all form controls from fields defined inside a model. Form does
+you can simply use `setModel()` to populate all form controls from fields defined inside a model. Form does
 have a pretty good guess about form control decorator based on the data field type, but what if you want to
 use a custom decorator?
 
-This is where ``$field->ui`` comes in (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$ui).
+This is where `$field->ui` comes in (https://atk4-data.readthedocs.io/en/develop/fields.html#Field::$ui).
 
-You can specify ``'ui' => ['form' => $decoratorSeed]`` when defining your model field inside your Model:
+You can specify `'ui' => ['form' => $decoratorSeed]` when defining your model field inside your Model:
 
 ```
 class User extends \Atk4\Data\Model
@@ -382,7 +388,7 @@ class User extends \Atk4\Data\Model
 }
 ```
 
-The seed for the UI will be combined with the default overriding :php:attr:`Form\\Control\\Calendar::type`
+The seed for the UI will be combined with the default overriding {php:attr}`Form_i_Control_i_Calendar::type`
 to allow month/year entry by the Calendar extension, which will then be saved and
 stored as a regular date. Obviously you can also specify decorator class:
 
@@ -397,9 +403,11 @@ Without the data 'type' property, now the calendar selection will be stored as t
 Although there were many examples above for the use of setModel() this method
 needs a bit more info:
 
-.. php:attr:: model
+:::{php:attr} model
+:::
 
-.. php:method:: setModel($model, [$fields])
+:::{php:method} setModel($model, [$fields])
+:::
 
 Associate form controls with existing model object and import all editable fields
 in the order in which they were defined inside model's init() method.
@@ -408,12 +416,12 @@ You can specify which form controls to import from model fields and their order 
 field names in an array as a second argument.
 
 Specifying "false" or empty array as a second argument will import no model fields as form controls,
-so you can then use :php:meth:`Form::addControl` to import form controls from model fields individually.
+so you can then use {php:meth}`Form::addControl` to import form controls from model fields individually.
 
-Note that :php:meth:`Form::setModel` also delegates adding form control to the form layout
+Note that {php:meth}`Form::setModel` also delegates adding form control to the form layout
 by using `Form->layout->setModel()` internally.
 
-See also: https://agile-data.readthedocs.io/en/develop/fields.html#Field::isEditable
+See also: https://atk4-data.readthedocs.io/en/develop/fields.html#Field::isEditable
 
 ### Using setModel() on a sub layout
 
@@ -427,7 +435,6 @@ $subLayout = $form->layout->addSubLayout();
 $subLayout->setModel($model, ['first_name', 'last_name']);
 ```
 
-
 When using setModel() on a sub layout to add controls per sub layout instead of entire layout,
 make sure you pass false as second argument when setting the model on the Form itself, like above.
 Otherwise all model fields will be automatically added in Forms main layout and you will not be
@@ -435,8 +442,8 @@ able to add them again in sub-layouts.
 
 ### Loading Values
 
-Although you can set form control values individually using ``$form->model->set('field', $value)``
-it's always nicer to load values for the database. Given a ``User`` model this is how
+Although you can set form control values individually using `$form->model->set('field', $value)`
+it's always nicer to load values for the database. Given a `User` model this is how
 you can create a form to change profile of a currently logged user:
 
 ```
@@ -453,22 +460,22 @@ Submitting this form will automatically store values back to the database. Form 
 POST data to submit itself and will re-use the query string, so you can also safely
 use any GET arguments for passing record $id. You may also perform model load after
 record association. This gives the benefit of not loading any other fields, unless
-they're marked as System (https://agile-data.readthedocs.io/en/develop/fields.html#Field::$system),
-see https://agile-data.readthedocs.io/en/develop/model.html?highlight=onlyfields#Model::setOnlyFields:
+they're marked as System (https://atk4-data.readthedocs.io/en/develop/fields.html#Field::$system),
+see https://atk4-data.readthedocs.io/en/develop/model.html?highlight=onlyfields#Model::setOnlyFields:
 
 ```
 $form = Form::addTo($app);
 $form->setModel((new User($db))->load($currentUserId), ['email', 'name']);
 ```
 
-As before, field ``password`` will not be loaded from the database, but this time
+As before, field `password` will not be loaded from the database, but this time
 using onlyFields restriction rather then `neverPersist`.
 
 ### Validating
 
 The topic of validation in web apps is quite extensive. You should start by reading what Agile Data
 has to say about validation:
-https://agile-data.readthedocs.io/en/develop/persistence.html#validation
+https://atk4-data.readthedocs.io/en/develop/persistence.html#validation
 
 Sometimes validation is needed when storing field value inside a model (e.g. setting boolean
 to "blah") and sometimes validation should be performed only when storing model data into
@@ -488,13 +495,13 @@ As far as form is concerned:
 - Decorators must be able to parse entered values. For instance Dropdown will make sure that
   value entered is one of the available values (by key)
 
-- Form will rely on Agile Data Typecasting (https://agile-data.readthedocs.io/en/develop/typecasting.html)
+- Form will rely on Agile Data Typecasting (https://atk4-data.readthedocs.io/en/develop/typecasting.html)
   to load values from POST data and store them in model.
 
-- Form submit handler will rely on ``Model::save()`` (https://agile-data.readthedocs.io/en/develop/persistence.html#Model::save)
+- Form submit handler will rely on `Model::save()` (https://atk4-data.readthedocs.io/en/develop/persistence.html#Model::save)
   not to throw validation exception.
 
-- Form submit handler will also interpret use of :php:meth:`Form::jsError` by displaying errors that
+- Form submit handler will also interpret use of {php:meth}`Form::jsError` by displaying errors that
   do not originate inside Model save logic.
 
 Example use of Model's validate() method:
@@ -526,7 +533,6 @@ class Person extends \Atk4\Data\Model
 }
 ```
 
-
 We can now populate form controls based around the data fields defined in the model:
 
 ```
@@ -542,21 +548,21 @@ $form->addControl('terms', ['type' => 'boolean', 'ui' => ['caption' => 'Accept T
 
 ### Form Submit Handling
 
-.. php:method:: onSubmit($callback)
+:::{php:method} onSubmit($callback)
+Specify a PHP callback that will be executed on successful form submission.
+:::
 
-    Specify a PHP callback that will be executed on successful form submission.
+:::{php:method} jsError($field, $message)
+Create and return {php:class}`Js_i_JsChain` action that will indicate error on a form control.
+:::
 
-.. php:method:: jsError($field, $message)
+:::{php:method} jsSuccess($title, [$subTitle])
+Create and return {php:class}`Js_i_JsChain` action, that will replace form with a success message.
+:::
 
-    Create and return :php:class:`JsChain` action that will indicate error on a form control.
-
-.. php:method:: jsSuccess($title, [$subTitle])
-
-    Create and return :php:class:`JsChain` action, that will replace form with a success message.
-
-.. php:method:: setApiConfig($config)
-
-    Add additional parameters to Fomantic-UI .api function which does the AJAX submission of the form.
+:::{php:method} setApiConfig($config)
+Add additional parameters to Fomantic-UI .api function which does the AJAX submission of the form.
+:::
 
 For example, if you want the loading overlay at a different HTML element, you can define it with:
 
@@ -566,9 +572,9 @@ $form->setApiConfig(['stateContext' => 'my-JQuery-selector']);
 
 All available parameters can be found here: https://fomantic-ui.com/behaviors/api.html#/settings
 
-.. php:attr:: successTemplate
-
-    Name of the template which will be used to render success message.
+:::{php:attr} successTemplate
+Name of the template which will be used to render success message.
+:::
 
 To continue with the example, a new Person record can be added into the database
 but only if they have also accepted terms and conditions. An onSubmit handler
@@ -587,7 +593,7 @@ $form->onSubmit(function (Form $form) {
 ```
 
 Callback function can return one or multiple JavaScript actions. Methods such as
-:php:meth:`jsError()` or :php:meth:`jsSuccess()` will help initialize those actions for your form.
+{php:meth}`jsError()` or {php:meth}`jsSuccess()` will help initialize those actions for your form.
 Here is a code that can be used to output multiple errors at once. Errors were intentionally not grouped
 with a message about failure to accept of terms and conditions:
 
@@ -620,7 +626,7 @@ $form->onSubmit(function (Form $form) {
 So far Agile UI / Agile Data does not come with a validation library but
 it supports usage of 3rd party validation libraries.
 
-Callback function may raise exception. If Exception is based on ``\Atk4\Core\Exception``,
+Callback function may raise exception. If Exception is based on `\Atk4\Core\Exception`,
 then the parameter "field" can be used to associate error with specific field:
 
 ```
@@ -635,33 +641,33 @@ will not be included in response for security reasons.
 
 ### Form Layout and Sub-layout
 
-As stated above, when a Form object is created and form controls are added through either :php:meth:`addControl()`
-or :php:meth:`setModel()`, the form controls will appear one under each-other. This arrangement of form controls as
+As stated above, when a Form object is created and form controls are added through either {php:meth}`addControl()`
+or {php:meth}`setModel()`, the form controls will appear one under each-other. This arrangement of form controls as
 well as display of labels and structure around the form controls themselves is not done by a form,
 but another object - "Form Layout". This object is responsible for the form control flow, presence
 of labels etc.
 
-.. php:method:: initLayout(Form\\Layout $layout)
+:::{php:method} initLayout(Form\Layout $layout)
+Sets a custom Form\Layout object for a form. If not specified then form will automatically
+use Form\Layout class.
+:::
 
-    Sets a custom Form\Layout object for a form. If not specified then form will automatically
-    use Form\Layout class.
+:::{php:attr} layout
+Current form layout object.
+:::
 
-.. php:attr:: layout
+:::{php:method} addHeader($header)
+Adds a form header with a text label. Returns View.
+:::
 
-    Current form layout object.
-
-.. php:method:: addHeader($header)
-
-    Adds a form header with a text label. Returns View.
-
-.. php:method:: addGroup($header)
-
-    Creates a sub-layout, returning new instance of a :php:class:`Form\\Layout` object. You
-    can also specify a header.
+:::{php:method} addGroup($header)
+Creates a sub-layout, returning new instance of a {php:class}`Form_i_Layout` object. You
+can also specify a header.
+:::
 
 ### Form Control Group Layout and Sub-layout
 
-Controls can be organized in groups, using method `Form::addGroup()` or as sub section using `Form\\Layout::addSubLayout()` method.
+Controls can be organized in groups, using method `Form::addGroup()` or as sub section using `Form\Layout::addSubLayout()` method.
 
 ### Using Group
 
@@ -715,7 +721,7 @@ $group->addControl('last_name', ['width' => 'five']);
 There are four specific sub layout views that you can add to your existing form layout: Generic, Accordion, Tabs and Columns.
 
 Generic sub layout is simply another layout view added to your existing form layout view. You add fields
-the same way as you would do for :php:class:`Form\\Layout`.
+the same way as you would do for {php:class}`Form_i_Layout`.
 
 Sub layout section like Accordion, Tabs or Columns will create layout specific section where you can
 organize fields in either accordion, tabs or columns.
@@ -763,15 +769,15 @@ form inside a segment (outline) and will make form controls appear smaller:
 $form = new \Atk4\Ui\Form(['class.small segment' => true]));
 ```
 
-For further styling see documentation on :php:class:`View`.
+For further styling see documentation on {php:class}`View`.
 
 ## Not-Nullable and Required Fields
 
 ATK Data has two field flags - "nullable" and "required". Because ATK Data works with PHP
 values, the values are defined like this:
 
- - nullable = value of the field can be null.
- - required = value of the field must not be empty/false/zero, null is empty too.
+- nullable = value of the field can be null.
+- required = value of the field must not be empty/false/zero, null is empty too.
 
 Form changes things slightly, because it does not allow user to enter NULL values. For
 example - string (or unspecified type) fields will contain empty string if are not
@@ -785,7 +791,8 @@ numeric field, if zero must be a permitted entry, use "nullable=false" instead.
 
 ## Conditional Form
 
-.. php:method:: setControlsDisplayRules()
+:::{php:method} setControlsDisplayRules()
+:::
 
 So far we had to present form with a set of form controls while initializing. Sometimes
 you would want to hide/display controls while user enters the data.
@@ -884,17 +891,19 @@ $form->setGroupDisplayRules([
 ]);
 ```
 
-.. todo:: MOVE THIS TO SEPARATE FILE
+:::{todo}
+MOVE THIS TO SEPARATE FILE
+:::
 
-.. php:class:: Form\\Layout
+:::{php:class} Form_i_Layout
+Renders HTML outline encasing form controls.
+:::
 
-    Renders HTML outline encasing form controls.
+:::{php:attr} form
+Form layout objects are always associated with a Form object.
+:::
 
-.. php:attr:: form
-
-    Form layout objects are always associated with a Form object.
-
-.. php:method:: addControl()
-
-    Same as :php:class:`Form::addControl()` but will place a form control inside this specific layout
-    or sub-layout.
+:::{php:method} addControl()
+Same as {php:class}`Form::addControl()` but will place a form control inside this specific layout
+or sub-layout.
+:::

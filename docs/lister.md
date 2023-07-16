@@ -1,13 +1,15 @@
-.. _Lister:
+:::{php:namespace} Atk4\Ui
+:::
+
+(Lister)=
 
 # Lister
 
-.. php:namespace:: Atk4\Ui
-
-.. php:class:: Lister
+:::{php:class} Lister
+:::
 
 Lister can be used to output unstructured data with your own HTML template. If you wish to output
-data in a table, see :php:class:`Table`. Lister is also the fastest way to render large amount of
+data in a table, see {php:class}`Table`. Lister is also the fastest way to render large amount of
 output and will probably give you most flexibility.
 
 ## Basic Usage
@@ -61,10 +63,10 @@ Lister::addTo($view, [], ['Countries'])
 While most other objects in Agile UI come with their own templates, lister will prefer
 to use template inside your region. It will look for "row" and "rows" tag:
 
- 1. Create clone of {row} tag
- 2. Delete contents of {rows} tag
- 3. For each model row, populate values into {row}
- 4. Render {row} and append into {rows}
+1. Create clone of {row} tag
+2. Delete contents of {rows} tag
+3. For each model row, populate values into {row}
+4. Render {row} and append into {rows}
 
 If you refresh your page now, you should see "Andorra" duplicated 20 times. This is because
 the {row} did not contain any field tags. Lets set them up:
@@ -102,7 +104,7 @@ Finally, Lister permits you not to use {rows} and {row} tags if entire region ca
 
 ## Tweaking the output
 
-Output is formatted using the standard :ref:`uiPersistence` routine, but you can also fine-tune the content
+Output is formatted using the standard {ref}`uiPersistence` routine, but you can also fine-tune the content
 of your tags like this:
 
 ```
@@ -126,9 +128,9 @@ $lister->setSource([
 
 Your {row} template may contain few special tags:
 
- - {$_id} - will be set to ID of the record (regardless of how your id_field is called)
- - {$_title} - will be set to the title of your record (see $model->$titleField)
- - {$_href} - will point to current page but with ?id=123 extra GET argument.
+- {$_id} - will be set to ID of the record (regardless of how your id_field is called)
+- {$_title} - will be set to the title of your record (see $model->$titleField)
+- {$_href} - will point to current page but with ?id=123 extra GET argument.
 
 ## Load page content dynamically when scrolling
 
@@ -153,4 +155,3 @@ Lister::addTo($app, ['defaultTemplate' => 'lister.html']);
 ```
 
 This should display a list nicely formatted by Fomantic-UI, with header, links, icons and description area.
-

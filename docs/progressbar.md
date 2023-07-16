@@ -1,19 +1,22 @@
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: ProgressBar
+:::{php:class} ProgressBar
+:::
 
 # ProgressBar
 
 ProgressBar is actually a quite simple element, but it can be made quite interactive along with
-:php:class:`JsSse`.
+{php:class}`JsSse`.
 
-Demo: https://ui.agiletoolkit.org/demos/progressbar.php
+Demo: https://ui.atk4.org/demos/progressbar.php
 
 ## Basic Usage
 
-.. php:method:: jsValue($value)
+:::{php:method} jsValue($value)
+:::
 
-After adding a console to your :ref:`render_tree`, you just need to set a callback:
+After adding a console to your {ref}`render_tree`, you just need to set a callback:
 
 ```
 // Add progressbar showing 0 (out of 100)
@@ -38,8 +41,7 @@ Button::addTo($app, ['charge up the battery'])
 You can use real-time element such as JsSse or Console (which relies on JsSse) to execute
 jsValue() of your progress bar and adjust the display value.
 
-Demo: https://ui.agiletoolkit.org/demos/progressbar.php
+Demo: https://ui.atk4.org/demos/progressbar.php
 
-:php:class:`Console` also implements method :php:meth:`Console::send` so you can use it to send progress
+{php:class}`Console` also implements method {php:meth}`Console::send` so you can use it to send progress
 updates of your progress-bar.
-

@@ -1,10 +1,12 @@
-.. _image:
+:::{php:namespace} Atk4\Ui
+:::
+
+(image)=
 
 # Image
 
-.. php:namespace:: Atk4\Ui
-
-.. php:class:: Image
+:::{php:class} Image
+:::
 
 Implements Image around https://fomantic-ui.com/elements/image.html.
 
@@ -26,4 +28,3 @@ You can pass additional classes to an image:
 $img = $app->cdn['atk'] . '/logo.png';
 $icon = Image::addTo($app, [$img, 'class.disabled' => true]);
 ```
-

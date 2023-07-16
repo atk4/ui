@@ -1,13 +1,15 @@
-.. _text:
+:::{php:namespace} Atk4\Ui
+:::
+
+(text)=
 
 # LoremIpsum
 
-.. php:namespace:: Atk4\Ui
-
-.. php:class:: LoremIpsum
+:::{php:class} LoremIpsum
+:::
 
 This class implements a standard filler-text which is so popular amongst web developers and designers.
-LoremIpsum will generate a dynamic filler text which should help you test :ref:`reloading` or layouts.
+LoremIpsum will generate a dynamic filler text which should help you test {ref}`reloading` or layouts.
 
 ## Basic Usage
 
@@ -25,7 +27,6 @@ $text = Text::addTo($app)
     ->addParagraph('Second Paragraph');
 ```
 
-
 You may specify amount of text to be generated with lorem:
 
 ```
@@ -35,5 +36,3 @@ LoremIpsum::addTo($app, [1]); // just add a little one
 
 LoremIpsum::addTo($app, [5]); // adds a lot of text
 ```
-
-

@@ -1,6 +1,8 @@
-.. php:namespace:: Atk4\Ui\Form\Control
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: Multiline
+:::{php:class} Form_i_Control_i_Multiline
+:::
 
 # Multiline Form Control
 
@@ -23,7 +25,7 @@ class User extends \Atk4\Data\Model
 
     protected function init(): void
     {
-        parent:: init();
+        parent::init();
 
         $this->addField('firstname', ['type' => 'string']);
         $this->addField('lastname', ['type' => 'string']);
@@ -53,7 +55,8 @@ class Address extends \Atk4\Data\Model
 
 This leads to a Multiline component automatically rendered for adding, editing and deleting Addresses of the current user record:
 
-.. image:: images/multiline_user_addresses.png
+:::{image} images/multiline_user_addresses.png
+:::
 
 You can also check LINK_TO_DEMO/multiline.php for this example
 
@@ -91,7 +94,7 @@ class User extends \Atk4\Data\Model
 
     protected function init(): void
     {
-        parent:: init();
+        parent::init();
 
         $this->addField('firstname', ['type' => 'string']);
         $this->addField('lastname', ['type' => 'string']);
@@ -103,7 +106,8 @@ class User extends \Atk4\Data\Model
 
 Using a form with User model won't automatically add a Multiline to edit the related email addresses.
 
-.. php:method:: setReferenceModel(string $refModelName, Model $entity = null, array $fieldNames = []): Model
+:::{php:method} setReferenceModel(string $refModelName, Model $entity = null, array $fieldNames = []): Model
+:::
 
 If you want to edit them along with the user, Multiline need to be set up accordingly using the setReferenceModel method:
 
@@ -125,7 +129,6 @@ $userForm->onSubmit(function (Form $form) use ($ml) {
 });
 ```
 
-
 Using the example above will create a form with control from the User model as well as a Multiline control for editing
 the Email model's field.
 
@@ -140,9 +143,9 @@ normally call this method in your form onSubmit handler method.
 ## Multiline and Expressions
 
 If a Model contains Expressions, there resulting values will automatically get updated when one of the form control value is changed.
-A loading icon on the ``+`` button will indicates that the expression values are being update.
+A loading icon on the `+` button will indicates that the expression values are being update.
 
-Lets use the example of demos/multiline.php:
+Lets use the example of `demos/multiline.php`:
 
 ```
 class InventoryItem extends \Atk4\Data\Model
@@ -166,7 +169,7 @@ The 'total' expression will get updated on each field change automatically.
 ## OnLineChange Callback
 
 If you want to define a callback which gets executed when a field value in a Multiline row is changed,
-you can do so using the ``onLineChange()`` method.
+you can do so using the `onLineChange()` method.
 The first parameter is the callback function, the second one is an array containing field names that will trigger
 the callback when values are changed.
 You can return a single JsExpressionable or an array of JsExpressionables which then will be sent to the browser.
@@ -194,7 +197,8 @@ field type associated with Multiline control.
 
 You will find a list of Vue component associated with each field type within the Multiline $fieldMapToComponent array.
 
-.. php:attr:: fieldMapToComponent
+:::{php:attr} fieldMapToComponent
+:::
 
 Each control being a Vue component means that they accept 'Props' that may change their look or behaviour.
 Props on each component may be applied globally, i.e. to all control within Multiline that use that control, or
@@ -204,7 +208,8 @@ per component.
 
 Use the $componentProps property of Multiline in order to apply 'Props' to component globally.
 
-.. php:attr:: componentProps
+:::{php:attr} componentProps
+:::
 
 Example of changing all Dropdown(SuiDropdown) within Multiline:
 
@@ -253,6 +258,5 @@ $ml = $form->addControl('ml', [Multiline::class, 'tableProps' => ['color' => 'bl
 ### Header
 
 - The header uses the field's caption by default.
-- You can edit it by setting the ``$caption`` property.
-- If you want to hide the header, set the ``$caption`` property to an empty string ``''``.
-
+- You can edit it by setting the `$caption` property.
+- If you want to hide the header, set the `$caption` property to an empty string `''`.

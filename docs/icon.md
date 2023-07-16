@@ -1,10 +1,12 @@
-.. _icon:
+:::{php:namespace} Atk4\Ui
+:::
+
+(icon)=
 
 # Icon
 
-.. php:namespace:: Atk4\Ui
-
-.. php:class:: Icon
+:::{php:class} Icon
+:::
 
 Implements basic icon:
 
@@ -18,8 +20,8 @@ Alternatively:
 $icon = Icon::addTo($app, [], ['flag'])->addClass('outline');
 ```
 
-Most commonly icon class is used for embedded icons on a :php:class:`Button`
-or inside other components (see :ref:`icon_other_comp`):
+Most commonly icon class is used for embedded icons on a {php:class}`Button`
+or inside other components (see {ref}`icon_other_comp`):
 
 ```
 $b1 = new \Atk4\Ui\Button(['Click Me', 'icon' => 'book']);
@@ -45,12 +47,12 @@ Button::addTo($app, ['Click Me', 'class.red' => true, 'icon' => 'flipped big que
 Label::addTo($app, ['Battery Low', 'class.green' => true, 'icon' => 'battery low']);
 ```
 
-.. _icon_other_comp:
+(icon_other_comp)=
 
 ## Using on other Components
 
-You can use icon on the following components: :php:class:`Button`, :php:class:`Label`, :php:class:`Header`
-:php:class:`Message`, :php:class:`Menu` and possibly some others. Here are some examples:
+You can use icon on the following components: {php:class}`Button`, {php:class}`Label`, {php:class}`Header`
+{php:class}`Message`, {php:class}`Menu` and possibly some others. Here are some examples:
 
 ```
 Header::addTo($app, ['Header', 'class.red' => true, 'icon' => 'flipped question']);
@@ -66,7 +68,7 @@ Label::addTo($app, ['Label', 'class.right ribbon red' => true, 'icon' => 'flippe
 
 ## Groups
 
-Fomantic-UI support icon groups. The best way to implement is to supply :php:class:`Template` to an
+Fomantic-UI support icon groups. The best way to implement is to supply {php:class}`Template` to an
 icon:
 
 ```
@@ -115,20 +117,18 @@ $app->add($noUsers);
 ## Icon in Your Component
 
 Sometimes you want to build a component that will contain user-defined icon. Here you can find
-an implementation for ``SocialAdd`` component that implements a friendly social button with
+an implementation for `SocialAdd` component that implements a friendly social button with
 the following features:
 
- - has a very compact usage ``new SocialAdd('facebook')``
- - allow to customize icon by specifying it as string, object or injecting properties
- - allow to customize label
+- has a very compact usage `new SocialAdd('facebook')`
+- allow to customize icon by specifying it as string, object or injecting properties
+- allow to customize label
 
 Here is the code with comments:
 
 ```
 /**
-```
-     * Implements a social network add button. You can initialize the button by passing
-```
+ * Implements a social network add button. You can initialize the button by passing
  * social network as a parameter: new SocialAdd('facebook')
  * or alternatively you can specify $social, $icon and content individually:
  * new SocialAdd(['Follow on Facebook', 'social' => 'facebook', 'icon' => 'facebook f']);
@@ -180,10 +180,8 @@ class SocialAdd extends \Atk4\Ui\View
         $this->add($this->icon, 'Icon');
     }
 }
-```
 
-    // Usage Examples. Start with the most basic usage
-```
+// Usage Examples. Start with the most basic usage
 SocialAdd::addTo($app, ['instagram']);
 
 // Next specify label and separately name of social network

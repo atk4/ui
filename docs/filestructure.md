@@ -1,4 +1,7 @@
-.. _filestructure:
+:::{php:namespace} Atk4\Ui
+:::
+
+(filestructure)=
 
 # File structure example & first app
 
@@ -11,57 +14,30 @@ and modified to your needs and shows just one concept of how to setup an atk4 pr
 This file structure is a recommendation and no must. It is a best practice example.
 Feel free to experiment with it and find the ideal file structure for your project.
 
-* config
-
-    * db.php
-
-* public_html
-
-    * images
-
-    * index.php
-
-    * init.php
-
-    * admin.php (if needed)
-
-* projectfolder (could be named "app" for example)
-
-    * Forms
-
-        * ExampleForm1.php
-
-        * ExampleForm2.php
-
-        * UserDetailForm.php
-
-    * Models
-
-        * ExampleClass1.php
-
-        * ExampleClass2.php
-
-        * LoadAllUsers.php
-
-    * Views
-
-        * View1.php
-
-        * View2.php
-
-        * GridUserList.php
-
-* vendor (contains all needed composer modules - don't touch them)
-
-    * atk4
-
-        * ...
-
-    * autoload.php
-
-    * ...
-
-* composer.json
+- config
+  - db.php
+- public_html
+  - images
+  - index.php
+  - init.php
+  - admin.php (if needed)
+- projectfolder (could be named "app" for example)
+  - Forms
+    - ExampleForm1.php
+    - ExampleForm2.php
+    - UserDetailForm.php
+  - Models
+    - ExampleClass1.php
+    - ExampleClass2.php
+    - LoadAllUsers.php
+  - Views
+    - View1.php
+    - View2.php
+    - GridUserList.php
+- vendor (contains all needed composer modules - don't touch them)
+  - autoload.php
+  - ...
+- composer.json
 
 ## Composer configuration
 
@@ -106,15 +82,12 @@ But you can't call it directly through the domain (that means in our case "db.ph
 ## Create your application
 
 To initialize your application we need to do the following steps:
-    #) Create db.php for database
 
-    #) Create init.php
-
-    #) Load Composer autoload.php (which loads up atk4) in init.php
-
-    #) Initialize the app class in init.php
-
-    #) Create index.php and admin.php
+1. Create db.php for database
+2. Create init.php
+3. Load Composer autoload.php (which loads up atk4) in init.php
+4. Initialize the app class in init.php
+5. Create index.php and admin.php
 
 ### Create db.php for database
 
@@ -141,15 +114,11 @@ require_once $rootdir . "../config/db.php"; // contains database configuration o
 
 ### Load Composer autoload.php (which loads up atk4) in init.php
 
-:
-
 ```
 require_once $rootdir . "vendor/autoload.php"; // loads up atk4 and our project files from Composer
 ```
 
 ### Initialize the app class in init.php
-
-:
 
 ```
 $app = new \Atk4\Ui\App('Welcome to my first app'); // initialization of our app
@@ -207,13 +176,15 @@ class View1 extends \Atk4\Data\View
 }
 ```
 
-"namespace MyProject\\Views;" defines the namespace to use. It reflects the folder structure of the app.
-The file located in "projectfolder/Views/View1.php" becomes "MyProject\\Views\\View1" in the namespace.
+"namespace MyProject\Views;" defines the namespace to use. It reflects the folder structure of the app.
+The file located in "projectfolder/Views/View1.php" becomes "MyProject\Views\View1" in the namespace.
 
 For each of your classes create a separate file. As long as you follow the name conventions all your class
 files will be autoloaded by Composer.
 
-.. warning:: Keep in mind that as soon as you have created one or more new file(s) within the projectfolder you have to run "composer dump-autoload"!!! Otherwise the newly generated file(s) and classes will not be autoloaded and are therefore unavailable in your application.
+:::{warning}
+Keep in mind that as soon as you have created one or more new file(s) within the projectfolder you have to run "composer dump-autoload"!!! Otherwise the newly generated file(s) and classes will not be autoloaded and are therefore unavailable in your application.
+:::
 
 ## Load your class in index.php
 
@@ -225,10 +196,10 @@ Please add the following lines into your index.php:
 \MyProject\Views\View1::addTo($app);
 ```
 
-or if you have added at the beginning of your index.php "use MyProject\\Views\\View1;" you can write:
+or if you have added at the beginning of your index.php "use MyProject\Views\View1;" you can write:
 
 ```
 View1::addTo($app);
 ```
 
-See also :ref:`using-namespaces` on this topic...
+See also {ref}`using-namespaces` on this topic...

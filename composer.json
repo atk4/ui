@@ -20,12 +20,10 @@
     "authors": [
         {
             "name": "Romans Malinovskis",
-            "email": "romans@agiletoolkit.org",
             "homepage": "https://nearly.guru/"
         },
         {
-            "name": "Alain Belair",
-            "homepage": "https://agiletoolkit.org/"
+            "name": "Alain Belair"
         },
         {
             "name": "Imants Horsts",

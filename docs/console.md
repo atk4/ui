@@ -1,25 +1,28 @@
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
-.. php:class:: Console
+:::{php:class} Console
+:::
 
 # Console
 
-.. figure:: images/console.png
+:::{figure} images/console.png
+:::
 
 With console you can output real-time information to the user directly from PHP. It can
 be used do direct output from slow method or even execute commands on the server (such as `ping`).
 
-
-Demo: https://ui.agiletoolkit.org/demos/console.php
+Demo: https://ui.atk4.org/demos/console.php
 
 ## Basic Usage
 
-.. php:method:: set($callback)
+:::{php:method} set($callback)
+:::
 
-.. php:method:: send($callback)
+:::{php:method} send($callback)
+:::
 
-
-After adding a console to your :ref:`render_tree`, you just need to set a callback:
+After adding a console to your {ref}`render_tree`, you just need to set a callback:
 
 ```
 $console = Console::addTo($app);
@@ -32,16 +35,17 @@ $console->set(function (Console $console) {
 });
 ```
 
-Console uses :ref:`sse` which works pretty much out-of-the-box with the modern browsers and unlike websockets
+Console uses {ref}`sse` which works pretty much out-of-the-box with the modern browsers and unlike websockets
 do not require you to set up additional ports on the server. JavaScript in a browser captures real-time
 events and displays it on a black background.
 
-Console integrates nicely with DebugTrait (https://agile-core.readthedocs.io/en/develop/debug.html?highlight=debug),
+Console integrates nicely with DebugTrait (https://atk4-core.readthedocs.io/en/develop/debug.html?highlight=debug),
 and also allows you to execute shell process on the server while redirecting output in real-time.
 
 ## Using With Object
 
-.. php:method:: runMethod($callback);
+:::{php:method} runMethod($callback)
+:::
 
 We recommend that you pack up your busineess logic into your Model methods. When it's time to call your method,
 you could either do this:
@@ -82,9 +86,11 @@ $console->runMethod('StaticLib', 'myStaticMethod');
 
 ## Executing Commands
 
-.. php:method:: exec($cmd, $args);
+:::{php:method} exec($cmd, $args)
+:::
 
-.. php:argument:: lastExitCode
+:::{php:argument} lastExitCode
+:::
 
 To execute a command, use:
 
@@ -116,7 +122,7 @@ Console::addTo($app)->set(function (Console $c) {
 ```
 
 Method exec() will return `$this` if command was run inside callback and was successful. It will return `false` on error
-and will return `null` if called outside of callback. You may also refer to ::php:attr:`Console::lastExitCode` which
+and will return `null` if called outside of callback. You may also refer to {php:attr}`Console::lastExitCode` which
 contains exit code of the last command.
 
 Normally it's safe to chain `exec` which ensures that execution will stack. Should any command fail, the subsequent

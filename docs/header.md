@@ -1,4 +1,5 @@
-.. php:namespace:: Atk4\Ui
+:::{php:namespace} Atk4\Ui
+:::
 
 # Header
 
@@ -6,7 +7,7 @@ Can be used for page or section headers.
 
 Based around: https://fomantic-ui.com/elements/header.html.
 
-Demo:  https://ui.agiletoolkit.org/demos/header.php
+Demo: https://ui.atk4.org/demos/header.php
 
 ## Basic Usage
 
@@ -18,9 +19,11 @@ Header::addTo($this, ['Hello, Header']);
 
 ## Attributes
 
-.. php:attr:: size
+:::{php:attr} size
+:::
 
-.. php:attr:: subHeader
+:::{php:attr} subHeader
+:::
 
 Specify size and sub-header content:
 
@@ -42,10 +45,11 @@ Header::addTo($seg, [
 
 ## Icon and Image
 
-.. php:attr:: icon
+:::{php:attr} icon
+:::
 
-.. php:attr:: image
-
+:::{php:attr} image
+:::
 
 Header may specify icon or image:
 
@@ -68,4 +72,3 @@ Header::addTo($seg, [
     'subHeader' => 'header with image',
 ]);
 ```
-

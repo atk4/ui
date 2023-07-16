@@ -1,20 +1,26 @@
-.. _crud:
+:::{php:namespace} Atk4\Ui
+:::
+
+(crud)=
 
 # Crud
 
-.. php:namespace:: Atk4\Ui
-.. php:class:: Crud
+:::{php:class} Crud
+:::
 
-Crud class offers a very usable extension to :php:class:`Grid` class, which automatically adds actions for deleting,
+Crud class offers a very usable extension to {php:class}`Grid` class, which automatically adds actions for deleting,
 updating and adding records as well as linking them with corresponding Model actions.
 
-.. important:: If you only wish to display a non-interactive table use :php:class:`Table` class. If you need to
-    display Data Grid with some custom actions (not update/delete/add) or if you want to use your own editing
-    mechanism (such as edit data on separate page, not inside a modal), use :php:class:`Grid`
+:::{important}
+If you only wish to display a non-interactive table use {php:class}`Table` class. If you need to
+display Data Grid with some custom actions (not update/delete/add) or if you want to use your own editing
+mechanism (such as edit data on separate page, not inside a modal), use {php:class}`Grid`
+:::
 
-
-.. important:: ATK Addon - MasterCrud implements a higher-level multi-model management solution, that takes
-    advantage of model relations and traversal to create multiple levels of Cruds: https://github.com/atk4/mastercrud
+:::{important}
+ATK Addon - MasterCrud implements a higher-level multi-model management solution, that takes
+advantage of model relations and traversal to create multiple levels of Cruds: https://github.com/atk4/mastercrud
+:::
 
 ## Using Crud
 
@@ -59,16 +65,20 @@ Model action using system property set to true, will not be display in Crud. Not
 
 ## Specifying Fields (for different views)
 
-.. php:attr:: displayFields
+:::{php:attr} displayFields
+:::
 
 Only fields name set in this property will be display in Grid. Leave empty for all fields.
 
-.. php:attr:: editFields
+:::{php:attr} editFields
+:::
 
 If you'd like to have different fields in the grid of the CRUD, but you need more/different fields in the editing modal (which opens when clicking on an entry),
 you can choose here the fields that are available in the editing modal window.
 
-.. important:: Both views (overview and editing view) refer to the same model, just the fields shown in either of them differ
+:::{important}
+Both views (overview and editing view) refer to the same model, just the fields shown in either of them differ
+:::
 
 Example:
 
@@ -79,7 +89,8 @@ $crud->displayFields(['field1, field2']);
 $crud->editFields(['field1, field2, field3, field4']);
 ```
 
-.. php:attr:: addFields
+:::{php:attr} addFields
+:::
 
 Through those properties you can specify which fields to use when form is display for add and edit action.
 Field name add here will have priorities over the action fields properties. When set to null, the action fields property
@@ -87,7 +98,7 @@ will be used.
 
 ## Custom Form Behavior
 
-:php:class:`Form` in Agile UI allows you to use many different things, such as custom layouts. With Crud you can
+{php:class}`Form` in Agile UI allows you to use many different things, such as custom layouts. With Crud you can
 specify your own form behavior using a callback for action:
 
 ```
@@ -116,9 +127,11 @@ Callback function will receive the Form and ActionExecutor as arguments.
 
 ## Changing titles
 
-.. important:: Changing the title of the CRUD's grid view must be done before setting the model.
-  Changing the title of the modal of a CRUD's modal window must be done after loading the model.
-  Otherwise the changes will have no effect.
+:::{important}
+Changing the title of the CRUD's grid view must be done before setting the model.
+Changing the title of the modal of a CRUD's modal window must be done after loading the model.
+Otherwise the changes will have no effect.
+:::
 
 Here's an example:
 
@@ -132,10 +145,17 @@ $model->getUserAction('add')->ui['executor']->title = 'New title for modal'; // 
 
 ## Notification
 
-.. php:attr:: notifyDefault
-.. php:attr:: saveMsg
-.. php:attr:: deleteMsg
-.. php:attr:: defaultMsg
+:::{php:attr} notifyDefault
+:::
+
+:::{php:attr} saveMsg
+:::
+
+:::{php:attr} deleteMsg
+:::
+
+:::{php:attr} defaultMsg
+:::
 
 When a model action execute in Crud, a notification to user is display. You can specify your notifier default seed using
 `$notifyDefault`. The notifier message may be set via `$saveMsg`, `$deleteMsg` or `$defaultMsg` property.

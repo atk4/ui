@@ -1,11 +1,14 @@
-.. _grid:
+:::{php:namespace} Atk4\Ui
+:::
+
+(grid)=
 
 # Grid
 
-.. php:namespace:: Atk4\Ui
-.. php:class:: Grid
+:::{php:class} Grid
+:::
 
-If you didn't read documentation on :ref:`table` you should start with that. While table implements the actual
+If you didn't read documentation on {ref}`table` you should start with that. While table implements the actual
 data rendering, Grid component supplies various enhancements around it, such as paginator, quick-search, toolbar
 and others by relying on other components.
 
@@ -29,12 +32,14 @@ $grid->menu->addItem('Reload Grid', new \Atk4\Ui\Js\JsReload($grid));
 
 ## Adding Menu Items
 
-.. php:attr:: menu
+:::{php:attr} menu
+:::
 
-.. php:method: addButton($label)
+:::{php:method} addButton($label)
+:::
 
 Grid top-bar which contains QuickSearch is implemented using Fomantic-UI "ui menu". With that
-you can add additional items and use all features of a regular :php:class:`Menu`:
+you can add additional items and use all features of a regular {php:class}`Menu`:
 
 ```
 $sub = $grid->menu->addMenu('Drop-down');
@@ -56,11 +61,13 @@ $grid = Grid::addTo($app, ['menu' => false]);
 
 ## Adding Quick Search
 
-.. php:attr:: quickSearch
+:::{php:attr} quickSearch
+:::
 
-.. php:method: addQuickSearch($fields = [], $hasAutoQuery = false)
+:::{php:method} addQuickSearch($fields = [], $hasAutoQuery = false)
+:::
 
-After you have associated grid with a model using :php:class:`View::setModel()` you can
+After you have associated grid with a model using {php:class}`View::setModel()` you can
 include quick-search component:
 
 ```
@@ -68,7 +75,7 @@ $grid->addQuickSearch(['name', 'surname']);
 ```
 
 If you don't specify argument, then search will be done by a models title field.
-(https://agile-data.readthedocs.io/en/develop/model.html#title-field)
+(https://atk4-data.readthedocs.io/en/develop/model.html#title-field)
 
 By default, quick search input field will query server when user press the Enter key. However, it is possible to make it
 querying the server automatically, i.e. after the user has finished typing, by setting the auto query parameter:
@@ -79,9 +86,11 @@ $grid->addQuickSearch(['name', 'surname'], true);
 
 ## Paginator
 
-.. php:attr:: paginator
+:::{php:attr} paginator
+:::
 
-.. php:attr:: ipp
+:::{php:attr} ipp
+:::
 
 Grid comes with a paginator already. You can disable it by setting $paginator property to false. Alternatively you
 can provide seed for the paginator or even entire object:
@@ -98,7 +107,8 @@ $grid->ipp = 10;
 
 ### JsPaginator
 
-.. php:method:: addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+:::{php:method} addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+:::
 
 JsPaginator will load table content dynamically when user scroll down the table window on screen.
 
@@ -106,20 +116,23 @@ JsPaginator will load table content dynamically when user scroll down the table 
 $table->addJsPaginator(30);
 ```
 
-See :php:meth:`Table::addJsPaginator`
+See {php:meth}`Table::addJsPaginator`
 
-.. php:method:: addJsPaginatorInContainer($ipp, $containerHeight, $options = [], $container = null, $scrollRegion = 'Body')
+:::{php:method} addJsPaginatorInContainer($ipp, $containerHeight, $options = [], $container = null, $scrollRegion = 'Body')
+:::
 
 Use this method if you want fixed table header when scrolling down table. In this case you have to set
 fixed height of your table container.
 
 ## Actions
 
-.. php:attr:: actions
+:::{php:attr} actions
+:::
 
-.. php:method:: addActionButton($button, $action, $confirm = false)
+:::{php:method} addActionButton($button, $action, $confirm = false)
+:::
 
-:php:class:`Table` supports use of :php:class:`Table\\Column\\\Actions`, which allows to display button for each row.
+{php:class}`Table` supports use of {php:class}`Table_i_Column_i_Actions`, which allows to display button for each row.
 Calling addActionButton() provides a useful short-cut for creating column-based actions.
 
 $button can be either a string (for a button label) or something like `['icon' => 'book']`.
@@ -128,9 +141,10 @@ If $confirm is set to true, then user will see a confirmation when he clicks on 
 
 Calling this method multiple times will add button into same action column.
 
-See :php:meth:`Table\\Column\\\Actions::addAction`
+See {php:meth}`Table_i_Column_i_Actions::addAction`
 
-.. php:method:: addModalAction($button, $title, $callback)
+:::{php:method} addModalAction($button, $title, $callback)
+:::
 
 Similar to addAction, but when clicking a button, will open a modal dialog and execute $callback
 to populate a content:
@@ -146,22 +160,24 @@ $grid->addModalAction('Details', 'Additional Details', function (View $p, $id) u
 
 Calling this method multiple times will add button into same action column.
 
-See :php:meth:`Atk4\\Ui\\Table\\Column\\Actions::addModal`
+See {php:meth}`Table_i_Column_i_Actions::addModal`
 
 ## Column Menus
 
-.. php:method:: addDropdown($columnName, $items, $fx, $icon = 'caret square down', $menuId = null)
+:::{php:method} addDropdown($columnName, $items, $fx, $icon = 'caret square down', $menuId = null)
+:::
 
-.. php:method:: addPopup($columnName, $popup = null, $icon = 'caret square down')
+:::{php:method} addPopup($columnName, $popup = null, $icon = 'caret square down')
+:::
 
-Methods addDropdown and addPopup provide a wrapper for :php:meth:`Atk4\\Ui\\Table\\Column::addDropdown` and
-:php:meth:`Atk4\\Ui\\\Table\\Column::addPopup` methods.
+Methods addDropdown and addPopup provide a wrapper for {php:meth}`Table_i_Column::addDropdown` and
+{php:meth}`Table_i_Column::addPopup` methods.
 
 ## Selection
 
-Grid can have a checkbox column for you to select elements. It relies on :php:class:`Table\\Column\\Checkbox`, but will
-additionally place this column before any other column inside a grid. You can use :php:meth:`Table\\Column\\Checkbox::jsChecked()`
-method to reference value of selected checkboxes inside any :ref:`js_action`:
+Grid can have a checkbox column for you to select elements. It relies on {php:class}`Table_i_Column_i_Checkbox`, but will
+additionally place this column before any other column inside a grid. You can use {php:meth}`Table_i_Column_i_Checkbox::jsChecked()`
+method to reference value of selected checkboxes inside any {ref}`js_action`:
 
 ```
 $sel = $grid->addSelection();
@@ -173,7 +189,8 @@ $grid->menu->addItem('show selection')
 
 ## Sorting
 
-.. php:attr:: sortable
+:::{php:attr} sortable
+:::
 
 When grid is associated with a model that supports order, it will automatically make itself sortable. You can
 override this behaviour by setting $sortable property to `true` or `false`.
@@ -181,10 +198,11 @@ override this behaviour by setting $sortable property to `true` or `false`.
 You can also set $sortable property for each table column decorator. That way you can enable/disable sorting
 of particular columns.
 
-See also :php:attr:`Table::$sortable`.
+See also {php:attr}`Table::$sortable`.
 
 ## Advanced Usage
 
-.. php:attr:: table
+:::{php:attr} table
+:::
 
-You can use a different component instead of default :php:class:`Table` by injecting $table property.
+You can use a different component instead of default {php:class}`Table` by injecting $table property.

@@ -1,17 +1,17 @@
-.. _view:
+:::{php:namespace} Atk4\Ui
+:::
+
+(view)=
 
 # Views
 
 Agile UI is a component framework, which follows a software patterns known as
 `Render Tree` and `Two pass HTML rendering`.
 
-.. php:namespace:: Atk4\Ui
-
-.. php:class:: View
-
-    A View is a most fundamental object that can take part in the Render tree. All
-    of the other components descend from the `View` class.
-
+:::{php:class} View
+A View is a most fundamental object that can take part in the Render tree. All
+of the other components descend from the `View` class.
+:::
 
 View object is recursive. You can take one view and add another View inside of it:
 
@@ -22,14 +22,14 @@ Button::addTo($v, ['Orange', 'class.inverted orange' => true]);
 
 The above code will produce the following HTML block:
 
-.. code-block:: html
+```html
+<div class="ui inverted segment">
+    <button class="ui inverted orange button">Orange</button>
+</div>
+```
 
-    <div class="ui inverted segment">
-        <button class="ui inverted orange button">Orange</button>
-    </div>
-
-All of the views combined form a ``Render Tree``. In order to get the HTML output
-from all the `Views` in `Render Tree` you need to execute ``render()`` for the top-most
+All of the views combined form a `Render Tree`. In order to get the HTML output
+from all the `Views` in `Render Tree` you need to execute `render()` for the top-most
 leaf:
 
 ```
@@ -43,28 +43,29 @@ Each of the views will automatically render all of the child views.
 Views use a principle of `delayed init`, which allow you to manipulate View objects
 in any way you wish, before they will actuallized.
 
-.. php:method:: add($object, $region = 'Content')
+:::{php:method} add($object, $region = 'Content')
+Add child view as a parent of the this view.
 
-    Add child view as a parent of the this view.
+In addition to adding a child object, sets up it's template
+and associate it's output with the region in our template.
 
-    In addition to adding a child object, sets up it's template
-    and associate it's output with the region in our template.
+Will copy $this->getApp() into $object->getApp().
 
-    Will copy $this->getApp() into $object->getApp().
+If this object is initialized, will also initialize $object
 
-    If this object is initialized, will also initialize $object
+```{eval-rst}
+:param $object: Object or :ref:`seed` to add into render tree.
+:param $region: When outputting HTML, which region in :php:attr:`View::$template` to use.
+```
+:::
 
-    :param $object: Object or :ref:`seed` to add into render tree.
-    :param $region: When outputting HTML, which region in :php:attr:`View::$template` to use.
+:::{php:method} init()
+View will automatically execute an init() method. This will happen as soon as
+values for properties properties `app`, `id` and `path` can be determined.
 
-
-.. php:method:: init()
-
-    View will automatically execute an init() method. This will happen as soon as
-    values for properties properties `app`, `id` and `path` can be determined.
-
-    You should override `init` method for composite views, so that you can `add()`
-    additional sub-views into it.
+You should override `init` method for composite views, so that you can `add()`
+additional sub-views into it.
+:::
 
 In the next example I'll be creating 3 views, but it at the time their __constructor
 is executed it will be impossible to determine each view's position inside render tree:
@@ -78,7 +79,6 @@ $bottom = new \Atk4\Ui\Button(['Hello World', 'class.orange' => true]);
 
 $middle->add($bottom);
 $top->add($middle);
-
 
 // Still not sure if finished adding
 
@@ -121,11 +121,11 @@ to `Factory::factory()`, which will be responsible of instantiating the actual o
 
 ## Use of $app property and Dependency Injeciton
 
-.. php:attr:: app
-
-    Each View has a property $app that is defined through \Atk4\Core\AppScopeTrait.
-    View elements rely on persistence of the app class in order to perform Dependency
-    Injection.
+:::{php:attr} app
+Each View has a property $app that is defined through \Atk4\Core\AppScopeTrait.
+View elements rely on persistence of the app class in order to perform Dependency
+Injection.
+:::
 
 Consider the following example:
 
@@ -140,14 +140,13 @@ Agile UI will automatically pass your $app class to all the views.
 
 ## Integration with Agile Data
 
-.. php:method:: setModel($model)
+:::{php:method} setModel($model)
+Associate current view with a domain model.
+:::
 
-    Associate current view with a domain model.
-
-.. php:attr:: model
-
-    Stores currently associated model until time of rendering.
-
+:::{php:attr} model
+Stores currently associated model until time of rendering.
+:::
 
 If you have used Agile Data, you should be familiar with a concept of creating
 Models:
@@ -190,17 +189,17 @@ to properly initialize the class corresponding to string 'Client'.
 
 ## UI Role and Classes
 
-.. php:method:: __construct($defaults = [])
+:::{php:method} __construct($defaults = [])
+```{eval-rst}
+:param $defaults: set of default properties and classes.
+```
+:::
 
-    :param $defaults: set of default properties and classes.
+:::{php:attr} ui
+Indicates a role of a view for CSS framework.
+:::
 
-.. php:attr:: ui
-
-    Indicates a role of a view for CSS framework.
-
-
-
-A constructor of a view often maps into a ``<div>`` tag that has a specific role
+A constructor of a view often maps into a `<div>` tag that has a specific role
 in a CSS framework. According to the principles of Agile UI, we support a
 wide varietty of roles. In some cases, a dedicated object will exist, for
 example a Button. In other cases, you can use a View and specify a UI role
@@ -231,8 +230,6 @@ have been designed to work consistently either way and delay all the
 property processing until the render stage, so it should be no difference
 which syntax you are using.
 
-
-
 If you are don't specify key for the properties, they will be considered an
 extra class for a view:
 
@@ -244,23 +241,27 @@ $view->name = 'test-id';
 You can either specify multiple classes one-by-one or as a single string
 "inverted orange".
 
-.. php:attr:: class
+:::{php:attr} class
+List of classes that will be added to the top-most element during render.
+:::
 
-    List of classes that will be added to the top-most element during render.
+:::{php:method} addClass($class)
+Add CSS class to element. Previously added classes are not affected.
+Multiple CSS classes can also be added if passed as space separated
+string or array of class names.
 
-.. php:method:: addClass($class)
+```{eval-rst}
+:type $class: string|array
+:param $class: CSS class name or array of class names
+:returns: $this
+```
+:::
 
-    Add CSS class to element. Previously added classes are not affected.
-    Multiple CSS classes can also be added if passed as space separated
-    string or array of class names.
-
-    :type $class: string|array
-    :param $class: CSS class name or array of class names
-    :returns: $this
-
-.. php:method:: removeClass($class)
-
-    :param $class: string|array one or multiple classes to be removed.
+:::{php:method} removeClass($class)
+```{eval-rst}
+:param $class: string|array one or multiple classes to be removed.
+```
+:::
 
 In addition to the UI / Role classes during the render, element will
 receive extra classes from the $class property. To add extra class to
@@ -306,33 +307,34 @@ $button = Button::addTo($app, ['icon' => new MyAwesomeIcon('book')]);
 
 ## Rendering of a Tree
 
-.. php:method:: render()
-
-    Perform render of this View and all the child Views recursively returning a valid HTML string.
+:::{php:method} render()
+Perform render of this View and all the child Views recursively returning a valid HTML string.
+:::
 
 Any view has the ability to render itself. Once executed, render will perform the following:
 
- - call renderView() of a current object.
- - call recursiveRender() to recursively render sub-elements.
- - return JS code with on-dom-ready instructions along with HTML code of a current view.
+- call renderView() of a current object.
+- call recursiveRender() to recursively render sub-elements.
+- return JS code with on-dom-ready instructions along with HTML code of a current view.
 
 You must not override render() in your objects. If you are integrating Agile UI into your
-framework you shouldn't even use ``render()``, but instead use ``getHtml`` and ``getJs``.
+framework you shouldn't even use `render()`, but instead use `getHtml` and `getJs`.
 
-.. php:method:: getHtml()
+:::{php:method} getHtml()
+Returns HTML for this View as well as all the child views.
+:::
 
-    Returns HTML for this View as well as all the child views.
-
-.. php:method:: getJs()
-
-    Return array of JS chains that was assigned to current element or it's children.
+:::{php:method} getJs()
+Return array of JS chains that was assigned to current element or it's children.
+:::
 
 ## Modifying rendering logic
 
 When you creating your own View, you most likely will want to change it's rendering mechanics.
-The most suitable location for that is inside ``renderView`` method.
+The most suitable location for that is inside `renderView` method.
 
-.. php:method:: renderView()
+:::{php:method} renderView()
+:::
 
 Perform necessary changes in the $template property according to the presentation logic
 of this view.
@@ -354,20 +356,22 @@ It's important when you call parent. You wouldn't be able to affect template of 
 anymore after calling renderView.
 
 Also, note that child classes are rendered already before invocation of rederView. If you wish
-to do something before child render, override method :php:meth:`View::recursiveRender()`
+to do something before child render, override method {php:meth}`View::recursiveRender()`
 
-.. php:attr:: template
+:::{php:attr} template
+:::
 
-Template of a current view. This attribute contains an object of a class :php:class:`Template`.
+Template of a current view. This attribute contains an object of a class {php:class}`Template`.
 You may secify this value explicitly:
 
 ```
 View::addTo($app, ['template' => new \Atk4\Ui\Template('<b>hello</b>')]);
 ```
 
-.. php:attr:: defaultTemplate
+:::{php:attr} defaultTemplate
+:::
 
-By default, if value of :php:attr:`View::$template` is not set, then it is loaded from class
+By default, if value of {php:attr}`View::$template` is not set, then it is loaded from class
 specified in `defaultTemplate`:
 
 ```
@@ -384,13 +388,13 @@ View::addTo($app, ['defaultTemplate' => __DIR__ . '/../templates/mytpl.httml']);
 
 Agile UI does not currently provide advanced search path for templates, by default the
 template is loaded from folder `vendor/atk4/ui/template`. To change this
-behaviour, see :php:class:`App::loadTemplate()`.
+behaviour, see {php:class}`App::loadTemplate()`.
 
-.. php:attr:: region
+:::{php:attr} region
+:::
 
 Name of the region in the owner's template where this object
 will output itself. By default 'Content'.
-
 
 Here is a best practice for using custom template:
 
@@ -422,7 +426,7 @@ Or you can set $template into object inside your constructor, in which case it w
 On other hand, if your 'template' property is null, then the process of adding View inside RenderTree
 will automatically clone region of a parent.
 
-``Lister`` is a class that has no default template, and therefore you can add it like this:
+`Lister` is a class that has no default template, and therefore you can add it like this:
 
 ```
 $profile = View::addTo($app, ['template' => 'myview.html']);
@@ -430,18 +434,18 @@ $profile->setModel($user);
 Lister::addTo($profile, [], ['Tags'])->setModel($user->ref('Tags'));
 ```
 
-In this set-up a template ``myview.html`` will be populated with fields from ``$user`` model. Next,
+In this set-up a template `myview.html` will be populated with fields from `$user` model. Next,
 a Lister is added inside Tags region which will use the contents of a given tag as a default
 template, which will be repeated according to the number of referenced 'Tags' for given users and
 re-inserted back into the 'Tags' region.
 
-See also :php:class:`Template`.
+See also {php:class}`Template`.
 
 ## Unique ID tag
 
-.. php:attr:: region
-
-    ID to be used with the top-most element.
+:::{php:attr} region
+ID to be used with the top-most element.
+:::
 
 Agile UI will maintain unique ID for all the elements. The tag is set through 'name' property:
 
@@ -452,22 +456,22 @@ echo $b->render();
 
 Outputs:
 
-.. code-block:: html
-
-    <div class="ui button" id="my-button3">Button</div>
+```html
+<div class="ui button" id="my-button3">Button</div>
+```
 
 If ID is not specified it will be set automatically. The top-most element of a Render Tree will
-use ``id=atk`` and all of the child elements will create a derived ID based on it's UI role.
+use `id=atk` and all of the child elements will create a derived ID based on it's UI role.
 
-.. code-block:: yml
-
-    atk:
-        atk-button:
-        atk-button2:
-        atk-form:
-            atk-form-name:
-            atk-form-surname:
-            atk-form-button:
+```yaml
+atk:
+    atk-button:
+    atk-button2:
+    atk-form:
+        atk-form-name:
+        atk-form-surname:
+        atk-form-button:
+```
 
 If role is unspecified then 'view' will be used. The main benefit here is to have automatic
 allocation of all the IDs throughout the render-tree ensuring that those ID's are consistent
@@ -476,15 +480,15 @@ between page requests.
 It is also possible to set the "last" bit of the ID postfix. When Form controls are populated,
 the name of the field will be used instead of the role. This is done by setting 'name' property.
 
-
-.. php:attr:: name
-
-    Specify a name for the element. If container already has object with specified name, exception
-    will be thrown.
+:::{php:attr} name
+Specify a name for the element. If container already has object with specified name, exception
+will be thrown.
+:::
 
 ## Reloading a View
 
-.. php:method:: jsReload($getArgs)
+:::{php:method} jsReload($getArgs)
+:::
 
 Agile UI makes it easy to reload any View on the page. Starting with v1.4 you can now use View::JsReload(),
 which will respond with JavaScript Action for reloading the view:
@@ -503,8 +507,6 @@ $b1->on('click', $b2->jsReload());
 
 TODO: Move to Element.
 
-
-
 Most of the basic elements will allow you to manipulate their content, HTML attributes or even
 add custom styles:
 
@@ -516,24 +518,29 @@ $view->setAttr('href', 'https://...');
 
 ## Rest of yet-to-document/implement methods and properties
 
-    .. php:attr:: content
+:::{php:attr} content
+Set static contents of this view.
+:::
 
-        Set static contents of this view.
+:::{php:method} setProperties($properties)
+```{eval-rst}
+:param $properties:
+```
+:::
 
+:::{php:method} setProperty($key, $val)
+```{eval-rst}
+:param $key:
+:param $val:
+```
+:::
 
-    .. php:method:: setProperties($properties)
+:::{php:method} set($arg1 = [], $arg2 = null)
+```{eval-rst}
+:param $arg1:
+:param $arg2:
+```
+:::
 
-        :param $properties:
-
-    .. php:method:: setProperty($key, $val)
-
-        :param $key:
-        :param $val:
-
-
-    .. php:method:: set($arg1 = [], $arg2 = null)
-
-        :param $arg1:
-        :param $arg2:
-
-    .. php:method:: recursiveRender()
+:::{php:method} recursiveRender()
+:::

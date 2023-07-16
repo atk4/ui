@@ -1,24 +1,27 @@
-.. _autocomplete:
+:::{php:namespace} Atk4\Ui
+:::
+
+(autocomplete)=
 
 # AutoComplete Form Control
 
-.. php:namespace:: Atk4\Ui\Form\Control
-.. php:class:: AutoComplete
+:::{php:class} Form_i_Control_i_AutoComplete
+:::
 
-Agile UI uses "Form\\Control\\Dropdown" by default on the form, but there is also implementation
+Agile UI uses "Form\Control\Dropdown" by default on the form, but there is also implementation
 for AutoComplete form control. Although they look similar, there are some differences:
 
- - AutoComplete will perform callback to fetch values.
- - AutoComplete can use callback to format options (both keys and values).
- - AutoComplete can search in multiple fields.
- - AutoComplete can use form current (dirty) values to apply dependency and limit options.
- - AutoComplete can have multiple selection.
- - AutoComplete has additional feature called "Plus"
- - AutoComplete only works with models. Won't work for pre-defined value lists.
+- AutoComplete will perform callback to fetch values.
+- AutoComplete can use callback to format options (both keys and values).
+- AutoComplete can search in multiple fields.
+- AutoComplete can use form current (dirty) values to apply dependency and limit options.
+- AutoComplete can have multiple selection.
+- AutoComplete has additional feature called "Plus"
+- AutoComplete only works with models. Won't work for pre-defined value lists.
 
 AutoComplete can be a drop-in replacement for Dropdown.
 
-### Using Plus mode
+## Using Plus mode
 
 In your application, it is handy if you can automatically add a missing "client" from the form
 where you add an invoice. AutoComplete implements "Plus" mode which will automatically open a modal
@@ -32,7 +35,7 @@ $form->addControl('test', [\Atk4\Ui\Form\Control\AutoComplete::class, 'plus' => 
     ->setModel(new Country($db));
 ```
 
-### Specifying in Model
+## Specifying in Model
 
 You can also specify that you prefer to use AutoComplete inside your model definition:
 
@@ -40,7 +43,7 @@ You can also specify that you prefer to use AutoComplete inside your model defin
 $model->hasOne('country_id', ['model' => [Country::class], 'ui' => ['form' => [\Atk4\Ui\Form\Control\AutoComplete::class]]]);
 ```
 
-### Advanced Usage
+## Advanced Usage
 
 You can do much more with AutoComplete form control by passing dropdown settings:
 
