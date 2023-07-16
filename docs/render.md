@@ -1,15 +1,15 @@
-
-Introduction
-------------
+### Introduction
 
 Agile UI allows you to create and combine various objects into a single Render Tree for unified rendering. Tree represents
-all the UI components that will contribute to the HTML generation. Render tree is automatically created and maintained::
+all the UI components that will contribute to the HTML generation. Render tree is automatically created and maintained:
 
-    $view = new \Atk4\Ui\View();
+```
+$view = new \Atk4\Ui\View();
 
-    \Atk4\Ui\Button::addTo($view, ['test']);
+\Atk4\Ui\Button::addTo($view, ['test']);
 
-    echo $view->render();
+echo $view->render();
+```
 
 When render on the $view is executed, it will render button first then incorporate HTML into it's own template before rendering.
 
@@ -33,8 +33,7 @@ simply set a $model property and does not really need to rely on $api etc.
 
 Next, lets look at what Initialization really is and why is it important.
 
-Initialization
---------------
+### Initialization
 
 Calling the init() method of a view is essential before any meaningful work can be done with it. This is important, because
 the following actions are performed:
@@ -47,43 +46,48 @@ the following actions are performed:
 Many UI components rely on the above to function properly. For example, Grid will look for certain regions in its template
 to clone them into separate objects. This cloning can only take place inside init() method.
 
-Late initialization
--------------------
+### Late initialization
 
-When you create an application and select a Layout, the layout is automatically initialized::
+When you create an application and select a Layout, the layout is automatically initialized:
 
-    $app = new \Atk4\Ui\App();
-    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+```
+$app = new \Atk4\Ui\App();
+$app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
-    echo $app->layout->name; // present, because layout is initialized!
+echo $app->layout->name; // present, because layout is initialized!
+```
 
-After that, adding any objects into app (into layout) will initialize those objects too::
+After that, adding any objects into app (into layout) will initialize those objects too:
 
-    $b = \Atk4\Ui\Button::addTo($app, ['Test1']);
+```
+$b = \Atk4\Ui\Button::addTo($app, ['Test1']);
 
-    echo $b->name; // present, because button was added into initialized object.
+echo $b->name; // present, because button was added into initialized object.
+```
 
 If object cannot determine the path to the application, then it will remain uninitialized for some time. This is called
-"Late initialization"::
+"Late initialization":
 
-    $v = new Buttons();
-    $b2 = \Atk4\Ui\Button::addTo($v, ['Test2']);
+```
+$v = new Buttons();
+$b2 = \Atk4\Ui\Button::addTo($v, ['Test2']);
 
-    echo $b2->name; // not set!! Not part of render tree
+echo $b2->name; // not set!! Not part of render tree
+```
 
 At this point, if you execute $v->render() it will create it's own App and will create its own render tree. On the other
-hand, if you add $v inside layout, trees will merge and the same $app will be used::
+hand, if you add $v inside layout, trees will merge and the same $app will be used:
 
-    $app->add($v);
+```
+$app->add($v);
 
-    echo $b2->name; // fully set now and unique.
+echo $b2->name; // fully set now and unique.
+```
 
 Agile UI will attempt to always initialize objects as soon as possible, so that you can get the most meaningful stack traces
 should there be any problems with the initialization.
 
-
-Rendering outside
------------------
+### Rendering outside
 
 It's possible for some views to be rendered outside of the app. In the previous section I speculated that calling $v->render()
 will create its own tree independent from the main one.
@@ -107,31 +111,34 @@ with static components.
 
 .. _unique_name:
 
-Unique Name
------------
+### Unique Name
 
 Through adding objects into render tree (even if those are not Views) objects can assume unique names. When you create
-your application, then any object you add into your app will have a unique `name` property::
+your application, then any object you add into your app will have a unique `name` property:
 
-    $b = \Atk4\Ui\Button::addTo($app);
-    echo $b->name;
+```
+$b = \Atk4\Ui\Button::addTo($app);
+echo $b->name;
+```
 
 The other property of the name is that it's also "permanent". Refreshing the page guarantees your object to have the same
-name. Ultimately, you can create a View that uses it's name to store some information::
+name. Ultimately, you can create a View that uses it's name to store some information:
 
-    class MyView extends View
+```
+class MyView extends View
+{
+    protected function init(): void
     {
-        protected function init(): void
-        {
-            parent::init();
+        parent::init();
 
-            if ($_GET[$this->name]) {
-                \Atk4\Ui\Label::addTo($this, ['Secret info is', 'class.big red' => true, 'detail' => $_GET[$this->name]]);
-            }
-
-            \Atk4\Ui\Button::addTo($this, ['Send info to ourselves'])
-                ->link([$this->name => 'secret_info']);
+        if ($_GET[$this->name]) {
+            \Atk4\Ui\Label::addTo($this, ['Secret info is', 'class.big red' => true, 'detail' => $_GET[$this->name]]);
         }
+
+        \Atk4\Ui\Button::addTo($this, ['Send info to ourselves'])
+            ->link([$this->name => 'secret_info']);
     }
+}
+```
 
 This quality of Agile UI objects is further explored through :php:class:`Callback` and :php:class:`VirtualPage`

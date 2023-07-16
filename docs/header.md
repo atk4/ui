@@ -1,8 +1,6 @@
 .. php:namespace:: Atk4\Ui
 
-======
-Header
-======
+# Header
 
 Can be used for page or section headers.
 
@@ -10,59 +8,64 @@ Based around: https://fomantic-ui.com/elements/header.html.
 
 Demo:  https://ui.agiletoolkit.org/demos/header.php
 
-Basic Usage
-===========
+## Basic Usage
 
-By default header size will depend on where you add it::
+By default header size will depend on where you add it:
 
-    Header::addTo($this, ['Hello, Header']);
+```
+Header::addTo($this, ['Hello, Header']);
+```
 
-Attributes
-==========
+## Attributes
 
 .. php:attr:: size
 
 .. php:attr:: subHeader
 
-Specify size and sub-header content::
+Specify size and sub-header content:
 
-    Header::addTo($seg, [
-        'H1 header',
-        'size' => 1,
-        'subHeader' => 'H1 subheader',
-    ]);
+```
+Header::addTo($seg, [
+    'H1 header',
+    'size' => 1,
+    'subHeader' => 'H1 subheader',
+]);
 
-    // or
+// or
 
-    Header::addTo($seg, [
-        'Small header',
-        'size' => 'small',
-        'subHeader' => 'small subheader',
-    ]);
+Header::addTo($seg, [
+    'Small header',
+    'size' => 'small',
+    'subHeader' => 'small subheader',
+]);
+```
 
-Icon and Image
-===============
+## Icon and Image
 
 .. php:attr:: icon
 
 .. php:attr:: image
 
 
-Header may specify icon or image::
+Header may specify icon or image:
 
-    Header::addTo($seg, [
-        'Header with icon',
-        'icon' => 'settings',
-        'subHeader' => 'and with sub-header',
-    ]);
+```
+Header::addTo($seg, [
+    'Header with icon',
+    'icon' => 'settings',
+    'subHeader' => 'and with sub-header',
+]);
+```
 
-Here you can also specify seed for the image::
+Here you can also specify seed for the image:
 
-    $img = $app->cdn['atk'] . '/logo.png';
-    Header::addTo($seg, [
-        'Center-aligned header',
-        'aligned' => 'center',
-        'image' => [$img, 'class.disabled' => true],
-        'subHeader' => 'header with image',
-    ]);
+```
+$img = $app->cdn['atk'] . '/logo.png';
+Header::addTo($seg, [
+    'Center-aligned header',
+    'aligned' => 'center',
+    'image' => [$img, 'class.disabled' => true],
+    'subHeader' => 'header with image',
+]);
+```
 

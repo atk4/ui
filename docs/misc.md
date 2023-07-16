@@ -1,10 +1,6 @@
-
-
 .. php:namespace:: Atk4\Ui
 
-
-Columns
-=======
+## Columns
 
 This class implements CSS Grid or ability to divide your elements into columns. If you are an expert
 designer with knowledge of HTML/CSS we recommend you to create your own layouts and templates, but
@@ -14,48 +10,54 @@ basic content arrangements.
 .. php:method:: addColumn()
 
 When you add new component to the page it will typically consume 100% width of its container. Columns
-will break down width into chunks that can be used by other elements::
+will break down width into chunks that can be used by other elements:
 
-    $c = Columns::addTo($page);
-    LoremIpsum::addTo($c->addColumn(), [1]);
-    LoremIpsum::addTo($c->addColumn(), [1]);
+```
+$c = Columns::addTo($page);
+LoremIpsum::addTo($c->addColumn(), [1]);
+LoremIpsum::addTo($c->addColumn(), [1]);
+```
 
-By default width is equally divided by columns. You may specify a custom width expressed as fraction of 16::
+By default width is equally divided by columns. You may specify a custom width expressed as fraction of 16:
 
-    $c = Columns::addTo($page);
-    LoremIpsum::addTo($c->addColumn(6), [1]);
-    LoremIpsum::addTo($c->addColumn(10), [2]); // wider column, more filler
+```
+$c = Columns::addTo($page);
+LoremIpsum::addTo($c->addColumn(6), [1]);
+LoremIpsum::addTo($c->addColumn(10), [2]); // wider column, more filler
+```
 
 You can specify how many columns are expected in a grid, but if you do you can't specify widths of individual
-columns. This seem like a limitation of Fomantic-UI::
+columns. This seem like a limitation of Fomantic-UI:
 
-    $c = Columns::addTo($page, ['width' => 4]);
-    Box::addTo($c->addColumn(), ['red']);
-    Box::addTo($c->addColumn(['class.right floated' => true]), ['blue']);
+```
+$c = Columns::addTo($page, ['width' => 4]);
+Box::addTo($c->addColumn(), ['red']);
+Box::addTo($c->addColumn(['class.right floated' => true]), ['blue']);
+```
 
-Rows
-----
+### Rows
 
 When you add columns for a total width which is more than permitted, columns will stack below and form a second
-row. To improve and control the flow of rows better, you can specify addRow()::
+row. To improve and control the flow of rows better, you can specify addRow():
 
-    $c = Columns::addTo($page, ['class.internally celled' => true]);
+```
+$c = Columns::addTo($page, ['class.internally celled' => true]);
 
-    $r = $c->addRow();
-    Icon::addTo($r->addColumn([2, 'class.right aligned' => true]), ['huge home']);
-    LoremIpsum::addTo($r->addColumn(12), [1]);
-    Icon::addTo($r->addColumn(2), ['huge trash']);
+$r = $c->addRow();
+Icon::addTo($r->addColumn([2, 'class.right aligned' => true]), ['huge home']);
+LoremIpsum::addTo($r->addColumn(12), [1]);
+Icon::addTo($r->addColumn(2), ['huge trash']);
 
-    $r = $c->addRow();
-    Icon::addTo($r->addColumn([2, 'class.right aligned' => true]), ['huge home']);
-    LoremIpsum::addTo($r->addColumn(12), [1]);
-    Icon::addTo($r->addColumn(2), ['huge trash']);
+$r = $c->addRow();
+Icon::addTo($r->addColumn([2, 'class.right aligned' => true]), ['huge home']);
+LoremIpsum::addTo($r->addColumn(12), [1]);
+Icon::addTo($r->addColumn(2), ['huge trash']);
+```
 
 This example also uses custom class for Columns ('internally celled') that adds dividers between columns and rows.
 For more information on available classes, see https://fomantic-ui.com/collections/grid.html.
 
-Responsiveness and Performance
-------------------------------
+### Responsiveness and Performance
 
 Although you can use responsiveness with the Column class to some degree, we recommend that you create your own
 component template where you can have greater control over all classes.

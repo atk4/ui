@@ -1,9 +1,6 @@
-
 .. _message:
 
-=======
-Message
-=======
+# Message
 
 .. php:namespace:: Atk4\Ui
 
@@ -13,48 +10,54 @@ Outputs a rectangular segment with a distinctive color to convey message to the 
 
 Demo: https://ui.agiletoolkit.org/demos/message.php
 
-Basic Usage
-===========
+## Basic Usage
 
-Implements basic image::
+Implements basic image:
 
-    $message = new \Atk4\Ui\Message('Message Title');
-    $app->add($message);
+```
+$message = new \Atk4\Ui\Message('Message Title');
+$app->add($message);
+```
 
-Although typically you would want to specify what type of message is that::
+Although typically you would want to specify what type of message is that:
 
-    $message = new \Atk4\Ui\Message(['Warning Message Title', 'type' => 'warning']);
-    $app->add($message);
+```
+$message = new \Atk4\Ui\Message(['Warning Message Title', 'type' => 'warning']);
+$app->add($message);
+```
 
-Here is the alternative syntax::
+Here is the alternative syntax:
 
-    $message = Message::addTo($app, ['Warning Message Title', 'type' => 'warning']);
+```
+$message = Message::addTo($app, ['Warning Message Title', 'type' => 'warning']);
+```
 
-Adding message text
-===================
+## Adding message text
 
 .. php:attr:: text
 
 Property $text is automatically initialized to :php:class:`Text` so you can call :php:meth:`Text::addParagraph`
-to add more text inside your message::
+to add more text inside your message:
 
-    $message = Message::addTo($app, ['Message Title']);
-    $message->addClass('warning');
-    $message->text->addParagraph('First para');
-    $message->text->addParagraph('Second para');
+```
+$message = Message::addTo($app, ['Message Title']);
+$message->addClass('warning');
+$message->text->addParagraph('First para');
+$message->text->addParagraph('Second para');
+```
 
-
-Message Icon
-============
+## Message Icon
 
 .. php:attr:: icon
 
-You can specify icon also::
+You can specify icon also:
 
-    $message = Message::addTo($app, [
-        'Battery low',
-        'class.red' => true,
-        'icon' => 'battery low',
-    ])->text->addParagraph('Your battery is getting low. Re-charge your Web App');
+```
+$message = Message::addTo($app, [
+    'Battery low',
+    'class.red' => true,
+    'icon' => 'battery low',
+])->text->addParagraph('Your battery is getting low. Re-charge your Web App');
+```
 
 

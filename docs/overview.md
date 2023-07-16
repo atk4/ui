@@ -1,9 +1,6 @@
-
 .. _overview:
 
-====================
-Overview of Agile UI
-====================
+# Overview of Agile UI
 
 Agile UI is a PHP component framework for building User Interfaces entirely in PHP.
 Although the components of Agile UI will typically use HTML, JavaScript, jQuery and
@@ -21,14 +18,12 @@ Agile UI is designed and built for the Agile Toolkit (https://agiletoolkit.org/)
 with the goal of providing a user-friendly experience when creating data-heavy API / UI
 backends.
 
-Agile UI Design Goals
-=====================
+## Agile UI Design Goals
 
 Our goal is to offer a free UI framework which can be used to easily develop the most complex
 business application UI in just a few hours, without diving deep into HTML/JS specifics.
 
-1. Out of the box experience
-----------------------------
+### 1. Out of the box experience
 
 Sample scenario:
 
@@ -40,8 +35,7 @@ Sample scenario:
 Agile UI is ideal for such a scenario. By simply describing your data model, relations,
 and operations you will get a fully working UI and API with minimal setup.
 
-2. Compact and easy to integrate
---------------------------------
+### 2. Compact and easy to integrate
 
 Simple scenario:
 
@@ -52,8 +46,7 @@ Simple scenario:
 Agile UI contains a Form component which you can integrate into your existing app.
 More importantly, it can securely access your offer database.
 
-3. Compatible with RestAPI
---------------------------
+### 3. Compatible with RestAPI
 
 Simple scenario:
 
@@ -62,8 +55,7 @@ Simple scenario:
 You can set up an API end-point for authorized access to your offer database, that
 follows the same business rules and has access to the same operations.
 
-4. Deploy and Scale
--------------------
+### 4. Deploy and Scale
 
 Simple scenario:
 
@@ -76,8 +68,7 @@ architecture providers such as: Heroku, Docker, or even AWS Lambdas.
 Agile UI / PHP application has a minimum "start-up" time, has the best CPU usage,
 and gives you the highest efficiency and best scaling.  
 
-5. High-level Solution
-----------------------
+### 5. High-level Solution
 
 Simple scenario:
 
@@ -92,39 +83,40 @@ Overview Example
 ^^^^^^^^^^^^^^^^
 
 Agile UI / Agile Data code for your app can fit into a single file. See below for
-clarifications::
+clarifications:
 
+```
+<?php
+require_once __DIR__ . '/vendor/autoload.php';
 
-    <?php
-    require_once __DIR__ . '/vendor/autoload.php';
+// Define your data structure
+class Offer extends \Atk4\Data\Model
+{
+    public $table = 'offer';
 
-    // Define your data structure
-    class Offer extends \Atk4\Data\Model
+    protected function init(): void
     {
-        public $table = 'offer';
+        parent::init();
 
-        protected function init(): void
-        {
-            parent::init();
-
-            // Persistence may not have structure, so we define here
-            $this->addField('domain_name');
-            $this->addField('contact_email');
-            $this->addField('contact_phone');
-            $this->addField('date', ['type' => 'date']);
-            $this->addField('offer', ['type' => 'atk4_money']);
-            $this->addField('is_accepted', ['type' => 'boolean']);
-        }
+        // Persistence may not have structure, so we define here
+        $this->addField('domain_name');
+        $this->addField('contact_email');
+        $this->addField('contact_phone');
+        $this->addField('date', ['type' => 'date']);
+        $this->addField('offer', ['type' => 'atk4_money']);
+        $this->addField('is_accepted', ['type' => 'boolean']);
     }
+}
 
-    // Create Application object and initialize Admin Layout
-    $app = new \Atk4\Ui\App('Offer tracking system');
-    $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
+// Create Application object and initialize Admin Layout
+$app = new \Atk4\Ui\App('Offer tracking system');
+$app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 
-    // Connect to database and place a fully-interactive Crud
-    $db = new \Atk4\Data\Persistence\Sql($dsn);
-    \Atk4\Ui\Crud::addTo($app)
-        ->setModel(new Offer($db));
+// Connect to database and place a fully-interactive Crud
+$db = new \Atk4\Data\Persistence\Sql($dsn);
+\Atk4\Ui\Crud::addTo($app)
+    ->setModel(new Offer($db));
+```
 
 Through the course of this example, We are performing several core actions:
 
@@ -181,9 +173,7 @@ To sum up Agile UI in more technical terms:
  - Abstains from duplicating field names, types, or validation logic outside of Model
    class.
 
-
-Best use of Agile UI
---------------------
+### Best use of Agile UI
 
  - Creating admin backend UI for data entry and dashboards in shortest time and with
    minimum amount of code.
@@ -196,64 +186,72 @@ Best use of Agile UI
 
 .. _component:
 
-Component
-=========
+## Component
 
 The component is a fundamental building block of Agile UI. Each component is fully
 self-sufficient and creating a class instance is enough to make a component work.
 
 That means that components may rely on each other and even though some may appear
 very basic to you, they are relied on by some other components for maximum
-flexibility. The next example adds a "Cancel" button to a form::
+flexibility. The next example adds a "Cancel" button to a form:
 
-    $button = \Atk4\Ui\Button::addTo($form, [
-        'Cancel',
-        'icon' => new \Atk4\Ui\Icon('pencil'),
-    ])->link('dashboard.php');
+```
+$button = \Atk4\Ui\Button::addTo($form, [
+    'Cancel',
+    'icon' => new \Atk4\Ui\Icon('pencil'),
+])->link('dashboard.php');
+```
 
 :php:class:`Button` and :php:class:`Icon` are some of the most basic components in
 Agile UI. You will find Crud / Form / Grid components much more useful:
 
 .. figure:: images/all-atk-classes.png
 
+### Using Components
 
-Using Components
-----------------
 Look above at the :ref:`overview_example`, component `GRID` was made part
-of application layout with a line::
+of application layout with a line:
 
-    \Atk4\Ui\Crud::addTo($app);
-
-
-To render a component individually and get the HTML and JavaScript use this format::
-
-    $form = new Form();
-    $form->setApp($app);
-    $form->invokeInit();
-    $form->setModel(new User($db));
-
-    $html = $form->render();
+```
+\Atk4\Ui\Crud::addTo($app);
+```
 
 
-This would render an individual component and will return HTML::
+To render a component individually and get the HTML and JavaScript use this format:
 
-    <div class="ui form">
-        <form id="atk_form">
-           ... fields
-           ... buttons
-        </form>
-    </div>
+```
+$form = new Form();
+$form->setApp($app);
+$form->invokeInit();
+$form->setModel(new User($db));
+
+$html = $form->render();
+```
+
+
+This would render an individual component and will return HTML:
+
+```
+<div class="ui form">
+    <form id="atk_form">
+       ... fields
+       ... buttons
+    </form>
+</div>
+```
 
 For other use-cases please look into :php:meth:`View::render()`
 
-Factory
--------
+### Factory
+
 Factory is a mechanism which allow you to use shorter syntax for creating objects.
 The goal of Agile UI is to be simple to read and use; so taking advantage of loose types
-in PHP language allows us to use an alternative shorter syntax::
+in PHP language allows us to use an alternative shorter syntax:
 
-    \Atk4\Ui\Button::addTo($form, ['Cancel', 'icon' => 'pencil'])
-        ->link('dashboard.php');
+```
+\Atk4\Ui\Button::addTo($form, ['Cancel', 'icon' => 'pencil'])
+    ->link('dashboard.php');
+```
 
 By default, class names specified as the first array elements passed to the add() method are
 resolved to namespace `Atk4\\Ui`; however the application class can fine-tune the
@@ -262,15 +260,14 @@ search.
 Using a factory is optional. For more information see:
 https://agile-core.readthedocs.io/en/develop/factory.html
 
-Templates
----------
+### Templates
+
 Components rely on :php:class:`Template` class for parsing and rendering their
 HTML. The default template is written for Fomantic-UI framework, which makes sure
 that elements will look good and be consistent.
 
+### Layouts
 
-Layouts
--------
 .. image:: images/layout-hierarchy.png
     :width: 40%
     :align: right
@@ -291,9 +288,8 @@ If you are extending your Admin Layout, be sure to maintain the same property na
 to allow other components to make use of them. For example, an authentication controller
 will automatically populate a user-menu with the name of the user and log-out button.
 
+## Advanced techniques
 
-Advanced techniques
-===================
 By design we make sure that adding a component into a Render Tree (See :ref:`view`)
 is enough, so App provides a mechanism for components to:
 
@@ -301,21 +297,20 @@ is enough, so App provides a mechanism for components to:
  - Define event handlers and actions
  - Handle callbacks
 
-Non-PHP dependencies
---------------------
+### Non-PHP dependencies
+
 Your component may depend on additional JavaScript libraries, CSS, or other files.
 At the present time you have to make them available through a CDN and HTTPS.
 See: :php:meth:`App::requireJs`
 
+### Events and Actions
 
-Events and Actions
-------------------
 Agile UI allows you to initiate some JavaScript actions from within PHP. The amount
 of code involvement is quite narrow and is only intended for binding events inside
 your component without involving developers who use and implement your component.
 
-Callbacks
----------
+### Callbacks
+
 Some actions can be done only on the server side. For example, adding a new
 record into the database.
 
@@ -325,8 +320,8 @@ must be able to use unique URLs which will trigger the callback.
 
 To see how this is implemented, read about :ref:`callback`
 
-Virtual Pages
--------------
+### Virtual Pages
+
 .. image:: images/ui-component-diagram.png
     :width: 30%
     :align: right
@@ -340,16 +335,15 @@ everything else, virtual pages can be contained within the components, so
 that no extra effort from you is required when a component wishes to use
 a dynamic modal dialog.
 
-Extending with Add-ons
-----------------------
+### Extending with Add-ons
+
 Agile UI is designed for data-agnostic UI components which you can add inside
 your application with a single line of code. However, Agile Toolkit goes one step
 further by offering you a directory of published add-ons and installs them
 by using a simple wizard.
 
+## Using Agile UI
 
-Using Agile UI
-==============
 Technologies advance forward to make it simpler and faster to build web
 apps. In some cases you can use ReactJS + Firebase but in most cases
 you will need to have a backend.
@@ -366,8 +360,7 @@ endpoint provided by Agile Toolkit.
 
 .. warning:: information on setting up API endpoints is coming soon.
 
-Learning Agile Toolkit
-----------------------
+### Learning Agile Toolkit
 
 We recommend that you start looking at Agile UI first. Continue reading through the
 :ref:`quickstart` section and try building some of the basic apps. You will need to
@@ -400,29 +393,24 @@ If you are not interested in UI and only need the Rest API, we recommend that yo
 into documentation for Agile Data (https://agile-data.readthedocs.io) and the
 Rest API extension (https://github.com/atk4/api) which is a work in progress.
 
-Application Tutorials
----------------------
+### Application Tutorials
 
 We have written a few working cloud applications ourselves with Agile Toolkit and are
 offering you to view their code. Some of them come with tutorials that teach you
 how to build an application step-by-step.
 
-Education
----------
+### Education
 
 If you represent a group of students that wish to learn Agile Toolkit contact us
 about our education materials. We offer special support for those that want to
 learn how to develop Web Apps using Agile Toolkit.
 
-Commercial Project Strategy
----------------------------
+### Commercial Project Strategy
 
 If you maintain a legacy PHP application, and would like to have a free chat with
 us about some support and assistance, please do not hesitate to reach out.
 
-
-Things Agile UI simplifies
-==========================
+## Things Agile UI simplifies
 
 Some technologies are "pre-requirements" in other PHP frameworks, but Agile Toolkit
 lets you develop a perfectly functional web application even if you are NOT familiar
@@ -436,24 +424,20 @@ with technologies such as:
 We do recommend that you come back and learn those technologies **after** you have mastered
 Agile Toolkit.
 
-Database abstraction
---------------------
+### Database abstraction
 
 Agile Data offers abstraction of database servers and will use appropriate query
 language to fetch your data. You may need to use SQL/NoSQL language of your database
 for some more advanced use cases.
 
-Cloud deployment
-----------------
+### Cloud deployment
 
 There are also ways to deploy your application into the cloud without knowledge of
 infrastructure, Linux and SSH. A good place to start is Heroku (https://www.heroku.com/).
 We reference Heroku in our tutorials, but Agile Toolkit can work with any cloud
 hosting that runs PHP apps.
 
-
-Hosted Demo showing many functions
-==================================
+## Hosted Demo showing many functions
 
 There's a demo available of atk4/ui which shows many of the modules and functions available
 in atk4.
@@ -463,13 +447,12 @@ how to use atk4 in certain application cases.
 You can find the demo here:
 https://ui.agiletoolkit.org/demos/
 
-Local Demo/Sandpit
-=====================================
+## Local Demo/Sandpit
+
 When you download and install atk4 you will find a subdirectory called "demos" in the atk4
 repository which also could be locally executed.
 
-Setup the demo
---------------
+### Setup the demo
 
 To run the demo:
  - Create a directory called "atk4" and create a separate folder for each repo (ui, data, etc.), in this case "ui"
@@ -480,11 +463,12 @@ To run the demo:
  - Setup an Sqlite file database using a provided script (see below)
  - Open the demos from your browser (e.g. https://localhost/atk4/ui/demos/)
 
-Setup database with example data
----------------------
+### Setup database with example data
+
 The demo also includes a script that let's you setup a Sqlite file database with an example data.
 You will find this script in the subdirectory "atk4/ui/demos/_demo-data/". To run this script,
 use the following command:
-    ```
-    php atk4/ui/demos/_demo-data/create-db.php;
-    ```
+
+```
+php atk4/ui/demos/_demo-data/create-db.php;
+```

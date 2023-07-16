@@ -1,7 +1,4 @@
-
-===========
-File Upload
-===========
+# File Upload
 
 .. figure:: images/fileupload.png
 
@@ -27,8 +24,7 @@ During upload, a progress bar will appear.
 
 .. php:class:: Upload
 
-Attributes
-==========
+## Attributes
 
 Upload control has the following properties:
 
@@ -41,25 +37,23 @@ Example would be: `['application/pdf', 'images/*']`.
 
 The button view to use for displaying the file open dialog. A default action button is used if omitted.
 
+## Callbacks
 
-Callbacks
-=========
+When adding an Upload or UploadImage field to a form, onUpload and onDelete callback must be defined:
 
-When adding an Upload or UploadImage field to a form, onUpload and onDelete callback must be defined::
+```
+$img = $form->addControl('img', [\Atk4\Ui\Form\Control\UploadImage::class, ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
 
-    $img = $form->addControl('img', [\Atk4\Ui\Form\Control\UploadImage::class, ['defaultSrc' => './images/default.png', 'placeholder' => 'Click to add an image.']]);
+$img->onUpload(function (array $postFile) {
+    // callback action here...
+});
 
-    $img->onUpload(function (array $postFile) {
-        // callback action here...
-    });
+$img->onDelete(function (string $fileId) {
+    // callback action here...
+});
+```
 
-    $img->onDelete(function (string $fileId) {
-        // callback action here...
-    });
-
-
-onUpload
---------
+### onUpload
 
 The onUpload callback get called as soon as the upload process is finished. This callback
 function will receive the `$_FILES['upfile']` array as function parameter (see https://php.net/manual/en/features.file-upload.php).
@@ -73,35 +67,38 @@ The onUpload callback function is a good place to:
 - setup a file preview to display back to user,
 - notify your user of the file upload process,
 
-Example showing the onUpload callback on the UploadImage field::
+Example showing the onUpload callback on the UploadImage field:
 
-    $img->onUpload(function (array $postFile) use ($form, $img) {
-        if ($postFile['error'] !== 0) {
-            return $form->jsError('img', 'Error uploading image.');
-        }
+```
+$img->onUpload(function (array $postFile) use ($form, $img) {
+    if ($postFile['error'] !== 0) {
+        return $form->jsError('img', 'Error uploading image.');
+    }
 
-        // Do file processing here...
+    // Do file processing here...
 
-        $img->setThumbnailSrc('./images/' . $fileName);
-        $img->setFileId('123456');
+    $img->setThumbnailSrc('./images/' . $fileName);
+    $img->setFileId('123456');
 
-        // can also return a notifier.
-        return new \Atk4\Ui\Js\JsToast([
-            'message' => 'File is uploaded!',
-            'class' => 'success',
-        ]);
-    });
+    // can also return a notifier.
+    return new \Atk4\Ui\Js\JsToast([
+        'message' => 'File is uploaded!',
+        'class' => 'success',
+    ]);
+});
+```
 
 When user submit the form, the form control data value that will be submitted is the fileId set during the onUpload callback.
-The fileId is set to file name by default if omitted::
+The fileId is set to file name by default if omitted:
 
-    $form->onSubmit(function (Form $form) {
-        // implement submission here
-        return $form->jsSuccess('Thanks for submitting file: ' . $form->model->get('img'));
-    });
+```
+$form->onSubmit(function (Form $form) {
+    // implement submission here
+    return $form->jsSuccess('Thanks for submitting file: ' . $form->model->get('img'));
+});
+```
 
-onDelete
---------
+### onDelete
 
 The onDelete callback get called when user click the delete button. This callback function
 receive the same fileId set during the onUpload callback as function parameter.
@@ -114,21 +111,21 @@ The onDelete callback function is a good place to:
 - delete db entry according to the fileId,
 - reset thumbnail preview,
 
-Example showing the onDelete callback on the UploadImage field::
+Example showing the onDelete callback on the UploadImage field:
 
-    $img->onDelete(function (string $fileId) use ($img) {
-        // reset thumbanil
-        $img->clearThumbnail('./images/default.png');
+```
+$img->onDelete(function (string $fileId) use ($img) {
+    // reset thumbanil
+    $img->clearThumbnail('./images/default.png');
 
-        return new \Atk4\Ui\Js\JsToast([
-            'message' => $fileId . ' has been removed!',
-            'class' => 'success',
-        ]);
-    });
+    return new \Atk4\Ui\Js\JsToast([
+        'message' => $fileId . ' has been removed!',
+        'class' => 'success',
+    ]);
+});
+```
 
-
-UploadImage
-===========
+## UploadImage
 
 Similar to Upload, this is a control implementation for uploading images. Here are additional properties:
 

@@ -1,9 +1,6 @@
-
 .. _image:
 
-=====
-Image
-=====
+# Image
 
 .. php:namespace:: Atk4\Ui
 
@@ -11,20 +8,22 @@ Image
 
 Implements Image around https://fomantic-ui.com/elements/image.html.
 
-Basic Usage
-===========
+## Basic Usage
 
-Implements basic image::
+Implements basic image:
 
-    $icon = Image::addTo($app, ['image.gif']);
+```
+$icon = Image::addTo($app, ['image.gif']);
+```
 
 You need to make sure that argument specified to Image is a valid URL to an image.
 
-Specify classes
-===============
+## Specify classes
 
-You can pass additional classes to an image::
+You can pass additional classes to an image:
 
-    $img = $app->cdn['atk'] . '/logo.png';
-    $icon = Image::addTo($app, [$img, 'class.disabled' => true]);
+```
+$img = $app->cdn['atk'] . '/logo.png';
+$icon = Image::addTo($app, [$img, 'class.disabled' => true]);
+```
 

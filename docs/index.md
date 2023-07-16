@@ -1,6 +1,4 @@
-
-Agile UI Documentation
-========================
+## Agile UI Documentation
 
 Contents:
 
@@ -33,10 +31,7 @@ Contents:
     virtual-page
     console
 
-
-
-Indices and tables
-==================
+## Indices and tables
 
 * :ref:`genindex`
 * :ref:`search`

@@ -1,9 +1,6 @@
-
 .. _rightpanel:
 
-===========
-Right Panel
-===========
+# Right Panel
 
 .. php:namespace:: Atk4\Ui\Panel
 
@@ -14,43 +11,47 @@ and can display content statically or dynamically using Loadable Content.
 
 Demo: https://ui.agiletoolkit.org/demos/layout/layout-panel.php
 
-Basic Usage
-===========
+## Basic Usage
 
-Adding a right panel to the app layout and adding content to it::
+Adding a right panel to the app layout and adding content to it:
 
-    $panel = $app->layout->addRightPanel(new \Atk4\Ui\Panel\Right(['dynamic' => false]));
-    Message::addTo($panel, ['This panel contains only static content.']);
+```
+$panel = $app->layout->addRightPanel(new \Atk4\Ui\Panel\Right(['dynamic' => false]));
+Message::addTo($panel, ['This panel contains only static content.']);
+```
 
 By default, panel content are loaded dynamically. If you want to only add static content, you need to specify
 the :ref:`dynamic` property and set it to false.
 
 Opening of the panel is done via a javascript event. Here, we simply register a click event on a button that will open
-the panel::
+the panel:
 
-    $button = Button::addTo($app, ['Open Static']);
-    $button->on('click', $panel->jsOpen());
+```
+$button = Button::addTo($app, ['Open Static']);
+$button->on('click', $panel->jsOpen());
+```
 
-Loading content dynamically
----------------------------
+### Loading content dynamically
 
 Loading dynamic content within panel is done via the onOpen method
 
 .. php:method:: onOpen($callback)
 
-Initializing a panel with onOpen callback::
+Initializing a panel with onOpen callback:
 
-    $panel = $app->layout->addRightPanel(new \Atk4\Ui\Panel\Right());
-    Message::addTo($panel, ['This panel will load content dynamically below according to button select on the right.']);
-    $button = Button::addTo($app, ['Button 1']);
-    $button->js(true)->data('btn', '1');
-    $button->on('click', $panel->jsOpen(['btn'], 'orange'));
+```
+$panel = $app->layout->addRightPanel(new \Atk4\Ui\Panel\Right());
+Message::addTo($panel, ['This panel will load content dynamically below according to button select on the right.']);
+$button = Button::addTo($app, ['Button 1']);
+$button->js(true)->data('btn', '1');
+$button->on('click', $panel->jsOpen(['btn'], 'orange'));
 
-    $panel->onOpen(function (Panel\Content $p) {
-        $buttonNumber = $_GET['btn'] ?? null;
-        $text =  'You loaded panel content using button #' . $buttonNumber;
-        Message::addTo($p, ['Panel 1', 'text' => $text]);
-    });
+$panel->onOpen(function (Panel\Content $p) {
+    $buttonNumber = $_GET['btn'] ?? null;
+    $text =  'You loaded panel content using button #' . $buttonNumber;
+    Message::addTo($p, ['Panel 1', 'text' => $text]);
+});
+```
 
 .. php:method:: jsOpen
 

@@ -1,16 +1,12 @@
 .. _filestructure:
 
-==================================
-File structure example & first app
-==================================
+# File structure example & first app
 
 We will deal here with a suggestion how you could structure your files and folders for your individual atk4 project.
 Let's assume you are planning to create at least several pages with some models and views. This example can be expanded
 and modified to your needs and shows just one concept of how to setup an atk4 project.
 
-
-File structure example
-======================
+## File structure example
 
 This file structure is a recommendation and no must. It is a best practice example.
 Feel free to experiment with it and find the ideal file structure for your project.
@@ -67,28 +63,26 @@ Feel free to experiment with it and find the ideal file structure for your proje
 
 * composer.json
 
-
-
-Composer configuration
-======================
+## Composer configuration
 
 Configure your composer.json to load the atk4 AND your project folder.
-Your composer.json could look like this::
+Your composer.json could look like this:
 
-    {
-        "require":{
-            "atk4/ui": "*"
-        },
-        "autoload": {
-            "psr-4": {
-                "MyProject\\": "projectfolder/"
-            }
+```
+{
+    "require":{
+        "atk4/ui": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "MyProject\\": "projectfolder/"
         }
     }
+}
+```
 
+### What does that mean?
 
-What does that mean?
---------------------
 As soon as you start a "composer update" or "composer dump-autoload" in the public_html directory, all needed atk4 files
 and all your project files from the subdirectory "projectfolder" are processed by Composer and the autoload.php file is generated.
 Read below how to load the autoload.php into your project.
@@ -98,9 +92,7 @@ The "require" section within composer.json loads publicly available composer pac
 The "autoload" section within composer.json loads your individual project files (that are saved locally on your computer).
 "MyProject" defines the namespace you are using in your classes later on.
 
-
-Why "public_html"?
-------------------
+### Why "public_html"?
 
 It is a good idea to keep away sensible configuration files that contain passwords (like database connection setups etc.)
 from the public and make it only available to your application.
@@ -111,10 +103,7 @@ If you call www.myexampledomain.com it should show the content of public_html.
 Within a php file from public_html you are still able to access and include files from config.
 But you can't call it directly through the domain (that means in our case "db.php" can't be accessed through the domain).
 
-
-
-Create your application
-=======================
+## Create your application
 
 To initialize your application we need to do the following steps:
     #) Create db.php for database
@@ -127,63 +116,67 @@ To initialize your application we need to do the following steps:
 
     #) Create index.php and admin.php
 
-
-Create db.php for database
---------------------------
+### Create db.php for database
 
 We initialize a reusable database connection in db.php through a mysql persistence.
-Create a file called "db.php" in the directory "config"::
+Create a file called "db.php" in the directory "config":
 
-    <?php
-    $db = \Atk4\Data\Persistence::connect("mysql://localhost/#myexampledatabase", "#username", "#password");
+```
+<?php
+$db = \Atk4\Data\Persistence::connect("mysql://localhost/#myexampledatabase", "#username", "#password");
+```
 
 Please remember to use a database that still exists.
 
-Create init.php, index.php and / or admin.php files
----------------------------------------------------
+### Create init.php, index.php and / or admin.php files
 
 Create a new file in "public_html/projectfolder" and name it "init.php".
-In this file we load up our app (later) and load the database configuration::
+In this file we load up our app (later) and load the database configuration:
 
-    <?php
-    $rootdir = "../"; // the public_html directory
-    require_once $rootdir . "../config/db.php"; // contains database configuration outside the public_html directory
+```
+<?php
+$rootdir = "../"; // the public_html directory
+require_once $rootdir . "../config/db.php"; // contains database configuration outside the public_html directory
+```
 
-Load Composer autoload.php (which loads up atk4) in init.php
-------------------------------------------------------------
+### Load Composer autoload.php (which loads up atk4) in init.php
 
-::
+:
 
-    require_once $rootdir . "vendor/autoload.php"; // loads up atk4 and our project files from Composer
+```
+require_once $rootdir . "vendor/autoload.php"; // loads up atk4 and our project files from Composer
+```
 
-Initialize the app class in init.php
-------------------------------------
+### Initialize the app class in init.php
 
-::
+:
 
-    $app = new \Atk4\Ui\App('Welcome to my first app'); // initialization of our app
-    $app->db = $db; // defines our database for reuse in other classes
+```
+$app = new \Atk4\Ui\App('Welcome to my first app'); // initialization of our app
+$app->db = $db; // defines our database for reuse in other classes
+```
 
-Create index.php and admin.php
-------------------------------
+### Create index.php and admin.php
 
-If you want to write an app with a backend, create a file called "admin.php"::
+If you want to write an app with a backend, create a file called "admin.php":
 
-    <?php
-    $rootdir = "../";
-    require_once __DIR__ . "init.php";
-    $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
+```
+<?php
+$rootdir = "../";
+require_once __DIR__ . "init.php";
+$app->initLayout([\Atk4\Ui\Layout\Admin::class]);
+```
 
-If you want to write an app with a frontend, create a file called "index.php"::
+If you want to write an app with a frontend, create a file called "index.php":
 
-    <?php
-    $rootdir = "../";
-    require_once __DIR__ . "init.php";
-    $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+```
+<?php
+$rootdir = "../";
+require_once __DIR__ . "init.php";
+$app->initLayout([\Atk4\Ui\Layout\Centered::class]);
+```
 
-
-Create your own classes
-=======================
+## Create your own classes
 
 Now as your basic app is set up and running, we start implementing our own classes that build the core of our app.
 Following the PSR-4 specifications all class names and file names have to correspond to each other.
@@ -197,20 +190,22 @@ defined in your composer.json.
 Do you remember? - If no, take a look at the beginning of this document. We defined there "MyProject" as our namespace for
 the directory "projectfolder".
 
-Open the created file "View1.php" in your editor and add the following lines::
+Open the created file "View1.php" in your editor and add the following lines:
 
-    <?php
-    namespace MyProject\Views;
+```
+<?php
+namespace MyProject\Views;
 
-    class View1 extends \Atk4\Data\View
+class View1 extends \Atk4\Data\View
+{
+    protected function init(): void
     {
-        protected function init(): void
-        {
-            parent::init();
+        parent::init();
 
-            \Atk4\Ui\Text::addTo($this->getApp(), ['here goes some text']);
-        }
+        \Atk4\Ui\Text::addTo($this->getApp(), ['here goes some text']);
     }
+}
+```
 
 "namespace MyProject\\Views;" defines the namespace to use. It reflects the folder structure of the app.
 The file located in "projectfolder/Views/View1.php" becomes "MyProject\\Views\\View1" in the namespace.
@@ -220,18 +215,20 @@ files will be autoloaded by Composer.
 
 .. warning:: Keep in mind that as soon as you have created one or more new file(s) within the projectfolder you have to run "composer dump-autoload"!!! Otherwise the newly generated file(s) and classes will not be autoloaded and are therefore unavailable in your application.
 
-
-Load your class in index.php
-============================
+## Load your class in index.php
 
 To use our class in our app, we have to include it into our app. This can be done either through index.php or admin.php.
 
-Please add the following lines into your index.php::
+Please add the following lines into your index.php:
 
-    \MyProject\Views\View1::addTo($app);
+```
+\MyProject\Views\View1::addTo($app);
+```
 
-or if you have added at the beginning of your index.php "use MyProject\\Views\\View1;" you can write::
+or if you have added at the beginning of your index.php "use MyProject\\Views\\View1;" you can write:
 
-    View1::addTo($app);
+```
+View1::addTo($app);
+```
 
 See also :ref:`using-namespaces` on this topic...

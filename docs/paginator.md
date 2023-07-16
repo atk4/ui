@@ -1,9 +1,6 @@
-
 .. _paginator:
 
-=========
-Paginator
-=========
+# Paginator
 
 .. php:namespace:: Atk4\Ui
 .. php:class:: Paginator
@@ -11,39 +8,43 @@ Paginator
 Paginator displays a horizontal UI menu providing links to pages when all of the content does not fit
 on a page. Paginator is a stand-alone component but you can use it in conjunction with other components.
 
-Adding and Using
-================
+## Adding and Using
 
 .. php:attr:: total
 
 .. php:attr:: page
 
 Place paginator in a designated spot on your page. You also should specify what's the total number of pages
-paginator should have::
+paginator should have:
 
-    $paginator = Paginator::addTo($app);
-    $paginator->total = 20;
+```
+$paginator = Paginator::addTo($app);
+$paginator->total = 20;
+```
 
 Paginator will not display links to all the 20 pages, instead it will show first, last, current page and few
 pages around the current page. Paginator will automatically place links back to your current page through
 :php:meth:`App::url()`.
 
 After initializing paginator you can use it's properties to determine current page. Quite often you'll need
-to display current page BEFORE the paginator on your page::
+to display current page BEFORE the paginator on your page:
 
-    $h = Header::addTo($page);
-    LoremIpsum::addTo($page); // some content here
+```
+$h = Header::addTo($page);
+LoremIpsum::addTo($page); // some content here
 
-    $p = Paginator::addTo($page);
-    $h->set('Page ' . $p->page . ' from ' . $p->total);
+$p = Paginator::addTo($page);
+$h->set('Page ' . $p->page . ' from ' . $p->total);
+```
 
-Remember that values of 'page' and 'total' are integers, so you may need to do type-casting::
+Remember that values of 'page' and 'total' are integers, so you may need to do type-casting:
 
-    $label->set($p->page); // will not work
-    $label->set((string) $p->page); // works fine
+```
+$label->set($p->page); // will not work
+$label->set((string) $p->page); // works fine
+```
 
-Range and Logic
-===============
+## Range and Logic
 
 You can configure Paginator through properties.
 
@@ -61,8 +62,7 @@ the current and total pages.
 
 Returns number of current page.
 
-Template
-========
+## Template
 
 Paginator uses Fomantic-UI `ui pagination menu` so if you are unhappy with the styling (e.g: active element is not
 sufficiently highlighted), you should refer to Fomantic-UI or use alternative theme.
@@ -80,8 +80,7 @@ Each of the above (except Spacer) may have `active`, `link` and `page` tags.
 
 .. php:method:: renderItem($t, $page = null)
 
-Dynamic Reloading
-=================
+## Dynamic Reloading
 
 .. php:attr:: reload
 
