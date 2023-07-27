@@ -166,9 +166,9 @@ class ViewTest extends TestCase
     }
 
     /**
-     * @return list<list<class-string<View|Callback>>>
+     * @return iterable<list{class-string<View|Callback>}>
      */
-    public function provideSetNotClosureErrorCases(): array
+    public function provideSetNotClosureErrorCases(): iterable
     {
         return [
             [Console::class],
@@ -198,9 +198,9 @@ class ViewTest extends TestCase
     }
 
     /**
-     * @return list<list<class-string<View>>>
+     * @return iterable<list{class-string<View>}>
      */
-    public function provideSetNotOneArgumentExceptionCases(): array
+    public function provideSetNotOneArgumentExceptionCases(): iterable
     {
         return [
             [View::class],

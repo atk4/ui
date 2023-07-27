@@ -9,7 +9,7 @@ use Atk4\Ui\Paginator;
 
 class PaginatorTest extends TestCase
 {
-    public function providePaginatorCases(): array
+    public function providePaginatorCases(): iterable
     {
         return [
             [1, 1, 1, [1]],

@@ -258,7 +258,7 @@ class DemosTest extends TestCase
     /** @var string */
     protected $regexSse = '~^(id|event|data).*$~m';
 
-    public function provideDemosStatusAndHtmlResponseCases(): array
+    public function provideDemosStatusAndHtmlResponseCases(): iterable
     {
         $excludeDirs = ['_demo-data', '_includes'];
         $excludeFiles = ['_unit-test/stream.php', 'layout/layouts_error.php'];
@@ -323,7 +323,7 @@ class DemosTest extends TestCase
         self::assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
     }
 
-    public function provideDemoGetCases(): array
+    public function provideDemoGetCases(): iterable
     {
         $files = [];
         $files[] = ['others/sticky.php?xx=YEY'];
@@ -396,10 +396,7 @@ class DemosTest extends TestCase
         self::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
-    /**
-     * Test reload and loader callback.
-     */
-    public function provideDemoAssertJsonResponseCases(): array
+    public function provideDemoAssertJsonResponseCases(): iterable
     {
         $files = [];
         // simple reload
@@ -414,6 +411,8 @@ class DemosTest extends TestCase
     }
 
     /**
+     * Test reload and loader callback.
+     *
      * @dataProvider provideDemoAssertJsonResponseCases
      */
     public function testDemoAssertJsonResponse(string $path, string $expectedExceptionMessage = null): void
@@ -441,10 +440,7 @@ class DemosTest extends TestCase
         }
     }
 
-    /**
-     * Test JsSse and Console.
-     */
-    public function provideDemoAssertSseResponseCases(): array
+    public function provideDemoAssertSseResponseCases(): iterable
     {
         $files = [];
         $files[] = ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
@@ -456,6 +452,8 @@ class DemosTest extends TestCase
     }
 
     /**
+     * Test JsSse and Console.
+     *
      * @dataProvider provideDemoAssertSseResponseCases
      */
     public function testDemoAssertSseResponse(string $path): void
@@ -484,7 +482,7 @@ class DemosTest extends TestCase
         }
     }
 
-    public function provideDemoAssertJsonResponsePostCases(): array
+    public function provideDemoAssertJsonResponsePostCases(): iterable
     {
         $files = [];
         $files[] = [
@@ -524,7 +522,7 @@ class DemosTest extends TestCase
         self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
     }
 
-    public function provideDemoCallbackErrorCases(): array
+    public function provideDemoCallbackErrorCases(): iterable
     {
         return [
             [

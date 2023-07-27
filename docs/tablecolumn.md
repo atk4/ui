@@ -107,7 +107,7 @@ $grid->addDropdown('name', ['Sort A-Z', 'Sort by Relevance'], function (string $
 });
 ```
 
-Those wrappers will invoke methods {php:meth}`Table_i_Column::addDropdown` and {php:meth}`Table_i_Colmun::addPopup` for
+Those wrappers will invoke methods {php:meth}`Table_i_Column::addDropdown` and {php:meth}`Table_i_Column::addPopup` for
 a specified column, which are documented below.
 
 ### Popups
