@@ -65,7 +65,7 @@ see only the 'LoremIpsum' text.
 :::{php:attr} urlTrigger
 :::
 
-See {php:attr}`Callback::urlTrigger`.
+See {php:attr}`Callback::$urlTrigger`.
 
 ## Output Modes
 
@@ -199,7 +199,7 @@ Returns JS action which will trigger loading. The action will be carried out in 
 - Content will be placed inside Loader's DIV replacing shiv (or previously loaded content)
 - loading indicator will is hidden
 
-:::{php:attr} loadEvent = null
+:::{php:attr} loadEvent
 :::
 
 If you have NOT invoked jsLoad in your code, Loader will automatically assign it do DOM Ready(). If the automatic
@@ -256,7 +256,7 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
 
 ## Progress Bar
 
-:::{php:attr} progressBar = null
+:::{php:attr} progressBar
 :::
 
 Loader can have a progress bar. Imagine that your Loader has to run slow process 4 times:

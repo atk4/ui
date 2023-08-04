@@ -67,7 +67,7 @@ $grid = Grid::addTo($app, ['menu' => false]);
 :::{php:method} addQuickSearch($fields = [], $hasAutoQuery = false)
 :::
 
-After you have associated grid with a model using {php:class}`View::setModel()` you can
+After you have associated grid with a model using {php:meth}`View::setModel()` you can
 include quick-search component:
 
 ```

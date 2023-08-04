@@ -227,10 +227,7 @@ argument to `text()`.
 We are not building JavaScript code just for the exercise. Our whole point is ability to link that code
 between actual views. All views support JavaScript binding through two methods: {php:meth}`View::js()` and {php:meth}`View::on()`.
 
-:::{php:class} View
-:::
-
-:::{php:method} js([$event, [$otherChain]])
+:::{php:method} View::js([$event, [$otherChain]])
 Return action chain that targets this view. As event you can specify `true` which will make chain automatically execute
 on document ready event. You can specify a specific JavaScript event such as `click` or `mousein`. You can also use your
 custom event that you would trigger manually. If `$event` is false or null, no event binding will be performed.
@@ -249,7 +246,7 @@ $b2 = new Button('Two');
 $b2->js('click', $b1->js()->hide());
 ```
 
-:::{php:method} on(String $event, [String selector], $callback = null)
+:::{php:method} View::on(String $event, [String selector], $callback = null)
 Returns chain that will be automatically executed if $event occurs. If $callback is specified, it
 will also be executed on event.
 :::

@@ -161,8 +161,8 @@ HelloWorld::addTo($app);
 $app->run();
 ```
 
-If you do not want the application to automatically execute `run()` you can either set `$alwaysRun` to false
-or use {php:meth}`terminate()` to the app with desired output.
+If you do not want the application to automatically execute `run()` you can either set {php:attr}`App::$alwaysRun` to false
+or use {php:meth}`App::terminate()` to the app with desired output.
 
 ## Exception handling
 
@@ -210,7 +210,7 @@ Initializes all includes required by Agile UI. You may extend this class to add 
 :::
 
 Decodes current request without any arguments. If you are changing URL generation pattern, you
-probably need to change this method to properly identify the current page. See {php:class}`App::url()`
+probably need to change this method to properly identify the current page. See {php:meth}`App::url()`
 
 ## Loading Templates for Views
 
@@ -286,7 +286,7 @@ No much magic in these methods.
 
 ## Database Connection
 
-:::{php:property} db
+:::{php:attr} db
 :::
 
 If your `App` needs a DB connection, set this property to an instance of `Persistence`.

@@ -259,7 +259,7 @@ https://atk4-core.readthedocs.io/en/develop/factory.html
 
 ### Templates
 
-Components rely on {php:class}`Template` class for parsing and rendering their
+Components rely on {php:class}`HtmlTemplate` class for parsing and rendering their
 HTML. The default template is written for Fomantic-UI framework, which makes sure
 that elements will look good and be consistent.
 

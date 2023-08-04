@@ -50,6 +50,10 @@ When used stand-alone, Form\Controls will produce a basic HTML (I have omitted i
 
 ### Using in-form
 
+:::{php:attr} form
+Form Control objects can be associated with a Form object.
+:::
+
 Form Control can also be used inside a form like this:
 
 ```
@@ -131,7 +135,7 @@ $form->addControl('name', ['hint' => new \Atk4\Ui\Text(
 or you can inject a view with a custom template:
 
 ```
-$form->addControl('name', ['hint' => ['template' => new \Atk4\Ui\Template(
+$form->addControl('name', ['hint' => ['template' => new \Atk4\Ui\HtmlTemplate(
     'Click <a href="https://example.com/" target="_blank">here</a>'
 )]]);
 ```
@@ -305,7 +309,7 @@ To see various examples of form controls and their attributes see `demos/form-co
 
 ### Integration with Form
 
-When you use {php:class}`Form::addControl()` it will create 'Form Control Decorator'
+When you use {php:meth}`Form::addControl()` it will create 'Form Control Decorator'
 
 ### JavaScript on Input
 

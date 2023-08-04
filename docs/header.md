@@ -3,6 +3,9 @@
 
 # Header
 
+:::{php:class} Header
+:::
+
 Can be used for page or section headers.
 
 Based around: https://fomantic-ui.com/elements/header.html.

@@ -80,8 +80,8 @@ $form->model->set([
 Form also relies on a `\Atk4\Ui\Form::Layout` class and displays form controls through
 decorators defined at `\Atk4\Ui\Form::Control`. See dedicated documentation for:
 
-- {php:class}`Form::Layout`
-- {php:class}`Form::Control`
+- {php:class}`Form\Layout`
+- {php:class}`Form\Control`
 
 To tweak the UI properties of an form control input use `setInputAttr()` (and not the surrounding `<div>` as `setAttr()`
 would do). Here is how to set the HTML "maxlength" attribute on the generated input field:
@@ -214,7 +214,7 @@ is documented here: https://atk4-data.readthedocs.io/en/develop/fields.html
 
 Form uses a small UI component to visualize HTML input fields associated with
 the respective Model Field. We call this object "Form Control". All form
-controls extend from class {php:class}`Form::Control`.
+controls extend from class {php:class}`Form\Control`.
 
 Agile UI comes with at least the following form controls:
 
@@ -241,7 +241,7 @@ $form->addControl('time', $calendar);
 ```
 
 For more information on default form controls as well as examples on how to create
-your own see documentation on {php:class}`Form::Control`.
+your own see documentation on {php:class}`Form\Control`.
 
 :::{php:method} controlFactory(\Atk4\Data\Field $field, $defaults = [])
 :::
@@ -388,7 +388,7 @@ class User extends \Atk4\Data\Model
 }
 ```
 
-The seed for the UI will be combined with the default overriding {php:attr}`Form\Control\Calendar::type`
+The seed for the UI will be combined with the default overriding {php:attr}`Form\Control\Calendar::$type`
 to allow month/year entry by the Calendar extension, which will then be saved and
 stored as a regular date. Obviously you can also specify decorator class:
 
@@ -593,7 +593,7 @@ $form->onSubmit(function (Form $form) {
 ```
 
 Callback function can return one or multiple JavaScript actions. Methods such as
-{php:meth}`jsError()` or {php:meth}`jsSuccess()` will help initialize those actions for your form.
+{php:meth}`Form::jsError()` or {php:meth}`Form::jsSuccess()` will help initialize those actions for your form.
 Here is a code that can be used to output multiple errors at once. Errors were intentionally not grouped
 with a message about failure to accept of terms and conditions:
 
@@ -641,8 +641,8 @@ will not be included in response for security reasons.
 
 ### Form Layout and Sub-layout
 
-As stated above, when a Form object is created and form controls are added through either {php:meth}`addControl()`
-or {php:meth}`setModel()`, the form controls will appear one under each-other. This arrangement of form controls as
+As stated above, when a Form object is created and form controls are added through either {php:meth}`Form::addControl()`
+or {php:meth}`Form::setModel()`, the form controls will appear one under each-other. This arrangement of form controls as
 well as display of labels and structure around the form controls themselves is not done by a form,
 but another object - "Form Layout". This object is responsible for the form control flow, presence
 of labels etc.
@@ -904,6 +904,6 @@ Form layout objects are always associated with a Form object.
 :::
 
 :::{php:method} addControl()
-Same as {php:class}`Form::addControl()` but will place a form control inside this specific layout
+Same as {php:meth}`Form::addControl()` but will place a form control inside this specific layout
 or sub-layout.
 :::

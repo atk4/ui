@@ -3,6 +3,9 @@
 
 # Columns
 
+:::{php:class} Columns
+:::
+
 This class implements CSS Grid or ability to divide your elements into columns. If you are an expert
 designer with knowledge of HTML/CSS we recommend you to create your own layouts and templates, but
 if you are not sure how to do that, then using "Columns" class might be a good alternative for some

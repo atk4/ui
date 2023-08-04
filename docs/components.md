@@ -41,7 +41,7 @@ label
 text
 loremipsum
 header
-beadcrumb
+breadcrumb
 icon
 image
 message

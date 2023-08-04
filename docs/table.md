@@ -300,7 +300,7 @@ Your column now can be added to any table:
 $table->addColumn(new ExpiredColumn());
 ```
 
-IMPORTANT: HTML injection will work unless {php:attr}`Table::useHtmlTags` property is disabled (for performance).
+IMPORTANT: HTML injection will work unless {php:attr}`Table::$useHtmlTags` property is disabled (for performance).
 
 ## Table Data Handling
 
@@ -339,7 +339,7 @@ data stored inside your own database. Either way, several principles apply to th
 ### Table Rendering Steps
 
 Once model is specified to the Table it will keep the object until render process will begin. Table
-columns can be defined any time and will be stored in the {php:attr}`Table::columns` property. Columns
+columns can be defined any time and will be stored in the {php:attr}`Table::$columns` property. Columns
 without defined name will have a numeric index. It's also possible to define multiple columns per key
 in which case we call them "decorators".
 
@@ -350,14 +350,14 @@ During the render process (see {php:meth}`View::renderView`) Table will perform 
 3. Iterate through rows
    1. Current row data is accessible through $table->model property.
    2. Update Totals if {php:meth}`Table::addTotals` was used.
-   3. Insert row values into {php:attr}`Table::tRow`
+   3. Insert row values into {php:attr}`Table::$tRow`
        1. Template relies on {ref}`uiPersistence` for formatting values
    4. Collect HTML tags from 'getHtmlTags' hook.
    5. Collect getHtmlTags() from columns objects
-   6. Inject HTML into {php:attr}`Table::tRow` template
+   6. Inject HTML into {php:attr}`Table::$tRow` template
    7. Render and append row template to Table Body ({$Body})
    8. Clear HTML tag values from template.
-4. If no rows were displayed, then "empty message" will be shown (see {php:attr}`Table::tEmpty`).
+4. If no rows were displayed, then "empty message" will be shown (see {php:attr}`Table::$tEmpty`).
 5. If {php:meth}`addTotals` was used, append totals row to table footer.
 
 ## Dealing with Multiple decorators
@@ -393,7 +393,7 @@ is not set or type is like "integer", then a generic formatter is used.
 
 There are a few things to note:
 
-1. Property {php:attr}`Table::columns` contains either a single or multiple decorators for each
+1. Property {php:attr}`Table::$columns` contains either a single or multiple decorators for each
    column. Some tasks will be done by first decorator only, such as getting TH/header cell. Others will
    be done by all decorators, such as collecting classes / styles for the cell or wrapping formatted
    content (link, icon, template).

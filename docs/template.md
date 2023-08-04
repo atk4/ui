@@ -193,10 +193,10 @@ is called _top.
 Template engine in Agile Toolkit can be used independently, without views
 if you require so. A typical workflow would be:
 
-1. Load template using {php:meth}`GiTemplate::loadTemplate` or
-   {php:meth}`GiTemplate::loadFromString`.
-2. Set tag and region values with {php:meth}`GiTemplate::set`.
-3. Render template with {php:meth}`GiTemplate::renderToHtml`.
+1. Load template using {php:meth}`HtmlTemplate::loadTemplate` or
+   {php:meth}`HtmlTemplate::loadFromString`.
+2. Set tag and region values with {php:meth}`HtmlTemplate::set`.
+3. Render template with {php:meth}`HtmlTemplate::renderToHtml`.
 
 ## Template use together with Views
 
@@ -269,7 +269,7 @@ Template can be loaded from either file or string by using one of
 following commands:
 
 ```
-$template = GiTemplate::addTo($this);
+$template = HtmlTemplate::addTo($this);
 
 $template->loadFromString('Hello, {name}world{/}');
 ```
@@ -286,7 +286,7 @@ And place the following inside `template/mytemplate.html`:
 Hello, {name}world{/}
 ```
 
-GiTemplate will use {php:class}`PathFinder` to locate template in one of the
+HtmlTemplate will use {php:class}`PathFinder` to locate template in one of the
 directories of {ref}`resource` `template`.
 
 ## Changing template contents
@@ -319,7 +319,7 @@ Attempts to append non-escaped value, but will do nothing if tag does not exist.
 Example:
 
 ```
-$template = GiTemplate::addTo($this);
+$template = HtmlTemplate::addTo($this);
 
 $template->loadFromString('Hello, {name}world{/}');
 
@@ -387,7 +387,7 @@ Let's assume you have the following template in `template/envelope.html`:
 You can use the following code to manipulate the template above:
 
 ```
-$template = GiTemplate::addTo($this);
+$template = HtmlTemplate::addTo($this);
 $template->loadFromFile('envelope'); // templates/envelope.html
 
 // Split into multiple objects for processing
@@ -573,7 +573,7 @@ $receiver->template->trySet($receiverData);
 
 It is strongly advised not to use templates directly unless you have no
 other choice. Views implement consistent and flexible layer on top of
-GiTemplate as well as integrate with many other components of Agile Toolkit.
+HtmlTemplate as well as integrate with many other components of Agile Toolkit.
 The only cases when direct use of SMlite is suggested is if you are not
 working with HTML or the output will not be rendered in a regular way
 (such as RSS feed generation or TMail)

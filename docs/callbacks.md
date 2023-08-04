@@ -109,7 +109,7 @@ if ($cb->set(function () { return true; })) {
 ```
 
 This example uses return of the {php:meth}`Callback::set()` to add class to a label, however a
-much more preferred way is to use {php:attr}`$triggered`.
+much more preferred way is to use {php:attr}`Callback::$triggered`.
 
 :::{php:attr} triggered
 :::

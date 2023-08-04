@@ -89,7 +89,7 @@ $console->runMethod('StaticLib', 'myStaticMethod');
 :::{php:method} exec($cmd, $args)
 :::
 
-:::{php:argument} lastExitCode
+:::{php:attr} lastExitCode
 :::
 
 To execute a command, use:
@@ -122,7 +122,7 @@ Console::addTo($app)->set(function (Console $c) {
 ```
 
 Method exec() will return `$this` if command was run inside callback and was successful. It will return `false` on error
-and will return `null` if called outside of callback. You may also refer to {php:attr}`Console::lastExitCode` which
+and will return `null` if called outside of callback. You may also refer to {php:attr}`Console::$lastExitCode` which
 contains exit code of the last command.
 
 Normally it's safe to chain `exec` which ensures that execution will stack. Should any command fail, the subsequent
