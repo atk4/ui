@@ -48,14 +48,9 @@ class JsSearch extends View
      * If search query need to be control via an URL parameter only
      * set this to false.
      *
-     * @var bool default to true
+     * @var bool
      */
     public $useAjax = true;
-
-    public function link($url, $target = null)
-    {
-        return parent::link($url, $target);
-    }
 
     /** @var string ui CSS classes */
     public $button = 'ui mini transparent basic button';

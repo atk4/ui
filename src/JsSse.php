@@ -120,9 +120,6 @@ class JsSse extends JsCallback
         flush();
     }
 
-    /**
-     * Send Data.
-     */
     private function output(string $content): void
     {
         if ($this->echoFunction) {
@@ -138,9 +135,6 @@ class JsSse extends JsCallback
         }, null, $app)();
     }
 
-    /**
-     * Send a SSE data block.
-     */
     public function sendBlock(string $id, string $data, string $eventName = null): void
     {
         if (connection_aborted()) {
@@ -180,7 +174,7 @@ class JsSse extends JsCallback
 
         $this->getApp()->setResponseHeader('content-type', 'text/event-stream');
 
-        // disable buffering for nginx, see http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
+        // disable buffering for nginx, see https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
         $this->getApp()->setResponseHeader('x-accel-buffering', 'no');
 
         // disable compression

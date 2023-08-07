@@ -67,11 +67,11 @@ class ModalService {
     addModal($modal) {
         // hide other modals
         if (this.modals.length > 1) {
-            const $prevModal = $(this.modals.at(-2));
-            if ($prevModal.hasClass('visible')) {
-                $prevModal.css('visibility', 'hidden');
-                $prevModal.addClass('__hiddenNotFront');
-                $prevModal.removeClass('visible');
+            const $previousModal = $(this.modals.at(-2));
+            if ($previousModal.hasClass('visible')) {
+                $previousModal.css('visibility', 'hidden');
+                $previousModal.addClass('__hiddenNotFront');
+                $previousModal.removeClass('visible');
             }
         }
 
@@ -132,14 +132,14 @@ class ModalService {
 
         // hide other modals
         if (this.modals.length > 0) {
-            const $prevModal = $(this.modals.at(-1));
-            if ($prevModal.hasClass('__hiddenNotFront')) {
-                $prevModal.css('visibility', '');
-                $prevModal.addClass('visible');
-                $prevModal.removeClass('__hiddenNotFront');
+            const $previousModal = $(this.modals.at(-1));
+            if ($previousModal.hasClass('__hiddenNotFront')) {
+                $previousModal.css('visibility', '');
+                $previousModal.addClass('visible');
+                $previousModal.removeClass('__hiddenNotFront');
                 // recenter modal, needed even with observeChanges enabled
                 // https://github.com/fomantic/Fomantic-UI/issues/2476
-                $prevModal.modal('refresh');
+                $previousModal.modal('refresh');
             }
         }
     }

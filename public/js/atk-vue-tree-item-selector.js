@@ -289,7 +289,7 @@ __webpack_require__.r(__webpack_exports__);
       return [...new Set(jointArray)];
     },
     /**
-     * Get all ID from all chidren node.
+     * Get all ID from all children node.
      *
      * @returns {Array.<string>}
      */

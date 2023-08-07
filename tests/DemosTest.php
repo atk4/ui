@@ -258,7 +258,7 @@ class DemosTest extends TestCase
     /** @var string */
     protected $regexSse = '~^(id|event|data).*$~m';
 
-    public function demoFilesProvider(): array
+    public function provideDemosStatusAndHtmlResponseCases(): iterable
     {
         $excludeDirs = ['_demo-data', '_includes'];
         $excludeFiles = ['_unit-test/stream.php', 'layout/layouts_error.php'];
@@ -301,7 +301,7 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @dataProvider demoFilesProvider
+     * @dataProvider provideDemosStatusAndHtmlResponseCases
      */
     public function testDemosStatusAndHtmlResponse(string $path): void
     {
@@ -323,7 +323,7 @@ class DemosTest extends TestCase
         self::assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
     }
 
-    public function casesDemoGetProvider(): array
+    public function provideDemoGetCases(): iterable
     {
         $files = [];
         $files[] = ['others/sticky.php?xx=YEY'];
@@ -334,7 +334,7 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @dataProvider casesDemoGetProvider
+     * @dataProvider provideDemoGetCases
      */
     public function testDemoGet(string $path): void
     {
@@ -396,10 +396,7 @@ class DemosTest extends TestCase
         self::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
-    /**
-     * Test reload and loader callback.
-     */
-    public function jsonResponseProvider(): array
+    public function provideDemoAssertJsonResponseCases(): iterable
     {
         $files = [];
         // simple reload
@@ -414,7 +411,9 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @dataProvider jsonResponseProvider
+     * Test reload and loader callback.
+     *
+     * @dataProvider provideDemoAssertJsonResponseCases
      */
     public function testDemoAssertJsonResponse(string $path, string $expectedExceptionMessage = null): void
     {
@@ -441,10 +440,7 @@ class DemosTest extends TestCase
         }
     }
 
-    /**
-     * Test JsSse and Console.
-     */
-    public function sseResponseProvider(): array
+    public function provideDemoAssertSseResponseCases(): iterable
     {
         $files = [];
         $files[] = ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
@@ -456,7 +452,9 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @dataProvider sseResponseProvider
+     * Test JsSse and Console.
+     *
+     * @dataProvider provideDemoAssertSseResponseCases
      */
     public function testDemoAssertSseResponse(string $path): void
     {
@@ -476,17 +474,15 @@ class DemosTest extends TestCase
         self::assertGreaterThan(0, count($outputLines));
         foreach ($outputLines as $index => $line) {
             preg_match_all($this->regexSse, $line, $matchesAll);
-            $format_match_string = implode('', $matchesAll[0] ?? ['error']);
-
             self::assertSame(
                 $line,
-                $format_match_string,
+                implode('', $matchesAll[0] ?? ['error']),
                 'Testing SSE response line ' . $index . ' with content ' . $line
             );
         }
     }
 
-    public function jsonResponsePostProvider(): array
+    public function provideDemoAssertJsonResponsePostCases(): iterable
     {
         $files = [];
         $files[] = [
@@ -500,7 +496,7 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @dataProvider jsonResponsePostProvider
+     * @dataProvider provideDemoAssertJsonResponsePostCases
      */
     public function testDemoAssertJsonResponsePost(string $path, array $postData): void
     {
@@ -510,7 +506,7 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @dataProvider demoCallbackErrorProvider
+     * @dataProvider provideDemoCallbackErrorCases
      */
     public function testDemoCallbackError(string $path, string $expectedExceptionMessage): void
     {
@@ -526,7 +522,7 @@ class DemosTest extends TestCase
         self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
     }
 
-    public function demoCallbackErrorProvider(): array
+    public function provideDemoCallbackErrorCases(): iterable
     {
         return [
             [

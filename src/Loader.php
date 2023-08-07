@@ -39,7 +39,7 @@ class Loader extends View
     /** @var Callback for triggering */
     public $cb;
 
-    /** @var array Url arguments. */
+    /** @var array URL arguments. */
     public $urlArgs = [];
 
     protected function init(): void
@@ -65,9 +65,6 @@ class Loader extends View
      *    do_long_processing_action();
      *    $p->set('new content');
      *  });
-     *
-     * Or
-     *  $l1->set([$my_object, 'run_long_process']);
      *
      * @param \Closure($this): void $fx
      * @param never                 $ignore

@@ -16,7 +16,7 @@ use Atk4\Ui\VirtualPage;
 class AppMock extends App
 {
     /**
-     * Overriden to allow multiple App::run() calls, prevent sending headers when headers are already sent.
+     * Overridden to allow multiple App::run() calls, prevent sending headers when headers are already sent.
      */
     protected function outputResponse(string $data): void
     {

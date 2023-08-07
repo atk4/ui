@@ -102,7 +102,7 @@ class CardDeck extends View
             $this->menu = $this->add(Factory::factory([Menu::class, 'activateOnClick' => false], $this->menu), 'Menu');
 
             if ($this->search !== false) {
-                $this->addMenuBarSeach();
+                $this->addMenuBarSearch();
             }
         }
 
@@ -114,7 +114,7 @@ class CardDeck extends View
         }
     }
 
-    protected function addMenuBarSeach(): void
+    protected function addMenuBarSearch(): void
     {
         $view = View::addTo($this->menu->addMenuRight()->addItem()->setElement('div'));
 
@@ -123,9 +123,6 @@ class CardDeck extends View
         $this->query = $this->stickyGet($this->search->queryArg);
     }
 
-    /**
-     * Add Paginator view to card deck.
-     */
     protected function addPaginator(): void
     {
         $seg = View::addTo($this->container, ['ui' => 'basic segment'])->setStyle('text-align', 'center');

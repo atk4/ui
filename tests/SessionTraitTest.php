@@ -67,9 +67,6 @@ class SessionTraitTest extends TestCase
         self::assertFalse(isset($_SESSION));
     }
 
-    /**
-     * Test memorize().
-     */
     public function testMemorize(): void
     {
         $m = new SessionMock($this->createApp());
@@ -96,9 +93,6 @@ class SessionTraitTest extends TestCase
         }, true);
     }
 
-    /**
-     * Test learn(), recall(), forget().
-     */
     public function testLearnRecallForget(): void
     {
         $m = new SessionMock($this->createApp());

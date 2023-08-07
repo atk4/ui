@@ -1,2 +1,5 @@
-sphinx<1.7
-sphinxcontrib-phpdomain==0.1.4
+sphinx<5
+sphinx-rtd-theme
+sphinxcontrib-phpdomain
+myst-parser
+linkify-it-py

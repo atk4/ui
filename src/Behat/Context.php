@@ -220,7 +220,7 @@ class Context extends RawMinkContext implements BehatContext
         if (preg_match('~^\(*//~s', $selector)) {
             // add support for standard CSS class selector
             $xpath = preg_replace_callback(
-                '~\'(?:[^\']+|\'\')*+\'\K|"(?:[^"]+|"")*+"\K|(?<=\w)\.([\w\-]+)~s',
+                '~\'(?:[^\']+|\'\')*+\'\K|"(?:[^"]+|"")*+"\K|(?<=\w|\*)\.([\w\-]+)~s',
                 function ($matches) {
                     if ($matches[0] === '') {
                         return '';
@@ -229,6 +229,13 @@ class Context extends RawMinkContext implements BehatContext
                     return '[contains(concat(\' \', normalize-space(@class), \' \'), \' ' . $matches[1] . ' \')]';
                 },
                 $selector
+            );
+
+            // add NBSP support for normalize-space() xpath function
+            $xpath = preg_replace(
+                '~(?<![\w\-])normalize-space\([^()\'"]*\)~',
+                'normalize-space(translate($0, \'' . "\u{00a0}" . '\', \' \'))',
+                $xpath
             );
 
             return ['xpath', $xpath];
@@ -510,15 +517,6 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I set calendar input name :arg1 with value :arg2
-     */
-    public function iSetCalendarInputNameWithValue(string $inputName, string $value): void
-    {
-        $script = '$(\'input[name="' . $inputName . '"]\').get(0)._flatpickr.setDate(\'' . $value . '\')';
-        $this->getSession()->executeScript($script);
-    }
-
-    /**
      * @Then I search grid for :arg1
      */
     public function iSearchGridFor(string $text): void
@@ -542,6 +540,9 @@ class Context extends RawMinkContext implements BehatContext
         $this->jqueryWait('$(arguments[0]).hasClass(\'visible\')', [$lookupElem]);
 
         // select value
+        if ($value === '') { // TODO impl. native clearable - https://github.com/atk4/ui/issues/572
+            $value = "\u{00a0}";
+        }
         $valueElem = $this->findElement($lookupElem, '//div[text()="' . $value . '"]');
         $this->getSession()->executeScript('$(arguments[0]).dropdown(\'set selected\', arguments[1]);', [$lookupElem, $valueElem->getAttribute('data-value')]);
         $this->jqueryWait();
@@ -631,7 +632,7 @@ class Context extends RawMinkContext implements BehatContext
 
         $rule = $this->getScopeBuilderRuleElem($name);
         $this->assertSelectedValue($rule, $operator, '.vqb-rule-operator select');
-        $this->assertInputValue($rule, $value, 'input.form-control');
+        $this->assertInputValue($rule, $value);
     }
 
     /**

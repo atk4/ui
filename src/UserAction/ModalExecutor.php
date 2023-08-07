@@ -76,7 +76,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
         // get necessary step need prior to execute action.
         $this->steps = $this->getSteps();
-        if ($this->steps) {
+        if ($this->steps !== []) {
             $this->title ??= $action->getDescription();
 
             // get current step.
@@ -101,13 +101,16 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->runSteps();
     }
 
-    private function jsShowAndLoad(array $urlArgs, array $apiConfig): JsBlock
+    /**
+     * @param array<string, string> $urlArgs
+     */
+    private function jsShowAndLoad(array $urlArgs): JsBlock
     {
         return new JsBlock([
             $this->jsShow(),
             $this->js()->data('closeOnLoadingError', true),
             $this->loader->jsLoad($urlArgs, [
-                'method' => 'post',
+                'method' => 'POST',
                 'onSuccess' => new JsFunction([], [$this->js()->removeData('closeOnLoadingError')]),
             ]),
         ]);
@@ -118,6 +121,8 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      * If action require steps, it will automatically initialize
      * proper step to execute first.
      *
+     * @param array<string, string> $urlArgs
+     *
      * @return $this
      */
     public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', string $selector = null): self
@@ -126,11 +131,11 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             throw new Exception('Action must be set prior to assign trigger');
         }
 
-        if ($this->steps) {
+        if ($this->steps !== []) {
             // use modal for stepping action.
             $urlArgs['step'] = $this->step;
             if ($this->action->enabled) {
-                $view->on($when, $selector, $this->jsShowAndLoad($urlArgs, ['method' => 'post']));
+                $view->on($when, $selector, $this->jsShowAndLoad($urlArgs));
             } else {
                 $view->addClass('disabled');
             }
@@ -147,7 +152,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
         $urlArgs['step'] = $this->step;
 
-        return $this->jsShowAndLoad($urlArgs, ['method' => 'post']);
+        return $this->jsShowAndLoad($urlArgs);
     }
 
     /**

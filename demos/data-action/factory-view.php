@@ -26,7 +26,7 @@ $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends Exe
         'callback' => 'sync',
         'preview' => 'eye',
         'edit_argument' => 'user edit',
-        'edit_argument_prev' => 'pen square',
+        'edit_argument_preview' => 'pen square',
         'edit_iso' => 'pencil',
         'confirm' => 'check circle',
         'multi_step' => 'window maximize outline',
@@ -63,7 +63,7 @@ unset($country->getDirtyRef()[$country->fieldName()->name]);
 $cardActions = Card::addTo($app, ['useLabel' => true, 'executorFactory' => new $myFactory()]);
 $cardActions->setModel($country);
 foreach ($country->getModel()->getUserActions() as $action) {
-    $showActions = ['callback', 'preview', 'edit_argument', 'edit_argument_prev', 'edit_iso', 'confirm', 'multi_step'];
+    $showActions = ['callback', 'preview', 'edit_argument', 'edit_argument_preview', 'edit_iso', 'confirm', 'multi_step'];
     if (in_array($action->shortName, $showActions, true)) {
         $cardActions->addClickAction($action);
     }

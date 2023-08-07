@@ -61,9 +61,9 @@ Header::addTo($app, ['Can be rendered into HTML']);
 View::addTo($app, ['ui' => 'segment', 'class.raised' => true, 'element' => 'pre'])->set($plane->render());
 
 Header::addTo($app, ['Has a unique global identifier']);
-Label::addTo($app, ['Plane ID: ', 'detail' => $plane->name]);
+Label::addTo($app, ['Plane ID:', 'detail' => $plane->name]);
 
-Header::addTo($app, ['Can interract with JavaScript actions']);
+Header::addTo($app, ['Can interact with JavaScript actions']);
 Button::addTo($app, ['Hide plane', 'icon' => 'down arrow'])
     ->on('click', $plane->js()->hide());
 Button::addTo($app, ['Show plane', 'icon' => 'up arrow'])
@@ -76,7 +76,7 @@ Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])
 Header::addTo($app, ['Can be on a Virtual Page']);
 $vp = VirtualPage::addTo($app)->set(function (VirtualPage $vp) use ($planeTemplate) {
     $plane = View::addTo($vp, ['template' => $planeTemplate]);
-    Label::addTo($vp, ['Plane ID: ', 'class.bottom attached' => true, 'detail' => $plane->name]);
+    Label::addTo($vp, ['Plane ID:', 'class.bottom attached' => true, 'detail' => $plane->name]);
 });
 
 Button::addTo($app, ['Show $plane in a dialog', 'icon' => 'clone'])

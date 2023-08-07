@@ -102,9 +102,6 @@ class Callback extends AbstractView
         return isset($_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger]);
     }
 
-    /**
-     * Return callback triggered value.
-     */
     public function getTriggeredValue(): string
     {
         return $_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger] ?? '';

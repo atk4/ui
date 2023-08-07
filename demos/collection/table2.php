@@ -84,7 +84,7 @@ $table->addColumn('amount_copy', [Table\Column\Multiformat::class, function (Mod
 
     // one formatter
     return [[Table\Column\Money::class]];
-}, 'attr' => ['all' => ['class' => ['right aligned singel line']]]]);
+}, 'attr' => ['all' => ['class' => ['right aligned single line']]]]);
 
 Header::addTo($app, ['Table with resizable columns', 'subHeader' => 'Just drag column header to resize', 'icon' => 'table']);
 

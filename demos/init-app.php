@@ -47,7 +47,7 @@ unset($coverageSaveFx);
 
 final class AnonymousClassNameCache
 {
-    /** @var array<string, string> */
+    /** @var array<string, class-string> */
     private static $classNameByFxHash = [];
 
     private function __construct()

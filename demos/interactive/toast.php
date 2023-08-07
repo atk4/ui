@@ -34,7 +34,7 @@ $button->on('click', new JsToast([
 $button = Button::addTo($app)->set('Error');
 $button->on('click', new JsToast([
     'title' => 'Error',
-    'message' => 'An error occured',
+    'message' => 'An error occurred',
     'class' => 'error',
 ]));
 

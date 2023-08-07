@@ -169,7 +169,7 @@ class Multiline extends Form\Control
     /**
      * Container for component that need Props set based on their field value as Lookup component.
      * Set during fieldDefinition and apply during renderView() after getValue().
-     * Must contains callable function and function will receive $model field and value as paremeter.
+     * Must contains callable function and function will receive $model field and value as parameter.
      *
      * @var array
      */
@@ -243,13 +243,9 @@ class Multiline extends Form\Control
         });
     }
 
-    /**
-     * Typecast each loaded value.
-     */
     protected function typeCastLoadValues(array $values): array
     {
         $dataRows = [];
-
         foreach ($values as $k => $row) {
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
@@ -493,18 +489,20 @@ class Multiline extends Form\Control
      */
     protected function getDatePickerProps(Field $field): array
     {
-        $calendar = new Calendar();
         $props = [];
         $props['config'] = $this->componentProps[self::DATE] ?? [];
-        $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
-        $props['config']['dateFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat);
+        $props['config']['allowInput'] ??= true;
 
+        $calendar = new Calendar();
+        $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
+        $props['config']['dateFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat, true);
         if ($field->type === 'datetime' || $field->type === 'time') {
+            $props['config']['noCalendar'] = $field->type === 'time';
             $props['config']['enableTime'] = true;
             $props['config']['time_24hr'] = $calendar->isDtFormatWith24hrTime($phpFormat);
-            $props['config']['noCalendar'] = $field->type === 'time';
-            $props['config']['enableSeconds'] = $calendar->isDtFormatWithSeconds($phpFormat);
-            $props['config']['allowInput'] = $calendar->isDtFormatWithMicroseconds($phpFormat);
+            $props['config']['enableSeconds'] ??= $calendar->isDtFormatWithSeconds($phpFormat);
+            $props['config']['formatSecondsPrecision'] ??= $calendar->isDtFormatWithMicroseconds($phpFormat) ? 6 : -1;
+            $props['config']['disableMobile'] = true;
         }
 
         return $props;
@@ -553,9 +551,6 @@ class Multiline extends Form\Control
         return $props;
     }
 
-    /**
-     * Lookup Props set based on field value.
-     */
     public function setLookupOptionValue(Field $field, string $value): void
     {
         $model = $field->getReference()->refModel($this->model);
@@ -574,7 +569,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Return a component definition.
      * Component definition require at least a name and a props array.
      */
     protected function getComponentDefinition(Field $field): array
@@ -603,9 +597,6 @@ class Multiline extends Form\Control
         return $definition;
     }
 
-    /**
-     * Return array of possible items set for a select or lookup field.
-     */
     protected function getFieldItems(Field $field, ?int $limit = 10): array
     {
         $items = [];

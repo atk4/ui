@@ -84,6 +84,7 @@ class FormService {
      * @param   {$}             $form     Form containing the field.
      * @param   {string}        fieldName Name of field
      * @param   {string|object} rule      Rule to apply test.
+     *
      * @returns {*|false}
      */
     validateField($form, fieldName, rule) {

@@ -37,7 +37,7 @@ class ItemSearch extends View
      */
     public $context;
 
-    /** @var string|null The URL argument name use for query. If null, then->>name will be assiged. */
+    /** @var string|null The URL argument name use for query. If null, then->>name will be assigned. */
     public $queryArg;
 
     public $defaultTemplate = 'item-search.html';
@@ -56,8 +56,6 @@ class ItemSearch extends View
     }
 
     /**
-     * Return query string sent by request.
-     *
      * @return string
      */
     public function getQuery()
@@ -65,9 +63,6 @@ class ItemSearch extends View
         return $_GET[$this->queryArg] ?? null;
     }
 
-    /**
-     * Set model condition base on search request.
-     */
     public function setModelCondition(Model $model): void
     {
         $q = $this->getQuery();

@@ -37,28 +37,11 @@ class Form extends View
     /** @var JsCallback Callback handling form submission. */
     public $cb;
 
-    /**
-     * Set this to false in order to
-     * prevent from leaving
-     * page if form is not submit.
-     *
-     * Note:
-     * When using your own change handler
-     * on an input field, set useDefault parameter to false.
-     * ex: $input->onChange(new JsExpression('console.log()), false)
-     * Otherwise, change event is not propagate to all event handler
-     * and leaving page might not be prevent.
-     *
-     * Form using Calendar field
-     * will still leave page when a calendar
-     * input value is changed.
-     *
-     * @var bool
-     */
+    /** @var bool Set this to false in order to prevent from leaving page if form is not submit. */
     public $canLeave = true;
 
     /**
-     * Html <form> element, all inner form controls are linked to it on render
+     * HTML <form> element, all inner form controls are linked to it on render
      * with HTML form="form_id" attribute.
      *
      * @var View
@@ -308,16 +291,16 @@ class Form extends View
         if ($success instanceof View) {
             $response = $success;
         } elseif ($useTemplate) {
-            $response = $this->getApp()->loadTemplate($this->successTemplate);
-            $response->set('header', $success);
+            $responseTemplate = $this->getApp()->loadTemplate($this->successTemplate);
+            $responseTemplate->set('header', $success);
 
             if ($subHeader) {
-                $response->set('message', $subHeader);
+                $responseTemplate->set('message', $subHeader);
             } else {
-                $response->del('p');
+                $responseTemplate->del('p');
             }
 
-            $response = $this->js()->html($response->renderToHtml());
+            $response = $this->js()->html($responseTemplate->renderToHtml());
         } else {
             $response = new Message([$success, 'type' => 'success', 'icon' => 'check']);
             $response->setApp($this->getApp());
@@ -390,9 +373,9 @@ class Form extends View
      * 3. $f->type is converted into seed and evaluated
      * 4. lastly, falling back to Line, Dropdown (based on $reference and $enum)
      *
-     * @param array<string, mixed> $ControlSeed
+     * @param array<string, mixed> $controlSeed
      */
-    public function controlFactory(Field $field, $ControlSeed = []): Control
+    public function controlFactory(Field $field, $controlSeed = []): Control
     {
         $this->model->assertIsEntity($field->getOwner());
 
@@ -420,8 +403,8 @@ class Form extends View
             $fallbackSeed['placeholder'] = $field->ui['placeholder'];
         }
 
-        $ControlSeed = Factory::mergeSeeds(
-            $ControlSeed,
+        $controlSeed = Factory::mergeSeeds(
+            $controlSeed,
             $field->ui['form'] ?? null,
             $this->typeToControl[$field->type] ?? null,
             $fallbackSeed
@@ -433,7 +416,7 @@ class Form extends View
             'shortName' => $field->shortName,
         ];
 
-        return Factory::factory($ControlSeed, $defaults);
+        return Factory::factory($controlSeed, $defaults);
     }
 
     /**
@@ -457,18 +440,19 @@ class Form extends View
 
         $errors = [];
         foreach ($this->controls as $k => $control) {
-            try {
-                // save field value only if field was editable in form at all
-                if (!$control->readOnly && !$control->disabled) {
-                    $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $_POST[$k]));
-                }
-            } catch (\Exception $e) {
-                $messages = [];
-                do {
-                    $messages[] = $e->getMessage();
-                } while ($e = $e->getPrevious());
+            // save field value only if field was editable in form at all
+            if (!$control->readOnly && !$control->disabled) {
+                $postRawValue = $_POST[$k];
+                try {
+                    $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $postRawValue));
+                } catch (\Exception $e) {
+                    $messages = [];
+                    do {
+                        $messages[] = $e->getMessage();
+                    } while (($e = $e->getPrevious()) !== null);
 
-                $errors[$k] = implode(': ', $messages);
+                    $errors[$k] = implode(': ', $messages);
+                }
             }
         }
 

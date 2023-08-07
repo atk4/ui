@@ -75,3 +75,18 @@ Feature: Grid
     When I click using selector "//th.sortable[//div[text()='Name']]"
     Then I should see "Andorra"
     Then I should not see "Zambia"
+
+  Scenario: IPP selector
+    Then I should see "Andorra"
+    Then I should not see "China"
+    Then I should not see "Zambia"
+    When I click using selector "//div.ui.dropdown.compact"
+    When I click using selector "//div.ui.dropdown.compact//div.item[text()='100']"
+    Then I should see "Andorra"
+    Then I should see "China"
+    Then I should not see "Zambia"
+    When I click using selector "//div.ui.dropdown.compact"
+    When I click using selector "//div.ui.dropdown.compact//div.item[text()[normalize-space()='1 000']]"
+    Then I should see "Andorra"
+    Then I should see "China"
+    Then I should see "Zambia"

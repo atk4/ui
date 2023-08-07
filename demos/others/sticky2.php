@@ -32,7 +32,7 @@ if (isset($_GET['name'])) {
     Label::addTo($frame, ['Reset', 'iconRight' => 'close', 'class.black' => true])->link($app->url());
     View::addTo($frame, ['ui' => 'hidden divider']);
 
-    // nested interractive elemetns will respect lockal sticky get
+    // nested interactive elements will respect lockal sticky get
     Button::addTo($frame, ['Triggering callback here will inherit color'])
         ->on('click', function () {
             return new JsToast('Color was = ' . $_GET['name']);
