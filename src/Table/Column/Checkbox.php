@@ -48,14 +48,15 @@ class Checkbox extends Table\Column
         }
         $this->table->js(true)->find('.' . $this->class)->checkbox();
         $this->table->js(true, new JsExpression('atk.gridCheckboxHelper.masterCheckbox();'));
+        $attr['class'][] = 'collapsing';
 
-        return $this->getTag('head', [['div', ['class' => 'ui master checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]]], []);
+        return $this->getTag('head', [['div', ['class' => 'ui master fitted checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]]], $attr);
     }
 
     public function getDataCellTemplate(Field $field = null): string
     {
         $this->table->js(true, new JsExpression('atk.gridCheckboxHelper.childCheckbox();'));
 
-        return $this->getApp()->getTag('div', ['class' => 'ui child checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]);
+        return $this->getApp()->getTag('div', ['class' => 'ui child fitted checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]);
     }
 }
