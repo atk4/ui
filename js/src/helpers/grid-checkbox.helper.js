@@ -25,7 +25,7 @@ export default {
     childCheckbox: function () {
         $('.table .child.checkbox').checkbox({
             // Fire on load to set parent value
-            fireOnInit: true,
+            fireOnInit: false,
 
             // Change parent state on each child checkbox change
             onChange: function () {

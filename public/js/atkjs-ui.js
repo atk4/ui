@@ -58,7 +58,7 @@ __webpack_require__.r(__webpack_exports__);
   childCheckbox: function () {
     external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('.table .child.checkbox').checkbox({
       // Fire on load to set parent value
-      fireOnInit: true,
+      fireOnInit: false,
       // Change parent state on each child checkbox change
       onChange: function () {
         const $listGroup = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table');
@@ -2417,7 +2417,7 @@ __webpack_require__.r(__webpack_exports__);
  */
 class FormService {
   constructor() {
-    this.formSettings = (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn.form.settings);
+    this.formSettings = (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn).form.settings;
     // collection of jQuery form object where preventLeave is set
     this.prevents = [];
     window.addEventListener('beforeunload', event => {
@@ -2431,9 +2431,9 @@ class FormService {
   }
   getDefaultFomanticSettings() {
     return [{
-      rules: external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(true, {}, (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn.form.settings.rules), {
+      rules: external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(true, {}, (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn).form.settings.rules, {
         rules: {
-          notEmpty: (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn.form.settings.rules.empty),
+          notEmpty: (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn).form.settings.rules.empty,
           isVisible: this.isVisible,
           isEqual: this.isEqual
         }
@@ -2512,7 +2512,7 @@ class FormService {
     return rule;
   }
   getDefaultSelector() {
-    return (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn.form.settings.selector.group);
+    return (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn).form.settings.selector.group;
   }
   getContainer($field, selector) {
     const $container = $field.closest(selector);
@@ -3631,7 +3631,7 @@ const fomanticServicesMap = {
 
 // setup Fomantic-UI global overrides
 // https://github.com/fomantic/Fomantic-UI/issues/2526
-(external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend) = (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.extend) = new Proxy((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn.extend), {
+(external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend) = (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn).extend = new Proxy((external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn).extend, {
   // eslint-disable-line no-multi-assign
   apply: function (target, thisArg, args) {
     // https://github.com/fomantic/Fomantic-UI/blob/c30ed51ca12fc1762b04c2fd1a83d087c0124d07/src/definitions/behaviors/api.js#L48
@@ -43757,6 +43757,7 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 					script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 				}
 /******/ 				script.setAttribute("data-webpack", dataWebpackPrefix + key);
+/******/ 		
 /******/ 				script.src = url;
 /******/ 			}
 /******/ 			inProgress[url] = [done];
