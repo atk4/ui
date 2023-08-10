@@ -77,7 +77,6 @@ Feature: Grid
     Then I should not see "Zambia"
 
   Scenario: IPP selector
-    Given I am on "collection/grid.php"
     Then I should see "Andorra"
     Then I should not see "China"
     Then I should not see "Zambia"
