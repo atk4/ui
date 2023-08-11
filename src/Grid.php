@@ -514,7 +514,7 @@ class Grid extends View
     }
 
     /**
-     * Similar to addModalAction but apply to a multiple recors selection and display in menu.
+     * Similar to addModalAction but apply to a multiple records selection and display in menu.
      * When menu item is clicked, modal is displayed with the $title and $callback is executed through
      * VirtualPage.
      *
