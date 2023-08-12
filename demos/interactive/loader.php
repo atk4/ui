@@ -29,7 +29,7 @@ Loader::addTo($app)->set(function (Loader $p) {
     Header::addTo($p, ['Loader #1']);
     LoremIpsum::addTo($p, ['size' => 1]);
 
-    // Any dynamic views can perform call-backs just fine
+    // Any dynamic views can perform callbacks just fine
     ViewTester::addTo($p);
 
     // Loader may be inside another loader, works fine.

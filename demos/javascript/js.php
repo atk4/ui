@@ -15,7 +15,7 @@ use Atk4\Ui\Label;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-// Demonstrates how to use interractive buttons.
+// Demonstrates how to use interactive buttons.
 Header::addTo($app, ['Basic Button']);
 
 // This button hides on page load
@@ -26,7 +26,8 @@ $b->js(true)->hide();
 $b = Button::addTo($app, ['name' => 'b2'])->set('Hide on click Button');
 $b->js('click')->hide();
 
-Button::addTo($app, ['Redirect'])->on('click', null, $app->jsRedirect(['foo' => 'bar']));
+Button::addTo($app, ['Redirect'])
+    ->on('click', null, $app->jsRedirect(['foo' => 'bar']));
 
 if (isset($_GET['foo']) && $_GET['foo'] === 'bar') {
     $app->redirect(['foo' => 'baz']);

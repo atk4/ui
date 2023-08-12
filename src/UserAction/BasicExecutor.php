@@ -127,7 +127,6 @@ class BasicExecutor extends View implements ExecutorInterface
     public function executeModelAction(): JsBlock
     {
         $args = [];
-
         foreach ($this->action->args as $key => $val) {
             $args[] = $this->arguments[$key];
         }
@@ -142,9 +141,6 @@ class BasicExecutor extends View implements ExecutorInterface
             ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
     }
 
-    /**
-     * Will add header if set.
-     */
     public function addHeader(): void
     {
         if ($this->hasHeader) {

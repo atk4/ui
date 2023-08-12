@@ -96,9 +96,6 @@ abstract class FilterModel extends Model
         $this->afterInit();
     }
 
-    /**
-     * Perform further initialization.
-     */
     public function afterInit(): void
     {
         $this->addField('name', ['default' => $this->lookupField->shortName, 'system' => true]);
@@ -116,9 +113,6 @@ abstract class FilterModel extends Model
         });
     }
 
-    /**
-     * Recall filter model data.
-     */
     public function recallData(): ?array
     {
         return $this->recall('data');
@@ -142,9 +136,6 @@ abstract class FilterModel extends Model
         return [];
     }
 
-    /**
-     * Check if this model is using session or not.
-     */
     public function clearData(): void
     {
         $this->forget();

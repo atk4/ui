@@ -15,7 +15,7 @@ use Atk4\Ui\View;
 /**
  * Right Panel implementation.
  * Opening, closing and loading Panel content is manage
- * via the js panel service.
+ * via the JS panel service.
  *
  * Content is loaded via a LoadableContent View.
  * This view must implement a callback for content to be added via the callback function.
@@ -42,13 +42,13 @@ class Right extends View implements Loadable
     /** @var array The default content seed. */
     public $dynamic = [Content::class];
 
-    /** @var string The css selector on where to add close panel event triggering for closing it. */
+    /** @var string The CSS selector on where to add close panel event triggering for closing it. */
     public $closeSelector = '.atk-panel-close';
 
-    /** @var string a css selector where warning trigger class will be applied. */
+    /** @var string a CSS selector where warning trigger class will be applied. */
     public $warningSelector = '.atk-panel-warning';
 
-    /** @var string the css class name to apply to element set by warning selector. */
+    /** @var string the CSS class name to apply to element set by warning selector. */
     public $warningTrigger = 'atk-visible';
 
     /** @var string the warning icon class */
@@ -76,16 +76,13 @@ class Right extends View implements Loadable
         $this->dynamicContent = Content::addTo($this, [], ['LoadContent']);
     }
 
-    /**
-     * Get dynamic content for this view.
-     */
     public function getDynamicContent(): LoadableContent
     {
         return $this->dynamicContent;
     }
 
     /**
-     * Return js expression in order to retrieve panelService.
+     * Return JS expression in order to retrieve panelService.
      */
     public function service(): JsChain
     {
@@ -93,12 +90,12 @@ class Right extends View implements Loadable
     }
 
     /**
-     * Return js expression need to open panel via js panelService.
+     * Return JS expression need to open panel via JS panelService.
      *
-     * @param array            $urlArgs       the argument to include when dynamic content panel open
-     * @param array            $dataAttribute the data attribute name to include in reload from the triggering element
-     * @param string|null      $activeCss     the css class name to apply on triggering element when panel is open
-     * @param JsExpressionable $jsTrigger     JS expression that trigger panel to open. Default = $(this).
+     * @param array<string, string> $urlArgs       the argument to include when dynamic content panel open
+     * @param array                 $dataAttribute the data attribute name to include in reload from the triggering element
+     * @param string|null           $activeCss     the CSS class name to apply on triggering element when panel is open
+     * @param JsExpressionable      $jsTrigger     JS expression that trigger panel to open. Default = $(this).
      */
     public function jsOpen(array $urlArgs = [], array $dataAttribute = [], string $activeCss = null, JsExpressionable $jsTrigger = null): JsExpressionable
     {
@@ -112,7 +109,7 @@ class Right extends View implements Loadable
     }
 
     /**
-     * Will reload panel passing args as Get param via js flyoutService.
+     * Will reload panel passing args as Get param via JS flyoutService.
      */
     public function jsPanelReload(array $args = []): JsExpressionable
     {
@@ -120,7 +117,7 @@ class Right extends View implements Loadable
     }
 
     /**
-     * Return js expression need to close panel via js panelService.
+     * Return JS expression need to close panel via JS panelService.
      */
     public function jsClose(): JsExpressionable
     {
@@ -129,22 +126,22 @@ class Right extends View implements Loadable
 
     /**
      * Attach confirmation modal view to display.
-     * js flyoutService will prevent closing of Flyout if a confirmation modal
+     * JS flyoutService will prevent closing of Flyout if a confirmation modal
      * is attached to it and flyoutService detect that the current open flyoutContent has warning on.
      */
-    public function addConfirmation(string $msg, string $title = 'Closing panel!', string $okBtn = null, string $cancelBtn = null): void
+    public function addConfirmation(string $msg, string $title = 'Closing panel!', string $okButton = null, string $cancelButton = null): void
     {
-        if (!$okBtn) {
-            $okBtn = (new Button(['Ok']))->addClass('ok');
+        if (!$okButton) {
+            $okButton = (new Button(['Ok']))->addClass('ok');
         }
 
-        if (!$cancelBtn) {
-            $cancelBtn = (new Button(['Cancel']))->addClass('cancel');
+        if (!$cancelButton) {
+            $cancelButton = (new Button(['Cancel']))->addClass('cancel');
         }
         $this->closeModal = $this->getApp()->add(array_merge($this->defaultModal, ['title' => $title]));
         $this->closeModal->add([View::class, $msg, 'element' => 'p']);
-        $this->closeModal->addButtonAction(Factory::factory($okBtn));
-        $this->closeModal->addButtonAction(Factory::factory($cancelBtn));
+        $this->closeModal->addButtonAction(Factory::factory($okButton));
+        $this->closeModal->addButtonAction(Factory::factory($cancelButton));
 
         $this->closeModal->notClosable();
     }
@@ -182,28 +179,25 @@ class Right extends View implements Loadable
         return (new Jquery('#' . $this->name . ' ' . $this->warningSelector))->toggleClass($this->warningTrigger);
     }
 
-    /**
-     * Return panel options.
-     */
     public function getPanelOptions(): array
     {
-        $panel_options = [
+        $res = [
             'id' => $this->name,
-            'loader' => ['selector' => '.ui.loader', 'trigger' => 'active'], // the css selector and trigger class to activate loader.
+            'loader' => ['selector' => '.ui.loader', 'trigger' => 'active'], // the CSS selector and trigger class to activate loader.
             'modal' => $this->closeModal,
             'warning' => ['selector' => $this->warningSelector, 'trigger' => $this->warningTrigger],
-            'visible' => 'atk-visible', // the triggering css class that will make this panel visible.
-            'closeSelector' => $this->closeSelector, // the css selector to close this flyout.
+            'visible' => 'atk-visible', // the triggering CSS class that will make this panel visible.
+            'closeSelector' => $this->closeSelector, // the CSS selector to close this flyout.
             'hasClickAway' => $this->hasClickAway,
             'hasEscAway' => $this->hasEscAway,
         ];
 
         if ($this->dynamicContent) {
-            $panel_options['url'] = $this->getDynamicContent()->getCallbackUrl();
-            $panel_options['clearable'] = $this->getDynamicContent()->getClearSelector();
+            $res['url'] = $this->getDynamicContent()->getCallbackUrl();
+            $res['clearable'] = $this->getDynamicContent()->getClearSelector();
         }
 
-        return $panel_options;
+        return $res;
     }
 
     protected function renderView(): void

@@ -60,7 +60,7 @@ class Callback extends AbstractView
     }
 
     /**
-     * Executes user-specified action when call-back is triggered.
+     * Executes user-specified action when callback is triggered.
      *
      * @template T
      *
@@ -102,9 +102,6 @@ class Callback extends AbstractView
         return isset($_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger]);
     }
 
-    /**
-     * Return callback triggered value.
-     */
     public function getTriggeredValue(): string
     {
         return $_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger] ?? '';
@@ -127,7 +124,7 @@ class Callback extends AbstractView
     }
 
     /**
-     * Return URL that will trigger action on this call-back. If you intend to request
+     * Return URL that will trigger action on this callback. If you intend to request
      * the URL directly in your browser (as iframe, new tab, or document location), you
      * should use getUrl instead.
      */
@@ -137,7 +134,7 @@ class Callback extends AbstractView
     }
 
     /**
-     * Return URL that will trigger action on this call-back. If you intend to request
+     * Return URL that will trigger action on this callback. If you intend to request
      * the URL loading from inside JavaScript, it's always advised to use getJsUrl instead.
      */
     public function getUrl(string $value = 'callback'): string
@@ -146,7 +143,7 @@ class Callback extends AbstractView
     }
 
     /**
-     * Return proper url argument for this callback.
+     * Return proper URL argument for this callback.
      */
     private function getUrlArguments(string $value = null): array
     {

@@ -9,7 +9,7 @@ use Atk4\Ui\Paginator;
 
 class PaginatorTest extends TestCase
 {
-    public function addDataProvider(): array
+    public function providePaginatorCases(): iterable
     {
         return [
             [1, 1, 1, [1]],
@@ -34,11 +34,11 @@ class PaginatorTest extends TestCase
     }
 
     /**
-     * @dataProvider addDataProvider
+     * @dataProvider providePaginatorCases
      */
     public function testPaginator(int $page, int $range, int $total, array $expected): void
     {
         $p = new Paginator(['page' => $page, 'range' => $range, 'total' => $total]);
-        static::assertSame($expected, $p->getPaginatorItems());
+        self::assertSame($expected, $p->getPaginatorItems());
     }
 }

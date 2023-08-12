@@ -56,7 +56,7 @@ class DemoActionsUtil
             },
         ]);
 
-        $country->addUserAction('edit_argument_prev', [
+        $country->addUserAction('edit_argument_preview', [
             'caption' => 'Argument/Preview',
             'description' => 'Ask for argument "Age" and display preview prior to execute',
             'args' => [
@@ -99,7 +99,7 @@ class DemoActionsUtil
             'caption' => 'User Confirmation',
             'description' => 'Confirm the action using a ConfirmationExecutor',
             'confirmation' => function (UserAction $a) {
-                $iso3 = $a->getEntity()->get(Country::hinting()->fieldName()->iso3);
+                $iso3 = Country::assertInstanceOf($a->getEntity())->iso3;
 
                 return 'Are you sure you want to perform this action on: <b>' . $a->getEntity()->getTitle() . ' (' . $iso3 . ')</b>';
             },

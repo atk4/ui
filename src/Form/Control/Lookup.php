@@ -9,13 +9,14 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\CallbackLater;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsModal;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\VirtualPage;
 
 class Lookup extends Input
@@ -37,11 +38,11 @@ class Lookup extends Input
 
     /**
      * Either set this to array of fields which must be searched (e.g. "name", "surname"), or define this
-     * as a callback to be executed callback($model, $search_string);.
+     * as a callback to be executed callback($model, $query);.
      *
      * If left null, then search will be performed on a model's title field
      *
-     * @var array|\Closure|null
+     * @var list<string>|\Closure(Model, string): void|null
      */
     public $search;
 
@@ -53,7 +54,7 @@ class Lookup extends Input
      * with dependency
      * Then model of the 'state' field can be limited to states of the currently selected 'country'.
      *
-     * @var \Closure|null
+     * @var \Closure(Model, array<string, mixed>): void|null
      */
     public $dependency;
 
@@ -112,7 +113,7 @@ class Lookup extends Input
      * Define callback for generating the row data
      * If left empty default callback Lookup::defaultRenderRow is used.
      *
-     * @var \Closure|null
+     * @var \Closure($this, Model): array{value: mixed, title: mixed}|null
      */
     public $renderRowFunction;
 
@@ -130,7 +131,6 @@ class Lookup extends Input
         parent::init();
 
         $this->template->set([
-            'inputId' => $this->name . '-ac',
             'placeholder' => $this->placeholder,
         ]);
 
@@ -140,6 +140,17 @@ class Lookup extends Input
         $this->callback->set(function () {
             $this->outputApiResponse();
         });
+    }
+
+    /**
+     * @param bool|string      $when
+     * @param JsExpressionable $action
+     *
+     * @return Jquery
+     */
+    protected function jsDropdown($when = false, $action = null): JsExpressionable
+    {
+        return $this->js($when, $action, 'div.ui.dropdown:has(> #' . $this->name . '_input)');
     }
 
     /**
@@ -155,7 +166,7 @@ class Lookup extends Input
      *
      * @return never
      */
-    public function outputApiResponse()
+    public function outputApiResponse(): void
     {
         $this->getApp()->terminateJson([
             'success' => true,
@@ -172,10 +183,6 @@ class Lookup extends Input
      */
     public function getData($limit = true): array
     {
-        if (!$this->model) {
-            throw new Exception('Model must be set for Lookup');
-        }
-
         $this->applyLimit($limit);
 
         $this->applySearchConditions();
@@ -252,18 +259,20 @@ class Lookup extends Input
         $vp->set(function (VirtualPage $p) {
             $form = Form::addTo($p);
 
-            $entity = (clone $this->model)->setOnlyFields($this->plus['fields'] ?? null)->createEntity();
-
-            $form->setModel($entity);
+            $entity = $this->model->createEntity();
+            $form->setModel($entity, $this->plus['fields'] ?? null);
 
             $form->onSubmit(function (Form $form) {
-                $form->model->save();
+                $msg = $form->model->getUserAction('add')->execute();
 
                 $res = new JsBlock();
+                if (is_string($msg)) {
+                    $res->addStatement(new JsToast($msg));
+                }
                 $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
 
                 $row = $this->renderRow($form->model);
-                $chain = new Jquery('#' . $this->name . '-ac');
+                $chain = $this->jsDropdown();
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
                 $res->addStatement($chain);
 
@@ -333,20 +342,6 @@ class Lookup extends Input
     }
 
     /**
-     * Set Fomantic-UI Api settings to use with dropdown.
-     *
-     * @param array $config
-     *
-     * @return $this
-     */
-    public function setApiConfig($config)
-    {
-        $this->apiConfig = array_merge($this->apiConfig, $config);
-
-        return $this;
-    }
-
-    /**
      * Override this method if you want to add more logic to the initialization of the auto-complete field.
      *
      * @param Jquery $chain
@@ -368,17 +363,14 @@ class Lookup extends Input
         }
 
         if ($this->disabled) {
-            $this->settings['allowTab'] = false;
-
-            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
             $this->template->set('disabledClass', 'disabled');
-        }
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
+        } elseif ($this->readOnly) {
+            $this->template->set('disabledClass', 'read-only');
+            $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
 
-        if ($this->readOnly) {
-            $this->settings['allowTab'] = false;
             $this->settings['apiSettings'] = null;
             $this->settings['onShow'] = new JsFunction([], [new JsExpression('return false')]);
-            $this->template->dangerouslySetHtml('readonly', 'readonly="readonly"');
         }
 
         if ($this->dependency) {
@@ -387,7 +379,7 @@ class Lookup extends Input
             ], $this->apiConfig['data'] ?? []);
         }
 
-        $chain = new Jquery('#' . $this->name . '-ac');
+        $chain = $this->jsDropdown();
 
         $this->initDropdown($chain);
 

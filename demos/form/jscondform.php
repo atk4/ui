@@ -83,7 +83,7 @@ $groupBasic->addControl('first_name', ['width' => 'eight']);
 $groupBasic->addControl('middle_name', ['width' => 'three']);
 $groupBasic->addControl('last_name', ['width' => 'five']);
 
-$formGroup->addControl('dev', [Form\Control\Checkbox::class, 'caption' => 'I am a developper']);
+$formGroup->addControl('dev', [Form\Control\Checkbox::class, 'caption' => 'I am a developer']);
 
 $groupCode = $formGroup->addGroup(['Check all language that apply']);
 $groupCode->addControl('php', [Form\Control\Checkbox::class]);
@@ -102,55 +102,45 @@ $formGroup->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language' => [
 
 // -----------------------------------------------------------------------------
 
-/*
 Header::addTo($app, ['Hide or show accordion section', 'size' => 2]);
 
-$f_acc = Form::addTo($app, ['class.segment' => true]);
-Label::addTo($f_acc, ['Work on section layouts too.', 'class.top attached' => true], ['AboveControls']);
+$formAccordion = Form::addTo($app, ['class.segment' => true]);
+Label::addTo($formAccordion, ['Work on section layouts too.', 'class.top attached' => true], ['AboveControls']);
 
-// Accordion
-$accordion_layout = $f_acc->layout->addSubLayout([Form\Layout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
+$accordionLayout = $formAccordion->layout->addSubLayout([Form\Layout\Section\Accordion::class, 'type' => ['styled', 'fluid'], 'settings' => ['exclusive' => false]]);
 
-// Section - business address
-$adr_section = $accordion_layout->addSection('Business Address');
+$invoiceAddressSection = $accordionLayout->addSection('Invoice Address');
+$group = $invoiceAddressSection->addGroup('Street and City');
+$group->addControl('invoice_addr', ['width' => 'eight'], ['required' => true]);
+$group->addControl('invoice_city', ['width' => 'eight']);
+$group = $invoiceAddressSection->addGroup('State, Country and Postal Code');
+$group->addControl('invoice_state', ['width' => 'six']);
+$group->addControl('country', ['width' => 'six']);
+$group->addControl('invoice_postal', ['width' => 'four']);
 
-$gr = $adr_section->addGroup('Street and City');
-$gr->addControl('addr1', ['width' => 'eight'], ['required' => true]);
-$gr->addControl('city1', ['width' => 'eight']);
+$invoiceAddressSection->addControl('has_custom_delivery_address', [Form\Control\Checkbox::class, 'caption' => 'Different Delivery Address']);
 
-$gr = $adr_section->addGroup('State, Country and Postal Code');
-$gr->addControl('state1', ['width' => 'six']);
-$gr->addControl('country1', ['width' => 'six']);
-$gr->addControl('postal1', ['width' => 'four']);
+$deliveryAddressSection = $accordionLayout->addSection('Delivery Address');
+$group = $deliveryAddressSection->addGroup('Street and City');
+$group->addControl('delivery_addr', ['width' => 'eight'], ['required' => true]);
+$group->addControl('delivery_city', ['width' => 'eight']);
+$group = $deliveryAddressSection->addGroup('State, Country and Postal Code');
+$group->addControl('delivery_state', ['width' => 'six']);
+$group->addControl('delivery_country', ['width' => 'six']);
+$group->addControl('delivery_postal', ['width' => 'four']);
 
-$adr_section->addControl('custom_shipping', [Form\Control\Checkbox::class, 'caption' => 'Different Shipping Address']);
-
-// Section - shipping address
-$ship_section = $accordion_layout->addSection('Shipping address');
-
-$gr = $ship_section->addGroup('Street and City');
-$gr->addControl('addr2', ['width' => 'eight'], ['required' => true]);
-$gr->addControl('city2', ['width' => 'eight']);
-
-$gr = $ship_section->addGroup('State, Country and Postal Code');
-$gr->addControl('state2', ['width' => 'six']);
-$gr->addControl('country2', ['width' => 'six']);
-$gr->addControl('postal2', ['width' => 'four']);
-
-// activate #1 section
-$accordion_layout->activate($adr_section);
+$accordionLayout->activate($invoiceAddressSection);
 
 // To hide-show group or section simply select a field in that group.
 // Show group where 'php' belong when dev is checked.
 // Show group where 'language' belong when dev is checked.
-$f_acc->setGroupDisplayRules(
-    // rules
-    ['addr2' => ['custom_shipping' => 'checked']],
+$formAccordion->setGroupDisplayRules(
+    ['delivery_addr' => ['has_custom_delivery_address' => 'checked']],
 
+    // TODO not implemented
     // JS selector of container
     // '.atk-form-group' // this will hide group
     // '.content' // this will hide content of 2nd accordion section
-    $ship_section->getOwner() // this way we set selector to accordion section title block - so what? we still can't do anything about it
-    // // BUT there is no way how to show/hide all accordion section including title and content
+    $deliveryAddressSection->getOwner() // this way we set selector to accordion section title block - so what? we still can't do anything about it
+    // BUT there is no way how to show/hide all accordion section including title and content
 );
-*/

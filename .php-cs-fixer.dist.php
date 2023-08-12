@@ -9,8 +9,8 @@ return (new PhpCsFixer\Config())
     ->setRules([
         '@PhpCsFixer' => true,
         '@PhpCsFixer:risky' => true,
-        '@PHP74Migration:risky' => true,
         '@PHP74Migration' => true,
+        '@PHP74Migration:risky' => true,
 
         // required by PSR-12
         'concat_space' => [
@@ -18,11 +18,6 @@ return (new PhpCsFixer\Config())
         ],
 
         // disable some too strict rules
-        'phpdoc_types' => [
-            // keep enabled, but without "alias" group to not fix
-            // "Callback" to "callback" in phpdoc
-            'groups' => ['simple', 'meta'],
-        ],
         'phpdoc_types_order' => [
             'null_adjustment' => 'always_last',
             'sort_algorithm' => 'none',

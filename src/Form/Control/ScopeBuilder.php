@@ -8,7 +8,6 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
-use Atk4\Data\Persistence;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
@@ -16,8 +15,6 @@ use Atk4\Ui\View;
 
 class ScopeBuilder extends Form\Control
 {
-    use VueLookupTrait;
-
     public $renderLabel = false;
 
     public array $options = [
@@ -29,7 +26,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Max depth of nested conditions allowed.
      * Corresponds to VueQueryBulder maxDepth.
-     * Maximum support by js component is 10.
+     * Maximum support by JS component is 10.
      */
     public int $maxDepth = 5;
 
@@ -42,13 +39,8 @@ class ScopeBuilder extends Form\Control
     /** List of delimiters for auto-detection in order of priority. */
     public static array $listDelimiters = [';', ','];
 
-    /**
-     * The date, time or datetime options:
-     * 'flatpickr' - any of Flatpickr options
-     * 'useDefault' - when true, will init date, time or datetime to current.
-     */
+    /** The date, time or datetime options. */
     public array $atkdDateOptions = [
-        'useDefault' => false,
         'flatpickr' => [],
     ];
 
@@ -294,8 +286,6 @@ class ScopeBuilder extends Form\Control
     {
         parent::setModel($model);
 
-        $this->initVueLookupCallback();
-
         $this->buildQuery($model);
     }
 
@@ -364,7 +354,6 @@ class ScopeBuilder extends Form\Control
         }
 
         if ($field->hasReference()) {
-            $props['url'] = $this->dataCb->getUrl();
             $props['reference'] = $field->shortName;
             $props['search'] = true;
         }
@@ -379,23 +368,20 @@ class ScopeBuilder extends Form\Control
      */
     protected function getDatePickerProps(Field $field): array
     {
-        $calendar = new Calendar();
         $props = $this->atkdDateOptions['flatpickr'] ?? [];
-        $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
-        $props['altFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat); // why altFormat format?
-        $props['dateFormat'] = 'Y-m-d';
-        $props['altInput'] = true;
+        $props['allowInput'] ??= true;
 
+        $calendar = new Calendar();
+        $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
+        $props['dateFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat, true);
         if ($field->type === 'datetime' || $field->type === 'time') {
+            $props['noCalendar'] = $field->type === 'time';
             $props['enableTime'] = true;
             $props['time_24hr'] = $calendar->isDtFormatWith24hrTime($phpFormat);
-            $props['noCalendar'] = $field->type === 'time';
-            $props['enableSeconds'] = $calendar->isDtFormatWithSeconds($phpFormat);
-            $props['allowInput'] = $calendar->isDtFormatWithMicroseconds($phpFormat);
-            $props['dateFormat'] = $field->type === 'datetime' ? 'Y-m-d H:i:S' : 'H:i:S';
+            $props['enableSeconds'] ??= $calendar->isDtFormatWithSeconds($phpFormat);
+            $props['formatSecondsPrecision'] ??= $calendar->isDtFormatWithMicroseconds($phpFormat) ? 6 : -1;
+            $props['disableMobile'] = true;
         }
-
-        $props['useDefault'] = $this->atkdDateOptions['useDefault'];
 
         return $props;
     }
@@ -447,7 +433,7 @@ class ScopeBuilder extends Form\Control
     }
 
     /**
-     * Return an array of items id and name for a field.
+     * Return an array of items ID and name for a field.
      * Return field enum, values or reference values.
      */
     protected function getFieldItems(Field $field, ?int $limit = 250): array
@@ -535,9 +521,9 @@ class ScopeBuilder extends Form\Control
      */
     public function queryToCondition(array $query): Scope\Condition
     {
-        $key = $query['rule'] ?? null;
-        $operator = $query['operator'] ?? null;
-        $value = $query['value'] ?? null;
+        $key = $query['rule'];
+        $operator = $query['operator'];
+        $value = $query['value'];
 
         switch ($operator) {
             case self::OPERATOR_EMPTY:
@@ -667,7 +653,7 @@ class ScopeBuilder extends Form\Control
         return [
             'rule' => $rule,
             'operator' => $operator,
-            'value' => $value instanceof \DateTimeInterface ? (new Persistence\Array_())->typecastSaveField($this->model->getField($rule), $value) : $value, // TODO an UI typecasting hack to pass CI
+            'value' => $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($rule), $value),
             'option' => $this->getConditionOption($inputType, $value, $condition),
         ];
     }

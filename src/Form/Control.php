@@ -40,7 +40,7 @@ class Control extends View
     /** @var bool rendered or not input label in generic Form\Layout template. */
     public $renderLabel = true;
 
-    /** @var string */
+    /** @var string Specify width for Fomantic-UI grid. For "four wide" use 'four'. */
     public $width;
 
     /**
@@ -63,16 +63,10 @@ class Control extends View
      */
     public $hint;
 
-    /**
-     * Is input field disabled?
-     * Disabled input fields are not editable and will not be submitted.
-     */
+    /** Disabled field is not editable and will not be submitted. */
     public bool $disabled = false;
 
-    /**
-     * Is input field read only?
-     * Read only input fields are not editable, but will be submitted.
-     */
+    /** Read-only field is not editable, but will be submitted. */
     public bool $readOnly = false;
 
     protected function init(): void
@@ -81,7 +75,7 @@ class Control extends View
 
         if ($this->form && $this->entityField) {
             if (isset($this->form->controls[$this->entityField->getFieldName()])) {
-                throw (new Exception('Form already has a field with the same name'))
+                throw (new Exception('Form field already exists'))
                     ->addMoreInfo('name', $this->entityField->getFieldName());
             }
             $this->form->controls[$this->entityField->getFieldName()] = $this;
@@ -137,16 +131,12 @@ class Control extends View
      * If $expr is JsExpressionable, then it will execute it instantly.
      * If $expr is callback method, then it'll make additional request to webserver.
      *
-     * Could be preferable to set useDefault to false. For example when
-     * needing to clear form error or when form canLeave property is false.
-     * Otherwise, change handler will not be propagate to all handlers.
-     *
      * Examples:
      * $control->onChange(new JsExpression('console.log(\'changed\')'));
      * $control->onChange(new JsExpression('$(this).parents(\'.form\').form(\'submit\')'));
      *
      * @param JsExpressionable|JsCallbackSetClosure|array{JsCallbackSetClosure} $expr
-     * @param array|bool $defaults
+     * @param array|bool                                                        $defaults
      */
     public function onChange($expr, $defaults = []): void
     {

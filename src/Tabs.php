@@ -40,15 +40,15 @@ class Tabs extends View
      * Adds dynamic tab in tabs widget which will load a separate
      * page/url when activated.
      *
-     * @param string|TabsTab $name
-     * @param string|array   $url  URL to open inside a tab
+     * @param string|TabsTab                           $name
+     * @param string|array<0|string, string|int|false> $page URL to open inside a tab
      */
-    public function addTabUrl($name, $url, array $settings = []): void
+    public function addTabUrl($name, $page, array $settings = []): void
     {
         $item = $this->addTabMenuItem($name, $settings);
         $this->addSubView($item->name);
 
-        $item->setPath($url);
+        $item->setPath($page);
     }
 
     /**
@@ -67,7 +67,6 @@ class Tabs extends View
         }
 
         $tab = $this->add(Factory::mergeSeeds(['class' => ['item'], 'settings' => $settings], $tab), 'Menu')
-            ->setElement('a')
             ->setAttr('data-tab', $tab->name);
 
         if (!$this->activeTabName) {

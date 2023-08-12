@@ -20,17 +20,17 @@ View::addTo($app, [
 $cc = Columns::addTo($app);
 $form = Form::addTo($cc->addColumn());
 
-$form->addControl('one', [], ['enum' => ['female', 'male']])->set('male');
-$form->addControl('two', [Form\Control\Radio::class], ['enum' => ['female', 'male']])->set('male');
+$form->addControl('enum_d', [], ['enum' => ['female', 'male']])->set('male');
+$form->addControl('enum_r', [Form\Control\Radio::class], ['enum' => ['female', 'male']])->set('male');
 
-$form->addControl('three', [], ['values' => ['female', 'male']])->set(1);
-$form->addControl('four', [Form\Control\Radio::class], ['values' => ['female', 'male']])->set(1);
+$form->addControl('list_d', [], ['values' => ['female', 'male']])->set(1);
+$form->addControl('list_r', [Form\Control\Radio::class], ['values' => ['female', 'male']])->set(1);
 
-$form->addControl('five', [], ['values' => [5 => 'female', 7 => 'male']])->set(7);
-$form->addControl('six', [Form\Control\Radio::class], ['values' => [5 => 'female', 7 => 'male']])->set(7);
+$form->addControl('int_d', [], ['values' => [5 => 'female', 7 => 'male']])->set(7);
+$form->addControl('int_r', [Form\Control\Radio::class], ['values' => [5 => 'female', 7 => 'male']])->set(7);
 
-$form->addControl('seven', [], ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
-$form->addControl('eight', [Form\Control\Radio::class], ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
+$form->addControl('string_d', [], ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
+$form->addControl('string_r', [Form\Control\Radio::class], ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
 
 $form->onSubmit(function (Form $form) use ($app) {
     return new JsToast($app->encodeJson($form->model->get()));

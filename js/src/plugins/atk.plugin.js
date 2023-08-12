@@ -29,6 +29,7 @@ export default class AtkPlugin {
      *
      * @param   {string}    fn   string representing the method name to execute.
      * @param   {Array.<*>} args array of arguments need for the method to execute.
+     *
      * @returns {*}
      */
     call(fn, args) {

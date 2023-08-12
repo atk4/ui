@@ -86,7 +86,11 @@ class TypeDatetime extends Column\FilterModel
                         $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
                         $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
                     }
-                    $model->addCondition($model->expr('[field] between [value] and [value2]', ['field' => $model->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $model->addCondition($model->expr('[field] between [value] and [value2]', [
+                        'field' => $model->getField($filter['name']),
+                        'value' => $value,
+                        'value2' => $value2,
+                    ]));
 
                     break;
                 case '!=':
@@ -100,8 +104,12 @@ class TypeDatetime extends Column\FilterModel
                         $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
                         $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
                     }
-                    $between_condition = $filter['op'] === '!=' ? 'not between' : 'between';
-                    $model->addCondition($model->expr('[field] ' . $between_condition . ' [value] and [value2]', ['field' => $model->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $betweenOperator = $filter['op'] === '!=' ? 'not between' : 'between';
+                    $model->addCondition($model->expr('[field] ' . $betweenOperator . ' [value] and [value2]', [
+                        'field' => $model->getField($filter['name']),
+                        'value' => $value,
+                        'value2' => $value2,
+                    ]));
 
                     break;
                 case '>':

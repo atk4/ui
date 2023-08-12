@@ -6,7 +6,7 @@ namespace Atk4\Ui;
 
 /**
  * A Search input field that will reload View
- * using the view->url with a _q arguments attach to url.
+ * using the view->url with a _q arguments attach to URL.
  */
 class JsSearch extends View
 {
@@ -45,28 +45,23 @@ class JsSearch extends View
     /**
      * Whether or not this search will reload a view
      * or the entire page.
-     * If search query need to be control via an url parameter only
+     * If search query need to be control via an URL parameter only
      * set this to false.
      *
-     * @var bool default to true
+     * @var bool
      */
     public $useAjax = true;
 
-    public function link($url, $target = null)
-    {
-        return parent::link($url, $target);
-    }
-
-    /** @var string ui css classes */
+    /** @var string ui CSS classes */
     public $button = 'ui mini transparent basic button';
     /** @var string */
     public $filterIcon = 'filter';
     /** @var string */
-    public $btnSearchIcon = 'search';
+    public $buttonSearchIcon = 'search';
     /** @var string */
-    public $btnRemoveIcon = 'red remove';
+    public $buttonRemoveIcon = 'red remove';
     /** @var string|null */
-    public $btnStyle;
+    public $buttonStyle;
 
     protected function init(): void
     {
@@ -81,14 +76,14 @@ class JsSearch extends View
             $this->template->trySet('Placeholder', $this->placeHolder);
         }
 
-        if ($this->btnStyle) {
-            $this->template->trySet('buttonStyle', $this->btnStyle);
+        if ($this->buttonStyle) {
+            $this->template->trySet('buttonStyle', $this->buttonStyle);
         }
 
         $this->template->set('Button', $this->button);
         $this->template->set('FilterIcon', $this->filterIcon);
-        $this->template->set('BtnSearchIcon', $this->btnSearchIcon);
-        $this->template->set('BtnRemoveIcon', $this->btnRemoveIcon);
+        $this->template->set('ButtonSearchIcon', $this->buttonSearchIcon);
+        $this->template->set('ButtonRemoveIcon', $this->buttonRemoveIcon);
 
         $this->js(true)->atkJsSearch([
             'url' => $this->reload->jsUrl(),

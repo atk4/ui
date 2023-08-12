@@ -36,7 +36,7 @@ class Layout extends AbstractLayout
     /** @var bool Set true if you want fields to appear in-line. */
     public $inline = false;
 
-    /** @var HtmlTemplate|null Template holding input html. */
+    /** @var HtmlTemplate|null Template holding input HTML. */
     public $inputTemplate;
 
     /** @var array Seed for creating input hint View used in this layout. */
@@ -57,8 +57,6 @@ class Layout extends AbstractLayout
     }
 
     /**
-     * Adds Button.
-     *
      * @param Button|array $seed
      *
      * @return Button
@@ -69,8 +67,6 @@ class Layout extends AbstractLayout
     }
 
     /**
-     * Adds Header in form layout.
-     *
      * @param string|array $label
      *
      * @return $this
@@ -127,9 +123,6 @@ class Layout extends AbstractLayout
         return $v;
     }
 
-    /**
-     * Recursively renders this view.
-     */
     protected function recursiveRender(): void
     {
         $labeledControl = $this->inputTemplate->cloneRegion('LabeledControl');
@@ -227,7 +220,7 @@ class Layout extends AbstractLayout
             }
 
             if ($this->template->hasTag($element->shortName)) {
-                $this->template->tryDangerouslySetHtml($element->shortName, $template->renderToHtml());
+                $this->template->dangerouslySetHtml($element->shortName, $template->renderToHtml());
             } else {
                 $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
             }

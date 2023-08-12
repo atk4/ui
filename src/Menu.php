@@ -36,8 +36,8 @@ class Menu extends View
     /**
      * $seed can also be name here.
      *
-     * @param string|array|MenuItem                          $item
-     * @param string|array|JsExpressionable|Model\UserAction $action
+     * @param string|array|MenuItem                                                      $item
+     * @param string|array<0|string, string|int|false>|JsExpressionable|Model\UserAction $action
      *
      * @return MenuItem
      */
@@ -51,11 +51,12 @@ class Menu extends View
             array_unshift($item, MenuItem::class);
         }
 
-        $item = $this->add($item)->setElement('a');
+        /** @var MenuItem */
+        $item = $this->add($item);
 
         if (is_string($action) || is_array($action)) {
             $url = $this->url($action);
-            $item->setAttr('href', $url);
+            $item->link($url);
         } elseif ($action) {
             $item->on('click', null, $action);
         }
@@ -93,7 +94,7 @@ class Menu extends View
         $label = $name['title'] ?? $name['text'] ?? $name['name'] ?? $name[0] ?? null;
 
         if ($label !== null) {
-            $subMenu->set('label', $label);
+            $subMenu->template->set('label', $label);
         }
 
         if (isset($name['icon'])) {
@@ -125,7 +126,7 @@ class Menu extends View
         $title = $name['title'] ?? $name['text'] ?? $name['name'] ?? $name[0] ?? null;
 
         if ($title !== null) {
-            $group->set('title', $title);
+            $group->template->set('title', $title);
         }
 
         if (isset($name['icon'])) {

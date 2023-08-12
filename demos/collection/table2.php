@@ -49,7 +49,10 @@ $table->onHook(Lister::HOOK_BEFORE_ROW, function (Table $table) {
 });
 
 $table->template->dangerouslyAppendHtml('Foot', $app->getTag('tr', ['class' => 'center aligned'], [['td', ['colspan' => '2'], 'This will appear above totals']]));
-$table->addTotals(['action' => 'Totals:', 'amount' => ['sum']]);
+$table->addTotals([
+    'action' => 'Totals:',
+    'amount' => ['sum'],
+]);
 
 Header::addTo($app, ['Columns with multiple formats', 'subHeader' => 'Single column can use logic to swap out formatters', 'icon' => 'table']);
 
@@ -81,7 +84,7 @@ $table->addColumn('amount_copy', [Table\Column\Multiformat::class, function (Mod
 
     // one formatter
     return [[Table\Column\Money::class]];
-}, 'attr' => ['all' => ['class' => ['right aligned singel line']]]]);
+}, 'attr' => ['all' => ['class' => ['right aligned single line']]]]);
 
 Header::addTo($app, ['Table with resizable columns', 'subHeader' => 'Just drag column header to resize', 'icon' => 'table']);
 

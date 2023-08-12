@@ -10,7 +10,7 @@ Feature: RightPanel
 
   Scenario: PanelModelAction
     Given I am on "layout/layout-panel.php"
-    Then I click using selector "xpath((//div.atk-card)[1])"
+    Then I click using selector "(//div.atk-card)[1]"
     When I press button "User Confirmation"
     When I press Modal button "Ok"
     Then Toast display should contain text "Confirm country"

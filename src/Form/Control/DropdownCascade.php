@@ -39,16 +39,16 @@ class DropdownCascade extends Dropdown
         // populate default dropdown values
         $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($cascadeFromValue), $this->entityField->get());
 
-        // js to execute for the onChange handler of the parent dropdown.
+        // JS to execute for the onChange handler of the parent dropdown.
         $expr = [
             function (Jquery $j) use ($cascadeFromValue) {
                 return new JsBlock([
-                    $this->js()->dropdown('change values', $this->getNewValues($cascadeFromValue)),
-                    $this->js()->removeClass('loading'),
+                    $this->jsDropdown()->dropdown('change values', $this->getNewValues($cascadeFromValue)),
+                    $this->jsDropdown()->removeClass('loading'),
                 ]);
             },
-            $this->js()->dropdown('clear'),
-            $this->js()->addClass('loading'),
+            $this->jsDropdown()->dropdown('clear'),
+            $this->jsDropdown()->addClass('loading'),
         ];
 
         $this->cascadeFrom->onChange($expr, ['args' => [$this->cascadeFrom->name => $this->cascadeFrom->jsInput()->val()]]);
@@ -62,8 +62,8 @@ class DropdownCascade extends Dropdown
     }
 
     /**
-     * Generate new dropdown values based on cascadeInput model selected id.
-     * Return an empty value set if id is null.
+     * Generate new dropdown values based on cascadeInput model selected ID.
+     * Return an empty value set if ID is null.
      *
      * @param string|int $id
      */
@@ -108,13 +108,13 @@ class DropdownCascade extends Dropdown
 
     protected function htmlRenderValue(): void
     {
-        // Called in parent::renderView(), but values are rendered only via js
+        // called in parent::renderView(), but values are rendered only via JS
     }
 
     protected function renderView(): void
     {
         // multiple selection is not supported
-        $this->isMultiple = false;
+        $this->multiple = false;
 
         parent::renderView();
     }

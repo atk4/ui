@@ -86,9 +86,9 @@ class Popup extends View
     public $stopClickEvent = false;
 
     /**
-     * @param View|array|null $triggerBy
+     * @param View|array<string, mixed> $triggerBy
      */
-    public function __construct($triggerBy = null)
+    public function __construct($triggerBy = [])
     {
         if (is_object($triggerBy)) {
             $triggerBy = ['triggerBy' => $triggerBy];
@@ -171,7 +171,7 @@ class Popup extends View
     }
 
     /**
-     * Allow to pass a target selector by name, i.e. a css class name.
+     * Allow to pass a target selector by name, i.e. a CSS class name.
      *
      * @param string $name
      *
@@ -211,7 +211,7 @@ class Popup extends View
     }
 
     /**
-     * Return js action need to display popup.
+     * Return JS action need to display popup.
      * When a grid is reloading, this method can be call
      * in order to display the popup once again.
      *

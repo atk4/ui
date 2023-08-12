@@ -33,7 +33,6 @@ $i = View::addTo($app, ['class.green' => true, 'ui' => 'segment'])->setElement('
 
 // add buttons in toolbar
 foreach ($buttons as $k => $args) {
-    Button::addTo($tb)
-        ->set([$args['title'], 'iconRight' => 'down arrow'])
-        ->on('click', $i->js()->attr('src', $app->url($args['page'])));
+    $button = Button::addTo($tb, [$args['title'], 'iconRight' => 'down arrow']);
+    $button->on('click', $i->js()->attr('src', $app->url($args['page'])));
 }

@@ -78,6 +78,7 @@
         errorHandler: function (err) {
             return typeof console !== "undefined" && console.warn(err);
         },
+        formatSecondsPrecision: 0,
         getWeek: function (givenDate) {
             var date = new Date(givenDate.getTime());
             date.setHours(0, 0, 0, 0);
@@ -96,7 +97,7 @@
         ignoredFocusElements: [],
         inline: false,
         locale: "default",
-        minuteIncrement: 5,
+        minuteIncrement: 1,
         mode: "single",
         monthSelectorType: "dropdown",
         nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
@@ -118,6 +119,7 @@
         position: "auto",
         positionElement: undefined,
         prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
+        secondIncrement: 1,
         shorthandCurrentMonth: false,
         showMonths: 1,
         static: false,
@@ -200,7 +202,11 @@
 
     var pad = function (number, length) {
         if (length === void 0) { length = 2; }
-        return ("000" + number).slice(length * -1);
+        var res = "" + number;
+        while (res.length < length) {
+            res = "0" + res;
+        }
+        return res;
     };
     var int = function (bool) { return (bool === true ? 1 : 0); };
     /* istanbul ignore next */
@@ -274,6 +280,61 @@
 
     var doNothing = function () { return undefined; };
     var monthToStr = function (monthNumber, shorthand, locale) { return locale.months[shorthand ? "shorthand" : "longhand"][monthNumber]; };
+    var setDateSeconds = function (dateObj, secondsStr, isAbsolute) {
+        var secondsArr = secondsStr.split(".", 2);
+        var seconds = parseInt(secondsArr[0]);
+        var nanos = secondsArr.length > 1
+            ? Math.floor(parseInt(secondsArr[1]) * Math.pow(10, 9 - secondsArr[1].length))
+            : 0;
+        if (isAbsolute) {
+            dateObj.setTime(seconds * 1000);
+        }
+        else {
+            dateObj.setSeconds(seconds);
+        }
+        dateObj.setMilliseconds(Math.floor(nanos / 1000000));
+        nanos = nanos - dateObj.getMilliseconds() * 1000000;
+        if (nanos) {
+            dateObj.flatpickrNanoseconds = nanos;
+        }
+        else if (dateObj.flatpickrNanoseconds !== undefined) {
+            delete dateObj.flatpickrNanoseconds;
+        }
+    };
+    var formatDateSeconds = function (date, isAbsolute, formatSecondsPrecision) {
+        var seconds = isAbsolute
+            ? Math.floor(date.getTime() / 1000)
+            : date.getSeconds();
+        var nanos = date.getMilliseconds() * 1000000 +
+            (date.flatpickrNanoseconds || 0);
+        if (formatSecondsPrecision > 0) {
+            return seconds + "." + pad(nanos, 9).slice(0, formatSecondsPrecision);
+        }
+        else if (formatSecondsPrecision < 0 && nanos) {
+            return seconds + "." + pad(nanos, 9).replace(/0+$/, "");
+        }
+        return "" + seconds;
+    };
+    var moveNumberDot = function (number, offset) {
+        var pos = number.indexOf(".");
+        if (pos !== -1) {
+            number = number.slice(0, pos) + number.slice(pos + 1);
+        }
+        else {
+            pos = number.length;
+        }
+        var newPos = pos + offset;
+        if (newPos <= 0) {
+            return "0." + pad(number, -newPos + 1);
+        }
+        else if (newPos < number.length) {
+            return number.slice(0, newPos) + "." + number.slice(newPos);
+        }
+        while (newPos > number.length) {
+            number += "0";
+        }
+        return number;
+    };
     var revFormat = {
         D: doNothing,
         F: function (dateObj, monthName, locale) {
@@ -296,9 +357,11 @@
             dateObj.setMonth(locale.months.shorthand.indexOf(shortMonth));
         },
         S: function (dateObj, seconds) {
-            dateObj.setSeconds(parseFloat(seconds));
+            setDateSeconds(dateObj, seconds, false);
         },
-        U: function (_, unixSeconds) { return new Date(parseFloat(unixSeconds) * 1000); },
+        U: function (dateObj, unixSeconds) {
+            setDateSeconds(dateObj, unixSeconds, true);
+        },
         W: function (dateObj, weekNum, locale) {
             var weekNumber = parseInt(weekNum);
             var date = new Date(dateObj.getFullYear(), 0, 2 + (weekNumber - 1) * 7, 0, 0, 0, 0);
@@ -329,10 +392,10 @@
             dateObj.setMonth(parseFloat(month) - 1);
         },
         s: function (dateObj, seconds) {
-            dateObj.setSeconds(parseFloat(seconds));
+            setDateSeconds(dateObj, seconds, false);
         },
-        u: function (_, unixMillSeconds) {
-            return new Date(parseFloat(unixMillSeconds));
+        u: function (dateObj, unixMilliseconds) {
+            setDateSeconds(dateObj, moveNumberDot(unixMilliseconds, -3), true);
         },
         w: doNothing,
         y: function (dateObj, year) {
@@ -342,50 +405,49 @@
     var tokenRegex = {
         D: "",
         F: "",
-        G: "(\\d\\d|\\d)",
-        H: "(\\d\\d|\\d)",
-        J: "(\\d\\d|\\d)\\w+",
+        G: "(\\d{1,2})",
+        H: "(\\d{1,2})",
+        J: "(\\d{1,2})\\w+",
         K: "",
         M: "",
-        S: "(\\d\\d|\\d)",
-        U: "(.+)",
-        W: "(\\d\\d|\\d)",
+        S: "(\\d{1,2}(?:\\.\\d+)?)",
+        U: "(\\d+(?:\\.\\d+)?)",
+        W: "(\\d{1,2})",
         Y: "(\\d{4})",
         Z: "(.+)",
-        d: "(\\d\\d|\\d)",
-        h: "(\\d\\d|\\d)",
-        i: "(\\d\\d|\\d)",
-        j: "(\\d\\d|\\d)",
+        d: "(\\d{1,2})",
+        h: "(\\d{1,2})",
+        i: "(\\d{1,2})",
+        j: "(\\d{1,2})",
         l: "",
-        m: "(\\d\\d|\\d)",
-        n: "(\\d\\d|\\d)",
-        s: "(\\d\\d|\\d)",
-        u: "(.+)",
-        w: "(\\d\\d|\\d)",
+        m: "(\\d{1,2})",
+        n: "(\\d{1,2})",
+        s: "(\\d{1,2}(?:\\.\\d+)?)",
+        u: "(\\d+(?:\\.\\d+)?)",
+        w: "(\\d{1,2})",
         y: "(\\d{2})",
     };
     var formats = {
         // get the date in UTC
         Z: function (date) { return date.toISOString(); },
         // weekday name, short, e.g. Thu
-        D: function (date, locale, options) {
-            return locale.weekdays.shorthand[formats.w(date, locale, options)];
+        D: function (date, locale, formatSecondsPrecision) {
+            return locale.weekdays.shorthand[parseInt(formats.w(date, locale, formatSecondsPrecision))];
         },
         // full month name e.g. January
-        F: function (date, locale, options) {
-            return monthToStr(formats.n(date, locale, options) - 1, false, locale);
+        F: function (date, locale, formatSecondsPrecision) {
+            return monthToStr(parseInt(formats.n(date, locale, formatSecondsPrecision)) - 1, false, locale);
         },
         // padded hour 1-12
-        G: function (date, locale, options) {
-            return pad(formats.h(date, locale, options));
+        G: function (date, locale, formatSecondsPrecision) {
+            return pad(formats.h(date, locale, formatSecondsPrecision));
         },
         // hours with leading zero e.g. 03
         H: function (date) { return pad(date.getHours()); },
         // day (1-30) with ordinal suffix e.g. 1st, 2nd
         J: function (date, locale) {
-            return locale.ordinal !== undefined
-                ? date.getDate() + locale.ordinal(date.getDate())
-                : date.getDate();
+            return (date.getDate() +
+                (locale.ordinal !== undefined ? locale.ordinal(date.getDate()) : ""));
         },
         // AM/PM
         K: function (date, locale) { return locale.amPM[int(date.getHours() > 11)]; },
@@ -393,23 +455,26 @@
         M: function (date, locale) {
             return monthToStr(date.getMonth(), true, locale);
         },
-        // seconds 00-59
-        S: function (date) { return pad(date.getSeconds()); },
-        // unix timestamp
-        U: function (date) { return date.getTime() / 1000; },
-        W: function (date, _, options) {
-            return options.getWeek(date);
+        // seconds (00-59)
+        S: function (date, _, formatSecondsPrecision) {
+            var res = formatDateSeconds(date, false, formatSecondsPrecision);
+            var resArr = res.split(".");
+            resArr[0] = pad(resArr[0], 2);
+            return resArr.join(".");
         },
+        // unix timestamp
+        U: function (date, _, formatSecondsPrecision) { return formatDateSeconds(date, true, formatSecondsPrecision); },
+        W: function (date) { return "" + defaults.getWeek(date); },
         // full year e.g. 2016, padded (0001-9999)
         Y: function (date) { return pad(date.getFullYear(), 4); },
         // day in month, padded (01-30)
         d: function (date) { return pad(date.getDate()); },
         // hour from 1-12 (am/pm)
-        h: function (date) { return (date.getHours() % 12 ? date.getHours() % 12 : 12); },
+        h: function (date) { return "" + (date.getHours() % 12 ? date.getHours() % 12 : 12); },
         // minutes, padded with leading zero e.g. 09
         i: function (date) { return pad(date.getMinutes()); },
         // day in month (1-30)
-        j: function (date) { return date.getDate(); },
+        j: function (date) { return "" + date.getDate(); },
         // weekday name, full, e.g. Thursday
         l: function (date, locale) {
             return locale.weekdays.longhand[date.getDay()];
@@ -417,29 +482,32 @@
         // padded month number (01-12)
         m: function (date) { return pad(date.getMonth() + 1); },
         // the month number (1-12)
-        n: function (date) { return date.getMonth() + 1; },
-        // seconds 0-59
-        s: function (date) { return date.getSeconds(); },
+        n: function (date) { return "" + (date.getMonth() + 1); },
+        // seconds (0-59)
+        s: function (date, _, formatSecondsPrecision) { return formatDateSeconds(date, false, formatSecondsPrecision); },
         // Unix Milliseconds
-        u: function (date) { return date.getTime(); },
+        u: function (date, _, formatSecondsPrecision) { return moveNumberDot(formatDateSeconds(date, true, formatSecondsPrecision), 3); },
         // number of the day of the week
-        w: function (date) { return date.getDay(); },
+        w: function (date) { return "" + date.getDay(); },
         // last two digits of year e.g. 16 for 2016
         y: function (date) { return String(date.getFullYear()).substring(2); },
     };
 
     var createDateFormatter = function (_a) {
         var _b = _a.config, config = _b === void 0 ? defaults : _b, _c = _a.l10n, l10n = _c === void 0 ? english : _c, _d = _a.isMobile, isMobile = _d === void 0 ? false : _d;
-        return function (dateObj, frmt, overrideLocale) {
+        return function (dateObj, format, overrideLocale, overrideFormatSecondsPrecision) {
             var locale = overrideLocale || l10n;
+            var formatSecondsPrecision = overrideFormatSecondsPrecision || config.formatSecondsPrecision || 0;
             if (config.formatDate !== undefined && !isMobile) {
-                return config.formatDate(dateObj, frmt, locale);
+                return config.formatDate(dateObj, format, locale, formatSecondsPrecision);
             }
-            return frmt
+            return format
                 .split("")
                 .map(function (c, i, arr) {
                 return formats[c] && arr[i - 1] !== "\\"
-                    ? formats[c](dateObj, locale, config)
+                    ? c === "W"
+                        ? function (date) { return "" + config.getWeek(date); }
+                        : formats[c](dateObj, locale, formatSecondsPrecision)
                     : c !== "\\"
                         ? c
                         : "";
@@ -449,29 +517,32 @@
     };
     var createDateParser = function (_a) {
         var _b = _a.config, config = _b === void 0 ? defaults : _b, _c = _a.l10n, l10n = _c === void 0 ? english : _c;
-        return function (date, givenFormat, timeless, customLocale) {
+        return function (date, givenFormat, timeless, overrideLocale) {
+            if (timeless === void 0) { timeless = false; }
             if (date !== 0 && !date)
                 return undefined;
-            var locale = customLocale || l10n;
+            var format = givenFormat || config.dateFormat;
+            var locale = overrideLocale || l10n;
             var parsedDate;
             var dateOrig = date;
-            if (date instanceof Date)
-                parsedDate = new Date(date.getTime());
-            else if (typeof date !== "string" &&
-                date.toFixed !== undefined // timestamp
-            )
-                // create a copy
-                parsedDate = new Date(date);
-            else if (typeof date === "string") {
+            if (typeof date !== "string" &&
+                !(date instanceof Date) &&
+                date.toFixed !== undefined // timestamp in milliseconds
+            ) {
+                date = new Date(date);
+            }
+            if (date instanceof Date) {
+                date = createDateFormatter({ config: config, l10n: l10n })(date, format, locale);
+            }
+            if (typeof date === "string") {
                 // date string
-                var format = givenFormat || (config || defaults).dateFormat;
                 var datestr = String(date).trim();
                 if (datestr === "today") {
                     parsedDate = new Date();
                     timeless = true;
                 }
-                else if (config && config.parseDate) {
-                    parsedDate = config.parseDate(date, format);
+                else if (config.parseDate) {
+                    parsedDate = config.parseDate(date, format, timeless, locale);
                 }
                 else if (/Z$/.test(datestr) ||
                     /GMT$/.test(datestr) // datestrings w/ timezone
@@ -479,7 +550,7 @@
                     parsedDate = new Date(date);
                 }
                 else {
-                    var matched = void 0, ops = [];
+                    var matched = false, ops = [];
                     for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
                         var token_1 = format[i];
                         var isBackSlash = token_1 === "\\";
@@ -487,7 +558,8 @@
                         if (tokenRegex[token_1] && !escaped) {
                             regexStr += tokenRegex[token_1];
                             var match = new RegExp(regexStr).exec(date);
-                            if (match && (matched = true)) {
+                            if (match) {
+                                matched = true;
                                 ops[token_1 !== "Y" ? "push" : "unshift"]({
                                     fn: revFormat[token_1],
                                     val: match[++matchIndex],
@@ -513,9 +585,9 @@
                 config.errorHandler(new Error("Invalid date provided: " + dateOrig));
                 return undefined;
             }
-            if (timeless === true)
-                parsedDate.setHours(0, 0, 0, 0);
-            return parsedDate;
+            return timeless === true
+                ? new Date(parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate())
+                : parsedDate;
         };
     };
     /**
@@ -704,12 +776,14 @@
          */
         function updateTime(e) {
             if (self.selectedDates.length === 0) {
+                var now = new Date();
                 var defaultDate = self.config.minDate === undefined ||
-                    compareDates(new Date(), self.config.minDate) >= 0
-                    ? new Date()
+                    compareDates(now, self.config.minDate) >= 0
+                    ? now
                     : new Date(self.config.minDate.getTime());
+                defaultDate.setMilliseconds(0);
                 var defaults = getDefaultHours(self.config);
-                defaultDate.setHours(defaults.hours, defaults.minutes, defaults.seconds, defaultDate.getMilliseconds());
+                defaultDate.setHours(defaults.hours, defaults.minutes, defaults.seconds);
                 self.selectedDates = [defaultDate];
                 self.latestSelectedDateObj = defaultDate;
             }
@@ -794,7 +868,7 @@
                         seconds = Math.max(seconds, minTime.getSeconds());
                 }
             }
-            setHours(hours, minutes, seconds);
+            setHours(hours, minutes, self.secondElement !== undefined ? seconds : null);
         }
         /**
          * Syncs time input values with a date
@@ -812,11 +886,25 @@
          * @param {Number} hours the hour. whether its military
          *                 or am-pm gets inferred from config
          * @param {Number} minutes the minutes
-         * @param {Number} seconds the seconds (optional)
+         * @param {Number} seconds the seconds
          */
         function setHours(hours, minutes, seconds) {
             if (self.latestSelectedDateObj !== undefined) {
-                self.latestSelectedDateObj.setHours(hours % 24, minutes, seconds || 0, 0);
+                var origHours = self.latestSelectedDateObj.getHours();
+                var origMinutes = self.latestSelectedDateObj.getMinutes();
+                var origSeconds = self.latestSelectedDateObj.getSeconds();
+                self.latestSelectedDateObj.setHours(hours % 24, minutes, seconds !== null ? seconds : self.latestSelectedDateObj.getSeconds(), self.latestSelectedDateObj.getMilliseconds());
+                if (origHours !== self.latestSelectedDateObj.getHours() ||
+                    origMinutes !== self.latestSelectedDateObj.getMinutes() ||
+                    origSeconds !== self.latestSelectedDateObj.getSeconds()) {
+                    if (seconds === null) {
+                        self.latestSelectedDateObj.setSeconds(0);
+                    }
+                    self.latestSelectedDateObj.setMilliseconds(0);
+                    if (self.latestSelectedDateObj.flatpickrNanoseconds !== undefined) {
+                        delete self.latestSelectedDateObj.flatpickrNanoseconds;
+                    }
+                }
             }
             if (!self.hourElement || !self.minuteElement || self.isMobile)
                 return;
@@ -826,7 +914,7 @@
             self.minuteElement.value = pad(minutes);
             if (self.amPM !== undefined)
                 self.amPM.textContent = self.l10n.amPM[int(hours >= 12)];
-            if (self.secondElement !== undefined)
+            if (self.secondElement !== undefined && seconds !== null)
                 self.secondElement.value = pad(seconds);
         }
         /**
@@ -1359,7 +1447,7 @@
                 self.secondElement.value = pad(self.latestSelectedDateObj
                     ? self.latestSelectedDateObj.getSeconds()
                     : defaults.seconds);
-                self.secondElement.setAttribute("step", self.minuteElement.getAttribute("step"));
+                self.secondElement.setAttribute("step", self.config.secondIncrement.toString());
                 self.secondElement.setAttribute("min", "0");
                 self.secondElement.setAttribute("max", "59");
                 self.secondElement.setAttribute("maxlength", "2");
@@ -1666,6 +1754,18 @@
                     ? self.config.altFormat
                     : self.config.dateFormat);
             }
+            setTimeout(function () {
+                // timeout is needed for document.activeElement to be the element after blur
+                if (self.isOpen) {
+                    var activeElement = getClosestActiveElement();
+                    if (activeElement &&
+                        activeElement !== self.input &&
+                        activeElement !== self.altInput &&
+                        !isCalendarElem(activeElement)) {
+                        documentClick({ target: null });
+                    }
+                }
+            }, 0);
         }
         function onKeyDown(e) {
             // e.key                      e.keyCode

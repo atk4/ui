@@ -39,7 +39,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
-    /** @var string css class for modal size. */
+    /** @var string CSS class for modal size. */
     public $size = 'tiny';
 
     /** @var string|null */
@@ -58,15 +58,15 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     }
 
     /**
-     * Properly set element id for this modal.
+     * Properly set element ID for this modal.
      */
-    protected function afterActionInit(Model\UserAction $action): void
+    protected function afterActionInit(): void
     {
         // Add buttons to modal for next and previous.
-        $btns = (new View())->setStyle(['min-height' => '24px']);
-        $this->ok = Button::addTo($btns, ['Ok', 'class.blue' => true]);
-        $this->cancel = Button::addTo($btns, ['Cancel']);
-        $this->add($btns, 'actions');
+        $buttonsView = (new View())->setStyle(['min-height' => '24px']);
+        $this->ok = Button::addTo($buttonsView, ['Ok', 'class.blue' => true]);
+        $this->cancel = Button::addTo($buttonsView, ['Cancel']);
+        $this->add($buttonsView, 'actions');
         $this->showActions = true;
 
         $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
@@ -74,13 +74,16 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->loader->addClass('atk-hide-loading-content');
     }
 
-    private function jsShowAndLoad(array $urlArgs, array $apiConfig): JsBlock
+    /**
+     * @param array<string, string> $urlArgs
+     */
+    private function jsShowAndLoad(array $urlArgs): JsBlock
     {
         return new JsBlock([
             $this->jsShow(),
             $this->js()->data('closeOnLoadingError', true),
             $this->loader->jsLoad($urlArgs, [
-                'method' => 'post',
+                'method' => 'POST',
                 'onSuccess' => new JsFunction([], [$this->js()->removeData('closeOnLoadingError')]),
             ]),
         ]);
@@ -92,7 +95,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             throw new Exception('Action must be set prior to assign trigger');
         }
 
-        return $this->jsShowAndLoad($urlArgs, ['method' => 'post']);
+        return $this->jsShowAndLoad($urlArgs);
     }
 
     public function getAction(): UserAction
@@ -103,12 +106,12 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
-        $this->afterActionInit($action);
+        $this->afterActionInit();
 
         $this->title ??= $action->getDescription();
         $this->step = $this->stickyGet('step');
 
-        $this->jsSetBtnState($this);
+        $this->jsSetButtonsState($this);
 
         return $this;
     }
@@ -121,8 +124,8 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->action = $this->executeModelActionLoad($this->action);
 
         $this->loader->set(function (Loader $p) {
-            $this->jsSetBtnState($p);
-            if ($this->step === 'exec') {
+            $this->jsSetButtonsState($p);
+            if ($this->step === 'execute') {
                 $this->doFinal($p);
             } else {
                 $this->doConfirmation($p);
@@ -133,7 +136,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Reset button state.
      */
-    protected function jsSetBtnState(View $view): void
+    protected function jsSetButtonsState(View $view): void
     {
         $view->js(true, $this->ok->js()->off());
         $view->js(true, $this->cancel->js()->off());
@@ -152,10 +155,10 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             $this->ok->js()->on('click', new JsFunction([], [
                 $this->loader->jsLoad(
                     [
-                        'step' => 'exec',
+                        'step' => 'execute',
                         $this->name => $this->action->getEntity()->getId(),
                     ],
-                    ['method' => 'post']
+                    ['method' => 'POST']
                 ),
             ]))
         );
@@ -187,7 +190,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     }
 
     /**
-     * Return proper js statement when action execute.
+     * Return proper JS statement when action execute.
      *
      * @param mixed      $obj
      * @param string|int $id

@@ -33,7 +33,7 @@ View::addTo($app, ['ui' => 'clearing divider']);
 
 $gl = GridLayout::addTo($app, ['rows' => 1, 'columns' => 2]);
 $c = Card::addTo($gl, ['useLabel' => true], ['r1c1']);
-$c->addContent(new Header(['Using country: ']));
+$c->addContent(new Header(['Using country:']));
 $c->setModel($entity, [$country->fieldName()->iso, $country->fieldName()->iso3, $country->fieldName()->phonecode]);
 
 $buttons = View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
@@ -41,6 +41,6 @@ $buttons = View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
 // Create a button for every action in Country model.
 foreach ($country->getUserActions() as $action) {
     $b = Button::addTo($buttons, [$action->getCaption()]);
-    // Assign action to button using current model id as url arguments.
+    // Assign action to button using current model id as URL arguments.
     $b->on('click', $action, ['args' => ['id' => $countryId]]);
 }

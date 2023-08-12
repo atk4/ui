@@ -51,7 +51,7 @@ class FilterPopup extends Popup
 
         $this->form = Form::addTo($this)->addClass('');
         $this->form->buttonSave->addClass('');
-        $this->form->addGroup('Where ' . $this->field->getCaption() . ' :');
+        $this->form->addGroup('Where ' . $this->field->getCaption() . ':');
 
         $this->form->buttonSave->set('Set');
 
@@ -75,24 +75,18 @@ class FilterPopup extends Popup
                 $model->clearData();
 
                 return new JsBlock([
-                    $this->form->js(false, null, $this->form->formElement)->form('reset'),
+                    $this->form->js()->form('reset'),
                     new JsReload($this->reload),
-                    (new Jquery($this->colTrigger))->trigger('click'),
+                    (new Jquery($this->colTrigger))->click(),
                 ]);
             });
     }
 
-    /**
-     * Check if filter is on.
-     */
     public function isFilterOn(): bool
     {
         return $this->recallData() !== null;
     }
 
-    /**
-     * Recall model data.
-     */
     public function recallData(): ?array
     {
         return $this->form->model->recallData();

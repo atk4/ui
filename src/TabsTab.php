@@ -16,22 +16,17 @@ class TabsTab extends MenuItem
     public $settings = [];
 
     /**
-     * Sets path for tab.
-     *
-     * @param string $path
+     * @param string|array<0|string, string|int|false> $page
      *
      * @return $this
      */
-    public function setPath($path)
+    public function setPath($page)
     {
-        $this->path = $this->getApp()->url($path) . '#';
+        $this->path = $this->getApp()->url($page) . '#';
 
         return $this;
     }
 
-    /**
-     * Rendering one tab view.
-     */
     protected function renderView(): void
     {
         $this->settings = array_merge($this->settings, ['autoTabActivation' => false]);

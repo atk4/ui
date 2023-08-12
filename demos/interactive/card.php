@@ -57,7 +57,7 @@ $cardStat->addContent(new Header(['Project Info']));
 $stat = (new Stat($app->db))->loadAny();
 $cardStat->setModel($stat, [$stat->fieldName()->project_name, $stat->fieldName()->project_code, $stat->fieldName()->client_name, $stat->fieldName()->start_date]);
 
-$btn = $cardStat->addButton(new Button(['Email Client']));
+$button = $cardStat->addButton(new Button(['Email Client']));
 
 $cardStat = Card::addTo($deck, ['useLabel' => true]);
 $cardStat->addContent(new Header(['Project Info']));

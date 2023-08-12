@@ -40,7 +40,7 @@ class DataService {
     }
 
     /**
-     * Check for valid json string.
+     * Check for valid JSON string.
      *
      * @returns {boolean}
      */
@@ -113,7 +113,7 @@ class DataService {
 
     /**
      * Similar to set data but make sure that value is
-     * a valid json string prior to set data.
+     * a valid JSON string prior to set data.
      */
     setJsonData(item, value, type = 'local') {
         if (!this.isJsonString(value)) {
@@ -125,7 +125,7 @@ class DataService {
     /**
      * Will either create or merge with existing data.
      * Merging is done with Object assign, prioritizing new value.
-     * Previous data, if exist, and value must be a valid json string.
+     * Previous data, if exist, and value must be a valid JSON string.
      */
     addJsonData(item, value, type = 'local') {
         const previous = this.getData(item, type);

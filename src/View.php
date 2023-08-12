@@ -7,6 +7,7 @@ namespace Atk4\Ui;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
@@ -88,7 +89,7 @@ class View extends AbstractView
     // {{{ Setting Things up
 
     /**
-     * @param array|string $label
+     * @param array<0|string, mixed>|string $label
      */
     public function __construct($label = [])
     {
@@ -112,6 +113,8 @@ class View extends AbstractView
      *
      * Do not try to create your own "Model" implementation, instead you must be looking for
      * your own "Persistence" implementation.
+     *
+     * @phpstan-assert !null $this->model
      */
     public function setModel(Model $model): void
     {
@@ -126,6 +129,8 @@ class View extends AbstractView
      * Sets source of the View.
      *
      * @param array $fields Limit model to particular fields
+     *
+     * @phpstan-assert !null $this->model
      */
     public function setSource(array $data, $fields = null): Model
     {
@@ -182,14 +187,14 @@ class View extends AbstractView
     /**
      * Makes view into a "<a>" element with a link.
      *
-     * @param string|array $url
-     * @param string       $target
+     * @param string|array<0|string, string|int|false> $url
      *
      * @return $this
      */
-    public function link($url, $target = null)
+    public function link($url, string $target = null)
     {
-        $this->element = 'a';
+        $this->setElement('a');
+
         if (is_string($url)) {
             $this->setAttr('href', $url);
         } else {
@@ -262,8 +267,6 @@ class View extends AbstractView
      *
      * @param AbstractView      $object
      * @param string|array|null $region
-     *
-     * @return ($object is self ? self : AbstractView)
      */
     public function add($object, $region = null): AbstractView
     {
@@ -331,44 +334,25 @@ class View extends AbstractView
     /**
      * TODO this method is hard to override, drop it from View.
      *
-     * Override this method without compatibility with parent, if you wish
-     * to set your own things your own way for your view.
-     *
-     * @param mixed $arg1
-     * @param mixed $arg2
+     * @param string $content
      *
      * @return $this
      */
-    public function set($arg1 = null, $arg2 = null)
+    public function set($content)
     {
-        if ($arg2 !== null) {
-            if (is_string($arg1)) {
-                $this->template->set($arg1, $arg2);
-
-                return $this;
-            }
-        } else {
-            if (is_string($arg1) || $arg1 === null) {
-                $this->content = $arg1;
-
-                return $this;
-            }
-
-            if (is_array($arg1)) {
-                if (isset($arg1[0])) {
-                    $this->content = $arg1[0];
-                    unset($arg1[0]);
-                }
-                $this->setDefaults($arg1);
-
-                return $this;
-            }
+        if (func_num_args() > 1) { // prevent bad usage
+            throw new Exception('Only one argument is needed by View::set()');
         }
 
-        throw (new Exception('Not sure what to do with argument'))
-            ->addMoreInfo('this', $this)
-            ->addMoreInfo('arg1', $arg1)
-            ->addMoreInfo('arg2', $arg2);
+        if (!is_string($content) && $content !== null) { // @phpstan-ignore-line
+            throw (new Exception('Not sure what to do with argument'))
+                ->addMoreInfo('this', $this)
+                ->addMoreInfo('arg', $content);
+        }
+
+        $this->content = $content;
+
+        return $this;
     }
 
     /**
@@ -409,7 +393,7 @@ class View extends AbstractView
      * Add inline CSS style to element.
      * Multiple CSS styles can also be set if passed as array.
      *
-     * @param string|array<string, string> $property
+     * @param string|array<string, string>          $property
      * @param ($property is array ? never : string) $value
      *
      * @return $this
@@ -444,7 +428,7 @@ class View extends AbstractView
     /**
      * Set attribute.
      *
-     * @param string|int|array<string, string|int> $name
+     * @param string|int|array<string, string|int>  $name
      * @param ($name is array ? never : string|int) $value
      *
      * @return $this
@@ -490,23 +474,23 @@ class View extends AbstractView
     public $stickyArgs = [];
 
     /**
-     * Build an URL which this view can use for JS callbacks.
-     *
-     * @param array $page
-     */
-    public function jsUrl($page = []): string
-    {
-        return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
-    }
-
-    /**
      * Build an URL which this view can use for callbacks.
      *
-     * @param string|array $page URL as string or array with page name as first element and other GET arguments
+     * @param string|array<0|string, string|int|false> $page URL as string or array with page name as first element and other GET arguments
      */
     public function url($page = []): string
     {
         return $this->getApp()->url($page, false, $this->_getStickyArgs());
+    }
+
+    /**
+     * Build an URL which this view can use for JS callbacks.
+     *
+     * @param string|array<0|string, string|int|false> $page URL as string or array with page name as first element and other GET arguments
+     */
+    public function jsUrl($page = []): string
+    {
+        return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
     }
 
     /**
@@ -525,7 +509,7 @@ class View extends AbstractView
 
     /**
      * Mark GET argument as sticky. Calling url() on this view or any
-     * sub-views will embedd the value of this GET argument.
+     * sub-views will embed the value of this GET argument.
      *
      * If GET argument is empty or false, it won't make into URL.
      *
@@ -771,9 +755,9 @@ class View extends AbstractView
      * Will convert calls to jQuery chain into JavaScript string:
      *  $('#view').find('.current').text('abc'); // the text will be JSON encoded to avoid JS injection
      *
-     * @param bool|string $when Event when chain will be executed
+     * @param bool|string                                     $when     Event when chain will be executed
      * @param ($when is false ? null : JsExpressionable|null) $action   JavaScript action
-     * @param string|self|null $selector If you wish to override jQuery($selector)
+     * @param string|self|null                                $selector If you wish to override jQuery($selector)
      *
      * @return ($action is null ? Jquery : null)
      */
@@ -952,11 +936,11 @@ class View extends AbstractView
      *   return $js->parent()->hide();
      * });
      *
-     * @param string $event JavaScript event
+     * @param string                                                                                                                                                                                       $event    JavaScript event
      * @param ($action is object ? string : ($action is null ? string : never)|JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction) $selector Optional jQuery-style selector
-     * @param ($selector is string|null ? JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction : array) $action code to execute
+     * @param ($selector is string|null ? JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction : array)                              $action   code to execute
      *
-     * @return ($selector is null|string ? ($action is null ? Jquery : null) : ($action is null|array ? Jquery : null))
+     * @return ($selector is string|null ? ($action is null ? Jquery : null) : ($action is array|null ? Jquery : null))
      */
     public function on(string $event, $selector = null, $action = null, array $defaults = [])
     {
@@ -1028,7 +1012,7 @@ class View extends AbstractView
                 $cb->apiConfig = $defaults['apiConfig'];
             }
 
-            $cb->set(function ($chain, ...$args) use ($action) {
+            $cb->set(function (Jquery $chain, ...$args) use ($action) {
                 return $action($chain, ...$args);
             }, $arguments);
 
@@ -1044,7 +1028,7 @@ class View extends AbstractView
                     $arguments[$ex->name] = $arguments['id'];
                     unset($arguments['id']);
                 } elseif (isset($arguments[0])) {
-                    // if id is not specify we assume arguments[0] is the model id.
+                    // if "id" is not specified we assume arguments[0] is the model ID.
                     $arguments[$ex->name] = $arguments[0];
                     unset($arguments[0]);
                 }
@@ -1122,11 +1106,11 @@ class View extends AbstractView
         $actions = [];
         foreach ($this->_jsActions as $eventActions) {
             foreach ($eventActions as $action) {
-                $actions[] = $action->jsRender();
+                $actions[] = $action;
             }
         }
 
-        return implode('; ', $actions);
+        return (new JsBlock($actions))->jsRender();
     }
 
     /**

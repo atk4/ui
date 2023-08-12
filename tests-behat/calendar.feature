@@ -1,34 +1,24 @@
 Feature: Calendar
 
   Scenario:
-    Given I am on "_unit-test/calendar-input.php"
+    Given I am on "form-control/calendar.php"
+    When I fill in "date" with "Jan 3, 2033"
+    Then I check if input value for "input[name='date']" match text "Jan 3, 2033"
+    When I fill in "time" with "21:23:59.205603"
+    Then I check if input value for "input[name='time']" match text "21:23:59.205603"
+    When I fill in "datetime" with "Jun 29, 2020 1:2:3.0010"
+    Then I check if input value for "input[name='datetime']" match text "Jun 29, 2020 01:02:03.001"
+    When I fill in "date_action" with "Dec 8, 2050"
+    When I press button "Save"
+    Then Toast display should contain text "Jan 3, 2033, 21:23:59.205603, Jun 29, 2020 01:02:03.001, Dec 8, 2050"
 
-  Scenario: field using format M j, Y
-    Then I set calendar input name 'field' with value 'Jan 1, 2021'
-    When I press button "field"
-    Then I should see "Jan 1, 2021"
-    Then I hide js modal
-
-  Scenario: input using format Y-m-d
-    Then I set calendar input name 'date_ymd' with value '2021-01-01'
-    When I press button "date_ymd"
-    Then I should see "2021-01-01"
-    Then I hide js modal
-
-  Scenario: input using format H:i:s
-    Then I set calendar input name 'time_24hr' with value '22:22:22'
-    When I press button "time_24hr"
-    Then I should see "22:22:22"
-    Then I hide js modal
-
-  Scenario: input using format G:i A
-    Then I set calendar input name 'time_am' with value '11:22 AM'
-    When I press button "time_am"
-    Then I should see "11:22 AM"
-    Then I hide js modal
-
-  Scenario: input using format Y-m-d (H:i:s)
-    Then I set calendar input name 'datetime' with value '2021-01-01 (22:22:22)'
-    When I press button "datetime"
-    Then I should see "2021-01-01 (22:22:22)"
-    Then I hide js modal
+    When I fill in "time" with "21:23:00"
+    Then I check if input value for "input[name='time']" match text "21:23"
+    When I fill in "datetime" with "Jun 29, 2020 1:2:0.000001"
+    Then I check if input value for "input[name='datetime']" match text "Jun 29, 2020 01:02:00.000001"
+    When I fill in "datetime" with "Jun 29, 2020 1:2:0"
+    Then I check if input value for "input[name='datetime']" match text "Jun 29, 2020 01:02"
+    When I press button "Clear"
+    Then I check if input value for "input[name='date_action']" match text ""
+    When I press button "Save"
+    Then Toast display should contain text "Jan 3, 2033, 21:23, Jun 29, 2020 01:02, empty"

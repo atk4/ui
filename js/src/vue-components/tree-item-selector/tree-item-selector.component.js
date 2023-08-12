@@ -191,7 +191,6 @@ export default {
          */
         mergeArrays: function (...arrays) {
             let jointArray = [];
-
             for (const array of arrays) {
                 jointArray = [...jointArray, ...array];
             }
@@ -199,7 +198,7 @@ export default {
             return [...new Set(jointArray)];
         },
         /**
-         * Get all id from all chidren node.
+         * Get all ID from all children node.
          *
          * @returns {Array.<string>}
          */
@@ -278,7 +277,7 @@ export default {
             return document.getElementsByName(this.getRootData().field)[0];
         },
         /**
-         * Send data using callback url.
+         * Send data using callback URL.
          */
         postValue: function () {
             $(this.$el).parents('.' + this.getRootData().options.loader).api({

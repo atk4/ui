@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 
 class Dropdown extends Input
 {
-    public $ui = 'dropdown fluid search selection';
     public $defaultTemplate = 'form/control/dropdown.html';
 
     public string $inputType = 'hidden';
@@ -32,16 +33,6 @@ class Dropdown extends Input
     /** @var string The string to set as an empty values. */
     public $empty = "\u{00a0}"; // Unicode NBSP
 
-    /**
-     * The icon to display at the dropdown menu.
-     *  The template default is set to: 'dropdown'.
-     *  Note: dropdown icon is show on the right side of the menu
-     *  while other icon are usually display on the left side.
-     *
-     * @var string|null
-     */
-    public $dropIcon;
-
     /** @var array Dropdown options as per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
 
@@ -52,10 +43,10 @@ class Dropdown extends Input
      *
      * @var bool
      */
-    public $isMultiple = false;
+    public $multiple = false;
 
     /**
-     * Here a custom function for creating the html of each dropdown option
+     * Here a custom function for creating the HTML of each dropdown option
      * can be defined. The function gets each row of the model/values property as first parameter.
      * if used with $values property, gets the key of this element as second parameter.
      * When using with a model, the second parameter is null and can be ignored.
@@ -96,14 +87,14 @@ class Dropdown extends Input
      *     ];
      * }
      *
-     * @var \Closure|null
+     * @var \Closure(mixed, int|string|null): array{value: mixed, title: mixed, icon?: mixed}|null
      */
     public $renderRowFunction;
 
-    /** @var object Subtemplate for a single dropdown item. */
+    /** @var HtmlTemplate Subtemplate for a single dropdown item. */
     protected $_tItem;
 
-    /** @var object Subtemplate for an icon for a single dropdown item. */
+    /** @var HtmlTemplate Subtemplate for an icon for a single dropdown item. */
     protected $_tIcon;
 
     protected function init(): void
@@ -154,7 +145,7 @@ class Dropdown extends Input
     }
 
     /**
-     * Set js dropdown() specific option;.
+     * Set JS dropdown() specific option;.
      *
      * @param string $option
      * @param mixed  $value
@@ -165,7 +156,7 @@ class Dropdown extends Input
     }
 
     /**
-     * Set js dropdown() options.
+     * Set JS dropdown() options.
      *
      * @param array $options
      */
@@ -175,20 +166,25 @@ class Dropdown extends Input
     }
 
     /**
-     * Render js for dropdown.
+     * @param bool|string      $when
+     * @param JsExpressionable $action
+     *
+     * @return Jquery
      */
-    protected function jsRenderDropdown(): JsExpressionable
+    protected function jsDropdown($when = false, $action = null): JsExpressionable
     {
-        return $this->js(true)->dropdown($this->dropdownOptions);
+        return $this->js($when, $action, 'div.ui.dropdown:has(> #' . $this->name . '_input)');
     }
 
-    /**
-     * Render values as html for Dropdown.
-     */
+    protected function jsRenderDropdown(): JsExpressionable
+    {
+        return $this->jsDropdown(true)->dropdown($this->dropdownOptions);
+    }
+
     protected function htmlRenderValue(): void
     {
         // add selection only if no value is required and Dropdown has no multiple selections enabled
-        if ($this->entityField !== null && !$this->entityField->getField()->required && !$this->isMultiple) {
+        if ($this->entityField !== null && !$this->entityField->getField()->required && !$this->multiple) {
             $this->_tItem->set('value', '');
             $this->_tItem->set('title', $this->empty);
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
@@ -201,7 +197,7 @@ class Dropdown extends Input
                     $this->_addCallBackRow($row);
                 }
             } else {
-                // for standard model rendering, only load id and title field
+                // for standard model rendering, only load ID and title field
                 $this->model->setOnlyFields([$this->model->titleField, $this->model->idField]);
                 $this->_renderItemsForModel();
             }
@@ -218,32 +214,27 @@ class Dropdown extends Input
 
     protected function renderView(): void
     {
-        if ($this->isMultiple) {
-            $this->addClass('multiple');
+        if ($this->multiple) {
+            $this->template->dangerouslySetHtml('multipleClass', 'multiple');
         }
 
         if ($this->readOnly || $this->disabled) {
-            $this->setDropdownOption('allowTab', false);
-            $this->removeClass('search');
-            if ($this->isMultiple) {
-                $this->js(true)->find('a i.delete.icon')->attr('class', 'disabled');
+            if ($this->multiple) {
+                $this->jsDropdown(true)->find('a i.delete.icon')->attr('class', 'disabled');
             }
         }
 
         if ($this->disabled) {
-            $this->addClass('disabled');
-        }
+            $this->template->set('disabledClass', 'disabled');
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
+        } elseif ($this->readOnly) {
+            $this->template->set('disabledClass', 'read-only');
+            $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
 
-        if ($this->readOnly) {
-            $this->setDropdownOption('allowTab', false);
             $this->setDropdownOption('onShow', new JsFunction([], [new JsExpression('return false')]));
         }
 
-        if ($this->dropIcon) {
-            $this->template->trySet('DropIcon', $this->dropIcon);
-        }
-
-        $this->template->trySet('DefaultText', $this->empty);
+        $this->template->set('DefaultText', $this->empty);
 
         $this->htmlRenderValue();
         $this->jsRenderDropdown();

@@ -80,8 +80,6 @@ use Atk4\Ui\View;
  */
 class Multiline extends Form\Control
 {
-    use VueLookupTrait;
-
     /** @var HtmlTemplate|null The template needed for the multiline view. */
     public $multiLineTemplate;
 
@@ -171,7 +169,7 @@ class Multiline extends Form\Control
     /**
      * Container for component that need Props set based on their field value as Lookup component.
      * Set during fieldDefinition and apply during renderView() after getValue().
-     * Must contains callable function and function will receive $model field and value as paremeter.
+     * Must contains callable function and function will receive $model field and value as parameter.
      *
      * @var array
      */
@@ -219,7 +217,7 @@ class Multiline extends Form\Control
                 }
             }
 
-            // remove __atml id from array field.
+            // remove __atml ID from array field
             if ($this->form->model->getField($this->shortName)->type === 'json') {
                 $rows = [];
                 foreach ($this->rowData as $key => $cols) {
@@ -245,13 +243,9 @@ class Multiline extends Form\Control
         });
     }
 
-    /**
-     * Typecast each loaded value.
-     */
     protected function typeCastLoadValues(array $values): array
     {
         $dataRows = [];
-
         foreach ($values as $k => $row) {
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
@@ -280,7 +274,7 @@ class Multiline extends Form\Control
 
     /**
      * Get Multiline initial field value. Value is based on model set and will
-     * output data rows as json string value.
+     * output data rows as JSON string value.
      */
     public function getValue(): string
     {
@@ -388,7 +382,7 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Finds and returns Multiline row id.
+     * Finds and returns Multiline row ID.
      */
     private function getMlRowId(array $row): ?string
     {
@@ -411,8 +405,6 @@ class Multiline extends Form\Control
     {
         parent::setModel($model);
 
-        $this->initVueLookupCallback();
-
         if ($fieldNames === null) {
             $fieldNames = array_keys($model->getFields('not system'));
         }
@@ -430,17 +422,17 @@ class Multiline extends Form\Control
      * Otherwise, form will try to save 'multiline' field value as an array when form is save.
      * $multiline = $form->addControl('multiline', [Multiline::class], ['neverPersist' => true])
      */
-    public function setReferenceModel(string $refModelName, Model $modelEntity = null, array $fieldNames = []): void
+    public function setReferenceModel(string $refModelName, Model $entity = null, array $fieldNames = []): void
     {
-        if ($modelEntity === null) {
+        if ($entity === null) {
             if (!$this->form->model->isEntity()) {
                 throw new Exception('Model entity is not set');
             }
 
-            $modelEntity = $this->form->model;
+            $entity = $this->form->model;
         }
 
-        $this->setModel($modelEntity->ref($refModelName), $fieldNames);
+        $this->setModel($entity->ref($refModelName), $fieldNames);
     }
 
     /**
@@ -497,18 +489,20 @@ class Multiline extends Form\Control
      */
     protected function getDatePickerProps(Field $field): array
     {
-        $calendar = new Calendar();
         $props = [];
         $props['config'] = $this->componentProps[self::DATE] ?? [];
-        $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
-        $props['config']['dateFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat);
+        $props['config']['allowInput'] ??= true;
 
+        $calendar = new Calendar();
+        $phpFormat = $this->getApp()->uiPersistence->{$field->type . 'Format'};
+        $props['config']['dateFormat'] = $calendar->convertPhpDtFormatToFlatpickr($phpFormat, true);
         if ($field->type === 'datetime' || $field->type === 'time') {
+            $props['config']['noCalendar'] = $field->type === 'time';
             $props['config']['enableTime'] = true;
             $props['config']['time_24hr'] = $calendar->isDtFormatWith24hrTime($phpFormat);
-            $props['config']['noCalendar'] = $field->type === 'time';
-            $props['config']['enableSeconds'] = $calendar->isDtFormatWithSeconds($phpFormat);
-            $props['config']['allowInput'] = $calendar->isDtFormatWithMicroseconds($phpFormat);
+            $props['config']['enableSeconds'] ??= $calendar->isDtFormatWithSeconds($phpFormat);
+            $props['config']['formatSecondsPrecision'] ??= $calendar->isDtFormatWithMicroseconds($phpFormat) ? 6 : -1;
+            $props['config']['disableMobile'] = true;
         }
 
         return $props;
@@ -546,7 +540,6 @@ class Multiline extends Form\Control
         }
 
         if ($field->hasReference()) {
-            $props['config']['url'] = $this->dataCb->getUrl();
             $props['config']['reference'] = $field->shortName;
             $props['config']['search'] = true;
         }
@@ -558,9 +551,6 @@ class Multiline extends Form\Control
         return $props;
     }
 
-    /**
-     * Lookup Props set based on field value.
-     */
     public function setLookupOptionValue(Field $field, string $value): void
     {
         $model = $field->getReference()->refModel($this->model);
@@ -579,7 +569,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Return a component definition.
      * Component definition require at least a name and a props array.
      */
     protected function getComponentDefinition(Field $field): array
@@ -608,9 +597,6 @@ class Multiline extends Form\Control
         return $definition;
     }
 
-    /**
-     * Return array of possible items set for a select or lookup field.
-     */
     protected function getFieldItems(Field $field, ?int $limit = 10): array
     {
         $items = [];
@@ -686,34 +672,33 @@ class Multiline extends Form\Control
      */
     private function outputJson(): void
     {
-        switch ($_POST['__atkml_action'] ?? null) {
+        switch ($_POST['__atkml_action']) {
             case 'update-row':
-                $model = $this->setDummyModelValue($this->model->createEntity());
-                $expressionValues = array_merge($this->getExpressionValues($model), $this->getCallbackValues($model));
+                $entity = $this->createDummyEntityFromPost($this->model);
+                $expressionValues = array_merge($this->getExpressionValues($entity), $this->getCallbackValues($entity));
                 $this->getApp()->terminateJson(['success' => true, 'expressions' => $expressionValues]);
                 // no break - expression above always terminate
             case 'on-change':
                 $response = call_user_func($this->onChangeFunction, $this->typeCastLoadValues($this->getApp()->decodeJson($_POST['rows'])), $this->form);
                 $this->renderCallback->terminateAjax($this->renderCallback->getAjaxec($response));
-
-                break;
+                // TODO JsCallback::terminateAjax() should return never
         }
     }
 
     /**
      * Return values associated with callback field.
      */
-    private function getCallbackValues(Model $model): array
+    private function getCallbackValues(Model $entity): array
     {
         $values = [];
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['name'];
-            if ($fieldName === $model->idField) {
+            if ($fieldName === $entity->idField) {
                 continue;
             }
-            $field = $model->getField($fieldName);
+            $field = $entity->getField($fieldName);
             if ($field instanceof CallbackField) {
-                $value = ($field->expr)($model);
+                $value = ($field->expr)($entity);
                 $values[$fieldName] = $this->getApp()->uiPersistence->typecastSaveField($field, $value);
             }
         }
@@ -725,90 +710,34 @@ class Multiline extends Form\Control
      * Looks inside the POST of the request and loads data into model.
      * Allow to Run expression base on post row value.
      */
-    private function setDummyModelValue(Model $model): Model
+    private function createDummyEntityFromPost(Model $model): Model
     {
-        $model = clone $model; // for clearing "required"
+        $entity = (clone $model)->createEntity(); // clone for clearing "required"
 
         foreach ($this->fieldDefs as $def) {
             $fieldName = $def['name'];
-            if ($fieldName === $model->idField) {
+            if ($fieldName === $entity->idField) {
                 continue;
             }
 
-            $field = $model->getField($fieldName);
+            $field = $entity->getField($fieldName);
 
-            $value = $this->getApp()->uiPersistence->typecastLoadField($field, $_POST[$fieldName] ?? null);
+            $value = $this->getApp()->uiPersistence->typecastLoadField($field, $_POST[$fieldName]);
             if ($field->isEditable()) {
                 try {
                     $field->required = false;
-                    $model->set($fieldName, $value);
+                    $entity->set($fieldName, $value);
                 } catch (ValidationException $e) {
                     // bypass validation at this point
                 }
             }
         }
 
-        return $model;
+        return $entity;
     }
 
     /**
-     * Return values associated to field expression.
-     */
-    private function getExpressionValues(Model $model): array
-    {
-        $dummyFields = $this->getExpressionFields($model);
-        $formatValues = [];
-
-        foreach ($dummyFields as $k => $field) {
-            if (!$field->expr instanceof \Closure) {
-                $dummyFields[$k]->expr = $this->getDummyExpression($field, $model);
-            }
-        }
-
-        if ($dummyFields !== []) {
-            $dummyModel = new Model($model->getModel()->getPersistence(), ['table' => $model->table]);
-            $dummyModel->removeField('id');
-            $dummyModel->idField = $model->idField;
-
-            $createExprFromValueFx = function ($v) use ($dummyModel): Persistence\Sql\Expression {
-                if (is_int($v)) {
-                    // TODO hack for multiline.php test for PostgreSQL
-                    // related with https://github.com/atk4/data/pull/989
-                    return $dummyModel->expr((string) $v);
-                }
-
-                return $dummyModel->expr('[]', [$v]);
-            };
-
-            foreach ($model->getFields() as $field) {
-                $dummyModel->addExpression($field->shortName, [
-                    'expr' => isset($dummyFields[$field->shortName])
-                        ? $dummyFields[$field->shortName]->expr
-                        : ($field->shortName === $dummyModel->idField
-                            ? '-1'
-                            : $createExprFromValueFx($model->getModel()->getPersistence()->typecastSaveField($field, $field->get($model)))),
-                    'type' => $field->type,
-                    'actual' => $field->actual,
-                ]);
-            }
-            $dummyModel->setLimit(1); // TODO must work with empty table, no table should be used
-            $values = $dummyModel->loadOne()->get();
-            unset($values[$model->idField]);
-
-            foreach ($values as $f => $value) {
-                if (isset($dummyFields[$f])) {
-                    $field = $model->getField($f);
-                    $formatValues[$f] = $this->getApp()->uiPersistence->typecastSaveField($field, $value);
-                }
-            }
-        }
-
-        return $formatValues;
-    }
-
-    /**
-     * Get all field expression in model, but only evaluate expression used in
-     * rowFields.
+     * Get all field expression in model, but only evaluate expression used in rowFields.
      *
      * @return array<string, SqlExpressionField>
      */
@@ -816,7 +745,7 @@ class Multiline extends Form\Control
     {
         $fields = [];
         foreach ($model->getFields() as $field) {
-            if (!$field instanceof SqlExpressionField || !in_array($field->shortName, $this->rowFields, true)) {
+            if (!in_array($field->shortName, $this->rowFields, true) || !$field instanceof SqlExpressionField) {
                 continue;
             }
 
@@ -827,26 +756,87 @@ class Multiline extends Form\Control
     }
 
     /**
+     * Return values associated to field expression.
+     */
+    private function getExpressionValues(Model $entity): array
+    {
+        $dummyFields = $this->getExpressionFields($entity);
+        foreach ($dummyFields as $k => $field) {
+            $dummyFields[$k] = clone $field;
+            $dummyFields[$k]->expr = $this->getDummyExpression($field, $entity);
+        }
+
+        if ($dummyFields === []) {
+            return [];
+        }
+
+        $dummyModel = new Model($entity->getModel()->getPersistence(), ['table' => $entity->table]);
+        $dummyModel->removeField('id');
+        $dummyModel->idField = $entity->idField;
+
+        $createExprFromValueFx = function ($v) use ($dummyModel): Persistence\Sql\Expression {
+            if (is_int($v)) {
+                // TODO hack for multiline.php test for PostgreSQL
+                // related with https://github.com/atk4/data/pull/989
+                return $dummyModel->expr((string) $v);
+            }
+
+            return $dummyModel->expr('[]', [$v]);
+        };
+
+        foreach ($entity->getFields() as $field) {
+            $dummyModel->addExpression($field->shortName, [
+                'expr' => isset($dummyFields[$field->shortName])
+                    ? $dummyFields[$field->shortName]->expr
+                    : ($field->shortName === $dummyModel->idField
+                        ? '-1'
+                        : $createExprFromValueFx($entity->getModel()->getPersistence()->typecastSaveField($field, $field->get($entity)))),
+                'type' => $field->type,
+                'actual' => $field->actual,
+            ]);
+        }
+        $dummyModel->setLimit(1); // TODO must work with empty table, no table should be used
+        $values = $dummyModel->loadOne()->get();
+        unset($values[$entity->idField]);
+
+        $formatValues = [];
+        foreach ($values as $f => $value) {
+            if (isset($dummyFields[$f])) {
+                $field = $entity->getField($f);
+                $formatValues[$f] = $this->getApp()->uiPersistence->typecastSaveField($field, $value);
+            }
+        }
+
+        return $formatValues;
+    }
+
+    /**
      * Return expression where fields are replace with their current or default value.
      * Ex: total field expression = [qty] * [price] will return 4 * 100
      * where qty and price current value are 4 and 100 respectively.
      *
-     * @return mixed
+     * @return string
      */
-    private function getDummyExpression(SqlExpressionField $exprField, Model $model)
+    private function getDummyExpression(SqlExpressionField $exprField, Model $entity)
     {
         $expr = $exprField->expr;
-        $matches = [];
+        if ($expr instanceof \Closure) {
+            $expr = $exprField->getDsqlExpression($entity->getModel()->expr(''));
+        }
+        if ($expr instanceof Persistence\Sql\Expression) {
+            $expr = \Closure::bind(fn () => $expr->template, null, Persistence\Sql\Expression::class)();
+        }
 
+        $matches = [];
         preg_match_all('~\[[a-z0-9_]*\]|{[a-z0-9_]*}~i', $expr, $matches);
 
         foreach ($matches[0] as $match) {
             $fieldName = substr($match, 1, -1);
-            $field = $model->getField($fieldName);
+            $field = $entity->getField($fieldName);
             if ($field instanceof SqlExpressionField) {
-                $expr = str_replace($match, $this->getDummyExpression($field, $model), $expr);
+                $expr = str_replace($match, $this->getDummyExpression($field, $entity), $expr);
             } else {
-                $expr = str_replace($match, $this->getValueForExpression($exprField, $fieldName, $model), $expr);
+                $expr = str_replace($match, $this->getValueForExpression($exprField, $fieldName, $entity), $expr);
             }
         }
 
@@ -859,17 +849,17 @@ class Multiline extends Form\Control
      *
      * @return string
      */
-    private function getValueForExpression(Field $exprField, string $fieldName, Model $model)
+    private function getValueForExpression(Field $exprField, string $fieldName, Model $entity)
     {
         switch ($exprField->type) {
             case 'integer':
             case 'float':
             case 'atk4_money':
-                $value = (string) ($model->get($fieldName) ?? 0);
+                $value = (string) ($entity->get($fieldName) ?? 0);
 
                 break;
             default:
-                $value = '"' . $model->get($fieldName) . '"';
+                $value = '"' . $entity->get($fieldName) . '"';
         }
 
         return $value;

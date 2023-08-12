@@ -51,9 +51,6 @@ class GridLayout extends View
         $this->buildTemplate();
     }
 
-    /**
-     * Build and set view template.
-     */
     protected function buildTemplate(): void
     {
         $this->tWrap->del('rows');

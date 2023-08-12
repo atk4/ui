@@ -19,14 +19,11 @@ class Upload extends Input
 
     public string $inputType = 'hidden';
 
-    /** @var Button|array|null The action button to open file browser dialog. */
-    public $action;
-
     /**
-     * The uploaded file id.
-     * This id is return on form submit.
+     * The uploaded file ID.
+     * This ID is return on form submit.
      * If not set, will default to file name.
-     * file id is also sent with onDelete Callback.
+     * file ID is also sent with onDelete Callback.
      *
      * @var string|null
      */
@@ -68,17 +65,20 @@ class Upload extends Input
 
         $this->cb = JsCallback::addTo($this);
 
-        if (!$this->action) {
-            $this->action = new Button(['icon' => 'upload', 'class.disabled' => $this->disabled || $this->readOnly]);
+        if ($this->action === null) {
+            $this->action = new Button([
+                'icon' => 'upload',
+                'class.disabled' => $this->disabled || $this->readOnly,
+            ]);
         }
     }
 
     /**
-     * Allow to set file id and file name
-     *  - fileId will be the file id sent with onDelete callback.
+     * Allow to set file ID and file name
+     *  - fileId will be the file ID sent with onDelete callback.
      *  - fileName is the field value display to user.
      *
-     * @param string      $fileId   Field id for onDelete Callback
+     * @param string      $fileId   Field ID for onDelete Callback
      * @param string|null $fileName Field name display to user
      *
      * @return $this
@@ -126,10 +126,8 @@ class Upload extends Input
 
     /**
      * Add a JS action to be returned to server on callback.
-     *
-     * @param JsExpressionable $action
      */
-    public function addJsAction($action): void
+    public function addJsAction(JsExpressionable $action): void
     {
         $this->jsActions[] = $action;
     }
@@ -165,7 +163,10 @@ class Upload extends Input
                     $this->setInput($fileId);
                 }
 
-                $this->addJsAction($fx(...$postFiles));
+                $jsRes = $fx(...$postFiles);
+                if ($jsRes !== null) { // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9388
+                    $this->addJsAction($jsRes);
+                }
 
                 if (count($postFiles) > 0 && reset($postFiles)['error'] === 0) {
                     $this->addJsAction(
@@ -188,8 +189,12 @@ class Upload extends Input
         $this->hasDeleteCb = true;
         if (($_POST['fUploadAction'] ?? null) === self::DELETE_ACTION) {
             $this->cb->set(function () use ($fx) {
-                $fileId = $_POST['fUploadId'] ?? null;
-                $this->addJsAction($fx($fileId));
+                $fileId = $_POST['fUploadId'];
+
+                $jsRes = $fx($fileId);
+                if ($jsRes !== null) { // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9388
+                    $this->addJsAction($jsRes);
+                }
 
                 return new JsBlock($this->jsActions);
             });
@@ -198,10 +203,6 @@ class Upload extends Input
 
     protected function renderView(): void
     {
-        // need before parent rendering.
-        if ($this->disabled) {
-            $this->addClass('disabled');
-        }
         parent::renderView();
 
         if ($this->cb->canTerminate()) {
@@ -225,8 +226,10 @@ class Upload extends Input
             $this->template->dangerouslySetHtml('multiple', 'multiple="multiple"');
         }
 
+        $this->template->set('placeholderReadonly', $this->disabled ? 'disabled="disabled"' : 'readonly="readonly"');
+
         if ($this->placeholder) {
-            $this->template->trySet('PlaceHolder', $this->placeholder);
+            $this->template->set('Placeholder', $this->placeholder);
         }
 
         $this->js(true)->atkFileUpload([
