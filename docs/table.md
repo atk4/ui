@@ -475,7 +475,7 @@ last decorator.
 :::
 :::{php:attr} totals
 :::
-:::{php:method} addTotals()
+:::{php:method} addTotals($plan, $plan_id = null)
 :::
 
 
@@ -494,6 +494,16 @@ but here is what actually happens:
 :::{important} addTotals() will only calculate based on rendered rows. If your table has limit
 or uses {php:class}`Paginator` you should calculate totals differently. See {php:meth}`Grid::addGrandTotals`
 ::
+
+Method addTotals() can be executed multiple times and every time it defines a new plan and
+will be reflected as an extra row for totals.
+
+To illustrate the need for multiple totals plans, here are some the scenarios which Table allows
+you to cover:
+
+- Add "subtotal" then "tax" and then "total" row to your table.
+- Create "group totals" which will appear in the middle of the table.
+- Display per-page total and grand totals (for entire table).
 
 ### Definition of a "totals plan"
 
@@ -526,17 +536,134 @@ is set. The above example can therefore be shortened:
 $table->addTotals(['client' => 'Totals for {$clients} client(s)']);
 ```
 
+In addition to the plans you define, there is also going to be `{$_row_count}` which automatically counts
+number of rows in your table.
+
 ### Possible values for total plan stages
 
 `init` value is typically a number, but can be any value, especially if you are going to control it's
 increment / formatting.
 
-`update` can be string - either "sum" or "increment". Other values are not supported. You can also pass
-a callable which gives you an option to perform update yourself.
+`update` can be string. Supported built-ins are:
+
+- min
+- inc
+- max
+- sum
+- avg
+
+You can use a callable which gives you an option to perform update yourself. Also, make note that `inc`
+will ONLY increment when value of the column it's associated with is not empty. If you need to get
+total number of rows, use a special value `{$_row_count}`
+
+Update can also be set to `false` if you don't want update to take place. If not set, or set to `null`
+then default action (based on column type) will be invoked.
 
 `format` uses a template in a format suitable for {php:class}`Template`. Within the template you can
 reference other fields too. A benefit for using template is that type formatting is done automatically
 for you.
+
+If `format` set to `null` or omitted then default action will be used which is to display totals only
+`money` / `numeric` and title column ("Totals for 123 record(s)")
+
+### Using Callbacks
+
+Value of any stage may also be a callback. Callbacks will be executed during the appropriate stage execution
+and the value will be used:
+
+`init` defines callback like this:
+
+```
+function($model) {
+
+    // $model is not loaded yet!!
+
+    return 0; // initial value
+}
+```
+
+`update` defines callback like this:
+
+```
+function($total, $value, $model) {
+
+    // $total is previous value
+    // $value is value of the column
+    // $model will be loaded to current column
+}
+```
+
+Here is example how you can implement "longest value" function:
+
+```
+function ($total, $value) {
+    return strlen($value) > strlen($total) ? $value : $total;
+}
+```
+
+`format` defines callback like this:
+
+```
+function ($total, $model) {
+    return 'Total is: '.$total;
+}
+```
+
+:::{important} when defining format as a string, template engine performs value
+formatting. If you define it through the callback, it's up to you.
+::
+
+### Some examples
+
+Calculate total salary yourself:
+
+
+```
+$salary_value = my_calc_salary();
+
+$table->addTotals(['salary'=> money_format($salary_value]));
+```
+
+:::{important} The value for the format above is passed through Template, so if user has control over
+the value, he may reference model field you don't want him to see. Keep your security tight!!
+::
+
+Safer version of the above code would be:
+
+```
+$salary_value = my_calc_salary();
+
+$table->addTotals(['salary'=> function() use($salary_value) { money_format($salary_value]); });
+```
+
+Here is another alternative:
+
+```
+$salary_value = my_calc_salary();
+
+$table->addTotals(['salary'=> [
+    'init'=> $salary_value,
+    'update'=>false,
+]);
+```
+
+Combine output into single column:
+
+```
+$table->addTotals([
+    'name'=>['update'=>'increment', 'format'=>'Total salary for {$name} employees is {$salary}'],
+    'salary'=>['update'=>'sum', 'format'=>false]
+]);
+```
+
+With introduciton of callbacks you can show average value too:
+
+```
+$table->addTotals([
+    'name'=>['update'=>'increment', 'format'=>'Total salary for {$name} employees is {$salary}'],
+    'salary'=>['update'=>'sum', 'format'=>false]
+]);
+```
 
 ## Advanced Usage
 

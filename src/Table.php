@@ -440,6 +440,8 @@ class Table extends Lister
             $this->renderRow();
 
             $rows++;
+
+            $this->hook('afterRow');
         }
 
         // Add totals rows or empty message
