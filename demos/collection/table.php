@@ -3,6 +3,7 @@
 date_default_timezone_set('UTC');
 include 'init.php';
 
+// 1st table
 $bb = $app->add(['View', 'ui' => 'buttons']);
 $table = $app->add(['Table', 'celled' => true]);
 
@@ -19,7 +20,6 @@ $table->addColumn('title', new \atk4\ui\TableColumn\Status([
     'positive' => ['Prof.'],
     'negative' => ['Dr.'],
 ]));
-
 $table->addColumn('date');
 $table->addColumn('salary', new \atk4\ui\TableColumn\Money()); //->addClass('right aligned single line', 'all'));
 
@@ -36,18 +36,19 @@ $table->addTotals([
     'salary' => ['sum'],
 ]);
 
-    $my_array = [
-        ['name' => 'Vinny', 'surname' => 'Sihra', 'birthdate' => new \DateTime('1973-02-03')],
-        ['name' => 'Zoe', 'surname' => 'Shatwell', 'birthdate' => new \DateTime('1958-08-21')],
-        ['name' => 'Darcy', 'surname' => 'Wild', 'birthdate' => new \DateTime('1968-11-01')],
-        ['name' => 'Brett', 'surname' => 'Bird', 'birthdate' => new \DateTime('1988-12-20')],
-    ];
+// 2nd table
+$my_array = [
+    ['name' => 'Vinny', 'surname' => 'Sihra', 'birthdate' => new \DateTime('1973-02-03')],
+    ['name' => 'Zoe', 'surname' => 'Shatwell', 'birthdate' => new \DateTime('1958-08-21')],
+    ['name' => 'Darcy', 'surname' => 'Wild', 'birthdate' => new \DateTime('1968-11-01')],
+    ['name' => 'Brett', 'surname' => 'Bird', 'birthdate' => new \DateTime('1988-12-20')],
+];
 
-    $table = $app->add('Table');
-    $table->setSource($my_array, ['name']);
+$table = $app->add('Table');
+$table->setSource($my_array, ['name']);
 
-    //$table->addColumn('name');
-    $table->addColumn('surname', ['Link', 'url' => 'details.php?surname={$surname}']);
-    $table->addColumn('birthdate', null, ['type' => 'date']);
+//$table->addColumn('name');
+$table->addColumn('surname', ['Link', 'url' => 'details.php?surname={$surname}']);
+$table->addColumn('birthdate', null, ['type' => 'date']);
 
-    $table->getColumnDecorators('name')[0]->addClass('disabled');
+$table->getColumnDecorators('name')[0]->addClass('disabled');

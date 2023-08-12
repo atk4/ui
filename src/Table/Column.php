@@ -175,8 +175,8 @@ class Generic
                             if (value === undefined || value === '' || value === null) return;
                             $(this)
                             .api({
-                                on:'now', 
-                                url:'{$cb->getJSURL()}', 
+                                on:'now',
+                                url:'{$cb->getJSURL()}',
                                 data:{item:value, id:$(this).data('menu-id')}
                                 }
                             );
@@ -328,12 +328,17 @@ class Generic
      *
      * @param \atk4\data\Field $f
      * @param mixed            $value
+     * @param bool             $typecast Should we typecast value
      *
      * @return string
      */
-    public function getTotalsCellHTML(\atk4\data\Field $f, $value)
+    public function getTotalsCellHTML(\atk4\data\Field $f, $value, $typecast = true)
     {
-        return $this->getTag('foot', $this->app->ui_persistence->typecastSaveField($f, $value));
+        if ($typecast) {
+            $value = $this->app->ui_persistence->typecastSaveField($f, $value);
+        }
+
+        return $this->getTag('foot', $value);
     }
 
     /**

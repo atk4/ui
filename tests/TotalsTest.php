@@ -14,7 +14,7 @@ class TotalsTest extends \atk4\core\PHPUnit_AgileTestCase
             1 => ['id'=>1, 'name'=>'Sock',    'type'=>'clothes',   'price'=>1,   'cnt'=>2, 'amount'=>2,   'balance'=>2],
             2 => ['id'=>2, 'name'=>'Hat',     'type'=>'clothes',   'price'=>5,   'cnt'=>5, 'amount'=>25,  'balance'=>27],
             3 => ['id'=>3, 'name'=>'Car',     'type'=>'transport', 'price'=>200, 'cnt'=>1, 'amount'=>200, 'balance'=>227],
-            3 => ['id'=>3, 'name'=>'Bicycle', 'type'=>'transport', 'price'=>50,  'cnt'=>2, 'amount'=>100, 'balance'=>327],
+            4 => ['id'=>4, 'name'=>'Bicycle', 'type'=>'transport', 'price'=>50,  'cnt'=>2, 'amount'=>100, 'balance'=>327],
         ]];
 
         $db = new \atk4\data\Persistence_Array($arr);
@@ -34,18 +34,18 @@ class TotalsTest extends \atk4\core\PHPUnit_AgileTestCase
     /**
      * Test built-in totals methods.
      */
-    public function testBuiltinTotals()
+    public function testBuiltinRowTotals()
     {
-        // add one totals plan to calculate built-in totals
+        // add one totals plan to calculate built-in row totals
         $this->table->addTotals([
-            'name'   => 'Totals:',
+            'name'   => 'Totals:', // Totals:
             'type'   => ['count'], // 4
             'price'  => ['min'],   // 1
             'cnt'    => ['max'],   // 5
             'amount' => ['sum'],   // 327
         ]);
 
-        // need to render to calculate totals
+        // need to render to calculate row totals
         $this->table->render();
 
         // assert
@@ -58,64 +58,46 @@ class TotalsTest extends \atk4\core\PHPUnit_AgileTestCase
         );
     }
 
-    /*
-        // add another totals row and use custom function to calculate it
-        $this->table->addTotals([
-            'name'  => 'Custom totals',
-            'animal'=> function ($total, $value, $model, $table) {
-                // longest animal name
-                $name = ($total === null ? $value : $total);
-
-                return strlen($value) > strlen($name) ? $value : $name;
-            },
-            'a'     => function ($total, $value, $model, $table) {
-                return ($total === null ? 0 : $total) + $value * 2 + $model['b'];
-            },
-        ]);
-
-            [
-                'animal'=> 'Bear', // longest name
-                'a'     => 23, // (1*2+2) + (3*2+5) + (2*2+4) = 23
-            ],
-        ]);
-    }
-    */
-
-    /*
-     * Test final totals.
+    /**
+     * Test advanced totals methods.
      */
-    /*
-    public function testFinalTotals()
+    public function testAdvancedRowTotals()
     {
-        // add one totals plan to calculate built-in totals
-        $this->table->addTotals(
-            // executed for each row
-            [
-                'name'  => 'Built-in totals',
-                'a'     => ['min'],
-                'b'     => ['max'],
-            ],
-            // executed at the end
-            [
-                'c'     => 'Average',
-                'd'     => function ($totals, $table) {
-                    return round(($totals['a'] + $totals['b'])/2);
-                },
-            ]);
+        // add first totals plan
+        $this->table->addTotals([
+            'name'   => 'Totals 1:', // Totals 1:
+            'type'   => function ($totals, $model) {
+                return $totals['price'] * $totals['cnt'];
+            }, // 25600
+            'price'  => [
+                            function ($total, $value, $model) {
+                                return $total + $value;
+                            },
+                        ], // 256 - simple sum(price)
+            'cnt'    => [
+                            function ($total, $value, $model) {
+                                return max($total, $value);
+                            },
+                            'default' => 100,
+                        ], // 100 - uses default value max(100, max(cnt))
+            'amount' => [
+                            'sum',
+                            'default' => function ($value, $model) {
+                                return $value * 1000;
+                            },
+                        ], // 2327 = 2*1000 + sum(amount)
+        ], 'first');
 
-
-        // need to render to calculate totals
+        // need to render to calculate row totals
         $this->table->render();
 
         // assert
-        $this->assertEquals($this->table->totals, [
-            [
-                'a'     => 1, // min
-                'b'     => 5, // max
-                'd'     => 3, // round((min+max)/2)
-            ],
-        ]);
-
+        $this->assertEquals([
+                //'type' => 25600,
+                'price'  => 256,
+                'cnt'    => 100,
+                'amount' => 2327,
+            ], $this->table->totals['first']
+        );
     }
-    */
 }
