@@ -19,18 +19,20 @@ class Link extends Generic
      * If $url is set up, we will use pattern-matching to fill-in any part of this
      * with values of the model.
      *
-     * @param string|array $page Destination definition
+     * @var string|array Destination definition
      */
     public $url = null;
 
     /**
      * If string 'example', then will be passed to $app->url('example') along with any defined arguments.
-     * If set as arrray, then non-0 key/values will be also passed to the URL:
+     * If set as array, then non-0 key/values will be also passed to the URL:
      *  $page = ['example', 'type'=>'123'];.
      *
      * $url = $app->url(['example', 'type'=>'123']);
      *
-     * In addition to abpove "args" refer to values picked up from a current row.
+     * In addition to above "args" refer to values picked up from a current row.
+     *
+     * @var array
      */
     public $page = null;
 
@@ -47,6 +49,8 @@ class Link extends Generic
      *
      * You can also pass non-key arguments ['id', 'title'] and they will be added up
      * as ?id=4&title=John%20Smith
+     *
+     * @var array
      */
     public $args = [];
 

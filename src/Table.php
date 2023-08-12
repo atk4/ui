@@ -307,6 +307,11 @@ class Table extends Lister
             }
         }
 
+        // each plan can have some "hidden" columns
+        // we use them, for example, to count table rows while rendering
+        $plan['_row_count']['row'] = 'count';
+
+        // save normalized plan
         if ($plan_id !== null) {
             $this->totals_plan[$plan_id] = $plan;
         } else {
@@ -670,27 +675,38 @@ class Table extends Lister
         foreach ($this->columns as $name => $column) {
             $field = $this->model->getElement($name);
 
-            // if totals was calculated, then show formatted value
-            if (array_key_exists($name, $totals)) {
-                $output[] = $column->getTotalsCellHTML($field, $totals[$name], true);
-                continue;
-            }
-
             // if no totals plan, then add empty cell, but keep column formatting
             if (!isset($plan[$name])) {
                 $output[] = $column->getTotalsCellHTML($field, '', false);
                 continue;
             }
 
-            // otherwise just show it, for example, "Totals:" cell
-            // this can also be passed as simple string or callable
-            $title = '';
-            if (is_string($plan[$name])) {
-                $title = $plan[$name];
-            } elseif (is_callable($plan[$name])) {
-                $title = call_user_func_array($plan[$name], [$this->totals, $this->model]);
+            // if totals was calculated, then show formatted value
+            if (array_key_exists($name, $totals)) {
+                $output[] = $column->getTotalsCellHTML($field, $totals[$name], true);
+                continue;
             }
-            $output[] = $column->getTotalsCellHTML($field, $title, false);
+
+            // if no title set in totals plan, then add empty cell, but keep column formatting
+            if (!isset($plan[$name]['title'])) {
+                $output[] = $column->getTotalsCellHTML($field, '', false);
+                continue;
+            }
+
+            // if title is set then just show it, for example, "Totals:" cell
+            // this can be passed as string or callable
+            $title = '';
+            if (is_string($plan[$name]['title'])) {
+                $title = $plan[$name]['title'];
+            } elseif (is_callable($plan[$name]['title'])) {
+                $title = call_user_func_array($plan[$name]['title'], [$this->totals, $this->model]);
+            }
+
+            // title can be defined as template and we fill in other total values if needed
+            $title = new Template($title);
+            $title->set($totals);
+
+            $output[] = $column->getTotalsCellHTML($field, $title->render(), false);
         }
 
         return implode('', $output);
