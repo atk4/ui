@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Data\Model;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Js\Jquery;
@@ -38,6 +39,9 @@ class TreeItemSelector extends Form\Control
      * @var string
      */
     public $loaderCssName = 'atk-tree-loader';
+
+    /** @var string The field name which includes the parent node's id. */
+    public $parentIdField = 'parent_id';
 
     /** @var bool Allow multiple selection or just one. */
     public $allowMultiple = true;
@@ -100,6 +104,36 @@ class TreeItemSelector extends Form\Control
 
             return $fx($value);
         }, ['data' => 'value']);
+    }
+
+    /**
+     * @param mixed $parentId
+     */
+    protected function addNodes(Model $model, $parentId = null): array
+    {
+        $result = [];
+
+        $nodeModel = (clone $model)->addCondition($this->parentIdField, $parentId);
+
+        foreach ($nodeModel as $node) {
+            if ($node->get($this->parentIdField) === $parentId) {
+                $newNode = [];
+                $newNode['name'] = $node->getTitle();
+                $newNode['id'] = $node->getId();
+                $newNode['parent_id'] = $node->get($this->parentIdField);
+                $newNode['nodes'] = $this->addNodes($model, $node->getId());
+                $result[] = $newNode;
+            }
+        }
+
+        return $result;
+    }
+
+    public function setModel(Model $model): void
+    {
+        parent::setModel($model);
+
+        $this->treeItems = $this->addNodes($model);
     }
 
     /**
