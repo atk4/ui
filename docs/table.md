@@ -98,53 +98,7 @@ $table->addColumn('price');
 When invoking addColumn, you have a great control over the field properties and decoration. The format
 of addColumn() is very similar to {php:meth}`Form::addControl`.
 
-## Calculations
-
-Apart from adding columns that reflect current values of your database, there are several ways
-how you can calculate additional values. You must know the capabilities of your database server
-if you want to execute some calculation there. (See https://atk4-data.readthedocs.io/en/develop/expressions.html)
-
-It's always a good idea to calculate column inside database. Lets create "total" column which will
-multiply "price" and "amount" values. Use `addExpression` to provide in-line definition for this
-field if it's not already defined in `Order::init()`:
-
-```
-$table = Table::addTo($app);
-$order = new Order($db);
-
-$order->addExpression('total', '[price] * [amount]')->type = 'atk4_money';
-
-$table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
-```
-
-The type of the Model Field determines the way how value is presented in the table. I've specified
-value to be 'atk4_money' which makes column align values to the right, format it with 2 decimal signs
-and possibly add a currency sign.
-
-To learn about value formatting, read documentation on {ref}`uiPersistence`.
-
-Table object does not contain any information about your fields (such as captions) but instead it will
-consult your Model for the necessary field information. If you are willing to define the type but also
-specify the caption, you can use code like this:
-
-```
-$table = Table::addTo($app);
-$order = new Order($db);
-
-$order->addExpression('total', [
-    '[price]*[amount]',
-    'type' => 'atk4_money',
-    'caption' => 'Total Price',
-]);
-
-$table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
-```
-
-### Column Objects
-
-To read more about column objects, see {ref}`tablecolumn`
-
-### Advanced Column Denifitions
+### Column Denifition
 
 Table defines a method `columnFactory`, which returns Column object which is to be used to
 display values of specific model Field.
@@ -234,6 +188,68 @@ $table->addColumn($colGap);
 ```
 
 This will result in 3 gap columns rendered to the left, middle and right of your Table.
+
+## Calculated Fields
+
+Apart from adding columns that reflect current values of your database, there are several ways
+how you can calculate additional values. You must know the capabilities of your database server
+if you want to execute some calculation there. (See https://atk4-data.readthedocs.io/en/develop/expressions.html)
+
+### In the database - best performance
+
+It's always a good idea to calculate column inside database. Lets create "total" column which will
+multiply "price" and "amount" values. Use `addExpression` to provide in-line definition for this
+field if it's not alrady defined in `Order::init()`:
+
+```
+$table = $app->add('Table');
+$order = new Order($db);
+
+$order->addExpression('total', [
+    '[price] * [amount]',
+    'type' => 'money',
+]);
+
+$table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
+```
+
+### In the model - best compatibility
+
+If your database does not have the capacity to perform calculations, e.g. you are using NoSQL with
+no support for expressions, the solution is to calculate value in the PHP:
+
+```
+$table = $app->add('Table');
+$order = new Order($db);
+
+$model->addField('total', [
+    'Callback', 
+    function ($m) {
+        return $m['price'] * $m['amount'];
+    },
+    'type' => 'money',
+]);
+
+$table->setModel($order, ['name', 'price', 'amount', 'total', 'status']);
+```
+
+### Alternative approaches
+
+:::{warning} Those alternatives are for special cases, when you are unable to perform calculation
+in the database or in the model. Please use with caution.
+::
+
+You can add add a custom code that performs formatting within the table through a hook:
+
+```
+$table->addField('no');
+
+$table->addHook('beforeRow', function($table)) {
+    $table->model['no'] = @++$t->npk;
+}
+```
+
+To read more about column objects, see {ref}`tablecolumn`
 
 ## Table sorting
 
@@ -452,6 +468,202 @@ If you are defining your own column, you may want to re-define getDataCellTempla
 getDataCellHtml can be left as-is and will be handled correctly. If you have overridden
 getDataCellHtml only, then your column will still work OK provided that it's used as a
 last decorator.
+
+## Table Totals
+
+:::{php:attr} totals_plan
+:::
+:::{php:attr} totals
+:::
+:::{php:method} addTotals($plan, $plan_id = null)
+:::
+
+
+Table implements a built-in handling for the "Totals" row. Simple usage would be:
+
+```
+$table->addTotals();
+```
+
+but here is what actually happens:
+
+1. when calling addTotals() - you define a total calculation plan.
+2. while iterating through table, totals are accumulated / modified according to plan.
+3. when table finishes with the rows, it adds yet another row with the accumulated values.
+
+:::{important} addTotals() will only calculate based on rendered rows. If your table has limit
+or uses {php:class}`Paginator` you should calculate totals differently. See {php:meth}`Grid::addGrandTotals`
+::
+
+Method addTotals() can be executed multiple times and every time it defines a new plan and
+will be reflected as an extra row for totals.
+
+To illustrate the need for multiple totals plans, here are some the scenarios which Table allows
+you to cover:
+
+- Add "subtotal" then "tax" and then "total" row to your table.
+- Create "group totals" which will appear in the middle of the table.
+- Display per-page total and grand totals (for entire table).
+
+### Definition of a "totals plan"
+
+Each column may have a different plan, which consists of stages:
+
+- init: defines the initial value
+- update: defines how value is updated
+- format: defines how value is formatted before outputting
+
+Here is the plan to calculate number of records:
+
+```
+$table->addTotals(['client' => [
+    'init' => 0,
+    'update' => 'increment',
+    'format' => 'Totals for {$client} client(s)',
+]);
+```
+
+To make things easier to define, each stage has a reasonable default:
+
+- init: set to 0
+- update: 'sum' for numeric/money type and 'increment' otherwise
+- format: will output '-' by default
+
+Also when calling addTotals() the column plan value does not have to be array, in which case the 'format'
+is set. The above example can therefore be shortened:
+
+```
+$table->addTotals(['client' => 'Totals for {$clients} client(s)']);
+```
+
+In addition to the plans you define, there is also going to be `{$_row_count}` which automatically counts
+number of rows in your table.
+
+### Possible values for total plan stages
+
+`init` value is typically a number, but can be any value, especially if you are going to control it's
+increment / formatting.
+
+`update` can be string. Supported built-ins are:
+
+- min
+- inc
+- max
+- sum
+- avg
+
+You can use a callable which gives you an option to perform update yourself. Also, make note that `inc`
+will ONLY increment when value of the column it's associated with is not empty. If you need to get
+total number of rows, use a special value `{$_row_count}`
+
+Update can also be set to `false` if you don't want update to take place. If not set, or set to `null`
+then default action (based on column type) will be invoked.
+
+`format` uses a template in a format suitable for {php:class}`Template`. Within the template you can
+reference other fields too. A benefit for using template is that type formatting is done automatically
+for you.
+
+If `format` set to `null` or omitted then default action will be used which is to display totals only
+`money` / `numeric` and title column ("Totals for 123 record(s)")
+
+### Using Callbacks
+
+Value of any stage may also be a callback. Callbacks will be executed during the appropriate stage execution
+and the value will be used:
+
+`init` defines callback like this:
+
+```
+function($model) {
+
+    // $model is not loaded yet!!
+
+    return 0; // initial value
+}
+```
+
+`update` defines callback like this:
+
+```
+function($total, $value, $model) {
+
+    // $total is previous value
+    // $value is value of the column
+    // $model will be loaded to current column
+}
+```
+
+Here is example how you can implement "longest value" function:
+
+```
+function ($total, $value) {
+    return strlen($value) > strlen($total) ? $value : $total;
+}
+```
+
+`format` defines callback like this:
+
+```
+function ($total, $model) {
+    return 'Total is: '.$total;
+}
+```
+
+:::{important} when defining format as a string, template engine performs value
+formatting. If you define it through the callback, it's up to you.
+::
+
+### Some examples
+
+Calculate total salary yourself:
+
+
+```
+$salary_value = my_calc_salary();
+
+$table->addTotals(['salary'=> money_format($salary_value]));
+```
+
+:::{important} The value for the format above is passed through Template, so if user has control over
+the value, he may reference model field you don't want him to see. Keep your security tight!!
+::
+
+Safer version of the above code would be:
+
+```
+$salary_value = my_calc_salary();
+
+$table->addTotals(['salary'=> function() use($salary_value) { money_format($salary_value]); });
+```
+
+Here is another alternative:
+
+```
+$salary_value = my_calc_salary();
+
+$table->addTotals(['salary'=> [
+    'init'=> $salary_value,
+    'update'=>false,
+]);
+```
+
+Combine output into single column:
+
+```
+$table->addTotals([
+    'name'=>['update'=>'increment', 'format'=>'Total salary for {$name} employees is {$salary}'],
+    'salary'=>['update'=>'sum', 'format'=>false]
+]);
+```
+
+With introduciton of callbacks you can show average value too:
+
+```
+$table->addTotals([
+    'name'=>['update'=>'increment', 'format'=>'Total salary for {$name} employees is {$salary}'],
+    'salary'=>['update'=>'sum', 'format'=>false]
+]);
+```
 
 ## Advanced Usage
 

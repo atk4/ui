@@ -1,93 +1,90 @@
 <?php
 
-declare(strict_types=1);
+namespace atk4\ui\TableColumn;
 
-namespace Atk4\Ui\Table;
-
-use Atk4\Data\Field;
-use Atk4\Data\Model;
-use Atk4\Ui\Js\Jquery;
-use Atk4\Ui\Js\JsExpression;
-use Atk4\Ui\Js\JsExpressionable;
-use Atk4\Ui\JsCallback;
-use Atk4\Ui\Popup;
-use Atk4\Ui\Table;
-use Atk4\Ui\View;
+use atk4\ui\Exception;
+use atk4\ui\jQuery;
+use atk4\ui\jsExpression;
+use atk4\ui\Popup;
 
 /**
  * Implements Column helper for table.
- *
- * @method Table getOwner()
  */
-class Column
+class Generic
 {
-    use \Atk4\Core\AppScopeTrait;
-    use \Atk4\Core\DiContainerTrait;
-    use \Atk4\Core\InitializerTrait;
-    use \Atk4\Core\NameTrait;
-    use \Atk4\Core\TrackableTrait;
+    use \atk4\core\AppScopeTrait;
+    use \atk4\core\InitializerTrait;
+    use \atk4\core\TrackableTrait;
+    use \atk4\core\DIContainerTrait;
 
-    public const HOOK_GET_HTML_TAGS = self::class . '@getHtmlTags';
-    public const HOOK_GET_HEADER_CELL_HTML = self::class . '@getHeaderCellHtml';
-
-    /** @var Table Link back to the table, where column is used. */
+    /**
+     * Link back to the table, where column is used.
+     *
+     * @var \atk4\ui\Table
+     */
     public $table;
 
-    /** Contains any custom attributes that may be applied on head, body or foot. */
-    public array $attr = [];
+    /**
+     * Contains any custom attributes that may be applied on head, body or foot.
+     *
+     * @var array
+     */
+    public $attr = [];
 
-    /** @var string|null If set, will override column header value. */
-    public $caption;
+    /**
+     * If set, will override column header value.
+     *
+     * @var string
+     */
+    public $caption = null;
 
-    /** @var bool Is column sortable? */
-    public $sortable = true;
-
-    /** @var string|null The data-column attribute value for Table th tag. */
-    public $columnData;
-
-    /** @var bool Include header action tag in rendering or not. */
+    /**
+     * Include header action tag in rendering or not.
+     *
+     * @var bool
+     */
     public $hasHeaderAction = false;
 
-    /** @var array|null The tag value required for getTag when using an header action. */
-    public $headerActionTag;
+    public $headerAction = null;
 
-    public function __construct(array $defaults = [])
+    /**
+     * The tag value required for getTag when using an header action.
+     *
+     * @var array|null
+     */
+    public $headerActionTag = null;
+
+    /**
+     * Constructor.
+     *
+     * @param array $defaults
+     */
+    public function __construct($defaults = [])
     {
-        if (func_num_args() > 1) { // prevent bad usage
-            throw new \Error('Too many method arguments');
-        }
-
         $this->setDefaults($defaults);
     }
 
     /**
      * Add popup to header.
-     * Use ColumnName for better popup positioning.
      *
-     * @param string $icon CSS class for filter icon
+     * @param Popup  $popup
+     * @param string $id
+     * @param string $icon
+     *
+     * @throws Exception
      *
      * @return mixed
      */
-    public function addPopup(Popup $popup = null, $icon = 'table-filter-off')
+    public function addPopup($popup = null, $icon = 'caret square down')
     {
-        $id = $this->name . '_ac';
+        if (!$this->app) {
+            throw new Exception('Columns\'s popup need to have a layout.');
+        }
+        if (!$popup) {
+            $popup = $this->app->add('Popup')->setHoverable();
+        }
 
-        $popup = $this->table->getOwner()->add($popup ?? [Popup::class])->setHoverable();
-
-        $this->setHeaderPopup($icon, $id);
-
-        $popup->triggerBy = '#' . $id;
-        $popup->popOptions = array_merge(
-            $popup->popOptions,
-            [
-                'on' => 'click',
-                'position' => 'bottom left',
-                'movePopup' => $this->columnData ? true : false,
-                'target' => $this->columnData ? 'th[data-column=' . $this->columnData . ']' : false,
-                'distanceAway' => -12,
-            ]
-        );
-        $popup->stopClickEvent = true;
+        $this->setHeaderPopup($popup, $icon);
 
         return $popup;
     }
@@ -95,52 +92,54 @@ class Column
     /**
      * Setup popup header action.
      *
-     * @param string $class the CSS class for filter icon
-     * @param string $id
+     * @param Popup $popup
+     * @param $icon
      */
-    public function setHeaderPopup($class, $id): void
+    public function setHeaderPopup($popup, $icon = 'caret square down')
     {
-        $this->hasHeaderAction = true;
+        $this->headerAction = true;
+        $id = $this->name.'_ac';
 
-        $this->headerActionTag = ['div', ['class' => 'atk-table-dropdown'],
+        $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
-                ['i', ['id' => $id, 'class' => $class . ' icon'], ''],
+                ['i', ['id' => $id, 'class' => $icon.' icon']],
             ],
         ];
-    }
+        $popup->triggerBy = '#'.$id;
+        $popup->popOptions = array_merge($popup->popOptions, ['on' =>'click', 'position' => 'bottom right', 'movePopup' => false]);
+        $popup->stopClickEvent = true;
 
-    /**
-     * Set header popup icon.
-     *
-     * @param string $icon
-     */
-    public function setHeaderPopupIcon($icon): void
-    {
-        $this->headerActionTag = ['div', ['class' => 'atk-table-dropdown'],
-            [
-                ['i', ['id' => $this->name . '_ac', 'class' => $icon . ' icon'], ''],
-            ],
-        ];
+        if (@$_GET['__atk_reload']) {
+            //This is part of a reload, need to reactivate popup.
+            $this->table->js(true, $popup->jsPopup());
+        }
     }
 
     /**
      * Add a dropdown header menu.
      *
-     * @param \Closure(string, string): (JsExpressionable|View|string|void) $fx
-     * @param string                                                        $icon
-     * @param string|null                                                   $menuId the menu name
+     * @param array       $items
+     * @param callable    $fx
+     * @param string      $icon
+     * @param string|null $menuId The menu name.
+     *
+     * @throws Exception
      */
-    public function addDropdown(array $items, \Closure $fx, $icon = 'caret square down', $menuId = null): void
+    public function addDropdown($items, $fx, $icon = 'caret square down', $menuId = null)
     {
-        $menuItems = [];
+        $menuITems = [];
         foreach ($items as $key => $item) {
-            $menuItems[] = ['name' => is_int($key) ? $item : $key, 'value' => $item];
+            if (is_int($key)) {
+                $menuITems[] = ['name' => $item, 'value' => $item];
+            } else {
+                $menuITems[] = ['name' => $key, 'value' => $item];
+            }
         }
 
-        $cb = $this->setHeaderDropdown($menuItems, $icon, $menuId);
+        $cb = $this->setHeaderDropdown($menuITems, $icon, $menuId);
 
-        $cb->onSelectItem(function (string $menu, string $item) use ($fx) {
-            return $fx($item, $menu);
+        $cb->onSelectItem(function ($menu, $item) use ($fx) {
+            return call_user_func($fx, $item, $menu);
         });
     }
 
@@ -149,43 +148,49 @@ class Column
      * This method return a callback where you can detect
      * menu item change via $cb->onMenuItem($item) function.
      *
-     * @param array<int, array> $items
+     * @param             $items
+     * @param string      $icon
+     * @param string|null $menuId The id of the menu.
      *
-     * @return Column\JsHeaderDropdownCallback
+     * @throws Exception
+     *
+     * @return \atk4\ui\jsCallback
      */
-    public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null): JsCallback
+    public function setHeaderDropdown($items, $icon = 'caret square down', $menuId = null)
     {
-        $this->hasHeaderAction = true;
-        $id = $this->name . '_ac';
-        $this->headerActionTag = ['div', ['class' => 'atk-table-dropdown'], [
+        $this->headerAction = true;
+        $id = $this->name.'_ac';
+        $this->headerActionTag = ['div',  ['class'=>'atk-table-dropdown'],
             [
-                'div', ['id' => $id, 'class' => 'ui top left pointing dropdown', 'data-menu-id' => $menuId],
-                [['i', ['class' => $icon . ' icon'], '']],
+                [
+                    'div', ['id' => $id, 'class'=>'ui top right pointing dropdown', 'data-menu-id' => $menuId],
+                    [['i', ['class' => $icon.' icon']]],
+                ],
             ],
-        ]];
+        ];
 
-        $cb = Column\JsHeaderDropdownCallback::addTo($this->table);
+        $cb = $this->table->add(new jsHeader());
 
-        $function = new JsExpression('function (value, text, item) {
-            if (value === undefined || value === \'\' || value === null) {
-                return;
-            }
-            $(this).api({
-                on: \'now\',
-                url: \'' . $cb->getJsUrl() . '\',
-                data: { item: value, id: $(this).data(\'menu-id\') }
-            });
-        }');
+        $function = "function(value, text, item){
+                            if (value === undefined || value === '' || value === null) return;
+                            $(this)
+                            .api({
+                                on:'now',
+                                url:'{$cb->getJSURL()}',
+                                data:{item:value, id:$(this).data('menu-id')}
+                                }
+                            );
+                     }";
 
-        $chain = new Jquery('#' . $id);
+        $chain = new jQuery('#'.$id);
         $chain->dropdown([
-            'action' => 'hide',
-            'values' => $items,
-            'onChange' => $function,
-        ]);
+                             'action'   => 'hide',
+                             'values'   => $items,
+                             'onChange' => new jsExpression($function),
+                         ]);
 
-        // will stop grid column from being sorted.
-        $chain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));
+        //will stop grid column from being sorted.
+        $chain->on('click', new jsExpression('function(e){e.stopPropagation();}'));
 
         $this->table->js(true, $chain);
 
@@ -229,14 +234,16 @@ class Column
         return $this;
     }
 
-    public function getTagAttributes(string $position, array $attr = []): array
+    public function getTagAttributes($position, $attr = [])
     {
         // "all" applies on all positions
-        // $position is for specific position classes
-        foreach (['all', $position] as $key) {
-            if (isset($this->attr[$key])) {
-                $attr = array_merge_recursive($attr, $this->attr[$key]);
-            }
+        if (isset($this->attr['all'])) {
+            $attr = array_merge_recursive($attr, $this->attr['all']);
+        }
+
+        // specific position classes
+        if (isset($this->attr[$position])) {
+            $attr = array_merge_recursive($attr, $this->attr[$position]);
         }
 
         return $attr;
@@ -246,11 +253,13 @@ class Column
      * Returns a suitable cell tag with the supplied value. Applies modifiers
      * added through addClass and setAttr.
      *
-     * @param string       $position 'head', 'body' or 'tail'
-     * @param string|array $value    either HTML or array defining HTML structure, see App::getTag help
-     * @param array        $attr     extra attributes to apply on the tag
+     * @param string $position - 'head', 'body' or 'tail'
+     * @param string $value    - what is inside? either html or array defining HTML structure, see App::getTag help
+     * @param array  $attr     - extra attributes to apply on the tag
+     *
+     * @return string
      */
-    public function getTag(string $position, $value, array $attr = []): string
+    public function getTag($position, $value, $attr = [])
     {
         $attr = $this->getTagAttributes($position, $attr);
 
@@ -258,72 +267,78 @@ class Column
             $attr['class'] = implode(' ', $attr['class']);
         }
 
-        return $this->getApp()->getTag($position === 'body' ? 'td' : 'th', $attr, $value);
+        return $this->app->getTag($position == 'body' ? 'td' : 'th', $attr, $value);
     }
 
     /**
      * Provided with a field definition (from a model) will return a header
      * cell, fully formatted to be included in a Table. (<th>).
      *
-     * @param mixed $value
+     * @param \atk4\data\Field $f
+     *
+     * @return string
      */
-    public function getHeaderCellHtml(Field $field = null, $value = null): string
+    public function getHeaderCellHTML(\atk4\data\Field $f = null, $value = null)
     {
-        $tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value]);
-        if ($tags) {
-            return reset($tags);
+        if (!$this->table) {
+            throw new \atk4\ui\Exception(['How $table could not be set??', 'f' => $f, 'value' => $value]);
+        }
+        if ($f === null) {
+            return $this->getTag('head', $this->caption ?: '', $this->table->sortable ? ['class' => ['disabled']] : []);
         }
 
-        if ($field === null) {
-            return $this->getTag('head', $this->caption ?? '', $this->table->sortable ? ['class' => ['disabled']] : []);
-        }
-
-        // if $this->caption is empty, header caption will be overridden by linked field definition
-        $caption = $this->caption ?? $field->getCaption();
-
-        $attr = [
-            'data-column' => $this->columnData,
-        ];
-
-        $class = 'atk-table-column-header';
-
-        if ($this->hasHeaderAction) {
-            $attr['id'] = $this->name . '_th';
-
-            // add the action tag to the caption
-            $caption = [$this->headerActionTag, $caption];
-        }
-
+        // If table is being sorted by THIS column, set the proper class
+        $attr = [];
         if ($this->table->sortable) {
-            $attr['data-sort'] = $field->shortName;
+            $attr['data-column'] = $f->short_name;
 
-            if ($this->sortable) {
-                $attr['class'] = ['sortable'];
-            }
+            if ($this->table->sort_by === $f->short_name) {
+                $attr['class'][] = 'sorted '.$this->table->sort_order;
 
-            // If table is being sorted by THIS column, set the proper class
-            if ($this->table->sortBy === $field->shortName) {
-                $class .= ' sorted ' . ['asc' => 'ascending', 'desc' => 'descending'][$this->table->sortDirection];
-
-                if ($this->table->sortDirection === 'asc') {
-                    $attr['data-sort'] = '-' . $attr['data-sort'];
-                } elseif ($this->table->sortDirection === 'desc') {
-                    $attr['data-sort'] = '';
+                if ($this->table->sort_order === 'ascending') {
+                    $attr['data-column'] = '-'.$f->short_name;
+                } elseif ($this->table->sort_order === 'descending') {
+                    $attr['data-column'] = '';
                 }
             }
         }
 
-        return $this->getTag('head', [['div', ['class' => $class], $caption]], $attr);
+        if ($this->headerAction) {
+            $attr = array_merge($attr, ['id' => $this->name.'_th']);
+            $tag = $this->getTag(
+                'head',
+                [$f->getCaption(),
+                    $this->headerActionTag,
+                ],
+                $attr
+            );
+        } else {
+            $tag = $this->getTag(
+                'head',
+                $f->getCaption(),
+                $attr
+            );
+        }
+
+        return $tag;
     }
 
     /**
      * Return HTML for a total value of a specific field.
      *
-     * @param mixed $value
+     * @param \atk4\data\Field $f
+     * @param mixed            $value
+     * @param bool             $typecast Should we typecast value
+     *
+     * @return string
      */
-    public function getTotalsCellHtml(Field $field, $value): string
+    public function getTotalsCellHTML(\atk4\data\Field $f, $value, $typecast = true)
     {
-        return $this->getTag('foot', $this->getApp()->uiPersistence->typecastSaveField($field, $value));
+        if ($typecast) {
+            $value = $this->app->ui_persistence->typecastSaveField($f, $value);
+        }
+
+        return $this->getTag('foot', $value);
     }
 
     /**
@@ -336,16 +351,20 @@ class Column
      * will also be formatted before inserting, see UI Persistence formatting in the documentation.
      *
      * This method will be executed only once per table rendering, if you need to format data manually,
-     * you should use $this->table->onHook('beforeRow' or 'afterRow', ...);
+     * you should use $this->table->addHook('formatRow');
+     *
+     * @param \atk4\data\Field $f
+     *
+     * @return string
      */
-    public function getDataCellHtml(Field $field = null, array $attr = []): string
+    public function getDataCellHTML(\atk4\data\Field $f = null, $extra_tags = [])
     {
-        return $this->getTag('body', [$this->getDataCellTemplate($field)], $attr);
+        return $this->getTag('body', [$this->getDataCellTemplate($f)], $extra_tags);
     }
 
     /**
      * Provided with a field definition will return a string containing a "Template"
-     * that would produce CONTENTS OF <td> cell when rendered. Example output:.
+     * that would produce CONTENS OF <td> cell when rendered. Example output:.
      *
      *   <b>{$name}</b>
      *
@@ -353,23 +372,30 @@ class Column
      * by another template returned by getDataCellTemplate when multiple formatters are
      * applied to the same column. The first one to be applied is executed first, then
      * a subsequent ones are executed.
+     *
+     * @param \atk4\data\Field $f
+     *
+     * @return string
      */
-    public function getDataCellTemplate(Field $field = null): string
+    public function getDataCellTemplate(\atk4\data\Field $f = null)
     {
-        if ($field) {
-            return '{$' . $field->shortName . '}';
+        if ($f) {
+            return '{$'.$f->short_name.'}';
+        } else {
+            return '{_$'.$this->short_name.'}';
         }
-
-        return '{_$' . $this->shortName . '}';
     }
 
     /**
      * Return associative array of tags to be filled with pre-rendered HTML on
-     * a column-basis. Will not be invoked if HTML output is turned off for the table.
+     * a column-basis. Will not be invoked if html-output is turned off for the table.
      *
-     * @return array<string, string>
+     * @param array  $row   link to row data
+     * @param string $field field being rendered
+     *
+     * @return array Associative array with tags and their HTML values.
      */
-    public function getHtmlTags(Model $row, ?Field $field): array
+    public function getHTMLTags($row, $field)
     {
         return [];
     }

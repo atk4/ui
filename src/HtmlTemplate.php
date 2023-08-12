@@ -1,197 +1,288 @@
 <?php
 
-declare(strict_types=1);
+// vim:ts=4:sw=4:et:fdm=marker:fdl=0
 
-namespace Atk4\Ui;
-
-use Atk4\Core\AppScopeTrait;
-use Atk4\Core\WarnDynamicPropertyTrait;
-use Atk4\Data\Model;
-use Atk4\Ui\HtmlTemplate\TagTree;
-use Atk4\Ui\HtmlTemplate\Value as HtmlValue;
+namespace atk4\ui;
 
 /**
- * @phpstan-consistent-constructor
+ * This class is a lightweight template engine. It's based around operating with
+ * chunks of HTML code and the main aims are:.
+ *
+ *  - completely remove any logic from templates
+ *  - speed up template parsing and manipulation speed
+ *
+ * @author      Romans <romans@agiletoolkit.org>
+ * @copyright   MIT
+ *
+ * @version     3.0
+ *
+ * ==[ Version History ]=======================================================
+ * 1.0          First public version (released with AModules3 alpha)
+ * 1.1          Added support for "_top" tag
+ *              Removed support for permanent tags
+ *              Much more comments and other fixes
+ * 2.0          Reimplemented template parsing, now doing it with regexps
+ * 3.0          Re-integrated as part of Agile UI under MIT license
  */
-class HtmlTemplate
+class Template implements \ArrayAccess
 {
-    use AppScopeTrait;
-    use WarnDynamicPropertyTrait;
+    use \atk4\core\AppScopeTrait;
 
-    public const TOP_TAG = '_top';
+    // {{{ Properties of a template
 
-    /** @var array<string, string|false> */
-    private static array $_realpathCache = [];
-    /** @var array<string, string|false> */
-    private static array $_filesCache = [];
+    /**
+     * This array contains list of all tags found inside template implementing
+     * faster access when manipulating the template.
+     *
+     * @var array
+     */
+    public $tags = [];
 
-    private static ?self $_parseCacheParentTemplate = null;
-    /** @var array<string, array<string, TagTree>> */
-    private static array $_parseCache = [];
+    /**
+     * This is a parsed contents of the template organized inside an array. This
+     * structure makes it very simple to modify any part of the array.
+     *
+     * @var array
+     */
+    public $template = [];
 
-    /** @var array<string, TagTree> */
-    private array $tagTrees;
+    /**
+     * Contains information about where the template was loaded from.
+     *
+     * @var string
+     */
+    public $source = null;
 
-    public function __construct(string $template = '')
+    /** @var string */
+    public $default_exception = 'Exception_Template';
+
+    // }}}
+
+    // {{{ Core methods - initialization
+
+    // Template creation, interface functions
+
+    /**
+     * Construct template.
+     *
+     * @param string $template
+     */
+    public function __construct($template = null)
     {
-        $this->loadFromString($template);
-    }
-
-    public function _hasTag(string $tag): bool
-    {
-        return isset($this->tagTrees[$tag]);
+        if ($template !== null) {
+            $this->loadTemplateFromString($template);
+        }
     }
 
     /**
-     * @param string|list<string> $tag
+     * Clone template.
      */
-    public function hasTag($tag): bool
+    public function __clone()
     {
-        // check if all tags exist
+        $this->template = unserialize(serialize($this->template));
+
+        unset($this->tags);
+        $this->rebuildTags();
+    }
+
+    /**
+     * Returns relevant exception class. Use this method with "throw".
+     *
+     * @param string $message Static text of exception
+     * @param int    $code    Optional error code
+     *
+     * @return Exception
+     */
+    public function exception($message = 'Undefined Exception', $code = null)
+    {
+        $arg = [
+            $message,
+            'tags'     => implode(', ', array_keys($this->tags)),
+            'template' => $this->template,
+        ];
+
+        if ($this->source) {
+            $arg['source'] = $this->source;
+        }
+
+        return new Exception($arg, $code);
+    }
+
+    // }}}
+
+    // {{{ Tag manipulation
+
+    /**
+     * Returns true if specified tag is a top-tag of the template.
+     *
+     * Since Agile Toolkit 4.3 this tag is always called _top.
+     *
+     * @param string $tag
+     *
+     * @return bool
+     */
+    public function isTopTag($tag)
+    {
+        return $tag == '_top';
+    }
+
+    /**
+     * This is a helper method which populates an array pointing
+     * to the place in the template referenced by a said tag.
+     *
+     * Because there might be multiple tags and getTagRef is
+     * returning only one template, it will return the first
+     * occurrence:
+     *
+     * {greeting}hello{/},  {greeting}world{/}
+     *
+     * calling getTagRef('greeting',$template) will point
+     * second argument towards &array('hello');
+     *
+     * @param string $tag
+     * @param array  $template
+     *
+     * @return $this
+     */
+    public function getTagRef($tag, &$template)
+    {
+        if ($this->isTopTag($tag)) {
+            $template = &$this->template;
+
+            return $this;
+        }
+
+        $a = explode('#', $tag);
+        $tag = array_shift($a);
+        //$ref = array_shift($a); // unused
+        if (!isset($this->tags[$tag])) {
+            throw $this->exception('Tag not found in Template')
+                ->addMoreInfo('tag', $tag)
+                ->addMoreInfo('tags', implode(', ', array_keys($this->tags)));
+        }
+        $template = reset($this->tags[$tag]);
+
+        return $this;
+    }
+
+    /**
+     * For methods which execute action on several tags, this method
+     * will return array of templates. You can then iterate
+     * through the array and update all the template values.
+     *
+     * {greeting}hello{/},  {greeting}world{/}
+     *
+     * calling getTagRefList('greeting',$template) will point
+     * second argument towards array(&array('hello'),&array('world'));
+     *
+     * If $tag is specified as array, then $templates will
+     * contain all occurrences of all tags from the array.
+     *
+     * @param string|array $tag
+     * @param array        &$template
+     *
+     * @return bool
+     */
+    public function getTagRefList($tag, &$template)
+    {
         if (is_array($tag)) {
+            // TODO: test
+            $res = [];
             foreach ($tag as $t) {
-                if (!$this->_hasTag($t)) {
-                    return false;
+                $template = [];
+                $this->getTagRefList($t, $te);
+
+                foreach ($template as &$tpl) {
+                    $res[] = &$tpl;
                 }
+
+                return true;
             }
+        }
+
+        if ($this->isTopTag($tag)) {
+            $template = &$this->template;
+
+            return false;
+        }
+
+        $a = explode('#', $tag);
+        $tag = array_shift($a);
+        $ref = array_shift($a);
+        if (!$ref) {
+            if (!isset($this->tags[$tag])) {
+                throw $this->exception('Tag not found in Template')
+                    ->addMoreInfo('tag', $tag);
+            }
+            $template = $this->tags[$tag];
 
             return true;
         }
-
-        return $this->_hasTag($tag);
-    }
-
-    public function getTagTree(string $tag): TagTree
-    {
-        if (!isset($this->tagTrees[$tag])) {
-            throw (new Exception('Tag is not defined in template'))
-                ->addMoreInfo('tag', $tag)
-                ->addMoreInfo('template_tags', array_diff(array_keys($this->tagTrees), [self::TOP_TAG]));
+        if (!isset($this->tags[$tag][$ref - 1])) {
+            throw $this->exception('Tag not found in Template')
+                ->addMoreInfo('tag', $tag);
         }
+        $template = [&$this->tags[$tag][$ref - 1]];
 
-        return $this->tagTrees[$tag];
-    }
-
-    private function cloneTagTrees(array $tagTrees): array
-    {
-        $res = [];
-        foreach ($tagTrees as $k => $v) {
-            $res[$k] = $v->clone($this);
-        }
-
-        return $res;
-    }
-
-    public function __clone()
-    {
-        $this->tagTrees = $this->cloneTagTrees($this->tagTrees);
+        return true;
     }
 
     /**
-     * @return static
+     * Checks if template has defined a specified tag.
+     *
+     * @param string|array $tag
+     *
+     * @return bool
      */
-    public function cloneRegion(string $tag): self
+    public function hasTag($tag)
     {
-        $template = new static();
-        $template->tagTrees = $template->cloneTagTrees($this->tagTrees);
-
-        // rename top tag tree
-        $topTagTree = $template->tagTrees[$tag];
-        unset($template->tagTrees[$tag]);
-        $template->tagTrees[self::TOP_TAG] = $topTagTree;
-        $topTag = self::TOP_TAG;
-        \Closure::bind(function () use ($topTagTree, $topTag) {
-            $topTagTree->tag = $topTag;
-        }, null, TagTree::class)();
-
-        // TODO prune unreachable nodes
-        // $template->rebuildTagsIndex();
-
-        if ($this->issetApp()) {
-            $template->setApp($this->getApp());
+        if (is_array($tag)) {
+            return true;
         }
 
-        return $template;
-    }
+        $a = explode('#', $tag);
+        $tag = array_shift($a);
+        //$ref = array_shift($a); // unused
 
-    protected function _unsetFromTagTree(TagTree $tagTree, int $k): void
-    {
-        \Closure::bind(function () use ($tagTree, $k) {
-            if ($k === array_key_last($tagTree->children)) {
-                array_pop($tagTree->children);
-            } else {
-                unset($tagTree->children[$k]);
-            }
-        }, null, TagTree::class)();
-    }
-
-    protected function emptyTagTree(TagTree $tagTree): void
-    {
-        foreach ($tagTree->getChildren() as $k => $v) {
-            if ($v instanceof TagTree) {
-                $this->emptyTagTree($v);
-            } else {
-                $this->_unsetFromTagTree($tagTree, $k);
-            }
-        }
+        return isset($this->tags[$tag]) || $this->isTopTag($tag);
     }
 
     /**
-     * Internal method for setting or appending content in $tag.
-     *
-     * If tag contains another tag trees, these tag trees are emptied.
-     *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
+     * Re-create tag indexes from scratch for the whole template.
      */
-    protected function _setOrAppend($tag, string $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
+    public function rebuildTags()
     {
-        if ($tag instanceof Model) {
-            if (!$encodeHtml) {
-                throw new Exception('HTML is not allowed to be dangerously set from Model');
-            }
+        $this->tags = [];
 
-            $tag = $this->getApp()->uiPersistence->typecastSaveRow($tag, $tag->get());
-        }
-
-        // $tag passed as associative array [tag => value]
-        // in this case we don't throw exception if tags don't exist
-        if (is_array($tag) && $value === null) {
-            foreach ($tag as $k => $v) {
-                $this->_setOrAppend($k, $v, $encodeHtml, $append, false);
-            }
-
-            return;
-        }
-
-        if (!is_string($tag) || $tag === '') {
-            throw (new Exception('Tag must be non-empty string'))
-                ->addMoreInfo('tag', $tag)
-                ->addMoreInfo('value', $value);
-        }
-
-        if ($value === null) {
-            $value = '';
-        }
-
-        $htmlValue = new HtmlValue();
-        if ($encodeHtml) {
-            $htmlValue->set($value);
-        } else {
-            $htmlValue->dangerouslySetHtml($value);
-        }
-
-        // set or append value
-        if (!$throwIfNotFound && !$this->hasTag($tag)) {
-            return;
-        }
-
-        $tagTree = $this->getTagTree($tag);
-        if (!$append) {
-            $this->emptyTagTree($tagTree);
-        }
-        $tagTree->add($htmlValue);
+        $this->rebuildTagsRegion($this->template);
     }
+
+    /**
+     * Add tags from a specified region.
+     *
+     * @param array $template
+     */
+    protected function rebuildTagsRegion(&$template)
+    {
+        foreach ($template as $tag => &$val) {
+            if (is_numeric($tag)) {
+                continue;
+            }
+
+            $a = explode('#', $tag);
+            $key = array_shift($a);
+            $ref = array_shift($a);
+
+            $this->tags[$key][$ref] = &$val;
+            if (is_array($val)) {
+                $this->rebuildTagsRegion($val);
+            }
+        }
+    }
+
+    // }}}
+
+    // {{{ Manipulating contents of tags
 
     /**
      * This function will replace region referred by $tag to a new content.
@@ -207,30 +298,46 @@ class HtmlTemplate
      *
      * would read and set multiple region values from $_GET array.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
+     * @param mixed        $tag
+     * @param string|array $value
+     * @param bool         $encode
      *
      * @return $this
      */
-    public function set($tag, string $value = null): self
+    public function set($tag, $value = null, $encode = true)
     {
-        $this->_setOrAppend($tag, $value, true, false);
+        if (!$tag) {
+            return $this;
+        }
 
-        return $this;
-    }
+        if (is_object($tag)) {
+            $tag = $this->app->ui_persistence->typecastSaveRow($tag, $tag->get());
+        }
 
-    /**
-     * Same as set(), but won't generate exception for non-existing
-     * $tag.
-     *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
-     *
-     * @return $this
-     */
-    public function trySet($tag, string $value = null): self
-    {
-        $this->_setOrAppend($tag, $value, true, false, false);
+        if (is_array($tag) && $value === null) {
+            foreach ($tag as $s => $v) {
+                $this->trySet($s, $v, $encode);
+            }
+
+            return $this;
+        }
+
+        if (is_array($value)) {
+            return $this;
+        }
+
+        if (is_object($value)) {
+            throw new Exception(['Value should not be an object', 'value'=>$value]);
+        }
+
+        if ($encode) {
+            $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+        }
+
+        $this->getTagRefList($tag, $template);
+        foreach ($template as &$ref) {
+            $ref = [$value];
+        }
 
         return $this;
     }
@@ -239,61 +346,64 @@ class HtmlTemplate
      * Set value of a tag to a HTML content. The value is set without
      * encoding, so you must be sure to sanitize.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
-     *
-     * @return $this
+     * @param mixed        $tag
+     * @param string|array $value
+     * @param $this
      */
-    public function dangerouslySetHtml($tag, string $value = null): self
+    public function setHTML($tag, $value = null)
     {
-        $this->_setOrAppend($tag, $value, false, false);
-
-        return $this;
+        return $this->set($tag, $value, false);
     }
 
     /**
-     * See dangerouslySetHtml() but won't generate exception for non-existing
+     * See setHTML() but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
-     *
-     * @return $this
+     * @param mixed        $tag
+     * @param string|array $value
+     * @param $this
      */
-    public function tryDangerouslySetHtml($tag, string $value = null): self
+    public function trySetHTML($tag, $value = null)
     {
-        $this->_setOrAppend($tag, $value, false, false, false);
+        return $this->trySet($tag, $value, false);
+    }
 
-        return $this;
+    /**
+     * Same as set(), but won't generate exception for non-existing
+     * $tag.
+     *
+     * @param mixed        $tag
+     * @param string|array $value
+     * @param bool         $encode
+     * @param $this
+     */
+    public function trySet($tag, $value = null, $encode = true)
+    {
+        if (is_array($tag)) {
+            return $this->set($tag, $value, $encode);
+        }
+
+        return $this->hasTag($tag) ? $this->set($tag, $value, $encode) : $this;
     }
 
     /**
      * Add more content inside a tag.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
-     *
-     * @return $this
+     * @param mixed        $tag
+     * @param string|array $value
+     * @param bool         $encode
+     * @param $this
      */
-    public function append($tag, ?string $value): self
+    public function append($tag, $value, $encode = true)
     {
-        $this->_setOrAppend($tag, $value, true, true);
+        if ($encode) {
+            $value = htmlspecialchars($value, ENT_NOQUOTES, 'UTF-8');
+        }
 
-        return $this;
-    }
-
-    /**
-     * Same as append(), but won't generate exception for non-existing
-     * $tag.
-     *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
-     *
-     * @return $this
-     */
-    public function tryAppend($tag, ?string $value): self
-    {
-        $this->_setOrAppend($tag, $value, true, true, false);
+        $this->getTagRefList($tag, $template);
+        foreach ($template as &$ref) {
+            $ref[] = $value;
+        }
 
         return $this;
     }
@@ -302,71 +412,45 @@ class HtmlTemplate
      * Add more content inside a tag. The content is appended without
      * encoding, so you must be sure to sanitize.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
+     * @param mixed        $tag
+     * @param string|array $value
      *
      * @return $this
      */
-    public function dangerouslyAppendHtml($tag, ?string $value): self
+    public function appendHTML($tag, $value)
     {
-        $this->_setOrAppend($tag, $value, false, true);
-
-        return $this;
+        return $this->append($tag, $value, false);
     }
 
     /**
-     * Same as dangerouslyAppendHtml(), but won't generate exception for non-existing
-     * $tag.
+     * Get value of the tag. Note that this may contain an array
+     * if tag contains a structure.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
+     * @param string $tag
      *
      * @return $this
      */
-    public function tryDangerouslyAppendHtml($tag, ?string $value): self
+    public function get($tag)
     {
-        $this->_setOrAppend($tag, $value, false, true, false);
+        $template = [];
+        $this->getTagRef($tag, $template);
 
-        return $this;
+        return $template;
     }
 
     /**
      * Empty contents of specified region. If region contains sub-hierarchy,
      * it will be also removed.
      *
-     * @param string|list<string> $tag
+     * IMPORTANT: This does not dispose of the tags which were previously
+     * inside the region. This causes some severe pitfalls for the users
+     * and ideally must be checked and proper errors must be generated.
+     *
+     * @param string|array $tag
      *
      * @return $this
      */
-    public function del($tag): self
-    {
-        if (is_array($tag)) {
-            foreach ($tag as $t) {
-                $this->del($t);
-            }
-
-            return $this;
-        }
-
-        $tagTree = $this->getTagTree($tag);
-        \Closure::bind(function () use ($tagTree) {
-            $tagTree->children = [];
-        }, null, TagTree::class)();
-
-        // TODO prune unreachable nodes
-        // $template->rebuildTagsIndex();
-
-        return $this;
-    }
-
-    /**
-     * Similar to del() but won't throw exception if tag is not present.
-     *
-     * @param string|list<string> $tag
-     *
-     * @return $this
-     */
-    public function tryDel($tag): self
+    public function del($tag)
     {
         if (is_array($tag)) {
             foreach ($tag as $t) {
@@ -375,200 +459,329 @@ class HtmlTemplate
 
             return $this;
         }
+        if ($this->isTopTag($tag)) {
+            $this->loadTemplateFromString('');
 
-        if ($this->hasTag($tag)) {
-            $this->del($tag);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function loadFromFile(string $filename): self
-    {
-        if ($this->tryLoadFromFile($filename) !== false) {
             return $this;
         }
 
-        throw (new Exception('Unable to read template from file'))
-            ->addMoreInfo('filename', $filename);
-    }
-
-    /**
-     * Same as load(), but will not throw an exception.
-     *
-     * @return $this|false
-     */
-    public function tryLoadFromFile(string $filename)
-    {
-        // realpath() is slow on Windows, so cache it and dedup only directories
-        $filenameBase = basename($filename);
-        $filename = dirname($filename);
-        if (!isset(self::$_realpathCache[$filename])) {
-            self::$_realpathCache[$filename] = realpath($filename);
+        $this->getTagRefList($tag, $template);
+        foreach ($template as &$ref) {
+            $ref = [];
         }
-        $filename = self::$_realpathCache[$filename];
-        if ($filename === false) {
-            return false;
-        }
-        $filename .= '/' . $filenameBase;
-
-        if (!isset(self::$_filesCache[$filename])) {
-            $data = @file_get_contents($filename);
-            if ($data !== false) {
-                $data = preg_replace('~(?:\r\n?|\n)$~s', '', $data); // always trim end NL
-            }
-            self::$_filesCache[$filename] = $data;
-        }
-
-        $str = self::$_filesCache[$filename];
-        if ($str === false) {
-            return false;
-        }
-
-        $this->loadFromString($str);
 
         return $this;
     }
 
     /**
+     * Similar to del() but won't throw exception if tag is not present.
+     *
+     * @param string|array $tag
+     *
      * @return $this
      */
-    public function loadFromString(string $str): self
+    public function tryDel($tag)
     {
+        if (is_array($tag)) {
+            return $this->del($tag);
+        }
+
+        return $this->hasTag($tag) ? $this->del($tag) : $this;
+    }
+
+    // }}}
+
+    // {{{ ArrayAccess support
+    public function offsetExists($name)
+    {
+        return $this->hasTag($name);
+    }
+
+    public function offsetGet($name)
+    {
+        return $this->get($name);
+    }
+
+    public function offsetSet($name, $val)
+    {
+        $this->set($name, $val);
+    }
+
+    public function offsetUnset($name)
+    {
+        $this->del($name, null);
+    }
+
+    // }}}
+
+    // {{{ Template Manipulations
+
+    /**
+     * Executes call-back for each matching tag in the template.
+     *
+     * @param string|array $tag
+     * @param callable     $callable
+     *
+     * @return $this
+     */
+    public function eachTag($tag, $callable)
+    {
+        if (!$this->hasTag($tag)) {
+            return $this;
+        }
+
+        if ($this->getTagRefList($tag, $template)) {
+            foreach ($template as $key => $templ) {
+                $ref = $tag.'#'.($key + 1);
+                $this->tags[$tag][$key] = [call_user_func($callable, $this->recursiveRender($templ), $ref)];
+            }
+        } else {
+            $this->tags[$tag][0] = [call_user_func($callable, $this->recursiveRender($template), $tag)];
+        }
+
+        return $this;
+    }
+
+    /**
+     * Creates a new template using portion of existing template.
+     *
+     * @param string $tag
+     *
+     * @return self
+     */
+    public function cloneRegion($tag)
+    {
+        if ($this->isTopTag($tag)) {
+            return clone $this;
+        }
+
+        $cl = get_class($this);
+        $n = new $cl();
+        $n->app = $this->app;
+        $n->template = unserialize(serialize(['_top#1' => $this->get($tag)]));
+        $n->rebuildTags();
+        $n->source = 'clone ('.$tag.') of template '.$this->source;
+
+        return $n;
+    }
+
+    // }}}
+
+    // {{{ Template Loading
+
+    /**
+     * Loads template from a specified file.
+     *
+     * @param string $filename Template file name
+     *
+     * @return $this
+     */
+    public function load($filename)
+    {
+        if (!is_readable($filename)) {
+            throw new Exception([
+                'Unable to read template from file',
+                'file' => $filename,
+            ]);
+        }
+        $this->loadTemplateFromString(file_get_contents($filename));
+        $this->source = 'loaded from file: '.$filename;
+
+        return $this;
+    }
+
+    /**
+     * Initialize current template from the supplied string.
+     *
+     * @param string $str
+     *
+     * @return $this
+     */
+    public function loadTemplateFromString($str)
+    {
+        $this->source = 'string: '.$str;
+        $this->template = $this->tags = [];
+        if (!$str) {
+            return;
+        }
+        $this->tag_cnt = [];
+
+        /* First expand self-closing tags {$tag} -> {tag}{/tag} */
+        $str = preg_replace('/{\$([\w]+)}/', '{\1}{/\1}', $str);
+
         $this->parseTemplate($str);
 
         return $this;
     }
 
-    protected function parseTemplateTree(array &$inputReversed, string $openedTag = null): TagTree
-    {
-        $tagTree = new TagTree($this, $openedTag ?? self::TOP_TAG);
+    // }}}
 
-        $chunk = array_pop($inputReversed);
-        if ($chunk !== '') {
-            $tagTree->add((new HtmlValue())->dangerouslySetHtml($chunk));
+    // {{{ Template Parsing Engine
+
+    /**
+     * Used for adding unique tag alternatives. E.g. if your template has
+     * {$name}{$name}, then first would become 'name#1' and second 'name#2', but
+     * both would still respond to 'name' tag.
+     *
+     * @var array
+     */
+    private $tag_cnt = [];
+
+    /**
+     * Register tags and return unique tag name.
+     *
+     * @param string $tag tag name
+     *
+     * @return string unique tag name
+     */
+    protected function regTag($tag)
+    {
+        if (!isset($this->tag_cnt[$tag])) {
+            $this->tag_cnt[$tag] = 0;
         }
 
-        while (($tag = array_pop($inputReversed)) !== null) {
-            $firstChar = substr($tag, 0, 1);
-            if ($firstChar === '/') { // is closing tag
+        return $tag.'#'.(++$this->tag_cnt[$tag]);
+    }
+
+    /**
+     * Recursively find nested tags inside a string, converting them to array.
+     *
+     * @param array $input
+     * @param array $template
+     *
+     * @return string|null
+     */
+    protected function parseTemplateRecursive(&$input, &$template)
+    {
+        while (list(, $tag) = @each($input)) {
+
+            // Closing tag
+            if ($tag[0] == '/') {
+                return substr($tag, 1);
+            }
+
+            if ($tag[0] == '$') {
                 $tag = substr($tag, 1);
-                if ($openedTag === null
-                    || ($tag !== '' && $tag !== $openedTag)) {
-                    throw (new Exception('Template parse error: tag was not opened'))
-                        ->addMoreInfo('opened_tag', $openedTag)
-                        ->addMoreInfo('tag', $tag);
+                $full_tag = $this->regTag($tag);
+                $template[$full_tag] = '';  // empty value
+                $this->tags[$tag][] = &$template[$full_tag];
+
+                // eat next chunk
+                $chunk = @each($input);
+                if ($chunk[1]) {
+                    $template[] = $chunk[1];
                 }
 
-                $openedTag = null;
-
-                break;
+                continue;
             }
 
-            // is new/opening tag
-            $childTagTree = $this->parseTemplateTree($inputReversed, $tag);
-            $this->tagTrees[$tag] = $childTagTree;
-            $tagTree->addTag($tag);
+            $full_tag = $this->regTag($tag);
 
-            $chunk = array_pop($inputReversed);
-            if ($chunk !== null && $chunk !== '') {
-                $tagTree->add((new HtmlValue())->dangerouslySetHtml($chunk));
+            // Next would be prefix
+            list(, $prefix) = @each($input);
+            $template[$full_tag] = $prefix ? [$prefix] : [];
+
+            $this->tags[$tag][] = &$template[$full_tag];
+
+            $this->parseTemplateRecursive($input, $template[$full_tag]);
+
+            $chunk = @each($input);
+            if ($chunk[1]) {
+                $template[] = $chunk[1];
             }
         }
-
-        if ($openedTag !== null) {
-            throw (new Exception('Template parse error: tag is not closed'))
-                ->addMoreInfo('tag', $openedTag);
-        }
-
-        return $tagTree;
     }
 
-    protected function parseTemplate(string $str): void
+    /**
+     * Deploys parse recursion.
+     *
+     * @param string $str
+     */
+    protected function parseTemplate($str)
     {
-        $cKey = static::class . "\0" . $str;
-        if (!isset(self::$_parseCache[$cKey])) {
-            // expand self-closing tags {$tag} -> {tag}{/tag}
-            $str = preg_replace('~\{\$([\w\-:]+)\}~', '{\1}{/\1}', $str);
+        $tag = '/{([\/$]?[-_\w]*)}/';
 
-            $input = preg_split('~\{(/?[\w\-:]*)\}~', $str, -1, \PREG_SPLIT_DELIM_CAPTURE);
-            $inputReversed = array_reverse($input); // reverse to allow to use fast array_pop()
+        $input = preg_split($tag, $str, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-            $this->tagTrees = [];
-            try {
-                $this->tagTrees[self::TOP_TAG] = $this->parseTemplateTree($inputReversed);
-                $tagTrees = $this->tagTrees;
+        list(, $prefix) = @each($input);
+        $this->template = [$prefix];
 
-                if (self::$_parseCacheParentTemplate === null) {
-                    $cKeySelfEmpty = self::class . "\0";
-                    self::$_parseCache[$cKeySelfEmpty] = [];
-                    try {
-                        self::$_parseCacheParentTemplate = new self();
-                    } finally {
-                        unset(self::$_parseCache[$cKeySelfEmpty]);
-                    }
-                }
-                $parentTemplate = self::$_parseCacheParentTemplate;
-
-                \Closure::bind(function () use ($tagTrees, $parentTemplate) {
-                    foreach ($tagTrees as $tagTree) {
-                        $tagTree->parentTemplate = $parentTemplate;
-                    }
-                }, null, TagTree::class)();
-                self::$_parseCache[$cKey] = $tagTrees;
-            } finally {
-                $this->tagTrees = [];
-            }
-        }
-
-        $this->tagTrees = $this->cloneTagTrees(self::$_parseCache[$cKey]);
+        $this->parseTemplateRecursive($input, $this->template);
     }
 
-    public function toLoadableString(string $region = self::TOP_TAG): string
+    // }}}
+
+    // {{{ Template Rendering
+
+    /**
+     * Render either a whole template or a specified region. Returns
+     * current contents of a template.
+     *
+     * @param string $region
+     *
+     * @return string
+     */
+    public function render($region = null)
     {
-        $res = [];
-        foreach ($this->getTagTree($region)->getChildren() as $v) {
-            if ($v instanceof HtmlValue) {
-                $res[] = $v->getHtml();
-            } elseif ($v instanceof TagTree) {
-                $tag = $v->getTag();
-                $tagInnerStr = $this->toLoadableString($tag);
-                $res[] = $tagInnerStr === ''
-                    ? '{$' . $tag . '}'
-                    : '{' . $tag . '}' . $tagInnerStr . '{/' . $tag . '}';
+        if ($region) {
+            return $this->recursiveRender($this->get($region));
+        }
+
+        return $this->recursiveRender($this->template);
+    }
+
+    /**
+     * Walk through the template array collecting the values
+     * and returning them as a string.
+     *
+     * @param array $template
+     *
+     * @return string
+     */
+    protected function recursiveRender(&$template)
+    {
+        $output = '';
+        foreach ($template as $val) {
+            if (is_array($val)) {
+                $output .= $this->recursiveRender($val);
             } else {
-                throw (new Exception('Value class has no save support'))
-                    ->addMoreInfo('value_class', get_class($v));
+                $output .= $val;
             }
         }
 
-        return implode('', $res);
+        return $output;
     }
 
-    public function renderToHtml(string $region = null): string
-    {
-        return $this->renderTagTreeToHtml($this->getTagTree($region ?? self::TOP_TAG));
-    }
+    // }}}
 
-    protected function renderTagTreeToHtml(TagTree $tagTree): string
+    // {{{ Debugging functions
+
+    /*
+     * Returns HTML-formatted code with all tags
+     *
+    public function _getDumpTags(&$template)
     {
-        $res = [];
-        foreach ($tagTree->getChildren() as $v) {
-            if ($v instanceof HtmlValue) {
-                $res[] = $v->getHtml();
-            } elseif ($v instanceof TagTree) {
-                $res[] = $this->renderTagTreeToHtml($v);
-            } elseif ($v instanceof self) { // @phpstan-ignore-line
-                $res[] = $v->renderToHtml();
+        $s = '';
+        foreach ($template as $key => $val) {
+            if (is_array($val)) {
+                $s .= '<font color="blue">{'.$key.'}</font>'.
+                    $this->_getDumpTags($val).'<font color="blue">{/'.$key.'}</font>';
             } else {
-                throw (new Exception('Unexpected value class'))
-                    ->addMoreInfo('value_class', get_class($v));
+                $s .= htmlspecialchars($val);
             }
         }
 
-        return implode('', $res);
+        return $s;
     }
+    /*** TO BE REFACTORED ***/
+
+    /*
+     * Output all tags
+     *
+    public function dumpTags()
+    {
+        echo '"'.$this->_getDumpTags($this->template).'"';
+    }
+    /*** TO BE REFACTORED ***/
+    // }}}
 }

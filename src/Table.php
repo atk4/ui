@@ -1,77 +1,109 @@
 <?php
 
-declare(strict_types=1);
+// vim:ts=4:sw=4:et:fdm=marker:fdl=0
 
-namespace Atk4\Ui;
+namespace atk4\ui;
 
-use Atk4\Core\Factory;
-use Atk4\Data\Field;
-use Atk4\Data\Model;
-use Atk4\Ui\Js\Jquery;
-use Atk4\Ui\Js\JsExpression;
-use Atk4\Ui\Js\JsExpressionable;
-
-/**
- * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
- */
 class Table extends Lister
 {
-    public $ui = 'table';
-
+    // Overrides
     public $defaultTemplate = 'table.html';
+    public $ui = 'table';
+    public $content = false;
 
     /**
-     * If table is part of Grid or Crud, we want to reload that instead of table.
-     * Usually a Grid or Crud that contains the table.
+     * TODO: is this used??
      *
-     * @var View|null
+     * @var null
+     *
+     * If table is part of Grid or CRUD, we want to reload that instead of grid.
      */
-    public $reload;
+    public $reload = null;
 
-    /** @var array<int|string, Table\Column|array<int, Table\Column>> Contains list of declared columns. Value will always be a column object. */
+    /**
+     * Column objects can service multiple columns. You can use it for your advancage by re-using the object
+     * when you pass it to addColumn(). If you omit the argument, then a column of a type 'Generic' will be
+     * used.
+     *
+     * @var TableColumn\Generic
+     */
+    public $default_column = null;
+
+    /**
+     * Contains list of declared columns. Value will always be a column object.
+     *
+     * @var array
+     */
     public $columns = [];
 
     /**
-     * Allows you to inject HTML into table using getHtmlTags hook and column callbacks.
+     * Allows you to inject HTML into table using getHTMLTags hook and column call-backs.
      * Switch this feature off to increase performance at expense of some row-specific HTML.
      *
      * @var bool
      */
-    public $useHtmlTags = true;
+    public $use_html_tags = true;
 
     /**
-     * Determines a strategy on how totals will be calculated. Do not touch those fields
-     * directly, instead use addTotals().
+     * Setting this to false will hide header row.
      *
-     * @var array<string, string|array{ string|\Closure(mixed, string, $this): (int|float) }>|false
+     * @var bool
      */
-    public $totalsPlan = false;
-
-    /** @var bool Setting this to false will hide header row. */
     public $header = true;
 
-    /** @var array Contains list of totals accumulated during the render process. */
+    /**
+     * Determines a strategy on how totals will be calculated.
+     *
+     * Do not touch those fields directly, instead use addTotals() or setTotals().
+     *
+     * @var array
+     */
+    public $totals_plan = [];
+
+    /**
+     * Contains list of totals accumulated during the render process.
+     *
+     * Don't use this property directly. Use addTotals() and setTotals() instead.
+     *
+     * @var array
+     */
     public $totals = [];
 
-    /** @var HtmlTemplate|null Contain the template for the "Head" type row. */
-    public $tHead;
+    /**
+     * Contain the template for the "Head" type row.
+     *
+     * @var Template
+     */
+    public $t_head;
 
-    /** @var HtmlTemplate */
-    public $tRowMaster;
+    /**
+     * Contain the template for the "Body" type row.
+     *
+     * @var Template
+     */
+    public $t_row;
 
-    /** @var HtmlTemplate Contain the template for the "Body" type row. */
-    public $tRow;
+    /**
+     * Contain the template for the "Foot" type row.
+     *
+     * @var Template
+     */
+    public $t_totals;
 
-    /** @var HtmlTemplate Contain the template for the "Foot" type row. */
-    public $tTotals;
+    /**
+     * Contains the output to show if table contains no rows.
+     *
+     * @var Template
+     */
+    public $t_empty;
 
     /**
      * Set this if you want table to appear as sortable. This does not add any
      * mechanic of actual sorting - either implement manually or use Grid.
      *
-     * @var bool|null
+     * @var null|bool
      */
-    public $sortable;
+    public $sortable = null;
 
     /**
      * When $sortable is true, you can specify which column will appear to have
@@ -79,40 +111,20 @@ class Table extends Lister
      *
      * @var string
      */
-    public $sortBy;
+    public $sort_by = null;
 
     /**
-     * When $sortable is true, and $sortBy is set, you can set order direction.
+     * When $sortable is true, and $sort_by is set, you can set this to
+     * "ascending" or "descending".
      *
-     * @var 'asc'|'desc'|null
+     * @var string
      */
-    public $sortDirection;
+    public $sort_order = null;
 
-    /**
-     * Make action columns in table use
-     * the collapsing CSS class.
-     * An action cell that is collapsing will
-     * only uses as much space as required.
-     *
-     * @var bool
-     */
-    public $hasCollapsingCssActionColumn = true;
-
-    /**
-     * Create one column object that will be used to render all columns
-     * in the table unless you have specified a different column object.
-     */
-    protected function initChunks(): void
+    public function __construct($class = null)
     {
-        if (!$this->tHead) {
-            $this->tHead = $this->template->cloneRegion('Head');
-            $this->tRowMaster = $this->template->cloneRegion('Row');
-            $this->tTotals = $this->template->cloneRegion('Totals');
-            $this->tEmpty = $this->template->cloneRegion('Empty');
-
-            $this->template->del('Head');
-            $this->template->del('Body');
-            $this->template->del('Foot');
+        if ($class) {
+            $this->addClass($class);
         }
     }
 
@@ -128,51 +140,75 @@ class Table extends Lister
      * cells and will handle other things, like alignment. If you do not specify
      * column, then it will be selected dynamically based on field type.
      *
-     * If you don't want table column to be associated with model field, then
-     * pass $name parameter as null.
+     * @param string                   $name            Data model field name
+     * @param array|string|object|null $columnDecorator
+     * @param array|string|object|null $field
      *
-     * @param string|null                             $name            Data model field name
-     * @param array|Table\Column                      $columnDecorator
-     * @param ($name is null ? array{} : array|Field) $field
-     *
-     * @return Table\Column
+     * @return TableColumn\Generic
      */
-    public function addColumn(?string $name, $columnDecorator = [], $field = [])
+    public function addColumn($name, $columnDecorator = null, $field = null)
     {
-        $this->assertIsInitialized();
-
-        if ($name !== null && isset($this->columns[$name])) {
-            throw (new Exception('Table column already exists'))
-                ->addMoreInfo('name', $name);
+        if (!$this->_initialized) {
+            throw new Exception\NoRenderTree($this, 'addColumn()');
         }
 
         if (!$this->model) {
-            $this->model = new \Atk4\Ui\Misc\ProxyModel();
+            $this->model = new \atk4\ui\misc\ProxyModel();
         }
-        $this->model->assertIsModel();
 
-        // should be vaguely consistent with Form\AbstractLayout::addControl()
+        // This code should be vaguely consistent with FormLayout\Generic::addField()
 
-        if ($name === null) {
-            $field = null;
-        } elseif (!$this->model->hasField($name)) {
-            $field = $this->model->addField($name, $field);
-            $field->neverPersist = true;
+        if (is_string($field)) {
+            $field = ['type' => $field];
+        }
+
+        if ($name) {
+            $existingField = $this->model->hasElement($name);
         } else {
-            $field = $this->model->getField($name)
-                ->setDefaults($field);
+            $existingField = null;
         }
 
-        if ($field === null) {
-            // column is not associated with any model field
-            // TODO simplify to single $this->decoratorFactory call
-            $columnDecorator = $this->_addUnchecked(Table\Column::fromSeed($columnDecorator, ['table' => $this]));
+        if (!$existingField) {
+            // Add missing field
+            if ($field) {
+                $field = $this->model->addField($name, $field);
+                $field->never_persist = true;
+            } else {
+                $field = $this->model->addField($name);
+                $field->never_persist = true;
+            }
+        } elseif (is_array($field)) {
+            // Add properties to existing field
+            $existingField->setDefaults($field);
+            $field = $existingField;
+        } elseif (is_object($field)) {
+            throw new Exception(['Duplicate field', 'name' => $name]);
         } else {
-            $columnDecorator = $this->decoratorFactory($field, Factory::mergeSeeds($columnDecorator, ['columnData' => $name]));
+            $field = $existingField;
         }
 
-        if ($name === null) {
+        if (is_array($columnDecorator) || is_string($columnDecorator)) {
+            $columnDecorator = $this->decoratorFactory($field, $columnDecorator);
+        } elseif (!$columnDecorator) {
+            $columnDecorator = $this->decoratorFactory($field);
+        } elseif (is_object($columnDecorator)) {
+            if (!$columnDecorator instanceof \atk4\ui\TableColumn\Generic) {
+                throw new Exception(['Column decorator must descend from \atk4\ui\TableColumn\Generic', 'columnDecorator' => $columnDecorator]);
+            }
+            $columnDecorator->table = $this;
+            $this->_add($columnDecorator);
+        } else {
+            throw new Exception(['Value of $columnDecorator argument is incorrect', 'columnDecorator' => $columnDecorator]);
+        }
+
+        if (is_null($name)) {
             $this->columns[] = $columnDecorator;
+        } elseif (!is_string($name)) {
+            echo 'about to throw exception.....';
+
+            throw new Exception(['Name must be a string', 'name' => $name]);
+        } elseif (isset($this->columns[$name])) {
+            throw new Exception(['Table already has column with $name. Try using addDecorator()', 'name' => $name]);
         } else {
             $this->columns[$name] = $columnDecorator;
         }
@@ -180,187 +216,150 @@ class Table extends Lister
         return $columnDecorator;
     }
 
-    // TODO do not use elements/add(), elements are only for View based objects
-    private function _addUnchecked(Table\Column $column): Table\Column
-    {
-        return \Closure::bind(function () use ($column) {
-            return $this->_add($column);
-        }, $this, AbstractView::class)();
-    }
-
-    /**
-     * Set Popup action for columns filtering.
-     *
-     * @param array $cols an array with columns name that need filtering
-     */
-    public function setFilterColumn($cols = null): void
-    {
-        if (!$this->model) {
-            throw new Exception('Model need to be defined in order to use column filtering');
-        }
-
-        // set filter to all column when null
-        if (!$cols) {
-            foreach ($this->model->getFields() as $key => $field) {
-                if (isset($this->columns[$key])) {
-                    $cols[] = $field->shortName;
-                }
-            }
-        }
-
-        // create column popup
-        foreach ($cols as $colName) {
-            $col = $this->getColumn($colName);
-
-            $pop = $col->addPopup(new Table\Column\FilterPopup(['field' => $this->model->getField($colName), 'reload' => $this->reload, 'colTrigger' => '#' . $col->name . '_ac']));
-            if ($pop->isFilterOn()) {
-                $col->setHeaderPopupIcon('table-filter-on');
-            }
-            // apply condition according to popup form
-            $this->model = $pop->setFilterCondition($this->model);
-        }
-    }
-
     /**
      * Add column Decorator.
      *
-     * @param array|Table\Column $seed
-     *
-     * @return Table\Column
+     * @param string                     $name      Column name
+     * @param string|TableColumn/Generic $decorator
      */
-    public function addDecorator(string $name, $seed)
+    public function addDecorator($name, $decorator)
     {
-        if (!isset($this->columns[$name])) {
-            throw (new Exception('Table column does not exist'))
-                ->addMoreInfo('name', $name);
+        if (!$this->columns[$name]) {
+            throw new Exception(['No such column, cannot decorate', 'name' => $name]);
         }
-
-        $decorator = $this->_addUnchecked(Table\Column::fromSeed($seed, ['table' => $this]));
+        $decorator = $this->_add($this->factory($decorator, ['table' => $this], 'TableColumn'));
 
         if (!is_array($this->columns[$name])) {
             $this->columns[$name] = [$this->columns[$name]];
         }
         $this->columns[$name][] = $decorator;
-
-        return $decorator;
     }
 
     /**
      * Return array of column decorators for particular column.
+     *
+     * @param string $name Column name
+     *
+     * @return array
      */
-    public function getColumnDecorators(string $name): array
+    public function getColumnDecorators($name)
     {
         $dec = $this->columns[$name];
+        if (!is_array($dec)) {
+            $dec = [$dec];
+        }
 
-        return is_array($dec) ? $dec : [$dec];
+        return $dec;
     }
-
-    /**
-     * Return column instance or first instance if using decorator.
-     *
-     * @return Table\Column
-     */
-    protected function getColumn(string $name)
-    {
-        // NOTE: It is not guaranteed that we will have only one element here. When adding decorators, the key will not
-        // contain the column instance anymore but an array with column instance set at 0 indexes and the rest as decorators.
-        // This is enough for fixing this issue right now. We can work on unifying decorator API in a separate PR.
-        return is_array($this->columns[$name]) ? $this->columns[$name][0] : $this->columns[$name];
-    }
-
-    /**
-     * @var array<string, array>
-     */
-    protected array $typeToDecorator = [
-        'atk4_money' => [Table\Column\Money::class],
-        'text' => [Table\Column\Text::class],
-        'boolean' => [Table\Column\Status::class, ['positive' => [true], 'negative' => [false]]],
-    ];
 
     /**
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
      *
-     * @param array|Table\Column $seed
+     * @param \atk4\data\Field $f    Data model field
+     * @param array            $seed Defaults to pass to factory() when decorator is initialized
      *
-     * @return Table\Column
+     * @return TableColumn\Generic
      */
-    public function decoratorFactory(Field $field, $seed = [])
+    public function decoratorFactory(\atk4\data\Field $f, $seed = [])
     {
-        $seed = Factory::mergeSeeds(
+        $seed = $this->mergeSeeds(
             $seed,
-            $field->ui['table'] ?? null,
-            $this->typeToDecorator[$field->type] ?? null,
-            [Table\Column::class]
+            isset($f->ui['table']) ? $f->ui['table'] : null,
+            isset($this->typeToDecorator[$f->type]) ? $this->typeToDecorator[$f->type] : null,
+            ['Generic']
         );
 
-        return $this->_addUnchecked(Table\Column::fromSeed($seed, ['table' => $this]));
+        return $this->_add($this->factory($seed, ['table' => $this], 'TableColumn'));
+    }
+
+    protected $typeToDecorator = [
+        'password' => 'Password',
+        'money'    => 'Money',
+        'text'     => 'Text',
+        'boolean'  => ['Status', ['positive' => [true], 'negative' => ['false']]],
+    ];
+
+    /**
+     * Adds totals calculation plan.
+     * You can call this method multiple times to add more than one totals row.
+     *
+     * It returns totals plan ID which you can use to do some magic in rendering phase.
+     *
+     * @param array      $plan    Array of type [column => strategy]
+     * @param string|int $plan_id Optional totals plan id
+     *
+     * @return string|int
+     */
+    public function addTotals($plan = [], $plan_id = null)
+    {
+        // normalize plan
+        foreach ($plan as $field => $def) {
+            // title (string or callable)
+            if (is_string($def) || is_callable($def)) {
+                $plan[$field] = ['title' => $def];
+            }
+
+            // "row" strategy + defaults
+            if (is_array($def) && isset($def[0])) {
+                $plan[$field]['row'] = $def[0];
+                unset($plan[$field][0]);
+            }
+        }
+
+        // each plan can have some "hidden" columns
+        // we use them, for example, to count table rows while rendering
+        $plan['_row_count']['row'] = 'count';
+
+        // save normalized plan
+        if ($plan_id !== null) {
+            $this->totals_plan[$plan_id] = $plan;
+        } else {
+            $this->totals_plan[] = $plan;
+            $plan_id = max(array_filter(array_keys($this->totals_plan), 'is_int'));
+        }
+
+        return $plan_id;
     }
 
     /**
-     * Make columns resizable by dragging column header.
+     * Sets totals calculation plans [$plan_id=>[column=>strategy]].
+     * This will overwrite all previously set plans.
      *
-     * The callback function will receive two parameter, a Jquery chain object and a array containing all table columns
-     * name and size.
-     *
-     * @param \Closure(Jquery, mixed): (JsExpressionable|View|string|void) $fx             a callback function with columns widths as parameter
-     * @param array<int, int>                                              $widths         ex: [100, 200, 300, 100]
-     * @param array                                                        $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
+     * @param array $plans
      *
      * @return $this
      */
-    public function resizableColumn($fx = null, $widths = null, $resizerOptions = [])
+    public function setTotals($plans = [])
     {
-        $options = [];
-        if ($fx !== null) {
-            $cb = JsCallback::addTo($this);
-            $cb->set(function (Jquery $chain, string $data) use ($fx) {
-                return $fx($chain, $this->getApp()->decodeJson($data));
-            }, ['widths' => 'widths']);
-            $options['url'] = $cb->getJsUrl();
+        // reset
+        $this->totals_plan = [];
+
+        // add each plan
+        foreach ($plans as $plan_id => $plan) {
+            $this->addTotals($plan, $plan_id);
         }
-
-        if ($widths !== null) {
-            $options['widths'] = $widths;
-        }
-
-        $options = array_merge($options, $resizerOptions);
-
-        $this->js(true, $this->js()->atkColumnResizer($options));
 
         return $this;
     }
 
     /**
-     * Add a dynamic paginator, i.e. when user is scrolling content.
-     *
-     * @param int    $ipp          number of item per page to start with
-     * @param array  $options      an array with JS Scroll plugin options
-     * @param View   $container    the container holding the lister for scrolling purpose
-     * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
-     *
-     * @return $this
+     * initChunks method will create one column object that will be used to render
+     * all columns in the table unless you have specified a different
+     * column object.
      */
-    public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+    public function initChunks()
     {
-        $options = array_merge($options, ['appendTo' => 'tbody']);
+        if (!$this->t_head) {
+            $this->t_head = $this->template->cloneRegion('Head');
+            $this->t_row_master = $this->template->cloneRegion('Row');
+            $this->t_totals = $this->template->cloneRegion('Totals');
+            $this->t_empty = $this->template->cloneRegion('Empty');
 
-        return parent::addJsPaginator($ipp, $options, $container, $scrollRegion);
-    }
-
-    /**
-     * Override works like this:.
-     * [
-     *   'name' => 'Totals for {$num} rows:',
-     *   'price' => '--',
-     *   'total' => ['sum']
-     * ].
-     *
-     * @param array<string, string|array{ string|\Closure(mixed, string, $this): (int|float) }> $plan
-     */
-    public function addTotals($plan = []): void
-    {
-        $this->totalsPlan = $plan;
+            $this->template->del('Head');
+            $this->template->del('Body');
+            $this->template->del('Foot');
+        }
     }
 
     /**
@@ -370,28 +369,44 @@ class Table extends Lister
      * visible model fields. If $columns is set to false, then will not add
      * columns at all.
      *
-     * @param array<int, string>|null $columns
+     * @param \atk4\data\Model $m       Data model
+     * @param array|bool       $columns
+     *
+     * @return \atk4\data\Model
      */
-    public function setModel(Model $model, array $columns = null): void
+    public function setModel(\atk4\data\Model $m, $columns = null)
     {
-        $model->assertIsModel();
-
-        parent::setModel($model);
+        parent::setModel($m);
 
         if ($columns === null) {
-            $columns = array_keys($model->getFields('visible'));
+            $columns = [];
+            foreach ($m->elements as $name => $element) {
+                if (!$element instanceof \atk4\data\Field) {
+                    continue;
+                }
+
+                if ($element->isVisible()) {
+                    $columns[] = $name;
+                }
+            }
+        } elseif ($columns === false) {
+            return $this->model;
         }
 
         foreach ($columns as $column) {
             $this->addColumn($column);
         }
+
+        return $this->model;
     }
 
-    protected function renderView(): void
+    /**
+     * {@inheritdoc}
+     */
+    public function renderView()
     {
         if (!$this->columns) {
-            throw (new Exception('Table does not have any columns defined'))
-                ->addMoreInfo('columns', $this->columns);
+            throw new Exception(['Table does not have any columns defined', 'columns' => $this->columns]);
         }
 
         if ($this->sortable) {
@@ -400,82 +415,63 @@ class Table extends Lister
 
         // Generate Header Row
         if ($this->header) {
-            $this->tHead->dangerouslySetHtml('cells', $this->getHeaderRowHtml());
-            $this->template->dangerouslySetHtml('Head', $this->tHead->renderToHtml());
+            $this->t_head->setHTML('cells', $this->getHeaderRowHTML());
+            $this->template->setHTML('Head', $this->t_head->render());
         }
 
         // Generate template for data row
-        $this->tRowMaster->dangerouslySetHtml('cells', $this->getDataRowHtml());
-        $this->tRowMaster->set('dataId', '{$dataId}');
-        $this->tRow = new HtmlTemplate($this->tRowMaster->renderToHtml());
-        $this->tRow->setApp($this->getApp());
+        $this->t_row_master->setHTML('cells', $this->getDataRowHTML());
+        $this->t_row_master['_id'] = '{$_id}';
+        $this->t_row = new Template($this->t_row_master->render());
+        $this->t_row->app = $this->app;
 
         // Iterate data rows
-        $this->_renderedRowsCount = 0;
-
-        // TODO we should not iterate using $this->model variable,
-        // then also backup/tryfinally would be not needed
-        // the same in Lister class
-        $modelBackup = $this->model;
-        $tRowBackup = $this->tRow;
-        try {
-            foreach ($this->model as $this->model) {
-                $this->currentRow = $this->model;
-                $this->tRow = clone $tRowBackup;
-                if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
-                    continue;
-                }
-
-                if ($this->totalsPlan) {
-                    $this->updateTotals();
-                }
-
-                $this->renderRow();
-
-                ++$this->_renderedRowsCount;
-
-                if ($this->hook(self::HOOK_AFTER_ROW) === false) {
-                    continue;
-                }
+        $rows = 0;
+        foreach ($this->model as $this->current_id => $tmp) {
+            $this->current_row = $this->model->get();
+            if ($this->hook('beforeRow') === false) {
+                continue;
             }
-        } finally {
-            $this->model = $modelBackup;
-            $this->tRow = $tRowBackup;
+
+            if ($this->totals_plan) {
+                $this->updateTotals();
+            }
+
+            $this->renderRow();
+
+            $rows++;
+
+            $this->hook('afterRow');
         }
 
         // Add totals rows or empty message
-        if ($this->_renderedRowsCount === 0) {
-            if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
-                $this->template->dangerouslyAppendHtml('Body', $this->tEmpty->renderToHtml());
+        if (!$rows) {
+            $this->template->appendHTML('Body', $this->t_empty->render());
+        } elseif ($this->totals_plan) {
+            foreach (array_keys($this->totals_plan) as $plan_id) {
+                $this->t_totals->setHTML('cells', $this->getTotalsRowHTML($plan_id));
+                $this->template->appendHTML('Foot', $this->t_totals->render());
             }
-        } elseif ($this->totalsPlan) {
-            $this->tTotals->dangerouslySetHtml('cells', $this->getTotalsRowHtml());
-            $this->template->dangerouslyAppendHtml('Foot', $this->tTotals->renderToHtml());
         }
 
-        // stop JsPaginator if there are no more records to fetch
-        if ($this->jsPaginator && ($this->_renderedRowsCount < $this->ipp)) {
-            $this->jsPaginator->jsIdle();
-        }
-
-        View::renderView();
+        return View::renderView();
     }
 
     /**
      * Render individual row. Override this method if you want to do more
      * decoration.
      */
-    public function renderRow(): void
+    public function renderRow()
     {
-        $this->tRow->set($this->model);
+        $this->t_row->set($this->model);
 
-        if ($this->useHtmlTags) {
-            // prepare row-specific HTML tags
-            $htmlTags = [];
+        if ($this->use_html_tags) {
+            // Prepare row-specific HTML tags.
+            $html_tags = [];
 
-            foreach ($this->hook(Table\Column::HOOK_GET_HTML_TAGS, [$this->model]) as $ret) {
+            foreach ($this->hook('getHTMLTags', [$this->model]) as $ret) {
                 if (is_array($ret)) {
-                    $htmlTags = array_merge($htmlTags, $ret);
+                    $html_tags = array_merge($html_tags, $ret);
                 }
             }
 
@@ -483,19 +479,21 @@ class Table extends Lister
                 if (!is_array($columns)) {
                     $columns = [$columns];
                 }
-                $field = is_int($name) ? null : $this->model->getField($name);
+                $field = $this->model->hasElement($name);
                 foreach ($columns as $column) {
-                    $htmlTags = array_merge($column->getHtmlTags($this->model, $field), $htmlTags);
+                    if (method_exists($column, 'getHTMLTags')) {
+                        $html_tags = array_merge($column->getHTMLTags($this->model, $field), $html_tags);
+                    }
                 }
             }
 
             // Render row and add to body
-            $this->tRow->dangerouslySetHtml($htmlTags);
-            $this->tRow->set('dataId', (string) $this->model->getId());
-            $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
-            $this->tRow->del(array_keys($htmlTags));
+            $this->t_row->setHTML($html_tags);
+            $this->t_row->set('_id', $this->model->id);
+            $this->template->appendHTML('Body', $this->t_row->render());
+            $this->t_row->del(array_keys($html_tags));
         } else {
-            $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
+            $this->template->appendHTML('Body', $this->t_row->render());
         }
     }
 
@@ -504,122 +502,154 @@ class Table extends Lister
      * click outside of the body. Additionally when you move cursor over the
      * rows, pointer will be used and rows will be highlighted as you hover.
      *
-     * @param JsExpressionable|JsCallbackSetClosure $action Code to execute
+     * @param jsChain|callable $action Code to execute
+     *
+     * @return jQuery
      */
-    public function onRowClick($action): void
+    public function onRowClick($action)
     {
         $this->addClass('selectable');
         $this->js(true)->find('tbody')->css('cursor', 'pointer');
 
-        // do not bubble row click event if click stems from row content like checkboxes
-        // TODO one ->on() call would be better, but we need a method to convert Closure $action into JsExpression first
-        $preventBubblingJs = new JsExpression(<<<'EOF'
-            let elem = event.target;
-            while (elem !== null && elem !== event.currentTarget) {
-                if (elem.tagName === 'A' || elem.classList.contains('atk4-norowclick')
-                    || (elem.classList.contains('ui') && ['button', 'input', 'checkbox', 'dropdown'].some(v => elem.classList.contains(v)))) {
-                    event.stopImmediatePropagation();
-                }
-                elem = elem.parentElement;
-            }
-            EOF);
-        $this->on('click', 'tbody > tr', $preventBubblingJs, ['preventDefault' => false]);
-
-        $this->on('click', 'tbody > tr', $action);
+        return $this->on('click', 'tbody>tr', $action);
     }
 
     /**
-     * Use this to quickly access the <tr> and wrap in Jquery.
+     * Use this to quickly access the <tr> and wrap in jQuery.
      *
      * $this->jsRow()->data('id');
      *
-     * @return Jquery
+     * @return jQuery
      */
-    public function jsRow(): JsExpressionable
+    public function jsRow()
     {
-        return (new Jquery())->closest('tr');
-    }
-
-    /**
-     * Remove a row in table using javascript using a model ID.
-     *
-     * @param string $id         the model ID where row need to be removed
-     * @param string $transition the transition effect
-     *
-     * @return Jquery
-     */
-    public function jsRemoveRow($id, $transition = 'fade left'): JsExpressionable
-    {
-        return $this->js()->find('tr[data-id=' . $id . ']')->transition($transition);
+        return (new jQuery(new jsExpression('this')))->closest('tr');
     }
 
     /**
      * Executed for each row if "totals" are enabled to add up values.
+     * It will calculate requested totals for all total plans.
      */
-    public function updateTotals(): void
+    public function updateTotals()
     {
-        foreach ($this->totalsPlan as $key => $val) {
-            // if value is array, then we treat it as built-in or closure aggregate method
-            if (is_array($val)) {
-                $f = $val[0];
+        foreach ($this->totals_plan as $plan_id => $plan) {
+            $t = &$this->totals[$plan_id]; // shortcut
+            if (!$t) {
+                $t = [];
+            }
 
-                // initial value is always 0
-                if (!isset($this->totals[$key])) {
-                    $this->totals[$key] = 0;
+            // update totals for each column
+            foreach ($plan as $key => $def) {
+                // ignore column if "row" strategy is not set
+                if (!isset($def['row'])) {
+                    continue;
                 }
 
-                if ($f instanceof \Closure) {
-                    $this->totals[$key] += $f($this->model->get($key), $key, $this);
-                } elseif (is_string($f)) {
-                    switch ($f) {
-                        case 'sum':
-                            $this->totals[$key] += $this->model->get($key);
+                // simply initialize array key, but don't set any value
+                // we can't set initial value to 0, because min/max or some custom totals
+                // methods can use this 0 as value for comparison and that's wrong
+                if (!array_key_exists($key, $t)) {
+                    if (isset($def['default'])) {
+                        $d = $def['default']; // shortcut
 
-                            break;
-                        case 'count':
-                            ++$this->totals[$key];
-
-                            break;
-                        case 'min':
-                            if ($this->model->get($key) < $this->totals[$key]) {
-                                $this->totals[$key] = $this->model->get($key);
-                            }
-
-                            break;
-                        case 'max':
-                            if ($this->model->get($key) > $this->totals[$key]) {
-                                $this->totals[$key] = $this->model->get($key);
-                            }
-
-                            break;
-                        default:
-                            throw (new Exception('Unsupported table aggregate function'))
-                                ->addMoreInfo('name', $f);
+                        $t[$key] = is_callable($d)
+                            ? call_user_func_array($d, [$this->model[$key], $this->model])
+                            : $d;
+                    } else {
+                        $t[$key] = null;
                     }
                 }
-            }
+
+                // calc row totals
+                $f = $def['row']; // shortcut
+
+                // built-in functions
+                if (is_string($f)) {
+                    switch ($f) {
+                        case 'sum':
+                            // set initial value
+                            if ($t[$key] === null) {
+                                $t[$key] = 0;
+                            }
+                            // sum
+                            $t[$key] = $t[$key] + $this->model[$key];
+                            break;
+                        case 'count':
+                            // set initial value
+                            if ($t[$key] === null) {
+                                $t[$key] = 0;
+                            }
+                            // increment
+                            $t[$key]++;
+                            break;
+                        case 'min':
+                            // set initial value
+                            if ($t[$key] === null) {
+                                $t[$key] = $this->model[$key];
+                            }
+                            // compare
+                            if ($this->model[$key] < $t[$key]) {
+                                $t[$key] = $this->model[$key];
+                            }
+                            break;
+                        case 'max':
+                            // set initial value
+                            if ($t[$key] === null) {
+                                $t[$key] = $this->model[$key];
+                            }
+                            // compare
+                            if ($this->model[$key] > $t[$key]) {
+                                $t[$key] = $this->model[$key];
+                            }
+                            break;
+                        default:
+                            throw new Exception([
+                                'Aggregation method does not exist',
+                                'column' => $key,
+                                'method' => $f,
+                            ]);
+                    }
+
+                    continue;
+                }
+
+                // Callable support
+                // Arguments:
+                // - current total value
+                // - current field value from model
+                // - \atk4\data\Model table model with current record loaded
+                // Should return new total value (for example, current value + current field value)
+                // NOTE: Keep in mind, that current total value initially can be null !
+                if (is_callable($f)) {
+                    $t[$key] = call_user_func_array($f, [$t[$key], $this->model[$key], $this->model]);
+
+                    continue;
+                }
+            }//foreach $plan
         }
     }
 
     /**
      * Responds with the HTML to be inserted in the header row that would
      * contain captions of all columns.
+     *
+     * @return string
      */
-    public function getHeaderRowHtml(): string
+    public function getHeaderRowHTML()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
+
             // If multiple formatters are defined, use the first for the header cell
             if (is_array($column)) {
                 $column = $column[0];
             }
 
             if (!is_int($name)) {
-                $field = $this->model->getField($name);
-
-                $output[] = $column->getHeaderCellHtml($field);
+                $field = $this->model->getElement($name);
+                $output[] = $column->getHeaderCellHTML($field);
             } else {
-                $output[] = $column->getHeaderCellHtml();
+                $output[] = $column->getHeaderCellHTML();
             }
         }
 
@@ -628,29 +658,55 @@ class Table extends Lister
 
     /**
      * Responds with HTML to be inserted in the footer row that would
-     * contain totals for all columns.
+     * contain totals for all columns. This generates only one totals
+     * row for particular totals plan with $plan_id.
+     *
+     * @param string|int $plan_id
+     *
+     * @return string
      */
-    public function getTotalsRowHtml(): string
+    public function getTotalsRowHTML($plan_id)
     {
+        // shortcuts
+        $plan = &$this->totals_plan[$plan_id];
+        $totals = &$this->totals[$plan_id];
+
         $output = [];
         foreach ($this->columns as $name => $column) {
-            // if no totals plan, then show dash, but keep column formatting
-            if (!isset($this->totalsPlan[$name])) {
-                $output[] = $column->getTag('foot', '-');
+            $field = $this->model->getElement($name);
 
+            // if no totals plan, then add empty cell, but keep column formatting
+            if (!isset($plan[$name])) {
+                $output[] = $column->getTotalsCellHTML($field, '', false);
                 continue;
             }
 
-            // if totals plan is set as array, then show formatted value
-            if (is_array($this->totalsPlan[$name])) {
-                $field = $this->model->getField($name);
-                $output[] = $column->getTotalsCellHtml($field, $this->totals[$name]);
-
+            // if totals was calculated, then show formatted value
+            if (array_key_exists($name, $totals)) {
+                $output[] = $column->getTotalsCellHTML($field, $totals[$name], true);
                 continue;
             }
 
-            // otherwise just show it, for example, "Totals:" cell
-            $output[] = $column->getTag('foot', $this->totalsPlan[$name]);
+            // if no title set in totals plan, then add empty cell, but keep column formatting
+            if (!isset($plan[$name]['title'])) {
+                $output[] = $column->getTotalsCellHTML($field, '', false);
+                continue;
+            }
+
+            // if title is set then just show it, for example, "Totals:" cell
+            // this can be passed as string or callable
+            $title = '';
+            if (is_string($plan[$name]['title'])) {
+                $title = $plan[$name]['title'];
+                $title = new Template($title);
+                $title = $title->set($totals)->render();
+            } elseif (is_callable($plan[$name]['title'])) {
+                $title = call_user_func_array($plan[$name]['title'], [isset($totals[$name]) ? $totals[$name] : null, $totals, $this->model]);
+            }
+
+            // title can be defined as template and we fill in other total values if needed
+
+            $output[] = $column->getTotalsCellHTML($field, $title, false);
         }
 
         return implode('', $output);
@@ -658,13 +714,21 @@ class Table extends Lister
 
     /**
      * Collects cell templates from all the columns and combine them into row template.
+     *
+     * @return string
      */
-    public function getDataRowHtml(): string
+    public function getDataRowHTML()
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            // if multiple formatters are defined, use the first for the header cell
-            $field = !is_int($name) ? $this->model->getField($name) : null;
+
+            // If multiple formatters are defined, use the first for the header cell
+
+            if (!is_int($name)) {
+                $field = $this->model->getElement($name);
+            } else {
+                $field = null;
+            }
 
             if (!is_array($column)) {
                 $column = [$column];
@@ -672,22 +736,23 @@ class Table extends Lister
 
             // we need to smartly wrap things up
             $cell = null;
-            $tdAttr = [];
-            foreach ($column as $cKey => $c) {
-                if ($cKey !== array_key_last($column)) {
+            $cnt = count($column);
+            $td_attr = [];
+            foreach ($column as $c) {
+                if (--$cnt) {
                     $html = $c->getDataCellTemplate($field);
-                    $tdAttr = $c->getTagAttributes('body', $tdAttr);
+                    $td_attr = $c->getTagAttributes('body', $td_attr);
                 } else {
-                    // last formatter, ask it to give us whole rendering
-                    $html = $c->getDataCellHtml($field, $tdAttr);
+                    // Last formatter, ask it to give us whole rendering
+                    $html = $c->getDataCellHTML($field, $td_attr);
                 }
 
                 if ($cell) {
                     if ($name) {
                         // if name is set, we can wrap things
-                        $cell = str_replace('{$' . $name . '}', $cell, $html);
+                        $cell = str_replace('{$'.$name.'}', $cell, $html);
                     } else {
-                        $cell .= ' ' . $html;
+                        $cell = $cell.' '.$html;
                     }
                 } else {
                     $cell = $html;
