@@ -68,7 +68,7 @@ class TotalsTest extends \atk4\core\PHPUnit_AgileTestCase
         $this->table->addTotals([
             'name'   => 'Total {$_row_count} rows', // Total 4 rows
             'type'   => function ($totals, $model) {
-                return 'Pay me: '.$totals['price'] * $totals['cnt'];
+                return 'Pay me: '.($totals['price'] * $totals['cnt']);
             }, // 25600
             'price'  => [
                             function ($total, $value, $model) {

@@ -33,6 +33,12 @@ $table->addHook('getHTMLTags', function ($table, $row) {
 
 $table->addTotals([
     'name' => 'Total {$_row_count} rows:',
+    'surname'=> [
+        // longest surname
+        function ($total, $value, $model) {
+            return strlen($value) > strlen($total) ? $value : $total;
+        },
+    ],
     'salary' => ['sum'],
 ]);
 
