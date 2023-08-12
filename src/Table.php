@@ -319,8 +319,6 @@ class Table extends Lister
             $plan_id = max(array_filter(array_keys($this->totals_plan), 'is_int'));
         }
 
-        //var_dump($this->totals_plan);
-
         return $plan_id;
     }
 
@@ -698,15 +696,15 @@ class Table extends Lister
             $title = '';
             if (is_string($plan[$name]['title'])) {
                 $title = $plan[$name]['title'];
+                $title = new Template($title);
+                $title = $title->set($totals)->render();
             } elseif (is_callable($plan[$name]['title'])) {
-                $title = call_user_func_array($plan[$name]['title'], [$totals, $this->model]);
+                $title = call_user_func_array($plan[$name]['title'], [isset($totals[$name]) ? $totals[$name] : null, $totals, $this->model]);
             }
 
             // title can be defined as template and we fill in other total values if needed
-            $title = new Template($title);
-            $title->set($totals);
 
-            $output[] = $column->getTotalsCellHTML($field, $title->render(), false);
+            $output[] = $column->getTotalsCellHTML($field, $title, false);
         }
 
         return implode('', $output);
