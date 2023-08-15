@@ -76,11 +76,11 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
 $sel = $grid->addSelection();
 // Executing a modal on a bulk selection
 $callback = function (View $modal, ?array $ids) use ($grid) {
-    $toDelete = "";
+    $toDelete = '';
     foreach ($ids as $id) {
-        $toDelete .=$id . ", ";
+        $toDelete .= $id . ', ';
     }
-    $toDelete .= "#";
+    $toDelete .= '#';
     $msg = Message::addTo($modal, [
         'The selected records will be permanently deleted: ' . $toDelete,
         'type' => 'warning',
