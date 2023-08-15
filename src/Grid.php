@@ -522,7 +522,7 @@ class Grid extends View
      * @param \Closure(View, list<string>): void $callback
      * @param array                              $args     extra URL argument for callback
      *
-     * @return Js\Jquery
+     * @return View
      */
     public function addModalBulkAction($item, \Closure $callback, $args = [])
     {
@@ -535,8 +535,9 @@ class Grid extends View
         $modal->set(function (View $t) use ($callback) {
             $callback($t, $t->stickyGet($this->name) ? explode(',', $t->stickyGet($this->name)) : []);
         });
-
-        return $this->menu->addItem($item)->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)));
+        $this->menu->addItem($item)->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)));
+        
+        return $modal;
     }
 
     /**
