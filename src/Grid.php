@@ -536,7 +536,7 @@ class Grid extends View
             $callback($t, $t->stickyGet($this->name) ? explode(',', $t->stickyGet($this->name)) : []);
         });
         $this->menu->addItem($item)->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)));
-        
+
         return $modal;
     }
 
