@@ -79,12 +79,12 @@ Feature: Grid
 
   Scenario: Bulk Modal Action
     Given I am on "collection/grid.php"
-    Then I press button "Delete Selected"
+    Then I press button "Delete selected"
     Then Modal is open with text "The selected records will be permanently deleted: #"
     Then I press button "Delete"
     Given I am on "collection/grid.php"
     When I click using selector "//tr[5]//div.ui.child.checkbox"
     When I click using selector "//tr[8]//div.ui.child.checkbox"
-    Then I press button "Delete Selected"
+    Then I press button "Delete selected"
     Then Modal is open with text "The selected records will be permanently deleted: 5, 8, #"
     Then I press button "Delete"

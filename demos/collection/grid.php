@@ -75,7 +75,7 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
 
 $sel = $grid->addSelection();
 // Executing a modal on a bulk selection
-$callback = function (View $modal, ?array $ids) use ($grid) {
+$callback = function (View $modal, array $ids) use ($grid) {
     $toDelete = '';
     foreach ($ids as $id) {
         $toDelete .= $id . ', ';
