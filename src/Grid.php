@@ -545,9 +545,9 @@ class Grid extends View
      * Similar to addAction but apply to a multiple records selection and display in menu.
      * When menu item is clicked, $callback is executed.
      *
-     * @param string|array|MenuItem       $item
-     * @param \Closure(Js\Jquery, string) $callback
-     * @param array                       $args     extra URL argument for callback
+     * @param string|array|MenuItem                         $item
+     * @param \Closure(Js\Jquery, string): JsExpressionable $callback
+     * @param array                                         $args     extra URL argument for callback
      *
      * @return View
      */
