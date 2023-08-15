@@ -106,7 +106,7 @@ $callback = function (View $modal, array $ids) use ($grid) {
 
 $grid->addModalBulkAction(['Delete selected', 'icon' => 'trash'], $callback);
 
-$grid->addBulkAction(['show selection', 'icon' => 'binoculars'], function (Jquery $f, string $ids) {
+$grid->addBulkAction(['Show selected', 'icon' => 'binoculars'], function (Jquery $f, string $ids) {
     return new JsToast('Selected: ' . $ids . '#');
 });
 
