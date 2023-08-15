@@ -535,9 +535,31 @@ class Grid extends View
         $modal->set(function (View $t) use ($callback) {
             $callback($t, $t->stickyGet($this->name) ? explode(',', $t->stickyGet($this->name)) : []);
         });
-        $this->menu->addItem($item)->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)));
+        $mi = $this->menu->addItem($item);
+        $mi->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)));
 
-        return $modal;
+        return $mi;
+    }
+
+    /**
+     * Similar to addAction but apply to a multiple records selection and display in menu.
+     * When menu item is clicked, $callback is executed
+     *
+     * @param string|array|MenuItem              $item
+     * @param \Closure(Js\Jquery, string): void $callback
+     * @param array                              $args     extra URL argument for callback
+     *
+     */
+    public function addBulkAction($item, \closure $callback, $args = [])
+    {
+        if (is_string($item)) {
+            $item = ['title' => $item];
+        }
+
+        $mi = $this->menu->addItem($item);
+        $mi->on('click', $callback, [$this->selection->jsChecked()]);
+
+        return $mi;
     }
 
     /**
