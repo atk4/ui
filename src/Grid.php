@@ -519,8 +519,8 @@ class Grid extends View
      * VirtualPage.
      *
      * @param string|array|MenuItem              $item
-     * @param \Closure(View, List<string>): void $callback
-     * @param array                             $args     extra URL argument for callback
+     * @param \Closure(View, list<string>): void $callback
+     * @param array                              $args     extra URL argument for callback
      *
      * @return View
      */
