@@ -178,8 +178,12 @@ class Lister extends View
     {
         $this->tRow->trySet($this->currentRow);
 
-        $this->tRow->trySet('_title', $this->model->getTitle());
-        $this->tRow->trySet('_href', $this->url(['id' => $this->currentRow->getId()]));
+        if ($this->tRow->hasTag('_title')) {
+            $this->tRow->set('_title', $this->model->getTitle());
+        }
+        if ($this->tRow->hasTag('_href')) {
+            $this->tRow->set('_href', $this->url(['id' => $this->currentRow->getId()]));
+        }
         $this->tRow->trySet('_id', $this->name . '-' . $this->currentRow->getId());
 
         $html = $this->tRow->renderToHtml();

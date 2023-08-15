@@ -526,7 +526,7 @@ class App
         $this->requireCss($this->cdn['atk'] . '/css/agileui.min.css');
 
         // set JS bundle dynamic loading path
-        $this->html->template->tryDangerouslySetHtml(
+        $this->html->template->dangerouslySetHtml(
             'InitJsBundle',
             (new JsExpression('window.__atkBundlePublicPath = [];', [$this->cdn['atk']]))->jsRender()
         );

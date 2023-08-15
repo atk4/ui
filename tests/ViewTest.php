@@ -148,13 +148,13 @@ class ViewTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Not sure what to do with argument');
-        $v->set(1);
+        $v->set(1); // @phpstan-ignore-line
     }
 
     /**
      * @param class-string<View|Callback> $class
      *
-     * @dataProvider setNotClosureProvider
+     * @dataProvider provideSetNotClosureErrorCases
      */
     public function testSetNotClosureError(string $class): void
     {
@@ -166,9 +166,9 @@ class ViewTest extends TestCase
     }
 
     /**
-     * @return list<list<class-string<View|Callback>>>
+     * @return iterable<list{class-string<View|Callback>}>
      */
-    public function setNotClosureProvider(): array
+    public function provideSetNotClosureErrorCases(): iterable
     {
         return [
             [Console::class],
@@ -182,9 +182,11 @@ class ViewTest extends TestCase
     }
 
     /**
+     * TODO remove the explicit exceptions and this test/provider once release 5.0 is made.
+     *
      * @param class-string<View> $class
      *
-     * @dataProvider setNotOneArgumentExceptionProvider
+     * @dataProvider provideSetNotOneArgumentExceptionCases
      */
     public function testSetNotOneArgumentException(string $class): void
     {
@@ -192,15 +194,16 @@ class ViewTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Only one argument is needed by ' . preg_replace('~.+\\\\~', '', $class) . '::set()');
-        $v->set(function () {}, null);
+        $v->set(function () {}, null); // @phpstan-ignore-line
     }
 
     /**
-     * @return list<list<class-string<View>>>
+     * @return iterable<list{class-string<View>}>
      */
-    public function setNotOneArgumentExceptionProvider(): array
+    public function provideSetNotOneArgumentExceptionCases(): iterable
     {
         return [
+            [View::class],
             [Loader::class],
             [Modal::class],
             [Popup::class],

@@ -168,7 +168,7 @@ class Grid extends View
     }
 
     /**
-     * Add a new buton to the Grid Menu with a given text.
+     * Add a new button to the Grid Menu with a given text.
      *
      * @param string $label
      */
@@ -206,7 +206,7 @@ class Grid extends View
      *
      * @return $this
      */
-    public function addItemsPerPageSelector(array $items = [10, 25, 50, 100], $label = 'Items per page:')
+    public function addItemsPerPageSelector(array $items = [10, 100, 1000], $label = 'Items per page:')
     {
         $ipp = (int) $this->container->stickyGet('ipp');
         if ($ipp) {

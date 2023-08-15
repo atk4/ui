@@ -38,7 +38,7 @@ class Lookup extends Input
 
     /**
      * Either set this to array of fields which must be searched (e.g. "name", "surname"), or define this
-     * as a callback to be executed callback($model, $search_string);.
+     * as a callback to be executed callback($model, $query);.
      *
      * If left null, then search will be performed on a model's title field
      *

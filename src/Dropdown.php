@@ -49,7 +49,8 @@ class Dropdown extends Lister
             new JsExpression(
                 'if ($(this).data(\'currentValue\') != value) { $(this).atkAjaxec({ url: [url], urlOptions: { item: value } }); $(this).data(\'currentValue\', value); }',
                 ['url' => $this->cb->getJsUrl()]
-            ), ]);
+            ),
+        ]);
 
         $this->cb->set(function (Jquery $j, string $value) use ($fx) {
             return $fx($value);

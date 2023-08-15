@@ -37,7 +37,7 @@ class Button extends View
 
         if ($this->iconRight) {
             if ($this->icon) {
-                throw (new Exception('Cannot use icon and iconRight simultaniously'))
+                throw (new Exception('Cannot use icon and iconRight simultaneously'))
                     ->addMoreInfo('icon', $this->icon)
                     ->addMoreInfo('iconRight', $this->iconRight);
             }

@@ -75,7 +75,7 @@ $form->onSubmit(function (Form $form) use ($app) {
         'single' => $form->model->get('tree1'),
     ];
 
-    $view = new Message('Items: ');
+    $view = new Message('Items:');
     $view->setApp($form->getApp());
     $view->invokeInit();
     $view->text->addParagraph($app->encodeJson($response));

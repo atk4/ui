@@ -13,6 +13,6 @@ class HelloWorld extends View
     {
         parent::init();
 
-        $this->set('Content', 'Hello World');
+        $this->set('Hello World');
     }
 }

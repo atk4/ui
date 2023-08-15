@@ -78,9 +78,9 @@ Feature: Form
 
     Then I should not see "Check all language that apply"
     Then I should not see "Css"
-    When I click using selector "//label[text()='I am a developper']"
+    When I click using selector "//label[text()='I am a developer']"
     Then I should see "Check all language that apply"
     Then I should see "Css"
-    When I click using selector "//label[text()='I am a developper']"
+    When I click using selector "//label[text()='I am a developer']"
     Then I should not see "Check all language that apply"
     Then I should not see "Css"

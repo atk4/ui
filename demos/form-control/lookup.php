@@ -20,7 +20,7 @@ require_once __DIR__ . '/../init-app.php';
 // create header
 Header::addTo($app, ['Lookup Input']);
 
-Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])
+Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country:'])
     ->setModel(new Country($app->db));
 
 // create form
@@ -64,7 +64,7 @@ $form->onSubmit(function (Form $form) {
 Header::addTo($app, ['Lookup input using label']);
 
 // from seed
-Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country: '])
+Form\Control\Lookup::addTo($app, ['placeholder' => 'Search country', 'label' => 'Country:'])
     ->setModel(new Country($app->db));
 
 // through constructor
@@ -88,7 +88,7 @@ Form\Control\Lookup::addTo($app, [
 Header::addTo($app, ['Lookup input inside modal']);
 
 $modal = Modal::addTo($app)->set(function (View $p) {
-    $a = Form\Control\Lookup::addTo($p, ['placeholder' => 'Search country', 'label' => 'Country: ']);
+    $a = Form\Control\Lookup::addTo($p, ['placeholder' => 'Search country', 'label' => 'Country:']);
     $a->setModel(new Country($p->getApp()->db));
 });
 Button::addTo($app, ['Open Lookup on a Modal window'])

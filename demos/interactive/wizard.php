@@ -17,7 +17,7 @@ use Atk4\Ui\Wizard;
 require_once __DIR__ . '/../init-app.php';
 
 $wizard = Wizard::addTo($app, ['urlTrigger' => 'demo_wizard']);
-// First step will automatcally be active when you open page first. It
+// First step will automatically be active when you open page first. It
 // will contain the 'Next' button with a link.
 $wizard->addStep('Welcome', function (Wizard $wizard) {
     Message::addTo($wizard, ['Welcome to wizard demonstration'])->text
@@ -43,7 +43,7 @@ $wizard->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database C
     });
 });
 
-// Alternatvely, you may access buttonNext, buttonPrevious properties of a wizard
+// Alternately, you may access buttonNext, buttonPrevious properties of a wizard
 // and set a custom JS action or even set a different link. You can use recall()
 // to access some values that were recorded on another steps.
 $wizard->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon' => 'table'], function (Wizard $wizard) {
@@ -68,7 +68,7 @@ $wizard->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon'
     $wizard->buttonNext->addClass('disabled');
 });
 
-// Steps may contain interractive elements. You can disable navigational buttons
+// Steps may contain interactive elements. You can disable navigational buttons
 // and enable them as you see fit. Use handy JS method to trigger advancement to
 // the next step.
 $wizard->addStep(['Migration', 'description' => 'Create or update table', 'icon' => 'database'], function (Wizard $wizard) {

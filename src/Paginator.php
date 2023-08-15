@@ -172,8 +172,8 @@ class Paginator extends View
     public function renderItem($t, $page = null): void
     {
         if ($page) {
-            $t->trySet('page', (string) $page);
-            $t->trySet('link', $this->getPageUrl($page));
+            $t->set('page', (string) $page);
+            $t->set('link', $this->getPageUrl($page));
 
             $t->trySet('active', $page === $this->page ? 'active' : '');
         }

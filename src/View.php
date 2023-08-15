@@ -89,7 +89,7 @@ class View extends AbstractView
     // {{{ Setting Things up
 
     /**
-     * @param array|string $label
+     * @param array<0|string, mixed>|string $label
      */
     public function __construct($label = [])
     {
@@ -113,6 +113,8 @@ class View extends AbstractView
      *
      * Do not try to create your own "Model" implementation, instead you must be looking for
      * your own "Persistence" implementation.
+     *
+     * @phpstan-assert !null $this->model
      */
     public function setModel(Model $model): void
     {
@@ -127,6 +129,8 @@ class View extends AbstractView
      * Sets source of the View.
      *
      * @param array $fields Limit model to particular fields
+     *
+     * @phpstan-assert !null $this->model
      */
     public function setSource(array $data, $fields = null): Model
     {
@@ -330,44 +334,25 @@ class View extends AbstractView
     /**
      * TODO this method is hard to override, drop it from View.
      *
-     * Override this method without compatibility with parent, if you wish
-     * to set your own things your own way for your view.
-     *
-     * @param mixed $arg1
-     * @param mixed $arg2
+     * @param string $content
      *
      * @return $this
      */
-    public function set($arg1 = null, $arg2 = null)
+    public function set($content)
     {
-        if ($arg2 !== null) {
-            if (is_string($arg1)) {
-                $this->template->set($arg1, $arg2);
-
-                return $this;
-            }
-        } else {
-            if (is_string($arg1) || $arg1 === null) {
-                $this->content = $arg1;
-
-                return $this;
-            }
-
-            if (is_array($arg1)) {
-                if (isset($arg1[0])) {
-                    $this->content = $arg1[0];
-                    unset($arg1[0]);
-                }
-                $this->setDefaults($arg1);
-
-                return $this;
-            }
+        if (func_num_args() > 1) { // prevent bad usage
+            throw new Exception('Only one argument is needed by View::set()');
         }
 
-        throw (new Exception('Not sure what to do with argument'))
-            ->addMoreInfo('this', $this)
-            ->addMoreInfo('arg1', $arg1)
-            ->addMoreInfo('arg2', $arg2);
+        if (!is_string($content) && $content !== null) { // @phpstan-ignore-line
+            throw (new Exception('Not sure what to do with argument'))
+                ->addMoreInfo('this', $this)
+                ->addMoreInfo('arg', $content);
+        }
+
+        $this->content = $content;
+
+        return $this;
     }
 
     /**
@@ -524,7 +509,7 @@ class View extends AbstractView
 
     /**
      * Mark GET argument as sticky. Calling url() on this view or any
-     * sub-views will embedd the value of this GET argument.
+     * sub-views will embed the value of this GET argument.
      *
      * If GET argument is empty or false, it won't make into URL.
      *

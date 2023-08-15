@@ -97,7 +97,7 @@
         ignoredFocusElements: [],
         inline: false,
         locale: "default",
-        minuteIncrement: 5,
+        minuteIncrement: 1,
         mode: "single",
         monthSelectorType: "dropdown",
         nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
@@ -119,6 +119,7 @@
         position: "auto",
         positionElement: undefined,
         prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
+        secondIncrement: 1,
         shorthandCurrentMonth: false,
         showMonths: 1,
         static: false,
@@ -430,24 +431,23 @@
         // get the date in UTC
         Z: function (date) { return date.toISOString(); },
         // weekday name, short, e.g. Thu
-        D: function (date, locale, options) {
-            return locale.weekdays.shorthand[formats.w(date, locale, options)];
+        D: function (date, locale, formatSecondsPrecision) {
+            return locale.weekdays.shorthand[parseInt(formats.w(date, locale, formatSecondsPrecision))];
         },
         // full month name e.g. January
-        F: function (date, locale, options) {
-            return monthToStr(formats.n(date, locale, options) - 1, false, locale);
+        F: function (date, locale, formatSecondsPrecision) {
+            return monthToStr(parseInt(formats.n(date, locale, formatSecondsPrecision)) - 1, false, locale);
         },
         // padded hour 1-12
-        G: function (date, locale, options) {
-            return pad(formats.h(date, locale, options));
+        G: function (date, locale, formatSecondsPrecision) {
+            return pad(formats.h(date, locale, formatSecondsPrecision));
         },
         // hours with leading zero e.g. 03
         H: function (date) { return pad(date.getHours()); },
         // day (1-30) with ordinal suffix e.g. 1st, 2nd
         J: function (date, locale) {
-            return locale.ordinal !== undefined
-                ? date.getDate() + locale.ordinal(date.getDate())
-                : date.getDate();
+            return (date.getDate() +
+                (locale.ordinal !== undefined ? locale.ordinal(date.getDate()) : ""));
         },
         // AM/PM
         K: function (date, locale) { return locale.amPM[int(date.getHours() > 11)]; },
@@ -456,29 +456,25 @@
             return monthToStr(date.getMonth(), true, locale);
         },
         // seconds (00-59)
-        S: function (date, _, options) {
-            var res = formatDateSeconds(date, false, options.formatSecondsPrecision);
+        S: function (date, _, formatSecondsPrecision) {
+            var res = formatDateSeconds(date, false, formatSecondsPrecision);
             var resArr = res.split(".");
             resArr[0] = pad(resArr[0], 2);
             return resArr.join(".");
         },
         // unix timestamp
-        U: function (date, _, options) {
-            return formatDateSeconds(date, true, options.formatSecondsPrecision);
-        },
-        W: function (date, _, options) {
-            return options.getWeek(date);
-        },
+        U: function (date, _, formatSecondsPrecision) { return formatDateSeconds(date, true, formatSecondsPrecision); },
+        W: function (date) { return "" + defaults.getWeek(date); },
         // full year e.g. 2016, padded (0001-9999)
         Y: function (date) { return pad(date.getFullYear(), 4); },
         // day in month, padded (01-30)
         d: function (date) { return pad(date.getDate()); },
         // hour from 1-12 (am/pm)
-        h: function (date) { return (date.getHours() % 12 ? date.getHours() % 12 : 12); },
+        h: function (date) { return "" + (date.getHours() % 12 ? date.getHours() % 12 : 12); },
         // minutes, padded with leading zero e.g. 09
         i: function (date) { return pad(date.getMinutes()); },
         // day in month (1-30)
-        j: function (date) { return date.getDate(); },
+        j: function (date) { return "" + date.getDate(); },
         // weekday name, full, e.g. Thursday
         l: function (date, locale) {
             return locale.weekdays.longhand[date.getDay()];
@@ -486,33 +482,32 @@
         // padded month number (01-12)
         m: function (date) { return pad(date.getMonth() + 1); },
         // the month number (1-12)
-        n: function (date) { return date.getMonth() + 1; },
+        n: function (date) { return "" + (date.getMonth() + 1); },
         // seconds (0-59)
-        s: function (date, _, options) {
-            return formatDateSeconds(date, false, options.formatSecondsPrecision);
-        },
+        s: function (date, _, formatSecondsPrecision) { return formatDateSeconds(date, false, formatSecondsPrecision); },
         // Unix Milliseconds
-        u: function (date, _, options) {
-            return moveNumberDot(formatDateSeconds(date, true, options.formatSecondsPrecision), 3);
-        },
+        u: function (date, _, formatSecondsPrecision) { return moveNumberDot(formatDateSeconds(date, true, formatSecondsPrecision), 3); },
         // number of the day of the week
-        w: function (date) { return date.getDay(); },
+        w: function (date) { return "" + date.getDay(); },
         // last two digits of year e.g. 16 for 2016
         y: function (date) { return String(date.getFullYear()).substring(2); },
     };
 
     var createDateFormatter = function (_a) {
         var _b = _a.config, config = _b === void 0 ? defaults : _b, _c = _a.l10n, l10n = _c === void 0 ? english : _c, _d = _a.isMobile, isMobile = _d === void 0 ? false : _d;
-        return function (dateObj, frmt, overrideLocale) {
+        return function (dateObj, format, overrideLocale, overrideFormatSecondsPrecision) {
             var locale = overrideLocale || l10n;
+            var formatSecondsPrecision = overrideFormatSecondsPrecision || config.formatSecondsPrecision || 0;
             if (config.formatDate !== undefined && !isMobile) {
-                return config.formatDate(dateObj, frmt, locale);
+                return config.formatDate(dateObj, format, locale, formatSecondsPrecision);
             }
-            return frmt
+            return format
                 .split("")
                 .map(function (c, i, arr) {
                 return formats[c] && arr[i - 1] !== "\\"
-                    ? formats[c](dateObj, locale, config)
+                    ? c === "W"
+                        ? function (date) { return "" + config.getWeek(date); }
+                        : formats[c](dateObj, locale, formatSecondsPrecision)
                     : c !== "\\"
                         ? c
                         : "";
@@ -522,11 +517,12 @@
     };
     var createDateParser = function (_a) {
         var _b = _a.config, config = _b === void 0 ? defaults : _b, _c = _a.l10n, l10n = _c === void 0 ? english : _c;
-        return function (date, givenFormat, timeless, customLocale) {
+        return function (date, givenFormat, timeless, overrideLocale) {
+            if (timeless === void 0) { timeless = false; }
             if (date !== 0 && !date)
                 return undefined;
-            var format = givenFormat || (config || defaults).dateFormat;
-            var locale = customLocale || l10n;
+            var format = givenFormat || config.dateFormat;
+            var locale = overrideLocale || l10n;
             var parsedDate;
             var dateOrig = date;
             if (typeof date !== "string" &&
@@ -545,8 +541,8 @@
                     parsedDate = new Date();
                     timeless = true;
                 }
-                else if (config && config.parseDate) {
-                    parsedDate = config.parseDate(date, format);
+                else if (config.parseDate) {
+                    parsedDate = config.parseDate(date, format, timeless, locale);
                 }
                 else if (/Z$/.test(datestr) ||
                     /GMT$/.test(datestr) // datestrings w/ timezone
@@ -1451,7 +1447,7 @@
                 self.secondElement.value = pad(self.latestSelectedDateObj
                     ? self.latestSelectedDateObj.getSeconds()
                     : defaults.seconds);
-                self.secondElement.setAttribute("step", self.minuteElement.getAttribute("step"));
+                self.secondElement.setAttribute("step", self.config.secondIncrement.toString());
                 self.secondElement.setAttribute("min", "0");
                 self.secondElement.setAttribute("max", "59");
                 self.secondElement.setAttribute("maxlength", "2");
@@ -1758,6 +1754,18 @@
                     ? self.config.altFormat
                     : self.config.dateFormat);
             }
+            setTimeout(function () {
+                // timeout is needed for document.activeElement to be the element after blur
+                if (self.isOpen) {
+                    var activeElement = getClosestActiveElement();
+                    if (activeElement &&
+                        activeElement !== self.input &&
+                        activeElement !== self.altInput &&
+                        !isCalendarElem(activeElement)) {
+                        documentClick({ target: null });
+                    }
+                }
+            }, 0);
         }
         function onKeyDown(e) {
             // e.key                      e.keyCode

@@ -83,7 +83,7 @@ $groupBasic->addControl('first_name', ['width' => 'eight']);
 $groupBasic->addControl('middle_name', ['width' => 'three']);
 $groupBasic->addControl('last_name', ['width' => 'five']);
 
-$formGroup->addControl('dev', [Form\Control\Checkbox::class, 'caption' => 'I am a developper']);
+$formGroup->addControl('dev', [Form\Control\Checkbox::class, 'caption' => 'I am a developer']);
 
 $groupCode = $formGroup->addGroup(['Check all language that apply']);
 $groupCode->addControl('php', [Form\Control\Checkbox::class]);
