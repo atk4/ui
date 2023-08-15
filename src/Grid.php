@@ -518,11 +518,11 @@ class Grid extends View
      * When menu item is clicked, modal is displayed with the $title and $callback is executed through
      * VirtualPage.
      *
-     * @param string|array|MenuItem            $item
-     * @param \Closure(View, array|null): void $callback
-     * @param array                            $args     extra url argument for callback
+     * @param string|array|MenuItem              $item
+     * @param \Closure(View, List<string>): void $callback
+     * @param array                             $args     extra URL argument for callback
      *
-     * @return Jquery
+     * @return View
      */
     public function addModalBulkAction($item, \Closure $callback, $args = [])
     {
@@ -533,10 +533,10 @@ class Grid extends View
         $modal = Modal::addTo($this->getOwner());
 
         $modal->set(function (View $t) use ($callback) {
-            $callback($t, $t->stickyGet($this->name) ? explode(',', $t->stickyGet($this->name)) : null);
+            $callback($t, $t->stickyGet($this->name) ? explode(',', $t->stickyGet($this->name)) : []);
         });
 
-        return $this->menu->addItem($item)->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)), []);
+        return $this->menu->addItem($item)->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)));
     }
 
     /**

@@ -76,42 +76,35 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
 $sel = $grid->addSelection();
 // Executing a modal on a bulk selection
 $callback = function (View $modal, ?array $ids) use ($grid) {
-    if (!$ids) {
-        Message::addTo($modal, [
-            'No records were selected.',
-            'type' => 'error',
-            'icon' => 'times',
-        ]);
-    } else {
-        $msg = Message::addTo($modal, [
-            'The selected records will be permanently deleted.',
-            'type' => 'warning',
-            'icon' => 'warning',
-        ]);
-        $msg->text->addParagraph('IDs to be deleted:');
-        foreach ($ids as $id) {
-            $msg->text->addParagraph($id);
-        }
-        $form = Form::addTo($modal);
-        $form->buttonSave->set('Delete');
-        $form->buttonSave->icon = 'trash';
-        $form->onSubmit(function (Form $form) use ($grid, $ids) {
-            // iterate trough the selected IDs and delete them
-            $grid->model->atomic(function () use ($grid, $ids) {
-                foreach ($ids as $id) {
-                    $grid->model->delete($id);
-                }
-            });
-
-            return new JsBlock([
-                $grid->jsReload(),
-                $form->jsSuccess(),
-            ]);
-        });
+    $toDelete = "";
+    foreach ($ids as $id) {
+        $toDelete .=$id . ", ";
     }
+    $toDelete .= "#";
+    $msg = Message::addTo($modal, [
+        'The selected records will be permanently deleted: ' . $toDelete,
+        'type' => 'warning',
+        'icon' => 'warning',
+    ]);
+    $form = Form::addTo($modal);
+    $form->buttonSave->set('Delete');
+    $form->buttonSave->icon = 'trash';
+    $form->onSubmit(function (Form $form) use ($grid, $ids) {
+        // iterate trough the selected IDs and delete them
+        $grid->model->atomic(function () use ($grid, $ids) {
+            foreach ($ids as $id) {
+                $grid->model->delete($id);
+            }
+        });
+
+        return new JsBlock([
+            $grid->jsReload(),
+            $form->jsSuccess(),
+        ]);
+    });
 };
 
-$grid->addModalBulkAction(['Delete selected', 'icon' => 'trash', 'class.orange active' => true], $callback);
+$grid->addModalBulkAction(['Delete selected', 'icon' => 'trash'], $callback);
 
 $grid->menu->addItem('show selection')
     ->on('click', new JsExpression(

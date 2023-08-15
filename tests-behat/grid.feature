@@ -76,3 +76,14 @@ Feature: Grid
     Then I should see "Andorra"
     Then I should see "China"
     Then I should see "Zambia"
+
+  Scenario: Bulk Modal Action
+    Given I am on "collection/grid.php"
+    Then I press button "Delete Selected"
+    Then I should see "The selected records will be permanently deleted: #"
+    Then I press button "Delete"
+    When I click using selector "//tr[5]//div.ui.child.checkbox"
+    When I click using selector "//tr[8]//div.ui.child.checkbox"
+    Then I press button "Delete Selected"
+    Then I should see "The selected records will be permanently deleted: 5, 8, #"
+    Then I press button "Delete"
