@@ -107,8 +107,8 @@ $callback = function (View $modal, array $ids) use ($grid) {
 $grid->addModalBulkAction(['Delete selected', 'icon' => 'trash'], $callback);
 
 $grid->addBulkAction(['show selection', 'icon' => 'binoculars'], function (Jquery $f, string $ids) {
-        return new JsToast('Selected: ' . $ids . '#');
-    });
+    return new JsToast('Selected: ' . $ids . '#');
+});
 
 // Setting ipp with an array will add an ItemPerPageSelector to paginator.
 $grid->setIpp([10, 100, 1000]);
