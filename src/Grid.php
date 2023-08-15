@@ -522,7 +522,7 @@ class Grid extends View
      * @param \Closure(View, list<string>): void $callback
      * @param array                              $args     extra URL argument for callback
      *
-     * @return JsQuery
+     * @return Js\Jquery
      */
     public function addModalBulkAction($item, \Closure $callback, $args = [])
     {

@@ -106,6 +106,7 @@ $callback = function (View $modal, array $ids) use ($grid) {
 
 $grid->addModalBulkAction(['Delete selected', 'icon' => 'trash'], $callback);
 
+// TODO: replace show selection by addBulkAction
 $grid->menu->addItem('show selection')
     ->on('click', new JsExpression(
         'alert(\'Selected: \' + [])',
