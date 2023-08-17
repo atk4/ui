@@ -58,7 +58,7 @@ trait RwDemosContextTrait
         $model->removeField('id');
         foreach ($tableColumns as $tableColumn) {
             $model->addField($tableColumn->getName(), [
-                'type' => Type::getTypeRegistry()->lookupName($tableColumn->getType()), // TODO review once https://github.com/doctrine/dbal/pull/6130 is merged
+                'type' => Type::getTypeRegistry()->lookupName($tableColumn->getType()), // TODO simplify once https://github.com/doctrine/dbal/pull/6130 is merged
                 'nullable' => !$tableColumn->getNotnull(),
             ]);
         }
