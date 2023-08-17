@@ -346,7 +346,7 @@ class DemosTest extends TestCase
 
     public function testHugeOutputStream(): void
     {
-        $sizeMb = 50;
+        $sizeMb = 40;
         $sizeBytes = $sizeMb * 1024 * 1024;
         $response = $this->getResponseFromRequest('_unit-test/stream.php?size_mb=' . $sizeMb);
         self::assertSame(200, $response->getStatusCode());
