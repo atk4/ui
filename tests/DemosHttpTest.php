@@ -6,6 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Ui\Callback;
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\LazyOpenStream;
 use Symfony\Component\Process\Process;
 
 /**
@@ -103,7 +104,11 @@ class DemosHttpTest extends DemosTest
 
     protected function getClient(): Client
     {
-        return new Client(['base_uri' => 'http://localhost:' . $this->port]);
+        // never buffer the response thru disk, remove once streaming with curl is supported
+        // https://github.com/guzzle/guzzle/issues/3115
+        $sink = new LazyOpenStream('php://memory', 'w+');
+
+        return new Client(['base_uri' => 'http://localhost:' . $this->port, 'sink' => $sink]);
     }
 
     protected function getPathWithAppVars(string $path): string
