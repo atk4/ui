@@ -18,7 +18,7 @@ Feature: Card
     When I press button "Delete"
     Then Modal is open with text "Please go ahead. Demo mode does not really delete data."
     When I press Modal button "Ok"
-    Then Modal is open with text "Atk4\Data\Exception: Calling user action on a Model with dirty fields that are not allowed by this action"
+    Then Modal is open with text "Atk4\Data\Exception: User action cannot be executed when unrelated fields are dirty"
 
   Scenario:
     Given I am on "interactive/card-action.php"
