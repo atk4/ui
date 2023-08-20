@@ -109,7 +109,7 @@ if ($cb->set(function () { return true; })) {
 ```
 
 This example uses return of the {php:meth}`Callback::set()` to add class to a label, however a
-much more preferred way is to use {php:attr}`$triggered`.
+much more preferred way is to use {php:attr}`Callback::$triggered`.
 
 :::{php:attr} triggered
 :::
@@ -176,7 +176,7 @@ CallbackLater is used by several actions in Agile UI, such as JsReload(), and en
 you are reloading are fully rendered by the time callback is executed.
 
 Given our knowledge of Callbacks, lets take a closer look at how JsReload actually works. So what do we
-know about {php:class}`Js_i_JsReload` already?
+know about {php:class}`Js\JsReload` already?
 
 - JsReload is class implementing JsExpressionable
 - you must specify a view to JsReload

@@ -361,11 +361,11 @@ to do something before child render, override method {php:meth}`View::recursiveR
 :::{php:attr} template
 :::
 
-Template of a current view. This attribute contains an object of a class {php:class}`Template`.
+Template of a current view. This attribute contains an object of a class {php:class}`HtmlTemplate`.
 You may secify this value explicitly:
 
 ```
-View::addTo($app, ['template' => new \Atk4\Ui\Template('<b>hello</b>')]);
+View::addTo($app, ['template' => new \Atk4\Ui\HtmlTemplate('<b>hello</b>')]);
 ```
 
 :::{php:attr} defaultTemplate
@@ -388,7 +388,7 @@ View::addTo($app, ['defaultTemplate' => __DIR__ . '/../templates/mytpl.httml']);
 
 Agile UI does not currently provide advanced search path for templates, by default the
 template is loaded from folder `vendor/atk4/ui/template`. To change this
-behaviour, see {php:class}`App::loadTemplate()`.
+behaviour, see {php:meth}`App::loadTemplate()`.
 
 :::{php:attr} region
 :::
@@ -414,7 +414,7 @@ class MyView extends View
 }
 ```
 
-As soon as the view becomes part of a render-tree, the Template object will also be allocated.
+As soon as the view becomes part of a render-tree, the {php:class}`HtmlTemplate` object will also be allocated.
 At this point it's also possible to override default template:
 
 ```
@@ -439,7 +439,7 @@ a Lister is added inside Tags region which will use the contents of a given tag 
 template, which will be repeated according to the number of referenced 'Tags' for given users and
 re-inserted back into the 'Tags' region.
 
-See also {php:class}`Template`.
+See also {php:class}`HtmlTemplate`.
 
 ## Unique ID tag
 

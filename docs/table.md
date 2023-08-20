@@ -9,7 +9,7 @@
 :::
 
 :::{important}
-For columns, see {php:class}`Table_i_Column`. For DIV-based lists, see {php:class}`Lister`. For an
+For columns, see {php:class}`Table\Column`. For DIV-based lists, see {php:class}`Lister`. For an
 interactive features see {php:class}`Grid` and {php:class}`Crud`.
 :::
 
@@ -152,7 +152,7 @@ display values of specific model Field.
 :::{php:method} columnFactory(\Atk4\Data\Field $field)
 :::
 
-If the value of the field can be displayed by {php:class}`Table_i_Column` then {php:class}`Table` will
+If the value of the field can be displayed by {php:class}`Table\Column` then {php:class}`Table` will
 respord with object of this class. Since the default column does not contain any customization,
 then to save memory Table will re-use the same objects for all generic fields.
 
@@ -175,10 +175,10 @@ it will automatically delete the corresponding record.
 
 You have probably noticed, that I have omitted the name for this column. If name is not specified
 (null) then the Column object will not be associated with any model field in
-{php:meth}`Table_i_Column::getHeaderCellHtml`, {php:meth}`Table_i_Column::getTotalsCellHtml` and
-{php:meth}`Table_i_Column::getDataCellHtml`.
+{php:meth}`Table\Column::getHeaderCellHtml`, {php:meth}`Table\Column::getTotalsCellHtml` and
+{php:meth}`Table\Column::getDataCellHtml`.
 
-Some columns require name, such as {php:class}`Table_i_Column` will
+Some columns require name, such as {php:class}`Table\Column` will
 not be able to cope with this situations, but many other column types are perfectly fine with this.
 
 Some column classes will be able to take some information from a specified column, but will work
@@ -274,7 +274,7 @@ For more information see https://github.com/kylefox/jquery-tablesort
 
 ### Injecting HTML
 
-The tag will override model value. Here is example usage of {php:meth}`Table_i_Column::getHtmlTags`:
+The tag will override model value. Here is example usage of {php:meth}`Table\Column::getHtmlTags`:
 
 ```
 class ExpiredColumn extends \Atk4\Ui\Table\Column
@@ -300,7 +300,7 @@ Your column now can be added to any table:
 $table->addColumn(new ExpiredColumn());
 ```
 
-IMPORTANT: HTML injection will work unless {php:attr}`Table::useHtmlTags` property is disabled (for performance).
+IMPORTANT: HTML injection will work unless {php:attr}`Table::$useHtmlTags` property is disabled (for performance).
 
 ## Table Data Handling
 
@@ -339,7 +339,7 @@ data stored inside your own database. Either way, several principles apply to th
 ### Table Rendering Steps
 
 Once model is specified to the Table it will keep the object until render process will begin. Table
-columns can be defined any time and will be stored in the {php:attr}`Table::columns` property. Columns
+columns can be defined any time and will be stored in the {php:attr}`Table::$columns` property. Columns
 without defined name will have a numeric index. It's also possible to define multiple columns per key
 in which case we call them "decorators".
 
@@ -350,14 +350,14 @@ During the render process (see {php:meth}`View::renderView`) Table will perform 
 3. Iterate through rows
    1. Current row data is accessible through $table->model property.
    2. Update Totals if {php:meth}`Table::addTotals` was used.
-   3. Insert row values into {php:attr}`Table::tRow`
+   3. Insert row values into {php:attr}`Table::$tRow`
        1. Template relies on {ref}`uiPersistence` for formatting values
    4. Collect HTML tags from 'getHtmlTags' hook.
    5. Collect getHtmlTags() from columns objects
-   6. Inject HTML into {php:attr}`Table::tRow` template
+   6. Inject HTML into {php:attr}`Table::$tRow` template
    7. Render and append row template to Table Body ({$Body})
    8. Clear HTML tag values from template.
-4. If no rows were displayed, then "empty message" will be shown (see {php:attr}`Table::tEmpty`).
+4. If no rows were displayed, then "empty message" will be shown (see {php:attr}`Table::$tEmpty`).
 5. If {php:meth}`addTotals` was used, append totals row to table footer.
 
 ## Dealing with Multiple decorators
@@ -393,7 +393,7 @@ is not set or type is like "integer", then a generic formatter is used.
 
 There are a few things to note:
 
-1. Property {php:attr}`Table::columns` contains either a single or multiple decorators for each
+1. Property {php:attr}`Table::$columns` contains either a single or multiple decorators for each
    column. Some tasks will be done by first decorator only, such as getting TH/header cell. Others will
    be done by all decorators, such as collecting classes / styles for the cell or wrapping formatted
    content (link, icon, template).
@@ -401,8 +401,8 @@ There are a few things to note:
 3. output of the \Atk4\Ui\Table\Column\Money decorator is used into Link decorator as if it would be value of cell, however
    decorators have access to original value also. Decorator implementation is usually aware of combinations.
 
-{php:meth}`Table_i_Column_i_Money::getDataCellTemplate` is called, which returns ONLY the HTML value,
-without the `<td>` cell itself. Subsequently {php:meth}`Table_i_Column_i_Link::getDataCellTemplate` is called
+{php:meth}`Table\Column\Money::getDataCellTemplate` is called, which returns ONLY the HTML value,
+without the `<td>` cell itself. Subsequently {php:meth}`Table\Column\Link::getDataCellTemplate` is called
 and the '{$salary}' tag from this link is replaced by output from Money column resulting in this
 template:
 
@@ -515,7 +515,7 @@ See also {ref}`js`.
 
 ### Static Attributes and classes
 
-:::{php:class} Table_i_Column
+:::{php:class} Table\Column
 :::
 
 :::{php:method} addClass($class, $scope = 'body')
@@ -560,8 +560,8 @@ $table->addColumn('name', [\Atk4\Ui\Table\Column::class])
 
 Setting a new value to the attribute will override previous value.
 
-Please note that if you are redefining {php:meth}`Table_i_Column::getHeaderCellHtml`,
-{php:meth}`Table_i_Column::getTotalsCellHtml` or {php:meth}`Table_i_Column::getDataCellHtml`
+Please note that if you are redefining {php:meth}`Table\Column::getHeaderCellHtml`,
+{php:meth}`Table\Column::getTotalsCellHtml` or {php:meth}`Table\Column::getDataCellHtml`
 and you wish to preserve functionality of setting custom attributes and
 classes, you should generate your TD/TH tag through getTag method.
 
@@ -580,8 +580,8 @@ $cb = $table->addColumn('CheckBox');
 
 ### Using dynamic values
 
-Body attributes will be embedded into the template by the default {php:meth}`Table_i_Column::getDataCellHtml`,
+Body attributes will be embedded into the template by the default {php:meth}`Table\Column::getDataCellHtml`,
 but if you specify attribute (or class) value as a tag, then it will be auto-filled
 with row value or injected HTML.
 
-For further examples of and advanced usage, see implementation of {php:class}`Table_i_Column_i_Status`.
+For further examples of and advanced usage, see implementation of {php:class}`Table\Column\Status`.

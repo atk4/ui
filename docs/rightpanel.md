@@ -5,7 +5,7 @@
 
 # Right Panel
 
-:::{php:class} Panel_i_Right
+:::{php:class} Panel\Right
 :::
 
 Right panel are view attached to the app layout. They are display on demand via javascript event

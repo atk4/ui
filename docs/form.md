@@ -80,8 +80,8 @@ $form->model->set([
 Form also relies on a `\Atk4\Ui\Form::Layout` class and displays form controls through
 decorators defined at `\Atk4\Ui\Form::Control`. See dedicated documentation for:
 
-- {php:class}`Form::Layout`
-- {php:class}`Form::Control`
+- {php:class}`Form\Layout`
+- {php:class}`Form\Control`
 
 To tweak the UI properties of an form control input use `setInputAttr()` (and not the surrounding `<div>` as `setAttr()`
 would do). Here is how to set the HTML "maxlength" attribute on the generated input field:
@@ -110,7 +110,7 @@ The basic 2-line syntax will extract all the required logic from the Model inclu
 - Fields defined for this Model will be displayed
 - Display of default values in the form
 - Depending on the field type, a form control will be selected from Form\Control namespace
-- Using {php:class}`Form_i_Layout_i_Columns` can make form more compact by splitting it into columns
+- Using {php:class}`Form\Layout\Columns` can make form more compact by splitting it into columns
 - Form control captions, placeholders, hints and other elements defined in Field::ui are respected (https://atk4-data.readthedocs.io/en/develop/fields.html#Field::$ui)
 - Fields that are not editable by default will not appear on the form (https://atk4-data.readthedocs.io/en/develop/fields.html#Field::isEditable)
 - Field typecasting will be invoked such as for converting dates
@@ -186,7 +186,7 @@ $form->setModel(new User($db), ['email', 'gender', 'terms']);
 ```
 
 Form control does not have to be added directly into the form. You can use a separate
-{php:class}`Form_i_Layout` or even a regular view. Simply specify property {php:meth}`Form_i_Control::$form`:
+{php:class}`Form\Layout` or even a regular view. Simply specify property {php:meth}`Form\Control::$form`:
 
 ```
 $myview = View::addTo($form, ['defaultTemplate' => './mytemplate.html']);
@@ -214,7 +214,7 @@ is documented here: https://atk4-data.readthedocs.io/en/develop/fields.html
 
 Form uses a small UI component to visualize HTML input fields associated with
 the respective Model Field. We call this object "Form Control". All form
-controls extend from class {php:class}`Form::Control`.
+controls extend from class {php:class}`Form\Control`.
 
 Agile UI comes with at least the following form controls:
 
@@ -241,7 +241,7 @@ $form->addControl('time', $calendar);
 ```
 
 For more information on default form controls as well as examples on how to create
-your own see documentation on {php:class}`Form::Control`.
+your own see documentation on {php:class}`Form\Control`.
 
 :::{php:method} controlFactory(\Atk4\Data\Field $field, $defaults = [])
 :::
@@ -388,7 +388,7 @@ class User extends \Atk4\Data\Model
 }
 ```
 
-The seed for the UI will be combined with the default overriding {php:attr}`Form_i_Control_i_Calendar::type`
+The seed for the UI will be combined with the default overriding {php:attr}`Form\Control\Calendar::$type`
 to allow month/year entry by the Calendar extension, which will then be saved and
 stored as a regular date. Obviously you can also specify decorator class:
 
@@ -553,11 +553,11 @@ Specify a PHP callback that will be executed on successful form submission.
 :::
 
 :::{php:method} jsError($field, $message)
-Create and return {php:class}`Js_i_JsChain` action that will indicate error on a form control.
+Create and return {php:class}`Js\JsChain` action that will indicate error on a form control.
 :::
 
 :::{php:method} jsSuccess($title, [$subTitle])
-Create and return {php:class}`Js_i_JsChain` action, that will replace form with a success message.
+Create and return {php:class}`Js\JsChain` action, that will replace form with a success message.
 :::
 
 :::{php:method} setApiConfig($config)
@@ -593,7 +593,7 @@ $form->onSubmit(function (Form $form) {
 ```
 
 Callback function can return one or multiple JavaScript actions. Methods such as
-{php:meth}`jsError()` or {php:meth}`jsSuccess()` will help initialize those actions for your form.
+{php:meth}`Form::jsError()` or {php:meth}`Form::jsSuccess()` will help initialize those actions for your form.
 Here is a code that can be used to output multiple errors at once. Errors were intentionally not grouped
 with a message about failure to accept of terms and conditions:
 
@@ -641,8 +641,8 @@ will not be included in response for security reasons.
 
 ### Form Layout and Sub-layout
 
-As stated above, when a Form object is created and form controls are added through either {php:meth}`addControl()`
-or {php:meth}`setModel()`, the form controls will appear one under each-other. This arrangement of form controls as
+As stated above, when a Form object is created and form controls are added through either {php:meth}`Form::addControl()`
+or {php:meth}`Form::setModel()`, the form controls will appear one under each-other. This arrangement of form controls as
 well as display of labels and structure around the form controls themselves is not done by a form,
 but another object - "Form Layout". This object is responsible for the form control flow, presence
 of labels etc.
@@ -661,7 +661,7 @@ Adds a form header with a text label. Returns View.
 :::
 
 :::{php:method} addGroup($header)
-Creates a sub-layout, returning new instance of a {php:class}`Form_i_Layout` object. You
+Creates a sub-layout, returning new instance of a {php:class}`Form\Layout` object. You
 can also specify a header.
 :::
 
@@ -721,7 +721,7 @@ $group->addControl('last_name', ['width' => 'five']);
 There are four specific sub layout views that you can add to your existing form layout: Generic, Accordion, Tabs and Columns.
 
 Generic sub layout is simply another layout view added to your existing form layout view. You add fields
-the same way as you would do for {php:class}`Form_i_Layout`.
+the same way as you would do for {php:class}`Form\Layout`.
 
 Sub layout section like Accordion, Tabs or Columns will create layout specific section where you can
 organize fields in either accordion, tabs or columns.
@@ -895,7 +895,7 @@ $form->setGroupDisplayRules([
 MOVE THIS TO SEPARATE FILE
 :::
 
-:::{php:class} Form_i_Layout
+:::{php:class} Form\Layout
 Renders HTML outline encasing form controls.
 :::
 
@@ -904,6 +904,6 @@ Form layout objects are always associated with a Form object.
 :::
 
 :::{php:method} addControl()
-Same as {php:class}`Form::addControl()` but will place a form control inside this specific layout
+Same as {php:meth}`Form::addControl()` but will place a form control inside this specific layout
 or sub-layout.
 :::
