@@ -113,6 +113,15 @@ class App
     private $portals = [];
 
     /**
+     * @var string used in method App::url to build the url
+     *
+     *  Used only in method App::url
+     *  If filename part is missing during building of url, this page will be used
+     *  Hint: if you use a routing system, you need to set this and urlBuildingExt to empty string
+     */
+    protected $urlBuildingPage = 'index';
+
+    /**
      * @var string used in method App::url to build the URL
      *
      * Used only in method App::url
@@ -692,31 +701,37 @@ class App
     public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
         if ($useRequestUrl) {
-            $page = $_SERVER['REQUEST_URI'];
+            $page = [
+                $this->getRequest()->getUri()->getPath(),
+                ...$this->request->getQueryParams(),
+            ];
         }
 
-        $pagePath = '';
         if (is_string($page)) {
             $pageExploded = explode('?', $page, 2);
-            $pagePath = $pageExploded[0];
+            $page = [];
             parse_str($pageExploded[1] ?? '', $page);
-        } else {
-            if (isset($page[0])) {
-                $pagePath = $page[0];
-            } else {
-                // use current page by default
-                $requestUrl = $this->getRequestUrl();
-                if (substr($requestUrl, -1, 1) === '/') {
-                    $pagePath = 'index';
-                } else {
-                    $pagePath = basename($requestUrl, $this->urlBuildingExt);
-                }
-            }
-            unset($page[0]);
-            if ($pagePath) {
-                $pagePath .= $this->urlBuildingExt;
-            }
+            $page[0] = $pageExploded[0];
         }
+
+        $pagePath = $page[0] ?? $this->getRequestUrl();
+
+        if (substr($pagePath, -1, 1) === '/') {
+            $pagePath = $pagePath . $this->urlBuildingPage;
+        } else {
+            // get initial part of the url
+            $pagePathPart = dirname($pagePath);
+            // remove dirname empty response
+            $pagePathPart = trim($pagePathPart, '.');
+            $pagePathPart = empty($pagePathPart) ? '' : $pagePathPart . '/';
+            // get filename
+            $pagePathFile = basename($pagePath, $this->urlBuildingExt);
+
+            $pagePath = str_replace('//', '/', $pagePathPart) . $pagePathFile;
+        }
+
+        unset($page[0]);
+        $pagePath .= $this->urlBuildingExt;
 
         $args = $extraRequestUrlArgs;
 
