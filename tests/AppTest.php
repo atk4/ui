@@ -95,6 +95,7 @@ class AppTest extends TestCase
             // simple cases with page as string
             ['test', false, [], '/', 'test.php', 'test.php8', 'test'],
             ['test/test/a', false, [], '/', 'test/test/a.php', 'test/test/a.php8', 'test/test/a'],
+            ['test/index', false, [], '/', 'test/index.php', 'test/index.php8', 'test/index'],
             ['test/index', false, [], '/test/', 'test/index.php', 'test/index.php8', 'test/index'],
             ['test', true, [], '/', '/index.php', '/default.php8', '/'],
             ['test', true, [], '/request-url', '/request-url.php', '/request-url.php8', '/request-url'],
@@ -131,6 +132,16 @@ class AppTest extends TestCase
             [['test'], true, ['extra_args' => 'atk4'], '/request-url/', '/request-url/index.php?extra_args=atk4', '/request-url/default.php8?extra_args=atk4', '/request-url/?extra_args=atk4'],
             [['test/index'], true, ['extra_args' => 'atk4'], '/test/', '/test/index.php?extra_args=atk4', '/test/default.php8?extra_args=atk4', '/test/?extra_args=atk4'],
             [['test'], false, ['extra_args' => 'atk4'], '/', 'test.php?extra_args=atk4', 'test.php8?extra_args=atk4', 'test?extra_args=atk4'],
+
+            // query args in page cases and query args in request cases and extra query args cases
+            [['test', 'page_args' => 'atk4'], false, ['extra_args' => 'atk4'], '/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test?extra_args=atk4&query_args=atk4&page_args=atk4'],
+            [['test/test/a', 'page_args' => 'atk4'], false, ['extra_args' => 'atk4'], '/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a?extra_args=atk4&query_args=atk4&page_args=atk4'],
+            [['test/index', 'page_args' => 'atk4'], false, ['extra_args' => 'atk4'], '/test/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index?extra_args=atk4&query_args=atk4&page_args=atk4'],
+            [['test', 'page_args' => 'atk4'], true, ['extra_args' => 'atk4'], '/', '/index.php?extra_args=atk4', '/default.php8?extra_args=atk4', '/?extra_args=atk4'],
+            [['test', 'page_args' => 'atk4'], true, ['extra_args' => 'atk4'], '/request-url', '/request-url.php?extra_args=atk4', '/request-url.php8?extra_args=atk4', '/request-url?extra_args=atk4'],
+            [['test', 'page_args' => 'atk4'], true, ['extra_args' => 'atk4'], '/request-url/', '/request-url/index.php?extra_args=atk4', '/request-url/default.php8?extra_args=atk4', '/request-url/?extra_args=atk4'],
+            [['test/index', 'page_args' => 'atk4'], true, ['extra_args' => 'atk4'], '/test/', '/test/index.php?extra_args=atk4', '/test/default.php8?extra_args=atk4', '/test/?extra_args=atk4'],
+            [['test', 'page_args' => 'atk4'], false, ['extra_args' => 'atk4'], '/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test?extra_args=atk4&query_args=atk4&page_args=atk4'],
         ];
     }
 
@@ -173,8 +184,8 @@ class AppTest extends TestCase
             'catchExceptions' => false,
             'alwaysRun' => false,
         ]);
-        self::assertSame($exceptedStd, $app->url($page, $useRequestUrl, $extraRequestUrlArgs));
-        self::assertSame($exceptedStd, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs));
+        self::assertSame($exceptedStd, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: standard');
+        self::assertSame($exceptedStd, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: standard');
 
         $app = new App([
             'stickyGetArguments' => $stickyGetArguments,
@@ -183,8 +194,8 @@ class AppTest extends TestCase
             'catchExceptions' => false,
             'alwaysRun' => false,
         ]);
-        self::assertSame($exceptedCustom, $app->url($page, $useRequestUrl, $extraRequestUrlArgs));
-        self::assertSame($exceptedCustom, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs));
+        self::assertSame($exceptedCustom, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: custom page/ext');
+        self::assertSame($exceptedCustom, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: custom page/ext');
 
         $app = new App([
             'stickyGetArguments' => $stickyGetArguments,
@@ -193,7 +204,7 @@ class AppTest extends TestCase
             'catchExceptions' => false,
             'alwaysRun' => false,
         ]);
-        self::assertSame($exceptedRouting, $app->url($page, $useRequestUrl, $extraRequestUrlArgs));
-        self::assertSame($exceptedRouting, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs));
+        self::assertSame($exceptedRouting, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: routing');
+        self::assertSame($exceptedRouting, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: routing');
     }
 }
