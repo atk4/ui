@@ -701,10 +701,8 @@ class App
     public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
         if ($useRequestUrl) {
-            $page = [
-                $this->getRequest()->getUri()->getPath(),
-                ...$this->request->getQueryParams(),
-            ];
+            $page = $this->request->getQueryParams();
+            $page[0] = $this->getRequest()->getUri()->getPath();
         }
 
         if (is_string($page)) {

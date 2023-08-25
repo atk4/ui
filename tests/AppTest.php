@@ -137,13 +137,11 @@ class AppTest extends TestCase
     /**
      * @dataProvider provideUrlBuildingCases
      *
-     * @param string|array<0|string, string|int|false> $page URL as string or array with page name as first element and other GET arguments
-     * @param bool $useRequestUrl Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array<string, string> $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
-     *
-     * @throws \ErrorException
+     * @param string|array<0|string, string|int|false> $page                URL as string or array with page name as first element and other GET arguments
+     * @param bool                                     $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array<string, string>                    $extraRequestUrlArgs Additional URL arguments, deleting sticky can delete them
      */
-    public function testUrlBuilding($page, bool $useRequestUrl, array $extraRequestUrlArgs, string $requestUrl, string $exceptedStd, string $exceptedCustom, $exceptedRouting): void
+    public function testUrlBuilding($page, bool $useRequestUrl, array $extraRequestUrlArgs, string $requestUrl, string $exceptedStd, string $exceptedCustom, string $exceptedRouting): void
     {
         $factory = new Psr17Factory();
         $request = $factory->createRequest('GET', 'http://127.0.0.1' . $requestUrl);
@@ -157,12 +155,18 @@ class AppTest extends TestCase
 
         parse_str($request->getUri()->getQuery(), $_GET);
 
-        $_GET = array_merge($_GET, $extraRequestUrlArgs);
+        foreach ($extraRequestUrlArgs as $key => $value) {
+            $_GET[$key] = $value;
+        }
 
-        $stickyGetArguments = array_merge($_GET, [
+        $stickyGetArguments = [
             '__atk_json' => false,
             '__atk_tab' => false,
-        ]);
+        ];
+
+        foreach ($_GET as $key => $value) {
+            $stickyGetArguments[$key] = $value;
+        }
 
         $app = new App([
             'stickyGetArguments' => $stickyGetArguments,
