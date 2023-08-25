@@ -723,7 +723,7 @@ class App
             $pagePathPart = dirname($pagePath);
             // remove dirname empty response
             $pagePathPart = trim($pagePathPart, '.');
-            $pagePathPart = empty($pagePathPart) ? '' : $pagePathPart . '/';
+            $pagePathPart = $pagePathPart === '' ? '' : $pagePathPart . '/';
             // get filename
             $pagePathFile = basename($pagePath, $this->urlBuildingExt);
 

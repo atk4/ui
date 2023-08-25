@@ -136,8 +136,14 @@ class AppTest extends TestCase
 
     /**
      * @dataProvider provideUrlBuildingCases
+     *
+     * @param string|array<0|string, string|int|false> $page URL as string or array with page name as first element and other GET arguments
+     * @param bool $useRequestUrl Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param array<string, string> $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
+     *
+     * @throws \ErrorException
      */
-    public function testUrlBuilding($page, $useRequestUrl, $extraRequestUrlArgs, $requestUrl, $exceptedStd, $exceptedCustom, $exceptedRouting)
+    public function testUrlBuilding($page, bool $useRequestUrl, array $extraRequestUrlArgs, string $requestUrl, string $exceptedStd, string $exceptedCustom, $exceptedRouting): void
     {
         $factory = new Psr17Factory();
         $request = $factory->createRequest('GET', 'http://127.0.0.1' . $requestUrl);
@@ -151,13 +157,12 @@ class AppTest extends TestCase
 
         parse_str($request->getUri()->getQuery(), $_GET);
 
-        $_GET = [...$_GET, ...$extraRequestUrlArgs];
+        $_GET = array_merge($_GET, $extraRequestUrlArgs);
 
-        $stickyGetArguments = [
-            ...$_GET,
+        $stickyGetArguments = array_merge($_GET, [
             '__atk_json' => false,
             '__atk_tab' => false,
-        ];
+        ]);
 
         $app = new App([
             'stickyGetArguments' => $stickyGetArguments,
