@@ -698,39 +698,65 @@ class App
      * @param bool                                     $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
      * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
+    public function url($page = [], bool $useRequestUrl = false, array $extraRequestUrlArgs = []): string
     {
         if ($useRequestUrl) {
-            $page = $this->request->getQueryParams();
-            $page[0] = $this->getRequest()->getUri()->getPath();
+            $page = $this->urlGetCurrentRequestPage();
         }
 
         if (is_string($page)) {
-            $pageExploded = explode('?', $page, 2);
-            $page = [];
-            parse_str($pageExploded[1] ?? '', $page);
-            $page[0] = $pageExploded[0];
+            $page = $this->urlSplitStringPageIntoArray($page);
         }
 
-        $pagePath = $page[0] ?? $this->getRequestUrl();
-
-        if (substr($pagePath, -1, 1) === '/') {
-            $pagePath = $pagePath . $this->urlBuildingPage;
-        } else {
-            // get initial part of the url
-            $pagePathPart = dirname($pagePath);
-            // remove dirname empty response
-            $pagePathPart = trim($pagePathPart, '.');
-            $pagePathPart = $pagePathPart === '' ? '' : $pagePathPart . '/';
-            // get filename
-            $pagePathFile = basename($pagePath, $this->urlBuildingExt);
-
-            $pagePath = str_replace('//', '/', $pagePathPart) . $pagePathFile;
-        }
-
+        $pagePath = $this->urlConstructPagePath($page[0] ?? $this->getRequestUrl());
         unset($page[0]);
-        $pagePath .= $this->urlBuildingExt;
 
+        $args = $this->urlMergeArguments($page, $extraRequestUrlArgs);
+
+        $pageQuery = http_build_query($args, '', '&', \PHP_QUERY_RFC3986);
+
+        return $pagePath . ($pageQuery ? '?' . $pageQuery : '');
+    }
+
+    private function urlGetCurrentRequestPage(): array
+    {
+        $request = $this->getRequest();
+        $page = $request->getQueryParams();
+        $page[0] = $request->getUri()->getPath();
+
+        return $page;
+    }
+
+    private function urlSplitStringPageIntoArray(string $page): array
+    {
+        $pageExploded = explode('?', $page, 2);
+        $arrayPage = [];
+        parse_str($pageExploded[1] ?? '', $arrayPage);
+        $arrayPage[0] = $pageExploded[0];
+
+        return $arrayPage;
+    }
+
+    private function urlConstructPagePath(string $pagePath): string
+    {
+        // Changed array string access to substr for PHP 7.4 compatibility
+        $lastChar = substr($pagePath, -1);
+        if ($lastChar === '/') {
+            return $pagePath . $this->urlBuildingPage . $this->urlBuildingExt;
+        }
+
+        $pagePathPart = trim(dirname($pagePath), '.');
+        $pagePathFile = basename($pagePath, $this->urlBuildingExt);
+
+        if ($pagePathPart !== '') {
+            $pagePathPart .= '/';
+        }
+
+        return str_replace('//', '/', $pagePathPart . $pagePathFile) . $this->urlBuildingExt;
+    }
+
+    private function urlMergeArguments(array $page, array $extraRequestUrlArgs): array
+    {
         $args = $extraRequestUrlArgs;
 
         // add sticky arguments
@@ -751,11 +777,7 @@ class App
             }
         }
 
-        // put URL together
-        $pageQuery = http_build_query($args, '', '&', \PHP_QUERY_RFC3986);
-        $url = $pagePath . ($pageQuery ? '?' . $pageQuery : '');
-
-        return $url;
+        return $args;
     }
 
     /**
