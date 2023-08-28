@@ -154,10 +154,6 @@ class AppTest extends TestCase
      */
     public function testUrlBuilding($page, bool $useRequestUrl, array $extraRequestUrlArgs, string $requestUrl, string $exceptedStd, string $exceptedCustom, string $exceptedRouting): void
     {
-        if ($useRequestUrl) {
-            $this->markTestSkipped('future improvements for App::url() with $useRequestUrl=true');
-        }
-
         $factory = new Psr17Factory();
         $request = $factory->createServerRequest('GET', 'http://127.0.0.1' . $requestUrl);
 /*
