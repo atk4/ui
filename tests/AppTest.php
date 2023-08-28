@@ -156,20 +156,7 @@ class AppTest extends TestCase
     {
         $factory = new Psr17Factory();
         $request = $factory->createServerRequest('GET', 'http://127.0.0.1' . $requestUrl);
-/*
-        $_SERVER = [
-            'REQUEST_METHOD' => 'GET',
-            'HTTP_HOST' => $request->getUri()->getHost(),
-            'REQUEST_URI' => $requestUrl,
-            'QUERY_STRING' => $request->getUri()->getQuery(),
-        ];
 
-        parse_str($request->getUri()->getQuery(), $_GET);
-
-        foreach ($extraRequestUrlArgs as $key => $value) {
-            $_GET[$key] = $value;
-        }
-*/
         $stickyGetArguments = [
             '__atk_json' => false,
             '__atk_tab' => false,
