@@ -692,7 +692,9 @@ class App
     public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
         if ($useRequestUrl) {
-            $page = $_SERVER['REQUEST_URI'];
+            $query = $this->getRequest()->getUri()->getQuery();
+            $page = $this->getRequest()->getUri()->getPath();
+            $page .= $query === '' ? '' : '?' . $query;
         }
 
         $pagePath = '';
@@ -719,11 +721,12 @@ class App
         }
 
         $args = $extraRequestUrlArgs;
+        $queryParams = $this->getRequest()->getQueryParams();
 
         // add sticky arguments
         foreach ($this->stickyGetArguments as $k => $v) {
-            if ($v && isset($_GET[$k])) {
-                $args[$k] = $_GET[$k];
+            if ($v && isset($queryParams[$k])) {
+                $args[$k] = $queryParams[$k];
             } else {
                 unset($args[$k]);
             }
