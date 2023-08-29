@@ -93,7 +93,7 @@ class View extends AbstractView
      */
     public function __construct($label = [])
     {
-        if (func_num_args() > 1) { // prevent bad usage
+        if ('func_num_args'() > 1) { // prevent bad usage
             throw new \Error('Too many method arguments');
         }
 
@@ -270,7 +270,7 @@ class View extends AbstractView
      */
     public function add($object, $region = null): AbstractView
     {
-        if (func_num_args() > 2) { // prevent bad usage
+        if ('func_num_args'() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');
         }
 
@@ -340,7 +340,7 @@ class View extends AbstractView
      */
     public function set($content)
     {
-        if (func_num_args() > 1) { // prevent bad usage
+        if ('func_num_args'() > 1) { // prevent bad usage
             throw new Exception('Only one argument is needed by View::set()');
         }
 
