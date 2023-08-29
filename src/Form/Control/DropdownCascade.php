@@ -54,11 +54,11 @@ class DropdownCascade extends Dropdown
         $this->cascadeFrom->onChange($expr, ['args' => [$this->cascadeFrom->name => $this->cascadeFrom->jsInput()->val()]]);
     }
 
-    public function set($value = null, $ignore = null)
+    public function set($value = null)
     {
         $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($this->cascadeFrom->entityField->get()), $value);
 
-        return parent::set($value, $ignore);
+        return parent::set($value);
     }
 
     /**

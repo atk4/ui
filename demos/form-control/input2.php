@@ -59,15 +59,15 @@ $onDelete = function () {
 $onUpload = function () {
 };
 
-$control = $group->addControl('file_norm', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]])->set('normal', 'normal.jpg');
+$control = $group->addControl('file_norm', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]])->set('normal', 'normal.jpg'); // @phpstan-ignore-line
 $control->onDelete($onDelete);
 $control->onUpload($onUpload);
 
-$control = $group->addControl('file_read', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'readOnly' => true]])->set('readonly', 'readonly.jpg');
+$control = $group->addControl('file_read', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'readOnly' => true]])->set('readonly', 'readonly.jpg'); // @phpstan-ignore-line
 $control->onDelete($onDelete);
 $control->onUpload($onUpload);
 
-$control = $group->addControl('file_disb', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'disabled' => true]])->set('disabled', 'disabled.jpg');
+$control = $group->addControl('file_disb', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'disabled' => true]])->set('disabled', 'disabled.jpg'); // @phpstan-ignore-line
 $control->onDelete($onDelete);
 $control->onUpload($onUpload);
 

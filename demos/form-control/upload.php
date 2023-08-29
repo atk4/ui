@@ -36,7 +36,7 @@ $img->onUpload(function (array $postFile) use ($form, $img) {
     }
 
     $img->setThumbnailSrc($img->getApp()->cdn['atk'] . '/logo.png');
-    $img->set('123456', $postFile['name'] . ' (token: 123456)');
+    $img->set('123456', $postFile['name'] . ' (token: 123456)'); // @phpstan-ignore-line
 
     // Do file processing here...
 
