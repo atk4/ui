@@ -16,7 +16,7 @@ Agile UI is the quickest way for building back-end UI, admin interfaces, data ma
 [![GitHub release](https://img.shields.io/github/release/atk4/ui.svg)](CHANGELOG.md)
 [![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
 
-Quick-Links: [Documentation](https://atk4-ui.readthedocs.io/). [Demo-site](https://ui.atk4.org/). [ATK Data](https://github.com/atk4/data). [Forum](https://forum.agiletoolkit.org/). [Chat](https://gitter.im/atk4/atk4). [Commercial support](https://www.agiletoolkit.org/contact).
+Quick-Links: [Documentation](https://atk4-ui.readthedocs.io/). [Demo-site](https://ui.atk4.org/). [ATK Data](https://github.com/atk4/data). [Discord community](https://discord.gg/QVKSk2B). [Commercial support](https://www.agiletoolkit.org/contact).
 
 ## How does Agile Toolkit work?
 
