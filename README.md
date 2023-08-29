@@ -4,12 +4,12 @@ Agile UI implement server side rendering engine and over 50 UI generic component
 
 Agile UI is the quickest way for building back-end UI, admin interfaces, data management systems for medium and large projects designed around roles, complex logic, formulas...
 
- - Agile UI relies on abstract data. It could be stored in SQL, NoSQL or in external API.
- - Agile UI adjusts to your data model. If you change your model structure, UI will reflect that.
- - Agile UI offers out-of-the-box components, you don't need front-end development experience.
- - Agile UI is interactive, making it very easy to trigger PHP code on JS events.
- - Agile UI is compact - single file, several lines of code - that's all it takes.
- - Agile UI is extensible - integrates VueJS for custom components and interactive behaviours.
+- Agile UI relies on abstract data. It could be stored in SQL, NoSQL or in external API.
+- Agile UI adjusts to your data model. If you change your model structure, UI will reflect that.
+- Agile UI offers out-of-the-box components, you don't need front-end development experience.
+- Agile UI is interactive, making it very easy to trigger PHP code on JS events.
+- Agile UI is compact - single file, several lines of code - that's all it takes.
+- Agile UI is extensible - integrates VueJS for custom components and interactive behaviours.
 
 [![Build](https://github.com/atk4/ui/workflows/Unit/badge.svg)](https://github.com/atk4/ui/actions?query=workflow%3AUnit+branch%3Adevelop)
 [![CodeCov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
@@ -23,9 +23,9 @@ Quick-Links: [Documentation](https://atk4-ui.readthedocs.io/). [Demo-site](https
 The goal of Agile Toolkit is to reduce amount of coding to build general purpose web applications. There are
 three steps involved:
 
- 1. Define your "Data Model" through [Agile Data Framework](https://github.com/atk4/data) and associate with SQL, NoSQL or API.
- 2. Initialize UI components, connecting them to Data Model to build User Interface for your application.
- 3. If needed - Use [Agile API](https://github.com/atk4/api) to provide API access for your Mobile/React app or IoT devices.
+1. Define your "Data Model" through [Agile Data Framework](https://github.com/atk4/data) and associate with SQL, NoSQL or API.
+2. Initialize UI components, connecting them to Data Model to build User Interface for your application.
+3. If needed - Use [Agile API](https://github.com/atk4/api) to provide API access for your Mobile/React app or IoT devices.
 
 Agile Data allows you to define models, fields, relations, formulas, aggregates, expressions, user action and
 access control rules. Both Agile UI and Agile API will follow those rules.
@@ -222,32 +222,32 @@ Agile UI comes with many built-in components:
 
 _All components can be view using the [demos](https://ui.atk4.org/demos/) application._
 
-| Component | Description | Introduced |
-| --------- | ----------- | ---------- |
-| View | Template, Render Tree and various patterns | 0.1 |
-| Button | Button in various variations including icons, labels, styles and tags | 0.1 |
-| Input | Decoration of input fields, integration with buttons. | 0.2 |
-| JS| Assign JS events and abstraction of PHP callbacks. | 0.2 |
-| Header| Simple view for header. | 0.3 |
-| Menu | Horizontal and vertical multi-dimensional menus with icons. | 0.4 |
-| Form| Validation, Interactivity, Feedback, Layouts, Field types. | 0.4 |
-| Layouts | Admin, Centered. | 0.4 |
-| Table | Formatting, Columns, Status, Link, Template, Delete. | 1.0 |
-| Grid | Toolbar, Paginator, Quick-search, Expander, Actions. | 1.1 |
-| Message | Such as "Info", "Error", "Warning" or "Tip" for easy use.| 1.1 |
-| Modal | Modal dialog with dynamically loaded content. | 1.1 |
-| Reloading | Dynamically re-render part of the UI. | 1.1 |
-| Actions | Extended buttons with various interactions | 1.1 |
-| Crud | Create, List, Edit and Delete records (based on Advanced Grid) | 1.1 |
-| Tabs | 4 Responsive: Admin, Centered, Site, Wide. | 1.2 |
-| Loader | Dynamically load itself and contained components inside. | 1.3 |
-| Modal View | Open/Load contained components in a dialog. | 1.3 |
-| Breadcrumb | Push links to pages for navigation. Wizard. | 1.4 |
-| ProgressBar | Interactive display of a multi-step PHP code execution progress | 1.4 |
-| Console | Execute server/shell commands and display progress live | 1.4 |
-| Items and Lists | Flexible and high-performance way to display lists of items. | 1.4 |
-| Wizard | Multi-step, wizard with temporary data storing. | 1.4 |
-| Actions | Visualization of user-defined actions | 2.0 |
+| Component       | Description                                                           | Introduced |
+| --------------- | --------------------------------------------------------------------- | ---------- |
+| View            | Template, Render Tree and various patterns                            | 0.1        |
+| Button          | Button in various variations including icons, labels, styles and tags | 0.1        |
+| Input           | Decoration of input fields, integration with buttons.                 | 0.2        |
+| JS              | Assign JS events and abstraction of PHP callbacks.                    | 0.2        |
+| Header          | Simple view for header.                                               | 0.3        |
+| Menu            | Horizontal and vertical multi-dimensional menus with icons.           | 0.4        |
+| Form            | Validation, Interactivity, Feedback, Layouts, Field types.            | 0.4        |
+| Layouts         | Admin, Centered.                                                      | 0.4        |
+| Table           | Formatting, Columns, Status, Link, Template, Delete.                  | 1.0        |
+| Grid            | Toolbar, Paginator, Quick-search, Expander, Actions.                  | 1.1        |
+| Message         | Such as "Info", "Error", "Warning" or "Tip" for easy use.             | 1.1        |
+| Modal           | Modal dialog with dynamically loaded content.                         | 1.1        |
+| Reloading       | Dynamically re-render part of the UI.                                 | 1.1        |
+| Actions         | Extended buttons with various interactions                            | 1.1        |
+| Crud            | Create, List, Edit and Delete records (based on Advanced Grid)        | 1.1        |
+| Tabs            | 4 Responsive: Admin, Centered, Site, Wide.                            | 1.2        |
+| Loader          | Dynamically load itself and contained components inside.              | 1.3        |
+| Modal View      | Open/Load contained components in a dialog.                           | 1.3        |
+| Breadcrumb      | Push links to pages for navigation. Wizard.                           | 1.4        |
+| ProgressBar     | Interactive display of a multi-step PHP code execution progress       | 1.4        |
+| Console         | Execute server/shell commands and display progress live               | 1.4        |
+| Items and Lists | Flexible and high-performance way to display lists of items.          | 1.4        |
+| Wizard          | Multi-step, wizard with temporary data storing.                       | 1.4        |
+| Actions         | Visualization of user-defined actions                                 | 2.0        |
 
 ## Add-ons and integrations
 
