@@ -11,7 +11,6 @@ use Atk4\Ui\Js\JsToast;
 require_once __DIR__ . '/../init-app.php';
 
 $form = Form::addTo($app);
-/** @var Form\Control\UploadImage $img */
 $img = $form->addControl('img', [Form\Control\UploadImage::class, ['defaultSrc' => '../images/default.png', 'placeholder' => 'Click to add an image.']]);
 // $img->set('a_new_token', 'an-img-file-name');
 // $img->setThumbnailSrc($app->cdn['atk'] . '/logo.png');
@@ -37,7 +36,7 @@ $img->onUpload(function (array $postFile) use ($form, $img) {
     }
 
     $img->setThumbnailSrc($img->getApp()->cdn['atk'] . '/logo.png');
-    $img->set('123456', $postFile['name'] . ' (token: 123456)');
+    $img->set('123456', $postFile['name'] . ' (token: 123456)'); // @phpstan-ignore-line
 
     // Do file processing here...
 
