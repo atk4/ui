@@ -126,11 +126,10 @@ class Dropdown extends Input
      * the model, then the model's value will also be affected.
      *
      * @param mixed $value
-     * @param never $ignore
      *
      * @return $this
      */
-    public function set($value = null, $ignore = null)
+    public function set($value = null)
     {
         if ($this->entityField) {
             if ($this->entityField->getField()->type === 'json' && is_string($value)) {
@@ -141,7 +140,7 @@ class Dropdown extends Input
             return $this;
         }
 
-        return parent::set($value, $ignore);
+        return parent::set($value);
     }
 
     /**
