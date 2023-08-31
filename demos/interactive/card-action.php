@@ -32,7 +32,7 @@ $notify = $country->getModel()->addUserAction('Notify', [
     'args' => [
         'note' => ['type' => 'string', 'required' => true],
     ],
-    'callback' => function (Model $model, $note) {
+    'callback' => static function (Model $model, $note) {
         return 'Note to client is sent: ' . $note;
     },
 ]);

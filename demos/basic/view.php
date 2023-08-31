@@ -74,7 +74,7 @@ Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])
     ->on('click', new JsReload($plane));
 
 Header::addTo($app, ['Can be on a Virtual Page']);
-$vp = VirtualPage::addTo($app)->set(function (VirtualPage $vp) use ($planeTemplate) {
+$vp = VirtualPage::addTo($app)->set(static function (VirtualPage $vp) use ($planeTemplate) {
     $plane = View::addTo($vp, ['template' => $planeTemplate]);
     Label::addTo($vp, ['Plane ID:', 'class.bottom attached' => true, 'detail' => $plane->name]);
 });

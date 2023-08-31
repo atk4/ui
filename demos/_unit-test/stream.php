@@ -10,7 +10,7 @@ use Psr\Http\Message\StreamInterface;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(fn (int $pos) => '', -1) implements StreamInterface {
+$hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(static fn (int $pos) => '', -1) implements StreamInterface {
     /** @var \Closure(int): string */
     private \Closure $fx;
 
@@ -130,7 +130,7 @@ $hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(f
 
 $sizeBytes = $_GET['size_mb'] * 1024 * 1024;
 
-$stream = new $hugePseudoStreamClass(function (int $pos) {
+$stream = new $hugePseudoStreamClass(static function (int $pos) {
     return "\n\0" . str_repeat($pos . ',', 1024);
 }, $sizeBytes);
 

@@ -16,7 +16,7 @@ require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Nested accordions']);
 
-$addAccordionFunc = function ($view, int $maxDepth, int $level = 0) use (&$addAccordionFunc) {
+$addAccordionFunc = static function ($view, int $maxDepth, int $level = 0) use (&$addAccordionFunc) {
     $accordion = Accordion::addTo($view, ['type' => ['styled', 'fluid']]);
 
     // static section
@@ -28,7 +28,7 @@ $addAccordionFunc = function ($view, int $maxDepth, int $level = 0) use (&$addAc
     }
 
     // dynamic section - simple view
-    $i2 = $accordion->addSection('Dynamic Text', function (VirtualPage $vp) use ($addAccordionFunc, $maxDepth, $level) {
+    $i2 = $accordion->addSection('Dynamic Text', static function (VirtualPage $vp) use ($addAccordionFunc, $maxDepth, $level) {
         Message::addTo($vp, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
         LoremIpsum::addTo($vp, ['size' => 2]);
 
@@ -36,11 +36,11 @@ $addAccordionFunc = function ($view, int $maxDepth, int $level = 0) use (&$addAc
     });
 
     // dynamic section - form view
-    $i3 = $accordion->addSection('Dynamic Form', function (VirtualPage $vp) use ($addAccordionFunc, $maxDepth, $level) {
+    $i3 = $accordion->addSection('Dynamic Form', static function (VirtualPage $vp) use ($addAccordionFunc, $maxDepth, $level) {
         Message::addTo($vp, ['Loading a form dynamically.', 'ui' => 'tiny message']);
         $form = Form::addTo($vp);
         $form->addControl('email');
-        $form->onSubmit(function (Form $form) {
+        $form->onSubmit(static function (Form $form) {
             return $form->jsSuccess('Subscribed ' . $form->model->get('email') . ' to newsletter.');
         });
 

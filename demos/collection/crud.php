@@ -23,12 +23,12 @@ $model = new Country($app->db);
 $crud = Crud::addTo($app, ['ipp' => 10]);
 
 // callback for model action add form.
-$crud->onFormAdd(function (Form $form, ModalExecutor $ex) use ($model) {
+$crud->onFormAdd(static function (Form $form, ModalExecutor $ex) use ($model) {
     $form->js(true, $form->getControl($model->fieldName()->name)->jsInput()->val('Entering value via javascript'));
 });
 
 // callback for model action edit form.
-$crud->onFormEdit(function (Form $form) use ($model) {
+$crud->onFormEdit(static function (Form $form) use ($model) {
     $form->js(true, $form->getControl($model->fieldName()->name)->jsInput()->attr('readonly', true));
 });
 
@@ -54,7 +54,7 @@ $crud = Crud::addTo($column, [
 // Condition on the model can be applied on a model
 $model = new Country($app->db);
 $model->addCondition($model->fieldName()->numcode, '<', 200);
-$model->onHook(Model::HOOK_VALIDATE, function (Country $model, ?string $intent) {
+$model->onHook(Model::HOOK_VALIDATE, static function (Country $model, ?string $intent) {
     $err = [];
     if ($model->numcode >= 200) {
         $err[$model->fieldName()->numcode] = 'Should be less than 200';
@@ -65,7 +65,7 @@ $model->onHook(Model::HOOK_VALIDATE, function (Country $model, ?string $intent) 
 $crud->setModel($model);
 
 // Because Crud inherits Grid, you can also define custom actions
-$crud->addModalAction(['icon' => 'cogs'], 'Details', function (View $p, $id) use ($crud) {
+$crud->addModalAction(['icon' => 'cogs'], 'Details', static function (View $p, $id) use ($crud) {
     $model = Country::assertInstanceOf($crud->model);
     Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $id . ')']);
 });

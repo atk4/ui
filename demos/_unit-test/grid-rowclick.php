@@ -21,19 +21,19 @@ $grid->setModel($model);
 
 $grid->addDecorator($model->fieldName()->name, [Table\Column\Link::class, 'url' => 'xxx']);
 
-$grid->addActionButton('Action Button', function () {
+$grid->addActionButton('Action Button', static function () {
     return new JsToast(['message' => 'Clicked Action Button']);
 });
 
-$grid->addActionMenuItem('Action MenuItem', function () {
+$grid->addActionMenuItem('Action MenuItem', static function () {
     return new JsToast(['message' => 'Clicked Action MenuItem']);
 });
 
-$grid->addModalAction('Action Modal', 'Details', function (View $p, $id) use ($model) {
+$grid->addModalAction('Action Modal', 'Details', static function (View $p, $id) use ($model) {
     Message::addTo($p, ['Clicked Action Modal: ' . $model->load($id)->name]);
 });
 
-$grid->table->onRowClick(function () {
+$grid->table->onRowClick(static function () {
     return new JsToast(['message' => 'Clicked on row']);
 });
 

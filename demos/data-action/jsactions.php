@@ -24,7 +24,7 @@ $country = new Country($app->db);
 
 $sendEmailAction = $country->addUserAction('Email', [
     'confirmation' => 'Are you sure you wish to send an email?',
-    'callback' => function (Country $country) {
+    'callback' => static function (Country $country) {
         return 'Email to Kristy in ' . $country->name . ' has been sent!';
     },
 ]);
@@ -48,7 +48,7 @@ $country->addUserAction('greet', [
             'required' => true,
         ],
     ],
-    'callback' => function (Country $model, string $name) {
+    'callback' => static function (Country $model, string $name) {
         return 'Hello ' . $name;
     },
 ]);

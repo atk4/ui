@@ -26,7 +26,7 @@ $view = View::addTo($app, ['template' => new HtmlTemplate(
 )]);
 
 $lister = Lister::addTo($view, [], ['List']);
-$lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
+$lister->onHook(Lister::HOOK_BEFORE_ROW, static function (Lister $lister) {
     $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 });
@@ -36,7 +36,7 @@ $lister->setModel($model);
 
 $sortable = JsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
-$sortable->onReorder(function (array $order, string $src, int $pos, int $oldPos) {
+$sortable->onReorder(static function (array $order, string $src, int $pos, int $oldPos) {
     if ($_GET['btn'] ?? null) {
         return new JsToast(implode(' - ', $order));
     }
@@ -56,6 +56,6 @@ $grid = Grid::addTo($app, ['paginator' => false]);
 $grid->setModel((new Country($app->db))->setLimit(6));
 
 $dragHandler = $grid->addDragHandler();
-$dragHandler->onReorder(function (array $order) {
+$dragHandler->onReorder(static function (array $order) {
     return new JsToast('New order: ' . implode(' - ', $order));
 });

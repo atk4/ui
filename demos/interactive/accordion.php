@@ -38,17 +38,17 @@ Message::addTo($i1, ['This content is added on page loaded', 'ui' => 'tiny messa
 LoremIpsum::addTo($i1, ['size' => 1]);
 
 // dynamic section - simple view
-$i2 = $accordion->addSection('Dynamic Text', function (VirtualPage $vp) {
+$i2 = $accordion->addSection('Dynamic Text', static function (VirtualPage $vp) {
     Message::addTo($vp, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
     LoremIpsum::addTo($vp, ['size' => 2]);
 });
 
 // dynamic section - form view
-$i3 = $accordion->addSection('Dynamic Form', function (VirtualPage $vp) {
+$i3 = $accordion->addSection('Dynamic Form', static function (VirtualPage $vp) {
     Message::addTo($vp, ['Loading a form dynamically.', 'ui' => 'tiny message']);
     $form = Form::addTo($vp);
     $form->addControl('Email');
-    $form->onSubmit(function (Form $form) {
+    $form->onSubmit(static function (Form $form) {
         return $form->jsSuccess('Subscribed ' . $form->model->get('Email') . ' to newsletter.');
     });
 });

@@ -16,7 +16,7 @@ $sse->setUrlTrigger('console_test');
 
 $console = Console::addTo($app, ['sse' => $sse]);
 
-$console->set(function (Console $console) {
+$console->set(static function (Console $console) {
     $console->output('Executing test process...');
     $console->output('Now trying something dangerous..');
     echo 'direct output is captured';
