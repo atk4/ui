@@ -61,7 +61,7 @@ class SessionTraitTest extends TestCase
         $m = new SessionMock($this->createApp());
 
         self::assertFalse(isset($_SESSION));
-        $m->atomicSession(function (): void {
+        $m->atomicSession(static function (): void {
             self::assertTrue(isset($_SESSION));
         });
         self::assertFalse(isset($_SESSION));
@@ -74,13 +74,13 @@ class SessionTraitTest extends TestCase
 
         // value as string
         $m->memorize('foo', 'bar');
-        $m->atomicSession(function () use ($m): void {
+        $m->atomicSession(static function () use ($m): void {
             self::assertSame('bar', $_SESSION['__atk_session'][$m->name]['foo']);
         }, true);
 
         // value as null
         $m->memorize('foo', null);
-        $m->atomicSession(function () use ($m): void {
+        $m->atomicSession(static function () use ($m): void {
             self::assertNull($_SESSION['__atk_session'][$m->name]['foo']);
         }, true);
 
@@ -88,7 +88,7 @@ class SessionTraitTest extends TestCase
         $o = new \stdClass();
         $o->foo = 'x';
         $m->memorize('foo', $o);
-        $m->atomicSession(function () use ($m, $o): void {
+        $m->atomicSession(static function () use ($m, $o): void {
             self::assertSame(serialize($o), serialize($_SESSION['__atk_session'][$m->name]['foo']));
         }, true);
     }
@@ -109,7 +109,7 @@ class SessionTraitTest extends TestCase
         self::assertSame('undefined', $m->recall('foo', 'undefined'));
 
         // value as callback
-        $m->learn('foo', function (string $key) {
+        $m->learn('foo', static function (string $key) {
             return $key . '_bar';
         });
         self::assertSame('foo_bar', $m->recall('foo'));
@@ -117,7 +117,7 @@ class SessionTraitTest extends TestCase
         $m->learn('foo_2', 'another');
         self::assertSame('another', $m->recall('foo_2'));
 
-        $v = $m->recall('foo_3', function (string $key) {
+        $v = $m->recall('foo_3', static function (string $key) {
             return $key . '_bar';
         });
         self::assertSame('foo_3_bar', $v);

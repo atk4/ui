@@ -65,13 +65,13 @@ class FormTest extends TestCase
     public function assertFormSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
     {
         $wasSubmitCalled = false;
-        $_POST = array_merge(array_map(fn () => '', $this->form->controls), $postData);
+        $_POST = array_merge(array_map(static fn () => '', $this->form->controls), $postData);
         try {
             // trigger callback
             $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . 'atk_submit'] = 'ajax';
             $_GET[Callback::URL_QUERY_TARGET] = 'atk_submit';
 
-            $this->form->onSubmit(function (Form $form) use (&$wasSubmitCalled, $submitFx): void {
+            $this->form->onSubmit(static function (Form $form) use (&$wasSubmitCalled, $submitFx): void {
                 $wasSubmitCalled = true;
                 if ($submitFx !== null) {
                     $submitFx($form->model);
@@ -114,7 +114,7 @@ class FormTest extends TestCase
         self::assertSame('John', $f->model->get('name'));
 
         // fake some POST data
-        $this->assertFormSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], function (Model $m) {
+        $this->assertFormSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], static function (Model $m) {
             // field has default, but form send back empty value
             self::assertSame('', $m->get('name'));
 
@@ -128,7 +128,7 @@ class FormTest extends TestCase
     public function testTextareaSubmit(): void
     {
         $this->form->addControl('Textarea');
-        $this->assertFormSubmit(['Textarea' => '0'], function (Model $m) {
+        $this->assertFormSubmit(['Textarea' => '0'], static function (Model $m) {
             self::assertSame('0', $m->get('Textarea'));
         });
     }
@@ -203,7 +203,7 @@ class FormTest extends TestCase
         $catchReached = false;
         try {
             try {
-                $this->assertFormSubmit(['foo' => 'x'], function (Model $model) use (&$submitReached) {
+                $this->assertFormSubmit(['foo' => 'x'], static function (Model $model) use (&$submitReached) {
                     $submitReached = true;
                     $model->set('bar', null);
                 });

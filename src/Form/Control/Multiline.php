@@ -776,7 +776,7 @@ class Multiline extends Form\Control
         $dummyModel->removeField('id');
         $dummyModel->idField = $entity->idField;
 
-        $createExprFromValueFx = function ($v) use ($dummyModel): Persistence\Sql\Expression {
+        $createExprFromValueFx = static function ($v) use ($dummyModel): Persistence\Sql\Expression {
             if (is_int($v)) {
                 // TODO hack for multiline.php test for PostgreSQL
                 // related with https://github.com/atk4/data/pull/989
@@ -826,7 +826,7 @@ class Multiline extends Form\Control
             $expr = $exprField->getDsqlExpression($entity->getModel()->expr(''));
         }
         if ($expr instanceof Persistence\Sql\Expression) {
-            $expr = \Closure::bind(fn () => $expr->template, null, Persistence\Sql\Expression::class)();
+            $expr = \Closure::bind(static fn () => $expr->template, null, Persistence\Sql\Expression::class)();
         }
 
         $matches = [];

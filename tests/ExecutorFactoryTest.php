@@ -29,7 +29,7 @@ class TestModel extends Model
         $this->addField('name');
 
         $this->addUserAction('confirm', [
-            'confirmation' => function () {
+            'confirmation' => static function () {
                 return 'confirm?';
             },
         ]);

@@ -52,7 +52,7 @@ class Dropdown extends Lister
             ),
         ]);
 
-        $this->cb->set(function (Jquery $j, string $value) use ($fx) {
+        $this->cb->set(static function (Jquery $j, string $value) use ($fx) {
             return $fx($value);
         }, ['item' => 'value']);
     }
