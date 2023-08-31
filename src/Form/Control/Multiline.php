@@ -591,7 +591,7 @@ class Multiline extends Form\Control
         }
 
         $definition = array_map(function ($value) use ($field) {
-            $this; // prevent PHP CS Fixer to make this anonymous function static, TODO https://github.com/atk4/ui/pull/1625
+            $this->issetOwner(); // prevent PHP CS Fixer to make this anonymous function static, TODO https://github.com/atk4/ui/pull/1625
 
             return is_array($value) && is_callable($value) ? call_user_func($value, $field) : $value;
         }, $component);
