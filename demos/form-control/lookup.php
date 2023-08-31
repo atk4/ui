@@ -48,7 +48,7 @@ $form->addControl('country3', [
     ],
 ]);
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     $view = new Message('Select:');
     $view->setApp($form->getApp());
     $view->invokeInit();
@@ -87,7 +87,7 @@ Form\Control\Lookup::addTo($app, [
 
 Header::addTo($app, ['Lookup input inside modal']);
 
-$modal = Modal::addTo($app)->set(function (View $p) {
+$modal = Modal::addTo($app)->set(static function (View $p) {
     $a = Form\Control\Lookup::addTo($p, ['placeholder' => 'Search country', 'label' => 'Country:']);
     $a->setModel(new Country($p->getApp()->db));
 });

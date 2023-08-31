@@ -124,7 +124,7 @@ class Context extends RawMinkContext implements BehatContext
     protected function disableAnimations(): void
     {
         // disable all CSS/jQuery animations/transitions
-        $toCssFx = function (string $selector, array $cssPairs): string {
+        $toCssFx = static function (string $selector, array $cssPairs): string {
             $css = [];
             foreach ($cssPairs as $k => $v) {
                 foreach ([$k, '-moz-' . $k, '-webkit-' . $k] as $k2) {
@@ -204,11 +204,11 @@ class Context extends RawMinkContext implements BehatContext
         $duplicateIds = array_diff($duplicateIds, ['atk', '_icon', 'atk_icon']); // generated when component is not correctly added to app/layout component tree - should throw, as such name/ID is dangerous to be used
 
         if (count($invalidIds) > 0) {
-            throw new \Exception('Page contains element with invalid ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $invalidIds)));
+            throw new \Exception('Page contains element with invalid ID: ' . implode(', ', array_map(static fn ($v) => '"' . $v . '"', $invalidIds)));
         }
 
         if (count($duplicateIds) > 0) {
-            throw new \Exception('Page contains elements with duplicate ID: ' . implode(', ', array_map(fn ($v) => '"' . $v . '"', $duplicateIds)));
+            throw new \Exception('Page contains elements with duplicate ID: ' . implode(', ', array_map(static fn ($v) => '"' . $v . '"', $duplicateIds)));
         }
     }
 
@@ -221,7 +221,7 @@ class Context extends RawMinkContext implements BehatContext
             // add support for standard CSS class selector
             $xpath = preg_replace_callback(
                 '~\'(?:[^\']+|\'\')*+\'\K|"(?:[^"]+|"")*+"\K|(?<=\w|\*)\.([\w\-]+)~s',
-                function ($matches) {
+                static function ($matches) {
                     if ($matches[0] === '') {
                         return '';
                     }

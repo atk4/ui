@@ -85,21 +85,21 @@ trait ModelPreventModificationTrait
 
     protected function initPreventModification(): void
     {
-        $makeMessageFx = function (string $actionName, Model $model) {
+        $makeMessageFx = static function (string $actionName, Model $model) {
             return $model->getModelCaption() . ' action "' . $actionName . '" with "' . $model->getTitle() . '" entity '
                 . ' was executed. In demo mode all changes are reversed.';
         };
 
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), function (Model $model) use ($makeMessageFx) {
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), static function (Model $model) use ($makeMessageFx) {
             return $makeMessageFx('add', $model);
         });
 
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), function (Model $model) use ($makeMessageFx) {
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), static function (Model $model) use ($makeMessageFx) {
             return $makeMessageFx('edit', $model);
         });
 
         $this->getUserAction('delete')->confirmation = 'Please go ahead. Demo mode does not really delete data.';
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), function (Model $model) use ($makeMessageFx) {
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), static function (Model $model) use ($makeMessageFx) {
             return $makeMessageFx('delete', $model);
         });
     }
@@ -216,7 +216,7 @@ class Country extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->numcode, ['caption' => 'ISO Numeric Code', 'type' => 'integer', 'required' => true]);
         $this->addField($this->fieldName()->phonecode, ['caption' => 'Phone Prefix', 'type' => 'integer', 'required' => true]);
 
-        $this->onHook(Model::HOOK_BEFORE_SAVE, function (self $model) {
+        $this->onHook(Model::HOOK_BEFORE_SAVE, static function (self $model) {
             if (!$model->sys_name) {
                 $model->sys_name = mb_strtoupper($model->name);
             }
@@ -301,7 +301,7 @@ class Stat extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->is_commercial, ['type' => 'boolean']);
         $this->addField($this->fieldName()->currency, ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
         $this->addField($this->fieldName()->currency_symbol, ['neverPersist' => true]);
-        $this->onHook(Model::HOOK_AFTER_LOAD, function (self $model) {
+        $this->onHook(Model::HOOK_AFTER_LOAD, static function (self $model) {
             $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
             $model->currency_symbol = $map[$model->currency] ?? '?';
         });
@@ -534,7 +534,7 @@ class MultilineItem extends ModelWithPrefixedFields
             'type' => 'integer',
         ]);
         $this->addCalculatedField($this->fieldName()->total_php, [
-            'expr' => function (self $row) {
+            'expr' => static function (self $row) {
                 return $row->qty * $row->box;
             },
             'type' => 'integer',

@@ -32,7 +32,7 @@ $listerTemplate = '<div {$attributes}>{List}<div id="{$_id}" class="ui segment" 
 $listerContainer = View::addTo($scrollContainer, ['template' => new HtmlTemplate($listerTemplate)]);
 
 $lister = Lister::addTo($listerContainer, [], ['List']);
-$lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
+$lister->onHook(Lister::HOOK_BEFORE_ROW, static function (Lister $lister) {
     $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 });

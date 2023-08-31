@@ -101,7 +101,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
                     }
 
                     $output = '';
-                    $this->sse->echoFunction = function (string $str) use (&$output) {
+                    $this->sse->echoFunction = static function (string $str) use (&$output) {
                         $output .= $str;
                     };
                     $this->output($content);
@@ -201,7 +201,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     protected function outputHtmlWithoutPre(string $messageHtml, array $context = [])
     {
-        $messageHtml = preg_replace_callback('~{([\w]+)}~', function ($matches) use ($context) {
+        $messageHtml = preg_replace_callback('~{([\w]+)}~', static function ($matches) use ($context) {
             if (isset($context[$matches[1]])) {
                 return $context[$matches[1]];
             }
@@ -320,7 +320,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
      */
     protected function execRaw(string $command, array $args = [])
     {
-        $args = array_map(fn ($v) => escapeshellarg($v), $args);
+        $args = array_map(static fn ($v) => escapeshellarg($v), $args);
 
         $spec = [1 => ['pipe', 'w'], 2 => ['pipe', 'w']]; // we want stdout and stderr
         $pipes = null;

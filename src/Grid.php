@@ -476,7 +476,7 @@ class Grid extends View
             $menuId = $columnName;
         }
 
-        $column->addDropdown($items, function (string $item) use ($fx) {
+        $column->addDropdown($items, static function (string $item) use ($fx) {
             return $fx($item);
         }, $icon, $menuId);
     }

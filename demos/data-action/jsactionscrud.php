@@ -22,7 +22,7 @@ $files->addUserAction('import_from_filesystem', [
     'caption' => 'Import',
     'callback' => 'importFromFilesystem',
     'description' => 'Import file using path:',
-    'preview' => function (Model $model, $path) {
+    'preview' => static function (Model $model, $path) {
         return 'Execute Import using path: "' . $path . '"';
     },
     'args' => [
@@ -31,7 +31,7 @@ $files->addUserAction('import_from_filesystem', [
     'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORDS,
 ]);
 
-$files->addUserAction('download', function (Model $model) {
+$files->addUserAction('download', static function (Model $model) {
     return 'File has been download!';
 });
 

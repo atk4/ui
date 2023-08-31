@@ -100,7 +100,7 @@ class HtmlTemplate
         unset($template->tagTrees[$tag]);
         $template->tagTrees[self::TOP_TAG] = $topTagTree;
         $topTag = self::TOP_TAG;
-        \Closure::bind(function () use ($topTagTree, $topTag) {
+        \Closure::bind(static function () use ($topTagTree, $topTag) {
             $topTagTree->tag = $topTag;
         }, null, TagTree::class)();
 
@@ -116,7 +116,7 @@ class HtmlTemplate
 
     protected function _unsetFromTagTree(TagTree $tagTree, int $k): void
     {
-        \Closure::bind(function () use ($tagTree, $k) {
+        \Closure::bind(static function () use ($tagTree, $k) {
             if ($k === array_key_last($tagTree->children)) {
                 array_pop($tagTree->children);
             } else {
@@ -349,7 +349,7 @@ class HtmlTemplate
         }
 
         $tagTree = $this->getTagTree($tag);
-        \Closure::bind(function () use ($tagTree) {
+        \Closure::bind(static function () use ($tagTree) {
             $tagTree->children = [];
         }, null, TagTree::class)();
 
@@ -513,7 +513,7 @@ class HtmlTemplate
                 }
                 $parentTemplate = self::$_parseCacheParentTemplate;
 
-                \Closure::bind(function () use ($tagTrees, $parentTemplate) {
+                \Closure::bind(static function () use ($tagTrees, $parentTemplate) {
                     foreach ($tagTrees as $tagTree) {
                         $tagTree->parentTemplate = $parentTemplate;
                     }

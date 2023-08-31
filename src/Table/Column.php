@@ -139,7 +139,7 @@ class Column
 
         $cb = $this->setHeaderDropdown($menuItems, $icon, $menuId);
 
-        $cb->onSelectItem(function (string $menu, string $item) use ($fx) {
+        $cb->onSelectItem(static function (string $menu, string $item) use ($fx) {
             return $fx($item, $menu);
         });
     }

@@ -33,7 +33,7 @@ $virtualPageButton->link('virtual.php');
 $virtualPage->ui = 'grey inverted segment';
 
 $modal = Modal::addTo($virtualPage);
-$modal->set(function (View $p) {
+$modal->set(static function (View $p) {
     Text::addTo($p)->set('This is yet another modal');
     LoremIpsum::addTo($p, ['size' => 2]);
 });
@@ -89,7 +89,7 @@ $table = Table::addTo($app, ['class.celled' => true]);
 $table->setModel(new SomeData());
 
 $frame = VirtualPage::addTo($app);
-$frame->set(function (VirtualPage $p) {
+$frame->set(static function (VirtualPage $p) {
     Header::addTo($p, ['Clicked row with ID = ' . ($_GET['id'] ?? '')]);
 });
 

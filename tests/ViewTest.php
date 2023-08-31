@@ -194,7 +194,7 @@ class ViewTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Only one argument is needed by ' . preg_replace('~.+\\\\~', '', $class) . '::set()');
-        $v->set(function () {}, null); // @phpstan-ignore-line
+        $v->set(static function () {}, null); // @phpstan-ignore-line
     }
 
     /**

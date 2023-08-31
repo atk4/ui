@@ -61,6 +61,6 @@ $tab = $tabs->addTab('Custom layout class');
 $form = Form::addTo($tab, ['layout' => [Form\Layout\Custom::class, 'defaultTemplate' => __DIR__ . '/templates/form-custom-layout.html']]);
 $form->setModel((new Country($app->db))->loadAny());
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     return new JsToast('Saving is disabled');
 });

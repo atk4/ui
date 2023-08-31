@@ -19,7 +19,7 @@ require_once __DIR__ . '/init-autoloader.php';
 $coverageSaveFx = null;
 if (is_dir(__DIR__ . '/../coverage') && !CoverageUtil::isCalledFromPhpunit()) {
     CoverageUtil::startFromPhpunitConfig(__DIR__ . '/..');
-    $coverageSaveFx = function (): void {
+    $coverageSaveFx = static function (): void {
         CoverageUtil::saveData(__DIR__ . '/../coverage');
     };
 }
