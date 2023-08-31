@@ -297,7 +297,9 @@ class DemosTest extends TestCase
             }
         }
 
-        return array_map(fn (string $v) => [$v], $files);
+        foreach ($files as $path) {
+            yield [$path];
+        }
     }
 
     /**
