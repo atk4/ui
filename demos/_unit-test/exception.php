@@ -19,7 +19,7 @@ $cb->setUrlTrigger('m_cb');
 $modal = Modal::addTo($app, ['cb' => $cb]);
 $modal->name = 'm_test';
 
-$modal->set(function () {
+$modal->set(static function () {
     throw new \Exception('Test throw exception!');
 });
 
@@ -29,7 +29,7 @@ $button->on('click', $modal->jsShow());
 $cb1 = CallbackLater::addTo($app, ['urlTrigger' => 'm2_cb']);
 $modal2 = Modal::addTo($app, ['cb' => $cb1]);
 
-$modal2->set(function () {
+$modal2->set(static function () {
     trigger_error('Test trigger error!');
 });
 

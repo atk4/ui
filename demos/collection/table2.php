@@ -35,7 +35,7 @@ $table->template->dangerouslyAppendHtml('SubHead', $app->getTag('tr', ['class' =
 $table->template->dangerouslyAppendHtml('Body', $app->getTag('tr', ['class' => 'center aligned'], [['td', ['colspan' => '2'], 'This is part of body, goes before other rows']]));
 
 // Hook can be used to display data before row. You can also inject and format extra rows.
-$table->onHook(Lister::HOOK_BEFORE_ROW, function (Table $table) {
+$table->onHook(Lister::HOOK_BEFORE_ROW, static function (Table $table) {
     if ($table->currentRow->getId() === 2) {
         $table->template->dangerouslyAppendHtml('Body', $table->getApp()->getTag('tr', ['class' => 'center aligned'], [['td', ['colspan' => '2'], 'This goes above row with ID=2 (' . $table->currentRow->get('action') . ')']]));
     } elseif ($table->currentRow->get('action') === 'Tax') {
@@ -60,7 +60,7 @@ $table = Table::addTo($app);
 $table->setModel($model, ['action']);
 
 // copy of amount through a PHP callback
-$model->addExpression('amount_copy', ['expr' => function (Model $model) {
+$model->addExpression('amount_copy', ['expr' => static function (Model $model) {
     return $model->get('amount');
 }, 'type' => 'atk4_money']);
 
@@ -69,7 +69,7 @@ $table->addColumn('amount', [Table\Column\Money::class]);
 $table->addDecorator('amount', [Table\Column\Template::class, 'Refunded: {$amount}']);
 
 // column which uses selective format depending on condition
-$table->addColumn('amount_copy', [Table\Column\Multiformat::class, function (Model $row) {
+$table->addColumn('amount_copy', [Table\Column\Multiformat::class, static function (Model $row) {
     if ($row->get('amount_copy') > 0) {
         // two formatters together
         return [[Table\Column\Link::class], [Table\Column\Money::class]];
@@ -90,7 +90,7 @@ Header::addTo($app, ['Table with resizable columns', 'subHeader' => 'Just drag c
 
 $table = Table::addTo($app);
 $table->setModel($model);
-$table->addClass('celled')->resizableColumn(function (Jquery $j, array $data) use ($app) {
+$table->addClass('celled')->resizableColumn(static function (Jquery $j, array $data) use ($app) {
     $res = [];
     foreach ($data as $column) {
         $res[$column['column']] = $column['size'] < 100 ? 'narrow' : 'wide';

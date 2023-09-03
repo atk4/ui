@@ -37,7 +37,7 @@ View::addTo($app)->set('with onChange callback');
 $inlineEditWithCallback = VueComponent\InlineEdit::addTo($app);
 $inlineEditWithCallback->fieldName = $entity->fieldName()->name;
 $inlineEditWithCallback->setModel($entity);
-$inlineEditWithCallback->onChange(function (string $value) use ($app) {
+$inlineEditWithCallback->onChange(static function (string $value) use ($app) {
     $view = new Message();
     $view->setApp($app);
     $view->invokeInit();
@@ -62,7 +62,7 @@ $view = View::addTo($app);
 $search = VueComponent\ItemSearch::addTo($view, ['ui' => 'compact segment']);
 $listerContainer = View::addTo($view, ['template' => $listerTemplate]);
 $lister = Lister::addTo($listerContainer, [], ['List']);
-$lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
+$lister->onHook(Lister::HOOK_BEFORE_ROW, static function (Lister $lister) {
     $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 

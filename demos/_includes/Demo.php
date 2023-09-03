@@ -48,11 +48,11 @@ class Demo extends Columns
             $funcRefl->getEndLine() - $funcRefl->getStartLine() - 1
         );
 
-        $minIndent = min(array_map(function (string $l): int {
+        $minIndent = min(array_map(static function (string $l): int {
             return strlen($l) - strlen(ltrim($l, ' '));
         }, array_filter($codeArr)));
 
-        return implode("\n", array_map(function (string $l) use ($minIndent) {
+        return implode("\n", array_map(static function (string $l) use ($minIndent) {
             return substr($l, $minIndent);
         }, $codeArr));
     }

@@ -26,7 +26,7 @@ class Accordion extends UiAccordion
     {
         parent::init();
 
-        $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
+        $this->form->onHook(Form::HOOK_DISPLAY_ERROR, static function (Form $form, $fieldName, $str) {
             // default behavior
             $jsError = [$form->js()->form('add prompt', $fieldName, $str)];
 

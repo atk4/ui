@@ -20,7 +20,7 @@ View::addTo($app, ['ui' => 'clearing divider']);
 $model = new Country($app->db);
 $model = $model->loadAny();
 
-$saveAndDumpValues = function (Form $form) {
+$saveAndDumpValues = static function (Form $form) {
     $form->model->save();
 
     return new JsToast([

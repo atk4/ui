@@ -32,9 +32,9 @@ $form = Form::addTo($seg, ['layout' => [Form\Layout\Columns::class]]);
 $modelClass = ['country' => Country::class, 'file' => File::class][$_GET['m'] ?? ''] ?? Stat::class;
 $form->setModel((new $modelClass($app->db))->loadAny());
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     $errors = [];
-    $modelDirty = \Closure::bind(function () use ($form): array { // TODO Model::dirty property is private
+    $modelDirty = \Closure::bind(static function () use ($form): array { // TODO Model::dirty property is private
         return $form->model->dirty;
     }, null, Model::class)();
     foreach ($modelDirty as $field => $value) {

@@ -13,6 +13,6 @@ class TableColumnTest extends TestCase
     {
         $this->expectException(\Error::class);
         $this->expectExceptionMessage('Too many method arguments');
-        new Column([], []);
+        new Column([], []); // @phpstan-ignore-line
     }
 }

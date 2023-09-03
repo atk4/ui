@@ -35,7 +35,7 @@ if ($id) {
 
     $form = Form::addTo($app);
     $form->setModel($model);
-    $form->onSubmit(function (Form $form) {
+    $form->onSubmit(static function (Form $form) {
         return new JsToast('Form Submitted! Data saving is not possible in demo!');
     });
 } else {

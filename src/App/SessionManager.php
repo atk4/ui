@@ -110,7 +110,7 @@ class SessionManager
         $found = false;
 
         if (self::$readCache === null) {
-            $this->atomicSession(function (): void {
+            $this->atomicSession(static function (): void {
             }, true);
         }
 
