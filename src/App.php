@@ -385,7 +385,7 @@ class App
         if ($value === '') {
             $this->response = $this->response->withoutHeader($name);
         } else {
-            $name = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+            $name = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', static function ($matches) {
                 return strtoupper($matches[0]);
             }, strtolower($name));
 
@@ -653,7 +653,7 @@ class App
         if ($requestUrlPath === null) {
             if (\PHP_SAPI === 'cli') { // for phpunit
                 $requestUrlPath = '/';
-                $requestLocalPath = \Closure::bind(function () {
+                $requestLocalPath = \Closure::bind(static function () {
                     return dirname((new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory());
                 }, null, ExceptionRenderer\Html::class)();
             } else {
@@ -1034,7 +1034,7 @@ class App
     public function encodeJson($data, bool $forceObject = false): string
     {
         if (is_array($data) || is_object($data)) {
-            $checkNoObjectFx = function ($v) {
+            $checkNoObjectFx = static function ($v) {
                 if (is_object($v)) {
                     throw (new Exception('Object to JSON encode is not supported'))
                         ->addMoreInfo('value', $v);
@@ -1058,7 +1058,7 @@ class App
         // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
         // replace large JSON integers only, do not replace anything in JSON/JS strings
         $json = preg_replace_callback('~"(?:[^"\\\\]+|\\\\.)*+"\K|\'(?:[^\'\\\\]+|\\\\.)*+\'\K'
-            . '|(?:^|[{\[,:])[ \n\r\t]*\K-?[1-9]\d{15,}(?=[ \n\r\t]*(?:$|[}\],:]))~s', function ($matches) {
+            . '|(?:^|[{\[,:])[ \n\r\t]*\K-?[1-9]\d{15,}(?=[ \n\r\t]*(?:$|[}\],:]))~s', static function ($matches) {
                 if ($matches[0] === '' || abs((int) $matches[0]) < (2 ** 53)) {
                     return $matches[0];
                 }

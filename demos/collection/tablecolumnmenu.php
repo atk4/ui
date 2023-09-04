@@ -37,12 +37,12 @@ Text::addTo($colName->addPopup())->set('Name popup');
 
 // dynamic popup setup
 // This popup will add content using the callback function.
-$colSurname->addPopup()->set(function (View $pop) {
+$colSurname->addPopup()->set(static function (View $pop) {
     Text::addTo($pop)->set('This popup is loaded dynamically');
 });
 
 // another dropdown menu
-$colTitle->addDropdown(['Change', 'Reorder', 'Update'], function (string $item) {
+$colTitle->addDropdown(['Change', 'Reorder', 'Update'], static function (string $item) {
     return new JsToast(['message' => 'Title item: ' . $item]);
 });
 
@@ -56,7 +56,7 @@ $grid->setModel(new Country($app->db));
 $grid->ipp = 5;
 
 // Adding a dropdown menu to the column 'name'.
-$grid->addDropdown(Country::hinting()->fieldName()->name, ['Rename', 'Delete'], function (string $item) {
+$grid->addDropdown(Country::hinting()->fieldName()->name, ['Rename', 'Delete'], static function (string $item) {
     return $item;
 });
 

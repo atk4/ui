@@ -62,7 +62,7 @@ class JsSse extends JsCallback
             throw new \TypeError('$fx must be of type Closure');
         }
 
-        return parent::set(function (Jquery $chain) use ($fx, $args) {
+        return parent::set(static function (Jquery $chain) use ($fx, $args) {
             // TODO replace EventSource to support POST
             // https://github.com/Yaffle/EventSource
             // https://github.com/mpetazzoni/sse.js
@@ -159,7 +159,7 @@ class JsSse extends JsCallback
      */
     private function wrapData(string $string): string
     {
-        return implode('', array_map(function (string $v): string {
+        return implode('', array_map(static function (string $v): string {
             return 'data: ' . $v . "\n";
         }, preg_split('~\r?\n|\r~', $string)));
     }

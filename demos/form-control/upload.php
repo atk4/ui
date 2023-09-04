@@ -20,7 +20,7 @@ $control = $form->addControl('file', [Form\Control\Upload::class, ['accept' => [
 // $control->set('a_generated_token', 'a-file-name');
 // $control->set('a_generated_token', null);
 
-$img->onDelete(function (string $fileId) use ($img) {
+$img->onDelete(static function (string $fileId) use ($img) {
     $img->clearThumbnail();
 
     return new JsToast([
@@ -30,13 +30,13 @@ $img->onDelete(function (string $fileId) use ($img) {
     ]);
 });
 
-$img->onUpload(function (array $postFile) use ($form, $img) {
+$img->onUpload(static function (array $postFile) use ($form, $img) {
     if ($postFile['error'] !== 0) {
         return $form->jsError('img', 'Error uploading image.');
     }
 
     $img->setThumbnailSrc($img->getApp()->cdn['atk'] . '/logo.png');
-    $img->set('123456', $postFile['name'] . ' (token: 123456)');
+    $img->set('123456', $postFile['name'] . ' (token: 123456)'); // @phpstan-ignore-line
 
     // Do file processing here...
 
@@ -55,7 +55,7 @@ $img->onUpload(function (array $postFile) use ($form, $img) {
     ]);
 });
 
-$control->onDelete(function (string $fileId) {
+$control->onDelete(static function (string $fileId) {
     return new JsToast([
         'title' => 'Delete successfully',
         'message' => $fileId . ' has been removed',
@@ -63,7 +63,7 @@ $control->onDelete(function (string $fileId) {
     ]);
 });
 
-$control->onUpload(function (array $postFile) use ($form, $control) {
+$control->onUpload(static function (array $postFile) use ($form, $control) {
     if ($postFile['error'] !== 0) {
         return $form->jsError('file', 'Error uploading file.');
     }
@@ -85,7 +85,7 @@ $control->onUpload(function (array $postFile) use ($form, $control) {
     ]);
 });
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     // implement submission here
     return $form->jsSuccess('Thanks for submitting file: ' . $form->model->get('img') . ' / ' . $form->model->get('file'));
 });

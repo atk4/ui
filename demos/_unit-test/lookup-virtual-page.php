@@ -17,10 +17,10 @@ $product = new Product($app->db);
 
 $vp = VirtualPage::addTo($app);
 
-$vp->set(function (VirtualPage $vp) {
+$vp->set(static function (VirtualPage $vp) {
     $form = Form::addTo($vp);
     $form->addControl('category', [Form\Control\Lookup::class, 'model' => new Category($vp->getApp()->db)]);
-    $form->onSubmit(function (Form $form) {
+    $form->onSubmit(static function (Form $form) {
         $category = $form->getControl('category')->model->load($form->model->get('category'));
 
         return new JsToast($category->getTitle());

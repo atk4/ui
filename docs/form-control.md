@@ -353,8 +353,9 @@ $c1->onChange(\Atk4\Ui\Js\JsExpression('console.log(\'c1 changed: \' + date + \'
 :::
 
 Dropdown uses Fomantic-UI Dropdown (https://fomantic-ui.com/modules/dropdown.html). A Dropdown can be used in two ways:
-1) Set a Model to $model property. The Dropdown will render all records of the model that matches the model's conditions.
-2) You can define $values property to create custom Dropdown items.
+
+1. Set a Model to $model property. The Dropdown will render all records of the model that matches the model's conditions.
+2. You can define $values property to create custom Dropdown items.
 
 ### Usage with a Model
 

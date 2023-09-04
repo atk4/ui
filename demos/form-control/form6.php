@@ -32,6 +32,6 @@ $form->addControl('int_r', [Form\Control\Radio::class], ['values' => [5 => 'fema
 $form->addControl('string_d', [], ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
 $form->addControl('string_r', [Form\Control\Radio::class], ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
 
-$form->onSubmit(function (Form $form) use ($app) {
+$form->onSubmit(static function (Form $form) use ($app) {
     return new JsToast($app->encodeJson($form->model->get()));
 });

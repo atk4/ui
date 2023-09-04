@@ -411,9 +411,14 @@ $rightContainer->js(true)->height(new JsExpression('mySum([])', [$heights]));
 This will map into the following JavaScript code:
 
 ```js
-$('#right_container_id').height(mySum([
-    $('#left_box1').height(), $('#left_box2').height(), $('#left_box3').height(), // etc
-]));
+$('#right_container_id').height(
+    mySum([
+        $('#left_box1').height(),
+        $('#left_box2').height(),
+        $('#left_box3').height(),
+        // ...
+    ])
+);
 ```
 
 You can further simplify JavaScript code yourself, but keep the JavaScript logic inside the `.js` files
