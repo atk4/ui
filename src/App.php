@@ -638,11 +638,6 @@ class App
             ->addMoreInfo('templateDir', $this->templateDir);
     }
 
-    protected function getRequestUrl(): string
-    {
-        return $this->request->getUri()->getPath();
-    }
-
     protected function createRequestPathFromLocalPath(string $localPath): string
     {
         // $localPath does not need realpath() as the path is expected to be built using __DIR__
@@ -708,7 +703,7 @@ class App
             $page = $this->urlSplitStringPageIntoArray($page);
         }
 
-        $pagePath = $this->urlConstructPagePath($page[0] ?? $this->getRequestUrl());
+        $pagePath = $this->urlConstructPagePath($page[0] ?? $this->request->getUri()->getPath());
         unset($page[0]);
 
         $args = $this->urlMergeArguments($page, $extraRequestUrlArgs);
