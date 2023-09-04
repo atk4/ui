@@ -85,7 +85,7 @@ class ActionButtons extends Table\Column
      */
     public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [])
     {
-        if ($owner === null) {
+        if ($owner === null) { // TODO explicit owner should not be needed
             $owner = $this->getOwner()->getOwner();
         }
 
