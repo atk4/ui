@@ -32,7 +32,7 @@ $form->setModel((new Country($app->db))->createEntity(), []);
 $formAddress = $form->addGroup('Basic Country Information');
 $nameInput = $formAddress->addControl(Country::hinting()->fieldName()->name, ['width' => 'sixteen']);
 $nameInput->addAction(['Check Duplicate', 'iconRight' => 'search'])
-    ->on('click', function (Jquery $jquery, string $name) use ($app, $form) {
+    ->on('click', static function (Jquery $jquery, string $name) use ($app, $form) {
         if ((new Country($app->db))->tryLoadBy(Country::hinting()->fieldName()->name, $name) !== null) {
             return $form->js()->form('add prompt', Country::hinting()->fieldName()->name, 'This country name is already added.');
         }
@@ -54,7 +54,7 @@ $formNames->addControl('middle_name', ['width' => 'five', 'caption' => 'Middle N
 $formNames->addControl('last_name', ['width' => 'six', 'caption' => 'Last Name']);
 
 // form on submit
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     $countryEntity = (new Country($form->getApp()->db))->createEntity();
     // Model will have some validation too
     foreach ($form->model->getFields('editable') as $k => $field) {
@@ -113,6 +113,6 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends M
 $form = Form::addTo($app)->addClass('segment');
 $form->setModel((new $personClass($app->db))->createEntity());
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     return new JsToast('Form saved!');
 });

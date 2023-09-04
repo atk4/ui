@@ -259,7 +259,7 @@ https://atk4-core.readthedocs.io/en/develop/factory.html
 
 ### Templates
 
-Components rely on {php:class}`Template` class for parsing and rendering their
+Components rely on {php:class}`HtmlTemplate` class for parsing and rendering their
 HTML. The default template is written for Fomantic-UI framework, which makes sure
 that elements will look good and be consistent.
 
@@ -277,7 +277,7 @@ Using App class will utilize a minimum of 2 templates:
 
 As you add more components, they will appear inside your layout.
 
-You'll also find that a layout class such as {php:class}`Layout_i_Admin` will initialize
+You'll also find that a layout class such as {php:class}`Layout\Admin` will initialize
 some components on its own - sidebar menu, top menu.
 
 :::{image} images/admin-layout.png

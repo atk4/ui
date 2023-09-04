@@ -90,3 +90,26 @@ Feature: Grid
     Then I should see "Andorra"
     Then I should see "China"
     Then I should see "Zambia"
+
+  Scenario: Bulk action
+    Given I am on "collection/grid.php"
+    Then I press button "Show selected"
+    Then Toast display should contain text "Selected: #"
+    When I click using selector "//tr[5]//div.ui.checkbox"
+    When I click using selector "//tr[8]//div.ui.checkbox"
+    Then I press button "Show selected"
+    Then Toast display should contain text "Selected: 5, 8#"
+
+  Scenario: Bulk modal action
+    Given I am on "collection/grid.php"
+    Then I press button "Delete selected"
+    Then Modal is open with text "The selected records will be permanently deleted: #"
+    Then I press button "Delete"
+    Then I should see "Success"
+    Then I click close modal
+    When I click using selector "//tr[5]//div.ui.checkbox"
+    When I click using selector "//tr[8]//div.ui.checkbox"
+    Then I press button "Delete selected"
+    Then Modal is open with text "The selected records will be permanently deleted: 5, 8#"
+    Then I press button "Delete"
+    Then I should see "Success"

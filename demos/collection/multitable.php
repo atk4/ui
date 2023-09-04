@@ -87,7 +87,7 @@ $model->setOrder([$model->fieldName()->is_folder => 'desc', $model->fieldName()-
 
 Header::addTo($app, ['File Finder', 'subHeader' => 'Component built around Table, Columns and JsReload']);
 
-$vp = VirtualPage::addTo($app)->set(function (VirtualPage $vp) use ($model) {
+$vp = VirtualPage::addTo($app)->set(static function (VirtualPage $vp) use ($model) {
     $model->importFromFilesystem('.');
     Button::addTo($vp, ['Import Complete', 'class.big green fluid' => true])->link('multitable.php');
     $vp->js(true)->closest('.modal')->find('.header')->remove();

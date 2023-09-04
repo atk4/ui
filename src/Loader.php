@@ -67,15 +67,14 @@ class Loader extends View
      *  });
      *
      * @param \Closure($this): void $fx
-     * @param never                 $ignore
      *
      * @return $this
      */
-    public function set($fx = null, $ignore = null)
+    public function set($fx = null)
     {
         if (!$fx instanceof \Closure) {
             throw new \TypeError('$fx must be of type Closure');
-        } elseif (func_num_args() > 1) {
+        } elseif ('func_num_args'() > 1) {
             throw new Exception('Only one argument is needed by Loader::set()');
         }
 

@@ -22,7 +22,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $wizard = Wizard::addTo($app);
 
-$wizard->addStep('Define User Action', function (Wizard $page) {
+$wizard->addStep('Define User Action', static function (Wizard $page) {
     Header::addTo($page, ['What are User Actions?']);
 
     $t = Text::addTo($page);
@@ -40,7 +40,7 @@ $wizard->addStep('Define User Action', function (Wizard $page) {
         and respect those actions. Actions can be added into the model just like you are adding fields:
         EOF);
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(static function (View $owner) {
         $country = new Country($owner->getApp()->db);
 
         $country->addUserAction('send_message');
@@ -59,10 +59,10 @@ $wizard->addStep('Define User Action', function (Wizard $page) {
         toast message, but this can also be customised.
         EOF);
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(static function (View $owner) {
         $country = new Country($owner->getApp()->db);
 
-        $country->addUserAction('send_message', function (Country $entity) {
+        $country->addUserAction('send_message', static function (Country $entity) {
             return 'Sent to ' . $entity->get($entity->fieldName()->name);
         });
         $country = $country->loadAny();
@@ -73,7 +73,7 @@ $wizard->addStep('Define User Action', function (Wizard $page) {
     });
 });
 
-$wizard->addStep('UI Integration', function (Wizard $page) {
+$wizard->addStep('UI Integration', static function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(<<<'EOF'
         Agile UI introduces a new set of views called "User Action Executors". Their job is to recognise all that meta-information
@@ -81,7 +81,7 @@ $wizard->addStep('UI Integration', function (Wizard $page) {
         and you can trigger it on button-click with a very simple code:
         EOF);
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(static function (View $owner) {
         $country = new Country($owner->getApp()->db);
         $country = $country->loadAny();
 
@@ -95,7 +95,7 @@ $wizard->addStep('UI Integration', function (Wizard $page) {
         is executed when you click on "World" menu item:
         EOF);
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(static function (View $owner) {
         $country = new Country($owner->getApp()->db);
         $country = $country->loadAny();
 
@@ -105,7 +105,7 @@ $wizard->addStep('UI Integration', function (Wizard $page) {
     });
 });
 
-$wizard->addStep('Arguments', function (Wizard $page) {
+$wizard->addStep('Arguments', static function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(<<<'EOF'
         Next demo defines an user action that requires arguments. You can specify arguments when the user action is invoked, but if not
@@ -113,7 +113,7 @@ $wizard->addStep('Arguments', function (Wizard $page) {
         same type system as fields.
         EOF);
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(static function (View $owner) {
         $model = new Model($owner->getApp()->db, ['table' => 'test']);
 
         $model->addUserAction('greet', [
@@ -123,7 +123,7 @@ $wizard->addStep('Arguments', function (Wizard $page) {
                     'type' => 'string',
                 ],
             ],
-            'callback' => function (Model $model, string $name) {
+            'callback' => static function (Model $model, string $name) {
                 return 'Hi ' . $name;
             },
         ]);
@@ -136,7 +136,7 @@ $wizard->addStep('Arguments', function (Wizard $page) {
                     'required' => true,
                 ],
             ],
-            'callback' => function (Model $model, int $age) {
+            'callback' => static function (Model $model, int $age) {
                 return 'Age is ' . $age;
             },
         ]);
@@ -152,7 +152,7 @@ $wizard->addStep('Arguments', function (Wizard $page) {
     });
 });
 
-$wizard->addStep('Crud integration', function (Wizard $page) {
+$wizard->addStep('Crud integration', static function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(<<<'EOF'
         Compared to 1.x versions Crud implementation has became much more lightweight, however you retain all the same
@@ -160,18 +160,18 @@ $wizard->addStep('Crud integration', function (Wizard $page) {
         and how you could add your own action with a custom trigger button and even a preview.
         EOF);
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(static function (View $owner) {
         $country = new Country($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
-        $country->getUserAction('delete')->enabled = function (Country $m) {
+        $country->getUserAction('delete')->enabled = static function (Country $m) {
             return $m->id % 2 === 0;
         };
         $country->addUserAction('mail', [
             'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'preview' => function (Country $model) {
+            'preview' => static function (Country $model) {
                 return 'Here is email preview for ' . $model->name;
             },
-            'callback' => function (Country $model) {
+            'callback' => static function (Country $model) {
                 return 'Email sent to ' . $model->name;
             },
             'description' => 'Email testing',
@@ -187,13 +187,13 @@ $wizard->addStep('Crud integration', function (Wizard $page) {
             ->setModel($country, [$country->fieldName()->name, $country->fieldName()->iso]);
     });
 
-    Demo::addTo($page, ['leftWidth' => 6, 'rightWidth' => 10])->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page, ['leftWidth' => 6, 'rightWidth' => 10])->setCodeAndCall(static function (View $owner) {
         $model = new Stat($owner->getApp()->db);
 
         $model->addUserAction('mail', [
             'fields' => [$model->fieldName()->currency],
             'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'callback' => function (Stat $model) {
+            'callback' => static function (Stat $model) {
                 return 'Email sent in ' . $model->currency . ' currency';
             },
             'description' => 'Email testing',
@@ -207,7 +207,7 @@ $wizard->addStep('Crud integration', function (Wizard $page) {
     });
 });
 
-$wizard->addFinish(function (Wizard $page) {
+$wizard->addFinish(static function (Wizard $page) {
     PromotionText::addTo($page);
     Button::addTo($page, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
         ->link('/demos/index.php');

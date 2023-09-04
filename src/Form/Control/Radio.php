@@ -42,7 +42,7 @@ class Radio extends Form\Control
         if (!$this->model) {
             // we cannot use "id" column here as seeding Array_ persistence with 0 will throw "Must not be a zero"
             // $this->setSource($this->values);
-            $this->setSource(array_map(fn ($k, string $v) => ['k' => $k, 'name' => $v], array_keys($this->values), $this->values));
+            $this->setSource(array_map(static fn ($k, string $v) => ['k' => $k, 'name' => $v], array_keys($this->values), $this->values));
             $this->model->idField = 'k';
         }
 

@@ -6,8 +6,10 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
+use Atk4\Ui\Form;
 use Atk4\Ui\Grid;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Js\JsToast;
@@ -21,7 +23,7 @@ require_once __DIR__ . '/../init-app.php';
 
 $grid = Grid::addTo($app);
 $model = new Country($app->db);
-$model->addUserAction('test', function (Model $model) {
+$model->addUserAction('test', static function (Model $model) {
     return 'test from ' . $model->getTitle() . ' was successful!';
 });
 
@@ -50,19 +52,19 @@ $grid->addColumn(null, [Table\Column\Template::class, 'hello<b>world</b>']);
 // Creating a button for executing model test user action.
 $grid->addExecutorButton($grid->getExecutorFactory()->createExecutor($model->getUserAction('test'), $grid));
 
-$grid->addActionButton('Say HI', function (Jquery $j, $id) use ($grid) {
+$grid->addActionButton('Say HI', static function (Jquery $j, $id) use ($grid) {
     $model = Country::assertInstanceOf($grid->model);
 
     return 'Loaded "' . $model->load($id)->name . '" from ID=' . $id;
 });
 
-$grid->addModalAction(['icon' => 'external'], 'Modal Test', function (View $p, $id) {
+$grid->addModalAction(['icon' => 'external'], 'Modal Test', static function (View $p, $id) {
     Message::addTo($p, ['Clicked on ID=' . $id]);
 });
 
 // Creating an executor for delete action.
 $deleteExecutor = $grid->getExecutorFactory()->createExecutor($model->getUserAction('delete'), $grid);
-$deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
+$deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, static function () {
     return [
         (new Jquery())->closest('tr')->transition('fade left'),
         new JsToast('Simulating delete in demo mode.'),
@@ -71,12 +73,35 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, function () {
 // TODO button is added not only to the table rows, but also below the table!
 // $grid->addExecutorButton($deleteExecutor, new Button(['icon' => 'times circle outline']));
 
-$sel = $grid->addSelection();
-$grid->menu->addItem('show selection')
-    ->on('click', new JsExpression(
-        'alert(\'Selected: \' + [])',
-        [$sel->jsChecked()]
-    ));
+$grid->addSelection();
+
+$grid->addBulkAction(['Show selected', 'icon' => 'binoculars'], static function (Jquery $j, array $ids) {
+    return new JsToast('Selected: ' . implode(', ', $ids) . '#');
+});
+
+// Executing a modal on a bulk selection
+$grid->addModalBulkAction(['Delete selected', 'icon' => 'trash'], '', static function (View $modal, array $ids) use ($grid) {
+    Message::addTo($modal, [
+        'The selected records will be permanently deleted: ' . implode(', ', $ids) . '#',
+        'type' => 'warning',
+        'icon' => 'warning',
+    ]);
+    $form = Form::addTo($modal);
+    $form->buttonSave->set('Delete');
+    $form->buttonSave->icon = 'trash';
+    $form->onSubmit(static function (Form $form) use ($grid, $ids) {
+        $grid->model->atomic(static function () use ($grid, $ids) {
+            foreach ($ids as $id) {
+                $grid->model->delete($id);
+            }
+        });
+
+        return new JsBlock([
+            $grid->jsReload(),
+            $form->jsSuccess(),
+        ]);
+    });
+});
 
 // Setting ipp with an array will add an ItemPerPageSelector to paginator.
 $grid->setIpp([10, 100, 1000]);

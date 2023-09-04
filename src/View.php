@@ -93,7 +93,7 @@ class View extends AbstractView
      */
     public function __construct($label = [])
     {
-        if (func_num_args() > 1) { // prevent bad usage
+        if ('func_num_args'() > 1) { // prevent bad usage
             throw new \Error('Too many method arguments');
         }
 
@@ -270,7 +270,7 @@ class View extends AbstractView
      */
     public function add($object, $region = null): AbstractView
     {
-        if (func_num_args() > 2) { // prevent bad usage
+        if ('func_num_args'() > 2) { // prevent bad usage
             throw new \Error('Too many method arguments');
         }
 
@@ -340,7 +340,7 @@ class View extends AbstractView
      */
     public function set($content)
     {
-        if (func_num_args() > 1) { // prevent bad usage
+        if ('func_num_args'() > 1) { // prevent bad usage
             throw new Exception('Only one argument is needed by View::set()');
         }
 
@@ -1012,15 +1012,15 @@ class View extends AbstractView
                 $cb->apiConfig = $defaults['apiConfig'];
             }
 
-            $cb->set(function (Jquery $chain, ...$args) use ($action) {
+            $cb->set(static function (Jquery $chain, ...$args) use ($action) {
                 return $action($chain, ...$args);
             }, $arguments);
 
-            $actions[] = $lazyJsRenderFx(fn () => $cb->jsExecute());
+            $actions[] = $lazyJsRenderFx(static fn () => $cb->jsExecute());
         } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof UserAction\SharedExecutor || $action instanceof Model\UserAction) {
             $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->createExecutor($action, $this) : $action;
 
-            $setupNonSharedExecutorFx = function (UserAction\ExecutorInterface $ex) use (&$defaults, &$arguments): void {
+            $setupNonSharedExecutorFx = static function (UserAction\ExecutorInterface $ex) use (&$defaults, &$arguments): void {
                 /** @var AbstractView&UserAction\ExecutorInterface $ex https://github.com/phpstan/phpstan/issues/3770 */
                 $ex = $ex;
 
@@ -1047,7 +1047,7 @@ class View extends AbstractView
             if ($ex instanceof UserAction\SharedExecutor) {
                 $setupNonSharedExecutorFx($ex->getExecutor());
                 $actions = [$ex->getExecutor() instanceof UserAction\JsCallbackExecutor
-                    ? $lazyJsRenderFx(fn () => $ex->jsExecute($arguments))
+                    ? $lazyJsRenderFx(static fn () => $ex->jsExecute($arguments))
                     : $ex->jsExecute($arguments)];
             } elseif ($ex instanceof UserAction\JsExecutorInterface && $ex instanceof self) {
                 $setupNonSharedExecutorFx($ex);
@@ -1056,12 +1056,12 @@ class View extends AbstractView
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
                 $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction();
-                $actions = [$lazyJsRenderFx(fn () => $ex->jsExecute($arguments))];
+                $actions = [$lazyJsRenderFx(static fn () => $ex->jsExecute($arguments))];
             } else {
                 throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or UserAction\JsExecutorInterface');
             }
         } elseif ($action instanceof JsCallback) {
-            $actions = [$lazyJsRenderFx(fn () => $action->jsExecute())];
+            $actions = [$lazyJsRenderFx(static fn () => $action->jsExecute())];
         } else {
             $actions = [$action];
         }

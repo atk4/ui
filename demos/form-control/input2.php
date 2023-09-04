@@ -54,20 +54,20 @@ $group->addControl('radio_disb', [Form\Control\Radio::class, 'disabled' => true]
 
 $group = $form->addGroup('File upload');
 
-$onDelete = function () {
+$onDelete = static function () {
 };
-$onUpload = function () {
+$onUpload = static function () {
 };
 
-$control = $group->addControl('file_norm', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]])->set('normal', 'normal.jpg');
+$control = $group->addControl('file_norm', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]])->set('normal', 'normal.jpg'); // @phpstan-ignore-line
 $control->onDelete($onDelete);
 $control->onUpload($onUpload);
 
-$control = $group->addControl('file_read', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'readOnly' => true]])->set('readonly', 'readonly.jpg');
+$control = $group->addControl('file_read', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'readOnly' => true]])->set('readonly', 'readonly.jpg'); // @phpstan-ignore-line
 $control->onDelete($onDelete);
 $control->onUpload($onUpload);
 
-$control = $group->addControl('file_disb', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'disabled' => true]])->set('disabled', 'disabled.jpg');
+$control = $group->addControl('file_disb', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'disabled' => true]])->set('disabled', 'disabled.jpg'); // @phpstan-ignore-line
 $control->onDelete($onDelete);
 $control->onUpload($onUpload);
 
@@ -101,7 +101,7 @@ $group->addControl('date_norm', [Form\Control\Calendar::class, 'type' => 'date']
 $group->addControl('date_read', [Form\Control\Calendar::class, 'type' => 'date', 'readOnly' => true])->set(new \DateTime());
 $group->addControl('date_disb', [Form\Control\Calendar::class, 'type' => 'date', 'disabled' => true])->set(new \DateTime());
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
 });
 
 Header::addTo($app, ['Stand Alone Line']);
@@ -127,7 +127,7 @@ $control = $form->addControl('surname', new Form\Control\Line([
     )],
 ]));
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     return $form->model->get('name');
 });
 
@@ -143,7 +143,7 @@ $formPage->addControl('name', new Form\Control\Line());
 $formPage = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
 $formPage->addControl('age', new Form\Control\Line());
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     return $form->model->get('name') . ' has age ' . $form->model->get('age');
 });
 
@@ -171,7 +171,7 @@ $f2->onChange(new JsBlock([
     new JsExpression('console.log(\'f2 changed\')'),
     new JsExpression('console.log(\'f2 really changed\')'),
 ]));
-$f3->onChange(function () {
+$f3->onChange(static function () {
     return new JsExpression('console.log(\'f3 changed\')');
 });
 
@@ -214,7 +214,7 @@ $group->addControl('m_text_crlf', [Form\Control\Textarea::class], ['type' => 'te
 $group->addControl('m_text_cr', [Form\Control\Textarea::class], ['type' => 'text'])->set("First line\rSecond line");
 $group->addControl('m_text_lf', [Form\Control\Textarea::class], ['type' => 'text'])->set("First line\nSecond line");
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     // check what values are submitted
     echo "We're URL encoding submitted values to be able to see what line end is actually submitted.";
     foreach ($form->model->get() as $k => $v) {

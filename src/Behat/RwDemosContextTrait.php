@@ -6,6 +6,7 @@ namespace Atk4\Ui\Behat;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Doctrine\DBAL\Types\Type;
 
 trait RwDemosContextTrait
 {
@@ -57,7 +58,7 @@ trait RwDemosContextTrait
         $model->removeField('id');
         foreach ($tableColumns as $tableColumn) {
             $model->addField($tableColumn->getName(), [
-                'type' => $tableColumn->getType()->getName(), // @phpstan-ignore-line Type::getName() is deprecated in DBAL 4.0
+                'type' => Type::getTypeRegistry()->lookupName($tableColumn->getType()), // TODO simplify once https://github.com/doctrine/dbal/pull/6130 is merged
                 'nullable' => !$tableColumn->getNotnull(),
             ]);
         }

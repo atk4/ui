@@ -77,25 +77,25 @@ $vp1Modal = Modal::addTo($app, ['title' => 'Lorem Ipsum load dynamically']);
 $vp2Modal = Modal::addTo($app, ['title' => 'Text message load dynamically'])->addClass('small');
 
 $vp3Modal = Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
-$vp3Modal->set(function (View $p) {
+$vp3Modal->set(static function (View $p) {
     Text::addTo($p)->set('This is yet another modal');
     LoremIpsum::addTo($p, ['size' => 2]);
 });
 
 // When $vp1Modal->jsShow() is activate, it will dynamically add this content to it.
-$vp1Modal->set(function (View $p) use ($vp2Modal) {
+$vp1Modal->set(static function (View $p) use ($vp2Modal) {
     ViewTester::addTo($p);
     View::addTo($p, ['Showing lorem ipsum']); // need in behat test.
     LoremIpsum::addTo($p, ['size' => 2]);
     $form = Form::addTo($p);
     $form->addControl('color', [], ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
-    $form->onSubmit(function (Form $form) use ($vp2Modal) {
+    $form->onSubmit(static function (Form $form) use ($vp2Modal) {
         return $vp2Modal->jsShow(['color' => $form->model->get('color')]);
     });
 });
 
 // When $vp2Modal->jsShow() is activate, it will dynamically add this content to it.
-$vp2Modal->set(function (View $p) use ($vp3Modal) {
+$vp2Modal->set(static function (View $p) use ($vp3Modal) {
     ViewTester::addTo($p);
     Message::addTo($p, [$_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
     Button::addTo($p)->set('Third modal')
@@ -175,7 +175,7 @@ $action->add($nextAction);
 $stepModal->addButtonAction($action);
 
 // Set modal functionality. Will changes content according to page being displayed.
-$stepModal->set(function (View $p) use ($session, $previousAction, $nextAction) {
+$stepModal->set(static function (View $p) use ($session, $previousAction, $nextAction) {
     $page = $session->recall('page', 1);
     $success = $session->recall('success', false);
     if (isset($_GET['move'])) {
@@ -205,7 +205,7 @@ $stepModal->set(function (View $p) use ($session, $previousAction, $nextAction) 
         $form = Form::addTo($p, ['class.segment' => true]);
         $form->setModel($modelRegister->createEntity());
 
-        $form->onSubmit(function (Form $form) use ($nextAction, $session) {
+        $form->onSubmit(static function (Form $form) use ($nextAction, $session) {
             if ($form->model->get('name') !== 'John') {
                 return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
             }

@@ -53,7 +53,7 @@ class Column
 
     public function __construct(array $defaults = [])
     {
-        if (func_num_args() > 1) { // prevent bad usage
+        if ('func_num_args'() > 1) { // prevent bad usage
             throw new \Error('Too many method arguments');
         }
 
@@ -139,7 +139,7 @@ class Column
 
         $cb = $this->setHeaderDropdown($menuItems, $icon, $menuId);
 
-        $cb->onSelectItem(function (string $menu, string $item) use ($fx) {
+        $cb->onSelectItem(static function (string $menu, string $item) use ($fx) {
             return $fx($item, $menu);
         });
     }

@@ -54,7 +54,7 @@ $formGroup = $form->addGroup('Address');
 $formGroup->addControl('address', ['width' => 'twelve']);
 $formGroup->addControl('zip', ['width' => 'four']);
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     $errors = [];
     foreach (['first_name', 'last_name', 'address'] as $field) {
         if (!$form->model->get($field)) {

@@ -109,7 +109,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
                     ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
 
                 return $js;
-            }, array_map(fn () => true, $this->action->args));
+            }, array_map(static fn () => true, $this->action->args));
         });
     }
 }

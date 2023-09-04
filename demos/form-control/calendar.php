@@ -49,7 +49,7 @@ $control->addAction(['Clear', 'icon' => 'times red'])
 //    'options' => ['mode' => 'multiple'],
 // ])->set(date('Y-m-d') . ', ' . date('Y-m-d', strtotime('+1 Day')) . ', ' . date('Y-m-d', strtotime('+2 Day')));
 
-$form->onSubmit(function (Form $form) use ($app) {
+$form->onSubmit(static function (Form $form) use ($app) {
     $data = [];
     foreach ($form->model->get() as $k => $v) {
         $data[$k] = $v !== null
