@@ -81,14 +81,14 @@ class AppTest extends TestCase
             [[], true, [], '/test/', '/test/index.php', '/test/default.php8', '/test/'],
 
             // simple cases with query args in request
-            // [[], false, [], '/?test=atk4', '/index.php?test=atk4', '/default.php8?test=atk4', '/?test=atk4'],
-            // [[], false, [], '/test/?test=atk4', '/test/index.php?test=atk4', '/test/default.php8?test=atk4', '/test/?test=atk4'],
+            [[], false, [], '/?test=atk4', '/index.php?test=atk4', '/default.php8?test=atk4', '/?test=atk4'],
+            [[], false, [], '/test/?test=atk4', '/test/index.php?test=atk4', '/test/default.php8?test=atk4', '/test/?test=atk4'],
             [[], true, [], '/?test=atk4', '/index.php?test=atk4', '/default.php8?test=atk4', '/?test=atk4'],
             [[], true, [], '/test/?test=atk4', '/test/index.php?test=atk4', '/test/default.php8?test=atk4', '/test/?test=atk4'],
 
             // simple cases with extra query args in request
-            // [[], false, ['extra_args' => 'atk4'], '/?test=atk4', '/index.php?extra_args=atk4&test=atk4', '/default.php8?extra_args=atk4&test=atk4', '/?extra_args=atk4&test=atk4'],
-            // [[], false, ['extra_args' => 'atk4'], '/test/?test=atk4', '/test/index.php?extra_args=atk4&test=atk4', '/test/default.php8?extra_args=atk4&test=atk4', '/test/?extra_args=atk4&test=atk4'],
+            [[], false, ['extra_args' => 'atk4'], '/?test=atk4', '/index.php?extra_args=atk4&test=atk4', '/default.php8?extra_args=atk4&test=atk4', '/?extra_args=atk4&test=atk4'],
+            [[], false, ['extra_args' => 'atk4'], '/test/?test=atk4', '/test/index.php?extra_args=atk4&test=atk4', '/test/default.php8?extra_args=atk4&test=atk4', '/test/?extra_args=atk4&test=atk4'],
             [[], true, ['extra_args' => 'atk4'], '/?test=atk4', '/index.php?extra_args=atk4&test=atk4', '/default.php8?extra_args=atk4&test=atk4', '/?extra_args=atk4&test=atk4'],
             [[], true, ['extra_args' => 'atk4'], '/test/?test=atk4', '/test/index.php?extra_args=atk4&test=atk4', '/test/default.php8?extra_args=atk4&test=atk4', '/test/?extra_args=atk4&test=atk4'],
 
@@ -134,14 +134,14 @@ class AppTest extends TestCase
             [['test'], false, ['extra_args' => 'atk4'], '/', 'test.php?extra_args=atk4', 'test.php8?extra_args=atk4', 'test?extra_args=atk4'],
 
             // query args in page cases and query args in request cases and extra query args cases
-            // [['test', 'page_args' => 'atk4'], false, ['extra_args' => 'atk4'], '/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test?extra_args=atk4&query_args=atk4&page_args=atk4'],
-            // [['test/test/a', 'page_args' => 'atk4'], false, ['extra_args' => 'atk4'], '/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a?extra_args=atk4&query_args=atk4&page_args=atk4'],
-            // [['test/index', 'page_args' => 'atk4'], false, ['extra_args' => 'atk4'], '/test/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index?extra_args=atk4&query_args=atk4&page_args=atk4'],
+            [['test', 'page_args' => 'atk4'], false, ['extra_args' => 'atk4'], '/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test?extra_args=atk4&query_args=atk4&page_args=atk4'],
+            [['test/test/a', 'page_args' => 'atk4'], false, ['extra_args' => 'atk4'], '/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a?extra_args=atk4&query_args=atk4&page_args=atk4'],
+            [['test/index', 'page_args' => 'atk4'], false, ['extra_args' => 'atk4'], '/test/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index?extra_args=atk4&query_args=atk4&page_args=atk4'],
             [['test', 'page_args' => 'atk4'], true, ['extra_args' => 'atk4'], '/', '/index.php?extra_args=atk4', '/default.php8?extra_args=atk4', '/?extra_args=atk4'],
             [['test', 'page_args' => 'atk4'], true, ['extra_args' => 'atk4'], '/request-url', '/request-url.php?extra_args=atk4', '/request-url.php8?extra_args=atk4', '/request-url?extra_args=atk4'],
             [['test', 'page_args' => 'atk4'], true, ['extra_args' => 'atk4'], '/request-url/', '/request-url/index.php?extra_args=atk4', '/request-url/default.php8?extra_args=atk4', '/request-url/?extra_args=atk4'],
             [['test/index', 'page_args' => 'atk4'], true, ['extra_args' => 'atk4'], '/test/', '/test/index.php?extra_args=atk4', '/test/default.php8?extra_args=atk4', '/test/?extra_args=atk4'],
-            // [['test', 'page_args' => 'atk4', 'check_unset_page' => false], false, ['extra_args' => 'atk4'], '/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test?extra_args=atk4&query_args=atk4&page_args=atk4'],
+            [['test', 'page_args' => 'atk4', 'check_unset_page' => false], false, ['extra_args' => 'atk4'], '/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test?extra_args=atk4&query_args=atk4&page_args=atk4'],
         ];
     }
 
