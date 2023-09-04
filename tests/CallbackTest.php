@@ -63,7 +63,7 @@ class CallbackTest extends TestCase
         $this->simulateCallbackTriggering($cb);
 
         $var = null;
-        $cb->set(function (int $x) use (&$var) {
+        $cb->set(static function (int $x) use (&$var) {
             $var = $x;
         }, [34]);
 
@@ -101,7 +101,7 @@ class CallbackTest extends TestCase
         self::assertSame($expectedUrlCb, $cb->getUrl());
 
         $var = null;
-        $cb->set(function (int $x) use (&$var, $v1) {
+        $cb->set(static function (int $x) use (&$var, $v1) {
             $v3 = View::addTo($v1);
             self::assertSame('test.php', $v3->url(['test']));
             $var = $x;
@@ -121,7 +121,7 @@ class CallbackTest extends TestCase
         // do NOT simulate triggering in this test
 
         $var = null;
-        $cb->set(function (int $x) use (&$var) {
+        $cb->set(static function (int $x) use (&$var) {
             $var = $x;
         }, [34]);
 
@@ -135,7 +135,7 @@ class CallbackTest extends TestCase
         $this->simulateCallbackTriggering($cb);
 
         $var = null;
-        $cb->set(function (int $x) use (&$var) {
+        $cb->set(static function (int $x) use (&$var) {
             $var = $x;
         }, [34]);
 
@@ -159,7 +159,7 @@ class CallbackTest extends TestCase
 
             $this->simulateCallbackTriggering($cb2);
 
-            $cb2->set(function (int $y) use (&$var) {
+            $cb2->set(static function (int $y) use (&$var) {
                 $var = $y;
             }, [$x]);
         }, [34]);
@@ -178,7 +178,7 @@ class CallbackTest extends TestCase
 
         // don't simulate triggering
         $var = null;
-        $cb->set(function (int $x) use (&$var) {
+        $cb->set(static function (int $x) use (&$var) {
             $var = $x;
         }, [34]);
 
@@ -197,7 +197,7 @@ class CallbackTest extends TestCase
         $this->simulateCallbackTriggering($vp);
 
         $var = null;
-        $vp->set(function (VirtualPage $p) use (&$var) {
+        $vp->set(static function (VirtualPage $p) use (&$var) {
             $var = 25;
         });
 
@@ -213,7 +213,7 @@ class CallbackTest extends TestCase
         $this->simulateCallbackTriggering($vp);
 
         $var = null;
-        $vp->set(function (VirtualPage $p) use (&$var) {
+        $vp->set(static function (VirtualPage $p) use (&$var) {
             $var = 25;
         });
 

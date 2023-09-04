@@ -68,11 +68,11 @@ Label::addTo($app, ['Label', 'class.right ribbon red' => true, 'icon' => 'flippe
 
 ## Groups
 
-Fomantic-UI support icon groups. The best way to implement is to supply {php:class}`Template` to an
+Fomantic-UI support icon groups. The best way to implement is to supply {php:class}`HtmlTemplate` to an
 icon:
 
 ```
-Icon::addTo($app, ['template' => new \Atk4\Ui\Template('<i class="huge icons">
+Icon::addTo($app, ['template' => new \Atk4\Ui\HtmlTemplate('<i class="huge icons">
     <i class="big thin circle icon"></i>
     <i class="user icon"></i>
 </i>'), false]);
@@ -161,7 +161,7 @@ class SocialAdd extends \Atk4\Ui\View
 
         if (!$this->template) {
             // TODO: Place template into file and set defaultTemplate instead
-            $this->template = new \Atk4\Ui\Template(
+            $this->template = new \Atk4\Ui\HtmlTemplate(
 '<{_element}button{/} class="ui ' . $this->social . ' button" {$attributes}>
     <i class="large icons">
         {$Icon}

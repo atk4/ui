@@ -17,7 +17,7 @@ class JsHeaderDropdownCallback extends JsCallback
      */
     public function onSelectItem(\Closure $fx): void
     {
-        $this->set(function () use ($fx) {
+        $this->set(static function () use ($fx) {
             return $fx($_GET['id'], $_GET['item']);
         });
     }

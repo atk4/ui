@@ -16,7 +16,7 @@ Header::addTo($app, ['Testing ModalExecutor reload']);
 
 $modal = Modal::addTo($app, ['title' => 'Modal Executor']);
 
-$modal->set(function (View $p) {
+$modal->set(static function (View $p) {
     ReloadTest::addTo($p);
 });
 

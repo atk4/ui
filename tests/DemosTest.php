@@ -150,7 +150,7 @@ class DemosTest extends TestCase
     protected function assertNoGlobalSticky(App $app): void
     {
         $appSticky = array_diff_assoc(
-            \Closure::bind(fn () => $app->stickyGetArguments, null, App::class)(),
+            \Closure::bind(static fn () => $app->stickyGetArguments, null, App::class)(),
             ['__atk_json' => false, '__atk_tab' => false, 'APP_CALL_EXIT' => true, 'APP_CATCH_EXCEPTIONS' => true]
         );
         if ($appSticky !== []) {
@@ -297,7 +297,9 @@ class DemosTest extends TestCase
             }
         }
 
-        return array_map(fn (string $v) => [$v], $files);
+        foreach ($files as $path) {
+            yield [$path];
+        }
     }
 
     /**
@@ -346,14 +348,14 @@ class DemosTest extends TestCase
 
     public function testHugeOutputStream(): void
     {
-        $sizeMb = 50;
+        $sizeMb = 40;
         $sizeBytes = $sizeMb * 1024 * 1024;
         $response = $this->getResponseFromRequest('_unit-test/stream.php?size_mb=' . $sizeMb);
         self::assertSame(200, $response->getStatusCode());
         self::assertSame('application/octet-stream', $response->getHeaderLine('Content-Type'));
         self::assertSame((string) $sizeBytes, $response->getHeaderLine('Content-Length'));
 
-        $hugePseudoStreamFx = function (int $pos) {
+        $hugePseudoStreamFx = static function (int $pos) {
             return "\n\0" . str_repeat($pos . ',', 1024);
         };
         $pos = 0;

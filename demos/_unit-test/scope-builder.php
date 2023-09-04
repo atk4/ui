@@ -34,7 +34,7 @@ $form = Form::addTo($app);
 
 $form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model], ['type' => 'object']);
 
-$form->onSubmit(function (Form $form) use ($model) {
+$form->onSubmit(static function (Form $form) use ($model) {
     $message = $form->model->get('qb')->toWords($model);
     $view = (new View(['name' => false]))->addClass('atk-scope-builder-response');
     $view->setApp($form->getApp());

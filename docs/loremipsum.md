@@ -1,7 +1,7 @@
 :::{php:namespace} Atk4\Ui
 :::
 
-(text)=
+(loremipsum)=
 
 # LoremIpsum
 

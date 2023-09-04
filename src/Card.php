@@ -243,7 +243,7 @@ class Card extends View
             if ($isNew) {
                 $ex = $cardDeck->sharedExecutorsContainer->getExecutorFactory()->createExecutor($action, $cardDeck->sharedExecutorsContainer);
 
-                $ex->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, \Closure::bind(function (ExecutorInterface $ex, $return, $id) use ($cardDeck, $action) { // @phpstan-ignore-line
+                $ex->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, \Closure::bind(static function (ExecutorInterface $ex, $return, $id) use ($cardDeck, $action) { // @phpstan-ignore-line
                     return $cardDeck->jsExecute($return, $action);
                 }, null, CardDeck::class));
 

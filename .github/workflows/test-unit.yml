@@ -455,3 +455,28 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
           files: coverage/merged.xml,coverage/js/clover.xml
+
+  docs-test:
+    name: Docs
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/mvorisek/image-php:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Python and dependencies
+        run: |
+          apk add python3 py3-pip
+          python --version
+          (cd docs && pip install -r requirements.txt)
+
+      - name: Build
+        run: |
+          mv docs/baseline.txt docs/baseline.orig.txt
+          (cd docs && python -m sphinx -T -b html . out 2>&1 | tee baseline.txt)
+          sed -i -r 's~[^:]*/docs/([^:]*:)([0-9]+:)?~\1~;t;d' docs/baseline.txt
+
+      - name: Diff build baseline
+        run: |
+          diff -u docs/baseline.orig.txt docs/baseline.txt

@@ -34,13 +34,13 @@ if (isset($_GET['name'])) {
 
     // nested interactive elements will respect lockal sticky get
     Button::addTo($frame, ['Triggering callback here will inherit color'])
-        ->on('click', function () {
+        ->on('click', static function () {
             return new JsToast('Color was = ' . $_GET['name']);
         });
 
     // Next we have loader, which will dynamically load console which will dynamically output "success" message.
-    Loader::addTo($frame)->set(function (Loader $p) {
-        Console::addTo($p)->set(function (Console $console) {
+    Loader::addTo($frame)->set(static function (Loader $p) {
+        Console::addTo($p)->set(static function (Console $console) {
             $console->output('success!, color is still ' . $_GET['name']);
         });
     });
@@ -52,7 +52,7 @@ $t->addDecorator('name', [Table\Column\Link::class, [], ['name']]);
 
 $frame = View::addTo($app, ['ui' => 'green segment']);
 Button::addTo($frame, ['does not inherit sticky get'])
-    ->on('click', function () use ($app) {
+    ->on('click', static function () use ($app) {
         return new JsToast('$_GET = ' . $app->encodeJson($_GET));
     });
 
@@ -61,7 +61,7 @@ Header::addTo($app, ['Use of View::url()']);
 $b1 = Button::addTo($app);
 $b1->set($b1->url());
 
-Loader::addTo($app)->set(function (Loader $p) use ($b1) {
+Loader::addTo($app)->set(static function (Loader $p) use ($b1) {
     $b2 = Button::addTo($p);
     $b2->set($b2->url());
 

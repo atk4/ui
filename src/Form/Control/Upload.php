@@ -103,7 +103,7 @@ class Upload extends Input
      */
     public function setInput($value)
     {
-        return parent::set($value, null);
+        return parent::set($value);
     }
 
     /**

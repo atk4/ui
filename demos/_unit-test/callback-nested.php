@@ -25,7 +25,7 @@ $loader = Loader::addTo($app);
 $loader->cb->setUrlTrigger('trigger_main_loader');
 $loader->loadEvent = false;
 
-$loader->set(function (Loader $p) use ($m) {
+$loader->set(static function (Loader $p) use ($m) {
     Header::addTo($p, ['Loader-1', 'size' => 4]);
 
     if (isset($_GET['err_main_loader'])) {
@@ -36,7 +36,7 @@ $loader->set(function (Loader $p) use ($m) {
     $loaderSub->cb->setUrlTrigger('trigger_sub_loader');
     $loaderSub->loadEvent = false;
 
-    $loaderSub->set(function (Loader $p) use ($m) {
+    $loaderSub->set(static function (Loader $p) use ($m) {
         Header::addTo($p, ['Loader-2', 'size' => 4]);
 
         if (isset($_GET['err_sub_loader'])) {
@@ -47,7 +47,7 @@ $loader->set(function (Loader $p) use ($m) {
 
         $loaderSubSub = Loader::addTo($p);
 
-        $loaderSubSub->set(function (Loader $p) use ($m) {
+        $loaderSubSub->set(static function (Loader $p) use ($m) {
             Header::addTo($p, ['Loader-3', 'size' => 4]);
 
             $c = Crud::addTo($p, ['ipp' => 4]);

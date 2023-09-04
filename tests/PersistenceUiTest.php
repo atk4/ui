@@ -48,7 +48,7 @@ class PersistenceUiTest extends TestCase
 
     public function providerTypecastBidirectional(): iterable
     {
-        $fixSpaceToNbspFx = fn (string $v) => str_replace(' ', "\u{00a0}", $v);
+        $fixSpaceToNbspFx = static fn (string $v) => str_replace(' ', "\u{00a0}", $v);
 
         yield [[], [], '1', '1'];
         yield [[], [], '0', '0'];

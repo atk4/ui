@@ -4,10 +4,10 @@ includes:
 parameters:
     level: 6
     paths:
-        - ./
+        - .
     excludePaths:
-        - vendor/
-        - js/
+        - vendor
+        - js
 
     ignoreErrors:
         - '~^(Property .+ has|Method .+\(\) (has parameter \$.+ with|return type has)) no value type specified in iterable type .+\.~'

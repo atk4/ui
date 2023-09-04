@@ -15,7 +15,7 @@ $model = new Category($app->db);
 $crud = Crud::addTo($app);
 $crud->setModel($model);
 
-$crud->addModalAction(['icon' => 'book'], 'Edit product category', function (View $v, $id) use ($model) {
+$crud->addModalAction(['icon' => 'book'], 'Edit product category', static function (View $v, $id) use ($model) {
     $entity = $model->load($id);
 
     $innerCrud = Crud::addTo($v);

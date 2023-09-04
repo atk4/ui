@@ -72,11 +72,11 @@ class GridLayout extends View
 
         // TODO replace later, the only use of direct template tree manipulation
         $t = $this->template;
-        \Closure::bind(function () use ($t, $tmp) {
-            $cloneTagTreeFx = function (HtmlTemplate\TagTree $src) use (&$cloneTagTreeFx, $t) {
+        \Closure::bind(static function () use ($t, $tmp) {
+            $cloneTagTreeFx = static function (HtmlTemplate\TagTree $src) use (&$cloneTagTreeFx, $t) {
                 $tagTree = $src->clone($t);
                 $t->tagTrees[$src->getTag()] = $tagTree;
-                \Closure::bind(function () use ($tagTree, $cloneTagTreeFx, $src) {
+                \Closure::bind(static function () use ($tagTree, $cloneTagTreeFx, $src) {
                     foreach ($tagTree->children as $v) {
                         if (is_string($v)) {
                             $cloneTagTreeFx($src->getParentTemplate()->getTagTree($v));

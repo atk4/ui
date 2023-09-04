@@ -53,7 +53,7 @@ Calling addCrumb adds more elements into the $path property. Each element there 
 - link - where to go if clicked
 - divider - which divider to use after the crumb
 
-By default `divider` is set to {php:attr}`Breadcrumb::dividerClass`. You may also manipulate $path array yourself.
+By default `divider` is set to {php:attr}`Breadcrumb::$dividerClass`. You may also manipulate $path array yourself.
 For example the next code will use some logic:
 
 ```

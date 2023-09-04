@@ -37,7 +37,7 @@ $items = [
     ['name' => 'Appliances', 'id' => 301],
 ];
 
-$pathFromIdFx = function (array $items, int $id) use (&$pathFromIdFx): ?string {
+$pathFromIdFx = static function (array $items, int $id) use (&$pathFromIdFx): ?string {
     foreach ($items as $item) {
         if (($item['id'] ?? false) === $id) {
             return $item['name'];
@@ -58,18 +58,18 @@ $form = Form::addTo($app);
 $control = $form->addControl('tree', [Form\Control\TreeItemSelector::class, 'treeItems' => $items, 'caption' => 'Multiple selection:'], ['type' => 'json']);
 $control->set([201, 301, 503]);
 
-$control->onItem(function (array $values) use ($pathFromIdFx, $items) {
-    return new JsToast('Selected: ' . implode(',<br>', array_map(fn ($v) => $pathFromIdFx($items, $v), $values)));
+$control->onItem(static function (array $values) use ($pathFromIdFx, $items) {
+    return new JsToast('Selected: ' . implode(',<br>', array_map(static fn ($v) => $pathFromIdFx($items, $v), $values)));
 });
 
 $control = $form->addControl('tree1', [Form\Control\TreeItemSelector::class, 'treeItems' => $items, 'allowMultiple' => false, 'caption' => 'Single selection:']);
 $control->set(503);
 
-$control->onItem(function (int $value) use ($pathFromIdFx, $items) {
+$control->onItem(static function (int $value) use ($pathFromIdFx, $items) {
     return new JsToast('Selected: ' . $pathFromIdFx($items, $value));
 });
 
-$form->onSubmit(function (Form $form) use ($app) {
+$form->onSubmit(static function (Form $form) use ($app) {
     $response = [
         'multiple' => $form->model->get('tree'),
         'single' => $form->model->get('tree1'),

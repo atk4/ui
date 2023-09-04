@@ -30,7 +30,7 @@ Header::addTo($tab, ['Very simple form']);
 
 $form = Form::addTo($tab);
 $form->addControl('email');
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     // implement subscribe here
 
     return $form->jsSuccess('Subscribed ' . $form->model->get('email') . ' to newsletter.');
@@ -57,7 +57,7 @@ $form->addControl('status_integer_not-nullable', [Form\Control\Dropdown::class],
 $form->addControl('status_string_required', [Form\Control\Dropdown::class], ['type' => 'string', 'values' => $values, 'required' => true]);
 $form->addControl('status_integer_required', [Form\Control\Dropdown::class], ['type' => 'integer', 'values' => $values, 'required' => true]);
 
-$form->onSubmit(function (Form $form) use ($app) {
+$form->onSubmit(static function (Form $form) use ($app) {
     return new JsToast($app->encodeJson($form->model->get()));
 });
 
@@ -67,7 +67,7 @@ $form->addControl('field', [], ['type' => 'date', 'caption' => 'Date using model
 $form->addControl('control', [Form\Control\Calendar::class, 'type' => 'date', 'caption' => 'Date using form control:']);
 $form->buttonSave->set('Compare Date');
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     $message = 'field = ' . print_r($form->model->get('field'), true) . '; <br> control = ' . print_r($form->model->get('control'), true);
     $view = new Message('Date field vs control:');
     $view->setApp($form->getApp());
@@ -85,7 +85,7 @@ Header::addTo($tab, ['Form can respond with manually generated error']);
 $form = Form::addTo($tab);
 $form->addControl('email1');
 $form->buttonSave->set('Save1');
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     if ($form->getControl('email1')->entityField->get() !== 'pass@bar') {
         return $form->jsError('email1', 'some error action ' . random_int(1, 100));
     }
@@ -95,7 +95,7 @@ Header::addTo($tab, ['..or success message']);
 $form = Form::addTo($tab);
 $form->addControl('email2');
 $form->buttonSave->set('Save2');
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     return $form->jsSuccess('form was successful');
 });
 
@@ -103,7 +103,7 @@ Header::addTo($tab, ['Any other view can be output']);
 $form = Form::addTo($tab);
 $form->addControl('email3');
 $form->buttonSave->set('Save3');
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     $view = new Message('some header');
     $view->setApp($form->getApp());
     $view->invokeInit();
@@ -116,7 +116,7 @@ Header::addTo($tab, ['Modal can be output directly']);
 $form = Form::addTo($tab);
 $form->addControl('email4');
 $form->buttonSave->set('Save4');
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     $view = new Message('some header');
     $view->setApp($form->getApp());
     $view->invokeInit();
@@ -133,7 +133,7 @@ Header::addTo($tab, ['jsAction can be used too']);
 $form = Form::addTo($tab);
 $control = $form->addControl('email5');
 $form->buttonSave->set('Save5');
-$form->onSubmit(function (Form $form) use ($control) {
+$form->onSubmit(static function (Form $form) use ($control) {
     return $control->jsInput()->val('random is ' . random_int(1, 100));
 });
 
@@ -146,7 +146,7 @@ Header::addTo($tab, ['Form handles errors', 'size' => 2]);
 $form = Form::addTo($tab);
 $form->addControl('email');
 $form->buttonSave->set('SaveE1');
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     $o = new \stdClass();
 
     return $o['abc'];
@@ -157,7 +157,7 @@ Header::addTo($tab, ['Form shows Agile exceptions', 'size' => 2]);
 $form = Form::addTo($tab);
 $form->addControl('email');
 $form->buttonSave->set('SaveE2');
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     throw (new CoreException('Test exception I.'))
         ->addMoreInfo('arg1', 'val1');
 
@@ -165,11 +165,11 @@ $form->onSubmit(function (Form $form) {
 });
 
 Button::addTo($form, ['Modal Test', 'class.secondary' => true])
-    ->on('click', Modal::addTo($form)->set(function (View $p) {
+    ->on('click', Modal::addTo($form)->set(static function (View $p) {
         $form = Form::addTo($p);
         $form->name = 'mf';
         $form->addControl('email');
-        $form->onSubmit(function (Form $form) {
+        $form->onSubmit(static function (Form $form) {
             throw (new CoreException('Test exception II.'))
                 ->addMoreInfo('arg1', 'val1');
 
@@ -192,7 +192,7 @@ $modelRegister = $modelRegister->createEntity();
 $form = Form::addTo($tab, ['class.segment' => true]);
 $form->setModel($modelRegister);
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     if ($form->model->get('name') !== 'John') {
         return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
     }
@@ -230,7 +230,7 @@ $group->addControl('first_name', ['width' => 'eight']);
 $group->addControl('middle_name', ['width' => 'three', 'disabled' => true]);
 $group->addControl('last_name', ['width' => 'five']);
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     $errors = [];
     foreach ($form->model->getFields() as $name => $ff) {
         if ($name === 'id') {
