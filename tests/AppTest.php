@@ -176,6 +176,7 @@ class AppTest extends TestCase
         self::assertSame($exceptedStd, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: standard (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
 
         $app = new App([
+            'request' => $request,
             'stickyGetArguments' => $stickyGetArguments,
             'urlBuildingPage' => 'default',
             'urlBuildingExt' => '.php8',
@@ -186,6 +187,7 @@ class AppTest extends TestCase
         self::assertSame($exceptedCustom, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: custom page/ext (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
 
         $app = new App([
+            'request' => $request,
             'stickyGetArguments' => $stickyGetArguments,
             'urlBuildingPage' => '',
             'urlBuildingExt' => '',
