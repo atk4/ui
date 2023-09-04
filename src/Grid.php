@@ -514,6 +514,28 @@ class Grid extends View
     }
 
     /**
+     * Similar to addActionButton but apply to a multiple records selection and display in menu.
+     * When menu item is clicked, $callback is executed.
+     *
+     * @param string|array|MenuItem                         $item
+     * @param \Closure(Js\Jquery, string): JsExpressionable $callback
+     * @param array                                         $args     extra URL argument for callback
+     *
+     * @return View
+     */
+    public function addBulkAction($item, \Closure $callback, $args = [])
+    {
+        if (is_string($item)) {
+            $item = ['title' => $item];
+        }
+
+        $menuItem = $this->menu->addItem($item);
+        $menuItem->on('click', $callback, [$this->selection->jsChecked()]);
+
+        return $menuItem;
+    }
+
+    /**
      * Similar to addModalAction but apply to a multiple records selection and display in menu.
      * When menu item is clicked, modal is displayed with the $title and $callback is executed.
      *
@@ -535,28 +557,6 @@ class Grid extends View
 
         $menuItem = $this->menu->addItem($item);
         $menuItem->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)));
-
-        return $menuItem;
-    }
-
-    /**
-     * Similar to addActionButton but apply to a multiple records selection and display in menu.
-     * When menu item is clicked, $callback is executed.
-     *
-     * @param string|array|MenuItem                         $item
-     * @param \Closure(Js\Jquery, string): JsExpressionable $callback
-     * @param array                                         $args     extra URL argument for callback
-     *
-     * @return View
-     */
-    public function addBulkAction($item, \Closure $callback, $args = [])
-    {
-        if (is_string($item)) {
-            $item = ['title' => $item];
-        }
-
-        $menuItem = $this->menu->addItem($item);
-        $menuItem->on('click', $callback, [$this->selection->jsChecked()]);
 
         return $menuItem;
     }
