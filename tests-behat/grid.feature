@@ -77,7 +77,7 @@ Feature: Grid
     Then I should see "China"
     Then I should see "Zambia"
 
-  Scenario: Bulk Action
+  Scenario: Bulk action
     Given I am on "collection/grid.php"
     Then I press button "Show selected"
     Then Toast display should contain text "Selected: #"
@@ -86,7 +86,7 @@ Feature: Grid
     Then I press button "Show selected"
     Then Toast display should contain text "Selected: 5, 8#"
 
-  Scenario: Bulk Modal Action
+  Scenario: Bulk modal action
     Given I am on "collection/grid.php"
     Then I press button "Delete selected"
     Then Modal is open with text "The selected records will be permanently deleted: #"
