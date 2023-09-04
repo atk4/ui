@@ -514,12 +514,20 @@ class Grid extends View
     }
 
     /**
+     * @return list<string>
+     */
+    private function explodeSelectionValue(string $value): array
+    {
+        return $value === '' ? [] : explode(',', $value);
+    }
+
+    /**
      * Similar to addActionButton but apply to a multiple records selection and display in menu.
      * When menu item is clicked, $callback is executed.
      *
-     * @param string|array|MenuItem                         $item
-     * @param \Closure(Js\Jquery, string): JsExpressionable $callback
-     * @param array                                         $args     extra URL argument for callback
+     * @param string|array|MenuItem                               $item
+     * @param \Closure(Js\Jquery, list<string>): JsExpressionable $callback
+     * @param array                                               $args     extra URL argument for callback
      *
      * @return View
      */
@@ -530,7 +538,9 @@ class Grid extends View
         }
 
         $menuItem = $this->menu->addItem($item);
-        $menuItem->on('click', $callback, [$this->selection->jsChecked()]);
+        $menuItem->on('click', function (Js\Jquery $j, string $value) use ($callback) {
+            return $callback($j, $this->explodeSelectionValue($value));
+        }, [$this->selection->jsChecked()]);
 
         return $menuItem;
     }
@@ -552,7 +562,7 @@ class Grid extends View
 
         $modal = Modal::addTo($this->getOwner(), $modalDefaults);
         $modal->set(function (View $t) use ($callback) {
-            $callback($t, $t->stickyGet($this->name) ? explode(',', $t->stickyGet($this->name)) : []);
+            $callback($t, $this->explodeSelectionValue($t->stickyGet($this->name) ?? ''));
         });
 
         $menuItem = $this->menu->addItem($item);

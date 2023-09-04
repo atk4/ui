@@ -75,8 +75,8 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, static function () {
 
 $grid->addSelection();
 
-$grid->addBulkAction(['Show selected', 'icon' => 'binoculars'], static function (Jquery $f, string $ids) {
-    return new JsToast('Selected: ' . $ids . '#');
+$grid->addBulkAction(['Show selected', 'icon' => 'binoculars'], static function (Jquery $j, array $ids) {
+    return new JsToast('Selected: ' . implode(', ', $ids) . '#');
 });
 
 // Executing a modal on a bulk selection
