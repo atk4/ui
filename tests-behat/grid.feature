@@ -81,7 +81,6 @@ Feature: Grid
     Given I am on "collection/grid.php"
     Then I press button "Show selected"
     Then Toast display should contain text "Selected: #"
-    Given I am on "collection/grid.php"
     When I click using selector "//tr[5]//div.ui.checkbox"
     When I click using selector "//tr[8]//div.ui.checkbox"
     Then I press button "Show selected"
@@ -93,7 +92,7 @@ Feature: Grid
     Then Modal is open with text "The selected records will be permanently deleted: #"
     Then I press button "Delete"
     Then I should see "Success"
-    Given I am on "collection/grid.php"
+    Then I click close modal
     When I click using selector "//tr[5]//div.ui.checkbox"
     When I click using selector "//tr[8]//div.ui.checkbox"
     Then I press button "Delete selected"

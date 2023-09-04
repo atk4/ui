@@ -558,7 +558,7 @@ class Grid extends View
      */
     public function addModalBulkAction($item, $title, \Closure $callback, $args = [])
     {
-        $modalDefaults = is_string($title) ? ['title' => $title] : [];
+        $modalDefaults = is_string($title) ? ['title' => $title] : []; // @phpstan-ignore-line
 
         $modal = Modal::addTo($this->getOwner(), $modalDefaults);
         $modal->set(function (View $t) use ($callback) {
