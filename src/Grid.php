@@ -533,10 +533,6 @@ class Grid extends View
      */
     public function addBulkAction($item, \Closure $callback, $args = [])
     {
-        if (is_string($item)) {
-            $item = ['title' => $item];
-        }
-
         $menuItem = $this->menu->addItem($item);
         $menuItem->on('click', function (Js\Jquery $j, string $value) use ($callback) {
             return $callback($j, $this->explodeSelectionValue($value));
