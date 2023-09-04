@@ -52,7 +52,7 @@ class Grid extends View
     public $actionButtons;
 
     /**
-     * Calling addAction will add a new column inside $table with dropdown menu,
+     * Calling addActionMenuItem will add a new column inside $table with dropdown menu,
      * and will be re-used for next addActionMenuItem().
      *
      * @var Table\Column|null
@@ -386,7 +386,7 @@ class Grid extends View
     }
 
     /**
-     * Similar to addAction. Will add Button that when click will display
+     * Similar to addActionButton. Will add Button that when click will display
      * a Dropdown menu.
      *
      * @param View|string                           $view
@@ -498,8 +498,8 @@ class Grid extends View
     }
 
     /**
-     * Similar to addAction but when button is clicked, modal is displayed
-     * with the $title and $callback is executed through VirtualPage.
+     * Similar to addActionButton but when button is clicked, modal is displayed
+     * with the $title and $callback is executed.
      *
      * @param string|array|View                 $button
      * @param string                            $title
@@ -515,8 +515,7 @@ class Grid extends View
 
     /**
      * Similar to addModalAction but apply to a multiple records selection and display in menu.
-     * When menu item is clicked, modal is displayed with the $title and $callback is executed through
-     * VirtualPage.
+     * When menu item is clicked, modal is displayed with the $title and $callback is executed.
      *
      * @param string|array|MenuItem              $item
      * @param \Closure(View, list<string>): void $callback
@@ -542,7 +541,7 @@ class Grid extends View
     }
 
     /**
-     * Similar to addAction but apply to a multiple records selection and display in menu.
+     * Similar to addActionButton but apply to a multiple records selection and display in menu.
      * When menu item is clicked, $callback is executed.
      *
      * @param string|array|MenuItem                         $item
