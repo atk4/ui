@@ -73,16 +73,16 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, static function () {
 // TODO button is added not only to the table rows, but also below the table!
 // $grid->addExecutorButton($deleteExecutor, new Button(['icon' => 'times circle outline']));
 
-$sel = $grid->addSelection();
+$grid->addSelection();
+
+$grid->addBulkAction(['Show selected', 'icon' => 'binoculars'], static function (Jquery $f, string $ids) {
+    return new JsToast('Selected: ' . $ids . '#');
+});
+
 // Executing a modal on a bulk selection
-$callback = static function (View $modal, array $ids) use ($grid) {
-    $toDelete = '';
-    foreach ($ids as $id) {
-        $toDelete .= $id . ', ';
-    }
-    $toDelete .= '#';
-    $msg = Message::addTo($modal, [
-        'The selected records will be permanently deleted: ' . $toDelete,
+$grid->addModalBulkAction(['Delete selected', 'icon' => 'trash'], static function (View $modal, array $ids) use ($grid) {
+    Message::addTo($modal, [
+        'The selected records will be permanently deleted: ' . implode(', ', $ids) . '#',
         'type' => 'warning',
         'icon' => 'warning',
     ]);
@@ -90,7 +90,6 @@ $callback = static function (View $modal, array $ids) use ($grid) {
     $form->buttonSave->set('Delete');
     $form->buttonSave->icon = 'trash';
     $form->onSubmit(static function (Form $form) use ($grid, $ids) {
-        // iterate trough the selected IDs and delete them
         $grid->model->atomic(static function () use ($grid, $ids) {
             foreach ($ids as $id) {
                 $grid->model->delete($id);
@@ -102,12 +101,6 @@ $callback = static function (View $modal, array $ids) use ($grid) {
             $form->jsSuccess(),
         ]);
     });
-};
-
-$grid->addModalBulkAction(['Delete selected', 'icon' => 'trash'], $callback);
-
-$grid->addBulkAction(['Show selected', 'icon' => 'binoculars'], static function (Jquery $f, string $ids) {
-    return new JsToast('Selected: ' . $ids . '#');
 });
 
 // Setting ipp with an array will add an ItemPerPageSelector to paginator.

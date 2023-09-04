@@ -530,14 +530,14 @@ class Grid extends View
         }
 
         $modal = Modal::addTo($this->getOwner());
-
         $modal->set(function (View $t) use ($callback) {
             $callback($t, $t->stickyGet($this->name) ? explode(',', $t->stickyGet($this->name)) : []);
         });
-        $mi = $this->menu->addItem($item);
-        $mi->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)));
 
-        return $mi;
+        $menuItem = $this->menu->addItem($item);
+        $menuItem->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)));
+
+        return $menuItem;
     }
 
     /**
@@ -556,10 +556,10 @@ class Grid extends View
             $item = ['title' => $item];
         }
 
-        $mi = $this->menu->addItem($item);
-        $mi->on('click', $callback, [$this->selection->jsChecked()]);
+        $menuItem = $this->menu->addItem($item);
+        $menuItem->on('click', $callback, [$this->selection->jsChecked()]);
 
-        return $mi;
+        return $menuItem;
     }
 
     /**
