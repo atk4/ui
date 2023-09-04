@@ -75,7 +75,7 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, static function () {
 
 $sel = $grid->addSelection();
 // Executing a modal on a bulk selection
-$callback = function (View $modal, array $ids) use ($grid) {
+$callback = static function (View $modal, array $ids) use ($grid) {
     $toDelete = '';
     foreach ($ids as $id) {
         $toDelete .= $id . ', ';
@@ -89,9 +89,9 @@ $callback = function (View $modal, array $ids) use ($grid) {
     $form = Form::addTo($modal);
     $form->buttonSave->set('Delete');
     $form->buttonSave->icon = 'trash';
-    $form->onSubmit(function (Form $form) use ($grid, $ids) {
+    $form->onSubmit(static function (Form $form) use ($grid, $ids) {
         // iterate trough the selected IDs and delete them
-        $grid->model->atomic(function () use ($grid, $ids) {
+        $grid->model->atomic(static function () use ($grid, $ids) {
             foreach ($ids as $id) {
                 $grid->model->delete($id);
             }
@@ -106,7 +106,7 @@ $callback = function (View $modal, array $ids) use ($grid) {
 
 $grid->addModalBulkAction(['Delete selected', 'icon' => 'trash'], $callback);
 
-$grid->addBulkAction(['Show selected', 'icon' => 'binoculars'], function (Jquery $f, string $ids) {
+$grid->addBulkAction(['Show selected', 'icon' => 'binoculars'], static function (Jquery $f, string $ids) {
     return new JsToast('Selected: ' . $ids . '#');
 });
 
