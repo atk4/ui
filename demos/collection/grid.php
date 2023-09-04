@@ -80,7 +80,7 @@ $grid->addBulkAction(['Show selected', 'icon' => 'binoculars'], static function 
 });
 
 // Executing a modal on a bulk selection
-$grid->addModalBulkAction(['Delete selected', 'icon' => 'trash'], static function (View $modal, array $ids) use ($grid) {
+$grid->addModalBulkAction(['Delete selected', 'icon' => 'trash'], '', static function (View $modal, array $ids) use ($grid) {
     Message::addTo($modal, [
         'The selected records will be permanently deleted: ' . implode(', ', $ids) . '#',
         'type' => 'warning',

@@ -518,18 +518,17 @@ class Grid extends View
      * When menu item is clicked, modal is displayed with the $title and $callback is executed.
      *
      * @param string|array|MenuItem              $item
+     * @param string                             $title
      * @param \Closure(View, list<string>): void $callback
      * @param array                              $args     extra URL argument for callback
      *
      * @return View
      */
-    public function addModalBulkAction($item, \Closure $callback, $args = [])
+    public function addModalBulkAction($item, $title, \Closure $callback, $args = [])
     {
-        if (is_string($item)) {
-            $item = ['title' => $item];
-        }
+        $modalDefaults = is_string($title) ? ['title' => $title] : [];
 
-        $modal = Modal::addTo($this->getOwner());
+        $modal = Modal::addTo($this->getOwner(), $modalDefaults);
         $modal->set(function (View $t) use ($callback) {
             $callback($t, $t->stickyGet($this->name) ? explode(',', $t->stickyGet($this->name)) : []);
         });
