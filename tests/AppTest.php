@@ -155,37 +155,25 @@ class AppTest extends TestCase
     public function testUrlBuilding($page, bool $useRequestUrl, array $extraRequestUrlArgs, string $requestUrl, string $exceptedStd, string $exceptedCustom, string $exceptedRouting): void
     {
         $factory = new Psr17Factory();
-        $request = $factory->createRequest('GET', 'http://127.0.0.1' . $requestUrl);
-
-        $_SERVER = [
-            'REQUEST_METHOD' => 'GET',
-            'HTTP_HOST' => $request->getUri()->getHost(),
-            'REQUEST_URI' => $requestUrl,
-            'QUERY_STRING' => $request->getUri()->getQuery(),
-        ];
-
-        parse_str($request->getUri()->getQuery(), $_GET);
-
-        foreach ($extraRequestUrlArgs as $key => $value) {
-            $_GET[$key] = $value;
-        }
+        $request = $factory->createServerRequest('GET', 'http://127.0.0.1' . $requestUrl);
 
         $stickyGetArguments = [
             '__atk_json' => false,
             '__atk_tab' => false,
         ];
 
-        foreach ($_GET as $key => $value) {
+        foreach ($request->getQueryParams() as $key => $value) {
             $stickyGetArguments[$key] = $value;
         }
 
         $app = new App([
+            'request' => $request,
             'stickyGetArguments' => $stickyGetArguments,
             'catchExceptions' => false,
             'alwaysRun' => false,
         ]);
-        self::assertSame($exceptedStd, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: standard');
-        self::assertSame($exceptedStd, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: standard');
+        self::assertSame($exceptedStd, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: standard (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
+        self::assertSame($exceptedStd, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: standard (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
 
         $app = new App([
             'stickyGetArguments' => $stickyGetArguments,
@@ -194,8 +182,8 @@ class AppTest extends TestCase
             'catchExceptions' => false,
             'alwaysRun' => false,
         ]);
-        self::assertSame($exceptedCustom, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: custom page/ext');
-        self::assertSame($exceptedCustom, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: custom page/ext');
+        self::assertSame($exceptedCustom, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: custom page/ext (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
+        self::assertSame($exceptedCustom, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: custom page/ext (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
 
         $app = new App([
             'stickyGetArguments' => $stickyGetArguments,
@@ -204,7 +192,7 @@ class AppTest extends TestCase
             'catchExceptions' => false,
             'alwaysRun' => false,
         ]);
-        self::assertSame($exceptedRouting, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: routing');
-        self::assertSame($exceptedRouting, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: routing');
+        self::assertSame($exceptedRouting, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: routing (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
+        self::assertSame($exceptedRouting, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: routing (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
     }
 }
