@@ -57,9 +57,11 @@ class SessionManager
     }
 
     /**
-     * @param \Closure(): mixed $fx
+     * @template T
      *
-     * @return mixed
+     * @param \Closure(): T $fx
+     *
+     * @return T
      */
     public function atomicSession(\Closure $fx, bool $readAndCloseImmediately = false)
     {

@@ -53,10 +53,12 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     }
 
     /**
-     * @param \Closure(): mixed     $fx
+     * @template T
+     *
+     * @param \Closure(): T         $fx
      * @param array<string, string> $urlArgs
      *
-     * @return mixed
+     * @return T
      */
     protected function invokeFxWithUrlArgs(\Closure $fx, array $urlArgs = [])
     {
