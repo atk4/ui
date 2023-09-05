@@ -204,9 +204,7 @@ class App
 
                 throw new \ErrorException($msg, 0, $severity, $file, $line);
             });
-            if (\PHP_SAPI !== 'cli') { // for phpunit
-                http_response_code(500);
-            }
+            http_response_code(500);
         }
 
         // always run app on shutdown
