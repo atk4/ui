@@ -1080,7 +1080,7 @@ class App
      */
     protected function emitResponse(): void
     {
-        if (!headers_sent()) { // avoid throwing late error in loop
+        if (!headers_sent() || $this->response->getHeaders() !== []) { // avoid throwing late error in loop
             http_response_code($this->response->getStatusCode());
         }
 
