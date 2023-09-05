@@ -140,19 +140,27 @@ class Upload extends Input
     public function onUpload(\Closure $fx): void
     {
         $this->hasUploadCb = true;
-        if (($_POST['fUploadAction'] ?? null) === self::UPLOAD_ACTION) {
+        if ($this->getApp()->getRequestPostParam('fUploadAction') === self::UPLOAD_ACTION) {
             $this->cb->set(function () use ($fx) {
                 $postFiles = [];
                 for ($i = 0;; ++$i) {
                     $k = 'file' . ($i > 0 ? '-' . $i : '');
-                    if (!isset($_FILES[$k])) {
+                    if (!$this->getApp()->issetRequestUploadedFile($k)) {
                         break;
                     }
 
-                    $postFile = $_FILES[$k];
-                    if ($postFile['error'] !== 0) {
+                    $uploadFile = $this->getApp()->getRequestUploadedFile($k);
+                    $postFile = [
+                        'name' => $uploadFile->getClientFilename(),
+                        'type' => $uploadFile->getClientMediaType(),
+                        'tmp_name' => $uploadFile->getError() > 0 ? null : $uploadFile->getStream()->getMetadata('uri'),
+                        'error' => $uploadFile->getError(),
+                        'size' => $uploadFile->getSize(),
+                    ];
+                    if ($uploadFile->getError() !== 0) {
                         // unset all details on upload error
                         $postFile = array_intersect_key($postFile, array_flip(['error', 'name']));
+                        // TODO add error message https://www.php.net/manual/en/features.file-upload.errors.php
                     }
                     $postFiles[] = $postFile;
                 }
