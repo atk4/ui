@@ -53,7 +53,16 @@ class CallbackTest extends TestCase
      */
     protected function simulateCallbackTriggering(AbstractView $cb): void
     {
-        $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . $cb->getUrlTrigger()] = '1';
+        $requestProperty = new \ReflectionProperty(App::class, 'request');
+
+        $params = $this->app->getRequest()->getQueryParams();
+        $request = $this->app->getRequest()->withQueryParams(
+            array_merge($params, [
+                Callback::URL_QUERY_TRIGGER_PREFIX . $cb->getUrlTrigger() => '1',
+            ])
+        );
+
+        $requestProperty->setValue($this->app, $request);
     }
 
     public function testCallback(): void
