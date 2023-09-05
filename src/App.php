@@ -1251,6 +1251,18 @@ class App
     }
 
     /**
+     * Return $_GET param by key or null if not exists.
+     */
+    public function tryGetRequestGetParam(string $key): ?string
+    {
+        if (!$this->hasRequestGetParam($key)) {
+            return null;
+        }
+
+        return $this->request->getQueryParams()[$key] ?? 'true';
+    }
+
+    /**
      * Return true if $_POST[$key] exists.
      */
     public function hasRequestPostParam(string $key): bool
