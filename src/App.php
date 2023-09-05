@@ -322,8 +322,8 @@ class App
         // remove header
         $this->layout->template->tryDel('Header');
 
-        if (($this->isJsUrlRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
-                && !isset($_GET['__atk_tab'])) {
+        if (($this->isJsUrlRequest() || $this->request->getHeaderLine('HTTP_X_REQUESTED_WITH') === 'xmlhttprequest')
+                && !$this->hasRequestGetParam('__atk_tab')) {
             $this->outputResponseJson([
                 'success' => false,
                 'message' => $this->layout->getHtml(),
@@ -741,6 +741,10 @@ class App
             return $pagePath . $this->urlBuildingPage . $this->urlBuildingExt;
         }
 
+        if ($pagePath === '') {
+            return '/' . $pagePath . $this->urlBuildingPage . $this->urlBuildingExt;
+        }
+
         $pagePathPart = trim(dirname($pagePath), '.');
         $pagePathFile = basename($pagePath, $this->urlBuildingExt);
 
@@ -757,7 +761,7 @@ class App
 
         // add sticky arguments
         foreach ($this->stickyGetArguments as $k => $v) {
-            if ($v && $this->issetRequestGetParam($k)) {
+            if ($v && $this->hasRequestGetParam($k)) {
                 $args[$k] = $this->getRequestGetParam($k);
             } else {
                 unset($args[$k]);
@@ -1228,33 +1232,28 @@ class App
     /**
      * Return true if $_GET[$key] exists.
      */
-    public function issetRequestGetParam(string $key): bool
+    public function hasRequestGetParam(string $key): bool
     {
-        return isset($this->request->getQueryParams()[$key]);
+        return ($this->request->getQueryParams()[$key] ?? null) !== null;
     }
 
     /**
-     * Return whole $_GET array data.
+     * Return $_GET param by key, raise exception if not exists.
      */
-    public function getRequestGetParams(): array
+    public function getRequestGetParam(string $key): string
     {
-        return $this->request->getQueryParams();
-    }
+        if (!$this->hasRequestGetParam($key)) {
+            throw (new Exception('GET ' . $key . ' param does not exist'))
+                ->addMoreInfo('key', $key);
+        }
 
-    /**
-     * Return $_GET param by key or null if not exists.
-     *
-     * @return mixed
-     */
-    public function getRequestGetParam(string $key)
-    {
-        return $this->getRequestGetParams()[$key] ?? null;
+        return $this->request->getQueryParams()[$key] ?? 'true';
     }
 
     /**
      * Return true if $_POST[$key] exists.
      */
-    public function issetRequestPostParam(string $key): bool
+    public function hasRequestPostParam(string $key): bool
     {
         return isset($this->request->getParsedBody()[$key]);
     }
@@ -1280,7 +1279,7 @@ class App
     /**
      * Return true if $_FILES[$key] exists.
      */
-    public function issetRequestUploadedFile(string $key): bool
+    public function hasRequestUploadedFile(string $key): bool
     {
         return isset($this->request->getUploadedFiles()[$key]);
     }
@@ -1298,7 +1297,7 @@ class App
     /**
      * Return $_FILES param by key or null if not exists.
      */
-    public function getRequestUploadedFile(string $key):? UploadedFileInterface
+    public function getRequestUploadedFile(string $key): ?UploadedFileInterface
     {
         return $this->request->getUploadedFiles()[$key] ?? null;
     }

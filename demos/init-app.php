@@ -87,7 +87,7 @@ try {
 $demosUrl = $rootUrl . 'demos/';
 
 // allow custom layout override
-$app->initLayout([!$app->issetRequestGetParam('layout') ? Layout\Maestro::class : $app->stickyGet('layout')]);
+$app->initLayout([!$app->hasRequestGetParam('layout') ? Layout\Maestro::class : $app->stickyGet('layout')]);
 
 $layout = $app->layout;
 if ($layout instanceof Layout\NavigableInterface) {

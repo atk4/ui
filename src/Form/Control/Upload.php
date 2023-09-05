@@ -145,7 +145,7 @@ class Upload extends Input
                 $postFiles = [];
                 for ($i = 0;; ++$i) {
                     $k = 'file' . ($i > 0 ? '-' . $i : '');
-                    if (!$this->getApp()->issetRequestUploadedFile($k)) {
+                    if (!$this->getApp()->hasRequestUploadedFile($k)) {
                         break;
                     }
 
