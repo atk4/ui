@@ -692,7 +692,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Auto-detects a string delimiter based on list of predefined values in ScopeBuilder::$listDelimiters in order of priority.
      *
-     * @phpstan-return non-empty-string
+     * @return non-empty-string
      */
     public function detectDelimiter(string $value): string
     {
