@@ -204,7 +204,9 @@ class App
 
                 throw new \ErrorException($msg, 0, $severity, $file, $line);
             });
-            http_response_code(500);
+            if (\PHP_SAPI !== 'cli') { // for phpunit
+                http_response_code(500);
+            }
         }
 
         // always run app on shutdown
@@ -1078,7 +1080,9 @@ class App
      */
     protected function emitResponse(): void
     {
-        http_response_code($this->response->getStatusCode());
+        if (!headers_sent()) { // avoid throwing late error in loop
+            http_response_code($this->response->getStatusCode());
+        }
 
         foreach ($this->response->getHeaders() as $name => $values) {
             foreach ($values as $value) {
