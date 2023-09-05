@@ -26,6 +26,7 @@ use Nyholm\Psr7Server\ServerRequestCreator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UploadedFileInterface;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -1222,5 +1223,83 @@ class App
         }
 
         return $portals;
+    }
+
+    /**
+     * Return true if $_GET[$key] exists.
+     */
+    public function issetRequestGetParam(string $key): bool
+    {
+        return isset($this->request->getQueryParams()[$key]);
+    }
+
+    /**
+     * Return whole $_GET array data.
+     */
+    public function getRequestGetParams(): array
+    {
+        return $this->request->getQueryParams() ?? [];
+    }
+
+    /**
+     * Return $_GET param by key or null if not exists.
+     *
+     * @return mixed
+     */
+    public function getRequestGetParam(string $key)
+    {
+        return $this->request->getQueryParams()[$key] ?? null;
+    }
+
+    /**
+     * Return true if $_POST[$key] exists.
+     */
+    public function issetRequestPostParam(string $key): bool
+    {
+        return isset($this->request->getParsedBody()[$key]);
+    }
+
+    /**
+     * Return whole $_POST data.
+     */
+    public function getRequestPostParams(): array
+    {
+        return $this->request->getParsedBody() ?? [];
+    }
+
+    /**
+     * Return $_POST param by key or null if not exists.
+     *
+     * @return mixed
+     */
+    public function getRequestPostParam(string $key)
+    {
+        return $this->request->getParsedBody()[$key] ?? null;
+    }
+
+    /**
+     * Return true if $_FILES[$key] exists.
+     */
+    public function issetRequestUploadedFile(string $key): bool
+    {
+        return isset($this->request->getUploadedFiles()[$key]);
+    }
+
+    /**
+     * Return whole $_FILES data.
+     *
+     * @return array<UploadedFileInterface>
+     */
+    public function getRequestUploadedFiles(): array
+    {
+        return $this->request->getUploadedFiles();
+    }
+
+    /**
+     * Return $_FILES param by key or null if not exists.
+     */
+    public function getRequestUploadedFile(string $key):? UploadedFileInterface
+    {
+        return $this->request->getUploadedFiles()[$key] ?? null;
     }
 }
