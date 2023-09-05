@@ -757,8 +757,8 @@ class App
 
         // add sticky arguments
         foreach ($this->stickyGetArguments as $k => $v) {
-            if ($v && isset($_GET[$k])) {
-                $args[$k] = $_GET[$k];
+            if ($v && $this->issetRequestGetParam($k)) {
+                $args[$k] = $this->getRequestGetParam($k);
             } else {
                 unset($args[$k]);
             }
@@ -1238,7 +1238,7 @@ class App
      */
     public function getRequestGetParams(): array
     {
-        return $this->request->getQueryParams() ?? [];
+        return $this->request->getQueryParams();
     }
 
     /**
@@ -1248,7 +1248,7 @@ class App
      */
     public function getRequestGetParam(string $key)
     {
-        return $this->request->getQueryParams()[$key] ?? null;
+        return $this->getRequestGetParams()[$key] ?? null;
     }
 
     /**
@@ -1274,7 +1274,7 @@ class App
      */
     public function getRequestPostParam(string $key)
     {
-        return $this->request->getParsedBody()[$key] ?? null;
+        return $this->getRequestPostParams()[$key] ?? null;
     }
 
     /**

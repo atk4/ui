@@ -32,7 +32,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
         $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->setStyle('cursor', 'pointer');
         $table->setModel($model, [$model->titleField]);
 
-        $selections = explode(',', $_GET[$this->name] ?? '');
+        $selections = explode(',', $this->getApp()->getRequestGetParam($this->name) ?? '');
 
         if ($selections[0]) {
             $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
