@@ -426,12 +426,16 @@ class ScopeBuilder extends Form\Control
         $options = $defaults['options'] ?? [];
         unset($defaults['options']);
 
-        // map all values for callables and merge with defaults
-        return array_merge(array_map(function ($value) use ($field, $options) {
-            $this->issetOwner(); // prevent PHP CS Fixer to make this anonymous function static, TODO https://github.com/atk4/ui/pull/1625
+        // map all callables
+        foreach ($rule as $k => $v) {
+            if (is_array($v) && is_callable($v)) {
+                $rule[$k] = call_user_func($v, $field, $options);
+            }
+        }
 
-            return is_array($value) && is_callable($value) ? call_user_func($value, $field, $options) : $value;
-        }, $rule), $defaults);
+        $rule = array_merge($rule, $defaults);
+
+        return $rule;
     }
 
     /**
