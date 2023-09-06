@@ -246,9 +246,9 @@ class Column
      * Returns a suitable cell tag with the supplied value. Applies modifiers
      * added through addClass and setAttr.
      *
-     * @param string       $position 'head', 'body' or 'tail'
-     * @param string|array $value    either HTML or array defining HTML structure, see App::getTag help
-     * @param array        $attr     extra attributes to apply on the tag
+     * @param string                                                                                                   $position 'head', 'body' or 'tail'
+     * @param string|array<int, array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value    either HTML or array defining HTML structure, see App::getTag help
+     * @param array<string, string|bool>                                                                               $attr     extra attributes to apply on the tag
      */
     public function getTag(string $position, $value, array $attr = []): string
     {
