@@ -121,21 +121,21 @@ class Link extends Table\Column
             $attr['target'] = $this->target;
         }
 
-        $icon = '';
+        $iconHtml = '';
         if ($this->icon) {
-            $icon = $this->getApp()->getTag('i', ['class' => $this->icon . ' icon'], '');
+            $iconHtml = $this->getApp()->getTag('i', ['class' => $this->icon . ' icon'], '');
         }
 
-        $label = '';
+        $labelHtml = '';
         if ($this->useLabel) {
-            $label = $field ? ('{$' . $field->shortName . '}') : '[Link]';
+            $labelHtml = $field ? ('{$' . $field->shortName . '}') : '[Link]';
         }
 
         if ($this->class) {
             $attr['class'] = $this->class;
         }
 
-        return $this->getApp()->getTag('a', $attr, [$icon, $label]); // TODO $label is not HTML encoded
+        return $this->getApp()->getTag('a', $attr, [$iconHtml, $labelHtml]);
     }
 
     public function getHtmlTags(Model $row, ?Field $field): array
