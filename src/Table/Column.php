@@ -291,7 +291,7 @@ class Column
             $attr['id'] = $this->name . '_th';
 
             // add the action tag to the caption
-            $caption = [$this->headerActionTag, $caption];
+            $caption = [$this->headerActionTag, $this->getApp()->encodeHtml($caption)];
         }
 
         if ($this->table->sortable) {
