@@ -61,12 +61,7 @@ class Link extends Table\Column
      */
     public $args = [];
 
-    /**
-     * Label template to use on the link.
-     *
-     * @var bool|string true - use field value as label
-     *                  'text {$fieldShortName}' - a label template
-     */
+    /** @var bool|string true - use field value as label, 'text {$fieldShortName}' - a label template */
     public $label = true;
 
     /** @var string|null set element class. */
@@ -132,7 +127,7 @@ class Link extends Table\Column
         }
 
         $label = '';
-        if ($this->label) {
+        if ($this->label !== false) {
             if ($this->label === true) {
                 $label = $field ? '{$' . $field->shortName . '}' : '[Link]';
             } else {
