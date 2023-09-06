@@ -16,7 +16,7 @@ use Atk4\Ui\Table;
  */
 class Labels extends Table\Column
 {
-    /** @var array|null Allowed values, prioritized over Field::$values */
+    /** @var array<string|int, string>|null Allowed values, prioritized over Field::$values */
     public ?array $values = null;
 
     public function getHtmlTags(Model $row, ?Field $field): array
