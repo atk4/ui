@@ -29,10 +29,10 @@ class Labels extends Table\Column
         $labelsHtml = [];
         foreach ($v as $id) {
             // if field values is set, then use titles instead of IDs
-            $id = $values[$id] ?? $id;
+            $label = $values[$id] ?? $id;
 
-            if ($id !== '') {
-                $labelsHtml[] = $this->getApp()->getTag('div', ['class' => 'ui label'], $id);
+            if ($label !== '') {
+                $labelsHtml[] = $this->getApp()->getTag('div', ['class' => 'ui label'], $label);
             }
         }
 
