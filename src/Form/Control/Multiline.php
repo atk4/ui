@@ -108,7 +108,7 @@ class Multiline extends Form\Control
     /** @var array SuiTable component props */
     public $tableProps = [];
 
-    /** @var array<string, array{component: string, componentProps: mixed}> Set Vue component to use per field type. */
+    /** @var array<string, array<string, mixed>> Set Vue component to use per field type. */
     protected $fieldMapToComponent = [
         'default' => [
             'component' => self::INPUT,
@@ -590,13 +590,14 @@ class Multiline extends Form\Control
             $component = $this->fieldMapToComponent['default'];
         }
 
-        $definition = array_map(function ($value) use ($field) {
-            $this->issetOwner(); // prevent PHP CS Fixer to make this anonymous function static, TODO https://github.com/atk4/ui/pull/1625
+        // map all callables defaults
+        foreach ($component as $k => $v) {
+            if (is_array($v) && is_callable($v)) {
+                $component[$k] = call_user_func($v, $field);
+            }
+        }
 
-            return is_array($value) && is_callable($value) ? call_user_func($value, $field) : $value;
-        }, $component);
-
-        return $definition;
+        return $component;
     }
 
     protected function getFieldItems(Field $field, ?int $limit = 10): array
