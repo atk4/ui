@@ -191,7 +191,9 @@ class ExecutorFactory
             }
         }
 
-        $seed = is_array($seed) && is_callable($seed) ? call_user_func($seed, $action, $type) : $seed;
+        if (is_array($seed) && is_callable($seed)) {
+            $seed = call_user_func($seed, $action, $type);
+        }
 
         return Factory::factory($seed);
     }
@@ -242,7 +244,11 @@ class ExecutorFactory
             }
         }
 
-        return is_array($caption) && is_callable($caption) ? call_user_func($caption, $action) : $caption;
+        if (is_array($caption) && is_callable($caption)) {
+            $caption = call_user_func($caption, $action);
+        }
+
+        return $caption;
     }
 
     /**
