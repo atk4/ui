@@ -171,7 +171,7 @@ class Multiline extends Form\Control
      * Set during fieldDefinition and apply during renderView() after getValue().
      * Must contains callable function and function will receive $model field and value as parameter.
      *
-     * @var array
+     * @var array<string, \Closure(Field, string): void>
      */
     private $valuePropsBinding = [];
 
@@ -546,7 +546,7 @@ class Multiline extends Form\Control
 
         $props['config']['placeholder'] ??= 'Select ' . $field->getCaption();
 
-        $this->valuePropsBinding[$field->shortName] = [__CLASS__, 'setLookupOptionValue'];
+        $this->valuePropsBinding[$field->shortName] = fn ($field, $value) => $this->setLookupOptionValue($field, $value);
 
         return $props;
     }
@@ -629,8 +629,8 @@ class Multiline extends Form\Control
 
         foreach ($fieldValues as $rows) {
             foreach ($rows as $fieldName => $value) {
-                if (array_key_exists($fieldName, $this->valuePropsBinding)) {
-                    call_user_func($this->valuePropsBinding[$fieldName], $this->model->getField($fieldName), $value);
+                if (isset($this->valuePropsBinding[$fieldName])) {
+                    ($this->valuePropsBinding[$fieldName])($this->model->getField($fieldName), $value);
                 }
             }
         }
@@ -657,7 +657,7 @@ class Multiline extends Form\Control
                 'fields' => $this->fieldDefs,
                 'url' => $this->renderCallback->getJsUrl(),
                 'eventFields' => $this->eventFields,
-                'hasChangeCb' => $this->onChangeFunction ? true : false,
+                'hasChangeCb' => $this->onChangeFunction !== null,
                 'tableProps' => $this->tableProps,
                 'rowLimit' => $this->rowLimit,
                 'caption' => $this->caption,
@@ -681,7 +681,7 @@ class Multiline extends Form\Control
                 $this->getApp()->terminateJson(['success' => true, 'expressions' => $expressionValues]);
                 // no break - expression above always terminate
             case 'on-change':
-                $response = call_user_func($this->onChangeFunction, $this->typeCastLoadValues($this->getApp()->decodeJson($_POST['rows'])), $this->form);
+                $response = ($this->onChangeFunction)($this->typeCastLoadValues($this->getApp()->decodeJson($_POST['rows'])), $this->form);
                 $this->renderCallback->terminateAjax($this->renderCallback->getAjaxec($response));
                 // TODO JsCallback::terminateAjax() should return never
         }
