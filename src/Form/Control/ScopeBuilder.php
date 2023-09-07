@@ -502,24 +502,23 @@ class ScopeBuilder extends Form\Control
      */
     public function queryToScope(array $query): Scope\AbstractScope
     {
-        $type = $query['type'] ?? 'query-builder-group';
-        $query = $query['query'] ?? $query;
-
-        switch ($type) {
-            case 'query-builder-group':
-                $components = array_map(fn ($v) => $this->queryToScope($v), $query['children']);
-                $scope = new Scope($components, $query['logicalOperator']);
-
-                break;
-            case 'query-builder-rule':
-                $scope = $this->queryToCondition($query);
-
-                break;
-            default:
-                $scope = Scope::createAnd();
+        if (!isset($query['type'])) {
+            $query = ['type' => 'query-builder-group', 'query' => $query];
         }
 
-        return $scope;
+        switch ($query['type']) {
+            case 'query-builder-rule':
+                $scope = $this->queryToCondition($query['query']);
+
+                break;
+            case 'query-builder-group':
+                $components = array_map(fn ($v) => $this->queryToScope($v), $query['query']['children']);
+                $scope = new Scope($components, $query['query']['logicalOperator']);
+
+                break;
+        }
+
+        return $scope; // @phpstan-ignore-line
     }
 
     /**

@@ -120,15 +120,15 @@ class ActionMenu extends Table\Column
         }
 
         // render our menus
-        $output = '';
+        $outputHtml = '';
         foreach ($this->items as $item) {
-            $output .= $item->getHtml();
+            $outputHtml .= $item->getHtml();
         }
 
         $res = $this->getApp()->getTag('div', ['class' => 'ui ' . $this->ui . ' atk-action-menu'], [
             ['div', ['class' => 'text'], $this->label],
             $this->icon ? $this->getApp()->getTag('i', ['class' => $this->icon . ' icon'], '') : '',
-            ['div', ['class' => 'menu'], [$output]],
+            ['div', ['class' => 'menu'], [$outputHtml]],
         ]);
 
         return $res;
