@@ -8,6 +8,8 @@ use Atk4\Ui\App;
 
 trait CreateAppTrait
 {
+    use ReplaceAppRequestTrait;
+
     protected function createApp(): App
     {
         return new App([

@@ -209,7 +209,7 @@ class Multiline extends Form\Control
 
         // load the data associated with this input and validate it.
         $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
-            $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($_POST[$this->shortName]));
+            $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($this->getApp()->getRequestPostParam($this->shortName)));
             if ($this->rowData) {
                 $this->rowErrors = $this->validate($this->rowData);
                 if ($this->rowErrors) {
@@ -674,14 +674,15 @@ class Multiline extends Form\Control
      */
     private function outputJson(): void
     {
-        switch ($_POST['__atkml_action']) {
+        switch ($this->getApp()->getRequestPostParam('__atkml_action')) {
             case 'update-row':
                 $entity = $this->createDummyEntityFromPost($this->model);
                 $expressionValues = array_merge($this->getExpressionValues($entity), $this->getCallbackValues($entity));
                 $this->getApp()->terminateJson(['success' => true, 'expressions' => $expressionValues]);
                 // no break - expression above always terminate
             case 'on-change':
-                $response = call_user_func($this->onChangeFunction, $this->typeCastLoadValues($this->getApp()->decodeJson($_POST['rows'])), $this->form);
+                $rows = $this->getApp()->decodeJson($this->getApp()->getRequestPostParam('rows'));
+                $response = call_user_func($this->onChangeFunction, $this->typeCastLoadValues($rows), $this->form);
                 $this->renderCallback->terminateAjax($this->renderCallback->getAjaxec($response));
                 // TODO JsCallback::terminateAjax() should return never
         }
@@ -724,7 +725,7 @@ class Multiline extends Form\Control
 
             $field = $entity->getField($fieldName);
 
-            $value = $this->getApp()->uiPersistence->typecastLoadField($field, $_POST[$fieldName]);
+            $value = $this->getApp()->uiPersistence->typecastLoadField($field, $this->getApp()->getRequestPostParam($fieldName));
             if ($field->isEditable()) {
                 try {
                     $field->required = false;

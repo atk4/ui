@@ -301,22 +301,23 @@ class Lookup extends Input
      */
     protected function applySearchConditions(): void
     {
-        if (($_GET['q'] ?? '') === '') {
+        $querySearch = $this->getApp()->tryGetRequestGetParam('q') ?? '';
+        if ($querySearch === '') {
             return;
         }
 
         if ($this->search instanceof \Closure) {
-            ($this->search)($this->model, $_GET['q']);
+            ($this->search)($this->model, $querySearch);
         } elseif (is_array($this->search)) {
             $scope = Model\Scope::createOr();
             foreach ($this->search as $field) {
-                $scope->addCondition($field, 'like', '%' . $_GET['q'] . '%');
+                $scope->addCondition($field, 'like', '%' . $querySearch . '%');
             }
             $this->model->addCondition($scope);
         } else {
             $titleField = $this->titleField ?? $this->model->titleField;
 
-            $this->model->addCondition($titleField, 'like', '%' . $_GET['q'] . '%');
+            $this->model->addCondition($titleField, 'like', '%' . $querySearch . '%');
         }
     }
 
@@ -330,8 +331,8 @@ class Lookup extends Input
         }
 
         $data = [];
-        if (isset($_GET['form'])) {
-            parse_str($_GET['form'], $data);
+        if ($this->getApp()->hasRequestGetParam('form')) {
+            parse_str($this->getApp()->getRequestGetParam('form'), $data);
         } elseif ($this->form) {
             $data = $this->form->model->get();
         } else {

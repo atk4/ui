@@ -85,7 +85,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
             $this->set(function (Jquery $j, ...$values) {
                 $id = $this->getApp()->uiPersistence->typecastLoadField(
                     $this->action->getModel()->getField($this->action->getModel()->idField),
-                    $_POST[$this->name] ?? null
+                    $this->getApp()->tryGetRequestPostParam($this->name)
                 );
                 if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
                     if ($this->action->isOwnerEntity() && $this->action->getEntity()->getId()) {

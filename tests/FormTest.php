@@ -65,11 +65,18 @@ class FormTest extends TestCase
     public function assertFormSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
     {
         $wasSubmitCalled = false;
-        $_POST = array_merge(array_map(static fn () => '', $this->form->controls), $postData);
         try {
             // trigger callback
-            $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . 'atk_submit'] = 'ajax';
-            $_GET[Callback::URL_QUERY_TARGET] = 'atk_submit';
+
+            $this->replaceAppRequestGet($this->form->getApp(), array_merge(
+                $this->form->getApp()->getRequest()->getQueryParams(), [
+                Callback::URL_QUERY_TRIGGER_PREFIX . 'atk_submit' => 'ajax',
+                Callback::URL_QUERY_TARGET => 'atk_submit',
+            ]));
+
+            $this->replaceAppRequestPost($this->form->getApp(),
+                array_merge(array_map(static fn () => '', $this->form->controls), $postData)
+            );
 
             $this->form->onSubmit(static function (Form $form) use (&$wasSubmitCalled, $submitFx): void {
                 $wasSubmitCalled = true;
@@ -270,8 +277,10 @@ class FormTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing onUpload callback');
         try {
-            $_GET = [Callback::URL_QUERY_TARGET => $input->cb->getUrlTrigger()];
-            $_POST = ['fUploadAction' => Form\Control\Upload::UPLOAD_ACTION];
+
+            $this->replaceAppRequestGet($input->getApp(), [Callback::URL_QUERY_TARGET => $input->cb->getUrlTrigger()]);
+            $this->replaceAppRequestPost($input->getApp(), ['fUploadAction' => Form\Control\Upload::UPLOAD_ACTION]);
+
             $input->render();
         } finally {
             unset($_GET);
@@ -288,8 +297,8 @@ class FormTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing onDelete callback');
         try {
-            $_GET = [Callback::URL_QUERY_TARGET => $input->cb->getUrlTrigger()];
-            $_POST = ['fUploadAction' => Form\Control\Upload::DELETE_ACTION];
+            $this->replaceAppRequestGet($input->getApp(), [Callback::URL_QUERY_TARGET => $input->cb->getUrlTrigger()]);
+            $this->replaceAppRequestPost($input->getApp(), ['fUploadAction' => Form\Control\Upload::DELETE_ACTION]);
             $input->render();
         } finally {
             unset($_GET);

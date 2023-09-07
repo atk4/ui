@@ -60,7 +60,7 @@ class ItemSearch extends View
      */
     public function getQuery()
     {
-        return $_GET[$this->queryArg] ?? null;
+        return $this->getApp()->tryGetRequestGetParam($this->queryArg);
     }
 
     public function setModelCondition(Model $model): void

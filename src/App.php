@@ -655,7 +655,7 @@ class App
             } else {
                 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
                 $requestUrlPath = $request->getBasePath();
-                $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME'));
+                $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME')); // TODO is right?
             }
         }
         $fs = new \Symfony\Component\Filesystem\Filesystem();
@@ -1218,7 +1218,12 @@ class App
     private function getRenderedPortals(): array
     {
         // prevent looping (calling App::terminateJson() recursively) if JsReload is used in Modal
-        unset($_GET['__atk_reload']);
+        $this->request = $this->request->withQueryParams(
+            array_diff_key(
+                $this->request->getQueryParams(),
+                ['__atk_reload' => true]
+            )
+        );
 
         $portals = [];
         foreach ($this->portals as $view) {
@@ -1287,6 +1292,19 @@ class App
     {
         return $this->getRequestPostParams()[$key] ?? null;
     }
+
+    /**
+     * Return $_GET param by key or null if not exists.
+     */
+    public function tryGetRequestPostParam(string $key): ?string
+    {
+        if (!$this->hasRequestPostParam($key)) {
+            return null;
+        }
+
+        return $this->request->getRequestPostParams()[$key] ?? 'true';
+    }
+
 
     /**
      * Return true if $_FILES[$key] exists.

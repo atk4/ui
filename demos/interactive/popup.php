@@ -52,8 +52,8 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
         $this->tRow->set('descr', 'click on link to remove item');
 
         // We link to ourselves with this special GET argument to indicate that item must be removed.
-        if (isset($_GET[$this->name . '_remove'])) {
-            $this->removeItem($_GET['id']);
+        if ($this->getApp()->hasRequestGetParam($this->name . '_remove')) {
+            $this->removeItem($this->getApp()->getRequestGetParam('id'));
 
             // redirect again, since we don't want this to stay in the URL
             $this->getApp()->redirect([$this->name . '_remove' => false]);
@@ -240,10 +240,10 @@ $signup = Popup::addTo($app, [$rightMenu, 'position' => 'bottom right'])->setHov
 
 // This popup will be dynamically loaded.
 $signup->stickyGet('logged');
-$signup->set(static function (View $pop) {
+$signup->set(static function (View $pop) use ($app) {
     // content of the popup will be different depending on this condition.
-    if (isset($_GET['logged'])) {
-        Message::addTo($pop, ['You are already logged in as ' . $_GET['logged']]);
+    if ($app->hasRequestGetParam('logged')) {
+        Message::addTo($pop, ['You are already logged in as ' . $app->getRequestGetParam('logged')]);
         Button::addTo($pop, ['Logout', 'class.primary' => true, 'icon' => 'sign out'])
             ->link($pop->getApp()->url());
     } else {

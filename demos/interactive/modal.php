@@ -97,7 +97,7 @@ $vp1Modal->set(static function (View $p) use ($vp2Modal) {
 // When $vp2Modal->jsShow() is activate, it will dynamically add this content to it.
 $vp2Modal->set(static function (View $p) use ($vp3Modal) {
     ViewTester::addTo($p);
-    Message::addTo($p, [$_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
+    Message::addTo($p, [$p->getApp()->tryGetRequestGetParam('color') ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
     Button::addTo($p)->set('Third modal')
         ->on('click', $vp3Modal->jsShow());
 });
@@ -178,11 +178,12 @@ $stepModal->addButtonAction($action);
 $stepModal->set(static function (View $p) use ($session, $previousAction, $nextAction) {
     $page = $session->recall('page', 1);
     $success = $session->recall('success', false);
-    if (isset($_GET['move'])) {
-        if ($_GET['move'] === 'next' && $success) {
+    if ($p->getApp()->hasRequestGetParam('move')) {
+        $move = $p->getApp()->getRequestGetParam('move');
+        if ($move === 'next' && $success) {
             ++$page;
         }
-        if ($_GET['move'] === 'previous' && $page > 1) {
+        if ($move === 'previous' && $page > 1) {
             --$page;
         }
         $session->memorize('success', false);

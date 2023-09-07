@@ -24,8 +24,8 @@ require_once __DIR__ . '/../init-app.php';
 $virtualPage = VirtualPage::addTo($app->layout, ['urlTrigger' => 'in']);
 
 // Add content to virtual page.
-if (isset($_GET['p_id'])) {
-    Header::addTo($virtualPage, [$_GET['p_id']])->addClass('__atk-behat-test-car');
+if ($app->hasRequestGetParam('p_id')) {
+    Header::addTo($virtualPage, [$app->getRequestGetParam('p_id')])->addClass('__atk-behat-test-car');
 }
 LoremIpsum::addTo($virtualPage, ['size' => 1]);
 $virtualPageButton = Button::addTo($virtualPage, ['Back', 'icon' => 'left arrow']);
@@ -75,7 +75,7 @@ Button::addTo($bar)->set('Load in Modal')
 
 Button::addTo($bar)->set('Simulate slow load')
     ->on('click', new JsModal('My Popup Title', $virtualPage->getJsUrl('cut') . '&slow=true'));
-if (isset($_GET['slow'])) {
+if ($app->hasRequestGetParam('slow')) {
     sleep(1);
 }
 
@@ -89,8 +89,8 @@ $table = Table::addTo($app, ['class.celled' => true]);
 $table->setModel(new SomeData());
 
 $frame = VirtualPage::addTo($app);
-$frame->set(static function (VirtualPage $p) {
-    Header::addTo($p, ['Clicked row with ID = ' . ($_GET['id'] ?? '')]);
+$frame->set(static function (VirtualPage $p) use ($app) {
+    Header::addTo($p, ['Clicked row with ID = ' . ($app->tryGetRequestGetParam('id') ?? '')]);
 });
 
 $table->onRowClick(new JsModal('Row Clicked', $frame, ['id' => $table->jsRow()->data('id')]));
