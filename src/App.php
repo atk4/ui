@@ -1302,7 +1302,7 @@ class App
             return null;
         }
 
-        return $this->request->getRequestPostParams()[$key] ?? 'true';
+        return $this->request->getParsedBody()[$key] ?? 'true';
     }
 
 

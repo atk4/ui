@@ -14,7 +14,7 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-if ($app->getRequestGetParam('id')) {
+if ($app->tryGetRequestGetParam('id')) {
     $app->layout->js(true, new JsToast('Details link is in simulation mode.'));
 }
 
