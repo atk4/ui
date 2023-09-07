@@ -69,12 +69,15 @@ class FormTest extends TestCase
             // trigger callback
 
             $this->replaceAppRequestGet($this->form->getApp(), array_merge(
-                $this->form->getApp()->getRequest()->getQueryParams(), [
-                Callback::URL_QUERY_TRIGGER_PREFIX . 'atk_submit' => 'ajax',
-                Callback::URL_QUERY_TARGET => 'atk_submit',
-            ]));
+                $this->form->getApp()->getRequest()->getQueryParams(),
+                [
+                    Callback::URL_QUERY_TRIGGER_PREFIX . 'atk_submit' => 'ajax',
+                    Callback::URL_QUERY_TARGET => 'atk_submit',
+                ]
+            ));
 
-            $this->replaceAppRequestPost($this->form->getApp(),
+            $this->replaceAppRequestPost(
+                $this->form->getApp(),
                 array_merge(array_map(static fn () => '', $this->form->controls), $postData)
             );
 
@@ -277,7 +280,6 @@ class FormTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing onUpload callback');
         try {
-
             $this->replaceAppRequestGet($input->getApp(), [Callback::URL_QUERY_TARGET => $input->cb->getUrlTrigger()]);
             $this->replaceAppRequestPost($input->getApp(), ['fUploadAction' => Form\Control\Upload::UPLOAD_ACTION]);
 

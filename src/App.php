@@ -1305,7 +1305,6 @@ class App
         return $this->request->getParsedBody()[$key] ?? 'true';
     }
 
-
     /**
      * Return true if $_FILES[$key] exists.
      */
