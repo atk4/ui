@@ -11,6 +11,7 @@ trait ReplaceAppRequestTrait
     public function replaceAppRequestGet(App $app, array $newQueryData): void
     {
         $requestProperty = new \ReflectionProperty(App::class, 'request');
+        $requestProperty->setAccessible(true);
 
         $request = $app->getRequest()->withQueryParams($newQueryData);
 
@@ -20,6 +21,7 @@ trait ReplaceAppRequestTrait
     public function replaceAppRequestPost(App $app, array $newPostData): void
     {
         $requestProperty = new \ReflectionProperty(App::class, 'request');
+        $requestProperty->setAccessible(true);
 
         $request = $app->getRequest()->withParsedBody($newPostData);
 

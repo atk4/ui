@@ -735,10 +735,15 @@ class App
 
     private function urlConstructPagePath(string $pagePath): string
     {
+        $prefix = '';
+        if (substr($pagePath, 0, 2) === '..') {
+            $prefix = '..';
+        }
+
         // Changed array string access to substr for PHP 7.4 compatibility
         $lastChar = substr($pagePath, -1);
         if ($lastChar === '/') {
-            return $pagePath . $this->urlBuildingPage . $this->urlBuildingExt;
+            return $prefix . $pagePath . $this->urlBuildingPage . $this->urlBuildingExt;
         }
 
         if ($pagePath === '') {
@@ -752,7 +757,7 @@ class App
             $pagePathPart .= '/';
         }
 
-        return str_replace('//', '/', $pagePathPart . $pagePathFile) . $this->urlBuildingExt;
+        return $prefix . str_replace('//', '/', $pagePathPart . $pagePathFile) . $this->urlBuildingExt;
     }
 
     private function urlMergeArguments(array $page, array $extraRequestUrlArgs): array
