@@ -157,10 +157,13 @@ class AppTest extends TestCase
         $factory = new Psr17Factory();
         $request = $factory->createServerRequest('GET', 'http://127.0.0.1' . $requestUrl);
 
-        $stickyGetArguments = [
-            '__atk_json' => false,
-            '__atk_tab' => false,
-        ];
+        $stickyGetArguments = array_merge(
+            [
+                '__atk_json' => false,
+                '__atk_tab' => false,
+            ],
+            $request->getQueryParams()
+        );
 
         $app = $this->createApp();
         $app->setDefaults([
@@ -168,7 +171,8 @@ class AppTest extends TestCase
             'stickyGetArguments' => $stickyGetArguments,
         ]);
 
-        $app = new App([
+        self::assertSame($exceptedStd, $app->url($page, $useRequestUrl, $extraRequestUrlArgs));
+        self::assertSame($exceptedStd, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs));
 
         $app = $this->createApp();
         $app->setDefaults([
@@ -178,13 +182,17 @@ class AppTest extends TestCase
             'urlBuildingExt' => '.php8',
         ]);
 
-        $app = new App([
+        self::assertSame($exceptedCustom, $app->url($page, $useRequestUrl, $extraRequestUrlArgs));
+        self::assertSame($exceptedCustom, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs));
+
+        $app = $this->createApp();
+        $app->setDefaults([
             'request' => $request,
             'stickyGetArguments' => $stickyGetArguments,
             'urlBuildingIndexPage' => '',
             'urlBuildingExt' => '',
         ]);
-        self::assertSame($exceptedRouting, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: routing (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
-        self::assertSame($exceptedRouting, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: routing (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
+        self::assertSame($exceptedRouting, $app->url($page, $useRequestUrl, $extraRequestUrlArgs));
+        self::assertSame($exceptedRouting, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs));
     }
 }
