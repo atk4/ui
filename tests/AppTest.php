@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
-use Atk4\Ui\App;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\HtmlTemplate;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -26,8 +25,7 @@ class AppTest extends TestCase
 
     public function testTemplateClassCustom(): void
     {
-        $anotherTemplateClass = new class() extends HtmlTemplate {
-        };
+        $anotherTemplateClass = new class() extends HtmlTemplate {};
 
         $app = $this->createApp();
         $app->templateClass = get_class($anotherTemplateClass);

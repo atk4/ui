@@ -113,7 +113,7 @@ class App
     private $portals = [];
 
     /**
-     * @var string used in method App::url to build the url
+     * Used in method App::url to build the url.
      *
      *  Used only in method App::url
      *  If filename part is missing during building of url, this page will be used
@@ -122,7 +122,7 @@ class App
     protected string $urlBuildingIndexPage = 'index';
 
     /**
-     * @var string used in method App::url to build the URL
+     * Used in method App::url to build the URL.
      *
      * Used only in method App::url
      * Remove and re-add the extension of the file during parsing requests and building urls
@@ -739,10 +739,19 @@ class App
 
     private function urlConstructPagePath(string $pagePath): string
     {
+        $prefix = '';
+        if (substr($pagePath, 0, 2) === '..') {
+            $prefix = '..';
+        }
+
         // Changed array string access to substr for PHP 7.4 compatibility
         $lastChar = substr($pagePath, -1);
         if ($lastChar === '/') {
-            return $pagePath . $this->urlBuildingPage . $this->urlBuildingExt;
+            return $prefix . $pagePath . $this->urlBuildingIndexPage . $this->urlBuildingExt;
+        }
+
+        if ($pagePath === '') {
+            return '/' . $pagePath . $this->urlBuildingIndexPage . $this->urlBuildingExt;
         }
 
         $pagePathPart = trim(dirname($pagePath), '.');
@@ -752,7 +761,7 @@ class App
             $pagePathPart .= '/';
         }
 
-        return str_replace('//', '/', $pagePathPart . $pagePathFile) . $this->urlBuildingExt;
+        return $prefix . str_replace('//', '/', $pagePathPart . $pagePathFile) . $this->urlBuildingExt;
     }
 
     private function urlMergeArguments(array $page, array $extraRequestUrlArgs): array
