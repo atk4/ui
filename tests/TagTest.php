@@ -14,7 +14,7 @@ class TagTest extends TestCase
     {
         $app = (new \ReflectionClass(App::class))->newInstanceWithoutConstructor();
 
-        self::assertSame($expectedHtml, $app->getTag(...$args));
+        static::assertSame($expectedHtml, $app->getTag(...$args));
     }
 
     public function testBasic(): void

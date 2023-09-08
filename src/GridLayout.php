@@ -86,7 +86,7 @@ class GridLayout extends View
             };
             $cloneTagTreeFx($tmp->getTagTree('rows'));
 
-            // TODO prune unreachable nodes
+        // TODO prune unreachable nodes
             // $template->rebuildTagsIndex();
         }, null, HtmlTemplate::class)();
 

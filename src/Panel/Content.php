@@ -16,7 +16,7 @@ class Content extends View implements LoadableContent
 {
     public $defaultTemplate = 'panel/content.html';
 
-    /** @var Callback */
+    /** @var callable */
     public $cb;
 
     protected function init(): void

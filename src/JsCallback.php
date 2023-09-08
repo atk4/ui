@@ -105,9 +105,9 @@ class JsCallback extends Callback
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
      *
-     * @param string|null                        $ajaxec
+     * @param string|null $ajaxec
      * @param ($success is true ? null : string) $msg     General message, typically won't be displayed
-     * @param bool                               $success Was request successful or not
+     * @param bool $success Was request successful or not
      */
     public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
     {

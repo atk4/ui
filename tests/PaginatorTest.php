@@ -39,6 +39,6 @@ class PaginatorTest extends TestCase
     public function testPaginator(int $page, int $range, int $total, array $expected): void
     {
         $p = new Paginator(['page' => $page, 'range' => $range, 'total' => $total]);
-        self::assertSame($expected, $p->getPaginatorItems());
+        static::assertSame($expected, $p->getPaginatorItems());
     }
 }

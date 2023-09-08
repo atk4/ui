@@ -48,7 +48,7 @@ class Popup extends View
     /** @var array Popup options as defined in Fomantic-UI popup module. */
     public $popOptions = [];
 
-    /** @var Callback|null The callback use to generate dynamic content. */
+    /** @var callable|null The callback use to generate dynamic content. */
     public $cb;
 
     /**

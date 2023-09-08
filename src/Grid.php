@@ -144,8 +144,8 @@ class Grid extends View
      * Add new column to grid. If column with this name already exists,
      * an. Simply calls Table::addColumn(), so check that method out.
      *
-     * @param string|null                             $name            Data model field name
-     * @param array|Table\Column                      $columnDecorator
+     * @param string|null        $name            Data model field name
+     * @param array|Table\Column $columnDecorator
      * @param ($name is null ? array{} : array|Field) $field
      *
      * @return Table\Column

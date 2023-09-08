@@ -51,7 +51,7 @@ class CallbackTest extends TestCase
     }
 
     /**
-     * @param Callback|VirtualPage $cb
+     * @param callable|VirtualPage $cb
      */
     protected function simulateCallbackTriggering(AbstractView $cb): void
     {
@@ -72,17 +72,17 @@ class CallbackTest extends TestCase
             $var = $x;
         }, [34]);
 
-        self::assertSame(34, $var);
-        self::assertSame('1', $cb->getTriggeredValue());
+        static::assertSame(34, $var);
+        static::assertSame('1', $cb->getTriggeredValue());
     }
 
     public function testCallbackTrigger(): void
     {
         $cb = Callback::addTo($this->app);
-        self::assertSame($this->app->layout->name . '_' . $cb->shortName, $cb->getUrlTrigger());
+        static::assertSame($this->app->layout->name . '_' . $cb->shortName, $cb->getUrlTrigger());
 
         $cb = Callback::addTo($this->app, ['urlTrigger' => 'test']);
-        self::assertSame('test', $cb->getUrlTrigger());
+        static::assertSame('test', $cb->getUrlTrigger());
     }
 
     public function testViewUrlCallback(): void
@@ -96,14 +96,14 @@ class CallbackTest extends TestCase
 
         $expectedUrlCbApp = '/index.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=callback&' . Callback::URL_QUERY_TARGET . '=aa';
         $expectedUrlCb = '/index.php?' . /* Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=1&' . */ Callback::URL_QUERY_TRIGGER_PREFIX . 'bb=callback&' . Callback::URL_QUERY_TARGET . '=bb';
-        self::assertSame($expectedUrlCbApp, $cbApp->getUrl());
-        self::assertSame($expectedUrlCb, $cb->getUrl());
+        static::assertSame($expectedUrlCbApp, $cbApp->getUrl());
+        static::assertSame($expectedUrlCb, $cb->getUrl());
 
         // URL must remain the same when urlTrigger is set but name is changed
         $cbApp->name = 'aax';
         $cb->name = 'bbx';
-        self::assertSame($expectedUrlCbApp, $cbApp->getUrl());
-        self::assertSame($expectedUrlCb, $cb->getUrl());
+        static::assertSame($expectedUrlCbApp, $cbApp->getUrl());
+        static::assertSame($expectedUrlCb, $cb->getUrl());
 
         $var = null;
         $cb->set(static function (int $x) use (&$var, $v1) {
@@ -115,8 +115,8 @@ class CallbackTest extends TestCase
         $v2 = View::addTo($v1);
         $v2->stickyGet('g1', '1');
 
-        self::assertSame(34, $var);
-        self::assertSame('test.php?g1=1', $v2->url(['test']));
+        static::assertSame(34, $var);
+        static::assertSame('test.php?g1=1', $v2->url(['test']));
     }
 
     public function testCallbackNotFiring(): void
@@ -130,7 +130,7 @@ class CallbackTest extends TestCase
             $var = $x;
         }, [34]);
 
-        self::assertNull($var);
+        static::assertNull($var);
     }
 
     public function testCallbackLater(): void
@@ -144,12 +144,12 @@ class CallbackTest extends TestCase
             $var = $x;
         }, [34]);
 
-        self::assertNull($var);
+        static::assertNull($var);
 
         $this->expectOutputRegex($this->htmlDoctypeRegex);
         $this->app->run();
 
-        self::assertSame(34, $var);
+        static::assertSame(34, $var);
     }
 
     public function testCallbackLaterNested(): void
@@ -169,12 +169,12 @@ class CallbackTest extends TestCase
             }, [$x]);
         }, [34]);
 
-        self::assertNull($var);
+        static::assertNull($var);
 
         $this->expectOutputRegex($this->htmlDoctypeRegex);
         $this->app->run();
 
-        self::assertSame(34, $var);
+        static::assertSame(34, $var);
     }
 
     public function testCallbackLaterNotFiring(): void
@@ -187,12 +187,12 @@ class CallbackTest extends TestCase
             $var = $x;
         }, [34]);
 
-        self::assertNull($var);
+        static::assertNull($var);
 
         $this->expectOutputRegex($this->htmlDoctypeRegex);
         $this->app->run();
 
-        self::assertNull($var); // @phpstan-ignore-line
+        static::assertNull($var); // @phpstan-ignore-line
     }
 
     public function testVirtualPage(): void
@@ -208,7 +208,7 @@ class CallbackTest extends TestCase
 
         $this->expectOutputRegex('~^..DOCTYPE~');
         $this->app->run();
-        self::assertSame(25, $var);
+        static::assertSame(25, $var);
     }
 
     public function testVirtualPageCustomTrigger(): void
@@ -224,7 +224,7 @@ class CallbackTest extends TestCase
 
         $this->expectOutputRegex('~^..DOCTYPE~');
         $this->app->run();
-        self::assertSame(25, $var);
+        static::assertSame(25, $var);
     }
 
     /** @var int */
@@ -242,6 +242,6 @@ class CallbackTest extends TestCase
 
         $this->expectOutputRegex('~^..DOCTYPE~');
         $this->app->run();
-        self::assertSame(26, $this->varPull230);
+        static::assertSame(26, $this->varPull230);
     }
 }

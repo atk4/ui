@@ -78,11 +78,11 @@ class ExecutorFactoryTest extends TestCase
         $factory->registerExecutor($this->model->getUserAction('basic'), [BasicExecutor::class]);
         $myBasicExecutor = $factory->createExecutor($this->model->getUserAction('basic'), $view);
 
-        self::assertInstanceOf(ModalExecutor::class, $modalExecutor);
-        self::assertInstanceOf(JsCallbackExecutor::class, $jsCallbackExecutor);
-        self::assertInstanceOf(ConfirmationExecutor::class, $confirmationExecutor);
-        self::assertInstanceOf(BasicExecutor::class, $myRequiredExecutor);
-        self::assertInstanceOf(BasicExecutor::class, $myBasicExecutor);
+        static::assertInstanceOf(ModalExecutor::class, $modalExecutor);
+        static::assertInstanceOf(JsCallbackExecutor::class, $jsCallbackExecutor);
+        static::assertInstanceOf(ConfirmationExecutor::class, $confirmationExecutor);
+        static::assertInstanceOf(BasicExecutor::class, $myRequiredExecutor);
+        static::assertInstanceOf(BasicExecutor::class, $myBasicExecutor);
     }
 
     public function testExecutorTrigger(): void
@@ -92,21 +92,21 @@ class ExecutorFactoryTest extends TestCase
         $addAction = $this->model->getUserAction('add');
 
         $modalButton = Button::assertInstanceOf($factory->createTrigger($editAction, ExecutorFactory::MODAL_BUTTON));
-        self::assertSame($factory->getCaption($editAction, ExecutorFactory::MODAL_BUTTON), $modalButton->content);
+        static::assertSame($factory->getCaption($editAction, ExecutorFactory::MODAL_BUTTON), $modalButton->content);
 
         $cardButton = Button::assertInstanceOf($factory->createTrigger($editAction, ExecutorFactory::CARD_BUTTON));
-        self::assertSame($factory->getCaption($editAction, ExecutorFactory::CARD_BUTTON), $cardButton->content);
+        static::assertSame($factory->getCaption($editAction, ExecutorFactory::CARD_BUTTON), $cardButton->content);
 
         $tableButton = Button::assertInstanceOf($factory->createTrigger($editAction, ExecutorFactory::TABLE_BUTTON));
-        self::assertNull($tableButton->content);
-        self::assertSame($tableButton->icon, 'edit');
+        static::assertNull($tableButton->content);
+        static::assertSame($tableButton->icon, 'edit');
 
         $addMenuItem = MenuItem::assertInstanceOf($factory->createTrigger($addAction, ExecutorFactory::MENU_ITEM));
-        self::assertSame($addMenuItem->content, 'Add Test');
-        self::assertSame($addMenuItem->icon, 'plus');
+        static::assertSame($addMenuItem->content, 'Add Test');
+        static::assertSame($addMenuItem->icon, 'plus');
 
         $tableMenuItem = MenuItem::assertInstanceOf($factory->createTrigger($editAction, ExecutorFactory::TABLE_MENU_ITEM));
-        self::assertSame($factory->getCaption($editAction, ExecutorFactory::TABLE_MENU_ITEM), $tableMenuItem->content);
+        static::assertSame($factory->getCaption($editAction, ExecutorFactory::TABLE_MENU_ITEM), $tableMenuItem->content);
     }
 
     public function testRegisterTrigger(): void
@@ -130,8 +130,8 @@ class ExecutorFactoryTest extends TestCase
         $factory->registerTrigger(ExecutorFactory::MENU_ITEM, [MenuItem::class, 'edit_item', 'icon' => 'pencil'], $editAction);
         $editItem = MenuItem::assertInstanceOf($factory->createTrigger($editAction, ExecutorFactory::MENU_ITEM));
 
-        self::assertSame('edit_item', $editItem->content);
-        self::assertSame('pencil', $editItem->icon);
+        static::assertSame('edit_item', $editItem->content);
+        static::assertSame('pencil', $editItem->icon);
 
         $factory->registerTrigger(ExecutorFactory::TABLE_BUTTON, [Button::class, 'edit_button'], $editAction);
         $factory->registerTrigger(ExecutorFactory::TABLE_BUTTON, [Button::class, 'specific_edit_button'], $specialEditAction, true);
@@ -140,8 +140,8 @@ class ExecutorFactoryTest extends TestCase
         $secondEditButton = Button::assertInstanceOf($factory->createTrigger($secondEditAction, ExecutorFactory::TABLE_BUTTON));
         $specialEditButton = Button::assertInstanceOf($factory->createTrigger($specialEditAction, ExecutorFactory::TABLE_BUTTON));
 
-        self::assertSame('specific_edit_button', $specialEditButton->content);
-        self::assertSame($editButton->content, $secondEditButton->content);
-        self::assertNotSame($editButton->content, $specialEditButton->content);
+        static::assertSame('specific_edit_button', $specialEditButton->content);
+        static::assertSame($editButton->content, $secondEditButton->content);
+        static::assertNotSame($editButton->content, $specialEditButton->content);
     }
 }

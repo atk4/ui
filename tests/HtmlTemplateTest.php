@@ -16,8 +16,8 @@ class HtmlTemplateTest extends TestCase
     protected static function assertSameTemplate(string $expectedTemplateStr, HtmlTemplate $template): void
     {
         $expectedTemplate = new HtmlTemplate($expectedTemplateStr);
-        self::assertSame($expectedTemplate->toLoadableString(), $template->toLoadableString());
-        self::assertSame($expectedTemplate->renderToHtml(), $template->renderToHtml());
+        static::assertSame($expectedTemplate->toLoadableString(), $template->toLoadableString());
+        static::assertSame($expectedTemplate->renderToHtml(), $template->renderToHtml());
 
         // TODO test if all tag trees are reachable
     }
@@ -70,15 +70,15 @@ class HtmlTemplateTest extends TestCase
     public function testTryLoadFromFileNonExistentFileException(): void
     {
         $t = new HtmlTemplate();
-        self::assertFalse($t->tryLoadFromFile(__DIR__ . 'bad_template_file'));
+        static::assertFalse($t->tryLoadFromFile(__DIR__ . 'bad_template_file'));
     }
 
     public function testHasTag(): void
     {
         $t = new HtmlTemplate('{foo}hello{/}, cruel {bar}world{/}. {foo}hello{/}');
-        self::assertTrue($t->hasTag('foo'));
-        self::assertTrue($t->hasTag(['foo', 'bar']));
-        self::assertFalse($t->hasTag(['foo', 'bar', 'non_existent_tag']));
+        static::assertTrue($t->hasTag('foo'));
+        static::assertTrue($t->hasTag(['foo', 'bar']));
+        static::assertFalse($t->hasTag(['foo', 'bar', 'non_existent_tag']));
     }
 
     public function testSetInvalidUtf8Exception(): void
@@ -137,17 +137,17 @@ class HtmlTemplateTest extends TestCase
         $t = new HtmlTemplate('{foo}hello{/} guys');
         $tagTreeFoo = $t->getTagTree('foo');
 
-        self::assertTrue($tagTreeFoo->getChildren()[0]->isEncoded());
-        self::assertSame('hello', $tagTreeFoo->getChildren()[0]->getHtml());
+        static::assertTrue($tagTreeFoo->getChildren()[0]->isEncoded());
+        static::assertSame('hello', $tagTreeFoo->getChildren()[0]->getHtml());
 
         $t->set('foo', '<br>');
-        self::assertFalse($tagTreeFoo->getChildren()[0]->isEncoded());
-        self::assertSame('&lt;br&gt;', $tagTreeFoo->getChildren()[0]->getHtml());
-        self::assertSame('<br>', $tagTreeFoo->getChildren()[0]->getUnencoded());
+        static::assertFalse($tagTreeFoo->getChildren()[0]->isEncoded());
+        static::assertSame('&lt;br&gt;', $tagTreeFoo->getChildren()[0]->getHtml());
+        static::assertSame('<br>', $tagTreeFoo->getChildren()[0]->getUnencoded());
 
         $t->dangerouslyAppendHtml('foo', '<br>');
-        self::assertTrue($tagTreeFoo->getChildren()[1]->isEncoded());
-        self::assertSame('<br>', $tagTreeFoo->getChildren()[1]->getHtml());
+        static::assertTrue($tagTreeFoo->getChildren()[1]->isEncoded());
+        static::assertSame('<br>', $tagTreeFoo->getChildren()[1]->getHtml());
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unencoded value is not available');
@@ -170,7 +170,7 @@ class HtmlTemplateTest extends TestCase
     public function testRenderRegion(): void
     {
         $t = new HtmlTemplate('{foo}hello{/} guys');
-        self::assertSame('hello', $t->renderToHtml('foo'));
+        static::assertSame('hello', $t->renderToHtml('foo'));
     }
 
     public function testParseDollarTags(): void

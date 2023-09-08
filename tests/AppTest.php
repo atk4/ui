@@ -18,7 +18,7 @@ class AppTest extends TestCase
     {
         $app = $this->createApp();
 
-        self::assertInstanceOf(
+        static::assertInstanceOf(
             HtmlTemplate::class,
             $app->loadTemplate('html.html')
         );
@@ -32,7 +32,7 @@ class AppTest extends TestCase
         $app = $this->createApp();
         $app->templateClass = get_class($anotherTemplateClass);
 
-        self::assertInstanceOf(
+        static::assertInstanceOf(
             get_class($anotherTemplateClass),
             $app->loadTemplate('html.html')
         );
@@ -44,13 +44,13 @@ class AppTest extends TestCase
         $app->setResponseHeader('cache-control', '');
 
         $app->setResponseHeader('content-type', 'Xy');
-        self::assertSame(['Content-Type' => ['Xy']], $app->getResponse()->getHeaders());
+        static::assertSame(['Content-Type' => ['Xy']], $app->getResponse()->getHeaders());
 
         $app->setResponseHeader('CONTENT-type', 'xY');
-        self::assertSame(['Content-Type' => ['xY']], $app->getResponse()->getHeaders());
+        static::assertSame(['Content-Type' => ['xY']], $app->getResponse()->getHeaders());
 
         $app->setResponseHeader('content-TYPE', '');
-        self::assertSame([], $app->getResponse()->getHeaders());
+        static::assertSame([], $app->getResponse()->getHeaders());
     }
 
     public function testUnexpectedOutputLateError(): void
@@ -66,7 +66,7 @@ class AppTest extends TestCase
             $this->expectExceptionMessage('Unexpected output detected');
             $app->terminateHtml('');
         } finally {
-            self::assertSame($testStr, ob_get_contents());
+            static::assertSame($testStr, ob_get_contents());
             ob_end_clean();
         }
     }
@@ -172,8 +172,8 @@ class AppTest extends TestCase
             'catchExceptions' => false,
             'alwaysRun' => false,
         ]);
-        self::assertSame($exceptedStd, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: standard (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
-        self::assertSame($exceptedStd, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: standard (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
+        static::assertSame($exceptedStd, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: standard (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
+        static::assertSame($exceptedStd, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: standard (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
 
         $app = new App([
             'request' => $request,
@@ -183,8 +183,8 @@ class AppTest extends TestCase
             'catchExceptions' => false,
             'alwaysRun' => false,
         ]);
-        self::assertSame($exceptedCustom, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: custom page/ext (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
-        self::assertSame($exceptedCustom, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: custom page/ext (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
+        static::assertSame($exceptedCustom, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: custom page/ext (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
+        static::assertSame($exceptedCustom, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: custom page/ext (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
 
         $app = new App([
             'request' => $request,
@@ -194,7 +194,7 @@ class AppTest extends TestCase
             'catchExceptions' => false,
             'alwaysRun' => false,
         ]);
-        self::assertSame($exceptedRouting, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: routing (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
-        self::assertSame($exceptedRouting, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: routing (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
+        static::assertSame($exceptedRouting, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: routing (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
+        static::assertSame($exceptedRouting, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: routing (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
     }
 }

@@ -25,7 +25,7 @@ class ItemsPerPageSelector extends View
     /** @var int The current number of item per page. */
     public $currentIpp;
 
-    /** @var Callback|null The callback function. */
+    /** @var callable|null The callback function. */
     public $cb;
 
     private function formatInteger(int $value): string

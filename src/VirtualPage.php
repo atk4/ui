@@ -17,7 +17,7 @@ class VirtualPage extends View
 {
     public $ui = 'container';
 
-    /** @var Callback */
+    /** @var callable */
     public $cb;
 
     /** @var string|null specify custom callback trigger for the URL (see Callback::$urlTrigger) */
@@ -40,7 +40,7 @@ class VirtualPage extends View
      * Set callback function of virtual page.
      *
      * @param \Closure($this, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $fx
-     * @param array                                                                                       $fxArgs
+     * @param array $fxArgs
      *
      * @return $this
      */

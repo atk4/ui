@@ -42,8 +42,8 @@ class FormTest extends TestCase
         $f = $this->form;
         $f->addControl('test');
 
-        self::assertInstanceOf(Form\Control::class, $f->getControl('test'));
-        self::assertSame($f->getControl('test'), $f->layout->getControl('test'));
+        static::assertInstanceOf(Form\Control::class, $f->getControl('test'));
+        static::assertSame($f->getControl('test'), $f->layout->getControl('test'));
     }
 
     public function testAddControlAlreadyExistsException(): void
@@ -92,14 +92,14 @@ class FormTest extends TestCase
             $res = AppFormTestMock::assertInstanceOf($this->form->getApp())->output;
 
             if ($checkExpectedErrorsFx !== null) {
-                self::assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');
-                self::assertNotSame('', $res['atkjs']); // will output useful error
+                static::assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');
+                static::assertNotSame('', $res['atkjs']); // will output useful error
                 $this->formError = $res['atkjs'];
 
                 $checkExpectedErrorsFx($res['atkjs']);
             } else {
-                self::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
-                self::assertNull($res['atkjs']);
+                static::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
+                static::assertNull($res['atkjs']);
             }
 
             $this->form = null; // we shouldn't submit form twice!
@@ -121,7 +121,7 @@ class FormTest extends TestCase
         $m = $m->createEntity();
         $f->setModel($m, ['name', 'email']);
 
-        self::assertSame('John', $f->model->get('name'));
+        static::assertSame('John', $f->model->get('name'));
 
         // fake some POST data
         $this->assertFormSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], static function (Model $m) {
@@ -146,22 +146,22 @@ class FormTest extends TestCase
     public function assertFormControlError(string $field, string $error): void
     {
         $n = preg_match_all('~\.form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
-        self::assertGreaterThan(0, $n);
+        static::assertGreaterThan(0, $n);
         $matched = false;
         foreach ($matchesAll as $matches) {
             if ($matches[1] === $field) {
                 $matched = true;
-                self::assertStringContainsString($error, $matches[2], 'Regarding control ' . $field . ' error message');
+                static::assertStringContainsString($error, $matches[2], 'Regarding control ' . $field . ' error message');
             }
         }
 
-        self::assertTrue($matched, 'Form control ' . $field . ' did not produce error');
+        static::assertTrue($matched, 'Form control ' . $field . ' did not produce error');
     }
 
     public function assertFormControlNoErrors(string $field): void
     {
         $n = preg_match_all('~\.form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
-        self::assertGreaterThan(0, $n);
+        static::assertGreaterThan(0, $n);
         foreach ($matchesAll as $matches) {
             if ($matches[1] === $field) {
                 throw new Exception('Form control ' . $field . ' unexpected error: ' . $matches[2]);
@@ -219,7 +219,7 @@ class FormTest extends TestCase
                 });
             } catch (UnhandledCallbackExceptionError $e) {
                 $catchReached = true;
-                self::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore-line
+                static::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore-line
 
                 $this->expectException(ValidationException::class);
                 $this->expectExceptionMessage('Must not be null');
@@ -227,8 +227,8 @@ class FormTest extends TestCase
                 throw $e->getPrevious();
             }
         } finally {
-            self::assertTrue($submitReached);
-            self::assertTrue($catchReached);
+            static::assertTrue($submitReached);
+            static::assertTrue($catchReached);
         }
     }
 
@@ -237,22 +237,22 @@ class FormTest extends TestCase
         $input = new Form\Control\Line();
         $input->readOnly = true;
         $input->setApp($this->createApp());
-        self::assertStringContainsString(' readonly="readonly"', $input->render());
-        self::assertStringNotContainsString('disabled', $input->render());
+        static::assertStringContainsString(' readonly="readonly"', $input->render());
+        static::assertStringNotContainsString('disabled', $input->render());
 
         $input = new Form\Control\Line();
         $input->disabled = true;
         $input->readOnly = true;
         $input->setApp($this->createApp());
-        self::assertStringContainsString(' disabled="disabled"', $input->render());
-        self::assertStringNotContainsString('readonly', $input->render());
+        static::assertStringContainsString(' disabled="disabled"', $input->render());
+        static::assertStringNotContainsString('readonly', $input->render());
 
         $input = new Form\Control\Hidden();
         $input->disabled = true;
         $input->readOnly = true;
         $input->setApp($this->createApp());
-        self::assertStringNotContainsString('disabled', $input->render());
-        self::assertStringNotContainsString('readonly', $input->render());
+        static::assertStringNotContainsString('disabled', $input->render());
+        static::assertStringNotContainsString('readonly', $input->render());
     }
 
     public function testCheckboxWithNonBooleanException(): void

@@ -36,7 +36,7 @@ class Loader extends View
      */
     public $loadEvent = true;
 
-    /** @var Callback for triggering */
+    /** @var callable for triggering */
     public $cb;
 
     /** @var array URL arguments. */

@@ -38,8 +38,8 @@ class GridTest extends TestCase
         $t->addColumn('email');
         $t->addColumn(null, new Table\Column\Template('password={$password}'));
 
-        self::assertSame('<td>{$email}</td><td>password={$password}</td>', $t->getDataRowHtml());
-        self::assertSame(
+        static::assertSame('<td>{$email}</td><td>password={$password}</td>', $t->getDataRowHtml());
+        static::assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>password=abc123</td></tr>',
             $this->extractTableRow($t)
         );
@@ -55,8 +55,8 @@ class GridTest extends TestCase
         $t->addColumn('email');
         $t->addColumn('password', [Table\Column\Password::class]);
 
-        self::assertSame('<td>{$email}</td><td>***</td>', $t->getDataRowHtml());
-        self::assertSame(
+        static::assertSame('<td>{$email}</td><td>***</td>', $t->getDataRowHtml());
+        static::assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>***</td></tr>',
             $this->extractTableRow($t)
         );

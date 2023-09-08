@@ -21,9 +21,9 @@ class JsIntegrationTest extends TestCase
         $v->setApp($this->createApp());
         $v->render();
 
-        self::assertNotEmpty($v->icon);
-        self::assertNotEmpty($v->icon->name);
-        self::assertNotSame($v->name, $v->icon->name);
+        static::assertNotEmpty($v->icon);
+        static::assertNotEmpty($v->icon->name);
+        static::assertNotSame($v->name, $v->icon->name);
     }
 
     public function testUniqueId2(): void
@@ -34,7 +34,7 @@ class JsIntegrationTest extends TestCase
         $v->setApp($this->createApp());
         $v->render();
 
-        self::assertNotSame($b1->name, $b2->name);
+        static::assertNotSame($b1->name, $b2->name);
     }
 
     public function testChainFalse(): void
@@ -44,7 +44,7 @@ class JsIntegrationTest extends TestCase
         $v->setApp($this->createApp());
         $v->render();
 
-        self::assertSame('$(\'#b\').hide()', $j->jsRender());
+        static::assertSame('$(\'#b\').hide()', $j->jsRender());
     }
 
     public function testChainTrue(): void
@@ -54,7 +54,7 @@ class JsIntegrationTest extends TestCase
         $v->setApp($this->createApp());
         $v->renderAll();
 
-        self::assertSame('(function () {
+        static::assertSame('(function () {
     $(\'#b\').hide();
 })()', $v->getJs());
     }
@@ -66,7 +66,7 @@ class JsIntegrationTest extends TestCase
         $v->setApp($this->createApp());
         $v->renderAll();
 
-        self::assertSame('(function () {
+        static::assertSame('(function () {
     $(\'#b\').on(\'click\', function (event) {
         event.preventDefault();
         event.stopPropagation();
@@ -82,7 +82,7 @@ class JsIntegrationTest extends TestCase
         $v->setApp($this->createApp());
         $v->renderAll();
 
-        self::assertSame('(function () {
+        static::assertSame('(function () {
     $(\'#b\').on(\'click\', function (event) {
         event.preventDefault();
         event.stopPropagation();
@@ -108,7 +108,7 @@ class JsIntegrationTest extends TestCase
         $v->setApp($this->createApp());
         $v->renderAll();
 
-        self::assertSame('(function () {
+        static::assertSame('(function () {
     $(\'#b1\').on(\'click\', function (event) {
         event.stopPropagation();
         $(\'#b1\').hide();
@@ -124,9 +124,9 @@ class JsIntegrationTest extends TestCase
         $v = new View(['name' => 'v']);
         $js = $v->js();
 
-        self::assertNotNull($v->js(true, null)); // @phpstan-ignore-line
-        self::assertNull($v->js(true, $js)); // @phpstan-ignore-line
-        self::assertNull($v->on('click', $js)); // @phpstan-ignore-line
+        static::assertNotNull($v->js(true, null)); // @phpstan-ignore-line
+        static::assertNull($v->js(true, $js)); // @phpstan-ignore-line
+        static::assertNull($v->on('click', $js)); // @phpstan-ignore-line
     }
 
     public function testChainUnsupportedTypeException(): void
@@ -163,12 +163,12 @@ class JsIntegrationTest extends TestCase
         $v->add($jsCallback);
 
         $b->on('click', $jsCallback);
-        self::assertSame(0, $jsCallback->counter);
+        static::assertSame(0, $jsCallback->counter);
 
         $v->renderAll();
-        self::assertSame(0, $jsCallback->counter);
+        static::assertSame(0, $jsCallback->counter);
 
         $v->getJs();
-        self::assertSame(1, $jsCallback->counter);
+        static::assertSame(1, $jsCallback->counter);
     }
 }

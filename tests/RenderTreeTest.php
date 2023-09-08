@@ -22,7 +22,7 @@ class RenderTreeTest extends TestCase
         $view->render();
 
         $view->getApp();
-        self::assertNotNull($view->template);
+        static::assertNotNull($view->template);
     }
 
     public function testBasicNested(): void
@@ -33,8 +33,8 @@ class RenderTreeTest extends TestCase
         $view->render();
 
         $view2->getApp();
-        self::assertNotNull($view2->template);
+        static::assertNotNull($view2->template);
 
-        self::assertSame($view2->getApp(), $view->getApp());
+        static::assertSame($view2->getApp(), $view->getApp());
     }
 }
