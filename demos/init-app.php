@@ -50,9 +50,7 @@ final class AnonymousClassNameCache
     /** @var array<string, class-string> */
     private static $classNameByFxHash = [];
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * @template T of object

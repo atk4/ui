@@ -135,9 +135,7 @@ class DemosTest extends TestCase
                 throw new DemosTestExitError();
             }
 
-            protected function emitResponse(): void
-            {
-            }
+            protected function emitResponse(): void {}
         };
         $app->initLayout([Layout\Maestro::class]);
 
@@ -551,6 +549,4 @@ class DemosTest extends TestCase
     }
 }
 
-class DemosTestExitError extends \Error
-{
-}
+class DemosTestExitError extends \Error {}
