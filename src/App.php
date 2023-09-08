@@ -119,7 +119,7 @@ class App
      *  If filename part is missing during building of url, this page will be used
      *  Hint: if you use a routing system, you need to set this and urlBuildingExt to empty string
      */
-    protected $urlBuildingPage = 'index';
+    protected string $urlBuildingIndexPage = 'index';
 
     /**
      * @var string used in method App::url to build the URL
@@ -127,7 +127,7 @@ class App
      * Used only in method App::url
      * Remove and re-add the extension of the file during parsing requests and building urls
      */
-    protected $urlBuildingExt = '.php';
+    protected string $urlBuildingExt = '.php';
 
     /** @var bool Call exit in place of throw Exception when Application need to exit. */
     public $callExit = true;
