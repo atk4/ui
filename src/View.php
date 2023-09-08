@@ -312,7 +312,7 @@ class View extends AbstractView
      *
      * @param class-string<T> $class
      *
-     * @phpstan-return T|null
+     * @return T|null
      */
     public function getClosestOwner(string $class): ?self
     {

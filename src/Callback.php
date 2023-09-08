@@ -67,7 +67,7 @@ class Callback extends AbstractView
      * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): T $fx
      * @param array                                                                             $fxArgs
      *
-     * @phpstan-return T|null
+     * @return T|null
      */
     public function set($fx = null, $fxArgs = null)
     {
