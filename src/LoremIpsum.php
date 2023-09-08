@@ -68,7 +68,7 @@ class LoremIpsum extends Text
             'utrum', 'uxor', 'valde', 'valetudo', 'validus', 'vel', 'velit',
             'veniam', 'venio', 'vereor', 'vero', 'verto', 'vicis', 'vindico',
             'virtus', 'voco', 'volutpat', 'vulpes', 'vulputate', 'wisi', 'ymo',
-            'zelus', ];
+            'zelus'];
 
         $lorem = '';
 

@@ -15,7 +15,7 @@ class Money extends Input
             return null;
         }
 
-        $res = str_replace("\u{00a0}" /* Unicode NBSP */ , ' ', $res);
+        $res = str_replace("\u{00a0}" /* Unicode NBSP */, ' ', $res);
 
         return trim(str_replace($this->getApp()->uiPersistence->currency, '', $res));
     }

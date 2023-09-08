@@ -43,7 +43,7 @@ class Table extends Lister
      * Determines a strategy on how totals will be calculated. Do not touch those fields
      * directly, instead use addTotals().
      *
-     * @var array<string, string|array{ string|\Closure(mixed, string,): (int|float) }>|false
+     * @var array<string, string|array{ string|\Closure(mixed, string, $this): (int|float) }>|false
      */
     public $totalsPlan = false;
 
@@ -131,8 +131,8 @@ class Table extends Lister
      * If you don't want table column to be associated with model field, then
      * pass $name parameter as null.
      *
-     * @param string|null        $name            Data model field name
-     * @param array|Table\Column $columnDecorator
+     * @param string|null                             $name            Data model field name
+     * @param array|Table\Column                      $columnDecorator
      * @param ($name is null ? array{} : array|Field) $field
      *
      * @return Table\Column

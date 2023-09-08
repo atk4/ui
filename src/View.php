@@ -393,7 +393,7 @@ class View extends AbstractView
      * Add inline CSS style to element.
      * Multiple CSS styles can also be set if passed as array.
      *
-     * @param string|array<string, string> $property
+     * @param string|array<string, string>          $property
      * @param ($property is array ? never : string) $value
      *
      * @return $this
@@ -428,7 +428,7 @@ class View extends AbstractView
     /**
      * Set attribute.
      *
-     * @param string|int|array<string, string|int> $name
+     * @param string|int|array<string, string|int>  $name
      * @param ($name is array ? never : string|int) $value
      *
      * @return $this
@@ -755,9 +755,9 @@ class View extends AbstractView
      * Will convert calls to jQuery chain into JavaScript string:
      *  $('#view').find('.current').text('abc'); // the text will be JSON encoded to avoid JS injection
      *
-     * @param bool|string $when Event when chain will be executed
+     * @param bool|string                                     $when     Event when chain will be executed
      * @param ($when is false ? null : JsExpressionable|null) $action   JavaScript action
-     * @param string|self|null $selector If you wish to override jQuery($selector)
+     * @param string|self|null                                $selector If you wish to override jQuery($selector)
      *
      * @return ($action is null ? Jquery : null)
      */
@@ -940,7 +940,7 @@ class View extends AbstractView
      *   return $js->parent()->hide();
      * });
      *
-     * @param string $event JavaScript event
+     * @param string                                                                                                                                                                                       $event    JavaScript event
      * @param ($action is object ? string : ($action is null ? string : never)|JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction) $selector Optional jQuery-style selector
      * @param ($selector is string|null ? JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction : array)                              $action   code to execute
      *
@@ -1052,7 +1052,7 @@ class View extends AbstractView
                 $setupNonSharedExecutorFx($ex->getExecutor());
                 $actions = [$ex->getExecutor() instanceof UserAction\JsCallbackExecutor
                     ? $lazyJsRenderFx(static fn () => $ex->jsExecute($arguments))
-                    : $ex->jsExecute($arguments), ];
+                    : $ex->jsExecute($arguments)];
             } elseif ($ex instanceof UserAction\JsExecutorInterface && $ex instanceof self) {
                 $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction();

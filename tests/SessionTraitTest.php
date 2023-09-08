@@ -60,11 +60,11 @@ class SessionTraitTest extends TestCase
     {
         $m = new SessionMock($this->createApp());
 
-        static::assertFalse(isset($_SESSION));
+        self::assertFalse(isset($_SESSION));
         $m->atomicSession(static function (): void {
             self::assertTrue(isset($_SESSION));
         });
-        static::assertFalse(isset($_SESSION));
+        self::assertFalse(isset($_SESSION));
     }
 
     public function testMemorize(): void
@@ -100,33 +100,33 @@ class SessionTraitTest extends TestCase
 
         // value as string
         $m->learn('foo', 'bar');
-        static::assertSame('bar', $m->recall('foo'));
+        self::assertSame('bar', $m->recall('foo'));
 
         $m->learn('foo', 'qwerty');
-        static::assertSame('bar', $m->recall('foo'));
+        self::assertSame('bar', $m->recall('foo'));
 
         $m->forget('foo');
-        static::assertSame('undefined', $m->recall('foo', 'undefined'));
+        self::assertSame('undefined', $m->recall('foo', 'undefined'));
 
         // value as callback
         $m->learn('foo', static function (string $key) {
             return $key . '_bar';
         });
-        static::assertSame('foo_bar', $m->recall('foo'));
+        self::assertSame('foo_bar', $m->recall('foo'));
 
         $m->learn('foo_2', 'another');
-        static::assertSame('another', $m->recall('foo_2'));
+        self::assertSame('another', $m->recall('foo_2'));
 
         $v = $m->recall('foo_3', static function (string $key) {
             return $key . '_bar';
         });
-        static::assertSame('foo_3_bar', $v);
-        static::assertSame('undefined', $m->recall('foo_3', 'undefined'));
+        self::assertSame('foo_3_bar', $v);
+        self::assertSame('undefined', $m->recall('foo_3', 'undefined'));
 
         $m->forget();
-        static::assertSame('undefined', $m->recall('foo', 'undefined'));
-        static::assertSame('undefined', $m->recall('foo_2', 'undefined'));
-        static::assertSame('undefined', $m->recall('foo_3', 'undefined'));
+        self::assertSame('undefined', $m->recall('foo', 'undefined'));
+        self::assertSame('undefined', $m->recall('foo_2', 'undefined'));
+        self::assertSame('undefined', $m->recall('foo_3', 'undefined'));
     }
 }
 

@@ -106,7 +106,7 @@ class Ui extends Persistence
                         ? $this->decimalSeparator . preg_replace('~\d{3}\K(?!$)~', '', substr($matches[0], 1))
                         : preg_replace('~(?<!^)(?=(?:\d{3})+$)~', $this->thousandsSeparator, $matches[0]);
                 }, $value);
-                $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */ , $value);
+                $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */, $value);
 
                 break;
             case 'atk4_money':
@@ -114,7 +114,7 @@ class Ui extends Persistence
                 $valueDecimals = strlen(preg_replace('~^[^.]$|^.+\.|0+$~s', '', number_format($value, max(0, 11 - (int) log10($value)), '.', '')));
                 $value = ($this->currency ? $this->currency . ' ' : '')
                     . number_format($value, max($this->currencyDecimals, $valueDecimals), $this->decimalSeparator, $this->thousandsSeparator);
-                $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */ , $value);
+                $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */, $value);
 
                 break;
             case 'date':
@@ -184,7 +184,7 @@ class Ui extends Persistence
                         }
                     }
 
-                    $value = str_replace([' ', "\u{00a0}" /* Unicode NBSP */ , '_', $tSep], '', $value);
+                    $value = str_replace([' ', "\u{00a0}" /* Unicode NBSP */, '_', $tSep], '', $value);
                     $value = str_replace($dSep, '.', $value);
 
                     if ($field->type === 'atk4_money' && $this->currency !== '' && substr_count($value, $this->currency) === 1) {

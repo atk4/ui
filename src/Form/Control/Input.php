@@ -67,7 +67,7 @@ class Input extends Form\Control
     /**
      * Set attribute which is added directly to the <input> tag, not the surrounding <div>.
      *
-     * @param string|int|array<string, string|int> $name
+     * @param string|int|array<string, string|int>  $name
      * @param ($name is array ? never : string|int) $value
      *
      * @return $this

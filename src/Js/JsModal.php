@@ -51,7 +51,7 @@ class JsModal extends JsExpression
      *
      * You can set option individually or supply an array.
      *
-     * @param string|array $options
+     * @param string|array                        $options
      * @param ($options is array ? never : mixed) $value
      *
      * @return $this

@@ -30,7 +30,7 @@ class ViewTest extends TestCase
         $v->setApp($this->createApp());
         $a = $v->render();
         $b = $v->render();
-        static::assertSame($a, $b);
+        self::assertSame($a, $b);
     }
 
     public function testAddAfterRenderException(): void
@@ -49,12 +49,12 @@ class ViewTest extends TestCase
     {
         $v = new View();
         $v->setApp($this->createApp());
-        static::assertSame('<div id="atk"></div>', $v->render());
+        self::assertSame('<div id="atk"></div>', $v->render());
 
         $v = new View();
         $v->element = 'img';
         $v->setApp($this->createApp());
-        static::assertSame('<img id="atk">', $v->render());
+        self::assertSame('<img id="atk">', $v->render());
     }
 
     public function testAddDelayedInit(): void
@@ -63,15 +63,15 @@ class ViewTest extends TestCase
         $vInner = new View();
 
         $v->add($vInner);
-        static::assertFalse($v->isInitialized());
-        static::assertFalse($vInner->isInitialized());
+        self::assertFalse($v->isInitialized());
+        self::assertFalse($vInner->isInitialized());
 
         $vLayout = new View();
         $vLayout->setApp($this->createApp());
         $vLayout->add($v);
 
-        static::assertTrue($v->isInitialized());
-        static::assertTrue($vInner->isInitialized());
+        self::assertTrue($v->isInitialized());
+        self::assertTrue($vInner->isInitialized());
     }
 
     public function testAddDelayedAbstractViewInit(): void
@@ -80,15 +80,15 @@ class ViewTest extends TestCase
         $vInner = new View();
 
         $v->add($vInner);
-        static::assertFalse($v->isInitialized());
-        static::assertFalse($vInner->isInitialized());
+        self::assertFalse($v->isInitialized());
+        self::assertFalse($vInner->isInitialized());
 
         $vLayout = new View();
         $vLayout->setApp($this->createApp());
         $vLayout->add($v);
 
-        static::assertTrue($v->isInitialized());
-        static::assertTrue($vInner->isInitialized());
+        self::assertTrue($v->isInitialized());
+        self::assertTrue($vInner->isInitialized());
     }
 
     public function testTooManyArgumentsConstructorError(): void

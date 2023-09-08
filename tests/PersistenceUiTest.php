@@ -27,21 +27,21 @@ class PersistenceUiTest extends TestCase
 
         if ($isUiValueNormalized) {
             $savedUiValue = $p->typecastSaveField($field, $phpValue);
-            static::assertSame($uiValue, $savedUiValue);
+            self::assertSame($uiValue, $savedUiValue);
         }
 
         $readPhpValue = $p->typecastLoadField($field, $uiValue);
         if ($readPhpValue instanceof \DateTimeInterface) {
             $this->{'assertEquals'}($phpValue, $readPhpValue);
         } else {
-            static::assertSame($phpValue, $readPhpValue);
+            self::assertSame($phpValue, $readPhpValue);
         }
 
         $savedUiValue = $p->typecastSaveField($field, $readPhpValue);
         if ($isUiValueNormalized) {
-            static::assertSame($uiValue, $savedUiValue);
+            self::assertSame($uiValue, $savedUiValue);
         } else {
-            static::assertNotSame($uiValue, $savedUiValue);
+            self::assertNotSame($uiValue, $savedUiValue);
             $this->testTypecast($persistenceSeed, $fieldSeed, $phpValue, $savedUiValue);
         }
     }
