@@ -46,9 +46,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->initExecutor();
     }
 
-    protected function initExecutor(): void
-    {
-    }
+    protected function initExecutor(): void {}
 
     public function getAction(): Model\UserAction
     {

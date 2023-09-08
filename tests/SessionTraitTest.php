@@ -146,6 +146,4 @@ class SessionMock extends SessionAbstractMock
     use NameTrait;
 }
 
-class SessionWithoutNameMock extends SessionAbstractMock
-{
-}
+class SessionWithoutNameMock extends SessionAbstractMock {}

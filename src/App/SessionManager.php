@@ -112,8 +112,7 @@ class SessionManager
         $found = false;
 
         if (self::$readCache === null) {
-            $this->atomicSession(static function (): void {
-            }, true);
+            $this->atomicSession(static function (): void {}, true);
         }
 
         if (isset(self::$readCache[$this->rootNamespace][$namespace])

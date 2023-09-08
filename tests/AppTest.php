@@ -24,8 +24,7 @@ class AppTest extends TestCase
 
     public function testTemplateClassCustom(): void
     {
-        $anotherTemplateClass = new class() extends HtmlTemplate {
-        };
+        $anotherTemplateClass = new class() extends HtmlTemplate {};
 
         $app = $this->createApp();
         $app->templateClass = get_class($anotherTemplateClass);
