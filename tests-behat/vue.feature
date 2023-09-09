@@ -13,7 +13,7 @@ Feature: Vue
     When I write "[escape]" into selector "(//input[@name='atk_fp_country__name'])[1]"
     Then I check if input value for "(//input[@name='atk_fp_country__name'])[1]" match text "test autoSave"
 
-  Scenario: testing InlineEdit - enter and syn key type
+  Scenario: testing InlineEdit - special keys typing using bitovi/syn
     When I persist DB changes across requests
     When I write "[ctrl]a[ctrl-up]test ean[left][backspace]" into selector "(//input[@name='atk_fp_country__name'])[1]"
     Then No toast should be displayed
