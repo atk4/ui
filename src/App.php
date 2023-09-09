@@ -636,11 +636,6 @@ class App
             ->addMoreInfo('templateDir', $this->templateDir);
     }
 
-    protected function getRequestUrl(): string
-    {
-        return $this->request->getUri()->getPath();
-    }
-
     protected function createRequestPathFromLocalPath(string $localPath): string
     {
         // $localPath does not need realpath() as the path is expected to be built using __DIR__
@@ -698,6 +693,8 @@ class App
      */
     public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
+        $request = $this->getRequest();
+
         if ($useRequestUrl) {
             $page = $_SERVER['REQUEST_URI'];
         }
@@ -712,7 +709,7 @@ class App
                 $pagePath = $page[0];
             } else {
                 // use current page by default
-                $requestUrl = $this->getRequestUrl();
+                $requestUrl = $request->getUri()->getPath();
                 if (substr($requestUrl, -1, 1) === '/') {
                     $pagePath = $this->urlBuildingPage;
                 } else {
