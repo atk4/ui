@@ -113,12 +113,19 @@ class App
     private $portals = [];
 
     /**
-     * @var string used in method App::url to build the URL
+     * If filename path part is missing during building of URL, this page will be used.
+     * Set to empty string when when your webserver supports index.php autoindex or you use mod_rewrite with routing.
      *
-     * Used only in method App::url
-     * Remove and re-add the extension of the file during parsing requests and building urls
+     * @internal Used only in self::url() method.
      */
-    protected $urlBuildingExt = '.php';
+    protected string $urlBuildingIndexPage = 'index';
+
+    /**
+     * Remove and re-add the extension of the file during parsing requests and building URL.
+     *
+     * @internal Used only in self::url() method.
+     */
+    protected string $urlBuildingExt = '.php';
 
     /** @var bool Call exit in place of throw Exception when Application need to exit. */
     public $callExit = true;
@@ -707,7 +714,7 @@ class App
                 // use current page by default
                 $requestUrl = $this->getRequestUrl();
                 if (substr($requestUrl, -1, 1) === '/') {
-                    $pagePath = 'index';
+                    $pagePath = $this->urlBuildingPage;
                 } else {
                     $pagePath = basename($requestUrl, $this->urlBuildingExt);
                 }
