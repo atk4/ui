@@ -58,7 +58,7 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
     private function executeJsSelectText(WebDriverElement $element, int $start, int $stop = null): void
     {
         $this->executeScript(
-            'arguments[0].setSelectionRange(arguments[1], arguments[2]);',
+            'arguments[0].setSelectionRange(Math.min(arguments[1], Number.MAX_SAFE_INTEGER), Math.min(arguments[2], Number.MAX_SAFE_INTEGER));',
             [$element, $start, $stop ?? $start]
         );
     }
