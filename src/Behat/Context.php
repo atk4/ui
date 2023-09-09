@@ -663,7 +663,7 @@ class Context extends RawMinkContext implements BehatContext
 
         $inputValue = $this->findElement(null, $selector)->getValue();
         if ($inputValue !== $text) {
-            throw new \Exception('Input value does not match: ' . $inputValue . ' expected: ' . $text);
+            throw new \Exception('Input value does not match: ' . $inputValue . ', expected: ' . $text);
         }
     }
 
@@ -678,7 +678,7 @@ class Context extends RawMinkContext implements BehatContext
         $expectedText = $this->findElement(null, $selector)->getText();
         $input = $this->findElement(null, 'input[name="' . $inputName . '"]');
         if ($expectedText !== $input->getValue()) {
-            throw new \Exception('Input value does not match: ' . $input->getValue() . ' expected: ' . $expectedText);
+            throw new \Exception('Input value does not match: ' . $input->getValue() . ', expected: ' . $expectedText);
         }
     }
 

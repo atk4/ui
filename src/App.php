@@ -900,12 +900,12 @@ class App
      * ])
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
-     * @param array<0|string, string|bool>                                                                              $attr
-     * @param string|array<int, array{0?: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
+     * @param array<0|string, string|bool>                                                                             $attr
+     * @param string|array<int, array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
      */
-    public function getTag(string $tag = null, array $attr = [], $value = null): string
+    public function getTag(string $tag, array $attr = [], $value = null): string
     {
-        $tag = strtolower($tag === null ? 'div' : $tag);
+        $tag = strtolower($tag);
         $tagOrig = $tag;
 
         $isOpening = true;
@@ -1090,7 +1090,9 @@ class App
      */
     protected function emitResponse(): void
     {
-        http_response_code($this->response->getStatusCode());
+        if (!headers_sent() || $this->response->getHeaders() !== []) { // avoid throwing late error in loop
+            http_response_code($this->response->getStatusCode());
+        }
 
         foreach ($this->response->getHeaders() as $name => $values) {
             foreach ($values as $value) {

@@ -446,10 +446,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
     /**
      * @param 'emergency'|'alert'|'critical'|'error'|'warning'|'notice'|'info'|'debug' $level
-     *
-     * @phpstan-ignore-next-line
      */
-    public function log($level, $message, array $context = []): void
+    public function log($level, $message, array $context = []): void // @phpstan-ignore-line
     {
         $this->{$level}($message, $context);
     }

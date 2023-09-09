@@ -88,7 +88,7 @@ class Input extends Form\Control
     /**
      * Returns presentable value to be inserted into input tag.
      *
-     * @return mixed
+     * @return string|null
      */
     public function getValue()
     {

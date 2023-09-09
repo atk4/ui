@@ -10,6 +10,9 @@ use Atk4\Ui\Exception;
 
 class TagTest extends TestCase
 {
+    /**
+     * @param array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null} $args
+     */
     public static function assertTagRender(string $expectedHtml, array $args): void
     {
         $app = (new \ReflectionClass(App::class))->newInstanceWithoutConstructor();
@@ -21,12 +24,11 @@ class TagTest extends TestCase
     {
         self::assertTagRender('<b>', ['b']);
         self::assertTagRender('<b>hello world</b>', ['b', [], 'hello world']);
-        self::assertTagRender('<div>', []);
     }
 
     public function testEscaping(): void
     {
-        self::assertTagRender('<div foo="he&quot;llo">', [null, ['foo' => 'he"llo']]);
+        self::assertTagRender('<div foo="he&quot;llo">', ['div', ['foo' => 'he"llo']]);
         self::assertTagRender('<b>bold text &gt;&gt;</b>', ['b', [], 'bold text >>']);
     }
 

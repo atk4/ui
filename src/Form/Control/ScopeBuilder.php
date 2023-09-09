@@ -426,12 +426,16 @@ class ScopeBuilder extends Form\Control
         $options = $defaults['options'] ?? [];
         unset($defaults['options']);
 
-        // map all values for callables and merge with defaults
-        return array_merge(array_map(function ($value) use ($field, $options) {
-            $this->issetOwner(); // prevent PHP CS Fixer to make this anonymous function static, TODO https://github.com/atk4/ui/pull/1625
+        // map all callables
+        foreach ($rule as $k => $v) {
+            if (is_array($v) && is_callable($v)) {
+                $rule[$k] = call_user_func($v, $field, $options);
+            }
+        }
 
-            return is_array($value) && is_callable($value) ? call_user_func($value, $field, $options) : $value;
-        }, $rule), $defaults);
+        $rule = array_merge($rule, $defaults);
+
+        return $rule;
     }
 
     /**
@@ -498,24 +502,23 @@ class ScopeBuilder extends Form\Control
      */
     public function queryToScope(array $query): Scope\AbstractScope
     {
-        $type = $query['type'] ?? 'query-builder-group';
-        $query = $query['query'] ?? $query;
-
-        switch ($type) {
-            case 'query-builder-group':
-                $components = array_map(fn ($v) => $this->queryToScope($v), $query['children']);
-                $scope = new Scope($components, $query['logicalOperator']);
-
-                break;
-            case 'query-builder-rule':
-                $scope = $this->queryToCondition($query);
-
-                break;
-            default:
-                $scope = Scope::createAnd();
+        if (!isset($query['type'])) {
+            $query = ['type' => 'query-builder-group', 'query' => $query];
         }
 
-        return $scope;
+        switch ($query['type']) {
+            case 'query-builder-rule':
+                $scope = $this->queryToCondition($query['query']);
+
+                break;
+            case 'query-builder-group':
+                $components = array_map(fn ($v) => $this->queryToScope($v), $query['query']['children']);
+                $scope = new Scope($components, $query['query']['logicalOperator']);
+
+                break;
+        }
+
+        return $scope; // @phpstan-ignore-line
     }
 
     /**
@@ -692,7 +695,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Auto-detects a string delimiter based on list of predefined values in ScopeBuilder::$listDelimiters in order of priority.
      *
-     * @phpstan-return non-empty-string
+     * @return non-empty-string
      */
     public function detectDelimiter(string $value): string
     {

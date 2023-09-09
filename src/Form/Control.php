@@ -24,11 +24,7 @@ class Control extends View
     /** @var Form|null to which this field belongs */
     public $form;
 
-    /**
-     * @var EntityFieldPair|null
-     *
-     * @phpstan-var EntityFieldPair<Model, Field>|null
-     */
+    /** @var EntityFieldPair<Model, Field>|null */
     public $entityField;
 
     /** @var string */

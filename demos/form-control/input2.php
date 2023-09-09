@@ -54,10 +54,8 @@ $group->addControl('radio_disb', [Form\Control\Radio::class, 'disabled' => true]
 
 $group = $form->addGroup('File upload');
 
-$onDelete = static function () {
-};
-$onUpload = static function () {
-};
+$onDelete = static function () {};
+$onUpload = static function () {};
 
 $control = $group->addControl('file_norm', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]])->set('normal', 'normal.jpg'); // @phpstan-ignore-line
 $control->onDelete($onDelete);
@@ -101,8 +99,7 @@ $group->addControl('date_norm', [Form\Control\Calendar::class, 'type' => 'date']
 $group->addControl('date_read', [Form\Control\Calendar::class, 'type' => 'date', 'readOnly' => true])->set(new \DateTime());
 $group->addControl('date_disb', [Form\Control\Calendar::class, 'type' => 'date', 'disabled' => true])->set(new \DateTime());
 
-$form->onSubmit(static function (Form $form) {
-});
+$form->onSubmit(static function (Form $form) {});
 
 Header::addTo($app, ['Stand Alone Line']);
 // you can pass values to button

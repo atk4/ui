@@ -52,7 +52,7 @@ class Grid extends View
     public $actionButtons;
 
     /**
-     * Calling addAction will add a new column inside $table with dropdown menu,
+     * Calling addActionMenuItem will add a new column inside $table with dropdown menu,
      * and will be re-used for next addActionMenuItem().
      *
      * @var Table\Column|null
@@ -386,7 +386,7 @@ class Grid extends View
     }
 
     /**
-     * Similar to addAction. Will add Button that when click will display
+     * Similar to addActionButton. Will add Button that when click will display
      * a Dropdown menu.
      *
      * @param View|string                           $view
@@ -498,8 +498,8 @@ class Grid extends View
     }
 
     /**
-     * Similar to addAction but when button is clicked, modal is displayed
-     * with the $title and $callback is executed through VirtualPage.
+     * Similar to addActionButton but when button is clicked, modal is displayed
+     * with the $title and $callback is executed.
      *
      * @param string|array|View                 $button
      * @param string                            $title
@@ -511,6 +511,60 @@ class Grid extends View
     public function addModalAction($button, $title, \Closure $callback, $args = [])
     {
         return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args);
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function explodeSelectionValue(string $value): array
+    {
+        return $value === '' ? [] : explode(',', $value);
+    }
+
+    /**
+     * Similar to addActionButton but apply to a multiple records selection and display in menu.
+     * When menu item is clicked, $callback is executed.
+     *
+     * @param string|array|MenuItem                               $item
+     * @param \Closure(Js\Jquery, list<string>): JsExpressionable $callback
+     * @param array                                               $args     extra URL argument for callback
+     *
+     * @return View
+     */
+    public function addBulkAction($item, \Closure $callback, $args = [])
+    {
+        $menuItem = $this->menu->addItem($item);
+        $menuItem->on('click', function (Js\Jquery $j, string $value) use ($callback) {
+            return $callback($j, $this->explodeSelectionValue($value));
+        }, [$this->selection->jsChecked()]);
+
+        return $menuItem;
+    }
+
+    /**
+     * Similar to addModalAction but apply to a multiple records selection and display in menu.
+     * When menu item is clicked, modal is displayed with the $title and $callback is executed.
+     *
+     * @param string|array|MenuItem              $item
+     * @param string                             $title
+     * @param \Closure(View, list<string>): void $callback
+     * @param array                              $args     extra URL argument for callback
+     *
+     * @return View
+     */
+    public function addModalBulkAction($item, $title, \Closure $callback, $args = [])
+    {
+        $modalDefaults = is_string($title) ? ['title' => $title] : []; // @phpstan-ignore-line
+
+        $modal = Modal::addTo($this->getOwner(), $modalDefaults);
+        $modal->set(function (View $t) use ($callback) {
+            $callback($t, $this->explodeSelectionValue($t->stickyGet($this->name) ?? ''));
+        });
+
+        $menuItem = $this->menu->addItem($item);
+        $menuItem->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)));
+
+        return $menuItem;
     }
 
     /**
