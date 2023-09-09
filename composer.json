@@ -67,7 +67,7 @@
         "symfony/http-foundation": "^4.4 || ^5.3 || ^6.0"
     },
     "require-dev": {
-        "atk4/behat-mink-selenium2-driver": "^1.6.1",
+        "atk4/behat-mink-selenium2-driver": "^1.6.2",
         "behat/mink-extension": "^2.3.1",
         "ergebnis/composer-normalize": "^2.13",
         "friendsofphp/php-cs-fixer": "^3.0",
