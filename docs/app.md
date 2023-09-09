@@ -206,12 +206,6 @@ $app->requireCss('https://example.com/file.min.css');
 
 Initializes all includes required by Agile UI. You may extend this class to add more includes.
 
-:::{php:method} getRequestUrl()
-:::
-
-Decodes current request without any arguments. If you are changing URL generation pattern, you
-probably need to change this method to properly identify the current page. See {php:meth}`App::url()`
-
 ## Loading Templates for Views
 
 :::{php:method} loadTemplate($name)

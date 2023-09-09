@@ -163,8 +163,7 @@ class AppTest extends TestCase
             $request->getQueryParams()
         );
 
-        $app = $this->createApp();
-        $app->setDefaults([
+        $app = $this->createApp([
             'request' => $request,
             'stickyGetArguments' => $stickyGetArguments,
         ]);
@@ -172,8 +171,7 @@ class AppTest extends TestCase
         self::assertSame($exceptedStd, $app->url($page, $useRequestUrl, $extraRequestUrlArgs));
         self::assertSame($exceptedStd, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs));
 
-        $app = $this->createApp();
-        $app->setDefaults([
+        $app = $this->createApp([
             'request' => $request,
             'stickyGetArguments' => $stickyGetArguments,
             'urlBuildingIndexPage' => 'default',
@@ -183,8 +181,7 @@ class AppTest extends TestCase
         self::assertSame($exceptedCustom, $app->url($page, $useRequestUrl, $extraRequestUrlArgs));
         self::assertSame($exceptedCustom, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs));
 
-        $app = $this->createApp();
-        $app->setDefaults([
+        $app = $this->createApp([
             'request' => $request,
             'stickyGetArguments' => $stickyGetArguments,
             'urlBuildingIndexPage' => '',

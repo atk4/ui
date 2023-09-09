@@ -95,17 +95,19 @@ class DemosTest extends TestCase
 
         $rootDirRealpath = realpath(static::ROOT_DIR);
 
+        $requestPath = $request->getUri()->getPath();
+        $requestQuery = $request->getUri()->getQuery();
         $_SERVER = [
             'REQUEST_METHOD' => $request->getMethod(),
             'HTTP_HOST' => $request->getUri()->getHost(),
-            'REQUEST_URI' => (string) $request->getUri(),
-            'QUERY_STRING' => $request->getUri()->getQuery(),
+            'REQUEST_URI' => $requestPath . ($requestQuery !== '' ? '?' . $requestQuery : ''),
+            'QUERY_STRING' => $requestQuery,
             'DOCUMENT_ROOT' => $rootDirRealpath,
-            'SCRIPT_FILENAME' => $rootDirRealpath . $request->getUri()->getPath(),
+            'SCRIPT_FILENAME' => $rootDirRealpath . $requestPath,
         ];
 
         $_GET = [];
-        parse_str($request->getUri()->getQuery(), $queryArr);
+        parse_str($requestQuery, $queryArr);
         foreach ($queryArr as $k => $v) {
             $_GET[$k] = $v;
         }

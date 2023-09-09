@@ -113,19 +113,17 @@ class App
     private $portals = [];
 
     /**
-     * Used in method App::url to build the url.
+     * If filename path part is missing during building of URL, this page will be used.
+     * Set to empty string when when your webserver supports index.php autoindex or you use mod_rewrite with routing.
      *
-     *  Used only in method App::url
-     *  If filename part is missing during building of url, this page will be used
-     *  Hint: if you use a routing system, you need to set this and urlBuildingExt to empty string
+     * @internal only for self::url() method
      */
     protected string $urlBuildingIndexPage = 'index';
 
     /**
-     * Used in method App::url to build the URL.
+     * Remove and re-add the extension of the file during parsing requests and building URL.
      *
-     * Used only in method App::url
-     * Remove and re-add the extension of the file during parsing requests and building urls
+     * @internal only for self::url() method
      */
     protected string $urlBuildingExt = '.php';
 
@@ -638,11 +636,6 @@ class App
             ->addMoreInfo('templateDir', $this->templateDir);
     }
 
-    protected function getRequestUrl(): string
-    {
-        return $this->request->getUri()->getPath();
-    }
-
     protected function createRequestPathFromLocalPath(string $localPath): string
     {
         // $localPath does not need realpath() as the path is expected to be built using __DIR__
@@ -700,6 +693,8 @@ class App
      */
     public function url($page = [], bool $useRequestUrl = false, array $extraRequestUrlArgs = []): string
     {
+        $request = $this->getRequest();
+
         if ($useRequestUrl) {
             $page = $this->urlGetCurrentRequestPage();
         }
@@ -708,7 +703,7 @@ class App
             $page = $this->urlSplitStringPageIntoArray($page);
         }
 
-        $pagePath = $this->urlConstructPagePath($page[0] ?? $this->getRequestUrl());
+        $pagePath = $this->urlConstructPagePath($page[0] ?? $request->getUri()->getPath());
         unset($page[0]);
 
         $args = $this->urlMergeArguments($page, $extraRequestUrlArgs);
