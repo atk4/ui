@@ -116,14 +116,14 @@ class App
      * If filename path part is missing during building of URL, this page will be used.
      * Set to empty string when when your webserver supports index.php autoindex or you use mod_rewrite with routing.
      *
-     * @internal Used only in self::url() method.
+     * @internal only for self::url() method
      */
     protected string $urlBuildingIndexPage = 'index';
 
     /**
      * Remove and re-add the extension of the file during parsing requests and building URL.
      *
-     * @internal Used only in self::url() method.
+     * @internal only for self::url() method
      */
     protected string $urlBuildingExt = '.php';
 
@@ -715,7 +715,7 @@ class App
                 // use current page by default
                 $requestUrl = $request->getUri()->getPath();
                 if (substr($requestUrl, -1, 1) === '/') {
-                    $pagePath = $this->urlBuildingPage;
+                    $pagePath = $this->urlBuildingIndexPage;
                 } else {
                     $pagePath = basename($requestUrl, $this->urlBuildingExt);
                 }
