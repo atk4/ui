@@ -55,6 +55,14 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
         $this->getWebDriverSession()->moveto(['element' => $element->getID()]);
     }
 
+    private function executeJsSelectText(WebDriverElement $element, int $start, int $stop = null): void
+    {
+        $this->executeScript(
+            'arguments[0].setSelectionRange(arguments[1], arguments[2]);',
+            [$element, $start, $stop ?? $start]
+        );
+    }
+
     /**
      * @param 'type' $action
      * @param string $options
@@ -81,6 +89,11 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
         $focusedElement = $this->getWebDriverSession()->activeElement();
         if ($element->getID() !== $focusedElement->getID()) {
             $this->clickOnElement($element);
+            $focusedElement = $this->getWebDriverSession()->activeElement();
+        }
+
+        if (in_array($focusedElement->name(), ['input', 'textarea'], true)) {
+            $this->executeJsSelectText($focusedElement, \PHP_INT_MAX);
         }
 
         $this->executeSynJsAndWait('type', $element, $text);
