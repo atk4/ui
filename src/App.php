@@ -696,7 +696,11 @@ class App
         $request = $this->getRequest();
 
         if ($useRequestUrl) {
-            $page = $_SERVER['REQUEST_URI'];
+            $page = $request->getUri()->getPath();
+            $query = $request->getUri()->getQuery();
+            if ($query !== '') {
+                $page .= '?' . $query;
+            }
         }
 
         $pagePath = '';
