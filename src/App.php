@@ -113,15 +113,6 @@ class App
     private $portals = [];
 
     /**
-     * @var string used in method App::url to build the url
-     *
-     *  Used only in method App::url
-     *  If filename part is missing during building of url, this page will be used
-     *  Hint: if you use a routing system, you need to set this and urlBuildingExt to empty string
-     */
-    protected $urlBuildingPage = 'index';
-
-    /**
      * @var string used in method App::url to build the URL
      *
      * Used only in method App::url
@@ -701,9 +692,7 @@ class App
     public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
         if ($useRequestUrl) {
-            $query = $this->getRequest()->getUri()->getQuery();
-            $page = $this->getRequest()->getUri()->getPath();
-            $page .= $query === '' ? '' : '?' . $query;
+            $page = $_SERVER['REQUEST_URI'];
         }
 
         $pagePath = '';
@@ -718,7 +707,7 @@ class App
                 // use current page by default
                 $requestUrl = $this->getRequestUrl();
                 if (substr($requestUrl, -1, 1) === '/') {
-                    $pagePath = $this->urlBuildingPage;
+                    $pagePath = 'index';
                 } else {
                     $pagePath = basename($requestUrl, $this->urlBuildingExt);
                 }
@@ -730,12 +719,11 @@ class App
         }
 
         $args = $extraRequestUrlArgs;
-        $queryParams = $this->getRequest()->getQueryParams();
 
         // add sticky arguments
         foreach ($this->stickyGetArguments as $k => $v) {
-            if ($v && isset($queryParams[$k])) {
-                $args[$k] = $queryParams[$k];
+            if ($v && isset($_GET[$k])) {
+                $args[$k] = $_GET[$k];
             } else {
                 unset($args[$k]);
             }
