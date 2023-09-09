@@ -51,23 +51,23 @@
     ],
     "homepage": "https://github.com/atk4/ui",
     "require": {
-        "php": ">=7.4 <8.3",
+        "php": ">=7.4 <8.4",
         "atk4/data": "dev-develop",
-        "nyholm/psr7": "^1.6.0",
+        "nyholm/psr7": "^1.6",
         "nyholm/psr7-server": "^1.0",
         "symfony/filesystem": "^4.4 || ^5.3 || ^6.0",
         "symfony/http-foundation": "^4.4 || ^5.3 || ^6.0"
     },
     "require-release": {
-        "php": ">=7.4 <8.3",
+        "php": ">=7.4 <8.4",
         "atk4/data": "~5.0.0",
-        "nyholm/psr7": "^1.6.0",
+        "nyholm/psr7": "^1.6",
         "nyholm/psr7-server": "^1.0",
         "symfony/filesystem": "^4.4 || ^5.3 || ^6.0",
         "symfony/http-foundation": "^4.4 || ^5.3 || ^6.0"
     },
     "require-dev": {
-        "atk4/behat-mink-selenium2-driver": "^1.6.1",
+        "atk4/behat-mink-selenium2-driver": "^1.6.2",
         "behat/mink-extension": "^2.3.1",
         "ergebnis/composer-normalize": "^2.13",
         "friendsofphp/php-cs-fixer": "^3.0",

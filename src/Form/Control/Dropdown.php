@@ -111,8 +111,6 @@ class Dropdown extends Input
      * Returns presentable value to be inserted into input tag.
      *
      * Dropdown input tag accepts only CSV formatted list of IDs.
-     *
-     * @return mixed
      */
     public function getValue()
     {

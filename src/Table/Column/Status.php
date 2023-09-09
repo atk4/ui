@@ -46,7 +46,8 @@ class Status extends Table\Column
         }
 
         return $this->getApp()->getTag('td', $attr, [
-            $this->getApp()->getTag('i', ['class' => 'icon {$_' . $field->shortName . '_icon}'], '') . ' {$' . $field->shortName . '}',
+            ['i', ['class' => 'icon {$_' . $field->shortName . '_icon}'], ''],
+            ' {$' . $field->shortName . '}',
         ]);
     }
 
