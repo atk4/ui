@@ -113,12 +113,19 @@ class App
     private $portals = [];
 
     /**
-     * @var string used in method App::url to build the URL
+     * If filename path part is missing during building of URL, this page will be used.
+     * Set to empty string when when your webserver supports index.php autoindex or you use mod_rewrite with routing.
      *
-     * Used only in method App::url
-     * Remove and re-add the extension of the file during parsing requests and building urls
+     * @internal only for self::url() method
      */
-    protected $urlBuildingExt = '.php';
+    protected string $urlBuildingIndexPage = 'index';
+
+    /**
+     * Remove and re-add the extension of the file during parsing requests and building URL.
+     *
+     * @internal only for self::url() method
+     */
+    protected string $urlBuildingExt = '.php';
 
     /** @var bool Call exit in place of throw Exception when Application need to exit. */
     public $callExit = true;
@@ -629,11 +636,6 @@ class App
             ->addMoreInfo('templateDir', $this->templateDir);
     }
 
-    protected function getRequestUrl(): string
-    {
-        return $this->request->getUri()->getPath();
-    }
-
     protected function createRequestPathFromLocalPath(string $localPath): string
     {
         // $localPath does not need realpath() as the path is expected to be built using __DIR__
@@ -691,8 +693,14 @@ class App
      */
     public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
     {
+        $request = $this->getRequest();
+
         if ($useRequestUrl) {
-            $page = $_SERVER['REQUEST_URI'];
+            $page = $request->getUri()->getPath();
+            $query = $request->getUri()->getQuery();
+            if ($query !== '') {
+                $page .= '?' . $query;
+            }
         }
 
         $pagePath = '';
@@ -705,9 +713,9 @@ class App
                 $pagePath = $page[0];
             } else {
                 // use current page by default
-                $requestUrl = $this->getRequestUrl();
+                $requestUrl = $request->getUri()->getPath();
                 if (substr($requestUrl, -1, 1) === '/') {
-                    $pagePath = 'index';
+                    $pagePath = $this->urlBuildingIndexPage;
                 } else {
                     $pagePath = basename($requestUrl, $this->urlBuildingExt);
                 }
