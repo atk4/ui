@@ -155,13 +155,10 @@ class AppTest extends TestCase
         $factory = new Psr17Factory();
         $request = $factory->createServerRequest('GET', 'http://127.0.0.1' . $requestUrl);
 
-        $stickyGetArguments = array_merge(
-            [
-                '__atk_json' => false,
-                '__atk_tab' => false,
-            ],
-            $request->getQueryParams()
-        );
+        $stickyGetArguments = array_merge([
+            '__atk_json' => false,
+            '__atk_tab' => false,
+        ], $request->getQueryParams());
 
         $app = $this->createApp([
             'request' => $request,
