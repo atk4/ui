@@ -104,6 +104,7 @@ class DemosTest extends TestCase
             'QUERY_STRING' => $requestQuery,
             'DOCUMENT_ROOT' => $rootDirRealpath,
             'SCRIPT_FILENAME' => $rootDirRealpath . $requestPath,
+            'CONTENT_TYPE' => $request->getHeaderLine('content-type'),
         ];
 
         $_GET = [];
@@ -502,7 +503,12 @@ class DemosTest extends TestCase
      */
     public function testDemoAssertJsonResponsePost(string $path, array $postData): void
     {
-        $response = $this->getResponseFromRequest($path, ['form_params' => $postData]);
+        $response = $this->getResponseFromRequest($path, [
+            'headers' => [
+                'Content-Type' => 'application/x-www-form-urlencoded',
+            ],
+            'form_params' => $postData
+        ]);
         self::assertSame(200, $response->getStatusCode());
         self::assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
     }
