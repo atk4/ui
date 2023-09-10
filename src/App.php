@@ -1313,7 +1313,7 @@ class App
      */
     public function getRequestUploadedFile(string $key): UploadedFileInterface
     {
-        if (!$this->hasRequestGetParam($key)) {
+        if (!$this->hasRequestUploadedFile($key)) {
             throw (new Exception('FILES ' . $key . ' does not exists'))
                 ->addMoreInfo('key', $key);
         }
