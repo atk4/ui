@@ -76,7 +76,7 @@ class ItemSearch extends View
         $this->class = [];
         parent::renderView();
 
-        // reloadId is the view ID selector name that needs to be reloaded.
+        // $reloadId is the view ID selector name that needs to be reloaded.
         // this will be pass as get argument to __atk_reload.
         if ($this->reload instanceof View) {
             $reloadId = $this->reload->name;
