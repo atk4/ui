@@ -1329,8 +1329,12 @@ class App
      *
      * @return UploadedFileInterface|null the uploaded file or null if it doesn't exist
      */
-    public function getRequestUploadedFile(string $key): ?UploadedFileInterface
+    public function tryGetRequestUploadedFile(string $key): ?UploadedFileInterface
     {
-        return $this->request->getUploadedFiles()[$key] ?? null;
+        if (!$this->hasRequestUploadedFile($key)) {
+            return null;
+        }
+
+        return $this->request->getUploadedFiles()[$key];
     }
 }
