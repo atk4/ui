@@ -24,15 +24,13 @@ class AppTest extends TestCase
 
     public function testTemplateClassCustom(): void
     {
-        $anotherTemplateClass = new class() extends HtmlTemplate {};
+        $anotherTemplateClass = get_class(new class() extends HtmlTemplate {});
 
-        $app = $this->createApp();
-        $app->templateClass = get_class($anotherTemplateClass);
+        $app = $this->createApp([
+            'templateClass' => $anotherTemplateClass,
+        ]);
 
-        self::assertInstanceOf(
-            get_class($anotherTemplateClass),
-            $app->loadTemplate('html.html')
-        );
+        self::assertInstanceOf($anotherTemplateClass, $app->loadTemplate('html.html'));
     }
 
     public function testHeaderNormalize(): void

@@ -109,9 +109,6 @@ class App
 
     private ResponseInterface $response;
 
-    /** @var array<string, View> Modal view that need to be rendered using JSON output. */
-    private $portals = [];
-
     /**
      * If filename path part is missing during building of URL, this page will be used.
      * Set to empty string when when your webserver supports index.php autoindex or you use mod_rewrite with routing.
@@ -229,22 +226,6 @@ class App
 
         // setting up default executor factory.
         $this->executorFactory = Factory::factory([ExecutorFactory::class]);
-    }
-
-    /**
-     * Register a portal view.
-     * Fomantic-ui Modal or atk Panel are teleported in HTML template
-     * within specific location. This will keep track
-     * of them when terminating app using JSON.
-     *
-     * @param Modal|Panel\Right $portal
-     */
-    public function registerPortals($portal): void
-    {
-        // TODO in https://github.com/atk4/ui/pull/1771 it has been discovered this method causes DOM code duplication,
-        // for some reasons, it seems even not needed, at least all Unit & Behat tests pass
-        // must be investigated
-        // $this->portals[$portal->name] = $portal;
     }
 
     public function setExecutorFactory(ExecutorFactory $factory): void
@@ -416,26 +397,10 @@ class App
             if (is_string($output)) {
                 $output = $this->decodeJson($output);
             }
-            $output['portals'] = $this->getRenderedPortals();
 
             $this->outputResponseJson($output);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
-            // ugly hack for Tabs
-            // because Fomantic-UI Tab only deal with HTML and not JSON
-            // we need to hack output to include app modal
-            $ids = [];
-            $jsRemoveFunction = '';
-            foreach ($this->getRenderedPortals() as $key => $modal) {
-                // add modal rendering to output
-                $ids[] = '#' . $key;
-                $output['atkjs'] .= '; ' . $modal['js'];
-                $output['html'] .= $modal['html'];
-            }
-            if (count($ids) > 0) {
-                $jsRemoveFunction = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . implode(', ', $ids) . '\').remove();';
-            }
-
-            $output = $this->getTag('script', [], '$(function () {' . $jsRemoveFunction . $output['atkjs'] . '});')
+            $output = $this->getTag('script', [], '$(function () {' . $output['atkjs'] . '});')
                 . $output['html'];
 
             $this->outputResponseHtml($output);
@@ -691,7 +656,7 @@ class App
      * @param bool                                     $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
      * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
+    public function url($page = [], bool $useRequestUrl = false, array $extraRequestUrlArgs = []): string
     {
         $request = $this->getRequest();
 
@@ -761,7 +726,7 @@ class App
      * @param bool                                     $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
      * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function jsUrl($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
+    public function jsUrl($page = [], bool $useRequestUrl = false, array $extraRequestUrlArgs = []): string
     {
         // append to the end but allow override
         $extraRequestUrlArgs = array_merge($extraRequestUrlArgs, ['__atk_json' => 1], $extraRequestUrlArgs);
@@ -1185,22 +1150,5 @@ class App
 
         $this->setResponseHeader('Content-Type', 'application/json');
         $this->outputResponse($data);
-    }
-
-    /**
-     * Generated HTML and JS for portal view registered to app.
-     */
-    private function getRenderedPortals(): array
-    {
-        // prevent looping (calling App::terminateJson() recursively) if JsReload is used in Modal
-        unset($_GET['__atk_reload']);
-
-        $portals = [];
-        foreach ($this->portals as $view) {
-            $portals[$view->name]['html'] = $view->getHtml();
-            $portals[$view->name]['js'] = $view->getJsRenderActions();
-        }
-
-        return $portals;
     }
 }
