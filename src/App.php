@@ -1227,7 +1227,7 @@ class App
             return null;
         }
 
-        return $this->request->getQueryParams()[$key] ?? 'true';
+        return $this->getRequestGetParam($key);
     }
 
     /**
@@ -1254,6 +1254,7 @@ class App
 
     /**
      * Get the value of a specific POST parameter from the HTTP request.
+     * Throws an exception if the POST parameter does not exist.
      *
      * @param string $key the key of the POST parameter to retrieve
      *
@@ -1261,6 +1262,11 @@ class App
      */
     public function getRequestPostParam(string $key)
     {
+        if (!$this->hasRequestPostParam($key)) {
+            throw (new Exception('POST ' . $key . ' param does not exist'))
+                ->addMoreInfo('key', $key);
+        }
+
         return $this->getRequestPostParams()[$key] ?? null;
     }
 
@@ -1278,7 +1284,7 @@ class App
             return null;
         }
 
-        return $this->request->getParsedBody()[$key] ?? 'true';
+        return $this->getRequestPostParam($key);
     }
 
     /**
