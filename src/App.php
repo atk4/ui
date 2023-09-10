@@ -1184,7 +1184,11 @@ class App
     }
 
     /**
-     * Return true if $_GET[$key] exists.
+     * Check if a specific GET parameter exists in the HTTP request.
+     *
+     * @param string $key the key of the GET parameter to check
+     *
+     * @return bool true if the GET parameter exists, false otherwise
      */
     public function hasRequestGetParam(string $key): bool
     {
@@ -1192,7 +1196,12 @@ class App
     }
 
     /**
-     * Return $_GET param by key, raise exception if not exists.
+     * Get the value of a specific GET parameter from the HTTP request.
+     * Throws an exception if the GET parameter does not exist.
+     *
+     * @param string $key the key of the GET parameter to retrieve
+     *
+     * @return string the value of the GET parameter
      */
     public function getRequestGetParam(string $key): string
     {
@@ -1205,7 +1214,12 @@ class App
     }
 
     /**
-     * Return $_GET param by key or null if not exists.
+     * Attempt to get the value of a specific GET parameter from the HTTP request.
+     * Returns null if the GET parameter does not exist.
+     *
+     * @param string $key the key of the GET parameter to try to retrieve
+     *
+     * @return string|null the value of the GET parameter or null if it doesn't exist
      */
     public function tryGetRequestGetParam(string $key): ?string
     {
@@ -1217,7 +1231,11 @@ class App
     }
 
     /**
-     * Return true if $_POST[$key] exists.
+     * Check if a specific POST parameter exists in the HTTP request.
+     *
+     * @param string $key the key of the POST parameter to check
+     *
+     * @return bool true if the POST parameter exists, false otherwise
      */
     public function hasRequestPostParam(string $key): bool
     {
@@ -1225,7 +1243,9 @@ class App
     }
 
     /**
-     * Return whole $_POST data.
+     * Get all POST parameters from the HTTP request.
+     *
+     * @return array an associative array of all POST parameters
      */
     public function getRequestPostParams(): array
     {
@@ -1233,9 +1253,11 @@ class App
     }
 
     /**
-     * Return $_POST param by key or null if not exists.
+     * Get the value of a specific POST parameter from the HTTP request.
      *
-     * @return mixed
+     * @param string $key the key of the POST parameter to retrieve
+     *
+     * @return mixed the value of the POST parameter or null if it doesn't exist
      */
     public function getRequestPostParam(string $key)
     {
@@ -1243,7 +1265,12 @@ class App
     }
 
     /**
-     * Return $_GET param by key or null if not exists.
+     * Attempt to get the value of a specific POST parameter from the HTTP request.
+     * Returns null if the POST parameter does not exist.
+     *
+     * @param string $key the key of the POST parameter to try to retrieve
+     *
+     * @return string|null the value of the POST parameter or null if it doesn't exist
      */
     public function tryGetRequestPostParam(string $key): ?string
     {
@@ -1255,7 +1282,11 @@ class App
     }
 
     /**
-     * Return true if $_FILES[$key] exists.
+     * Check if a specific uploaded file exists in the HTTP request.
+     *
+     * @param string $key the key corresponding to the uploaded file
+     *
+     * @return bool true if the uploaded file exists, false otherwise
      */
     public function hasRequestUploadedFile(string $key): bool
     {
@@ -1263,9 +1294,9 @@ class App
     }
 
     /**
-     * Return whole $_FILES data.
+     * Retrieve all uploaded files from the HTTP request.
      *
-     * @return array<UploadedFileInterface>
+     * @return array<UploadedFileInterface> an array of uploaded files implementing the UploadedFileInterface
      */
     public function getRequestUploadedFiles(): array
     {
@@ -1273,7 +1304,30 @@ class App
     }
 
     /**
-     * Return $_FILES param by key or null if not exists.
+     * Get a specific uploaded file from the HTTP request by its key.
+     * Throws an exception if the uploaded file does not exist.
+     *
+     * @param string $key the key corresponding to the uploaded file to retrieve
+     *
+     * @return UploadedFileInterface the uploaded file or null if it doesn't exist
+     */
+    public function getRequestUploadedFile(string $key): UploadedFileInterface
+    {
+        if (!$this->hasRequestGetParam($key)) {
+            throw (new Exception('FILES ' . $key . ' does not exists'))
+                ->addMoreInfo('key', $key);
+        }
+
+        return $this->request->getUploadedFiles()[$key];
+    }
+
+    /**
+     * Attempt to get a specific uploaded file from the HTTP request by its key.
+     * Returns null if the uploaded file does not exist.
+     *
+     * @param string $key the key corresponding to the uploaded file to try to retrieve
+     *
+     * @return UploadedFileInterface|null the uploaded file or null if it doesn't exist
      */
     public function getRequestUploadedFile(string $key): ?UploadedFileInterface
     {
