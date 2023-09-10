@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
-use Atk4\Ui\App;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\HtmlTemplate;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -154,44 +153,36 @@ class AppTest extends TestCase
         $factory = new Psr17Factory();
         $request = $factory->createServerRequest('GET', 'http://127.0.0.1' . $requestUrl);
 
-        $stickyGetArguments = [
+        $stickyGetArguments = array_merge([
             '__atk_json' => false,
             '__atk_tab' => false,
-        ];
+        ], $request->getQueryParams());
 
-        foreach ($request->getQueryParams() as $key => $value) {
-            $stickyGetArguments[$key] = $value;
-        }
-
-        $app = new App([
+        $app = $this->createApp([
             'request' => $request,
             'stickyGetArguments' => $stickyGetArguments,
-            'catchExceptions' => false,
-            'alwaysRun' => false,
         ]);
-        self::assertSame($exceptedStd, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: standard (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
-        self::assertSame($exceptedStd, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: standard (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
 
-        $app = new App([
+        self::assertSame($exceptedStd, $app->url($page, $useRequestUrl, $extraRequestUrlArgs));
+        self::assertSame($exceptedStd, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs));
+
+        $app = $this->createApp([
             'request' => $request,
             'stickyGetArguments' => $stickyGetArguments,
             'urlBuildingIndexPage' => 'default',
             'urlBuildingExt' => '.php8',
-            'catchExceptions' => false,
-            'alwaysRun' => false,
         ]);
-        self::assertSame($exceptedCustom, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: custom page/ext (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
-        self::assertSame($exceptedCustom, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: custom page/ext (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
 
-        $app = new App([
+        self::assertSame($exceptedCustom, $app->url($page, $useRequestUrl, $extraRequestUrlArgs));
+        self::assertSame($exceptedCustom, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs));
+
+        $app = $this->createApp([
             'request' => $request,
             'stickyGetArguments' => $stickyGetArguments,
             'urlBuildingIndexPage' => '',
             'urlBuildingExt' => '',
-            'catchExceptions' => false,
-            'alwaysRun' => false,
         ]);
-        self::assertSame($exceptedRouting, $app->url($page, $useRequestUrl, $extraRequestUrlArgs), 'App::url test error case: routing (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
-        self::assertSame($exceptedRouting, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs), 'App::jsUrl test error case: routing (from: ' . $requestUrl . ' and $useRequestUrl=' . (int) $useRequestUrl . ')');
+        self::assertSame($exceptedRouting, $app->url($page, $useRequestUrl, $extraRequestUrlArgs));
+        self::assertSame($exceptedRouting, $app->jsUrl($page, $useRequestUrl, $extraRequestUrlArgs));
     }
 }

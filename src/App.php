@@ -728,6 +728,7 @@ class App
         $args = $extraRequestUrlArgs;
 
         // add sticky arguments
+        $queryParams = $this->getRequest()->getQueryParams();
         foreach ($this->stickyGetArguments as $k => $v) {
             if ($v && $this->hasRequestGetParam($k)) {
                 $args[$k] = $this->getRequestGetParam($k);
