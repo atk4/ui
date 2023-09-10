@@ -64,8 +64,6 @@ class Right extends View implements Loadable
         if ($this->dynamic) {
             $this->addDynamicContent(Factory::factory($this->dynamic));
         }
-
-        $this->getApp()->registerPortals($this);
     }
 
     /**

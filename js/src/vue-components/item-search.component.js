@@ -4,7 +4,6 @@ import atk from 'atk';
 /**
  * Will allow user to send data query request to server.
  * Request should filter the data and reload the data view.
- * The request is send using Fomantic-UI api.
  *
  * Properties need for this component are:
  * context: string, a jQuery selector where the 'loading' class will be apply by Fomantic-UI - default to this component.

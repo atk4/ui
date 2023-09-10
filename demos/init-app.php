@@ -81,7 +81,7 @@ try {
     throw new Exception('Database error: ' . $e->getMessage());
 }
 
-[$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
+[$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(?:/|$))~s', $app->getRequest()->getUri()->getPath(), 3);
 $demosUrl = $rootUrl . 'demos/';
 
 // allow custom layout override

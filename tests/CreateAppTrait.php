@@ -10,11 +10,14 @@ trait CreateAppTrait
 {
     use ReplaceAppRequestTrait;
 
-    protected function createApp(): App
+    /**
+     * @param array<string, mixed> $defaults
+     */
+    protected function createApp(array $defaults = []): App
     {
-        return new App([
+        return new App(array_merge([
             'catchExceptions' => false,
             'alwaysRun' => false,
-        ]);
+        ], $defaults));
     }
 }
