@@ -507,7 +507,7 @@ class DemosTest extends TestCase
             'headers' => [
                 'Content-Type' => 'application/x-www-form-urlencoded',
             ],
-            'form_params' => $postData
+            'form_params' => $postData,
         ]);
         self::assertSame(200, $response->getStatusCode());
         self::assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
