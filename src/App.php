@@ -656,7 +656,7 @@ class App
      * @param bool                                     $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
      * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
+    public function url($page = [], bool $useRequestUrl = false, array $extraRequestUrlArgs = []): string
     {
         $request = $this->getRequest();
 
@@ -726,7 +726,7 @@ class App
      * @param bool                                     $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
      * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function jsUrl($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
+    public function jsUrl($page = [], bool $useRequestUrl = false, array $extraRequestUrlArgs = []): string
     {
         // append to the end but allow override
         $extraRequestUrlArgs = array_merge($extraRequestUrlArgs, ['__atk_json' => 1], $extraRequestUrlArgs);

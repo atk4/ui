@@ -26,8 +26,9 @@ class AppTest extends TestCase
     {
         $anotherTemplateClass = new class() extends HtmlTemplate {};
 
-        $app = $this->createApp();
-        $app->templateClass = get_class($anotherTemplateClass);
+        $app = $this->createApp([
+            'templateClass' => get_class($anotherTemplateClass),
+        ]);
 
         self::assertInstanceOf(
             get_class($anotherTemplateClass),
