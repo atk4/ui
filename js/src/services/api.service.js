@@ -89,17 +89,6 @@ class ApiService {
                         // throw Error('Unable to replace element with id: ' + response.id);
                     }
                 }
-                if (response.portals) {
-                    // Create app portal from JSON response.
-                    const portals = Object.keys(response.portals);
-                    for (const portalID of portals) {
-                        const m = $('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
-                        if (m.length === 0) {
-                            $(document.body).append(response.portals[portalID].html);
-                            atk.apiService.evalResponse(response.portals[portalID].js);
-                        }
-                    }
-                }
                 if (response.atkjs) {
                     atk.apiService.evalResponse.call(this, response.atkjs);
                 }

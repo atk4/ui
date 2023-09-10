@@ -1374,8 +1374,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Reload a view using Fomantic-UI API.
- * Prefer method is GET.
+ * Reload a view from server. Default method is GET.
  *
  * You can include WebStorage value within the request
  * by setting the store name (key) value.
@@ -1999,17 +1998,6 @@ class ApiService {
           }
         }
 
-        if (response.portals) {
-          // Create app portal from JSON response.
-          const portals = Object.keys(response.portals);
-          for (const portalID of portals) {
-            const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
-            if (m.length === 0) {
-              external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document.body).append(response.portals[portalID].html);
-              atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse(response.portals[portalID].js);
-            }
-          }
-        }
         if (response.atkjs) {
           atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse.call(this, response.atkjs);
         }
@@ -3170,7 +3158,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Allow to upload files to server via Fomantic-UI API.
+ * Allow to upload files to server.
  */
 class UploadService {
   /**
