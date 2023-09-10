@@ -3,7 +3,7 @@ import atk from 'atk';
 import AtkPlugin from './atk.plugin';
 
 /**
- * Reload a view from server. Default method is GET.
+ * Reload a view from server. Default request method is GET.
  *
  * You can include WebStorage value within the request
  * by setting the store name (key) value.

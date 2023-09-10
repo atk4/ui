@@ -1374,7 +1374,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Reload a view from server. Default method is GET.
+ * Reload a view from server. Default request method is GET.
  *
  * You can include WebStorage value within the request
  * by setting the store name (key) value.
