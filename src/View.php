@@ -480,7 +480,7 @@ class View extends AbstractView
      */
     public function url($page = []): string
     {
-        return $this->getApp()->url($page, false, $this->_getStickyArgs());
+        return $this->getApp()->url($page, false, array_merge($this->getRunningCallbackArgs(false, is_array($page) ? $page : []), $this->getStickyArgs()));
     }
 
     /**
@@ -490,16 +490,77 @@ class View extends AbstractView
      */
     public function jsUrl($page = []): string
     {
-        return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
+        return $this->getApp()->jsUrl($page, false, array_merge($this->getRunningCallbackArgs(false, is_array($page) ? $page : []), $this->getStickyArgs()));
+    }
+
+    protected function getRunningCallbackArgs(bool $isTerminated, array $page): array
+    {
+        $args = [];
+        foreach ($this->elements as $v) {
+            if ($v instanceof Callback) { // @phpstan-ignore-line
+                if (($page[Callback::URL_QUERY_TARGET] ?? null) === $v->getUrlTrigger()) {
+                    $isTerminated = true;
+                }
+
+                if ($isTerminated && $v->isTriggered() && $v->canTrigger()) {
+                    $args[Callback::URL_QUERY_TRIGGER_PREFIX . $v->getUrlTrigger()] = $v->getTriggeredValue();
+                }
+            }
+        }
+
+        $parentRenderView = null;
+        if ($this->issetOwner() && $this->getOwner() instanceof self) {
+            $parentRenderView = $this->getOwner();
+        } // else
+
+        if (($this instanceof Modal || $this instanceof Panel\Content/* || $this instanceof Panel\Right no direct callback, must use something like mergeStickyArgsFromChildView */) && $this->cb !== null && $this->cb->isTriggered() && $this->cb->canTrigger()) { // hack for modals placed outside the render tree with possible callbacks
+            $isTerminated = true; // fake terminated detection to support https://github.com/atk4/ui/blob/8014b6c1cb5beb103f337af8ace5ac350f73ce19/src/JsReload.php#L58 URL built not thru callback
+
+            $stacktrace = debug_backtrace(\DEBUG_BACKTRACE_PROVIDE_OBJECT | \DEBUG_BACKTRACE_IGNORE_ARGS);
+            foreach (array_slice($stacktrace, 1, null, true) as $k => $stackframe) {
+                if (($stackframe['object'] ?? null) instanceof self && ($stackframe['object'] ?? null) !== $this) {
+                    $parentRenderView = $stackframe['object'];
+                    foreach (array_slice($stacktrace, $k + 1) as $stackframe2) {
+                        if (($stackframe2['object'] ?? null) === $parentRenderView && $stackframe2['function'] === 'getRunningCallbackArgs') {
+                            $parentRenderView = null; // already called
+                        }
+                    }
+
+                    break;
+                } elseif (($stackframe['object'] ?? null) instanceof App && ($stackframe['function'] ?? null) === 'run') {
+                    break;
+                }
+            }
+
+            if ($parentRenderView !== null) {
+                $a = [
+                    array_map(function ($v) {
+                        $v['class'] = isset($v['object']) ? get_class($v['object']) : 'x';
+                        unset($v['object']);
+
+                        return $v;
+                    }, $stacktrace),
+                    $parentRenderView !== null ? $parentRenderView->getRunningCallbackArgs($isTerminated, $page) : '-----',
+                    $page,
+                ];
+                // print_r($a);
+            }
+        }
+
+        if ($parentRenderView !== null) {
+            $args = array_merge($parentRenderView->getRunningCallbackArgs($isTerminated, $page), $args);
+        }
+
+        return $args;
     }
 
     /**
      * Get sticky arguments defined by the view and parents (including API).
      */
-    protected function _getStickyArgs(): array
+    protected function getStickyArgs(): array
     {
-        if ($this->issetOwner()) {
-            $stickyArgs = array_merge($this->getOwner()->_getStickyArgs(), $this->stickyArgs);
+        if ($this->issetOwner() && $this->getOwner() instanceof self) {
+            $stickyArgs = array_merge($this->getOwner()->getStickyArgs(), $this->stickyArgs);
         } else {
             $stickyArgs = $this->stickyArgs;
         }
