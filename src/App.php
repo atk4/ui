@@ -657,31 +657,30 @@ class App
      */
     public function url($page = [], array $extraRequestUrlArgs = []): string
     {
-        $request = $this->getRequest();
-
-        $pagePath = '';
         if (is_string($page)) {
             $pageExploded = explode('?', $page, 2);
-            $pagePath = $pageExploded[0];
             parse_str($pageExploded[1] ?? '', $page);
-        } else {
-            if (isset($page[0])) {
-                $pagePath = $page[0];
-            } else {
-                // use current page by default
-                $requestUrl = $request->getUri()->getPath();
-                if ($requestUrl === '') { // TODO path must always start with '/'
-                    $requestUrl = '/';
-                }
-                if (substr($requestUrl, -1) === '/') {
-                    $pagePath = $this->urlBuildingIndexPage;
-                } else {
-                    $pagePath = basename($requestUrl, $this->urlBuildingExt);
-                }
-            }
-            unset($page[0]);
-            $pagePath .= $this->urlBuildingExt;
+            $page[0] = $pageExploded[0];
         }
+
+        $request = $this->getRequest();
+
+        if (isset($page[0])) {
+            $pagePath = $page[0];
+        } else {
+            // use current page by default
+            $requestUrl = $request->getUri()->getPath();
+            if ($requestUrl === '') { // TODO path must always start with '/'
+                $requestUrl = '/';
+            }
+            if (substr($requestUrl, -1) === '/') {
+                $pagePath = $this->urlBuildingIndexPage;
+            } else {
+                $pagePath = basename($requestUrl, $this->urlBuildingExt);
+            }
+        }
+        unset($page[0]);
+        $pagePath .= $this->urlBuildingExt;
 
         $args = $extraRequestUrlArgs;
 
