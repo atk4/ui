@@ -612,7 +612,7 @@ class App
             if (\PHP_SAPI === 'cli') { // for phpunit
                 $requestUrlPath = '/';
                 $requestLocalPath = \Closure::bind(static function () {
-                    return dirname((new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory());
+                    return (new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory();
                 }, null, ExceptionRenderer\Html::class)();
             } else {
                 $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
