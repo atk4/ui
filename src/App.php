@@ -615,7 +615,7 @@ class App
                     return (new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory();
                 }, null, ExceptionRenderer\Html::class)();
             } else {
-                $request = new \Symfony\Component\HttpFoundation\Request($_GET, [], [], [], [], $_SERVER);
+                $request = new \Symfony\Component\HttpFoundation\Request([], [], [], [], [], $_SERVER);
                 $requestUrlPath = $request->getBasePath();
                 $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME'));
             }
