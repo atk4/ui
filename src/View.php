@@ -480,7 +480,7 @@ class View extends AbstractView
      */
     public function url($page = []): string
     {
-        return $this->getApp()->url($page, false, $this->_getStickyArgs());
+        return $this->getApp()->url($page, $this->_getStickyArgs());
     }
 
     /**
@@ -490,7 +490,7 @@ class View extends AbstractView
      */
     public function jsUrl($page = []): string
     {
-        return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
+        return $this->getApp()->jsUrl($page, $this->_getStickyArgs());
     }
 
     /**
