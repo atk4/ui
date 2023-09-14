@@ -659,66 +659,35 @@ class App
     {
         $request = $this->getRequest();
 
+        $pagePath = '';
         if (is_string($page)) {
-            $page = $this->urlSplitStringPageIntoArray($page);
+            $pageExploded = explode('?', $page, 2);
+            $pagePath = $pageExploded[0];
+            parse_str($pageExploded[1] ?? '', $page);
+        } else {
+            if (isset($page[0])) {
+                $pagePath = $page[0];
+            } else {
+                // use current page by default
+                $requestUrl = $request->getUri()->getPath();
+                if (substr($requestUrl, -1, 1) === '/') {
+                    $pagePath = $this->urlBuildingIndexPage;
+                } else {
+                    $pagePath = basename($requestUrl, $this->urlBuildingExt);
+                }
+            }
+            unset($page[0]);
+            if ($pagePath) {
+                $pagePath .= $this->urlBuildingExt;
+            }
         }
 
-        $pagePath = $this->urlConstructPagePath($page[0] ?? $request->getUri()->getPath());
-        unset($page[0]);
-
-        $args = $this->urlMergeArguments($page, $extraRequestUrlArgs);
-
-        $pageQuery = http_build_query($args, '', '&', \PHP_QUERY_RFC3986);
-
-        return $pagePath . ($pageQuery ? '?' . $pageQuery : '');
-    }
-
-    private function urlSplitStringPageIntoArray(string $page): array
-    {
-        $pageExploded = explode('?', $page, 2);
-        $arrayPage = [];
-        parse_str($pageExploded[1] ?? '', $arrayPage);
-        $arrayPage[0] = $pageExploded[0];
-
-        return $arrayPage;
-    }
-
-    private function urlConstructPagePath(string $pagePath): string
-    {
-        $prefix = '';
-        if (substr($pagePath, 0, 2) === '..') {
-            $prefix = '..';
-        }
-
-        // Changed array string access to substr for PHP 7.4 compatibility
-        $lastChar = substr($pagePath, -1);
-        if ($lastChar === '/') {
-            return $prefix . $pagePath . $this->urlBuildingIndexPage . $this->urlBuildingExt;
-        }
-
-        if ($pagePath === '') {
-            return '/' . $pagePath . $this->urlBuildingIndexPage . $this->urlBuildingExt;
-        }
-
-        $pagePathPart = trim(dirname($pagePath), '.');
-        $pagePathFile = basename($pagePath, $this->urlBuildingExt);
-
-        if ($pagePathPart !== '') {
-            $pagePathPart .= '/';
-        }
-
-        return $prefix . str_replace('//', '/', $pagePathPart . $pagePathFile) . $this->urlBuildingExt;
-    }
-
-    private function urlMergeArguments(array $page, array $extraRequestUrlArgs): array
-    {
         $args = $extraRequestUrlArgs;
 
         // add sticky arguments
-        $queryParams = $this->getRequest()->getQueryParams();
         foreach ($this->stickyGetArguments as $k => $v) {
-            if ($v && isset($queryParams[$k])) {
-                $args[$k] = $queryParams[$k];
+            if ($v && isset($_GET[$k])) {
+                $args[$k] = $_GET[$k];
             } else {
                 unset($args[$k]);
             }
@@ -733,7 +702,11 @@ class App
             }
         }
 
-        return $args;
+        // put URL together
+        $pageQuery = http_build_query($args, '', '&', \PHP_QUERY_RFC3986);
+        $url = $pagePath . ($pageQuery ? '?' . $pageQuery : '');
+
+        return $url;
     }
 
     /**
