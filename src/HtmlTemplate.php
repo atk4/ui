@@ -561,7 +561,7 @@ class HtmlTemplate
                 $res[] = $v->getHtml();
             } elseif ($v instanceof TagTree) {
                 $res[] = $this->renderTagTreeToHtml($v);
-            } elseif ($v instanceof self) { // @phpstan-ignore-line
+            } elseif ($v instanceof self) {
                 $res[] = $v->renderToHtml();
             } else {
                 throw (new Exception('Unexpected value class'))
