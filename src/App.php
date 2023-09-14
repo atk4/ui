@@ -660,14 +660,15 @@ class App
         if (is_string($page)) {
             $pageExploded = explode('?', $page, 2);
             parse_str($pageExploded[1] ?? '', $page);
-            $page[0] = $pageExploded[0];
+            $pagePath = $pageExploded[0] !== '' ? $pageExploded[0] : null;
+        } else {
+            $pagePath = $page[0] ?? null;
+            unset($page[0]);
         }
 
         $request = $this->getRequest();
 
-        if (isset($page[0])) {
-            $pagePath = $page[0];
-        } else {
+        if ($pagePath === null) {
             // use current page by default
             $requestUrl = $request->getUri()->getPath();
             if ($requestUrl === '') { // TODO path must always start with '/'
@@ -679,7 +680,6 @@ class App
                 $pagePath = basename($requestUrl, $this->urlBuildingExt);
             }
         }
-        unset($page[0]);
         $pagePath .= $this->urlBuildingExt;
 
         $args = $extraRequestUrlArgs;
