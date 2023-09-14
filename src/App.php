@@ -653,20 +653,11 @@ class App
      * Build a URL that application can use for loading HTML data.
      *
      * @param string|array<0|string, string|int|false> $page                URL as string or array with page name as first element and other GET arguments
-     * @param bool                                     $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
      * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function url($page = [], bool $useRequestUrl = false, array $extraRequestUrlArgs = []): string
+    public function url($page = [], array $extraRequestUrlArgs = []): string
     {
         $request = $this->getRequest();
-
-        if ($useRequestUrl) {
-            $page = $request->getUri()->getPath();
-            $query = $request->getUri()->getQuery();
-            if ($query !== '') {
-                $page .= '?' . $query;
-            }
-        }
 
         $pagePath = '';
         if (is_string($page)) {
@@ -723,15 +714,14 @@ class App
      * mechanism for NON-HTML response.
      *
      * @param string|array<0|string, string|int|false> $page                URL as string or array with page name as first element and other GET arguments
-     * @param bool                                     $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
      * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function jsUrl($page = [], bool $useRequestUrl = false, array $extraRequestUrlArgs = []): string
+    public function jsUrl($page = [], array $extraRequestUrlArgs = []): string
     {
         // append to the end but allow override
         $extraRequestUrlArgs = array_merge($extraRequestUrlArgs, ['__atk_json' => 1], $extraRequestUrlArgs);
 
-        return $this->url($page, $useRequestUrl, $extraRequestUrlArgs);
+        return $this->url($page, $extraRequestUrlArgs);
     }
 
     /**
