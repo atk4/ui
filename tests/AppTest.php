@@ -108,9 +108,9 @@ class AppTest extends TestCase
             [['test/index'], ['extra_args' => 'atk4'], '/test/', 'test/index.php?extra_args=atk4', 'test/index.php8?extra_args=atk4', 'test/index?extra_args=atk4'],
 
             // query args in page cases and query args in request cases and extra query args cases
-            // [['test', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], '/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test?extra_args=atk4&query_args=atk4&page_args=atk4'],
-            // [['test/test/a', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], '/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a?extra_args=atk4&query_args=atk4&page_args=atk4'],
-            // [['test/index', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], '/test/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index?extra_args=atk4&query_args=atk4&page_args=atk4'],
+            [['test', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], '/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test?extra_args=atk4&query_args=atk4&page_args=atk4'],
+            [['test/test/a', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], '/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/test/a?extra_args=atk4&query_args=atk4&page_args=atk4'],
+            [['test/index', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], '/test/?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index.php?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index.php8?extra_args=atk4&query_args=atk4&page_args=atk4', 'test/index?extra_args=atk4&query_args=atk4&page_args=atk4'],
         ];
     }
 
