@@ -669,15 +669,14 @@ class App
         $request = $this->getRequest();
 
         if ($pagePath === null) {
-            // use current page by default
-            $requestUrl = $request->getUri()->getPath();
-            if ($requestUrl === '') { // TODO path must always start with '/'
-                $requestUrl = '/';
+            $pagePath = $request->getUri()->getPath();
+            if ($pagePath === '') { // TODO path must always start with '/'
+                $pagePath = '/';
             }
-            if (substr($requestUrl, -1) === '/') {
+            if (substr($pagePath, -1) === '/') {
                 $pagePath = $this->urlBuildingIndexPage;
             } else {
-                $pagePath = basename($requestUrl, $this->urlBuildingExt);
+                $pagePath = basename($pagePath, $this->urlBuildingExt);
             }
         }
         $pagePath .= $this->urlBuildingExt;
@@ -685,10 +684,10 @@ class App
         $args = $extraRequestUrlArgs;
 
         // add sticky arguments
-        $queryParams = $this->getRequest()->getQueryParams();
+        $requestQueryParams = $request->getQueryParams();
         foreach ($this->stickyGetArguments as $k => $v) {
-            if ($v && isset($queryParams[$k])) {
-                $args[$k] = $queryParams[$k];
+            if ($v && isset($requestQueryParams[$k])) {
+                $args[$k] = $requestQueryParams[$k];
             } else {
                 unset($args[$k]);
             }
