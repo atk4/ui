@@ -670,16 +670,17 @@ class App
             } else {
                 // use current page by default
                 $requestUrl = $request->getUri()->getPath();
-                if (substr($requestUrl, -1, 1) === '/') {
+                if ($requestUrl === '') { // TODO path must always start with '/'
+                    $requestUrl = '/';
+                }
+                if (substr($requestUrl, -1) === '/') {
                     $pagePath = $this->urlBuildingIndexPage;
                 } else {
                     $pagePath = basename($requestUrl, $this->urlBuildingExt);
                 }
             }
             unset($page[0]);
-            if ($pagePath) {
-                $pagePath .= $this->urlBuildingExt;
-            }
+            $pagePath .= $this->urlBuildingExt;
         }
 
         $args = $extraRequestUrlArgs;
