@@ -673,13 +673,11 @@ class App
             if ($pagePath === '') { // TODO path must always start with '/'
                 $pagePath = '/';
             }
-            if (substr($pagePath, -1) === '/') {
-                $pagePath = $this->urlBuildingIndexPage;
-            } else {
-                $pagePath = basename($pagePath, $this->urlBuildingExt);
-            }
         }
-        if (!str_contains(basename($pagePath), '.')) {
+        if (str_ends_with($pagePath, '/')) {
+            $pagePath .= $this->urlBuildingIndexPage;
+        }
+        if (!str_ends_with($pagePath, '/') && !str_contains(basename($pagePath), '.')) {
             $pagePath .= $this->urlBuildingExt;
         }
 
