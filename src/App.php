@@ -612,10 +612,10 @@ class App
             if (\PHP_SAPI === 'cli') { // for phpunit
                 $requestUrlPath = '/';
                 $requestLocalPath = \Closure::bind(static function () {
-                    return dirname((new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory());
+                    return (new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory();
                 }, null, ExceptionRenderer\Html::class)();
             } else {
-                $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+                $request = new \Symfony\Component\HttpFoundation\Request([], [], [], [], [], $_SERVER);
                 $requestUrlPath = $request->getBasePath();
                 $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME'));
             }
@@ -657,37 +657,39 @@ class App
      */
     public function url($page = [], array $extraRequestUrlArgs = []): string
     {
-        $request = $this->getRequest();
-
-        $pagePath = '';
         if (is_string($page)) {
             $pageExploded = explode('?', $page, 2);
-            $pagePath = $pageExploded[0];
             parse_str($pageExploded[1] ?? '', $page);
+            $pagePath = $pageExploded[0] !== '' ? $pageExploded[0] : null;
         } else {
-            if (isset($page[0])) {
-                $pagePath = $page[0];
-            } else {
-                // use current page by default
-                $requestUrl = $request->getUri()->getPath();
-                if (substr($requestUrl, -1, 1) === '/') {
-                    $pagePath = $this->urlBuildingIndexPage;
-                } else {
-                    $pagePath = basename($requestUrl, $this->urlBuildingExt);
-                }
-            }
+            $pagePath = $page[0] ?? null;
             unset($page[0]);
-            if ($pagePath) {
-                $pagePath .= $this->urlBuildingExt;
+        }
+
+        $request = $this->getRequest();
+
+        if ($pagePath === null) {
+            $pagePath = $request->getUri()->getPath();
+            if ($pagePath === '') { // TODO path must always start with '/'
+                $pagePath = '/';
             }
+            if (substr($pagePath, -1) === '/') {
+                $pagePath = $this->urlBuildingIndexPage;
+            } else {
+                $pagePath = basename($pagePath, $this->urlBuildingExt);
+            }
+        }
+        if (!str_contains(basename($pagePath), '.')) {
+            $pagePath .= $this->urlBuildingExt;
         }
 
         $args = $extraRequestUrlArgs;
 
         // add sticky arguments
+        $requestQueryParams = $request->getQueryParams();
         foreach ($this->stickyGetArguments as $k => $v) {
-            if ($v && isset($_GET[$k])) {
-                $args[$k] = $_GET[$k];
+            if ($v && isset($requestQueryParams[$k])) {
+                $args[$k] = $requestQueryParams[$k];
             } else {
                 unset($args[$k]);
             }
@@ -702,11 +704,9 @@ class App
             }
         }
 
-        // put URL together
         $pageQuery = http_build_query($args, '', '&', \PHP_QUERY_RFC3986);
-        $url = $pagePath . ($pageQuery ? '?' . $pageQuery : '');
 
-        return $url;
+        return $pagePath . ($pageQuery !== '' ? '?' . $pageQuery : '');
     }
 
     /**
