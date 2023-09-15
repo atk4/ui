@@ -94,8 +94,8 @@ class CallbackTest extends TestCase
         $this->simulateCallbackTriggering($cbApp);
         $this->simulateCallbackTriggering($cb);
 
-        $expectedUrlCbApp = '/index.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=callback&' . Callback::URL_QUERY_TARGET . '=aa';
-        $expectedUrlCb = '/index.php?' . /* Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=1&' . */ Callback::URL_QUERY_TRIGGER_PREFIX . 'bb=callback&' . Callback::URL_QUERY_TARGET . '=bb';
+        $expectedUrlCbApp = 'index.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=callback&' . Callback::URL_QUERY_TARGET . '=aa';
+        $expectedUrlCb = 'index.php?' . /* Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=1&' . */ Callback::URL_QUERY_TRIGGER_PREFIX . 'bb=callback&' . Callback::URL_QUERY_TARGET . '=bb';
         self::assertSame($expectedUrlCbApp, $cbApp->getUrl());
         self::assertSame($expectedUrlCb, $cb->getUrl());
 

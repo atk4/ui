@@ -613,10 +613,10 @@ class App
             if (\PHP_SAPI === 'cli') { // for phpunit
                 $requestUrlPath = '/';
                 $requestLocalPath = \Closure::bind(static function () {
-                    return dirname((new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory());
+                    return (new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory();
                 }, null, ExceptionRenderer\Html::class)();
             } else {
-                $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+                $request = new \Symfony\Component\HttpFoundation\Request([], [], [], [], [], $_SERVER);
                 $requestUrlPath = $request->getBasePath();
                 $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME')); // TODO is right?
             }
@@ -659,62 +659,34 @@ class App
     public function url($page = [], array $extraRequestUrlArgs = []): string
     {
         if (is_string($page)) {
-            $page = $this->urlSplitStringPageIntoArray($page);
+            $pageExploded = explode('?', $page, 2);
+            parse_str($pageExploded[1] ?? '', $page);
+            $pagePath = $pageExploded[0] !== '' ? $pageExploded[0] : null;
+        } else {
+            $pagePath = $page[0] ?? null;
+            unset($page[0]);
         }
 
-        $pagePath = $this->urlConstructPagePath($page[0] ?? $this->request->getUri()->getPath());
-        unset($page[0]);
+        $request = $this->getRequest();
 
-        $args = $this->urlMergeArguments($page, $extraRequestUrlArgs);
-
-        $pageQuery = http_build_query($args, '', '&', \PHP_QUERY_RFC3986);
-
-        return $pagePath . ($pageQuery ? '?' . $pageQuery : '');
-    }
-
-    private function urlSplitStringPageIntoArray(string $page): array
-    {
-        $pageExploded = explode('?', $page, 2);
-        $arrayPage = [];
-        parse_str($pageExploded[1] ?? '', $arrayPage);
-        $arrayPage[0] = $pageExploded[0];
-
-        return $arrayPage;
-    }
-
-    private function urlConstructPagePath(string $pagePath): string
-    {
-        $prefix = '';
-        if (substr($pagePath, 0, 2) === '..') {
-            $prefix = '..';
+        if ($pagePath === null) {
+            $pagePath = $request->getUri()->getPath();
+            if ($pagePath === '') { // TODO path must always start with '/'
+                $pagePath = '/';
+            }
+            if (substr($pagePath, -1) === '/') {
+                $pagePath = $this->urlBuildingIndexPage;
+            } else {
+                $pagePath = basename($pagePath, $this->urlBuildingExt);
+            }
+        }
+        if (!str_contains(basename($pagePath), '.')) {
+            $pagePath .= $this->urlBuildingExt;
         }
 
-        // Changed array string access to substr for PHP 7.4 compatibility
-        $lastChar = substr($pagePath, -1);
-        if ($lastChar === '/') {
-            return $prefix . $pagePath . $this->urlBuildingIndexPage . $this->urlBuildingExt;
-        }
-
-        if ($pagePath === '') {
-            return '/' . $pagePath . $this->urlBuildingIndexPage . $this->urlBuildingExt;
-        }
-
-        $pagePathPart = trim(dirname($pagePath), '.');
-        $pagePathFile = basename($pagePath, $this->urlBuildingExt);
-
-        if ($pagePathPart !== '') {
-            $pagePathPart .= '/';
-        }
-
-        return $prefix . str_replace('//', '/', $pagePathPart . $pagePathFile) . $this->urlBuildingExt;
-    }
-
-    private function urlMergeArguments(array $page, array $extraRequestUrlArgs): array
-    {
         $args = $extraRequestUrlArgs;
 
         // add sticky arguments
-        $queryParams = $this->getRequest()->getQueryParams();
         foreach ($this->stickyGetArguments as $k => $v) {
             if ($v && $this->hasRequestGetParam($k)) {
                 $args[$k] = $this->getRequestGetParam($k);
@@ -732,7 +704,9 @@ class App
             }
         }
 
-        return $args;
+        $pageQuery = http_build_query($args, '', '&', \PHP_QUERY_RFC3986);
+
+        return $pagePath . ($pageQuery !== '' ? '?' . $pageQuery : '');
     }
 
     /**
