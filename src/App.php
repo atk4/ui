@@ -679,7 +679,9 @@ class App
                 $pagePath = basename($pagePath, $this->urlBuildingExt);
             }
         }
-        $pagePath .= $this->urlBuildingExt;
+        if (!str_contains(basename($pagePath), '.')) {
+            $pagePath .= $this->urlBuildingExt;
+        }
 
         $args = $extraRequestUrlArgs;
 
