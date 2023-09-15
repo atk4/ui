@@ -518,7 +518,7 @@ class View extends AbstractView
      */
     public function stickyGet(string $name, string $newValue = null): ?string
     {
-        $this->stickyArgs[$name] = $newValue ?? $this->stickyArgs[$name] ?? $this->getApp()->tryGetRequestGetParam($name);
+        $this->stickyArgs[$name] = $newValue ?? $this->stickyArgs[$name] ?? $_GET[$name] ?? null;
 
         return $this->stickyArgs[$name];
     }
@@ -705,7 +705,7 @@ class View extends AbstractView
      */
     public function getHtml()
     {
-        if ($this->getApp()->hasRequestGetParam('__atk_reload') && $this->getApp()->getRequestGetParam('__atk_reload') === $this->name) {
+        if (isset($_GET['__atk_reload']) && $_GET['__atk_reload'] === $this->name) {
             $this->getApp()->terminateJson($this);
         }
 
@@ -853,12 +853,8 @@ class View extends AbstractView
     public function jsGetStoreData(): array
     {
         $data = [];
-        $data['local'] = $this->getApp()->decodeJson(
-            $this->getApp()->tryGetRequestGetParam($this->name . '_local_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_local_store') ?? 'null'
-        );
-        $data['session'] = $this->getApp()->decodeJson(
-            $this->getApp()->tryGetRequestGetParam($this->name . '_session_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_session_store') ?? 'null'
-        );
+        $data['local'] = $this->getApp()->decodeJson($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null');
+        $data['session'] = $this->getApp()->decodeJson($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null');
 
         return $data;
     }

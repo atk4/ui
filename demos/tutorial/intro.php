@@ -94,8 +94,7 @@ $wizard->addStep('Interactivity', static function (Wizard $page) {
 
         View::addTo($seg, ['ui' => 'divider']);
 
-        $count = $seg->getApp()->tryGetRequestGetParam('count') ?? 1;
-        for ($i = 1; $i <= $count; ++$i) {
+        for ($i = 1; $i <= ($_GET['count'] ?? 1); ++$i) {
             Button::addTo($seg, [(string) $i]);
         }
     });

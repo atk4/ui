@@ -26,7 +26,6 @@ use Nyholm\Psr7Server\ServerRequestCreator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
-use Psr\Http\Message\UploadedFileInterface;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -301,8 +300,8 @@ class App
         // remove header
         $this->layout->template->tryDel('Header');
 
-        if (($this->isJsUrlRequest() || $this->request->getHeaderLine('HTTP_X_REQUESTED_WITH') === 'xmlhttprequest')
-                && !$this->hasRequestGetParam('__atk_tab')) {
+        if (($this->isJsUrlRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
+                && !isset($_GET['__atk_tab'])) {
             $this->outputResponseJson([
                 'success' => false,
                 'message' => $this->layout->getHtml(),
@@ -400,7 +399,7 @@ class App
             }
 
             $this->outputResponseJson($output);
-        } elseif ($this->hasRequestGetParam('__atk_tab') && $type === 'text/html') {
+        } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
             $output = $this->getTag('script', [], '$(function () {' . $output['atkjs'] . '});')
                 . $output['html'];
 
@@ -551,9 +550,9 @@ class App
             $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], '$(function () {' . $this->html->getJs() . ';});'));
             $this->isRendering = false;
 
-            if ($this->hasRequestGetParam(Callback::URL_QUERY_TARGET) && $this->catchRunawayCallbacks) {
+            if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catchRunawayCallbacks) {
                 throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
-                    ->addMoreInfo('callback', $this->getRequestGetParam(Callback::URL_QUERY_TARGET));
+                    ->addMoreInfo('callback', $_GET[Callback::URL_QUERY_TARGET]);
             }
 
             $output = $this->html->template->renderToHtml();
@@ -618,7 +617,7 @@ class App
             } else {
                 $request = new \Symfony\Component\HttpFoundation\Request([], [], [], [], [], $_SERVER);
                 $requestUrlPath = $request->getBasePath();
-                $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME')); // TODO is right?
+                $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME'));
             }
         }
         $fs = new \Symfony\Component\Filesystem\Filesystem();
@@ -639,7 +638,7 @@ class App
     {
         $this->stickyGetArguments[$name] = !$isDeleting;
 
-        return $this->tryGetRequestGetParam($name);
+        return $_GET[$name] ?? null;
     }
 
     /**
@@ -685,9 +684,10 @@ class App
         $args = $extraRequestUrlArgs;
 
         // add sticky arguments
+        $requestQueryParams = $request->getQueryParams();
         foreach ($this->stickyGetArguments as $k => $v) {
-            if ($v && $this->hasRequestGetParam($k)) {
-                $args[$k] = $this->getRequestGetParam($k);
+            if ($v && isset($requestQueryParams[$k])) {
+                $args[$k] = $requestQueryParams[$k];
             } else {
                 unset($args[$k]);
             }
@@ -727,7 +727,7 @@ class App
      */
     public function isJsUrlRequest(): bool
     {
-        return $this->hasRequestGetParam('__atk_json') && $this->getRequestGetParam('__atk_json') !== '0';
+        return isset($_GET['__atk_json']) && $_GET['__atk_json'] !== '0';
     }
 
     /**
@@ -1138,166 +1138,5 @@ class App
 
         $this->setResponseHeader('Content-Type', 'application/json');
         $this->outputResponse($data);
-    }
-
-    /**
-     * Check if a specific GET parameter exists in the HTTP request.
-     *
-     * @param string $key the key of the GET parameter to check
-     *
-     * @return bool true if the GET parameter exists, false otherwise
-     */
-    public function hasRequestGetParam(string $key): bool
-    {
-        return ($this->request->getQueryParams()[$key] ?? null) !== null;
-    }
-
-    /**
-     * Get the value of a specific GET parameter from the HTTP request.
-     * Throws an exception if the GET parameter does not exist.
-     *
-     * @param string $key the key of the GET parameter to retrieve
-     *
-     * @return string the value of the GET parameter
-     */
-    public function getRequestGetParam(string $key): string
-    {
-        if (!$this->hasRequestGetParam($key)) {
-            throw (new Exception('GET ' . $key . ' param does not exist'))
-                ->addMoreInfo('key', $key);
-        }
-
-        return $this->request->getQueryParams()[$key] ?? 'true';
-    }
-
-    /**
-     * Attempt to get the value of a specific GET parameter from the HTTP request.
-     * Returns null if the GET parameter does not exist.
-     *
-     * @param string $key the key of the GET parameter to try to retrieve
-     *
-     * @return string|null the value of the GET parameter or null if it doesn't exist
-     */
-    public function tryGetRequestGetParam(string $key): ?string
-    {
-        if (!$this->hasRequestGetParam($key)) {
-            return null;
-        }
-
-        return $this->getRequestGetParam($key);
-    }
-
-    /**
-     * Check if a specific POST parameter exists in the HTTP request.
-     *
-     * @param string $key the key of the POST parameter to check
-     *
-     * @return bool true if the POST parameter exists, false otherwise
-     */
-    public function hasRequestPostParam(string $key): bool
-    {
-        return isset($this->request->getParsedBody()[$key]);
-    }
-
-    /**
-     * Get all POST parameters from the HTTP request.
-     *
-     * @return array an associative array of all POST parameters
-     */
-    public function getRequestPostParams(): array
-    {
-        return $this->request->getParsedBody() ?? [];
-    }
-
-    /**
-     * Get the value of a specific POST parameter from the HTTP request.
-     * Throws an exception if the POST parameter does not exist.
-     *
-     * @param string $key the key of the POST parameter to retrieve
-     *
-     * @return mixed the value of the POST parameter or null if it doesn't exist
-     */
-    public function getRequestPostParam(string $key)
-    {
-        if (!$this->hasRequestPostParam($key)) {
-            throw (new Exception('POST ' . $key . ' param does not exist'))
-                ->addMoreInfo('key', $key);
-        }
-
-        return $this->getRequestPostParams()[$key] ?? null;
-    }
-
-    /**
-     * Attempt to get the value of a specific POST parameter from the HTTP request.
-     * Returns null if the POST parameter does not exist.
-     *
-     * @param string $key the key of the POST parameter to try to retrieve
-     *
-     * @return string|null the value of the POST parameter or null if it doesn't exist
-     */
-    public function tryGetRequestPostParam(string $key): ?string
-    {
-        if (!$this->hasRequestPostParam($key)) {
-            return null;
-        }
-
-        return $this->getRequestPostParam($key);
-    }
-
-    /**
-     * Check if a specific uploaded file exists in the HTTP request.
-     *
-     * @param string $key the key corresponding to the uploaded file
-     *
-     * @return bool true if the uploaded file exists, false otherwise
-     */
-    public function hasRequestUploadedFile(string $key): bool
-    {
-        return isset($this->request->getUploadedFiles()[$key]);
-    }
-
-    /**
-     * Retrieve all uploaded files from the HTTP request.
-     *
-     * @return array<UploadedFileInterface> an array of uploaded files implementing the UploadedFileInterface
-     */
-    public function getRequestUploadedFiles(): array
-    {
-        return $this->request->getUploadedFiles();
-    }
-
-    /**
-     * Get a specific uploaded file from the HTTP request by its key.
-     * Throws an exception if the uploaded file does not exist.
-     *
-     * @param string $key the key corresponding to the uploaded file to retrieve
-     *
-     * @return UploadedFileInterface the uploaded file or null if it doesn't exist
-     */
-    public function getRequestUploadedFile(string $key): UploadedFileInterface
-    {
-        if (!$this->hasRequestUploadedFile($key)) {
-            throw (new Exception('FILES ' . $key . ' does not exists'))
-                ->addMoreInfo('key', $key);
-        }
-
-        return $this->request->getUploadedFiles()[$key];
-    }
-
-    /**
-     * Attempt to get a specific uploaded file from the HTTP request by its key.
-     * Returns null if the uploaded file does not exist.
-     *
-     * @param string $key the key corresponding to the uploaded file to try to retrieve
-     *
-     * @return UploadedFileInterface|null the uploaded file or null if it doesn't exist
-     */
-    public function tryGetRequestUploadedFile(string $key): ?UploadedFileInterface
-    {
-        if (!$this->hasRequestUploadedFile($key)) {
-            return null;
-        }
-
-        return $this->request->getUploadedFiles()[$key];
     }
 }

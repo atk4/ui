@@ -572,7 +572,7 @@ class Grid extends View
      */
     public function getSortBy(): ?string
     {
-        return $this->getApp()->tryGetRequestGetParam($this->sortTrigger);
+        return $_GET[$this->sortTrigger] ?? null;
     }
 
     /**

@@ -8,8 +8,6 @@ use Atk4\Ui\App;
 
 trait CreateAppTrait
 {
-    use ReplaceAppRequestTrait;
-
     /**
      * @param array<string, mixed> $defaults
      */

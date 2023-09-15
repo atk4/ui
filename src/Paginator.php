@@ -79,7 +79,7 @@ class Paginator extends View
      */
     public function getCurrentPage(): int
     {
-        return (int) ($this->getApp()->tryGetRequestGetParam($this->urlTrigger) ?? 1);
+        return (int) ($_GET[$this->urlTrigger] ?? 1);
     }
 
     /**

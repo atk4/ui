@@ -81,7 +81,7 @@ class JsCallback extends Callback
 
             $values = [];
             foreach (array_keys($this->args) as $key) {
-                $values[] = $this->getApp()->getRequestPostParam($key);
+                $values[] = $_POST[$key];
             }
 
             $response = $fx($chain, ...$values);

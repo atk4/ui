@@ -30,8 +30,8 @@ class DropdownCascade extends Dropdown
             $this->cascadeFrom = $this->form->getControl($this->cascadeFrom);
         }
 
-        $cascadeFromValue = $this->getApp()->hasRequestPostParam($this->cascadeFrom->name)
-            ? $this->getApp()->uiPersistence->typecastLoadField($this->cascadeFrom->entityField->getField(), $this->getApp()->getRequestPostParam($this->cascadeFrom->name))
+        $cascadeFromValue = isset($_POST[$this->cascadeFrom->name])
+            ? $this->getApp()->uiPersistence->typecastLoadField($this->cascadeFrom->entityField->getField(), $_POST[$this->cascadeFrom->name])
             : $this->cascadeFrom->entityField->get();
 
         $this->model = $this->cascadeFrom->model ? $this->cascadeFrom->model->ref($this->reference) : null;

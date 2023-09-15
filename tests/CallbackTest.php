@@ -26,8 +26,6 @@ class AppMock extends App
 
 class CallbackTest extends TestCase
 {
-    use ReplaceAppRequestTrait;
-
     /** @var string */
     private $htmlDoctypeRegex = '~^<!DOCTYPE~';
 
@@ -55,10 +53,7 @@ class CallbackTest extends TestCase
      */
     protected function simulateCallbackTriggering(AbstractView $cb): void
     {
-        $params = $this->app->getRequest()->getQueryParams();
-        $params[Callback::URL_QUERY_TRIGGER_PREFIX . $cb->getUrlTrigger()] = '1';
-
-        $this->replaceAppRequestGet($this->app, $params);
+        $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . $cb->getUrlTrigger()] = '1';
     }
 
     public function testCallback(): void
