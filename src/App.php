@@ -673,21 +673,14 @@ class App
             if ($pagePath === '') { // TODO path must always start with '/'
                 $pagePath = '/';
             }
-        }
-
-        if (substr($pagePath, -1) === '/') {
-            $pagePath = $pagePath . $this->urlBuildingIndexPage . $this->urlBuildingExt;
-        } elseif ($pagePath === '') {
-            $pagePath = '/' . $pagePath . $this->urlBuildingIndexPage . $this->urlBuildingExt;
-        } else {
-            $pagePathPart = trim(dirname($pagePath), '.');
-            $pagePathFile = basename($pagePath, $this->urlBuildingExt);
-
-            if ($pagePathPart !== '') {
-                $pagePathPart .= '/';
+            if (substr($pagePath, -1) === '/') {
+                $pagePath = $this->urlBuildingIndexPage;
+            } else {
+                $pagePath = basename($pagePath, $this->urlBuildingExt);
             }
-
-            $pagePath = str_replace('//', '/', $pagePathPart . $pagePathFile) . $this->urlBuildingExt;
+        }
+        if (!str_contains(basename($pagePath), '.')) {
+            $pagePath .= $this->urlBuildingExt;
         }
 
         $args = $extraRequestUrlArgs;
