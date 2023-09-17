@@ -126,13 +126,12 @@ class AppTest extends TestCase
             'request' => $request,
             'stickyGetArguments' => $appStickyGetArguments,
         ]);
-
         self::assertSame($exceptedUrl, $app->url($page, $extraRequestUrlArgs));
         $pageAssocOnly = array_diff_key($page, [true]);
         self::assertSame($exceptedUrl, $app->url(($page[0] ?? '') . (count($pageAssocOnly) > 0 ? '?' . implode('&', array_map(static fn ($k) => $k . '=' . $pageAssocOnly[$k], array_keys($pageAssocOnly))) : ''), $extraRequestUrlArgs));
         self::assertSame($exceptedUrl, $app->jsUrl($page, array_merge(['__atk_json' => null], $extraRequestUrlArgs)));
 
-        $remakeExpectedUrlFx = static function (string $indexPage, string $ext) use ($page, $exceptedUrl) {
+        $replaceExpectedUrlFx = static function (string $indexPage, string $ext) use ($page, $exceptedUrl) {
             return preg_replace_callback('~^[^?]*?\K([^/?]*)(\.php)(?=\?|$)~', static function ($matches) use ($page, $indexPage, $ext) {
                 if ($matches[1] === 'index' && !preg_match('~(^|/)index(\.php)?(?=\?|$)~', $page[0] ?? '')) {
                     $matches[1] = $indexPage;
@@ -151,8 +150,7 @@ class AppTest extends TestCase
             'urlBuildingIndexPage' => 'default',
             'urlBuildingExt' => '.php8',
         ]);
-
-        $exceptedUrlCustom = $remakeExpectedUrlFx('default', '.php8');
+        $exceptedUrlCustom = $replaceExpectedUrlFx('default', '.php8');
         self::assertSame($exceptedUrlCustom, $app->url($page, $extraRequestUrlArgs));
 
         $app = $this->createApp([
@@ -161,7 +159,7 @@ class AppTest extends TestCase
             'urlBuildingIndexPage' => '',
             'urlBuildingExt' => '',
         ]);
-        $exceptedUrlAutoindex = $remakeExpectedUrlFx('', '');
+        $exceptedUrlAutoindex = $replaceExpectedUrlFx('', '');
         self::assertSame($exceptedUrlAutoindex, $app->url($page, $extraRequestUrlArgs));
 
         $app = $this->createApp([
@@ -170,7 +168,7 @@ class AppTest extends TestCase
             'urlBuildingIndexPage' => '',
             'urlBuildingExt' => '.html',
         ]);
-        $exceptedUrlAutoindex2 = $remakeExpectedUrlFx('', '.html');
+        $exceptedUrlAutoindex2 = $replaceExpectedUrlFx('', '.html');
         self::assertSame($exceptedUrlAutoindex2, $app->url($page, $extraRequestUrlArgs));
     }
 }
