@@ -67,108 +67,120 @@ class AppTest extends TestCase
         }
     }
 
-    public function provideUrlBuildingCases(): iterable
+    public function provideUrlCases(): iterable
     {
-        // simple cases
-        yield ['/', [], [], '/index.php'];
-        yield ['/test/', [], [], '/test/index.php'];
+        foreach (['/', '/page.html', '/d/', '/0/index.php'] as $requestPage) {
+            yield [$requestPage, [], ['x'], [], 'x.php'];
+            yield [$requestPage, [], ['0'], [], '0.php'];
+            yield [$requestPage, [], ['/x/y/z'], [], '/x/y/z.php'];
+            yield [$requestPage, [], ['x.php'], [], 'x.php'];
+            yield [$requestPage, [], ['x.html'], [], 'x.html'];
+            yield [$requestPage, [], ['index'], [], 'index.php'];
+            yield [$requestPage, [], ['index.php'], [], 'index.php'];
+            yield [$requestPage . '?u=U', [], ['x'], [], 'x.php'];
+            yield [$requestPage . '?index.php', [], ['x'], [], 'x.php'];
 
-        // simple cases with query args in request
-        yield ['/?test=atk4', [], [], '/index.php?test=atk4'];
-        yield ['/test/?test=atk4', [], [], '/test/index.php?test=atk4'];
+            // /w page autoindex
+            yield [$requestPage, [], ['/'], [], '/index.php'];
+            yield [$requestPage, [], ['/0/0/'], [], '/0/0/index.php'];
+            yield [$requestPage, [], ['a.b c/'], [], 'a.b c/index.php'];
+            yield [$requestPage . '?u=U', [], ['x/'], [], 'x/index.php'];
 
-        // simple cases with extra query args in request
-        yield ['/?test=atk4', [], ['extra_args' => 'atk4'], '/index.php?extra_args=atk4&test=atk4'];
-        yield ['/test/?test=atk4', [], ['extra_args' => 'atk4'], '/test/index.php?extra_args=atk4&test=atk4'];
+            // /w page args
+            yield [$requestPage, [], ['x', 'foo' => 'a'], [], 'x.php?foo=a'];
+            yield [$requestPage, [], ['x', 'foo' => 'a', 'bar' => '0'], [], 'x.php?foo=a&bar=0'];
+            yield [$requestPage, [], ['x', 'foo' => ''], [], 'x.php?foo='];
+            yield [$requestPage, [], ['x', 'foo' => 'a b'], [], 'x.php?foo=a%20b'];
+            yield [$requestPage, [], ['x.html', 'foo' => 'index.php'], [], 'x.html?foo=index.php'];
+            yield [$requestPage . '?u=U', [], ['x', 'foo' => 'a'], [], 'x.php?foo=a'];
 
-        // simple cases with page as string
-        yield ['/', 'test', [], 'test.php'];
-        yield ['/', 'test/test/a', [], 'test/test/a.php'];
-        yield ['/', 'test/index', [], 'test/index.php'];
-        yield ['/test/', 'test/index', [], 'test/index.php'];
-        yield ['/', '/index.php', [], '/index.php'];
-        yield ['/request-url', '/request-url', [], '/request-url.php'];
-        yield ['/request-url/', '/request-url/', [], '/request-url/index.php'];
-        yield ['/test/', '/test/', [], '/test/index.php'];
+            // /w extra args
+            yield [$requestPage, [], ['x'], ['foo' => 'a'], 'x.php?foo=a'];
+            yield [$requestPage, [], ['x'], ['foo' => 'a', 'bar' => '0'], 'x.php?foo=a&bar=0'];
+            yield [$requestPage, [], ['x'], ['foo' => ''], 'x.php?foo='];
+            yield [$requestPage, [], ['x'], ['foo' => 'a b'], 'x.php?foo=a%20b'];
+            yield [$requestPage . '?u=U', [], ['x'], ['foo' => 'a'], 'x.php?foo=a'];
+        }
 
-        // simple cases with page as array with 0 => string
-        yield ['/', ['test'], [], 'test.php'];
-        yield ['/', ['test/test/a'], [], 'test/test/a.php'];
-        yield ['/test/', ['test/index'], [], 'test/index.php'];
+        // /w sticky args
+        yield ['/?u=U&v=V', ['v' => true], ['x'], [], 'x.php?v=V'];
+        yield ['/?u=U&v=V', ['v' => true], ['x', 'foo' => 'a'], [], 'x.php?v=V&foo=a'];
+        yield ['/', ['v' => true], ['x'], [], 'x.php'];
+        yield ['/?v=V', ['v' => false], ['x'], [], 'x.php'];
+        yield ['/', ['v' => false], ['x', 'v' => 'page'], [], 'x.php?v=page'];
+        yield ['/', ['v' => false], ['x'], ['v' => 'extra'], 'x.php'];
 
-        // query args in page cases
-        yield ['/', ['test', 'extra_args' => 'atk4'], [], 'test.php?extra_args=atk4'];
-        yield ['/', ['test/test/a', 'extra_args' => 'atk4'], [], 'test/test/a.php?extra_args=atk4'];
-        yield ['/test/', ['test/index', 'extra_args' => 'atk4'], [], 'test/index.php?extra_args=atk4'];
+        // /wo page path
+        yield ['/x', [], [], [], '/x.php'];
+        yield ['/d/x.html', [], ['foo' => 'a'], [], '/d/x.html?foo=a'];
+        yield ['/?u=U&v=V', ['v' => true], [], [], '/index.php?v=V'];
 
-        // extra query args cases
-        yield ['/', ['test'], ['extra_args' => 'atk4'], 'test.php?extra_args=atk4'];
-        yield ['/', ['test/test/a'], ['extra_args' => 'atk4'], 'test/test/a.php?extra_args=atk4'];
-        yield ['/test/', ['test/index'], ['extra_args' => 'atk4'], 'test/index.php?extra_args=atk4'];
-
-        // query args in page cases and query args in request cases and extra query args cases
-        yield ['/?extra_args=atk4&query_args=atk4&page_args=atk4', ['test', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], 'test.php?extra_args=atk4&query_args=atk4&page_args=atk4'];
-        yield ['/?extra_args=atk4&query_args=atk4&page_args=atk4', ['test/test/a', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], 'test/test/a.php?extra_args=atk4&query_args=atk4&page_args=atk4'];
-        yield ['/test/?extra_args=atk4&query_args=atk4&page_args=atk4', ['test/index', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], 'test/index.php?extra_args=atk4&query_args=atk4&page_args=atk4'];
-        yield ['/?extra_args=atk4&query_args=atk4&page_args=atk4', ['test', 'page_args' => 'atk4', 'check_unset_page' => false], ['extra_args' => 'atk4'], 'test.php?extra_args=atk4&query_args=atk4&page_args=atk4'];
+        // args priority
+        yield ['/', [], ['x', 'foo' => 'page'], ['foo' => 'extra'], 'x.php?foo=page'];
+        yield ['/?foo=sticky', ['foo' => true], ['x', 'foo' => 'page'], ['foo' => 'extra'], 'x.php?foo=page'];
+        yield ['/?foo=sticky', ['foo' => true], ['x'], ['foo' => 'extra'], 'x.php?foo=sticky'];
     }
 
     /**
-     * @dataProvider provideUrlBuildingCases
+     * @dataProvider provideUrlCases
      *
-     * @param string|array<0|string, string|int|false> $page
-     * @param array<string, string>                    $extraRequestUrlArgs
+     * @param array<string, bool>               $appStickyGetArguments
+     * @param array<0|string, string|int|false> $page
+     * @param array<string, string>             $extraRequestUrlArgs
      */
-    public function testUrlBuilding(string $requestUrl, $page, array $extraRequestUrlArgs, string $exceptedStd): void
+    public function testUrl(string $requestUrl, array $appStickyGetArguments, array $page, array $extraRequestUrlArgs, string $exceptedUrl): void
     {
-        $factory = new Psr17Factory();
-        $request = $factory->createServerRequest('GET', 'http://127.0.0.1' . $requestUrl);
-
-        $stickyGetArguments = array_merge([
-            '__atk_json' => false,
-            '__atk_tab' => false,
-        ], $request->getQueryParams());
+        $request = (new Psr17Factory())->createServerRequest('GET', 'http://xxx' . $requestUrl);
 
         $app = $this->createApp([
             'request' => $request,
-            'stickyGetArguments' => $stickyGetArguments,
+            'stickyGetArguments' => $appStickyGetArguments,
         ]);
 
-        self::assertSame($exceptedStd, $app->url($page, $extraRequestUrlArgs));
-        self::assertSame($exceptedStd, $app->jsUrl($page, $extraRequestUrlArgs));
+        self::assertSame($exceptedUrl, $app->url($page, $extraRequestUrlArgs));
+        $pageAssocOnly = array_diff_key($page, [true]);
+        self::assertSame($exceptedUrl, $app->url(($page[0] ?? '') . (count($pageAssocOnly) > 0 ? '?' . implode('&', array_map(static fn ($k) => $k . '=' . $pageAssocOnly[$k], array_keys($pageAssocOnly))) : ''), $extraRequestUrlArgs));
+        self::assertSame($exceptedUrl, $app->jsUrl($page, array_merge(['__atk_json' => null], $extraRequestUrlArgs)));
 
-        $makeExpectedUrlFx = static function (string $indexPage, string $ext) use ($page, $exceptedStd) {
-            return preg_replace_callback('~((?<=/)index)?(\.php)(?=\?|$)~', static function ($matches) use ($page, $indexPage, $ext) {
-                if ($matches[1] !== '' && !preg_match('~/index(\.php)?(?=\?|$)~', is_string($page) ? $page : ($page[0] ?? ''))) {
+        $remakeExpectedUrlFx = static function (string $indexPage, string $ext) use ($page, $exceptedUrl) {
+            return preg_replace_callback('~^[^?]*?\K([^/?]*)(\.php)(?=\?|$)~', static function ($matches) use ($page, $indexPage, $ext) {
+                if ($matches[1] === 'index' && !preg_match('~(^|/)index(\.php)?(?=\?|$)~', $page[0] ?? '')) {
                     $matches[1] = $indexPage;
                 }
-                if ($matches[2] !== '' && !preg_match('~\.php(?=\?|$)~', is_string($page) ? $page : ($page[0] ?? ''))) {
-                    $matches[2] = $ext;
+                if ($matches[2] !== '' && !preg_match('~\.php(?=\?|$)~', $page[0] ?? '')) {
+                    $matches[2] = $matches[1] !== '' ? $ext : '';
                 }
 
                 return $matches[1] . $matches[2];
-            }, $exceptedStd, 1);
+            }, $exceptedUrl, 1);
         };
 
         $app = $this->createApp([
             'request' => $request,
-            'stickyGetArguments' => $stickyGetArguments,
+            'stickyGetArguments' => $appStickyGetArguments,
             'urlBuildingIndexPage' => 'default',
             'urlBuildingExt' => '.php8',
         ]);
 
-        $exceptedCustom = $makeExpectedUrlFx('default', '.php8');
-        self::assertSame($exceptedCustom, $app->url($page, $extraRequestUrlArgs));
-        self::assertSame($exceptedCustom, $app->jsUrl($page, $extraRequestUrlArgs));
+        $exceptedUrlCustom = $remakeExpectedUrlFx('default', '.php8');
+        self::assertSame($exceptedUrlCustom, $app->url($page, $extraRequestUrlArgs));
 
         $app = $this->createApp([
             'request' => $request,
-            'stickyGetArguments' => $stickyGetArguments,
+            'stickyGetArguments' => $appStickyGetArguments,
             'urlBuildingIndexPage' => '',
             'urlBuildingExt' => '',
         ]);
-        $exceptedRouting = $makeExpectedUrlFx('', '');
-        self::assertSame($exceptedRouting, $app->url($page, $extraRequestUrlArgs));
-        self::assertSame($exceptedRouting, $app->jsUrl($page, $extraRequestUrlArgs));
+        $exceptedUrlAutoindex = $remakeExpectedUrlFx('', '');
+        self::assertSame($exceptedUrlAutoindex, $app->url($page, $extraRequestUrlArgs));
+
+        $app = $this->createApp([
+            'request' => $request,
+            'stickyGetArguments' => $appStickyGetArguments,
+            'urlBuildingIndexPage' => '',
+            'urlBuildingExt' => '.html',
+        ]);
+        $exceptedUrlAutoindex2 = $remakeExpectedUrlFx('', '.html');
+        self::assertSame($exceptedUrlAutoindex2, $app->url($page, $extraRequestUrlArgs));
     }
 }
