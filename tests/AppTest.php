@@ -69,50 +69,48 @@ class AppTest extends TestCase
 
     public function provideUrlBuildingCases(): iterable
     {
-        return [
-            // simple cases
-            ['/', [], [], '/index.php'],
-            ['/test/', [], [], '/test/index.php'],
+        // simple cases
+        yield ['/', [], [], '/index.php'];
+        yield ['/test/', [], [], '/test/index.php'];
 
-            // simple cases with query args in request
-            ['/?test=atk4', [], [], '/index.php?test=atk4'],
-            ['/test/?test=atk4', [], [], '/test/index.php?test=atk4'],
+        // simple cases with query args in request
+        yield ['/?test=atk4', [], [], '/index.php?test=atk4'];
+        yield ['/test/?test=atk4', [], [], '/test/index.php?test=atk4'];
 
-            // simple cases with extra query args in request
-            ['/?test=atk4', [], ['extra_args' => 'atk4'], '/index.php?extra_args=atk4&test=atk4'],
-            ['/test/?test=atk4', [], ['extra_args' => 'atk4'], '/test/index.php?extra_args=atk4&test=atk4'],
+        // simple cases with extra query args in request
+        yield ['/?test=atk4', [], ['extra_args' => 'atk4'], '/index.php?extra_args=atk4&test=atk4'];
+        yield ['/test/?test=atk4', [], ['extra_args' => 'atk4'], '/test/index.php?extra_args=atk4&test=atk4'];
 
-            // simple cases with page as string
-            ['/', 'test', [], 'test.php'],
-            ['/', 'test/test/a', [], 'test/test/a.php'],
-            ['/', 'test/index', [], 'test/index.php'],
-            ['/test/', 'test/index', [], 'test/index.php'],
-            ['/', '/index.php', [], '/index.php'],
-            ['/request-url', '/request-url', [], '/request-url.php'],
-            ['/request-url/', '/request-url/', [], '/request-url/index.php'],
-            ['/test/', '/test/', [], '/test/index.php'],
+        // simple cases with page as string
+        yield ['/', 'test', [], 'test.php'];
+        yield ['/', 'test/test/a', [], 'test/test/a.php'];
+        yield ['/', 'test/index', [], 'test/index.php'];
+        yield ['/test/', 'test/index', [], 'test/index.php'];
+        yield ['/', '/index.php', [], '/index.php'];
+        yield ['/request-url', '/request-url', [], '/request-url.php'];
+        yield ['/request-url/', '/request-url/', [], '/request-url/index.php'];
+        yield ['/test/', '/test/', [], '/test/index.php'];
 
-            // simple cases with page as array with 0 => string
-            ['/', ['test'], [], 'test.php'],
-            ['/', ['test/test/a'], [], 'test/test/a.php'],
-            ['/test/', ['test/index'], [], 'test/index.php'],
+        // simple cases with page as array with 0 => string
+        yield ['/', ['test'], [], 'test.php'];
+        yield ['/', ['test/test/a'], [], 'test/test/a.php'];
+        yield ['/test/', ['test/index'], [], 'test/index.php'];
 
-            // query args in page cases
-            ['/', ['test', 'extra_args' => 'atk4'], [], 'test.php?extra_args=atk4'],
-            ['/', ['test/test/a', 'extra_args' => 'atk4'], [], 'test/test/a.php?extra_args=atk4'],
-            ['/test/', ['test/index', 'extra_args' => 'atk4'], [], 'test/index.php?extra_args=atk4'],
+        // query args in page cases
+        yield ['/', ['test', 'extra_args' => 'atk4'], [], 'test.php?extra_args=atk4'];
+        yield ['/', ['test/test/a', 'extra_args' => 'atk4'], [], 'test/test/a.php?extra_args=atk4'];
+        yield ['/test/', ['test/index', 'extra_args' => 'atk4'], [], 'test/index.php?extra_args=atk4'];
 
-            // extra query args cases
-            ['/', ['test'], ['extra_args' => 'atk4'], 'test.php?extra_args=atk4'],
-            ['/', ['test/test/a'], ['extra_args' => 'atk4'], 'test/test/a.php?extra_args=atk4'],
-            ['/test/', ['test/index'], ['extra_args' => 'atk4'], 'test/index.php?extra_args=atk4'],
+        // extra query args cases
+        yield ['/', ['test'], ['extra_args' => 'atk4'], 'test.php?extra_args=atk4'];
+        yield ['/', ['test/test/a'], ['extra_args' => 'atk4'], 'test/test/a.php?extra_args=atk4'];
+        yield ['/test/', ['test/index'], ['extra_args' => 'atk4'], 'test/index.php?extra_args=atk4'];
 
-            // query args in page cases and query args in request cases and extra query args cases
-            ['/?extra_args=atk4&query_args=atk4&page_args=atk4', ['test', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], 'test.php?extra_args=atk4&query_args=atk4&page_args=atk4'],
-            ['/?extra_args=atk4&query_args=atk4&page_args=atk4', ['test/test/a', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], 'test/test/a.php?extra_args=atk4&query_args=atk4&page_args=atk4'],
-            ['/test/?extra_args=atk4&query_args=atk4&page_args=atk4', ['test/index', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], 'test/index.php?extra_args=atk4&query_args=atk4&page_args=atk4'],
-            ['/?extra_args=atk4&query_args=atk4&page_args=atk4', ['test', 'page_args' => 'atk4', 'check_unset_page' => false], ['extra_args' => 'atk4'], 'test.php?extra_args=atk4&query_args=atk4&page_args=atk4'],
-        ];
+        // query args in page cases and query args in request cases and extra query args cases
+        yield ['/?extra_args=atk4&query_args=atk4&page_args=atk4', ['test', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], 'test.php?extra_args=atk4&query_args=atk4&page_args=atk4'];
+        yield ['/?extra_args=atk4&query_args=atk4&page_args=atk4', ['test/test/a', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], 'test/test/a.php?extra_args=atk4&query_args=atk4&page_args=atk4'];
+        yield ['/test/?extra_args=atk4&query_args=atk4&page_args=atk4', ['test/index', 'page_args' => 'atk4'], ['extra_args' => 'atk4'], 'test/index.php?extra_args=atk4&query_args=atk4&page_args=atk4'];
+        yield ['/?extra_args=atk4&query_args=atk4&page_args=atk4', ['test', 'page_args' => 'atk4', 'check_unset_page' => false], ['extra_args' => 'atk4'], 'test.php?extra_args=atk4&query_args=atk4&page_args=atk4'];
     }
 
     /**
