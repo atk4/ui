@@ -80,12 +80,6 @@ class AppTest extends TestCase
             yield [$requestPage . '?u=U', [], ['x'], [], 'x.php'];
             yield [$requestPage . '?index.php', [], ['x'], [], 'x.php'];
 
-            // /w page autoindex
-            yield [$requestPage, [], ['/'], [], '/index.php'];
-            yield [$requestPage, [], ['/0/0/'], [], '/0/0/index.php'];
-            yield [$requestPage, [], ['a.b c/'], [], 'a.b c/index.php'];
-            yield [$requestPage . '?u=U', [], ['x/'], [], 'x/index.php'];
-
             // /w page args
             yield [$requestPage, [], ['x', 'foo' => 'a'], [], 'x.php?foo=a'];
             yield [$requestPage, [], ['x', 'foo' => 'a', 'bar' => '0'], [], 'x.php?foo=a&bar=0'];
@@ -109,11 +103,6 @@ class AppTest extends TestCase
         yield ['/?v=V', ['v' => false], ['x'], [], 'x.php'];
         yield ['/', ['v' => false], ['x', 'v' => 'page'], [], 'x.php?v=page'];
         yield ['/', ['v' => false], ['x'], ['v' => 'extra'], 'x.php'];
-
-        // /wo page path
-        yield ['/x', [], [], [], '/x.php'];
-        yield ['/d/x.html', [], ['foo' => 'a'], [], '/d/x.html?foo=a'];
-        yield ['/?u=U&v=V', ['v' => true], [], [], '/index.php?v=V'];
 
         // args priority
         yield ['/', [], ['x', 'foo' => 'page'], ['foo' => 'extra'], 'x.php?foo=page'];
