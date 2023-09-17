@@ -71,8 +71,10 @@ class AppTest extends TestCase
     {
         foreach (['/', '/page.html', '/d/', '/0/index.php'] as $requestPage) {
             yield [$requestPage, [], ['x'], [], 'x.php'];
-            yield [$requestPage, [], ['0'], [], '0.php'];
+            yield [$requestPage, [], ['/x'], [], '/x.php'];
+            yield [$requestPage, [], ['x/y/z'], [], 'x/y/z.php'];
             yield [$requestPage, [], ['/x/y/z'], [], '/x/y/z.php'];
+            yield [$requestPage, [], ['0'], [], '0.php'];
             yield [$requestPage, [], ['x.php'], [], 'x.php'];
             yield [$requestPage, [], ['x.html'], [], 'x.html'];
             yield [$requestPage, [], ['index'], [], 'index.php'];
