@@ -652,7 +652,7 @@ class App
     /**
      * Build a URL that application can use for loading HTML data.
      *
-     * @param string|array<0|string, string|int|false> $page                URL as string or array with page name as first element and other GET arguments
+     * @param string|array<0|string, string|int|false> $page                URL as string or array with page path as first element and other GET arguments
      * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
     public function url($page = [], array $extraRequestUrlArgs = []): string
@@ -711,7 +711,7 @@ class App
      * Build a URL that application can use for JS callbacks. Some framework integration will use a different routing
      * mechanism for non-HTML response.
      *
-     * @param string|array<0|string, string|int|false> $page                URL as string or array with page name as first element and other GET arguments
+     * @param string|array<0|string, string|int|false> $page                URL as string or array with page path as first element and other GET arguments
      * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
     public function jsUrl($page = [], array $extraRequestUrlArgs = []): string
