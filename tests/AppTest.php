@@ -71,8 +71,8 @@ class AppTest extends TestCase
     {
         foreach (['/', '/page.html', '/d/', '/0/index.php'] as $requestPage) {
             yield [$requestPage, [], ['x'], [], 'x.php'];
-            yield [$requestPage, [], ['0'], [], '0.php'];
             yield [$requestPage, [], ['/x/y/z'], [], '/x/y/z.php'];
+            yield [$requestPage, [], ['0'], [], '0.php'];
             yield [$requestPage, [], ['x.php'], [], 'x.php'];
             yield [$requestPage, [], ['x.html'], [], 'x.html'];
             yield [$requestPage, [], ['index'], [], 'index.php'];
@@ -143,7 +143,7 @@ class AppTest extends TestCase
         self::assertSame($expectedUrl, $app->url(($page[0] ?? '') . (count($pageAssocOnly) > 0 ? '?' . implode('&', array_map(static fn ($k) => $k . '=' . $pageAssocOnly[$k], array_keys($pageAssocOnly))) : ''), $extraRequestUrlArgs));
         self::assertSame($expectedUrl, $app->jsUrl($page, array_merge(['__atk_json' => null], $extraRequestUrlArgs)));
 
-        $remakeExpectedUrlFx = static function (string $indexPage, string $ext) use ($page, $expectedUrl) {
+        $makeExpectedUrlFx = static function (string $indexPage, string $ext) use ($page, $expectedUrl) {
             return preg_replace_callback('~^[^?]*?\K([^/?]*)(\.php)(?=\?|$)~', static function ($matches) use ($page, $indexPage, $ext) {
                 if ($matches[1] === 'index' && !preg_match('~(^|/)index(\.php)?(?=\?|$)~', $page[0] ?? '')) {
                     $matches[1] = $indexPage;
@@ -163,7 +163,7 @@ class AppTest extends TestCase
             'urlBuildingExt' => '.php8',
         ]);
 
-        $expectedUrlCustom = $remakeExpectedUrlFx('default', '.php8');
+        $expectedUrlCustom = $makeExpectedUrlFx('default', '.php8');
         self::assertSame($expectedUrlCustom, $app->url($page, $extraRequestUrlArgs));
 
         $app = $this->createApp([
@@ -172,7 +172,7 @@ class AppTest extends TestCase
             'urlBuildingIndexPage' => '',
             'urlBuildingExt' => '',
         ]);
-        $expectedUrlAutoindex = $remakeExpectedUrlFx('', '');
+        $expectedUrlAutoindex = $makeExpectedUrlFx('', '');
         self::assertSame($expectedUrlAutoindex, $app->url($page, $extraRequestUrlArgs));
 
         $app = $this->createApp([
@@ -181,7 +181,7 @@ class AppTest extends TestCase
             'urlBuildingIndexPage' => '',
             'urlBuildingExt' => '.html',
         ]);
-        $expectedUrlAutoindex2 = $remakeExpectedUrlFx('', '.html');
+        $expectedUrlAutoindex2 = $makeExpectedUrlFx('', '.html');
         self::assertSame($expectedUrlAutoindex2, $app->url($page, $extraRequestUrlArgs));
     }
 }
