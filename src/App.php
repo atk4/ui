@@ -679,7 +679,7 @@ class App
                 $pagePath = basename($pagePath, $this->urlBuildingExt);
             }
         }
-        if (!str_contains(basename($pagePath), '.')) {
+        if (!str_ends_with($pagePath, '/') && !str_contains(basename($pagePath), '.')) {
             $pagePath .= $this->urlBuildingExt;
         }
 
