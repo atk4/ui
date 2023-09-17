@@ -127,7 +127,7 @@ class App
     /** @var bool Call exit in place of throw Exception when Application need to exit. */
     public $callExit = true;
 
-    /** @var array global sticky arguments */
+    /** @var array<string, bool> global sticky arguments */
     protected array $stickyGetArguments = [
         '__atk_json' => false,
         '__atk_tab' => false,
