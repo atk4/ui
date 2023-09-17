@@ -71,6 +71,8 @@ class AppTest extends TestCase
     {
         foreach (['/', '/page.html', '/d/', '/0/index.php'] as $requestPage) {
             yield [$requestPage, [], ['x'], [], 'x.php'];
+            yield [$requestPage, [], ['/x'], [], '/x.php'];
+            yield [$requestPage, [], ['x/y/z'], [], 'x/y/z.php'];
             yield [$requestPage, [], ['/x/y/z'], [], '/x/y/z.php'];
             yield [$requestPage, [], ['0'], [], '0.php'];
             yield [$requestPage, [], ['x.php'], [], 'x.php'];
@@ -131,7 +133,7 @@ class AppTest extends TestCase
      */
     public function testUrl(string $requestUrl, array $appStickyGetArguments, array $page, array $extraRequestUrlArgs, string $expectedUrl): void
     {
-        $request = (new Psr17Factory())->createServerRequest('GET', 'http://xxx' . $requestUrl);
+        $request = (new Psr17Factory())->createServerRequest('GET', $requestUrl);
 
         $app = $this->createApp([
             'request' => $request,
