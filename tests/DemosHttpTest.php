@@ -138,11 +138,9 @@ class DemosHttpTest extends DemosTest
         $hOutput = "\n" . '!! FATAL UI ERROR: Headers already sent, more headers cannot be set at this stage !!' . "\n";
         $oOutput = 'unmanaged output' . "\n" . '!! FATAL UI ERROR: Unexpected output detected !!' . "\n";
 
-        return [
-            ['err_headers_already_sent_2', $hOutput],
-            ['err_unexpected_output_detected_2', $oOutput],
-            ['err_headers_already_sent_1', $hOutput],
-            ['err_unexpected_output_detected_1', $oOutput],
-        ];
+        yield ['err_headers_already_sent_2', $hOutput];
+        yield ['err_unexpected_output_detected_2', $oOutput];
+        yield ['err_headers_already_sent_1', $hOutput];
+        yield ['err_unexpected_output_detected_1', $oOutput];
     }
 }
