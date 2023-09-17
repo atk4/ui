@@ -476,7 +476,7 @@ class View extends AbstractView
     /**
      * Build an URL which this view can use for callbacks.
      *
-     * @param string|array<0|string, string|int|false> $page URL as string or array with page name as first element and other GET arguments
+     * @param string|array<0|string, string|int|false> $page URL as string or array with page path as first element and other GET arguments
      */
     public function url($page = []): string
     {
@@ -486,7 +486,7 @@ class View extends AbstractView
     /**
      * Build an URL which this view can use for JS callbacks.
      *
-     * @param string|array<0|string, string|int|false> $page URL as string or array with page name as first element and other GET arguments
+     * @param string|array<0|string, string|int|false> $page URL as string or array with page path as first element and other GET arguments
      */
     public function jsUrl($page = []): string
     {

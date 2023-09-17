@@ -128,7 +128,7 @@ class App
     /** @var bool Call exit in place of throw Exception when Application need to exit. */
     public $callExit = true;
 
-    /** @var array global sticky arguments */
+    /** @var array<string, bool> global sticky arguments */
     protected array $stickyGetArguments = [
         '__atk_json' => false,
         '__atk_tab' => false,
@@ -653,7 +653,7 @@ class App
     /**
      * Build a URL that application can use for loading HTML data.
      *
-     * @param string|array<0|string, string|int|false> $page                URL as string or array with page name as first element and other GET arguments
+     * @param string|array<0|string, string|int|false> $page                URL as string or array with page path as first element and other GET arguments
      * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
     public function url($page = [], array $extraRequestUrlArgs = []): string
@@ -674,13 +674,11 @@ class App
             if ($pagePath === '') { // TODO path must always start with '/'
                 $pagePath = '/';
             }
-            if (substr($pagePath, -1) === '/') {
-                $pagePath = $this->urlBuildingIndexPage;
-            } else {
-                $pagePath = basename($pagePath, $this->urlBuildingExt);
-            }
         }
-        if (!str_contains(basename($pagePath), '.')) {
+        if (str_ends_with($pagePath, '/')) {
+            $pagePath .= $this->urlBuildingIndexPage;
+        }
+        if (!str_ends_with($pagePath, '/') && !str_contains(basename($pagePath), '.')) {
             $pagePath .= $this->urlBuildingExt;
         }
 
@@ -711,9 +709,9 @@ class App
 
     /**
      * Build a URL that application can use for JS callbacks. Some framework integration will use a different routing
-     * mechanism for NON-HTML response.
+     * mechanism for non-HTML response.
      *
-     * @param string|array<0|string, string|int|false> $page                URL as string or array with page name as first element and other GET arguments
+     * @param string|array<0|string, string|int|false> $page                URL as string or array with page path as first element and other GET arguments
      * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
     public function jsUrl($page = [], array $extraRequestUrlArgs = []): string
