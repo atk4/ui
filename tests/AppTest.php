@@ -119,6 +119,7 @@ class AppTest extends TestCase
         yield ['/', [], ['x', 'foo' => 'page'], ['foo' => 'extra'], 'x.php?foo=page'];
         yield ['/?foo=sticky', ['foo' => true], ['x', 'foo' => 'page'], ['foo' => 'extra'], 'x.php?foo=page'];
         yield ['/?foo=sticky', ['foo' => true], ['x'], ['foo' => 'extra'], 'x.php?foo=sticky'];
+        yield ['/', ['foo' => true], ['x'], ['foo' => 'extra'], 'x.php'];
     }
 
     /**
