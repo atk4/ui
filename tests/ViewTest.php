@@ -170,15 +170,13 @@ class ViewTest extends TestCase
      */
     public function provideSetNotClosureErrorCases(): iterable
     {
-        return [
-            [Console::class],
-            [JsCallback::class],
-            [JsSse::class],
-            [Loader::class],
-            [Modal::class],
-            [Popup::class],
-            [VirtualPage::class],
-        ];
+        yield [Console::class];
+        yield [JsCallback::class];
+        yield [JsSse::class];
+        yield [Loader::class];
+        yield [Modal::class];
+        yield [Popup::class];
+        yield [VirtualPage::class];
     }
 
     /**
@@ -202,11 +200,9 @@ class ViewTest extends TestCase
      */
     public function provideSetNotOneArgumentExceptionCases(): iterable
     {
-        return [
-            [View::class],
-            [Loader::class],
-            [Modal::class],
-            [Popup::class],
-        ];
+        yield [View::class];
+        yield [Loader::class];
+        yield [Modal::class];
+        yield [Popup::class];
     }
 }
