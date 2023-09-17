@@ -120,7 +120,7 @@ class AppTest extends TestCase
      */
     public function testUrl(string $requestUrl, array $appStickyGetArguments, array $page, array $extraRequestUrlArgs, string $exceptedUrl): void
     {
-        $request = (new Psr17Factory())->createServerRequest('GET', 'http://xxx' . $requestUrl);
+        $request = (new Psr17Factory())->createServerRequest('GET', $requestUrl);
 
         $app = $this->createApp([
             'request' => $request,
