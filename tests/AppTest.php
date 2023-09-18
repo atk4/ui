@@ -70,11 +70,11 @@ class AppTest extends TestCase
 
     public function testEmptyRequestPathException(): void
     {
+        $request = (new Psr17Factory())->createServerRequest('GET', '');
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Request URL path must always start with \'/\'');
-        $this->createApp([
-            'request' => (new Psr17Factory())->createServerRequest('GET', ''),
-        ]);
+        $this->createApp(['request' => $request]);
     }
 
     public function provideUrlCases(): iterable
