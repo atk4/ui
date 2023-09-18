@@ -14,14 +14,14 @@ trait CreateAppTrait
      */
     protected function createApp(array $seed = []): App
     {
-        $class = $seed[0] ?? App::class;
+        $appClass = $seed[0] ?? App::class;
         unset($seed[0]);
 
         if (!isset($seed['request'])) {
             $seed['request'] = (new Psr17Factory())->createServerRequest('GET', '/');
         }
 
-        return new $class(array_merge([
+        return new $appClass(array_merge([
             'catchExceptions' => false,
             'alwaysRun' => false,
         ], $seed));
