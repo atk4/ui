@@ -221,7 +221,7 @@ class CallbackTest extends TestCase
             $var = 25;
         });
 
-        $this->expectOutputRegex('~^..DOCTYPE~');
+        $this->expectOutputRegex($this->htmlDoctypeRegex);
         $this->app->run();
         self::assertSame(25, $var);
     }
@@ -239,7 +239,7 @@ class CallbackTest extends TestCase
             $var = 25;
         });
 
-        $this->expectOutputRegex('~^..DOCTYPE~');
+        $this->expectOutputRegex($this->htmlDoctypeRegex);
         $this->app->run();
         self::assertSame(25, $var);
     }

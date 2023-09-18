@@ -45,14 +45,14 @@ class FormTest extends TestCase
 
     public function testAddControlAlreadyExistsException(): void
     {
-        $t = new Form();
-        $t->setApp($this->createApp());
-        $t->invokeInit();
-        $t->addControl('foo');
+        $form = new Form();
+        $form->setApp($this->createApp());
+        $form->invokeInit();
+        $form->addControl('foo');
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Form field already exists');
-        $t->addControl('foo');
+        $form->addControl('foo');
     }
 
     private function replaceAppRequest(App $app, ServerRequestInterface $request): void
