@@ -40,13 +40,6 @@ class CallbackTest extends TestCase
         $this->app->initLayout([Layout\Centered::class]);
     }
 
-    protected function tearDown(): void
-    {
-        unset($_GET);
-
-        parent::tearDown();
-    }
-
     private function replaceAppRequest(App $app, ServerRequestInterface $request): void
     {
         $requestProperty = new \ReflectionProperty(App::class, 'request');

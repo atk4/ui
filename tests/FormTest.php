@@ -84,36 +84,31 @@ class FormTest extends TestCase
     protected function assertFormSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
     {
         $wasSubmitCalled = false;
-        try {
-            $request = $this->triggerFormSubmit($this->form->getApp()->getRequest(), $this->form, $postData);
-            $this->replaceAppRequest($this->form->getApp(), $request);
+        $request = $this->triggerFormSubmit($this->form->getApp()->getRequest(), $this->form, $postData);
+        $this->replaceAppRequest($this->form->getApp(), $request);
 
-            $this->form->onSubmit(static function (Form $form) use (&$wasSubmitCalled, $submitFx): void {
-                $wasSubmitCalled = true;
-                if ($submitFx !== null) {
-                    $submitFx($form->model);
-                }
-            });
-
-            $this->form->render();
-            $res = AppFormTestMock::assertInstanceOf($this->form->getApp())->output;
-
-            if ($checkExpectedErrorsFx !== null) {
-                self::assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');
-                self::assertNotSame('', $res['atkjs']); // will output useful error
-                $this->formError = $res['atkjs'];
-
-                $checkExpectedErrorsFx($res['atkjs']);
-            } else {
-                self::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
-                self::assertNull($res['atkjs']);
+        $this->form->onSubmit(static function (Form $form) use (&$wasSubmitCalled, $submitFx): void {
+            $wasSubmitCalled = true;
+            if ($submitFx !== null) {
+                $submitFx($form->model);
             }
+        });
 
-            $this->form = null; // we shouldn't submit form twice!
-        } finally {
-            unset($_GET);
-            unset($_POST);
+        $this->form->render();
+        $res = AppFormTestMock::assertInstanceOf($this->form->getApp())->output;
+
+        if ($checkExpectedErrorsFx !== null) {
+            self::assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');
+            self::assertNotSame('', $res['atkjs']); // will output useful error
+            $this->formError = $res['atkjs'];
+
+            $checkExpectedErrorsFx($res['atkjs']);
+        } else {
+            self::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
+            self::assertNull($res['atkjs']);
         }
+
+        $this->form = null; // we shouldn't submit form twice!
     }
 
     public function testFormSubmit(): void
@@ -289,19 +284,14 @@ class FormTest extends TestCase
         $input->setApp($this->createApp());
         $input->invokeInit();
 
+        $request = $input->getApp()->getRequest();
+        $request = $this->triggerCallback($request, $input->cb);
+        $request = $request->withParsedBody(['fUploadAction' => Form\Control\Upload::UPLOAD_ACTION]);
+        $this->replaceAppRequest($input->getApp(), $request);
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing onUpload callback');
-        try {
-            $request = $input->getApp()->getRequest();
-            $request = $this->triggerCallback($request, $input->cb);
-            $request = $request->withParsedBody(['fUploadAction' => Form\Control\Upload::UPLOAD_ACTION]);
-            $this->replaceAppRequest($input->getApp(), $request);
-
-            $input->render();
-        } finally {
-            unset($_GET);
-            unset($_POST);
-        }
+        $input->render();
     }
 
     public function testUploadNoDeleteCallbackException(): void
@@ -310,19 +300,14 @@ class FormTest extends TestCase
         $input->setApp($this->createApp());
         $input->invokeInit();
 
+        $request = $input->getApp()->getRequest();
+        $request = $this->triggerCallback($request, $input->cb);
+        $request = $request->withParsedBody(['fUploadAction' => Form\Control\Upload::DELETE_ACTION]);
+        $this->replaceAppRequest($input->getApp(), $request);
+
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing onDelete callback');
-        try {
-            $request = $input->getApp()->getRequest();
-            $request = $this->triggerCallback($request, $input->cb);
-            $request = $request->withParsedBody(['fUploadAction' => Form\Control\Upload::DELETE_ACTION]);
-            $this->replaceAppRequest($input->getApp(), $request);
-
-            $input->render();
-        } finally {
-            unset($_GET);
-            unset($_POST);
-        }
+        $input->render();
     }
 }
 
