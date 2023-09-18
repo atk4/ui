@@ -49,11 +49,6 @@ class CallbackTest extends TestCase
         // TODO FormTest does not need this hack
         $request = $request->withQueryParams(array_diff_key($request->getQueryParams(), [Callback::URL_QUERY_TARGET => true]));
 
-        // TODO remove once the App::$request is not mutated
-        $requestProperty = new \ReflectionProperty(App::class, 'request');
-        $requestProperty->setAccessible(true);
-        $requestProperty->setValue($cb->getApp(), $request);
-
         return $request;
     }
 
@@ -89,16 +84,24 @@ class CallbackTest extends TestCase
 
     public function testViewUrlCallback(): void
     {
-        $app = $this->createApp();
-        $cbApp = Callback::addTo($app, ['urlTrigger' => 'aa']);
-        $v1 = View::addTo($app);
-        $cb = Callback::addTo($v1, ['urlTrigger' => 'bb']);
+        $v1 = null;
+        $cb = null;
+        $cbApp = $this->simulateViewCallback(function (ServerRequestInterface $request) use (&$v1, &$cb) {
+            $app = $this->createApp(['request' => $request]);
+            $cbApp = Callback::addTo($app, ['urlTrigger' => 'aa']);
+            $v1 = View::addTo($app);
+            $cb = Callback::addTo($v1, ['urlTrigger' => 'bb']);
 
-        $this->triggerCallback($app->getRequest(), $cbApp);
-        $this->triggerCallback($app->getRequest(), $cb);
+            return $cbApp;
+        }, function (Callback $cbApp) use (&$cb) {
+            $request = $this->triggerCallback($cbApp->getApp()->getRequest(), $cbApp);
+            $request = $this->triggerCallback($request, $cb);
+
+            return $request;
+        });
 
         $expectedUrlCbApp = '/index.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=callback&' . Callback::URL_QUERY_TARGET . '=aa';
-        $expectedUrlCb = '/index.php?' . /* Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=1&' . */ Callback::URL_QUERY_TRIGGER_PREFIX . 'bb=callback&' . Callback::URL_QUERY_TARGET . '=bb';
+        $expectedUrlCb = '/index.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=1&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'bb=callback&' . Callback::URL_QUERY_TARGET . '=bb';
         self::assertSame($expectedUrlCbApp, $cbApp->getUrl());
         self::assertSame($expectedUrlCb, $cb->getUrl());
 
@@ -111,7 +114,7 @@ class CallbackTest extends TestCase
         $var = null;
         $cb->set(static function (int $x) use (&$var, $v1) {
             $v3 = View::addTo($v1);
-            self::assertSame('test.php', $v3->url(['test']));
+            self::assertSame('test.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=1&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'bb=1', $v3->url(['test']));
             $var = $x;
         }, [34]);
 
@@ -119,7 +122,7 @@ class CallbackTest extends TestCase
         $v2->stickyGet('g1', '1');
 
         self::assertSame(34, $var);
-        self::assertSame('test.php?g1=1', $v2->url(['test']));
+        self::assertSame('test.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=1&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'bb=1&g1=1', $v2->url(['test']));
     }
 
     public function testCallbackNotFiring(): void
