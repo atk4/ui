@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
+use Atk4\Ui\AbstractView;
 use Atk4\Ui\App;
 use Atk4\Ui\Callback;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -49,5 +50,46 @@ trait CreateAppTrait
                 Callback::URL_QUERY_TARGET => $cb->getUrlTrigger(),
             ]
         ));
+    }
+
+    /**
+     * @template T of App
+     *
+     * @param \Closure(ServerRequestInterface): T $createAppFx
+     * @param \Closure(T): ServerRequestInterface $simulateRequestFx
+     *
+     * @return T
+     */
+    protected function simulateAppCallback(\Closure $createAppFx, \Closure $simulateRequestFx): App
+    {
+        $requestBase = (new Psr17Factory())->createServerRequest('GET', '/');
+        $appBase = $createAppFx($requestBase);
+        $request = $simulateRequestFx($appBase);
+
+        $app = $createAppFx($request);
+
+        return $app;
+    }
+
+    /**
+     * @template T of AbstractView
+     *
+     * @param \Closure(ServerRequestInterface): T $createViewFx
+     * @param \Closure(T): ServerRequestInterface $simulateRequestFx
+     *
+     * @return T
+     */
+    protected function simulateViewCallback(\Closure $createViewFx, \Closure $simulateRequestFx): AbstractView
+    {
+        $view = null;
+        $this->simulateAppCallback(static function (ServerRequestInterface $request) use ($createViewFx, &$view) {
+            $view = $createViewFx($request);
+
+            return $view->getApp();
+        }, static function () use ($simulateRequestFx, &$view) {
+            return $simulateRequestFx($view);
+        });
+
+        return $view;
     }
 }
