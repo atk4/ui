@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
-use Atk4\Ui\AbstractView;
 use Atk4\Ui\App;
 use Atk4\Ui\Callback;
 use Atk4\Ui\CallbackLater;
 use Atk4\Ui\Layout;
 use Atk4\Ui\View;
 use Atk4\Ui\VirtualPage;
+use Psr\Http\Message\ServerRequestInterface;
 
 class AppMock extends App
 {
@@ -34,10 +34,8 @@ class CallbackTest extends TestCase
     /** @var App */
     protected $app;
 
-    protected function setUp(): void
+    protected function setupApp(): void
     {
-        parent::setUp();
-
         $this->app = $this->createApp([AppMock::class]);
         $this->app->initLayout([Layout\Centered::class]);
     }
@@ -45,21 +43,34 @@ class CallbackTest extends TestCase
     protected function tearDown(): void
     {
         unset($_GET);
-        unset($_POST);
 
         parent::tearDown();
     }
 
-    /**
-     * @param Callback|VirtualPage $cb
-     */
-    protected function simulateCallbackTriggering(AbstractView $cb): void
+    private function replaceAppRequest(App $app, ServerRequestInterface $request): void
     {
-        $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . $cb->getUrlTrigger()] = '1';
+        $requestProperty = new \ReflectionProperty(App::class, 'request');
+        $requestProperty->setAccessible(true);
+        $requestProperty->setValue($app, $request);
+
+        $this->setGlobalsFromRequest($request);
+    }
+
+    protected function simulateCallbackTriggering(Callback $cb): void
+    {
+        $request = $this->app->getRequest();
+        $request = $this->triggerCallback($request, $cb);
+
+        // TODO FormTest does not need this hack
+        $request = $request->withQueryParams(array_diff_key($request->getQueryParams(), [Callback::URL_QUERY_TARGET => true]));
+
+        $this->replaceAppRequest($this->app, $request);
     }
 
     public function testCallback(): void
     {
+        $this->setupApp();
+
         $cb = Callback::addTo($this->app);
 
         $this->simulateCallbackTriggering($cb);
@@ -75,6 +86,8 @@ class CallbackTest extends TestCase
 
     public function testCallbackTrigger(): void
     {
+        $this->setupApp();
+
         $cb = Callback::addTo($this->app);
         self::assertSame($this->app->layout->name . '_' . $cb->shortName, $cb->getUrlTrigger());
 
@@ -84,6 +97,8 @@ class CallbackTest extends TestCase
 
     public function testViewUrlCallback(): void
     {
+        $this->setupApp();
+
         $cbApp = Callback::addTo($this->app, ['urlTrigger' => 'aa']);
         $v1 = View::addTo($this->app);
         $cb = Callback::addTo($v1, ['urlTrigger' => 'bb']);
@@ -118,6 +133,8 @@ class CallbackTest extends TestCase
 
     public function testCallbackNotFiring(): void
     {
+        $this->setupApp();
+
         $cb = Callback::addTo($this->app);
 
         // do NOT simulate triggering in this test
@@ -132,6 +149,8 @@ class CallbackTest extends TestCase
 
     public function testCallbackLater(): void
     {
+        $this->setupApp();
+
         $cb = CallbackLater::addTo($this->app);
 
         $this->simulateCallbackTriggering($cb);
@@ -151,6 +170,8 @@ class CallbackTest extends TestCase
 
     public function testCallbackLaterNested(): void
     {
+        $this->setupApp();
+
         $cb = CallbackLater::addTo($this->app);
 
         $this->simulateCallbackTriggering($cb);
@@ -176,6 +197,8 @@ class CallbackTest extends TestCase
 
     public function testCallbackLaterNotFiring(): void
     {
+        $this->setupApp();
+
         $cb = CallbackLater::addTo($this->app);
 
         // don't simulate triggering
@@ -194,9 +217,11 @@ class CallbackTest extends TestCase
 
     public function testVirtualPage(): void
     {
+        $this->setupApp();
+
         $vp = VirtualPage::addTo($this->app);
 
-        $this->simulateCallbackTriggering($vp);
+        $this->simulateCallbackTriggering($vp->cb);
 
         $var = null;
         $vp->set(static function (VirtualPage $p) use (&$var) {
@@ -210,9 +235,11 @@ class CallbackTest extends TestCase
 
     public function testVirtualPageCustomTrigger(): void
     {
+        $this->setupApp();
+
         $vp = VirtualPage::addTo($this->app, ['urlTrigger' => 'bah']);
 
-        $this->simulateCallbackTriggering($vp);
+        $this->simulateCallbackTriggering($vp->cb);
 
         $var = null;
         $vp->set(static function (VirtualPage $p) use (&$var) {
@@ -229,9 +256,11 @@ class CallbackTest extends TestCase
 
     public function testPull230(): void
     {
+        $this->setupApp();
+
         $vp = VirtualPage::addTo($this->app);
 
-        $this->simulateCallbackTriggering($vp);
+        $this->simulateCallbackTriggering($vp->cb);
 
         $vp->set(function () {
             $this->varPull230 = 26;

@@ -9,11 +9,11 @@ use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\App;
-use Atk4\Ui\Callback;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use Atk4\Ui\Form;
 use Mvorisek\Atk4\Hintable\Phpstan\PhpstanUtil;
+use Psr\Http\Message\ServerRequestInterface;
 
 class FormTest extends TestCase
 {
@@ -25,10 +25,8 @@ class FormTest extends TestCase
     /** @var string */
     protected $formError;
 
-    protected function setUp(): void
+    protected function setupForm(): void
     {
-        parent::setUp();
-
         $this->form = new Form();
         $this->form->setApp($this->createApp([AppFormTestMock::class]));
         $this->form->invokeInit();
@@ -36,6 +34,8 @@ class FormTest extends TestCase
 
     public function testGetField(): void
     {
+        $this->setupForm();
+
         $f = $this->form;
         $f->addControl('test');
 
@@ -55,6 +55,28 @@ class FormTest extends TestCase
         $t->addControl('foo');
     }
 
+    private function replaceAppRequest(App $app, ServerRequestInterface $request): void
+    {
+        $requestProperty = new \ReflectionProperty(App::class, 'request');
+        $requestProperty->setAccessible(true);
+        $requestProperty->setValue($app, $request);
+
+        $this->setGlobalsFromRequest($request);
+    }
+
+    protected function triggerFormSubmit(ServerRequestInterface $request, Form $form, array $postData): ServerRequestInterface
+    {
+        $request = $this->triggerCallback($request, $form->cb);
+
+        $request = $request->withMethod('POST');
+        $request = $request->withParsedBody(array_merge(
+            $request->getParsedBody() ?? [],
+            array_merge(array_map(static fn () => '', $this->form->controls), $postData),
+        ));
+
+        return $request;
+    }
+
     /**
      * @param \Closure(Model): void  $submitFx
      * @param \Closure(string): void $checkExpectedErrorsFx
@@ -62,11 +84,9 @@ class FormTest extends TestCase
     protected function assertFormSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
     {
         $wasSubmitCalled = false;
-        $_POST = array_merge(array_map(static fn () => '', $this->form->controls), $postData);
         try {
-            // trigger callback
-            $_GET[Callback::URL_QUERY_TRIGGER_PREFIX . 'atk_submit'] = 'ajax';
-            $_GET[Callback::URL_QUERY_TARGET] = 'atk_submit';
+            $request = $this->triggerFormSubmit($this->form->getApp()->getRequest(), $this->form, $postData);
+            $this->replaceAppRequest($this->form->getApp(), $request);
 
             $this->form->onSubmit(static function (Form $form) use (&$wasSubmitCalled, $submitFx): void {
                 $wasSubmitCalled = true;
@@ -98,6 +118,8 @@ class FormTest extends TestCase
 
     public function testFormSubmit(): void
     {
+        $this->setupForm();
+
         $f = $this->form;
 
         $m = new Model();
@@ -105,8 +127,7 @@ class FormTest extends TestCase
         $m->addField('email', ['required' => true]);
         $m->addField('is_admin', ['default' => false]);
 
-        $m = $m->createEntity();
-        $f->setModel($m, ['name', 'email']);
+        $f->setModel($m->createEntity(), ['name', 'email']);
 
         self::assertSame('John', $f->model->get('name'));
 
@@ -124,6 +145,8 @@ class FormTest extends TestCase
 
     public function testTextareaSubmit(): void
     {
+        $this->setupForm();
+
         $this->form->addControl('Textarea');
         $this->assertFormSubmit(['Textarea' => '0'], static function (Model $m) {
             self::assertSame('0', $m->get('Textarea'));
@@ -169,8 +192,9 @@ class FormTest extends TestCase
         $m->addField('opt4', ['values' => $options, 'required' => true]);
         $m->addField('opt4_z', ['values' => $options, 'required' => true]);
 
-        $m = $m->createEntity();
-        $this->form->setModel($m);
+        $this->setupForm();
+
+        $this->form->setModel($m->createEntity());
 
         $this->assertFormSubmit(['opt1' => '2', 'opt3_z' => '0', 'opt4' => '', 'opt4_z' => '0'], null, function (string $formError) {
             // dropdown validates to make sure option is proper
@@ -193,8 +217,9 @@ class FormTest extends TestCase
         $m->addField('foo', ['nullable' => false]);
         $m->addField('bar', ['nullable' => false]);
 
-        $m = $m->createEntity();
-        $this->form->setModel($m, ['foo']);
+        $this->setupForm();
+
+        $this->form->setModel($m->createEntity(), ['foo']);
 
         $submitReached = false;
         $catchReached = false;
@@ -267,8 +292,11 @@ class FormTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing onUpload callback');
         try {
-            $_GET = [Callback::URL_QUERY_TARGET => $input->cb->getUrlTrigger()];
-            $_POST = ['fUploadAction' => Form\Control\Upload::UPLOAD_ACTION];
+            $request = $input->getApp()->getRequest();
+            $request = $this->triggerCallback($request, $input->cb);
+            $request = $request->withParsedBody(['fUploadAction' => Form\Control\Upload::UPLOAD_ACTION]);
+            $this->replaceAppRequest($input->getApp(), $request);
+
             $input->render();
         } finally {
             unset($_GET);
@@ -285,8 +313,11 @@ class FormTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing onDelete callback');
         try {
-            $_GET = [Callback::URL_QUERY_TARGET => $input->cb->getUrlTrigger()];
-            $_POST = ['fUploadAction' => Form\Control\Upload::DELETE_ACTION];
+            $request = $input->getApp()->getRequest();
+            $request = $this->triggerCallback($request, $input->cb);
+            $request = $request->withParsedBody(['fUploadAction' => Form\Control\Upload::DELETE_ACTION]);
+            $this->replaceAppRequest($input->getApp(), $request);
+
             $input->render();
         } finally {
             unset($_GET);
