@@ -26,17 +26,19 @@ class AppMock extends App
 
 class CallbackTest extends TestCase
 {
+    use CreateAppTrait;
+
     /** @var string */
     private $htmlDoctypeRegex = '~^<!DOCTYPE~';
 
     /** @var App */
-    public $app;
+    protected $app;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->app = new AppMock(['alwaysRun' => false, 'catchExceptions' => false]);
+        $this->app = $this->createApp([AppMock::class]);
         $this->app->initLayout([Layout\Centered::class]);
     }
 

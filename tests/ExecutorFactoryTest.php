@@ -40,10 +40,12 @@ class TestModel extends Model
 
 class ExecutorFactoryTest extends TestCase
 {
+    use CreateAppTrait;
+
     /** @var Model */
-    public $model;
+    protected $model;
     /** @var App */
-    public $app;
+    protected $app;
 
     protected function setUp(): void
     {
@@ -53,14 +55,6 @@ class ExecutorFactoryTest extends TestCase
         $this->model = new TestModel($p);
         $this->app = $this->createApp();
         $this->app->initLayout([Layout\Admin::class]);
-    }
-
-    protected function createApp(): App
-    {
-        return new App([
-            'catchExceptions' => false,
-            'alwaysRun' => false,
-        ]);
     }
 
     public function testExecutorFactory(): void

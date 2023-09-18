@@ -30,7 +30,7 @@ class FormFieldUiTest extends TestCase
     use CreateAppTrait;
 
     /** @var Model */
-    public $m;
+    protected $m;
 
     protected function setUp(): void
     {
