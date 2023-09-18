@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\HtmlTemplate;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -65,6 +66,15 @@ class AppTest extends TestCase
             self::assertSame($testStr, ob_get_contents());
             ob_end_clean();
         }
+    }
+
+    public function testEmptyRequestPathException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Request URL path must always start with \'/\'');
+        $this->createApp([
+            'request' => (new Psr17Factory())->createServerRequest('GET', ''),
+        ]);
     }
 
     public function provideUrlCases(): iterable

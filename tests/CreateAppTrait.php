@@ -5,17 +5,25 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Ui\App;
+use Nyholm\Psr7\Factory\Psr17Factory;
 
 trait CreateAppTrait
 {
     /**
-     * @param array<string, mixed> $defaults
+     * @param array<0|string, mixed> $seed
      */
-    protected function createApp(array $defaults = []): App
+    protected function createApp(array $seed = []): App
     {
-        return new App(array_merge([
+        $class = $seed[0] ?? App::class;
+        unset($seed[0]);
+
+        if (!isset($seed['request'])) {
+            $seed['request'] = (new Psr17Factory())->createServerRequest('GET', '/');
+        }
+
+        return new $class(array_merge([
             'catchExceptions' => false,
             'alwaysRun' => false,
-        ], $defaults));
+        ], $seed));
     }
 }

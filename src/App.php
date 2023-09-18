@@ -220,6 +220,11 @@ class App
             $this->uiPersistence = new UiPersistence();
         }
 
+        if (!str_starts_with($this->getRequest()->getUri()->getPath(), '/')) {
+            throw (new Exception('Request URL path must always start with \'/\''))
+                ->addMoreInfo('url', (string) $this->getRequest()->getUri());
+        }
+
         if ($this->session === null) {
             $this->session = new App\SessionManager();
         }
@@ -670,9 +675,6 @@ class App
 
         if ($pagePath === null) {
             $pagePath = $request->getUri()->getPath();
-            if ($pagePath === '') { // TODO path must always start with '/'
-                $pagePath = '/';
-            }
         }
         if (str_ends_with($pagePath, '/')) {
             $pagePath .= $this->urlBuildingIndexPage;

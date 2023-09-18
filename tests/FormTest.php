@@ -30,10 +30,7 @@ class FormTest extends TestCase
         parent::setUp();
 
         $this->form = new Form();
-        $this->form->setApp(new AppFormTestMock([
-            'catchExceptions' => false,
-            'alwaysRun' => false,
-        ]));
+        $this->form->setApp($this->createApp([AppFormTestMock::class]));
         $this->form->invokeInit();
     }
 
