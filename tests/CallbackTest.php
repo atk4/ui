@@ -32,7 +32,7 @@ class CallbackTest extends TestCase
     private $htmlDoctypeRegex = '~^<!DOCTYPE~';
 
     /** @var App */
-    public $app;
+    protected $app;
 
     protected function setUp(): void
     {

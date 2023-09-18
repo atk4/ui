@@ -70,22 +70,16 @@ class App
     /** @var bool Will replace an exception handler with our own, that will output errors nicely. */
     public $catchExceptions = true;
 
-    /** @var bool Will display error if callback wasn't triggered. */
-    public $catchRunawayCallbacks = true;
+    /** Will display error if callback wasn't triggered. */
+    protected bool $catchRunawayCallbacks = true;
 
-    /** @var bool Will always run application even if developer didn't explicitly executed run();. */
-    public $alwaysRun = true;
+    /** Will always run application even if developer didn't explicitly executed run();. */
+    protected bool $alwaysRun = true;
 
-    /**
-     * Will be set to true after app->run() is called, which may be done automatically
-     * on exit.
-     */
+    /** Will be set to true after app->run() is called, which may be done automatically on exit. */
     public bool $runCalled = false;
 
-    /**
-     * Will be set to true, when exit is called. Sometimes exit is intercepted by shutdown
-     * handler and we don't want to execute 'beforeExit' multiple times.
-     */
+    /** Will be set to true after exit is called. */
     private bool $exitCalled = false;
 
     public bool $isRendering = false;

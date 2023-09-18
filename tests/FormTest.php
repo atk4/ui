@@ -20,10 +20,10 @@ class FormTest extends TestCase
     use CreateAppTrait;
 
     /** @var Form|null */
-    public $form;
+    protected $form;
 
     /** @var string */
-    public $formError;
+    protected $formError;
 
     protected function setUp(): void
     {
@@ -59,7 +59,7 @@ class FormTest extends TestCase
      * @param \Closure(Model): void  $submitFx
      * @param \Closure(string): void $checkExpectedErrorsFx
      */
-    public function assertFormSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
+    protected function assertFormSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
     {
         $wasSubmitCalled = false;
         $_POST = array_merge(array_map(static fn () => '', $this->form->controls), $postData);
@@ -130,7 +130,7 @@ class FormTest extends TestCase
         });
     }
 
-    public function assertFormControlError(string $field, string $error): void
+    protected function assertFormControlError(string $field, string $error): void
     {
         $n = preg_match_all('~\.form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
         self::assertGreaterThan(0, $n);
@@ -145,7 +145,7 @@ class FormTest extends TestCase
         self::assertTrue($matched, 'Form control ' . $field . ' did not produce error');
     }
 
-    public function assertFormControlNoErrors(string $field): void
+    protected function assertFormControlNoErrors(string $field): void
     {
         $n = preg_match_all('~\.form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
         self::assertGreaterThan(0, $n);

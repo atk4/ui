@@ -43,9 +43,9 @@ class ExecutorFactoryTest extends TestCase
     use CreateAppTrait;
 
     /** @var Model */
-    public $model;
+    protected $model;
     /** @var App */
-    public $app;
+    protected $app;
 
     protected function setUp(): void
     {

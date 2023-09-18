@@ -15,7 +15,7 @@ class GridTest extends TestCase
     use TableTestTrait;
 
     /** @var MyModel */
-    public $m;
+    protected $m;
 
     protected function setUp(): void
     {

@@ -15,7 +15,7 @@ class TableColumnLinkTest extends TestCase
     use TableTestTrait;
 
     /** @var Table */
-    public $table;
+    protected $table;
 
     protected function setUp(): void
     {
