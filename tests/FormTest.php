@@ -19,28 +19,19 @@ class FormTest extends TestCase
 {
     use CreateAppTrait;
 
-    /** @var Form|null */
-    protected $form;
-
     /** @var string */
     protected $formError;
 
-    protected function setupForm(): void
-    {
-        $this->form = new Form();
-        $this->form->setApp($this->createApp([AppFormTestMock::class]));
-        $this->form->invokeInit();
-    }
-
     public function testGetField(): void
     {
-        $this->setupForm();
+        $form = new Form();
+        $form->setApp($this->createApp());
+        $form->invokeInit();
 
-        $f = $this->form;
-        $f->addControl('test');
+        $form->addControl('test');
 
-        self::assertInstanceOf(Form\Control::class, $f->getControl('test'));
-        self::assertSame($f->getControl('test'), $f->layout->getControl('test'));
+        self::assertInstanceOf(Form\Control::class, $form->getControl('test'));
+        self::assertSame($form->getControl('test'), $form->layout->getControl('test'));
     }
 
     public function testAddControlAlreadyExistsException(): void
@@ -55,15 +46,6 @@ class FormTest extends TestCase
         $form->addControl('foo');
     }
 
-    private function replaceAppRequest(App $app, ServerRequestInterface $request): void
-    {
-        $requestProperty = new \ReflectionProperty(App::class, 'request');
-        $requestProperty->setAccessible(true);
-        $requestProperty->setValue($app, $request);
-
-        $this->setGlobalsFromRequest($request);
-    }
-
     protected function triggerFormSubmit(ServerRequestInterface $request, Form $form, array $postData): ServerRequestInterface
     {
         $request = $this->triggerCallback($request, $form->cb);
@@ -71,31 +53,40 @@ class FormTest extends TestCase
         $request = $request->withMethod('POST');
         $request = $request->withParsedBody(array_merge(
             $request->getParsedBody() ?? [],
-            array_merge(array_map(static fn () => '', $this->form->controls), $postData),
+            array_merge(array_map(static fn () => '', $form->controls), $postData),
         ));
 
         return $request;
     }
 
     /**
+     * @param \Closure(App): Form    $createFormFx
      * @param \Closure(Model): void  $submitFx
      * @param \Closure(string): void $checkExpectedErrorsFx
      */
-    protected function assertFormSubmit(array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
+    protected function assertFormSubmit(\Closure $createFormFx, array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
     {
-        $wasSubmitCalled = false;
-        $request = $this->triggerFormSubmit($this->form->getApp()->getRequest(), $this->form, $postData);
-        $this->replaceAppRequest($this->form->getApp(), $request);
+        $form = $this->simulateViewCallback(function (ServerRequestInterface $request) use ($createFormFx) {
+            $app = $this->createApp([AppFormTestMock::class, 'request' => $request]);
+            $form = $createFormFx($app);
 
-        $this->form->onSubmit(static function (Form $form) use (&$wasSubmitCalled, $submitFx): void {
+            return $form;
+        }, function (Form $form) use ($postData) {
+            $request = $this->triggerFormSubmit($form->getApp()->getRequest(), $form, $postData);
+
+            return $request;
+        });
+
+        $wasSubmitCalled = false;
+        $form->onSubmit(static function (Form $form) use (&$wasSubmitCalled, $submitFx): void {
             $wasSubmitCalled = true;
             if ($submitFx !== null) {
                 $submitFx($form->model);
             }
         });
 
-        $this->form->render();
-        $res = AppFormTestMock::assertInstanceOf($this->form->getApp())->output;
+        $form->render();
+        $res = AppFormTestMock::assertInstanceOf($form->getApp())->output;
 
         if ($checkExpectedErrorsFx !== null) {
             self::assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');
@@ -107,27 +98,25 @@ class FormTest extends TestCase
             self::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
             self::assertNull($res['atkjs']);
         }
-
-        $this->form = null; // we shouldn't submit form twice!
     }
 
     public function testFormSubmit(): void
     {
-        $this->setupForm();
-
-        $f = $this->form;
-
-        $m = new Model();
-        $m->addField('name', ['default' => 'John']);
-        $m->addField('email', ['required' => true]);
-        $m->addField('is_admin', ['default' => false]);
-
-        $f->setModel($m->createEntity(), ['name', 'email']);
-
-        self::assertSame('John', $f->model->get('name'));
-
         // fake some POST data
-        $this->assertFormSubmit(['email' => 'john@yahoo.com', 'is_admin' => '1'], static function (Model $m) {
+        $this->assertFormSubmit(static function (App $app) {
+            $form = Form::addTo($app);
+
+            $m = new Model();
+            $m->addField('name', ['default' => 'John']);
+            $m->addField('email', ['required' => true]);
+            $m->addField('is_admin', ['default' => false]);
+
+            $form->setModel($m->createEntity(), ['name', 'email']);
+
+            self::assertSame('John', $form->model->get('name'));
+
+            return $form;
+        }, ['email' => 'john@yahoo.com', 'is_admin' => '1'], static function (Model $m) {
             // field has default, but form send back empty value
             self::assertSame('', $m->get('name'));
 
@@ -140,10 +129,12 @@ class FormTest extends TestCase
 
     public function testTextareaSubmit(): void
     {
-        $this->setupForm();
+        $this->assertFormSubmit(static function (App $app) {
+            $form = Form::addTo($app);
+            $form->addControl('Textarea');
 
-        $this->form->addControl('Textarea');
-        $this->assertFormSubmit(['Textarea' => '0'], static function (Model $m) {
+            return $form;
+        }, ['Textarea' => '0'], static function (Model $m) {
             self::assertSame('0', $m->get('Textarea'));
         });
     }
@@ -176,22 +167,23 @@ class FormTest extends TestCase
 
     public function testFormSubmitError(): void
     {
-        $m = new Model();
+        $this->assertFormSubmit(static function (App $app) {
+            $m = new Model();
 
-        $options = ['yes please', 'woot'];
+            $options = ['yes please', 'woot'];
 
-        $m->addField('opt1', ['values' => $options]);
-        $m->addField('opt2', ['values' => $options]);
-        $m->addField('opt3', ['values' => $options, 'nullable' => false]);
-        $m->addField('opt3_z', ['values' => $options, 'nullable' => false]);
-        $m->addField('opt4', ['values' => $options, 'required' => true]);
-        $m->addField('opt4_z', ['values' => $options, 'required' => true]);
+            $m->addField('opt1', ['values' => $options]);
+            $m->addField('opt2', ['values' => $options]);
+            $m->addField('opt3', ['values' => $options, 'nullable' => false]);
+            $m->addField('opt3_z', ['values' => $options, 'nullable' => false]);
+            $m->addField('opt4', ['values' => $options, 'required' => true]);
+            $m->addField('opt4_z', ['values' => $options, 'required' => true]);
 
-        $this->setupForm();
+            $form = Form::addTo($app);
+            $form->setModel($m->createEntity());
 
-        $this->form->setModel($m->createEntity());
-
-        $this->assertFormSubmit(['opt1' => '2', 'opt3_z' => '0', 'opt4' => '', 'opt4_z' => '0'], null, function (string $formError) {
+            return $form;
+        }, ['opt1' => '2', 'opt3_z' => '0', 'opt4' => '', 'opt4_z' => '0'], null, function (string $formError) {
             // dropdown validates to make sure option is proper
             $this->assertFormControlError('opt1', 'not one of the allowed values');
 
@@ -208,19 +200,20 @@ class FormTest extends TestCase
 
     public function testSubmitNonFormFieldError(): void
     {
-        $m = new Model();
-        $m->addField('foo', ['nullable' => false]);
-        $m->addField('bar', ['nullable' => false]);
-
-        $this->setupForm();
-
-        $this->form->setModel($m->createEntity(), ['foo']);
-
         $submitReached = false;
         $catchReached = false;
         try {
             try {
-                $this->assertFormSubmit(['foo' => 'x'], static function (Model $model) use (&$submitReached) {
+                $this->assertFormSubmit(static function (App $app) {
+                    $m = new Model();
+                    $m->addField('foo', ['nullable' => false]);
+                    $m->addField('bar', ['nullable' => false]);
+
+                    $form = Form::addTo($app);
+                    $form->setModel($m->createEntity(), ['foo']);
+
+                    return $form;
+                }, ['foo' => 'x'], static function (Model $model) use (&$submitReached) {
                     $submitReached = true;
                     $model->set('bar', null);
                 });
@@ -280,14 +273,17 @@ class FormTest extends TestCase
 
     public function testUploadNoUploadCallbackException(): void
     {
-        $input = new Form\Control\Upload();
-        $input->setApp($this->createApp());
-        $input->invokeInit();
+        $input = $this->simulateViewCallback(function (ServerRequestInterface $request) {
+            $app = $this->createApp(['request' => $request]);
+            $input = Form\Control\Upload::addTo($app);
 
-        $request = $input->getApp()->getRequest();
-        $request = $this->triggerCallback($request, $input->cb);
-        $request = $request->withParsedBody(['fUploadAction' => Form\Control\Upload::UPLOAD_ACTION]);
-        $this->replaceAppRequest($input->getApp(), $request);
+            return $input;
+        }, function (Form\Control\Upload $input) {
+            $request = $this->triggerCallback($input->getApp()->getRequest(), $input->cb);
+            $request = $request->withParsedBody(['fUploadAction' => Form\Control\Upload::UPLOAD_ACTION]);
+
+            return $request;
+        });
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing onUpload callback');
@@ -296,14 +292,17 @@ class FormTest extends TestCase
 
     public function testUploadNoDeleteCallbackException(): void
     {
-        $input = new Form\Control\Upload();
-        $input->setApp($this->createApp());
-        $input->invokeInit();
+        $input = $this->simulateViewCallback(function (ServerRequestInterface $request) {
+            $app = $this->createApp(['request' => $request]);
+            $input = Form\Control\Upload::addTo($app);
 
-        $request = $input->getApp()->getRequest();
-        $request = $this->triggerCallback($request, $input->cb);
-        $request = $request->withParsedBody(['fUploadAction' => Form\Control\Upload::DELETE_ACTION]);
-        $this->replaceAppRequest($input->getApp(), $request);
+            return $input;
+        }, function (Form\Control\Upload $input) {
+            $request = $this->triggerCallback($input->getApp()->getRequest(), $input->cb);
+            $request = $request->withParsedBody(['fUploadAction' => Form\Control\Upload::DELETE_ACTION]);
+
+            return $request;
+        });
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing onDelete callback');
