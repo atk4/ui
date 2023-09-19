@@ -7,6 +7,7 @@ namespace Atk4\Ui\Tests;
 use Atk4\Ui\AbstractView;
 use Atk4\Ui\App;
 use Atk4\Ui\Callback;
+use Atk4\Ui\Layout;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -26,10 +27,13 @@ trait CreateAppTrait
 
         $this->setGlobalsFromRequest($seed['request']);
 
-        return new $appClass(array_merge([
+        $app = new $appClass(array_merge([
             'catchExceptions' => false,
             'alwaysRun' => false,
         ], $seed));
+        $app->initLayout([Layout::class]);
+
+        return $app;
     }
 
     /**

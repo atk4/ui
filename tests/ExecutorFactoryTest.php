@@ -9,7 +9,6 @@ use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\App;
 use Atk4\Ui\Button;
-use Atk4\Ui\Layout;
 use Atk4\Ui\MenuItem;
 use Atk4\Ui\UserAction\BasicExecutor;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
@@ -54,7 +53,6 @@ class ExecutorFactoryTest extends TestCase
         $p = new Persistence\Array_();
         $this->model = new TestModel($p);
         $this->app = $this->createApp();
-        $this->app->initLayout([Layout\Admin::class]);
     }
 
     public function testExecutorFactory(): void

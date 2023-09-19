@@ -139,7 +139,7 @@ class DemosTest extends TestCase
 
             protected function emitResponse(): void {}
         };
-        $app->initLayout([Layout\Maestro::class]);
+        $app->initLayout([Layout::class]);
 
         // clone DB (mainly because all Models remains attached now, TODO can be removed once they are GCed)
         $app->db = clone self::$_db;
@@ -241,7 +241,7 @@ class DemosTest extends TestCase
     }
 
     /** @var string */
-    protected $regexHtml = '~^<!DOCTYPE~';
+    protected $regexHtml = '~^<!DOCTYPE html>\s*<html~';
     /** @var string */
     protected $regexJson = '~
         (?(DEFINE)
