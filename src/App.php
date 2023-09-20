@@ -299,7 +299,7 @@ class App
         // remove header
         $this->layout->template->tryDel('Header');
 
-        if (($this->isJsUrlRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
+        if (($this->isJsUrlRequest() || ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'XMLHttpRequest')
                 && !isset($_GET['__atk_tab'])) {
             $this->outputResponseJson([
                 'success' => false,
