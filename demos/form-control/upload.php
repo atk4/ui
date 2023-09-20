@@ -38,12 +38,12 @@ $img->onUpload(static function (array $postFile) use ($form, $img) {
     $img->setThumbnailSrc($img->getApp()->cdn['atk'] . '/logo.png');
     $img->set('123456', $postFile['name'] . ' (token: 123456)'); // @phpstan-ignore-line
 
-    // Do file processing here...
+    // do file processing here...
 
-    // This will get caught by JsCallback and show via modal.
+    // this will get caught by JsCallback and show via modal
     // new Blabla();
 
-    // JS Action can be return.
+    // JS Action can be return
     // if using form, can return an error to form control directly.
     // return $form->jsError('file', 'Unable to upload file.');
 

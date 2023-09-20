@@ -18,12 +18,12 @@ use Atk4\Ui\VirtualPage;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-// Demonstrate the use of Virtual Page.
+// Demonstrate the use of VirtualPage
 
 // define virtual page.
 $virtualPage = VirtualPage::addTo($app->layout, ['urlTrigger' => 'in']);
 
-// Add content to virtual page.
+// add content to virtual page
 if (isset($_GET['p_id'])) {
     Header::addTo($virtualPage, [$_GET['p_id']])->addClass('__atk-behat-test-car');
 }
@@ -51,7 +51,6 @@ $button->link($virtualPage->cb->getUrl() . '&p_id=Car');
 $button = Button::addTo($app, ['More info on Bike']);
 $button->link($virtualPage->cb->getUrl() . '&p_id=Bike');
 
-// Test 1 - Basic reloading
 Header::addTo($app, ['Virtual Page Logic']);
 
 $virtualPage = VirtualPage::addTo($app); // this page will not be visible unless you trigger it specifically

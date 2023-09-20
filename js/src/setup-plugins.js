@@ -28,7 +28,7 @@ atk.registerPlugin = function (name, cl, shorthand = false) {
 
     // register plugin to jQuery fn prototype.
     $.fn[name] = function (option = {}, args = []) {
-        // Check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
+        // check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
         if (typeof option === 'string') {
             return this.data(dataName).call(option, args);
         }

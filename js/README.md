@@ -38,7 +38,7 @@ atk.registerPlugin('greenify', function (el) {
 The plugin can now by invoke using:
 
 ```
-// Change all link color text to green.
+// change all link color text to green
 $('a').greenify();
 ```
 

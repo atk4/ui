@@ -254,7 +254,7 @@ Here are few ways to specify `icon` to an Input/Line:
 // compact
 Line::addTo($page, ['icon' => 'search']);
 
-// Type-hinting friendly
+// type-hinting friendly
 $line = new \Atk4\Ui\Form\Control\Line();
 $line->icon = 'search';
 $page->add($line);
@@ -271,7 +271,7 @@ and pass some arguments to the icon, there are two options:
 // compact
 $line->icon = ['search', 'class.big' => true];
 
-// Type-hinting friendly
+// type-hinting friendly
 $line->icon = new Icon('search');
 $line->icon->addClass('big');
 ```

@@ -32,7 +32,7 @@ $wizard->addStep('Welcome', static function (Wizard $wizard) {
 // to store wizard-specific variables
 $wizard->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database Connection String'], static function (Wizard $wizard) {
     $form = Form::addTo($wizard);
-    // IMPORTANT - needed for php_unit Wizard test.
+    // IMPORTANT - needed for php_unit Wizard test
     $form->cb->setUrlTrigger('w_form_submit');
 
     $form->addControl('dsn', ['caption' => 'Connect DSN'], ['required' => true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
@@ -91,7 +91,7 @@ $wizard->addStep(['Migration', 'description' => 'Create or update table', 'icon'
     });
 });
 
-// calling addFinish adds a step, which will not appear in the list of steps, but
+// Calling addFinish adds a step, which will not appear in the list of steps, but
 // will be displayed when you click the "Finish". Finish will not add any buttons
 // because you shouldn't be able to navigate wizard back without restarting it.
 // Only one finish can be added.

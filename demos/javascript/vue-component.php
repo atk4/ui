@@ -19,7 +19,7 @@ require_once __DIR__ . '/../init-app.php';
 Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
 View::addTo($app, ['ui' => 'divider']);
 
-// Inline Edit
+// InlineEdit
 
 $entity = (new Country($app->db))
     ->setOrder(Country::hinting()->fieldName()->id)
@@ -109,7 +109,7 @@ $app->html->template->dangerouslyAppendHtml('Head', $app->getTag('script', [], <
     };
     EOF));
 
-// Injecting template but normally you would create a template file.
+// injecting template but normally you would create a template file
 $clockTemplate = new HtmlTemplate(<<<'EOF'
     <div class="ui center aligned segment" {$attributes}>
         <my-clock v-bind="initData"></my-clock>
@@ -117,7 +117,7 @@ $clockTemplate = new HtmlTemplate(<<<'EOF'
     {$script}
     EOF);
 
-// Injecting script but normally you would create a separate JS file and include it in your page.
+// injecting script but normally you would create a separate JS file and include it in your page
 $clockScript = $app->getTag('script', [], <<<'EOF'
     let myClock = {
         template: `
@@ -162,7 +162,7 @@ $clockScript = $app->getTag('script', [], <<<'EOF'
     };
     EOF);
 
-// Creating the clock view and injecting JS.
+// creating the clock view and injecting JS
 $clock = View::addTo($app, ['template' => $clockTemplate]);
 $clock->template->dangerouslySetHtml('script', $clockScript);
 

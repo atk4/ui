@@ -29,16 +29,16 @@ Loader::addTo($app)->set(static function (Loader $p) {
     Header::addTo($p, ['Loader #1']);
     LoremIpsum::addTo($p, ['size' => 1]);
 
-    // Any dynamic views can perform callbacks just fine
+    // any dynamic views can perform callbacks just fine
     ViewTester::addTo($p);
 
-    // Loader may be inside another loader, works fine.
+    // Loader may be inside another loader
     $loader = Loader::addTo($p);
 
     // use loadEvent to prevent manual loading or even specify custom trigger event
     $loader->loadEvent = false;
     $loader->set(static function (Loader $p) {
-        // You may pass arguments to the loader, in this case it's "color"
+        // you may pass arguments to the loader, in this case it's "color"
         sleep(1);
         Header::addTo($p, ['Loader #1b - ' . $_GET['color']]);
         LoremIpsum::addTo(View::addTo($p, ['ui' => $_GET['color'] . ' segment']), ['size' => 1]);
@@ -47,7 +47,7 @@ Loader::addTo($app)->set(static function (Loader $p) {
         $p->stickyGet('color');
         ViewTester::addTo($p);
 
-        // This loader takes 2s to load because it needs to go through 2 sleep statements.
+        // this loader takes 2s to load because it needs to go through 2 sleep statements
     });
 
     // button may contain load event.

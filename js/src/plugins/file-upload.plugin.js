@@ -20,7 +20,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
      * Setup field initial state.
      */
     setInitialState() {
-        // Set progress bar.
+        // set progress bar
         this.bar.progress({
             text: {
                 percent: '{percent}%',

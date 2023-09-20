@@ -10,7 +10,7 @@ export default class AtkAjaxecPlugin extends AtkPlugin {
             return;
         }
 
-        // Allow user to confirm if available.
+        // allow user to confirm if available
         if (this.settings.confirm) {
             if (window.confirm(this.settings.confirm)) { // eslint-disable-line no-alert
                 this.doExecute();

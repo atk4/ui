@@ -1066,7 +1066,6 @@ class View extends AbstractView
             $actions = [$action];
         }
 
-        // Do we need confirm action.
         if ($defaults['confirm'] ?? null) {
             array_unshift($eventStatements, new JsExpression('$.atkConfirm({ message: [confirm], onApprove: [action], options: { button: { ok: [ok], cancel: [cancel] } }, context: this })', [
                 'confirm' => $defaults['confirm'],

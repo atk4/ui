@@ -27,7 +27,7 @@ $action = $countries->addUserAction('book', [
     },
 ]);
 
-// Create custom button for this action in card.
+// create custom button for this action in card
 $app->getExecutorFactory()->registerTrigger(ExecutorFactory::CARD_BUTTON, [Button::class, 'class.blue' => true, 'icon' => 'plane'], $action);
 
 $action->args = [

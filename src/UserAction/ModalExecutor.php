@@ -93,7 +93,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     {
         $this->action = $this->executeModelActionLoad($this->action);
 
-        // Add buttons to modal for next and previous.
+        // add buttons to modal for next and previous
         $this->addButtonAction($this->createButtonBar());
         $this->jsSetButtonsState($this->loader, $this->step);
         $this->runSteps();

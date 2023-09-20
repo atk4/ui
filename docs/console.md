@@ -27,7 +27,7 @@ After adding a console to your {ref}`render_tree`, you just need to set a callba
 ```
 $console = Console::addTo($app);
 $console->set(function (Console $console) {
-    // This will be executed through SSE request
+    // this will be executed through SSE request
     $console->output('hello');
     echo 'world'; // also will be redirected to console
     sleep(2);

@@ -80,7 +80,7 @@ $img->onUpload(function (array $postFile) use ($form, $img) {
         return $form->jsError('img', 'Error uploading image.');
     }
 
-    // Do file processing here...
+    // do file processing here...
 
     $img->setThumbnailSrc('./images/' . $fileName);
     $img->setFileId('123456');

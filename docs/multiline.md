@@ -112,7 +112,7 @@ Using a form with User model won't automatically add a Multiline to edit the rel
 If you want to edit them along with the user, Multiline need to be set up accordingly using the setReferenceModel method:
 
 ```
-// Add a form to Ui in order to edit User record.
+// add a form to UI in order to edit User record
 $userForm = \Atk4\Ui\Form::addTo($app);
 $userForm->setModel($user->load($userId));
 

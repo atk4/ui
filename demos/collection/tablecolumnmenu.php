@@ -16,7 +16,7 @@ require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Table column may contains popup or dropdown menu.']);
 
-// Better Popup positioning when Popup are inside a container.
+// better Popup positioning when Popup are inside a container
 $container = View::addTo($app, ['ui' => 'vertical segment']);
 $table = Table::addTo($container, ['class.celled' => true]);
 $table->setModel(new SomeData(), []);
@@ -36,7 +36,7 @@ $table->addColumn('salary', new Table\Column\Money());
 Text::addTo($colName->addPopup())->set('Name popup');
 
 // dynamic popup setup
-// This popup will add content using the callback function.
+// this popup will add content using the callback function
 $colSurname->addPopup()->set(static function (View $pop) {
     Text::addTo($pop)->set('This popup is loaded dynamically');
 });
@@ -50,16 +50,16 @@ $colTitle->addDropdown(['Change', 'Reorder', 'Update'], static function (string 
 
 Header::addTo($app, ['Grid column may contains popup or dropdown menu.']);
 
-// Table in Grid are already inside a container.
+// Table in Grid are already inside a container
 $grid = Grid::addTo($app);
 $grid->setModel(new Country($app->db));
 $grid->ipp = 5;
 
-// Adding a dropdown menu to the column 'name'.
+// adding a dropdown menu to the column 'name'
 $grid->addDropdown(Country::hinting()->fieldName()->name, ['Rename', 'Delete'], static function (string $item) {
     return $item;
 });
 
-// Adding a popup view to the column 'iso'
+// adding a popup view to the column 'iso'
 $pop = $grid->addPopup(Country::hinting()->fieldName()->iso);
 Text::addTo($pop)->set('Grid column popup');

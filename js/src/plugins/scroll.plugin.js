@@ -88,11 +88,11 @@ export default class AtkScrollPlugin extends AtkPlugin {
         const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth;
         // this.$el padding top value.
         const paddingTop = Number.parseInt(this.$el.css('paddingTop'), 10) + borderTopWidthInt;
-        // Either the scroll bar position using window or the container element top position otherwise.
+        // either the scroll bar position using window or the container element top position otherwise
         const topHeight = this.isWindow ? $(window).scrollTop() : this.$scroll.offset().top;
         // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
         const innerTop = this.$inner.length > 0 ? this.$inner.offset().top : 0;
-        // The total height.
+        // the total height
         const totalHeight = Math.ceil(topHeight - innerTop + this.$scroll.height() + paddingTop);
 
         if (!this.isWaiting && totalHeight + this.settings.options.padding >= this.$inner.outerHeight()) {

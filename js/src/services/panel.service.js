@@ -8,9 +8,9 @@ import atk from 'atk';
 class PanelService {
     constructor() {
         this.service = {
-            panels: [], // a collection of panels.
-            currentVisibleId: null, // the current panel id that is in a visible state.
-            currentParams: null, // URL argument of the current panel.
+            panels: [], // a collection of panels
+            currentVisibleId: null, // the current panel id that is in a visible state
+            currentParams: null, // URL argument of the current panel
         };
     }
 
@@ -32,7 +32,8 @@ class PanelService {
      * we need to make sure it is not add multiple time.
      */
     addPanel(params) {
-        // Remove existing one. Can be added by a reload.
+        // remove existing one
+        // can be added by a reload
         if (this.getPropertyValue(params.id, 'id')) {
             this.removePanel(params.id);
         }
@@ -140,8 +141,8 @@ class PanelService {
         const params = this.service.currentParams;
         // do we need to load anything in this panel.
         if (this.getPropertyValue(id, 'url')) {
-            // Convert our array of args to object.
-            // Args must be defined as data-attributeName in the triggered element.
+            // convert our array of args to object
+            // args must be defined as data-attributeName in the triggered element
             const args = {};
             for (const k of params.reloadArgs) {
                 args[k] = params.triggered.data(k);
@@ -253,7 +254,7 @@ class PanelService {
     setTriggerElement(id, trigger, params) {
         this.setPropertyValue(id, 'triggerElement', trigger);
 
-        // Do we need to setup CSS class on triggering element.
+        // setup CSS class on triggering element
         if (params.activeCSS) {
             let element;
             let css;

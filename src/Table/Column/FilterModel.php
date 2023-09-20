@@ -70,7 +70,7 @@ abstract class FilterModel extends Model
             'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
         ][$field->type];
 
-        // You can set your own filter model class.
+        // you can set your own filter model class
         if (isset($field->ui['filterModel'])) {
             if ($field->ui['filterModel'] instanceof self) {
                 return $field->ui['filterModel'];
@@ -107,7 +107,7 @@ abstract class FilterModel extends Model
             $this->forget();
         }
 
-        // Add hook in order to persist data in session.
+        // add hook in order to persist data in session
         $this->onHook(self::HOOK_AFTER_SAVE, function (Model $model) {
             $this->memorize('data', $model->get());
         });

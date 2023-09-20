@@ -19,7 +19,7 @@ Header::addTo($app, [
     'subHeader' => 'Model action can be trigger in various ways.',
 ]);
 
-// Model action setup.
+// Model action setup
 $country = new Country($app->db);
 
 $sendEmailAction = $country->addUserAction('Email', [
@@ -39,7 +39,7 @@ Header::addTo($app, [
     'subHeader' => 'Action can be triggered via a button attached to an input. The data action argument value is set to the input value.',
 ]);
 
-// Note here that we explicitly required a JsCallbackExecutor for the greet action.
+// note here that we explicitly required a JsCallbackExecutor for the greet action
 $country->addUserAction('greet', [
     'appliesTo' => UserAction::APPLIES_TO_NO_RECORDS,
     'args' => [
@@ -53,7 +53,7 @@ $country->addUserAction('greet', [
     },
 ]);
 
-// Set the action property for the Line Form Control.
+// set the action property for the Line Form Control
 Form\Control\Line::addTo($app, ['action' => $country->getUserAction('greet')]);
 
 // -----------------------------------------------------------------------------
@@ -66,7 +66,7 @@ Header::addTo($app, [
     'subHeader' => 'Easily trigger a data action using a Card component.',
 ]);
 
-// Card component.
+// Card component
 $card = Card::addTo($app);
 $content = new View(['class' => ['content']]);
 $img = Image::addTo($content, ['../images/kristy.png']);
@@ -79,5 +79,5 @@ $card->addDescription('Kristy is a friend of Mully.');
 $s = $card->addSection('Country');
 $s->addFields($entity = $country->loadAny(), [$country->fieldName()->name, $country->fieldName()->iso]);
 
-// Pass the model action to the Card::addClickAction() method.
+// pass the model action to the Card::addClickAction() method
 $card->addClickAction($sendEmailAction, null, ['id' => $entity->getId()]);

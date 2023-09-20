@@ -220,7 +220,8 @@ class Card extends View
 
         $defaults = [];
 
-        // Setting arg for model ID. $args[0] is consider to hold a model ID, i.e. as a JS expression.
+        // setting arg for model ID
+        // $args[0] is consider to hold a model ID, i.e. as a JS expression
         if ($this->model && $this->model->isLoaded() && !isset($args[0])) {
             $defaults[] = $this->model->getId();
             if ($cardDeck === null && !$action->isOwnerEntity()) {

@@ -23,6 +23,7 @@ require_once __DIR__ . '/../init-app.php';
 Header::addTo($app, ['Modal View']);
 
 $session = new Session($app);
+
 // Re-usable component implementing counter
 
 Header::addTo($app, ['Static Modal Dialog']);
@@ -54,7 +55,7 @@ Button::addTo($bar, ['No Title'])
 Button::addTo($bar, ['Scrolling Content'])
     ->on('click', $modalScrolling->jsShow());
 
-// Modal demos.
+// Modal demos
 
 // REGULAR
 
@@ -82,7 +83,7 @@ $vp3Modal->set(static function (View $p) {
     LoremIpsum::addTo($p, ['size' => 2]);
 });
 
-// When $vp1Modal->jsShow() is activate, it will dynamically add this content to it.
+// when $vp1Modal->jsShow() is activate, it will dynamically add this content to it
 $vp1Modal->set(static function (View $p) use ($vp2Modal) {
     ViewTester::addTo($p);
     View::addTo($p, ['Showing lorem ipsum']); // need in behat test.
@@ -94,7 +95,7 @@ $vp1Modal->set(static function (View $p) use ($vp2Modal) {
     });
 });
 
-// When $vp2Modal->jsShow() is activate, it will dynamically add this content to it.
+// when $vp2Modal->jsShow() is activate, it will dynamically add this content to it
 $vp2Modal->set(static function (View $p) use ($vp3Modal) {
     ViewTester::addTo($p);
     Message::addTo($p, [$_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
@@ -161,10 +162,10 @@ $button->on('click', $denyApproveModal->jsShow());
 
 Header::addTo($app, ['Multiple page modal']);
 
-// Add modal to layout.
+// add modal to layout
 $stepModal = Modal::addTo($app, ['title' => 'Multi step actions']);
 
-// Add buttons to modal for next and previous actions.
+// add buttons to modal for next and previous actions
 $action = new View(['ui' => 'buttons']);
 $previousAction = new Button(['Previous', 'icon' => 'left arrow']);
 $nextAction = new Button(['Next', 'iconRight' => 'right arrow']);
@@ -238,7 +239,7 @@ $nextAction->on('click', $stepModal->js()->atkReloadView(
     ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'next']]
 ));
 
-// Bind display modal to page display button.
+// bind display modal to page display button
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($menuBar)->set('Multi Step Modal');
 $button->on('click', $stepModal->jsShow());

@@ -18,7 +18,8 @@ use Atk4\Ui\View;
 require_once __DIR__ . '/../init-app.php';
 
 $country = new Country($app->db);
-// Model actions for this file are setup in DemoActionUtil.
+
+// model actions for this file are setup in DemoActionUtil
 DemoActionsUtil::setupDemoActions($country);
 
 // creating special menu item for multi_step action.
@@ -42,7 +43,7 @@ $jsHeader = Factory::factory([View::class], ['name' => false, 'class' => ['heade
 Icon::addTo($jsHeader, ['content' => 'file code']);
 
 $grid->addActionMenuItem($jsHeader);
-// Beside model user action, grid menu items can also execute javascript.
+// beside model user action, grid menu items can also execute javascript
 $grid->addActionMenuItem('JS Callback', static function () {
     return (new View())->set('JS Callback done!');
 }, 'Are you sure?');
@@ -51,7 +52,7 @@ $grid->addActionMenuItem($divider);
 
 $grid->addActionMenuItem($modelHeader);
 
-// Adding Model actions.
+// adding Model actions
 foreach ($country->getUserActions(UserAction::APPLIES_TO_SINGLE_RECORD) as $action) {
     if (in_array($action->shortName, ['add', 'edit', 'delete'], true)) {
         continue;

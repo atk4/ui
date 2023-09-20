@@ -405,7 +405,7 @@ class Grid extends View
     public function addExecutorMenuItem(ExecutorInterface $executor)
     {
         $item = $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_MENU_ITEM);
-        // ConfirmationExecutor take care of showing the user confirmation, thus make it empty.
+        // ConfirmationExecutor take care of showing the user confirmation, thus make it empty
         $confirmation = !$executor instanceof ConfirmationExecutor ? $executor->getAction()->getConfirmation() : '';
         if (!$confirmation) {
             $confirmation = '';
@@ -641,7 +641,7 @@ class Grid extends View
     {
         $this->selection = $this->table->addColumn(null, [Table\Column\Checkbox::class]);
 
-        // Move last column to the beginning in table column array.
+        // move last column to the beginning in table column array
         array_unshift($this->table->columns, array_pop($this->table->columns));
 
         return $this->selection;
@@ -657,7 +657,7 @@ class Grid extends View
     {
         $handler = $this->table->addColumn(null, [Table\Column\DragHandler::class]);
 
-        // Move last column to the beginning in table column array.
+        // move last column to the beginning in table column array
         array_unshift($this->table->columns, array_pop($this->table->columns));
 
         return $handler;

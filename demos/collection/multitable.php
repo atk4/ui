@@ -17,7 +17,7 @@ use Atk4\Ui\VirtualPage;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-// Re-usable component implementing counter
+// re-usable component implementing counter
 
 $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends Columns {
     public array $route = [];

@@ -40,7 +40,7 @@ class ItemsPerPageSelector extends View
         Icon::addTo($this)->set('dropdown');
         $this->template->trySet('Label', $this->label);
 
-        // Callback later will give us time to properly render menu item before final output.
+        // CallbackLater will give us time to properly render menu item before final output
         $this->cb = CallbackLater::addTo($this);
 
         if (!$this->currentIpp) {

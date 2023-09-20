@@ -82,9 +82,9 @@ class ApiService {
 
                     const result = $('#' + response.id).replaceWith(response.html);
                     if (result.length === 0) {
-                        // TODO Find a better solution for long term.
-                        // Need a way to gracefully abort server request.
-                        // when user cancel a request by selecting another request.
+                        // TODO find a better solution for long term
+                        // need a way to gracefully abort server request
+                        // when user cancel a request by selecting another request
                         console.error('Unable to replace element with id: ' + response.id);
                         // throw Error('Unable to replace element with id: ' + response.id);
                     }

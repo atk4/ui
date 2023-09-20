@@ -51,7 +51,7 @@ $crud = Crud::addTo($column, [
     'menu' => ['class' => ['green inverted']],
     'table' => ['class' => ['red inverted']],
 ]);
-// Condition on the model can be applied on a model
+// condition on the model can be applied on a model
 $model = new Country($app->db);
 $model->addCondition($model->fieldName()->numcode, '<', 200);
 $model->onHook(Model::HOOK_VALIDATE, static function (Country $model, ?string $intent) {
@@ -64,7 +64,7 @@ $model->onHook(Model::HOOK_VALIDATE, static function (Country $model, ?string $i
 });
 $crud->setModel($model);
 
-// Because Crud inherits Grid, you can also define custom actions
+// because Crud inherits Grid, you can also define custom actions
 $crud->addModalAction(['icon' => 'cogs'], 'Details', static function (View $p, $id) use ($crud) {
     $model = Country::assertInstanceOf($crud->model);
     Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $id . ')']);
@@ -102,6 +102,6 @@ $crud = Crud::addTo($column, [
 
 $crud->menu->addItem(['Rescan', 'icon' => 'recycle']);
 
-// Condition on the model can be applied after setting the model
+// condition on the model can be applied after setting the model
 $crud->setModel($file);
 $file->addCondition($file->fieldName()->parent_folder_id, null);

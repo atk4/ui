@@ -310,7 +310,7 @@ class App
             $this->run();
         }
 
-        // Process is already in shutdown/stop
+        // process is already in shutdown because of uncaught exception
         // no need of call exit function
         $this->callBeforeExit();
     }

@@ -398,19 +398,19 @@ class Table extends Lister
             $this->addClass('sortable');
         }
 
-        // Generate Header Row
+        // generate Header Row
         if ($this->header) {
             $this->tHead->dangerouslySetHtml('cells', $this->getHeaderRowHtml());
             $this->template->dangerouslySetHtml('Head', $this->tHead->renderToHtml());
         }
 
-        // Generate template for data row
+        // generate template for data row
         $this->tRowMaster->dangerouslySetHtml('cells', $this->getDataRowHtml());
         $this->tRowMaster->set('dataId', '{$dataId}');
         $this->tRow = new HtmlTemplate($this->tRowMaster->renderToHtml());
         $this->tRow->setApp($this->getApp());
 
-        // Iterate data rows
+        // iterate data rows
         $this->_renderedRowsCount = 0;
 
         // TODO we should not iterate using $this->model variable,
@@ -443,7 +443,7 @@ class Table extends Lister
             $this->tRow = $tRowBackup;
         }
 
-        // Add totals rows or empty message
+        // add totals rows or empty message
         if ($this->_renderedRowsCount === 0) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
                 $this->template->dangerouslyAppendHtml('Body', $this->tEmpty->renderToHtml());
@@ -489,7 +489,7 @@ class Table extends Lister
                 }
             }
 
-            // Render row and add to body
+            // render row and add to body
             $this->tRow->dangerouslySetHtml($htmlTags);
             $this->tRow->set('dataId', (string) $this->model->getId());
             $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
@@ -609,7 +609,7 @@ class Table extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
-            // If multiple formatters are defined, use the first for the header cell
+            // if multiple formatters are defined, use the first for the header cell
             if (is_array($column)) {
                 $column = $column[0];
             }

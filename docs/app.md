@@ -73,11 +73,11 @@ class Warehouse extends \Atk4\Ui\App
     {
         parent::__construct('Warehouse App v0.4');
 
-        // My App class will establish database connection
+        // my App class will establish database connection
         $this->db = new \Atk4\Data\Persistence\Sql($_CLEARDB_DATABASE_URL['DSN']);
         $this->db->setApp($this);
 
-        // My App class provides access to a currently logged user and currently selected system.
+        // my App class provides access to a currently logged user and currently selected system
         session_start();
 
         // App class may be used for pages that do not require authentication
@@ -87,13 +87,13 @@ class Warehouse extends \Atk4\Ui\App
             return;
         }
 
-        // Load user from database based on session data
+        // load user from database based on session data
         if (isset($_SESSION['user_id'])) {
             $user = new User($this->db);
             $this->user = $user->tryLoad($_SESSION['user_id']);
         }
 
-        // Make sure user is valid
+        // make sure user is valid
         if ($this->user === null) {
             $this->initLayout([\Atk4\Ui\Layout\Centered::class]);
             Message::addTo($this, ['Login Required', 'type' => 'error']);
@@ -101,12 +101,12 @@ class Warehouse extends \Atk4\Ui\App
             exit;
         }
 
-        // Load company data (System) for present user
+        // load company data (System) for present user
         $this->company = $this->user->ref('company_id');
 
         $this->initLayout([\Atk4\Ui\Layout\Admin::class]);
 
-        // Add more initialization here, such as a populating menu.
+        // add more initialization here, such as a populating menu.
     }
 }
 ```
@@ -157,7 +157,7 @@ without actually triggering a global execution process:
 ```
 HelloWorld::addTo($app);
 
-// Next line is optional
+// next line is optional
 $app->run();
 ```
 
@@ -443,7 +443,7 @@ Populating the left menu object is simply a matter of adding the right menu item
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 $layout = $app->layout;
 
-// Add item into menu
+// add item into menu
 $layout->menuLeft->addItem(['Welcome Page', 'icon' => 'gift'], ['index']);
 $layout->menuLeft->addItem(['Layouts', 'icon' => 'object group'], ['layouts']);
 

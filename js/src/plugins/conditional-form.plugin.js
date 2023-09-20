@@ -122,7 +122,7 @@ export default class AtkConditionalFormPlugin extends AtkPlugin {
                         isAndValid = isAndValid && atk.formService.validateField(this.$el, inputName, validationRule);
                     }
                 }
-                // Apply OR condition between rules.
+                // apply OR condition between rules
                 input.state = input.state || isAndValid;
             }
         }

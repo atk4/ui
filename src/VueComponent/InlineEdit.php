@@ -76,7 +76,7 @@ class InlineEdit extends View
 
         $this->cb = JsCallback::addTo($this);
 
-        // Set default validation error handler.
+        // set default validation error handler
         if (!$this->formatErrorMsg) {
             $this->formatErrorMsg = function (ValidationException $e, string $value) {
                 $caption = $this->model->getField($this->fieldName)->getCaption();

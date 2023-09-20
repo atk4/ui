@@ -301,7 +301,7 @@ class Column
                 $attr['class'] = ['sortable'];
             }
 
-            // If table is being sorted by THIS column, set the proper class
+            // if table is being sorted by THIS column, set the proper class
             if ($this->table->sortBy === $field->shortName) {
                 $class .= ' sorted ' . ['asc' => 'ascending', 'desc' => 'descending'][$this->table->sortDirection];
 

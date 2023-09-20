@@ -15,7 +15,7 @@ require_once __DIR__ . '/../init-app.php';
 $v = View::addTo($app)->set('This will trigger a network request for testing SSE...');
 
 $sse = JsSse::addTo($app);
-// URL trigger must match php_unit test in sse provider.
+// URL trigger must match php_unit test in SSE provider
 $sse->setUrlTrigger('see_test');
 
 $v->js(true, $sse->set(static function () use ($sse) {
