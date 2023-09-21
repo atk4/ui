@@ -186,7 +186,7 @@ __webpack_require__.r(__webpack_exports__);
      * Get input initial data.
      */
     getInitData: function () {
-      // check if input containing data is set and initialized.
+      // check if input containing data is set and initialized
       if (!this.getRootData().item.isInitialized) {
         this.getRootData().values = this.getValues();
         this.getRootData().item.isInitialized = true;

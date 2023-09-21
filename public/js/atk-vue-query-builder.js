@@ -336,9 +336,9 @@ __webpack_require__.r(__webpack_exports__);
         removeGroupClass: 'small icon times',
         textInputPlaceholder: 'value',
         spaceRule: 'fitted',
-        // can be fitted, compact or padded.
+        // can be fitted, compact or padded
         hiddenOperator: ['is empty', 'is not empty'],
-        // a list of operators that when select, will hide user input.
+        // a list of operators that when select, will hide user input
         ...labels
       };
     }
