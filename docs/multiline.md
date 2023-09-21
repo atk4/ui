@@ -122,7 +122,7 @@ $ml->setReferenceModel('Emails');
 // set up saving of Email on Form submit
 $userForm->onSubmit(function (Form $form) use ($ml) {
     $form->model->save();
-    // save emails record related to current user.
+    // save emails record related to current user
     $ml->saveRows();
 
     return new JsToast(var_export($ml->model->export(), true));

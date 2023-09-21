@@ -184,7 +184,7 @@ class Column
             'onChange' => $function,
         ]);
 
-        // will stop grid column from being sorted.
+        // will stop grid column from being sorted
         $chain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));
 
         $this->table->js(true, $chain);

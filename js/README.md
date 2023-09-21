@@ -18,8 +18,8 @@ atk.uploadService.uploadFiles(
     elem,
     { data: 'value' },
     url,
-    onComplete() {}, // the callback function when upload is complete.
-    onXhr() {} // the callback function when uploading files is in progress.
+    onComplete() {}, // the callback function when upload is complete
+    onXhr() {} // the callback function when uploading files is in progress
 );
 ```
 

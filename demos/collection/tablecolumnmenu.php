@@ -21,10 +21,10 @@ $container = View::addTo($app, ['ui' => 'vertical segment']);
 $table = Table::addTo($container, ['class.celled' => true]);
 $table->setModel(new SomeData(), []);
 
-// will add popup to this column.
+// will add popup to this column
 $colName = $table->addColumn('name');
 
-// will add dropdown menu to this column.
+// will add dropdown menu to this column
 $colSurname = $table->addColumn('surname');
 
 $colTitle = $table->addColumn('title');

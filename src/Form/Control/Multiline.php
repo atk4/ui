@@ -207,7 +207,7 @@ class Multiline extends Form\Control
 
         $this->renderCallback = JsCallback::addTo($this);
 
-        // load the data associated with this input and validate it.
+        // load the data associated with this input and validate it
         $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
             $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($_POST[$this->shortName]));
             if ($this->rowData) {
@@ -233,7 +233,7 @@ class Multiline extends Form\Control
             // when errors are coming from this Multiline field, then notify Multiline component about them
             // otherwise use normal field error
             if ($fieldName === $this->shortName) {
-                // multiline.js component listen to 'multiline-rows-error' event.
+                // multiline.js component listen to 'multiline-rows-error' event
                 $jsError = $this->jsEmitEvent($this->multiLine->name . '-multiline-rows-error', ['errors' => $this->rowErrors]);
             } else {
                 $jsError = $form->js()->form('add prompt', $fieldName, $str);
@@ -281,7 +281,7 @@ class Multiline extends Form\Control
         if ($this->entityField->getField()->type === 'json') {
             $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
         } else {
-            // set data according to HasMany relation or using model.
+            // set data according to HasMany relation or using model
             $rows = [];
             foreach ($this->model as $row) {
                 $cols = [];
@@ -531,7 +531,8 @@ class Multiline extends Form\Control
      */
     protected function getLookupProps(Field $field): array
     {
-        // set any of SuiDropdown props via this property. Will be applied globally.
+        // set any of SuiDropdown props via this property
+        // will be applied globally
         $props = [];
         $props['config'] = $this->componentProps[self::LOOKUP] ?? [];
         $items = $this->getFieldItems($field, 10);

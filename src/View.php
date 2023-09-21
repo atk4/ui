@@ -737,10 +737,10 @@ class View extends AbstractView
      *
      * 1. Calling with arguments:
      * $view->js(); // technically does nothing
-     * $a = $view->js()->hide(); // creates chain for hiding $view but does not bind to event yet.
+     * $a = $view->js()->hide(); // creates chain for hiding $view but does not bind to event yet
      *
      * 2. Binding existing chains
-     * $img->on('mouseenter', $a); // binds previously defined chain to event on event of $img.
+     * $img->on('mouseenter', $a); // binds previously defined chain to event on event of $img
      *
      * Produced code: $('#img_id').on('mouseenter', function (event) {
      *     event.preventDefault();
@@ -1028,7 +1028,7 @@ class View extends AbstractView
                     $arguments[$ex->name] = $arguments['id'];
                     unset($arguments['id']);
                 } elseif (isset($arguments[0])) {
-                    // if "id" is not specified we assume arguments[0] is the model ID.
+                    // if "id" is not specified we assume arguments[0] is the model ID
                     $arguments[$ex->name] = $arguments[0];
                     unset($arguments[0]);
                 }

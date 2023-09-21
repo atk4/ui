@@ -10,7 +10,7 @@ export default class AtkColumnResizerPlugin extends AtkPlugin {
         this.settings.onResize = this.onResize.bind(this);
         this.resizable = new Resizer(this.$el[0], { ...this.settings.atkDefaults, ...this.settings });
 
-        // reset padding class.
+        // reset padding class
         this.$el.removeClass('grip-padding');
     }
 

@@ -71,10 +71,10 @@ $button->on('click', $simpleModal->jsShow());
 
 Header::addTo($app, ['Three levels of Modal loading dynamic content via callback']);
 
-// vp1Modal will be render into page but hide until $vp1Modal->jsShow() is activate.
+// vp1Modal will be render into page but hide until $vp1Modal->jsShow() is activate
 $vp1Modal = Modal::addTo($app, ['title' => 'Lorem Ipsum load dynamically']);
 
-// vp2Modal will be render into page but hide until $vp1Modal->jsShow() is activate.
+// vp2Modal will be render into page but hide until $vp1Modal->jsShow() is activate
 $vp2Modal = Modal::addTo($app, ['title' => 'Text message load dynamically'])->addClass('small');
 
 $vp3Modal = Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
@@ -86,7 +86,7 @@ $vp3Modal->set(static function (View $p) {
 // when $vp1Modal->jsShow() is activate, it will dynamically add this content to it
 $vp1Modal->set(static function (View $p) use ($vp2Modal) {
     ViewTester::addTo($p);
-    View::addTo($p, ['Showing lorem ipsum']); // need in behat test.
+    View::addTo($p, ['Showing lorem ipsum']); // need in behat test
     LoremIpsum::addTo($p, ['size' => 2]);
     $form = Form::addTo($p);
     $form->addControl('color', [], ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);

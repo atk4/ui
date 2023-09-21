@@ -263,7 +263,7 @@ class Card extends View
      */
     public function addExtraFields(Model $model, array $fields, string $glue = null): void
     {
-        // display extra field in line.
+        // display extra field in line
         if ($glue) {
             $extra = '';
             foreach ($fields as $field) {

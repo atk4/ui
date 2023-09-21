@@ -502,7 +502,7 @@ class Form extends View
 
     /**
      * Set Fomantic-UI Form settings to use with form. A complete list is here:
-     * https://fomantic-ui.com/behaviors/form.html#/settings.
+     * https://fomantic-ui.com/behaviors/form.html#/settings .
      *
      * @param array $config
      *

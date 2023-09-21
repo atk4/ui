@@ -22,11 +22,11 @@ $country = new Country($app->db);
 // model actions for this file are setup in DemoActionUtil
 DemoActionsUtil::setupDemoActions($country);
 
-// creating special menu item for multi_step action.
+// creating special menu item for multi_step action
 $multiAction = $country->getUserAction('multi_step');
 $specialItem = Factory::factory([View::class], ['name' => false, 'class' => ['item'], 'content' => 'Multi Step']);
 Icon::addTo($specialItem, ['content' => 'window maximize outline']);
-// register this menu item in factory.
+// register this menu item in factory
 $app->getExecutorFactory()->registerTrigger(ExecutorFactory::TABLE_MENU_ITEM, $specialItem, $multiAction);
 
 Header::addTo($app, ['Execute model action from Grid menu items', 'subHeader' => 'Setting grid menu items in order to execute model actions or javascript.']);

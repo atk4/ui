@@ -106,7 +106,7 @@ class Warehouse extends \Atk4\Ui\App
 
         $this->initLayout([\Atk4\Ui\Layout\Admin::class]);
 
-        // add more initialization here, such as a populating menu.
+        // add more initialization here, such as a populating menu
     }
 }
 ```

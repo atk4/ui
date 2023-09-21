@@ -43,11 +43,10 @@ $img->onUpload(static function (array $postFile) use ($form, $img) {
     // this will get caught by JsCallback and show via modal
     // new Blabla();
 
-    // JS Action can be return
-    // if using form, can return an error to form control directly.
+    // JS Action can be return if using form, can return an error to form control directly
     // return $form->jsError('file', 'Unable to upload file.');
 
-    // can also return a notifier.
+    // can also return a notifier
     return new JsToast([
         'title' => 'Upload success',
         'message' => 'Image is uploaded!',

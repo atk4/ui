@@ -27,7 +27,7 @@ class TypeDatetime extends Column\FilterModel
         ];
         $this->op->default = '=';
 
-        // the date value to operate on.
+        // the date value to operate on
         $this->value->values = [
             'today' => 'Today',
             'tomorrow' => 'Tomorrow',

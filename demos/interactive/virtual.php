@@ -20,7 +20,7 @@ require_once __DIR__ . '/../init-app.php';
 
 // Demonstrate the use of VirtualPage
 
-// define virtual page.
+// define virtual page
 $virtualPage = VirtualPage::addTo($app->layout, ['urlTrigger' => 'in']);
 
 // add content to virtual page
@@ -44,7 +44,7 @@ $msg = Message::addTo($app, ['Virtual Page']);
 $msg->text->addParagraph('Virtual page content are not rendered on page load. They will ouptput their content when trigger.');
 $msg->text->addParagraph('Click button below to trigger it.');
 
-// button that trigger virtual page.
+// button that trigger virtual page
 $button = Button::addTo($app, ['More info on Car']);
 $button->link($virtualPage->cb->getUrl() . '&p_id=Car');
 

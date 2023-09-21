@@ -11,10 +11,10 @@ import AtkPlugin from './atk.plugin';
  */
 export default class AtkSidenavPlugin extends AtkPlugin {
     main() {
-        // menu items container.
+        // menu items container
         this.menu = this.$el.find(this.settings.menuItemsSelector);
         if (this.menu.length === 0) {
-            // this $el is our single item.
+            // this $el is our single item
             if (this.urlMatchLocation(this.$el[0].href)) {
                 this.$el.addClass(this.settings.menuItemActiveClass);
             }
@@ -26,9 +26,9 @@ export default class AtkSidenavPlugin extends AtkPlugin {
 
         this.addClickHandler();
         if (this.hasBase()) {
-            // make menu group active.
+            // make menu group active
             this.$el.addClass(this.settings.menuGroupActiveClass);
-            // make menu group visible.
+            // make menu group visible
             this.menu.toggleClass(this.settings.visibleCssClass);
         }
         this.setTogglerIcon(this.settings.icon.selector);
@@ -45,7 +45,7 @@ export default class AtkSidenavPlugin extends AtkPlugin {
         this.menu.find('a').each((i, el) => {
             if (this.urlMatchLocation(el.href)) {
                 hasBase = true;
-                // set active class for this specific menu item.
+                // set active class for this specific menu item
                 $(el).addClass(this.settings.menuItemActiveClass);
             }
         });

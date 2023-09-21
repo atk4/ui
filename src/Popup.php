@@ -147,7 +147,7 @@ class Popup extends View
             $this->minHeight = '45px';
         }
 
-        // create content view to pass to callback.
+        // create content view to pass to callback
         $content = $this->add($this->dynamicContent);
         $this->cb->set($fx, [$content]);
         // only render our content view

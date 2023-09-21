@@ -38,7 +38,7 @@ Once template is initialized you can `renderToHtml()` it any-time to get string
 ```
 $t->set('mytag', 'Agile UI');
 
-echo $t->renderToHtml(); // "Hello, Agile UI".
+echo $t->renderToHtml(); // "Hello, Agile UI"
 ```
 
 Tags may also be self-closing:

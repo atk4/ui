@@ -72,12 +72,12 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->action = $action;
         $this->afterActionInit();
 
-        // get necessary step need prior to execute action.
+        // get necessary step need prior to execute action
         $this->steps = $this->getSteps();
         if ($this->steps !== []) {
             $this->title ??= $action->getDescription();
 
-            // get current step.
+            // get current step
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
         }
 
@@ -130,7 +130,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         }
 
         if ($this->steps !== []) {
-            // use modal for stepping action.
+            // use modal for stepping action
             $urlArgs['step'] = $this->step;
             if ($this->action->enabled) {
                 $view->on($when, $selector, $this->jsShowAndLoad($urlArgs));

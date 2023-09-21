@@ -73,11 +73,11 @@ $form = \Atk4\Ui\Form::addTo($app, ['class.segment' => true]);
 
 $l = $form->addControl('city', [\Atk4\Ui\Form\Control\Lookup::class]);
 
-// will restraint possible city value in droddown base on country and/or language.
+// will restraint possible city value in droddown base on country and/or language
 $l->addFilter('country', 'Country');
 $l->addFilter('language', 'Lang');
 
-// make sure country and language belong to your model.
+// make sure country and language belong to your model
 $l->setModel(new City($db));
 ```
 

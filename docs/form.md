@@ -827,7 +827,7 @@ $form->addControl('gender', [\Atk4\Ui\Form\Control\Radio::class], ['enum' => ['F
 $form->addControl('m_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
 $form->addControl('f_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption' => 'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
 
-// show email and gender when subscribe is checked.
+// show email and gender when subscribe is checked
 // show m_gift when gender = 'male' and subscribe is checked
 // show f_gift when gender = 'female' and subscribe is checked
 

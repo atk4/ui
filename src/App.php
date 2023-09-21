@@ -223,7 +223,7 @@ class App
             $this->session = new App\SessionManager();
         }
 
-        // setting up default executor factory.
+        // setting up default executor factory
         $this->executorFactory = Factory::factory([ExecutorFactory::class]);
     }
 

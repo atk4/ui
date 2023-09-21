@@ -22,12 +22,12 @@ $model = new Country($app->db);
 
 $crud = Crud::addTo($app, ['ipp' => 10]);
 
-// callback for model action add form.
+// callback for model action add form
 $crud->onFormAdd(static function (Form $form, ModalExecutor $ex) use ($model) {
     $form->js(true, $form->getControl($model->fieldName()->name)->jsInput()->val('Entering value via javascript'));
 });
 
-// callback for model action edit form.
+// callback for model action edit form
 $crud->onFormEdit(static function (Form $form) use ($model) {
     $form->js(true, $form->getControl($model->fieldName()->name)->jsInput()->attr('readonly', true));
 });

@@ -232,7 +232,7 @@ class Grid extends View
             }
             $this->applySort();
 
-            // return the view to reload.
+            // return the view to reload
             return $this->container;
         });
 
@@ -253,7 +253,7 @@ class Grid extends View
     {
         if ($this->paginator) {
             $this->paginator->destroy();
-            // prevent action(count) to be output twice.
+            // prevent action(count) to be output twice
             $this->paginator = null;
         }
 
@@ -287,7 +287,7 @@ class Grid extends View
             'hasFixTableHeader' => true,
             'tableContainerHeight' => $containerHeight,
         ]);
-        // adding a state context to JS scroll plugin.
+        // adding a state context to JS scroll plugin
         $options = array_merge(['stateContext' => $this->container], $options);
 
         return $this->addJsPaginator($ipp, $options, $container, $scrollRegion);

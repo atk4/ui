@@ -133,8 +133,8 @@ $clockScript = $app->getTag('script', [], <<<'EOF'
             return { style: this.styles, currentIndex: 0 };
         },
         mounted: function () {
-            // add a listener for changing clock style.
-            // this will listen to event '-clock-change-style' emit on the eventBus.
+            // add a listener for changing clock style
+            // this will listen to event '-clock-change-style' emit on the eventBus
             atk.eventBus.on(this.$root.$el.parentElement.id + '-clock-change-style', (payload) => {
                 this.onChangeStyle();
             });
@@ -166,14 +166,14 @@ $clockScript = $app->getTag('script', [], <<<'EOF'
 $clock = View::addTo($app, ['template' => $clockTemplate]);
 $clock->template->dangerouslySetHtml('script', $clockScript);
 
-// passing some style to my-clock component.
+// passing some style to my-clock component
 $clockStyle = [
     ['color' => 'maroon', 'background' => '', 'textShadow' => '5px 5px 10px teal'],
     ['color' => 'white', 'background' => '', 'textShadow' => '0px 0px 10px blue'],
     ['color' => '', 'background' => 'radial-gradient(ellipse at center, rgba(0, 255, 0, 0.25) 0%,rgba(0, 255, 0, 0) 50%)', 'textShadow' => ''],
 ];
 
-// creating vue using an external definition.
+// creating vue using an external definition
 $clock->vue('my-clock', ['styles' => $clockStyle], new JsExpression('myClock'));
 
 $button = Button::addTo($app, ['Change Style']);

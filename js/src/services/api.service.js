@@ -73,7 +73,7 @@ class ApiService {
         try {
             if (response.success) {
                 if (response.html && response.id) {
-                    // prevent modal duplication.
+                    // prevent modal duplication
                     // apiService.removeModalDuplicate(response.html);
                     const modelsContainer = $('.ui.dimmer.modals.page')[0];
                     $($.parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
@@ -123,7 +123,7 @@ class ApiService {
         if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
             atk.apiService.showErrorModal(response.message);
         } else {
-            // check if we have HTML returned by server with <body> content.
+            // check if we have HTML returned by server with <body> content
             const body = response.match(/<body[^>]*>[\S\s]*<\/body>/gi);
             if (body) {
                 atk.apiService.showErrorModal(body);
@@ -200,7 +200,7 @@ class ApiService {
             }
         }
 
-        // catch application error and display them in a new modal window.
+        // catch application error and display them in a new modal window
         const m = $('<div>')
             .appendTo('body')
             .addClass('ui scrolling modal')

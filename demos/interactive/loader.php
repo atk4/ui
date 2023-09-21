@@ -24,7 +24,7 @@ ViewTester::addTo($app);
 
 // Example 1 - Basic usage of a Loader.
 Loader::addTo($app)->set(static function (Loader $p) {
-    // set your time expensive function here.
+    // set your time expensive function here
     sleep(1);
     Header::addTo($p, ['Loader #1']);
     LoremIpsum::addTo($p, ['size' => 1]);
@@ -50,7 +50,7 @@ Loader::addTo($app)->set(static function (Loader $p) {
         // this loader takes 2s to load because it needs to go through 2 sleep statements
     });
 
-    // button may contain load event.
+    // button may contain load event
     Button::addTo($p, ['Load Segment Manually (2s)', 'class.red' => true])
         ->on('click', $loader->jsLoad(['color' => 'red']));
     Button::addTo($p, ['Load Segment Manually (2s)', 'class.blue' => true])
