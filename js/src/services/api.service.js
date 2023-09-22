@@ -124,6 +124,7 @@ class ApiService {
             atk.apiService.showErrorModal(response.message);
         } else {
             // check if we have HTML returned by server with <body> content
+            // TODO test together /w onError using non-200 HTTP AJAX response code
             const body = response.match(/<body[^>]*>[\S\s]*<\/body>/gi);
             if (body) {
                 atk.apiService.showErrorModal(body);
