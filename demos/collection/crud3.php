@@ -27,7 +27,7 @@ $modelClass = AnonymousClassNameCache::get_class(fn () => new class() extends Mo
     }
 });
 
-// Prepare Persistence and data Model
+// prepare Persistence and data Model
 $data = ['test' => [
     1 => ['id' => 1, 'name' => 'ABC9', 'code' => 11, 'country' => 'Ireland'],
     2 => ['id' => 2, 'name' => 'ABC8', 'code' => 12, 'country' => 'Ireland'],

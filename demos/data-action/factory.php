@@ -48,7 +48,7 @@ $myFactory = AnonymousClassNameCache::get_class(static fn () => new class() exte
     ];
 });
 
-// Set new executor factory globally.
+// set new executor factory globally
 $app->setExecutorFactory(new $myFactory());
 
 $country = new Country($app->db);

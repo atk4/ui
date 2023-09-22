@@ -140,7 +140,7 @@ class JsSse extends JsCallback
         if (connection_aborted()) {
             $this->hook(self::HOOK_ABORTED);
 
-            // stop execution when aborted if not keepAlive.
+            // stop execution when aborted if not keepAlive
             if (!$this->keepAlive) {
                 $this->getApp()->callExit();
             }

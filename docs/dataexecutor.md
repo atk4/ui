@@ -190,7 +190,7 @@ class MySpecialFormExecutor extends \Atk4\Ui\UserAction\ModalExecutor
     }
 }
 
-//...
+// ...
 ExecutorFactory::registerExecutor($action, [MySpecialFormExecutor::class]);
 ```
 
@@ -261,7 +261,7 @@ class MyFactory extends \Atk4\Ui\UserAction\ExecutorFactory
     ];
 }
 
-//...
+// ...
 $app->defaultExecutorFactory = $myFactory;
 ```
 

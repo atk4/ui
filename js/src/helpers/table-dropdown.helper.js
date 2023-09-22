@@ -9,7 +9,7 @@ import throttle from 'lodash/throttle';
  * This utility will properly set CSS style for dropdown menu to be displayed correctly.
  */
 function showTableDropdown() {
-    // getting element composing dropdown.
+    // getting element composing dropdown
     const $that = $(this);
     const $menu = $(this).find('.menu');
     const position = $that.offset();
@@ -31,7 +31,7 @@ function showTableDropdown() {
         // console.log(position.top, $that.scrollTop());
         let top = 0;
         let left = 0;
-        // check if we need to place menu above or down button.
+        // check if we need to place menu above or down button
         if (canFitBelow()) {
             top = position.top + $that.outerHeight();
             top = hasFloating ? top + 5 : top;
@@ -58,7 +58,7 @@ function showTableDropdown() {
  * Reset CSS and handler when hiding dropdown.
  */
 function hideTableDropdown() {
-    // reset positioning.
+    // reset positioning
     const $menu = $(this).find('.menu');
     $menu.css('cssText', '');
     $(window).off('scroll.atktable');

@@ -223,7 +223,7 @@ class App
             $this->session = new App\SessionManager();
         }
 
-        // setting up default executor factory.
+        // setting up default executor factory
         $this->executorFactory = Factory::factory([ExecutorFactory::class]);
     }
 
@@ -299,7 +299,7 @@ class App
         // remove header
         $this->layout->template->tryDel('Header');
 
-        if (($this->isJsUrlRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
+        if (($this->isJsUrlRequest() || ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'XMLHttpRequest')
                 && !isset($_GET['__atk_tab'])) {
             $this->outputResponseJson([
                 'success' => false,
@@ -310,7 +310,7 @@ class App
             $this->run();
         }
 
-        // Process is already in shutdown/stop
+        // process is already in shutdown because of uncaught exception
         // no need of call exit function
         $this->callBeforeExit();
     }

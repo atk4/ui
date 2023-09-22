@@ -310,13 +310,13 @@ examples will show you how to display list of "files" inside your Dropbox folder
 of issues from your Github repository:
 
 ```
-// Show contents of dropbox
+// show contents of dropbox
 $dropbox = \Atk4\Dropbox\Persistence($dbConfig);
 $files = new \Atk4\Dropbox\Model\File($dropbox);
 
 Table::addTo($app)->setModel($files);
 
-// Show contents of dropbox
+// show contents of dropbox
 $github = \Atk4\Github\IssuePersistence($githubApiConfig);
 $issues = new \Atk4\Github\Model\Issue($github);
 

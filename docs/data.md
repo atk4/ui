@@ -41,7 +41,7 @@ Writing raw SQL queries is source of many errors, both with a business logic and
 for abstracting your SQL queries, but if you have to use a raw query:
 
 ```
-// not sure how TODO - write this section.
+// TODO - write this section
 ```
 
 :::{note}

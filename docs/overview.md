@@ -92,7 +92,7 @@ clarifications:
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-// Define your data structure
+// define your data structure
 class Offer extends \Atk4\Data\Model
 {
     public $table = 'offer';
@@ -101,7 +101,6 @@ class Offer extends \Atk4\Data\Model
     {
         parent::init();
 
-        // Persistence may not have structure, so we define here
         $this->addField('domain_name');
         $this->addField('contact_email');
         $this->addField('contact_phone');
@@ -111,11 +110,11 @@ class Offer extends \Atk4\Data\Model
     }
 }
 
-// Create Application object and initialize Admin Layout
+// create Application object and initialize Admin Layout
 $app = new \Atk4\Ui\App('Offer tracking system');
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 
-// Connect to database and place a fully-interactive Crud
+// connect to database and place a fully-interactive Crud
 $db = new \Atk4\Data\Persistence\Sql($dsn);
 \Atk4\Ui\Crud::addTo($app)
     ->setModel(new Offer($db));

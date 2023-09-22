@@ -28,14 +28,14 @@ use Atk4\Ui\View;
  * $form = Form::addTo($app);
  * $form->setModel($invoice, []);
  *
- * // Add Multiline form control and set model for Invoice items.
+ * // add Multiline form control and set model for Invoice items
  * $ml = $form->addControl('ml', [Multiline::class]);
  * $ml->setReferenceModel('Items', null, ['item', 'cat', 'qty', 'price', 'total']);
  *
  * $form->onSubmit(function (Form $form) use ($ml) {
- *     // Save Form model and then Multiline model
- *     $form->model->save(); // Saving Invoice record.
- *     $ml->saveRows(); // Saving invoice items record related to invoice.
+ *     // save Form model and then Multiline model
+ *     $form->model->save(); // saving invoice record
+ *     $ml->saveRows(); // saving invoice items record related to invoice
  *     return new JsToast('Saved!');
  * });
  *
@@ -86,7 +86,7 @@ class Multiline extends Form\Control
     /** @var View The multiline View. Assigned in init(). */
     private $multiLine;
 
-    // Components name
+    // component names
     public const INPUT = 'SuiInput';
     public const READ_ONLY = 'AtkMultilineReadonly';
     public const TEXT_AREA = 'AtkMultilineTextarea';
@@ -207,7 +207,7 @@ class Multiline extends Form\Control
 
         $this->renderCallback = JsCallback::addTo($this);
 
-        // load the data associated with this input and validate it.
+        // load the data associated with this input and validate it
         $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
             $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($_POST[$this->shortName]));
             if ($this->rowData) {
@@ -228,12 +228,12 @@ class Multiline extends Form\Control
             }
         });
 
-        // Change form error handling.
+        // change form error handling
         $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
-            // When errors are coming from this Multiline field, then notify Multiline component about them.
-            // Otherwise use normal field error.
+            // when errors are coming from this Multiline field, then notify Multiline component about them
+            // otherwise use normal field error
             if ($fieldName === $this->shortName) {
-                // multiline.js component listen to 'multiline-rows-error' event.
+                // multiline.js component listen to 'multiline-rows-error' event
                 $jsError = $this->jsEmitEvent($this->multiLine->name . '-multiline-rows-error', ['errors' => $this->rowErrors]);
             } else {
                 $jsError = $form->js()->form('add prompt', $fieldName, $str);
@@ -281,7 +281,7 @@ class Multiline extends Form\Control
         if ($this->entityField->getField()->type === 'json') {
             $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
         } else {
-            // set data according to HasMany relation or using model.
+            // set data according to HasMany relation or using model
             $rows = [];
             foreach ($this->model as $row) {
                 $cols = [];
@@ -315,7 +315,7 @@ class Multiline extends Form\Control
 
                 try {
                     $field = $entity->getField($fieldName);
-                    // Save field value only if the field was editable
+                    // save field value only if the field was editable
                     if (!$field->readOnly) {
                         $entity->set($fieldName, $value);
                     }
@@ -336,7 +336,7 @@ class Multiline extends Form\Control
     {
         $model = $this->model;
 
-        // collects existing ids.
+        // collects existing IDs
         $currentIds = array_column($model->export(), $model->idField);
 
         foreach ($this->rowData as $row) {
@@ -358,7 +358,7 @@ class Multiline extends Form\Control
             }
         }
 
-        // Delete remaining currentIds
+        // delete removed IDs
         foreach ($currentIds as $id) {
             $model->delete($id);
         }
@@ -531,7 +531,8 @@ class Multiline extends Form\Control
      */
     protected function getLookupProps(Field $field): array
     {
-        // set any of SuiDropdown props via this property. Will be applied globally.
+        // set any of SuiDropdown props via this property
+        // will be applied globally
         $props = [];
         $props['config'] = $this->componentProps[self::LOOKUP] ?? [];
         $items = $this->getFieldItems($field, 10);
@@ -682,7 +683,8 @@ class Multiline extends Form\Control
                 $this->getApp()->terminateJson(['success' => true, 'expressions' => $expressionValues]);
                 // no break - expression above always terminate
             case 'on-change':
-                $response = ($this->onChangeFunction)($this->typeCastLoadValues($this->getApp()->decodeJson($_POST['rows'])), $this->form);
+                $rowsRaw = $this->getApp()->decodeJson($_POST['rows']);
+                $response = ($this->onChangeFunction)($this->typeCastLoadValues($rowsRaw), $this->form);
                 $this->renderCallback->terminateAjax($this->renderCallback->getAjaxec($response));
                 // TODO JsCallback::terminateAjax() should return never
         }

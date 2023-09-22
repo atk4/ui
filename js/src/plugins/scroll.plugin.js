@@ -13,7 +13,7 @@ import AtkPlugin from './atk.plugin';
 export default class AtkScrollPlugin extends AtkPlugin {
     main() {
         // check if we are initialized already because loading content
-        // can recall this plugin and screw up page number.
+        // can recall this plugin and screw up page number
         if (this.$el.data('__atkScroll')) {
             return false;
         }
@@ -27,7 +27,7 @@ export default class AtkScrollPlugin extends AtkPlugin {
             tableHeaderColor: '#ffffff',
             stateContext: null,
         };
-        // set default option if not set.
+        // set default option if not set
         this.settings.options = { ...defaultSettings, ...this.settings.options };
 
         this.isWaiting = false;
@@ -39,14 +39,14 @@ export default class AtkScrollPlugin extends AtkPlugin {
             this.$inner = this.$el;
             this.setTableHeader();
         } else {
-            // check if scroll apply vs Window or inside our element.
+            // check if scroll apply vs Window or inside our element
             this.isWindow = this.$el.css('overflow-y') === 'visible';
             this.$scroll = this.isWindow ? $(window) : this.$el;
-            // is Inner the element itself or it's children.
+            // is Inner the element itself or it's children
             this.$inner = this.isWindow ? this.$el : this.$el.children();
         }
 
-        // the target element within container where new content is appendTo.
+        // the target element within container where new content is appendTo
         this.$target = this.settings.options.appendTo ? this.$inner.find(this.settings.options.appendTo) : this.$inner;
 
         this.$scroll.on('scroll', this.onScroll.bind(this));
@@ -86,13 +86,13 @@ export default class AtkScrollPlugin extends AtkPlugin {
     onScroll(event) {
         const borderTopWidth = Number.parseInt(this.$el.css('borderTopWidth'), 10);
         const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth;
-        // this.$el padding top value.
+        // this.$el padding top value
         const paddingTop = Number.parseInt(this.$el.css('paddingTop'), 10) + borderTopWidthInt;
-        // Either the scroll bar position using window or the container element top position otherwise.
+        // either the scroll bar position using window or the container element top position otherwise
         const topHeight = this.isWindow ? $(window).scrollTop() : this.$scroll.offset().top;
         // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
         const innerTop = this.$inner.length > 0 ? this.$inner.offset().top : 0;
-        // The total height.
+        // the total height
         const totalHeight = Math.ceil(topHeight - innerTop + this.$scroll.height() + paddingTop);
 
         if (!this.isWaiting && totalHeight + this.settings.options.padding >= this.$inner.outerHeight()) {

@@ -15,14 +15,15 @@ use Atk4\Ui\Label;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-// Demonstrates how to use interactive buttons.
+// Demonstrates how to use interactive buttons
+
 Header::addTo($app, ['Basic Button']);
 
-// This button hides on page load
+// this button hides on page load
 $b = Button::addTo($app, ['Hidden Button']);
 $b->js(true)->hide();
 
-// This button hides when clicked
+// this button hides when clicked
 $b = Button::addTo($app, ['name' => 'b2'])->set('Hide on click Button');
 $b->js('click')->hide();
 
@@ -53,7 +54,7 @@ $b->on('click', null, new JsBlock([
 
 Header::addTo($app, ['Callbacks']);
 
-// On button click reload it and change it's title
+// on button click reload it and change it's title
 $b = Button::addTo($app, ['Callback Test']);
 $b->on('click', null, static function (Jquery $j) {
     return $j->text(random_int(1, 20));

@@ -25,9 +25,9 @@ export default class AtkJsSortablePlugin extends AtkPlugin {
         this.ids = [];
         // the data label attribute value of the source element being drag. ex: data-id
         this.sourceId = null;
-        // the new index value of the dragged element after sorting.
+        // the new index value of the dragged element after sorting
         this.newIndex = null;
-        // the original index value of the dragged element.
+        // the original index value of the dragged element
         this.origIndex = null;
 
         // fix screen reader announcement container added more than once

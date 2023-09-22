@@ -451,7 +451,7 @@ $user = new User($db);
 $user->getField('password')->neverPersist = true; // ignore password field
 $user = $user->load($currentUserId);
 
-// Display all fields (except password) and values
+// display all fields (except password) and values
 $form = Form::addTo($app);
 $form->setModel($user);
 ```
@@ -827,10 +827,9 @@ $form->addControl('gender', [\Atk4\Ui\Form\Control\Radio::class], ['enum' => ['F
 $form->addControl('m_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
 $form->addControl('f_gift', [\Atk4\Ui\Form\Control\Dropdown::class, 'caption' => 'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
 
-// Show email and gender when subscribe is checked.
-
-// Show m_gift when gender = 'male' and subscribe is checked.
-// Show f_gift when gender = 'female' and subscribe is checked.
+// show email and gender when subscribe is checked
+// show m_gift when gender = 'male' and subscribe is checked
+// show f_gift when gender = 'female' and subscribe is checked
 
 $form->setControlsDisplayRules([
     'email' => ['subscribe' => 'checked'],
@@ -848,9 +847,9 @@ $form->addControl('race', [\Atk4\Ui\Form\Control\Line::class]);
 $form->addControl('age');
 $form->addControl('hair_cut', [\Atk4\Ui\Form\Control\Dropdown::class, 'values' => ['Short', 'Long']]);
 
-// Show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
+// show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
 // OR
-// Show 'hair_cut' when race contains exactly the word 'bichon'
+// show 'hair_cut' when race contains exactly the word 'bichon'
 $form->setControlsDisplayRules([
     'hair_cut' => [['race' => 'contains[poodle]', 'age' => 'integer[1..5]'], ['race' => 'isExactly[bichon]']],
 ]);
@@ -881,9 +880,9 @@ $groupOther = $form->addGroup(['Others']);
 $groupOther->addControl('language', ['width' => 'eight']);
 $groupOther->addControl('favorite_pet', ['width' => 'four']);
 
-// To hide-show group simply select a field in that group.
-// Show group where 'php' belong when dev is checked.
-// Show group where 'language' belong when dev is checked.
+// to hide-show group simply select a field in that group
+// show group where 'php' belong when dev is checked
+// show group where 'language' belong when dev is checked
 
 $form->setGroupDisplayRules([
     'php' => ['dev' => 'checked'],

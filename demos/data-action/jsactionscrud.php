@@ -17,7 +17,7 @@ Header::addTo($app, ['Actions in Crud', 'subHeader' => 'Crud will automatically 
 
 $files = new File($app->db);
 
-// This action must appear on top of the Crud
+// this action must appear on top of the Crud
 $files->addUserAction('import_from_filesystem', [
     'caption' => 'Import',
     'callback' => 'importFromFilesystem',

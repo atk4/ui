@@ -74,7 +74,7 @@ export default class AtkConditionalFormPlugin extends AtkPlugin {
 
     initialize() {
         const ruleKeys = Object.keys(this.settings.fieldRules);
-        // map inputs according to ruleKeys.
+        // map inputs according to ruleKeys
         this.inputs = ruleKeys.map((ruleKey, idx, org) => {
             const tempRule = this.settings.fieldRules[ruleKey];
             const temp = [];
@@ -97,7 +97,7 @@ export default class AtkConditionalFormPlugin extends AtkPlugin {
      * Field change handler.
      */
     onInputChange(e) {
-        // check rule when inputs has changed.
+        // check rule when inputs has changed
         e.data.resetInputStatus();
         e.data.applyRules();
         e.data.setInputsState();
@@ -122,7 +122,7 @@ export default class AtkConditionalFormPlugin extends AtkPlugin {
                         isAndValid = isAndValid && atk.formService.validateField(this.$el, inputName, validationRule);
                     }
                 }
-                // Apply OR condition between rules.
+                // apply OR condition between rules
                 input.state = input.state || isAndValid;
             }
         }

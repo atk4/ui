@@ -16,7 +16,7 @@ require_once __DIR__ . '/../init-app.php';
 Header::addTo($app, ['Paginator tracks its own position']);
 Paginator::addTo($app, ['total' => 40, 'urlTrigger' => 'page']);
 
-// Dynamically reloading paginator
+// dynamically reloading paginator
 Header::addTo($app, ['Dynamic reloading']);
 $seg = View::addTo($app, ['ui' => 'blue segment']);
 $label = Label::addTo($seg);
@@ -24,7 +24,7 @@ $bb = Paginator::addTo($seg, ['total' => 50, 'range' => 2, 'reload' => $seg]);
 $label->addClass('blue ribbon');
 $label->set('Current page: ' . $bb->page);
 
-// Multiple dependent Paginators
+// multiple dependent Paginators
 Header::addTo($app, ['Local Sticky Usage']);
 $seg = View::addTo($app, ['ui' => 'blue segment']);
 

@@ -93,7 +93,8 @@ class Crud extends Grid
 
         parent::setModel($model, $this->displayFields);
 
-        // Grab model ID when using delete. Must be set before delete action execute.
+        // grab model ID when using delete
+        // must be set before delete action execute
         $this->model->onHook(Model::HOOK_AFTER_DELETE, function (Model $model) {
             $this->deletedId = $model->getId();
         });
@@ -172,7 +173,7 @@ class Crud extends Grid
             $res->addStatement($jsAction);
         }
 
-        // display msg return by action or depending on action modifier.
+        // display msg return by action or depending on action modifier
         if (is_string($return)) {
             $res->addStatement($this->jsCreateNotifier($return));
         } else {
@@ -200,7 +201,7 @@ class Crud extends Grid
 
                 break;
             case Model\UserAction::MODIFIER_DELETE:
-                // use deleted record ID to remove row, fallback to closest tr if ID is not available.
+                // use deleted record ID to remove row, fallback to closest tr if ID is not available
                 $js = $this->deletedId
                     ? $this->js(false, null, 'tr[data-id="' . $this->deletedId . '"]')
                     : (new Jquery())->closest('tr');
@@ -247,12 +248,12 @@ class Crud extends Grid
      */
     protected function getExecutor(Model\UserAction $action)
     {
-        // prioritize Crud addFields over action->fields for Model add action.
+        // prioritize Crud addFields over action->fields for Model add action
         if ($action->shortName === 'add' && $this->addFields) {
             $action->fields = $this->addFields;
         }
 
-        // prioritize Crud editFields over action->fields for Model edit action.
+        // prioritize Crud editFields over action->fields for Model edit action
         if ($action->shortName === 'edit' && $this->editFields) {
             $action->fields = $this->editFields;
         }

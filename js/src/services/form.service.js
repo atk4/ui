@@ -144,7 +144,7 @@ class FormService {
     }
 
     getAncillaryValue(rule) {
-        // must have a rule.value property and must be a bracketed rule.
+        // must have a rule.value property and must be a bracketed rule
         if (!rule.value && !this.isBracketedRule(rule)) {
             return false;
         }
