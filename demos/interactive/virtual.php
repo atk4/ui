@@ -25,7 +25,7 @@ $virtualPage = VirtualPage::addTo($app->layout, ['urlTrigger' => 'in']);
 
 // add content to virtual page
 if ($app->hasRequestGetParam('p_id')) {
-    Header::addTo($virtualPage, [$_GET['p_id']])->addClass('__atk-behat-test-car');
+    Header::addTo($virtualPage, [$app->getRequestGetParam('p_id')])->addClass('__atk-behat-test-car');
 }
 LoremIpsum::addTo($virtualPage, ['size' => 1]);
 $virtualPageButton = Button::addTo($virtualPage, ['Back', 'icon' => 'left arrow']);

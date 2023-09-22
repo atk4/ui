@@ -644,7 +644,7 @@ class App
 
             if ($this->hasRequestGetParam(Callback::URL_QUERY_TARGET) && $this->catchRunawayCallbacks) {
                 throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
-                    ->addMoreInfo('callback', $_GET[Callback::URL_QUERY_TARGET]);
+                    ->addMoreInfo('callback', $this->getRequestGetParam(Callback::URL_QUERY_TARGET));
             }
 
             $output = $this->html->template->renderToHtml();
@@ -816,7 +816,7 @@ class App
      */
     public function isJsUrlRequest(): bool
     {
-        return $this->hasRequestGetParam('__atk_json') && $_GET['__atk_json'] !== '0';
+        return $this->hasRequestGetParam('__atk_json') && $this->getRequestGetParam('__atk_json') !== '0';
     }
 
     /**

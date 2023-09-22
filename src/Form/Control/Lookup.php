@@ -332,7 +332,7 @@ class Lookup extends Input
 
         $data = [];
         if ($this->getApp()->hasRequestGetParam('form')) {
-            parse_str($_GET['form'], $data);
+            parse_str($this->getApp()->getRequestGetParam('form'), $data);
         } elseif ($this->form) {
             $data = $this->form->model->get();
         } else {

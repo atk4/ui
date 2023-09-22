@@ -26,7 +26,7 @@ if ($app->hasRequestGetParam('name')) {
     $frame->stickyGet('name');
 
     // frame will generate URL with sticky parameter
-    Label::addTo($frame, ['Name:', 'detail' => $_GET['name'], 'class.black' => true])->link($frame->url());
+    Label::addTo($frame, ['Name:', 'detail' => $app->getRequestGetParam('name'), 'class.black' => true])->link($frame->url());
 
     // app still generates URL without localized sticky
     Label::addTo($frame, ['Reset', 'iconRight' => 'close', 'class.black' => true])->link($app->url());
@@ -34,14 +34,14 @@ if ($app->hasRequestGetParam('name')) {
 
     // nested interactive elements will respect lockal sticky get
     Button::addTo($frame, ['Triggering callback here will inherit color'])
-        ->on('click', static function () {
-            return new JsToast('Color was = ' . $_GET['name']);
+        ->on('click', static function () use ($app) {
+            return new JsToast('Color was = ' . $app->getRequestGetParam('name'));
         });
 
     // next we have loader, which will dynamically load console which will dynamically output "success" message
     Loader::addTo($frame)->set(static function (Loader $p) {
         Console::addTo($p)->set(static function (Console $console) {
-            $console->output('success!, color is still ' . $_GET['name']);
+            $console->output('success!, color is still ' . $console->getApp()->getRequestGetParam('name'));
         });
     });
 }

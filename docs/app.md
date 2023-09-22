@@ -273,7 +273,7 @@ if (!$app->hasRequestGetParam('age')) {
 }
 
 Button::addTo($app, ['Increase age'])
-    ->on('click', $app->jsRedirect(['age' => $_GET['age'] + 1]));
+    ->on('click', $app->jsRedirect(['age' => $app->getRequestGetParam('age') + 1]));
 ```
 
 No much magic in these methods.

@@ -216,7 +216,7 @@ The following code is safe:
 
 ```
 $b = new Button();
-$b->js(true)->text($_GET['button_text']);
+$b->js(true)->text($app->getRequestGetParam('button_text'));
 ```
 
 Any malicious input through the GET arguments will be encoded as JS string before being included as an

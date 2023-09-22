@@ -30,7 +30,7 @@ $b->js('click')->hide();
 Button::addTo($app, ['Redirect'])
     ->on('click', null, $app->jsRedirect(['foo' => 'bar']));
 
-if ($app->hasRequestGetParam('foo') && $_GET['foo'] === 'bar') {
+if ($app->hasRequestGetParam('foo') && $app->getRequestGetParam('foo') === 'bar') {
     $app->redirect(['foo' => 'baz']);
 }
 

@@ -40,7 +40,7 @@ Loader::addTo($app)->set(static function (Loader $p) {
     $loader->set(static function (Loader $p) {
         // you may pass arguments to the loader, in this case it's "color"
         sleep(1);
-        $color = $_GET['color'];
+        $color = $p->getApp()->getRequestGetParam('color');
         Header::addTo($p, ['Loader #1b - ' . $color]);
         LoremIpsum::addTo(View::addTo($p, ['ui' => $color . ' segment']), ['size' => 1]);
 

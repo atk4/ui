@@ -29,7 +29,7 @@ Header::addTo($app, ['Combinations and Interraction']);
 $del = Label::addTo($app, ['Zoe', 'image' => 'https://fomantic-ui.com/images/avatar/small/ade.jpg', 'iconRight' => 'delete']);
 $del->on('click', '.delete', $del->js()->fadeOut());
 
-$val = $app->hasRequestGetParam('toggle') && $_GET['toggle'];
+$val = $app->hasRequestGetParam('toggle') && $app->getRequestGetParam('toggle');
 $toggle = Label::addTo($app, ['icon' => 'toggle ' . ($val ? 'on' : 'off')])->set('Value: ' . $val);
 $toggle->on('click', new JsReload($toggle, ['toggle' => $val ? null : 1]));
 

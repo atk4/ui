@@ -112,7 +112,7 @@ class Callback extends AbstractView
      */
     public function canTerminate(): bool
     {
-        return $this->getApp()->hasRequestGetParam(self::URL_QUERY_TARGET) && $_GET[self::URL_QUERY_TARGET] === $this->urlTrigger;
+        return $this->getApp()->hasRequestGetParam(self::URL_QUERY_TARGET) && $this->getApp()->getRequestGetParam(self::URL_QUERY_TARGET) === $this->urlTrigger;
     }
 
     /**

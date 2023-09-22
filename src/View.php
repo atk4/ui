@@ -705,7 +705,7 @@ class View extends AbstractView
      */
     public function getHtml()
     {
-        if ($this->getApp()->hasRequestGetParam('__atk_reload') && $_GET['__atk_reload'] === $this->name) {
+        if ($this->getApp()->hasRequestGetParam('__atk_reload') && $this->getApp()->getRequestGetParam('__atk_reload') === $this->name) {
             $this->getApp()->terminateJson($this);
         }
 
