@@ -262,7 +262,7 @@ $buttons = View::addTo($app, ['ui' => 'basic buttons']);
 
 $buttons->on('click', '.button')->hide();
 
-// Generates:
+// generates:
 // $('#top-element-id').on('click', '.button', function (event) {
 //     event.preventDefault();
 //     event.stopPropagation();
@@ -284,7 +284,7 @@ $buttons = View::addTo($app, ['ui' => 'basic buttons']);
 
 $buttons->on('click', '.button', $b3->js()->hide());
 
-// Generates:
+// generates:
 // $('#top-element-id').on('click', '.button', function (event) {
 //     event.preventDefault();
 //     event.stopPropagation();
@@ -569,7 +569,7 @@ The following will **not** work:
 $app = new MyApp();
 $model = new MyModel();
 
-// JsModal requires its contents to be put into a Virtual Page
+// JsModal requires its contents to be put into a VirtualPage
 $vp = \Atk4\Ui\VirtualPage::addTo($app);
 $form = \Atk4\Ui\Form::addTo($vp);
 $form->setModel($model);
@@ -596,7 +596,7 @@ Table needs to be first! The following works:
 $app = new MyApp();
 $model = new MyModel();
 
-// This needs to be first
+// this needs to be first
 $table = \Atk4\Ui\Table::addTo($app);
 $table->setModel($model));
 

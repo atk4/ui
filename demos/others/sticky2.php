@@ -17,7 +17,7 @@ use Atk4\Ui\View;
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
 
-// This demo shows a local impact of a sticky parameters.
+// This demo shows a local impact of a sticky parameters
 
 if (isset($_GET['name'])) {
     // IMPORTANT: because this is an optional frame, I have to specify it's unique shortName explicitly, othrewise
@@ -38,7 +38,7 @@ if (isset($_GET['name'])) {
             return new JsToast('Color was = ' . $_GET['name']);
         });
 
-    // Next we have loader, which will dynamically load console which will dynamically output "success" message.
+    // next we have loader, which will dynamically load console which will dynamically output "success" message
     Loader::addTo($frame)->set(static function (Loader $p) {
         Console::addTo($p)->set(static function (Console $console) {
             $console->output('success!, color is still ' . $_GET['name']);

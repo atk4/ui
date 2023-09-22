@@ -20,7 +20,7 @@ $country = new Country($app->db);
 $entity = $country->loadAny();
 $countryId = $entity->getId();
 
-// Model actions for this file are setup in DemoActionUtil.
+// Model actions for this file are setup in DemoActionUtil
 DemoActionsUtil::setupDemoActions($country);
 
 Header::addTo($app, ['Assign Model action to button event', 'subHeader' => 'Execute model action on this country record by clicking on the appropriate button on the right.']);
@@ -38,9 +38,9 @@ $c->setModel($entity, [$country->fieldName()->iso, $country->fieldName()->iso3, 
 
 $buttons = View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
 
-// Create a button for every action in Country model.
+// create a button for every action in Country model
 foreach ($country->getUserActions() as $action) {
     $b = Button::addTo($buttons, [$action->getCaption()]);
-    // Assign action to button using current model id as URL arguments.
+    // assign action to button using current model id as URL arguments
     $b->on('click', $action, ['args' => ['id' => $countryId]]);
 }

@@ -35,7 +35,7 @@ class JsExpression implements JsExpressionable
             function ($matches) use (&$namelessCount): string {
                 $identifier = substr($matches[0], 1, -1);
 
-                // Allow template to contain []
+                // allow template to contain []
                 if ($identifier === '') {
                     $identifier = $namelessCount++;
                 }

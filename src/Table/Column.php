@@ -184,7 +184,7 @@ class Column
             'onChange' => $function,
         ]);
 
-        // will stop grid column from being sorted.
+        // will stop grid column from being sorted
         $chain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));
 
         $this->table->js(true, $chain);
@@ -301,7 +301,7 @@ class Column
                 $attr['class'] = ['sortable'];
             }
 
-            // If table is being sorted by THIS column, set the proper class
+            // if table is being sorted by THIS column, set the proper class
             if ($this->table->sortBy === $field->shortName) {
                 $class .= ' sorted ' . ['asc' => 'ascending', 'desc' => 'descending'][$this->table->sortDirection];
 

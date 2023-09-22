@@ -26,7 +26,7 @@ export default class AtkConfirmPlugin extends AtkPlugin {
             context = this.settings.context;
         }
 
-        // Create wrapper function for using proper "this" context.
+        // create wrapper function for using proper "this" context
         if (this.settings.onApprove) {
             options.onApprove = () => { this.settings.onApprove.call(context); };
         }

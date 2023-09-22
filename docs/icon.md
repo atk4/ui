@@ -160,7 +160,7 @@ class SocialAdd extends \Atk4\Ui\View
         }
 
         if (!$this->template) {
-            // TODO: Place template into file and set defaultTemplate instead
+            // TODO: place template into file and set defaultTemplate instead
             $this->template = new \Atk4\Ui\HtmlTemplate(
 '<{_element}button{/} class="ui ' . $this->social . ' button" {$attributes}>
     <i class="large icons">
@@ -171,23 +171,25 @@ class SocialAdd extends \Atk4\Ui\View
 </{_element}button{/}>');
         }
 
-        // Initialize icon
+        // initialize icon
         if (!is_object($this->icon)) {
             $this->icon = new \Atk4\Ui\Icon($this->icon);
         }
 
-        // Add icon into render tree
+        // add icon into render tree
         $this->add($this->icon, 'Icon');
     }
 }
 
-// Usage Examples. Start with the most basic usage
+// usage examples
+
+// start with the most basic usage
 SocialAdd::addTo($app, ['instagram']);
 
-// Next specify label and separately name of social network
+// next specify label and separately name of social network
 SocialAdd::addTo($app, ['Follow on Twitter', 'social' => 'twitter']);
 
-// Finally provide custom icon and make the button clickable.
+// finally provide custom icon and make the button clickable
 SocialAdd::addTo($app, ['facebook', 'icon' => 'facebook f'])
     ->link('https://facebook.com', '_blank');
 ```

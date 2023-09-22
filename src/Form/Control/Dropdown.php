@@ -290,7 +290,6 @@ class Dropdown extends Input
         $this->_tItem->set('value', (string) $res['value']);
         $this->_tItem->set('title', $res['title']);
 
-        // Icon
         $this->_tItem->del('Icon');
         if (isset($res['icon']) && $res['icon']) {
             // compatibility with how $values property works on icons: 'icon'

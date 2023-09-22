@@ -19,10 +19,10 @@ Demo: https://ui.atk4.org/demos/progressbar.php
 After adding a console to your {ref}`render_tree`, you just need to set a callback:
 
 ```
-// Add progressbar showing 0 (out of 100)
+// add progressbar showing 0 (out of 100)
 $bar = ProgressBar::addTo($app);
 
-// Add with some other value of 20% and label
+// add with some other value of 20% and label
 $bar2 = ProgressBar::addTo($app, [20, '% Battery']);
 ```
 

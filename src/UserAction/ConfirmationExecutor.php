@@ -62,7 +62,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
      */
     protected function afterActionInit(): void
     {
-        // Add buttons to modal for next and previous.
+        // add buttons to modal for next and previous
         $buttonsView = (new View())->setStyle(['min-height' => '24px']);
         $this->ok = Button::addTo($buttonsView, ['Ok', 'class.blue' => true]);
         $this->cancel = Button::addTo($buttonsView, ['Cancel']);

@@ -80,12 +80,12 @@ $bottom = new \Atk4\Ui\Button(['Hello World', 'class.orange' => true]);
 $middle->add($bottom);
 $top->add($middle);
 
-// Still not sure if finished adding
+// still not sure if finished adding
 
 $app = new \Atk4\Ui\App('My App');
 $app->initLayout($top);
 
-// Calls init() for all elements recursively.
+// calls init() for all elements recursively
 ```
 
 Each View's `init()` method will be executed first before calling the same method for
@@ -499,7 +499,7 @@ $b2 = Button::addTo($app, ['Rand: ' . rand(1, 100)]);
 
 $b1->on('click', $b2->jsReload());
 
-// Previously:
+// previously:
 // $b1->on('click', new \Atk4\Ui\Js\JsReload($b2));
 ```
 

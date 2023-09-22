@@ -15,50 +15,49 @@ class GridTest extends TestCase
     use TableTestTrait;
 
     /** @var MyModel */
-    public $m;
+    protected $m;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $a = [
+        $this->m = new MyModel(new Persistence\Array_([
             1 => ['id' => 1, 'email' => 'test@test.com', 'password' => 'abc123', 'xtra' => 'xtra'],
             2 => ['id' => 2, 'email' => 'test@yahoo.com', 'password' => 'secret'],
-        ];
-        $this->m = new MyModel(new Persistence\Array_($a));
+        ]));
     }
 
     public function test1(): void
     {
-        $t = new Table();
-        $t->setApp($this->createApp());
-        $t->invokeInit();
-        $t->setModel($this->m, []);
+        $table = new Table();
+        $table->setApp($this->createApp());
+        $table->invokeInit();
+        $table->setModel($this->m, []);
 
-        $t->addColumn('email');
-        $t->addColumn(null, new Table\Column\Template('password={$password}'));
+        $table->addColumn('email');
+        $table->addColumn(null, new Table\Column\Template('password={$password}'));
 
-        self::assertSame('<td>{$email}</td><td>password={$password}</td>', $t->getDataRowHtml());
+        self::assertSame('<td>{$email}</td><td>password={$password}</td>', $table->getDataRowHtml());
         self::assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>password=abc123</td></tr>',
-            $this->extractTableRow($t)
+            $this->extractTableRow($table)
         );
     }
 
     public function test2(): void
     {
-        $t = new Table();
-        $t->setApp($this->createApp());
-        $t->invokeInit();
-        $t->setModel($this->m, []);
+        $table = new Table();
+        $table->setApp($this->createApp());
+        $table->invokeInit();
+        $table->setModel($this->m, []);
 
-        $t->addColumn('email');
-        $t->addColumn('password', [Table\Column\Password::class]);
+        $table->addColumn('email');
+        $table->addColumn('password', [Table\Column\Password::class]);
 
-        self::assertSame('<td>{$email}</td><td>***</td>', $t->getDataRowHtml());
+        self::assertSame('<td>{$email}</td><td>***</td>', $table->getDataRowHtml());
         self::assertSame(
             '<tr data-id="1"><td>test@test.com</td><td>***</td></tr>',
-            $this->extractTableRow($t)
+            $this->extractTableRow($table)
         );
     }
 }

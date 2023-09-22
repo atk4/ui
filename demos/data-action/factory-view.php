@@ -34,7 +34,7 @@ $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends Exe
 
     public function __construct()
     {
-        // registering card button default with our own method handler.
+        // registering card button default with our own method handler
         $this->triggerSeed = array_merge(
             $this->triggerSeed,
             [self::CARD_BUTTON => ['default' => [$this, 'getCardButton']]]

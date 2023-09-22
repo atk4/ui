@@ -27,12 +27,12 @@ $inventory->getField($inventory->fieldName()->total_php)->ui['multiline'] = [For
 
 $form = Form::addTo($app);
 
-// Add multiline field and set model.
+// add multiline field and set model
 /** @var Form\Control\Multiline */
 $multiline = $form->addControl('items', [Form\Control\Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
 $multiline->setModel($inventory);
 
-// Add total field.
+// add total field
 $total = 0;
 foreach ($inventory as $item) {
     $total += $item->qty * $item->box;
@@ -42,7 +42,7 @@ $sublayout->addColumn(12);
 $column = $sublayout->addColumn(4);
 $controlTotal = $column->addControl('total', ['readOnly' => true])->set($total);
 
-// Update total when qty and box value in any row has changed.
+// update total when qty and box value in any row has changed
 $multiline->onLineChange(static function (array $rows, Form $form) use ($controlTotal) {
     $total = 0;
     foreach ($rows as $row => $cols) {

@@ -202,7 +202,7 @@ if (!$cart->items) {
 $cartPopup->set(static function (View $popup) use ($cart) {
     $cartInnerLabel = Label::addTo($popup, ['Number of items:']);
 
-    // cart is already initialized, so init() is not called again. However, cart will be rendered
+    // Cart is already initialized, so init() is not called again. However, cart will be rendered
     // as a child of a pop-up now.
     $popup->add($cart);
 

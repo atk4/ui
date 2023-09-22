@@ -133,7 +133,7 @@ Knowledge of the Fomantic-UI button (https://fomantic-ui.com/elements/button.htm
 in creating more complex buttons:
 
 ```
-$forks = new Button(['labeled' => true]); // Button, not Buttons!
+$forks = new Button(['labeled' => true]);
 Icon::addTo(Button::addTo($forks, ['Forks', 'class.blue' => true]), ['fork']);
 Label::addTo($forks, ['1,048', 'class.basic blue left pointing' => true]);
 $app->add($forks);

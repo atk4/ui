@@ -31,11 +31,6 @@ class VirtualPage extends View
         unset($this->{'urlTrigger'});
     }
 
-    public function getUrlTrigger(): string
-    {
-        return $this->cb->getUrlTrigger();
-    }
-
     /**
      * Set callback function of virtual page.
      *
@@ -119,7 +114,7 @@ class VirtualPage extends View
             }
         }
 
-        // Remove all elements from inside the Content
+        // remove all elements from inside the Content
         foreach ($this->getApp()->layout->elements as $key => $view) {
             if ($view instanceof View && $view->region === 'Content') {
                 unset($this->getApp()->layout->elements[$key]);

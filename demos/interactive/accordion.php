@@ -53,7 +53,7 @@ $i3 = $accordion->addSection('Dynamic Form', static function (VirtualPage $vp) {
     });
 });
 
-// Activate on page load.
+// activate on page load
 $accordion->activate($i2);
 
 $b1->on('click', $accordion->jsToggle($i1));

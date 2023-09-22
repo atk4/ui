@@ -80,12 +80,12 @@ $img->onUpload(function (array $postFile) use ($form, $img) {
         return $form->jsError('img', 'Error uploading image.');
     }
 
-    // Do file processing here...
+    // do file processing here...
 
     $img->setThumbnailSrc('./images/' . $fileName);
     $img->setFileId('123456');
 
-    // can also return a notifier.
+    // can also return a notifier
     return new \Atk4\Ui\Js\JsToast([
         'message' => 'File is uploaded!',
         'class' => 'success',

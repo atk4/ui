@@ -76,7 +76,7 @@ class InlineEdit extends View
 
         $this->cb = JsCallback::addTo($this);
 
-        // Set default validation error handler.
+        // set default validation error handler
         if (!$this->formatErrorMsg) {
             $this->formatErrorMsg = function (ValidationException $e, string $value) {
                 $caption = $this->model->getField($this->fieldName)->getCaption();
@@ -123,7 +123,10 @@ class InlineEdit extends View
     public function onChange(\Closure $fx): void
     {
         if (!$this->autoSave) {
-            $value = $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($this->fieldName), $_POST['value'] ?? null);
+            $value = $this->getApp()->uiPersistence->typecastLoadField(
+                $this->model->getField($this->fieldName),
+                $_POST['value'] ?? null
+            );
             $this->cb->set(static function () use ($fx, $value) {
                 return $fx($value);
             });

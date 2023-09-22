@@ -133,7 +133,7 @@ class Layout extends AbstractLayout
         $this->template->del('Content');
 
         foreach ($this->elements as $element) {
-            // Buttons go under Button section
+            // buttons go under Button section
             if ($element instanceof Button) {
                 $this->template->dangerouslyAppendHtml('Buttons', $element->getHtml());
 
@@ -162,7 +162,7 @@ class Layout extends AbstractLayout
                 continue;
             }
 
-            // Anything but controls or explicitly defined controls get inserted directly
+            // anything but controls or explicitly defined controls get inserted directly
             if (!$element instanceof Control || !$element->layoutWrap) {
                 $this->template->dangerouslyAppendHtml('Content', $element->getHtml()); // @phpstan-ignore-line
 
@@ -172,7 +172,7 @@ class Layout extends AbstractLayout
             $template = $element->renderLabel ? $labeledControl : $noLabelControl;
             $label = $element->caption ?? $element->entityField->getField()->getCaption();
 
-            // Anything but form controls gets inserted directly
+            // anything but form controls gets inserted directly
             if ($element instanceof Control\Checkbox) {
                 $template = $noLabelControl;
                 $element->template->set('Content', $label);
@@ -191,7 +191,7 @@ class Layout extends AbstractLayout
                 }
             }
 
-            // Controls get extra pampering
+            // controls get extra pampering
             $template->dangerouslySetHtml('Input', $element->getHtml());
             $template->trySet('label', $label);
             $template->trySet('labelFor', $element->name . '_input');

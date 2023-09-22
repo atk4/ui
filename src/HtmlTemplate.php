@@ -199,14 +199,6 @@ class HtmlTemplate
      * If tag is found inside template several times, all occurrences are
      * replaced.
      *
-     * ALTERNATIVE USE(2) of this function is to pass associative array as
-     * a single argument. This will assign multiple tags with one call.
-     * Sample use is:
-     *
-     *  set($_GET);
-     *
-     * would read and set multiple region values from $_GET array.
-     *
      * @param string|array<string, string>|Model          $tag
      * @param ($tag is array|Model ? never : string|null) $value
      *

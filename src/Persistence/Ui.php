@@ -238,7 +238,7 @@ class Ui extends Persistence
 
                 break;
                 // <-- reindent once https://github.com/FriendsOfPHP/PHP-CS-Fixer/pull/6490 is merged
-                // SECURITY: Do not unserialize any user input
+                // SECURITY: do not unserialize any user input
                 // https://github.com/search?q=unserialize+repo%3Adoctrine%2Fdbal+path%3A%2Fsrc%2FTypes
             case 'object':
             case 'array':

@@ -19,7 +19,7 @@ Header::addTo($app, ['Disabled and read only form controls (normal / read only /
 
 $form = Form::addTo($app);
 
-// Test all kinds of input fields
+// test all kinds of input fields
 $group = $form->addGroup('Line');
 $group->addControl('line_norm')->set('editable');
 $group->addControl('line_read', ['readOnly' => true])->set('read only');

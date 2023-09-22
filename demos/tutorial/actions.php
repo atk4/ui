@@ -177,7 +177,7 @@ $wizard->addStep('Crud integration', static function (Wizard $page) {
             'description' => 'Email testing',
         ]);
 
-        // Register a trigger for mail action in Crud
+        // register a trigger for mail action in Crud
         $owner->getExecutorFactory()->registerTrigger(
             ExecutorFactory::TABLE_BUTTON,
             [Button::class, null, 'icon' => 'blue mail'],

@@ -17,7 +17,7 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
         this.setSearchAction();
         this.onEscapeKeyAction();
 
-        // Set input initial value.
+        // set input initial value
         if (this.settings.q) {
             this.setFilter(this.settings.q);
         }

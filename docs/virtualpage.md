@@ -160,7 +160,7 @@ while a spinner is shown to a user:
 ```
 $loader = \Atk4\Ui\Loader::addTo($app);
 $loader->set(function (\Atk4\Ui\Loader $p) {
-    // Simulate slow-loading component
+    // simulate slow-loading component
     sleep(2);
     \Atk4\Ui\LoremIpsum::addTo($p);
 });
@@ -178,7 +178,7 @@ property:
 ```
 $loader = \Atk4\Ui\Loader::addTo($app, ['shim' => [\Atk4\Ui\Message::class, 'Please wait until we load LoremIpsum...', 'class.red' => true]]);
 $loader->set(function (\Atk4\Ui\Loader $p) {
-    // Simulate slow-loading component
+    // simulate slow-loading component
     sleep(2);
     \Atk4\Ui\LoremIpsum::addTo($p);
 });
@@ -273,7 +273,7 @@ You can notify user about this progress through a simple code:
 ```
 $loader = \Atk4\Ui\Loader::addTo($app, ['progressBar' => true]);
 $loader->set(function (\Atk4\Ui\Loader $p) {
-    // Simulate slow-loading component
+    // simulate slow-loading component
     sleep(1);
     $p->setProgress(0.25);
     sleep(1);

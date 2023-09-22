@@ -17,7 +17,7 @@ class Paginator extends View
 
     /**
      * Override what is the current page. If not set, Paginator will look inside
-     * $_GET[$this->name]. If page > total, then page = total.
+     * $_GET[self::$urlTrigger]. If page > total, then page = total.
      */
     public ?int $page = null;
 
