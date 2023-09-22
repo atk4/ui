@@ -180,10 +180,10 @@ $stepModal->set(static function (View $p) use ($session, $previousAction, $nextA
     $page = $session->recall('page', 1);
     $success = $session->recall('success', false);
     if (isset($_GET['move'])) {
-        if ($_GET['move'] === 'next' && $success) {
+        $move = $_GET['move'];
+        if ($move === 'next' && $success) {
             ++$page;
-        }
-        if ($_GET['move'] === 'previous' && $page > 1) {
+        } elseif ($move === 'previous' && $page > 1) {
             --$page;
         }
         $session->memorize('success', false);

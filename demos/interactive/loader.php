@@ -40,8 +40,9 @@ Loader::addTo($app)->set(static function (Loader $p) {
     $loader->set(static function (Loader $p) {
         // you may pass arguments to the loader, in this case it's "color"
         sleep(1);
-        Header::addTo($p, ['Loader #1b - ' . $_GET['color']]);
-        LoremIpsum::addTo(View::addTo($p, ['ui' => $_GET['color'] . ' segment']), ['size' => 1]);
+        $color = $_GET['color'];
+        Header::addTo($p, ['Loader #1b - ' . $color]);
+        LoremIpsum::addTo(View::addTo($p, ['ui' => $color . ' segment']), ['size' => 1]);
 
         // don't forget to make your own argument sticky so that Components can communicate with themselves:
         $p->stickyGet('color');

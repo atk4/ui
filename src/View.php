@@ -853,8 +853,12 @@ class View extends AbstractView
     public function jsGetStoreData(): array
     {
         $data = [];
-        $data['local'] = $this->getApp()->decodeJson($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null');
-        $data['session'] = $this->getApp()->decodeJson($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null');
+        $data['local'] = $this->getApp()->decodeJson(
+            $_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null'
+        );
+        $data['session'] = $this->getApp()->decodeJson(
+            $_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null'
+        );
 
         return $data;
     }

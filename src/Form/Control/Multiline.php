@@ -683,7 +683,8 @@ class Multiline extends Form\Control
                 $this->getApp()->terminateJson(['success' => true, 'expressions' => $expressionValues]);
                 // no break - expression above always terminate
             case 'on-change':
-                $response = ($this->onChangeFunction)($this->typeCastLoadValues($this->getApp()->decodeJson($_POST['rows'])), $this->form);
+                $rowsRaw = $this->getApp()->decodeJson($_POST['rows']);
+                $response = ($this->onChangeFunction)($this->typeCastLoadValues($rowsRaw), $this->form);
                 $this->renderCallback->terminateAjax($this->renderCallback->getAjaxec($response));
                 // TODO JsCallback::terminateAjax() should return never
         }

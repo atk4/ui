@@ -436,13 +436,14 @@ class Form extends View
      */
     protected function loadPost(): void
     {
-        $this->hook(self::HOOK_LOAD_POST, [&$_POST]);
+        $postRawData = $_POST;
+        $this->hook(self::HOOK_LOAD_POST, [&$postRawData]);
 
         $errors = [];
         foreach ($this->controls as $k => $control) {
             // save field value only if field was editable in form at all
             if (!$control->readOnly && !$control->disabled) {
-                $postRawValue = $_POST[$k];
+                $postRawValue = $postRawData[$k];
                 try {
                     $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $postRawValue));
                 } catch (\Exception $e) {

@@ -301,22 +301,23 @@ class Lookup extends Input
      */
     protected function applySearchConditions(): void
     {
-        if (($_GET['q'] ?? '') === '') {
+        $query = $_GET['q'] ?? '';
+        if ($query === '') {
             return;
         }
 
         if ($this->search instanceof \Closure) {
-            ($this->search)($this->model, $_GET['q']);
+            ($this->search)($this->model, $query);
         } elseif (is_array($this->search)) {
             $scope = Model\Scope::createOr();
             foreach ($this->search as $field) {
-                $scope->addCondition($field, 'like', '%' . $_GET['q'] . '%');
+                $scope->addCondition($field, 'like', '%' . $query . '%');
             }
             $this->model->addCondition($scope);
         } else {
             $titleField = $this->titleField ?? $this->model->titleField;
 
-            $this->model->addCondition($titleField, 'like', '%' . $_GET['q'] . '%');
+            $this->model->addCondition($titleField, 'like', '%' . $query . '%');
         }
     }
 
