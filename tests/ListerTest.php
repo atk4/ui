@@ -41,11 +41,11 @@ class ListerTest extends TestCase
 
     public function testAddAfterRender(): void
     {
-        $v = new View();
-        $v->setApp($this->createApp());
-        $v->invokeInit();
+        $view = new View();
+        $view->setApp($this->createApp());
+        $view->invokeInit();
 
         $this->expectException(Exception::class);
-        Lister::addTo($v);
+        Lister::addTo($view);
     }
 }

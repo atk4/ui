@@ -32,7 +32,7 @@ $wizard->addStep('Welcome', static function (Wizard $wizard) {
 // to store wizard-specific variables
 $wizard->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database Connection String'], static function (Wizard $wizard) {
     $form = Form::addTo($wizard);
-    // IMPORTANT - needed for php_unit Wizard test
+    // IMPORTANT - needed for phpunit Wizard test
     $form->cb->setUrlTrigger('w_form_submit');
 
     $form->addControl('dsn', ['caption' => 'Connect DSN'], ['required' => true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
