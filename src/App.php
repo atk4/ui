@@ -301,7 +301,7 @@ class App
         $this->layout->template->tryDel('Header');
 
         if (($this->isJsUrlRequest() || $this->getRequest()->getHeaderLine('X-Requested-With') === 'XMLHttpRequest')
-                && !isset($_GET['__atk_tab'])) {
+                && !$this->hasRequestGetParam('__atk_tab')) {
             $this->outputResponseJson([
                 'success' => false,
                 'message' => $this->layout->getHtml(),
@@ -491,7 +491,7 @@ class App
             }
 
             $this->outputResponseJson($output);
-        } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
+        } elseif ($this->hasRequestGetParam('__atk_tab') && $type === 'text/html') {
             $output = $this->getTag('script', [], '$(function () {' . $output['atkjs'] . '});')
                 . $output['html'];
 
@@ -642,7 +642,7 @@ class App
             $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], '$(function () {' . $this->html->getJs() . ';});'));
             $this->isRendering = false;
 
-            if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catchRunawayCallbacks) {
+            if ($this->hasRequestGetParam(Callback::URL_QUERY_TARGET) && $this->catchRunawayCallbacks) {
                 throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
                     ->addMoreInfo('callback', $_GET[Callback::URL_QUERY_TARGET]);
             }
@@ -816,7 +816,7 @@ class App
      */
     public function isJsUrlRequest(): bool
     {
-        return isset($_GET['__atk_json']) && $_GET['__atk_json'] !== '0';
+        return $this->hasRequestGetParam('__atk_json') && $_GET['__atk_json'] !== '0';
     }
 
     /**

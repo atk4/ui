@@ -179,7 +179,7 @@ $stepModal->addButtonAction($action);
 $stepModal->set(static function (View $p) use ($session, $previousAction, $nextAction) {
     $page = $session->recall('page', 1);
     $success = $session->recall('success', false);
-    if (isset($_GET['move'])) {
+    if ($p->getApp()->hasRequestGetParam('move')) {
         $move = $_GET['move'];
         if ($move === 'next' && $success) {
             ++$page;

@@ -268,7 +268,7 @@ to provide a simple way to redirect for users who are not familiar with JavaScri
 so well. Example:
 
 ```
-if (!isset($_GET['age'])) {
+if (!$app->hasRequestGetParam('age')) {
     $app->redirect(['age' => 18]);
 }
 

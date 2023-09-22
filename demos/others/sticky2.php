@@ -19,7 +19,7 @@ require_once __DIR__ . '/../init-app.php';
 
 // This demo shows a local impact of a sticky parameters
 
-if (isset($_GET['name'])) {
+if ($app->hasRequestGetParam('name')) {
     // IMPORTANT: because this is an optional frame, I have to specify it's unique shortName explicitly, othrewise
     // the name for a second frame will be affected by presence of GET['name'] parameter
     $frame = View::addTo($app, ['ui' => 'red segment', 'shortName' => 'fr1']);

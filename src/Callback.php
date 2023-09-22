@@ -99,7 +99,7 @@ class Callback extends AbstractView
      */
     public function isTriggered(): bool
     {
-        return isset($_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger]);
+        return $this->getApp()->hasRequestGetParam(self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger);
     }
 
     public function getTriggeredValue(): string
@@ -112,7 +112,7 @@ class Callback extends AbstractView
      */
     public function canTerminate(): bool
     {
-        return isset($_GET[self::URL_QUERY_TARGET]) && $_GET[self::URL_QUERY_TARGET] === $this->urlTrigger;
+        return $this->getApp()->hasRequestGetParam(self::URL_QUERY_TARGET) && $_GET[self::URL_QUERY_TARGET] === $this->urlTrigger;
     }
 
     /**
@@ -120,7 +120,7 @@ class Callback extends AbstractView
      */
     public function canTrigger(): bool
     {
-        return $this->triggerOnReload || !isset($_GET['__atk_reload']);
+        return $this->triggerOnReload || !$this->getApp()->hasRequestGetParam('__atk_reload');
     }
 
     /**

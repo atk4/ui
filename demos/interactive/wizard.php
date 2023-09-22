@@ -47,7 +47,7 @@ $wizard->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database C
 // and set a custom JS action or even set a different link. You can use recall()
 // to access some values that were recorded on another steps.
 $wizard->addStep(['Select Model', 'description' => '"Country" or "Stat"', 'icon' => 'table'], static function (Wizard $wizard) {
-    if (isset($_GET['name'])) {
+    if ($wizard->getApp()->hasRequestGetParam('name')) {
         $wizard->memorize('model', $_GET['name']);
         $wizard->getApp()->redirect($wizard->urlNext());
     }

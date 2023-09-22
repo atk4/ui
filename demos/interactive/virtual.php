@@ -24,7 +24,7 @@ require_once __DIR__ . '/../init-app.php';
 $virtualPage = VirtualPage::addTo($app->layout, ['urlTrigger' => 'in']);
 
 // add content to virtual page
-if (isset($_GET['p_id'])) {
+if ($app->hasRequestGetParam('p_id')) {
     Header::addTo($virtualPage, [$_GET['p_id']])->addClass('__atk-behat-test-car');
 }
 LoremIpsum::addTo($virtualPage, ['size' => 1]);
@@ -74,7 +74,7 @@ Button::addTo($bar)->set('Load in Modal')
 
 Button::addTo($bar)->set('Simulate slow load')
     ->on('click', new JsModal('My Popup Title', $virtualPage->getJsUrl('cut') . '&slow=true'));
-if (isset($_GET['slow'])) {
+if ($app->hasRequestGetParam('slow')) {
     sleep(1);
 }
 

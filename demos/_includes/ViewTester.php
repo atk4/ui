@@ -22,7 +22,7 @@ class ViewTester extends View
         $label = Label::addTo($this, ['CallBack', 'detail' => 'fail', 'class.red' => true]);
         $reload = new JsReload($this, [$this->name => 'ok']);
 
-        if (isset($_GET[$this->name])) {
+        if ($this->getApp()->hasRequestGetParam($this->name)) {
             $label->class[] = 'green';
             $label->detail = 'success';
         } else {

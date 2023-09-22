@@ -81,7 +81,7 @@ Agile UI implements advanced approach allowing any View object that you add into
 declare "sticky GET arguments". Here is example:
 
 ```
-if (isset($_GET['message'])) {
+if ($app->hasRequestGetParam('message')) {
     Message::addTo($app)->set($_GET['message']);
 }
 
