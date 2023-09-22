@@ -189,7 +189,7 @@ class Upload extends Input
         $this->hasDeleteCb = true;
         if ($this->getApp()->tryGetRequestPostParam('fUploadAction') === self::DELETE_ACTION) {
             $this->cb->set(function () use ($fx) {
-                $fileId = $_POST['fUploadId'];
+                $fileId = $this->getApp()->getRequestPostParam('fUploadId');
 
                 $jsRes = $fx($fileId);
                 if ($jsRes !== null) { // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9388

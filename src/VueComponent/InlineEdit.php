@@ -96,7 +96,7 @@ class InlineEdit extends View
 
         if ($this->autoSave && $this->model->isLoaded()) {
             $this->cb->set(function () {
-                $postValue = $_POST['value'];
+                $postValue = $this->getApp()->getRequestPostParam('value');
                 try {
                     $this->model->set($this->fieldName, $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($this->fieldName), $postValue));
                     $this->model->save();
