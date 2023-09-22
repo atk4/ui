@@ -854,10 +854,10 @@ class View extends AbstractView
     {
         $data = [];
         $data['local'] = $this->getApp()->decodeJson(
-            $this->getApp()->tryGetRequestGetParam($this->name . '_local_store') ?? $_POST[$this->name . '_local_store'] ?? 'null'
+            $this->getApp()->tryGetRequestGetParam($this->name . '_local_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_local_store') ?? 'null'
         );
         $data['session'] = $this->getApp()->decodeJson(
-            $this->getApp()->tryGetRequestGetParam($this->name . '_session_store') ?? $_POST[$this->name . '_session_store'] ?? 'null'
+            $this->getApp()->tryGetRequestGetParam($this->name . '_session_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_session_store') ?? 'null'
         );
 
         return $data;

@@ -140,7 +140,7 @@ class Upload extends Input
     public function onUpload(\Closure $fx): void
     {
         $this->hasUploadCb = true;
-        if (($_POST['fUploadAction'] ?? null) === self::UPLOAD_ACTION) {
+        if ($this->getApp()->tryGetRequestPostParam('fUploadAction') === self::UPLOAD_ACTION) {
             $this->cb->set(function () use ($fx) {
                 $postFiles = [];
                 for ($i = 0;; ++$i) {
@@ -187,7 +187,7 @@ class Upload extends Input
     public function onDelete(\Closure $fx): void
     {
         $this->hasDeleteCb = true;
-        if (($_POST['fUploadAction'] ?? null) === self::DELETE_ACTION) {
+        if ($this->getApp()->tryGetRequestPostParam('fUploadAction') === self::DELETE_ACTION) {
             $this->cb->set(function () use ($fx) {
                 $fileId = $_POST['fUploadId'];
 
@@ -206,7 +206,7 @@ class Upload extends Input
         parent::renderView();
 
         if ($this->cb->canTerminate()) {
-            $uploadActionRaw = $_POST['fUploadAction'] ?? null;
+            $uploadActionRaw = $this->getApp()->tryGetRequestPostParam('fUploadAction');
             if (!$this->hasUploadCb && ($uploadActionRaw === self::UPLOAD_ACTION)) {
                 throw new Exception('Missing onUpload callback');
             } elseif (!$this->hasDeleteCb && ($uploadActionRaw === self::DELETE_ACTION)) {
