@@ -23,6 +23,7 @@ require_once __DIR__ . '/../init-app.php';
 Header::addTo($app, ['Modal View']);
 
 $session = new Session($app);
+
 // Re-usable component implementing counter
 
 Header::addTo($app, ['Static Modal Dialog']);
@@ -54,7 +55,7 @@ Button::addTo($bar, ['No Title'])
 Button::addTo($bar, ['Scrolling Content'])
     ->on('click', $modalScrolling->jsShow());
 
-// Modal demos.
+// Modal demos
 
 // REGULAR
 
@@ -70,10 +71,10 @@ $button->on('click', $simpleModal->jsShow());
 
 Header::addTo($app, ['Three levels of Modal loading dynamic content via callback']);
 
-// vp1Modal will be render into page but hide until $vp1Modal->jsShow() is activate.
+// vp1Modal will be render into page but hide until $vp1Modal->jsShow() is activate
 $vp1Modal = Modal::addTo($app, ['title' => 'Lorem Ipsum load dynamically']);
 
-// vp2Modal will be render into page but hide until $vp1Modal->jsShow() is activate.
+// vp2Modal will be render into page but hide until $vp1Modal->jsShow() is activate
 $vp2Modal = Modal::addTo($app, ['title' => 'Text message load dynamically'])->addClass('small');
 
 $vp3Modal = Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
@@ -82,10 +83,10 @@ $vp3Modal->set(static function (View $p) {
     LoremIpsum::addTo($p, ['size' => 2]);
 });
 
-// When $vp1Modal->jsShow() is activate, it will dynamically add this content to it.
+// when $vp1Modal->jsShow() is activate, it will dynamically add this content to it
 $vp1Modal->set(static function (View $p) use ($vp2Modal) {
     ViewTester::addTo($p);
-    View::addTo($p, ['Showing lorem ipsum']); // need in behat test.
+    View::addTo($p, ['Showing lorem ipsum']); // need in behat test
     LoremIpsum::addTo($p, ['size' => 2]);
     $form = Form::addTo($p);
     $form->addControl('color', [], ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
@@ -94,7 +95,7 @@ $vp1Modal->set(static function (View $p) use ($vp2Modal) {
     });
 });
 
-// When $vp2Modal->jsShow() is activate, it will dynamically add this content to it.
+// when $vp2Modal->jsShow() is activate, it will dynamically add this content to it
 $vp2Modal->set(static function (View $p) use ($vp3Modal) {
     ViewTester::addTo($p);
     Message::addTo($p, [$_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
@@ -161,10 +162,10 @@ $button->on('click', $denyApproveModal->jsShow());
 
 Header::addTo($app, ['Multiple page modal']);
 
-// Add modal to layout.
+// add modal to layout
 $stepModal = Modal::addTo($app, ['title' => 'Multi step actions']);
 
-// Add buttons to modal for next and previous actions.
+// add buttons to modal for next and previous actions
 $action = new View(['ui' => 'buttons']);
 $previousAction = new Button(['Previous', 'icon' => 'left arrow']);
 $nextAction = new Button(['Next', 'iconRight' => 'right arrow']);
@@ -179,10 +180,10 @@ $stepModal->set(static function (View $p) use ($session, $previousAction, $nextA
     $page = $session->recall('page', 1);
     $success = $session->recall('success', false);
     if (isset($_GET['move'])) {
-        if ($_GET['move'] === 'next' && $success) {
+        $move = $_GET['move'];
+        if ($move === 'next' && $success) {
             ++$page;
-        }
-        if ($_GET['move'] === 'previous' && $page > 1) {
+        } elseif ($move === 'previous' && $page > 1) {
             --$page;
         }
         $session->memorize('success', false);
@@ -238,7 +239,7 @@ $nextAction->on('click', $stepModal->js()->atkReloadView(
     ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'next']]
 ));
 
-// Bind display modal to page display button.
+// bind display modal to page display button
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($menuBar)->set('Multi Step Modal');
 $button->on('click', $stepModal->jsShow());

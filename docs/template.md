@@ -38,7 +38,7 @@ Once template is initialized you can `renderToHtml()` it any-time to get string
 ```
 $t->set('mytag', 'Agile UI');
 
-echo $t->renderToHtml(); // "Hello, Agile UI".
+echo $t->renderToHtml(); // "Hello, Agile UI"
 ```
 
 Tags may also be self-closing:
@@ -354,7 +354,7 @@ will return contents of the template without tags:
 $result = $template->renderToHtml();
 
 \Atk4\Ui\Text::addTo($this)->set($result);
-// Will output "Hello, World"
+// will output "Hello, World"
 ```
 
 ## Template cloning
@@ -390,11 +390,11 @@ You can use the following code to manipulate the template above:
 $template = HtmlTemplate::addTo($this);
 $template->loadFromFile('envelope'); // templates/envelope.html
 
-// Split into multiple objects for processing
+// split into multiple objects for processing
 $sender = $template->cloneRegion('Sender');
 $recipient = $template->cloneRegion('Recipient');
 
-// Set data to each sub-template separately
+// set data to each sub-template separately
 $sender->set($senderData);
 $recipient->set($recipientData);
 

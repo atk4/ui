@@ -23,7 +23,7 @@ $formPhone->addControl('phone2');
 $formPhone->addControl('phone3');
 $formPhone->addControl('phone4');
 
-// Show phoneX when previous phone is visible and has a number with at least 5 char.
+// show phoneX when previous phone is visible and has a number with at least 5 char
 $formPhone->setControlsDisplayRules([
     'phone2' => ['phone1' => ['number', 'minLength[5]']],
     'phone3' => ['phone2' => ['number', 'minLength[5]'], 'phone1' => ['number', 'minLength[5]']],
@@ -44,9 +44,9 @@ $formSubscribe->addControl('gender', [Form\Control\Radio::class], ['enum' => ['F
 $formSubscribe->addControl('m_gift', [Form\Control\Dropdown::class, 'caption' => 'Gift for Men', 'values' => ['Beer Glass', 'Swiss Knife']]);
 $formSubscribe->addControl('f_gift', [Form\Control\Dropdown::class, 'caption' => 'Gift for Women', 'values' => ['Wine Glass', 'Lipstick']]);
 
-// Show email and gender when subscribe is checked.
-// Show m_gift when gender = 'male' and subscribe is checked.
-// Show f_gift when gender = 'female' and subscribe is checked.
+// show email and gender when subscribe is checked
+// show m_gift when gender = 'male' and subscribe is checked
+// show f_gift when gender = 'female' and subscribe is checked
 $formSubscribe->setControlsDisplayRules([
     'email' => ['subscribe' => 'checked'],
     'gender' => ['subscribe' => 'checked'],
@@ -64,9 +64,9 @@ $formDog->addControl('race', [Form\Control\Line::class]);
 $formDog->addControl('age');
 $formDog->addControl('hair_cut', [Form\Control\Dropdown::class, 'values' => ['Short', 'Long']]);
 
-// Show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
+// show 'hair_cut' when race contains the word 'poodle' AND age is between 1 and 5
 // OR
-// Show 'hair_cut' when race contains exactly the word 'bichon'
+// show 'hair_cut' when race contains exactly the word 'bichon'
 $formDog->setControlsDisplayRules([
     'hair_cut' => [['race' => 'contains[poodle]', 'age' => 'integer[1..5]'], ['race' => 'isExactly[bichon]']],
 ]);
@@ -95,9 +95,9 @@ $groupOther = $formGroup->addGroup(['Others']);
 $groupOther->addControl('language', ['width' => 'eight']);
 $groupOther->addControl('favorite_pet', ['width' => 'four']);
 
-// To hide-show group simply select a field in that group.
-// Show group where 'php' belong when dev is checked.
-// Show group where 'language' belong when dev is checked.
+// to hide-show group simply select a field in that group
+// show group where 'php' belong when dev is checked
+// show group where 'language' belong when dev is checked
 $formGroup->setGroupDisplayRules(['php' => ['dev' => 'checked'], 'language' => ['dev' => 'checked']]);
 
 // -----------------------------------------------------------------------------
@@ -131,9 +131,9 @@ $group->addControl('delivery_postal', ['width' => 'four']);
 
 $accordionLayout->activate($invoiceAddressSection);
 
-// To hide-show group or section simply select a field in that group.
-// Show group where 'php' belong when dev is checked.
-// Show group where 'language' belong when dev is checked.
+// to hide-show group or section simply select a field in that group
+// show group where 'php' belong when dev is checked
+// show group where 'language' belong when dev is checked
 $formAccordion->setGroupDisplayRules(
     ['delivery_addr' => ['has_custom_delivery_address' => 'checked']],
 

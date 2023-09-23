@@ -47,7 +47,7 @@ class GridLayout extends View
         $this->tRow->del('column');
         $this->tWrap->del('rows');
 
-        // Will need to manipulate template a little
+        // will need to manipulate template a little
         $this->buildTemplate();
     }
 

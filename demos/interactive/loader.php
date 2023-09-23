@@ -24,33 +24,34 @@ ViewTester::addTo($app);
 
 // Example 1 - Basic usage of a Loader.
 Loader::addTo($app)->set(static function (Loader $p) {
-    // set your time expensive function here.
+    // set your time expensive function here
     sleep(1);
     Header::addTo($p, ['Loader #1']);
     LoremIpsum::addTo($p, ['size' => 1]);
 
-    // Any dynamic views can perform callbacks just fine
+    // any dynamic views can perform callbacks just fine
     ViewTester::addTo($p);
 
-    // Loader may be inside another loader, works fine.
+    // Loader may be inside another loader
     $loader = Loader::addTo($p);
 
     // use loadEvent to prevent manual loading or even specify custom trigger event
     $loader->loadEvent = false;
     $loader->set(static function (Loader $p) {
-        // You may pass arguments to the loader, in this case it's "color"
+        // you may pass arguments to the loader, in this case it's "color"
         sleep(1);
-        Header::addTo($p, ['Loader #1b - ' . $_GET['color']]);
-        LoremIpsum::addTo(View::addTo($p, ['ui' => $_GET['color'] . ' segment']), ['size' => 1]);
+        $color = $_GET['color'];
+        Header::addTo($p, ['Loader #1b - ' . $color]);
+        LoremIpsum::addTo(View::addTo($p, ['ui' => $color . ' segment']), ['size' => 1]);
 
         // don't forget to make your own argument sticky so that Components can communicate with themselves:
         $p->stickyGet('color');
         ViewTester::addTo($p);
 
-        // This loader takes 2s to load because it needs to go through 2 sleep statements.
+        // this loader takes 2s to load because it needs to go through 2 sleep statements
     });
 
-    // button may contain load event.
+    // button may contain load event
     Button::addTo($p, ['Load Segment Manually (2s)', 'class.red' => true])
         ->on('click', $loader->jsLoad(['color' => 'red']));
     Button::addTo($p, ['Load Segment Manually (2s)', 'class.blue' => true])

@@ -73,7 +73,7 @@ class ApiService {
         try {
             if (response.success) {
                 if (response.html && response.id) {
-                    // prevent modal duplication.
+                    // prevent modal duplication
                     // apiService.removeModalDuplicate(response.html);
                     const modelsContainer = $('.ui.dimmer.modals.page')[0];
                     $($.parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
@@ -82,22 +82,11 @@ class ApiService {
 
                     const result = $('#' + response.id).replaceWith(response.html);
                     if (result.length === 0) {
-                        // TODO Find a better solution for long term.
-                        // Need a way to gracefully abort server request.
-                        // when user cancel a request by selecting another request.
+                        // TODO find a better solution for long term
+                        // need a way to gracefully abort server request
+                        // when user cancel a request by selecting another request
                         console.error('Unable to replace element with id: ' + response.id);
                         // throw Error('Unable to replace element with id: ' + response.id);
-                    }
-                }
-                if (response.portals) {
-                    // Create app portal from JSON response.
-                    const portals = Object.keys(response.portals);
-                    for (const portalID of portals) {
-                        const m = $('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
-                        if (m.length === 0) {
-                            $(document.body).append(response.portals[portalID].html);
-                            atk.apiService.evalResponse(response.portals[portalID].js);
-                        }
                     }
                 }
                 if (response.atkjs) {
@@ -134,7 +123,8 @@ class ApiService {
         if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
             atk.apiService.showErrorModal(response.message);
         } else {
-            // check if we have HTML returned by server with <body> content.
+            // check if we have HTML returned by server with <body> content
+            // TODO test together /w onError using non-200 HTTP AJAX response code
             const body = response.match(/<body[^>]*>[\S\s]*<\/body>/gi);
             if (body) {
                 atk.apiService.showErrorModal(body);
@@ -211,7 +201,7 @@ class ApiService {
             }
         }
 
-        // catch application error and display them in a new modal window.
+        // catch application error and display them in a new modal window
         const m = $('<div>')
             .appendTo('body')
             .addClass('ui scrolling modal')

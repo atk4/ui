@@ -42,12 +42,12 @@ Counter::addTo($seg);
 Counter::addTo($seg, ['40']);
 Counter::addTo($seg, ['-20']);
 
-// Add button to reload all counters
+// add button to reload all counters
 $bar = View::addTo($app, ['ui' => 'buttons']);
 $b = Button::addTo($bar, ['Reload counter'])
     ->on('click', new JsReload($seg));
 
-// Relading with argument
+// reloading with argument
 Header::addTo($app, ['We can pass argument to reloader']);
 
 $v = View::addTo($app, ['ui' => 'segment'])->set($_GET['val'] ?? 'No value');

@@ -184,7 +184,7 @@ class Column
             'onChange' => $function,
         ]);
 
-        // will stop grid column from being sorted.
+        // will stop grid column from being sorted
         $chain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));
 
         $this->table->js(true, $chain);
@@ -246,9 +246,9 @@ class Column
      * Returns a suitable cell tag with the supplied value. Applies modifiers
      * added through addClass and setAttr.
      *
-     * @param string       $position 'head', 'body' or 'tail'
-     * @param string|array $value    either HTML or array defining HTML structure, see App::getTag help
-     * @param array        $attr     extra attributes to apply on the tag
+     * @param string                                                                                                   $position 'head', 'body' or 'tail'
+     * @param string|array<int, array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value    either HTML or array defining HTML structure, see App::getTag help
+     * @param array<string, string|bool|array>                                                                         $attr     extra attributes to apply on the tag
      */
     public function getTag(string $position, $value, array $attr = []): string
     {
@@ -291,7 +291,7 @@ class Column
             $attr['id'] = $this->name . '_th';
 
             // add the action tag to the caption
-            $caption = [$this->headerActionTag, $caption];
+            $caption = [$this->headerActionTag, $this->getApp()->encodeHtml($caption)];
         }
 
         if ($this->table->sortable) {
@@ -301,7 +301,7 @@ class Column
                 $attr['class'] = ['sortable'];
             }
 
-            // If table is being sorted by THIS column, set the proper class
+            // if table is being sorted by THIS column, set the proper class
             if ($this->table->sortBy === $field->shortName) {
                 $class .= ' sorted ' . ['asc' => 'ascending', 'desc' => 'descending'][$this->table->sortDirection];
 

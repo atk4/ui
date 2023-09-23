@@ -37,7 +37,7 @@ $g1->addModalAction(['icon' => 'cogs'], 'Details', static function (View $p, $id
 $g1->addActionButton('red', static function (Jquery $js) {
     return $js->closest('tr')->css('color', 'red');
 });
-// THIS SHOULD GO AFTER YOU CALL Grid::addActionButton() !!!
+// THIS SHOULD GO AFTER YOU CALL Grid::addActionButton()
 $g1->addJsPaginatorInContainer(30, 350);
 
 $c2 = $c->addColumn();

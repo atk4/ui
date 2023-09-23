@@ -64,8 +64,6 @@ class Right extends View implements Loadable
         if ($this->dynamic) {
             $this->addDynamicContent(Factory::factory($this->dynamic));
         }
-
-        $this->getApp()->registerPortals($this);
     }
 
     /**
@@ -183,11 +181,11 @@ class Right extends View implements Loadable
     {
         $res = [
             'id' => $this->name,
-            'loader' => ['selector' => '.ui.loader', 'trigger' => 'active'], // the CSS selector and trigger class to activate loader.
+            'loader' => ['selector' => '.ui.loader', 'trigger' => 'active'], // the CSS selector and trigger class to activate loader
             'modal' => $this->closeModal,
             'warning' => ['selector' => $this->warningSelector, 'trigger' => $this->warningTrigger],
-            'visible' => 'atk-visible', // the triggering CSS class that will make this panel visible.
-            'closeSelector' => $this->closeSelector, // the CSS selector to close this flyout.
+            'visible' => 'atk-visible', // the triggering CSS class that will make this panel visible
+            'closeSelector' => $this->closeSelector, // the CSS selector to close this flyout
             'hasClickAway' => $this->hasClickAway,
             'hasEscAway' => $this->hasEscAway,
         ];

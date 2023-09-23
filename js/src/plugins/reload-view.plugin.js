@@ -3,8 +3,7 @@ import atk from 'atk';
 import AtkPlugin from './atk.plugin';
 
 /**
- * Reload a view using Fomantic-UI API.
- * Prefer method is GET.
+ * Reload a view from server. Default request method is GET.
  *
  * You can include WebStorage value within the request
  * by setting the store name (key) value.
@@ -23,13 +22,13 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
         const url = atk.urlHelper.removeAllParams(this.settings.url);
         const userConfig = this.settings.apiConfig ?? {};
 
-        // add new param and remove duplicate, prioritizing the latest one.
+        // add new param and remove duplicate, prioritizing the latest one
         let urlParams = Object.assign(
             atk.urlHelper.parseParams(this.settings.url),
             this.settings.urlOptions ?? {}
         );
 
-        // get store object.
+        // get store object
         const store = atk.dataService.getStoreData(this.settings.storeName);
 
         // merge user settings
@@ -46,7 +45,7 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
             ...userConfig,
         };
 
-        // if post then we need to set our store into settings data.
+        // if post then we need to set our store into settings data
         if (settings.method.toUpperCase() === 'POST') {
             settings.data = Object.assign(settings.data, store);
         } else {

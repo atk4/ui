@@ -95,17 +95,19 @@ class DemosTest extends TestCase
 
         $rootDirRealpath = realpath(static::ROOT_DIR);
 
+        $requestPath = $request->getUri()->getPath();
+        $requestQuery = $request->getUri()->getQuery();
         $_SERVER = [
             'REQUEST_METHOD' => $request->getMethod(),
             'HTTP_HOST' => $request->getUri()->getHost(),
-            'REQUEST_URI' => (string) $request->getUri(),
-            'QUERY_STRING' => $request->getUri()->getQuery(),
+            'REQUEST_URI' => $requestPath . ($requestQuery !== '' ? '?' . $requestQuery : ''),
+            'QUERY_STRING' => $requestQuery,
             'DOCUMENT_ROOT' => $rootDirRealpath,
-            'SCRIPT_FILENAME' => $rootDirRealpath . $request->getUri()->getPath(),
+            'SCRIPT_FILENAME' => $rootDirRealpath . $requestPath,
         ];
 
         $_GET = [];
-        parse_str($request->getUri()->getQuery(), $queryArr);
+        parse_str($requestQuery, $queryArr);
         foreach ($queryArr as $k => $v) {
             $_GET[$k] = $v;
         }
@@ -135,11 +137,9 @@ class DemosTest extends TestCase
                 throw new DemosTestExitError();
             }
 
-            protected function emitResponse(): void
-            {
-            }
+            protected function emitResponse(): void {}
         };
-        $app->initLayout([Layout\Maestro::class]);
+        $app->initLayout([Layout::class]);
 
         // clone DB (mainly because all Models remains attached now, TODO can be removed once they are GCed)
         $app->db = clone self::$_db;
@@ -241,7 +241,7 @@ class DemosTest extends TestCase
     }
 
     /** @var string */
-    protected $regexHtml = '~^<!DOCTYPE~';
+    protected $regexHtml = '~^<!DOCTYPE html>\s*<html~';
     /** @var string */
     protected $regexJson = '~
         (?(DEFINE)
@@ -327,12 +327,9 @@ class DemosTest extends TestCase
 
     public function provideDemoGetCases(): iterable
     {
-        $files = [];
-        $files[] = ['others/sticky.php?xx=YEY'];
-        $files[] = ['others/sticky.php?c=OHO'];
-        $files[] = ['others/sticky.php?xx=YEY&c=OHO'];
-
-        return $files;
+        yield ['others/sticky.php?xx=YEY'];
+        yield ['others/sticky.php?c=OHO'];
+        yield ['others/sticky.php?xx=YEY&c=OHO'];
     }
 
     /**
@@ -400,16 +397,13 @@ class DemosTest extends TestCase
 
     public function provideDemoAssertJsonResponseCases(): iterable
     {
-        $files = [];
         // simple reload
-        $files[] = ['_unit-test/reload.php?__atk_reload=reload'];
+        yield ['_unit-test/reload.php?__atk_reload=reload'];
         // loader callback reload
-        $files[] = ['_unit-test/reload.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'c_reload=ajax&' . Callback::URL_QUERY_TARGET . '=c_reload'];
+        yield ['_unit-test/reload.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'c_reload=ajax&' . Callback::URL_QUERY_TARGET . '=c_reload'];
         // test catch exceptions
-        $files[] = ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m_cb&__atk_json=1', 'Test throw exception!'];
-        $files[] = ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm2_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m2_cb&__atk_json=1', 'Test trigger error!'];
-
-        return $files;
+        yield ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m_cb&__atk_json=1', 'Test throw exception!'];
+        yield ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm2_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m2_cb&__atk_json=1', 'Test trigger error!'];
     }
 
     /**
@@ -444,13 +438,10 @@ class DemosTest extends TestCase
 
     public function provideDemoAssertSseResponseCases(): iterable
     {
-        $files = [];
-        $files[] = ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
-        $files[] = ['_unit-test/console.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
-        $files[] = ['_unit-test/console_run.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
-        $files[] = ['_unit-test/console_exec.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
-
-        return $files;
+        yield ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
+        yield ['_unit-test/console.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
+        yield ['_unit-test/console_run.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
+        yield ['_unit-test/console_exec.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
     }
 
     /**
@@ -486,15 +477,10 @@ class DemosTest extends TestCase
 
     public function provideDemoAssertJsonResponsePostCases(): iterable
     {
-        $files = [];
-        $files[] = [
+        yield [
             '_unit-test/post.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_submit=ajax&' . Callback::URL_QUERY_TARGET . '=test_submit',
-            [
-                'f1' => 'v1',
-            ],
+            ['f1' => 'v1'],
         ];
-
-        return $files;
     }
 
     /**
@@ -526,31 +512,27 @@ class DemosTest extends TestCase
 
     public function provideDemoCallbackErrorCases(): iterable
     {
-        return [
-            [
-                '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
-                'Callback requested, but never reached. You may be missing some arguments in request URL.',
-            ],
-            [
-                '_unit-test/callback-nested.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
-                'Callback requested, but never reached. You may be missing some arguments in request URL.',
-            ],
-            [
-                '_unit-test/callback-nested.php?err_main_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_main_loader',
-                'Exception from Main Loader',
-            ],
-            [
-                '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
-                'Exception from Sub Loader',
-            ],
-            [
-                '_unit-test/callback-nested.php?err_sub_loader2&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
-                'Exception II from Sub Loader',
-            ],
+        yield [
+            '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
+            'Callback requested, but never reached. You may be missing some arguments in request URL.',
+        ];
+        yield [
+            '_unit-test/callback-nested.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
+            'Callback requested, but never reached. You may be missing some arguments in request URL.',
+        ];
+        yield [
+            '_unit-test/callback-nested.php?err_main_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_main_loader',
+            'Exception from Main Loader',
+        ];
+        yield [
+            '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
+            'Exception from Sub Loader',
+        ];
+        yield [
+            '_unit-test/callback-nested.php?err_sub_loader2&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
+            'Exception II from Sub Loader',
         ];
     }
 }
 
-class DemosTestExitError extends \Error
-{
-}
+class DemosTestExitError extends \Error {}

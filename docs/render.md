@@ -64,7 +64,7 @@ After that, adding any objects into app (into layout) will initialize those obje
 ```
 $b = \Atk4\Ui\Button::addTo($app, ['Test1']);
 
-echo $b->name; // present, because button was added into initialized object.
+echo $b->name; // present, because button was added into initialized object
 ```
 
 If object cannot determine the path to the application, then it will remain uninitialized for some time. This is called
@@ -83,7 +83,7 @@ hand, if you add $v inside layout, trees will merge and the same $app will be us
 ```
 $app->add($v);
 
-echo $b2->name; // fully set now and unique.
+echo $b2->name; // fully set now and unique
 ```
 
 Agile UI will attempt to always initialize objects as soon as possible, so that you can get the most meaningful stack traces
@@ -134,7 +134,11 @@ class MyView extends View
         parent::init();
 
         if ($_GET[$this->name]) {
-            \Atk4\Ui\Label::addTo($this, ['Secret info is', 'class.big red' => true, 'detail' => $_GET[$this->name]]);
+            \Atk4\Ui\Label::addTo($this, [
+                'Secret info is',
+                'class.big red' => true,
+                'detail' => $_GET[$this->name],
+            ]);
         }
 
         \Atk4\Ui\Button::addTo($this, ['Send info to ourselves'])

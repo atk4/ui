@@ -312,7 +312,7 @@ class View extends AbstractView
      *
      * @param class-string<T> $class
      *
-     * @phpstan-return T|null
+     * @return T|null
      */
     public function getClosestOwner(string $class): ?self
     {
@@ -476,21 +476,21 @@ class View extends AbstractView
     /**
      * Build an URL which this view can use for callbacks.
      *
-     * @param string|array<0|string, string|int|false> $page URL as string or array with page name as first element and other GET arguments
+     * @param string|array<0|string, string|int|false> $page URL as string or array with page path as first element and other GET arguments
      */
     public function url($page = []): string
     {
-        return $this->getApp()->url($page, false, $this->_getStickyArgs());
+        return $this->getApp()->url($page, $this->_getStickyArgs());
     }
 
     /**
      * Build an URL which this view can use for JS callbacks.
      *
-     * @param string|array<0|string, string|int|false> $page URL as string or array with page name as first element and other GET arguments
+     * @param string|array<0|string, string|int|false> $page URL as string or array with page path as first element and other GET arguments
      */
     public function jsUrl($page = []): string
     {
-        return $this->getApp()->jsUrl($page, false, $this->_getStickyArgs());
+        return $this->getApp()->jsUrl($page, $this->_getStickyArgs());
     }
 
     /**
@@ -737,10 +737,10 @@ class View extends AbstractView
      *
      * 1. Calling with arguments:
      * $view->js(); // technically does nothing
-     * $a = $view->js()->hide(); // creates chain for hiding $view but does not bind to event yet.
+     * $a = $view->js()->hide(); // creates chain for hiding $view but does not bind to event yet
      *
      * 2. Binding existing chains
-     * $img->on('mouseenter', $a); // binds previously defined chain to event on event of $img.
+     * $img->on('mouseenter', $a); // binds previously defined chain to event on event of $img
      *
      * Produced code: $('#img_id').on('mouseenter', function (event) {
      *     event.preventDefault();
@@ -853,8 +853,12 @@ class View extends AbstractView
     public function jsGetStoreData(): array
     {
         $data = [];
-        $data['local'] = $this->getApp()->decodeJson($_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null');
-        $data['session'] = $this->getApp()->decodeJson($_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null');
+        $data['local'] = $this->getApp()->decodeJson(
+            $_GET[$this->name . '_local_store'] ?? $_POST[$this->name . '_local_store'] ?? 'null'
+        );
+        $data['session'] = $this->getApp()->decodeJson(
+            $_GET[$this->name . '_session_store'] ?? $_POST[$this->name . '_session_store'] ?? 'null'
+        );
 
         return $data;
     }
@@ -1028,7 +1032,7 @@ class View extends AbstractView
                     $arguments[$ex->name] = $arguments['id'];
                     unset($arguments['id']);
                 } elseif (isset($arguments[0])) {
-                    // if "id" is not specified we assume arguments[0] is the model ID.
+                    // if "id" is not specified we assume arguments[0] is the model ID
                     $arguments[$ex->name] = $arguments[0];
                     unset($arguments[0]);
                 }
@@ -1066,7 +1070,6 @@ class View extends AbstractView
             $actions = [$action];
         }
 
-        // Do we need confirm action.
         if ($defaults['confirm'] ?? null) {
             array_unshift($eventStatements, new JsExpression('$.atkConfirm({ message: [confirm], onApprove: [action], options: { button: { ok: [ok], cancel: [cancel] } }, context: this })', [
                 'confirm' => $defaults['confirm'],

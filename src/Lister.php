@@ -125,7 +125,7 @@ class Lister extends View
             return;
         }
 
-        // Iterate data rows
+        // iterate data rows
         $this->_renderedRowsCount = 0;
 
         // TODO we should not iterate using $this->model variable,

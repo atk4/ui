@@ -50,9 +50,7 @@ final class AnonymousClassNameCache
     /** @var array<string, class-string> */
     private static $classNameByFxHash = [];
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * @template T of object
@@ -83,7 +81,7 @@ try {
     throw new Exception('Database error: ' . $e->getMessage());
 }
 
-[$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
+[$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(?:/|$))~s', $app->getRequest()->getUri()->getPath(), 3);
 $demosUrl = $rootUrl . 'demos/';
 
 // allow custom layout override

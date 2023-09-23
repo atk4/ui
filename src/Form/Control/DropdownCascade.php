@@ -39,7 +39,7 @@ class DropdownCascade extends Dropdown
         // populate default dropdown values
         $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($cascadeFromValue), $this->entityField->get());
 
-        // JS to execute for the onChange handler of the parent dropdown.
+        // JS to execute for the onChange handler of the parent dropdown
         $expr = [
             function (Jquery $j) use ($cascadeFromValue) {
                 return new JsBlock([

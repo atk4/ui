@@ -75,7 +75,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
         $this->action = $action;
         $this->afterActionInit();
 
-        // get necessary step need prior to execute action.
+        // get necessary step need prior to execute action
         $this->steps = $this->getSteps();
         if ($this->steps !== []) {
             $this->header->set($this->title ?? $action->getDescription());

@@ -124,7 +124,7 @@ __webpack_require__.r(__webpack_exports__);
  * This utility will properly set CSS style for dropdown menu to be displayed correctly.
  */
 function showTableDropdown() {
-  // getting element composing dropdown.
+  // getting element composing dropdown
   const $that = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this);
   const $menu = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).find('.menu');
   const position = $that.offset();
@@ -146,7 +146,7 @@ function showTableDropdown() {
     // console.log(position.top, $that.scrollTop());
     let top = 0;
     let left = 0;
-    // check if we need to place menu above or down button.
+    // check if we need to place menu above or down button
     if (canFitBelow()) {
       top = position.top + $that.outerHeight();
       top = hasFloating ? top + 5 : top;
@@ -170,7 +170,7 @@ function showTableDropdown() {
  * Reset CSS and handler when hiding dropdown.
  */
 function hideTableDropdown() {
-  // reset positioning.
+  // reset positioning
   const $menu = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).find('.menu');
   $menu.css('cssText', '');
   external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).off('scroll.atktable');
@@ -293,7 +293,7 @@ class AtkAjaxecPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"
       return;
     }
 
-    // Allow user to confirm if available.
+    // allow user to confirm if available
     if (this.settings.confirm) {
       if (window.confirm(this.settings.confirm)) {
         // eslint-disable-line no-alert
@@ -313,7 +313,7 @@ class AtkAjaxecPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"
     // retrieve param from URL
     let urlParams = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.url);
 
-    // get store object.
+    // get store object
     const store = atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService.getStoreData(this.settings.storeName);
     const settings = {
       on: 'now',
@@ -323,7 +323,7 @@ class AtkAjaxecPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["default"
       ...userConfig
     };
     if (settings.method.toUpperCase() === 'GET') {
-      // set data, store and add it to URL param.
+      // set data, store and add it to URL param
       urlParams = Object.assign(urlParams, data, store);
     } else {
       settings.data = Object.assign(data, store);
@@ -439,7 +439,7 @@ class AtkColumnResizerPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["d
       ...this.settings
     });
 
-    // reset padding class.
+    // reset padding class
     this.$el.removeClass('grip-padding');
   }
 
@@ -583,7 +583,7 @@ class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__[
   }
   initialize() {
     const ruleKeys = Object.keys(this.settings.fieldRules);
-    // map inputs according to ruleKeys.
+    // map inputs according to ruleKeys
     this.inputs = ruleKeys.map((ruleKey, idx, org) => {
       const tempRule = this.settings.fieldRules[ruleKey];
       const temp = [];
@@ -608,7 +608,7 @@ class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__[
    * Field change handler.
    */
   onInputChange(e) {
-    // check rule when inputs has changed.
+    // check rule when inputs has changed
     e.data.resetInputStatus();
     e.data.applyRules();
     e.data.setInputsState();
@@ -633,7 +633,7 @@ class AtkConditionalFormPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__[
             isAndValid = isAndValid && atk__WEBPACK_IMPORTED_MODULE_6__["default"].formService.validateField(this.$el, inputName, validationRule);
           }
         }
-        // Apply OR condition between rules.
+        // apply OR condition between rules
         input.state = input.state || isAndValid;
       }
     }
@@ -720,7 +720,7 @@ class AtkConfirmPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["default
       context = this.settings.context;
     }
 
-    // Create wrapper function for using proper "this" context.
+    // create wrapper function for using proper "this" context
     if (this.settings.onApprove) {
       options.onApprove = () => {
         this.settings.onApprove.call(context);
@@ -866,7 +866,7 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
    * Setup field initial state.
    */
   setInitialState() {
-    // Set progress bar.
+    // set progress bar
     this.bar.progress({
       text: {
         percent: '{percent}%',
@@ -905,7 +905,7 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
       }
     });
 
-    // add event handler to action button.
+    // add event handler to action button
     this.action.on('click', e => {
       if (!this.textInput.val()) {
         this.fileInput.click();
@@ -922,7 +922,7 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
       }
     });
 
-    // add event handler to file input.
+    // add event handler to file input
     this.fileInput.on('change', e => {
       if (e.target.files.length > 0) {
         this.textInput.val(e.target.files[0].name);
@@ -964,13 +964,12 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
    * @param {FileList} files
    */
   doFileUpload(files) {
-    // if submit button id is set, then disable submit
-    // during upload.
+    // if submit button id is set, then disable submit during upload
     if (this.settings.submit) {
       external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('#' + this.settings.submit).addClass('disabled');
     }
 
-    // setup task on upload completion.
+    // setup task on upload completion
     const completeCb = (response, content) => {
       if (response.success) {
         this.bar.progress('set label', this.settings.completeLabel);
@@ -981,7 +980,7 @@ class AtkFileUploadPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["defa
       }
     };
 
-    // setup progress bar update via xhr.
+    // setup progress bar update via xhr
     const xhrCb = () => {
       const xhr = new window.XMLHttpRequest();
       xhr.upload.addEventListener('progress', event => {
@@ -1092,7 +1091,7 @@ class AtkJsSearchPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_7__["defaul
     this.setSearchAction();
     this.onEscapeKeyAction();
 
-    // Set input initial value.
+    // set input initial value
     if (this.settings.q) {
       this.setFilter(this.settings.q);
     }
@@ -1339,9 +1338,9 @@ class AtkJsSortablePlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_6__["defa
     this.ids = [];
     // the data label attribute value of the source element being drag. ex: data-id
     this.sourceId = null;
-    // the new index value of the dragged element after sorting.
+    // the new index value of the dragged element after sorting
     this.newIndex = null;
-    // the original index value of the dragged element.
+    // the original index value of the dragged element
     this.origIndex = null;
 
     // fix screen reader announcement container added more than once
@@ -1453,8 +1452,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Reload a view using Fomantic-UI API.
- * Prefer method is GET.
+ * Reload a view from server. Default request method is GET.
  *
  * You can include WebStorage value within the request
  * by setting the store name (key) value.
@@ -1471,10 +1469,10 @@ class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["defa
     const url = atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.removeAllParams(this.settings.url);
     const userConfig = this.settings.apiConfig ?? {};
 
-    // add new param and remove duplicate, prioritizing the latest one.
+    // add new param and remove duplicate, prioritizing the latest one
     let urlParams = Object.assign(atk__WEBPACK_IMPORTED_MODULE_1__["default"].urlHelper.parseParams(this.settings.url), this.settings.urlOptions ?? {});
 
-    // get store object.
+    // get store object
     const store = atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService.getStoreData(this.settings.storeName);
 
     // merge user settings
@@ -1491,7 +1489,7 @@ class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["defa
       ...userConfig
     };
 
-    // if post then we need to set our store into settings data.
+    // if post then we need to set our store into settings data
     if (settings.method.toUpperCase() === 'POST') {
       settings.data = Object.assign(settings.data, store);
     } else {
@@ -1549,7 +1547,7 @@ __webpack_require__.r(__webpack_exports__);
 class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   main() {
     // check if we are initialized already because loading content
-    // can recall this plugin and screw up page number.
+    // can recall this plugin and screw up page number
     if (this.$el.data('__atkScroll')) {
       return false;
     }
@@ -1562,7 +1560,7 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
       tableHeaderColor: '#ffffff',
       stateContext: null
     };
-    // set default option if not set.
+    // set default option if not set
     this.settings.options = {
       ...defaultSettings,
       ...this.settings.options
@@ -1575,14 +1573,14 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
       this.$inner = this.$el;
       this.setTableHeader();
     } else {
-      // check if scroll apply vs Window or inside our element.
+      // check if scroll apply vs Window or inside our element
       this.isWindow = this.$el.css('overflow-y') === 'visible';
       this.$scroll = this.isWindow ? external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window) : this.$el;
-      // is Inner the element itself or it's children.
+      // is Inner the element itself or it's children
       this.$inner = this.isWindow ? this.$el : this.$el.children();
     }
 
-    // the target element within container where new content is appendTo.
+    // the target element within container where new content is appendTo
     this.$target = this.settings.options.appendTo ? this.$inner.find(this.settings.options.appendTo) : this.$inner;
     this.$scroll.on('scroll', this.onScroll.bind(this));
 
@@ -1621,13 +1619,13 @@ class AtkScrollPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_4__["default"
   onScroll(event) {
     const borderTopWidth = Number.parseInt(this.$el.css('borderTopWidth'), 10);
     const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth;
-    // this.$el padding top value.
+    // this.$el padding top value
     const paddingTop = Number.parseInt(this.$el.css('paddingTop'), 10) + borderTopWidthInt;
-    // Either the scroll bar position using window or the container element top position otherwise.
+    // either the scroll bar position using window or the container element top position otherwise
     const topHeight = this.isWindow ? external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).scrollTop() : this.$scroll.offset().top;
     // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
     const innerTop = this.$inner.length > 0 ? this.$inner.offset().top : 0;
-    // The total height.
+    // the total height
     const totalHeight = Math.ceil(topHeight - innerTop + this.$scroll.height() + paddingTop);
     if (!this.isWaiting && totalHeight + this.settings.options.padding >= this.$inner.outerHeight()) {
       this.loadContent();
@@ -1814,10 +1812,10 @@ __webpack_require__.r(__webpack_exports__);
  */
 class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
-    // menu items container.
+    // menu items container
     this.menu = this.$el.find(this.settings.menuItemsSelector);
     if (this.menu.length === 0) {
-      // this $el is our single item.
+      // this $el is our single item
       if (this.urlMatchLocation(this.$el[0].href)) {
         this.$el.addClass(this.settings.menuItemActiveClass);
       }
@@ -1827,9 +1825,9 @@ class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default
     this.toggler = this.$el.find(this.settings.toggleSelector);
     this.addClickHandler();
     if (this.hasBase()) {
-      // make menu group active.
+      // make menu group active
       this.$el.addClass(this.settings.menuGroupActiveClass);
-      // make menu group visible.
+      // make menu group visible
       this.menu.toggleClass(this.settings.visibleCssClass);
     }
     this.setTogglerIcon(this.settings.icon.selector);
@@ -1846,7 +1844,7 @@ class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default
     this.menu.find('a').each((i, el) => {
       if (this.urlMatchLocation(el.href)) {
         hasBase = true;
-        // set active class for this specific menu item.
+        // set active class for this specific menu item
         external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(el).addClass(this.settings.menuItemActiveClass);
       }
     });
@@ -1908,19 +1906,19 @@ class AtkSidenavPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_5__["default
 AtkSidenavPlugin.DEFAULTS = {
   base: 'index.php',
   menuItemsSelector: '.atk-maestro-menu-items',
-  // The CSS selector where menu items are contain.
+  // the CSS selector where menu items are contain
   menuGroupTitleSelector: '.atk-menu-group-title',
-  // The CSS selector for menu group title.
+  // the CSS selector for menu group title
   toggleSelector: '.atk-submenu-toggle',
-  // the CSS selector that will show or hide sub menu.
+  // the CSS selector that will show or hide sub menu
   visibleCssClass: 'atk-visible',
-  // Display an item when this CSS class is set.
+  // display an item when this CSS class is set
   menuGroupActiveClass: 'active',
-  // the CSS class to set when a menu group is active.
+  // the CSS class to set when a menu group is active
   menuItemActiveClass: 'active',
-  // the CSS class to set when a menu item in a group is active.
+  // the CSS class to set when a menu item in a group is active
   firstItemSelector: 'a',
-  // the selector for the first menu item in a group, where click will be trigger.
+  // the selector for the first menu item in a group, where click will be trigger
   icon: {
     selector: 'i',
     on: 'caret right',
@@ -2062,7 +2060,7 @@ class ApiService {
     try {
       if (response.success) {
         if (response.html && response.id) {
-          // prevent modal duplication.
+          // prevent modal duplication
           // apiService.removeModalDuplicate(response.html);
           const modelsContainer = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page')[0];
           external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(external_jquery__WEBPACK_IMPORTED_MODULE_5___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
@@ -2070,25 +2068,14 @@ class ApiService {
           });
           const result = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('#' + response.id).replaceWith(response.html);
           if (result.length === 0) {
-            // TODO Find a better solution for long term.
-            // Need a way to gracefully abort server request.
-            // when user cancel a request by selecting another request.
+            // TODO find a better solution for long term
+            // need a way to gracefully abort server request
+            // when user cancel a request by selecting another request
             console.error('Unable to replace element with id: ' + response.id);
             // throw Error('Unable to replace element with id: ' + response.id);
           }
         }
 
-        if (response.portals) {
-          // Create app portal from JSON response.
-          const portals = Object.keys(response.portals);
-          for (const portalID of portals) {
-            const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
-            if (m.length === 0) {
-              external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(document.body).append(response.portals[portalID].html);
-              atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse(response.portals[portalID].js);
-            }
-          }
-        }
         if (response.atkjs) {
           atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse.call(this, response.atkjs);
         }
@@ -2123,7 +2110,8 @@ class ApiService {
     if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
       atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response.message);
     } else {
-      // check if we have HTML returned by server with <body> content.
+      // check if we have HTML returned by server with <body> content
+      // TODO test together /w onError using non-200 HTTP AJAX response code
       const body = response.match(/<body[^>]*>[\S\s]*<\/body>/gi);
       if (body) {
         atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(body);
@@ -2199,7 +2187,7 @@ class ApiService {
       }
     }
 
-    // catch application error and display them in a new modal window.
+    // catch application error and display them in a new modal window
     const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(errorMsg);
     m.data('needRemove', true).modal().modal('show');
   }
@@ -2260,16 +2248,11 @@ class DataService {
       storage.removeItem(x);
       return true;
     } catch (e) {
-      return e instanceof DOMException && (
-      // everything except Firefox
-      e.code === 22
-      // Firefox
-      || e.code === 1014
-      // test name field too, because code might not be present
-      // everything except Firefox
-      || e.name === 'QuotaExceededError'
-      // Firefox
-      || e.name === 'NS_ERROR_DOM_QUOTA_REACHED')
+      return e instanceof DOMException && (e.code === 22 // everything except Firefox
+      || e.code === 1014 // Firefox
+      || e.name === 'QuotaExceededError' // test name field too, because code might not be present, everything except Firefox
+      || e.name === 'NS_ERROR_DOM_QUOTA_REACHED' // Firefox
+      )
       // acknowledge QuotaExceededError only if there's something already stored
       && storage && storage.length > 0;
     }
@@ -2537,7 +2520,7 @@ class FormService {
     return this.formSettings.rules[rule];
   }
   getAncillaryValue(rule) {
-    // must have a rule.value property and must be a bracketed rule.
+    // must have a rule.value property and must be a bracketed rule
     if (!rule.value && !this.isBracketedRule(rule)) {
       return false;
     }
@@ -2764,10 +2747,10 @@ class PanelService {
   constructor() {
     this.service = {
       panels: [],
-      // a collection of panels.
+      // a collection of panels
       currentVisibleId: null,
-      // the current panel id that is in a visible state.
-      currentParams: null // URL argument of the current panel.
+      // the current panel id that is in a visible state
+      currentParams: null // URL argument of the current panel
     };
   }
 
@@ -2789,7 +2772,8 @@ class PanelService {
    * we need to make sure it is not add multiple time.
    */
   addPanel(params) {
-    // Remove existing one. Can be added by a reload.
+    // remove existing one
+    // can be added by a reload
     if (this.getPropertyValue(params.id, 'id')) {
       this.removePanel(params.id);
     }
@@ -2821,7 +2805,7 @@ class PanelService {
       }
     };
 
-    // add click handler for closing panel.
+    // add click handler for closing panel
     newPanel[params.id].$panel.on('click', params.closeSelector, () => {
       this.closePanel(params.id);
     });
@@ -2842,15 +2826,15 @@ class PanelService {
    * @param {object} params
    */
   openPanel(params) {
-    // if no id is provide, then get the first one.
-    // no id mean the first panel in list.
+    // if no id is provide, then get the first one
+    // no id mean the first panel in list
     const panelId = params.openId ?? Object.keys(this.service.panels[0])[0];
-    // save our open param.
+    // save our open param
     this.service.currentParams = params;
     if (this.isSameElement(panelId, params.triggered)) {
       return;
     }
-    // first check if current panel can be click away.
+    // first check if current panel can be click away
     if (this.service.currentVisibleId && !this.getPropertyValue(this.service.currentVisibleId, 'hasClickAway')) {
       return;
     }
@@ -2862,7 +2846,7 @@ class PanelService {
    */
   initOpen(id) {
     if (this.service.currentVisibleId && id !== this.service.currentVisibleId) {
-      // trying to open a different panel so close current one if allowed.
+      // trying to open a different panel so close current one if allowed
       if (this.needConfirmation(this.service.currentVisibleId)) {
         // need to ask user
         const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.getPropertyValue(this.service.currentVisibleId, 'modal'));
@@ -2901,10 +2885,10 @@ class PanelService {
    */
   initPanelReload(id) {
     const params = this.service.currentParams;
-    // do we need to load anything in this panel.
+    // do we need to load anything in this panel
     if (this.getPropertyValue(id, 'url')) {
-      // Convert our array of args to object.
-      // Args must be defined as data-attributeName in the triggered element.
+      // convert our array of args to object
+      // args must be defined as data-attributeName in the triggered element
       const args = {};
       for (const k of params.reloadArgs) {
         args[k] = params.triggered.data(k);
@@ -2927,7 +2911,7 @@ class PanelService {
       triggerElement = external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(triggerElement);
     }
 
-    // will apply css class to triggering element if provide.
+    // will apply css class to triggering element if provide
     if (triggerElement.length > 0) {
       this.setTriggerElement(panelId, triggerElement, params);
     }
@@ -2960,11 +2944,11 @@ class PanelService {
    * Close panel and cleanup.
    */
   doClosePanel(id) {
-    // remove document event.
+    // remove document event
     this.removeClickAwayEvent();
     this.removeWarning(id);
 
-    // do the actual closing.
+    // do the actual closing
     this.getPropertyValue(id, '$panel').removeClass(this.getPropertyValue(id, 'visible'));
     this.service.currentVisibleId = null;
 
@@ -2987,7 +2971,7 @@ class PanelService {
     const $panel = this.getPropertyValue(id, '$panel');
     const url = this.getPropertyValue(id, 'url');
 
-    // do some cleanup.
+    // do some cleanup
     this.removeWarning(id);
     this.clearPanelContent(id);
     $panel.find(loader.selector).addClass(loader.trigger);
@@ -3012,7 +2996,7 @@ class PanelService {
   setTriggerElement(id, trigger, params) {
     this.setPropertyValue(id, 'triggerElement', trigger);
 
-    // Do we need to setup CSS class on triggering element.
+    // setup CSS class on triggering element
     if (params.activeCSS) {
       let element;
       let css;
@@ -3037,7 +3021,7 @@ class PanelService {
    * Add click away closing event handler.
    */
   addClickAwayEvent(id) {
-    // clicking anywhere in main tag will close panel.
+    // clicking anywhere in main tag will close panel
     external_jquery__WEBPACK_IMPORTED_MODULE_6___default()('main').on('click.atkPanel', atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(evt => {
       this.closePanel(id);
     }, 250));
@@ -3047,7 +3031,7 @@ class PanelService {
    * Add esc away closing event handler.
    */
   addEscAwayEvent(id) {
-    // pressing esc key will close panel.
+    // pressing esc key will close panel
     external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(document).on('keyup.atkPanel', atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(evt => {
       if (evt.keyCode === 27) {
         this.closePanel(id);
@@ -3249,7 +3233,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 /**
- * Allow to upload files to server via Fomantic-UI API.
+ * Allow to upload files to server.
  */
 class UploadService {
   /**
@@ -3406,10 +3390,10 @@ class VueService {
           return this.initData;
         }
       },
-      // provide method to our child component.
+      // provide method to our child component
       // child component would need to inject a method to have access using the inject property,
       // inject: ['getRootData'],
-      // Once inject you can get initial data using this.getRootData().
+      // once inject you can get initial data using this.getRootData()
       provide: function () {
         return {
           getRootData: this.getData
@@ -3756,21 +3740,21 @@ atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin = function (name, cl)
   let shorthand = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
   const dataName = '__' + name;
 
-  // add plugin to atk namespace.
+  // add plugin to atk namespace
   atk__WEBPACK_IMPORTED_MODULE_1__["default"][name] = cl;
 
-  // register plugin to jQuery fn prototype.
+  // register plugin to jQuery fn prototype
   (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn)[name] = function () {
     let option = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-    // Check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
+    // check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
     if (typeof option === 'string') {
       return this.data(dataName).call(option, args);
     }
     return this.each(function () {
       const options = external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend({}, cl.DEFAULTS, typeof option === 'object' && option);
       // create plugin using the constructor function store in atk namespace object
-      // and add a reference of it to this jQuery object data.
+      // and add a reference of it to this jQuery object data
       external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data(dataName, new atk__WEBPACK_IMPORTED_MODULE_1__["default"][name](this, options));
     });
   };

@@ -26,7 +26,7 @@ $myButtonClass = AnonymousClassNameCache::get_class(fn () => new class() extends
     }
 });
 
-// Buttons
+// buttons
 $myButtonClass::addTo($app, [$app->url()]);
 $myButtonClass::addTo($app, [$app->url(['xx' => 'YEY'])]);
 $myButtonClass::addTo($app, [$app->url(['c' => 'OHO'])]);
@@ -39,21 +39,21 @@ Button::addTo($app, [$app->url(['b' => 2])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => false])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => 'abc'])]);
 
-// Sticky for xx=
+// sticky for xx=
 Header::addTo($app, ['Now add sticky for xx=' . $app->stickyGet('xx')]);
 Button::addTo($app, [$app->url()]);
 Button::addTo($app, [$app->url(['b' => 2])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => false])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => 'abc'])]);
 
-// Sticky for c=
+// sticky for c=
 Header::addTo($app, ['Now also add sticky for c=' . $app->stickyGet('c')]);
 Button::addTo($app, [$app->url()]);
 Button::addTo($app, [$app->url(['b' => 2])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => false])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => 'abc'])]);
 
-// Various ways to build links
+// various ways to build links
 Header::addTo($app, ['Various ways to build links']);
 Button::addTo($app, [$app->url()]);
 Button::addTo($app, [$app->url('other.php')]);

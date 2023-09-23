@@ -118,12 +118,12 @@ class ActionButtons extends Table\Column
         }
 
         // render our buttons
-        $output = '';
+        $outputHtml = '';
         foreach ($this->buttons as $button) {
-            $output .= $button->getHtml();
+            $outputHtml .= $button->getHtml();
         }
 
-        return $this->getApp()->getTag('div', ['class' => 'ui buttons'], [$output]);
+        return $this->getApp()->getTag('div', ['class' => 'ui buttons'], [$outputHtml]);
     }
 
     public function getHtmlTags(Model $row, ?Field $field): array

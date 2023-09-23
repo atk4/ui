@@ -67,7 +67,7 @@ class Callback extends AbstractView
      * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): T $fx
      * @param array                                                                             $fxArgs
      *
-     * @phpstan-return T|null
+     * @return T|null
      */
     public function set($fx = null, $fxArgs = null)
     {
@@ -104,7 +104,7 @@ class Callback extends AbstractView
 
     public function getTriggeredValue(): string
     {
-        return $_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger] ?? '';
+        return $_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger];
     }
 
     /**
@@ -147,6 +147,9 @@ class Callback extends AbstractView
      */
     private function getUrlArguments(string $value = null): array
     {
-        return [self::URL_QUERY_TARGET => $this->urlTrigger, self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger => $value ?? $this->getTriggeredValue()];
+        return [
+            self::URL_QUERY_TARGET => $this->urlTrigger,
+            self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger => $value ?? ($this->isTriggered() ? $this->getTriggeredValue() : ''),
+        ];
     }
 }

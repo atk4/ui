@@ -30,7 +30,7 @@ class FormFieldUiTest extends TestCase
     use CreateAppTrait;
 
     /** @var Model */
-    public $m;
+    protected $m;
 
     protected function setUp(): void
     {
@@ -47,28 +47,28 @@ class FormFieldUiTest extends TestCase
 
     public function testRegularField(): void
     {
-        $f = new Form();
-        $f->setApp($this->createApp());
-        $f->invokeInit();
-        $f->setModel($this->m->createEntity());
-        self::assertFalse($f->getControl('regular_field')->readOnly);
+        $form = new Form();
+        $form->setApp($this->createApp());
+        $form->invokeInit();
+        $form->setModel($this->m->createEntity());
+        self::assertFalse($form->getControl('regular_field')->readOnly);
     }
 
     public function testJustDataField(): void
     {
-        $f = new Form();
-        $f->setApp($this->createApp());
-        $f->invokeInit();
-        $f->setModel($this->m->createEntity(), ['just_for_data']);
-        self::assertTrue($f->getControl('just_for_data')->readOnly);
+        $form = new Form();
+        $form->setApp($this->createApp());
+        $form->invokeInit();
+        $form->setModel($this->m->createEntity(), ['just_for_data']);
+        self::assertTrue($form->getControl('just_for_data')->readOnly);
     }
 
     public function testShowInUi(): void
     {
-        $f = new Form();
-        $f->setApp($this->createApp());
-        $f->invokeInit();
-        $f->setModel($this->m->createEntity());
-        self::assertFalse($f->getControl('no_persist_but_show_in_ui')->readOnly);
+        $form = new Form();
+        $form->setApp($this->createApp());
+        $form->invokeInit();
+        $form->setModel($this->m->createEntity());
+        self::assertFalse($form->getControl('no_persist_but_show_in_ui')->readOnly);
     }
 }

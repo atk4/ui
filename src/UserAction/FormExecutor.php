@@ -26,7 +26,7 @@ class FormExecutor extends BasicExecutor
             $this->form = Form::addTo($this);
         }
 
-        // Setup form model using action fields.
+        // setup form model using action fields
         if (!$this->form->model) {
             if (!$this->action->fields) {
                 $this->action->fields = $this->getModelFields($this->action->getModel());

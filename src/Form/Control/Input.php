@@ -88,7 +88,7 @@ class Input extends Form\Control
     /**
      * Returns presentable value to be inserted into input tag.
      *
-     * @return mixed
+     * @return string|null
      */
     public function getValue()
     {
@@ -172,7 +172,7 @@ class Input extends Form\Control
 
     protected function renderView(): void
     {
-        // TODO: I don't think we need the loading state at all.
+        // TODO: I don't think we need the loading state at all
         if ($this->loading) {
             if (!$this->icon) {
                 $this->icon = 'search'; // does not matter, but since

@@ -57,7 +57,7 @@ class FilterPopup extends Popup
 
         $this->form->setControlsDisplayRules($model->getFormDisplayRules());
 
-        // load data associated with this popup.
+        // load data associated with this popup
         $filter = $model->recallData();
         if ($filter !== null) {
             $model->setMulti($filter);

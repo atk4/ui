@@ -102,17 +102,17 @@ will be used.
 specify your own form behavior using a callback for action:
 
 ```
-// callback for model action add form.
+// callback for model action add form
 $g->onFormAdd(function (Form $form, ModalExecutor $ex) {
     $form->js(true, $form->getControl('name')->jsInput()->val('Entering value via javascript'));
 });
 
-// callback for model action edit form.
+// callback for model action edit form
 $g->onFormEdit(function (Form $form, ModalExecutor $ex) {
     $form->js(true, $form->getControl('name')->jsInput()->attr('readonly', true));
 });
 
-// callback for both model action edit and add.
+// callback for both model action edit and add
 $g->onFormAddEdit(function (Form $form, ModalExecutor $ex) {
     $form->onSubmit(function (Form $form) use ($ex) {
         return new \Atk4\Ui\Js\JsBlock([

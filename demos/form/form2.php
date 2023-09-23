@@ -63,7 +63,7 @@ $form->onSubmit(static function (Form $form) {
         }
     }
 
-    // In-form validation
+    // in-form validation
     $errors = [];
     if (mb_strlen($form->model->get('first_name')) < 3) {
         $errors[] = $form->jsError('first_name', 'too short, ' . $form->model->get('first_name'));

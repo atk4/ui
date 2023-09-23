@@ -179,7 +179,7 @@ class Wizard extends View
 
     protected function renderView(): void
     {
-        // Set proper width to the wizard
+        // set proper width to the wizard
         $c = count($this->steps);
         $enumeration = ['one', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
         $this->ui = $enumeration[$c] . ' ' . $this->ui;

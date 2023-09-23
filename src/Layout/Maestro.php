@@ -41,8 +41,8 @@ class Maestro extends Admin
     {
         parent::renderView();
 
-        // initialize all menu group at ounce.
-        // since atkSideNav plugin default setting are for Maestro, no need to pass settings to initialize it.
+        // initialize all menu group at once
+        // since atkSideNav plugin default setting are for Maestro, no need to pass settings to initialize it
         $js = (new Jquery('.atk-maestro-sidenav'))->atkSidenav();
 
         $this->js(true, $js);

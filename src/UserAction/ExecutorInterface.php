@@ -26,8 +26,7 @@ use Atk4\Data\Model\UserAction;
 interface ExecutorInterface
 {
     // Generate UI which is presented to the user before action is executed
-    // protected method cannot be defined in interface, see:
-    // https://github.com/php/php-src/pull/5708
+    // https://github.com/php/php-src/pull/5708 protected methods cannot be defined in interface
     // protected function init(): void;
 
     /**

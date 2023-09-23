@@ -9,7 +9,6 @@ use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\App;
 use Atk4\Ui\Button;
-use Atk4\Ui\Layout;
 use Atk4\Ui\MenuItem;
 use Atk4\Ui\UserAction\BasicExecutor;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
@@ -40,10 +39,12 @@ class TestModel extends Model
 
 class ExecutorFactoryTest extends TestCase
 {
+    use CreateAppTrait;
+
     /** @var Model */
-    public $model;
+    protected $model;
     /** @var App */
-    public $app;
+    protected $app;
 
     protected function setUp(): void
     {
@@ -52,15 +53,6 @@ class ExecutorFactoryTest extends TestCase
         $p = new Persistence\Array_();
         $this->model = new TestModel($p);
         $this->app = $this->createApp();
-        $this->app->initLayout([Layout\Admin::class]);
-    }
-
-    protected function createApp(): App
-    {
-        return new App([
-            'catchExceptions' => false,
-            'alwaysRun' => false,
-        ]);
     }
 
     public function testExecutorFactory(): void
@@ -118,8 +110,7 @@ class ExecutorFactoryTest extends TestCase
         $editAction = $this->model->getUserAction('edit');
 
         $p = new Persistence\Array_();
-        $otherModelClass = get_class(new class() extends Model {
-        });
+        $otherModelClass = get_class(new class() extends Model {});
         $secondEditAction = (new $otherModelClass($p))->getUserAction('edit');
 
         $specialClass = get_class(new class() extends Model {

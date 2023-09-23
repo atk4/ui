@@ -27,7 +27,7 @@ class TypeDate extends Column\FilterModel
         ];
         $this->op->default = '=';
 
-        // the date value to operate on.
+        // the date value to operate on
         $this->value->values = [
             'today' => 'Today',
             'tomorrow' => 'Tomorrow',
@@ -41,7 +41,7 @@ class TypeDate extends Column\FilterModel
             'exact' => 'Exact date',
         ];
 
-        // The range value field use when within is select.
+        // the range value field use when within is select
         $this->addField('range', [
             'ui' => ['caption' => ''],
             'values' => [
@@ -56,10 +56,10 @@ class TypeDate extends Column\FilterModel
             ],
         ]);
 
-        // The exact date field input when exact is select as input value.
+        // the exact date field input when exact is select as input value
         $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);
 
-        // The integer field to generate a date when x day selector is used.
+        // the integer field to generate a date when x day selector is used
         $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class, 'inputType' => 'number']]]);
     }
 

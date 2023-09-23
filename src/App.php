@@ -70,22 +70,16 @@ class App
     /** @var bool Will replace an exception handler with our own, that will output errors nicely. */
     public $catchExceptions = true;
 
-    /** @var bool Will display error if callback wasn't triggered. */
-    public $catchRunawayCallbacks = true;
+    /** Will display error if callback wasn't triggered. */
+    protected bool $catchRunawayCallbacks = true;
 
-    /** @var bool Will always run application even if developer didn't explicitly executed run();. */
-    public $alwaysRun = true;
+    /** Will always run application even if developer didn't explicitly executed run();. */
+    protected bool $alwaysRun = true;
 
-    /**
-     * Will be set to true after app->run() is called, which may be done automatically
-     * on exit.
-     */
+    /** Will be set to true after app->run() is called, which may be done automatically on exit. */
     public bool $runCalled = false;
 
-    /**
-     * Will be set to true, when exit is called. Sometimes exit is intercepted by shutdown
-     * handler and we don't want to execute 'beforeExit' multiple times.
-     */
+    /** Will be set to true after exit is called. */
     private bool $exitCalled = false;
 
     public bool $isRendering = false;
@@ -109,21 +103,25 @@ class App
 
     private ResponseInterface $response;
 
-    /** @var array<string, View> Modal view that need to be rendered using JSON output. */
-    private $portals = [];
+    /**
+     * If filename path part is missing during building of URL, this page will be used.
+     * Set to empty string when when your webserver supports index.php autoindex or you use mod_rewrite with routing.
+     *
+     * @internal only for self::url() method
+     */
+    protected string $urlBuildingIndexPage = 'index';
 
     /**
-     * @var string used in method App::url to build the URL
+     * Remove and re-add the extension of the file during parsing requests and building URL.
      *
-     * Used only in method App::url
-     * Remove and re-add the extension of the file during parsing requests and building urls
+     * @internal only for self::url() method
      */
-    protected $urlBuildingExt = '.php';
+    protected string $urlBuildingExt = '.php';
 
     /** @var bool Call exit in place of throw Exception when Application need to exit. */
     public $callExit = true;
 
-    /** @var array global sticky arguments */
+    /** @var array<string, bool> global sticky arguments */
     protected array $stickyGetArguments = [
         '__atk_json' => false,
         '__atk_tab' => false,
@@ -216,28 +214,17 @@ class App
             $this->uiPersistence = new UiPersistence();
         }
 
+        if (!str_starts_with($this->getRequest()->getUri()->getPath(), '/')) {
+            throw (new Exception('Request URL path must always start with \'/\''))
+                ->addMoreInfo('url', (string) $this->getRequest()->getUri());
+        }
+
         if ($this->session === null) {
             $this->session = new App\SessionManager();
         }
 
-        // setting up default executor factory.
+        // setting up default executor factory
         $this->executorFactory = Factory::factory([ExecutorFactory::class]);
-    }
-
-    /**
-     * Register a portal view.
-     * Fomantic-ui Modal or atk Panel are teleported in HTML template
-     * within specific location. This will keep track
-     * of them when terminating app using JSON.
-     *
-     * @param Modal|Panel\Right $portal
-     */
-    public function registerPortals($portal): void
-    {
-        // TODO in https://github.com/atk4/ui/pull/1771 it has been discovered this method causes DOM code duplication,
-        // for some reasons, it seems even not needed, at least all Unit & Behat tests pass
-        // must be investigated
-        // $this->portals[$portal->name] = $portal;
     }
 
     public function setExecutorFactory(ExecutorFactory $factory): void
@@ -312,7 +299,7 @@ class App
         // remove header
         $this->layout->template->tryDel('Header');
 
-        if (($this->isJsUrlRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
+        if (($this->isJsUrlRequest() || ($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'XMLHttpRequest')
                 && !isset($_GET['__atk_tab'])) {
             $this->outputResponseJson([
                 'success' => false,
@@ -323,7 +310,7 @@ class App
             $this->run();
         }
 
-        // Process is already in shutdown/stop
+        // process is already in shutdown because of uncaught exception
         // no need of call exit function
         $this->callBeforeExit();
     }
@@ -409,26 +396,10 @@ class App
             if (is_string($output)) {
                 $output = $this->decodeJson($output);
             }
-            $output['portals'] = $this->getRenderedPortals();
 
             $this->outputResponseJson($output);
         } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
-            // ugly hack for Tabs
-            // because Fomantic-UI Tab only deal with HTML and not JSON
-            // we need to hack output to include app modal
-            $ids = [];
-            $jsRemoveFunction = '';
-            foreach ($this->getRenderedPortals() as $key => $modal) {
-                // add modal rendering to output
-                $ids[] = '#' . $key;
-                $output['atkjs'] .= '; ' . $modal['js'];
-                $output['html'] .= $modal['html'];
-            }
-            if (count($ids) > 0) {
-                $jsRemoveFunction = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . implode(', ', $ids) . '\').remove();';
-            }
-
-            $output = $this->getTag('script', [], '$(function () {' . $jsRemoveFunction . $output['atkjs'] . '});')
+            $output = $this->getTag('script', [], '$(function () {' . $output['atkjs'] . '});')
                 . $output['html'];
 
             $this->outputResponseHtml($output);
@@ -629,11 +600,6 @@ class App
             ->addMoreInfo('templateDir', $this->templateDir);
     }
 
-    protected function getRequestUrl(): string
-    {
-        return $this->request->getUri()->getPath();
-    }
-
     protected function createRequestPathFromLocalPath(string $localPath): string
     {
         // $localPath does not need realpath() as the path is expected to be built using __DIR__
@@ -645,10 +611,10 @@ class App
             if (\PHP_SAPI === 'cli') { // for phpunit
                 $requestUrlPath = '/';
                 $requestLocalPath = \Closure::bind(static function () {
-                    return dirname((new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory());
+                    return (new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory();
                 }, null, ExceptionRenderer\Html::class)();
             } else {
-                $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+                $request = new \Symfony\Component\HttpFoundation\Request([], [], [], [], [], $_SERVER);
                 $requestUrlPath = $request->getBasePath();
                 $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME'));
             }
@@ -685,45 +651,39 @@ class App
     /**
      * Build a URL that application can use for loading HTML data.
      *
-     * @param string|array<0|string, string|int|false> $page                URL as string or array with page name as first element and other GET arguments
-     * @param bool                                     $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param string|array<0|string, string|int|false> $page                URL as string or array with page path as first element and other GET arguments
      * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
+    public function url($page = [], array $extraRequestUrlArgs = []): string
     {
-        if ($useRequestUrl) {
-            $page = $_SERVER['REQUEST_URI'];
-        }
-
-        $pagePath = '';
         if (is_string($page)) {
             $pageExploded = explode('?', $page, 2);
-            $pagePath = $pageExploded[0];
             parse_str($pageExploded[1] ?? '', $page);
+            $pagePath = $pageExploded[0] !== '' ? $pageExploded[0] : null;
         } else {
-            if (isset($page[0])) {
-                $pagePath = $page[0];
-            } else {
-                // use current page by default
-                $requestUrl = $this->getRequestUrl();
-                if (substr($requestUrl, -1, 1) === '/') {
-                    $pagePath = 'index';
-                } else {
-                    $pagePath = basename($requestUrl, $this->urlBuildingExt);
-                }
-            }
+            $pagePath = $page[0] ?? null;
             unset($page[0]);
-            if ($pagePath) {
-                $pagePath .= $this->urlBuildingExt;
-            }
+        }
+
+        $request = $this->getRequest();
+
+        if ($pagePath === null) {
+            $pagePath = $request->getUri()->getPath();
+        }
+        if (str_ends_with($pagePath, '/')) {
+            $pagePath .= $this->urlBuildingIndexPage;
+        }
+        if (!str_ends_with($pagePath, '/') && !str_contains(basename($pagePath), '.')) {
+            $pagePath .= $this->urlBuildingExt;
         }
 
         $args = $extraRequestUrlArgs;
 
         // add sticky arguments
+        $requestQueryParams = $request->getQueryParams();
         foreach ($this->stickyGetArguments as $k => $v) {
-            if ($v && isset($_GET[$k])) {
-                $args[$k] = $_GET[$k];
+            if ($v && isset($requestQueryParams[$k])) {
+                $args[$k] = $requestQueryParams[$k];
             } else {
                 unset($args[$k]);
             }
@@ -738,27 +698,24 @@ class App
             }
         }
 
-        // put URL together
         $pageQuery = http_build_query($args, '', '&', \PHP_QUERY_RFC3986);
-        $url = $pagePath . ($pageQuery ? '?' . $pageQuery : '');
 
-        return $url;
+        return $pagePath . ($pageQuery !== '' ? '?' . $pageQuery : '');
     }
 
     /**
      * Build a URL that application can use for JS callbacks. Some framework integration will use a different routing
-     * mechanism for NON-HTML response.
+     * mechanism for non-HTML response.
      *
-     * @param string|array<0|string, string|int|false> $page                URL as string or array with page name as first element and other GET arguments
-     * @param bool                                     $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
+     * @param string|array<0|string, string|int|false> $page                URL as string or array with page path as first element and other GET arguments
      * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function jsUrl($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
+    public function jsUrl($page = [], array $extraRequestUrlArgs = []): string
     {
         // append to the end but allow override
         $extraRequestUrlArgs = array_merge($extraRequestUrlArgs, ['__atk_json' => 1], $extraRequestUrlArgs);
 
-        return $this->url($page, $useRequestUrl, $extraRequestUrlArgs);
+        return $this->url($page, $extraRequestUrlArgs);
     }
 
     /**
@@ -888,12 +845,12 @@ class App
      * ])
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
-     * @param array<0|string, string|bool>                                                                              $attr
-     * @param string|array<int, array{0?: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
+     * @param array<0|string, string|bool>                                                                             $attr
+     * @param string|array<int, array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
      */
-    public function getTag(string $tag = null, array $attr = [], $value = null): string
+    public function getTag(string $tag, array $attr = [], $value = null): string
     {
-        $tag = strtolower($tag === null ? 'div' : $tag);
+        $tag = strtolower($tag);
         $tagOrig = $tag;
 
         $isOpening = true;
@@ -1078,7 +1035,9 @@ class App
      */
     protected function emitResponse(): void
     {
-        http_response_code($this->response->getStatusCode());
+        if (!headers_sent() || $this->response->getHeaders() !== []) { // avoid throwing late error in loop
+            http_response_code($this->response->getStatusCode());
+        }
 
         foreach ($this->response->getHeaders() as $name => $values) {
             foreach ($values as $value) {
@@ -1175,22 +1134,5 @@ class App
 
         $this->setResponseHeader('Content-Type', 'application/json');
         $this->outputResponse($data);
-    }
-
-    /**
-     * Generated HTML and JS for portal view registered to app.
-     */
-    private function getRenderedPortals(): array
-    {
-        // prevent looping (calling App::terminateJson() recursively) if JsReload is used in Modal
-        unset($_GET['__atk_reload']);
-
-        $portals = [];
-        foreach ($this->portals as $view) {
-            $portals[$view->name]['html'] = $view->getHtml();
-            $portals[$view->name]['js'] = $view->getJsRenderActions();
-        }
-
-        return $portals;
     }
 }

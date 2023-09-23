@@ -111,8 +111,6 @@ class Dropdown extends Input
      * Returns presentable value to be inserted into input tag.
      *
      * Dropdown input tag accepts only CSV formatted list of IDs.
-     *
-     * @return mixed
      */
     public function getValue()
     {
@@ -292,7 +290,6 @@ class Dropdown extends Input
         $this->_tItem->set('value', (string) $res['value']);
         $this->_tItem->set('title', $res['title']);
 
-        // Icon
         $this->_tItem->del('Icon');
         if (isset($res['icon']) && $res['icon']) {
             // compatibility with how $values property works on icons: 'icon'
