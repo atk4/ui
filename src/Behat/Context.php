@@ -148,10 +148,12 @@ class Context extends RawMinkContext implements BehatContext
         ]);
 
         $this->getSession()->executeScript(
-            'if (Array.prototype.filter.call(document.getElementsByTagName(\'style\'), (e) => e.getAttribute(\'about\') === \'atk-test-behat\').length === 0) {'
-            . ' $(\'<style about="atk-test-behat">' . $css . '</style>\').appendTo(\'head\');'
+            'if (Array.prototype.filter.call(document.getElementsByTagName(\'style\'), (e) => e.getAttribute(\'about\') === \'atk4-ui-behat\').length === 0) {'
+            . ' $(\'<style about="atk4-ui-behat">' . $css . '</style>\').appendTo(\'head\');'
+            . ' jQuery.fx.off = true;'
+            // fix self::getFinishedScript() detection for Firefox - document.readyState is updated after at least part of a new page has been loaded
+            . ' window.addEventListener(\'beforeunload\', (event) => jQuery.active++);'
             . ' }'
-            . 'jQuery.fx.off = true;'
         );
     }
 
@@ -350,6 +352,26 @@ class Context extends RawMinkContext implements BehatContext
     public function iClickUsingSelector(string $selector): void
     {
         $element = $this->findElement(null, $selector);
+        $element->click();
+    }
+
+    /**
+     * \Behat\Mink\Driver\Selenium2Driver::clickOnElement() does not wait until AJAX is completed after scroll.
+     *
+     * One solution can be waiting for AJAX after each \WebDriver\AbstractWebDriver::curl() call.
+     *
+     * @Then PATCH DRIVER I click using selector :selector
+     */
+    public function iClickPatchedUsingSelector(string $selector): void
+    {
+        $element = $this->findElement(null, $selector);
+
+        $driver = $this->getSession()->getDriver();
+        \Closure::bind(static function () use ($driver, $element) {
+            $driver->mouseOverElement($driver->findElement($element->getXpath()));
+        }, null, MinkSeleniumDriver::class)();
+        $this->jqueryWait();
+
         $element->click();
     }
 
