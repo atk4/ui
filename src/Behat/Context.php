@@ -356,6 +356,26 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
+     * \Behat\Mink\Driver\Selenium2Driver::clickOnElement() does not wait until AJAX is completed after scroll.
+     *
+     * One solution can be waiting for AJAX after each \WebDriver\AbstractWebDriver::curl() call.
+     *
+     * @Then PATCH DRIVER I click using selector :selector
+     */
+    public function iClickPatchedUsingSelector(string $selector): void
+    {
+        $element = $this->findElement(null, $selector);
+
+        $driver = $this->getSession()->getDriver();
+        \Closure::bind(static function () use ($driver, $element) {
+            $driver->mouseOverElement($driver->findElement($element->getXpath()));
+        }, null, MinkSeleniumDriver::class)();
+        $this->jqueryWait();
+
+        $element->click();
+    }
+
+    /**
      * @Then I click paginator page :arg1
      */
     public function iClickPaginatorPage(string $pageNumber): void
