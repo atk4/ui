@@ -148,10 +148,12 @@ class Context extends RawMinkContext implements BehatContext
         ]);
 
         $this->getSession()->executeScript(
-            'if (Array.prototype.filter.call(document.getElementsByTagName(\'style\'), (e) => e.getAttribute(\'about\') === \'atk-test-behat\').length === 0) {'
-            . ' $(\'<style about="atk-test-behat">' . $css . '</style>\').appendTo(\'head\');'
+            'if (Array.prototype.filter.call(document.getElementsByTagName(\'style\'), (e) => e.getAttribute(\'about\') === \'atk4-ui-behat\').length === 0) {'
+            . ' $(\'<style about="atk4-ui-behat">' . $css . '</style>\').appendTo(\'head\');'
+            . ' jQuery.fx.off = true;'
+            // fix self::getFinishedScript() detection for Firefox - document.readyState is updated after at least part of the new page has been loaded
+            . ' window.addEventListener(\'beforeunload\', (event) => jQuery.active++);'
             . ' }'
-            . 'jQuery.fx.off = true;'
         );
     }
 
