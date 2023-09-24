@@ -24,7 +24,7 @@ jobs:
             type: 'StaticAnalysis'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure PHP
         run: |
@@ -111,7 +111,7 @@ jobs:
           ORACLE_PASSWORD: atk4_pass
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure PHP
         run: |
@@ -274,7 +274,7 @@ jobs:
           ORACLE_PASSWORD: atk4_pass
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure PHP
         run: |
@@ -465,7 +465,7 @@ jobs:
       image: ghcr.io/mvorisek/image-php:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Python and dependencies
         run: |
