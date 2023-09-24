@@ -45,6 +45,6 @@ Feature: Dynamic scroll
     Given I am on "interactive/scroll-grid-container.php"
     Then I should see "Brazil"
     Then I should not see "Canada"
-    When I click using selector "//table//tr/td[text()='Brazil']"
+    When PATCH DRIVER I click using selector "//table//tr/td[text()='Brazil']"
     Then I should see "Brazil"
     Then I should see "Canada"
