@@ -245,6 +245,8 @@ jobs:
             type: 'Firefox'
           - php: 'latest'
             type: 'Chrome Slow'
+          - php: 'latest'
+            type: 'Firefox Slow'
     env:
       LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == '8.2' && matrix.type == 'Chrome' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
     services:
@@ -292,7 +294,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - name: Install JS dependencies (only for coverage or Slow)
+      - name: Install JS dependencies (only for coverage or Chrome Slow)
         if: env.LOG_COVERAGE || matrix.type == 'Chrome Slow'
         run: |
           if [ -n "$LOG_COVERAGE" ]; then
@@ -313,25 +315,25 @@ jobs:
             (cd public/external && npm ci --loglevel=error && git clean -dxfq .)
           fi
 
-      - name: Lint JS files (only for Slow)
+      - name: Lint JS files (only for Chrome Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
           cp public/external/postinstall.js js
           (cd js && npm run lint)
 
-      - name: Compile HTML files (only for Slow)
+      - name: Compile HTML files (only for Chrome Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
           cp -r template template.orig
           find template -not -type d -not -name '*.pug' -delete
           (cd template && pug --doctype html --pretty --silent .)
 
-      - name: Compile CSS files (only for Slow)
+      - name: Compile CSS files (only for Chrome Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
           lessc public/css/agileui.less public/css/agileui.min.css --clean-css="--s1 --advanced" --source-map
 
-      - name: Compile JS files (only for coverage or Slow)
+      - name: Compile JS files (only for coverage or Chrome Slow)
         if: env.LOG_COVERAGE || matrix.type == 'Chrome Slow'
         run: |
           if [ -n "$LOG_COVERAGE" ]; then
@@ -341,7 +343,7 @@ jobs:
             (cd js && npm run build)
           fi
 
-      - name: Diff compiled files (only for Slow)
+      - name: Diff compiled files (only for Chrome Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
           diff -ru public.orig public
@@ -372,8 +374,8 @@ jobs:
           ci_wait_until '[ -e /tmp/.X11-unix/X99 ]'
           su browser -c 'java -Dwebdriver.chrome.whitelistedIps=127.0.0.1 -jar /opt/selenium-server-standalone.jar -role standalone -host 127.0.0.1 -port 4444 -sessionTimeout 15 -browserTimeout 12 > /dev/null 2>&1 &'
           ci_wait_until 'nc -w 1 127.0.0.1 4444'
-          if [ "${{ matrix.type }}" = "Firefox" ]; then sed -i "s~chrome~firefox~" behat.yml.dist; fi
-          if [ "${{ matrix.type }}" = "Chrome Slow" ]; then echo 'sleep(1);' >> demos/init-app.php; fi
+          if [ "${{ matrix.type }}" = "Firefox" ] || [ "${{ matrix.type }}" = "Firefox Slow" ]; then sed -i "s~chrome~firefox~" behat.yml.dist; fi
+          if [ "${{ matrix.type }}" = "Chrome Slow" ] || [ "${{ matrix.type }}" = "Firefox Slow" ]; then echo 'usleep(500_000);' >> demos/init-app.php; fi
 
       - name: "Run tests: SQLite"
         run: |
