@@ -26,6 +26,7 @@ use Nyholm\Psr7Server\ServerRequestCreator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UploadedFileInterface;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -318,6 +319,98 @@ class App
     public function getRequest(): ServerRequestInterface
     {
         return $this->request;
+    }
+
+    /**
+     * Check if a specific GET parameter exists in the HTTP request.
+     */
+    public function hasRequestGetParam(string $key): bool
+    {
+        return $this->tryGetRequestGetParam($key) !== null;
+    }
+
+    /**
+     * Try to get the value of a specific GET parameter from the HTTP request.
+     */
+    public function tryGetRequestGetParam(string $key): ?string
+    {
+        return $this->getRequest()->getQueryParams()[$key] ?? null;
+    }
+
+    /**
+     * Get the value of a specific GET parameter from the HTTP request.
+     */
+    public function getRequestGetParam(string $key): string
+    {
+        $res = $this->tryGetRequestGetParam($key);
+        if ($res === null) {
+            throw (new Exception('GET param does not exist'))
+                ->addMoreInfo('key', $key);
+        }
+
+        return $res;
+    }
+
+    /**
+     * Check if a specific POST parameter exists in the HTTP request.
+     */
+    public function hasRequestPostParam(string $key): bool
+    {
+        return $this->tryGetRequestPostParam($key) !== null;
+    }
+
+    /**
+     * Try to get the value of a specific POST parameter from the HTTP request.
+     */
+    public function tryGetRequestPostParam(string $key): ?string
+    {
+        return $this->getRequest()->getParsedBody()[$key] ?? null;
+    }
+
+    /**
+     * Get the value of a specific POST parameter from the HTTP request.
+     *
+     * @return mixed
+     */
+    public function getRequestPostParam(string $key)
+    {
+        $res = $this->tryGetRequestPostParam($key);
+        if ($res === null) {
+            throw (new Exception('POST param does not exist'))
+                ->addMoreInfo('key', $key);
+        }
+
+        return $res;
+    }
+
+    /**
+     * Check if a specific uploaded file exists in the HTTP request.
+     */
+    public function hasRequestUploadedFile(string $key): bool
+    {
+        return $this->tryGetRequestUploadedFile($key) !== null;
+    }
+
+    /**
+     * Try to get a specific uploaded file from the HTTP request.
+     */
+    public function tryGetRequestUploadedFile(string $key): ?UploadedFileInterface
+    {
+        return $this->getRequest()->getUploadedFiles()[$key] ?? null;
+    }
+
+    /**
+     * Get a specific uploaded file from the HTTP request.
+     */
+    public function getRequestUploadedFile(string $key): UploadedFileInterface
+    {
+        $res = $this->tryGetRequestUploadedFile($key);
+        if ($res === null) {
+            throw (new Exception('FILES upload does not exist'))
+                ->addMoreInfo('key', $key);
+        }
+
+        return $res;
     }
 
     public function getResponse(): ResponseInterface
@@ -1027,8 +1120,6 @@ class App
             }
         );
     }
-
-    // RESPONSES
 
     /**
      * @internal should be called only from self::outputResponse() and self::outputLateOutputError()
