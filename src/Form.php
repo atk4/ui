@@ -436,7 +436,7 @@ class Form extends View
      */
     protected function loadPost(): void
     {
-        $postRawData = $_POST;
+        $postRawData = $this->getApp()->getRequest()->getParsedBody();
         $this->hook(self::HOOK_LOAD_POST, [&$postRawData]);
 
         $errors = [];

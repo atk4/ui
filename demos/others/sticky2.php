@@ -53,7 +53,7 @@ $t->addDecorator('name', [Table\Column\Link::class, [], ['name']]);
 $frame = View::addTo($app, ['ui' => 'green segment']);
 Button::addTo($frame, ['does not inherit sticky get'])
     ->on('click', static function () use ($app) {
-        return new JsToast('$_GET = ' . $app->encodeJson($_GET));
+        return new JsToast('$_GET = ' . $app->encodeJson($app->getRequest()->getQueryParams()));
     });
 
 Header::addTo($app, ['Use of View::url()']);
