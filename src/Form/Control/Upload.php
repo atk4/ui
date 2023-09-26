@@ -145,14 +145,21 @@ class Upload extends Input
                 $postFiles = [];
                 for ($i = 0;; ++$i) {
                     $k = 'file' . ($i > 0 ? '-' . $i : '');
-                    if (!isset($_FILES[$k])) {
+                    $uploadFile = $this->getApp()->tryGetRequestUploadedFile($k);
+                    if ($uploadFile === null) {
                         break;
                     }
 
-                    $postFile = $_FILES[$k];
-                    if ($postFile['error'] !== 0) {
-                        // unset all details on upload error
-                        $postFile = array_intersect_key($postFile, array_flip(['error', 'name']));
+                    $postFile = [
+                        'name' => $uploadFile->getClientFilename(),
+                        'error' => $uploadFile->getError(),
+                    ];
+                    if ($uploadFile->getError() === \UPLOAD_ERR_OK) {
+                        $postFile = array_merge($postFile, [
+                            'type' => $uploadFile->getClientMediaType(),
+                            'tmp_name' => $uploadFile->getStream()->getMetadata('uri'),
+                            'size' => $uploadFile->getSize(),
+                        ]);
                     }
                     $postFiles[] = $postFile;
                 }
