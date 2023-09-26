@@ -50,7 +50,7 @@ $b = Button::addTo($bar, ['Reload counter'])
 // reloading with argument
 Header::addTo($app, ['We can pass argument to reloader']);
 
-$v = View::addTo($app, ['ui' => 'segment'])->set($_GET['val'] ?? 'No value');
+$v = View::addTo($app, ['ui' => 'segment'])->set($app->tryGetRequestGetParam('val') ?? 'No value');
 
 Button::addTo($app, ['Set value to "hello"'])
     ->on('click', new JsReload($v, ['val' => 'hello']));

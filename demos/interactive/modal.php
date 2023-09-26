@@ -98,7 +98,7 @@ $vp1Modal->set(static function (View $p) use ($vp2Modal) {
 // when $vp2Modal->jsShow() is activate, it will dynamically add this content to it
 $vp2Modal->set(static function (View $p) use ($vp3Modal) {
     ViewTester::addTo($p);
-    Message::addTo($p, [$_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
+    Message::addTo($p, [$p->getApp()->tryGetRequestGetParam('color') ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
     Button::addTo($p)->set('Third modal')
         ->on('click', $vp3Modal->jsShow());
 });

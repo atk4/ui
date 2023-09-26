@@ -301,7 +301,7 @@ class Lookup extends Input
      */
     protected function applySearchConditions(): void
     {
-        $query = $_GET['q'] ?? '';
+        $query = $this->getApp()->tryGetRequestGetParam('q') ?? '';
         if ($query === '') {
             return;
         }

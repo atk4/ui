@@ -730,7 +730,7 @@ class App
     {
         $this->stickyGetArguments[$name] = !$isDeleting;
 
-        return $_GET[$name] ?? null;
+        return $this->tryGetRequestGetParam($name);
     }
 
     /**

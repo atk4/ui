@@ -89,7 +89,7 @@ $table->setModel(new SomeData());
 
 $frame = VirtualPage::addTo($app);
 $frame->set(static function (VirtualPage $p) {
-    Header::addTo($p, ['Clicked row with ID = ' . ($_GET['id'] ?? '')]);
+    Header::addTo($p, ['Clicked row with ID = ' . $p->getApp()->tryGetRequestGetParam('id')]);
 });
 
 $table->onRowClick(new JsModal('Row Clicked', $frame, ['id' => $table->jsRow()->data('id')]));

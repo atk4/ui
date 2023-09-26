@@ -104,7 +104,7 @@ class Callback extends AbstractView
 
     public function getTriggeredValue(): string
     {
-        return $_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger];
+        return $this->getApp()->tryGetRequestGetParam(self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger) ?? '';
     }
 
     /**
