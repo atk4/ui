@@ -31,6 +31,33 @@ class AppTest extends TestCase
         self::assertNull($app->tryGetRequestQueryParam('z'));
     }
 
+    public function testNoRequestQueryParamException(): void
+    {
+        $app = $this->createApp();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('GET param does not exist');
+        $app->getRequestQueryParam('foo');
+    }
+
+    public function testNoRequestPostParamException(): void
+    {
+        $app = $this->createApp();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('POST param does not exist');
+        $app->getRequestPostParam('foo');
+    }
+
+    public function testNoRequestUploadedFileException(): void
+    {
+        $app = $this->createApp();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('FILES upload does not exist');
+        $app->getRequestUploadedFile('foo');
+    }
+
     public function testTemplateClassDefault(): void
     {
         $app = $this->createApp();
