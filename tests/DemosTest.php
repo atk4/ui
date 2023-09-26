@@ -99,12 +99,15 @@ class DemosTest extends TestCase
         $requestQuery = $request->getUri()->getQuery();
         $_SERVER = [
             'REQUEST_METHOD' => $request->getMethod(),
-            'HTTP_HOST' => $request->getUri()->getHost(),
             'REQUEST_URI' => $requestPath . ($requestQuery !== '' ? '?' . $requestQuery : ''),
             'QUERY_STRING' => $requestQuery,
             'DOCUMENT_ROOT' => $rootDirRealpath,
             'SCRIPT_FILENAME' => $rootDirRealpath . $requestPath,
         ];
+        foreach (array_keys($request->getHeaders()) as $k) {
+            $kSever = 'HTTP_' . str_replace('-', '_', strtoupper($k));
+            $_SERVER[$kSever] = $request->getHeaderLine($k);
+        }
 
         $_GET = [];
         parse_str($requestQuery, $queryArr);
