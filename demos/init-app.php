@@ -29,6 +29,12 @@ $app = new App([
     'catchExceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
     'alwaysRun' => (bool) ($_GET['APP_ALWAYS_RUN'] ?? true),
 ]);
+unset($_SERVER);
+unset($_GET);
+unset($_POST);
+unset($_FILES);
+unset($_COOKIE);
+unset($_SESSION);
 $app->title = 'Agile UI Demo v' . $app->version;
 
 if ($app->callExit !== true) {

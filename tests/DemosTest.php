@@ -172,6 +172,7 @@ class DemosTest extends TestCase
             ob_start();
             try {
                 $app = $this->createTestingApp();
+                $this->resetSuperglobals();
                 try {
                     require $localPath;
 
