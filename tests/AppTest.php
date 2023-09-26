@@ -14,6 +14,23 @@ class AppTest extends TestCase
 {
     use CreateAppTrait;
 
+    public function testHasRequestQueryParam(): void
+    {
+        $app = $this->createApp(['request' => (new Psr17Factory())->createServerRequest('GET', '/?a=1&b=0&c=&d')]);
+
+        self::assertTrue($app->hasRequestQueryParam('a'));
+        self::assertTrue($app->hasRequestQueryParam('b'));
+        self::assertTrue($app->hasRequestQueryParam('c'));
+        self::assertTrue($app->hasRequestQueryParam('d'));
+        self::assertFalse($app->hasRequestQueryParam('z'));
+
+        self::assertSame('1', $app->getRequestQueryParam('a'));
+        self::assertSame('0', $app->getRequestQueryParam('b'));
+        self::assertSame('', $app->getRequestQueryParam('c'));
+        self::assertSame('', $app->getRequestQueryParam('d'));
+        self::assertNull($app->tryGetRequestQueryParam('z'));
+    }
+
     public function testTemplateClassDefault(): void
     {
         $app = $this->createApp();
