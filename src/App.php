@@ -301,7 +301,7 @@ class App
         $this->layout->template->tryDel('Header');
 
         if (($this->isJsUrlRequest() || $this->getRequest()->getHeaderLine('X-Requested-With') === 'XMLHttpRequest')
-                && !$this->hasRequestGetParam('__atk_tab')) {
+                && !$this->hasRequestQueryParam('__atk_tab')) {
             $this->outputResponseJson([
                 'success' => false,
                 'message' => $this->layout->getHtml(),
@@ -324,15 +324,15 @@ class App
     /**
      * Check if a specific GET parameter exists in the HTTP request.
      */
-    public function hasRequestGetParam(string $key): bool
+    public function hasRequestQueryParam(string $key): bool
     {
-        return $this->tryGetRequestGetParam($key) !== null;
+        return $this->tryGetRequestQueryParam($key) !== null;
     }
 
     /**
      * Try to get the value of a specific GET parameter from the HTTP request.
      */
-    public function tryGetRequestGetParam(string $key): ?string
+    public function tryGetRequestQueryParam(string $key): ?string
     {
         return $this->getRequest()->getQueryParams()[$key] ?? null;
     }
@@ -340,9 +340,9 @@ class App
     /**
      * Get the value of a specific GET parameter from the HTTP request.
      */
-    public function getRequestGetParam(string $key): string
+    public function getRequestQueryParam(string $key): string
     {
-        $res = $this->tryGetRequestGetParam($key);
+        $res = $this->tryGetRequestQueryParam($key);
         if ($res === null) {
             throw (new Exception('GET param does not exist'))
                 ->addMoreInfo('key', $key);
@@ -491,7 +491,7 @@ class App
             }
 
             $this->outputResponseJson($output);
-        } elseif ($this->hasRequestGetParam('__atk_tab') && $type === 'text/html') {
+        } elseif ($this->hasRequestQueryParam('__atk_tab') && $type === 'text/html') {
             $output = $this->getTag('script', [], '$(function () {' . $output['atkjs'] . '});')
                 . $output['html'];
 
@@ -642,9 +642,9 @@ class App
             $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], '$(function () {' . $this->html->getJs() . ';});'));
             $this->isRendering = false;
 
-            if ($this->hasRequestGetParam(Callback::URL_QUERY_TARGET) && $this->catchRunawayCallbacks) {
+            if ($this->hasRequestQueryParam(Callback::URL_QUERY_TARGET) && $this->catchRunawayCallbacks) {
                 throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
-                    ->addMoreInfo('callback', $this->getRequestGetParam(Callback::URL_QUERY_TARGET));
+                    ->addMoreInfo('callback', $this->getRequestQueryParam(Callback::URL_QUERY_TARGET));
             }
 
             $output = $this->html->template->renderToHtml();
@@ -730,7 +730,7 @@ class App
     {
         $this->stickyGetArguments[$name] = !$isDeleting;
 
-        return $this->tryGetRequestGetParam($name);
+        return $this->tryGetRequestQueryParam($name);
     }
 
     /**
@@ -816,7 +816,7 @@ class App
      */
     public function isJsUrlRequest(): bool
     {
-        return $this->hasRequestGetParam('__atk_json') && $this->getRequestGetParam('__atk_json') !== '0';
+        return $this->hasRequestQueryParam('__atk_json') && $this->getRequestQueryParam('__atk_json') !== '0';
     }
 
     /**

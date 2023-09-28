@@ -19,8 +19,8 @@ class JsHeaderDropdownCallback extends JsCallback
     {
         $this->set(function () use ($fx) {
             return $fx(
-                $this->getApp()->getRequestGetParam('id'),
-                $this->getApp()->getRequestGetParam('item')
+                $this->getApp()->getRequestQueryParam('id'),
+                $this->getApp()->getRequestQueryParam('item')
             );
         });
     }

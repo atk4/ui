@@ -35,7 +35,7 @@ class JsSse extends JsCallback
     {
         parent::init();
 
-        if ($this->getApp()->tryGetRequestGetParam('__atk_sse')) {
+        if ($this->getApp()->tryGetRequestQueryParam('__atk_sse')) {
             $this->browserSupport = true;
             $this->initSse();
         }

@@ -31,7 +31,7 @@ $app->stickyGet('client_id');
 
 Loader::addTo($app)->set(function (Loader $p) {
     Console::addTo($p)->set(function (Console $console) {
-        $console->output('client_id = !' . $console->getApp()->getRequestGetParam('client_id'));
+        $console->output('client_id = !' . $console->getApp()->getRequestQueryParam('client_id'));
     });
 });
 ```

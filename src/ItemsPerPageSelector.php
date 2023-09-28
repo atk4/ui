@@ -59,7 +59,7 @@ class ItemsPerPageSelector extends View
     public function onPageLengthSelect(\Closure $fx): void
     {
         $this->cb->set(function () use ($fx) {
-            $ipp = $this->getApp()->hasRequestGetParam('ipp') ? (int) $this->getApp()->getRequestGetParam('ipp') : null;
+            $ipp = $this->getApp()->hasRequestQueryParam('ipp') ? (int) $this->getApp()->getRequestQueryParam('ipp') : null;
             $this->set($this->formatInteger($ipp));
             $reload = $fx($ipp);
             if ($reload) {

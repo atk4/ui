@@ -17,7 +17,7 @@ class ReloadTest extends View
         $label = Label::addTo($this, ['Testing...', 'detail' => '', 'class.red' => true]);
         $reload = new JsReload($this, [$this->name => 'ok']);
 
-        if ($this->getApp()->hasRequestGetParam($this->name)) {
+        if ($this->getApp()->hasRequestQueryParam($this->name)) {
             $label->class[] = 'green';
             $label->content = 'Reload success';
         } else {

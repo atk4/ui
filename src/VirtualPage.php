@@ -100,11 +100,11 @@ class VirtualPage extends View
             }
 
             // render and terminate
-            if ($this->getApp()->hasRequestGetParam('__atk_json')) {
+            if ($this->getApp()->hasRequestQueryParam('__atk_json')) {
                 $this->getApp()->terminateJson($this);
             }
 
-            if ($this->getApp()->hasRequestGetParam('__atk_tab')) {
+            if ($this->getApp()->hasRequestQueryParam('__atk_tab')) {
                 $this->getApp()->terminateHtml($this->renderToTab());
             }
 

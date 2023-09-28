@@ -268,12 +268,12 @@ to provide a simple way to redirect for users who are not familiar with JavaScri
 so well. Example:
 
 ```
-if (!$app->hasRequestGetParam('age')) {
+if (!$app->hasRequestQueryParam('age')) {
     $app->redirect(['age' => 18]);
 }
 
 Button::addTo($app, ['Increase age'])
-    ->on('click', $app->jsRedirect(['age' => $app->getRequestGetParam('age') + 1]));
+    ->on('click', $app->jsRedirect(['age' => $app->getRequestQueryParam('age') + 1]));
 ```
 
 No much magic in these methods.

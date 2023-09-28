@@ -37,7 +37,7 @@ $lister->setModel($model);
 $sortable = JsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
 $sortable->onReorder(static function (array $order, string $src, int $pos, int $oldPos) use ($app) {
-    if ($app->tryGetRequestGetParam('btn')) {
+    if ($app->tryGetRequestQueryParam('btn')) {
         return new JsToast(implode(' - ', $order));
     }
 

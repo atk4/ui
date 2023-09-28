@@ -518,7 +518,7 @@ class View extends AbstractView
      */
     public function stickyGet(string $name, string $newValue = null): ?string
     {
-        $this->stickyArgs[$name] = $newValue ?? $this->stickyArgs[$name] ?? $this->getApp()->tryGetRequestGetParam($name);
+        $this->stickyArgs[$name] = $newValue ?? $this->stickyArgs[$name] ?? $this->getApp()->tryGetRequestQueryParam($name);
 
         return $this->stickyArgs[$name];
     }
@@ -705,7 +705,7 @@ class View extends AbstractView
      */
     public function getHtml()
     {
-        if ($this->getApp()->hasRequestGetParam('__atk_reload') && $this->getApp()->getRequestGetParam('__atk_reload') === $this->name) {
+        if ($this->getApp()->hasRequestQueryParam('__atk_reload') && $this->getApp()->getRequestQueryParam('__atk_reload') === $this->name) {
             $this->getApp()->terminateJson($this);
         }
 
@@ -854,10 +854,10 @@ class View extends AbstractView
     {
         $data = [];
         $data['local'] = $this->getApp()->decodeJson(
-            $this->getApp()->tryGetRequestGetParam($this->name . '_local_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_local_store') ?? 'null'
+            $this->getApp()->tryGetRequestQueryParam($this->name . '_local_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_local_store') ?? 'null'
         );
         $data['session'] = $this->getApp()->decodeJson(
-            $this->getApp()->tryGetRequestGetParam($this->name . '_session_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_session_store') ?? 'null'
+            $this->getApp()->tryGetRequestQueryParam($this->name . '_session_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_session_store') ?? 'null'
         );
 
         return $data;

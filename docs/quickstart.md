@@ -256,8 +256,8 @@ $grid->menu->addItem('Complete Selected',
     ])
 );
 
-if ($app->hasRequestGetParam('delete')) {
-    foreach (explode(',', $app->getRequestGetParam('delete')) as $id) {
+if ($app->hasRequestQueryParam('delete')) {
+    foreach (explode(',', $app->getRequestQueryParam('delete')) as $id) {
         $grid->model->delete($id);
     }
 }

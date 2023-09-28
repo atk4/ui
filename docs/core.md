@@ -81,8 +81,8 @@ Agile UI implements advanced approach allowing any View object that you add into
 declare "sticky GET arguments". Here is example:
 
 ```
-if ($app->hasRequestGetParam('message')) {
-    Message::addTo($app)->set($app->getRequestGetParam('message'));
+if ($app->hasRequestQueryParam('message')) {
+    Message::addTo($app)->set($app->getRequestQueryParam('message'));
 }
 
 Button::addTo($app, ['Trigger message'])->link(['message' => 'Hello World']);
@@ -96,7 +96,7 @@ In Agile UI you can request that some $_GET arguments are preserved and included
 
 ```
 if ($this->getApp()->stickyGet('message')) {
-    Message::addTo($app)->set($app->getRequestGetParam('message'));
+    Message::addTo($app)->set($app->getRequestQueryParam('message'));
 }
 
 Button::addTo($app, ['Trigger message'])->link(['message' => 'Hello World']);

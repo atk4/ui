@@ -29,7 +29,7 @@ Button::addTo($buttons, ['Use Stat Model', 'icon' => 'arrow down'])
     ->on('click', new JsReload($seg, ['m' => 'stat']));
 
 $form = Form::addTo($seg, ['layout' => [Form\Layout\Columns::class]]);
-$modelClass = ['country' => Country::class, 'file' => File::class][$app->tryGetRequestGetParam('m')] ?? Stat::class;
+$modelClass = ['country' => Country::class, 'file' => File::class][$app->tryGetRequestQueryParam('m')] ?? Stat::class;
 $form->setModel((new $modelClass($app->db))->loadAny());
 
 $form->onSubmit(static function (Form $form) {
