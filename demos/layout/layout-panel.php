@@ -50,7 +50,7 @@ $button->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
 
 $view = View::addTo($app, ['ui' => 'segment']);
 $text = Text::addTo($view);
-$text->set($_GET['txt'] ?? 'Not Complete');
+$text->set($app->tryGetRequestQueryParam('txt') ?? 'Not Complete');
 
 $panel1->onOpen(static function (Panel\Content $p) use ($view) {
     $panel = View::addTo($p, ['ui' => 'basic segment']);

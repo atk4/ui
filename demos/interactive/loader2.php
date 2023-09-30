@@ -30,6 +30,6 @@ $grid->table->onRowClick($countryLoader->jsLoad(['id' => $grid->jsRow()->data('i
 
 $countryLoader->set(static function (Loader $p) {
     Form::addTo($p)->setModel(
-        (new Country($p->getApp()->db))->load($_GET['id'])
+        (new Country($p->getApp()->db))->load($p->getApp()->getRequestQueryParam('id'))
     );
 });

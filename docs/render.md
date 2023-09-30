@@ -133,11 +133,11 @@ class MyView extends View
     {
         parent::init();
 
-        if ($_GET[$this->name]) {
+        if ($this->getApp()->getRequestQueryParam($this->name)) {
             \Atk4\Ui\Label::addTo($this, [
                 'Secret info is',
                 'class.big red' => true,
-                'detail' => $_GET[$this->name],
+                'detail' => $this->getApp()->getRequestQueryParam($this->name),
             ]);
         }
 

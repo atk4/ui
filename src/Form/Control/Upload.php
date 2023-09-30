@@ -140,19 +140,26 @@ class Upload extends Input
     public function onUpload(\Closure $fx): void
     {
         $this->hasUploadCb = true;
-        if (($_POST['fUploadAction'] ?? null) === self::UPLOAD_ACTION) {
+        if ($this->getApp()->tryGetRequestPostParam('fUploadAction') === self::UPLOAD_ACTION) {
             $this->cb->set(function () use ($fx) {
                 $postFiles = [];
                 for ($i = 0;; ++$i) {
                     $k = 'file' . ($i > 0 ? '-' . $i : '');
-                    if (!isset($_FILES[$k])) {
+                    $uploadFile = $this->getApp()->tryGetRequestUploadedFile($k);
+                    if ($uploadFile === null) {
                         break;
                     }
 
-                    $postFile = $_FILES[$k];
-                    if ($postFile['error'] !== 0) {
-                        // unset all details on upload error
-                        $postFile = array_intersect_key($postFile, array_flip(['error', 'name']));
+                    $postFile = [
+                        'name' => $uploadFile->getClientFilename(),
+                        'error' => $uploadFile->getError(),
+                    ];
+                    if ($uploadFile->getError() === \UPLOAD_ERR_OK) {
+                        $postFile = array_merge($postFile, [
+                            'type' => $uploadFile->getClientMediaType(),
+                            'tmp_name' => $uploadFile->getStream()->getMetadata('uri'),
+                            'size' => $uploadFile->getSize(),
+                        ]);
                     }
                     $postFiles[] = $postFile;
                 }
@@ -187,9 +194,9 @@ class Upload extends Input
     public function onDelete(\Closure $fx): void
     {
         $this->hasDeleteCb = true;
-        if (($_POST['fUploadAction'] ?? null) === self::DELETE_ACTION) {
+        if ($this->getApp()->tryGetRequestPostParam('fUploadAction') === self::DELETE_ACTION) {
             $this->cb->set(function () use ($fx) {
-                $fileId = $_POST['fUploadId'];
+                $fileId = $this->getApp()->getRequestPostParam('fUploadId');
 
                 $jsRes = $fx($fileId);
                 if ($jsRes !== null) { // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9388
@@ -206,7 +213,7 @@ class Upload extends Input
         parent::renderView();
 
         if ($this->cb->canTerminate()) {
-            $uploadActionRaw = $_POST['fUploadAction'] ?? null;
+            $uploadActionRaw = $this->getApp()->tryGetRequestPostParam('fUploadAction');
             if (!$this->hasUploadCb && ($uploadActionRaw === self::UPLOAD_ACTION)) {
                 throw new Exception('Missing onUpload callback');
             } elseif (!$this->hasDeleteCb && ($uploadActionRaw === self::DELETE_ACTION)) {

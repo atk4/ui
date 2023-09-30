@@ -26,6 +26,7 @@ use Nyholm\Psr7Server\ServerRequestCreator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UploadedFileInterface;
 use Psr\Log\LoggerInterface;
 
 class App
@@ -300,7 +301,7 @@ class App
         $this->layout->template->tryDel('Header');
 
         if (($this->isJsUrlRequest() || $this->getRequest()->getHeaderLine('X-Requested-With') === 'XMLHttpRequest')
-                && !isset($_GET['__atk_tab'])) {
+                && !$this->hasRequestQueryParam('__atk_tab')) {
             $this->outputResponseJson([
                 'success' => false,
                 'message' => $this->layout->getHtml(),
@@ -318,6 +319,98 @@ class App
     public function getRequest(): ServerRequestInterface
     {
         return $this->request;
+    }
+
+    /**
+     * Check if a specific GET parameter exists in the HTTP request.
+     */
+    public function hasRequestQueryParam(string $key): bool
+    {
+        return $this->tryGetRequestQueryParam($key) !== null;
+    }
+
+    /**
+     * Try to get the value of a specific GET parameter from the HTTP request.
+     */
+    public function tryGetRequestQueryParam(string $key): ?string
+    {
+        return $this->getRequest()->getQueryParams()[$key] ?? null;
+    }
+
+    /**
+     * Get the value of a specific GET parameter from the HTTP request.
+     */
+    public function getRequestQueryParam(string $key): string
+    {
+        $res = $this->tryGetRequestQueryParam($key);
+        if ($res === null) {
+            throw (new Exception('GET param does not exist'))
+                ->addMoreInfo('key', $key);
+        }
+
+        return $res;
+    }
+
+    /**
+     * Check if a specific POST parameter exists in the HTTP request.
+     */
+    public function hasRequestPostParam(string $key): bool
+    {
+        return $this->tryGetRequestPostParam($key) !== null;
+    }
+
+    /**
+     * Try to get the value of a specific POST parameter from the HTTP request.
+     */
+    public function tryGetRequestPostParam(string $key): ?string
+    {
+        return $this->getRequest()->getParsedBody()[$key] ?? null;
+    }
+
+    /**
+     * Get the value of a specific POST parameter from the HTTP request.
+     *
+     * @return mixed
+     */
+    public function getRequestPostParam(string $key)
+    {
+        $res = $this->tryGetRequestPostParam($key);
+        if ($res === null) {
+            throw (new Exception('POST param does not exist'))
+                ->addMoreInfo('key', $key);
+        }
+
+        return $res;
+    }
+
+    /**
+     * Check if a specific uploaded file exists in the HTTP request.
+     */
+    public function hasRequestUploadedFile(string $key): bool
+    {
+        return $this->tryGetRequestUploadedFile($key) !== null;
+    }
+
+    /**
+     * Try to get a specific uploaded file from the HTTP request.
+     */
+    public function tryGetRequestUploadedFile(string $key): ?UploadedFileInterface
+    {
+        return $this->getRequest()->getUploadedFiles()[$key] ?? null;
+    }
+
+    /**
+     * Get a specific uploaded file from the HTTP request.
+     */
+    public function getRequestUploadedFile(string $key): UploadedFileInterface
+    {
+        $res = $this->tryGetRequestUploadedFile($key);
+        if ($res === null) {
+            throw (new Exception('FILES upload does not exist'))
+                ->addMoreInfo('key', $key);
+        }
+
+        return $res;
     }
 
     public function getResponse(): ResponseInterface
@@ -398,7 +491,7 @@ class App
             }
 
             $this->outputResponseJson($output);
-        } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
+        } elseif ($this->hasRequestQueryParam('__atk_tab') && $type === 'text/html') {
             $output = $this->getTag('script', [], '$(function () {' . $output['atkjs'] . '});')
                 . $output['html'];
 
@@ -549,9 +642,9 @@ class App
             $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], '$(function () {' . $this->html->getJs() . ';});'));
             $this->isRendering = false;
 
-            if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catchRunawayCallbacks) {
+            if ($this->hasRequestQueryParam(Callback::URL_QUERY_TARGET) && $this->catchRunawayCallbacks) {
                 throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
-                    ->addMoreInfo('callback', $_GET[Callback::URL_QUERY_TARGET]);
+                    ->addMoreInfo('callback', $this->getRequestQueryParam(Callback::URL_QUERY_TARGET));
             }
 
             $output = $this->html->template->renderToHtml();
@@ -637,7 +730,7 @@ class App
     {
         $this->stickyGetArguments[$name] = !$isDeleting;
 
-        return $_GET[$name] ?? null;
+        return $this->tryGetRequestQueryParam($name);
     }
 
     /**
@@ -723,7 +816,7 @@ class App
      */
     public function isJsUrlRequest(): bool
     {
-        return isset($_GET['__atk_json']) && $_GET['__atk_json'] !== '0';
+        return $this->hasRequestQueryParam('__atk_json') && $this->getRequestQueryParam('__atk_json') !== '0';
     }
 
     /**
@@ -1027,8 +1120,6 @@ class App
             }
         );
     }
-
-    // RESPONSES
 
     /**
      * @internal should be called only from self::outputResponse() and self::outputLateOutputError()
