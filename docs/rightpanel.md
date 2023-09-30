@@ -50,7 +50,7 @@ $button->js(true)->data('btn', '1');
 $button->on('click', $panel->jsOpen(['btn'], 'orange'));
 
 $panel->onOpen(function (Panel\Content $p) {
-    $buttonNumber = $_GET['btn'] ?? null;
+    $buttonNumber = $p->getApp()->tryGetRequestQueryParam('btn');
     $text = 'You loaded panel content using button #' . $buttonNumber;
     Message::addTo($p, ['Panel 1', 'text' => $text]);
 });

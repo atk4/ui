@@ -301,7 +301,7 @@ class Lookup extends Input
      */
     protected function applySearchConditions(): void
     {
-        $query = $_GET['q'] ?? '';
+        $query = $this->getApp()->tryGetRequestQueryParam('q') ?? '';
         if ($query === '') {
             return;
         }
@@ -331,8 +331,8 @@ class Lookup extends Input
         }
 
         $data = [];
-        if (isset($_GET['form'])) {
-            parse_str($_GET['form'], $data);
+        if ($this->getApp()->hasRequestQueryParam('form')) {
+            parse_str($this->getApp()->getRequestQueryParam('form'), $data);
         } elseif ($this->form) {
             $data = $this->form->model->get();
         } else {

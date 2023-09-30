@@ -28,7 +28,7 @@ $loader->loadEvent = false;
 $loader->set(static function (Loader $p) use ($m) {
     Header::addTo($p, ['Loader-1', 'size' => 4]);
 
-    if (isset($_GET['err_main_loader'])) {
+    if ($p->getApp()->hasRequestQueryParam('err_main_loader')) {
         throw new Exception('Exception from Main Loader');
     }
 
@@ -39,9 +39,9 @@ $loader->set(static function (Loader $p) use ($m) {
     $loaderSub->set(static function (Loader $p) use ($m) {
         Header::addTo($p, ['Loader-2', 'size' => 4]);
 
-        if (isset($_GET['err_sub_loader'])) {
+        if ($p->getApp()->hasRequestQueryParam('err_sub_loader')) {
             throw new Exception('Exception from Sub Loader');
-        } elseif (isset($_GET['err_sub_loader2'])) {
+        } elseif ($p->getApp()->hasRequestQueryParam('err_sub_loader2')) {
             throw new \Error('Exception II from Sub Loader');
         }
 

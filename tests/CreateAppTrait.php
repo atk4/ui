@@ -25,8 +25,6 @@ trait CreateAppTrait
             $seed['request'] = (new Psr17Factory())->createServerRequest('GET', '/');
         }
 
-        $this->setGlobalsFromRequest($seed['request']);
-
         $app = new $appClass(array_merge([
             'catchExceptions' => false,
             'alwaysRun' => false,
@@ -34,15 +32,6 @@ trait CreateAppTrait
         $app->initLayout([Layout::class]);
 
         return $app;
-    }
-
-    /**
-     * TODO remove in https://github.com/atk4/ui/pull/2101.
-     */
-    protected function setGlobalsFromRequest(ServerRequestInterface $request): void
-    {
-        $_GET = $request->getQueryParams();
-        $_POST = $request->getParsedBody() ?? [];
     }
 
     protected function triggerCallback(ServerRequestInterface $request, Callback $cb, string $triggerValue = '1'): ServerRequestInterface

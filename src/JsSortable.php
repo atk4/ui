@@ -68,11 +68,11 @@ class JsSortable extends JsCallback
      */
     public function onReorder(\Closure $fx): void
     {
-        $this->set(static function () use ($fx) {
-            $sortOrders = explode(',', $_POST['order']);
-            $source = $_POST['source'];
-            $newIndex = (int) $_POST['newIndex'];
-            $origIndex = (int) $_POST['origIndex'];
+        $this->set(function () use ($fx) {
+            $sortOrders = explode(',', $this->getApp()->getRequestPostParam('order'));
+            $source = $this->getApp()->getRequestPostParam('source');
+            $newIndex = (int) $this->getApp()->getRequestPostParam('newIndex');
+            $origIndex = (int) $this->getApp()->getRequestPostParam('origIndex');
 
             return $fx($sortOrders, $source, $newIndex, $origIndex);
         });

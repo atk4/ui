@@ -61,7 +61,7 @@ class JsPaginator extends JsCallback
      */
     public function getPage(): int
     {
-        return (int) ($_GET['page'] ?? 0);
+        return (int) ($this->getApp()->tryGetRequestQueryParam('page') ?? 0);
     }
 
     /**
