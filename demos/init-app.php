@@ -29,13 +29,24 @@ $app = new App([
     'catchExceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
     'alwaysRun' => (bool) ($_GET['APP_ALWAYS_RUN'] ?? true),
 ]);
+$app->title = 'Agile UI Demo v' . $app->version;
+
 unset($_SERVER);
 unset($_GET);
 unset($_POST);
 unset($_FILES);
-unset($_COOKIE);
+if (isset($_COOKIE)) { // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9953
+    $sessionCookieName = function_exists('session_name') ? session_name() : false;
+    foreach (array_keys($_COOKIE) as $k) {
+        if ($k !== $sessionCookieName) {
+            unset($_COOKIE[$k]);
+        }
+    }
+    if ($_COOKIE === []) {
+        unset($_COOKIE);
+    }
+}
 unset($_SESSION);
-$app->title = 'Agile UI Demo v' . $app->version;
 
 if ($app->callExit !== true) {
     $app->stickyGet('APP_CALL_EXIT');
