@@ -93,10 +93,6 @@ class View extends AbstractView
      */
     public function __construct($label = [])
     {
-        if ('func_num_args'() > 1) { // prevent bad usage
-            throw new \Error('Too many method arguments');
-        }
-
         $defaults = is_array($label) ? $label : [$label];
 
         if (array_key_exists(0, $defaults)) {
@@ -270,10 +266,6 @@ class View extends AbstractView
      */
     public function add($object, $region = null): AbstractView
     {
-        if ('func_num_args'() > 2) { // prevent bad usage
-            throw new \Error('Too many method arguments');
-        }
-
         if (!is_object($object)) { // @phpstan-ignore-line
             // for BC do not throw
             // later consider to accept strictly objects only
@@ -340,10 +332,6 @@ class View extends AbstractView
      */
     public function set($content)
     {
-        if ('func_num_args'() > 1) { // prevent bad usage
-            throw new Exception('Only one argument is needed by View::set()');
-        }
-
         if (!is_string($content) && $content !== null) { // @phpstan-ignore-line
             throw (new Exception('Not sure what to do with argument'))
                 ->addMoreInfo('this', $this)

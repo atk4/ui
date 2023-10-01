@@ -91,33 +91,6 @@ class ViewTest extends TestCase
         self::assertTrue($vInner->isInitialized());
     }
 
-    public function testTooManyArgumentsConstructorError(): void
-    {
-        $this->expectException(\Error::class);
-        $this->expectExceptionMessage('Too many method arguments');
-        new View([], []); // @phpstan-ignore-line
-    }
-
-    public function testTooManyArgumentsAddError(): void
-    {
-        $v = new View();
-        $vInner = new View();
-
-        $this->expectException(\Error::class);
-        $this->expectExceptionMessage('Too many method arguments');
-        $v->add($vInner, [], []); // @phpstan-ignore-line
-    }
-
-    public function testTooManyArgumentsAbstractViewAddError(): void
-    {
-        $v = new class() extends AbstractView {};
-        $vInner = new View();
-
-        $this->expectException(\Error::class);
-        $this->expectExceptionMessage('Too many method arguments');
-        $v->add($vInner, [], []); // @phpstan-ignore-line
-    }
-
     public function testSetModelTwiceException(): void
     {
         $v = new View();
@@ -177,32 +150,5 @@ class ViewTest extends TestCase
         yield [Modal::class];
         yield [Popup::class];
         yield [VirtualPage::class];
-    }
-
-    /**
-     * TODO remove the explicit exceptions and this test/provider once release 5.0 is made.
-     *
-     * @param class-string<View> $class
-     *
-     * @dataProvider provideSetNotOneArgumentExceptionCases
-     */
-    public function testSetNotOneArgumentException(string $class): void
-    {
-        $v = new $class();
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Only one argument is needed by ' . preg_replace('~.+\\\\~', '', $class) . '::set()');
-        $v->set(static function () {}, null); // @phpstan-ignore-line
-    }
-
-    /**
-     * @return iterable<list{class-string<View>}>
-     */
-    public function provideSetNotOneArgumentExceptionCases(): iterable
-    {
-        yield [View::class];
-        yield [Loader::class];
-        yield [Modal::class];
-        yield [Popup::class];
     }
 }
