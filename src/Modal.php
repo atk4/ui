@@ -66,8 +66,6 @@ class Modal extends View
 
     /**
      * Set callback function for this modal.
-     * $fx is set as an array in order to comply with View::set().
-     * TODO Rename this function and break BC?
      *
      * @param \Closure(View): void $fx
      *
@@ -77,8 +75,6 @@ class Modal extends View
     {
         if (!$fx instanceof \Closure) {
             throw new \TypeError('$fx must be of type Closure');
-        } elseif ('func_num_args'() > 1) {
-            throw new Exception('Only one argument is needed by Modal::set()');
         }
 
         $this->fx = $fx;
