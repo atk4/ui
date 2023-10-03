@@ -36,13 +36,16 @@ trait ModelPreventModificationTrait
 
     public function atomic(\Closure $fx)
     {
-        $eRollback = new \Exception('Prevent modification');
+        $connection = $this->getModel(true)->getPersistence()->getConnection(); // @phpstan-ignore-line
+        $eRollback = !$connection->inTransaction()
+            ? new \Exception('Prevent modification')
+            : null; // TODO replace with atk4/data Connection before commit hook
         $res = null;
         try {
             parent::atomic(function () use ($fx, $eRollback, &$res) {
                 $res = $fx();
 
-                if (!$this->isAllowDbModifications()) {
+                if ($eRollback !== null && !$this->isAllowDbModifications()) {
                     throw $eRollback;
                 }
             });
