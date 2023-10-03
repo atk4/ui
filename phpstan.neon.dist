@@ -16,12 +16,6 @@ parameters:
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
         - '~^Variable (static )?(property access|method call) on .+\.~'
 
-        # https://github.com/phpstan/phpstan/issues/9951
-        -
-            path: 'src/Table/Column/FilterModel/Type*.php'
-            message: '~^Parameter (#2 \$operator|#3 \$value) of method Atk4\\Data\\Model::addCondition\(\) expects (Atk4\\Data\\Persistence\\Sql\\Expressionable\|string, bool|string, DateTime) given\.$~'
-            count: 5
-
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
         -

@@ -340,7 +340,9 @@ class Multiline extends Form\Control
         $currentIds = array_column($model->export(), $model->idField);
 
         foreach ($this->rowData as $row) {
-            $entity = $row[$model->idField] !== null ? $model->load($row[$model->idField]) : $model->createEntity();
+            $entity = $row[$model->idField] !== null
+                ? $model->load($row[$model->idField])
+                : $model->createEntity();
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
                     continue;
@@ -350,9 +352,12 @@ class Multiline extends Form\Control
                     $entity->set($fieldName, $value);
                 }
             }
-            $id = $entity->save()->getId();
 
-            $k = array_search($id, $currentIds, true);
+            if (!$entity->isLoaded() || $entity->getDirtyRef() !== []) {
+                $entity->save();
+            }
+
+            $k = array_search($entity->getId(), $currentIds, true);
             if ($k !== false) {
                 unset($currentIds[$k]);
             }
