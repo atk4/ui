@@ -59,7 +59,7 @@ Header::addTo($rightColumn, [
 // Explicitly adding an Action executor.
 $executor = UserAction\JsCallbackExecutor::addTo($rightColumn);
 // Passing Model action to executor and action argument via URL.
-$executor->setAction($action->getActionForEntity($files->createEntity()));
+$executor->setAction($action);
 // Setting user response after model action get execute.
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, static function () {
     return new JsToast('Files imported');
@@ -70,7 +70,7 @@ $button->on('click', $executor, ['args' => ['path' => '.'], 'confirm' => 'This w
 
 Header::addTo($rightColumn, ['BasicExecutor']);
 $executor = UserAction\BasicExecutor::addTo($rightColumn, ['executorButton' => [Button::class, 'Import', 'class.primary' => true]]);
-$executor->setAction($action->getActionForEntity($files->createEntity()));
+$executor->setAction($action);
 $executor->ui = 'segment';
 $executor->description = 'Execute Import action using "BasicExecutor" with argument "path" equal to "."';
 $executor->setArguments(['path' => '.']);
@@ -82,7 +82,7 @@ View::addTo($rightColumn, ['ui' => 'hidden divider']);
 
 Header::addTo($rightColumn, ['PreviewExecutor']);
 $executor = UserAction\PreviewExecutor::addTo($rightColumn, ['executorButton' => [Button::class, 'Confirm', 'class.primary' => true]]);
-$executor->setAction($action->getActionForEntity($files->createEntity()));
+$executor->setAction($action);
 $executor->ui = 'segment';
 $executor->previewType = 'console';
 $executor->description = 'Displays preview in console prior to executing';
@@ -93,7 +93,7 @@ $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, static function 
 
 Header::addTo($leftColumn, ['FormExecutor']);
 $executor = UserAction\FormExecutor::addTo($leftColumn, ['executorButton' => [Button::class, 'Save Name Only', 'class.primary' => true]]);
-$executor->setAction($action->getActionForEntity($files->createEntity()));
+$executor->setAction($action);
 $executor->ui = 'segment';
 $executor->description = 'Only fields set in $action[field] array will be added in form.';
 $executor->setArguments(['path' => '.']);
@@ -105,7 +105,7 @@ View::addTo($leftColumn, ['ui' => 'hidden divider']);
 
 Header::addTo($leftColumn, ['ArgumentFormExecutor']);
 $executor = UserAction\ArgumentFormExecutor::addTo($leftColumn, ['executorButton' => [Button::class, 'Run Import', 'class.primary' => true]]);
-$executor->setAction($action->getActionForEntity($files->createEntity()));
+$executor->setAction($action);
 $executor->description = 'ArgumentFormExecutor will ask user about arguments set in actions.';
 $executor->ui = 'segment';
 $executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, static function () {
