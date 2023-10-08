@@ -326,6 +326,8 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest5xx('layout/layouts_error.php');
 
         self::assertSame(500, $response->getStatusCode());
+        self::assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
+        self::assertSame('no-store', $response->getHeaderLine('Cache-Control'));
         self::assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
     }
 
@@ -509,6 +511,7 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest5xx($path);
 
         self::assertSame(500, $response->getStatusCode());
+        self::assertSame('no-store', $response->getHeaderLine('Cache-Control'));
         $responseBodyStr = $response->getBody()->getContents();
         self::assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
         self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);

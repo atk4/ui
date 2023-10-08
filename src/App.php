@@ -300,8 +300,9 @@ class App
 
         $this->layout->template->dangerouslySetHtml('Content', $this->renderExceptionHtml($exception));
 
-        // remove header
         $this->layout->template->tryDel('Header');
+
+        $this->setResponseHeader('Cache-Control', 'no-store');
 
         if (($this->isJsUrlRequest() || $this->getRequest()->getHeaderLine('X-Requested-With') === 'XMLHttpRequest')
                 && !$this->hasRequestQueryParam('__atk_tab')) {
