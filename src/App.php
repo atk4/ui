@@ -204,6 +204,7 @@ class App
                 throw new \ErrorException($msg, 0, $severity, $file, $line);
             });
             http_response_code(500);
+            header('Content-Type: text/plain');
         }
 
         // always run app on shutdown
@@ -1126,8 +1127,9 @@ class App
      */
     protected function emitResponse(): void
     {
-        if (!headers_sent() || $this->response->getHeaders() !== []) { // avoid throwing late error in loop
+        if (http_response_code() !== 500 || $this->response->getStatusCode() !== 500 || $this->response->getHeaders() !== []) { // avoid throwing late error in loop
             http_response_code($this->response->getStatusCode());
+            header_remove('Content-Type');
         }
 
         foreach ($this->response->getHeaders() as $name => $values) {

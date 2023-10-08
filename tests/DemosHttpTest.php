@@ -130,6 +130,7 @@ class DemosHttpTest extends DemosTest
         $response = $this->getResponseFromRequest5xx($path);
 
         self::assertSame(500, $response->getStatusCode());
+        self::assertSame('text/plain', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         self::assertSame($expectedOutput, $response->getBody()->getContents());
     }
 
