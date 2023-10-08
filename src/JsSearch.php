@@ -66,8 +66,6 @@ class JsSearch extends View
     protected function init(): void
     {
         parent::init();
-
-        // $this->input = Form\Control\Line::addTo($this, ['iconLeft' => 'filter', 'action' => new Button(['icon' => 'search', 'ui' => 'button atk-action'])]);
     }
 
     protected function renderView(): void
