@@ -413,7 +413,7 @@ class Context extends RawMinkContext implements BehatContext
      *
      * Check if text is present in modal or dynamic modal.
      */
-    public function modalIsOpenWithText(string $text, string $selector = 'div'): void
+    public function modalIsOpenWithText(string $text, string $selector = '*'): void
     {
         $textEncoded = str_contains($text, '"')
             ? 'concat("' . str_replace('"', '", \'"\', "', $text) . '")'
@@ -468,7 +468,7 @@ class Context extends RawMinkContext implements BehatContext
      * @Then Panel is open with text :arg1
      * @Then Panel is open with text :arg1 in selector :arg2
      */
-    public function panelIsOpenWithText(string $text, string $selector = 'div'): void
+    public function panelIsOpenWithText(string $text, string $selector = '*'): void
     {
         $panel = $this->findElement(null, '.atk-right-panel.atk-visible');
         $this->findElement($panel, '//' . $selector . '[text()[normalize-space()="' . $text . '"]]');
