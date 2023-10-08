@@ -41,6 +41,11 @@ class ModalService {
         s.modals.push(this);
 
         s.addModal($(this));
+
+        // recenter modal, needed even with observeChanges enabled
+        // https://github.com/fomantic/Fomantic-UI/issues/2920
+        // NOT https://github.com/fomantic/Fomantic-UI/issues/2476
+        $(this).modal('refresh');
     }
 
     onHide() {

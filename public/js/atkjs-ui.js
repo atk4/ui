@@ -2529,6 +2529,11 @@ class ModalService {
     }
     s.modals.push(this);
     s.addModal(external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this));
+
+    // recenter modal, needed even with observeChanges enabled
+    // https://github.com/fomantic/Fomantic-UI/issues/2920
+    // NOT https://github.com/fomantic/Fomantic-UI/issues/2476
+    external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this).modal('refresh');
   }
   onHide() {
     const s = atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService;
