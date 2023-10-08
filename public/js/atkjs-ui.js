@@ -2011,7 +2011,7 @@ class ApiService {
         throw new Error(response.message);
       }
     } catch (e) {
-      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.getErrorHtml(e.message));
+      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.getErrorHtml('API JavaScript Error', e.message));
     }
   }
 
@@ -2033,7 +2033,7 @@ class ApiService {
     } else {
       // check if we have HTML returned by server with <body> content
       // TODO test together /w onError using non-200 HTTP AJAX response code
-      const body = response.match(/<body[^>]*>[\S\s]*<\/body>/gi);
+      const body = response.match(/<html[^>]*>.*<body[^>]*>[\S\s]*<\/body>/gi);
       if (body) {
         atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(body);
       } else {
@@ -2060,7 +2060,7 @@ class ApiService {
    * Will wrap Fomantic-UI api call into a Promise.
    * Can be used to retrieve JSON data from the server.
    * Using this will bypass regular successTest i.e. any
-   * atkjs (javascript) return from server will not be evaluated.
+   * atkjs (JavaScript) return from server will not be evaluated.
    *
    * Make sure to control the server output when using
    * this function. It must at least return { success: true } in order for
@@ -2100,7 +2100,7 @@ class ApiService {
   /**
    * Display App error in a Fomantic-UI modal.
    */
-  showErrorModal(errorMsg) {
+  showErrorModal(contentHtml) {
     if (atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.modals.length > 0) {
       const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.modals.at(-1));
       if ($modal.data('closeOnLoadingError')) {
@@ -2109,17 +2109,17 @@ class ApiService {
     }
 
     // catch application error and display them in a new modal window
-    const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(errorMsg);
+    const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(contentHtml);
     m.data('needRemove', true).modal().modal('show');
   }
-  getErrorHtml(error) {
-    return `<div class="ui negative icon message">
-                <i class="warning sign icon"></i>
-                <div class="content">
-                  <div class="header">Javascript Error</div>
-                  <div>${error}</div>
-                </div>
-              </div>`;
+  getErrorHtml(titleHtml, messageHtml) {
+    return `<div class="ui negative icon message" style="margin: 0px;">
+              <i class="warning sign icon"></i>
+              <div class="content">
+                <div class="header">${titleHtml}</div>
+                <div>${messageHtml}</div>
+              </div>
+            </div>`;
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new ApiService()));
