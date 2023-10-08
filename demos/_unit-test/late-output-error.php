@@ -14,8 +14,13 @@ use Atk4\Ui\Modal;
 require_once __DIR__ . '/../init-app.php';
 
 $emitLateErrorHFx = static function () {
+    // TODO once https://github.com/php/php-src/issues/12385 is fixed
+    // while (ob_get_level() !== 0) {
+    //     ob_end_flush();
+    // }
     header('x-unmanaged-header: test');
     flush();
+    // var_dump(headers_sent());
 };
 
 $emitLateErrorOFx = static function () {
