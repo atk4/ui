@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.3
+ * # Fomantic UI - 2.9.4-beta.11+a03991c
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -8322,6 +8322,10 @@ a.ui.inverted.black.header.header.header:hover {
 
 .ui.bottom.attached.header {
   border-radius: 0 0 0.28571429rem 0.28571429rem;
+}
+
+.ui.seamless.attached:not(.bottom).header {
+  border-bottom: none;
 }
 
 /* Attached Sizes */
@@ -17826,7 +17830,7 @@ img.ui.bordered.image {
 .ui.input > input {
   margin: 0;
   max-width: 100%;
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   outline: none;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   text-align: left;
@@ -18502,7 +18506,11 @@ img.ui.bordered.image {
 .ui.form .field.error > .ui.action.input:not([class*="left action"]) > input + .ui.button,
 .ui.form .field.error > .ui.right.labeled.input:not([class*="corner labeled"]) > input + .ui.label,
 .ui.action.input.error:not([class*="left action"]) > input + .ui.button,
-.ui.right.labeled.input.error:not([class*="corner labeled"]) > input + .ui.label {
+.ui.right.labeled.input.error:not([class*="corner labeled"]) > input + .ui.label,
+.ui.form .field.error > .ui.action.input:not([class*="left action"]) > textarea + .ui.button,
+.ui.form .field.error > .ui.right.labeled.input:not([class*="corner labeled"]) > textarea + .ui.label,
+.ui.action.input.error:not([class*="left action"]) > textarea + .ui.button,
+.ui.right.labeled.input.error:not([class*="corner labeled"]) > textarea + .ui.label {
   border-right: 1px solid #e0b4b4;
 }
 
@@ -18529,7 +18537,11 @@ img.ui.bordered.image {
 .ui.form .field.info > .ui.action.input:not([class*="left action"]) > input + .ui.button,
 .ui.form .field.info > .ui.right.labeled.input:not([class*="corner labeled"]) > input + .ui.label,
 .ui.action.input.info:not([class*="left action"]) > input + .ui.button,
-.ui.right.labeled.input.info:not([class*="corner labeled"]) > input + .ui.label {
+.ui.right.labeled.input.info:not([class*="corner labeled"]) > input + .ui.label,
+.ui.form .field.info > .ui.action.input:not([class*="left action"]) > textarea + .ui.button,
+.ui.form .field.info > .ui.right.labeled.input:not([class*="corner labeled"]) > textarea + .ui.label,
+.ui.action.input.info:not([class*="left action"]) > textarea + .ui.button,
+.ui.right.labeled.input.info:not([class*="corner labeled"]) > textarea + .ui.label {
   border-right: 1px solid #a9d5de;
 }
 
@@ -18556,7 +18568,11 @@ img.ui.bordered.image {
 .ui.form .field.success > .ui.action.input:not([class*="left action"]) > input + .ui.button,
 .ui.form .field.success > .ui.right.labeled.input:not([class*="corner labeled"]) > input + .ui.label,
 .ui.action.input.success:not([class*="left action"]) > input + .ui.button,
-.ui.right.labeled.input.success:not([class*="corner labeled"]) > input + .ui.label {
+.ui.right.labeled.input.success:not([class*="corner labeled"]) > input + .ui.label,
+.ui.form .field.success > .ui.action.input:not([class*="left action"]) > textarea + .ui.button,
+.ui.form .field.success > .ui.right.labeled.input:not([class*="corner labeled"]) > textarea + .ui.label,
+.ui.action.input.success:not([class*="left action"]) > textarea + .ui.button,
+.ui.right.labeled.input.success:not([class*="corner labeled"]) > textarea + .ui.label {
   border-right: 1px solid #a3c293;
 }
 
@@ -18583,7 +18599,11 @@ img.ui.bordered.image {
 .ui.form .field.warning > .ui.action.input:not([class*="left action"]) > input + .ui.button,
 .ui.form .field.warning > .ui.right.labeled.input:not([class*="corner labeled"]) > input + .ui.label,
 .ui.action.input.warning:not([class*="left action"]) > input + .ui.button,
-.ui.right.labeled.input.warning:not([class*="corner labeled"]) > input + .ui.label {
+.ui.right.labeled.input.warning:not([class*="corner labeled"]) > input + .ui.label,
+.ui.form .field.warning > .ui.action.input:not([class*="left action"]) > textarea + .ui.button,
+.ui.form .field.warning > .ui.right.labeled.input:not([class*="corner labeled"]) > textarea + .ui.label,
+.ui.action.input.warning:not([class*="left action"]) > textarea + .ui.button,
+.ui.right.labeled.input.warning:not([class*="corner labeled"]) > textarea + .ui.label {
   border-right: 1px solid #c9ba9b;
 }
 
@@ -18612,7 +18632,8 @@ img.ui.bordered.image {
 
 /* Input when ui Left */
 
-.ui[class*="left action"].input > input {
+.ui[class*="left action"].input > input,
+.ui[class*="left action"].input > textarea {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   border-left-color: transparent;
@@ -18620,7 +18641,8 @@ img.ui.bordered.image {
 
 /* Input when ui Right */
 
-.ui.action.input:not([class*="left action"]) > input {
+.ui.action.input:not([class*="left action"]) > input,
+.ui.action.input:not([class*="left action"]) > textarea {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   border-right-color: transparent;
@@ -18648,11 +18670,13 @@ img.ui.bordered.image {
 
 /* Input Focus */
 
-.ui.action.input:not([class*="left action"]) > input:focus {
+.ui.action.input:not([class*="left action"]) > input:focus,
+.ui.action.input:not([class*="left action"]) > textarea:focus {
   border-right-color: #85b7d9;
 }
 
-.ui.ui[class*="left action"].input > input:focus {
+.ui.ui[class*="left action"].input > input:focus,
+.ui.ui[class*="left action"].input > textarea:focus {
   border-left-color: #85b7d9;
 }
 
@@ -20059,7 +20083,6 @@ a.ui.label {
 .ui.ribbon.label {
   position: relative;
   margin: 0;
-  min-width: -webkit-max-content;
   min-width: max-content;
   border-radius: 0 0.28571429rem 0.28571429rem 0;
   border-color: rgba(0, 0, 0, 0.15);
@@ -27148,6 +27171,12 @@ span.ui.massive.text {
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   line-height: 1.2857;
   resize: vertical;
+  min-height: 2.99992857em;
+}
+
+.ui.input > textarea {
+  flex: 1 1 auto;
+  max-width: 100%;
 }
 
 .ui.form textarea:not([rows]) {
@@ -27285,8 +27314,10 @@ span.ui.massive.text {
 /* Auto Input */
 
 .ui.form .fields .field .ui.input input,
-.ui.form .field .ui.input input {
-  width: auto;
+.ui.form .fields .field .ui.input textarea,
+.ui.form .field .ui.input input,
+.ui.form .field .ui.input textarea {
+  width: 100%;
 }
 
 /* Full Width Input */
@@ -27463,7 +27494,8 @@ span.ui.massive.text {
 .ui.form .ui.action.input:not([class*="left action"]) input[type="text"]:focus,
 .ui.form .ui.action.input:not([class*="left action"]) input[type="file"]:focus,
 .ui.form .ui.action.input:not([class*="left action"]) input[type="url"]:focus,
-.ui.form .ui.action.input:not([class*="left action"]) input[type="week"]:focus {
+.ui.form .ui.action.input:not([class*="left action"]) input[type="week"]:focus,
+.ui.form .ui.action.input:not([class*="left action"]) textarea:focus {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -27482,7 +27514,8 @@ span.ui.massive.text {
 .ui.form .ui[class*="left action"].input input[type="text"],
 .ui.form .ui[class*="left action"].input input[type="file"],
 .ui.form .ui[class*="left action"].input input[type="url"],
-.ui.form .ui[class*="left action"].input input[type="week"] {
+.ui.form .ui[class*="left action"].input input[type="week"],
+.ui.form .ui[class*="left action"].input textarea {
   border-bottom-left-radius: 0;
   border-top-left-radius: 0;
 }
@@ -31628,7 +31661,6 @@ span.ui.massive.text {
   left: 100%;
   /* IE needs 0, all others support max-content to show dropdown icon inline, so keep both settings! */
   min-width: 0;
-  min-width: -webkit-max-content;
   min-width: max-content;
   margin: 0 0 0 0;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
@@ -45688,7 +45720,6 @@ body.dimmable > .dimmer {
   display: none;
   outline: none;
   top: 100%;
-  min-width: -webkit-max-content;
   min-width: max-content;
   margin: 0;
   padding: 0;
@@ -46096,7 +46127,6 @@ select.ui.dropdown {
 }
 
 .ui.compact.selection.dropdown > .menu:not(.multiline) {
-  width: -webkit-max-content;
   width: max-content;
 }
 
@@ -50031,7 +50061,6 @@ a.ui.nag {
   top: 0;
   right: 0;
   /* Fixes content being squished when inline (moz only) */
-  min-width: -webkit-min-content;
   min-width: min-content;
   z-index: 1900;
   border: 1px solid #d4d4d5;
