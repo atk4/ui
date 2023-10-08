@@ -41,7 +41,7 @@ Many companies use Agile Toolkit to implement admin interface and in some cases 
 
 ### How does it work?
 
-Download from https://ui.atk4.org/ or install ATK UI with `composer require atk4/ui`
+Download from https://github.com/atk4/ui/releases or install Agile UI with `composer require atk4/ui`
 
 Create "index.php" file with:
 
