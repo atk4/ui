@@ -24,3 +24,6 @@ Feature: TreeItemSelector
     Then Toast display should contain text "Electronics > Phone > iPhone"
     Then I click using selector "(//div.atk-tree-loader)[1]//div[text()='Phone']"
     Then Toast display should contain text "Appliances"
+    Then I click using selector "(//div.atk-tree-loader)[1]//div[text()='Electronics']"
+    Then Toast display should contain text "Appliances"
+    Then Toast display should contain text "Electronics > Tv"
