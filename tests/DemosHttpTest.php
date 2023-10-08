@@ -131,6 +131,7 @@ class DemosHttpTest extends DemosTest
 
         self::assertSame(500, $response->getStatusCode());
         self::assertSame('text/plain', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
+        self::assertSame('no-store', $response->getHeaderLine('Cache-Control'));
         self::assertSame($expectedOutput, $response->getBody()->getContents());
     }
 

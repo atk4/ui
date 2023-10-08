@@ -203,8 +203,10 @@ class App
 
                 throw new \ErrorException($msg, 0, $severity, $file, $line);
             });
+
             http_response_code(500);
             header('Content-Type: text/plain');
+            header('Cache-Control: no-store');
         }
 
         // always run app on shutdown
@@ -1130,6 +1132,7 @@ class App
         if (http_response_code() !== 500 || $this->response->getStatusCode() !== 500 || $this->response->getHeaders() !== []) { // avoid throwing late error in loop
             http_response_code($this->response->getStatusCode());
             header_remove('Content-Type');
+            header_remove('Cache-Control');
         }
 
         foreach ($this->response->getHeaders() as $name => $values) {
