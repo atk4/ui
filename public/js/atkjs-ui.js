@@ -2035,13 +2035,11 @@ class ApiService {
    * Handle a server response failure.
    */
   onFailure(response) {
-    // if JSON is returned, it should contain the error within message property
+    // if JSON is returned, it should contain the HTML error in message property
     if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
       atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response.message);
     } else {
-      // check if we have HTML returned by server with <body> content
-      const body = response.match(/<html[^>]*>.*<body[^>]*>[\S\s]*<\/body>/gi);
-      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.getErrorHtml('API Server Error', '') + '<div>' + (body ? 'body' : '<pre style="margin-bottom: 0px;"><code style="display: block; padding: 1em; color: #adbac7; background: #22272e;">' + (0,lodash_escape__WEBPACK_IMPORTED_MODULE_7__["default"])(response) + '</code></pre>') + '</div>');
+      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.getErrorHtml('API Server Error', '') + '<div><pre style="margin-bottom: 0px;"><code style="display: block; padding: 1em; color: #adbac7; background: #22272e;">' + (0,lodash_escape__WEBPACK_IMPORTED_MODULE_7__["default"])(response) + '</code></pre></div>');
     }
   }
 
