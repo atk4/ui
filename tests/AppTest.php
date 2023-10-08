@@ -83,6 +83,7 @@ class AppTest extends TestCase
     {
         $app = $this->createApp();
         $app->setResponseHeader('cache-control', '');
+        self::assertSame([], $app->getResponse()->getHeaders());
 
         $app->setResponseHeader('content-type', 'Xy');
         self::assertSame(['Content-Type' => ['Xy']], $app->getResponse()->getHeaders());

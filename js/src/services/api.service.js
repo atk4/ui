@@ -1,5 +1,6 @@
 import $ from 'external/jquery';
 import atk from 'atk';
+import lodashEscape from 'lodash/escape';
 
 /**
  * Handle Fomantic-UI API functionality throughout the app.
@@ -103,7 +104,7 @@ class ApiService {
                 throw new Error(response.message);
             }
         } catch (e) {
-            atk.apiService.showErrorModal(atk.apiService.getErrorHtml(e.message));
+            atk.apiService.showErrorModal(atk.apiService.getErrorHtml('API JavaScript Error', e.message));
         }
     }
 
@@ -124,13 +125,13 @@ class ApiService {
             atk.apiService.showErrorModal(response.message);
         } else {
             // check if we have HTML returned by server with <body> content
-            // TODO test together /w onError using non-200 HTTP AJAX response code
-            const body = response.match(/<body[^>]*>[\S\s]*<\/body>/gi);
-            if (body) {
-                atk.apiService.showErrorModal(body);
-            } else {
-                atk.apiService.showErrorModal(response);
-            }
+            const body = response.match(/<html[^>]*>.*<body[^>]*>[\S\s]*<\/body>/gi);
+
+            atk.apiService.showErrorModal(atk.apiService.getErrorHtml('API Server Error', '') + '<div>' + (
+                body
+                    ? 'body'
+                    : '<pre style="margin-bottom: 0px;"><code style="display: block; padding: 1em; color: #adbac7; background: #22272e;">' + lodashEscape(response) + '</code></pre>'
+            ) + '</div>');
         }
     }
 
@@ -151,7 +152,7 @@ class ApiService {
      * Will wrap Fomantic-UI api call into a Promise.
      * Can be used to retrieve JSON data from the server.
      * Using this will bypass regular successTest i.e. any
-     * atkjs (javascript) return from server will not be evaluated.
+     * atkjs (JavaScript) return from server will not be evaluated.
      *
      * Make sure to control the server output when using
      * this function. It must at least return { success: true } in order for
@@ -193,7 +194,7 @@ class ApiService {
     /**
      * Display App error in a Fomantic-UI modal.
      */
-    showErrorModal(errorMsg) {
+    showErrorModal(contentHtml) {
         if (atk.modalService.modals.length > 0) {
             const $modal = $(atk.modalService.modals.at(-1));
             if ($modal.data('closeOnLoadingError')) {
@@ -206,18 +207,18 @@ class ApiService {
             .appendTo('body')
             .addClass('ui scrolling modal')
             .css('padding', '1em')
-            .html(errorMsg);
+            .html(contentHtml);
         m.data('needRemove', true).modal().modal('show');
     }
 
-    getErrorHtml(error) {
-        return `<div class="ui negative icon message">
-                <i class="warning sign icon"></i>
-                <div class="content">
-                  <div class="header">Javascript Error</div>
-                  <div>${error}</div>
-                </div>
-              </div>`;
+    getErrorHtml(titleHtml, messageHtml) {
+        return `<div class="ui negative icon message" style="margin: 0px;">
+              <i class="warning sign icon"></i>
+              <div class="content">
+                <div class="header">${titleHtml}</div>
+                <div>${messageHtml}</div>
+              </div>
+            </div>`;
     }
 }
 

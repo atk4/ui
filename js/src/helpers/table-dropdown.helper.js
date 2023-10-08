@@ -1,5 +1,5 @@
 import $ from 'external/jquery';
-import throttle from 'lodash/throttle';
+import lodashThrottle from 'lodash/throttle';
 
 /**
  * Simple helper to help displaying Fomantic-UI Dropdown within an atk table.
@@ -48,7 +48,7 @@ function showTableDropdown() {
     }
 
     setCssPosition();
-    $(window).on('scroll.atktable', throttle(setCssPosition, 10));
+    $(window).on('scroll.atktable', lodashThrottle(setCssPosition, 10));
     $(window).on('resize.atktable', () => {
         $that.dropdown('hide');
     });
