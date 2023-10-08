@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.3-beta.37+7e5e3ff
+ * # Fomantic UI - 2.9.3
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -5420,7 +5420,9 @@
                             $input.trigger('blur');
                             shortcutPressed = true;
                             event.stopPropagation();
-                        } else if (!event.ctrlKey && module.can.change()) {
+                        } else if (!module.can.change()) {
+                            shortcutPressed = true;
+                        } else if (!event.ctrlKey) {
                             if (key === keyCode.space || (key === keyCode.enter && settings.enableEnterKey)) {
                                 module.verbose('Enter/space key pressed, toggling checkbox');
                                 module.toggle();
@@ -7352,7 +7354,10 @@
                             if ($subMenu.length > 0) {
                                 module.verbose('Hiding sub-menu', $subMenu);
                                 $subMenu.each(function () {
-                                    module.animate.hide(false, $(this));
+                                    var $sub = $(this);
+                                    if (!module.is.animating($sub)) {
+                                        module.animate.hide(false, $sub);
+                                    }
                                 });
                             }
                         }
@@ -12022,9 +12027,6 @@
                         .off(eventNamespace)
                         .removeData(moduleNamespace)
                     ;
-                    if (module.is.ios()) {
-                        module.remove.ios();
-                    }
                     $closeIcon.off(elementNamespace);
                     if ($inputs) {
                         $inputs.off(elementNamespace);
@@ -12679,12 +12681,6 @@
                         });
                     },
 
-                    // ios only (scroll on html not document). This prevent auto-resize canvas/scroll in ios
-                    // (This is no longer necessary in latest iOS)
-                    ios: function () {
-                        $html.addClass(className.ios);
-                    },
-
                     // container
                     pushed: function () {
                         $context.addClass(className.pushed);
@@ -12732,11 +12728,6 @@
                         $document
                             .off('keydown' + eventNamespace)
                         ;
-                    },
-
-                    // ios scroll on html not document
-                    ios: function () {
-                        $html.removeClass(className.ios);
                     },
 
                     // context
@@ -12859,20 +12850,6 @@
                         }
 
                         return module.cache.isIE;
-                    },
-                    ios: function () {
-                        var
-                            userAgent      = navigator.userAgent,
-                            isIOS          = userAgent.match(regExp.ios),
-                            isMobileChrome = userAgent.match(regExp.mobileChrome)
-                        ;
-                        if (isIOS && !isMobileChrome) {
-                            module.verbose('Browser was found to be iOS', userAgent);
-
-                            return true;
-                        }
-
-                        return false;
                     },
                     mobile: function () {
                         var
@@ -13220,7 +13197,6 @@
             blurring: 'blurring',
             closing: 'closing',
             dimmed: 'dimmed',
-            ios: 'ios',
             locked: 'locked',
             pushable: 'pushable',
             pushed: 'pushed',
@@ -13253,8 +13229,6 @@
         },
 
         regExp: {
-            ios: /(iPad|iPhone|iPod)/g,
-            mobileChrome: /(CriOS)/g,
             mobile: /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/g,
         },
 
@@ -18728,7 +18702,8 @@
                         var
                             step = module.get.step(),
                             min = module.get.min(),
-                            quotient = step === 0 ? 0 : Math.floor((settings.max - min) / step),
+                            precision = module.get.precision(),
+                            quotient = step === 0 ? 0 : Math.floor(Math.round(((settings.max - min) / step) * precision) / precision),
                             remainder = step === 0 ? 0 : (settings.max - min) % step
                         ;
 
@@ -18738,7 +18713,9 @@
                         return settings.step;
                     },
                     numLabels: function () {
-                        var value = Math.round((module.get.max() - module.get.min()) / (module.get.step() === 0 ? 1 : module.get.step()));
+                        var step = module.get.step(),
+                            precision = module.get.precision(),
+                            value = Math.round(((module.get.max() - module.get.min()) / (step === 0 ? 1 : step)) * precision) / precision;
                         module.debug('Determined that there should be ' + value + ' labels');
 
                         return value;
@@ -18753,7 +18730,9 @@
 
                         switch (settings.labelType) {
                             case settings.labelTypes.number: {
-                                return Math.round(((value * (module.get.step() === 0 ? 1 : module.get.step())) + module.get.min()) * precision) / precision;
+                                var step = module.get.step();
+
+                                return Math.round(((value * (step === 0 ? 1 : step)) + module.get.min()) * precision) / precision;
                             }
                             case settings.labelTypes.letter: {
                                 return alphabet[value % 26];
@@ -22504,9 +22483,6 @@
                         .off(eventNamespace)
                         .removeData(moduleNamespace)
                     ;
-                    if (module.is.ios()) {
-                        module.remove.ios();
-                    }
                     // bound by uuid
                     $context.off(elementNamespace);
                     $window.off(elementNamespace);
@@ -22970,11 +22946,6 @@
                             $pusher.removeClass(className.blurring);
                         }
                     },
-                    // ios only (scroll on html not document). This prevent auto-resize canvas/scroll in ios
-                    // (This is no longer necessary in latest iOS)
-                    ios: function () {
-                        $html.addClass(className.ios);
-                    },
 
                     // container
                     pushed: function () {
@@ -23021,11 +22992,6 @@
                         if ($style && $style.length > 0) {
                             $style.remove();
                         }
-                    },
-
-                    // ios scroll on html not document
-                    ios: function () {
-                        $html.removeClass(className.ios);
                     },
 
                     // context
@@ -23147,20 +23113,6 @@
                         return module.cache.isIE;
                     },
 
-                    ios: function () {
-                        var
-                            userAgent      = navigator.userAgent,
-                            isIOS          = userAgent.match(regExp.ios),
-                            isMobileChrome = userAgent.match(regExp.mobileChrome)
-                        ;
-                        if (isIOS && !isMobileChrome) {
-                            module.verbose('Browser was found to be iOS', userAgent);
-
-                            return true;
-                        }
-
-                        return false;
-                    },
                     mobile: function () {
                         var
                             userAgent    = navigator.userAgent,
@@ -23420,7 +23372,6 @@
             blurring: 'blurring',
             closing: 'closing',
             dimmed: 'dimmed',
-            ios: 'ios',
             locked: 'locked',
             pushable: 'pushable',
             pushed: 'pushed',
@@ -23440,8 +23391,6 @@
         },
 
         regExp: {
-            ios: /(iPad|iPhone|iPod)/g,
-            mobileChrome: /(CriOS)/g,
             mobile: /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/g,
         },
 
@@ -27345,6 +27294,7 @@
                     : $.extend({}, $.fn.api.settings),
 
                 // internal aliases
+                regExp          = settings.regExp,
                 namespace       = settings.namespace,
                 metadata        = settings.metadata,
                 selector        = settings.selector,
@@ -27647,8 +27597,8 @@
                             optionalVariables
                         ;
                         if (url) {
-                            requiredVariables = url.match(settings.regExp.required);
-                            optionalVariables = url.match(settings.regExp.optional);
+                            requiredVariables = url.match(regExp.required);
+                            optionalVariables = url.match(regExp.optional);
                             urlData = urlData || settings.urlData;
                             if (requiredVariables) {
                                 module.debug('Looking for required URL variables', requiredVariables);
@@ -27745,7 +27695,7 @@
                                 });
                             });
                             $.each(formArray, function (i, el) {
-                                if (!settings.regExp.validate.test(el.name)) {
+                                if (!regExp.validate.test(el.name)) {
                                     return;
                                 }
                                 var
@@ -27756,7 +27706,7 @@
                                         || (String(floatValue) === el.value
                                             ? floatValue
                                             : (el.value === 'false' ? false : el.value)),
-                                    nameKeys = el.name.match(settings.regExp.key) || [],
+                                    nameKeys = el.name.match(regExp.key) || [],
                                     pushKey = el.name.replace(/\[]$/, '')
                                 ;
                                 if (!(pushKey in pushes)) {
@@ -27776,9 +27726,9 @@
 
                                     if (k === '' && !Array.isArray(value)) { // foo[]
                                         value = build([], pushes[pushKey]++, value);
-                                    } else if (settings.regExp.fixed.test(k)) { // foo[n]
+                                    } else if (regExp.fixed.test(k)) { // foo[n]
                                         value = build([], k, value);
-                                    } else if (settings.regExp.named.test(k)) { // foo; foo[bar]
+                                    } else if (regExp.named.test(k)) { // foo; foo[bar]
                                         value = build({}, k, value);
                                     }
                                 }
