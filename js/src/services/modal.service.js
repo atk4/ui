@@ -112,7 +112,7 @@ class ModalService {
                         response.success = false;
                         response.isServiceError = true;
                         response.message = 'Modal service error: Empty HTML, unable to replace modal content from server response';
-                    } else {
+                    } else if (response.id) {
                         // content is replace no need to do it in api
                         response.id = null;
                     }

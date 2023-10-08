@@ -1908,6 +1908,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var lodash_escape__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash/escape */ "./node_modules/lodash/escape.js");
+
 
 
 
@@ -2031,14 +2033,11 @@ class ApiService {
     if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
       atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response.message);
     } else {
-      // check if we have HTML returned by server with <body> content
       // TODO test together /w onError using non-200 HTTP AJAX response code
+
+      // check if we have HTML returned by server with <body> content
       const body = response.match(/<html[^>]*>.*<body[^>]*>[\S\s]*<\/body>/gi);
-      if (body) {
-        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(body);
-      } else {
-        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response);
-      }
+      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.getErrorHtml('API Server Error', '') + '<div>' + (body ? 'body' : '<pre style="margin-bottom: 0px;"><code style="display: block; padding: 1em; color: #adbac7; background: #22272e;">' + (0,lodash_escape__WEBPACK_IMPORTED_MODULE_7__["default"])(response) + '</code></pre>') + '</div>');
     }
   }
 
@@ -2587,7 +2586,7 @@ class ModalService {
             response.success = false;
             response.isServiceError = true;
             response.message = 'Modal service error: Empty HTML, unable to replace modal content from server response';
-          } else {
+          } else if (response.id) {
             // content is replace no need to do it in api
             response.id = null;
           }
@@ -43140,6 +43139,68 @@ function debounce(func, wait, options) {
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (debounce);
+
+
+/***/ }),
+
+/***/ "./node_modules/lodash/escape.js":
+/*!***************************************!*\
+  !*** ./node_modules/lodash/escape.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/** Used to map characters to HTML entities. */
+const htmlEscapes = {
+  '&': '&amp;',
+  '<': '&lt;',
+  '>': '&gt;',
+  '"': '&quot;',
+  "'": '&#39;'
+}
+
+/** Used to match HTML entities and HTML characters. */
+const reUnescapedHtml = /[&<>"']/g
+const reHasUnescapedHtml = RegExp(reUnescapedHtml.source)
+
+/**
+ * Converts the characters "&", "<", ">", '"', and "'" in `string` to their
+ * corresponding HTML entities.
+ *
+ * **Note:** No other characters are escaped. To escape additional
+ * characters use a third-party library like [_he_](https://mths.be/he).
+ *
+ * Though the ">" character is escaped for symmetry, characters like
+ * ">" and "/" don't need escaping in HTML and have no special meaning
+ * unless they're part of a tag or unquoted attribute value. See
+ * [Mathias Bynens's article](https://mathiasbynens.be/notes/ambiguous-ampersands)
+ * (under "semi-related fun fact") for more details.
+ *
+ * When working with HTML you should always
+ * [quote attribute values](http://wonko.com/post/html-escaping) to reduce
+ * XSS vectors.
+ *
+ * @since 0.1.0
+ * @category String
+ * @param {string} [string=''] The string to escape.
+ * @returns {string} Returns the escaped string.
+ * @see escapeRegExp, unescape
+ * @example
+ *
+ * escape('fred, barney, & pebbles')
+ * // => 'fred, barney, &amp; pebbles'
+ */
+function escape(string) {
+  return (string && reHasUnescapedHtml.test(string))
+    ? string.replace(reUnescapedHtml, (chr) => htmlEscapes[chr])
+    : (string || '')
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (escape);
 
 
 /***/ }),
