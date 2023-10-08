@@ -40,8 +40,7 @@ __webpack_require__.r(__webpack_exports__);
                 @keyup="onKeyup"
                 @keyup.esc="onEscape"
             />
-            <i class="atk-search-icon" :class="classIcon" />
-            <span style="width: 12px; cursor: pointer;" @click="onClear" />
+            <i class="atk-search-icon link" :class="classIcon" @click="onClear" />
         </div>`,
   props: {
     context: String,
