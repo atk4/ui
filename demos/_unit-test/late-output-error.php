@@ -46,7 +46,7 @@ $cbO2->setUrlTrigger('err_unexpected_output_detected_2');
 $modalO2 = Modal::addTo($app, ['cb' => $cbO2]);
 $modalO2->set($emitLateErrorOFx);
 
-Header::addTo($app, ['content' => 'Modal before render (/w Callback)']);
+Header::addTo($app, ['content' => 'Modal /w Callback']);
 
 $buttonH1 = Button::addTo($app, ['Test LateOutputError I: Headers already sent']);
 $buttonH1->on('click', $modalH1->jsShow());
@@ -54,7 +54,7 @@ $buttonH1->on('click', $modalH1->jsShow());
 $buttonO1 = Button::addTo($app, ['Test LateOutputError I: Unexpected output detected']);
 $buttonO1->on('click', $modalO1->jsShow());
 
-Header::addTo($app, ['content' => 'Modal after render (/w CallbackLater)']);
+Header::addTo($app, ['content' => 'Modal /w CallbackLater']);
 
 $buttonH2 = Button::addTo($app, ['Test LateOutputError II: Headers already sent']);
 $buttonH2->on('click', $modalH2->jsShow());
