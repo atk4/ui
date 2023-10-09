@@ -49,7 +49,7 @@ use Atk4\Ui\View;
  * Note that deleting a row will always fire the onChange callback.
  *
  * You can use the returned data to update other related areas of the form.
- * For example, ypdating Grand Total field of all invoice items.
+ * For example, updating Grand Total field of all invoice items.
  *
  * $ml->onChange(function (array $rows) use ($form) {
  *     $grandTotal = 0;

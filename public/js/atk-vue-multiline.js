@@ -371,12 +371,6 @@ __webpack_require__.r(__webpack_exports__);
     hasColumnError: function (column) {
       return this.errors.some(v => column.name === v.name);
     },
-    getColumnWidth: function (column) {
-      return column.fieldOptions ? column.fieldOptions.width : null;
-    },
-    onEdit: function () {
-      this.isEditing = true;
-    },
     onToggleDelete: function (e) {
       atk__WEBPACK_IMPORTED_MODULE_5__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete', {
         rowId: this.rowId

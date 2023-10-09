@@ -65,12 +65,6 @@ export default {
         hasColumnError: function (column) {
             return this.errors.some((v) => column.name === v.name);
         },
-        getColumnWidth: function (column) {
-            return column.fieldOptions ? column.fieldOptions.width : null;
-        },
-        onEdit: function () {
-            this.isEditing = true;
-        },
         onToggleDelete: function (e) {
             atk.eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete', { rowId: this.rowId });
         },
