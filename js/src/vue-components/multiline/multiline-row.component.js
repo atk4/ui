@@ -58,7 +58,7 @@ export default {
             return columns.filter((v) => v.isVisible);
         },
         onTab: function (columnIndex) {
-            if (columnIndex === this.columns.filter((column) => column.isEditable).length) {
+            if (columnIndex === this.columns.filter((column) => column.isEditable).length - 1) {
                 this.$emit('onTabLastColumn');
             }
         },
