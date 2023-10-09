@@ -364,18 +364,12 @@ __webpack_require__.r(__webpack_exports__);
       return columns.filter(v => v.isVisible);
     },
     onTab: function (columnIndex) {
-      if (columnIndex === this.columns.filter(column => column.isEditable).length) {
+      if (columnIndex === this.columns.filter(column => column.isEditable).length - 1) {
         this.$emit('onTabLastColumn');
       }
     },
     hasColumnError: function (column) {
       return this.errors.some(v => column.name === v.name);
-    },
-    getColumnWidth: function (column) {
-      return column.fieldOptions ? column.fieldOptions.width : null;
-    },
-    onEdit: function () {
-      this.isEditing = true;
     },
     onToggleDelete: function (e) {
       atk__WEBPACK_IMPORTED_MODULE_5__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete', {
