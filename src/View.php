@@ -749,7 +749,7 @@ class View extends AbstractView
      *
      * @return ($action is null ? Jquery : null)
      */
-    public function js($when = false, $action = null, $selector = null)
+    public function js($when = false, $action = null, $selector = null): ?JsExpressionable
     {
         // binding on a specific event
         // TODO allow only boolean $when, otherwise user should use self::on() method
