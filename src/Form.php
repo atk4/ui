@@ -348,17 +348,6 @@ class Form extends View
         return $this->layout->addGroup($title);
     }
 
-    /**
-     * Returns JS Chain that targets INPUT element of a specified field. This method is handy
-     * if you wish to set a value to a certain field.
-     *
-     * @return Jquery
-     */
-    public function jsInput(string $name): JsExpressionable
-    {
-        return $this->layout->getControl($name)->jsInput();
-    }
-
     // }}}
 
     // {{{ Internals

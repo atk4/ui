@@ -148,8 +148,8 @@ class Control extends View
      *
      * $field->jsInput(true)->val(123);
      *
-     * @param bool|string      $when
-     * @param JsExpressionable $action
+     * @param bool|string                                     $when
+     * @param ($when is false ? null : JsExpressionable|null) $action
      *
      * @return Jquery
      */

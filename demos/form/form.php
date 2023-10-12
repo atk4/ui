@@ -198,7 +198,7 @@ $form->onSubmit(static function (Form $form) {
     }
 
     return new JsBlock([
-        $form->jsInput('email')->val('john@gmail.com'),
+        $form->getControl('email')->jsInput()->val('john@gmail.com'),
         $form->getControl('is_accept_terms')->js()->checkbox('set checked'),
     ]);
 });
