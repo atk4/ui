@@ -348,17 +348,6 @@ class Form extends View
         return $this->layout->addGroup($title);
     }
 
-    /**
-     * Returns JS Chain that targets INPUT element of a specified field. This method is handy
-     * if you wish to set a value to a certain field.
-     *
-     * @return Jquery
-     */
-    public function jsInput(string $name): JsExpressionable
-    {
-        return $this->layout->getControl($name)->jsInput();
-    }
-
     // }}}
 
     // {{{ Internals
@@ -443,7 +432,12 @@ class Form extends View
         foreach ($this->controls as $k => $control) {
             // save field value only if field was editable in form at all
             if (!$control->readOnly && !$control->disabled) {
-                $postRawValue = $postRawData[$k];
+                $postRawValue = $postRawData[$k] ?? null;
+                if ($postRawValue === null) {
+                    throw (new Exception('Form POST param does not exist'))
+                        ->addMoreInfo('key', $k);
+                }
+
                 try {
                     $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $postRawValue));
                 } catch (\Exception $e) {
@@ -527,6 +521,7 @@ class Form extends View
             'on' => 'submit',
             'url' => $this->cb->getJsUrl(),
             'method' => 'POST',
+            'contentType' => 'application/x-www-form-urlencoded; charset=UTF-8', // remove once https://github.com/jquery/jquery/issues/5346 is fixed
             'serializeForm' => true,
         ], $this->apiConfig));
 

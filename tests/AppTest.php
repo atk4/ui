@@ -239,4 +239,13 @@ class AppTest extends TestCase
         $expectedUrlAutoindex2 = $makeExpectedUrlFx('', '.html');
         self::assertSame($expectedUrlAutoindex2, $app->url($page, $extraRequestUrlArgs));
     }
+
+    public function testTerminateNoContentTypeException(): void
+    {
+        $app = $this->createApp();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Content type must be always set');
+        $app->terminate();
+    }
 }
