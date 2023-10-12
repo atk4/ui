@@ -521,6 +521,7 @@ class Form extends View
             'on' => 'submit',
             'url' => $this->cb->getJsUrl(),
             'method' => 'POST',
+            'contentType' => 'application/x-www-form-urlencoded; charset=UTF-8', // remove once https://github.com/jquery/jquery/issues/5346 is fixed
             'serializeForm' => true,
         ], $this->apiConfig));
 

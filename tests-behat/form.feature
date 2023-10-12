@@ -84,3 +84,8 @@ Feature: Form
     When I click using selector "//label[text()='I am a developer']"
     Then I should not see "Check all language that apply"
     Then I should not see "Css"
+
+  Scenario: empty POST
+    Given I am on "_unit-test/form-empty.php"
+    When I press button "Save"
+    Then Toast display should contain text "Post ok"
