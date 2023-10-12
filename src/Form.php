@@ -432,7 +432,12 @@ class Form extends View
         foreach ($this->controls as $k => $control) {
             // save field value only if field was editable in form at all
             if (!$control->readOnly && !$control->disabled) {
-                $postRawValue = $postRawData[$k];
+                $postRawValue = $postRawData[$k] ?? null;
+                if ($postRawValue === null) {
+                    throw (new Exception('Form POST param does not exist'))
+                        ->addMoreInfo('key', $k);
+                }
+
                 try {
                     $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $postRawValue));
                 } catch (\Exception $e) {

@@ -502,13 +502,13 @@ class DemosTest extends TestCase
     /**
      * @dataProvider provideDemoCallbackErrorCases
      */
-    public function testDemoCallbackError(string $path, string $expectedExceptionMessage): void
+    public function testDemoCallbackError(string $path, string $expectedExceptionMessage, array $options = []): void
     {
         if (static::class === self::class) {
             $this->expectExceptionMessage($expectedExceptionMessage);
         }
 
-        $response = $this->getResponseFromRequest5xx($path);
+        $response = $this->getResponseFromRequest5xx($path, $options);
 
         self::assertSame(500, $response->getStatusCode());
         self::assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
@@ -539,6 +539,12 @@ class DemosTest extends TestCase
         yield [
             '_unit-test/callback-nested.php?err_sub_loader2&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
             'Exception II from Sub Loader',
+        ];
+
+        yield [
+            '_unit-test/post.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_submit=ajax&' . Callback::URL_QUERY_TARGET . '=test_submit',
+            'Form POST param does not exist',
+            ['form_params' => []],
         ];
     }
 }
