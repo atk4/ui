@@ -210,8 +210,8 @@ class ModelWithPrefixedFields extends Model
  * @property string $sys_name  @Atk4\Field()
  * @property string $iso       @Atk4\Field()
  * @property string $iso3      @Atk4\Field()
- * @property string $numcode   @Atk4\Field()
- * @property string $phonecode @Atk4\Field()
+ * @property int    $numcode   @Atk4\Field()
+ * @property int    $phonecode @Atk4\Field()
  */
 class Country extends ModelWithPrefixedFields
 {
