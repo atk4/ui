@@ -274,7 +274,7 @@ class ScopeBuilder extends Form\Control
         if ($this->form) {
             $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
                 $key = $this->entityField->getFieldName();
-                $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
+                $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key]));
             });
         }
     }

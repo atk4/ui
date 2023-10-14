@@ -9,8 +9,6 @@ use Atk4\Ui\Header;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsToast;
-use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
-use SebastianBergmann\CodeCoverage\CodeCoverage;
 
 /** @var \Atk4\Ui\App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -26,9 +24,6 @@ $inventory->getField($inventory->fieldName()->qty)->ui['multiline'] = [Form\Cont
 $inventory->getField($inventory->fieldName()->box)->ui['multiline'] = [Form\Control\Multiline::TABLE_CELL => ['width' => 2]];
 $inventory->getField($inventory->fieldName()->total_sql)->ui['multiline'] = [Form\Control\Multiline::TABLE_CELL => ['width' => 1, 'class' => 'blue']];
 $inventory->getField($inventory->fieldName()->total_php)->ui['multiline'] = [Form\Control\Multiline::TABLE_CELL => ['width' => 1, 'class' => 'blue']];
-if ($app->db->getDatabasePlatform() instanceof PostgreSQLPlatform || class_exists(CodeCoverage::class, false)) {
-    $inventory->setOrder($inventory->idField);
-}
 
 $form = Form::addTo($app);
 

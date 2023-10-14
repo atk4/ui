@@ -10,7 +10,9 @@ use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Table;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Mvorisek\Atk4\Hintable\Data\HintablePropertyDef;
+use SebastianBergmann\CodeCoverage\CodeCoverage;
 
 try {
     require_once file_exists(__DIR__ . '/db.php')
@@ -192,6 +194,10 @@ class ModelWithPrefixedFields extends Model
         parent::init();
 
         $this->initPreventModification();
+
+        if ($this->getPersistence()->getDatabasePlatform() instanceof PostgreSQLPlatform || class_exists(CodeCoverage::class, false)) {
+            $this->setOrder($this->idField);
+        }
     }
 
     public function addField(string $name, $seed = []): Field
