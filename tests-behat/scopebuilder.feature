@@ -1,6 +1,6 @@
 Feature: ScopeBuilder
 
-  Scenario: test ScopeBuilder rendering of model scope
+  Scenario: test ScopeBuilder rendering of model scope, exception is displayed
     Given I am on "_unit-test/scope-builder.php"
     Then rule "atk_fp_stat__project_budget" operator is ">=" and value is "€ 1 000.00"
     Then rule "atk_fp_stat__project_name" operator is "matches regular expression" and value is "[a-zA-Z]"
@@ -12,6 +12,7 @@ Feature: ScopeBuilder
     Then bool rule "atk_fp_stat__is_commercial" has value "No"
     Then I check if input value for "qb" match text in "p.atk-expected-input-result"
     When I press button "Save"
+    Then Modal is open with text "TypeError: Unexpected non-scalar value"
     # TODO uncomment once "Object serialization is not supported" is fixed
     # Then I check if text in "p.atk-expected-word-result" match text in ".atk-scope-builder-response"
 
