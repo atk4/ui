@@ -22,8 +22,7 @@ View::addTo($app, ['ui' => 'divider']);
 // InlineEdit
 
 $entity = (new Country($app->db))
-    ->setOrder(Country::hinting()->fieldName()->id)
-    ->loadAny();
+    ->loadBy(Country::hinting()->fieldName()->iso, 'JP');
 
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
 Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);
