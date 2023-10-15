@@ -584,7 +584,7 @@ class App
         // flatpickr - TODO should be load only when needed
         // needs https://github.com/atk4/ui/issues/1875
         $this->requireJs($this->cdn['flatpickr'] . '/flatpickr' . ($minified ? '.min' : '') . '.js');
-        $this->requireCss($this->cdn['flatpickr'] . '/flatpickr' . ($minified ? '.min' : '') . '.css');
+        // $this->requireCss($this->cdn['flatpickr'] . '/flatpickr' . ($minified ? '.min' : '') . '.css');
         if ($this->uiPersistence->locale !== 'en') {
             $this->requireJs($this->cdn['flatpickr'] . '/l10n/' . $this->uiPersistence->locale . '.js');
             $this->html->js(true, new JsExpression('flatpickr.localize(window.flatpickr.l10ns.' . $this->uiPersistence->locale . ')'));
@@ -592,7 +592,7 @@ class App
 
         // Agile UI
         $this->requireJs($this->cdn['atk'] . '/js/atkjs-ui' . ($minified ? '.min' : '') . '.js');
-        $this->requireCss($this->cdn['atk'] . '/css/agileui.min.css');
+        // $this->requireCss($this->cdn['atk'] . '/css/agileui.min.css');
 
         // set JS bundle dynamic loading path
         $this->html->template->dangerouslySetHtml(
