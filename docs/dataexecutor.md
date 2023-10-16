@@ -123,10 +123,6 @@ Executors can use the HOOK_AFTER_EXECUTE hook in order to return javascript acti
 executing. It is use in Crud for example in order to display users of successful model UserAction execution. Either by displaying
 Toast messages or removing a row within a Crud table.
 
-Some Ui View component, like Crud for example, will also set javascript action to return based on the UserAction::modifier property.
-For example it the modifier property is set to MODIFIER_DELETE then Crud will know it has to delete a table row on the
-other hand, if MODIFIER_UPDATE is set, then Table needs to be reloaded.
-
 ## The Executor Factory
 
 :::{php:class} UserAction\ExecutorFactory

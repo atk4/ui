@@ -172,17 +172,17 @@ class Crud extends Grid
     {
         $res = new JsBlock();
         $jsAction = $this->getJsGridAction($action);
-        if ($jsAction) {
+        if ($jsAction !== null) {
             $res->addStatement($jsAction);
         }
 
-        // display msg return by action or depending on action modifier
-        if (is_string($return)) {
+        // display msg return by action or depending on action type
+        if ($return !== null) {
             $res->addStatement($this->jsCreateNotifier($return));
         } else {
-            if ($action->modifier === Model\UserAction::MODIFIER_CREATE || $action->modifier === Model\UserAction::MODIFIER_UPDATE) {
+            if ($action->shortName === 'add' || $action->shortName === 'edit') {
                 $res->addStatement($this->jsCreateNotifier($this->saveMsg));
-            } elseif ($action->modifier === Model\UserAction::MODIFIER_DELETE) {
+            } elseif ($action->shortName === 'delete') {
                 $res->addStatement($this->jsCreateNotifier($this->deleteMsg));
             } else {
                 $res->addStatement($this->jsCreateNotifier($this->defaultMsg));
@@ -193,26 +193,20 @@ class Crud extends Grid
     }
 
     /**
-     * Return proper JS actions depending on action modifier type.
+     * Return proper JS actions depending on action type.
      */
     protected function getJsGridAction(Model\UserAction $action): ?JsExpressionable
     {
-        switch ($action->modifier) {
-            case Model\UserAction::MODIFIER_UPDATE:
-            case Model\UserAction::MODIFIER_CREATE:
-                $js = $this->container->jsReload($this->_getReloadArgs());
-
-                break;
-            case Model\UserAction::MODIFIER_DELETE:
-                // use deleted record ID to remove row, fallback to closest tr if ID is not available
-                $js = $this->deletedId
-                    ? $this->js(false, null, 'tr[data-id="' . $this->deletedId . '"]')
-                    : (new Jquery())->closest('tr');
-                $js = $js->transition('fade left', new JsFunction([], [new JsExpression('this.remove()')]));
-
-                break;
-            default:
-                $js = null;
+        if ($action->shortName === 'add' || $action->shortName === 'edit') {
+            $js = $this->container->jsReload($this->_getReloadArgs());
+        } elseif ($action->shortName === 'delete') {
+            // use deleted record ID to remove row, fallback to closest tr if ID is not available
+            $js = $this->deletedId
+                ? $this->js(false, null, 'tr[data-id="' . $this->deletedId . '"]')
+                : (new Jquery())->closest('tr');
+            $js = $js->transition('fade left', new JsFunction([], [new JsExpression('this.remove()')]));
+        } else {
+            $js = null;
         }
 
         return $js;
