@@ -32,7 +32,7 @@ access control rules. Both Agile UI and Agile API will follow those rules.
 
 ### Integrations and Apps using Agile UI
 
-Agile UI can integrate with frameworks like Laravel or Symfony, has integration with Wordpress and there are several
+Agile UI can integrate with frameworks like Laravel or Symfony, has integration with WordPress and there are several
 high-level projects developed entirely on Agile Toolkit.
 
 ### Who uses Agile Toolkit?
@@ -261,7 +261,7 @@ Add-ons:
 
 Integrations:
 
-- [Agile UI for Wordpress](https://github.com/ibelar/atk-wordpress) - Write Wordpress plugin using Agile UI
+- [Agile UI for WordPress](https://github.com/ibelar/atk-wordpress) - Write WordPress plugin using Agile UI
 - [Laravel Agile Data](https://github.com/atk4/laravel-ad) - ServiceProvider for Agile Data
 
 All bundled components are free and licensed under MIT license. They are installed together with Agile UI.
