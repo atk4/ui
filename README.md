@@ -144,7 +144,7 @@ Agile UI has some unique features:
 
 ## Callbacks. Callbacks everywhere!
 
-One of the fundamental features of ATK is Callback - ability to dynamically generate a route then have JS part of the component invoke it. Thanks to this approach, code can be fluid, simple and readable:
+One of the fundamental features of ATK is Callback - the ability to dynamically generate a route, and then have the JS part of the component invoke it. Thanks to this approach, code can be fluid, simple and readable:
 
 ```php
 $tabs = \Atk4\Ui\Tabs::addTo($app);
