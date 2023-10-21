@@ -11,7 +11,7 @@ Agile UI is the quickest way for building back-end UI, admin interfaces, data ma
 - Agile UI is compact - single file, several lines of code - that's all it takes.
 - Agile UI is extensible - integrates VueJS for custom components and interactive behaviours.
 
-[![Build](https://github.com/atk4/ui/workflows/Unit/badge.svg)](https://github.com/atk4/ui/actions?query=workflow%3AUnit+branch%3Adevelop)
+[![Build](https://github.com/atk4/ui/actions/workflows/test-unit.yml/badge.svg?branch=develop)](https://github.com/atk4/ui/actions?query=branch:develop)
 [![CodeCov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
 [![GitHub release](https://img.shields.io/github/release/atk4/ui.svg)](CHANGELOG.md)
 [![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
@@ -144,7 +144,7 @@ Agile UI has some unique features:
 
 ## Callbacks. Callbacks everywhere!
 
-One of the fundamental features of ATK is Callback - ability to dynamically generate a route then have JS part of the component invoke it. Thanks to this approach, code can be fluid, simple and readable:
+One of the fundamental features of ATK is Callback - the ability to dynamically generate a route, and then have the JS part of the component invoke it. Thanks to this approach, code can be fluid, simple and readable:
 
 ```php
 $tabs = \Atk4\Ui\Tabs::addTo($app);
