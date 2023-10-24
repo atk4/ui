@@ -160,7 +160,7 @@ class PersistenceUiTest extends TestCase
         // yield [[], ['type' => 'integer'], 8, '7.5', false];
         yield [[], ['type' => 'integer'], -7, '-7.49', false];
         // yield [[], ['type' => 'integer'], -8, '-7.5', false];
-        yield [[], ['type' => 'integer'], 12, '12.345.678', false];
+        yield [[], ['type' => 'integer'], 12, '12.345', false];
         yield [[], ['type' => 'integer'], 123, '123,456', false];
         yield [['decimalSeparator' => ','], ['type' => 'integer'], 123, '123.456', false];
 

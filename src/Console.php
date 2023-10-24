@@ -281,7 +281,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
         // $pipes contain streams that are still open and not EOF
         while ($pipes) {
             $read = $pipes;
-            $j1 = $j2 = null;
+            $j1 = null;
+            $j2 = null;
             if (stream_select($read, $j1, $j2, 2) === false) {
                 throw new Exception('Unexpected stream_select() result');
             }

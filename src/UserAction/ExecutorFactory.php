@@ -157,7 +157,7 @@ class ExecutorFactory
             }
             $seed = $this->executorSeed[$requiredType];
         } else {
-            $seed = $seed = $this->executorSeed[$this->getModelKey($action)][$action->shortName] ?? null;
+            $seed = $this->executorSeed[$this->getModelKey($action)][$action->shortName] ?? null;
             if ($seed === null) {
                 // if no type is register, determine executor to use base on action properties
                 if ($action->confirmation instanceof \Closure) {
