@@ -446,6 +446,10 @@ class Form extends View
                         $messages[] = $e->getMessage();
                     } while (($e = $e->getPrevious()) !== null);
 
+                    if (count($messages) >= 2 && $messages[0] === 'Typecast parse error') {
+                        array_shift($messages);
+                    }
+
                     $errors[$k] = implode(': ', $messages);
                 }
             }
