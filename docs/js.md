@@ -354,7 +354,7 @@ $h2 = $leftBox2->js()->height();
 
 $sum = new JsExpression('[] + []', [$h1, $h2]);
 
-$rightBoxContainer->js(true)->height( $sum );
+$rightBoxContainer->js(true)->height($sum);
 ```
 
 It is important to remember that the height of an element is a browser-side property and you
