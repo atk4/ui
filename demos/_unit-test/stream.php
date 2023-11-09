@@ -37,7 +37,7 @@ $hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(s
         throw new Exception('Not implemented/supported');
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         $this->throwNotSupported();
     }
