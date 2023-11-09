@@ -357,7 +357,10 @@ and therefore Persistence typecasting will not modify it's value and it's stored
 The above code result in the following output:
 
 ```
-date1 = DateTime Object ( [date] => 2017-09-03 00:00:00 .. ) and date2 = September 3, 2017
+date1 = DateTime Object(
+    [date] => 2017-09-03 00:00:00
+    ...
+) and date2 = September 3, 2017
 ```
 
 ### Seeding Form Control from Model
