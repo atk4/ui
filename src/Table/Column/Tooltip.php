@@ -72,7 +72,7 @@ class Tooltip extends Table\Column
 
         return [
             '_' . $field->shortName . '_data_visible_class' => '',
-            '_' . $field->shortName . '_data_tooltip' => (String) $tooltip,
+            '_' . $field->shortName . '_data_tooltip' => (string) $tooltip,
             '_' . $field->shortName . '_icon' => $this->icon,
         ];
     }
