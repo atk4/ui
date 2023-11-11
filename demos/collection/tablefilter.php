@@ -16,7 +16,7 @@ $grid = Grid::addTo($view, ['menu' => ['class' => ['atk-grid-menu']]]); // menu 
 
 $model = new Country($app->db);
 $model->addExpression('is_uk', [
-    'expr' => $model->expr('case when [atk_fp_country__iso] = [country] THEN 1 ELSE 0 END', ['country' => 'GB']),
+    'expr' => $model->expr('case when [atk_fp_country__iso] = [country] THEN [t] ELSE [f] END', ['country' => 'GB', 't' => true, 'f' => false]),
     'type' => 'boolean',
 ]);
 
