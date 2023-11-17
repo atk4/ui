@@ -9,6 +9,8 @@ parameters:
         - vendor
         - js
 
+    checkMissingOverrideMethodAttribute: true
+
     ignoreErrors:
         - '~^(Property .+ has|Method .+\(\) (has parameter \$.+ with|return type has)) no value type specified in iterable type .+\.~'
 
