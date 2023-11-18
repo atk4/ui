@@ -40,6 +40,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
     /** @var array<string, string> */
     public $stepListItems = ['args' => 'Fill argument(s)', 'fields' => 'Edit Record(s)', 'preview' => 'Preview', 'final' => 'Complete'];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -53,6 +54,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
         $this->stepList = View::addTo($this)->addClass('ui horizontal bulleted link list');
     }
 
+    #[\Override]
     public function getAction(): Model\UserAction
     {
         return $this->action;
@@ -70,6 +72,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 
+    #[\Override]
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
@@ -89,6 +92,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
         return $this;
     }
 
+    #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
     {
         $urlArgs['step'] = $this->step;

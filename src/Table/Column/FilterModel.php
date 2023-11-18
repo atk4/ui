@@ -83,6 +83,7 @@ abstract class FilterModel extends Model
         return $filterModel;
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

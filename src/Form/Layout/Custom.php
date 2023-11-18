@@ -13,6 +13,7 @@ class Custom extends Form\AbstractLayout
 {
     public $defaultTemplate;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

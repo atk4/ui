@@ -24,6 +24,7 @@ class Centered extends Layout
     /** @var string */
     public $imageAlt = 'Logo';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -37,6 +38,7 @@ class Centered extends Layout
         $this->template->trySet('title', $this->getApp()->title);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->image) {

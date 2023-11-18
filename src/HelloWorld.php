@@ -9,6 +9,7 @@ namespace Atk4\Ui;
  */
 class HelloWorld extends View
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();

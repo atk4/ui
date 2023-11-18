@@ -21,6 +21,7 @@ class TestModel extends Model
 {
     public $caption = 'Test';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -46,6 +47,7 @@ class ExecutorFactoryTest extends TestCase
     /** @var App */
     protected $app;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

@@ -387,6 +387,7 @@ class Table extends Lister
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if (!$this->columns) {

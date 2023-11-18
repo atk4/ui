@@ -23,6 +23,7 @@ class VirtualPage extends View
     /** @var string|null specify custom callback trigger for the URL (see Callback::$urlTrigger) */
     protected $urlTrigger;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

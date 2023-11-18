@@ -57,6 +57,7 @@ class Right extends View implements Loadable
     /** @var string the close icon class */
     public $closeIcon = 'times';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -74,6 +75,7 @@ class Right extends View implements Loadable
         $this->dynamicContent = Content::addTo($this, [], ['LoadContent']);
     }
 
+    #[\Override]
     public function getDynamicContent(): LoadableContent
     {
         return $this->dynamicContent;
@@ -198,6 +200,7 @@ class Right extends View implements Loadable
         return $res;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->template->trySet('WarningIcon', $this->warningIcon);

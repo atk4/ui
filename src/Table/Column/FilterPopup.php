@@ -39,6 +39,7 @@ class FilterPopup extends Popup
      */
     public $colTrigger;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

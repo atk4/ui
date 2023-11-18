@@ -230,6 +230,7 @@ class Modal extends View
         return $this;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $data = [];

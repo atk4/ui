@@ -17,6 +17,7 @@ class UploadImage extends Upload
     /** @var string|null The default thumbnail source. */
     public $defaultSrc;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

@@ -9,6 +9,7 @@ class Textarea extends Input
     /** @var int Text area vertical size */
     public $rows = 2;
 
+    #[\Override]
     public function getInput()
     {
         return $this->getApp()->getTag('textarea', array_merge([

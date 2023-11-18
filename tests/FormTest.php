@@ -411,6 +411,7 @@ class AppFormTestMock extends App
     /** @var string|array */
     public $output;
 
+    #[\Override]
     public function terminate($output = ''): void
     {
         $this->output = $output;

@@ -47,6 +47,7 @@ class Layout extends AbstractLayout
         return $this->add($control, ['desired_name' => $field->shortName]);
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -123,6 +124,7 @@ class Layout extends AbstractLayout
         return $v;
     }
 
+    #[\Override]
     protected function recursiveRender(): void
     {
         $labeledControl = $this->inputTemplate->cloneRegion('LabeledControl');

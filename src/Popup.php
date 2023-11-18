@@ -97,6 +97,7 @@ class Popup extends View
         parent::__construct($triggerBy);
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -229,6 +230,7 @@ class Popup extends View
         return $chain;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->triggerBy) {

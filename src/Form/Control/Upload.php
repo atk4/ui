@@ -59,6 +59,7 @@ class Upload extends Input
     public const UPLOAD_ACTION = 'upload';
     public const DELETE_ACTION = 'delete';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -208,6 +209,7 @@ class Upload extends Input
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         parent::renderView();

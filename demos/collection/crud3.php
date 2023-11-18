@@ -17,6 +17,7 @@ $modelClass = AnonymousClassNameCache::get_class(fn () => new class() extends Mo
 
     public $caption = 'Country';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

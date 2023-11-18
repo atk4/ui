@@ -10,6 +10,7 @@ use Atk4\Ui\Table\Column;
 
 class TypeNumber extends Column\FilterModel
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -29,6 +30,7 @@ class TypeNumber extends Column\FilterModel
         $this->addField('range', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class, 'inputType' => 'number']]]);
     }
 
+    #[\Override]
     public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();
@@ -52,6 +54,7 @@ class TypeNumber extends Column\FilterModel
         return $model;
     }
 
+    #[\Override]
     public function getFormDisplayRules(): array
     {
         return [

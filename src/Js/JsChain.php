@@ -91,6 +91,7 @@ class JsChain extends JsExpression
             . ')';
     }
 
+    #[\Override]
     public function jsRender(): string
     {
         $res = $this->_library;

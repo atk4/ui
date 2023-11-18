@@ -33,11 +33,13 @@ class Callback extends AbstractView
     /** @var bool Allow this callback to trigger during a reload. */
     public $triggerOnReload = true;
 
+    #[\Override]
     public function add(AbstractView $object, array $args = []): AbstractView
     {
         throw new Exception('Callback cannot contain children');
     }
 
+    #[\Override]
     protected function init(): void
     {
         $this->getApp(); // assert has App

@@ -42,6 +42,7 @@ class ItemSearch extends View
 
     public $defaultTemplate = 'item-search.html';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -71,6 +72,7 @@ class ItemSearch extends View
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->class = [];

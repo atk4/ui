@@ -70,6 +70,7 @@ class Columns extends View
         return static::addTo($this, [$width, 'ui' => false])->addClass('row');
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $width = $this->width ?? $this->calculatedWidth;

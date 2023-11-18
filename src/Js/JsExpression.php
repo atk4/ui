@@ -27,6 +27,7 @@ class JsExpression implements JsExpressionable
         $this->args = $args;
     }
 
+    #[\Override]
     public function jsRender(): string
     {
         $namelessCount = 0;

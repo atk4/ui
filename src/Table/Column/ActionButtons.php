@@ -28,6 +28,7 @@ class ActionButtons extends Table\Column
     /** @var array<string, \Closure(Model): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
     protected $callbacks = [];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -102,6 +103,7 @@ class ActionButtons extends Table\Column
         return $this->addButton($button, $modal->jsShow(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)));
     }
 
+    #[\Override]
     public function getTag(string $position, $value, $attr = []): string
     {
         if ($this->table->hasCollapsingCssActionColumn && $position === 'body') {
@@ -111,6 +113,7 @@ class ActionButtons extends Table\Column
         return parent::getTag($position, $value, $attr);
     }
 
+    #[\Override]
     public function getDataCellTemplate(Field $field = null): string
     {
         if (count($this->buttons) === 0) {
@@ -126,6 +129,7 @@ class ActionButtons extends Table\Column
         return $this->getApp()->getTag('div', ['class' => 'ui buttons'], [$outputHtml]);
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $tags = [];

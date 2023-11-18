@@ -23,6 +23,7 @@ class Tooltip extends Table\Column
 
     public string $tooltipField;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -32,6 +33,7 @@ class Tooltip extends Table\Column
         }
     }
 
+    #[\Override]
     public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         if ($field === null) {
@@ -57,6 +59,7 @@ class Tooltip extends Table\Column
         ]);
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         // @TODO remove popup tooltip when null

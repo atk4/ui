@@ -32,6 +32,7 @@ class DemosHttpTest extends DemosTest
     /** @var int */
     protected $port = 9687;
 
+    #[\Override]
     public static function tearDownAfterClass(): void
     {
         // stop the test server
@@ -51,6 +52,7 @@ class DemosHttpTest extends DemosTest
         parent::tearDownAfterClass();
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -102,6 +104,7 @@ class DemosHttpTest extends DemosTest
         }
     }
 
+    #[\Override]
     protected function getClient(): Client
     {
         // never buffer the response thru disk, remove once streaming with curl is supported
@@ -111,6 +114,7 @@ class DemosHttpTest extends DemosTest
         return new Client(['base_uri' => 'http://localhost:' . $this->port, 'sink' => $sink]);
     }
 
+    #[\Override]
     protected function getPathWithAppVars(string $path): string
     {
         $path .= (!str_contains($path, '?') ? '?' : '&')

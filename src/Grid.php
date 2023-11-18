@@ -92,6 +92,7 @@ class Grid extends View
     /** @var array Defines which Table Decorator to use for ActionMenu. */
     protected $actionMenuDecorator = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -334,6 +335,7 @@ class Grid extends View
         $this->quickSearch->initValue = $q;
     }
 
+    #[\Override]
     public function jsReload($args = [], $afterSuccess = null, $apiConfig = []): JsExpressionable
     {
         return new JsReload($this->container, $args, $afterSuccess, $apiConfig);
@@ -682,6 +684,7 @@ class Grid extends View
         parent::renderView();
     }
 
+    #[\Override]
     protected function recursiveRender(): void
     {
         // bind with paginator

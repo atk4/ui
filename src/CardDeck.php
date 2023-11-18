@@ -90,6 +90,7 @@ class CardDeck extends View
     /** @var string|null The current search query string. */
     private $query;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

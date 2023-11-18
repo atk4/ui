@@ -18,21 +18,25 @@ class MinkSession extends \Behat\Mink\Session
         parent::__construct($driver, $session->getSelectorsHandler());
     }
 
+    #[\Override]
     public function getDriver(): MinkSeleniumDriver
     {
         return parent::getDriver(); // @phpstan-ignore-line
     }
 
+    #[\Override]
     public function executeScript($script, array $args = []): void
     {
         $this->getDriver()->executeScript($script, $args);
     }
 
+    #[\Override]
     public function evaluateScript($script, array $args = [])
     {
         return $this->getDriver()->evaluateScript($script, $args);
     }
 
+    #[\Override]
     public function wait($time, $condition = 'false', array $args = [])
     {
         return $this->getDriver()->wait($time, $condition, $args);

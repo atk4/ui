@@ -11,11 +11,13 @@ class Text extends View
 {
     public $defaultTemplate;
 
+    #[\Override]
     public function render(): string
     {
         return $this->content;
     }
 
+    #[\Override]
     public function getHtml()
     {
         return $this->content;

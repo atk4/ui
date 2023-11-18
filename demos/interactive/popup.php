@@ -38,6 +38,7 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
 
     public $defaultTemplate = 'lister.html';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -104,6 +105,7 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
 $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
     public $ui = 'green segment';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

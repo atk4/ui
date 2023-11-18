@@ -170,6 +170,7 @@ class Input extends Form\Control
         return $button;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         // TODO: I don't think we need the loading state at all

@@ -97,6 +97,7 @@ class Dropdown extends Input
     /** @var HtmlTemplate Subtemplate for an icon for a single dropdown item. */
     protected $_tIcon;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -209,6 +210,7 @@ class Dropdown extends Input
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->multiple) {

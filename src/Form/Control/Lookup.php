@@ -126,6 +126,7 @@ class Lookup extends Input
      */
     public $multiple = false;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -357,6 +358,7 @@ class Lookup extends Input
         $chain->dropdown($settings);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->multiple) {

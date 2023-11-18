@@ -36,6 +36,7 @@ trait ModelPreventModificationTrait
         return $rw;
     }
 
+    #[\Override]
     public function atomic(\Closure $fx)
     {
         $eRollback = true;
@@ -172,6 +173,7 @@ class ModelWithPrefixedFields extends Model
         return self::$prefixedFieldNames[$name];
     }
 
+    #[\Override]
     protected function createHintablePropsFromClassDoc(string $className): array
     {
         return array_map(function (HintablePropertyDef $hintableProp) {
@@ -181,6 +183,7 @@ class ModelWithPrefixedFields extends Model
         }, parent::createHintablePropsFromClassDoc($className));
     }
 
+    #[\Override]
     protected function init(): void
     {
         if ($this->idField === 'id') {
@@ -200,6 +203,7 @@ class ModelWithPrefixedFields extends Model
         }
     }
 
+    #[\Override]
     public function addField(string $name, $seed = []): Field
     {
         $seed = Factory::mergeSeeds($seed, [
@@ -224,6 +228,7 @@ class Country extends ModelWithPrefixedFields
     public $table = 'country';
     public $caption = 'Country';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -243,6 +248,7 @@ class Country extends ModelWithPrefixedFields
         });
     }
 
+    #[\Override]
     public function validate(string $intent = null): array
     {
         $errors = parent::validate($intent);
@@ -296,6 +302,7 @@ class Stat extends ModelWithPrefixedFields
 {
     public $table = 'stat';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -366,6 +373,7 @@ class File extends ModelWithPrefixedFields
     public $table = 'file';
     public $caption = 'File';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -436,6 +444,7 @@ class File extends ModelWithPrefixedFields
 
 class Folder extends File
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -453,6 +462,7 @@ class Category extends ModelWithPrefixedFields
 {
     public $table = 'product_category';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -479,6 +489,7 @@ class SubCategory extends ModelWithPrefixedFields
 {
     public $table = 'product_sub_category';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -506,6 +517,7 @@ class Product extends ModelWithPrefixedFields
     public $table = 'product';
     public $caption = 'Product';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -535,6 +547,7 @@ class MultilineItem extends ModelWithPrefixedFields
 {
     public $table = 'multiline_item';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -571,6 +584,7 @@ class MultilineDelivery extends ModelWithPrefixedFields
 {
     public $table = 'multiline_delivery';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

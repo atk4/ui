@@ -73,6 +73,7 @@ class Card extends View
     /** @var string Default executor class. */
     public $executor = UserAction\ModalExecutor::class;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

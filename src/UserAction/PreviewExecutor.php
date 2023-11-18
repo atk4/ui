@@ -16,6 +16,7 @@ class PreviewExecutor extends BasicExecutor
     /** @var string can be "console", "text", or "html" */
     public $previewType = 'console';
 
+    #[\Override]
     public function initPreview(): void
     {
         if (!$this->hasAllArguments()) {

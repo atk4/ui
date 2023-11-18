@@ -36,6 +36,7 @@ class Calendar extends Input
         $this->options[$name] = $value;
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -66,6 +67,7 @@ class Calendar extends Input
         ];
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->readOnly) {

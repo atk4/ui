@@ -113,6 +113,7 @@ class Form extends View
 
     // {{{ Base Methods
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -464,6 +465,7 @@ class Form extends View
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->setupAjaxSubmit();
@@ -474,6 +476,7 @@ class Form extends View
         parent::renderView();
     }
 
+    #[\Override]
     protected function renderTemplateToHtml(): string
     {
         $output = parent::renderTemplateToHtml();

@@ -19,6 +19,7 @@ class Button extends View
     /** @var string|array|Icon Additional icon that can appear on the right of the button. */
     public $iconRight;
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->icon) {

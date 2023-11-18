@@ -33,6 +33,7 @@ class ItemsPerPageSelector extends View
         return $this->getApp()->uiPersistence->typecastSaveField(new Field(['type' => 'integer']), $value);
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -68,6 +69,7 @@ class ItemsPerPageSelector extends View
         });
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $menuItems = [];

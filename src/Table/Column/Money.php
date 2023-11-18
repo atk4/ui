@@ -19,6 +19,7 @@ class Money extends Table\Column
     /** @var bool Should we show zero values in cells? */
     public $showZeroValues = true;
 
+    #[\Override]
     public function getTagAttributes(string $position, array $attr = []): array
     {
         $attr = array_merge_recursive($attr, ['class' => ['{$_' . $this->shortName . '_class}']]);
@@ -26,6 +27,7 @@ class Money extends Table\Column
         return parent::getTagAttributes($position, $attr);
     }
 
+    #[\Override]
     public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         if ($field === null) {
@@ -35,6 +37,7 @@ class Money extends Table\Column
         return $this->getTag('body', '{$' . $field->shortName . '}', $attr);
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         if ($field->get($row) < 0) {

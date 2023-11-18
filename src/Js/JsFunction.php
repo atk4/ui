@@ -47,6 +47,7 @@ class JsFunction implements JsExpressionable
         }
     }
 
+    #[\Override]
     public function jsRender(): string
     {
         $pre = '';

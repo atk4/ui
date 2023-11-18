@@ -195,6 +195,7 @@ class Multiline extends Form\Control
      */
     public $jsAfterDelete;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -643,6 +644,7 @@ class Multiline extends Form\Control
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->model->assertIsModel();

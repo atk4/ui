@@ -979,6 +979,7 @@ class View extends AbstractView
                     $this->fx = $fx;
                 }
 
+                #[\Override]
                 public function jsRender(): string
                 {
                     return ($this->fx)()->jsRender();

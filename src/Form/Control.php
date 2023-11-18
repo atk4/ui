@@ -65,6 +65,7 @@ class Control extends View
     /** Read-only field is not editable, but will be submitted. */
     public bool $readOnly = false;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -110,6 +111,7 @@ class Control extends View
         parent::renderView();
     }
 
+    #[\Override]
     protected function renderTemplateToHtml(): string
     {
         $output = parent::renderTemplateToHtml();

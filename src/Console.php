@@ -219,6 +219,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
         return $this;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->setStyle('overflow-x', 'auto');

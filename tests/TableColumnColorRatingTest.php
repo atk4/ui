@@ -18,6 +18,7 @@ class TableColumnColorRatingTest extends TestCase
     /** @var Table */
     protected $table;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

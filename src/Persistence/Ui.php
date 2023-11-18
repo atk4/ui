@@ -79,6 +79,7 @@ class Ui extends Persistence
         }
     }
 
+    #[\Override]
     protected function _typecastSaveField(Field $field, $value): string
     {
         // always normalize string EOL
@@ -156,6 +157,7 @@ class Ui extends Persistence
         return (string) $value;
     }
 
+    #[\Override]
     protected function _typecastLoadField(Field $field, $value)
     {
         switch ($field->type) {

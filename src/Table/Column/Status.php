@@ -31,6 +31,7 @@ class Status extends Table\Column
         $this->states = $states;
     }
 
+    #[\Override]
     public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         if ($field === null) {
@@ -51,6 +52,7 @@ class Status extends Table\Column
         ]);
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $cl = '';

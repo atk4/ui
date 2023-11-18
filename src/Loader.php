@@ -42,6 +42,7 @@ class Loader extends View
     /** @var array URL arguments. */
     public $urlArgs = [];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

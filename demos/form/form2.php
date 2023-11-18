@@ -87,6 +87,7 @@ $form->onSubmit(static function (Form $form) {
 $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
     public $table = 'person';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -98,6 +99,7 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends M
         $this->hasOne('country_dropdown_id', ['model' => [Country::class], 'ui' => ['form' => new Form\Control\Dropdown()]]); // this works slow
     }
 
+    #[\Override]
     public function validate(string $intent = null): array
     {
         $errors = parent::validate($intent);

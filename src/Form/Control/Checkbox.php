@@ -31,6 +31,7 @@ class Checkbox extends Form\Control
         $this->content = null;
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -45,6 +46,7 @@ class Checkbox extends Form\Control
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->label) {

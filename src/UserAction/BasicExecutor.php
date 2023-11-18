@@ -48,11 +48,13 @@ class BasicExecutor extends View implements ExecutorInterface
     /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     protected $jsSuccess;
 
+    #[\Override]
     public function getAction(): Model\UserAction
     {
         return $this->action;
     }
 
+    #[\Override]
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
@@ -73,6 +75,7 @@ class BasicExecutor extends View implements ExecutorInterface
         $this->arguments = array_merge($this->arguments, $arguments);
     }
 
+    #[\Override]
     protected function recursiveRender(): void
     {
         if (!$this->action) {

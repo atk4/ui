@@ -17,6 +17,7 @@ class GridTest extends TestCase
     /** @var MyModel */
     protected $m;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -66,6 +67,7 @@ class MyModel extends Model
 {
     public ?string $titleField = 'email';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

@@ -9,6 +9,7 @@ use Atk4\Ui\Table\Column;
 
 class TypeTime extends Column\FilterModel
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -28,6 +29,7 @@ class TypeTime extends Column\FilterModel
         $this->addField('range', ['ui' => ['caption' => ''], 'type' => 'time']);
     }
 
+    #[\Override]
     public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();
@@ -58,6 +60,7 @@ class TypeTime extends Column\FilterModel
         return $model;
     }
 
+    #[\Override]
     public function getFormDisplayRules(): array
     {
         return [

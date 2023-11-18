@@ -45,6 +45,7 @@ class ActionMenu extends Table\Column
     /** @var string Button icon to use for display dropdown. */
     public $icon = 'dropdown';
 
+    #[\Override]
     public function getTag(string $position, $value, $attr = []): string
     {
         if ($this->table->hasCollapsingCssActionColumn && $position === 'body') {
@@ -96,6 +97,7 @@ class ActionMenu extends Table\Column
         return $item;
     }
 
+    #[\Override]
     public function getHeaderCellHtml(Field $field = null, $value = null): string
     {
         $this->table->js(true)->find('.atk-action-menu')->dropdown(
@@ -113,6 +115,7 @@ class ActionMenu extends Table\Column
         return parent::getHeaderCellHtml($field, $value);
     }
 
+    #[\Override]
     public function getDataCellTemplate(Field $field = null): string
     {
         if (!$this->items) {
@@ -134,6 +137,7 @@ class ActionMenu extends Table\Column
         return $res;
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $tags = [];

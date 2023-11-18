@@ -10,6 +10,7 @@ use Atk4\Ui\View;
 
 class ReloadTest extends View
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();

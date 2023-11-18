@@ -41,6 +41,7 @@ class JsSortable extends JsCallback
     /** @var View|null The View that need reordering. */
     public $view;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

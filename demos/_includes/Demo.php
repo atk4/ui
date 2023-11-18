@@ -25,6 +25,7 @@ class Demo extends Columns
     /** @var int */
     public $rightWidth = 8;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

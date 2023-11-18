@@ -31,6 +31,7 @@ class JsSse extends JsCallback
     /** @var \Closure|null custom function for outputting (instead of echo) */
     public $echoFunction;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -41,6 +42,7 @@ class JsSse extends JsCallback
         }
     }
 
+    #[\Override]
     public function jsExecute(): JsBlock
     {
         $this->assertIsInitialized();

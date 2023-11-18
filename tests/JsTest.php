@@ -213,6 +213,7 @@ class JsTest extends TestCase
             new JsExpression(''),
             new JsBlock(),
             new class() extends JsBlock {
+                #[\Override]
                 public function jsRender(): string
                 {
                     return 'if (foo) { a(); }';

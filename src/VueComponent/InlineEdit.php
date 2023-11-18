@@ -70,6 +70,7 @@ class InlineEdit extends View
      */
     public $formatErrorMsg;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -86,6 +87,7 @@ class InlineEdit extends View
         }
     }
 
+    #[\Override]
     public function setModel(Model $entity): void
     {
         parent::setModel($entity);
@@ -156,6 +158,7 @@ class InlineEdit extends View
         ]);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         parent::renderView();

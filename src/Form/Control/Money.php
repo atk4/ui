@@ -8,6 +8,7 @@ class Money extends Input
 {
     public string $inputType = 'text';
 
+    #[\Override]
     public function getValue()
     {
         $res = parent::getValue();
@@ -20,6 +21,7 @@ class Money extends Input
         return trim(str_replace($this->getApp()->uiPersistence->currency, '', $res));
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->label === null) {

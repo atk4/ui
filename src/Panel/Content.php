@@ -19,6 +19,7 @@ class Content extends View implements LoadableContent
     /** @var Callback */
     public $cb;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
