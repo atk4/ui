@@ -234,7 +234,7 @@ jobs:
     name: Behat
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/mvorisek/image-php:${{ matrix.php }}-selenium
+      image: ghcr.io/mvorisek/image-php${{ matrix.php < 8.1 && '@sha256' || '' }}:${{ matrix.php == '7.4' && '2362d2eddf97bc43f6bf3f99b81afa9aa192402dacfada933bac1835cd38136b' || (matrix.php == '8.0' && 'be424f776187ff71541e3ff4c6ec173d792c9b915057110427e3502c01480cdd' || matrix.php) }}${{ matrix.php >= 8.1 && '-selenium' || '' }}
     strategy:
       fail-fast: false
       matrix:
