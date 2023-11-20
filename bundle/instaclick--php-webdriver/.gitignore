@@ -1,0 +1,8 @@
+build/
+logs/
+nbproject/
+vendor/
+.idea/
+.phpunit.result.cache
+composer.lock
+composer.phar

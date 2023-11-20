@@ -68,11 +68,13 @@
     },
     "require-dev": {
         "atk4/behat-mink-selenium2-driver": "^1.6.2",
+        "behat/mink": "^1.9@dev",
         "behat/mink-extension": "^2.3.1",
         "ergebnis/composer-normalize": "^2.13",
         "friendsofphp/php-cs-fixer": "^3.0",
         "fzaninotto/faker": "^1.6",
         "guzzlehttp/guzzle": "^7.3",
+        "instaclick/php-webdriver":  "^1.4.14",
         "johnkary/phpunit-speedtrap": "^3.3",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.0",
@@ -98,9 +100,18 @@
         }
     },
     "autoload-dev": {
+        "psr-0": {
+            "WebDriver": "bundle/instaclick--php-webdriver/lib/"
+        },
         "psr-4": {
+            "Behat\\Mink\\Driver\\": "bundle/atk4--behat-mink-selenium2-driver/src/",
             "Atk4\\Ui\\Tests\\": "tests/"
         }
+    },
+    "replace": {
+        "atk4/behat-mink-selenium2-driver": "1.6.2",
+        "behat/mink-selenium2-driver": "*",
+        "instaclick/php-webdriver": "1.4.16"
     },
     "config": {
         "allow-plugins": {
