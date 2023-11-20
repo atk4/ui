@@ -238,7 +238,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1', '8.2', '8.3']
+        # Selenium with PHP 7.4 and 8.0 was failing too often on initial/create session request, probably because of older (Alpine 3.16) base image
+        php: ['8.1', '8.2', '8.3']
         type: ['Chrome', 'Chrome Lowest']
         include:
           - php: 'latest'
