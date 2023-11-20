@@ -74,10 +74,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1', '8.2', '8.3']
+        php: ['7.4', '7.4', '7.4', '7.4', '8.0', '8.0', '8.0', '8.0', '8.1', '8.2', '8.3']
         type: ['Chrome', 'Chrome Lowest']
-        i: [1]
-        j: [1]
+        i: [1, 2]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
