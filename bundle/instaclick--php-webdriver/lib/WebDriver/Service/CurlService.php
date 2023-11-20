@@ -42,6 +42,7 @@ class CurlService implements CurlServiceInterface
             'Accept: application/json;charset=UTF-8',
         );
 
+        $s = microtime(true);
         $curl = curl_init($url);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
@@ -102,6 +103,11 @@ class CurlService implements CurlServiceInterface
         $info['request_method'] = $requestMethod;
         $info['errno'] = curl_errno($curl);
         $info['error'] = curl_error($curl);
+
+        print_r([
+            [$requestMethod, $url, $parameters, $extraOptions],
+            [$info, $rawResult, microtime(true) - $s],
+        ]);
 
         if (array_key_exists(CURLOPT_FAILONERROR, $extraOptions) &&
             $extraOptions[CURLOPT_FAILONERROR] &&
