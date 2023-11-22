@@ -132,11 +132,11 @@ class FormTest extends TestCase
     {
         $this->assertFormSubmit(static function (App $app) {
             $form = Form::addTo($app);
-            $form->addControl('Textarea');
+            $form->addControl('foo');
 
             return $form;
-        }, ['Textarea' => '0'], static function (Model $m) {
-            self::assertSame('0', $m->get('Textarea'));
+        }, ['foo' => '0'], static function (Model $m) {
+            self::assertSame('0', $m->get('foo'));
         });
     }
 
