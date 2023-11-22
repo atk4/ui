@@ -441,6 +441,10 @@ class Form extends View
                 try {
                     $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $postRawValue));
                 } catch (\Exception $e) {
+                    if ($e instanceof \ErrorException) {
+                        throw $e;
+                    }
+
                     $messages = [];
                     do {
                         $messages[] = $e->getMessage();

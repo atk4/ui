@@ -64,10 +64,14 @@ abstract class AbstractLayout extends View
 
             $control = $this->form->controlFactory($field, $control);
         } catch (\Exception $e) {
+            if ($e instanceof \ErrorException) {
+                throw $e;
+            }
+
             throw (new Exception('Unable to create form control', 0, $e))
                 ->addMoreInfo('name', $name)
                 ->addMoreInfo('control', $control)
-                ->addMoreInfo('field', $fieldSeed);
+                ->addMoreInfo('fieldSeed', $fieldSeed);
         }
 
         return $this->_addControl($control, $field);
