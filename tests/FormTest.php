@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Data\ValidationException;
@@ -28,10 +29,10 @@ class FormTest extends TestCase
         $form->setApp($this->createApp());
         $form->invokeInit();
 
-        $form->addControl('test');
+        $form->addControl('foo');
 
-        self::assertInstanceOf(Form\Control::class, $form->getControl('test'));
-        self::assertSame($form->getControl('test'), $form->layout->getControl('test'));
+        self::assertInstanceOf(Form\Control::class, $form->getControl('foo'));
+        self::assertSame($form->getControl('foo'), $form->layout->getControl('foo'));
     }
 
     public function testAddControlAlreadyExistsException(): void
@@ -203,31 +204,61 @@ class FormTest extends TestCase
         $submitReached = false;
         $catchReached = false;
         try {
-            try {
-                $this->assertFormSubmit(static function (App $app) {
-                    $m = new Model();
-                    $m->addField('foo', ['nullable' => false]);
-                    $m->addField('bar', ['nullable' => false]);
+            $this->assertFormSubmit(static function (App $app) {
+                $m = new Model();
+                $m->addField('foo', ['nullable' => false]);
+                $m->addField('bar', ['nullable' => false]);
 
-                    $form = Form::addTo($app);
-                    $form->setModel($m->createEntity(), ['foo']);
+                $form = Form::addTo($app);
+                $form->setModel($m->createEntity(), ['foo']);
 
-                    return $form;
-                }, ['foo' => 'x'], static function (Model $model) use (&$submitReached) {
-                    $submitReached = true;
-                    $model->set('bar', null);
-                });
-            } catch (UnhandledCallbackExceptionError $e) {
-                $catchReached = true;
-                self::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore-line
+                return $form;
+            }, ['foo' => 'x'], static function (Model $model) use (&$submitReached) {
+                $submitReached = true;
+                $model->set('bar', null);
+            });
+        } catch (UnhandledCallbackExceptionError $e) {
+            $catchReached = true;
+            self::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore-line
 
-                $this->expectException(ValidationException::class);
-                $this->expectExceptionMessage('Must not be null');
+            $this->expectException(ValidationException::class);
+            $this->expectExceptionMessage('Must not be null');
 
-                throw $e->getPrevious();
-            }
+            throw $e->getPrevious();
         } finally {
             self::assertTrue($submitReached);
+            self::assertTrue($catchReached);
+        }
+    }
+
+    public function testLoadPostConvertedWarningNotWrappedException(): void
+    {
+        $catchReached = false;
+        try {
+            $this->assertFormSubmit(static function (App $app) {
+                $m = new Model();
+                $m->addField('foo', new class() extends Field {
+                    public function normalize($value)
+                    {
+                        TestCase::assertSame('x', $value);
+
+                        throw new \ErrorException('Converted PHP warning');
+                    }
+                });
+
+                $form = Form::addTo($app);
+                $form->setModel($m->createEntity());
+
+                return $form;
+            }, ['foo' => 'x'], static function (Model $model) {});
+        } catch (UnhandledCallbackExceptionError $e) {
+            $catchReached = true;
+
+            $this->expectException(\ErrorException::class);
+            $this->expectExceptionMessage('Converted PHP warning');
+
+            throw $e->getPrevious();
+        } finally {
             self::assertTrue($catchReached);
         }
     }
