@@ -250,7 +250,7 @@ class FormTest extends TestCase
                 $form->setModel($m->createEntity());
 
                 return $form;
-            }, ['foo' => 'x'], static function (Model $model) {});
+            }, ['foo' => 'x']);
         } catch (UnhandledCallbackExceptionError $e) {
             $catchReached = true;
 
