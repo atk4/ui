@@ -272,7 +272,7 @@ class FormTest extends TestCase
         $controlClass = get_class(new class() extends Form\Control {
             private static bool $firstCreate = true;
 
-            public function __construct($defaults = [])
+            public function __construct() // @phpstan-ignore-line
             {
                 if (self::$firstCreate) {
                     self::$firstCreate = false;
@@ -305,7 +305,7 @@ class FormTest extends TestCase
         $controlClass = get_class(new class() extends Form\Control {
             private static bool $firstCreate = true;
 
-            public function __construct($defaults = [])
+            public function __construct() // @phpstan-ignore-line
             {
                 if (self::$firstCreate) {
                     self::$firstCreate = false;
