@@ -54,10 +54,10 @@ abstract class AbstractLayout extends View
             }
         }
 
-        if (!$model->hasField($name)) {
-            $field = $model->addField($name, $fieldSeed);
-        } else {
+        if ($model->hasField($name)) {
             $field = $model->getField($name)->setDefaults($fieldSeed); // TODO assert same defaults only
+        } else {
+            $field = $model->addField($name, $fieldSeed);
         }
 
         $control = $this->form->controlFactory($field, $control);
