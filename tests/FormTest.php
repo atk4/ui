@@ -263,6 +263,65 @@ class FormTest extends TestCase
         }
     }
 
+    public function testCreateControlException(): void
+    {
+        $form = new Form();
+        $form->setApp($this->createApp());
+        $form->invokeInit();
+
+        $controlClass = get_class(new class() extends Form\Control {
+            private static bool $firstCreate = true;
+
+            public function __construct($defaults = [])
+            {
+                if (self::$firstCreate) {
+                    self::$firstCreate = false;
+
+                    return;
+                }
+
+                throw new Exception('x');
+            }
+        });
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unable to create form control');
+        try {
+            $form->addControl('foo', [$controlClass]);
+        } catch (Exception $e) {
+            self::assertSame(Exception::class, get_class($e->getPrevious()));
+            self::assertSame('x', $e->getPrevious()->getMessage());
+
+            throw $e;
+        }
+    }
+
+    public function testCreateControlConvertedWarningNotWrappedException(): void
+    {
+        $form = new Form();
+        $form->setApp($this->createApp());
+        $form->invokeInit();
+
+        $controlClass = get_class(new class() extends Form\Control {
+            private static bool $firstCreate = true;
+
+            public function __construct($defaults = [])
+            {
+                if (self::$firstCreate) {
+                    self::$firstCreate = false;
+
+                    return;
+                }
+
+                throw new \ErrorException('Converted PHP warning');
+            }
+        });
+
+        $this->expectException(\ErrorException::class);
+        $this->expectExceptionMessage('Converted PHP warning');
+        $form->addControl('foo', [$controlClass]);
+    }
+
     public function testNoDisabledAttrWithHiddenType(): void
     {
         $input = new Form\Control\Line();
