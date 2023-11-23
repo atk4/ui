@@ -270,7 +270,7 @@ class FormTest extends TestCase
         $form->invokeInit();
 
         $controlClass = get_class(new class() extends Form\Control {
-            private static bool $firstCreate = true;
+            public static bool $firstCreate = true;
 
             public function __construct() // @phpstan-ignore-line
             {
@@ -293,6 +293,8 @@ class FormTest extends TestCase
             self::assertSame('x', $e->getPrevious()->getMessage());
 
             throw $e;
+        } finally {
+            $controlClass::$firstCreate = true;
         }
     }
 
@@ -303,7 +305,7 @@ class FormTest extends TestCase
         $form->invokeInit();
 
         $controlClass = get_class(new class() extends Form\Control {
-            private static bool $firstCreate = true;
+            public static bool $firstCreate = true;
 
             public function __construct() // @phpstan-ignore-line
             {
@@ -319,7 +321,11 @@ class FormTest extends TestCase
 
         $this->expectException(\ErrorException::class);
         $this->expectExceptionMessage('Converted PHP warning');
-        $form->addControl('foo', [$controlClass]);
+        try {
+            $form->addControl('foo', [$controlClass]);
+        } finally {
+            $controlClass::$firstCreate = true;
+        }
     }
 
     public function testNoDisabledAttrWithHiddenType(): void
