@@ -54,25 +54,14 @@ abstract class AbstractLayout extends View
             }
         }
 
-        try {
-            if (!$this->form->model->hasField($name)) {
-                $field = $this->form->model->getModel()->addField($name, $fieldSeed);
-            } else {
-                $field = $this->form->model->getField($name)
-                    ->setDefaults($fieldSeed);
-            }
-
-            $control = $this->form->controlFactory($field, $control);
-        } catch (\Exception $e) {
-            if ($e instanceof \ErrorException) {
-                throw $e;
-            }
-
-            throw (new Exception('Unable to create form control', 0, $e))
-                ->addMoreInfo('name', $name)
-                ->addMoreInfo('control', $control)
-                ->addMoreInfo('fieldSeed', $fieldSeed);
+        if (!$this->form->model->hasField($name)) {
+            $field = $this->form->model->getModel()->addField($name, $fieldSeed);
+        } else {
+            $field = $this->form->model->getField($name)
+                ->setDefaults($fieldSeed);
         }
+
+        $control = $this->form->controlFactory($field, $control);
 
         return $this->_addControl($control, $field);
     }
