@@ -57,7 +57,7 @@ abstract class AbstractLayout extends View
         if (!$model->hasField($name)) {
             $field = $model->addField($name, $fieldSeed);
         } else {
-            $field = $model->getField($name)->setDefaults($fieldSeed);
+            $field = $model->getField($name)->setDefaults($fieldSeed); // TODO assert same defaults only
         }
 
         $control = $this->form->controlFactory($field, $control);
