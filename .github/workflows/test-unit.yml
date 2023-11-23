@@ -76,8 +76,8 @@ jobs:
       matrix:
         # Selenium with PHP 7.4 and 8.0 was failing too often on initial/create session request, probably because of older (Alpine 3.16) base image
         php: ['8.1', '8.2', '8.3']
-        type: ['Chrome', 'Firefox', 'Firefox Lowest', 'Firefox Slow']
-        i: [1]
+        type: ['Chrome', 'Firefox', 'Firefox Slow', 'Firefox Slow', 'Firefox Slow', 'Firefox Slow', 'Firefox Slow', 'Firefox Slow', 'Firefox Slow', 'Firefox Slow']
+        i: [1, 2, 3, 4]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -122,56 +122,85 @@ jobs:
           if [ "${{ matrix.type }}" = "Chrome Slow" ] || [ "${{ matrix.type }}" = "Firefox Slow" ]; then echo 'usleep(500_000);' >> demos/init-app.php; fi
 
       - name: "Create test DB"
-        if: success() || failure()
         run: |
           php demos/_demo-data/create-db.php
 
       - name: "Run tests: 1"
-        if: success() || failure()
         run: |
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
           vendor/bin/behat -vv --config behat.yml.dist
 
       - name: "Run tests: 2"
-        if: success() || failure()
         run: |
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
           vendor/bin/behat -vv --config behat.yml.dist
 
       - name: "Run tests: 3"
-        if: success() || failure()
         run: |
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
           vendor/bin/behat -vv --config behat.yml.dist
 
       - name: "Run tests: 4"
-        if: success() || failure()
         run: |
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
           vendor/bin/behat -vv --config behat.yml.dist
 
       - name: "Run tests: 5"
-        if: success() || failure()
         run: |
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
           vendor/bin/behat -vv --config behat.yml.dist
 
       - name: "Run tests: 6"
-        if: success() || failure()
         run: |
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
           vendor/bin/behat -vv --config behat.yml.dist
 
       - name: "Run tests: 7"
-        if: success() || failure()
         run: |
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
           vendor/bin/behat -vv --config behat.yml.dist
 
       - name: "Run tests: 8"
-        if: success() || failure()
         run: |
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
           vendor/bin/behat -vv --config behat.yml.dist
 
       - name: "Run tests: 9"
-        if: success() || failure()
         run: |
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
           vendor/bin/behat -vv --config behat.yml.dist
 
       - name: "Run tests: 10"
-        if: success() || failure()
         run: |
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat -vv --config behat.yml.dist
           vendor/bin/behat -vv --config behat.yml.dist
