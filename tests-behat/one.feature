@@ -1,4 +1,4 @@
-Feature: Form
+Feature:
 
   Scenario: test form response
     Given I am on "form/form.php"
@@ -49,3 +49,22 @@ Feature: Form
     Given I am on "_unit-test/form-empty.php"
     When I press button "Save"
     Then Toast display should contain text "Post ok"
+
+  Scenario:
+    Given I am on "_unit-test/late-output-error.php"
+    When I press button "Test LateOutputError I: Headers already sent"
+    Then Modal is open with text "API Server Error"
+    Then Modal is open with text "!! FATAL UI ERROR: Headers already sent, more headers cannot be set at this stage !!"
+    Then I hide js modal
+
+  Scenario:
+    When I press button "Test LateOutputError II: Unexpected output detected"
+    Then Modal is open with text "API Server Error"
+    Then Modal is open with text "unmanaged output !! FATAL UI ERROR: Unexpected output detected !!"
+    Then I hide js modal
+
+  Scenario:
+    When I press button "Test LateOutputError III: Unexpected output detected"
+    Then Modal is open with text "API Server Error"
+    Then Modal is open with text "unmanaged output !! FATAL UI ERROR: Unexpected output detected !!"
+    Then I hide js modal
