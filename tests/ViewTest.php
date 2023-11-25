@@ -141,7 +141,7 @@ class ViewTest extends TestCase
     /**
      * @return iterable<list{class-string<View|Callback>}>
      */
-    public function provideSetNotClosureErrorCases(): iterable
+    public static function provideSetNotClosureErrorCases(): iterable
     {
         yield [Console::class];
         yield [JsCallback::class];

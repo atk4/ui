@@ -263,7 +263,7 @@ class DemosTest extends TestCase
     /** @var string */
     protected $regexSse = '~^(id|event|data).*$~m';
 
-    public function provideDemosStatusAndHtmlResponseCases(): iterable
+    public static function provideDemosStatusAndHtmlResponseCases(): iterable
     {
         $excludeDirs = ['_demo-data', '_includes'];
         $excludeFiles = ['_unit-test/stream.php', 'layout/layouts_error.php'];
@@ -332,7 +332,7 @@ class DemosTest extends TestCase
         self::assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
     }
 
-    public function provideDemoGetCases(): iterable
+    public static function provideDemoGetCases(): iterable
     {
         yield ['others/sticky.php?xx=YEY'];
         yield ['others/sticky.php?c=OHO'];
@@ -402,7 +402,7 @@ class DemosTest extends TestCase
         self::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
     }
 
-    public function provideDemoAssertJsonResponseCases(): iterable
+    public static function provideDemoAssertJsonResponseCases(): iterable
     {
         // simple reload
         yield ['_unit-test/reload.php?__atk_reload=reload'];
@@ -443,7 +443,7 @@ class DemosTest extends TestCase
         }
     }
 
-    public function provideDemoAssertSseResponseCases(): iterable
+    public static function provideDemoAssertSseResponseCases(): iterable
     {
         yield ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
         yield ['_unit-test/console.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
@@ -482,7 +482,7 @@ class DemosTest extends TestCase
         }
     }
 
-    public function provideDemoAssertJsonResponsePostCases(): iterable
+    public static function provideDemoAssertJsonResponsePostCases(): iterable
     {
         yield [
             '_unit-test/post.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_submit=ajax&' . Callback::URL_QUERY_TARGET . '=test_submit',
@@ -519,7 +519,7 @@ class DemosTest extends TestCase
         self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
     }
 
-    public function provideDemoCallbackErrorCases(): iterable
+    public static function provideDemoCallbackErrorCases(): iterable
     {
         yield [
             '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
