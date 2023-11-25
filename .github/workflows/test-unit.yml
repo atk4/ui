@@ -206,7 +206,7 @@ jobs:
       - name: "Run tests: Oracle (only for cron)"
         if: (success() || failure()) && github.event_name == 'schedule'
         env:
-          DB_DSN: "oci:dbname=oracle/xe"
+          DB_DSN: "oci:dbname=oracle/free"
           DB_USER: system
           DB_PASSWORD: atk4_pass
           NLS_LANG: AMERICAN_AMERICA.AL32UTF8
@@ -430,7 +430,7 @@ jobs:
       - name: "Run tests: Oracle (only for cron)"
         if: (success() || failure()) && github.event_name == 'schedule'
         env:
-          DB_DSN: "oci:dbname=oracle/xe"
+          DB_DSN: "oci:dbname=oracle/free"
           DB_USER: system
           DB_PASSWORD: atk4_pass
           NLS_LANG: AMERICAN_AMERICA.AL32UTF8
