@@ -36,16 +36,16 @@ class CoverageUtil
 
         $phpunitCoverageConfig = simplexml_load_file($phpunitConfigDir . '/phpunit.xml.dist')->coverage;
         foreach ($phpunitCoverageConfig->include->directory ?? [] as $path) {
-            $filter->includeDirectory($phpunitConfigDir . '/' . $path);
+            $filter->includeDirectory($phpunitConfigDir . '/' . $path); // @phpstan-ignore-line
         }
         foreach ($phpunitCoverageConfig->include->file ?? [] as $path) {
             $filter->includeFile($phpunitConfigDir . '/' . $path);
         }
         foreach ($phpunitCoverageConfig->exclude->directory ?? [] as $path) {
-            $filter->excludeDirectory($phpunitConfigDir . '/' . $path);
+            $filter->excludeDirectory($phpunitConfigDir . '/' . $path); // @phpstan-ignore-line
         }
         foreach ($phpunitCoverageConfig->exclude->file ?? [] as $path) {
-            $filter->excludeFile($phpunitConfigDir . '/' . $path);
+            $filter->excludeFile($phpunitConfigDir . '/' . $path); // @phpstan-ignore-line
         }
 
         static::start($filter);
