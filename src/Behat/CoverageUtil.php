@@ -34,7 +34,7 @@ class CoverageUtil
     {
         $filter = new Filter();
 
-        $phpunitCoverageConfig = simplexml_load_file($phpunitConfigDir . '/phpunit.xml.dist')->coverage;
+        $phpunitCoverageConfig = simplexml_load_file($phpunitConfigDir . '/phpunit.xml.dist')->source;
         foreach ($phpunitCoverageConfig->include->directory ?? [] as $path) {
             $filter->includeDirectory($phpunitConfigDir . '/' . $path); // @phpstan-ignore-line
         }
