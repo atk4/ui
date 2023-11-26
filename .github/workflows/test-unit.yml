@@ -155,8 +155,8 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-sqlite.cov; fi
 
-      - name: "Run tests: MySQL"
-        if: success() || failure()
+      - name: "Run tests: MySQL (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "mysql:host=mysql;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -167,8 +167,8 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mysql.cov; fi
 
-      - name: "Run tests: MariaDB (only for cron)"
-        if: (success() || failure()) && github.event_name == 'schedule'
+      - name: "Run tests: MariaDB"
+        if: success() || failure()
         env:
           DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -383,8 +383,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MySQL (only for coverage or cron)"
-        if: (success() || failure()) && (env.LOG_COVERAGE || github.event_name == 'schedule')
+      - name: "Run tests: MySQL (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "mysql:host=mysql;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -394,8 +394,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MariaDB (only for cron)"
-        if: (success() || failure()) && github.event_name == 'schedule'
+      - name: "Run tests: MariaDB (only for coverage or cron)"
+        if: (success() || failure()) && (env.LOG_COVERAGE || github.event_name == 'schedule')
         env:
           DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
           DB_USER: atk4_test_user
