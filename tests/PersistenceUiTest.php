@@ -46,7 +46,7 @@ class PersistenceUiTest extends TestCase
         }
     }
 
-    public function providerTypecastBidirectional(): iterable
+    public static function providerTypecastBidirectional(): iterable
     {
         $fixSpaceToNbspFx = static fn (string $v) => str_replace(' ', "\u{00a0}", $v);
 
@@ -131,7 +131,7 @@ class PersistenceUiTest extends TestCase
         }
     }
 
-    public function providerTypecastLoadOnly(): iterable
+    public static function providerTypecastLoadOnly(): iterable
     {
         foreach (['integer', 'float', 'boolean', 'date', 'time', 'datetime', 'atk4_money'] as $type) {
             yield [[], ['type' => $type], null, '', false];

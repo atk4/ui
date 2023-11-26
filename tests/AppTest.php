@@ -122,7 +122,7 @@ class AppTest extends TestCase
         $this->createApp(['request' => $request]);
     }
 
-    public function provideUrlCases(): iterable
+    public static function provideUrlCases(): iterable
     {
         foreach (['/', '/page.html', '/d/', '/0/index.php'] as $requestPage) {
             yield [$requestPage, [], ['x'], [], 'x.php'];

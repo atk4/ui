@@ -182,7 +182,7 @@ class App
         if ($this->catchExceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
             set_error_handler(static function (int $severity, string $msg, string $file, int $line): bool {
-                if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
+                if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? (\E_ERROR | \E_PARSE | \E_CORE_ERROR | \E_COMPILE_ERROR | \E_USER_ERROR | \E_RECOVERABLE_ERROR) : 0)) === 0) {
                     $isFirstFrame = true;
                     foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
                         // allow to suppress any warning outside Atk4

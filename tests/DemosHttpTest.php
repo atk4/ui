@@ -135,7 +135,7 @@ class DemosHttpTest extends DemosTest
         self::assertSame($expectedOutput, $response->getBody()->getContents());
     }
 
-    public function provideDemoLateOutputErrorCases(): iterable
+    public static function provideDemoLateOutputErrorCases(): iterable
     {
         $hOutput = "\n" . '!! FATAL UI ERROR: Headers already sent, more headers cannot be set at this stage !!' . "\n";
         $oOutput = 'unmanaged output' . "\n" . '!! FATAL UI ERROR: Unexpected output detected !!' . "\n";

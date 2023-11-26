@@ -16,6 +16,16 @@ parameters:
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
         - '~^Variable (static )?(property access|method call) on .+\.~'
 
+        # remove once PHPUnit 9.x support is removed
+        -
+            path: 'tests/DemosTest.php'
+            message: '~^Access to constant (STATUS_PASSED|STATUS_INCOMPLETE|STATUS_SKIPPED) on an unknown class PHPUnit\\Runner\\BaseTestRunner\.$~'
+            count: 3
+        -
+            path: 'tests/DemosTest.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\Tests\\DemosTest::(getName|getStatus)\(\)\.$~'
+            count: 4
+
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
         -
