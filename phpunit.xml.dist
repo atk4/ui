@@ -16,9 +16,9 @@
             <group>require_session</group>
         </exclude>
     </groups>
-    <listeners>
-        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener" />
-    </listeners>
+    <extensions>
+        <bootstrap class="Ergebnis\PHPUnit\SlowTestDetector\Extension" />
+    </extensions>
     <coverage>
         <include>
             <directory>src</directory>
