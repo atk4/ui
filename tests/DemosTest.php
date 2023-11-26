@@ -72,7 +72,8 @@ class DemosTest extends TestCase
         }
     }
 
-    protected function onNotSuccessfulTest(\Throwable $t): void
+    #[\Override]
+    protected function _onNotSuccessfulTest(\Throwable $t): void
     {
         if (!in_array($this->getStatus(), [
             \PHPUnit\Runner\BaseTestRunner::STATUS_PASSED,
