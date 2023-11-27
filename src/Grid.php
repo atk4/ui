@@ -614,17 +614,12 @@ class Grid extends View
     }
 
     /**
-     * Sets data Model of Grid.
-     *
-     * If $columns is not defined, then automatically will add columns for all
-     * visible model fields. If $columns is set to false, then will not add
-     * columns at all.
-     *
-     * @param array<int, string>|null $columns
+     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
-    public function setModel(Model $model, array $columns = null): void
+    #[\Override]
+    public function setModel(Model $model, array $fields = null): void
     {
-        $this->table->setModel($model, $columns);
+        $this->table->setModel($model, $fields);
 
         parent::setModel($model);
 
@@ -671,9 +666,7 @@ class Grid extends View
         $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
     }
 
-    /**
-     * Before rendering take care of data sorting.
-     */
+    #[\Override]
     protected function renderView(): void
     {
         // take care of sorting

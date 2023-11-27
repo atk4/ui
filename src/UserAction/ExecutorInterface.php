@@ -13,10 +13,8 @@ use Atk4\Data\Model\UserAction;
  * SomeExecutor::addTo($app)->setAction($model, 'action_name');
  *
  * Here are some suggested implementation for ExecutorInterface:
- *
  *  - MarkdownPreview. Requires $preview callback to be defined by the action. Will treat output as Markdown. Confirm button will
  *      execute action normally.
- *
  *
  *  - ArgumentForm. Displays a form which is populated with arguments. When submitting the form, action will be executed.
  *

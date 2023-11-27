@@ -36,7 +36,7 @@ class BasicExecutor extends View implements ExecutorInterface
     /** @var Button|array Button that trigger the action. Either as an array seed or object */
     public $executorButton;
 
-    /** @var array */
+    /** @var array<string, mixed> */
     protected $arguments = [];
 
     /** @var string display message when missing arguments */
@@ -127,6 +127,7 @@ class BasicExecutor extends View implements ExecutorInterface
     /**
      * Will call $action->execute() with the correct arguments.
      */
+    #[\Override]
     public function executeModelAction(): JsBlock
     {
         $args = [];

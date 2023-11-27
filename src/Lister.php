@@ -203,6 +203,7 @@ class Lister extends View
      * is wrong by design. Each table row should be probably rendered natively using cloned
      * render tree (instead of cloned template).
      */
+    #[\Override]
     public function renderToJsonArr(string $region = null): array
     {
         $this->renderAll();

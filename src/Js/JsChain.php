@@ -70,6 +70,7 @@ class JsChain extends JsExpression
      *
      * @return $this
      */
+    #[\Override]
     public function &__get(string $name)
     {
         $this->_chain[] = $name;

@@ -283,6 +283,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Set the model to build scope for.
      */
+    #[\Override]
     public function setModel(Model $model): void
     {
         parent::setModel($model);

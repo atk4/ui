@@ -83,9 +83,7 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
         $this->memorize('items', $this->items);
     }
 
-    /**
-     * Renders as a regular lister, but source is the items.
-     */
+    #[\Override]
     protected function renderView(): void
     {
         // memorize items

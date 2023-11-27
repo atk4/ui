@@ -62,6 +62,7 @@ class Ui extends Persistence
     /**
      * @return scalar|null
      */
+    #[\Override]
     public function typecastSaveField(Field $field, $value)
     {
         // relax empty checks for UI render for not yet set values
@@ -265,6 +266,7 @@ class Ui extends Persistence
     /**
      * Override parent method to ignore key change by Field::actual property.
      */
+    #[\Override]
     public function typecastSaveRow(Model $model, array $row): array
     {
         $result = [];

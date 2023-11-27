@@ -62,6 +62,7 @@ class JsCallback extends Callback
      *
      * @return $this
      */
+    #[\Override]
     public function set($fx = null, $args = null)
     {
         if (!$fx instanceof \Closure) {
@@ -139,6 +140,7 @@ class JsCallback extends Callback
         return $jsBlock->jsRender();
     }
 
+    #[\Override]
     public function getUrl(string $mode = 'callback'): string
     {
         throw new Exception('Do not use getUrl on JsCallback, use getJsUrl()');

@@ -68,9 +68,8 @@ class Modal extends View
      * Set callback function for this modal.
      *
      * @param \Closure(View): void $fx
-     *
-     * @return $this
      */
+    #[\Override]
     public function set($fx = null)
     {
         if (!$fx instanceof \Closure) {

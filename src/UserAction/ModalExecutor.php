@@ -92,6 +92,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * Perform model action by stepping through args - fields - preview.
      */
+    #[\Override]
     public function executeModelAction(): void
     {
         $this->action = $this->executeModelActionLoad($this->action);

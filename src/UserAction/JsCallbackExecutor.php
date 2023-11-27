@@ -76,6 +76,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /**
      * @param array<string, string> $urlArgs
      */
+    #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
     {
         return $this->invokeFxWithUrlArgs(function () { // backup/restore $this->args and merge them with $urlArgs

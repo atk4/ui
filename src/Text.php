@@ -11,6 +11,8 @@ class Text extends View
 {
     public $defaultTemplate;
 
+    public $content = '';
+
     #[\Override]
     public function render(): string
     {
@@ -18,7 +20,7 @@ class Text extends View
     }
 
     #[\Override]
-    public function getHtml()
+    public function getHtml(): string
     {
         return $this->content;
     }

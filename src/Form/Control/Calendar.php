@@ -82,6 +82,7 @@ class Calendar extends Input
     /**
      * @param JsExpressionable $expr
      */
+    #[\Override]
     public function onChange($expr, $default = []): void
     {
         if (!$expr instanceof JsBlock) {

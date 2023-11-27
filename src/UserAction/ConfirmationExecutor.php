@@ -123,6 +123,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Perform the current step.
      */
+    #[\Override]
     public function executeModelAction(): void
     {
         $this->action = $this->executeModelActionLoad($this->action);

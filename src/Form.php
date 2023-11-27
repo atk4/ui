@@ -188,14 +188,9 @@ class Form extends View
     }
 
     /**
-     * Associates form with the model but also specifies which of Model
-     * fields should be added automatically.
-     *
-     * If $actualFields are not specified, then all "editable" fields
-     * will be added.
-     *
-     * @param array<int, string>|null $fields
+     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
+    #[\Override]
     public function setModel(Model $entity, array $fields = null): void
     {
         $entity->assertIsEntity();

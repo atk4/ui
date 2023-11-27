@@ -42,6 +42,7 @@ class Layout extends AbstractLayout
     /** @var array Seed for creating input hint View used in this layout. */
     public $defaultHint = [Label::class, 'class' => ['pointing']];
 
+    #[\Override]
     protected function _addControl(Control $control, Field $field): Control
     {
         return $this->add($control, ['desired_name' => $field->shortName]);
@@ -57,11 +58,7 @@ class Layout extends AbstractLayout
         }
     }
 
-    /**
-     * @param Button|array $seed
-     *
-     * @return Button
-     */
+    #[\Override]
     public function addButton($seed)
     {
         return $this->add(Factory::mergeSeeds([Button::class], $seed), 'Buttons');

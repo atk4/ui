@@ -163,7 +163,7 @@ class Menu extends View
     }
 
     #[\Override]
-    public function getHtml()
+    public function getHtml(): string
     {
         // if menu don't have a single element or content, then destroy it
         if ($this->elements === [] && !$this->content) {

@@ -92,6 +92,7 @@ abstract class AbstractLayout extends View
      *
      * @param array<int, string>|null $fields
      */
+    #[\Override]
     public function setModel(Model $entity, array $fields = null): void
     {
         $entity->assertIsEntity();

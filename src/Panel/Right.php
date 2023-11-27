@@ -14,7 +14,7 @@ use Atk4\Ui\View;
 
 /**
  * Right Panel implementation.
- * Opening, closing and loading Panel content is manage
+ * Opening, closing and loading Panel content is managed
  * via the JS panel service.
  *
  * Content is loaded via a LoadableContent View.
@@ -67,9 +67,7 @@ class Right extends View implements Loadable
         }
     }
 
-    /**
-     * Set the dynamic content of this view.
-     */
+    #[\Override]
     public function addDynamicContent(LoadableContent $content): void
     {
         $this->dynamicContent = Content::addTo($this, [], ['LoadContent']);

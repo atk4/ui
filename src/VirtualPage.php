@@ -37,9 +37,8 @@ class VirtualPage extends View
      *
      * @param \Closure($this, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $fx
      * @param array                                                                                       $fxArgs
-     *
-     * @return $this
      */
+    #[\Override]
     public function set($fx = null, $fxArgs = [])
     {
         if (!$fx instanceof \Closure) {
@@ -81,7 +80,8 @@ class VirtualPage extends View
      * VirtualPage is not rendered normally. It's invisible. Only when
      * it is triggered, it will exclusively output it's content.
      */
-    public function getHtml()
+    #[\Override]
+    public function getHtml(): string
     {
         if (!$this->cb->isTriggered()) {
             return '';

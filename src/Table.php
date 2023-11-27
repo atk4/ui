@@ -98,12 +98,10 @@ class Table extends Lister
      */
     public $hasCollapsingCssActionColumn = true;
 
-    /**
-     * Create one column object that will be used to render all columns
-     * in the table unless you have specified a different column object.
-     */
+    #[\Override]
     protected function initChunks(): void
     {
+        // create one column object that will be used to render all columns in the table
         if (!$this->tHead) {
             $this->tHead = $this->template->cloneRegion('Head');
             $this->tRowMaster = $this->template->cloneRegion('Row');
@@ -331,16 +329,7 @@ class Table extends Lister
         return $this;
     }
 
-    /**
-     * Add a dynamic paginator, i.e. when user is scrolling content.
-     *
-     * @param int    $ipp          number of item per page to start with
-     * @param array  $options      an array with JS Scroll plugin options
-     * @param View   $container    the container holding the lister for scrolling purpose
-     * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
-     *
-     * @return $this
-     */
+    #[\Override]
     public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
     {
         $options = array_merge($options, ['appendTo' => 'tbody']);
@@ -364,26 +353,21 @@ class Table extends Lister
     }
 
     /**
-     * Sets data Model of Table.
-     *
-     * If $columns is not defined, then automatically will add columns for all
-     * visible model fields. If $columns is set to false, then will not add
-     * columns at all.
-     *
-     * @param array<int, string>|null $columns
+     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
-    public function setModel(Model $model, array $columns = null): void
+    #[\Override]
+    public function setModel(Model $model, array $fields = null): void
     {
         $model->assertIsModel();
 
         parent::setModel($model);
 
-        if ($columns === null) {
-            $columns = array_keys($model->getFields('visible'));
+        if ($fields === null) {
+            $fields = array_keys($model->getFields('visible'));
         }
 
-        foreach ($columns as $column) {
-            $this->addColumn($column);
+        foreach ($fields as $field) {
+            $this->addColumn($field);
         }
     }
 
@@ -462,10 +446,7 @@ class Table extends Lister
         View::renderView();
     }
 
-    /**
-     * Render individual row. Override this method if you want to do more
-     * decoration.
-     */
+    #[\Override]
     public function renderRow(): void
     {
         $this->tRow->set($this->model);

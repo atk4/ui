@@ -28,17 +28,13 @@ class Content extends View implements LoadableContent
         $this->setCb(new Callback());
     }
 
-    /**
-     * Return callback URL for panel options.
-     */
+    #[\Override]
     public function getCallbackUrl(): string
     {
         return $this->cb->getJsUrl();
     }
 
-    /**
-     * Set callback for panel.
-     */
+    #[\Override]
     public function setCb(Callback $cb): void
     {
         $this->cb = $this->add($cb); // @phpstan-ignore-line
@@ -49,6 +45,7 @@ class Content extends View implements LoadableContent
      *
      * @param \Closure($this): void $fx
      */
+    #[\Override]
     public function onLoad(\Closure $fx): void
     {
         $this->cb->set(function () use ($fx) {

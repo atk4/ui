@@ -58,6 +58,7 @@ class JsSse extends JsCallback
         return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)]);
     }
 
+    #[\Override]
     public function set($fx = null, $args = null)
     {
         if (!$fx instanceof \Closure) {
@@ -88,6 +89,7 @@ class JsSse extends JsCallback
     /**
      * @return never
      */
+    #[\Override]
     public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
     {
         if ($this->browserSupport) {
