@@ -145,7 +145,7 @@ normally call this method in your form onSubmit handler method.
 If a Model contains Expressions, there resulting values will automatically get updated when one of the form control value is changed.
 A loading icon on the `+` button will indicates that the expression values are being update.
 
-Lets use the example of `demos/multiline.php`:
+Lets use the example of `demos/form-control/multiline.php`:
 
 ```
 class InventoryItem extends \Atk4\Data\Model

@@ -8,7 +8,7 @@
 
 Tabs implement a yet another way to organize your data. The implementation is based on: https://fomantic-ui.com/elements/icon.html.
 
-Demo: https://ui.atk4.org/demos/tabs.php
+Demo: https://ui.atk4.org/demos/interactive/tabs.php
 
 ## Basic Usage
 

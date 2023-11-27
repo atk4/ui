@@ -13,7 +13,7 @@ Agile UI is the quickest way for building back-end UI, admin interfaces, data ma
 
 [![Build](https://github.com/atk4/ui/actions/workflows/test-unit.yml/badge.svg?branch=develop)](https://github.com/atk4/ui/actions?query=branch:develop)
 [![CodeCov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
-[![GitHub release](https://img.shields.io/github/release/atk4/ui.svg)](CHANGELOG.md)
+[![GitHub release](https://img.shields.io/github/release/atk4/ui.svg)](https://github.com/atk4/ui/releases)
 [![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
 
 Quick-Links: [Documentation](https://atk4-ui.readthedocs.io/). [Demo-site](https://ui.atk4.org/). [ATK Data](https://github.com/atk4/data). [Discord community](https://discord.gg/QVKSk2B).
@@ -78,7 +78,7 @@ ATK UI relies on https://fomantic-ui.com CSS framework to render the form beauti
 
 To get most of ATK UI, use [ATK Data](https://github.com/atk4/data) to describe your business models such as "User" or "Purchase". When you define models, you can start using some more advanced components:
 
-[Crud](https://ui.atk4.org/demos/crud.php) is a fully-interactive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
+[Crud](https://ui.atk4.org/demos/collection/crud.php) is a fully-interactive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
 
 ```php
 $app = new \Atk4\Ui\App(['title' => 'hello world']);

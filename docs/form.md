@@ -226,7 +226,7 @@ Agile UI comes with at least the following form controls:
 - Radio
 - Money
 
-For some examples see: https://ui.atk4.org/demos/form3.php
+For some examples see: https://ui.atk4.org/demos/form/form3.php
 
 Field Decorator can be passed to `addControl` using 'string', {php:ref}`seed` or 'object':
 
@@ -761,7 +761,7 @@ $a2->setModel($model, ['numcode', 'phonecode']);
 ```
 
 Sub layout gives you greater control on how to display form controls within your form. For more examples on
-sub layouts please visit demo page: https://github.com/atk4/ui/blob/develop/demos/form-section.php
+sub layouts please visit demo page: https://ui.atk4.org/demos/form/form-section.php
 
 ### Fomantic-UI Modifiers
 

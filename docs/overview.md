@@ -461,7 +461,7 @@ To run the demo:
 - Rename the copied file to "db.php"
 - Open the renamed file and edit your database details accordingly to fit to your database
 - Setup an Sqlite file database using a provided script (see below)
-- Open the demos from your browser (e.g. https://localhost/atk4/ui/demos/)
+- Open the demos from your browser (e.g. https://localhost/.../demos/)
 
 ### Setup database with example data
 
