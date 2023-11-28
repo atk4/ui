@@ -74,6 +74,7 @@ Header::addTo($page, ['Add elements into columns and using classes']);
 $boxClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
     public $ui = 'segment';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

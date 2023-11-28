@@ -92,6 +92,7 @@ class Grid extends View
     /** @var array Defines which Table Decorator to use for ActionMenu. */
     protected $actionMenuDecorator = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -334,6 +335,7 @@ class Grid extends View
         $this->quickSearch->initValue = $q;
     }
 
+    #[\Override]
     public function jsReload($args = [], $afterSuccess = null, $apiConfig = []): JsExpressionable
     {
         return new JsReload($this->container, $args, $afterSuccess, $apiConfig);
@@ -612,17 +614,12 @@ class Grid extends View
     }
 
     /**
-     * Sets data Model of Grid.
-     *
-     * If $columns is not defined, then automatically will add columns for all
-     * visible model fields. If $columns is set to false, then will not add
-     * columns at all.
-     *
-     * @param array<int, string>|null $columns
+     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
-    public function setModel(Model $model, array $columns = null): void
+    #[\Override]
+    public function setModel(Model $model, array $fields = null): void
     {
-        $this->table->setModel($model, $columns);
+        $this->table->setModel($model, $fields);
 
         parent::setModel($model);
 
@@ -669,9 +666,7 @@ class Grid extends View
         $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
     }
 
-    /**
-     * Before rendering take care of data sorting.
-     */
+    #[\Override]
     protected function renderView(): void
     {
         // take care of sorting
@@ -682,6 +677,7 @@ class Grid extends View
         parent::renderView();
     }
 
+    #[\Override]
     protected function recursiveRender(): void
     {
         // bind with paginator

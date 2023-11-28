@@ -45,6 +45,7 @@ class VpExecutor extends View implements JsExecutorInterface
     /** @var array */
     public $cancelButtonSeed = [Button::class, ['Cancel', 'class.small left floated basic blue' => true, 'icon' => 'left arrow']];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -64,6 +65,7 @@ class VpExecutor extends View implements JsExecutorInterface
         $this->stepList = View::addTo($this->vp)->addClass('ui horizontal bulleted link list');
     }
 
+    #[\Override]
     public function getAction(): Model\UserAction
     {
         return $this->action;
@@ -81,6 +83,7 @@ class VpExecutor extends View implements JsExecutorInterface
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 
+    #[\Override]
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
@@ -100,6 +103,7 @@ class VpExecutor extends View implements JsExecutorInterface
         return $this;
     }
 
+    #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
     {
         $urlArgs['step'] = $this->step;
@@ -110,6 +114,7 @@ class VpExecutor extends View implements JsExecutorInterface
     /**
      * Perform model action by stepping through args - fields - preview.
      */
+    #[\Override]
     public function executeModelAction(): void
     {
         $this->action = $this->executeModelActionLoad($this->action);

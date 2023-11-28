@@ -12,12 +12,7 @@ class FormExecutor extends BasicExecutor
     /** @var Form|null */
     public $form;
 
-    /**
-     * If form model is not set then will use action fields property to set model field.
-     * If action fields property is empty then will use all model fields as default.
-     *
-     * If model is already supply in form, then editable fields must match action fields property.
-     */
+    #[\Override]
     public function initPreview(): void
     {
         $this->addHeader();

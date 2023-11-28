@@ -90,6 +90,7 @@ class CardDeck extends View
     /** @var string|null The current search query string. */
     private $query;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -132,6 +133,7 @@ class CardDeck extends View
     /**
      * @param array<int, string>|null $fields
      */
+    #[\Override]
     public function setModel(Model $model, array $fields = null, array $extra = null): void
     {
         parent::setModel($model);

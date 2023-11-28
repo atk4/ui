@@ -238,6 +238,7 @@ class FormTest extends TestCase
             $this->assertFormSubmit(static function (App $app) {
                 $m = new Model();
                 $m->addField('foo', new class() extends Field {
+                    #[\Override]
                     public function normalize($value)
                     {
                         TestCase::assertSame('x', $value);
@@ -411,6 +412,7 @@ class AppFormTestMock extends App
     /** @var string|array */
     public $output;
 
+    #[\Override]
     public function terminate($output = ''): void
     {
         $this->output = $output;

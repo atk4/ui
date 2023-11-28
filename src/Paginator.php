@@ -46,6 +46,7 @@ class Paginator extends View
      */
     public array $reloadArgs = [];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -181,6 +182,7 @@ class Paginator extends View
         $this->template->dangerouslyAppendHtml('rows', $t->renderToHtml());
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $tItem = $this->template->cloneRegion('Item');

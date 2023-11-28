@@ -27,11 +27,13 @@ class Multiformat extends Table\Column
         $this->callback = $callback;
     }
 
+    #[\Override]
     public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         return '{$c_' . $this->shortName . '}';
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $decorators = ($this->callback)($row, $field);

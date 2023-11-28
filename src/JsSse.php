@@ -31,6 +31,7 @@ class JsSse extends JsCallback
     /** @var \Closure|null custom function for outputting (instead of echo) */
     public $echoFunction;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -41,6 +42,7 @@ class JsSse extends JsCallback
         }
     }
 
+    #[\Override]
     public function jsExecute(): JsBlock
     {
         $this->assertIsInitialized();
@@ -56,6 +58,7 @@ class JsSse extends JsCallback
         return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)]);
     }
 
+    #[\Override]
     public function set($fx = null, $args = null)
     {
         if (!$fx instanceof \Closure) {
@@ -86,6 +89,7 @@ class JsSse extends JsCallback
     /**
      * @return never
      */
+    #[\Override]
     public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
     {
         if ($this->browserSupport) {

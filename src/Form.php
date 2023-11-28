@@ -113,6 +113,7 @@ class Form extends View
 
     // {{{ Base Methods
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -187,14 +188,9 @@ class Form extends View
     }
 
     /**
-     * Associates form with the model but also specifies which of Model
-     * fields should be added automatically.
-     *
-     * If $actualFields are not specified, then all "editable" fields
-     * will be added.
-     *
-     * @param array<int, string>|null $fields
+     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
+    #[\Override]
     public function setModel(Model $entity, array $fields = null): void
     {
         $entity->assertIsEntity();
@@ -464,6 +460,7 @@ class Form extends View
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->setupAjaxSubmit();
@@ -474,6 +471,7 @@ class Form extends View
         parent::renderView();
     }
 
+    #[\Override]
     protected function renderTemplateToHtml(): string
     {
         $output = parent::renderTemplateToHtml();

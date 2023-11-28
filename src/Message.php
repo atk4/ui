@@ -26,6 +26,7 @@ class Message extends View
 
     public $defaultTemplate = 'message.html';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -39,6 +40,7 @@ class Message extends View
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->type) {

@@ -63,11 +63,13 @@ class JsSearch extends View
     /** @var string|null */
     public $buttonStyle;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->placeHolder) {

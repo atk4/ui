@@ -97,6 +97,7 @@ class Dropdown extends Input
     /** @var HtmlTemplate Subtemplate for an icon for a single dropdown item. */
     protected $_tIcon;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -107,26 +108,16 @@ class Dropdown extends Input
         $this->_tItem->del('Icon');
     }
 
-    /**
-     * Returns presentable value to be inserted into input tag.
-     *
-     * Dropdown input tag accepts only CSV formatted list of IDs.
-     */
+    #[\Override]
     public function getValue()
     {
+        // dropdown input tag accepts CSV formatted list of IDs
         return $this->entityField !== null
             ? (is_array($this->entityField->get()) ? implode(', ', $this->entityField->get()) : $this->entityField->get())
             : parent::getValue();
     }
 
-    /**
-     * Sets the value of this field. If field is a part of the form and is associated with
-     * the model, then the model's value will also be affected.
-     *
-     * @param mixed $value
-     *
-     * @return $this
-     */
+    #[\Override]
     public function set($value = null)
     {
         if ($this->entityField) {
@@ -209,6 +200,7 @@ class Dropdown extends Input
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->multiple) {

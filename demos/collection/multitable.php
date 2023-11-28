@@ -22,6 +22,7 @@ require_once __DIR__ . '/../init-app.php';
 $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends Columns {
     public array $route = [];
 
+    #[\Override]
     public function setModel(Model $model, array $route = []): void
     {
         parent::setModel($model);

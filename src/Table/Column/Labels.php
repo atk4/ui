@@ -19,6 +19,7 @@ class Labels extends Table\Column
     /** @var array<string|int, string>|null Allowed values, prioritized over Field::$values */
     public ?array $values = null;
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $values = $this->values ?? $field->values;

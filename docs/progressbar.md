@@ -9,7 +9,7 @@
 ProgressBar is actually a quite simple element, but it can be made quite interactive along with
 {php:class}`JsSse`.
 
-Demo: https://ui.atk4.org/demos/progressbar.php
+Demo: https://ui.atk4.org/demos/interactive/progress.php
 
 ## Basic Usage
 
@@ -41,7 +41,7 @@ Button::addTo($app, ['charge up the battery'])
 You can use real-time element such as JsSse or Console (which relies on JsSse) to execute
 jsValue() of your progress bar and adjust the display value.
 
-Demo: https://ui.atk4.org/demos/progressbar.php
+Demo: https://ui.atk4.org/demos/interactive/sse.php
 
 {php:class}`Console` also implements method {php:meth}`Console::send` so you can use it to send progress
 updates of your progress-bar.

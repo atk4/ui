@@ -14,6 +14,7 @@ class Image extends Table\Column
 {
     public array $attr = ['all' => ['class' => ['center aligned single line']]];
 
+    #[\Override]
     public function getDataCellTemplate(Field $field = null): string
     {
         $caption = $field ? $field->getCaption() : $this->shortName;

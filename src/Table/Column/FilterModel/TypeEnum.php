@@ -9,6 +9,7 @@ use Atk4\Ui\Table\Column;
 
 class TypeEnum extends Column\FilterModel
 {
+    #[\Override]
     protected function init(): void
     {
         // bypass parent init since we are not using op and value field but create them from the lookup field value
@@ -28,6 +29,7 @@ class TypeEnum extends Column\FilterModel
         }
     }
 
+    #[\Override]
     public function setConditionForModel(Model $model)
     {
         $filter = $this->recallData();

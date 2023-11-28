@@ -149,9 +149,7 @@ class View extends AbstractView
         return $this->model;
     }
 
-    /**
-     * @param mixed $value
-     */
+    #[\Override]
     protected function setMissingProperty(string $propertyName, $value): void
     {
         if (is_bool($value) && str_starts_with($propertyName, 'class.')) {
@@ -212,6 +210,7 @@ class View extends AbstractView
      * Called when view becomes part of render tree. You can override it but avoid
      * placing any "heavy processing" here.
      */
+    #[\Override]
     protected function init(): void
     {
         // almost every View needs an App to load a template, so assert App is set upfront
@@ -264,6 +263,7 @@ class View extends AbstractView
      * @param AbstractView      $object
      * @param string|array|null $region
      */
+    #[\Override]
     public function add($object, $region = null): AbstractView
     {
         if (!is_object($object)) { // @phpstan-ignore-line
@@ -688,10 +688,8 @@ class View extends AbstractView
     /**
      * Created for recursive rendering or when you want to only get HTML of
      * this object (not javascript).
-     *
-     * @return string
      */
-    public function getHtml()
+    public function getHtml(): string
     {
         if ($this->getApp()->hasRequestQueryParam('__atk_reload') && $this->getApp()->getRequestQueryParam('__atk_reload') === $this->name) {
             $this->getApp()->terminateJson($this);
@@ -979,6 +977,7 @@ class View extends AbstractView
                     $this->fx = $fx;
                 }
 
+                #[\Override]
                 public function jsRender(): string
                 {
                     return ($this->fx)()->jsRender();

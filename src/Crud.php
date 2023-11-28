@@ -56,6 +56,7 @@ class Crud extends Grid
     /** @var mixed recently deleted record ID. */
     private $deletedId;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -66,6 +67,7 @@ class Crud extends Grid
         }
     }
 
+    #[\Override]
     public function applySort(): void
     {
         parent::applySort();
@@ -83,6 +85,7 @@ class Crud extends Grid
         }
     }
 
+    #[\Override]
     public function setModel(Model $model, array $fields = null): void
     {
         $model->assertIsModel();

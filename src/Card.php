@@ -73,6 +73,7 @@ class Card extends View
     /** @var string Default executor class. */
     public $executor = UserAction\ModalExecutor::class;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -166,11 +167,9 @@ class Card extends View
     }
 
     /**
-     * If Fields are past with $model that field will be add
-     * to the main section of this card.
-     *
      * @param array<int, string>|null $fields
      */
+    #[\Override]
     public function setModel(Model $entity, array $fields = null): void
     {
         $entity->assertIsLoaded();

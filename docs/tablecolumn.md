@@ -89,7 +89,7 @@ Return array of HTML tags that will be injected into the row template. See
 
 ## Column Menus and Popups
 
-Table column may have a menu as seen in https://ui.atk4.org/demos/tablecolumnmenu.php. Menu is added
+Table column may have a menu as seen in https://ui.atk4.org/demos/collection/tablecolumnmenu.php. Menu is added
 into table column and can be linked with Popup or Menu.
 
 ### Basic Use

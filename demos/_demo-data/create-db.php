@@ -44,6 +44,7 @@ class ImportModelWithPrefixedFields extends Model
         return 'atk_' . ($forActualName ? 'a' : '') . 'fp_' . $tableShort . '__' . $fieldShort;
     }
 
+    #[\Override]
     public function addField(string $name, $seed = []): \Atk4\Data\Field
     {
         if ($name === 'id') {
@@ -57,6 +58,7 @@ class ImportModelWithPrefixedFields extends Model
         return parent::addField($this->prefixFieldName($name), $seed);
     }
 
+    #[\Override]
     public function import(array $rowsMulti)
     {
         return parent::import(array_map(function (array $rows): array {

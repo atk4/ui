@@ -20,6 +20,7 @@ class Radio extends Form\Control
     /** @var array<int|string, string> List of values. */
     public $values = [];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -37,6 +38,7 @@ class Radio extends Form\Control
         $this->lister->tRow->set('_name', $this->shortName);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if (!$this->model) {
@@ -71,6 +73,7 @@ class Radio extends Form\Control
         parent::renderView();
     }
 
+    #[\Override]
     public function onChange($expr, $defaults = []): void
     {
         if (is_bool($defaults)) {

@@ -65,6 +65,7 @@ class Control extends View
     /** Read-only field is not editable, but will be submitted. */
     public bool $readOnly = false;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -83,9 +84,8 @@ class Control extends View
      * the model, then the model's value will also be affected.
      *
      * @param mixed $value
-     *
-     * @return $this
      */
+    #[\Override]
     public function set($value = null)
     {
         if ($this->entityField) {
@@ -97,12 +97,10 @@ class Control extends View
         return $this;
     }
 
-    /**
-     * It only makes sense to have "name" property inside a field if
-     * it was used inside a form.
-     */
+    #[\Override]
     protected function renderView(): void
     {
+        // it only makes sense to have "name" property inside a field if used inside a form
         if ($this->form) {
             $this->template->trySet('name', $this->shortName);
         }
@@ -110,6 +108,7 @@ class Control extends View
         parent::renderView();
     }
 
+    #[\Override]
     protected function renderTemplateToHtml(): string
     {
         $output = parent::renderTemplateToHtml();

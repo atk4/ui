@@ -195,6 +195,7 @@ class Multiline extends Form\Control
      */
     public $jsAfterDelete;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -404,16 +405,17 @@ class Multiline extends Form\Control
     }
 
     /**
-     * @param array<int, string>|null $fieldNames
+     * @param array<int, string>|null $fields
      */
-    public function setModel(Model $model, array $fieldNames = null): void
+    #[\Override]
+    public function setModel(Model $model, array $fields = null): void
     {
         parent::setModel($model);
 
-        if ($fieldNames === null) {
-            $fieldNames = array_keys($model->getFields('not system'));
+        if ($fields === null) {
+            $fields = array_keys($model->getFields('not system'));
         }
-        $this->rowFields = array_merge([$model->idField], $fieldNames);
+        $this->rowFields = array_merge([$model->idField], $fields);
 
         foreach ($this->rowFields as $fieldName) {
             $this->fieldDefs[] = $this->getFieldDef($model->getField($fieldName));
@@ -643,6 +645,7 @@ class Multiline extends Form\Control
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->model->assertIsModel();

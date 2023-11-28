@@ -18,12 +18,9 @@ class Columns extends UiColumns
     public Form $form;
 
     /**
-     * Add new vertical column.
-     *
-     * @param int|array $defaults specify width (1..16) or relative to $width
-     *
      * @return Form\Layout
      */
+    #[\Override]
     public function addColumn($defaults = [])
     {
         $column = parent::addColumn($defaults);

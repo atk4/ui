@@ -9,6 +9,8 @@ parameters:
         - vendor
         - js
 
+    checkMissingOverrideMethodAttribute: true
+
     ignoreErrors:
         - '~^(Property .+ has|Method .+\(\) (has parameter \$.+ with|return type has)) no value type specified in iterable type .+\.~'
 
@@ -136,6 +138,9 @@ parameters:
         -
             path: 'src/CardDeck.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\ExecutorInterface::onHook\(\)\.$~'
+        -
+            path: 'src/Console.php'
+            message: '~^Parameter #1 \$level \(''alert''\|''critical''\|''debug''\|''emergency''\|''error''\|''info''\|''notice''\|''warning''\) of method Atk4\\Ui\\Console::log\(\) should be contravariant with parameter \$level \(mixed\) of method Psr\\Log\\LoggerInterface::log\(\)$~'
         -
             path: 'src/Crud.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\JsExecutorInterface::stickyGet\(\)\.$~'

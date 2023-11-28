@@ -97,6 +97,7 @@ class Popup extends View
         parent::__construct($triggerBy);
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -126,9 +127,8 @@ class Popup extends View
      * for adding content to it.
      *
      * @param \Closure(View): void $fx
-     *
-     * @return $this
      */
+    #[\Override]
     public function set($fx = null)
     {
         if (!$fx instanceof \Closure) {
@@ -229,6 +229,7 @@ class Popup extends View
         return $chain;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->triggerBy) {

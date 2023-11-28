@@ -261,6 +261,7 @@ class ScopeBuilder extends Form\Control
         'checkbox' => 'boolean',
     ];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -282,6 +283,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Set the model to build scope for.
      */
+    #[\Override]
     public function setModel(Model $model): void
     {
         parent::setModel($model);
@@ -481,6 +483,7 @@ class ScopeBuilder extends Form\Control
         return $ret;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         parent::renderView();

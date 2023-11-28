@@ -20,14 +20,17 @@ class Context extends RawMinkContext implements BehatContext
     use RwDemosContextTrait;
     use WarnDynamicPropertyTrait;
 
+    #[\Override]
     public function getSession($name = null): MinkSession
     {
         return new MinkSession($this->getMink()->getSession($name));
     }
 
+    #[\Override]
     public function assertSession($name = null): WebAssert
     {
         return new class($this->getSession($name)) extends WebAssert {
+            #[\Override]
             protected function cleanUrl($url)
             {
                 // fix https://github.com/minkphp/Mink/issues/656

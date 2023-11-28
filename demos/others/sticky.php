@@ -17,6 +17,7 @@ View::addTo($app, [
 ]);
 
 $myButtonClass = AnonymousClassNameCache::get_class(fn () => new class() extends Button {
+    #[\Override]
     protected function renderView(): void
     {
         $this->link($this->content);

@@ -50,6 +50,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /** @var Button Cancel button */
     private $cancel;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -89,6 +90,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         ]);
     }
 
+    #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
     {
         if (!$this->action) {
@@ -98,11 +100,13 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         return $this->jsShowAndLoad($urlArgs);
     }
 
+    #[\Override]
     public function getAction(): UserAction
     {
         return $this->action;
     }
 
+    #[\Override]
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
@@ -119,6 +123,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Perform the current step.
      */
+    #[\Override]
     public function executeModelAction(): void
     {
         $this->action = $this->executeModelActionLoad($this->action);

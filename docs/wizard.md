@@ -12,7 +12,7 @@ simple syntax for building UI and display a lovely UI for you.
 :::{image} images/wizard.png
 :::
 
-Demo: https://ui.atk4.org/demos/wizard.php
+Demo: https://ui.atk4.org/demos/interactive/wizard.php
 
 Introduced in UI v1.4
 

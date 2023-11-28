@@ -23,6 +23,7 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
         }
     }
 
+    #[\Override]
     public function getText($xpath): string
     {
         // HTMLElement::innerText returns rendered text as when copied to the clipboard
@@ -46,6 +47,7 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
         }, $this, parent::class)();
     }
 
+    #[\Override]
     protected function mouseOverElement(WebDriverElement $element): void
     {
         // move the element into the viewport

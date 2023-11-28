@@ -38,6 +38,7 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
 
     public $defaultTemplate = 'lister.html';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -82,9 +83,7 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
         $this->memorize('items', $this->items);
     }
 
-    /**
-     * Renders as a regular lister, but source is the items.
-     */
+    #[\Override]
     protected function renderView(): void
     {
         // memorize items
@@ -104,6 +103,7 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
 $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
     public $ui = 'green segment';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

@@ -36,7 +36,7 @@ class BasicExecutor extends View implements ExecutorInterface
     /** @var Button|array Button that trigger the action. Either as an array seed or object */
     public $executorButton;
 
-    /** @var array */
+    /** @var array<string, mixed> */
     protected $arguments = [];
 
     /** @var string display message when missing arguments */
@@ -48,11 +48,13 @@ class BasicExecutor extends View implements ExecutorInterface
     /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     protected $jsSuccess;
 
+    #[\Override]
     public function getAction(): Model\UserAction
     {
         return $this->action;
     }
 
+    #[\Override]
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
@@ -73,6 +75,7 @@ class BasicExecutor extends View implements ExecutorInterface
         $this->arguments = array_merge($this->arguments, $arguments);
     }
 
+    #[\Override]
     protected function recursiveRender(): void
     {
         if (!$this->action) {
@@ -124,6 +127,7 @@ class BasicExecutor extends View implements ExecutorInterface
     /**
      * Will call $action->execute() with the correct arguments.
      */
+    #[\Override]
     public function executeModelAction(): JsBlock
     {
         $args = [];

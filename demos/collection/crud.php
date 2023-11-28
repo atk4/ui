@@ -74,6 +74,7 @@ $column = $columns->addColumn();
 Header::addTo($column, ['Customizations']);
 
 $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() extends ModalExecutor {
+    #[\Override]
     public function addFormTo(View $view): Form
     {
         $columns = Columns::addTo($view);

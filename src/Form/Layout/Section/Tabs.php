@@ -20,6 +20,7 @@ class Tabs extends UiTabs
     /**
      * @return Form\Layout
      */
+    #[\Override]
     public function addTab($name, \Closure $callback = null, array $settings = [])
     {
         $tab = parent::addTab($name, $callback, $settings);

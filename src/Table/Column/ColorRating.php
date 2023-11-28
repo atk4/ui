@@ -37,6 +37,7 @@ class ColorRating extends Table\Column
     /** @var bool Define if values greater than max have no color. */
     public $moreThanMaxNoColor = false;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -50,6 +51,7 @@ class ColorRating extends Table\Column
         }
     }
 
+    #[\Override]
     public function getTagAttributes(string $position, array $attr = []): array
     {
         $attr['style'] ??= '';
@@ -58,6 +60,7 @@ class ColorRating extends Table\Column
         return parent::getTagAttributes($position, $attr);
     }
 
+    #[\Override]
     public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         if ($field === null) {
@@ -67,6 +70,7 @@ class ColorRating extends Table\Column
         return $this->getTag('body', '{$' . $field->shortName . '}', $attr);
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $value = $field->get($row);

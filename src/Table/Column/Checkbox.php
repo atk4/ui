@@ -31,6 +31,7 @@ class Checkbox extends Table\Column
             ->get()->join(',');
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -40,6 +41,7 @@ class Checkbox extends Table\Column
         }
     }
 
+    #[\Override]
     public function getHeaderCellHtml(Field $field = null, $value = null): string
     {
         if ($field !== null) {
@@ -51,6 +53,7 @@ class Checkbox extends Table\Column
         return parent::getHeaderCellHtml($field);
     }
 
+    #[\Override]
     public function getDataCellTemplate(Field $field = null): string
     {
         return $this->getApp()->getTag('div', ['class' => 'ui checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]);

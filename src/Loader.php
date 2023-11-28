@@ -42,6 +42,7 @@ class Loader extends View
     /** @var array URL arguments. */
     public $urlArgs = [];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -67,9 +68,8 @@ class Loader extends View
      *  });
      *
      * @param \Closure($this): void $fx
-     *
-     * @return $this
      */
+    #[\Override]
     public function set($fx = null)
     {
         if (!$fx instanceof \Closure) {
@@ -88,6 +88,7 @@ class Loader extends View
      * Automatically call the jsLoad on a supplied event unless it was already triggered
      * or if user have invoked jsLoad manually.
      */
+    #[\Override]
     protected function renderView(): void
     {
         if (!$this->cb->isTriggered()) {

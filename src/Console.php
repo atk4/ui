@@ -8,12 +8,14 @@ use Atk4\Core\DebugTrait;
 use Atk4\Core\TraitUtil;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * Console is a black square component resembling terminal window. It can be programmed
  * to run a job and output results to the user.
  */
-class Console extends View implements \Psr\Log\LoggerInterface
+class Console extends View implements LoggerInterface
 {
     public $ui = 'inverted black segment';
 
@@ -73,9 +75,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * @param \Closure($this): void $fx    callback which will be executed while displaying output inside console
      * @param bool|string           $event "true" would mean to execute on page load, string would indicate
      *                                     JS event. See first argument for View::js()
-     *
-     * @return $this
      */
+    #[\Override]
     public function set($fx = null, $event = null)
     {
         if (!$fx instanceof \Closure) {
@@ -219,6 +220,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
         return $this;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->setStyle('overflow-x', 'auto');
@@ -403,52 +405,59 @@ class Console extends View implements \Psr\Log\LoggerInterface
         return $this;
     }
 
-    // methods below implements \Psr\Log\LoggerInterface
-
+    #[\Override]
     public function emergency($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    #[\Override]
     public function alert($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    #[\Override]
     public function critical($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    #[\Override]
     public function error($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    #[\Override]
     public function warning($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    #[\Override]
     public function notice($message, array $context = []): void
     {
         $this->outputHtml('<font color="yellow">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    #[\Override]
     public function info($message, array $context = []): void
     {
         $this->outputHtml('<font color="gray">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    #[\Override]
     public function debug($message, array $context = []): void
     {
         $this->outputHtml('<font color="cyan">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
     /**
-     * @param 'emergency'|'alert'|'critical'|'error'|'warning'|'notice'|'info'|'debug' $level
+     * @param LogLevel::* $level
      */
-    public function log($level, $message, array $context = []): void // @phpstan-ignore-line
+    #[\Override]
+    public function log($level, $message, array $context = []): void
     {
         $this->{$level}($message, $context);
     }

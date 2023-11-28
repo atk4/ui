@@ -153,6 +153,7 @@ class JsIntegrationTest extends TestCase
         $jsCallback = new class() extends JsCallback {
             public int $counter = 0;
 
+            #[\Override]
             public function jsExecute(): JsBlock
             {
                 ++$this->counter;

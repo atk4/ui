@@ -12,7 +12,7 @@
 With console you can output real-time information to the user directly from PHP. It can
 be used do direct output from slow method or even execute commands on the server (such as `ping`).
 
-Demo: https://ui.atk4.org/demos/console.php
+Demo: https://ui.atk4.org/demos/interactive/console.php
 
 ## Basic Usage
 

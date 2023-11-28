@@ -27,6 +27,7 @@ class TabsTab extends MenuItem
         return $this;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->settings = array_merge($this->settings, ['autoTabActivation' => false]);

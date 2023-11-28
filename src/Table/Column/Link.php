@@ -97,6 +97,7 @@ class Link extends Table\Column
         parent::__construct($defaults);
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -109,6 +110,7 @@ class Link extends Table\Column
         }
     }
 
+    #[\Override]
     public function getDataCellTemplate(Field $field = null): string
     {
         $attr = ['href' => '{$c_' . $this->shortName . '}'];
@@ -138,6 +140,7 @@ class Link extends Table\Column
         return $this->getApp()->getTag('a', $attr, [$iconHtml, $labelHtml]);
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         if ($this->url) {

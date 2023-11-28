@@ -35,6 +35,7 @@ class DemosTest extends TestCase
     /** @var array<string, int> */
     private static array $_failedParentTests = [];
 
+    #[\Override]
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
@@ -42,6 +43,7 @@ class DemosTest extends TestCase
         self::$_serverSuperglobalBackup = $_SERVER;
     }
 
+    #[\Override]
     public static function tearDownAfterClass(): void
     {
         $_SERVER = self::$_serverSuperglobalBackup;
@@ -49,6 +51,7 @@ class DemosTest extends TestCase
         parent::tearDownAfterClass();
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -134,11 +137,13 @@ class DemosTest extends TestCase
     protected function createTestingApp(): App
     {
         $app = new class(['callExit' => false, 'catchExceptions' => false, 'alwaysRun' => false]) extends App {
+            #[\Override]
             public function callExit(): void
             {
                 throw new DemosTestExitError();
             }
 
+            #[\Override]
             protected function emitResponse(): void {}
         };
         $app->initLayout([Layout::class]);

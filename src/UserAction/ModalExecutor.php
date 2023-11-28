@@ -39,6 +39,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
     public const HOOK_STEP = self::class . '@onStep';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -48,6 +49,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
     protected function initExecutor(): void {}
 
+    #[\Override]
     public function getAction(): Model\UserAction
     {
         return $this->action;
@@ -67,6 +69,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 
+    #[\Override]
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
@@ -89,6 +92,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * Perform model action by stepping through args - fields - preview.
      */
+    #[\Override]
     public function executeModelAction(): void
     {
         $this->action = $this->executeModelActionLoad($this->action);
@@ -142,6 +146,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         return $this;
     }
 
+    #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
     {
         if (!$this->actionInitialized) {

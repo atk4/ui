@@ -27,6 +27,7 @@ class NoValue extends Table\Column
     /** @var string */
     public $noValue = ' --- ';
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $actualValue = $field->get($row);

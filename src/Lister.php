@@ -39,6 +39,7 @@ class Lister extends View
     /** @var Model Current row entity */
     public $currentRow;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -112,6 +113,7 @@ class Lister extends View
     /** @var int This will count how many rows are rendered. Needed for JsPaginator for example. */
     protected $_renderedRowsCount = 0;
 
+    #[\Override]
     protected function renderView(): void
     {
         if (!$this->template) {
@@ -201,6 +203,7 @@ class Lister extends View
      * is wrong by design. Each table row should be probably rendered natively using cloned
      * render tree (instead of cloned template).
      */
+    #[\Override]
     public function renderToJsonArr(string $region = null): array
     {
         $this->renderAll();
