@@ -43,7 +43,7 @@ Many companies use Agile Toolkit to implement admin interface and in some cases 
 
 Install Agile UI with `composer require atk4/ui` using composer.
 
-Create "index.php" file with:
+Create `index.php` file with:
 
 ```php
 <?php
