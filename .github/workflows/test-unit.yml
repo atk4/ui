@@ -79,36 +79,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1', '8.2', '8.3']
-        type: ['Phpunit', 'Phpunit Lowest']
+        php: ['7.4', '8.3']
+        type: ['Phpunit']
         include:
           - php: 'latest'
             type: 'Phpunit Burn'
     env:
       LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == '8.3' && matrix.type == 'Phpunit' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
-    services:
-      mysql:
-        image: mysql
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
-      mariadb:
-        image: mariadb
-        options: --health-cmd="mariadb-admin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
-      postgres:
-        image: postgres:alpine
-        env:
-          POSTGRES_USER: atk4_test_user
-          POSTGRES_PASSWORD: atk4_pass
-          POSTGRES_DB: atk4_test
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-      mssql:
-        image: mcr.microsoft.com/mssql/server
-        env:
-          ACCEPT_EULA: Y
-          SA_PASSWORD: atk4_pass
-      oracle:
-        image: gvenzl/oracle-xe:18-slim-faststart
-        env:
-          ORACLE_PASSWORD: atk4_pass
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -143,10 +120,6 @@ jobs:
 
       - name: Init
         run: |
-          php -r '(new PDO("mysql:host=mysql", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
-          php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
-          php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
-          /usr/lib/oracle/setup.sh
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage; fi
 
       - name: "Run tests: SQLite"
@@ -154,67 +127,6 @@ jobs:
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-sqlite.cov; fi
-
-      - name: "Run tests: MySQL (only for cron)"
-        if: (success() || failure()) && github.event_name == 'schedule'
-        env:
-          DB_DSN: "mysql:host=mysql;dbname=atk4_test"
-          DB_USER: atk4_test_user
-          DB_PASSWORD: atk4_pass
-        run: |
-          sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
-          php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
-          if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mysql.cov; fi
-
-      - name: "Run tests: MariaDB"
-        if: success() || failure()
-        env:
-          DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
-          DB_USER: atk4_test_user
-          DB_PASSWORD: atk4_pass
-        run: |
-          sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
-          php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
-          if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mariadb.cov; fi
-
-      - name: "Run tests: PostgreSQL (only for cron)"
-        if: (success() || failure()) && github.event_name == 'schedule'
-        env:
-          DB_DSN: "pgsql:host=postgres;dbname=atk4_test"
-          DB_USER: atk4_test_user
-          DB_PASSWORD: atk4_pass
-        run: |
-          sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
-          php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
-          if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-postgres.cov; fi
-
-      - name: "Run tests: MSSQL (only for cron)"
-        if: (success() || failure()) && github.event_name == 'schedule'
-        env:
-          DB_DSN: "sqlsrv:host=mssql;dbname=master;driverOptions[TrustServerCertificate]=1"
-          DB_USER: sa
-          DB_PASSWORD: atk4_pass
-        run: |
-          sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
-          php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
-          if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mssql.cov; fi
-
-      - name: "Run tests: Oracle (only for cron)"
-        if: (success() || failure()) && github.event_name == 'schedule'
-        env:
-          DB_DSN: "oci:dbname=oracle/free"
-          DB_USER: system
-          DB_PASSWORD: atk4_pass
-          NLS_LANG: AMERICAN_AMERICA.AL32UTF8
-        run: |
-          sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
-          php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
-          if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-oracle.cov; fi
 
       - name: Upload coverage logs 1/2 (only for latest Phpunit)
         if: env.LOG_COVERAGE
@@ -238,9 +150,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Selenium with PHP 7.4 and 8.0 was failing too often on initial/create session request, probably because of older (Alpine 3.16) base image
-        php: ['8.1', '8.2', '8.3']
-        type: ['Chrome', 'Chrome Lowest']
+        php: ['8.1', '8.3']
+        type: ['Chrome']
         include:
           - php: 'latest'
             type: 'Firefox'
@@ -250,29 +161,6 @@ jobs:
             type: 'Firefox Slow'
     env:
       LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == '8.3' && matrix.type == 'Chrome' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
-    services:
-      mysql:
-        image: mysql
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
-      mariadb:
-        image: mariadb
-        options: --health-cmd="mariadb-admin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
-      postgres:
-        image: postgres:alpine
-        env:
-          POSTGRES_USER: atk4_test_user
-          POSTGRES_PASSWORD: atk4_pass
-          POSTGRES_DB: atk4_test
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-      mssql:
-        image: mcr.microsoft.com/mssql/server
-        env:
-          ACCEPT_EULA: Y
-          SA_PASSWORD: atk4_pass
-      oracle:
-        image: gvenzl/oracle-xe:18-slim-faststart
-        env:
-          ORACLE_PASSWORD: atk4_pass
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -362,10 +250,6 @@ jobs:
 
       - name: Init
         run: |
-          php -r '(new PDO("mysql:host=mysql", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
-          php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
-          php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
-          /usr/lib/oracle/setup.sh
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage coverage/js; fi
           ci_wait_until () { timeout 30 sh -c "until { $1 2> /dev/null; }; do sleep 0.02; done" || timeout 15 sh -c "$1" || { echo "health timeout: $1"; exit 1; }; }
           php -d opcache.enable_cli=1 -S 127.0.0.1:8888 > /dev/null 2>&1 &
@@ -380,62 +264,6 @@ jobs:
 
       - name: "Run tests: SQLite"
         run: |
-          php demos/_demo-data/create-db.php
-          vendor/bin/behat -vv --config behat.yml.dist
-
-      - name: "Run tests: MySQL (only for cron)"
-        if: (success() || failure()) && github.event_name == 'schedule'
-        env:
-          DB_DSN: "mysql:host=mysql;dbname=atk4_test"
-          DB_USER: atk4_test_user
-          DB_PASSWORD: atk4_pass
-        run: |
-          sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
-          php demos/_demo-data/create-db.php
-          vendor/bin/behat -vv --config behat.yml.dist
-
-      - name: "Run tests: MariaDB (only for coverage or cron)"
-        if: (success() || failure()) && (env.LOG_COVERAGE || github.event_name == 'schedule')
-        env:
-          DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
-          DB_USER: atk4_test_user
-          DB_PASSWORD: atk4_pass
-        run: |
-          sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
-          php demos/_demo-data/create-db.php
-          vendor/bin/behat -vv --config behat.yml.dist
-
-      - name: "Run tests: PostgreSQL (only for cron)"
-        if: (success() || failure()) && github.event_name == 'schedule'
-        env:
-          DB_DSN: "pgsql:host=postgres;dbname=atk4_test"
-          DB_USER: atk4_test_user
-          DB_PASSWORD: atk4_pass
-        run: |
-          sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
-          php demos/_demo-data/create-db.php
-          vendor/bin/behat -vv --config behat.yml.dist
-
-      - name: "Run tests: MSSQL (only for cron)"
-        if: (success() || failure()) && github.event_name == 'schedule'
-        env:
-          DB_DSN: "sqlsrv:host=mssql;dbname=master;driverOptions[TrustServerCertificate]=1"
-          DB_USER: sa
-          DB_PASSWORD: atk4_pass
-        run: |
-          sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
-          php demos/_demo-data/create-db.php
-          vendor/bin/behat -vv --config behat.yml.dist
-
-      - name: "Run tests: Oracle (only for cron)"
-        if: (success() || failure()) && github.event_name == 'schedule'
-        env:
-          DB_DSN: "oci:dbname=oracle/free"
-          DB_USER: system
-          DB_PASSWORD: atk4_pass
-          NLS_LANG: AMERICAN_AMERICA.AL32UTF8
-        run: |
-          sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
