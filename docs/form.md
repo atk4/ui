@@ -810,14 +810,14 @@ $form->addControl('phone3');
 $form->addControl('phone4');
 
 $form->setControlsDisplayRules([
-    'phone2' => ['phone1' => 'empty'],
-    'phone3' => ['phone1' => 'empty', 'phone2' => 'empty'],
-    'phone4' => ['phone1' => 'empty', 'phone2' => 'empty', 'phone3' => 'empty'],
+    'phone2' => ['phone1' => 'notEmpty'],
+    'phone3' => ['phone1' => 'notEmpty', 'phone2' => 'notEmpty'],
+    'phone4' => ['phone1' => 'notEmpty', 'phone2' => 'notEmpty', 'phone3' => 'notEmpty'],
 ]);
 ```
 
-The only catch here is that "empty" means "not empty". ATK UI relies on rules defined by Fomantic-UI
-https://fomantic-ui.com/behaviors/form.html, so you can use any of the conditions there.
+ATK UI relies on rules defined by Fomantic-UI https://fomantic-ui.com/behaviors/form.html,
+so you can use any of the conditions there.
 
 Here is a more advanced example:
 

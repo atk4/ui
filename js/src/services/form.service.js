@@ -25,7 +25,6 @@ class FormService {
             {
                 rules: $.extend(true, {}, $.fn.form.settings.rules, {
                     rules: {
-                        notEmpty: $.fn.form.settings.rules.empty,
                         isVisible: this.isVisible,
                         isEqual: this.isEqual,
                     },
