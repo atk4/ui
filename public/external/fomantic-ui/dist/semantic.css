@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.4-beta.11+a03991c
+ * # Fomantic UI - 2.9.4-beta.20+0224737
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -31098,10 +31098,10 @@ span.ui.massive.text {
     border-top: none !important;
   }
 
-  .ui.inverted.stackable.celled.grid > .column:not(.row),
-  .ui.inverted.stackable.divided.grid > .column:not(.row),
-  .ui.inverted.stackable.celled.grid > .row > .column,
-  .ui.inverted.stackable.divided.grid > .row > .column {
+  .ui.ui.inverted.stackable.celled.grid > .column:not(.row),
+  .ui.ui.inverted.stackable.divided.grid > .column:not(.row),
+  .ui.ui.inverted.stackable.celled.grid > .row > .column,
+  .ui.ui.inverted.stackable.divided.grid > .row > .column {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
@@ -47746,38 +47746,38 @@ select.ui.dropdown {
   font-size: 1rem;
 }
 
-.ui.mini.dropdown,
-.ui.mini.dropdown .menu > .item {
+.ui.ui.mini.dropdown,
+.ui.ui.mini.dropdown .menu > .item {
   font-size: 0.78571429rem;
 }
 
-.ui.tiny.dropdown,
-.ui.tiny.dropdown .menu > .item {
+.ui.ui.tiny.dropdown,
+.ui.ui.tiny.dropdown .menu > .item {
   font-size: 0.85714286rem;
 }
 
-.ui.small.dropdown,
-.ui.small.dropdown .menu > .item {
+.ui.ui.small.dropdown,
+.ui.ui.small.dropdown .menu > .item {
   font-size: 0.92857143rem;
 }
 
-.ui.large.dropdown,
-.ui.large.dropdown .menu > .item {
+.ui.ui.large.dropdown,
+.ui.ui.large.dropdown .menu > .item {
   font-size: 1.14285714rem;
 }
 
-.ui.big.dropdown,
-.ui.big.dropdown .menu > .item {
+.ui.ui.big.dropdown,
+.ui.ui.big.dropdown .menu > .item {
   font-size: 1.28571429rem;
 }
 
-.ui.huge.dropdown,
-.ui.huge.dropdown .menu > .item {
+.ui.ui.huge.dropdown,
+.ui.ui.huge.dropdown .menu > .item {
   font-size: 1.42857143rem;
 }
 
-.ui.massive.dropdown,
-.ui.massive.dropdown .menu > .item {
+.ui.ui.massive.dropdown,
+.ui.ui.massive.dropdown .menu > .item {
   font-size: 1.71428571rem;
 }
 
