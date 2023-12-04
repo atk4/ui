@@ -2338,7 +2338,6 @@ class FormService {
     return [{
       rules: external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(true, {}, (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn).form.settings.rules, {
         rules: {
-          notEmpty: (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn).form.settings.rules.empty,
           isVisible: this.isVisible,
           isEqual: this.isEqual
         }
