@@ -15,7 +15,7 @@ class MinkSession extends \Behat\Mink\Session
     {
         $driver = new MinkSeleniumDriver($session->getDriver()); // @phpstan-ignore-line
 
-        parent::__construct($driver, $session->getSelectorsHandler());
+        parent::__construct($driver, $session->getSelectorsHandler()); // @phpstan-ignore-line
     }
 
     #[\Override]
