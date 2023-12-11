@@ -1105,24 +1105,22 @@ class App
 
     protected function setupAlwaysRun(): void
     {
-        register_shutdown_function(
-            function () {
-                if (!$this->runCalled) {
-                    try {
-                        $this->run();
-                    } catch (ExitApplicationError $e) {
-                        // let the process go and stop on ->callExit below
-                    } catch (\Throwable $e) {
-                        // set_exception_handler does not work in shutdown
-                        // https://github.com/php/php-src/issues/10695
-                        $this->caughtException($e);
-                    }
-
-                    // call with true to trigger beforeExit event
-                    $this->callBeforeExit();
+        register_shutdown_function(function () {
+            if (!$this->runCalled) {
+                try {
+                    $this->run();
+                } catch (ExitApplicationError $e) {
+                    // let the process go and stop on ->callExit below
+                } catch (\Throwable $e) {
+                    // set_exception_handler does not work in shutdown
+                    // https://github.com/php/php-src/issues/10695
+                    $this->caughtException($e);
                 }
+
+                // call with true to trigger beforeExit event
+                $this->callBeforeExit();
             }
-        );
+        });
     }
 
     /**
