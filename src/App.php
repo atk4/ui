@@ -41,6 +41,8 @@ class App
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
     public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
 
+    private static ?string $shutdownReservedMemory; // @phpstan-ignore-line
+
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
         'atk' => '/public',
@@ -1232,3 +1234,12 @@ class App
         $this->outputResponse($data);
     }
 }
+
+\Closure::bind(static function (): void {
+    // reserve 1 MB of memory for shutdown
+    App::$shutdownReservedMemory = str_repeat(str_repeat('shutdownReserved', 256), 256);
+
+    register_shutdown_function(static function (): void {
+        App::$shutdownReservedMemory = null;
+    });
+}, null, App::class)();
