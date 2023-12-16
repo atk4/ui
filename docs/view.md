@@ -130,10 +130,10 @@ Injection.
 Consider the following example:
 
 ```
-$app->debug = new Logger('log'); // Monolog
+$app->logger = new Logger('log'); // Monolog
 
 // next, somewhere in a render tree
-$view->getApp()->debug->log('Foo Bar');
+$view->getApp()->logger->log('Foo Bar');
 ```
 
 Agile UI will automatically pass your $app class to all the views.
