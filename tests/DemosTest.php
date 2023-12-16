@@ -14,7 +14,6 @@ use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use Atk4\Ui\Layout;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
-use PHPUnit\Runner\BaseTestRunner;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -31,9 +30,6 @@ class DemosTest extends TestCase
     private static array $_serverSuperglobalBackup;
 
     private static ?Persistence $_db = null;
-
-    /** @var array<string, int> */
-    private static array $_failedParentTests = [];
 
     #[\Override]
     public static function setUpBeforeClass(): void
@@ -75,20 +71,6 @@ class DemosTest extends TestCase
             // prevent $app to run on shutdown
             $app->runCalled = true;
         }
-    }
-
-    #[\Override]
-    protected function _onNotSuccessfulTest(\Throwable $t): void
-    {
-        if (self::isPhpunit9x() ? !in_array($this->getStatus(), [BaseTestRunner::STATUS_PASSED, BaseTestRunner::STATUS_SKIPPED, BaseTestRunner::STATUS_INCOMPLETE], true) : !$this->status()->isSuccess() && !$this->status()->isSkipped() && !$this->status()->isIncomplete()) {
-            if (!isset(self::$_failedParentTests[self::isPhpunit9x() ? $this->getName() : $this->nameWithDataSet()])) {
-                self::$_failedParentTests[self::isPhpunit9x() ? $this->getName() : $this->nameWithDataSet()] = self::isPhpunit9x() ? $this->getStatus() : $this->status()->asInt();
-            } else {
-                self::markTestIncomplete('Test failed, but non-HTTP test failed too, fix it first');
-            }
-        }
-
-        throw $t;
     }
 
     protected function setSuperglobalsFromRequest(RequestInterface $request): void
