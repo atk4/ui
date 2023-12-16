@@ -36,6 +36,8 @@ class App
     use DynamicMethodTrait;
     use HookTrait;
 
+    private const UNSUPPRESSEABLE_ERROR_LEVELS = \PHP_MAJOR_VERSION >= 8 ? (\E_ERROR | \E_PARSE | \E_CORE_ERROR | \E_COMPILE_ERROR | \E_USER_ERROR | \E_RECOVERABLE_ERROR) : 0;
+
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
     public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
 
@@ -182,7 +184,7 @@ class App
         if ($this->catchExceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
             set_error_handler(static function (int $severity, string $msg, string $file, int $line): bool {
-                if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? (\E_ERROR | \E_PARSE | \E_CORE_ERROR | \E_COMPILE_ERROR | \E_USER_ERROR | \E_RECOVERABLE_ERROR) : 0)) === 0) {
+                if ((error_reporting() & ~self::UNSUPPRESSEABLE_ERROR_LEVELS) === 0) {
                     $isFirstFrame = true;
                     foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
                         // allow to suppress any warning outside Atk4
@@ -281,7 +283,7 @@ class App
         exit;
     }
 
-    public function caughtException(\Throwable $exception): void
+    protected function caughtException(\Throwable $exception): void
     {
         if ($exception instanceof LateOutputError) {
             $this->outputLateOutputError($exception);
@@ -1105,24 +1107,21 @@ class App
 
     protected function setupAlwaysRun(): void
     {
-        register_shutdown_function(
-            function () {
-                if (!$this->runCalled) {
-                    try {
-                        $this->run();
-                    } catch (ExitApplicationError $e) {
-                        // let the process go and stop on ->callExit below
-                    } catch (\Throwable $e) {
-                        // set_exception_handler does not work in shutdown
-                        // https://github.com/php/php-src/issues/10695
-                        $this->caughtException($e);
-                    }
-
-                    // call with true to trigger beforeExit event
-                    $this->callBeforeExit();
+        register_shutdown_function(function () {
+            if (!$this->runCalled) {
+                try {
+                    $this->run();
+                } catch (ExitApplicationError $e) {
+                    // let the process continue and terminate using self::callExit() below
+                } catch (\Throwable $e) {
+                    // set_exception_handler does not work in shutdown
+                    // https://github.com/php/php-src/issues/10695
+                    $this->caughtException($e);
                 }
+
+                $this->callBeforeExit();
             }
-        );
+        });
     }
 
     /**
