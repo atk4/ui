@@ -31,6 +31,16 @@ class DemosTest extends TestCase
 
     private static ?Persistence $_db = null;
 
+    protected static string $regexHtml = '~^<!DOCTYPE html>\s*<html.*</html>$~s';
+    protected static string $regexJson = '~^(?<json>\s*(?:
+           (?<number>-?(?=[1-9]|0(?!\d))\d+(\.\d+)?(E[+-]?\d+)?)
+           |(?<boolean>true|false|null)
+           |(?<string>"([^"\\\\]*|\\\\["\\\\bfnrt/]|\\\\u[0-9a-f]{4})*")
+           |(?<array>\[(?:(?&json)(?:,(?&json))*|\s*)\])
+           |(?<object>\{(?:(?<pair>\s*(?&string)\s*:(?&json))(?:,(?&pair))*|\s*)\})
+        )\s*)$~six';
+    protected static string $regexSseLine = '~^(id|event|data).*$~s';
+
     #[\Override]
     public static function setUpBeforeClass(): void
     {
@@ -230,24 +240,6 @@ class DemosTest extends TestCase
         return 'demos/' . $path;
     }
 
-    /** @var string */
-    protected $regexHtml = '~^<!DOCTYPE html>\s*<html~';
-    /** @var string */
-    protected $regexJson = '~
-        (?(DEFINE)
-           (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
-           (?<boolean>   true | false | null )
-           (?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt/] | \\\\ u [0-9a-f]{4} )* " )
-           (?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
-           (?<pair>      \s* (?&string) \s* : (?&json)  )
-           (?<object>    \{  (?:  (?&pair)  (?: , (?&pair)  )*  )?  \s* \} )
-           (?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
-        )
-        \A (?&json) \Z
-        ~six';
-    /** @var string */
-    protected $regexSse = '~^(id|event|data).*$~m';
-
     public static function provideDemosStatusAndHtmlResponseCases(): iterable
     {
         $excludeDirs = ['_demo-data', '_includes'];
@@ -299,7 +291,7 @@ class DemosTest extends TestCase
     {
         $response = $this->getResponseFromRequest($path);
         self::assertSame(200, $response->getStatusCode());
-        self::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
+        self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
     }
 
     public function testDemoResponseError(): void
@@ -332,7 +324,7 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest($path);
         self::assertSame(200, $response->getStatusCode());
         self::assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
-        self::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
+        self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
     }
 
     public function testHugeOutputStream(): void
@@ -380,11 +372,11 @@ class DemosTest extends TestCase
         );
 
         self::assertSame(200, $response->getStatusCode());
-        self::assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
+        self::assertMatchesRegularExpression(self::$regexJson, $response->getBody()->getContents());
 
         $response = $this->getResponseFromRequest('interactive/wizard.php?atk_admin_wizard=2&name=Country');
         self::assertSame(200, $response->getStatusCode());
-        self::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
+        self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
     }
 
     public static function provideDemoAssertJsonResponseCases(): iterable
@@ -421,7 +413,7 @@ class DemosTest extends TestCase
         self::assertSame(200, $response->getStatusCode());
         self::assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         $responseBodyStr = $response->getBody()->getContents();
-        self::assertMatchesRegularExpression($this->regexJson, $responseBodyStr);
+        self::assertMatchesRegularExpression(self::$regexJson, $responseBodyStr);
         self::assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
         if ($expectedExceptionMessage !== null) {
             self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
@@ -458,7 +450,7 @@ class DemosTest extends TestCase
         // check SSE Syntax
         self::assertGreaterThan(0, count($outputLines));
         foreach ($outputLines as $index => $line) {
-            preg_match_all($this->regexSse, $line, $matchesAll);
+            preg_match_all(self::$regexSseLine, $line, $matchesAll);
             self::assertSame(
                 $line,
                 implode('', $matchesAll[0] ?? ['error']),
@@ -482,7 +474,7 @@ class DemosTest extends TestCase
     {
         $response = $this->getResponseFromRequest($path, ['form_params' => $postData]);
         self::assertSame(200, $response->getStatusCode());
-        self::assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
+        self::assertMatchesRegularExpression(self::$regexJson, $response->getBody()->getContents());
     }
 
     /**
@@ -500,6 +492,7 @@ class DemosTest extends TestCase
         self::assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         self::assertSame('no-store', $response->getHeaderLine('Cache-Control'));
         $responseBodyStr = $response->getBody()->getContents();
+        self::assertMatchesRegularExpression(self::$regexHtml, $responseBodyStr);
         self::assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
         self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
     }
