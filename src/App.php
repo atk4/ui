@@ -1141,8 +1141,9 @@ class App
             if (!$this->runCalled) {
                 try {
                     $this->run();
-                } catch (ExitApplicationError $e) {
                     $this->callExit(true);
+                } catch (ExitApplicationError $e) {
+                    // continue shutdown
                 } catch (\Throwable $e) {
                     // set_exception_handler does not work in shutdown
                     // https://github.com/php/php-src/issues/10695
