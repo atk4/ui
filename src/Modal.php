@@ -245,9 +245,7 @@ class Modal extends View
             $this->template->loadFromString(preg_replace('~<div class="\{\$headerClass\}">\{\$title\}</div>\s*~', '', $this->template->toLoadableString(), 1));
         }
 
-        if ($this->contentClass) {
-            $this->template->trySet('contentClass', implode(' ', $this->contentClass));
-        }
+        $this->template->trySet('contentClass', implode(' ', $this->contentClass));
 
         if ($this->fx !== null) {
             $data['url'] = $this->cb->getJsUrl();
