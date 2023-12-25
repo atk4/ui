@@ -479,6 +479,8 @@ class DemosTest extends TestCase
 
     /**
      * @dataProvider provideDemoCallbackErrorCases
+     *
+     * @slowThreshold 1500
      */
     public function testDemoCallbackError(string $path, string $expectedExceptionMessage, array $options = []): void
     {

@@ -123,6 +123,37 @@ class DemosHttpTest extends DemosTest
         return parent::getPathWithAppVars($path);
     }
 
+    #[\Override]
+    public static function provideDemoCallbackErrorCases(): iterable
+    {
+        yield from parent::provideDemoCallbackErrorCases();
+
+        yield [
+            '_unit-test/fatal-error.php?type=oom',
+            'Allowed memory size of 16777216 bytes exhausted',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=time-limit',
+            'Maximum execution time of 1 second exceeded',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=compile-error',
+            'Non-abstract method Cl::foo() must contain body',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=compile-warning',
+            'Unsupported declare \'x\'',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=exception-in-shutdown',
+            'Exception from shutdown',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=warning-in-shutdown',
+            'Warning from shutdown',
+        ];
+    }
+
     /**
      * @dataProvider provideDemoLateOutputErrorCases
      */
