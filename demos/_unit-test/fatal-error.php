@@ -35,7 +35,7 @@ if ($type === 'oom') {
 
     $str = '';
     $t = microtime(true);
-    while (microtime(true) - $t < 2) {
+    while (microtime(true) - $t < 1.5) {
         $str = md5($str);
     }
 } elseif ($type === 'compile-error') {
