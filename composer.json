@@ -68,9 +68,9 @@
     },
     "require-dev": {
         "atk4/behat-mink-selenium2-driver": "^1.6.2",
-        "atk4/ergebnis-phpunit-slow-test-detector": "^2.4",
         "behat/mink-extension": "^2.3.1",
         "ergebnis/composer-normalize": "^2.13",
+        "ergebnis/phpunit-slow-test-detector": "^2.9",
         "friendsofphp/php-cs-fixer": "^3.0",
         "fzaninotto/faker": "^1.6",
         "guzzlehttp/guzzle": "^7.3",
