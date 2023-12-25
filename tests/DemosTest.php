@@ -379,7 +379,7 @@ class DemosTest extends TestCase
         self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
     }
 
-    public static function provideDemoAssertJsonResponseCases(): iterable
+    public static function provideDemoJsonResponseCases(): iterable
     {
         // simple reload
         yield ['_unit-test/reload.php?__atk_reload=reload'];
@@ -393,9 +393,9 @@ class DemosTest extends TestCase
     /**
      * Test reload and loader callback.
      *
-     * @dataProvider provideDemoAssertJsonResponseCases
+     * @dataProvider provideDemoJsonResponseCases
      */
-    public function testDemoAssertJsonResponse(string $path, string $expectedExceptionMessage = null): void
+    public function testDemoJsonResponse(string $path, string $expectedExceptionMessage = null): void
     {
         if (static::class === self::class) {
             if ($expectedExceptionMessage !== null) {
@@ -420,7 +420,7 @@ class DemosTest extends TestCase
         }
     }
 
-    public static function provideDemoAssertSseResponseCases(): iterable
+    public static function provideDemoSseResponseCases(): iterable
     {
         yield ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
         yield ['_unit-test/console.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
@@ -431,9 +431,9 @@ class DemosTest extends TestCase
     /**
      * Test JsSse and Console.
      *
-     * @dataProvider provideDemoAssertSseResponseCases
+     * @dataProvider provideDemoSseResponseCases
      */
-    public function testDemoAssertSseResponse(string $path): void
+    public function testDemoSseResponse(string $path): void
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
@@ -459,7 +459,7 @@ class DemosTest extends TestCase
         }
     }
 
-    public static function provideDemoAssertJsonResponsePostCases(): iterable
+    public static function provideDemoJsonResponsePostCases(): iterable
     {
         yield [
             '_unit-test/post.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_submit=ajax&' . Callback::URL_QUERY_TARGET . '=test_submit',
@@ -468,9 +468,9 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @dataProvider provideDemoAssertJsonResponsePostCases
+     * @dataProvider provideDemoJsonResponsePostCases
      */
-    public function testDemoAssertJsonResponsePost(string $path, array $postData): void
+    public function testDemoJsonResponsePost(string $path, array $postData): void
     {
         $response = $this->getResponseFromRequest($path, ['form_params' => $postData]);
         self::assertSame(200, $response->getStatusCode());
