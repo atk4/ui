@@ -9,7 +9,6 @@ use Atk4\Ui\App;
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-// https://github.com/php/php-src/issues/10695
 $runOnShutdownFx = static function (\Closure $fx) use ($app) {
     // relies on https://github.com/atk4/ui/blob/5.0.0/src/App.php#L1108
     $app->onHook(App::HOOK_BEFORE_RENDER, static function () use (&$fx) {
