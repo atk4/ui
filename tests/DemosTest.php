@@ -130,7 +130,7 @@ class DemosTest extends TestCase
     {
         $app = new class(['callExit' => false, 'catchExceptions' => false, 'alwaysRun' => false]) extends App {
             #[\Override]
-            public function callExit(): void
+            public function callExit(bool $calledFromShutdownHandler = false): void
             {
                 throw new DemosTestExitError();
             }

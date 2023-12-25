@@ -256,33 +256,30 @@ class App
         $this->templateDir[] = dirname(__DIR__) . '/template';
     }
 
-    protected function callBeforeExit(): void
+    /**
+     * @return ($calledFromShutdownHandler is true ? void : never)
+     */
+    public function callExit(bool $calledFromShutdownHandler = false): void
     {
         if (!$this->exitCalled) {
             $this->exitCalled = true;
             $this->hook(self::HOOK_BEFORE_EXIT);
         }
-    }
 
-    /**
-     * @return never
-     */
-    public function callExit(): void
-    {
-        $this->callBeforeExit();
+        if (!$calledFromShutdownHandler) {
+            if (!$this->callExit) {
+                // case process is not in shutdown mode
+                // App as already done everything
+                // App need to stop output
+                // set_handler to catch/trap any exception
+                set_exception_handler(static function (\Throwable $t): void {});
 
-        if (!$this->callExit) {
-            // case process is not in shutdown mode
-            // App as already done everything
-            // App need to stop output
-            // set_handler to catch/trap any exception
-            set_exception_handler(static function (\Throwable $t): void {});
+                // raise exception to be trapped and stop execution
+                throw new ExitApplicationError();
+            }
 
-            // raise exception to be trapped and stop execution
-            throw new ExitApplicationError();
+            exit;
         }
-
-        exit;
     }
 
     protected function caughtException(\Throwable $exception): void
@@ -320,8 +317,7 @@ class App
         }
 
         // process is already in shutdown because of uncaught exception
-        // no need of call exit function
-        $this->callBeforeExit();
+        $this->callExit(true);
     }
 
     public function getRequest(): ServerRequestInterface
@@ -1100,7 +1096,7 @@ class App
      *   $app->initLayout([Layout\Centered::class]);
      *   $app->layout->template->dangerouslySetHtml('Content', $e->getHtml());
      *   $app->run();
-     *   $app->callBeforeExit();
+     *   $app->callExit();
      */
     public function renderExceptionHtml(\Throwable $exception): string
     {
@@ -1114,14 +1110,12 @@ class App
                 try {
                     $this->run();
                 } catch (ExitApplicationError $e) {
-                    // let the process continue and terminate using self::callExit() below
+                    $this->callExit(true);
                 } catch (\Throwable $e) {
                     // set_exception_handler does not work in shutdown
                     // https://github.com/php/php-src/issues/10695
                     $this->caughtException($e);
                 }
-
-                $this->callBeforeExit();
             }
         });
     }

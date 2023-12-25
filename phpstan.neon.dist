@@ -18,6 +18,12 @@ parameters:
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
         - '~^Variable (static )?(property access|method call) on .+\.~'
 
+        # https://github.com/phpstan/phpstan/issues/10337
+        -
+            path: 'src/App.php'
+            message: '~^Call to method Atk4\\Ui\\App::callExit\(\) with true will always evaluate to true\.$~'
+            count: 2
+
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
         -
