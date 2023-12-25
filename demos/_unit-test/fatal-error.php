@@ -11,20 +11,16 @@ require_once __DIR__ . '/../init-app.php';
 
 // https://github.com/php/php-src/issues/10695
 $runOnShutdownFx = static function (\Closure $fx) use ($app) {
-    if (\PHP_VERSION_ID < 80300) {
-        // relies on https://github.com/atk4/ui/blob/5.0.0/src/App.php#L1108
-        $app->onHook(App::HOOK_BEFORE_RENDER, static function () use (&$fx) {
-            if ($fx !== null) {
-                try {
-                    $fx();
-                } finally {
-                    $fx = null;
-                }
+    // relies on https://github.com/atk4/ui/blob/5.0.0/src/App.php#L1108
+    $app->onHook(App::HOOK_BEFORE_RENDER, static function () use (&$fx) {
+        if ($fx !== null) {
+            try {
+                $fx();
+            } finally {
+                $fx = null;
             }
-        });
-    } else {
-        register_shutdown_function($fx);
-    }
+        }
+    });
 };
 
 $type = $app->tryGetRequestQueryParam('type');
