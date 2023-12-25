@@ -38,7 +38,7 @@ class Modal extends View
     /** @var string */
     public $loadingLabel = 'Loading...';
     /** @var string */
-    public $headerCss = 'header';
+    public $headerClass = 'header';
     /** @var \Closure(View): void|null */
     public $fx;
     /** @var CallbackLater|null */
@@ -54,7 +54,7 @@ class Modal extends View
     public $type = 'json';
 
     /** @var array Add ability to add CSS classes to "content" div. */
-    public $contentCss = ['img', 'content', 'atk-dialog-content'];
+    public $contentClass = ['img', 'content', 'atk-dialog-content'];
 
     /**
      * If true, the <div class="actions"> at the bottom of the modal is
@@ -107,9 +107,9 @@ class Modal extends View
      *
      * @param string|array $class
      */
-    public function addContentCss($class): void
+    public function addContentClass($class): void
     {
-        $this->contentCss = array_merge($this->contentCss, is_string($class) ? [$class] : $class);
+        $this->contentClass = array_merge($this->contentClass, is_string($class) ? [$class] : $class);
     }
 
     /**
@@ -161,7 +161,7 @@ class Modal extends View
      */
     public function addScrolling()
     {
-        $this->addContentCss('scrolling');
+        $this->addContentClass('scrolling');
 
         return $this;
     }
@@ -238,15 +238,15 @@ class Modal extends View
 
         if ($this->title) {
             $this->template->trySet('title', $this->title);
-            $this->template->trySet('headerCss', $this->headerCss);
+            $this->template->trySet('headerClass', $this->headerClass);
         } else {
             // fix top modal corner rounding, first div must not be empty (must not be lower than 5px)
             // https://github.com/fomantic/Fomantic-UI/blob/2.9.0/src/definitions/modules/modal.less#L43
-            $this->template->loadFromString(preg_replace('~<div class="\{\$headerCss\}">\{\$title\}</div>\s*~', '', $this->template->toLoadableString(), 1));
+            $this->template->loadFromString(preg_replace('~<div class="\{\$headerClass\}">\{\$title\}</div>\s*~', '', $this->template->toLoadableString(), 1));
         }
 
-        if ($this->contentCss) {
-            $this->template->trySet('contentCss', implode(' ', $this->contentCss));
+        if ($this->contentClass) {
+            $this->template->trySet('contentClass', implode(' ', $this->contentClass));
         }
 
         if ($this->fx !== null) {

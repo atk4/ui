@@ -31,10 +31,10 @@ class JsModal extends JsExpression
     /**
      * Set additional option for this JsModal.
      *
-     * Valuable option are headerCss and label:
-     *  'headerCss' -> customize CSS class name for the header.
+     * Valuable option are headerClass and label:
+     *  'headerClass' -> customize CSS class name for the header.
      *      ex: changing color text for header
-     *      $jsModal->setOption('headerCss', 'ui blue header');
+     *      $jsModal->setOption('headerClass', 'ui blue header');
      *
      *  'loadingLabel' -> set the text loader value.
      *      ex: changing default 'Loading...' for no text
@@ -44,9 +44,9 @@ class JsModal extends JsExpression
      *      ex: making modal fullscreen
      *      $jsModal->setOption('modalCss', 'fullscreen');
      *
-     *   'contentCss' -> customize CSS class name for Modal content.
+     *   'contentClass' -> customize CSS class name for Modal content.
      *       ex: making content scrollable
-     *       $jsModal->setOption('contentCss', 'scrolling');
+     *       $jsModal->setOption('contentClass', 'scrolling');
      *       Note: Default to 'image' for backward compatibility.
      *
      * You can set option individually or supply an array.
@@ -76,7 +76,7 @@ class JsModal extends JsExpression
      */
     public function removeHeader()
     {
-        $this->args['arg']['headerCss'] = '';
+        $this->args['arg']['headerClass'] = '';
         $this->args['arg']['title'] = '';
 
         return $this;

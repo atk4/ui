@@ -725,8 +725,8 @@ class AtkCreateModalPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_1__["def
   }
   getDialogHtml(title) {
     return `<i class="close icon"></i>
-          ` + (title ? `<div class="${this.settings.headerCss}">${title}</div>
-          ` : '') + `<div class="${this.settings.contentCss} content atk-dialog-content">
+          ` + (title ? `<div class="${this.settings.headerClass}">${title}</div>
+          ` : '') + `<div class="${this.settings.contentClass} content atk-dialog-content">
             </div>
           </div>`;
   }
@@ -735,9 +735,9 @@ AtkCreateModalPlugin.DEFAULTS = {
   title: '',
   url: null,
   urlOptions: {},
-  headerCss: 'header',
+  headerClass: 'header',
   modalCss: 'scrolling',
-  contentCss: 'image',
+  contentClass: 'image',
   loadingLabel: 'Loading...',
   modal: {}
 };
