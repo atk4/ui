@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Card;
 use Atk4\Ui\Form;
@@ -17,7 +18,7 @@ use Atk4\Ui\Text;
 use Atk4\Ui\View;
 use Atk4\Ui\Wizard;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $wizard = Wizard::addTo($app);

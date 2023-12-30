@@ -6,11 +6,12 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
+use Atk4\Ui\App;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $model = new Stat($app->db, ['caption' => 'Demo Stat']);
