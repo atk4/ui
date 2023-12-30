@@ -108,7 +108,7 @@ class Admin extends Layout implements NavigableInterface
             $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], ['index']);
         }
         if (!$this->isMenuLeftVisible) {
-            $this->template->tryDel('CssVisibility');
+            $this->template->tryDel('ClassVisibility');
         }
 
         parent::renderView();
