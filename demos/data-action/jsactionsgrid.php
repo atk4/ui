@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model\UserAction;
+use Atk4\Ui\App;
 use Atk4\Ui\Grid;
 use Atk4\Ui\Header;
 use Atk4\Ui\Icon;
@@ -14,7 +15,7 @@ use Atk4\Ui\View;
 
 // Demo for Model action in Grid
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $country = new Country($app->db);

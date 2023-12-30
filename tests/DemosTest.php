@@ -13,6 +13,8 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use Atk4\Ui\Layout;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -199,8 +201,8 @@ class DemosTest extends TestCase
     {
         try {
             return $this->getClient()->request(isset($options['form_params']) ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
-        } catch (\GuzzleHttp\Exception\ServerException $ex) {
-            $exFactoryWithFullBody = new class('', $ex->getRequest()) extends \GuzzleHttp\Exception\RequestException {
+        } catch (ServerException $ex) {
+            $exFactoryWithFullBody = new class('', $ex->getRequest()) extends RequestException {
                 public static function getResponseBodySummary(ResponseInterface $response): string
                 {
                     $body = $response->getBody();
@@ -222,7 +224,7 @@ class DemosTest extends TestCase
     {
         try {
             $response = $this->getResponseFromRequest($path, $options);
-        } catch (\GuzzleHttp\Exception\ServerException $e) {
+        } catch (ServerException $e) {
             $response = $e->getResponse();
         } catch (UnhandledCallbackExceptionError $e) {
             while ($e instanceof UnhandledCallbackExceptionError) {

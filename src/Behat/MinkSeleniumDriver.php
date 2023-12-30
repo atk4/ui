@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Atk4\Ui\Behat;
 
 use Atk4\Core\WarnDynamicPropertyTrait;
+use Behat\Mink\Driver\Selenium2Driver;
 use WebDriver\Element as WebDriverElement;
 
-class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
+class MinkSeleniumDriver extends Selenium2Driver
 {
     use WarnDynamicPropertyTrait;
 
-    public function __construct(\Behat\Mink\Driver\Selenium2Driver $driver) // @phpstan-ignore-line
+    public function __construct(Selenium2Driver $driver) // @phpstan-ignore-line
     {
         $class = self::class;
         while (($class = get_parent_class($class)) !== false) {

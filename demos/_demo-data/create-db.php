@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Core\Factory;
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Data\Schema\Migrator;
@@ -45,13 +47,13 @@ class ImportModelWithPrefixedFields extends Model
     }
 
     #[\Override]
-    public function addField(string $name, $seed = []): \Atk4\Data\Field
+    public function addField(string $name, $seed = []): Field
     {
         if ($name === 'id') {
             $this->idField = $this->prefixFieldName($name);
         }
 
-        $seed = \Atk4\Core\Factory::mergeSeeds($seed, [
+        $seed = Factory::mergeSeeds($seed, [
             'actual' => $this->prefixFieldName($name, true),
         ]);
 
