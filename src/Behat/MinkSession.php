@@ -6,12 +6,13 @@ namespace Atk4\Ui\Behat;
 
 use Atk4\Core\WarnDynamicPropertyTrait;
 use Behat\Mink\Element\NodeElement;
+use Behat\Mink\Session as BaseSession;
 
-class MinkSession extends \Behat\Mink\Session
+class MinkSession extends BaseSession
 {
     use WarnDynamicPropertyTrait;
 
-    public function __construct(\Behat\Mink\Session $session)
+    public function __construct(BaseSession $session)
     {
         $driver = new MinkSeleniumDriver($session->getDriver()); // @phpstan-ignore-line
 

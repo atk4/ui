@@ -6,6 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Ui\Callback;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\LazyOpenStream;
 use Symfony\Component\Process\Process;
 
@@ -96,7 +97,7 @@ class DemosHttpTest extends DemosTest
                 $this->getResponseFromRequest('?ping');
 
                 break;
-            } catch (\GuzzleHttp\Exception\ConnectException $e) {
+            } catch (ConnectException $e) {
                 if (microtime(true) - $ts > 5) {
                     throw $e;
                 }
