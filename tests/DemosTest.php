@@ -15,6 +15,7 @@ use Atk4\Ui\Layout;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -191,7 +192,7 @@ class DemosTest extends TestCase
                 $app->getResponse()->getBody()->rewind();
             }
 
-            return new \GuzzleHttp\Promise\FulfilledPromise($app->getResponse());
+            return new FulfilledPromise($app->getResponse());
         };
 
         return new Client(['base_uri' => 'http://localhost/', 'handler' => $handler]);

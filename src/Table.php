@@ -10,6 +10,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Misc\ProxyModel;
 
 /**
  * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
@@ -145,7 +146,7 @@ class Table extends Lister
         }
 
         if (!$this->model) {
-            $this->model = new \Atk4\Ui\Misc\ProxyModel();
+            $this->model = new ProxyModel();
         }
         $this->model->assertIsModel();
 

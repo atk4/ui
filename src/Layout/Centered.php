@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Layout;
 
+use Atk4\Core\DebugTrait;
 use Atk4\Ui\Layout;
 
 /**
@@ -15,7 +16,7 @@ use Atk4\Ui\Layout;
  */
 class Centered extends Layout
 {
-    use \Atk4\Core\DebugTrait;
+    use DebugTrait;
 
     public $defaultTemplate = 'layout/centered.html';
 

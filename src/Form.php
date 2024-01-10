@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
+use Atk4\Core\HookTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
@@ -20,7 +21,7 @@ use Atk4\Ui\Js\JsExpressionable;
 
 class Form extends View
 {
-    use \Atk4\Core\HookTrait;
+    use HookTrait;
 
     /** Executed when form is submitted */
     public const HOOK_SUBMIT = self::class . '@submit';

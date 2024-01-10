@@ -10,6 +10,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
+use Atk4\Ui\Misc\ProxyModel;
 use Atk4\Ui\View;
 
 /**
@@ -37,7 +38,7 @@ abstract class AbstractLayout extends View
     public function addControl(string $name, $control = [], array $fieldSeed = []): Control
     {
         if ($this->form->model === null) {
-            $this->form->model = (new \Atk4\Ui\Misc\ProxyModel())->createEntity();
+            $this->form->model = (new ProxyModel())->createEntity();
         }
         $model = $this->form->model->getModel();
 
