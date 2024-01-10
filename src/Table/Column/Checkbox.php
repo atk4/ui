@@ -9,6 +9,7 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Table;
 
 /**
@@ -27,7 +28,7 @@ class Checkbox extends Table\Column
     public function jsChecked(): JsExpressionable
     {
         return (new Jquery($this->table))->find('.checked.' . $this->class)->closest('tr')
-            ->map(new \Atk4\Ui\Js\JsFunction([], [new JsExpression('return $(this).data(\'id\')')]))
+            ->map(new JsFunction([], [new JsExpression('return $(this).data(\'id\')')]))
             ->get()->join(',');
     }
 

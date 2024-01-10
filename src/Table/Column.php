@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table;
 
+use Atk4\Core\AppScopeTrait;
+use Atk4\Core\DiContainerTrait;
+use Atk4\Core\InitializerTrait;
+use Atk4\Core\NameTrait;
+use Atk4\Core\TrackableTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
@@ -21,11 +26,11 @@ use Atk4\Ui\View;
  */
 class Column
 {
-    use \Atk4\Core\AppScopeTrait;
-    use \Atk4\Core\DiContainerTrait;
-    use \Atk4\Core\InitializerTrait;
-    use \Atk4\Core\NameTrait;
-    use \Atk4\Core\TrackableTrait;
+    use AppScopeTrait;
+    use DiContainerTrait;
+    use InitializerTrait;
+    use NameTrait;
+    use TrackableTrait;
 
     public const HOOK_GET_HTML_TAGS = self::class . '@getHtmlTags';
     public const HOOK_GET_HEADER_CELL_HTML = self::class . '@getHeaderCellHtml';

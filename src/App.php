@@ -28,6 +28,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation;
 
 class App
 {
@@ -743,12 +745,12 @@ class App
                     return (new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory();
                 }, null, ExceptionRenderer\Html::class)();
             } else {
-                $request = new \Symfony\Component\HttpFoundation\Request([], [], [], [], [], $_SERVER);
+                $request = new HttpFoundation\Request([], [], [], [], [], $_SERVER);
                 $requestUrlPath = $request->getBasePath();
                 $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME'));
             }
         }
-        $fs = new \Symfony\Component\Filesystem\Filesystem();
+        $fs = new Filesystem();
         $localPathRelative = $fs->makePathRelative($localPath, dirname($requestLocalPath));
         $res = '/' . $fs->makePathRelative($requestUrlPath . '/' . $localPathRelative, '/');
         // fix https://github.com/symfony/symfony/pull/40051
