@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\HookTrait;
-use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
@@ -26,7 +25,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     use CommonExecutorTrait;
     use HookTrait;
 
-    /** @var Model\UserAction|null Action to execute */
+    /** @var UserAction|null Action to execute */
     public $action;
 
     /** @var Loader|null Loader to add content to modal. */
@@ -107,7 +106,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     }
 
     #[\Override]
-    public function setAction(Model\UserAction $action)
+    public function setAction(UserAction $action)
     {
         $this->action = $action;
         $this->afterActionInit();

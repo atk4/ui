@@ -361,7 +361,7 @@ class Grid extends View
      *
      * @return View
      */
-    public function addExecutorButton(UserAction\ExecutorInterface $executor, Button $button = null)
+    public function addExecutorButton(ExecutorInterface $executor, Button $button = null)
     {
         if ($button !== null) {
             $this->add($button);
@@ -536,7 +536,7 @@ class Grid extends View
     public function addBulkAction($item, \Closure $callback, $args = [])
     {
         $menuItem = $this->menu->addItem($item);
-        $menuItem->on('click', function (Js\Jquery $j, string $value) use ($callback) {
+        $menuItem->on('click', function (Jquery $j, string $value) use ($callback) {
             return $callback($j, $this->explodeSelectionValue($value));
         }, [$this->selection->jsChecked()]);
 

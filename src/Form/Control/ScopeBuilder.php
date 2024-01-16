@@ -528,7 +528,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts an VueQueryBuilder rule array to Condition or Scope.
      */
-    public function queryToCondition(array $query): Scope\Condition
+    public function queryToCondition(array $query): Condition
     {
         $key = $query['rule'];
         $operator = $query['operator'];
@@ -566,7 +566,7 @@ class ScopeBuilder extends Form\Control
 
         $operator = $operator ? ($operatorsMap[strtolower($operator)] ?? '=') : null;
 
-        return new Scope\Condition($key, $operator, $value);
+        return new Condition($key, $operator, $value);
     }
 
     /**
@@ -575,7 +575,7 @@ class ScopeBuilder extends Form\Control
     public function scopeToQuery(Scope\AbstractScope $scope, array $inputsMap = []): array
     {
         $query = [];
-        if ($scope instanceof Scope\Condition) {
+        if ($scope instanceof Condition) {
             $query = [
                 'type' => 'query-builder-rule',
                 'query' => $this->conditionToQuery($scope, $inputsMap),
@@ -603,7 +603,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts a Condition to VueQueryBuilder query array.
      */
-    public function conditionToQuery(Scope\Condition $condition, array $inputsMap = []): array
+    public function conditionToQuery(Condition $condition, array $inputsMap = []): array
     {
         if (is_string($condition->key)) {
             $rule = $condition->key;
