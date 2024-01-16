@@ -68,7 +68,7 @@ class FilterPopup extends Popup
         $this->form->onSubmit(function (Form $form) {
             $form->model->save();
 
-            return new jsReload($this->reload);
+            return new JsReload($this->reload);
         });
 
         Button::addTo($this->form, ['Clear', 'class.clear' => true])
