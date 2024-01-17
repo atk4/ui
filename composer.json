@@ -78,7 +78,9 @@
         "phpstan/phpstan": "^1.0",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-strict-rules": "^1.3",
-        "phpunit/phpunit": "^9.5.5",
+        "phpunit/phpunit": "9.6.13",
+        "phpunit/php-code-coverage": "9.2.29",
+        "phpunit/phpcov": "8.2.1",
         "symfony/process": "^4.4.30 || ^5.3.7 || ^6.0"
     },
     "conflict": {
