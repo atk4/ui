@@ -15,5 +15,6 @@ class JsTest extends TestCase
         }
 
         $v = 'x';
+        self::assertSame('x', $v);
     }
 }
