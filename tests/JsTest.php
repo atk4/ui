@@ -11,7 +11,7 @@ class JsTest extends TestCase
 {
     public function testNumbers(): void
     {
-        Repro::repro();
+        (new Repro())->repro();
 
         self::assertTrue(true);
     }
