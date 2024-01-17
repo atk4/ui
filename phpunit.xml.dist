@@ -4,12 +4,10 @@
             <directory>tests</directory>
         </testsuite>
     </testsuites>
-    <source>
+    <coverage>
         <include>
             <directory>src/Repro</directory>
         </include>
-    </source>
-    <coverage>
         <report>
             <php outputFile="coverage/phpunit.cov" />
         </report>
