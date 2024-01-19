@@ -1410,6 +1410,20 @@ class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["defa
       ...userConfig
     };
 
+    // workaround Fomantic-UI modal is hidden when "loading" class is set by
+    // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/behaviors/api.js#L524
+    // because of
+    // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/modules/modal.less#L396
+    // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/modules/transition.less#L44
+    // related fix https://github.com/fomantic/Fomantic-UI/pull/2982
+    if (!settings.stateContext && this.$el.hasClass('ui modal')) {
+      [settings.stateContext] = this.$el.children('.content');
+      if (!settings.className) {
+        settings.className = [];
+      }
+      settings.className.loading = 'ui basic vertically fitted segment loading atk-hide-loading-content';
+    }
+
     // if post then we need to set our store into settings data
     if (settings.method.toUpperCase() === 'POST') {
       settings.data = Object.assign(settings.data, store);
