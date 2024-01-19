@@ -75,14 +75,42 @@ class ApiService {
             if (response.success) {
                 if (response.html && response.id) {
                     // prevent modal duplication
-                    // apiService.removeModalDuplicate(response.html);
                     const modelsContainer = $('.ui.dimmer.modals.page')[0];
                     $($.parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
                         $(modelsContainer).find('#' + e.id).remove();
                     });
 
-                    const result = $('#' + response.id).replaceWith(response.html);
-                    if (result.length === 0) {
+                    const $target = $('#' + response.id);
+
+                    let $result;
+                    if ($target.hasClass('ui modal')) {
+                        const responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
+                        const responseElement = responseBody.childNodes[0];
+                        if (responseBody.childNodes.length !== 1 || !responseElement.classList.contains('ui') || !responseElement.classList.contains('modal')) {
+                            throw new Error('Unexpected modal HTML response');
+                        }
+
+                        $.each([...$target[0].childNodes], (i, node) => {
+                            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
+                                return;
+                            }
+
+                            $(node).remove();
+                        });
+                        $.each([...responseElement.childNodes], (i, node) => {
+                            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
+                                return;
+                            }
+
+                            $target.append(node);
+                        });
+
+                        $result = $target;
+                    } else {
+                        $result = $target.replaceWith(response.html);
+                    }
+
+                    if ($result.length === 0) {
                         // TODO find a better solution for long term
                         // need a way to gracefully abort server request
                         // when user cancel a request by selecting another request
