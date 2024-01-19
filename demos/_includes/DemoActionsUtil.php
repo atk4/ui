@@ -58,9 +58,9 @@ class DemoActionsUtil
 
         $country->addUserAction('edit_argument_preview', [
             'caption' => 'Argument/Preview',
-            'description' => 'Ask for argument "Age" and display preview prior to execute',
+            'description' => 'Ask for argument "Age" and display preview prior to execute ' . mt_rand(),
             'args' => [
-                'age' => ['type' => 'integer', 'required' => true],
+                'age' => ['type' => 'integer', 'required' => true, 'default' => 8],
             ],
             'preview' => static function (Country $model, int $age) {
                 return 'You age is: ' . $age;
