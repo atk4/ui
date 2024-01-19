@@ -143,7 +143,7 @@ trait StepExecutorTrait
                 $val['model'] = Factory::factory($val['model']);
                 $form->addControl($key, [Form\Control\Lookup::class])->setModel($val['model']);
             } else {
-                $form->addControl($key, ['caption' => 'x ' . mt_rand()], $val);
+                $form->addControl($key, [], $val);
             }
         }
 

@@ -255,9 +255,7 @@ class Modal extends View
             $this->template->del('ActionContainer');
         }
 
-        if ($this->options !== []) { // remove if once https://github.com/fomantic/Fomantic-UI/issues/2981 is fixed
-            $this->js(true)->modal($this->options);
-        }
+        $this->js(true)->modal($this->options);
 
         if (!isset($this->options['closable']) || $this->options['closable']) {
             $this->template->trySet('closeIcon', 'close');
