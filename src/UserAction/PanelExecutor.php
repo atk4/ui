@@ -68,7 +68,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
      */
     protected function afterActionInit(): void
     {
-        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim, 'loadEvent' => false]);
+        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this, 'loadEvent' => false]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 

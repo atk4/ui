@@ -83,11 +83,13 @@ class ApiService {
                     const $target = $('#' + response.id);
 
                     let $result;
-                    if ($target.hasClass('ui modal')) {
+                    if ($target.hasClass('ui modal') || $target.hasClass('atk-right-panel')) {
                         const responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
                         const responseElement = responseBody.childNodes[0];
-                        if (responseBody.childNodes.length !== 1 || !responseElement.classList.contains('ui') || !responseElement.classList.contains('modal')) {
-                            throw new Error('Unexpected modal HTML response');
+                        if (responseBody.childNodes.length !== 1
+                            || !((responseElement.classList.contains('ui') && responseElement.classList.contains('modal')) || responseElement.classList.contains('atk-right-panel'))
+                        ) {
+                            throw new Error('Unexpected modal/panel HTML response');
                         }
 
                         $.each([...$target[0].childNodes], (i, node) => {

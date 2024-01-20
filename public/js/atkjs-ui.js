@@ -2010,11 +2010,11 @@ class ApiService {
           });
           const $target = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('#' + response.id);
           let $result;
-          if ($target.hasClass('ui modal')) {
+          if ($target.hasClass('ui modal') || $target.hasClass('atk-right-panel')) {
             const responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
             const responseElement = responseBody.childNodes[0];
-            if (responseBody.childNodes.length !== 1 || !responseElement.classList.contains('ui') || !responseElement.classList.contains('modal')) {
-              throw new Error('Unexpected modal HTML response');
+            if (responseBody.childNodes.length !== 1 || !(responseElement.classList.contains('ui') && responseElement.classList.contains('modal') || responseElement.classList.contains('atk-right-panel'))) {
+              throw new Error('Unexpected modal/panel HTML response');
             }
             external_jquery__WEBPACK_IMPORTED_MODULE_5___default().each([...$target[0].childNodes], (i, node) => {
               if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
@@ -2721,7 +2721,8 @@ class PanelService {
    */
   removePanel(id) {
     // remove from dom
-    this.getPropertyValue(id, '$panel').remove();
+    // TODO uncomment once "/demos/data-action/jsactions-panel.php" demo does not close itself immediately
+    // this.getPropertyValue(id, '$panel').remove();
     const temp = this.service.panels.filter(panel => !panel[id]);
     this.service.panels.splice(0, this.service.panels.length, ...temp);
   }

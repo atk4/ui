@@ -29,9 +29,6 @@ trait StepExecutorTrait
     /** @var string */
     public $loaderUi = 'basic segment';
 
-    /** @var array */
-    public $loaderShim = [];
-
     /** @var Button The action step previous button. */
     protected $previousStepButton;
 

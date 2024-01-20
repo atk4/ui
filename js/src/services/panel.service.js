@@ -19,7 +19,8 @@ class PanelService {
      */
     removePanel(id) {
         // remove from dom
-        this.getPropertyValue(id, '$panel').remove();
+        // TODO uncomment once "/demos/data-action/jsactions-panel.php" demo does not close itself immediately
+        // this.getPropertyValue(id, '$panel').remove();
         const temp = this.service.panels.filter((panel) => !panel[id]);
         this.service.panels.splice(0, this.service.panels.length, ...temp);
     }

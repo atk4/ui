@@ -33,8 +33,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
     /** @var string */
     public $loaderUi = 'basic segment';
-    /** @var array|View|null Loader shim object or seed. */
-    public $loaderShim;
     /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
@@ -69,8 +67,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->add($buttonsView, 'actions');
         $this->showActions = true;
 
-        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim, 'loadEvent' => false]);
-        $this->loader->addClass('atk-hide-loading-content');
+        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this, 'loadEvent' => false]);
     }
 
     /**

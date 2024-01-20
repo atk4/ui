@@ -75,7 +75,7 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
      */
     protected function afterActionInit(): void
     {
-        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 
