@@ -34,10 +34,9 @@ Loader::addTo($app)->set(static function (Loader $p) {
     ViewTester::addTo($p);
 
     // Loader may be inside another loader
-    $loader = Loader::addTo($p);
-
     // use loadEvent to prevent manual loading or even specify custom trigger event
-    $loader->loadEvent = false;
+    $loader = Loader::addTo($p, ['loadEvent' => false]);
+
     $loader->set(static function (Loader $p) {
         // you may pass arguments to the loader, in this case it's "color"
         sleep(1);
