@@ -25,6 +25,11 @@ class Text extends View
         return $this->content;
     }
 
+    public function set($content)
+    {
+        $this->content = $this->getApp()->encodeHtml($content);
+    }
+
     /**
      * Adds HTML paragraph.
      *
@@ -44,7 +49,7 @@ class Text extends View
      *
      * @return $this
      */
-    public function addHtml(string $html)
+    public function dangerouslyAddHtml(string $html)
     {
         $this->content .= $html;
 
