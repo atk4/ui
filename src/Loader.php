@@ -21,7 +21,7 @@ class Loader extends View
      * by an actual content when loading stops. Additionally there will be loading indicator
      * on top of this content.
      *
-     * @var View
+     * @var View|non-empty-array<mixed>
      */
     public $shim;
 
@@ -95,7 +95,10 @@ class Loader extends View
             if ($this->loadEvent) {
                 $this->js($this->loadEvent, $this->jsLoad($this->urlArgs));
             }
-            $this->add($this->shim);
+
+            if (!is_object($this->shim) || !$this->shim->isInitialized()) {
+                $this->add($this->shim);
+            }
         }
 
         parent::renderView();
