@@ -26,9 +26,6 @@ trait StepExecutorTrait
     /** @var Loader The Loader that will execute all action step. */
     protected $loader;
 
-    /** @var string */
-    public $loaderUi = 'basic segment';
-
     /** @var Button The action step previous button. */
     protected $previousStepButton;
 

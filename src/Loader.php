@@ -13,7 +13,7 @@ use Atk4\Ui\Js\JsExpressionable;
  */
 class Loader extends View
 {
-    public $ui = 'segment';
+    public $ui = 'basic fitted segment';
 
     /**
      * Shim is a filler object that is displayed inside loader while the actual content is fetched

@@ -27,6 +27,8 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
 
     public const HOOK_STEP = self::class . '@onStep';
 
+    public $ui = 'container basic segment';
+
     /** @var string|null */
     public $title;
 
@@ -75,7 +77,7 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
      */
     protected function afterActionInit(): void
     {
-        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this]);
+        $this->loader = Loader::addTo($this, ['shim' => $this]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 

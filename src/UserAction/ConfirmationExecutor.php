@@ -31,8 +31,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /** @var Loader|null Loader to add content to modal. */
     public $loader;
 
-    /** @var string */
-    public $loaderUi = 'basic segment';
     /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
@@ -67,7 +65,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->add($buttonsView, 'actions');
         $this->showActions = true;
 
-        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this, 'loadEvent' => false]);
+        $this->loader = Loader::addTo($this, ['shim' => $this, 'loadEvent' => false]);
     }
 
     /**
