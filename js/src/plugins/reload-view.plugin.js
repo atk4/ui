@@ -56,7 +56,7 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
             if (!settings.className) {
                 settings.className = [];
             }
-            settings.className.loading = 'ui basic vertically fitted segment loading atk-hide-loading-content';
+            settings.className.loading = 'ui basic fitted segment loading atk-hide-loading-content';
         }
 
         // if post then we need to set our store into settings data
