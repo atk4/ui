@@ -139,7 +139,6 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
 
     protected function jsSetListState(View $view, string $currentStep): void
     {
-        $view->js(true, $this->stepList->js()->find('.item')->removeClass('active'));
         foreach ($this->steps as $step) {
             if ($step === $currentStep) {
                 $view->js(true, $this->stepList->js()->find('[data-list-item="' . $step . '"]')->addClass('active'));

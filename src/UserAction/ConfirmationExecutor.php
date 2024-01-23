@@ -71,14 +71,12 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * @param array<string, string> $urlArgs
      */
-    private function jsShowAndLoad(array $urlArgs): JsBlock
+    private function jsLoadAndShow(array $urlArgs): JsBlock
     {
         return new JsBlock([
-            $this->jsShow(),
-            $this->js()->data('closeOnLoadingError', true),
             $this->loader->jsLoad($urlArgs, [
                 'method' => 'POST',
-                'onSuccess' => new JsFunction([], [$this->js()->removeData('closeOnLoadingError')]),
+                'onSuccess' => new JsFunction([], [$this->jsShow()]),
             ]),
         ]);
     }
@@ -90,7 +88,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             throw new Exception('Action must be set prior to assign trigger');
         }
 
-        return $this->jsShowAndLoad($urlArgs);
+        return $this->jsLoadAndShow($urlArgs);
     }
 
     #[\Override]
@@ -108,8 +106,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->title ??= $action->getDescription();
         $this->step = $this->stickyGet('step');
 
-        $this->jsSetButtonsState($this);
-
         return $this;
     }
 
@@ -122,22 +118,12 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->action = $this->executeModelActionLoad($this->action);
 
         $this->loader->set(function (Loader $p) {
-            $this->jsSetButtonsState($p);
             if ($this->step === 'execute') {
                 $this->doFinal($p);
             } else {
                 $this->doConfirmation($p);
             }
         });
-    }
-
-    /**
-     * Reset button state.
-     */
-    protected function jsSetButtonsState(View $view): void
-    {
-        $view->js(true, $this->ok->js()->off());
-        $view->js(true, $this->cancel->js()->off());
     }
 
     /**
@@ -201,8 +187,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
         return new JsBlock([
             $this->jsHide(),
-            $this->ok->js(true)->off(),
-            $this->cancel->js(true)->off(),
             JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
                 ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
         ]);

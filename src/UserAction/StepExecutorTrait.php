@@ -319,13 +319,6 @@ trait StepExecutorTrait
             $view->js(true, $this->jsSetNextState($step));
             $view->js(true, $this->jsSetExecuteState($step));
         }
-
-        // reset button handler
-        $view->js(true, $this->executeActionButton->js()->off());
-        $view->js(true, $this->nextStepButton->js()->off());
-        $view->js(true, $this->previousStepButton->js()->off());
-        $view->js(true, $this->nextStepButton->js()->removeClass('disabled'));
-        $view->js(true, $this->executeActionButton->js()->removeClass('disabled'));
     }
 
     /**
