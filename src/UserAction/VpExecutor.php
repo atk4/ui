@@ -19,16 +19,13 @@ use Atk4\Ui\VirtualPage;
 /**
  * A Step Action Executor that use a VirtualPage.
  */
-class VpExecutor extends View implements JsExecutorInterface
+class VpExecutor extends VirtualPage implements JsExecutorInterface
 {
     use CommonExecutorTrait;
     use HookTrait;
     use StepExecutorTrait;
 
     public const HOOK_STEP = self::class . '@onStep';
-
-    /** @var VirtualPage */
-    protected $vp;
 
     /** @var string|null */
     public $title;
@@ -55,14 +52,13 @@ class VpExecutor extends View implements JsExecutorInterface
 
     protected function initExecutor(): void
     {
-        $this->vp = VirtualPage::addTo($this);
         /** @var Button $b */
-        $b = $this->vp->add(Factory::factory($this->cancelButtonSeed));
+        $b = $this->add(Factory::factory($this->cancelButtonSeed));
         $b->link($this->getApp()->url());
-        View::addTo($this->vp, ['ui' => 'clearing divider']);
+        View::addTo($this, ['ui' => 'clearing divider']);
 
-        $this->header = Header::addTo($this->vp);
-        $this->stepList = View::addTo($this->vp)->addClass('ui horizontal bulleted link list');
+        $this->header = Header::addTo($this);
+        $this->stepList = View::addTo($this)->addClass('ui horizontal bulleted link list');
     }
 
     #[\Override]
@@ -79,7 +75,7 @@ class VpExecutor extends View implements JsExecutorInterface
      */
     protected function afterActionInit(): void
     {
-        $this->loader = Loader::addTo($this->vp, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 
@@ -94,7 +90,7 @@ class VpExecutor extends View implements JsExecutorInterface
         if ($this->steps !== []) {
             $this->header->set($this->title ?? $action->getDescription());
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
-            $this->vp->add($this->createButtonBar()->setStyle(['text-align' => 'end']));
+            $this->add($this->createButtonBar()->setStyle(['text-align' => 'end']));
             $this->addStepList();
         }
 
@@ -108,7 +104,7 @@ class VpExecutor extends View implements JsExecutorInterface
     {
         $urlArgs['step'] = $this->step;
 
-        return new JsBlock([(new JsChain('atk.utils'))->redirect($this->vp->getUrl(), $urlArgs)]);
+        return new JsBlock([(new JsChain('atk.utils'))->redirect($this->getUrl(), $urlArgs)]);
     }
 
     /**
@@ -119,7 +115,7 @@ class VpExecutor extends View implements JsExecutorInterface
     {
         $this->action = $this->executeModelActionLoad($this->action);
 
-        $this->vp->set(function () {
+        $this->set(function () {
             $this->jsSetButtonsState($this->loader, $this->step);
             $this->jsSetListState($this->loader, $this->step);
             $this->runSteps();
@@ -133,7 +129,8 @@ class VpExecutor extends View implements JsExecutorInterface
         }
 
         foreach ($this->steps as $step) {
-            View::addTo($this->stepList)->set($this->stepListItems[$step])->addClass('item')->setAttr(['data-list-item' => $step]);
+            // TODO replace `(View::class)` with `View` once https://github.com/phpstan/phpstan/issues/10469 is fixed
+            (View::class)::addTo($this->stepList)->set($this->stepListItems[$step])->addClass('item')->setAttr(['data-list-item' => $step]);
         }
     }
 
