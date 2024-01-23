@@ -410,7 +410,7 @@ class HtmlTemplate
         if (!isset(self::$_filesCache[$filename])) {
             $data = @file_get_contents($filename);
             if ($data !== false) {
-                $data = preg_replace('~(?:\r\n?|\n)$~s', '', $data); // always trim end NL
+                $data = preg_replace('~(?:\r\n?|\n)$~sD', '', $data); // always trim end NL
             }
             self::$_filesCache[$filename] = $data;
         }
