@@ -8,6 +8,7 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
 use Atk4\Ui\LoaderInnerTrait;
@@ -94,12 +95,24 @@ class PanelExecutor extends Right implements JsExecutorInterface
         return $this;
     }
 
+    /**
+     * @param array<string, string> $urlArgs
+     */
+    private function jsLoadAndShow(array $urlArgs): JsBlock
+    {
+        return new JsBlock([
+            $this->loader->jsLoad($urlArgs, [
+                'onSuccess' => new JsFunction([], [$this->jsOpen()]),
+            ]),
+        ]);
+    }
+
     #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
     {
         $urlArgs['step'] = $this->step;
 
-        return new JsBlock([$this->jsOpen(), $this->loader->jsLoad($urlArgs)]);
+        return $this->jsLoadAndShow($urlArgs);
     }
 
     /**
