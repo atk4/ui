@@ -82,7 +82,7 @@ class Right extends View implements Loadable
     /**
      * Return JS expression in order to retrieve panelService.
      */
-    public function service(): JsChain
+    public function jsService(): JsChain
     {
         return new JsChain('atk.panelService');
     }
@@ -97,7 +97,7 @@ class Right extends View implements Loadable
      */
     public function jsOpen(array $urlArgs = [], array $dataAttribute = [], string $activeCss = null, JsExpressionable $jsTrigger = null): JsExpressionable
     {
-        return $this->service()->openPanel([
+        return $this->jsService()->openPanel([
             'triggered' => $jsTrigger ?? new Jquery(),
             'reloadArgs' => $dataAttribute,
             'urlArgs' => $urlArgs,
@@ -111,7 +111,7 @@ class Right extends View implements Loadable
      */
     public function jsPanelReload(array $args = []): JsExpressionable
     {
-        return $this->service()->reloadPanel($this->name, $args);
+        return $this->jsService()->reloadPanel($this->name, $args);
     }
 
     /**
@@ -119,7 +119,7 @@ class Right extends View implements Loadable
      */
     public function jsClose(): JsExpressionable
     {
-        return $this->service()->closePanel($this->name);
+        return $this->jsService()->closePanel($this->name);
     }
 
     /**
@@ -206,6 +206,6 @@ class Right extends View implements Loadable
 
         parent::renderView();
 
-        $this->js(true, $this->service()->addPanel($this->getPanelOptions()));
+        $this->js(true, $this->jsService()->addPanel($this->getPanelOptions()));
     }
 }
