@@ -158,7 +158,8 @@ header.ui.fixed.horizontal.menu {
 }
 
 .atk-hide-loading-content.loading::before {
-    background: rgba(255, 255, 255, 98%) !important;
+    background-color: #fff !important;
+    opacity: 0.98;
 }
 
 .atk-layout {
@@ -213,6 +214,11 @@ footer.atk-footer {
     &.atk-visible {
         box-shadow: 0 0 5px rgba(@black, 20%);
         right: 0%;
+    }
+
+    .ui.loading.segment::before,
+    .ui.loading.form::before {
+        background-color: @atkSlidePanelColor !important;
     }
 }
 

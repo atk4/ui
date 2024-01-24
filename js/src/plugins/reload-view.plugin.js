@@ -58,6 +58,15 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
             }
             settings.className.loading = 'ui basic fitted segment loading atk-hide-loading-content';
         }
+        // and for our panel until migrated
+        // https://github.com/atk4/ui/issues/1812#issuecomment-1273092181
+        if (!settings.stateContext && this.$el.hasClass('atk-right-panel')) {
+            [settings.stateContext] = this.$el.children('.ui.segment:not(:has(> .atk-panel-warning))');
+            if (!settings.className) {
+                settings.className = [];
+            }
+            settings.className.loading = 'loading atk-hide-loading-content';
+        }
 
         // if post then we need to set our store into settings data
         if (settings.method.toUpperCase() === 'POST') {
