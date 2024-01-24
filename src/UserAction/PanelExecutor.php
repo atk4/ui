@@ -10,16 +10,18 @@ use Atk4\Ui\Header;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
+use Atk4\Ui\LoaderInnerTrait;
 use Atk4\Ui\Panel\Right;
 use Atk4\Ui\View;
 
 /**
- * A Step Action Executor that use a VirtualPage.
+ * A Step Action Executor that use a Right Panel.
  */
 class PanelExecutor extends Right implements JsExecutorInterface
 {
     use CommonExecutorTrait;
     use HookTrait;
+    use LoaderInnerTrait;
     use StepExecutorTrait;
 
     public const HOOK_STEP = self::class . '@onStep';

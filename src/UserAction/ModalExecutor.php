@@ -11,6 +11,7 @@ use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
+use Atk4\Ui\LoaderInnerTrait;
 use Atk4\Ui\Modal;
 use Atk4\Ui\View;
 
@@ -35,6 +36,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 {
     use CommonExecutorTrait;
     use HookTrait;
+    use LoaderInnerTrait;
     use StepExecutorTrait;
 
     public const HOOK_STEP = self::class . '@onStep';
