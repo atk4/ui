@@ -2016,16 +2016,17 @@ class ApiService {
           if ($target.length !== 1) {
             throw new Error('Target DOM element not found');
           }
-          const responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
+          let responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
           const responseElement = responseBody.childNodes[0];
           if (responseBody.childNodes.length !== 1 || responseElement.id !== response.id) {
             throw new Error('Unexpected HTML response');
           }
+          responseBody = null;
 
           // prevent modal duplication
-          const modelsContainer = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page')[0];
-          external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(external_jquery__WEBPACK_IMPORTED_MODULE_5___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
-            external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
+          const $modalsContainers = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('body > .ui.dimmer.modals.page, body > .atk-side-panels');
+          external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(responseElement).find('.ui.modal[id], .atk-right-panel[id]').each((i, e) => {
+            $modalsContainers.find('#' + e.id).remove();
           });
           if ($target.hasClass('ui modal') || $target.hasClass('atk-right-panel')) {
             external_jquery__WEBPACK_IMPORTED_MODULE_5___default().each([...$target[0].childNodes], (i, node) => {
@@ -2621,10 +2622,15 @@ class ModalService {
         method: 'GET',
         obj: $content,
         onComplete: function (response, content) {
-          const modelsContainer = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page')[0];
-          external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(external_jquery__WEBPACK_IMPORTED_MODULE_5___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
-            external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
-          });
+          // prevent modal duplication
+          // TODO deduplicate in favor of api.service.js code only
+          if (response.html) {
+            const responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
+            const $modalsContainers = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('body > .ui.dimmer.modals.page, body > .atk-side-panels');
+            external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(responseBody.childNodes[0]).find('.ui.modal[id], .atk-right-panel[id]').each((i, e) => {
+              $modalsContainers.find('#' + e.id).remove();
+            });
+          }
           const result = content.html(response.html);
           if (result.length === 0) {
             // TODO this if should be removed

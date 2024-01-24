@@ -79,16 +79,17 @@ class ApiService {
                         throw new Error('Target DOM element not found');
                     }
 
-                    const responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
+                    let responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
                     const responseElement = responseBody.childNodes[0];
                     if (responseBody.childNodes.length !== 1 || responseElement.id !== response.id) {
                         throw new Error('Unexpected HTML response');
                     }
+                    responseBody = null;
 
                     // prevent modal duplication
-                    const modelsContainer = $('.ui.dimmer.modals.page')[0];
-                    $($.parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
-                        $(modelsContainer).find('#' + e.id).remove();
+                    const $modalsContainers = $('body > .ui.dimmer.modals.page, body > .atk-side-panels');
+                    $(responseElement).find('.ui.modal[id], .atk-right-panel[id]').each((i, e) => {
+                        $modalsContainers.find('#' + e.id).remove();
                     });
 
                     if ($target.hasClass('ui modal') || $target.hasClass('atk-right-panel')) {
