@@ -7,8 +7,8 @@ import atk from 'atk';
  */
 class PanelService {
     constructor() {
-        this.service = {
-            panels: [], // a collection of panels
+        this.panels = [];
+        this.service = { // needed because of Object.freeze
             currentVisibleId: null, // the current panel id that is in a visible state
             currentParams: null, // URL argument of the current panel
         };
@@ -21,8 +21,8 @@ class PanelService {
         // remove from dom
         // TODO uncomment once "/demos/data-action/jsactions-panel.php" demo does not close itself immediately
         // this.getPropertyValue(id, '$panel').remove();
-        const temp = this.service.panels.filter((panel) => !panel[id]);
-        this.service.panels.splice(0, this.service.panels.length, ...temp);
+        const temp = this.panels.filter((panel) => !panel[id]);
+        this.panels.splice(0, this.panels.length, ...temp);
     }
 
     /**
@@ -65,7 +65,7 @@ class PanelService {
 
         newPanel[params.id].$panel.appendTo($('.atk-side-panels'));
 
-        this.service.panels.push(newPanel);
+        this.panels.push(newPanel);
     }
 
     /**
@@ -83,7 +83,7 @@ class PanelService {
     openPanel(params) {
         // if no id is provide, then get the first one
         // no id mean the first panel in list
-        const panelId = params.openId ?? Object.keys(this.service.panels[0])[0];
+        const panelId = params.openId ?? Object.keys(this.panels[0])[0];
         // save our open param
         this.service.currentParams = params;
         if (this.isSameElement(panelId, params.triggered)) {
@@ -389,7 +389,7 @@ class PanelService {
      * @param {*}      value the value.
      */
     setPropertyValue(id, prop, value) {
-        for (const panel of this.service.panels) {
+        for (const panel of this.panels) {
             if (panel[id]) {
                 panel[id][prop] = value;
             }
@@ -404,7 +404,7 @@ class PanelService {
      */
     getPropertyValue(id, prop = null) {
         let value = null;
-        for (const panel of this.service.panels) {
+        for (const panel of this.panels) {
             if (panel[id]) {
                 value = prop ? panel[id][prop] : panel[id];
             }
