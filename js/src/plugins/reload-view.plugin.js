@@ -51,7 +51,7 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
         // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/modules/modal.less#L396
         // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/modules/transition.less#L44
         // related fix https://github.com/fomantic/Fomantic-UI/pull/2982
-        if (!settings.stateContext && this.$el.hasClass('ui modal')) {
+        if (!settings.stateContext && this.$el.hasClass('ui modal') && this.$el.children().length > 0 /* prevent loading in original DOM location */) {
             [settings.stateContext] = this.$el.children('.content');
             if (!settings.className) {
                 settings.className = [];
@@ -60,7 +60,7 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
         }
         // and for our panel until migrated
         // https://github.com/atk4/ui/issues/1812#issuecomment-1273092181
-        if (!settings.stateContext && this.$el.hasClass('atk-right-panel')) {
+        if (!settings.stateContext && this.$el.hasClass('atk-right-panel') && this.$el.children().length > 0 /* prevent loading in original DOM location */) {
             [settings.stateContext] = this.$el.children('.ui.segment:not(:has(> .atk-panel-warning))');
             if (!settings.className) {
                 settings.className = [];
