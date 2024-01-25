@@ -28,7 +28,7 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
 
     public const HOOK_STEP = self::class . '@onStep';
 
-    public $ui = 'container basic segment';
+    public $ui = 'container basic fitted segment';
 
     /** @var string|null */
     public $title;
