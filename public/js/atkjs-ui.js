@@ -3836,11 +3836,11 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].createDebouncedFx = function (func, 
 
 /**
  * Utilities function that you can execute from atk context.
- * Usage: atk.utils.redirect('url');
+ * Usage: atk.utils.redirect(url);
  */
 atk__WEBPACK_IMPORTED_MODULE_2__["default"].utils = {
   redirect: function (url, params) {
-    document.location = atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper.appendParams(url, params);
+    window.location = atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper.appendParams(url, params);
   }
 };
 atk__WEBPACK_IMPORTED_MODULE_2__["default"].tableDropdownHelper = _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_3__["default"];
