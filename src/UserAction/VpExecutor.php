@@ -8,7 +8,6 @@ use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
-use Atk4\Ui\Callback;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
@@ -165,16 +164,11 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
 
-        // needed for https://github.com/atk4/ui/pull/2142
-        // but TODO as previously https://github.com/atk4/ui/blob/5.0.0/demos/data-action/jsactions-vp.php demo
-        // was already broken - run "Argument/Preview" action and then notice "Undefined index: age" exception when run again
-        unset($this->stickyArgs[Callback::URL_QUERY_TRIGGER_PREFIX . \Closure::bind(static fn ($cb) => $cb->urlTrigger, null, Callback::class)($this->cb)]);
-
         return new JsBlock([
             JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
                 ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
             $this->loader->jsClearStoreData(true),
-            (new JsChain('atk.utils'))->redirect($this->url()),
+            (new JsChain('atk.utils'))->redirect($this->getOwner()->url()),
         ]);
     }
 }
