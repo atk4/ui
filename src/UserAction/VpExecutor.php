@@ -14,7 +14,6 @@ use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
-use Atk4\Ui\LoaderInnerTrait;
 use Atk4\Ui\View;
 use Atk4\Ui\VirtualPage;
 
@@ -25,7 +24,7 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
 {
     use CommonExecutorTrait;
     use HookTrait;
-    use LoaderInnerTrait;
+    use InnerLoaderTrait;
     use StepExecutorTrait;
 
     public const HOOK_STEP = self::class . '@onStep';

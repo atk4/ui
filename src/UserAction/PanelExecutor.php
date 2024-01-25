@@ -11,7 +11,6 @@ use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
-use Atk4\Ui\LoaderInnerTrait;
 use Atk4\Ui\Panel\Right;
 use Atk4\Ui\View;
 
@@ -22,7 +21,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
 {
     use CommonExecutorTrait;
     use HookTrait;
-    use LoaderInnerTrait;
+    use InnerLoaderTrait;
     use StepExecutorTrait;
 
     public const HOOK_STEP = self::class . '@onStep';

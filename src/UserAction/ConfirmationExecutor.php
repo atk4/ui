@@ -13,7 +13,6 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
-use Atk4\Ui\LoaderInnerTrait;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
@@ -25,13 +24,10 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 {
     use CommonExecutorTrait;
     use HookTrait;
-    use LoaderInnerTrait;
+    use InnerLoaderTrait;
 
     /** @var UserAction|null Action to execute */
     public $action;
-
-    /** @var Loader|null Loader to add content to modal. */
-    public $loader;
 
     /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;

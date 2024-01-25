@@ -23,9 +23,6 @@ trait StepExecutorTrait
     /** @var string current step. */
     protected $step;
 
-    /** @var Loader The Loader that will execute all action step. */
-    protected $loader;
-
     /** @var Button The action step previous button. */
     protected $previousStepButton;
 
