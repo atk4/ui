@@ -14,6 +14,7 @@ use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
+use Atk4\Ui\LoaderInnerTrait;
 use Atk4\Ui\View;
 use Atk4\Ui\VirtualPage;
 
@@ -24,6 +25,7 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
 {
     use CommonExecutorTrait;
     use HookTrait;
+    use LoaderInnerTrait;
     use StepExecutorTrait;
 
     public const HOOK_STEP = self::class . '@onStep';
@@ -78,8 +80,14 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
      */
     protected function afterActionInit(): void
     {
-        $this->loader = Loader::addTo($this, ['shim' => $this]);
+        $this->loader = Loader::addTo($this, ['shim' => $this, 'loadEvent' => false]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
+
+        if ($this->cb->canTerminate()) {
+            $this->js(true, $this->loader->jsLoad([
+                $this->name => $this->getApp()->getRequestQueryParam($this->name),
+            ]));
+        }
     }
 
     #[\Override]
