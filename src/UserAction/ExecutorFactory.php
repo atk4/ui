@@ -218,7 +218,7 @@ class ExecutorFactory
 
                 break;
             case self::TABLE_MENU_ITEM:
-                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'name' => false, 'class.item' => true];
+                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'name' => View::NAME_POSSIBLY_NON_UNIQUE, 'class.item' => true];
 
                 break;
             default:

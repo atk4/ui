@@ -57,12 +57,7 @@ class Multiformat extends Table\Column
             }
 
             if ($cell) {
-                if ($name) {
-                    // if name is set, we can wrap things
-                    $cell = str_replace('{$' . $name . '}', $cell, $html);
-                } else {
-                    $cell .= ' ' . $html;
-                }
+                $cell = str_replace('{$' . $name . '}', $cell, $html);
             } else {
                 $cell = $html;
             }

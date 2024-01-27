@@ -50,7 +50,7 @@ abstract class AbstractView
      */
     protected function init(): void
     {
-        if ($this->name === null) {
+        if (($this->name ?? null) === null) {
             $this->name = 'atk';
         }
 

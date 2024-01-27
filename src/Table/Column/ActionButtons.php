@@ -22,7 +22,7 @@ use Atk4\Ui\View;
  */
 class ActionButtons extends Table\Column
 {
-    /** @var array Stores all the buttons that have been added. */
+    /** @var array<string, View> Stores all the buttons that have been added. */
     public $buttons = [];
 
     /** @var array<string, \Closure(Model): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
@@ -54,7 +54,7 @@ class ActionButtons extends Table\Column
                 $button = [1 => $button];
             }
 
-            $button = Factory::factory([Button::class], Factory::mergeSeeds($button, ['name' => false]));
+            $button = Factory::factory([Button::class], Factory::mergeSeeds($button, ['name' => View::NAME_POSSIBLY_NON_UNIQUE]));
         }
 
         if ($isDisabled === true) {

@@ -23,6 +23,9 @@ use Atk4\Ui\UserAction\ExecutorFactory;
  */
 class View extends AbstractView
 {
+    /** TODO remove once nothing is rendered using cloned template (used for table rows render currently) */
+    public const NAME_POSSIBLY_NON_UNIQUE = '__atk4_ui_non_unique__';
+
     /**
      * When you call render() this will be populated with JavaScript chains.
      *
@@ -535,7 +538,7 @@ class View extends AbstractView
 
         $attrsHtml = [];
 
-        if ($this->name) {
+        if ($this->name !== self::NAME_POSSIBLY_NON_UNIQUE) {
             $attrsHtml[] = 'id="' . $app->encodeHtml($this->name) . '"';
 
             // TODO hack for template/tabs.html
@@ -691,7 +694,7 @@ class View extends AbstractView
      */
     public function getHtml(): string
     {
-        if ($this->getApp()->hasRequestQueryParam('__atk_reload') && $this->getApp()->getRequestQueryParam('__atk_reload') === $this->name) {
+        if ($this->getApp()->hasRequestQueryParam('__atk_reload') && $this->getApp()->getRequestQueryParam('__atk_reload') === ($this->name ?? null)) {
             $this->getApp()->terminateJson($this);
         }
 
@@ -856,12 +859,7 @@ class View extends AbstractView
     {
         $type = $useSession ? 'session' : 'local';
 
-        $name = $this->name;
-        if (!$name) {
-            throw new Exception('View property name needs to be set');
-        }
-
-        return (new JsChain('atk.dataService'))->clearData($name, $type);
+        return (new JsChain('atk.dataService'))->clearData($this->name, $type);
     }
 
     /**
@@ -879,12 +877,7 @@ class View extends AbstractView
     {
         $type = $useSession ? 'session' : 'local';
 
-        $name = $this->name;
-        if (!$name) {
-            throw new Exception('View property name needs to be set');
-        }
-
-        return (new JsChain('atk.dataService'))->addJsonData($name, $this->getApp()->encodeJson($data), $type);
+        return (new JsChain('atk.dataService'))->addJsonData($this->name, $this->getApp()->encodeJson($data), $type);
     }
 
     /**

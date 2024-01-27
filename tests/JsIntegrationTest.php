@@ -22,7 +22,7 @@ class JsIntegrationTest extends TestCase
         $v->render();
 
         self::assertNotEmpty($v->icon);
-        self::assertNotEmpty($v->icon->name);
+        self::assertNotEmpty($v->icon->name); // @phpstan-ignore-line
         self::assertNotSame($v->name, $v->icon->name);
     }
 

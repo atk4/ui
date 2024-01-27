@@ -28,7 +28,7 @@ class ColorRating extends Table\Column
     /** @var float Maximum value of the gradient. */
     public $max;
 
-    /** @var array Hex colors. */
+    /** @var list<string> Hex colors. */
     public $colors = ['#FF0000', '#00FF00'];
 
     /** @var bool Define if values lesser than min have no color. */
@@ -107,8 +107,8 @@ class ColorRating extends Table\Column
         $colorIndex = (count($this->colors) - 1) * ($value - $this->min) / ($this->max - $this->min);
 
         $color = $this->interpolateColor(
-            $this->colors[floor($colorIndex)],
-            $this->colors[ceil($colorIndex)],
+            $this->colors[(int) floor($colorIndex)],
+            $this->colors[(int) ceil($colorIndex)],
             $colorIndex - floor($colorIndex)
         );
 

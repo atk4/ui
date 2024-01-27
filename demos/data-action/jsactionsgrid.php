@@ -25,7 +25,7 @@ DemoActionsUtil::setupDemoActions($country);
 
 // creating special menu item for multi_step action
 $multiAction = $country->getUserAction('multi_step');
-$specialItem = Factory::factory([View::class], ['name' => false, 'class' => ['item'], 'content' => 'Multi Step']);
+$specialItem = Factory::factory([View::class], ['name' => View::NAME_POSSIBLY_NON_UNIQUE, 'class' => ['item'], 'content' => 'Multi Step']);
 Icon::addTo($specialItem, ['content' => 'window maximize outline']);
 // register this menu item in factory
 $app->getExecutorFactory()->registerTrigger(ExecutorFactory::TABLE_MENU_ITEM, $specialItem, $multiAction);
@@ -35,12 +35,12 @@ Header::addTo($app, ['Execute model action from Grid menu items', 'subHeader' =>
 $grid = Grid::addTo($app, ['menu' => false]);
 $grid->setModel($country);
 
-$divider = Factory::factory([View::class], ['name' => false, 'class' => ['divider'], 'content' => '']);
+$divider = Factory::factory([View::class], ['name' => View::NAME_POSSIBLY_NON_UNIQUE, 'class' => ['divider'], 'content' => '']);
 
-$modelHeader = Factory::factory([View::class], ['name' => false, 'class' => ['header'], 'content' => 'Model Actions']);
+$modelHeader = Factory::factory([View::class], ['name' => View::NAME_POSSIBLY_NON_UNIQUE, 'class' => ['header'], 'content' => 'Model Actions']);
 Icon::addTo($modelHeader, ['content' => 'database']);
 
-$jsHeader = Factory::factory([View::class], ['name' => false, 'class' => ['header'], 'content' => 'JS Actions']);
+$jsHeader = Factory::factory([View::class], ['name' => View::NAME_POSSIBLY_NON_UNIQUE, 'class' => ['header'], 'content' => 'JS Actions']);
 Icon::addTo($jsHeader, ['content' => 'file code']);
 
 $grid->addActionMenuItem($jsHeader);

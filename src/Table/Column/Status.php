@@ -14,17 +14,17 @@ use Atk4\Ui\Table;
  */
 class Status extends Table\Column
 {
-    /** @var array Describes list of highlited statuses for this Field. */
-    public $states = [];
+    /** @var array<string, list<string>> Describes list of highlighted statuses for this Field. */
+    public array $states = [];
 
     /**
      * Pass argument with possible states like this:.
      *
      *  ['positive' => ['Paid', 'Archived'], 'negative' => ['Overdue']]
      *
-     * @param array $states List of status => [value, value, value]
+     * @param array<string, list<string>> $states List of status => [value, value, value]
      */
-    public function __construct($states)
+    public function __construct(array $states)
     {
         parent::__construct();
 

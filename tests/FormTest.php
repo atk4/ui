@@ -334,6 +334,7 @@ class FormTest extends TestCase
         $input = new Form\Control\Line();
         $input->readOnly = true;
         $input->setApp($this->createApp());
+        $input->shortName = 'i';
         self::assertStringContainsString(' readonly="readonly"', $input->render());
         self::assertStringNotContainsString('disabled', $input->render());
 
@@ -341,6 +342,7 @@ class FormTest extends TestCase
         $input->disabled = true;
         $input->readOnly = true;
         $input->setApp($this->createApp());
+        $input->shortName = 'i';
         self::assertStringContainsString(' disabled="disabled"', $input->render());
         self::assertStringNotContainsString('readonly', $input->render());
 
@@ -348,6 +350,7 @@ class FormTest extends TestCase
         $input->disabled = true;
         $input->readOnly = true;
         $input->setApp($this->createApp());
+        $input->shortName = 'i';
         self::assertStringNotContainsString('disabled', $input->render());
         self::assertStringNotContainsString('readonly', $input->render());
     }
