@@ -313,16 +313,19 @@ parameters:
             message: '~^Method Atk4\\Ui\\Form\\Layout\\Custom::addButton\(\) should return Atk4\\Ui\\Button but returns Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Form/Layout/Section.php'
-            message: '~^Method Atk4\\Ui\\Form\\Layout\\Section::addSection\(\) should return Atk4\\Ui\\Form\\Layout but returns Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Method Atk4\\Ui\\Form\\Layout\\Section::addSection\(\) should return Atk4\\Ui\\Form\\Layout but returns static\(Atk4\\Ui\\Form\\Layout\\Section\)\.$~'
         -
             path: 'src/Form/Layout/Section/Accordion.php'
             message: '~^Return type \(Atk4\\Ui\\Form\\Layout\) of method Atk4\\Ui\\Form\\Layout\\Section\\Accordion::addSection\(\) should be compatible with return type \(Atk4\\Ui\\AccordionSection\) of method Atk4\\Ui\\Accordion::addSection\(\)$~'
         -
             path: 'src/Form/Layout/Section/Accordion.php'
-            message: '~^Method Atk4\\Ui\\Form\\Layout\\Section\\Accordion::addSection\(\) should return Atk4\\Ui\\Form\\Layout but returns Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Method Atk4\\Ui\\Form\\Layout\\Section\\Accordion::addSection\(\) should return Atk4\\Ui\\Form\\Layout but returns static\(Atk4\\Ui\\Form\\Layout\\Section\\Accordion\)\.$~'
+        -
+            path: 'src/Form/Layout/Section/Columns.php'
+            message: '~^Method Atk4\\Ui\\Form\\Layout\\Section\\Columns::addColumn\(\) should return Atk4\\Ui\\Form\\Layout but returns static\(Atk4\\Ui\\Form\\Layout\\Section\\Columns\)\.$~'
         -
             path: 'src/Form/Layout/Section/Tabs.php'
-            message: '~^Method Atk4\\Ui\\Form\\Layout\\Section\\Tabs::addTab\(\) should return Atk4\\Ui\\Form\\Layout but returns Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Method Atk4\\Ui\\Form\\Layout\\Section\\Tabs::addTab\(\) should return Atk4\\Ui\\Form\\Layout but returns static\(Atk4\\Ui\\Form\\Layout\\Section\\Tabs\)\.$~'
         -
             path: 'src/Grid.php'
             message: '~^Property Atk4\\Ui\\Grid::\$menu \(array\|Atk4\\Ui\\Menu\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
@@ -377,15 +380,6 @@ parameters:
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 5
-        -
-            path: 'src/Form/Layout/Section.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, Atk4\\Ui\\Form\|class-string<Atk4\\Ui\\Form\\Layout>> given\.$~'
-        -
-            path: 'src/Form/Layout/Section/Accordion.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, Atk4\\Ui\\Form\|class-string<Atk4\\Ui\\Form\\Layout>> given\.$~'
-        -
-            path: 'src/Form/Layout/Section/Tabs.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, Atk4\\Ui\\Form\|class-string<Atk4\\Ui\\Form\\Layout>> given\.$~'
         -
             path: 'src/Grid.php'
             message: '~^Parameter #1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View\|string, Atk4\\Data\\Model\\UserAction given\.$~'

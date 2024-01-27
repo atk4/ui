@@ -48,7 +48,7 @@ $form = Form::addTo($left, [
         Form\Layout::class,
         [
             'defaultInputTemplate' => __DIR__ . '/templates/input.html',
-            'defaultHint' => [Label::class, 'class' => ['pointing', 'below']],
+            'defaultHintSeed' => [Label::class, 'class' => ['pointing', 'below']],
         ],
     ],
 ]);
