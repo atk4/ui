@@ -40,7 +40,7 @@ class Layout extends AbstractLayout
     public $inputTemplate;
 
     /** @var array Seed for creating input hint View used in this layout. */
-    public $defaultHint = [Label::class, 'class' => ['pointing']];
+    public $defaultHintSeed = [Label::class, 'class' => ['pointing']];
 
     #[\Override]
     protected function _addControl(Control $control, Field $field): Control
@@ -205,7 +205,7 @@ class Layout extends AbstractLayout
             }
 
             if ($element->hint && $template->hasTag('Hint')) {
-                $hint = Factory::factory($this->defaultHint);
+                $hint = Factory::factory($this->defaultHintSeed);
                 $hint->name = $element->name . '_hint';
                 if (is_object($element->hint) || is_array($element->hint)) {
                     $hint->add($element->hint);
