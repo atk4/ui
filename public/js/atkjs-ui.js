@@ -1410,6 +1410,29 @@ class AtkReloadViewPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["defa
       ...userConfig
     };
 
+    // workaround Fomantic-UI modal is hidden when "loading" class is set by
+    // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/behaviors/api.js#L524
+    // because of
+    // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/modules/modal.less#L396
+    // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/modules/transition.less#L44
+    // related fix https://github.com/fomantic/Fomantic-UI/pull/2982
+    if (!settings.stateContext && this.$el.hasClass('ui modal') && this.$el.children().length > 0 /* prevent loading in original DOM location */) {
+      [settings.stateContext] = this.$el.children('.content');
+      if (!settings.className) {
+        settings.className = [];
+      }
+      settings.className.loading = 'ui basic fitted segment loading atk-hide-loading-content';
+    }
+    // and for our panel until migrated
+    // https://github.com/atk4/ui/issues/1812#issuecomment-1273092181
+    if (!settings.stateContext && this.$el.hasClass('atk-right-panel') && this.$el.children().length > 0 /* prevent loading in original DOM location */) {
+      [settings.stateContext] = this.$el.children('.ui.segment:not(:has(> .atk-panel-warning))');
+      if (!settings.className) {
+        settings.className = [];
+      }
+      settings.className.loading = 'loading atk-hide-loading-content';
+    }
+
     // if post then we need to set our store into settings data
     if (settings.method.toUpperCase() === 'POST') {
       settings.data = Object.assign(settings.data, store);
@@ -1989,22 +2012,39 @@ class ApiService {
     try {
       if (response.success) {
         if (response.html && response.id) {
+          const $target = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('#' + response.id);
+          if ($target.length !== 1) {
+            throw new Error('Target DOM element not found');
+          }
+          let responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
+          const responseElement = responseBody.childNodes[0];
+          if (responseBody.childNodes.length !== 1 || responseElement.id !== response.id) {
+            throw new Error('Unexpected HTML response');
+          }
+          responseBody = null;
+
           // prevent modal duplication
-          // apiService.removeModalDuplicate(response.html);
-          const modelsContainer = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page')[0];
-          external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(external_jquery__WEBPACK_IMPORTED_MODULE_5___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
-            external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
+          const $modalsContainers = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('body > .ui.dimmer.modals.page, body > .atk-side-panels');
+          external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(responseElement).find('.ui.modal[id], .atk-right-panel[id]').each((i, e) => {
+            $modalsContainers.find('#' + e.id).remove();
           });
-          const result = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('#' + response.id).replaceWith(response.html);
-          if (result.length === 0) {
-            // TODO find a better solution for long term
-            // need a way to gracefully abort server request
-            // when user cancel a request by selecting another request
-            console.error('Unable to replace element with id: ' + response.id);
-            // throw Error('Unable to replace element with id: ' + response.id);
+          if ($target.hasClass('ui modal') || $target.hasClass('atk-right-panel')) {
+            external_jquery__WEBPACK_IMPORTED_MODULE_5___default().each([...$target[0].childNodes], (i, node) => {
+              if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
+                return;
+              }
+              external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(node).remove();
+            });
+            external_jquery__WEBPACK_IMPORTED_MODULE_5___default().each([...responseElement.childNodes], (i, node) => {
+              if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
+                return;
+              }
+              $target.append(node);
+            });
+          } else {
+            $target.replaceWith(response.html);
           }
         }
-
         if (response.atkjs) {
           atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse.call(this, response.atkjs);
         }
@@ -2582,10 +2622,15 @@ class ModalService {
         method: 'GET',
         obj: $content,
         onComplete: function (response, content) {
-          const modelsContainer = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('.ui.dimmer.modals.page')[0];
-          external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(external_jquery__WEBPACK_IMPORTED_MODULE_5___default().parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
-            external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(modelsContainer).find('#' + e.id).remove();
-          });
+          // prevent modal duplication
+          // TODO deduplicate in favor of api.service.js code only
+          if (response.html) {
+            const responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
+            const $modalsContainers = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('body > .ui.dimmer.modals.page, body > .atk-side-panels');
+            external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(responseBody.childNodes[0]).find('.ui.modal[id], .atk-right-panel[id]').each((i, e) => {
+              $modalsContainers.find('#' + e.id).remove();
+            });
+          }
           const result = content.html(response.html);
           if (result.length === 0) {
             // TODO this if should be removed
@@ -2671,9 +2716,9 @@ __webpack_require__.r(__webpack_exports__);
  */
 class PanelService {
   constructor() {
+    this.panels = [];
     this.service = {
-      panels: [],
-      // a collection of panels
+      // needed because of Object.freeze
       currentVisibleId: null,
       // the current panel id that is in a visible state
       currentParams: null // URL argument of the current panel
@@ -2685,9 +2730,10 @@ class PanelService {
    */
   removePanel(id) {
     // remove from dom
-    this.getPropertyValue(id, '$panel').remove();
-    const temp = this.service.panels.filter(panel => !panel[id]);
-    this.service.panels.splice(0, this.service.panels.length, ...temp);
+    // TODO uncomment once "/demos/data-action/jsactions-panel.php" demo does not close itself immediately
+    // this.getPropertyValue(id, '$panel').remove();
+    const temp = this.panels.filter(panel => !panel[id]);
+    this.panels.splice(0, this.panels.length, ...temp);
   }
 
   /**
@@ -2736,7 +2782,7 @@ class PanelService {
       this.closePanel(params.id);
     });
     newPanel[params.id].$panel.appendTo(external_jquery__WEBPACK_IMPORTED_MODULE_6___default()('.atk-side-panels'));
-    this.service.panels.push(newPanel);
+    this.panels.push(newPanel);
   }
 
   /**
@@ -2754,7 +2800,7 @@ class PanelService {
   openPanel(params) {
     // if no id is provide, then get the first one
     // no id mean the first panel in list
-    const panelId = params.openId ?? Object.keys(this.service.panels[0])[0];
+    const panelId = params.openId ?? Object.keys(this.panels[0])[0];
     // save our open param
     this.service.currentParams = params;
     if (this.isSameElement(panelId, params.triggered)) {
@@ -3052,7 +3098,7 @@ class PanelService {
    * @param {*}      value the value.
    */
   setPropertyValue(id, prop, value) {
-    for (const panel of this.service.panels) {
+    for (const panel of this.panels) {
       if (panel[id]) {
         panel[id][prop] = value;
       }
@@ -3068,7 +3114,7 @@ class PanelService {
   getPropertyValue(id) {
     let prop = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
     let value = null;
-    for (const panel of this.service.panels) {
+    for (const panel of this.panels) {
       if (panel[id]) {
         value = prop ? panel[id][prop] : panel[id];
       }
@@ -3790,11 +3836,11 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].createDebouncedFx = function (func, 
 
 /**
  * Utilities function that you can execute from atk context.
- * Usage: atk.utils.redirect('url');
+ * Usage: atk.utils.redirect(url);
  */
 atk__WEBPACK_IMPORTED_MODULE_2__["default"].utils = {
   redirect: function (url, params) {
-    document.location = atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper.appendParams(url, params);
+    window.location = atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper.appendParams(url, params);
   }
 };
 atk__WEBPACK_IMPORTED_MODULE_2__["default"].tableDropdownHelper = _helpers_table_dropdown_helper__WEBPACK_IMPORTED_MODULE_3__["default"];

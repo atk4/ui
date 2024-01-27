@@ -22,9 +22,8 @@ $app->getExecutorFactory()->registerTrigger(
     $m->getUserAction('edit')
 );
 
-$loader = Loader::addTo($app);
+$loader = Loader::addTo($app, ['loadEvent' => false]);
 $loader->cb->setUrlTrigger('trigger_main_loader');
-$loader->loadEvent = false;
 
 $loader->set(static function (Loader $p) use ($m) {
     Header::addTo($p, ['Loader-1', 'size' => 4]);
@@ -33,9 +32,8 @@ $loader->set(static function (Loader $p) use ($m) {
         throw new Exception('Exception from Main Loader');
     }
 
-    $loaderSub = Loader::addTo($p);
+    $loaderSub = Loader::addTo($p, ['loadEvent' => false]);
     $loaderSub->cb->setUrlTrigger('trigger_sub_loader');
-    $loaderSub->loadEvent = false;
 
     $loaderSub->set(static function (Loader $p) use ($m) {
         Header::addTo($p, ['Loader-2', 'size' => 4]);

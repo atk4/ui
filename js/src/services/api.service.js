@@ -74,25 +74,48 @@ class ApiService {
         try {
             if (response.success) {
                 if (response.html && response.id) {
+                    const $target = $('#' + response.id);
+                    if ($target.length !== 1) {
+                        throw new Error('Target DOM element not found');
+                    }
+
+                    let responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
+                    const responseElement = responseBody.childNodes[0];
+                    if (responseBody.childNodes.length !== 1 || responseElement.id !== response.id) {
+                        throw new Error('Unexpected HTML response');
+                    }
+                    responseBody = null;
+
                     // prevent modal duplication
-                    // apiService.removeModalDuplicate(response.html);
-                    const modelsContainer = $('.ui.dimmer.modals.page')[0];
-                    $($.parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
-                        $(modelsContainer).find('#' + e.id).remove();
+                    const $modalsContainers = $('body > .ui.dimmer.modals.page, body > .atk-side-panels');
+                    $(responseElement).find('.ui.modal[id], .atk-right-panel[id]').each((i, e) => {
+                        $modalsContainers.find('#' + e.id).remove();
                     });
 
-                    const result = $('#' + response.id).replaceWith(response.html);
-                    if (result.length === 0) {
-                        // TODO find a better solution for long term
-                        // need a way to gracefully abort server request
-                        // when user cancel a request by selecting another request
-                        console.error('Unable to replace element with id: ' + response.id);
-                        // throw Error('Unable to replace element with id: ' + response.id);
+                    if ($target.hasClass('ui modal') || $target.hasClass('atk-right-panel')) {
+                        $.each([...$target[0].childNodes], (i, node) => {
+                            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
+                                return;
+                            }
+
+                            $(node).remove();
+                        });
+                        $.each([...responseElement.childNodes], (i, node) => {
+                            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
+                                return;
+                            }
+
+                            $target.append(node);
+                        });
+                    } else {
+                        $target.replaceWith(response.html);
                     }
                 }
+
                 if (response.atkjs) {
                     atk.apiService.evalResponse.call(this, response.atkjs);
                 }
+
                 if (atk.apiService.afterSuccessCallbacks.length > 0) {
                     const callbacks = atk.apiService.afterSuccessCallbacks;
                     for (const callback of callbacks) {

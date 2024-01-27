@@ -161,7 +161,7 @@ class Wizard extends View
      */
     public function jsNext(): JsExpressionable
     {
-        return new JsExpression('document.location = []', [$this->urlNext()]);
+        return new JsExpression('window.location = []', [$this->urlNext()]);
     }
 
     #[\Override]

@@ -124,7 +124,7 @@ If array is used, it's routed to {php:meth}`App::url`
 For other JavaScript actions you can use {ref}`js`:
 
 ```
-$button->on('click', new JsExpression('document.location.reload()'));
+$button->on('click', new JsExpression('window.location.reload()'));
 ```
 
 ## Complex Buttons

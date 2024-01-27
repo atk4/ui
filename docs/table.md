@@ -506,7 +506,7 @@ demonstrates how various standard column types are relying on this property:
 
 ```
 $table->on('click', 'td', new JsExpression(
-    'document.location = \'page.php?id=\' + []',
+    'window.location = \'page.php?id=\' + []',
     [(new Jquery())->closest('tr')->data('id')]
 ));
 ```

@@ -357,9 +357,6 @@ parameters:
             path: 'src/Label.php'
             message: '~^Property Atk4\\Ui\\Label::\$detail \(string\|false\|null\) does not accept \$this\(Atk4\\Ui\\Label\)\.$~'
         -
-            path: 'src/Loader.php'
-            message: '~^Property Atk4\\Ui\\Loader::\$shim \(Atk4\\Ui\\View\) does not accept array<int\|string, array<int\|string, string>\|string>\.$~'
-        -
             path: 'src/Menu.php'
             message: '~^Method Atk4\\Ui\\Menu::addDivider\(\) should return Atk4\\Ui\\View but returns Atk4\\Ui\\AbstractView\.$~'
         -

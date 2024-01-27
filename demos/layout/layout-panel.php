@@ -51,7 +51,7 @@ $button->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
 
 $view = View::addTo($app, ['ui' => 'segment']);
 $text = Text::addTo($view);
-$text->set($app->tryGetRequestQueryParam('txt') ?? 'Not Complete');
+$text->set($app->tryGetRequestQueryParam('txt') ?? 'Not Completed');
 
 $panel1->onOpen(static function (Panel\Content $p) use ($view) {
     $panel = View::addTo($p, ['ui' => 'basic segment']);
@@ -67,7 +67,7 @@ $panel1->onOpen(static function (Panel\Content $p) use ($view) {
     $panelButton = Button::addTo($panel, ['Complete']);
     $panelButton->on('click', new JsBlock([
         $p->getOwner()->jsClose(),
-        new JsReload($view, ['txt' => 'Complete using button #' . $buttonNumber]),
+        new JsReload($view, ['txt' => 'Completed using button #' . $buttonNumber]),
     ]));
 });
 
