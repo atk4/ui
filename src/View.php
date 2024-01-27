@@ -23,6 +23,9 @@ use Atk4\Ui\UserAction\ExecutorFactory;
  */
 class View extends AbstractView
 {
+    /** TODO remove once nothing is rendered using cloned template (used for table rows render currently) */
+    public const NAME_POSSIBLY_NON_UNIQUE = '__atk4_ui_non_unique__';
+
     /**
      * When you call render() this will be populated with JavaScript chains.
      *
@@ -535,7 +538,7 @@ class View extends AbstractView
 
         $attrsHtml = [];
 
-        if ($this->name) {
+        if ($this->name !== self::NAME_POSSIBLY_NON_UNIQUE) {
             $attrsHtml[] = 'id="' . $app->encodeHtml($this->name) . '"';
 
             // TODO hack for template/tabs.html

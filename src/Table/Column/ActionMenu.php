@@ -69,7 +69,7 @@ class ActionMenu extends Table\Column
         $name = $this->name . '_action_' . (count($this->items) + 1);
 
         if (!is_object($item)) {
-            $item = Factory::factory([View::class], ['name' => false, 'ui' => 'item', 'content' => $item]);
+            $item = Factory::factory([View::class], ['name' => View::NAME_POSSIBLY_NON_UNIQUE, 'ui' => 'item', 'content' => $item]);
         }
 
         $item->setApp($this->getApp());

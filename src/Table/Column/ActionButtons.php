@@ -54,7 +54,7 @@ class ActionButtons extends Table\Column
                 $button = [1 => $button];
             }
 
-            $button = Factory::factory([Button::class], Factory::mergeSeeds($button, ['name' => false]));
+            $button = Factory::factory([Button::class], Factory::mergeSeeds($button, ['name' => View::NAME_POSSIBLY_NON_UNIQUE]));
         }
 
         if ($isDisabled === true) {
