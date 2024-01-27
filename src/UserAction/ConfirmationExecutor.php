@@ -12,7 +12,6 @@ use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsToast;
-use Atk4\Ui\Loader;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
@@ -63,7 +62,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->add($buttonsView, 'actions');
         $this->showActions = true;
 
-        $this->loader = Loader::addTo($this, ['shim' => $this, 'loadEvent' => false]);
+        $this->loader = View::addTo($this);
     }
 
     /**
