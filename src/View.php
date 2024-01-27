@@ -856,12 +856,7 @@ class View extends AbstractView
     {
         $type = $useSession ? 'session' : 'local';
 
-        $name = $this->name;
-        if (!$name) {
-            throw new Exception('View property name needs to be set');
-        }
-
-        return (new JsChain('atk.dataService'))->clearData($name, $type);
+        return (new JsChain('atk.dataService'))->clearData($this->name, $type);
     }
 
     /**
@@ -879,12 +874,7 @@ class View extends AbstractView
     {
         $type = $useSession ? 'session' : 'local';
 
-        $name = $this->name;
-        if (!$name) {
-            throw new Exception('View property name needs to be set');
-        }
-
-        return (new JsChain('atk.dataService'))->addJsonData($name, $this->getApp()->encodeJson($data), $type);
+        return (new JsChain('atk.dataService'))->addJsonData($this->name, $this->getApp()->encodeJson($data), $type);
     }
 
     /**
