@@ -8,14 +8,15 @@ use Atk4\Ui\Accordion as UiAccordion;
 use Atk4\Ui\AccordionSection;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\View;
 
 /**
  * Represents form controls in accordion.
  */
 class Accordion extends UiAccordion
 {
-    /** @var class-string<Form\Layout> */
-    public $formLayout = Form\Layout::class;
+    /** @var array */
+    public $formLayoutSeed = [Form\Layout::class];
 
     public Form $form;
 
@@ -49,7 +50,10 @@ class Accordion extends UiAccordion
     {
         $section = parent::addSection($title, $callback, $icon);
 
-        return $section->add([$this->formLayout, 'form' => $this->form]);
+        $res = View::fromSeed($this->formLayoutSeed, ['form' => $this->form]);
+        $section->add($res);
+
+        return $res;
     }
 
     /**

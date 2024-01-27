@@ -6,14 +6,15 @@ namespace Atk4\Ui\Form\Layout\Section;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\Tabs as UiTabs;
+use Atk4\Ui\View;
 
 /**
  * Represents form controls in tabs.
  */
 class Tabs extends UiTabs
 {
-    /** @var class-string<Form\Layout> */
-    public $formLayout = Form\Layout::class;
+    /** @var array */
+    public $formLayoutSeed = [Form\Layout::class];
 
     public Form $form;
 
@@ -25,6 +26,9 @@ class Tabs extends UiTabs
     {
         $tab = parent::addTab($name, $callback, $settings);
 
-        return $tab->add([$this->formLayout, 'form' => $this->form]);
+        $res = View::fromSeed($this->formLayoutSeed, ['form' => $this->form]);
+        $tab->add($res);
+
+        return $res;
     }
 }
