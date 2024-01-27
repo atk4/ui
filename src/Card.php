@@ -70,9 +70,6 @@ class Card extends View
     /** @var bool Use Field label with value data. */
     public $useLabel = false;
 
-    /** @var string Default executor class. */
-    public $executor = UserAction\ModalExecutor::class;
-
     #[\Override]
     protected function init(): void
     {
