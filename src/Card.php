@@ -46,8 +46,8 @@ class Card extends View
     /** @var CardSection|null The main card section of this card */
     public $section;
 
-    /** @var string The CardSection default class name. */
-    public $cardSection = CardSection::class;
+    /** @var array The CardSection default seed. */
+    public $cardSectionSeed = [CardSection::class];
 
     /** @var View|null The extra content view container for the card. */
     public $extraContainer;
@@ -101,7 +101,7 @@ class Card extends View
     public function getSection()
     {
         if (!$this->section) {
-            $this->section = CardSection::addToWithCl($this, [$this->cardSection, 'card' => $this]);
+            $this->section = CardSection::addToWithCl($this, array_merge($this->cardSectionSeed, ['card' => $this]));
         }
 
         return $this->section;
@@ -190,7 +190,7 @@ class Card extends View
      */
     public function addSection(string $title = null, Model $model = null, array $fields = null, bool $useTable = false, bool $useLabel = false)
     {
-        $section = CardSection::addToWithCl($this, [$this->cardSection, 'card' => $this], ['Section']);
+        $section = CardSection::addToWithCl($this, array_merge($this->cardSectionSeed, ['card' => $this]), ['Section']);
         if ($title) {
             View::addTo($section, [$title, 'class.header' => true]);
         }
