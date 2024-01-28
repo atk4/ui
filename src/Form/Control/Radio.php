@@ -63,7 +63,7 @@ class Radio extends Form\Control
 
             $lister->tRow->set('value', $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $lister->currentRow->getId()));
 
-            $lister->tRow->dangerouslySetHtml('checked', $lister->model->compare($lister->model->idField, $value) ? 'checked="checked"' : '');
+            $lister->tRow->dangerouslySetHtml('checked', $lister->currentRow->compare($lister->model->idField, $value) ? 'checked="checked"' : '');
         });
 
         $this->js(true, null, '.ui.checkbox.radio')->checkbox([
