@@ -30,7 +30,7 @@ class TypeEnum extends Column\FilterModel
     }
 
     #[\Override]
-    public function setConditionForModel(Model $model)
+    public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
         if ($filter !== null) {
@@ -44,7 +44,5 @@ class TypeEnum extends Column\FilterModel
                 $model->addCondition($filter['name'], 'in', $values);
             }
         }
-
-        return $model;
     }
 }

@@ -25,7 +25,7 @@ class TypeString extends Column\FilterModel
     }
 
     #[\Override]
-    public function setConditionForModel(Model $model)
+    public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
         if ($filter !== null) {
@@ -52,7 +52,5 @@ class TypeString extends Column\FilterModel
                     break;
             }
         }
-
-        return $model;
     }
 }

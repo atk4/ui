@@ -65,7 +65,7 @@ class TypeDate extends Column\FilterModel
     }
 
     #[\Override]
-    public function setConditionForModel(Model $model)
+    public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
         if ($filter !== null) {
@@ -99,8 +99,6 @@ class TypeDate extends Column\FilterModel
                     $model->addCondition($filter['name'], $filter['op'], $this->getDate($filter['value']));
             }
         }
-
-        return $model;
     }
 
     /**

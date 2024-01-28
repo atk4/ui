@@ -216,7 +216,7 @@ class Table extends Lister
                 $col->setHeaderPopupIcon('table-filter-on');
             }
             // apply condition according to popup form
-            $this->model = $pop->setFilterCondition($this->model);
+            $pop->setFilterCondition($this->model);
         }
     }
 
@@ -390,12 +390,6 @@ class Table extends Lister
             $this->template->dangerouslySetHtml('Head', $this->tHead->renderToHtml());
         }
 
-        // generate template for data row
-        $this->tRowMaster->dangerouslySetHtml('cells', $this->getDataRowHtml());
-        $this->tRowMaster->set('dataId', '{$dataId}');
-        $this->tRow = new HtmlTemplate($this->tRowMaster->renderToHtml());
-        $this->tRow->setApp($this->getApp());
-
         // iterate data rows
         $this->_renderedRowsCount = 0;
 
@@ -403,11 +397,16 @@ class Table extends Lister
         // then also backup/tryfinally would be not needed
         // the same in Lister class
         $modelBackup = $this->model;
-        $tRowBackup = $this->tRow;
         try {
             foreach ($this->model as $this->model) {
                 $this->currentRow = $this->model;
-                $this->tRow = clone $tRowBackup;
+
+                // generate template for data row
+                $this->tRowMaster->dangerouslySetHtml('cells', $this->getDataRowHtml());
+                $this->tRowMaster->set('dataId', '{$dataId}');
+                $this->tRow = new HtmlTemplate($this->tRowMaster->renderToHtml()); // TODO reparse should not be needed
+                $this->tRow->setApp($this->getApp());
+
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
                 }
@@ -426,7 +425,8 @@ class Table extends Lister
             }
         } finally {
             $this->model = $modelBackup;
-            $this->tRow = $tRowBackup;
+            $this->tRow = null; // @phpstan-ignore-line
+            $this->currentRow = null;
         }
 
         // add totals rows or empty message
