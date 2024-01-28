@@ -36,8 +36,8 @@ class Lister extends View
     /** @var int|null The number of item per page for JsPaginator. */
     public $ipp;
 
-    /** @var Model Current row entity */
-    public $currentRow;
+    /** Current row entity */
+    public ?Model $currentRow = null;
 
     #[\Override]
     protected function init(): void
@@ -150,6 +150,7 @@ class Lister extends View
         } finally {
             $this->model = $modelBackup;
             $this->tRow = $tRowBackup;
+            $this->currentRow = null;
         }
 
         // empty message

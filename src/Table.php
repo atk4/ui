@@ -426,6 +426,7 @@ class Table extends Lister
         } finally {
             $this->model = $modelBackup;
             $this->tRow = null; // @phpstan-ignore-line
+            $this->currentRow = null;
         }
 
         // add totals rows or empty message
