@@ -43,7 +43,7 @@ $table->onHook(Lister::HOOK_BEFORE_ROW, static function (Table $table) {
         $table->renderRow();
 
         // adjusts data for next render
-        $table->model
+        $table->currentRow
             ->set('action', 'manually injected row after Tax')
             ->set('amount', -0.02);
     }

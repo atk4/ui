@@ -393,13 +393,9 @@ class Table extends Lister
         // iterate data rows
         $this->_renderedRowsCount = 0;
 
-        // TODO we should not iterate using $this->model variable,
-        // then also backup/tryfinally would be not needed
-        // the same in Lister class
-        $modelBackup = $this->model;
         try {
-            foreach ($this->model as $this->model) {
-                $this->currentRow = $this->model;
+            foreach ($this->model as $entity) {
+                $this->currentRow = $entity;
 
                 // generate template for data row
                 $this->tRowMaster->dangerouslySetHtml('cells', $this->getDataRowHtml());
@@ -424,7 +420,6 @@ class Table extends Lister
                 }
             }
         } finally {
-            $this->model = $modelBackup;
             $this->tRow = null; // @phpstan-ignore-line
             $this->currentRow = null;
         }
@@ -450,13 +445,13 @@ class Table extends Lister
     #[\Override]
     public function renderRow(): void
     {
-        $this->tRow->set($this->model);
+        $this->tRow->set($this->currentRow);
 
         if ($this->useHtmlTags) {
             // prepare row-specific HTML tags
             $htmlTags = [];
 
-            foreach ($this->hook(Table\Column::HOOK_GET_HTML_TAGS, [$this->model]) as $ret) {
+            foreach ($this->hook(Table\Column::HOOK_GET_HTML_TAGS, [$this->currentRow]) as $ret) {
                 if (is_array($ret)) {
                     $htmlTags = array_merge($htmlTags, $ret);
                 }
@@ -468,13 +463,13 @@ class Table extends Lister
                 }
                 $field = is_int($name) ? null : $this->model->getField($name);
                 foreach ($columns as $column) {
-                    $htmlTags = array_merge($column->getHtmlTags($this->model, $field), $htmlTags);
+                    $htmlTags = array_merge($column->getHtmlTags($this->currentRow, $field), $htmlTags);
                 }
             }
 
             // render row and add to body
             $this->tRow->dangerouslySetHtml($htmlTags);
-            $this->tRow->set('dataId', (string) $this->model->getId());
+            $this->tRow->set('dataId', (string) $this->currentRow->getId());
             $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
             $this->tRow->del(array_keys($htmlTags));
         } else {
@@ -552,11 +547,11 @@ class Table extends Lister
                 }
 
                 if ($f instanceof \Closure) {
-                    $this->totals[$key] += $f($this->model->get($key), $key, $this);
+                    $this->totals[$key] += $f($this->currentRow->get($key), $key, $this);
                 } elseif (is_string($f)) {
                     switch ($f) {
                         case 'sum':
-                            $this->totals[$key] += $this->model->get($key);
+                            $this->totals[$key] += $this->currentRow->get($key);
 
                             break;
                         case 'count':
@@ -564,14 +559,14 @@ class Table extends Lister
 
                             break;
                         case 'min':
-                            if ($this->model->get($key) < $this->totals[$key]) {
-                                $this->totals[$key] = $this->model->get($key);
+                            if ($this->currentRow->get($key) < $this->totals[$key]) {
+                                $this->totals[$key] = $this->currentRow->get($key);
                             }
 
                             break;
                         case 'max':
-                            if ($this->model->get($key) > $this->totals[$key]) {
-                                $this->totals[$key] = $this->model->get($key);
+                            if ($this->currentRow->get($key) > $this->totals[$key]) {
+                                $this->totals[$key] = $this->currentRow->get($key);
                             }
 
                             break;

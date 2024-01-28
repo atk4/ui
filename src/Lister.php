@@ -130,15 +130,13 @@ class Lister extends View
         // iterate data rows
         $this->_renderedRowsCount = 0;
 
-        // TODO we should not iterate using $this->model variable,
-        // then also backup/tryfinally would be not needed
-        // the same in Table class
-        $modelBackup = $this->model;
         $tRowBackup = $this->tRow;
         try {
-            foreach ($this->model as $this->model) {
-                $this->currentRow = $this->model;
+            foreach ($this->model as $entity) {
+                $this->currentRow = $entity;
+
                 $this->tRow = clone $tRowBackup;
+
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
                 }
@@ -148,7 +146,6 @@ class Lister extends View
                 ++$this->_renderedRowsCount;
             }
         } finally {
-            $this->model = $modelBackup;
             $this->tRow = $tRowBackup;
             $this->currentRow = null;
         }
@@ -182,7 +179,7 @@ class Lister extends View
         $this->tRow->trySet($this->currentRow);
 
         if ($this->tRow->hasTag('_title')) {
-            $this->tRow->set('_title', $this->model->getTitle());
+            $this->tRow->set('_title', $this->currentRow->getTitle());
         }
         if ($this->tRow->hasTag('_href')) {
             $this->tRow->set('_href', $this->url(['id' => $this->currentRow->getId()]));
