@@ -95,11 +95,9 @@ class FilterPopup extends Popup
 
     /**
      * Set filter condition base on the field Type model use in this FilterPopup.
-     *
-     * @return Model
      */
-    public function setFilterCondition(Model $tableModel)
+    public function setFilterCondition(Model $tableModel): void
     {
-        return $this->form->model->setConditionForModel($tableModel);
+        $this->form->model->setConditionForModel($tableModel);
     }
 }

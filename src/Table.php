@@ -216,7 +216,7 @@ class Table extends Lister
                 $col->setHeaderPopupIcon('table-filter-on');
             }
             // apply condition according to popup form
-            $this->model = $pop->setFilterCondition($this->model);
+            $pop->setFilterCondition($this->model);
         }
     }
 
