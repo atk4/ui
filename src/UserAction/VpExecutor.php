@@ -12,6 +12,7 @@ use Atk4\Ui\Header;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsToast;
+use Atk4\Ui\Loader;
 use Atk4\Ui\View;
 use Atk4\Ui\VirtualPage;
 
@@ -77,7 +78,7 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
      */
     protected function afterActionInit(): void
     {
-        $this->loader = View::addTo($this);
+        $this->loader = Loader::addTo($this, ['shim' => $this, 'loadEvent' => false]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
 
         if ($this->cb->canTerminate()) {

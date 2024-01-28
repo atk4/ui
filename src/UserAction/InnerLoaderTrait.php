@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\UserAction;
 
+use Atk4\Ui\Loader;
 use Atk4\Ui\View;
 
 /**
@@ -11,7 +12,7 @@ use Atk4\Ui\View;
  */
 trait InnerLoaderTrait
 {
-    protected View $loader;
+    protected Loader $loader;
 
     #[\Override]
     protected function renderView(): void

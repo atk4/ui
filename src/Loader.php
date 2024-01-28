@@ -56,6 +56,13 @@ class Loader extends View
         }
     }
 
+    private function getShimIfOwner(): View
+    {
+        return $this->getOwner() === $this->shim
+            ? $this->shim
+            : $this;
+    }
+
     /**
      * Set callback function for this loader.
      *
@@ -78,7 +85,7 @@ class Loader extends View
 
         $this->cb->set(function () use ($fx) {
             $fx($this);
-            $this->cb->terminateJson($this);
+            $this->cb->terminateJson($this->getShimIfOwner());
         });
 
         return $this;
@@ -95,7 +102,10 @@ class Loader extends View
             if ($this->loadEvent) {
                 $this->js($this->loadEvent, $this->jsLoad($this->urlArgs));
             }
-            $this->add($this->shim);
+
+            if (!is_object($this->shim) || !$this->shim->isInitialized()) {
+                $this->add($this->shim);
+            }
         }
 
         parent::renderView();
@@ -110,7 +120,7 @@ class Loader extends View
      */
     public function jsLoad(array $args = [], array $apiConfig = [], $storeName = null): JsExpressionable
     {
-        return $this->js()->atkReloadView([
+        return $this->getShimIfOwner()->js()->atkReloadView([
             'url' => $this->cb->getUrl(),
             'urlOptions' => $args,
             'apiConfig' => $apiConfig !== [] ? $apiConfig : null,
