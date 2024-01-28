@@ -11,6 +11,7 @@ use Atk4\Core\NameTrait;
 use Atk4\Core\TrackableTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
@@ -56,9 +57,70 @@ class Column
     /** @var array|null The tag value required for getTag when using an header action. */
     public $headerActionTag;
 
+    private string $nameInTableCache;
+
     public function __construct(array $defaults = [])
     {
         $this->setDefaults($defaults);
+    }
+
+    /**
+     * Cloning View is unwanted as some references might be not cloned/set as expected,
+     * remove this method once https://github.com/atk4/ui/issues/1365 is implemented.
+     *
+     * @internal
+     */
+    protected function assertColumnViewNotInitialized(View $view): void
+    {
+        if ($view->isInitialized() || ($view->name ?? null) !== null) {
+            throw (new Exception('Unexpected initialized View instance'))
+                ->addMoreInfo('view', $view);
+        }
+    }
+
+    /**
+     * @template T of View
+     *
+     * @param T $view
+     *
+     * @return T
+     *
+     * @internal
+     */
+    protected function cloneColumnView(View $view, string $nameSuffix): View
+    {
+        $this->assertColumnViewNotInitialized($view);
+
+        $cloneViewWithAddLaterFx = static function (View $view) use (&$cloneViewWithAddLaterFx) {
+            $view = clone $view;
+
+            \Closure::bind(static function () use ($view, $cloneViewWithAddLaterFx) {
+                foreach ($view->_addLater as $k => [$obj]) {
+                    $view->_addLater[$k][0] = $cloneViewWithAddLaterFx($obj); // @phpstan-ignore-line
+                }
+            }, null, View::class)();
+
+            return $view;
+        };
+
+        if (!isset($this->nameInTableCache)) {
+            foreach ($this->table->columns as $n => $columns) {
+                foreach (is_array($columns) ? $columns : [$columns] as $k => $column) {
+                    if ($this === $column) {
+                        $this->nameInTableCache = $n . '_' . $k;
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        $view = $cloneViewWithAddLaterFx($view);
+        $view->shortName = 'c' . $this->nameInTableCache . '_' . $nameSuffix . '_r'
+            . $this->getApp()->uiPersistence->typecastSaveField($this->table->model->getField($this->table->model->idField), $this->table->currentRow->getId());
+        $view->name = \Closure::bind(static fn (Table $table) => $view->_shorten($table->name, $view->shortName, null), null, Table::class)($this->table);
+
+        return $view;
     }
 
     /**

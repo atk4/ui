@@ -54,8 +54,10 @@ class ActionButtons extends Table\Column
                 $button = [1 => $button];
             }
 
-            $button = Factory::factory([Button::class], Factory::mergeSeeds($button, ['name' => View::NAME_POSSIBLY_NON_UNIQUE]));
+            $button = Factory::factory([Button::class], $button);
         }
+
+        $this->assertColumnViewNotInitialized($button);
 
         if ($isDisabled === true) {
             $button->addClass('disabled');
@@ -122,7 +124,8 @@ class ActionButtons extends Table\Column
 
         // render our buttons
         $outputHtml = '';
-        foreach ($this->buttons as $button) {
+        foreach ($this->buttons as $name => $button) {
+            $button = $this->cloneColumnView($button, $name);
             $outputHtml .= $button->getHtml();
         }
 

@@ -420,6 +420,7 @@ class Table extends Lister
                 }
             }
         } finally {
+            $this->tRowMaster->set('cells', null);
             $this->tRow = null; // @phpstan-ignore-line
             $this->currentRow = null;
         }

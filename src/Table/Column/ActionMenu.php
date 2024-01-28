@@ -22,7 +22,7 @@ use Atk4\Ui\View;
  */
 class ActionMenu extends Table\Column
 {
-    /** @var array Menu items collections. */
+    /** @var array<int, View> Menu items collections. */
     protected $items = [];
 
     /** @var array<string, \Closure(Model): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
@@ -69,8 +69,10 @@ class ActionMenu extends Table\Column
         $name = $this->name . '_action_' . (count($this->items) + 1);
 
         if (!is_object($item)) {
-            $item = Factory::factory([View::class], ['name' => View::NAME_POSSIBLY_NON_UNIQUE, 'ui' => 'item', 'content' => $item]);
+            $item = Factory::factory([View::class], ['ui' => 'item', 'content' => $item]);
         }
+
+        $this->assertColumnViewNotInitialized($item);
 
         $item->setApp($this->getApp());
         $this->items[] = $item;
@@ -124,7 +126,8 @@ class ActionMenu extends Table\Column
 
         // render our menus
         $outputHtml = '';
-        foreach ($this->items as $item) {
+        foreach ($this->items as $k => $item) {
+            $item = $this->cloneColumnView($item, (string) $k);
             $outputHtml .= $item->getHtml();
         }
 
