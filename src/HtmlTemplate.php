@@ -169,7 +169,7 @@ class HtmlTemplate
             if ($throwIfNotFound) {
                 foreach ($tag as $k => $v) {
                     if (!$this->_hasTag($k)) {
-                        $this->_setOrAppend($k, $v, $encodeHtml, $append, $throwIfNotFound);
+                        $this->_setOrAppend($k, $v, $encodeHtml, $append, true);
                     }
                 }
             }
