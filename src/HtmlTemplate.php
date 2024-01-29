@@ -437,7 +437,7 @@ class HtmlTemplate
             return false;
         }
 
-        $this->loadFromString($str);
+        $this->loadFromString($str, true);
 
         return $this;
     }
@@ -445,9 +445,9 @@ class HtmlTemplate
     /**
      * @return $this
      */
-    public function loadFromString(string $str): self
+    public function loadFromString(string $str, bool $allowParseCache = false): self
     {
-        $this->parseTemplate($str);
+        $this->parseTemplate($str, $allowParseCache);
 
         return $this;
     }
@@ -496,7 +496,7 @@ class HtmlTemplate
         return $tagTree;
     }
 
-    protected function parseTemplate(string $str): void
+    protected function parseTemplate(string $str, bool $allowParseCache): void
     {
         $cKey = static::class . "\0" . $str;
         if (!isset(self::$_parseCache[$cKey])) {
@@ -512,6 +512,12 @@ class HtmlTemplate
                 $tagTrees = $this->tagTrees;
             } finally {
                 $this->tagTrees = [];
+            }
+
+            if (!$allowParseCache) {
+                $this->tagTrees = $tagTrees;
+
+                return;
             }
 
             if (self::$_parseCacheParentTemplate === null) {

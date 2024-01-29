@@ -390,9 +390,8 @@ class Table extends Lister
             $this->template->dangerouslySetHtml('Head', $this->tHead->renderToHtml());
         }
 
-        $templateParseCacheLastKey = \Closure::bind(static fn () => array_key_last(HtmlTemplate::$_parseCache), null, HtmlTemplate::class)();
+        $this->_renderedRowsCount = 0;
         try {
-            $this->_renderedRowsCount = 0;
             foreach ($this->model as $entity) {
                 $this->currentRow = $entity;
 
@@ -422,18 +421,6 @@ class Table extends Lister
             $this->tRowMaster->set('cells', null);
             $this->tRow = null; // @phpstan-ignore-line
             $this->currentRow = null;
-
-            // remove once https://github.com/atk4/ui/blob/f73cb129f3/src/Table.php#L403 reparse is removed/replaced
-            \Closure::bind(static function () use ($templateParseCacheLastKey) {
-                while (HtmlTemplate::$_parseCache !== []) {
-                    $k = array_key_last(HtmlTemplate::$_parseCache);
-                    if ($k === $templateParseCacheLastKey) {
-                        break;
-                    }
-
-                    unset(HtmlTemplate::$_parseCache[$k]);
-                }
-            }, null, HtmlTemplate::class)();
         }
 
         // add totals rows or empty message
