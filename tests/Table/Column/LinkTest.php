@@ -152,7 +152,7 @@ class LinkTest extends TestCase
         );
     }
 
-    public function testLink1(): void
+    public function testLink1a(): void
     {
         $link = $this->table->addDecorator('name', new Table\Column\Link('example.php?id={$id}'));
 
@@ -167,7 +167,7 @@ class LinkTest extends TestCase
         );
     }
 
-    public function testLink1a(): void
+    public function testLink1b(): void
     {
         $link = $this->table->addDecorator('name', [Table\Column\Link::class, 'url' => 'example.php?id={$id}']);
 
@@ -264,7 +264,7 @@ class LinkTest extends TestCase
         );
     }
 
-    public function testLink10(): void
+    public function testNoValue(): void
     {
         $this->table->model->load(1)->save(['name' => '']);
 
@@ -276,7 +276,7 @@ class LinkTest extends TestCase
         );
     }
 
-    public function testLink11(): void
+    public function testTooltip(): void
     {
         $this->table->addDecorator('name', [Table\Column\Tooltip::class, ['tooltipField' => 'ref']]);
 
