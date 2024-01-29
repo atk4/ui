@@ -16,7 +16,9 @@ atk.options = (function () {
     const data = {};
 
     return {
-        set: (name, value) => { data[name] = value; },
+        set: (name, value) => {
+            data[name] = value;
+        },
         get: (name) => data[name],
     };
 }());
