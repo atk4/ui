@@ -133,7 +133,7 @@ class ExecutorFactory
     }
 
     /**
-     * @return ($type is self::MENU_ITEM ? MenuItem : ($type is self::TABLE_MENU_ITEM ? MenuItem : Button))
+     * @return ($type is self::MENU_ITEM|self::TABLE_MENU_ITEM ? MenuItem : Button)
      */
     public function createTrigger(UserAction $action, string $type = null): View
     {
@@ -218,7 +218,7 @@ class ExecutorFactory
 
                 break;
             case self::TABLE_MENU_ITEM:
-                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'name' => View::NAME_POSSIBLY_NON_UNIQUE, 'class.item' => true];
+                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'class.item' => true];
 
                 break;
             default:

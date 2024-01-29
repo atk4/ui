@@ -37,7 +37,7 @@ class HtmlTemplate
         $this->loadFromString($template);
     }
 
-    public function _hasTag(string $tag): bool
+    protected function _hasTag(string $tag): bool
     {
         return isset($this->tagTrees[$tag]);
     }
@@ -146,19 +146,36 @@ class HtmlTemplate
      */
     protected function _setOrAppend($tag, string $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
     {
-        if ($tag instanceof Model) {
+        if ($tag instanceof Model && $value === null) {
             if (!$encodeHtml) {
                 throw new Exception('HTML is not allowed to be dangerously set from Model');
             }
 
-            $tag = $this->getApp()->uiPersistence->typecastSaveRow($tag, $tag->get());
+            // $tag passed as model
+            // in this case we don't throw exception if tags don't exist
+            $uiPersistence = $this->getApp()->uiPersistence;
+            foreach ($tag->getFields() as $k => $field) {
+                if ($this->_hasTag($k)) {
+                    $v = $uiPersistence->typecastSaveField($field, $tag->get($k));
+                    $this->_setOrAppend($k, $v, $encodeHtml, $append);
+                }
+            }
+
+            return;
         }
 
         // $tag passed as associative array [tag => value]
-        // in this case we don't throw exception if tags don't exist
         if (is_array($tag) && $value === null) {
+            if ($throwIfNotFound) {
+                foreach ($tag as $k => $v) {
+                    if (!$this->_hasTag($k)) {
+                        $this->_setOrAppend($k, $v, $encodeHtml, $append, true);
+                    }
+                }
+            }
+
             foreach ($tag as $k => $v) {
-                $this->_setOrAppend($k, $v, $encodeHtml, $append, false);
+                $this->_setOrAppend($k, $v, $encodeHtml, $append, $throwIfNotFound);
             }
 
             return;
@@ -420,7 +437,7 @@ class HtmlTemplate
             return false;
         }
 
-        $this->loadFromString($str);
+        $this->loadFromString($str, true);
 
         return $this;
     }
@@ -428,9 +445,9 @@ class HtmlTemplate
     /**
      * @return $this
      */
-    public function loadFromString(string $str): self
+    public function loadFromString(string $str, bool $allowParseCache = false): self
     {
-        $this->parseTemplate($str);
+        $this->parseTemplate($str, $allowParseCache);
 
         return $this;
     }
@@ -479,7 +496,7 @@ class HtmlTemplate
         return $tagTree;
     }
 
-    protected function parseTemplate(string $str): void
+    protected function parseTemplate(string $str, bool $allowParseCache): void
     {
         $cKey = static::class . "\0" . $str;
         if (!isset(self::$_parseCache[$cKey])) {
@@ -493,27 +510,33 @@ class HtmlTemplate
             try {
                 $this->tagTrees[self::TOP_TAG] = $this->parseTemplateTree($inputReversed);
                 $tagTrees = $this->tagTrees;
-
-                if (self::$_parseCacheParentTemplate === null) {
-                    $cKeySelfEmpty = self::class . "\0";
-                    self::$_parseCache[$cKeySelfEmpty] = [];
-                    try {
-                        self::$_parseCacheParentTemplate = new self();
-                    } finally {
-                        unset(self::$_parseCache[$cKeySelfEmpty]);
-                    }
-                }
-                $parentTemplate = self::$_parseCacheParentTemplate;
-
-                \Closure::bind(static function () use ($tagTrees, $parentTemplate) {
-                    foreach ($tagTrees as $tagTree) {
-                        $tagTree->parentTemplate = $parentTemplate;
-                    }
-                }, null, TagTree::class)();
-                self::$_parseCache[$cKey] = $tagTrees;
             } finally {
                 $this->tagTrees = [];
             }
+
+            if (!$allowParseCache) {
+                $this->tagTrees = $tagTrees;
+
+                return;
+            }
+
+            if (self::$_parseCacheParentTemplate === null) {
+                $cKeySelfEmpty = self::class . "\0";
+                self::$_parseCache[$cKeySelfEmpty] = [];
+                try {
+                    self::$_parseCacheParentTemplate = new self();
+                } finally {
+                    unset(self::$_parseCache[$cKeySelfEmpty]);
+                }
+            }
+            $parentTemplate = self::$_parseCacheParentTemplate;
+
+            \Closure::bind(static function () use ($tagTrees, $parentTemplate) {
+                foreach ($tagTrees as $tagTree) {
+                    $tagTree->parentTemplate = $parentTemplate;
+                }
+            }, null, TagTree::class)();
+            self::$_parseCache[$cKey] = $tagTrees;
         }
 
         $this->tagTrees = $this->cloneTagTrees(self::$_parseCache[$cKey]);

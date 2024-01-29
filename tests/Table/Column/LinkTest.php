@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui\Tests;
+namespace Atk4\Ui\Tests\Table\Column;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Table;
+use Atk4\Ui\Tests\CreateAppTrait;
+use Atk4\Ui\Tests\TableTestTrait;
 
-class TableColumnLinkTest extends TestCase
+class LinkTest extends TestCase
 {
     use CreateAppTrait;
     use TableTestTrait;
@@ -150,7 +152,7 @@ class TableColumnLinkTest extends TestCase
         );
     }
 
-    public function testLink1(): void
+    public function testLink1a(): void
     {
         $link = $this->table->addDecorator('name', new Table\Column\Link('example.php?id={$id}'));
 
@@ -165,7 +167,7 @@ class TableColumnLinkTest extends TestCase
         );
     }
 
-    public function testLink1a(): void
+    public function testLink1b(): void
     {
         $link = $this->table->addDecorator('name', [Table\Column\Link::class, 'url' => 'example.php?id={$id}']);
 
@@ -262,7 +264,7 @@ class TableColumnLinkTest extends TestCase
         );
     }
 
-    public function testLink10(): void
+    public function testNoValue(): void
     {
         $this->table->model->load(1)->save(['name' => '']);
 
@@ -274,7 +276,7 @@ class TableColumnLinkTest extends TestCase
         );
     }
 
-    public function testLink11(): void
+    public function testTooltip(): void
     {
         $this->table->addDecorator('name', [Table\Column\Tooltip::class, ['tooltipField' => 'ref']]);
 

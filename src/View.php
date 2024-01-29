@@ -23,9 +23,6 @@ use Atk4\Ui\UserAction\ExecutorFactory;
  */
 class View extends AbstractView
 {
-    /** TODO remove once nothing is rendered using cloned template (used for table rows render currently) */
-    public const NAME_POSSIBLY_NON_UNIQUE = '__atk4_ui_non_unique__';
-
     /**
      * When you call render() this will be populated with JavaScript chains.
      *
@@ -536,24 +533,22 @@ class View extends AbstractView
             $this->template->tryDangerouslySetHtml('_element_end', '</' . $this->element . '>');
         }
 
-        $attrsHtml = [];
+        $attrsHtml = [
+            'id="' . $app->encodeHtml($this->name) . '"',
+        ];
 
-        if ($this->name !== self::NAME_POSSIBLY_NON_UNIQUE) {
-            $attrsHtml[] = 'id="' . $app->encodeHtml($this->name) . '"';
-
-            // TODO hack for template/tabs.html
-            if ($this->template->hasTag('Tabs')) {
-                array_pop($attrsHtml);
-            }
-
-            // TODO hack for template/form/control/upload.html
-            if ($this->template->hasTag('AfterBeforeInput') && str_contains($this->template->renderToHtml(), ' type="file"')) {
-                array_pop($attrsHtml);
-            }
-
-            // needed for templates like '<input id="{$_id}_input">'
-            $this->template->trySet('_id', $this->name);
+        // TODO hack for template/tabs.html
+        if ($this->template->hasTag('Tabs')) {
+            array_pop($attrsHtml);
         }
+
+        // TODO hack for template/form/control/upload.html
+        if ($this->template->hasTag('AfterBeforeInput') && str_contains($this->template->renderToHtml(), ' type="file"')) {
+            array_pop($attrsHtml);
+        }
+
+        // needed for templates like '<input id="{$_id}_input">'
+        $this->template->trySet('_id', $this->name);
 
         $class = null;
         if ($this->class !== []) {

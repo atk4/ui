@@ -390,9 +390,7 @@ class Table extends Lister
             $this->template->dangerouslySetHtml('Head', $this->tHead->renderToHtml());
         }
 
-        // iterate data rows
         $this->_renderedRowsCount = 0;
-
         try {
             foreach ($this->model as $entity) {
                 $this->currentRow = $entity;
@@ -420,6 +418,7 @@ class Table extends Lister
                 }
             }
         } finally {
+            $this->tRowMaster->set('cells', null);
             $this->tRow = null; // @phpstan-ignore-line
             $this->currentRow = null;
         }

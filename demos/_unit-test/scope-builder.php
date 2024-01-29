@@ -37,10 +37,7 @@ $form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model], [
 
 $form->onSubmit(static function (Form $form) use ($model) {
     $message = $form->model->get('qb')->toWords($model);
-    $view = (new View(['name' => View::NAME_POSSIBLY_NON_UNIQUE]))->addClass('atk-scope-builder-response');
-    $view->setApp($form->getApp());
-    $view->invokeInit();
-
+    $view = View::addTo($form)->addClass('atk-scope-builder-response');
     $view->set($message);
 
     return $view;

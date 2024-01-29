@@ -140,7 +140,7 @@ Try loading the template. Returns false if template couldn't be loaded. This can
 if you attempt to load template from various locations.
 :::
 
-:::{php:method} loadFromString($string)
+:::{php:method} loadFromString($string, bool $allowParseCache = false)
 Same as using constructor.
 :::
 

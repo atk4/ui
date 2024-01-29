@@ -167,7 +167,7 @@ class JsCallback extends Callback
         if ($response instanceof Modal) {
             $html = $response->getHtml();
         } else {
-            $modal = new Modal(['name' => View::NAME_POSSIBLY_NON_UNIQUE]);
+            $modal = new Modal(['name' => 'js_callback_' . md5(random_bytes(16))]);
             $modal->setApp($this->getApp());
             $modal->add($response);
             $html = $modal->getHtml();

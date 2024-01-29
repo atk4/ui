@@ -188,9 +188,11 @@ class HtmlTemplateTest extends TestCase
         $model = new Model();
         $model->addField('foo');
         $model->addField('bar');
+        $model->addField('baz');
         $entity = $model->createEntity();
         $entity->set('foo', 'Hello');
         $entity->set('bar', '<br>');
+        $entity->set('baz', 'not in template');
 
         $t = new HtmlTemplate('{$foo} {$bar}');
         $t->setApp($this->createApp());
@@ -198,13 +200,35 @@ class HtmlTemplateTest extends TestCase
         self::assertSameTemplate('{foo}Hello{/foo} {bar}&lt;br&gt;{/bar}', $t);
     }
 
-    public function testTagNotDefinedException(): void
+    public function testSetFromArray(): void
+    {
+        $t = new HtmlTemplate('{$foo} {$bar}');
+        $t->set(['foo' => 'Hello', 'bar' => '<br>']);
+        self::assertSameTemplate('{foo}Hello{/foo} {bar}&lt;br&gt;{/bar}', $t);
+    }
+
+    public function testTagNotDefinedSimpleException(): void
     {
         $t = new HtmlTemplate('{$foo}');
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Tag is not defined in template');
         $t->set('bar', 'test');
+    }
+
+    public function testTagNotDefinedFromArrayException(): void
+    {
+        $t = new HtmlTemplate('{$foo}');
+        $t->set(['foo' => 'x']);
+        self::assertSameTemplate('{foo}x{/foo}', $t);
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Tag is not defined in template');
+        try {
+            $t->set(['foo' => 'y', 'bar' => 'test']);
+        } finally {
+            self::assertSameTemplate('{foo}x{/foo}', $t);
+        }
     }
 
     public function testSetHtmlFromEntityException(): void

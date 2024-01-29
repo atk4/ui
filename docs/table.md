@@ -346,19 +346,18 @@ in which case we call them "decorators".
 During the render process (see {php:meth}`View::renderView`) Table will perform the following actions:
 
 1. Generate header row.
-2. Generate template for data rows.
-3. Iterate through rows
+2. Iterate through rows
    1. Current row data is accessible through $table->model property.
-   2. Update Totals if {php:meth}`Table::addTotals` was used.
-   3. Insert row values into {php:attr}`Table::$tRow`
+   2. Generate template for data row.
+   3. Update Totals if {php:meth}`Table::addTotals` was used.
+   4. Insert row values into {php:attr}`Table::$tRow`
        1. Template relies on {ref}`uiPersistence` for formatting values
-   4. Collect HTML tags from 'getHtmlTags' hook.
-   5. Collect getHtmlTags() from columns objects
-   6. Inject HTML into {php:attr}`Table::$tRow` template
-   7. Render and append row template to Table Body ({$Body})
-   8. Clear HTML tag values from template.
-4. If no rows were displayed, then "empty message" will be shown (see {php:attr}`Table::$tEmpty`).
-5. If {php:meth}`addTotals` was used, append totals row to table footer.
+   5. Collect HTML tags from 'getHtmlTags' hook.
+   6. Collect getHtmlTags() from columns objects
+   7. Inject HTML into {php:attr}`Table::$tRow` template
+   8. Render and append row template to Table Body ({$Body})
+3. If no rows were displayed, then "empty message" will be shown (see {php:attr}`Table::$tEmpty`).
+4. If {php:meth}`addTotals` was used, append totals row to table footer.
 
 ## Dealing with Multiple decorators
 
