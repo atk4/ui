@@ -510,27 +510,27 @@ class HtmlTemplate
             try {
                 $this->tagTrees[self::TOP_TAG] = $this->parseTemplateTree($inputReversed);
                 $tagTrees = $this->tagTrees;
-
-                if (self::$_parseCacheParentTemplate === null) {
-                    $cKeySelfEmpty = self::class . "\0";
-                    self::$_parseCache[$cKeySelfEmpty] = [];
-                    try {
-                        self::$_parseCacheParentTemplate = new self();
-                    } finally {
-                        unset(self::$_parseCache[$cKeySelfEmpty]);
-                    }
-                }
-                $parentTemplate = self::$_parseCacheParentTemplate;
-
-                \Closure::bind(static function () use ($tagTrees, $parentTemplate) {
-                    foreach ($tagTrees as $tagTree) {
-                        $tagTree->parentTemplate = $parentTemplate;
-                    }
-                }, null, TagTree::class)();
-                self::$_parseCache[$cKey] = $tagTrees;
             } finally {
                 $this->tagTrees = [];
             }
+
+            if (self::$_parseCacheParentTemplate === null) {
+                $cKeySelfEmpty = self::class . "\0";
+                self::$_parseCache[$cKeySelfEmpty] = [];
+                try {
+                    self::$_parseCacheParentTemplate = new self();
+                } finally {
+                    unset(self::$_parseCache[$cKeySelfEmpty]);
+                }
+            }
+            $parentTemplate = self::$_parseCacheParentTemplate;
+
+            \Closure::bind(static function () use ($tagTrees, $parentTemplate) {
+                foreach ($tagTrees as $tagTree) {
+                    $tagTree->parentTemplate = $parentTemplate;
+                }
+            }, null, TagTree::class)();
+            self::$_parseCache[$cKey] = $tagTrees;
         }
 
         $this->tagTrees = $this->cloneTagTrees(self::$_parseCache[$cKey]);
