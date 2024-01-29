@@ -55,12 +55,8 @@ can rely on various strategies for calculating totals. See {php:meth}`Table::add
 :::{php:method} getDataCellHtml(\Atk4\Data\Field $field): string
 :::
 
-Provided with a field, this method will respond with HTML **template**. In order to keep
-performance of Web Application at the maximum, Table will execute getDataCellHtml for all the
-fields once. When iterating, a combined template will be used to display the values.
-
-The template must not incorporate field values (simply because related model will not be
-loaded just yet), but instead should resort to tags and syntax compatible with {php:class}`Template`.
+Provided with a field, this method will respond with HTML **template**. When iterating,
+a combined template will be used to display the values.
 
 A sample template could be:
 
