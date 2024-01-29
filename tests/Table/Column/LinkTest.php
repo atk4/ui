@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui\Tests;
+namespace Atk4\Ui\Tests\Table\Column;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Table;
+use Atk4\Ui\Tests\CreateAppTrait;
+use Atk4\Ui\Tests\TableTestTrait;
 
-class TableColumnLinkTest extends TestCase
+class LinkTest extends TestCase
 {
     use CreateAppTrait;
     use TableTestTrait;
