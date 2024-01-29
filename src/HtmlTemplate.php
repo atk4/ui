@@ -37,7 +37,7 @@ class HtmlTemplate
         $this->loadFromString($template);
     }
 
-    public function _hasTag(string $tag): bool
+    protected function _hasTag(string $tag): bool
     {
         return isset($this->tagTrees[$tag]);
     }
@@ -146,12 +146,22 @@ class HtmlTemplate
      */
     protected function _setOrAppend($tag, string $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
     {
-        if ($tag instanceof Model) {
+        if ($tag instanceof Model && $value === null) {
             if (!$encodeHtml) {
                 throw new Exception('HTML is not allowed to be dangerously set from Model');
             }
 
-            $tag = $this->getApp()->uiPersistence->typecastSaveRow($tag, $tag->get());
+            // $tag passed as model
+            // in this case we don't throw exception if tags don't exist
+            $uiPersistence = $this->getApp()->uiPersistence;
+            foreach ($tag->getFields() as $k => $field) {
+                if ($this->_hasTag($k)) {
+                    $v = $uiPersistence->typecastSaveField($field, $tag->get($k));
+                    $this->_setOrAppend($k, $v, $encodeHtml, $append);
+                }
+            }
+
+            return;
         }
 
         // $tag passed as associative array [tag => value]
