@@ -165,10 +165,17 @@ class HtmlTemplate
         }
 
         // $tag passed as associative array [tag => value]
-        // in this case we don't throw exception if tags don't exist
         if (is_array($tag) && $value === null) {
+            if ($throwIfNotFound) {
+                foreach ($tag as $k => $v) {
+                    if (!$this->_hasTag($k)) {
+                        $this->_setOrAppend($k, $v, $encodeHtml, $append, $throwIfNotFound);
+                    }
+                }
+            }
+
             foreach ($tag as $k => $v) {
-                $this->_setOrAppend($k, $v, $encodeHtml, $append, false);
+                $this->_setOrAppend($k, $v, $encodeHtml, $append, $throwIfNotFound);
             }
 
             return;
