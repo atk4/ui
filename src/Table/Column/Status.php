@@ -38,9 +38,8 @@ class Status extends Table\Column
             throw new Exception('Status can be used only with model field');
         }
 
-        $bodyAttr = $this->getTagAttributes('body');
         $attr = $this->mergeTagAttributes(
-            $bodyAttr,
+            $this->getTagAttributes('body'),
             $attr,
             ['class' => ['{$_' . $field->shortName . '_status}']],
         );
