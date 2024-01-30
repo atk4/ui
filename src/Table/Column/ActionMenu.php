@@ -26,7 +26,7 @@ class ActionMenu extends Table\Column
     protected $items = [];
 
     /** @var array<string, \Closure(Model): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
-    protected $callbacks = [];
+    protected $isEnabledFxs = [];
 
     /**
      * Dropdown label.
@@ -82,7 +82,7 @@ class ActionMenu extends Table\Column
         if ($isDisabled === true) {
             $item->addClass('disabled');
         } elseif ($isDisabled !== false) {
-            $this->callbacks[$name] = $isDisabled;
+            $this->isEnabledFxs[$name] = $isDisabled;
         }
 
         if ($action !== null) {
@@ -144,9 +144,9 @@ class ActionMenu extends Table\Column
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $tags = [];
-        foreach ($this->callbacks as $name => $callback) {
+        foreach ($this->isEnabledFxs as $name => $isEnabledFx) {
             // if action is enabled then do not set disabled class
-            if ($callback($row)) {
+            if ($isEnabledFx($row)) {
                 continue;
             }
 

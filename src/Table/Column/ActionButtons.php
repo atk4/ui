@@ -26,7 +26,7 @@ class ActionButtons extends Table\Column
     public $buttons = [];
 
     /** @var array<string, \Closure(Model): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
-    protected $callbacks = [];
+    protected $isEnabledFxs = [];
 
     #[\Override]
     protected function init(): void
@@ -37,7 +37,7 @@ class ActionButtons extends Table\Column
     }
 
     /**
-     * Adds a new button which will execute $callback when clicked.
+     * Adds a new button which will execute $action when clicked.
      *
      * @param string|array|View                                       $button
      * @param JsExpressionable|JsCallbackSetClosure|ExecutorInterface $action
@@ -62,7 +62,7 @@ class ActionButtons extends Table\Column
         if ($isDisabled === true) {
             $button->addClass('disabled');
         } elseif ($isDisabled !== false) {
-            $this->callbacks[$name] = $isDisabled;
+            $this->isEnabledFxs[$name] = $isDisabled;
         }
 
         $button->setApp($this->table->getApp());
@@ -137,9 +137,9 @@ class ActionButtons extends Table\Column
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $tags = [];
-        foreach ($this->callbacks as $name => $callback) {
+        foreach ($this->isEnabledFxs as $name => $isEnabledFx) {
             // if action is enabled then do not set disabled class
-            if ($callback($row)) {
+            if ($isEnabledFx($row)) {
                 continue;
             }
 

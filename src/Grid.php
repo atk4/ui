@@ -86,10 +86,10 @@ class Grid extends View
 
     public $defaultTemplate = 'grid.html';
 
-    /** @var array Defines which Table Decorator to use for ActionButtons. */
+    /** @var array Defines which Table decorator to use for ActionButtons. */
     protected $actionButtonsDecorator = [Table\Column\ActionButtons::class];
 
-    /** @var array Defines which Table Decorator to use for ActionMenu. */
+    /** @var array Defines which Table decorator to use for ActionMenu. */
     protected $actionMenuDecorator = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
 
     #[\Override]

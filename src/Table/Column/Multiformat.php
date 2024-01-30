@@ -15,16 +15,16 @@ use Atk4\Ui\Table;
 class Multiformat extends Table\Column
 {
     /** @var \Closure(Model, Field|null): list<array<0|string, mixed>|Table\Column> Method to execute which will return array of seeds for decorators */
-    public $callback;
+    protected \Closure $decoratorsFx;
 
     /**
-     * @param \Closure(Model, Field|null): list<array<0|string, mixed>|Table\Column> $callback
+     * @param \Closure(Model, Field|null): list<array<0|string, mixed>|Table\Column> $decoratorsFx
      */
-    public function __construct(\Closure $callback)
+    public function __construct(\Closure $decoratorsFx)
     {
         parent::__construct();
 
-        $this->callback = $callback;
+        $this->decoratorsFx = $decoratorsFx;
     }
 
     #[\Override]
@@ -36,9 +36,11 @@ class Multiformat extends Table\Column
     #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
-        $decorators = ($this->callback)($row, $field);
-        // we need to smartly wrap things up
+        $decorators = ($this->decoratorsFx)($row, $field);
+
         $name = $field->shortName;
+
+        // we need to smartly wrap things up
         $cellHtml = null;
         $tdAttr = [];
         $htmlTags = [];
