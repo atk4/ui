@@ -347,7 +347,7 @@ class Grid extends View
      *
      * @param string|array|View                     $button     Label text, object or seed for the Button
      * @param JsExpressionable|JsCallbackSetClosure $action
-     * @param bool                                  $isDisabled
+     * @param bool|\Closure(Model): bool            $isDisabled
      *
      * @return View
      */
@@ -393,10 +393,11 @@ class Grid extends View
      *
      * @param View|string                           $view
      * @param JsExpressionable|JsCallbackSetClosure $action
+     * @param bool|\Closure(Model): bool            $isDisabled
      *
      * @return View
      */
-    public function addActionMenuItem($view, $action = null, string $confirmMsg = '', bool $isDisabled = false)
+    public function addActionMenuItem($view, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
         return $this->getActionMenu()->addActionMenuItem($view, $action, $confirmMsg, $isDisabled);
     }
@@ -494,7 +495,7 @@ class Grid extends View
      * @param string                            $title
      * @param \Closure(View, string|null): void $callback
      * @param array                             $args       extra URL argument for callback
-     * @param \Closure|bool                     $isDisabled function (Model $row) { ... }
+     * @param bool|\Closure(Model): bool        $isDisabled
      *
      * @return View
      */

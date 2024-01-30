@@ -83,7 +83,7 @@ class ActionButtons extends Table\Column
      * @param \Closure(View, string|null): void $callback
      * @param View                              $owner
      * @param array                             $args
-     * @param \Closure|bool                     $isDisabled function (Model $row) { ... }
+     * @param bool|\Closure(Model): bool        $isDisabled
      *
      * @return View
      */
