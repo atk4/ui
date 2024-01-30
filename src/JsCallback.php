@@ -91,9 +91,7 @@ class JsCallback extends Callback
                 throw new Exception('Jquery JsCallback chain was mutated but not returned');
             }
 
-            $ajaxec = $response
-                ? $this->getAjaxec($response)
-                : null;
+            $ajaxec = $this->getAjaxec($response);
 
             $this->terminateAjax($ajaxec);
         });
@@ -105,17 +103,16 @@ class JsCallback extends Callback
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
      *
-     * @param string|null                        $ajaxec
      * @param ($success is true ? null : string) $msg     General message, typically won't be displayed
      * @param bool                               $success Was request successful or not
      */
-    public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
+    public function terminateAjax(JsBlock $ajaxec, $msg = null, bool $success = true): void
     {
         $data = ['success' => $success];
         if (!$success) {
             $data['message'] = $msg;
         }
-        $data['atkjs'] = $ajaxec;
+        $data['atkjs'] = $ajaxec->jsRender();
 
         if ($this->canTerminate()) {
             $this->getApp()->terminateJson($data);
@@ -127,12 +124,14 @@ class JsCallback extends Callback
      *
      * @param JsExpressionable|View|string|null $response
      */
-    public function getAjaxec($response): string
+    public function getAjaxec($response): JsBlock
     {
         $jsBlock = new JsBlock();
-        $jsBlock->addStatement($this->_getProperAction($response));
+        if ($response) {
+            $jsBlock->addStatement($this->_getProperAction($response));
+        }
 
-        return $jsBlock->jsRender();
+        return $jsBlock;
     }
 
     #[\Override]

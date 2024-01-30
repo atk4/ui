@@ -91,13 +91,13 @@ class FormTest extends TestCase
 
         if ($checkExpectedErrorsFx !== null) {
             self::assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');
-            self::assertNotSame('', $res['atkjs']); // will output useful error
+            self::assertNotEmpty($res['atkjs']);
             $this->formError = $res['atkjs'];
 
             $checkExpectedErrorsFx($res['atkjs']);
         } else {
             self::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
-            self::assertNull($res['atkjs']);
+            self::assertSame('', $res['atkjs']);
         }
     }
 
