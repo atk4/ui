@@ -295,11 +295,16 @@ class Column
      */
     public function getTagAttributes(string $position, array $attr = []): array
     {
-        // "all" applies on all positions
-        // $position is for specific position classes
-        foreach (['all', $position] as $key) {
-            if (isset($this->attr[$key])) {
-                $attr = array_merge_recursive($attr, $this->attr[$key]);
+        foreach ([
+            $this->attr['all'] ?? [],
+            $this->attr[$position] ?? [],
+        ] as $thisAttr) {
+            foreach ($thisAttr as $k => $v) {
+                if (is_string($v) && !isset($attr[$k])) {
+                    $attr[$k] = $v;
+                } else {
+                    $attr[$k] = array_merge($v, $attr[$k] ?? []);
+                }
             }
         }
 
