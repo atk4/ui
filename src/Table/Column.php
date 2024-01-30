@@ -291,24 +291,34 @@ class Column
     }
 
     /**
-     * @param 'head'|'body'|'foot' $position
+     * @param array<string, string|list<string>> ...$attributesArr
      */
-    public function getTagAttributes(string $position, array $attr = []): array
+    protected function mergeTagAttributes(array ...$attributesArr): array
     {
-        foreach ([
-            $this->attr['all'] ?? [],
-            $this->attr[$position] ?? [],
-        ] as $thisAttr) {
-            foreach ($thisAttr as $k => $v) {
-                if (is_string($v) && !isset($attr[$k])) {
-                    $attr[$k] = $v;
+        $res = [];
+        foreach ($attributesArr as $attributes) {
+            foreach ($attributes as $k => $v) {
+                if (is_string($v)) {
+                    $res[$k] = $v;
                 } else {
-                    $attr[$k] = array_merge($v, $attr[$k] ?? []);
+                    $res[$k] = array_merge($res[$k] ?? [], $v);
                 }
             }
         }
 
-        return $attr;
+        return $res;
+    }
+
+    /**
+     * @param 'head'|'body'|'foot' $position
+     */
+    public function getTagAttributes(string $position, array $attr = []): array
+    {
+        return $this->mergeTagAttributes(
+            $this->attr['all'] ?? [],
+            $this->attr[$position] ?? [],
+            $attr
+        );
     }
 
     /**

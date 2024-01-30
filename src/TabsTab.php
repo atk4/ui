@@ -33,12 +33,10 @@ class TabsTab extends MenuItem
         $this->settings = array_merge($this->settings, ['autoTabActivation' => false]);
 
         if ($this->path) {
-            $this->settings = array_merge_recursive($this->settings, [
-                'cache' => false,
-                'auto' => true,
-                'path' => $this->path,
-                'apiSettings' => ['data' => ['__atk_tab' => 1]],
-            ]);
+            $this->settings['cache'] = false;
+            $this->settings['auto'] = true;
+            $this->settings['path'] = $this->path;
+            $this->settings['apiSettings']['data']['__atk_tab'] = 1;
         }
 
         $this->js(true)->tab($this->settings);

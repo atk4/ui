@@ -41,8 +41,11 @@ class Tooltip extends Table\Column
         }
 
         $bodyAttr = $this->getTagAttributes('body');
-
-        $attr = array_merge_recursive($bodyAttr, $attr, ['class' => '{$_' . $field->shortName . '_tooltip}']);
+        $attr = $this->mergeTagAttributes(
+            $bodyAttr,
+            $attr,
+            ['class' => ['{$_' . $field->shortName . '_tooltip}']],
+        );
 
         if (is_array($attr['class'] ?? null)) {
             $attr['class'] = implode(' ', $attr['class']);

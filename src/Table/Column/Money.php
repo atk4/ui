@@ -26,7 +26,7 @@ class Money extends Table\Column
     #[\Override]
     public function getTagAttributes(string $position, array $attr = []): array
     {
-        $attr = array_merge_recursive($attr, ['class' => ['{$_' . $this->shortName . '_class}']]);
+        $attr['class'][] = '{$_' . $this->shortName . '_class}';
 
         return parent::getTagAttributes($position, $attr);
     }
