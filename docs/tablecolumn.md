@@ -346,7 +346,7 @@ fields of your models and will conditionally add Link on top of Money formatting
 The callback must return array of seeds like:
 
 ```
-[[\Atk4\Ui\Table\Column\Link::class], \Atk4\Ui\Table\Column\Money::class]
+[[\Atk4\Ui\Table\Column\Link::class], [\Atk4\Ui\Table\Column\Money::class]]
 ```
 
 Multiple decorators will be created and merged.
