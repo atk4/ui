@@ -382,9 +382,6 @@ parameters:
         # for level = 5
         -
             path: 'src/Grid.php'
-            message: '~^Parameter #1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View\|string, Atk4\\Data\\Model\\UserAction given\.$~'
-        -
-            path: 'src/Grid.php'
             message: '~^Parameter #2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Paginator given\.$~'
         -
             path: 'src/Grid.php'

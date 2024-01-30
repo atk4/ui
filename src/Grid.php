@@ -430,19 +430,6 @@ class Grid extends View
     }
 
     /**
-     * Add action menu items using Model.
-     * You may specify the scope of actions to be added.
-     *
-     * @param string|null $appliesTo the scope of model action
-     */
-    public function addActionMenuFromModel(string $appliesTo = null): void
-    {
-        foreach ($this->model->getUserActions($appliesTo) as $action) {
-            $this->addActionMenuItem($action);
-        }
-    }
-
-    /**
      * An array of column name where filter is needed.
      * Leave empty to include all column in grid.
      *
