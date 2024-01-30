@@ -39,7 +39,7 @@ class Column
     /** @var Table Link back to the table, where column is used. */
     public $table;
 
-    /** Contains any custom attributes that may be applied on head, body or foot. */
+    /** @var array<'head'|'body'|'foot'|'all', array<string, string|list<string>>> Contains any custom attributes that may be applied on head, body or foot. */
     public array $attr = [];
 
     /** @var string|null If set, will override column header value. */
@@ -256,11 +256,10 @@ class Column
     }
 
     /**
-     * Adds a new class to the cells of this column. The optional second argument may be "head",
-     * "body" or "foot". If position is not defined, then class will be applied on all cells.
+     * Adds a new class to the cells of this column.
      *
-     * @param string $class
-     * @param string $position
+     * @param string                     $class
+     * @param 'head'|'body'|'foot'|'all' $position
      *
      * @return $this
      */
@@ -272,16 +271,15 @@ class Column
     }
 
     /**
-     * Adds a new attribute to the cells of this column. The optional second argument may be "head",
-     * "body" or "foot". If position is not defined, then attribute will be applied on all cells.
+     * Adds a new attribute to the cells of this column.
      *
      * You can also use the "{$name}" value if you wish to specific row value:
      *
      *    $table->column['name']->setAttr('data', '{$id}');
      *
-     * @param string $attr
-     * @param string $value
-     * @param string $position
+     * @param string                     $attr
+     * @param string                     $value
+     * @param 'head'|'body'|'foot'|'all' $position
      *
      * @return $this
      */
@@ -292,6 +290,9 @@ class Column
         return $this;
     }
 
+    /**
+     * @param 'head'|'body'|'foot' $position
+     */
     public function getTagAttributes(string $position, array $attr = []): array
     {
         // "all" applies on all positions
@@ -309,7 +310,7 @@ class Column
      * Returns a suitable cell tag with the supplied value. Applies modifiers
      * added through addClass and setAttr.
      *
-     * @param string                                                                                                   $position 'head', 'body' or 'tail'
+     * @param 'head'|'body'|'foot'                                                                                     $position
      * @param string|array<int, array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value    either HTML or array defining HTML structure, see App::getTag help
      * @param array<string, string|bool|array>                                                                         $attr     extra attributes to apply on the tag
      */
@@ -398,8 +399,7 @@ class Column
      * The must correspond to the name of the field, although you can also use multiple tags. The tag
      * will also be formatted before inserting, see UI Persistence formatting in the documentation.
      *
-     * This method will be executed only once per table rendering, if you need to format data manually,
-     * you should use $this->table->onHook('beforeRow' or 'afterRow', ...);
+     * If you need to format data manually, you can use $this->table->onHook(Lister::HOOK_BEFORE_ROW or Lister::HOOK_AFTER_ROW, ...);
      */
     public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
