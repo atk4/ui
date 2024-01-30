@@ -124,13 +124,13 @@ class ActionButtons extends Table\Column
         }
 
         // render our buttons
-        $outputHtml = '';
+        $outputHtmls = [];
         foreach ($this->buttons as $name => $button) {
             $button = $this->cloneColumnView($button, $name);
-            $outputHtml .= $button->getHtml();
+            $outputHtmls[] = $button->getHtml();
         }
 
-        return $this->getApp()->getTag('div', ['class' => 'ui buttons'], [$outputHtml]);
+        return $this->getApp()->getTag('div', ['class' => 'ui buttons'], $outputHtmls);
     }
 
     #[\Override]

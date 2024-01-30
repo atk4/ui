@@ -125,16 +125,16 @@ class ActionMenu extends Table\Column
         }
 
         // render our menus
-        $outputHtml = '';
+        $outputHtmls = [];
         foreach ($this->items as $k => $item) {
             $item = $this->cloneColumnView($item, (string) $k);
-            $outputHtml .= $item->getHtml();
+            $outputHtmls[] = $item->getHtml();
         }
 
         $res = $this->getApp()->getTag('div', ['class' => 'ui ' . $this->ui . ' atk-action-menu'], [
             ['div', ['class' => 'text'], $this->label],
             $this->icon ? $this->getApp()->getTag('i', ['class' => $this->icon . ' icon'], '') : '',
-            ['div', ['class' => 'menu'], [$outputHtml]],
+            ['div', ['class' => 'menu'], $outputHtmls],
         ]);
 
         return $res;
