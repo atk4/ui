@@ -506,7 +506,7 @@ class App
 
     /**
      * Will perform a preemptive output and terminate. Do not use this
-     * directly, instead call it form Callback, JsCallback or similar
+     * directly, instead call it from Callback, JsCallback or similar
      * other classes.
      *
      * @param string|StreamInterface|array $output Array type is supported only for JSON response

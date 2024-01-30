@@ -6,7 +6,6 @@ namespace Atk4\Ui;
 
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
-use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 
@@ -87,14 +86,14 @@ class JsCallback extends Callback
 
             $response = $fx($chain, ...$values);
 
-            if (count($chain->_chain) === 0) {
-                // TODO should we create/pass $chain to $fx at all?
-                $chain = null;
-            } elseif ($response) {
-                // TODO throw when non-empty chain is to be ignored?
+            // TODO should we create/pass $chain to $fx at all?
+            if (count($chain->_chain) !== 0 && !$response instanceof JsExpressionable) {
+                throw new Exception('Jquery JsCallback chain was mutated but not returned');
             }
 
-            $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
+            $ajaxec = $response
+                ? $this->getAjaxec($response)
+                : null;
 
             $this->terminateAjax($ajaxec);
         });
@@ -126,15 +125,11 @@ class JsCallback extends Callback
     /**
      * Provided with a $response from callbacks convert it into a JavaScript code.
      *
-     * @param JsExpressionable|View|string|null $response response from callbacks,
-     * @param JsChain                           $chain
+     * @param JsExpressionable|View|string|null $response
      */
-    public function getAjaxec($response, $chain = null): string
+    public function getAjaxec($response): string
     {
         $jsBlock = new JsBlock();
-        if ($chain !== null) {
-            $jsBlock->addStatement($chain);
-        }
         $jsBlock->addStatement($this->_getProperAction($response));
 
         return $jsBlock->jsRender();

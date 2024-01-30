@@ -911,6 +911,7 @@ class View extends AbstractView
      *   if (!$data['clickable']) {
      *      return new JsExpression('alert([])', ['This record is not clickable'])
      *   }
+     *
      *   return $js->parent()->hide();
      * });
      *
