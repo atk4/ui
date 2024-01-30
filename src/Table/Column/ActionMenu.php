@@ -145,12 +145,9 @@ class ActionMenu extends Table\Column
     {
         $tags = [];
         foreach ($this->isEnabledFxs as $name => $isEnabledFx) {
-            // if action is enabled then do not set disabled class
-            if ($isEnabledFx($row)) {
-                continue;
+            if (!$isEnabledFx($row)) {
+                $tags['_' . $name . '_disabled'] = 'disabled';
             }
-
-            $tags['_' . $name . '_disabled'] = 'disabled';
         }
 
         return $tags;
