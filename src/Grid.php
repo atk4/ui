@@ -506,7 +506,8 @@ class Grid extends View
      * @param string|array|View                 $button
      * @param string                            $title
      * @param \Closure(View, string|null): void $callback
-     * @param array                             $args     extra URL argument for callback
+     * @param array                             $args       extra URL argument for callback
+     * @param \Closure|bool                     $isDisabled function (Model $row) { ... }
      *
      * @return View
      */
