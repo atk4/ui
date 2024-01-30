@@ -122,7 +122,7 @@ class ActionMenu extends Table\Column
         // render our menus
         $outputHtmls = [];
         foreach ($this->items as $k => $item) {
-            $item = $this->cloneColumnView($item, (string) $k);
+            $item = $this->cloneColumnView($item, $this->table->currentRow, (string) $k);
             $outputHtmls[] = $item->getHtml();
         }
 

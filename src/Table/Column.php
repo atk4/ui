@@ -87,7 +87,7 @@ class Column
      *
      * @internal
      */
-    protected function cloneColumnView(View $view, string $nameSuffix): View
+    protected function cloneColumnView(View $view, Model $row, string $nameSuffix): View
     {
         $this->assertColumnViewNotInitialized($view);
 
@@ -117,7 +117,7 @@ class Column
 
         $view = $cloneViewWithAddLaterFx($view);
         $view->shortName = 'c' . $this->nameInTableCache . '_' . $nameSuffix . '_r'
-            . $this->getApp()->uiPersistence->typecastSaveField($this->table->model->getField($this->table->model->idField), $this->table->currentRow->getId());
+            . $this->getApp()->uiPersistence->typecastSaveField($row->getField($row->idField), $row->getId());
         $view->name = \Closure::bind(static fn (Table $table) => $view->_shorten($table->name, $view->shortName, null), null, Table::class)($this->table);
 
         return $view;

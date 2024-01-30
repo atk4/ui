@@ -126,7 +126,7 @@ class ActionButtons extends Table\Column
         // render our buttons
         $outputHtmls = [];
         foreach ($this->buttons as $name => $button) {
-            $button = $this->cloneColumnView($button, $name);
+            $button = $this->cloneColumnView($button, $this->table->currentRow, $name);
             $outputHtmls[] = $button->getHtml();
         }
 
