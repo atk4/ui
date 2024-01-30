@@ -19,7 +19,7 @@ Feature: Crud
     Then I should not see "No records"
 
   Scenario: add after search and sort
-    # cover https://github.com/atk4/ui/commit/d42b07fbcc340d4e24f87056ddafdb94036c3cfa
+    # cover https://github.com/atk4/ui/commit/d42b07fbcc
     # TODO generalize JS reload with component reload
     When I click using selector "//th.sortable[//div[text()='Name']]"
     Then I should see "United Kingdom"

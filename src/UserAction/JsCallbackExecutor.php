@@ -87,7 +87,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     #[\Override]
     public function executeModelAction(): void
     {
-        $this->invokeFxWithUrlArgs(function () { // backup/restore $this->args mutated in https://github.com/atk4/ui/blob/8926412a31bc17d3ed1e751e67770557fe865935/src/JsCallback.php#L71
+        $this->invokeFxWithUrlArgs(function () { // backup/restore $this->args mutated in https://github.com/atk4/ui/blob/8926412a31/src/JsCallback.php#L71
             $this->set(function (Jquery $j, ...$values) {
                 $id = $this->getApp()->uiPersistence->typecastLoadField(
                     $this->action->getModel()->getField($this->action->getModel()->idField),
