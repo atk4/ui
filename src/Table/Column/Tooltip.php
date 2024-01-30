@@ -46,10 +46,7 @@ class Tooltip extends Table\Column
             $attr,
             ['class' => ['{$_' . $field->shortName . '_tooltip}']],
         );
-
-        if (is_array($attr['class'] ?? null)) {
-            $attr['class'] = implode(' ', $attr['class']);
-        }
+        $attr['class'] = implode(' ', $attr['class']);
 
         return $this->getApp()->getTag('td', $attr, [
             ' {$' . $field->shortName . '}',

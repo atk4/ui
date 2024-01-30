@@ -44,10 +44,7 @@ class Status extends Table\Column
             $attr,
             ['class' => ['{$_' . $field->shortName . '_status}']],
         );
-
-        if (is_array($attr['class'] ?? null)) {
-            $attr['class'] = implode(' ', $attr['class']);
-        }
+        $attr['class'] = implode(' ', $attr['class']);
 
         return $this->getApp()->getTag('td', $attr, [
             ['i', ['class' => 'icon {$_' . $field->shortName . '_icon}'], ''],
