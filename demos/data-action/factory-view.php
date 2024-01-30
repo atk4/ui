@@ -58,7 +58,7 @@ DemoActionsUtil::setupDemoActions($country);
 $country = $country->loadBy($country->fieldName()->iso, 'fr');
 $country->name .= ' NO RELOAD';
 // suppress dirty field exception
-// https://github.com/atk4/data/blob/35dd7b7d95909cfe574b15e32b7cc57c39a16a58/src/Model/UserAction.php#L164
+// https://github.com/atk4/data/blob/35dd7b7d95/src/Model/UserAction.php#L164
 unset($country->getDirtyRef()[$country->fieldName()->name]);
 
 $cardActions = Card::addTo($app, ['useLabel' => true, 'executorFactory' => new $myFactory()]);

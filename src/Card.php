@@ -234,8 +234,8 @@ class Card extends View
         }
 
         if ($cardDeck !== null) {
-            // mimic https://github.com/atk4/ui/blob/3c592b8f10fe67c61f179c5c8723b07f8ab754b9/src/Crud.php#L140
-            // based on https://github.com/atk4/ui/blob/3c592b8f10fe67c61f179c5c8723b07f8ab754b9/src/UserAction/SharedExecutorsContainer.php#L24
+            // mimic https://github.com/atk4/ui/blob/3c592b8f10/src/Crud.php#L140
+            // based on https://github.com/atk4/ui/blob/3c592b8f10/src/UserAction/SharedExecutorsContainer.php#L24
             $isNew = !isset($cardDeck->sharedExecutorsContainer->sharedExecutors[$action->shortName]);
             if ($isNew) {
                 $ex = $cardDeck->sharedExecutorsContainer->getExecutorFactory()->createExecutor($action, $cardDeck->sharedExecutorsContainer);
