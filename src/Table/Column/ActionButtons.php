@@ -26,7 +26,7 @@ class ActionButtons extends Table\Column
     public $buttons = [];
 
     /** @var array<string, \Closure(Model): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
-    protected $callbacks = [];
+    protected $isEnabledFxs = [];
 
     #[\Override]
     protected function init(): void
@@ -37,7 +37,7 @@ class ActionButtons extends Table\Column
     }
 
     /**
-     * Adds a new button which will execute $callback when clicked.
+     * Adds a new button which will execute $action when clicked.
      *
      * @param string|array|View                                       $button
      * @param JsExpressionable|JsCallbackSetClosure|ExecutorInterface $action
@@ -62,7 +62,7 @@ class ActionButtons extends Table\Column
         if ($isDisabled === true) {
             $button->addClass('disabled');
         } elseif ($isDisabled !== false) {
-            $this->callbacks[$name] = $isDisabled;
+            $this->isEnabledFxs[$name] = $isDisabled;
         }
 
         $button->setApp($this->table->getApp());
@@ -124,30 +124,25 @@ class ActionButtons extends Table\Column
         }
 
         // render our buttons
-        $outputHtml = '';
+        $outputHtmls = [];
         foreach ($this->buttons as $name => $button) {
-            $button = $this->cloneColumnView($button, $name);
-            $outputHtml .= $button->getHtml();
+            $button = $this->cloneColumnView($button, $this->table->currentRow, $name);
+            $outputHtmls[] = $button->getHtml();
         }
 
-        return $this->getApp()->getTag('div', ['class' => 'ui buttons'], [$outputHtml]);
+        return $this->getApp()->getTag('div', ['class' => 'ui buttons'], $outputHtmls);
     }
 
     #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $tags = [];
-        foreach ($this->callbacks as $name => $callback) {
-            // if action is enabled then do not set disabled class
-            if ($callback($row)) {
-                continue;
+        foreach ($this->isEnabledFxs as $name => $isEnabledFx) {
+            if (!$isEnabledFx($row)) {
+                $tags['_' . $name . '_disabled'] = 'disabled';
             }
-
-            $tags['_' . $name . '_disabled'] = 'disabled';
         }
 
         return $tags;
     }
-
-    // rest will be implemented for crud
 }

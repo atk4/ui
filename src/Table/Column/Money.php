@@ -14,7 +14,11 @@ use Atk4\Ui\Table;
  */
 class Money extends Table\Column
 {
-    public array $attr = ['all' => ['class' => ['right aligned single line']]];
+    public array $attr = [
+        'all' => [
+            'class' => ['right aligned single line'],
+        ],
+    ];
 
     /** @var bool Should we show zero values in cells? */
     public $showZeroValues = true;
@@ -22,7 +26,7 @@ class Money extends Table\Column
     #[\Override]
     public function getTagAttributes(string $position, array $attr = []): array
     {
-        $attr = array_merge_recursive($attr, ['class' => ['{$_' . $this->shortName . '_class}']]);
+        $attr['class'][] = '{$_' . $this->shortName . '_class}';
 
         return parent::getTagAttributes($position, $attr);
     }

@@ -354,9 +354,6 @@ parameters:
             path: 'src/Header.php'
             message: '~^Property Atk4\\Ui\\Header::\$subHeader \(string\) does not accept \$this\(Atk4\\Ui\\Header\)\.$~'
         -
-            path: 'src/JsSearch.php'
-            message: '~^Property Atk4\\Ui\\JsSearch::\$placeHolder \(Atk4\\Ui\\Form\\Control\\Line\|null\) does not accept default value of type string\.$~'
-        -
             path: 'src/Label.php'
             message: '~^Property Atk4\\Ui\\Label::\$detail \(string\|false\|null\) does not accept \$this\(Atk4\\Ui\\Label\)\.$~'
         -
@@ -386,9 +383,6 @@ parameters:
         -
             path: 'src/Grid.php'
             message: '~^Parameter #2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Table\|false given\.$~'
-        -
-            path: 'src/JsSearch.php'
-            message: '~^Parameter #2 \$value of method Atk4\\Ui\\HtmlTemplate::trySet\(\) expects string\|null, Atk4\\Ui\\Form\\Control\\Line given\.$~'
         -
             path: 'src/Menu.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, array<int, string>\|string> given\.$~'

@@ -67,12 +67,12 @@ class LinkTest extends TestCase
         $salary = $this->table->addColumn('salary', new Table\Column\Money());
 
         self::assertSame(
-            '<td>{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary) . '} right aligned single line">{$salary}</td>',
+            '<td>{$name}</td><td>{$ref}</td><td class="right aligned single line {$' . $this->getColumnClass($salary) . '}">{$salary}</td>',
             $this->table->getDataRowHtml()
         );
 
         self::assertSame(
-            '<tr data-id="1"><td>bar</td><td>ref123</td><td class="negative right aligned single line">-123</td></tr>',
+            '<tr data-id="1"><td>bar</td><td>ref123</td><td class="right aligned single line negative">-123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -83,12 +83,12 @@ class LinkTest extends TestCase
         $this->table->addDecorator('salary', new Table\Column\Template('<b>{$salary}</b>'));
 
         self::assertSame(
-            '<td>{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary) . '} right aligned single line"><b>{$salary}</b></td>',
+            '<td>{$name}</td><td>{$ref}</td><td class="right aligned single line {$' . $this->getColumnClass($salary) . '}"><b>{$salary}</b></td>',
             $this->table->getDataRowHtml()
         );
 
         self::assertSame(
-            '<tr data-id="1"><td>bar</td><td>ref123</td><td class="negative right aligned single line"><b>-123</b></td></tr>',
+            '<tr data-id="1"><td>bar</td><td>ref123</td><td class="right aligned single line negative"><b>-123</b></td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -100,12 +100,12 @@ class LinkTest extends TestCase
         $this->table->addDecorator('salary', new Table\Column\Template('<b>{$salary}</b>'));
 
         self::assertSame(
-            '<td class="{$' . $this->getColumnClass($salary1) . '} right aligned single line">{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary2) . '} right aligned single line"><b>{$salary}</b></td>',
+            '<td class="right aligned single line {$' . $this->getColumnClass($salary1) . '}">{$name}</td><td>{$ref}</td><td class="right aligned single line {$' . $this->getColumnClass($salary2) . '}"><b>{$salary}</b></td>',
             $this->table->getDataRowHtml()
         );
 
         self::assertSame(
-            '<tr data-id="1"><td class=" right aligned single line">bar</td><td>ref123</td><td class="negative right aligned single line"><b>-123</b></td></tr>',
+            '<tr data-id="1"><td class="right aligned single line ">bar</td><td>ref123</td><td class="right aligned single line negative"><b>-123</b></td></tr>',
             $this->extractTableRow($this->table)
         );
     }

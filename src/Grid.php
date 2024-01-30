@@ -86,11 +86,11 @@ class Grid extends View
 
     public $defaultTemplate = 'grid.html';
 
-    /** @var array Defines which Table Decorator to use for ActionButtons. */
-    protected $actionButtonsDecorator = [Table\Column\ActionButtons::class];
+    /** @var array Table\Column seed to use for ActionButtons. */
+    protected $actionButtonsSeed = [Table\Column\ActionButtons::class];
 
-    /** @var array Defines which Table Decorator to use for ActionMenu. */
-    protected $actionMenuDecorator = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
+    /** @var array Table\Column seed to use for ActionMenu. */
+    protected $actionMenuSeed = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
 
     #[\Override]
     protected function init(): void
@@ -373,7 +373,9 @@ class Grid extends View
         if (!$confirmation) {
             $confirmation = '';
         }
-        $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+        $disabled = is_bool($executor->getAction()->enabled)
+            ? !$executor->getAction()->enabled
+            : $executor->getAction()->enabled;
 
         return $this->getActionButtons()->addButton($button, $executor, $confirmation, $disabled);
     }
@@ -381,7 +383,7 @@ class Grid extends View
     private function getActionButtons(): Table\Column\ActionButtons
     {
         if ($this->actionButtons === null) {
-            $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
+            $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsSeed);
         }
 
         return $this->actionButtons; // @phpstan-ignore-line
@@ -408,12 +410,15 @@ class Grid extends View
     public function addExecutorMenuItem(ExecutorInterface $executor)
     {
         $item = $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_MENU_ITEM);
+
         // ConfirmationExecutor take care of showing the user confirmation, thus make it empty
         $confirmation = !$executor instanceof ConfirmationExecutor ? $executor->getAction()->getConfirmation() : '';
         if (!$confirmation) {
             $confirmation = '';
         }
-        $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+        $disabled = is_bool($executor->getAction()->enabled)
+            ? !$executor->getAction()->enabled
+            : $executor->getAction()->enabled;
 
         return $this->getActionMenu()->addActionMenuItem($item, $executor, $confirmation, $disabled);
     }
@@ -424,7 +429,7 @@ class Grid extends View
     private function getActionMenu()
     {
         if (!$this->actionMenu) {
-            $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
+            $this->actionMenu = $this->table->addColumn(null, $this->actionMenuSeed);
         }
 
         return $this->actionMenu; // @phpstan-ignore-line
