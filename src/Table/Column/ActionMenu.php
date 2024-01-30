@@ -28,12 +28,7 @@ class ActionMenu extends Table\Column
     /** @var array<string, \Closure(Model): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
     protected $isEnabledFxs = [];
 
-    /**
-     * Dropdown label.
-     * Note: In Grid::class, this value is set by ActionMenuDecorator property.
-     *
-     * @var string
-     */
+    /** @var string Dropdown label. */
     public $label;
 
     /** @var string Dropdown module CSS class name as per Formantic-UI. */
