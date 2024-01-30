@@ -373,7 +373,9 @@ class Grid extends View
         if (!$confirmation) {
             $confirmation = '';
         }
-        $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+        $disabled = is_bool($executor->getAction()->enabled)
+            ? !$executor->getAction()->enabled
+            : $executor->getAction()->enabled;
 
         return $this->getActionButtons()->addButton($button, $executor, $confirmation, $disabled);
     }
@@ -408,12 +410,15 @@ class Grid extends View
     public function addExecutorMenuItem(ExecutorInterface $executor)
     {
         $item = $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_MENU_ITEM);
+
         // ConfirmationExecutor take care of showing the user confirmation, thus make it empty
         $confirmation = !$executor instanceof ConfirmationExecutor ? $executor->getAction()->getConfirmation() : '';
         if (!$confirmation) {
             $confirmation = '';
         }
-        $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+        $disabled = is_bool($executor->getAction()->enabled)
+            ? !$executor->getAction()->enabled
+            : $executor->getAction()->enabled;
 
         return $this->getActionMenu()->addActionMenuItem($item, $executor, $confirmation, $disabled);
     }
