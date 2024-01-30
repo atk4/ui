@@ -648,7 +648,7 @@ class Table extends Lister
             }
 
             // we need to smartly wrap things up
-            $cell = null;
+            $cellHtml = null;
             $tdAttr = [];
             foreach ($column as $cKey => $c) {
                 if ($cKey !== array_key_last($column)) {
@@ -659,19 +659,15 @@ class Table extends Lister
                     $html = $c->getDataCellHtml($field, $tdAttr);
                 }
 
-                if ($cell) {
-                    if ($name) {
+                $cellHtml = $cellHtml === null
+                    ? $html
+                    : ($name
                         // if name is set, we can wrap things
-                        $cell = str_replace('{$' . $name . '}', $cell, $html);
-                    } else {
-                        $cell .= ' ' . $html;
-                    }
-                } else {
-                    $cell = $html;
-                }
+                        ? str_replace('{$' . $name . '}', $cellHtml, $html)
+                        : $cellHtml . ' ' . $html);
             }
 
-            $output[] = $cell;
+            $output[] = $cellHtml;
         }
 
         return implode('', $output);
