@@ -347,7 +347,7 @@ class Grid extends View
      *
      * @param string|array|View                     $button     Label text, object or seed for the Button
      * @param JsExpressionable|JsCallbackSetClosure $action
-     * @param bool                                  $isDisabled
+     * @param bool|\Closure(Model): bool            $isDisabled
      *
      * @return View
      */
@@ -393,10 +393,11 @@ class Grid extends View
      *
      * @param View|string                           $view
      * @param JsExpressionable|JsCallbackSetClosure $action
+     * @param bool|\Closure(Model): bool            $isDisabled
      *
      * @return View
      */
-    public function addActionMenuItem($view, $action = null, string $confirmMsg = '', bool $isDisabled = false)
+    public function addActionMenuItem($view, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
         return $this->getActionMenu()->addActionMenuItem($view, $action, $confirmMsg, $isDisabled);
     }
@@ -427,19 +428,6 @@ class Grid extends View
         }
 
         return $this->actionMenu; // @phpstan-ignore-line
-    }
-
-    /**
-     * Add action menu items using Model.
-     * You may specify the scope of actions to be added.
-     *
-     * @param string|null $appliesTo the scope of model action
-     */
-    public function addActionMenuFromModel(string $appliesTo = null): void
-    {
-        foreach ($this->model->getUserActions($appliesTo) as $action) {
-            $this->addActionMenuItem($action);
-        }
     }
 
     /**
@@ -506,13 +494,14 @@ class Grid extends View
      * @param string|array|View                 $button
      * @param string                            $title
      * @param \Closure(View, string|null): void $callback
-     * @param array                             $args     extra URL argument for callback
+     * @param array                             $args       extra URL argument for callback
+     * @param bool|\Closure(Model): bool        $isDisabled
      *
      * @return View
      */
-    public function addModalAction($button, $title, \Closure $callback, $args = [])
+    public function addModalAction($button, $title, \Closure $callback, $args = [], $isDisabled = false)
     {
-        return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args);
+        return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args, $isDisabled);
     }
 
     /**
