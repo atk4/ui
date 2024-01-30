@@ -27,7 +27,7 @@ class JsSearch extends View
      */
     public $autoQuery = false;
 
-    /** @var Form\Control\Line|null The input field. */
+    /** @var string|null */
     public $placeHolder = 'Search';
 
     /**
