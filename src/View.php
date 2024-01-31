@@ -1089,11 +1089,7 @@ class View extends AbstractView
             }
         }
 
-        if (count($actions) === 0) {
-            return new JsBlock();
-        }
-
-        return new JsBlock([new JsExpression('[]()', [new JsFunction([], $actions)])]);
+        return new JsBlock($actions);
     }
 
     // }}}
