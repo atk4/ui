@@ -56,7 +56,7 @@ class JsIntegrationTest extends TestCase
 
         self::assertSame('(function () {
     $(\'#b\').hide();
-})()', $v->getJs());
+})();', $v->getJs()->jsRender());
     }
 
     public function testChainClick(): void
@@ -72,7 +72,7 @@ class JsIntegrationTest extends TestCase
         event.stopPropagation();
         $(this).hide();
     });
-})()', $v->getJs());
+})();', $v->getJs()->jsRender());
     }
 
     public function testChainClickEmpty(): void
@@ -90,7 +90,7 @@ class JsIntegrationTest extends TestCase
         . '$(this);' // this JS statement is not required
         . '
     });
-})()', $v->getJs());
+})();', $v->getJs()->jsRender());
     }
 
     public function testChainNested(): void
@@ -116,7 +116,7 @@ class JsIntegrationTest extends TestCase
         $(\'#b2\').hide();
     });
     $(\'#b1\').data(\'x\', \'y\');
-})()', $v->getJs());
+})();', $v->getJs()->jsRender());
     }
 
     public function testChainNullReturn(): void
@@ -169,7 +169,7 @@ class JsIntegrationTest extends TestCase
         $v->renderAll();
         self::assertSame(0, $jsCallback->counter);
 
-        $v->getJs();
+        $v->getJs()->jsRender();
         self::assertSame(1, $jsCallback->counter);
     }
 }

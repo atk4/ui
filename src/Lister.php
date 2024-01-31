@@ -216,7 +216,7 @@ class Lister extends View
 
         return [
             'success' => true,
-            'atkjs' => $this->getJs(),
+            'atkjs' => $this->getJs()->jsRender(),
             'html' => $this->template->renderToHtml($region),
             'id' => $this->name,
         ];

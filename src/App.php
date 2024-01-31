@@ -677,7 +677,7 @@ class App
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], '$(function () {' . $this->html->getJs() . ';});'));
+            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], '$(function () {' . $this->html->getJs()->jsRender() . '});'));
             $this->isRendering = false;
 
             if ($this->hasRequestQueryParam(Callback::URL_QUERY_TARGET) && $this->catchRunawayCallbacks) {
