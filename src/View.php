@@ -656,7 +656,7 @@ class View extends AbstractView
     {
         $this->renderAll();
 
-        $js = $this->getJs();
+        $js = $this->getJs()->jsRender();
 
         return ($js !== '' ? $this->getApp()->getTag('script', [], '$(function () {' . $js . ';});') : '')
                . $this->renderTemplateToHtml();
@@ -670,7 +670,7 @@ class View extends AbstractView
         $this->renderAll();
 
         return [
-            'atkjs' => $this->getJsRenderActions(),
+            'atkjs' => $this->getJs()->jsRender(),
             'html' => $this->renderTemplateToHtml(),
         ];
     }
@@ -684,7 +684,7 @@ class View extends AbstractView
 
         return [
             'success' => true,
-            'atkjs' => $this->getJs(),
+            'atkjs' => $this->getJs()->jsRender(),
             'html' => $this->renderTemplateToHtml(),
             'id' => $this->name,
         ];
@@ -1078,28 +1078,9 @@ class View extends AbstractView
     }
 
     /**
-     * Return rendered js actions as a string.
-     */
-    public function getJsRenderActions(): string
-    {
-        $actions = [];
-        foreach ($this->_jsActions as $eventActions) {
-            foreach ($eventActions as $action) {
-                $actions[] = $action;
-            }
-        }
-
-        return (new JsBlock($actions))->jsRender();
-    }
-
-    /**
      * Get JavaScript objects from this render tree.
-     *
-     * TODO dedup with getJsRenderActions()
-     *
-     * @return string
      */
-    public function getJs()
+    public function getJs(): JsBlock
     {
         $actions = [];
         foreach ($this->_jsActions as $eventActions) {
@@ -1108,11 +1089,7 @@ class View extends AbstractView
             }
         }
 
-        if (count($actions) === 0) {
-            return '';
-        }
-
-        return (new JsExpression('[]()', [new JsFunction([], $actions)]))->jsRender();
+        return new JsBlock($actions);
     }
 
     // }}}

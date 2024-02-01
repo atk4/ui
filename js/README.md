@@ -77,7 +77,7 @@ the JSON file for this.
 npm run profile
 ```
 
-This command will create a profile JSON file `atkjs-bundle-profile.json` with bundle information inside the profile folder. You can use this file with your
+This command will create a profile JSON file `webpack-bundle-profile.local.json` with bundle information inside the profile folder. You can use this file with your
 favorite bundle analyzer.
 
 Another npm script is available for analyzing the bundle using the webpack-bundle-analyzer tool.
@@ -86,7 +86,7 @@ Another npm script is available for analyzing the bundle using the webpack-bundl
 npm run analyze-profile
 ```
 
-Note: In order to use this script, make sure that the webpack-bundle-analyzer package is install
+Note: In order to use this script, make sure that the webpack-bundle-analyzer package is installed
 globally.
 
 ```

@@ -27,13 +27,13 @@ class ApiService {
     /**
      * Execute JS code.
      *
-     * This function should be called using .call() by passing proper context for 'this'.
-     * ex: apiService.evalResponse.call(this, code)
-     *
+     * @param {object} thisObject
      * @param {string} code
      */
-    evalResponse(code) {
-        eval(code); // eslint-disable-line no-eval
+    evalJsCode(thisObject, code) {
+        (function () {
+            eval('\'use strict\'; (() => {' + code + '})()'); // eslint-disable-line no-eval
+        }).call(thisObject);
     }
 
     /**
@@ -113,13 +113,13 @@ class ApiService {
                 }
 
                 if (response.atkjs) {
-                    atk.apiService.evalResponse.call(this, response.atkjs);
+                    atk.apiService.evalJsCode(this, response.atkjs);
                 }
 
                 if (atk.apiService.afterSuccessCallbacks.length > 0) {
                     const callbacks = atk.apiService.afterSuccessCallbacks;
                     for (const callback of callbacks) {
-                        atk.apiService.evalResponse.call(this, callback);
+                        atk.apiService.evalJsCode(this, callback);
                     }
                     atk.apiService.afterSuccessCallbacks.splice(0);
                 }

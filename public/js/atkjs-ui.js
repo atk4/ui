@@ -1968,13 +1968,13 @@ class ApiService {
   /**
    * Execute JS code.
    *
-   * This function should be called using .call() by passing proper context for 'this'.
-   * ex: apiService.evalResponse.call(this, code)
-   *
+   * @param {object} thisObject
    * @param {string} code
    */
-  evalResponse(code) {
-    eval(code); // eslint-disable-line no-eval
+  evalJsCode(thisObject, code) {
+    (function () {
+      eval('\'use strict\'; (() => {' + code + '})()'); // eslint-disable-line no-eval
+    }).call(thisObject);
   }
 
   /**
@@ -2046,12 +2046,12 @@ class ApiService {
           }
         }
         if (response.atkjs) {
-          atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse.call(this, response.atkjs);
+          atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalJsCode(this, response.atkjs);
         }
         if (atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks.length > 0) {
           const callbacks = atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks;
           for (const callback of callbacks) {
-            atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalResponse.call(this, callback);
+            atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalJsCode(this, callback);
           }
           atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks.splice(0);
         }

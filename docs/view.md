@@ -325,7 +325,7 @@ Returns HTML for this View as well as all the child views.
 :::
 
 :::{php:method} getJs()
-Return array of JS chains that was assigned to current element or it's children.
+Returns JsBlock containing JS chains that were assigned to current element or it's children.
 :::
 
 ## Modifying rendering logic
