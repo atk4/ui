@@ -8,8 +8,8 @@
         "dev": "webpack --progress --watch --env development",
         "profile": "webpack --env production --profile --json > profile/atkjs-bundle-profile.json",
         "analyze-profile": "webpack-bundle-analyzer profile/atkjs-bundle-profile.json",
-        "lint": "eslint --ext .js,.vue . && stylelint \"../public/**/*.less\" && prettier --config .prettierrc.js --loglevel warn \"../public/**/*.less\" --check",
-        "lint-fix": "eslint --ext .js,.vue . --fix && stylelint \"../public/**/*.less\" --fix && prettier --config .prettierrc.js --loglevel warn \"../public/**/*.less\" --write"
+        "lint": "eslint --ext .js,.vue . && stylelint \"../public/**/*.less\" && prettier --config .prettierrc.js --log-level warn \"../public/**/*.less\" --check",
+        "lint-fix": "eslint --ext .js,.vue . --fix && stylelint \"../public/**/*.less\" --fix && prettier --config .prettierrc.js --log-level warn \"../public/**/*.less\" --write"
     },
     "repository": {
         "type": "git",
