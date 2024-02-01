@@ -3407,7 +3407,7 @@ class VueService {
       if (registry[name] === undefined && registry[(0,vue__WEBPACK_IMPORTED_MODULE_28__.camelize)(name)] === undefined) {
         const namePascalized = (0,vue__WEBPACK_IMPORTED_MODULE_28__.capitalize)((0,vue__WEBPACK_IMPORTED_MODULE_28__.camelize)(name));
         if (registry[namePascalized] === undefined && vueFomanticUiComponentNamesSet.has(namePascalized)) {
-          registry[namePascalized] = asyncComponentFactory(namePascalized, () => __webpack_require__.e(/*! import() */ "vendor-vue").then(__webpack_require__.bind(__webpack_require__, /*! vue-fomantic-ui */ "./node_modules/vue-fomantic-ui/dist/vue-fomantic-ui.es.js")).then(r => r[namePascalized])); // eslint-disable-line import/no-unresolved
+          registry[namePascalized] = asyncComponentFactory(namePascalized, () => __webpack_require__.e(/*! import() */ "vendor-vue").then(__webpack_require__.bind(__webpack_require__, /*! vue-fomantic-ui */ "./node_modules/vue-fomantic-ui/dist/vue-fomantic-ui.mjs")).then(r => r[namePascalized])); // eslint-disable-line import/no-unresolved
         }
       }
     };
