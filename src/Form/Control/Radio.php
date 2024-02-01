@@ -20,6 +20,7 @@ class Radio extends Form\Control
     /** @var array<int|string, string> List of values. */
     public $values = [];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -37,6 +38,7 @@ class Radio extends Form\Control
         $this->lister->tRow->set('_name', $this->shortName);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if (!$this->model) {
@@ -61,7 +63,7 @@ class Radio extends Form\Control
 
             $lister->tRow->set('value', $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $lister->currentRow->getId()));
 
-            $lister->tRow->dangerouslySetHtml('checked', $lister->model->compare($lister->model->idField, $value) ? 'checked="checked"' : '');
+            $lister->tRow->dangerouslySetHtml('checked', $lister->currentRow->compare($lister->model->idField, $value) ? 'checked="checked"' : '');
         });
 
         $this->js(true, null, '.ui.checkbox.radio')->checkbox([
@@ -71,6 +73,7 @@ class Radio extends Form\Control
         parent::renderView();
     }
 
+    #[\Override]
     public function onChange($expr, $defaults = []): void
     {
         if (is_bool($defaults)) {

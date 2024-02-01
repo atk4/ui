@@ -130,10 +130,10 @@ Injection.
 Consider the following example:
 
 ```
-$app->debug = new Logger('log'); // Monolog
+$app->logger = new Logger('log'); // Monolog
 
 // next, somewhere in a render tree
-$view->getApp()->debug->log('Foo Bar');
+$view->getApp()->logger->log('Foo Bar');
 ```
 
 Agile UI will automatically pass your $app class to all the views.
@@ -325,7 +325,7 @@ Returns HTML for this View as well as all the child views.
 :::
 
 :::{php:method} getJs()
-Return array of JS chains that was assigned to current element or it's children.
+Returns JsBlock containing JS chains that were assigned to current element or it's children.
 :::
 
 ## Modifying rendering logic

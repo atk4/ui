@@ -10,6 +10,7 @@ use Atk4\Ui\Table\Column;
 
 class TypeDate extends Column\FilterModel
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -63,7 +64,8 @@ class TypeDate extends Column\FilterModel
         $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class, 'inputType' => 'number']]]);
     }
 
-    public function setConditionForModel(Model $model)
+    #[\Override]
+    public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
         if ($filter !== null) {
@@ -97,8 +99,6 @@ class TypeDate extends Column\FilterModel
                     $model->addCondition($filter['name'], $filter['op'], $this->getDate($filter['value']));
             }
         }
-
-        return $model;
     }
 
     /**
@@ -133,6 +133,7 @@ class TypeDate extends Column\FilterModel
         return $date;
     }
 
+    #[\Override]
     public function getFormDisplayRules(): array
     {
         return [

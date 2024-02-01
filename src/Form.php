@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
+use Atk4\Core\HookTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
@@ -20,7 +21,7 @@ use Atk4\Ui\Js\JsExpressionable;
 
 class Form extends View
 {
-    use \Atk4\Core\HookTrait;
+    use HookTrait;
 
     /** Executed when form is submitted */
     public const HOOK_SUBMIT = self::class . '@submit';
@@ -113,6 +114,7 @@ class Form extends View
 
     // {{{ Base Methods
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -187,14 +189,9 @@ class Form extends View
     }
 
     /**
-     * Associates form with the model but also specifies which of Model
-     * fields should be added automatically.
-     *
-     * If $actualFields are not specified, then all "editable" fields
-     * will be added.
-     *
-     * @param array<int, string>|null $fields
+     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
+    #[\Override]
     public function setModel(Model $entity, array $fields = null): void
     {
         $entity->assertIsEntity();
@@ -348,17 +345,6 @@ class Form extends View
         return $this->layout->addGroup($title);
     }
 
-    /**
-     * Returns JS Chain that targets INPUT element of a specified field. This method is handy
-     * if you wish to set a value to a certain field.
-     *
-     * @return Jquery
-     */
-    public function jsInput(string $name): JsExpressionable
-    {
-        return $this->layout->getControl($name)->jsInput();
-    }
-
     // }}}
 
     // {{{ Internals
@@ -443,14 +429,27 @@ class Form extends View
         foreach ($this->controls as $k => $control) {
             // save field value only if field was editable in form at all
             if (!$control->readOnly && !$control->disabled) {
-                $postRawValue = $postRawData[$k];
+                $postRawValue = $postRawData[$k] ?? null;
+                if ($postRawValue === null) {
+                    throw (new Exception('Form POST param does not exist'))
+                        ->addMoreInfo('key', $k);
+                }
+
                 try {
                     $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $postRawValue));
                 } catch (\Exception $e) {
+                    if ($e instanceof \ErrorException) {
+                        throw $e;
+                    }
+
                     $messages = [];
                     do {
                         $messages[] = $e->getMessage();
                     } while (($e = $e->getPrevious()) !== null);
+
+                    if (count($messages) >= 2 && $messages[0] === 'Typecast parse error') {
+                        array_shift($messages);
+                    }
 
                     $errors[$k] = implode(': ', $messages);
                 }
@@ -462,6 +461,7 @@ class Form extends View
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->setupAjaxSubmit();
@@ -472,6 +472,7 @@ class Form extends View
         parent::renderView();
     }
 
+    #[\Override]
     protected function renderTemplateToHtml(): string
     {
         $output = parent::renderTemplateToHtml();
@@ -527,12 +528,13 @@ class Form extends View
             'on' => 'submit',
             'url' => $this->cb->getJsUrl(),
             'method' => 'POST',
+            'contentType' => 'application/x-www-form-urlencoded; charset=UTF-8', // remove once https://github.com/jquery/jquery/issues/5346 is fixed
             'serializeForm' => true,
         ], $this->apiConfig));
 
         // fix remove prompt for dropdown
         // https://github.com/fomantic/Fomantic-UI/issues/2797
-        // [name] in selector is to suppress https://github.com/fomantic/Fomantic-UI/commit/facbca003cf0da465af7d44af41462e736d3eb8b console errors from Multiline/vue fields
+        // [name] in selector is to suppress https://github.com/fomantic/Fomantic-UI/commit/facbca003c console errors from Multiline/vue fields
         $this->on('change', '.field input[name], .field textarea[name], .field select[name]', $this->js()->form('remove prompt', new JsExpression('$(this).attr(\'name\')')));
 
         if (!$this->canLeave) {

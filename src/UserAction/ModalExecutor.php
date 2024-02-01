@@ -35,10 +35,12 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 {
     use CommonExecutorTrait;
     use HookTrait;
+    use InnerLoaderTrait;
     use StepExecutorTrait;
 
     public const HOOK_STEP = self::class . '@onStep';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -48,6 +50,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
     protected function initExecutor(): void {}
 
+    #[\Override]
     public function getAction(): Model\UserAction
     {
         return $this->action;
@@ -61,12 +64,11 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      */
     protected function afterActionInit(): void
     {
-        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
-        $this->loader->loadEvent = false;
-        $this->loader->addClass('atk-hide-loading-content');
+        $this->loader = Loader::addTo($this, ['shim' => $this, 'loadEvent' => false]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 
+    #[\Override]
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
@@ -89,6 +91,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * Perform model action by stepping through args - fields - preview.
      */
+    #[\Override]
     public function executeModelAction(): void
     {
         $this->action = $this->executeModelActionLoad($this->action);
@@ -102,14 +105,12 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * @param array<string, string> $urlArgs
      */
-    private function jsShowAndLoad(array $urlArgs): JsBlock
+    private function jsLoadAndShow(array $urlArgs): JsBlock
     {
         return new JsBlock([
-            $this->jsShow(),
-            $this->js()->data('closeOnLoadingError', true),
             $this->loader->jsLoad($urlArgs, [
                 'method' => 'POST',
-                'onSuccess' => new JsFunction([], [$this->js()->removeData('closeOnLoadingError')]),
+                'onSuccess' => new JsFunction([], [$this->jsShow()]),
             ]),
         ]);
     }
@@ -133,7 +134,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
             // use modal for stepping action
             $urlArgs['step'] = $this->step;
             if ($this->action->enabled) {
-                $view->on($when, $selector, $this->jsShowAndLoad($urlArgs));
+                $view->on($when, $selector, $this->jsLoadAndShow($urlArgs));
             } else {
                 $view->addClass('disabled');
             }
@@ -142,6 +143,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         return $this;
     }
 
+    #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
     {
         if (!$this->actionInitialized) {
@@ -150,7 +152,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
         $urlArgs['step'] = $this->step;
 
-        return $this->jsShowAndLoad($urlArgs);
+        return $this->jsLoadAndShow($urlArgs);
     }
 
     /**

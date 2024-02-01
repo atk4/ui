@@ -16,8 +16,10 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationError;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -28,6 +30,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation;
 
 class App
 {
@@ -36,8 +40,14 @@ class App
     use DynamicMethodTrait;
     use HookTrait;
 
+    private const UNHANDLEABLE_ERROR_LEVELS = \E_ERROR | \E_PARSE | \E_CORE_ERROR | \E_CORE_WARNING | \E_COMPILE_ERROR | \E_COMPILE_WARNING;
+    private const UNSUPPRESSIBLE_ERROR_LEVELS = \PHP_MAJOR_VERSION >= 8 ? (\E_ERROR | \E_PARSE | \E_CORE_ERROR | \E_COMPILE_ERROR | \E_USER_ERROR | \E_RECOVERABLE_ERROR) : 0;
+
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
     public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
+
+    private static ?string $shutdownReservedMemory; // @phpstan-ignore-line
+    private static ?int $errorReportingLevel = null;
 
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
@@ -57,7 +67,7 @@ class App
      *
      * @TODO remove, no longer needed for CDN versioning as we bundle all resources
      */
-    public $version = '5.0-dev';
+    public $version = '5.1-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -181,8 +191,13 @@ class App
         // set our exception handler
         if ($this->catchExceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
-            set_error_handler(static function (int $severity, string $msg, string $file, int $line): bool {
-                if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
+
+            $createErrorExceptionArgsFx = static function (int $severity, string $msg, string $file, int $line) {
+                return [$msg, 0, $severity, $file, $line];
+            };
+
+            set_error_handler(function (int $severity, string $msg, string $file, int $line) use ($createErrorExceptionArgsFx): bool {
+                if ((error_reporting() & ~self::UNSUPPRESSIBLE_ERROR_LEVELS) === 0) {
                     $isFirstFrame = true;
                     foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
                         // allow to suppress any warning outside Atk4
@@ -201,9 +216,21 @@ class App
                     }
                 }
 
-                throw new \ErrorException($msg, 0, $severity, $file, $line);
+                $this->throwOrCaughtExceptionIfInShutdown(new \ErrorException(...$createErrorExceptionArgsFx($severity, $msg, $file, $line)));
             });
+
+            register_shutdown_function(function () use ($createErrorExceptionArgsFx): void {
+                $error = error_get_last();
+                if ($error !== null && ($error['type'] & self::UNHANDLEABLE_ERROR_LEVELS) !== 0) {
+                    $this->throwOrCaughtExceptionIfInShutdown(new \ErrorException(...$createErrorExceptionArgsFx($error['type'], $error['message'], $error['file'], $error['line'])));
+                }
+            });
+            self::$errorReportingLevel = error_reporting();
+            error_reporting(self::$errorReportingLevel & ~self::UNHANDLEABLE_ERROR_LEVELS);
+
             http_response_code(500);
+            header('Content-Type: text/plain');
+            header('Cache-Control: no-store');
         }
 
         // always run app on shutdown
@@ -249,36 +276,49 @@ class App
         $this->templateDir[] = dirname(__DIR__) . '/template';
     }
 
-    protected function callBeforeExit(): void
+    /**
+     * @return ($calledFromShutdownHandler is true ? void : never)
+     */
+    public function callExit(bool $calledFromShutdownHandler = false): void
     {
         if (!$this->exitCalled) {
             $this->exitCalled = true;
             $this->hook(self::HOOK_BEFORE_EXIT);
+        }
+
+        if (!$calledFromShutdownHandler) {
+            if (!$this->callExit) {
+                // case process is not in shutdown mode
+                // App as already done everything
+                // App need to stop output
+                // set_handler to catch/trap any exception
+                set_exception_handler(static function (\Throwable $t): void {});
+
+                // raise exception to be trapped and stop execution
+                throw new ExitApplicationError();
+            }
+
+            exit;
         }
     }
 
     /**
      * @return never
      */
-    public function callExit(): void
+    private function throwOrCaughtExceptionIfInShutdown(\Throwable $exception): void
     {
-        $this->callBeforeExit();
+        if (\PHP_VERSION_ID < 80300 && self::$shutdownReservedMemory === null) {
+            // remove method once PHP 8.2 support is dropped
+            // https://github.com/php/php-src/issues/10695
+            $this->caughtException($exception);
 
-        if (!$this->callExit) {
-            // case process is not in shutdown mode
-            // App as already done everything
-            // App need to stop output
-            // set_handler to catch/trap any exception
-            set_exception_handler(static function (\Throwable $t): void {});
-
-            // raise exception to be trapped and stop execution
-            throw new ExitApplicationError();
+            exit(1);
         }
 
-        exit;
+        throw $exception;
     }
 
-    public function caughtException(\Throwable $exception): void
+    protected function caughtException(\Throwable $exception): void
     {
         if ($exception instanceof LateOutputError) {
             $this->outputLateOutputError($exception);
@@ -297,8 +337,9 @@ class App
 
         $this->layout->template->dangerouslySetHtml('Content', $this->renderExceptionHtml($exception));
 
-        // remove header
         $this->layout->template->tryDel('Header');
+
+        $this->setResponseHeader('Cache-Control', 'no-store');
 
         if (($this->isJsUrlRequest() || $this->getRequest()->getHeaderLine('X-Requested-With') === 'XMLHttpRequest')
                 && !$this->hasRequestQueryParam('__atk_tab')) {
@@ -312,8 +353,7 @@ class App
         }
 
         // process is already in shutdown because of uncaught exception
-        // no need of call exit function
-        $this->callBeforeExit();
+        $this->callExit(true);
     }
 
     public function getRequest(): ServerRequestInterface
@@ -468,7 +508,7 @@ class App
 
     /**
      * Will perform a preemptive output and terminate. Do not use this
-     * directly, instead call it form Callback, JsCallback or similar
+     * directly, instead call it from Callback, JsCallback or similar
      * other classes.
      *
      * @param string|StreamInterface|array $output Array type is supported only for JSON response
@@ -639,7 +679,10 @@ class App
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], '$(function () {' . $this->html->getJs() . ';});'));
+            $this->html->template->dangerouslyAppendHtml(
+                'Head',
+                $this->getTag('script', [], (new Jquery(new JsFunction([], $this->html->getJs())))->jsRender() . ';')
+            );
             $this->isRendering = false;
 
             if ($this->hasRequestQueryParam(Callback::URL_QUERY_TARGET) && $this->catchRunawayCallbacks) {
@@ -707,12 +750,12 @@ class App
                     return (new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory();
                 }, null, ExceptionRenderer\Html::class)();
             } else {
-                $request = new \Symfony\Component\HttpFoundation\Request([], [], [], [], [], $_SERVER);
+                $request = new HttpFoundation\Request([], [], [], [], [], $_SERVER);
                 $requestUrlPath = $request->getBasePath();
                 $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME'));
             }
         }
-        $fs = new \Symfony\Component\Filesystem\Filesystem();
+        $fs = new Filesystem();
         $localPathRelative = $fs->makePathRelative($localPath, dirname($requestLocalPath));
         $res = '/' . $fs->makePathRelative($requestUrlPath . '/' . $localPathRelative, '/');
         // fix https://github.com/symfony/symfony/pull/40051
@@ -1092,7 +1135,7 @@ class App
      *   $app->initLayout([Layout\Centered::class]);
      *   $app->layout->template->dangerouslySetHtml('Content', $e->getHtml());
      *   $app->run();
-     *   $app->callBeforeExit();
+     *   $app->callExit();
      */
     public function renderExceptionHtml(\Throwable $exception): string
     {
@@ -1101,24 +1144,20 @@ class App
 
     protected function setupAlwaysRun(): void
     {
-        register_shutdown_function(
-            function () {
-                if (!$this->runCalled) {
-                    try {
-                        $this->run();
-                    } catch (ExitApplicationError $e) {
-                        // let the process go and stop on ->callExit below
-                    } catch (\Throwable $e) {
-                        // set_exception_handler does not work in shutdown
-                        // https://github.com/php/php-src/issues/10695
-                        $this->caughtException($e);
-                    }
-
-                    // call with true to trigger beforeExit event
-                    $this->callBeforeExit();
+        register_shutdown_function(function () {
+            if (!$this->runCalled) {
+                try {
+                    $this->run();
+                    $this->callExit(true);
+                } catch (ExitApplicationError $e) {
+                    // continue shutdown
+                } catch (\Throwable $e) {
+                    // set_exception_handler does not work in shutdown
+                    // https://github.com/php/php-src/issues/10695
+                    $this->caughtException($e);
                 }
             }
-        );
+        });
     }
 
     /**
@@ -1126,8 +1165,10 @@ class App
      */
     protected function emitResponse(): void
     {
-        if (!headers_sent() || $this->response->getHeaders() !== []) { // avoid throwing late error in loop
+        if (http_response_code() !== 500 || $this->response->getStatusCode() !== 500 || $this->response->getHeaders() !== []) { // avoid throwing late error in loop
             http_response_code($this->response->getStatusCode());
+            header_remove('Content-Type');
+            header_remove('Cache-Control');
         }
 
         foreach ($this->response->getHeaders() as $name => $values) {
@@ -1227,3 +1268,16 @@ class App
         $this->outputResponse($data);
     }
 }
+
+\Closure::bind(static function (): void {
+    // reserve 1 MB of memory for shutdown
+    App::$shutdownReservedMemory = str_repeat(str_repeat('shutdownReserved', 256), 256);
+
+    register_shutdown_function(static function (): void {
+        App::$shutdownReservedMemory = null;
+
+        if (App::$errorReportingLevel !== null) {
+            error_reporting(error_reporting() | (App::$errorReportingLevel & App::UNHANDLEABLE_ERROR_LEVELS));
+        }
+    });
+}, null, App::class)();

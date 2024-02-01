@@ -10,7 +10,7 @@ Can be used for page or section headers.
 
 Based around: https://fomantic-ui.com/elements/header.html.
 
-Demo: https://ui.atk4.org/demos/header.php
+Demo: https://ui.atk4.org/demos/basic/header.php
 
 ## Basic Usage
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\App;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Form;
@@ -15,7 +16,7 @@ use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\ModalExecutor;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $model = new Country($app->db);
@@ -74,6 +75,7 @@ $column = $columns->addColumn();
 Header::addTo($column, ['Customizations']);
 
 $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() extends ModalExecutor {
+    #[\Override]
     public function addFormTo(View $view): Form
     {
         $columns = Columns::addTo($view);

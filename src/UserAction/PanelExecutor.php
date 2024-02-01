@@ -8,18 +8,20 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
 use Atk4\Ui\Panel\Right;
 use Atk4\Ui\View;
 
 /**
- * A Step Action Executor that use a VirtualPage.
+ * A Step Action Executor that use a Right Panel.
  */
 class PanelExecutor extends Right implements JsExecutorInterface
 {
     use CommonExecutorTrait;
     use HookTrait;
+    use InnerLoaderTrait;
     use StepExecutorTrait;
 
     public const HOOK_STEP = self::class . '@onStep';
@@ -40,6 +42,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
     /** @var array<string, string> */
     public $stepListItems = ['args' => 'Fill argument(s)', 'fields' => 'Edit Record(s)', 'preview' => 'Preview', 'final' => 'Complete'];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -53,6 +56,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
         $this->stepList = View::addTo($this)->addClass('ui horizontal bulleted link list');
     }
 
+    #[\Override]
     public function getAction(): Model\UserAction
     {
         return $this->action;
@@ -66,10 +70,11 @@ class PanelExecutor extends Right implements JsExecutorInterface
      */
     protected function afterActionInit(): void
     {
-        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim, 'loadEvent' => false]);
+        $this->loader = Loader::addTo($this, ['shim' => $this, 'loadEvent' => false]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 
+    #[\Override]
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
@@ -89,16 +94,30 @@ class PanelExecutor extends Right implements JsExecutorInterface
         return $this;
     }
 
+    /**
+     * @param array<string, string> $urlArgs
+     */
+    private function jsLoadAndShow(array $urlArgs): JsBlock
+    {
+        return new JsBlock([
+            $this->loader->jsLoad($urlArgs, [
+                'onSuccess' => new JsFunction([], [$this->jsOpen()]),
+            ]),
+        ]);
+    }
+
+    #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
     {
         $urlArgs['step'] = $this->step;
 
-        return new JsBlock([$this->jsOpen(), $this->loader->jsLoad($urlArgs)]);
+        return $this->jsLoadAndShow($urlArgs);
     }
 
     /**
      * Perform model action by stepping through args - fields - preview.
      */
+    #[\Override]
     public function executeModelAction(): void
     {
         $this->action = $this->executeModelActionLoad($this->action);
@@ -121,7 +140,6 @@ class PanelExecutor extends Right implements JsExecutorInterface
 
     protected function jsSetListState(View $view, string $currentStep): void
     {
-        $view->js(true, $this->stepList->js()->find('.item')->removeClass('active'));
         foreach ($this->steps as $step) {
             if ($step === $currentStep) {
                 $view->js(true, $this->stepList->js()->find('[data-list-item="' . $step . '"]')->addClass('active'));

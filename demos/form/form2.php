@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
@@ -13,7 +14,7 @@ use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Label;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // create header
@@ -87,6 +88,7 @@ $form->onSubmit(static function (Form $form) {
 $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
     public $table = 'person';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -98,6 +100,7 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends M
         $this->hasOne('country_dropdown_id', ['model' => [Country::class], 'ui' => ['form' => new Form\Control\Dropdown()]]); // this works slow
     }
 
+    #[\Override]
     public function validate(string $intent = null): array
     {
         $errors = parent::validate($intent);

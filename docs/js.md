@@ -354,7 +354,7 @@ $h2 = $leftBox2->js()->height();
 
 $sum = new JsExpression('[] + []', [$h1, $h2]);
 
-$rightBoxContainer->js(true)->height( $sum );
+$rightBoxContainer->js(true)->height($sum);
 ```
 
 It is important to remember that the height of an element is a browser-side property and you
@@ -448,7 +448,7 @@ is always destroyed when the modal is closed instead of only hiding it.
 :::{php:method} jsHide()
 :::
 
-:::{php:method} addContentCss()
+:::{php:method} addContentClass()
 :::
 
 :::{php:method} addScrolling()
@@ -487,8 +487,8 @@ $modal = \Atk4\Ui\Modal::addTo($app, ['Modal Title']);
 
 The second way is more convenient for creating static content, such as Terms of Service.
 
-You can customize the CSS classes of both header and content section of the modal using the properties `headerCss`
-or `contentCss` or use the method `addContentCss()`. See the Fomantic-UI modal documentation for further information.
+You can customize the CSS classes of both header and content section of the modal using the properties `headerClass`
+or `contentClass` or use the method `addContentClass()`. See the Fomantic-UI modal documentation for further information.
 
 ### JsModal
 

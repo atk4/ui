@@ -49,7 +49,7 @@ use Atk4\Ui\View;
  * Note that deleting a row will always fire the onChange callback.
  *
  * You can use the returned data to update other related areas of the form.
- * For example, ypdating Grand Total field of all invoice items.
+ * For example, updating Grand Total field of all invoice items.
  *
  * $ml->onChange(function (array $rows) use ($form) {
  *     $grandTotal = 0;
@@ -195,6 +195,7 @@ class Multiline extends Form\Control
      */
     public $jsAfterDelete;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -340,7 +341,9 @@ class Multiline extends Form\Control
         $currentIds = array_column($model->export(), $model->idField);
 
         foreach ($this->rowData as $row) {
-            $entity = $row[$model->idField] !== null ? $model->load($row[$model->idField]) : $model->createEntity();
+            $entity = $row[$model->idField] !== null
+                ? $model->load($row[$model->idField])
+                : $model->createEntity();
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
                     continue;
@@ -350,9 +353,12 @@ class Multiline extends Form\Control
                     $entity->set($fieldName, $value);
                 }
             }
-            $id = $entity->save()->getId();
 
-            $k = array_search($id, $currentIds, true);
+            if (!$entity->isLoaded() || $entity->getDirtyRef() !== []) {
+                $entity->save();
+            }
+
+            $k = array_search($entity->getId(), $currentIds, true);
             if ($k !== false) {
                 unset($currentIds[$k]);
             }
@@ -399,16 +405,17 @@ class Multiline extends Form\Control
     }
 
     /**
-     * @param array<int, string>|null $fieldNames
+     * @param array<int, string>|null $fields
      */
-    public function setModel(Model $model, array $fieldNames = null): void
+    #[\Override]
+    public function setModel(Model $model, array $fields = null): void
     {
         parent::setModel($model);
 
-        if ($fieldNames === null) {
-            $fieldNames = array_keys($model->getFields('not system'));
+        if ($fields === null) {
+            $fields = array_keys($model->getFields('not system'));
         }
-        $this->rowFields = array_merge([$model->idField], $fieldNames);
+        $this->rowFields = array_merge([$model->idField], $fields);
 
         foreach ($this->rowFields as $fieldName) {
             $this->fieldDefs[] = $this->getFieldDef($model->getField($fieldName));
@@ -638,6 +645,7 @@ class Multiline extends Form\Control
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->model->assertIsModel();

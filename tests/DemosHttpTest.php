@@ -6,6 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Ui\Callback;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\LazyOpenStream;
 use Symfony\Component\Process\Process;
 
@@ -32,6 +33,7 @@ class DemosHttpTest extends DemosTest
     /** @var int */
     protected $port = 9687;
 
+    #[\Override]
     public static function tearDownAfterClass(): void
     {
         // stop the test server
@@ -51,6 +53,7 @@ class DemosHttpTest extends DemosTest
         parent::tearDownAfterClass();
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -94,7 +97,7 @@ class DemosHttpTest extends DemosTest
                 $this->getResponseFromRequest('?ping');
 
                 break;
-            } catch (\GuzzleHttp\Exception\ConnectException $e) {
+            } catch (ConnectException $e) {
                 if (microtime(true) - $ts > 5) {
                     throw $e;
                 }
@@ -102,6 +105,7 @@ class DemosHttpTest extends DemosTest
         }
     }
 
+    #[\Override]
     protected function getClient(): Client
     {
         // never buffer the response thru disk, remove once streaming with curl is supported
@@ -111,12 +115,44 @@ class DemosHttpTest extends DemosTest
         return new Client(['base_uri' => 'http://localhost:' . $this->port, 'sink' => $sink]);
     }
 
+    #[\Override]
     protected function getPathWithAppVars(string $path): string
     {
         $path .= (!str_contains($path, '?') ? '?' : '&')
             . 'APP_CALL_EXIT=' . ((int) $this->appCallExit) . '&APP_CATCH_EXCEPTIONS=' . ((int) $this->appCatchExceptions);
 
         return parent::getPathWithAppVars($path);
+    }
+
+    #[\Override]
+    public static function provideDemoCallbackErrorCases(): iterable
+    {
+        yield from parent::provideDemoCallbackErrorCases();
+
+        yield [
+            '_unit-test/fatal-error.php?type=oom',
+            'Allowed memory size of 16777216 bytes exhausted',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=time-limit',
+            'Maximum execution time of 1 second exceeded',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=compile-error',
+            'Non-abstract method Cl::foo() must contain body',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=compile-warning',
+            'Unsupported declare \'x\'',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=exception-in-shutdown',
+            'Exception from shutdown',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=warning-in-shutdown',
+            'Warning from shutdown',
+        ];
     }
 
     /**
@@ -130,10 +166,12 @@ class DemosHttpTest extends DemosTest
         $response = $this->getResponseFromRequest5xx($path);
 
         self::assertSame(500, $response->getStatusCode());
+        self::assertSame('text/plain', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
+        self::assertSame('no-store', $response->getHeaderLine('Cache-Control'));
         self::assertSame($expectedOutput, $response->getBody()->getContents());
     }
 
-    public function provideDemoLateOutputErrorCases(): iterable
+    public static function provideDemoLateOutputErrorCases(): iterable
     {
         $hOutput = "\n" . '!! FATAL UI ERROR: Headers already sent, more headers cannot be set at this stage !!' . "\n";
         $oOutput = 'unmanaged output' . "\n" . '!! FATAL UI ERROR: Unexpected output detected !!' . "\n";

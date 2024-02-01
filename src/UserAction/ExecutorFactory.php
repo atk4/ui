@@ -133,7 +133,7 @@ class ExecutorFactory
     }
 
     /**
-     * @return ($type is self::MENU_ITEM ? MenuItem : ($type is self::TABLE_MENU_ITEM ? MenuItem : Button))
+     * @return ($type is self::MENU_ITEM|self::TABLE_MENU_ITEM ? MenuItem : Button)
      */
     public function createTrigger(UserAction $action, string $type = null): View
     {
@@ -157,7 +157,7 @@ class ExecutorFactory
             }
             $seed = $this->executorSeed[$requiredType];
         } else {
-            $seed = $seed = $this->executorSeed[$this->getModelKey($action)][$action->shortName] ?? null;
+            $seed = $this->executorSeed[$this->getModelKey($action)][$action->shortName] ?? null;
             if ($seed === null) {
                 // if no type is register, determine executor to use base on action properties
                 if ($action->confirmation instanceof \Closure) {
@@ -218,7 +218,7 @@ class ExecutorFactory
 
                 break;
             case self::TABLE_MENU_ITEM:
-                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'name' => false, 'class.item' => true];
+                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'class.item' => true];
 
                 break;
             default:

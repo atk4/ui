@@ -14,30 +14,34 @@ use Atk4\Ui\Table;
  */
 class Multiformat extends Table\Column
 {
-    /** @var \Closure(Model, Field|null): array Method to execute which will return array of seeds for decorators */
-    public $callback;
+    /** @var \Closure(Model, Field|null): list<array<0|string, mixed>|Table\Column> Method to execute which will return array of seeds for decorators */
+    protected \Closure $decoratorsFx;
 
     /**
-     * @param \Closure(Model, Field|null): array $callback
+     * @param \Closure(Model, Field|null): list<array<0|string, mixed>|Table\Column> $decoratorsFx
      */
-    public function __construct(\Closure $callback)
+    public function __construct(\Closure $decoratorsFx)
     {
         parent::__construct();
 
-        $this->callback = $callback;
+        $this->decoratorsFx = $decoratorsFx;
     }
 
+    #[\Override]
     public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         return '{$c_' . $this->shortName . '}';
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
-        $decorators = ($this->callback)($row, $field);
-        // we need to smartly wrap things up
+        $decorators = ($this->decoratorsFx)($row, $field);
+
         $name = $field->shortName;
-        $cell = null;
+
+        // we need to smartly wrap things up
+        $cellHtml = null;
         $tdAttr = [];
         $htmlTags = [];
         foreach ($decorators as $cKey => $c) {
@@ -54,21 +58,14 @@ class Multiformat extends Table\Column
                 $html = $c->getDataCellHtml($field, $tdAttr);
             }
 
-            if ($cell) {
-                if ($name) {
-                    // if name is set, we can wrap things
-                    $cell = str_replace('{$' . $name . '}', $cell, $html);
-                } else {
-                    $cell .= ' ' . $html;
-                }
-            } else {
-                $cell = $html;
-            }
+            $cellHtml = $cellHtml === null
+                ? $html
+                : str_replace('{$' . $name . '}', $cellHtml, $html);
 
             $htmlTags = array_merge($c->getHtmlTags($row, $field), $htmlTags);
         }
 
-        $template = new HtmlTemplate($cell);
+        $template = new HtmlTemplate($cellHtml);
         $template->setApp($this->getApp());
         $template->set($row);
         $template->dangerouslySetHtml($htmlTags);

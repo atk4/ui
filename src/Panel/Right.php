@@ -14,7 +14,7 @@ use Atk4\Ui\View;
 
 /**
  * Right Panel implementation.
- * Opening, closing and loading Panel content is manage
+ * Opening, closing and loading Panel content is managed
  * via the JS panel service.
  *
  * Content is loaded via a LoadableContent View.
@@ -57,6 +57,7 @@ class Right extends View implements Loadable
     /** @var string the close icon class */
     public $closeIcon = 'times';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -66,14 +67,13 @@ class Right extends View implements Loadable
         }
     }
 
-    /**
-     * Set the dynamic content of this view.
-     */
+    #[\Override]
     public function addDynamicContent(LoadableContent $content): void
     {
         $this->dynamicContent = Content::addTo($this, [], ['LoadContent']);
     }
 
+    #[\Override]
     public function getDynamicContent(): LoadableContent
     {
         return $this->dynamicContent;
@@ -82,7 +82,7 @@ class Right extends View implements Loadable
     /**
      * Return JS expression in order to retrieve panelService.
      */
-    public function service(): JsChain
+    public function jsService(): JsChain
     {
         return new JsChain('atk.panelService');
     }
@@ -97,7 +97,7 @@ class Right extends View implements Loadable
      */
     public function jsOpen(array $urlArgs = [], array $dataAttribute = [], string $activeCss = null, JsExpressionable $jsTrigger = null): JsExpressionable
     {
-        return $this->service()->openPanel([
+        return $this->jsService()->openPanel([
             'triggered' => $jsTrigger ?? new Jquery(),
             'reloadArgs' => $dataAttribute,
             'urlArgs' => $urlArgs,
@@ -111,7 +111,7 @@ class Right extends View implements Loadable
      */
     public function jsPanelReload(array $args = []): JsExpressionable
     {
-        return $this->service()->reloadPanel($this->name, $args);
+        return $this->jsService()->reloadPanel($this->name, $args);
     }
 
     /**
@@ -119,7 +119,7 @@ class Right extends View implements Loadable
      */
     public function jsClose(): JsExpressionable
     {
-        return $this->service()->closePanel($this->name);
+        return $this->jsService()->closePanel($this->name);
     }
 
     /**
@@ -198,6 +198,7 @@ class Right extends View implements Loadable
         return $res;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->template->trySet('WarningIcon', $this->warningIcon);
@@ -205,6 +206,6 @@ class Right extends View implements Loadable
 
         parent::renderView();
 
-        $this->js(true, $this->service()->addPanel($this->getPanelOptions()));
+        $this->js(true, $this->jsService()->addPanel($this->getPanelOptions()));
     }
 }

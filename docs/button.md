@@ -32,7 +32,7 @@ $app->add($button);
 
 You can refer to the Fomantic-UI documentation for Button to find out more about available classes: https://fomantic-ui.com/elements/button.html.
 
-Demo: https://ui.atk4.org/demos/button.php
+Demo: https://ui.atk4.org/demos/basic/button.php
 
 ## Button Icon
 
@@ -124,7 +124,7 @@ If array is used, it's routed to {php:meth}`App::url`
 For other JavaScript actions you can use {ref}`js`:
 
 ```
-$button->on('click', new JsExpression('document.location.reload()'));
+$button->on('click', new JsExpression('window.location.reload()'));
 ```
 
 ## Complex Buttons

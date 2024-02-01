@@ -126,6 +126,7 @@ class Lookup extends Input
      */
     public $multiple = false;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -357,6 +358,7 @@ class Lookup extends Input
         $chain->dropdown($settings);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->multiple) {
@@ -390,7 +392,7 @@ class Lookup extends Input
             $this->model = $this->model->loadBy($idField, $this->entityField->get());
 
             $row = $this->renderRow($this->model);
-            $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
+            $chain->dropdown('set value', $row['value'], true)->dropdown('set text', $row['title'], true);
         }
 
         $this->js(true, $chain);

@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui\Tests;
+namespace Atk4\Ui\Tests\Table\Column;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Table;
+use Atk4\Ui\Tests\CreateAppTrait;
+use Atk4\Ui\Tests\TableTestTrait;
 
-class TableColumnColorRatingTest extends TestCase
+class ColorRatingTest extends TestCase
 {
     use CreateAppTrait;
     use TableTestTrait;
@@ -18,6 +20,7 @@ class TableColumnColorRatingTest extends TestCase
     /** @var Table */
     protected $table;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

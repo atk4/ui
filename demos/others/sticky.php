@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 View::addTo($app, [
@@ -17,6 +18,7 @@ View::addTo($app, [
 ]);
 
 $myButtonClass = AnonymousClassNameCache::get_class(fn () => new class() extends Button {
+    #[\Override]
     protected function renderView(): void
     {
         $this->link($this->content);

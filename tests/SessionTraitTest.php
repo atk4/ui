@@ -20,6 +20,7 @@ class SessionTraitTest extends TestCase
 {
     use CreateAppTrait;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -32,6 +33,7 @@ class SessionTraitTest extends TestCase
         ini_set('session.save_path', $sessionDir);
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         session_abort();

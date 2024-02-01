@@ -39,6 +39,7 @@ class FilterPopup extends Popup
      */
     public $colTrigger;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -67,7 +68,7 @@ class FilterPopup extends Popup
         $this->form->onSubmit(function (Form $form) {
             $form->model->save();
 
-            return new jsReload($this->reload);
+            return new JsReload($this->reload);
         });
 
         Button::addTo($this->form, ['Clear', 'class.clear' => true])
@@ -94,11 +95,9 @@ class FilterPopup extends Popup
 
     /**
      * Set filter condition base on the field Type model use in this FilterPopup.
-     *
-     * @return Model
      */
-    public function setFilterCondition(Model $tableModel)
+    public function setFilterCondition(Model $tableModel): void
     {
-        return $this->form->model->setConditionForModel($tableModel);
+        $this->form->model->setConditionForModel($tableModel);
     }
 }

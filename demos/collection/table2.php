@@ -6,13 +6,14 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\App;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Lister;
 use Atk4\Ui\Table;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $data = [
@@ -42,7 +43,7 @@ $table->onHook(Lister::HOOK_BEFORE_ROW, static function (Table $table) {
         $table->renderRow();
 
         // adjusts data for next render
-        $table->model
+        $table->currentRow
             ->set('action', 'manually injected row after Tax')
             ->set('amount', -0.02);
     }

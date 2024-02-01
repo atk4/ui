@@ -145,6 +145,7 @@ class Accordion extends View
         return $idx;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->type) {

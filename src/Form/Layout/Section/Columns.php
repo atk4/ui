@@ -6,28 +6,29 @@ namespace Atk4\Ui\Form\Layout\Section;
 
 use Atk4\Ui\Columns as UiColumns;
 use Atk4\Ui\Form;
+use Atk4\Ui\View;
 
 /**
  * Represents form controls in columns.
  */
 class Columns extends UiColumns
 {
-    /** @var class-string<Form\Layout> */
-    public $formLayout = Form\Layout::class;
+    /** @var array */
+    public $formLayoutSeed = [Form\Layout::class];
 
     public Form $form;
 
     /**
-     * Add new vertical column.
-     *
-     * @param int|array $defaults specify width (1..16) or relative to $width
-     *
      * @return Form\Layout
      */
+    #[\Override]
     public function addColumn($defaults = [])
     {
         $column = parent::addColumn($defaults);
 
-        return $column->add([$this->formLayout, 'form' => $this->form]); // @phpstan-ignore-line
+        $res = View::fromSeed($this->formLayoutSeed, ['form' => $this->form]);
+        $column->add($res);
+
+        return $res;
     }
 }

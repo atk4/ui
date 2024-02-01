@@ -21,6 +21,7 @@ class Dropdown extends Lister
     /** @var array As per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -57,6 +58,7 @@ class Dropdown extends Lister
         }, ['item' => 'value']);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->js(true)->dropdown($this->dropdownOptions);

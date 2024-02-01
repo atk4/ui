@@ -60,7 +60,7 @@
     },
     "require-release": {
         "php": ">=7.4 <8.4",
-        "atk4/data": "~5.0.0",
+        "atk4/data": "~5.1.0",
         "nyholm/psr7": "^1.6",
         "nyholm/psr7-server": "^1.0",
         "symfony/filesystem": "^4.4 || ^5.3 || ^6.0",
@@ -70,15 +70,15 @@
         "atk4/behat-mink-selenium2-driver": "^1.6.2",
         "behat/mink-extension": "^2.3.1",
         "ergebnis/composer-normalize": "^2.13",
+        "ergebnis/phpunit-slow-test-detector": "^2.9",
         "friendsofphp/php-cs-fixer": "^3.0",
         "fzaninotto/faker": "^1.6",
         "guzzlehttp/guzzle": "^7.3",
-        "johnkary/phpunit-speedtrap": "^3.3",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.0",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-strict-rules": "^1.3",
-        "phpunit/phpunit": "^9.5.5",
+        "phpunit/phpunit": "^9.5.5 || ^10.0",
         "symfony/process": "^4.4.30 || ^5.3.7 || ^6.0"
     },
     "conflict": {

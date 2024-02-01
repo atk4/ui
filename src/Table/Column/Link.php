@@ -97,18 +97,21 @@ class Link extends Table\Column
         parent::__construct($defaults);
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
 
         if (is_string($this->url)) {
             $this->url = new HtmlTemplate($this->url);
+            $this->url->setApp($this->getApp());
         }
         if (is_string($this->page)) {
             $this->page = [$this->page];
         }
     }
 
+    #[\Override]
     public function getDataCellTemplate(Field $field = null): string
     {
         $attr = ['href' => '{$c_' . $this->shortName . '}'];
@@ -138,12 +141,11 @@ class Link extends Table\Column
         return $this->getApp()->getTag('a', $attr, [$iconHtml, $labelHtml]);
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         if ($this->url) {
-            $rowValues = $this->getApp()->uiPersistence->typecastSaveRow($row, $row->get());
-
-            return ['c_' . $this->shortName => $this->url->set($rowValues)->renderToHtml()];
+            return ['c_' . $this->shortName => $this->url->set($row)->renderToHtml()];
         }
 
         $page = $this->page ?? [];

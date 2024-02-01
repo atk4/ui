@@ -11,6 +11,7 @@ use Atk4\Ui\Form;
 
 class MyTestModel extends Model
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -32,6 +33,7 @@ class FormFieldUiTest extends TestCase
     /** @var Model */
     protected $m;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();

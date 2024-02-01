@@ -17,7 +17,9 @@ atk.options = (function () {
     const data = {};
 
     return {
-        set: (name, value) => { data[name] = value; },
+        set: (name, value) => {
+            data[name] = value;
+        },
         get: (name) => data[name],
     };
 }());
@@ -73,11 +75,11 @@ atk.createDebouncedFx = function (func, wait, options) {
 
 /**
  * Utilities function that you can execute from atk context.
- * Usage: atk.utils.redirect('url');
+ * Usage: atk.utils.redirect(url);
  */
 atk.utils = {
     redirect: function (url, params) {
-        document.location = atk.urlHelper.appendParams(url, params);
+        window.location = atk.urlHelper.appendParams(url, params);
     },
 };
 

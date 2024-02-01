@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Dropdown as UiDropdown;
@@ -22,7 +23,7 @@ use Atk4\Ui\Popup;
 use Atk4\Ui\SessionTrait;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 /**
@@ -38,6 +39,7 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
 
     public $defaultTemplate = 'lister.html';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -82,9 +84,7 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
         $this->memorize('items', $this->items);
     }
 
-    /**
-     * Renders as a regular lister, but source is the items.
-     */
+    #[\Override]
     protected function renderView(): void
     {
         // memorize items
@@ -104,6 +104,7 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
 $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
     public $ui = 'green segment';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

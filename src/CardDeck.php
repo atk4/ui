@@ -22,8 +22,8 @@ class CardDeck extends View
 
     public $defaultTemplate = 'card-deck.html';
 
-    /** @var class-string<View> Card type inside this deck. */
-    public $card = Card::class;
+    /** @var array Seed of Card inside this deck. */
+    public $cardSeed = [Card::class];
 
     /** @var bool Whether card should use table display or not. */
     public $useTable = false;
@@ -90,6 +90,7 @@ class CardDeck extends View
     /** @var string|null The current search query string. */
     private $query;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -132,6 +133,7 @@ class CardDeck extends View
     /**
      * @param array<int, string>|null $fields
      */
+    #[\Override]
     public function setModel(Model $model, array $fields = null, array $extra = null): void
     {
         parent::setModel($model);
@@ -144,7 +146,7 @@ class CardDeck extends View
         if ($count) {
             foreach ($this->model as $m) {
                 /** @var Card */
-                $c = $this->cardHolder->add(Factory::factory([$this->card], ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]));
+                $c = $this->cardHolder->add(Factory::factory($this->cardSeed, ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]));
                 $c->setModel($m, $fields);
                 if ($extra) {
                     $c->addExtraFields($m, $extra, $this->extraGlue);

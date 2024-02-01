@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
@@ -13,7 +14,7 @@ use Atk4\Ui\Message;
 use Atk4\Ui\View;
 use Atk4\Ui\VueComponent;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Component', 'size' => 2, 'icon' => 'vuejs', 'subHeader' => 'UI view handle by Vue.js']);
@@ -22,8 +23,7 @@ View::addTo($app, ['ui' => 'divider']);
 // InlineEdit
 
 $entity = (new Country($app->db))
-    ->setOrder(Country::hinting()->fieldName()->id)
-    ->loadAny();
+    ->loadBy(Country::hinting()->fieldName()->iso, 'JP');
 
 $subHeader = 'Try me. I will restore value on "Escape" or save it on "Enter" or when field get blur after it has been changed.';
 Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader]);

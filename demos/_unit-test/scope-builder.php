@@ -6,11 +6,12 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model\Scope;
 use Atk4\Data\Model\Scope\Condition;
+use Atk4\Ui\App;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $model = new Stat($app->db, ['caption' => 'Demo Stat']);
@@ -36,10 +37,7 @@ $form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model], [
 
 $form->onSubmit(static function (Form $form) use ($model) {
     $message = $form->model->get('qb')->toWords($model);
-    $view = (new View(['name' => false]))->addClass('atk-scope-builder-response');
-    $view->setApp($form->getApp());
-    $view->invokeInit();
-
+    $view = View::addTo($form)->addClass('atk-scope-builder-response');
     $view->set($message);
 
     return $view;

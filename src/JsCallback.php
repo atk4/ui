@@ -6,7 +6,6 @@ namespace Atk4\Ui;
 
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
-use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 
@@ -62,6 +61,7 @@ class JsCallback extends Callback
      *
      * @return $this
      */
+    #[\Override]
     public function set($fx = null, $args = null)
     {
         if (!$fx instanceof \Closure) {
@@ -86,14 +86,12 @@ class JsCallback extends Callback
 
             $response = $fx($chain, ...$values);
 
-            if (count($chain->_chain) === 0) {
-                // TODO should we create/pass $chain to $fx at all?
-                $chain = null;
-            } elseif ($response) {
-                // TODO throw when non-empty chain is to be ignored?
+            // TODO should we create/pass $chain to $fx at all?
+            if (count($chain->_chain) !== 0 && !$response instanceof JsExpressionable) {
+                throw new Exception('Jquery JsCallback chain was mutated but not returned');
             }
 
-            $ajaxec = $response ? $this->getAjaxec($response, $chain) : null;
+            $ajaxec = $this->getAjaxec($response);
 
             $this->terminateAjax($ajaxec);
         });
@@ -105,17 +103,16 @@ class JsCallback extends Callback
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
      *
-     * @param string|null                        $ajaxec
      * @param ($success is true ? null : string) $msg     General message, typically won't be displayed
      * @param bool                               $success Was request successful or not
      */
-    public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
+    public function terminateAjax(JsBlock $ajaxec, $msg = null, bool $success = true): void
     {
         $data = ['success' => $success];
         if (!$success) {
             $data['message'] = $msg;
         }
-        $data['atkjs'] = $ajaxec;
+        $data['atkjs'] = $ajaxec->jsRender();
 
         if ($this->canTerminate()) {
             $this->getApp()->terminateJson($data);
@@ -125,20 +122,19 @@ class JsCallback extends Callback
     /**
      * Provided with a $response from callbacks convert it into a JavaScript code.
      *
-     * @param JsExpressionable|View|string|null $response response from callbacks,
-     * @param JsChain                           $chain
+     * @param JsExpressionable|View|string|null $response
      */
-    public function getAjaxec($response, $chain = null): string
+    public function getAjaxec($response): JsBlock
     {
         $jsBlock = new JsBlock();
-        if ($chain !== null) {
-            $jsBlock->addStatement($chain);
+        if ($response) {
+            $jsBlock->addStatement($this->_getProperAction($response));
         }
-        $jsBlock->addStatement($this->_getProperAction($response));
 
-        return $jsBlock->jsRender();
+        return $jsBlock;
     }
 
+    #[\Override]
     public function getUrl(string $mode = 'callback'): string
     {
         throw new Exception('Do not use getUrl on JsCallback, use getJsUrl()');
@@ -165,7 +161,7 @@ class JsCallback extends Callback
         if ($response instanceof Modal) {
             $html = $response->getHtml();
         } else {
-            $modal = new Modal(['name' => false]);
+            $modal = new Modal(['name' => 'js_callback_' . md5(random_bytes(16))]);
             $modal->setApp($this->getApp());
             $modal->add($response);
             $html = $modal->getHtml();

@@ -22,6 +22,7 @@ class DropdownCascade extends Dropdown
     /** @var string|Model|null The hasMany reference model that will generate value for this dropdown list. */
     public $reference;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -54,6 +55,7 @@ class DropdownCascade extends Dropdown
         $this->cascadeFrom->onChange($expr, ['args' => [$this->cascadeFrom->name => $this->cascadeFrom->jsInput()->val()]]);
     }
 
+    #[\Override]
     public function set($value = null)
     {
         $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($this->cascadeFrom->entityField->get()), $value);
@@ -106,11 +108,13 @@ class DropdownCascade extends Dropdown
         return $values;
     }
 
+    #[\Override]
     protected function htmlRenderValue(): void
     {
         // called in parent::renderView(), but values are rendered only via JS
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         // multiple selection is not supported

@@ -97,6 +97,7 @@ class Popup extends View
         parent::__construct($triggerBy);
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -122,19 +123,16 @@ class Popup extends View
 
     /**
      * Set callback for loading content dynamically.
-     * Callback will receive a view attach to this popup
+     * Callback will receive a view attached to this popup
      * for adding content to it.
      *
      * @param \Closure(View): void $fx
-     *
-     * @return $this
      */
+    #[\Override]
     public function set($fx = null)
     {
         if (!$fx instanceof \Closure) {
             throw new \TypeError('$fx must be of type Closure');
-        } elseif ('func_num_args'() > 1) {
-            throw new Exception('Only one argument is needed by Popup::set()');
         }
 
         $this->cb = Callback::addTo($this);
@@ -231,6 +229,7 @@ class Popup extends View
         return $chain;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->triggerBy) {

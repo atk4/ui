@@ -22,18 +22,13 @@ use Atk4\Ui\View;
  */
 class ActionMenu extends Table\Column
 {
-    /** @var array Menu items collections. */
+    /** @var array<int, View> Menu items collections. */
     protected $items = [];
 
     /** @var array<string, \Closure(Model): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
-    protected $callbacks = [];
+    protected $isEnabledFxs = [];
 
-    /**
-     * Dropdown label.
-     * Note: In Grid::class, this value is set by ActionMenuDecorator property.
-     *
-     * @var string
-     */
+    /** @var string Dropdown label. */
     public $label;
 
     /** @var string Dropdown module CSS class name as per Formantic-UI. */
@@ -45,6 +40,7 @@ class ActionMenu extends Table\Column
     /** @var string Button icon to use for display dropdown. */
     public $icon = 'dropdown';
 
+    #[\Override]
     public function getTag(string $position, $value, $attr = []): string
     {
         if ($this->table->hasCollapsingCssActionColumn && $position === 'body') {
@@ -68,8 +64,10 @@ class ActionMenu extends Table\Column
         $name = $this->name . '_action_' . (count($this->items) + 1);
 
         if (!is_object($item)) {
-            $item = Factory::factory([View::class], ['name' => false, 'ui' => 'item', 'content' => $item]);
+            $item = Factory::factory([View::class], ['ui' => 'item', 'content' => $item]);
         }
+
+        $this->assertColumnViewNotInitialized($item);
 
         $item->setApp($this->getApp());
         $this->items[] = $item;
@@ -79,7 +77,7 @@ class ActionMenu extends Table\Column
         if ($isDisabled === true) {
             $item->addClass('disabled');
         } elseif ($isDisabled !== false) {
-            $this->callbacks[$name] = $isDisabled;
+            $this->isEnabledFxs[$name] = $isDisabled;
         }
 
         if ($action !== null) {
@@ -96,6 +94,7 @@ class ActionMenu extends Table\Column
         return $item;
     }
 
+    #[\Override]
     public function getHeaderCellHtml(Field $field = null, $value = null): string
     {
         $this->table->js(true)->find('.atk-action-menu')->dropdown(
@@ -113,6 +112,7 @@ class ActionMenu extends Table\Column
         return parent::getHeaderCellHtml($field, $value);
     }
 
+    #[\Override]
     public function getDataCellTemplate(Field $field = null): string
     {
         if (!$this->items) {
@@ -120,30 +120,29 @@ class ActionMenu extends Table\Column
         }
 
         // render our menus
-        $outputHtml = '';
-        foreach ($this->items as $item) {
-            $outputHtml .= $item->getHtml();
+        $outputHtmls = [];
+        foreach ($this->items as $k => $item) {
+            $item = $this->cloneColumnView($item, $this->table->currentRow, (string) $k);
+            $outputHtmls[] = $item->getHtml();
         }
 
         $res = $this->getApp()->getTag('div', ['class' => 'ui ' . $this->ui . ' atk-action-menu'], [
             ['div', ['class' => 'text'], $this->label],
             $this->icon ? $this->getApp()->getTag('i', ['class' => $this->icon . ' icon'], '') : '',
-            ['div', ['class' => 'menu'], [$outputHtml]],
+            ['div', ['class' => 'menu'], $outputHtmls],
         ]);
 
         return $res;
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $tags = [];
-        foreach ($this->callbacks as $name => $callback) {
-            // if action is enabled then do not set disabled class
-            if ($callback($row)) {
-                continue;
+        foreach ($this->isEnabledFxs as $name => $isEnabledFx) {
+            if (!$isEnabledFx($row)) {
+                $tags['_' . $name . '_disabled'] = 'disabled';
             }
-
-            $tags['_' . $name . '_disabled'] = 'disabled';
         }
 
         return $tags;

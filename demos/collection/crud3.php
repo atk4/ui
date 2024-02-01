@@ -6,10 +6,11 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\App;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Header;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $modelClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
@@ -17,6 +18,7 @@ $modelClass = AnonymousClassNameCache::get_class(fn () => new class() extends Mo
 
     public $caption = 'Country';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

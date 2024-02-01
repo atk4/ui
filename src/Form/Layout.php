@@ -40,13 +40,15 @@ class Layout extends AbstractLayout
     public $inputTemplate;
 
     /** @var array Seed for creating input hint View used in this layout. */
-    public $defaultHint = [Label::class, 'class' => ['pointing']];
+    public $defaultHintSeed = [Label::class, 'class' => ['pointing']];
 
+    #[\Override]
     protected function _addControl(Control $control, Field $field): Control
     {
         return $this->add($control, ['desired_name' => $field->shortName]);
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -56,11 +58,7 @@ class Layout extends AbstractLayout
         }
     }
 
-    /**
-     * @param Button|array $seed
-     *
-     * @return Button
-     */
+    #[\Override]
     public function addButton($seed)
     {
         return $this->add(Factory::mergeSeeds([Button::class], $seed), 'Buttons');
@@ -123,6 +121,7 @@ class Layout extends AbstractLayout
         return $v;
     }
 
+    #[\Override]
     protected function recursiveRender(): void
     {
         $labeledControl = $this->inputTemplate->cloneRegion('LabeledControl');
@@ -206,7 +205,7 @@ class Layout extends AbstractLayout
             }
 
             if ($element->hint && $template->hasTag('Hint')) {
-                $hint = Factory::factory($this->defaultHint);
+                $hint = Factory::factory($this->defaultHintSeed);
                 $hint->name = $element->name . '_hint';
                 if (is_object($element->hint) || is_array($element->hint)) {
                     $hint->add($element->hint);

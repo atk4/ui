@@ -25,6 +25,7 @@ class Template extends Table\Column
         $this->template = $template;
     }
 
+    #[\Override]
     public function getDataCellTemplate(Field $field = null): string
     {
         return $this->template;

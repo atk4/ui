@@ -62,6 +62,7 @@ class Ui extends Persistence
     /**
      * @return scalar|null
      */
+    #[\Override]
     public function typecastSaveField(Field $field, $value)
     {
         // relax empty checks for UI render for not yet set values
@@ -79,6 +80,7 @@ class Ui extends Persistence
         }
     }
 
+    #[\Override]
     protected function _typecastSaveField(Field $field, $value): string
     {
         // always normalize string EOL
@@ -156,6 +158,7 @@ class Ui extends Persistence
         return (string) $value;
     }
 
+    #[\Override]
     protected function _typecastLoadField(Field $field, $value)
     {
         switch ($field->type) {
@@ -263,6 +266,7 @@ class Ui extends Persistence
     /**
      * Override parent method to ignore key change by Field::actual property.
      */
+    #[\Override]
     public function typecastSaveRow(Model $model, array $row): array
     {
         $result = [];

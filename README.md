@@ -11,9 +11,9 @@ Agile UI is the quickest way for building back-end UI, admin interfaces, data ma
 - Agile UI is compact - single file, several lines of code - that's all it takes.
 - Agile UI is extensible - integrates VueJS for custom components and interactive behaviours.
 
-[![Build](https://github.com/atk4/ui/workflows/Unit/badge.svg)](https://github.com/atk4/ui/actions?query=workflow%3AUnit+branch%3Adevelop)
+[![Build](https://github.com/atk4/ui/actions/workflows/test-unit.yml/badge.svg?branch=develop)](https://github.com/atk4/ui/actions?query=branch:develop)
 [![CodeCov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
-[![GitHub release](https://img.shields.io/github/release/atk4/ui.svg)](CHANGELOG.md)
+[![GitHub release](https://img.shields.io/github/release/atk4/ui.svg)](https://github.com/atk4/ui/releases)
 [![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
 
 Quick-Links: [Documentation](https://atk4-ui.readthedocs.io/). [Demo-site](https://ui.atk4.org/). [ATK Data](https://github.com/atk4/data). [Discord community](https://discord.gg/QVKSk2B).
@@ -32,7 +32,7 @@ access control rules. Both Agile UI and Agile API will follow those rules.
 
 ### Integrations and Apps using Agile UI
 
-Agile UI can integrate with frameworks like Laravel or Symfony, has integration with Wordpress and there are several
+Agile UI can integrate with frameworks like Laravel or Symfony, has integration with WordPress and there are several
 high-level projects developed entirely on Agile Toolkit.
 
 ### Who uses Agile Toolkit?
@@ -41,9 +41,9 @@ Many companies use Agile Toolkit to implement admin interface and in some cases 
 
 ### How does it work?
 
-Download from https://ui.atk4.org/ or install ATK UI with `composer require atk4/ui`
+Install Agile UI with `composer require atk4/ui` using composer.
 
-Create "index.php" file with:
+Create `index.php` file with:
 
 ```php
 <?php
@@ -78,7 +78,7 @@ ATK UI relies on https://fomantic-ui.com CSS framework to render the form beauti
 
 To get most of ATK UI, use [ATK Data](https://github.com/atk4/data) to describe your business models such as "User" or "Purchase". When you define models, you can start using some more advanced components:
 
-[Crud](https://ui.atk4.org/demos/crud.php) is a fully-interactive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
+[Crud](https://ui.atk4.org/demos/collection/crud.php) is a fully-interactive component that supports pagination, reloading, conditions, data formatting, sorting, quick-search, ordering, custom actions and modals, but at the same time is very easy to use:
 
 ```php
 $app = new \Atk4\Ui\App(['title' => 'hello world']);
@@ -144,7 +144,7 @@ Agile UI has some unique features:
 
 ## Callbacks. Callbacks everywhere!
 
-One of the fundamental features of ATK is Callback - ability to dynamically generate a route then have JS part of the component invoke it. Thanks to this approach, code can be fluid, simple and readable:
+One of the fundamental features of ATK is Callback - the ability to dynamically generate a route, and then have the JS part of the component invoke it. Thanks to this approach, code can be fluid, simple and readable:
 
 ```php
 $tabs = \Atk4\Ui\Tabs::addTo($app);
@@ -261,7 +261,7 @@ Add-ons:
 
 Integrations:
 
-- [Agile UI for Wordpress](https://github.com/ibelar/atk-wordpress) - Write Wordpress plugin using Agile UI
+- [Agile UI for WordPress](https://github.com/ibelar/atk-wordpress) - Write WordPress plugin using Agile UI
 - [Laravel Agile Data](https://github.com/atk4/laravel-ad) - ServiceProvider for Agile Data
 
 All bundled components are free and licensed under MIT license. They are installed together with Agile UI.

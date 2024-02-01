@@ -16,6 +16,7 @@ class CallbackLater extends Callback
      * Executes user-specified action before rendering or if App is
      * already in rendering state, then before output.
      */
+    #[\Override]
     public function set($fx = null, $fxArgs = null)
     {
         if ($this->getApp()->isRendering) {

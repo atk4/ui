@@ -44,6 +44,7 @@ class JsReload implements JsExpressionable
         $this->includeStorage = $includeStorage;
     }
 
+    #[\Override]
     public function jsRender(): string
     {
         $final = (new Jquery($this->view))

@@ -37,11 +37,13 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
+    #[\Override]
     public function getAction(): Model\UserAction
     {
         return $this->action;
     }
 
+    #[\Override]
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
@@ -74,6 +76,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /**
      * @param array<string, string> $urlArgs
      */
+    #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
     {
         return $this->invokeFxWithUrlArgs(function () { // backup/restore $this->args and merge them with $urlArgs
@@ -81,9 +84,10 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         }, $urlArgs);
     }
 
+    #[\Override]
     public function executeModelAction(): void
     {
-        $this->invokeFxWithUrlArgs(function () { // backup/restore $this->args mutated in https://github.com/atk4/ui/blob/8926412a31bc17d3ed1e751e67770557fe865935/src/JsCallback.php#L71
+        $this->invokeFxWithUrlArgs(function () { // backup/restore $this->args mutated in https://github.com/atk4/ui/blob/8926412a31/src/JsCallback.php#L71
             $this->set(function (Jquery $j, ...$values) {
                 $id = $this->getApp()->uiPersistence->typecastLoadField(
                     $this->action->getModel()->getField($this->action->getModel()->idField),

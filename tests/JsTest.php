@@ -170,6 +170,15 @@ class JsTest extends TestCase
             EOF, $fx->jsRender());
     }
 
+    public function testFunctionEmpty(): void
+    {
+        $js = new JsFunction([], []);
+        self::assertSame('function () {}', $js->jsRender());
+
+        $js = new JsFunction([], new JsBlock());
+        self::assertSame('function () {}', $js->jsRender());
+    }
+
     public function testTagNotDefinedRenderException(): void
     {
         $js = new JsExpression('[foo]', ['foo']);
@@ -213,6 +222,7 @@ class JsTest extends TestCase
             new JsExpression(''),
             new JsBlock(),
             new class() extends JsBlock {
+                #[\Override]
                 public function jsRender(): string
                 {
                     return 'if (foo) { a(); }';

@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table;
 
+use Atk4\Core\AppScopeTrait;
+use Atk4\Core\DiContainerTrait;
+use Atk4\Core\InitializerTrait;
+use Atk4\Core\NameTrait;
+use Atk4\Core\TrackableTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
@@ -21,11 +27,11 @@ use Atk4\Ui\View;
  */
 class Column
 {
-    use \Atk4\Core\AppScopeTrait;
-    use \Atk4\Core\DiContainerTrait;
-    use \Atk4\Core\InitializerTrait;
-    use \Atk4\Core\NameTrait;
-    use \Atk4\Core\TrackableTrait;
+    use AppScopeTrait;
+    use DiContainerTrait;
+    use InitializerTrait;
+    use NameTrait;
+    use TrackableTrait;
 
     public const HOOK_GET_HTML_TAGS = self::class . '@getHtmlTags';
     public const HOOK_GET_HEADER_CELL_HTML = self::class . '@getHeaderCellHtml';
@@ -33,7 +39,7 @@ class Column
     /** @var Table Link back to the table, where column is used. */
     public $table;
 
-    /** Contains any custom attributes that may be applied on head, body or foot. */
+    /** @var array<'head'|'body'|'foot'|'all', array<string, string|list<string>>> Contains any custom attributes that may be applied on head, body or foot. */
     public array $attr = [];
 
     /** @var string|null If set, will override column header value. */
@@ -51,13 +57,70 @@ class Column
     /** @var array|null The tag value required for getTag when using an header action. */
     public $headerActionTag;
 
+    private string $nameInTableCache;
+
     public function __construct(array $defaults = [])
     {
-        if ('func_num_args'() > 1) { // prevent bad usage
-            throw new \Error('Too many method arguments');
+        $this->setDefaults($defaults);
+    }
+
+    /**
+     * Cloning View is unwanted as some references might be not cloned/set as expected,
+     * remove this method once https://github.com/atk4/ui/issues/1365 is implemented.
+     *
+     * @internal
+     */
+    protected function assertColumnViewNotInitialized(View $view): void
+    {
+        if ($view->isInitialized() || ($view->name ?? null) !== null) {
+            throw (new Exception('Unexpected initialized View instance'))
+                ->addMoreInfo('view', $view);
+        }
+    }
+
+    /**
+     * @template T of View
+     *
+     * @param T $view
+     *
+     * @return T
+     *
+     * @internal
+     */
+    protected function cloneColumnView(View $view, Model $row, string $nameSuffix): View
+    {
+        $this->assertColumnViewNotInitialized($view);
+
+        $cloneViewWithAddLaterFx = static function (View $view) use (&$cloneViewWithAddLaterFx) {
+            $view = clone $view;
+
+            \Closure::bind(static function () use ($view, $cloneViewWithAddLaterFx) {
+                foreach ($view->_addLater as $k => [$obj]) {
+                    $view->_addLater[$k][0] = $cloneViewWithAddLaterFx($obj); // @phpstan-ignore-line
+                }
+            }, null, View::class)();
+
+            return $view;
+        };
+
+        if (!isset($this->nameInTableCache)) {
+            foreach ($this->table->columns as $n => $columns) {
+                foreach (is_array($columns) ? $columns : [$columns] as $k => $column) {
+                    if ($this === $column) {
+                        $this->nameInTableCache = $n . '_' . $k;
+
+                        break;
+                    }
+                }
+            }
         }
 
-        $this->setDefaults($defaults);
+        $view = $cloneViewWithAddLaterFx($view);
+        $view->shortName = 'c' . $this->nameInTableCache . '_' . $nameSuffix . '_r'
+            . $this->getApp()->uiPersistence->typecastSaveField($row->getField($row->idField), $row->getId());
+        $view->name = \Closure::bind(static fn (Table $table) => $view->_shorten($table->name, $view->shortName, null), null, Table::class)($this->table);
+
+        return $view;
     }
 
     /**
@@ -193,11 +256,10 @@ class Column
     }
 
     /**
-     * Adds a new class to the cells of this column. The optional second argument may be "head",
-     * "body" or "foot". If position is not defined, then class will be applied on all cells.
+     * Adds a new class to the cells of this column.
      *
-     * @param string $class
-     * @param string $position
+     * @param string                     $class
+     * @param 'head'|'body'|'foot'|'all' $position
      *
      * @return $this
      */
@@ -209,16 +271,15 @@ class Column
     }
 
     /**
-     * Adds a new attribute to the cells of this column. The optional second argument may be "head",
-     * "body" or "foot". If position is not defined, then attribute will be applied on all cells.
+     * Adds a new attribute to the cells of this column.
      *
      * You can also use the "{$name}" value if you wish to specific row value:
      *
      *    $table->column['name']->setAttr('data', '{$id}');
      *
-     * @param string $attr
-     * @param string $value
-     * @param string $position
+     * @param string                     $attr
+     * @param string                     $value
+     * @param 'head'|'body'|'foot'|'all' $position
      *
      * @return $this
      */
@@ -229,24 +290,42 @@ class Column
         return $this;
     }
 
-    public function getTagAttributes(string $position, array $attr = []): array
+    /**
+     * @param array<string, string|list<string>> ...$attributesArr
+     */
+    protected function mergeTagAttributes(array ...$attributesArr): array
     {
-        // "all" applies on all positions
-        // $position is for specific position classes
-        foreach (['all', $position] as $key) {
-            if (isset($this->attr[$key])) {
-                $attr = array_merge_recursive($attr, $this->attr[$key]);
+        $res = [];
+        foreach ($attributesArr as $attributes) {
+            foreach ($attributes as $k => $v) {
+                if (is_string($v)) {
+                    $res[$k] = $v;
+                } else {
+                    $res[$k] = array_merge($res[$k] ?? [], $v);
+                }
             }
         }
 
-        return $attr;
+        return $res;
+    }
+
+    /**
+     * @param 'head'|'body'|'foot' $position
+     */
+    public function getTagAttributes(string $position, array $attr = []): array
+    {
+        return $this->mergeTagAttributes(
+            $this->attr['all'] ?? [],
+            $this->attr[$position] ?? [],
+            $attr
+        );
     }
 
     /**
      * Returns a suitable cell tag with the supplied value. Applies modifiers
      * added through addClass and setAttr.
      *
-     * @param string                                                                                                   $position 'head', 'body' or 'tail'
+     * @param 'head'|'body'|'foot'                                                                                     $position
      * @param string|array<int, array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value    either HTML or array defining HTML structure, see App::getTag help
      * @param array<string, string|bool|array>                                                                         $attr     extra attributes to apply on the tag
      */
@@ -335,8 +414,7 @@ class Column
      * The must correspond to the name of the field, although you can also use multiple tags. The tag
      * will also be formatted before inserting, see UI Persistence formatting in the documentation.
      *
-     * This method will be executed only once per table rendering, if you need to format data manually,
-     * you should use $this->table->onHook('beforeRow' or 'afterRow', ...);
+     * If you need to format data manually, you can use $this->table->onHook(Lister::HOOK_BEFORE_ROW or Lister::HOOK_AFTER_ROW, ...);
      */
     public function getDataCellHtml(Field $field = null, array $attr = []): string
     {

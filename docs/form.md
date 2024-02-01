@@ -226,7 +226,7 @@ Agile UI comes with at least the following form controls:
 - Radio
 - Money
 
-For some examples see: https://ui.atk4.org/demos/form3.php
+For some examples see: https://ui.atk4.org/demos/form/form3.php
 
 Field Decorator can be passed to `addControl` using 'string', {php:ref}`seed` or 'object':
 
@@ -357,7 +357,10 @@ and therefore Persistence typecasting will not modify it's value and it's stored
 The above code result in the following output:
 
 ```
-date1 = DateTime Object ( [date] => 2017-09-03 00:00:00 .. ) and date2 = September 3, 2017
+date1 = DateTime Object(
+    [date] => 2017-09-03 00:00:00
+    ...
+) and date2 = September 3, 2017
 ```
 
 ### Seeding Form Control from Model
@@ -758,7 +761,7 @@ $a2->setModel($model, ['numcode', 'phonecode']);
 ```
 
 Sub layout gives you greater control on how to display form controls within your form. For more examples on
-sub layouts please visit demo page: https://github.com/atk4/ui/blob/develop/demos/form-section.php
+sub layouts please visit demo page: https://ui.atk4.org/demos/form/form-section.php
 
 ### Fomantic-UI Modifiers
 
@@ -807,14 +810,14 @@ $form->addControl('phone3');
 $form->addControl('phone4');
 
 $form->setControlsDisplayRules([
-    'phone2' => ['phone1' => 'empty'],
-    'phone3' => ['phone1' => 'empty', 'phone2' => 'empty'],
-    'phone4' => ['phone1' => 'empty', 'phone2' => 'empty', 'phone3' => 'empty'],
+    'phone2' => ['phone1' => 'notEmpty'],
+    'phone3' => ['phone1' => 'notEmpty', 'phone2' => 'notEmpty'],
+    'phone4' => ['phone1' => 'notEmpty', 'phone2' => 'notEmpty', 'phone3' => 'notEmpty'],
 ]);
 ```
 
-The only catch here is that "empty" means "not empty". ATK UI relies on rules defined by Fomantic-UI
-https://fomantic-ui.com/behaviors/form.html, so you can use any of the conditions there.
+ATK UI relies on rules defined by Fomantic-UI https://fomantic-ui.com/behaviors/form.html,
+so you can use any of the conditions there.
 
 Here is a more advanced example:
 

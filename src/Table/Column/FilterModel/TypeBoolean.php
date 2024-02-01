@@ -11,6 +11,7 @@ class TypeBoolean extends Column\FilterModel
 {
     public $noValueField = true;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -22,13 +23,12 @@ class TypeBoolean extends Column\FilterModel
         $this->op->default = 'true';
     }
 
-    public function setConditionForModel(Model $model)
+    #[\Override]
+    public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
         if ($filter !== null) {
             $model->addCondition($filter['name'], $filter['op'] === 'true');
         }
-
-        return $model;
     }
 }

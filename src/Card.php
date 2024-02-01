@@ -46,8 +46,8 @@ class Card extends View
     /** @var CardSection|null The main card section of this card */
     public $section;
 
-    /** @var string The CardSection default class name. */
-    public $cardSection = CardSection::class;
+    /** @var array The CardSection default seed. */
+    public $cardSectionSeed = [CardSection::class];
 
     /** @var View|null The extra content view container for the card. */
     public $extraContainer;
@@ -70,9 +70,7 @@ class Card extends View
     /** @var bool Use Field label with value data. */
     public $useLabel = false;
 
-    /** @var string Default executor class. */
-    public $executor = UserAction\ModalExecutor::class;
-
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -103,7 +101,7 @@ class Card extends View
     public function getSection()
     {
         if (!$this->section) {
-            $this->section = CardSection::addToWithCl($this, [$this->cardSection, 'card' => $this]);
+            $this->section = CardSection::addToWithCl($this, array_merge($this->cardSectionSeed, ['card' => $this]));
         }
 
         return $this->section;
@@ -166,11 +164,9 @@ class Card extends View
     }
 
     /**
-     * If Fields are past with $model that field will be add
-     * to the main section of this card.
-     *
      * @param array<int, string>|null $fields
      */
+    #[\Override]
     public function setModel(Model $entity, array $fields = null): void
     {
         $entity->assertIsLoaded();
@@ -194,7 +190,7 @@ class Card extends View
      */
     public function addSection(string $title = null, Model $model = null, array $fields = null, bool $useTable = false, bool $useLabel = false)
     {
-        $section = CardSection::addToWithCl($this, [$this->cardSection, 'card' => $this], ['Section']);
+        $section = CardSection::addToWithCl($this, array_merge($this->cardSectionSeed, ['card' => $this]), ['Section']);
         if ($title) {
             View::addTo($section, [$title, 'class.header' => true]);
         }
@@ -238,8 +234,8 @@ class Card extends View
         }
 
         if ($cardDeck !== null) {
-            // mimic https://github.com/atk4/ui/blob/3c592b8f10fe67c61f179c5c8723b07f8ab754b9/src/Crud.php#L140
-            // based on https://github.com/atk4/ui/blob/3c592b8f10fe67c61f179c5c8723b07f8ab754b9/src/UserAction/SharedExecutorsContainer.php#L24
+            // mimic https://github.com/atk4/ui/blob/3c592b8f10/src/Crud.php#L140
+            // based on https://github.com/atk4/ui/blob/3c592b8f10/src/UserAction/SharedExecutorsContainer.php#L24
             $isNew = !isset($cardDeck->sharedExecutorsContainer->sharedExecutors[$action->shortName]);
             if ($isNew) {
                 $ex = $cardDeck->sharedExecutorsContainer->getExecutorFactory()->createExecutor($action, $cardDeck->sharedExecutorsContainer);

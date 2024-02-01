@@ -20,14 +20,17 @@ class Context extends RawMinkContext implements BehatContext
     use RwDemosContextTrait;
     use WarnDynamicPropertyTrait;
 
+    #[\Override]
     public function getSession($name = null): MinkSession
     {
         return new MinkSession($this->getMink()->getSession($name));
     }
 
+    #[\Override]
     public function assertSession($name = null): WebAssert
     {
         return new class($this->getSession($name)) extends WebAssert {
+            #[\Override]
             protected function cleanUrl($url)
             {
                 // fix https://github.com/minkphp/Mink/issues/656
@@ -201,9 +204,6 @@ class Context extends RawMinkContext implements BehatContext
                 return [invalidIds, duplicateIds];
             })();
             EOF);
-
-        // TODO hack to pass CI testing, fix these issues and remove the error diffs below asap
-        $duplicateIds = array_diff($duplicateIds, ['atk', '_icon', 'atk_icon']); // generated when component is not correctly added to app/layout component tree - should throw, as such name/ID is dangerous to be used
 
         if (count($invalidIds) > 0) {
             throw new \Exception('Page contains element with invalid ID: ' . implode(', ', array_map(static fn ($v) => '"' . $v . '"', $invalidIds)));
@@ -413,7 +413,7 @@ class Context extends RawMinkContext implements BehatContext
      *
      * Check if text is present in modal or dynamic modal.
      */
-    public function modalIsOpenWithText(string $text, string $selector = 'div'): void
+    public function modalIsOpenWithText(string $text, string $selector = '*'): void
     {
         $textEncoded = str_contains($text, '"')
             ? 'concat("' . str_replace('"', '", \'"\', "', $text) . '")'
@@ -468,7 +468,7 @@ class Context extends RawMinkContext implements BehatContext
      * @Then Panel is open with text :arg1
      * @Then Panel is open with text :arg1 in selector :arg2
      */
-    public function panelIsOpenWithText(string $text, string $selector = 'div'): void
+    public function panelIsOpenWithText(string $text, string $selector = '*'): void
     {
         $panel = $this->findElement(null, '.atk-right-panel.atk-visible');
         $this->findElement($panel, '//' . $selector . '[text()[normalize-space()="' . $text . '"]]');

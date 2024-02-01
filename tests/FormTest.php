@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Data\ValidationException;
@@ -28,10 +29,10 @@ class FormTest extends TestCase
         $form->setApp($this->createApp());
         $form->invokeInit();
 
-        $form->addControl('test');
+        $form->addControl('foo');
 
-        self::assertInstanceOf(Form\Control::class, $form->getControl('test'));
-        self::assertSame($form->getControl('test'), $form->layout->getControl('test'));
+        self::assertInstanceOf(Form\Control::class, $form->getControl('foo'));
+        self::assertSame($form->getControl('foo'), $form->layout->getControl('foo'));
     }
 
     public function testAddControlAlreadyExistsException(): void
@@ -90,13 +91,13 @@ class FormTest extends TestCase
 
         if ($checkExpectedErrorsFx !== null) {
             self::assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');
-            self::assertNotSame('', $res['atkjs']); // will output useful error
+            self::assertNotEmpty($res['atkjs']);
             $this->formError = $res['atkjs'];
 
             $checkExpectedErrorsFx($res['atkjs']);
         } else {
             self::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
-            self::assertNull($res['atkjs']);
+            self::assertSame('', $res['atkjs']);
         }
     }
 
@@ -131,11 +132,11 @@ class FormTest extends TestCase
     {
         $this->assertFormSubmit(static function (App $app) {
             $form = Form::addTo($app);
-            $form->addControl('Textarea');
+            $form->addControl('foo');
 
             return $form;
-        }, ['Textarea' => '0'], static function (Model $m) {
-            self::assertSame('0', $m->get('Textarea'));
+        }, ['foo' => '0'], static function (Model $m) {
+            self::assertSame('0', $m->get('foo'));
         });
     }
 
@@ -203,32 +204,128 @@ class FormTest extends TestCase
         $submitReached = false;
         $catchReached = false;
         try {
-            try {
-                $this->assertFormSubmit(static function (App $app) {
-                    $m = new Model();
-                    $m->addField('foo', ['nullable' => false]);
-                    $m->addField('bar', ['nullable' => false]);
+            $this->assertFormSubmit(static function (App $app) {
+                $m = new Model();
+                $m->addField('foo', ['nullable' => false]);
+                $m->addField('bar', ['nullable' => false]);
 
-                    $form = Form::addTo($app);
-                    $form->setModel($m->createEntity(), ['foo']);
+                $form = Form::addTo($app);
+                $form->setModel($m->createEntity(), ['foo']);
 
-                    return $form;
-                }, ['foo' => 'x'], static function (Model $model) use (&$submitReached) {
-                    $submitReached = true;
-                    $model->set('bar', null);
-                });
-            } catch (UnhandledCallbackExceptionError $e) {
-                $catchReached = true;
-                self::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore-line
+                return $form;
+            }, ['foo' => 'x'], static function (Model $model) use (&$submitReached) {
+                $submitReached = true;
+                $model->set('bar', null);
+            });
+        } catch (UnhandledCallbackExceptionError $e) {
+            $catchReached = true;
+            self::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore-line
 
-                $this->expectException(ValidationException::class);
-                $this->expectExceptionMessage('Must not be null');
+            $this->expectException(ValidationException::class);
+            $this->expectExceptionMessage('Must not be null');
 
-                throw $e->getPrevious();
-            }
+            throw $e->getPrevious();
         } finally {
             self::assertTrue($submitReached);
             self::assertTrue($catchReached);
+        }
+    }
+
+    public function testLoadPostConvertedWarningNotWrappedException(): void
+    {
+        $catchReached = false;
+        try {
+            $this->assertFormSubmit(static function (App $app) {
+                $m = new Model();
+                $m->addField('foo', new class() extends Field {
+                    #[\Override]
+                    public function normalize($value)
+                    {
+                        TestCase::assertSame('x', $value);
+
+                        throw new \ErrorException('Converted PHP warning');
+                    }
+                });
+
+                $form = Form::addTo($app);
+                $form->setModel($m->createEntity());
+
+                return $form;
+            }, ['foo' => 'x']);
+        } catch (UnhandledCallbackExceptionError $e) {
+            $catchReached = true;
+
+            $this->expectException(\ErrorException::class);
+            $this->expectExceptionMessage('Converted PHP warning');
+
+            throw $e->getPrevious();
+        } finally {
+            self::assertTrue($catchReached);
+        }
+    }
+
+    public function testCreateControlException(): void
+    {
+        $form = new Form();
+        $form->setApp($this->createApp());
+        $form->invokeInit();
+
+        $controlClass = get_class(new class() extends Form\Control {
+            public static bool $firstCreate = true;
+
+            public function __construct() // @phpstan-ignore-line
+            {
+                if (self::$firstCreate) {
+                    self::$firstCreate = false;
+
+                    return;
+                }
+
+                throw new Exception('x');
+            }
+        });
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unable to create form control');
+        try {
+            $form->addControl('foo', [$controlClass]);
+        } catch (Exception $e) {
+            self::assertSame(Exception::class, get_class($e->getPrevious()));
+            self::assertSame('x', $e->getPrevious()->getMessage());
+
+            throw $e;
+        } finally {
+            $controlClass::$firstCreate = true;
+        }
+    }
+
+    public function testCreateControlConvertedWarningNotWrappedException(): void
+    {
+        $form = new Form();
+        $form->setApp($this->createApp());
+        $form->invokeInit();
+
+        $controlClass = get_class(new class() extends Form\Control {
+            public static bool $firstCreate = true;
+
+            public function __construct() // @phpstan-ignore-line
+            {
+                if (self::$firstCreate) {
+                    self::$firstCreate = false;
+
+                    return;
+                }
+
+                throw new \ErrorException('Converted PHP warning');
+            }
+        });
+
+        $this->expectException(\ErrorException::class);
+        $this->expectExceptionMessage('Converted PHP warning');
+        try {
+            $form->addControl('foo', [$controlClass]);
+        } finally {
+            $controlClass::$firstCreate = true;
         }
     }
 
@@ -237,6 +334,7 @@ class FormTest extends TestCase
         $input = new Form\Control\Line();
         $input->readOnly = true;
         $input->setApp($this->createApp());
+        $input->shortName = 'i';
         self::assertStringContainsString(' readonly="readonly"', $input->render());
         self::assertStringNotContainsString('disabled', $input->render());
 
@@ -244,6 +342,7 @@ class FormTest extends TestCase
         $input->disabled = true;
         $input->readOnly = true;
         $input->setApp($this->createApp());
+        $input->shortName = 'i';
         self::assertStringContainsString(' disabled="disabled"', $input->render());
         self::assertStringNotContainsString('readonly', $input->render());
 
@@ -251,6 +350,7 @@ class FormTest extends TestCase
         $input->disabled = true;
         $input->readOnly = true;
         $input->setApp($this->createApp());
+        $input->shortName = 'i';
         self::assertStringNotContainsString('disabled', $input->render());
         self::assertStringNotContainsString('readonly', $input->render());
     }
@@ -315,6 +415,7 @@ class AppFormTestMock extends App
     /** @var string|array */
     public $output;
 
+    #[\Override]
     public function terminate($output = ''): void
     {
         $this->output = $output;

@@ -35,6 +35,7 @@ class Header extends View
 
     public $defaultTemplate = 'header.html';
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->size) {

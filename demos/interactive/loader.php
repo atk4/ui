@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\Loader;
@@ -11,7 +12,7 @@ use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Loader Examples - Page 2', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
@@ -33,10 +34,9 @@ Loader::addTo($app)->set(static function (Loader $p) {
     ViewTester::addTo($p);
 
     // Loader may be inside another loader
-    $loader = Loader::addTo($p);
-
     // use loadEvent to prevent manual loading or even specify custom trigger event
-    $loader->loadEvent = false;
+    $loader = Loader::addTo($p, ['loadEvent' => false]);
+
     $loader->set(static function (Loader $p) {
         // you may pass arguments to the loader, in this case it's "color"
         sleep(1);

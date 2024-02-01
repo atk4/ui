@@ -146,6 +146,7 @@ class Menu extends View
         return (self::class)::addTo($this, ['ui' => false], ['RightMenu'])->removeClass('item')->addClass('right menu');
     }
 
+    #[\Override]
     public function add($seed, $region = null): AbstractView
     {
         return parent::add($seed, $region)->addClass('item');
@@ -161,7 +162,8 @@ class Menu extends View
         return parent::add([View::class, 'class' => ['divider']]);
     }
 
-    public function getHtml()
+    #[\Override]
+    public function getHtml(): string
     {
         // if menu don't have a single element or content, then destroy it
         if ($this->elements === [] && !$this->content) {
@@ -173,6 +175,7 @@ class Menu extends View
         return parent::getHtml();
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->activateOnClick && $this->ui === 'menu') {

@@ -298,12 +298,3 @@ ToDoManager::addTo($app)->setModel(new ToDoItem());
 
 Just like that you could be developing more components and re-using existing ones in your current
 or next web application.
-
-## More Tutorials
-
-If you have enjoyed this tutorial, we have prepared another one for you, that builds a multi-page
-and multi-user application and takes advantage of database expressions, authentication and introduces
-more UI components:
-
-- https://github.com/atk4/money-lending-tutorial
-- (Demo: https://money-lending-tutorial.herokuapp.com)

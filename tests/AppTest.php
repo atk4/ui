@@ -83,6 +83,7 @@ class AppTest extends TestCase
     {
         $app = $this->createApp();
         $app->setResponseHeader('cache-control', '');
+        self::assertSame([], $app->getResponse()->getHeaders());
 
         $app->setResponseHeader('content-type', 'Xy');
         self::assertSame(['Content-Type' => ['Xy']], $app->getResponse()->getHeaders());
@@ -121,7 +122,7 @@ class AppTest extends TestCase
         $this->createApp(['request' => $request]);
     }
 
-    public function provideUrlCases(): iterable
+    public static function provideUrlCases(): iterable
     {
         foreach (['/', '/page.html', '/d/', '/0/index.php'] as $requestPage) {
             yield [$requestPage, [], ['x'], [], 'x.php'];
@@ -237,5 +238,14 @@ class AppTest extends TestCase
         ]);
         $expectedUrlAutoindex2 = $makeExpectedUrlFx('', '.html');
         self::assertSame($expectedUrlAutoindex2, $app->url($page, $extraRequestUrlArgs));
+    }
+
+    public function testTerminateNoContentTypeException(): void
+    {
+        $app = $this->createApp();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Content type must be always set');
+        $app->terminate();
     }
 }

@@ -75,7 +75,7 @@ $sub->addItem('bar 2');
 
 ## Advanced Use
 
-You can add other elements inside menu. Refer to demos/menu.php.
+You can add other elements inside menu. Refer to `demos/basic/menu.php`.
 
 ## MenuItem
 

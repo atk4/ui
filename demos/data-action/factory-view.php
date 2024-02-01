@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Card;
 use Atk4\Ui\Header;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Executor Factory in App instance', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
@@ -57,7 +58,7 @@ DemoActionsUtil::setupDemoActions($country);
 $country = $country->loadBy($country->fieldName()->iso, 'fr');
 $country->name .= ' NO RELOAD';
 // suppress dirty field exception
-// https://github.com/atk4/data/blob/35dd7b7d95909cfe574b15e32b7cc57c39a16a58/src/Model/UserAction.php#L164
+// https://github.com/atk4/data/blob/35dd7b7d95/src/Model/UserAction.php#L164
 unset($country->getDirtyRef()[$country->fieldName()->name]);
 
 $cardActions = Card::addTo($app, ['useLabel' => true, 'executorFactory' => new $myFactory()]);

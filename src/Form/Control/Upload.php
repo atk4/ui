@@ -59,6 +59,7 @@ class Upload extends Input
     public const UPLOAD_ACTION = 'upload';
     public const DELETE_ACTION = 'delete';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -74,15 +75,10 @@ class Upload extends Input
     }
 
     /**
-     * Allow to set file ID and file name
-     *  - fileId will be the file ID sent with onDelete callback.
-     *  - fileName is the field value display to user.
-     *
      * @param string      $fileId   Field ID for onDelete Callback
      * @param string|null $fileName Field name display to user
-     *
-     * @return $this
      */
+    #[\Override]
     public function set($fileId = null, $fileName = null)
     {
         $this->setFileId($fileId);
@@ -208,6 +204,7 @@ class Upload extends Input
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         parent::renderView();

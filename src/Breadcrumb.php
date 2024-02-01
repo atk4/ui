@@ -63,6 +63,7 @@ class Breadcrumb extends Lister
         return $this;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->setSource($this->path);

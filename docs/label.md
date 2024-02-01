@@ -13,7 +13,7 @@ other components.
 
 To see what possible classes you can use on the Label, see: https://fomantic-ui.com/elements/label.html.
 
-Demo: https://ui.atk4.org/demos/label.php
+Demo: https://ui.atk4.org/demos/basic/label.php
 
 ## Basic Usage
 

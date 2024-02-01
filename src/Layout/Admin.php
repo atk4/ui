@@ -51,6 +51,7 @@ class Admin extends Layout implements NavigableInterface
 
     public $defaultTemplate = 'layout/admin.html';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -83,11 +84,13 @@ class Admin extends Layout implements NavigableInterface
         $this->template->trySet('version', $this->getApp()->version);
     }
 
+    #[\Override]
     public function addMenuGroup($seed): Menu
     {
         return $this->menuLeft->addGroup($seed);
     }
 
+    #[\Override]
     public function addMenuItem($name, $action = null, $group = null): MenuItem
     {
         if ($group) {
@@ -97,6 +100,7 @@ class Admin extends Layout implements NavigableInterface
         return $this->menuLeft->addItem($name, $action);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if (count($this->menuLeft->elements) === 0) {
@@ -104,7 +108,7 @@ class Admin extends Layout implements NavigableInterface
             $this->menuLeft->addItem(['Dashboard', 'icon' => 'dashboard'], ['index']);
         }
         if (!$this->isMenuLeftVisible) {
-            $this->template->tryDel('CssVisibility');
+            $this->template->tryDel('ClassVisibility');
         }
 
         parent::renderView();

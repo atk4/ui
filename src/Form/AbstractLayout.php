@@ -10,6 +10,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
+use Atk4\Ui\Misc\ProxyModel;
 use Atk4\Ui\View;
 
 /**
@@ -37,9 +38,9 @@ abstract class AbstractLayout extends View
     public function addControl(string $name, $control = [], array $fieldSeed = []): Control
     {
         if ($this->form->model === null) {
-            $this->form->model = (new \Atk4\Ui\Misc\ProxyModel())->createEntity();
+            $this->form->model = (new ProxyModel())->createEntity();
         }
-        $this->form->model->assertIsEntity();
+        $model = $this->form->model->getModel();
 
         // TODO this class should not refer to any specific form control
         $controlClass = is_object($control)
@@ -55,19 +56,22 @@ abstract class AbstractLayout extends View
         }
 
         try {
-            if (!$this->form->model->hasField($name)) {
-                $field = $this->form->model->getModel()->addField($name, $fieldSeed);
+            if ($model->hasField($name)) {
+                $field = $model->getField($name)->setDefaults($fieldSeed); // TODO assert same defaults only
             } else {
-                $field = $this->form->model->getField($name)
-                    ->setDefaults($fieldSeed);
+                $field = $model->addField($name, $fieldSeed);
             }
 
             $control = $this->form->controlFactory($field, $control);
         } catch (\Exception $e) {
+            if ($e instanceof \ErrorException) {
+                throw $e;
+            }
+
             throw (new Exception('Unable to create form control', 0, $e))
                 ->addMoreInfo('name', $name)
-                ->addMoreInfo('control', $control)
-                ->addMoreInfo('field', $fieldSeed);
+                ->addMoreInfo('control' . (!is_object($control) ? 'Seed' : ''), $control)
+                ->addMoreInfo('fieldSeed', $fieldSeed);
         }
 
         return $this->_addControl($control, $field);
@@ -89,6 +93,7 @@ abstract class AbstractLayout extends View
      *
      * @param array<int, string>|null $fields
      */
+    #[\Override]
     public function setModel(Model $entity, array $fields = null): void
     {
         $entity->assertIsEntity();

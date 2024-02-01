@@ -6,7 +6,7 @@ Feature: RightPanel
     Then I should see "button #1"
     Then I press button "Reload Myself"
     Then I press button "Complete"
-    Then I should see "Complete using button #1"
+    Then I should see "Completed using button #1"
 
   Scenario: PanelModelAction
     Given I am on "layout/layout-panel.php"

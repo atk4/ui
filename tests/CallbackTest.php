@@ -17,6 +17,7 @@ class AppMock extends App
     /**
      * Overridden to allow multiple App::run() calls, prevent sending headers when headers are already sent.
      */
+    #[\Override]
     protected function outputResponse(string $data): void
     {
         echo $data;
@@ -30,8 +31,7 @@ class CallbackTest extends TestCase
         triggerCallback as private _triggerCallback;
     }
 
-    /** @var string */
-    private $regexHtmlDoctype = '~^<!DOCTYPE html>\s*<html~';
+    protected static string $regexHtml = '~^<!DOCTYPE html>\s*<html.*</html>$~s';
 
     protected function createApp(array $seed = []): App
     {
@@ -158,7 +158,7 @@ class CallbackTest extends TestCase
 
         self::assertNull($var);
 
-        $this->expectOutputRegex($this->regexHtmlDoctype);
+        $this->expectOutputRegex(self::$regexHtml);
         $cb->getApp()->run();
         self::assertSame(34, $var);
     }
@@ -194,7 +194,7 @@ class CallbackTest extends TestCase
 
         self::assertNull($var);
 
-        $this->expectOutputRegex($this->regexHtmlDoctype);
+        $this->expectOutputRegex(self::$regexHtml);
         $cb->getApp()->run();
         self::assertSame(134, $var);
     }
@@ -213,7 +213,7 @@ class CallbackTest extends TestCase
 
         self::assertNull($var);
 
-        $this->expectOutputRegex($this->regexHtmlDoctype);
+        $this->expectOutputRegex(self::$regexHtml);
         $app->run();
         self::assertNull($var); // @phpstan-ignore-line
     }
@@ -234,7 +234,7 @@ class CallbackTest extends TestCase
             $var = 25;
         });
 
-        $this->expectOutputRegex($this->regexHtmlDoctype);
+        $this->expectOutputRegex(self::$regexHtml);
         $vp->getApp()->run();
         self::assertSame(25, $var);
     }
@@ -255,7 +255,7 @@ class CallbackTest extends TestCase
             $var = 25;
         });
 
-        $this->expectOutputRegex($this->regexHtmlDoctype);
+        $this->expectOutputRegex(self::$regexHtml);
         $vp->getApp()->run();
         self::assertSame(25, $var);
     }

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsFunction;
+
 /**
  * Virtual page normally does not render, yet it has it's own trigger and will respond
  * to the trigger in a number of useful way depending on trigger's argument:.
@@ -23,6 +26,7 @@ class VirtualPage extends View
     /** @var string|null specify custom callback trigger for the URL (see Callback::$urlTrigger) */
     protected $urlTrigger;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -36,9 +40,8 @@ class VirtualPage extends View
      *
      * @param \Closure($this, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $fx
      * @param array                                                                                       $fxArgs
-     *
-     * @return $this
      */
+    #[\Override]
     public function set($fx = null, $fxArgs = [])
     {
         if (!$fx instanceof \Closure) {
@@ -80,7 +83,8 @@ class VirtualPage extends View
      * VirtualPage is not rendered normally. It's invisible. Only when
      * it is triggered, it will exclusively output it's content.
      */
-    public function getHtml()
+    #[\Override]
+    public function getHtml(): string
     {
         if (!$this->cb->isTriggered()) {
             return '';
@@ -94,7 +98,10 @@ class VirtualPage extends View
             if ($mode === 'popup') {
                 $this->getApp()->html->template->set('title', $this->getApp()->title);
                 $this->getApp()->html->template->dangerouslySetHtml('Content', parent::getHtml());
-                $this->getApp()->html->template->dangerouslyAppendHtml('Head', $this->getApp()->getTag('script', [], '$(function () { ' . $this->getJs() . '; });'));
+                $this->getApp()->html->template->dangerouslyAppendHtml(
+                    'Head',
+                    $this->getApp()->getTag('script', [], (new Jquery(new JsFunction([], $this->getJs())))->jsRender() . ';')
+                );
 
                 $this->getApp()->terminateHtml($this->getApp()->html->template);
             }
@@ -131,8 +138,10 @@ class VirtualPage extends View
         }
 
         $this->getApp()->html->template->dangerouslySetHtml('Content', $this->getApp()->layout->template->renderToHtml());
-
-        $this->getApp()->html->template->dangerouslyAppendHtml('Head', $this->getApp()->getTag('script', [], '$(function () {' . $this->getApp()->layout->getJs() . ';});'));
+        $this->getApp()->html->template->dangerouslyAppendHtml(
+            'Head',
+            $this->getApp()->getTag('script', [], (new Jquery(new JsFunction([], $this->getApp()->layout->getJs())))->jsRender() . ';')
+        );
 
         $this->getApp()->terminateHtml($this->getApp()->html->template);
     }

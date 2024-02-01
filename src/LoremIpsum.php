@@ -87,6 +87,7 @@ class LoremIpsum extends Text
         return $lorem;
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

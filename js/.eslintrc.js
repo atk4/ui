@@ -18,6 +18,7 @@ module.exports = {
         'import/resolver': 'webpack',
     },
     rules: {
+        'brace-style': ['error', '1tbs'],
         'class-methods-use-this': 'off',
         'comma-dangle': ['error', {
             arrays: 'always-multiline',

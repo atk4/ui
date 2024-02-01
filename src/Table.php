@@ -10,6 +10,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Misc\ProxyModel;
 
 /**
  * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
@@ -98,12 +99,10 @@ class Table extends Lister
      */
     public $hasCollapsingCssActionColumn = true;
 
-    /**
-     * Create one column object that will be used to render all columns
-     * in the table unless you have specified a different column object.
-     */
+    #[\Override]
     protected function initChunks(): void
     {
+        // create one column object that will be used to render all columns in the table
         if (!$this->tHead) {
             $this->tHead = $this->template->cloneRegion('Head');
             $this->tRowMaster = $this->template->cloneRegion('Row');
@@ -147,7 +146,7 @@ class Table extends Lister
         }
 
         if (!$this->model) {
-            $this->model = new \Atk4\Ui\Misc\ProxyModel();
+            $this->model = new ProxyModel();
         }
         $this->model->assertIsModel();
 
@@ -217,7 +216,7 @@ class Table extends Lister
                 $col->setHeaderPopupIcon('table-filter-on');
             }
             // apply condition according to popup form
-            $this->model = $pop->setFilterCondition($this->model);
+            $pop->setFilterCondition($this->model);
         }
     }
 
@@ -331,16 +330,7 @@ class Table extends Lister
         return $this;
     }
 
-    /**
-     * Add a dynamic paginator, i.e. when user is scrolling content.
-     *
-     * @param int    $ipp          number of item per page to start with
-     * @param array  $options      an array with JS Scroll plugin options
-     * @param View   $container    the container holding the lister for scrolling purpose
-     * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
-     *
-     * @return $this
-     */
+    #[\Override]
     public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
     {
         $options = array_merge($options, ['appendTo' => 'tbody']);
@@ -364,29 +354,25 @@ class Table extends Lister
     }
 
     /**
-     * Sets data Model of Table.
-     *
-     * If $columns is not defined, then automatically will add columns for all
-     * visible model fields. If $columns is set to false, then will not add
-     * columns at all.
-     *
-     * @param array<int, string>|null $columns
+     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
-    public function setModel(Model $model, array $columns = null): void
+    #[\Override]
+    public function setModel(Model $model, array $fields = null): void
     {
         $model->assertIsModel();
 
         parent::setModel($model);
 
-        if ($columns === null) {
-            $columns = array_keys($model->getFields('visible'));
+        if ($fields === null) {
+            $fields = array_keys($model->getFields('visible'));
         }
 
-        foreach ($columns as $column) {
-            $this->addColumn($column);
+        foreach ($fields as $field) {
+            $this->addColumn($field);
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if (!$this->columns) {
@@ -404,24 +390,17 @@ class Table extends Lister
             $this->template->dangerouslySetHtml('Head', $this->tHead->renderToHtml());
         }
 
-        // generate template for data row
-        $this->tRowMaster->dangerouslySetHtml('cells', $this->getDataRowHtml());
-        $this->tRowMaster->set('dataId', '{$dataId}');
-        $this->tRow = new HtmlTemplate($this->tRowMaster->renderToHtml());
-        $this->tRow->setApp($this->getApp());
-
-        // iterate data rows
         $this->_renderedRowsCount = 0;
-
-        // TODO we should not iterate using $this->model variable,
-        // then also backup/tryfinally would be not needed
-        // the same in Lister class
-        $modelBackup = $this->model;
-        $tRowBackup = $this->tRow;
         try {
-            foreach ($this->model as $this->model) {
-                $this->currentRow = $this->model;
-                $this->tRow = clone $tRowBackup;
+            foreach ($this->model as $entity) {
+                $this->currentRow = $entity;
+
+                // generate template for data row
+                $this->tRowMaster->dangerouslySetHtml('cells', $this->getDataRowHtml());
+                $this->tRowMaster->set('dataId', '{$dataId}');
+                $this->tRow = new HtmlTemplate($this->tRowMaster->renderToHtml()); // TODO reparse should not be needed
+                $this->tRow->setApp($this->getApp());
+
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
                 }
@@ -439,8 +418,9 @@ class Table extends Lister
                 }
             }
         } finally {
-            $this->model = $modelBackup;
-            $this->tRow = $tRowBackup;
+            $this->tRowMaster->set('cells', null);
+            $this->tRow = null; // @phpstan-ignore-line
+            $this->currentRow = null;
         }
 
         // add totals rows or empty message
@@ -461,19 +441,16 @@ class Table extends Lister
         View::renderView();
     }
 
-    /**
-     * Render individual row. Override this method if you want to do more
-     * decoration.
-     */
+    #[\Override]
     public function renderRow(): void
     {
-        $this->tRow->set($this->model);
+        $this->tRow->set($this->currentRow);
 
         if ($this->useHtmlTags) {
             // prepare row-specific HTML tags
             $htmlTags = [];
 
-            foreach ($this->hook(Table\Column::HOOK_GET_HTML_TAGS, [$this->model]) as $ret) {
+            foreach ($this->hook(Table\Column::HOOK_GET_HTML_TAGS, [$this->currentRow]) as $ret) {
                 if (is_array($ret)) {
                     $htmlTags = array_merge($htmlTags, $ret);
                 }
@@ -485,13 +462,13 @@ class Table extends Lister
                 }
                 $field = is_int($name) ? null : $this->model->getField($name);
                 foreach ($columns as $column) {
-                    $htmlTags = array_merge($column->getHtmlTags($this->model, $field), $htmlTags);
+                    $htmlTags = array_merge($column->getHtmlTags($this->currentRow, $field), $htmlTags);
                 }
             }
 
             // render row and add to body
             $this->tRow->dangerouslySetHtml($htmlTags);
-            $this->tRow->set('dataId', (string) $this->model->getId());
+            $this->tRow->set('dataId', (string) $this->currentRow->getId());
             $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
             $this->tRow->del(array_keys($htmlTags));
         } else {
@@ -569,11 +546,11 @@ class Table extends Lister
                 }
 
                 if ($f instanceof \Closure) {
-                    $this->totals[$key] += $f($this->model->get($key), $key, $this);
+                    $this->totals[$key] += $f($this->currentRow->get($key), $key, $this);
                 } elseif (is_string($f)) {
                     switch ($f) {
                         case 'sum':
-                            $this->totals[$key] += $this->model->get($key);
+                            $this->totals[$key] += $this->currentRow->get($key);
 
                             break;
                         case 'count':
@@ -581,14 +558,14 @@ class Table extends Lister
 
                             break;
                         case 'min':
-                            if ($this->model->get($key) < $this->totals[$key]) {
-                                $this->totals[$key] = $this->model->get($key);
+                            if ($this->currentRow->get($key) < $this->totals[$key]) {
+                                $this->totals[$key] = $this->currentRow->get($key);
                             }
 
                             break;
                         case 'max':
-                            if ($this->model->get($key) > $this->totals[$key]) {
-                                $this->totals[$key] = $this->model->get($key);
+                            if ($this->currentRow->get($key) > $this->totals[$key]) {
+                                $this->totals[$key] = $this->currentRow->get($key);
                             }
 
                             break;
@@ -671,7 +648,7 @@ class Table extends Lister
             }
 
             // we need to smartly wrap things up
-            $cell = null;
+            $cellHtml = null;
             $tdAttr = [];
             foreach ($column as $cKey => $c) {
                 if ($cKey !== array_key_last($column)) {
@@ -682,19 +659,15 @@ class Table extends Lister
                     $html = $c->getDataCellHtml($field, $tdAttr);
                 }
 
-                if ($cell) {
-                    if ($name) {
+                $cellHtml = $cellHtml === null
+                    ? $html
+                    : ($name
                         // if name is set, we can wrap things
-                        $cell = str_replace('{$' . $name . '}', $cell, $html);
-                    } else {
-                        $cell .= ' ' . $html;
-                    }
-                } else {
-                    $cell = $html;
-                }
+                        ? str_replace('{$' . $name . '}', $cellHtml, $html)
+                        : $cellHtml . ' ' . $html);
             }
 
-            $output[] = $cell;
+            $output[] = $cellHtml;
         }
 
         return implode('', $output);

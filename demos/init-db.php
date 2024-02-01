@@ -10,7 +10,9 @@ use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Table;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Mvorisek\Atk4\Hintable\Data\HintablePropertyDef;
+use SebastianBergmann\CodeCoverage\CodeCoverage;
 
 try {
     require_once file_exists(__DIR__ . '/db.php')
@@ -34,15 +36,30 @@ trait ModelPreventModificationTrait
         return $rw;
     }
 
+    #[\Override]
     public function atomic(\Closure $fx)
     {
-        $eRollback = new \Exception('Prevent modification');
+        $eRollback = true;
+        foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS | \DEBUG_BACKTRACE_PROVIDE_OBJECT), 1) as $frame) {
+            if ($frame['function'] === 'atomic'
+                && ($frame['class'] ?? null) === self::class
+                && $frame['object']->getModel(true)->getPersistence() === $this->getModel(true)->getPersistence()
+            ) {
+                $eRollback = null;
+
+                break;
+            }
+        }
+        if ($eRollback === true) {
+            $eRollback = new \Exception('Prevent modification');
+        }
+
         $res = null;
         try {
             parent::atomic(function () use ($fx, $eRollback, &$res) {
                 $res = $fx();
 
-                if (!$this->isAllowDbModifications()) {
+                if ($eRollback !== null && !$this->isAllowDbModifications()) {
                     throw $eRollback;
                 }
             });
@@ -156,6 +173,7 @@ class ModelWithPrefixedFields extends Model
         return self::$prefixedFieldNames[$name];
     }
 
+    #[\Override]
     protected function createHintablePropsFromClassDoc(string $className): array
     {
         return array_map(function (HintablePropertyDef $hintableProp) {
@@ -165,6 +183,7 @@ class ModelWithPrefixedFields extends Model
         }, parent::createHintablePropsFromClassDoc($className));
     }
 
+    #[\Override]
     protected function init(): void
     {
         if ($this->idField === 'id') {
@@ -178,8 +197,13 @@ class ModelWithPrefixedFields extends Model
         parent::init();
 
         $this->initPreventModification();
+
+        if ($this->getPersistence()->getDatabasePlatform() instanceof PostgreSQLPlatform || class_exists(CodeCoverage::class, false)) {
+            $this->setOrder($this->idField);
+        }
     }
 
+    #[\Override]
     public function addField(string $name, $seed = []): Field
     {
         $seed = Factory::mergeSeeds($seed, [
@@ -196,14 +220,15 @@ class ModelWithPrefixedFields extends Model
  * @property string $sys_name  @Atk4\Field()
  * @property string $iso       @Atk4\Field()
  * @property string $iso3      @Atk4\Field()
- * @property string $numcode   @Atk4\Field()
- * @property string $phonecode @Atk4\Field()
+ * @property int    $numcode   @Atk4\Field()
+ * @property int    $phonecode @Atk4\Field()
  */
 class Country extends ModelWithPrefixedFields
 {
     public $table = 'country';
     public $caption = 'Country';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -223,6 +248,7 @@ class Country extends ModelWithPrefixedFields
         });
     }
 
+    #[\Override]
     public function validate(string $intent = null): array
     {
         $errors = parent::validate($intent);
@@ -276,6 +302,7 @@ class Stat extends ModelWithPrefixedFields
 {
     public $table = 'stat';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -346,6 +373,7 @@ class File extends ModelWithPrefixedFields
     public $table = 'file';
     public $caption = 'File';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -416,6 +444,7 @@ class File extends ModelWithPrefixedFields
 
 class Folder extends File
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -433,6 +462,7 @@ class Category extends ModelWithPrefixedFields
 {
     public $table = 'product_category';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -459,6 +489,7 @@ class SubCategory extends ModelWithPrefixedFields
 {
     public $table = 'product_sub_category';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -486,6 +517,7 @@ class Product extends ModelWithPrefixedFields
     public $table = 'product';
     public $caption = 'Product';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -515,6 +547,7 @@ class MultilineItem extends ModelWithPrefixedFields
 {
     public $table = 'multiline_item';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -551,6 +584,7 @@ class MultilineDelivery extends ModelWithPrefixedFields
 {
     public $table = 'multiline_delivery';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

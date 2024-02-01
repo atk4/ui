@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui\Tests;
+namespace Atk4\Ui\Tests\Table\Column;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Table;
+use Atk4\Ui\Tests\CreateAppTrait;
+use Atk4\Ui\Tests\TableTestTrait;
 
-class TableColumnLinkTest extends TestCase
+class LinkTest extends TestCase
 {
     use CreateAppTrait;
     use TableTestTrait;
@@ -17,6 +19,7 @@ class TableColumnLinkTest extends TestCase
     /** @var Table */
     protected $table;
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -64,12 +67,12 @@ class TableColumnLinkTest extends TestCase
         $salary = $this->table->addColumn('salary', new Table\Column\Money());
 
         self::assertSame(
-            '<td>{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary) . '} right aligned single line">{$salary}</td>',
+            '<td>{$name}</td><td>{$ref}</td><td class="right aligned single line {$' . $this->getColumnClass($salary) . '}">{$salary}</td>',
             $this->table->getDataRowHtml()
         );
 
         self::assertSame(
-            '<tr data-id="1"><td>bar</td><td>ref123</td><td class="negative right aligned single line">-123</td></tr>',
+            '<tr data-id="1"><td>bar</td><td>ref123</td><td class="right aligned single line negative">-123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -80,12 +83,12 @@ class TableColumnLinkTest extends TestCase
         $this->table->addDecorator('salary', new Table\Column\Template('<b>{$salary}</b>'));
 
         self::assertSame(
-            '<td>{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary) . '} right aligned single line"><b>{$salary}</b></td>',
+            '<td>{$name}</td><td>{$ref}</td><td class="right aligned single line {$' . $this->getColumnClass($salary) . '}"><b>{$salary}</b></td>',
             $this->table->getDataRowHtml()
         );
 
         self::assertSame(
-            '<tr data-id="1"><td>bar</td><td>ref123</td><td class="negative right aligned single line"><b>-123</b></td></tr>',
+            '<tr data-id="1"><td>bar</td><td>ref123</td><td class="right aligned single line negative"><b>-123</b></td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -97,12 +100,12 @@ class TableColumnLinkTest extends TestCase
         $this->table->addDecorator('salary', new Table\Column\Template('<b>{$salary}</b>'));
 
         self::assertSame(
-            '<td class="{$' . $this->getColumnClass($salary1) . '} right aligned single line">{$name}</td><td>{$ref}</td><td class="{$' . $this->getColumnClass($salary2) . '} right aligned single line"><b>{$salary}</b></td>',
+            '<td class="right aligned single line {$' . $this->getColumnClass($salary1) . '}">{$name}</td><td>{$ref}</td><td class="right aligned single line {$' . $this->getColumnClass($salary2) . '}"><b>{$salary}</b></td>',
             $this->table->getDataRowHtml()
         );
 
         self::assertSame(
-            '<tr data-id="1"><td class=" right aligned single line">bar</td><td>ref123</td><td class="negative right aligned single line"><b>-123</b></td></tr>',
+            '<tr data-id="1"><td class="right aligned single line ">bar</td><td>ref123</td><td class="right aligned single line negative"><b>-123</b></td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -149,7 +152,7 @@ class TableColumnLinkTest extends TestCase
         );
     }
 
-    public function testLink1(): void
+    public function testLink1a(): void
     {
         $link = $this->table->addDecorator('name', new Table\Column\Link('example.php?id={$id}'));
 
@@ -164,7 +167,7 @@ class TableColumnLinkTest extends TestCase
         );
     }
 
-    public function testLink1a(): void
+    public function testLink1b(): void
     {
         $link = $this->table->addDecorator('name', [Table\Column\Link::class, 'url' => 'example.php?id={$id}']);
 
@@ -261,7 +264,7 @@ class TableColumnLinkTest extends TestCase
         );
     }
 
-    public function testLink10(): void
+    public function testNoValue(): void
     {
         $this->table->model->load(1)->save(['name' => '']);
 
@@ -273,7 +276,7 @@ class TableColumnLinkTest extends TestCase
         );
     }
 
-    public function testLink11(): void
+    public function testTooltip(): void
     {
         $this->table->addDecorator('name', [Table\Column\Tooltip::class, ['tooltipField' => 'ref']]);
 

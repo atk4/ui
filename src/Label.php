@@ -43,6 +43,7 @@ class Label extends View
 
     public $defaultTemplate = 'label.html';
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->icon) {

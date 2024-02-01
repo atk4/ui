@@ -23,6 +23,7 @@ class Tooltip extends Table\Column
 
     public string $tooltipField;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -32,19 +33,19 @@ class Tooltip extends Table\Column
         }
     }
 
+    #[\Override]
     public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
         if ($field === null) {
             throw new Exception('Tooltip can be used only with model field');
         }
 
-        $bodyAttr = $this->getTagAttributes('body');
-
-        $attr = array_merge_recursive($bodyAttr, $attr, ['class' => '{$_' . $field->shortName . '_tooltip}']);
-
-        if (is_array($attr['class'] ?? null)) {
-            $attr['class'] = implode(' ', $attr['class']);
-        }
+        $attr = $this->mergeTagAttributes(
+            $this->getTagAttributes('body'),
+            $attr,
+            ['class' => ['{$_' . $field->shortName . '_tooltip}']],
+        );
+        $attr['class'] = implode(' ', $attr['class']);
 
         return $this->getApp()->getTag('td', $attr, [
             ' {$' . $field->shortName . '}',
@@ -57,6 +58,7 @@ class Tooltip extends Table\Column
         ]);
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         // @TODO remove popup tooltip when null

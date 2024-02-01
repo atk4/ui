@@ -342,11 +342,10 @@ $label->on('click', function (Jquery $j, $arg1) {
 ## Referring to event origin
 
 You might have noticed that JsCallback now passes first argument ($j) which so far, we have ignored. This argument is a
-jQuery chain for the element which received the event. We can change the response to do something with this element.
-Instead of `return` use:
+jQuery chain for the element which received the event. We can change the response to do something with this element like:
 
 ```
-$j->text('width is ' . $arg1);
+return $j->text('width is ' . $arg1);
 ```
 
 Now instead of showing an alert box, label content will be changed to display window width.

@@ -6,8 +6,11 @@ Feature: Grid
     Then I should see "United Kingdom"
     Then I press button "Test"
     Then Toast display should contain text "United Kingdom"
-    # click search remove icon
     Then I click using selector "i.atk-remove-icon"
+    Then I should not see "United Kingdom"
+    Then I search grid for "kingdom"
+    Then I should see "United Kingdom"
+    When I write "[escape]" into selector "input.atk-grid-search"
     Then I should not see "United Kingdom"
 
   Scenario: search no ajax

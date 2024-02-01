@@ -23,15 +23,6 @@ trait StepExecutorTrait
     /** @var string current step. */
     protected $step;
 
-    /** @var Loader The Loader that will execute all action step. */
-    protected $loader;
-
-    /** @var string */
-    public $loaderUi = 'basic segment';
-
-    /** @var array */
-    public $loaderShim = [];
-
     /** @var Button The action step previous button. */
     protected $previousStepButton;
 
@@ -325,13 +316,6 @@ trait StepExecutorTrait
             $view->js(true, $this->jsSetNextState($step));
             $view->js(true, $this->jsSetExecuteState($step));
         }
-
-        // reset button handler
-        $view->js(true, $this->executeActionButton->js()->off());
-        $view->js(true, $this->nextStepButton->js()->off());
-        $view->js(true, $this->previousStepButton->js()->off());
-        $view->js(true, $this->nextStepButton->js()->removeClass('disabled'));
-        $view->js(true, $this->executeActionButton->js()->removeClass('disabled'));
     }
 
     /**

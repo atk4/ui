@@ -86,12 +86,13 @@ class Grid extends View
 
     public $defaultTemplate = 'grid.html';
 
-    /** @var array Defines which Table Decorator to use for ActionButtons. */
-    protected $actionButtonsDecorator = [Table\Column\ActionButtons::class];
+    /** @var array Table\Column seed to use for ActionButtons. */
+    protected $actionButtonsSeed = [Table\Column\ActionButtons::class];
 
-    /** @var array Defines which Table Decorator to use for ActionMenu. */
-    protected $actionMenuDecorator = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
+    /** @var array Table\Column seed to use for ActionMenu. */
+    protected $actionMenuSeed = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -334,6 +335,7 @@ class Grid extends View
         $this->quickSearch->initValue = $q;
     }
 
+    #[\Override]
     public function jsReload($args = [], $afterSuccess = null, $apiConfig = []): JsExpressionable
     {
         return new JsReload($this->container, $args, $afterSuccess, $apiConfig);
@@ -345,7 +347,7 @@ class Grid extends View
      *
      * @param string|array|View                     $button     Label text, object or seed for the Button
      * @param JsExpressionable|JsCallbackSetClosure $action
-     * @param bool                                  $isDisabled
+     * @param bool|\Closure(Model): bool            $isDisabled
      *
      * @return View
      */
@@ -359,7 +361,7 @@ class Grid extends View
      *
      * @return View
      */
-    public function addExecutorButton(UserAction\ExecutorInterface $executor, Button $button = null)
+    public function addExecutorButton(ExecutorInterface $executor, Button $button = null)
     {
         if ($button !== null) {
             $this->add($button);
@@ -371,7 +373,9 @@ class Grid extends View
         if (!$confirmation) {
             $confirmation = '';
         }
-        $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+        $disabled = is_bool($executor->getAction()->enabled)
+            ? !$executor->getAction()->enabled
+            : $executor->getAction()->enabled;
 
         return $this->getActionButtons()->addButton($button, $executor, $confirmation, $disabled);
     }
@@ -379,7 +383,7 @@ class Grid extends View
     private function getActionButtons(): Table\Column\ActionButtons
     {
         if ($this->actionButtons === null) {
-            $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
+            $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsSeed);
         }
 
         return $this->actionButtons; // @phpstan-ignore-line
@@ -391,10 +395,11 @@ class Grid extends View
      *
      * @param View|string                           $view
      * @param JsExpressionable|JsCallbackSetClosure $action
+     * @param bool|\Closure(Model): bool            $isDisabled
      *
      * @return View
      */
-    public function addActionMenuItem($view, $action = null, string $confirmMsg = '', bool $isDisabled = false)
+    public function addActionMenuItem($view, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
         return $this->getActionMenu()->addActionMenuItem($view, $action, $confirmMsg, $isDisabled);
     }
@@ -405,12 +410,15 @@ class Grid extends View
     public function addExecutorMenuItem(ExecutorInterface $executor)
     {
         $item = $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_MENU_ITEM);
+
         // ConfirmationExecutor take care of showing the user confirmation, thus make it empty
         $confirmation = !$executor instanceof ConfirmationExecutor ? $executor->getAction()->getConfirmation() : '';
         if (!$confirmation) {
             $confirmation = '';
         }
-        $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+        $disabled = is_bool($executor->getAction()->enabled)
+            ? !$executor->getAction()->enabled
+            : $executor->getAction()->enabled;
 
         return $this->getActionMenu()->addActionMenuItem($item, $executor, $confirmation, $disabled);
     }
@@ -421,23 +429,10 @@ class Grid extends View
     private function getActionMenu()
     {
         if (!$this->actionMenu) {
-            $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
+            $this->actionMenu = $this->table->addColumn(null, $this->actionMenuSeed);
         }
 
         return $this->actionMenu; // @phpstan-ignore-line
-    }
-
-    /**
-     * Add action menu items using Model.
-     * You may specify the scope of actions to be added.
-     *
-     * @param string|null $appliesTo the scope of model action
-     */
-    public function addActionMenuFromModel(string $appliesTo = null): void
-    {
-        foreach ($this->model->getUserActions($appliesTo) as $action) {
-            $this->addActionMenuItem($action);
-        }
     }
 
     /**
@@ -504,13 +499,14 @@ class Grid extends View
      * @param string|array|View                 $button
      * @param string                            $title
      * @param \Closure(View, string|null): void $callback
-     * @param array                             $args     extra URL argument for callback
+     * @param array                             $args       extra URL argument for callback
+     * @param bool|\Closure(Model): bool        $isDisabled
      *
      * @return View
      */
-    public function addModalAction($button, $title, \Closure $callback, $args = [])
+    public function addModalAction($button, $title, \Closure $callback, $args = [], $isDisabled = false)
     {
-        return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args);
+        return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args, $isDisabled);
     }
 
     /**
@@ -534,7 +530,7 @@ class Grid extends View
     public function addBulkAction($item, \Closure $callback, $args = [])
     {
         $menuItem = $this->menu->addItem($item);
-        $menuItem->on('click', function (Js\Jquery $j, string $value) use ($callback) {
+        $menuItem->on('click', function (Jquery $j, string $value) use ($callback) {
             return $callback($j, $this->explodeSelectionValue($value));
         }, [$this->selection->jsChecked()]);
 
@@ -612,17 +608,12 @@ class Grid extends View
     }
 
     /**
-     * Sets data Model of Grid.
-     *
-     * If $columns is not defined, then automatically will add columns for all
-     * visible model fields. If $columns is set to false, then will not add
-     * columns at all.
-     *
-     * @param array<int, string>|null $columns
+     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
-    public function setModel(Model $model, array $columns = null): void
+    #[\Override]
+    public function setModel(Model $model, array $fields = null): void
     {
-        $this->table->setModel($model, $columns);
+        $this->table->setModel($model, $fields);
 
         parent::setModel($model);
 
@@ -669,9 +660,7 @@ class Grid extends View
         $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
     }
 
-    /**
-     * Before rendering take care of data sorting.
-     */
+    #[\Override]
     protected function renderView(): void
     {
         // take care of sorting
@@ -682,6 +671,7 @@ class Grid extends View
         parent::renderView();
     }
 
+    #[\Override]
     protected function recursiveRender(): void
     {
         // bind with paginator

@@ -31,6 +31,7 @@ class JsSse extends JsCallback
     /** @var \Closure|null custom function for outputting (instead of echo) */
     public $echoFunction;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -41,6 +42,7 @@ class JsSse extends JsCallback
         }
     }
 
+    #[\Override]
     public function jsExecute(): JsBlock
     {
         $this->assertIsInitialized();
@@ -56,6 +58,7 @@ class JsSse extends JsCallback
         return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)]);
     }
 
+    #[\Override]
     public function set($fx = null, $args = null)
     {
         if (!$fx instanceof \Closure) {
@@ -79,20 +82,23 @@ class JsSse extends JsCallback
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
-            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec]), 'atkSseAction');
+            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec->jsRender()]), 'atkSseAction');
         }
     }
 
     /**
      * @return never
      */
-    public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
+    #[\Override]
+    public function terminateAjax(JsBlock $ajaxec, $msg = null, bool $success = true): void
     {
+        $ajaxecStr = $ajaxec->jsRender();
+
         if ($this->browserSupport) {
-            if ($ajaxec) {
+            if ($ajaxecStr !== '') {
                 $this->sendEvent(
                     'js',
-                    $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec]),
+                    $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxecStr]),
                     'atkSseAction'
                 );
             }
@@ -101,7 +107,7 @@ class JsSse extends JsCallback
             $this->getApp()->terminate();
         }
 
-        $this->getApp()->terminateJson(['success' => $success, 'atkjs' => $ajaxec]);
+        $this->getApp()->terminateJson(['success' => $success, 'atkjs' => $ajaxecStr]);
     }
 
     /**

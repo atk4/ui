@@ -70,6 +70,7 @@ class TreeItemSelector extends Form\Control
     /** @var JsCallback|null Callback for onTreeChange. */
     private $cb;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -124,6 +125,7 @@ class TreeItemSelector extends Form\Control
         return $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get());
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         parent::renderView();

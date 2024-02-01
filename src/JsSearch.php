@@ -27,7 +27,7 @@ class JsSearch extends View
      */
     public $autoQuery = false;
 
-    /** @var Form\Control\Line|null The input field. */
+    /** @var string|null */
     public $placeHolder = 'Search';
 
     /**
@@ -63,13 +63,13 @@ class JsSearch extends View
     /** @var string|null */
     public $buttonStyle;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
-
-        // $this->input = Form\Control\Line::addTo($this, ['iconLeft' => 'filter', 'action' => new Button(['icon' => 'search', 'ui' => 'button atk-action'])]);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->placeHolder) {

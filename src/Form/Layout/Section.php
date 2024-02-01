@@ -12,8 +12,8 @@ use Atk4\Ui\View;
  */
 class Section extends View
 {
-    /** @var class-string<Form\Layout> */
-    public $formLayout = Form\Layout::class;
+    /** @var array */
+    public $formLayoutSeed = [Form\Layout::class];
 
     public Form $form;
 
@@ -24,6 +24,9 @@ class Section extends View
      */
     public function addSection()
     {
-        return $this->add([$this->formLayout, 'form' => $this->form]);
+        $res = View::fromSeed($this->formLayoutSeed, ['form' => $this->form]);
+        $this->add($res);
+
+        return $res;
     }
 }

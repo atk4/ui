@@ -55,12 +55,8 @@ can rely on various strategies for calculating totals. See {php:meth}`Table::add
 :::{php:method} getDataCellHtml(\Atk4\Data\Field $field): string
 :::
 
-Provided with a field, this method will respond with HTML **template**. In order to keep
-performance of Web Application at the maximum, Table will execute getDataCellHtml for all the
-fields once. When iterating, a combined template will be used to display the values.
-
-The template must not incorporate field values (simply because related model will not be
-loaded just yet), but instead should resort to tags and syntax compatible with {php:class}`Template`.
+Provided with a field, this method will respond with HTML **template**. When iterating,
+a combined template will be used to display the values.
 
 A sample template could be:
 
@@ -89,7 +85,7 @@ Return array of HTML tags that will be injected into the row template. See
 
 ## Column Menus and Popups
 
-Table column may have a menu as seen in https://ui.atk4.org/demos/tablecolumnmenu.php. Menu is added
+Table column may have a menu as seen in https://ui.atk4.org/demos/collection/tablecolumnmenu.php. Menu is added
 into table column and can be linked with Popup or Menu.
 
 ### Basic Use
@@ -350,7 +346,7 @@ fields of your models and will conditionally add Link on top of Money formatting
 The callback must return array of seeds like:
 
 ```
-[[\Atk4\Ui\Table\Column\Link::class], \Atk4\Ui\Table\Column\Money::class]
+[[\Atk4\Ui\Table\Column\Link::class], [\Atk4\Ui\Table\Column\Money::class]]
 ```
 
 Multiple decorators will be created and merged.

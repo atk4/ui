@@ -22,12 +22,13 @@ use Atk4\Ui\View;
  */
 class ActionButtons extends Table\Column
 {
-    /** @var array Stores all the buttons that have been added. */
+    /** @var array<string, View> Stores all the buttons that have been added. */
     public $buttons = [];
 
     /** @var array<string, \Closure(Model): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
-    protected $callbacks = [];
+    protected $isEnabledFxs = [];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -36,7 +37,7 @@ class ActionButtons extends Table\Column
     }
 
     /**
-     * Adds a new button which will execute $callback when clicked.
+     * Adds a new button which will execute $action when clicked.
      *
      * @param string|array|View                                       $button
      * @param JsExpressionable|JsCallbackSetClosure|ExecutorInterface $action
@@ -53,13 +54,15 @@ class ActionButtons extends Table\Column
                 $button = [1 => $button];
             }
 
-            $button = Factory::factory([Button::class], Factory::mergeSeeds($button, ['name' => false]));
+            $button = Factory::factory([Button::class], $button);
         }
+
+        $this->assertColumnViewNotInitialized($button);
 
         if ($isDisabled === true) {
             $button->addClass('disabled');
         } elseif ($isDisabled !== false) {
-            $this->callbacks[$name] = $isDisabled;
+            $this->isEnabledFxs[$name] = $isDisabled;
         }
 
         $button->setApp($this->table->getApp());
@@ -76,14 +79,15 @@ class ActionButtons extends Table\Column
      * load contents through $callback. Will pass a virtual page.
      *
      * @param string|array|View                 $button
-     * @param string|array                      $defaults modal title or modal defaults array
+     * @param string|array                      $defaults   modal title or modal defaults array
      * @param \Closure(View, string|null): void $callback
      * @param View                              $owner
      * @param array                             $args
+     * @param bool|\Closure(Model): bool        $isDisabled
      *
      * @return View
      */
-    public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [])
+    public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [], $isDisabled = false)
     {
         if ($owner === null) { // TODO explicit owner should not be needed
             $owner = $this->getOwner()->getOwner();
@@ -99,9 +103,10 @@ class ActionButtons extends Table\Column
             $callback($t, $t->stickyGet($this->name));
         });
 
-        return $this->addButton($button, $modal->jsShow(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)));
+        return $this->addButton($button, $modal->jsShow(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)), '', $isDisabled);
     }
 
+    #[\Override]
     public function getTag(string $position, $value, $attr = []): string
     {
         if ($this->table->hasCollapsingCssActionColumn && $position === 'body') {
@@ -111,6 +116,7 @@ class ActionButtons extends Table\Column
         return parent::getTag($position, $value, $attr);
     }
 
+    #[\Override]
     public function getDataCellTemplate(Field $field = null): string
     {
         if (count($this->buttons) === 0) {
@@ -118,28 +124,25 @@ class ActionButtons extends Table\Column
         }
 
         // render our buttons
-        $outputHtml = '';
-        foreach ($this->buttons as $button) {
-            $outputHtml .= $button->getHtml();
+        $outputHtmls = [];
+        foreach ($this->buttons as $name => $button) {
+            $button = $this->cloneColumnView($button, $this->table->currentRow, $name);
+            $outputHtmls[] = $button->getHtml();
         }
 
-        return $this->getApp()->getTag('div', ['class' => 'ui buttons'], [$outputHtml]);
+        return $this->getApp()->getTag('div', ['class' => 'ui buttons'], $outputHtmls);
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $tags = [];
-        foreach ($this->callbacks as $name => $callback) {
-            // if action is enabled then do not set disabled class
-            if ($callback($row)) {
-                continue;
+        foreach ($this->isEnabledFxs as $name => $isEnabledFx) {
+            if (!$isEnabledFx($row)) {
+                $tags['_' . $name . '_disabled'] = 'disabled';
             }
-
-            $tags['_' . $name . '_disabled'] = 'disabled';
         }
 
         return $tags;
     }
-
-    // rest will be implemented for crud
 }

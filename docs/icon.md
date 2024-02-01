@@ -138,9 +138,9 @@ Here is the code with comments:
  */
 class SocialAdd extends \Atk4\Ui\View
 {
-    public $social = null;
-    public $icon = null;
-    public $defaultTemplate = null; // __DIR__ . '../templates/socialadd.html'
+    public $social;
+    public $icon;
+    public $defaultTemplate; // __DIR__ . '../templates/socialadd.html'
 
     protected function init(): void
     {

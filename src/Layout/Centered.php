@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Layout;
 
+use Atk4\Core\DebugTrait;
 use Atk4\Ui\Layout;
 
 /**
@@ -15,7 +16,7 @@ use Atk4\Ui\Layout;
  */
 class Centered extends Layout
 {
-    use \Atk4\Core\DebugTrait;
+    use DebugTrait;
 
     public $defaultTemplate = 'layout/centered.html';
 
@@ -24,6 +25,7 @@ class Centered extends Layout
     /** @var string */
     public $imageAlt = 'Logo';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -37,6 +39,7 @@ class Centered extends Layout
         $this->template->trySet('title', $this->getApp()->title);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->image) {

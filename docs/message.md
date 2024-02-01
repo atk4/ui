@@ -10,7 +10,7 @@
 
 Outputs a rectangular segment with a distinctive color to convey message to the user, based around: https://fomantic-ui.com/collections/message.html
 
-Demo: https://ui.atk4.org/demos/message.php
+Demo: https://ui.atk4.org/demos/basic/message.php
 
 ## Basic Usage
 

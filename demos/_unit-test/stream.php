@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Exception;
 use Psr\Http\Message\StreamInterface;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(static fn (int $pos) => '', -1) implements StreamInterface {
@@ -37,17 +38,20 @@ $hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(s
         throw new Exception('Not implemented/supported');
     }
 
-    public function __toString()
+    #[\Override]
+    public function __toString(): string
     {
         $this->throwNotSupported();
     }
 
+    #[\Override]
     public function close(): void
     {
         $this->pos = null;
         $this->buffer = '';
     }
 
+    #[\Override]
     public function detach()
     {
         $this->close();
@@ -55,51 +59,61 @@ $hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(s
         return null;
     }
 
+    #[\Override]
     public function getSize(): int
     {
         return $this->size;
     }
 
+    #[\Override]
     public function tell(): int
     {
         return $this->pos;
     }
 
+    #[\Override]
     public function eof(): bool
     {
         return $this->pos === $this->size;
     }
 
+    #[\Override]
     public function isSeekable(): bool
     {
         return false;
     }
 
+    #[\Override]
     public function seek($offset, $whence = \SEEK_SET): void
     {
         $this->throwNotSupported();
     }
 
+    #[\Override]
     public function rewind(): void
     {
         $this->seek(0);
     }
 
+    #[\Override]
     public function isWritable(): bool
     {
         return false;
     }
 
+    #[\Override]
     public function write($string): int
     {
         $this->throwNotSupported();
     }
 
+    #[\Override]
     public function isReadable(): bool
     {
         return true;
     }
 
+    #[\Override]
     public function read($length): string
     {
         if ($this->pos + $length > $this->size) {
@@ -117,11 +131,13 @@ $hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(s
         return $res;
     }
 
+    #[\Override]
     public function getContents(): string
     {
         $this->throwNotSupported();
     }
 
+    #[\Override]
     public function getMetadata($key = null)
     {
         $this->throwNotSupported();

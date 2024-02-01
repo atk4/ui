@@ -12,6 +12,7 @@ class Counter extends Form\Control\Line
 {
     public $content = '20';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

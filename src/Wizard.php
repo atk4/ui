@@ -44,6 +44,7 @@ class Wizard extends View
      */
     public $defaultIcon = 'empty'; // 'square outline'
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -129,6 +130,7 @@ class Wizard extends View
         }
     }
 
+    #[\Override]
     public function add($seed, $region = null): AbstractView
     {
         $result = parent::add($seed, $region);
@@ -159,9 +161,10 @@ class Wizard extends View
      */
     public function jsNext(): JsExpressionable
     {
-        return new JsExpression('document.location = []', [$this->urlNext()]);
+        return new JsExpression('window.location = []', [$this->urlNext()]);
     }
 
+    #[\Override]
     protected function recursiveRender(): void
     {
         if ($this->steps === []) {
@@ -177,6 +180,7 @@ class Wizard extends View
         parent::recursiveRender();
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         // set proper width to the wizard

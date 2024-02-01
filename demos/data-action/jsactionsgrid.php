@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Model\UserAction;
+use Atk4\Ui\App;
 use Atk4\Ui\Grid;
 use Atk4\Ui\Header;
 use Atk4\Ui\Icon;
@@ -14,7 +15,7 @@ use Atk4\Ui\View;
 
 // Demo for Model action in Grid
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $country = new Country($app->db);
@@ -24,7 +25,7 @@ DemoActionsUtil::setupDemoActions($country);
 
 // creating special menu item for multi_step action
 $multiAction = $country->getUserAction('multi_step');
-$specialItem = Factory::factory([View::class], ['name' => false, 'class' => ['item'], 'content' => 'Multi Step']);
+$specialItem = Factory::factory([View::class], ['class' => ['item'], 'content' => 'Multi Step']);
 Icon::addTo($specialItem, ['content' => 'window maximize outline']);
 // register this menu item in factory
 $app->getExecutorFactory()->registerTrigger(ExecutorFactory::TABLE_MENU_ITEM, $specialItem, $multiAction);
@@ -34,12 +35,12 @@ Header::addTo($app, ['Execute model action from Grid menu items', 'subHeader' =>
 $grid = Grid::addTo($app, ['menu' => false]);
 $grid->setModel($country);
 
-$divider = Factory::factory([View::class], ['name' => false, 'class' => ['divider'], 'content' => '']);
+$divider = Factory::factory([View::class], ['class' => ['divider'], 'content' => '']);
 
-$modelHeader = Factory::factory([View::class], ['name' => false, 'class' => ['header'], 'content' => 'Model Actions']);
+$modelHeader = Factory::factory([View::class], ['class' => ['header'], 'content' => 'Model Actions']);
 Icon::addTo($modelHeader, ['content' => 'database']);
 
-$jsHeader = Factory::factory([View::class], ['name' => false, 'class' => ['header'], 'content' => 'JS Actions']);
+$jsHeader = Factory::factory([View::class], ['class' => ['header'], 'content' => 'JS Actions']);
 Icon::addTo($jsHeader, ['content' => 'file code']);
 
 $grid->addActionMenuItem($jsHeader);

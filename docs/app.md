@@ -459,7 +459,7 @@ This is the top menu of the admin layout. You can add other item to the top menu
 ```
 Button::addTo($layout->menu->addItem(), ['View Source', 'class.teal' => true, 'icon' => 'github'])
     ->setAttr('target', '_blank')
-    ->on('click', new \Atk4\Ui\Js\JsExpression('document.location = [];', [$url . $f]));
+    ->on('click', new \Atk4\Ui\Js\JsExpression('window.location = []', [$url . $f]));
 ```
 
 :::{php:attr} menuRight

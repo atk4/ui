@@ -261,6 +261,7 @@ class ScopeBuilder extends Form\Control
         'checkbox' => 'boolean',
     ];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -274,7 +275,7 @@ class ScopeBuilder extends Form\Control
         if ($this->form) {
             $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
                 $key = $this->entityField->getFieldName();
-                $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key] ?? '{}'));
+                $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key]));
             });
         }
     }
@@ -282,6 +283,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Set the model to build scope for.
      */
+    #[\Override]
     public function setModel(Model $model): void
     {
         parent::setModel($model);
@@ -481,6 +483,7 @@ class ScopeBuilder extends Form\Control
         return $ret;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         parent::renderView();
@@ -525,7 +528,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts an VueQueryBuilder rule array to Condition or Scope.
      */
-    public function queryToCondition(array $query): Scope\Condition
+    public function queryToCondition(array $query): Condition
     {
         $key = $query['rule'];
         $operator = $query['operator'];
@@ -563,7 +566,7 @@ class ScopeBuilder extends Form\Control
 
         $operator = $operator ? ($operatorsMap[strtolower($operator)] ?? '=') : null;
 
-        return new Scope\Condition($key, $operator, $value);
+        return new Condition($key, $operator, $value);
     }
 
     /**
@@ -572,7 +575,7 @@ class ScopeBuilder extends Form\Control
     public function scopeToQuery(Scope\AbstractScope $scope, array $inputsMap = []): array
     {
         $query = [];
-        if ($scope instanceof Scope\Condition) {
+        if ($scope instanceof Condition) {
             $query = [
                 'type' => 'query-builder-rule',
                 'query' => $this->conditionToQuery($scope, $inputsMap),
@@ -600,7 +603,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts a Condition to VueQueryBuilder query array.
      */
-    public function conditionToQuery(Scope\Condition $condition, array $inputsMap = []): array
+    public function conditionToQuery(Condition $condition, array $inputsMap = []): array
     {
         if (is_string($condition->key)) {
             $rule = $condition->key;
