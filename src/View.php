@@ -297,6 +297,13 @@ class View extends AbstractView
         return $object;
     }
 
+    public function getHtmlId(): string
+    {
+        $this->assertIsInitialized();
+
+        return $this->name;
+    }
+
     /**
      * Get closest owner which is instance of particular class.
      *
@@ -1068,13 +1075,6 @@ class View extends AbstractView
         $this->_jsActions[$event][] = $eventChain;
 
         return $res;
-    }
-
-    public function getHtmlId(): string
-    {
-        $this->assertIsInitialized();
-
-        return $this->name;
     }
 
     /**

@@ -5,9 +5,8 @@ module.exports = {
     customSyntax: 'postcss-less',
     rules: {
         'at-rule-empty-line-before': null,
-        'at-rule-name-case': null,
         'color-function-notation': 'legacy',
-        'max-line-length': null,
+        'media-query-no-invalid': null,
         'no-descending-specificity': null,
         'rule-empty-line-before': null,
 
