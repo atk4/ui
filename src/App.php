@@ -591,7 +591,7 @@ class App
         $layout->setApp($this);
 
         if ($this->html === null) {
-            $this->html = new View(['defaultTemplate' => 'html.html', 'name' => 'atk']);
+            $this->html = new View(['defaultTemplate' => 'html.html']);
             $this->html->setApp($this);
             $this->html->invokeInit();
         }

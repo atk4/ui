@@ -50,7 +50,9 @@ abstract class AbstractView
      */
     protected function init(): void
     {
-        $this->name; // @phpstan-ignore-line assert name is set early
+        if (($this->name ?? null) === null) {
+            $this->name = 'atk';
+        }
 
         $this->_init();
 
