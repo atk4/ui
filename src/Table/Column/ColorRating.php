@@ -67,7 +67,7 @@ class ColorRating extends Table\Column
             throw new Exception('ColorRating can be used only with model field');
         }
 
-        return $this->getTag('body', '{$' . $field->shortName . '}', $attr);
+        return $this->getTag('body', $attr, '{$' . $field->shortName . '}');
     }
 
     #[\Override]

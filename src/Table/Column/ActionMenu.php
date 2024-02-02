@@ -41,13 +41,13 @@ class ActionMenu extends Table\Column
     public $icon = 'dropdown';
 
     #[\Override]
-    public function getTag(string $position, $value, $attr = []): string
+    public function getTag(string $position, $attr, $value): string
     {
         if ($this->table->hasCollapsingCssActionColumn && $position === 'body') {
             $attr['class'][] = 'collapsing';
         }
 
-        return parent::getTag($position, $value, $attr);
+        return parent::getTag($position, $attr, $value);
     }
 
     /**

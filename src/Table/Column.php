@@ -326,10 +326,10 @@ class Column
      * added through addClass and setAttr.
      *
      * @param 'head'|'body'|'foot'                                                                                     $position
-     * @param string|array<int, array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value    either HTML or array defining HTML structure, see App::getTag help
-     * @param array<string, string|bool|array>                                                                         $attr     extra attributes to apply on the tag
+     * @param array<string, string|bool|array<string>>                                                                 $attr
+     * @param string|array<int, array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
      */
-    public function getTag(string $position, $value, array $attr = []): string
+    public function getTag(string $position, $attr, $value): string
     {
         $attr = $this->getTagAttributes($position, $attr);
 
@@ -354,7 +354,7 @@ class Column
         }
 
         if ($field === null) {
-            return $this->getTag('head', $this->caption ?? '', $this->table->sortable ? ['class' => ['disabled']] : []);
+            return $this->getTag('head', $this->table->sortable ? ['class' => ['disabled']] : [], $this->caption ?? '');
         }
 
         // if $this->caption is empty, header caption will be overridden by linked field definition
@@ -392,7 +392,7 @@ class Column
             }
         }
 
-        return $this->getTag('head', [['div', ['class' => $class], $caption]], $attr);
+        return $this->getTag('head', $attr, [['div', ['class' => $class], $caption]]);
     }
 
     /**
@@ -402,7 +402,7 @@ class Column
      */
     public function getTotalsCellHtml(Field $field, $value): string
     {
-        return $this->getTag('foot', $this->getApp()->uiPersistence->typecastSaveField($field, $value));
+        return $this->getTag('foot', [], $this->getApp()->uiPersistence->typecastSaveField($field, $value));
     }
 
     /**
@@ -418,7 +418,7 @@ class Column
      */
     public function getDataCellHtml(Field $field = null, array $attr = []): string
     {
-        return $this->getTag('body', [$this->getDataCellTemplate($field)], $attr);
+        return $this->getTag('body', $attr, [$this->getDataCellTemplate($field)]);
     }
 
     /**

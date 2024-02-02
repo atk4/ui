@@ -564,7 +564,7 @@ Please note that if you are redefining {php:meth}`Table\Column::getHeaderCellHtm
 and you wish to preserve functionality of setting custom attributes and
 classes, you should generate your TD/TH tag through getTag method.
 
-:::{php:method} getTag($tag, $position, $value)
+:::{php:method} getTag($position, $attr, $value)
 Will apply cell-based attributes or classes then use {php:meth}`App::getTag` to
 generate HTML tag and encode it's content.
 :::
