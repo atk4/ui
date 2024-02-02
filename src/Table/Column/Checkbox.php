@@ -57,6 +57,6 @@ class Checkbox extends Table\Column
     #[\Override]
     public function getDataCellTemplate(Field $field = null): string
     {
-        return $this->getApp()->getTag('div', ['class' => 'ui checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]);
+        return $this->getApp()->getTag('div', ['class' => 'ui fitted checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]);
     }
 }
