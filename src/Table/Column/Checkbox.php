@@ -53,7 +53,7 @@ class Checkbox extends Table\Column
         $this->table->js(true, new JsExpression('atk.gridCheckboxHelper.masterCheckbox();'));
         $this->table->js(true, new JsExpression('atk.gridCheckboxHelper.childCheckbox();'));
 
-        return $this->getTag('head', [['div', ['class' => 'ui master fitted checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]]]);
+        return $this->getTag('head', [], [['div', ['class' => 'ui master fitted checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]]]);
     }
 
     #[\Override]
