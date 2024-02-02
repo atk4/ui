@@ -37,16 +37,16 @@ class CardDeck extends View
     /** @var bool If each card should use action or not. */
     public $useAction = true;
 
-    /** @var SharedExecutorsContainer|null */
+    /** @var SharedExecutorsContainer|array */
     public $sharedExecutorsContainer = [SharedExecutorsContainer::class];
 
-    /** @var View|null The container view. The view that is reload when page or data changed. */
+    /** @var View|array The container view. The view that is reload when page or data changed. */
     public $container = [View::class, 'ui' => 'vertical segment'];
 
-    /** @var View The view containing Cards. */
+    /** @var View|array The view containing Cards. */
     public $cardHolder = [View::class, 'ui' => 'cards'];
 
-    /** @var Paginator|false|null The paginator view. */
+    /** @var Paginator|array|false The paginator view. */
     public $paginator = [Paginator::class];
 
     /** @var int The number of cards to be displayed per page. */
@@ -296,7 +296,7 @@ class CardDeck extends View
     protected function initPaginator(): int
     {
         $count = $this->model->executeCountQuery();
-        if ($this->paginator) {
+        if ($this->paginator !== false) {
             if ($count > 0) {
                 $this->paginator->setTotal((int) ceil($count / $this->ipp));
                 $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);

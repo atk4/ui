@@ -291,14 +291,14 @@ class View extends AbstractView
     }
 
     /**
-     * @param array|AbstractView $seed
-     * @param string|array|null  $region
+     * @param array{class-string<AbstractView>} $seed
+     * @param string|array|null                 $region
      *
      * @return ($seed is View|array{class-string<View>} ? View : self)
      */
     public function addFromSeed($seed, $region = null): AbstractView
     {
-        $object = is_array($seed)
+        $object = is_array($seed) // @phpstan-ignore-line
             ? AbstractView::fromSeed($seed)
             : $seed;
 
