@@ -55,7 +55,7 @@ class MethodExecutor extends View
     {
         parent::init();
 
-        $this->console = $this->add([Console::class, 'event' => false]); //->addStyle('display', 'none');
+        $this->console = $this->add([Console::class, 'event' => false]); // ->addStyle('display', 'none');
         $this->console->addStyle('max-height', '50em')->addStyle('overflow', 'scroll');
 
         $this->form = $this->add([Form::class]);
