@@ -38,7 +38,7 @@ class Money extends Table\Column
             throw new Exception('Money column requires a field');
         }
 
-        return $this->getTag('body', '{$' . $field->shortName . '}', $attr);
+        return $this->getTag('body', $attr, '{$' . $field->shortName . '}');
     }
 
     #[\Override]
