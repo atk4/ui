@@ -49,6 +49,8 @@ class Menu extends View
             }
 
             array_unshift($item, MenuItem::class);
+
+            $item = MenuItem::fromSeed($item);
         }
 
         /** @var MenuItem */
@@ -147,7 +149,7 @@ class Menu extends View
     }
 
     #[\Override]
-    public function add($seed, $region = null): AbstractView
+    public function add(AbstractView $seed, $region = null): AbstractView
     {
         return parent::add($seed, $region)->addClass('item');
     }
@@ -159,7 +161,7 @@ class Menu extends View
      */
     public function addDivider()
     {
-        return parent::add([View::class, 'class' => ['divider']]);
+        return parent::addFromSeed([View::class, 'class' => ['divider']]);
     }
 
     #[\Override]

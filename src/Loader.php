@@ -103,8 +103,8 @@ class Loader extends View
                 $this->js($this->loadEvent, $this->jsLoad($this->urlArgs));
             }
 
-            if (!is_object($this->shim) || !$this->shim->isInitialized()) {
-                $this->add($this->shim);
+            if (!is_object($this->shim)) {
+                $this->addFromSeed($this->shim);
             }
         }
 

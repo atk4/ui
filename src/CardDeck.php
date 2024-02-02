@@ -95,9 +95,9 @@ class CardDeck extends View
     {
         parent::init();
 
-        $this->sharedExecutorsContainer = $this->add($this->sharedExecutorsContainer);
+        $this->sharedExecutorsContainer = $this->addFromSeed($this->sharedExecutorsContainer);
 
-        $this->container = $this->add($this->container);
+        $this->container = $this->addFromSeed($this->container);
 
         if ($this->menu !== false && !is_object($this->menu)) {
             $this->menu = $this->add(Factory::factory([Menu::class, 'activateOnClick' => false], $this->menu), 'Menu');
@@ -107,7 +107,7 @@ class CardDeck extends View
             }
         }
 
-        $this->cardHolder = $this->container->add($this->cardHolder);
+        $this->cardHolder = $this->container->addFromSeed($this->cardHolder);
 
         if ($this->paginator !== false) {
             $this->addPaginator();

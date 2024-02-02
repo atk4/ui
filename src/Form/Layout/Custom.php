@@ -26,6 +26,6 @@ class Custom extends Form\AbstractLayout
     #[\Override]
     public function addButton($seed)
     {
-        return $this->add(Factory::mergeSeeds([Button::class], $seed), 'Buttons');
+        return $this->addFromSeed(Factory::mergeSeeds([Button::class], $seed), 'Buttons');
     }
 }

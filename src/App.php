@@ -651,12 +651,11 @@ class App
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
-     * @param AbstractView      $object
      * @param string|array|null $region
      *
      * @return ($object is View ? View : AbstractView)
      */
-    public function add($object, $region = null): AbstractView
+    public function add(AbstractView $object, $region = null): AbstractView
     {
         if (!$this->layout) { // @phpstan-ignore-line
             throw (new Exception('App layout is missing'))
@@ -664,6 +663,21 @@ class App
         }
 
         return $this->layout->add($object, $region);
+    }
+
+    /**
+     * @param array|AbstractView $seed
+     * @param string|array|null  $region
+     *
+     * @return ($seed is View|array{class-string<View>} ? View : AbstractView)
+     */
+    public function addFromSeed($seed, $region = null): AbstractView
+    {
+        $object = is_array($seed)
+            ? AbstractView::fromSeed($seed)
+            : $seed;
+
+        return $this->add($object, $region);
     }
 
     /**

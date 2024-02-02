@@ -146,7 +146,7 @@ class Popup extends View
         }
 
         // create content view to pass to callback
-        $content = $this->add($this->dynamicContent);
+        $content = $this->addFromSeed($this->dynamicContent);
         $this->cb->set($fx, [$content]);
         // only render our content view
         // PopupService will replace content with this one

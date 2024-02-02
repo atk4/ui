@@ -61,7 +61,7 @@ class Layout extends AbstractLayout
     #[\Override]
     public function addButton($seed)
     {
-        return $this->add(Factory::mergeSeeds([Button::class], $seed), 'Buttons');
+        return $this->addFromSeed(Factory::mergeSeeds([Button::class], $seed), 'Buttons');
     }
 
     /**
@@ -208,7 +208,7 @@ class Layout extends AbstractLayout
                 $hint = Factory::factory($this->defaultHintSeed);
                 $hint->name = $element->name . '_hint';
                 if (is_object($element->hint) || is_array($element->hint)) {
-                    $hint->add($element->hint);
+                    $hint->addFromSeed($element->hint);
                 } else {
                     $hint->set($element->hint);
                 }

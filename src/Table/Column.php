@@ -135,7 +135,7 @@ class Column
     {
         $id = $this->name . '_ac';
 
-        $popup = $this->table->getOwner()->add($popup ?? [Popup::class])->setHoverable();
+        $popup = $this->table->getOwner()->addFromSeed($popup ?? [Popup::class])->setHoverable();
 
         $this->setHeaderPopup($icon, $id);
 

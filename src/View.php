@@ -260,18 +260,11 @@ class View extends AbstractView
      * In addition to adding a child object, sets up it's template
      * and associate it's output with the region in our template.
      *
-     * @param AbstractView      $object
      * @param string|array|null $region
      */
     #[\Override]
-    public function add($object, $region = null): AbstractView
+    public function add(AbstractView $object, $region = null): AbstractView
     {
-        if (!is_object($object)) { // @phpstan-ignore-line
-            // for BC do not throw
-            // later consider to accept strictly objects only
-            $object = AbstractView::fromSeed($object);
-        }
-
         if (!$this->issetApp()) {
             $this->_addLater[] = [$object, $region];
 
@@ -295,6 +288,21 @@ class View extends AbstractView
         parent::add($object, $args);
 
         return $object;
+    }
+
+    /**
+     * @param array|AbstractView $seed
+     * @param string|array|null  $region
+     *
+     * @return ($seed is View|array{class-string<View>} ? View : self)
+     */
+    public function addFromSeed($seed, $region = null): AbstractView
+    {
+        $object = is_array($seed)
+            ? AbstractView::fromSeed($seed)
+            : $seed;
+
+        return $this->add($object, $region);
     }
 
     public function getHtmlId(): string

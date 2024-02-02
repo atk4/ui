@@ -131,9 +131,9 @@ class Wizard extends View
     }
 
     #[\Override]
-    public function add($seed, $region = null): AbstractView
+    public function add(AbstractView $object, $region = null): AbstractView
     {
-        $result = parent::add($seed, $region);
+        $result = parent::add($object, $region);
 
         if ($result instanceof Form) {
             // mingle with the button icon

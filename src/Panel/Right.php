@@ -136,8 +136,8 @@ class Right extends View implements Loadable
         if (!$cancelButton) {
             $cancelButton = (new Button(['Cancel']))->addClass('cancel');
         }
-        $this->closeModal = $this->getApp()->add(array_merge($this->defaultModal, ['title' => $title]));
-        $this->closeModal->add([View::class, $msg, 'element' => 'p']);
+        $this->closeModal = $this->getApp()->addFromSeed(array_merge($this->defaultModal, ['title' => $title]));
+        $this->closeModal->addFromSeed([View::class, $msg, 'element' => 'p']);
         $this->closeModal->addButtonAction(Factory::factory($okButton));
         $this->closeModal->addButtonAction(Factory::factory($cancelButton));
 
