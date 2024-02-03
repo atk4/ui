@@ -11,13 +11,18 @@ use Atk4\Ui\Form;
 use Atk4\Ui\Grid;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
+use Atk4\Ui\SessionTrait;
 use Atk4\Ui\Table;
 use Atk4\Ui\Wizard;
 
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$wizard = Wizard::addTo($app, ['urlTrigger' => 'demo_wizard']);
+$wizardClass = AnonymousClassNameCache::get_class(static fn () => new class() extends Wizard {
+    use SessionTrait;
+});
+
+$wizard = $wizardClass::addTo($app, ['urlTrigger' => 'demo_wizard']);
 // First step will automatically be active when you open page first. It
 // will contain the 'Next' button with a link.
 $wizard->addStep('Welcome', static function (Wizard $wizard) {
