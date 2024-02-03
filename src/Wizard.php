@@ -10,8 +10,6 @@ use Atk4\Ui\Js\JsExpressionable;
 
 class Wizard extends View
 {
-    use SessionTrait;
-
     public $defaultTemplate = 'wizard.html';
     public $ui = 'steps top attached';
 
