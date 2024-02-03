@@ -12,6 +12,9 @@ parameters:
     checkMissingOverrideMethodAttribute: true
 
     ignoreErrors:
+        - '~^Method .+\(\) has parameter \$.+ with no value type specified in iterable type .+\.~'
+        - '~^Method .+\(\) return type has no value type specified in iterable type .+\.~'
+
         # relax strict rules
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
         - '~^Variable (static )?(property access|method call) on .+\.~'
