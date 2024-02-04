@@ -472,11 +472,14 @@ jobs:
         run: |
           apk add python3 py3-pip
           python --version
+          python -m venv .venv
+          source .venv/bin/activate
           (cd docs && pip install -r requirements.txt)
 
       - name: Build
         run: |
           mv docs/baseline.txt docs/baseline.orig.txt
+          source .venv/bin/activate
           (cd docs && python -m sphinx -T -b html . out 2>&1 | tee baseline.txt)
           sed -i -r 's~[^:]*/docs/([^:]*:)([0-9]+:)?~\1~;t;d' docs/baseline.txt
 
