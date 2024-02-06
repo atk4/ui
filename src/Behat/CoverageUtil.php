@@ -54,16 +54,6 @@ class CoverageUtil
     {
         $phpunitCoverageConfig = simplexml_load_file($phpunitConfigDir . '/phpunit.xml.dist')->source;
 
-        $files = [];
-        foreach ($phpunitCoverageConfig->include->directory ?? [] as $path) {
-            foreach (self::listFiles($phpunitConfigDir . '/' . $path) as $path2) {
-                $files[] = $path2;
-            }
-        }
-        foreach ($phpunitCoverageConfig->include->file ?? [] as $path) {
-            $files[] = $phpunitConfigDir . '/' . $path;
-        }
-
         $excludeFiles = [];
         foreach ($phpunitCoverageConfig->exclude->directory ?? [] as $path) {
             foreach (self::listFiles($phpunitConfigDir . '/' . $path) as $path2) {
@@ -74,7 +64,17 @@ class CoverageUtil
             $excludeFiles[] = $phpunitConfigDir . '/' . $path;
         }
 
+        $files = [];
+        foreach ($phpunitCoverageConfig->include->directory ?? [] as $path) {
+            foreach (self::listFiles($phpunitConfigDir . '/' . $path) as $path2) {
+                $files[] = $path2;
+            }
+        }
         $files = array_diff($files, $excludeFiles);
+
+        foreach ($phpunitCoverageConfig->include->file ?? [] as $path) {
+            $files[] = $phpunitConfigDir . '/' . $path;
+        }
 
         // https://github.com/sebastianbergmann/phpunit/blob/11.0.2/src/TextUI/Configuration/CodeCoverageFilterRegistry.php#L57
         $filter = new Filter();
