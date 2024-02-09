@@ -496,11 +496,11 @@ class Grid extends View
      * Similar to addActionButton but when button is clicked, modal is displayed
      * with the $title and $callback is executed.
      *
-     * @param string|array|View                 $button
-     * @param string                            $title
-     * @param \Closure(View, string|null): void $callback
-     * @param array                             $args       extra URL argument for callback
-     * @param bool|\Closure(Model): bool        $isDisabled
+     * @param string|array|View           $button
+     * @param string                      $title
+     * @param \Closure(View, mixed): void $callback
+     * @param array                       $args       extra URL argument for callback
+     * @param bool|\Closure(Model): bool  $isDisabled
      *
      * @return View
      */
