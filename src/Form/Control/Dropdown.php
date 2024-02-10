@@ -236,9 +236,9 @@ class Dropdown extends Input
      */
     protected function _renderItemsForModel(): void
     {
-        foreach ($this->model as $key => $row) {
+        foreach ($this->model as $id => $row) {
             $title = $row->getTitle();
-            $this->_tItem->set('value', (string) $key);
+            $this->_tItem->set('value', (string) $id);
             $this->_tItem->set('title', $title || is_numeric($title) ? (string) $title : '');
             // add item to template
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
