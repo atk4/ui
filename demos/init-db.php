@@ -122,6 +122,9 @@ trait ModelPreventModificationTrait
     }
 }
 
+/**
+ * Improve testing by using prefixed real field and SQL names.
+ */
 class ModelWithPrefixedFields extends Model
 {
     use ModelPreventModificationTrait;
