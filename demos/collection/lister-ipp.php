@@ -56,7 +56,7 @@ $lister->onHook(Lister::HOOK_BEFORE_ROW, static function (Lister $lister) {
     $row->iso = mb_strtolower($row->iso);
 });
 $model = new Country($app->db);
-$model->addCondition(Country::hinting()->fieldName()->id, -1); // no such records so model will be empty
+$model->addCondition(Country::hinting()->fieldName()->id, null); // no such records so model will be empty
 $lister->setModel($model);
 
 View::addTo($app, ['ui' => 'clearing divider']);

@@ -67,19 +67,19 @@ class DropdownCascade extends Dropdown
      * Generate new dropdown values based on cascadeInput model selected ID.
      * Return an empty value set if ID is null.
      *
-     * @param string|int $id
+     * @param mixed $id
      */
     public function getNewValues($id): array
     {
-        if (!$id) {
+        if ($id === null) {
             return [['value' => '', 'text' => $this->empty, 'name' => $this->empty]];
         }
 
         $model = $this->cascadeFrom->model->load($id)->ref($this->reference);
         $values = [];
-        foreach ($model as $k => $row) {
+        foreach ($model as $row) {
             if ($this->renderRowFunction) {
-                $res = ($this->renderRowFunction)($row, $k);
+                $res = ($this->renderRowFunction)($row); // @phpstan-ignore-line
                 $values[] = ['value' => $res['value'], 'text' => $res['title'], 'name' => $res['title']];
             } else {
                 $values[] = ['value' => $row->getId(), 'text' => $row->get($model->titleField), 'name' => $row->get($model->titleField)];

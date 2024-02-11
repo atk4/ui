@@ -560,6 +560,10 @@ class ScopeBuilder extends Form\Control
                 $value = explode($this->detectDelimiter($value), $value);
 
                 break;
+            default:
+                $value = $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($key), $value);
+
+                break;
         }
 
         $operatorsMap = array_merge(...array_values(static::$operatorsMap));

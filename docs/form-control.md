@@ -405,7 +405,7 @@ class MyDropdown extends \Atk4\Ui\Dropdown
     public $defaultTemplate = 'my_dropdown.html';
 
     /**
-     * used when a custom callback is defined for row rendering. Sets
+     * Used when a custom callback is defined for row rendering. Sets
      * values to item template and appends it to main template
      */
     protected function _addCallBackRow($row, $key = null)

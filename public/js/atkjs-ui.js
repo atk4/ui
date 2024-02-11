@@ -1482,7 +1482,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Add dynamic scrolling to a View that can accept page argument in URL.
  *
- * default options are:
+ * Default options are:
  * padding: 20         The amount of padding needed prior to request a page load.
  * initialPage: 1      The initial page load when calling this plugin.
  * appendTo: null      The HTML element where new content should be append to.

@@ -155,8 +155,8 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
     /**
      * Return proper JS statement need after action execution.
      *
-     * @param mixed      $obj
-     * @param string|int $id
+     * @param mixed $obj
+     * @param mixed $id
      */
     protected function jsGetExecute($obj, $id): JsBlock
     {

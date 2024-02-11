@@ -496,11 +496,11 @@ class Grid extends View
      * Similar to addActionButton but when button is clicked, modal is displayed
      * with the $title and $callback is executed.
      *
-     * @param string|array|View                 $button
-     * @param string                            $title
-     * @param \Closure(View, string|null): void $callback
-     * @param array                             $args       extra URL argument for callback
-     * @param bool|\Closure(Model): bool        $isDisabled
+     * @param string|array|View           $button
+     * @param string                      $title
+     * @param \Closure(View, mixed): void $callback
+     * @param array                       $args       extra URL argument for callback
+     * @param bool|\Closure(Model): bool  $isDisabled
      *
      * @return View
      */
@@ -510,20 +510,25 @@ class Grid extends View
     }
 
     /**
-     * @return list<string>
+     * @return list<mixed>
      */
     private function explodeSelectionValue(string $value): array
     {
-        return $value === '' ? [] : explode(',', $value);
+        $res = [];
+        foreach ($value === '' ? [] : explode(',', $value) as $v) {
+            $res[] = $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($this->model->idField), $v);
+        }
+
+        return $res;
     }
 
     /**
      * Similar to addActionButton but apply to a multiple records selection and display in menu.
      * When menu item is clicked, $callback is executed.
      *
-     * @param string|array|MenuItem                               $item
-     * @param \Closure(Js\Jquery, list<string>): JsExpressionable $callback
-     * @param array                                               $args     extra URL argument for callback
+     * @param string|array|MenuItem                              $item
+     * @param \Closure(Js\Jquery, list<mixed>): JsExpressionable $callback
+     * @param array                                              $args     extra URL argument for callback
      *
      * @return View
      */
@@ -541,10 +546,10 @@ class Grid extends View
      * Similar to addModalAction but apply to a multiple records selection and display in menu.
      * When menu item is clicked, modal is displayed with the $title and $callback is executed.
      *
-     * @param string|array|MenuItem              $item
-     * @param string                             $title
-     * @param \Closure(View, list<string>): void $callback
-     * @param array                              $args     extra URL argument for callback
+     * @param string|array|MenuItem             $item
+     * @param string                            $title
+     * @param \Closure(View, list<mixed>): void $callback
+     * @param array                             $args     extra URL argument for callback
      *
      * @return View
      */

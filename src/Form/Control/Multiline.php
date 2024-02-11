@@ -157,7 +157,7 @@ class Multiline extends Form\Control
     /** @var array The fields names used in each row. */
     public $rowFields;
 
-    /** @var array The data sent for each row. */
+    /** @var list<array<string, mixed>> The data sent for each row. */
     public $rowData;
 
     /** @var int The max number of records (rows) that can be added to Multiline. 0 means no limit. */
@@ -221,7 +221,7 @@ class Multiline extends Form\Control
             // remove __atml ID from array field
             if ($this->form->model->getField($this->shortName)->type === 'json') {
                 $rows = [];
-                foreach ($this->rowData as $key => $cols) {
+                foreach ($this->rowData as $cols) {
                     unset($cols['__atkml']);
                     $rows[] = $cols;
                 }
@@ -234,7 +234,7 @@ class Multiline extends Form\Control
             // when errors are coming from this Multiline field, then notify Multiline component about them
             // otherwise use normal field error
             if ($fieldName === $this->shortName) {
-                // multiline.js component listen to 'multiline-rows-error' event
+                // multiline js component listen to 'multiline-rows-error' event
                 $jsError = $this->jsEmitEvent($this->multiLine->name . '-multiline-rows-error', ['errors' => $this->rowErrors]);
             } else {
                 $jsError = $form->js()->form('add prompt', $fieldName, $str);
