@@ -822,7 +822,7 @@ class View extends AbstractView
     /**
      * Emit an event on atkEvent bus.
      *
-     * example of adding a listener on for an emit event.
+     * Example of adding a listener on for an emit event:
      *
      * atk.eventBus.on('eventName', (data) => {
      *     console.log(data)
