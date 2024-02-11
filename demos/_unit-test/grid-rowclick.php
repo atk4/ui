@@ -17,7 +17,7 @@ use Atk4\Ui\View;
 require_once __DIR__ . '/../init-app.php';
 
 $model = new Country($app->db);
-$grid = Grid::addTo($app, ['name' => 'grid']);
+$grid = Grid::addTo($app, ['name' => 'grid', 'ipp' => 5]);
 $grid->setModel($model);
 
 $grid->addDecorator($model->fieldName()->name, [Table\Column\Link::class, 'url' => 'xxx']);
@@ -38,7 +38,15 @@ $grid->table->onRowClick(static function () {
     return new JsToast(['message' => 'Clicked on row']);
 });
 
-$grid->addSelection();
+$sel = $grid->addSelection();
+
+$grid->menu->addItem('Show Selection')->on(
+    'click',
+    static function ($f, $ids) {
+        return new JsToast('Selected: ' . $ids . '#');
+    },
+    [$sel->jsChecked()]
+);
 
 // emulate navigate for <a> for Behat
 // TODO emulate for all tests automatically in our Atk4\Ui\Behat\Context

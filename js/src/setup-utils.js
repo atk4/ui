@@ -2,6 +2,7 @@ import $ from 'external/jquery';
 import mitt from 'mitt';
 import lodashDebounce from 'lodash/debounce';
 import atk from 'atk';
+import gridCheckboxHelper from './helpers/grid-checkbox.helper';
 import tableDropdownHelper from './helpers/table-dropdown.helper';
 import urlHelper from './helpers/url.helper';
 
@@ -82,6 +83,7 @@ atk.utils = {
     },
 };
 
+atk.gridCheckboxHelper = gridCheckboxHelper;
 atk.tableDropdownHelper = tableDropdownHelper;
 atk.urlHelper = urlHelper;
 
