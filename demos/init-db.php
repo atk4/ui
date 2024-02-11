@@ -278,6 +278,8 @@ class ModelWithPrefixedFields extends Model
 
         parent::init();
 
+        $this->getField($this->idField)->type = WrappedIdType::NAME;
+
         $this->initPreventModification();
 
         if ($this->getPersistence()->getDatabasePlatform() instanceof PostgreSQLPlatform || class_exists(CodeCoverage::class, false)) {
@@ -294,6 +296,17 @@ class ModelWithPrefixedFields extends Model
         ]);
 
         return parent::addField($name, $seed);
+    }
+
+    #[\Override]
+    public function hasOne(string $link, array $defaults = [])
+    {
+        // TODO remove once HasOne reference can infer type from their model
+        if (!isset($defaults['type'])) {
+            $defaults['type'] = WrappedIdType::NAME;
+        }
+
+        return parent::hasOne($link, $defaults);
     }
 
     #[\Override]
