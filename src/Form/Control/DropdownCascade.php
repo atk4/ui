@@ -82,7 +82,7 @@ class DropdownCascade extends Dropdown
                 $res = ($this->renderRowFunction)($row); // @phpstan-ignore-line
                 $values[] = ['value' => $res['value'], 'text' => $res['title'], 'name' => $res['title']];
             } else {
-                $values[] = ['value' => $row->getId(), 'text' => $row->get($model->titleField), 'name' => $row->get($model->titleField)];
+                $values[] = ['value' => $this->getApp()->uiPersistence->typecastSaveField($model->getField($model->idField), $row->getId()), 'text' => $row->get($model->titleField), 'name' => $row->get($model->titleField)];
             }
         }
 
@@ -93,12 +93,15 @@ class DropdownCascade extends Dropdown
      * Will mark current value as selected from a list
      * of possible values.
      *
-     * @param string|int $value the current field value
+     * @param mixed $value the current field value
      */
     private function getJsValues(array $values, $value): array
     {
+        $model = $this->cascadeFrom->model->ref($this->reference);
+        $valueStr = $this->getApp()->uiPersistence->typecastSaveField($model->getField($model->idField), $value);
+
         foreach ($values as $k => $v) {
-            if ($v['value'] === $value) {
+            if ($v['value'] === $valueStr) {
                 $values[$k]['selected'] = true;
 
                 break;
