@@ -18,7 +18,7 @@ class Radio extends Form\Control
     public $lister;
 
     /** @var array<int|string, string> List of values. */
-    public $values = [];
+    public array $values;
 
     #[\Override]
     protected function init(): void
@@ -41,7 +41,7 @@ class Radio extends Form\Control
     #[\Override]
     protected function renderView(): void
     {
-        if (!$this->model) {
+        if ($this->model === null) {
             // we cannot use "id" column here as seeding Array_ persistence with 0 will throw "Must not be a zero"
             // $this->setSource($this->values);
             $this->setSource(array_map(static fn ($k, string $v) => ['k' => $k, 'name' => $v], array_keys($this->values), $this->values));

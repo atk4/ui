@@ -326,7 +326,7 @@ class ScopeBuilder extends Form\Control
      */
     protected function addFieldRule(Field $field): void
     {
-        if ($field->enum || $field->values) {
+        if ($field->enum !== null || $field->values !== null) {
             $type = 'enum';
         } elseif ($field->hasReference()) {
             $type = 'lookup';

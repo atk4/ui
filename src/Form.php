@@ -372,9 +372,9 @@ class Form extends View
             $model = $field->getReference()->refModel($this->model);
             $fallbackSeed = [Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
         } elseif ($field->type !== 'boolean') {
-            if ($field->enum) {
+            if ($field->enum !== null) {
                 $fallbackSeed = [Control\Dropdown::class, 'values' => array_combine($field->enum, $field->enum)];
-            } elseif ($field->values) {
+            } elseif ($field->values !== null) {
                 $fallbackSeed = [Control\Dropdown::class, 'values' => $field->values];
             } elseif ($field->hasReference()) {
                 $fallbackSeed = [Control\Lookup::class, 'model' => $field->getReference()->refModel($this->model)];

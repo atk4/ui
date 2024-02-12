@@ -121,7 +121,7 @@ class Lister extends View
         }
 
         // if no model is set, don't show anything (even warning)
-        if (!$this->model) {
+        if ($this->model === null) {
             parent::renderView();
 
             return;
