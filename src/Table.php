@@ -145,7 +145,7 @@ class Table extends Lister
                 ->addMoreInfo('name', $name);
         }
 
-        if (!$this->model) {
+        if ($this->model === null) {
             $this->model = new ProxyModel();
         }
         $this->model->assertIsModel();
@@ -194,7 +194,7 @@ class Table extends Lister
      */
     public function setFilterColumn($cols = null): void
     {
-        if (!$this->model) {
+        if ($this->model === null) {
             throw new Exception('Model need to be defined in order to use column filtering');
         }
 

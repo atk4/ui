@@ -586,7 +586,7 @@ class Multiline extends Form\Control
             $component = $this->fieldMapToComponent[$name];
         } elseif (!$field->isEditable()) {
             $component = $this->fieldMapToComponent['readonly'];
-        } elseif ($field->enum || $field->values) {
+        } elseif ($field->enum !== null || $field->values !== null) {
             $component = $this->fieldMapToComponent['select'];
         } elseif ($field->type === 'date' || $field->type === 'time' || $field->type === 'datetime') {
             $component = $this->fieldMapToComponent['date'];

@@ -163,7 +163,7 @@ class InlineEdit extends View
     {
         parent::renderView();
 
-        if ($this->model && $this->model->isLoaded()) {
+        if ($this->model !== null && $this->model->isLoaded()) {
             $initValue = $this->model->get($this->fieldName);
         } else {
             $initValue = $this->initValue;

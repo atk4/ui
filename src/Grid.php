@@ -304,7 +304,7 @@ class Grid extends View
      */
     public function addQuickSearch($fields = [], $hasAutoQuery = false): void
     {
-        if (!$this->model) {
+        if ($this->model === null) {
             throw new Exception('Call setModel() before addQuickSearch()');
         }
 
