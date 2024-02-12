@@ -48,6 +48,22 @@ abstract class AbstractLayout extends View
             : ($control[0] ?? (($fieldSeed['ui'] ?? [])['form'][0] ?? null));
         if (is_a($controlClass, Control\Checkbox::class, true)) {
             $fieldSeed['type'] = 'boolean';
+        } elseif (is_a($controlClass, Control\Dropdown::class, true) || is_a($controlClass, Control\Lookup::class, true)) {
+            if (is_a($controlClass, Control\DropdownCascade::class, true)) {
+                $cascadeFromControl = $control instanceof Control\DropdownCascade ? $control->cascadeFrom : ($control['cascadeFrom'] ?? null);
+                if ($cascadeFromControl !== null) {
+                    if (!$cascadeFromControl instanceof Control) {
+                        $cascadeFromControl = $this->form->getControl($cascadeFromControl);
+                    }
+
+                    $fieldSeed['type'] = $cascadeFromControl->entityField->getField()->type;
+                }
+            } else {
+                $dropdownModel = $control instanceof Control ? $control->model : ($control['model'] ?? null);
+                if ($dropdownModel !== null) {
+                    $fieldSeed['type'] = $dropdownModel->getField($dropdownModel->idField)->type;
+                }
+            }
         } elseif (is_a($controlClass, Control\Calendar::class, true)) {
             $calendarType = $control instanceof Control\Calendar ? $control->type : ($control['type'] ?? null);
             if ($calendarType !== null) {
