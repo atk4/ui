@@ -26,10 +26,10 @@ $group->addControl('line_norm')->set('editable');
 $group->addControl('line_read', ['readOnly' => true])->set('read only');
 $group->addControl('line_disb', ['disabled' => true])->set('disabled');
 
-$group = $form->addGroup('Text Area');
-$group->addControl('text_norm', [Form\Control\Textarea::class])->set('editable');
-$group->addControl('text_read', [Form\Control\Textarea::class, 'readOnly' => true])->set('read only');
-$group->addControl('text_disb', [Form\Control\Textarea::class, 'disabled' => true])->set('disabled');
+$group = $form->addGroup('Textarea');
+$group->addControl('text_norm', [Form\Control\Textarea::class], ['type' => 'text'])->set("editable\nline2");
+$group->addControl('text_read', [Form\Control\Textarea::class, 'readOnly' => true], ['type' => 'text'])->set("read only\nline2");
+$group->addControl('text_disb', [Form\Control\Textarea::class, 'disabled' => true], ['type' => 'text'])->set("disabled\nline2");
 
 $group = $form->addGroup('Checkbox');
 $group->addControl('c_norm', [Form\Control\Checkbox::class], ['type' => 'boolean'])->set(true);
@@ -198,25 +198,3 @@ $r1 = $group->addControl('r1', new Form\Control\Radio([
     ],
 ]));
 $r1->onChange(new JsExpression('console.log(\'radio changed\')'));
-
-Header::addTo($app, ['Line ends of Textarea']);
-
-$form = Form::addTo($app);
-$group = $form->addGroup('Without model');
-$group->addControl('text_crlf', [Form\Control\Textarea::class])->set("First line\r\nSecond line");
-$group->addControl('text_cr', [Form\Control\Textarea::class])->set("First line\rSecond line");
-$group->addControl('text_lf', [Form\Control\Textarea::class])->set("First line\nSecond line");
-
-$group = $form->addGroup('With model');
-$group->addControl('m_text_crlf', [Form\Control\Textarea::class], ['type' => 'text'])->set("First line\r\nSecond line");
-$group->addControl('m_text_cr', [Form\Control\Textarea::class], ['type' => 'text'])->set("First line\rSecond line");
-$group->addControl('m_text_lf', [Form\Control\Textarea::class], ['type' => 'text'])->set("First line\nSecond line");
-
-$form->onSubmit(static function (Form $form) {
-    // check what values are submitted
-    echo "We're URL encoding submitted values to be able to see what line end is actually submitted.";
-    foreach ($form->model->get() as $k => $v) {
-        var_dump([$k => urlencode($v)]);
-    }
-    echo 'As you can see - without model it submits CRLF, but with model it will normalize all to LF';
-});

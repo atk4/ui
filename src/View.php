@@ -887,7 +887,7 @@ class View extends AbstractView
      *
      * @param array                 $args
      * @param JsExpressionable|null $afterSuccess
-     * @param array                 $apiConfig
+     * @param array<string, mixed>  $apiConfig
      *
      * @return JsReload
      */

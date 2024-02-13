@@ -44,10 +44,8 @@ class Form extends View
     /**
      * HTML <form> element, all inner form controls are linked to it on render
      * with HTML form="form_id" attribute.
-     *
-     * @var View
      */
-    public $formElement;
+    public View $formElement;
 
     /** @var Form\Layout A current layout of a form, needed if you call Form->addControl(). */
     public $layout;
@@ -106,10 +104,10 @@ class Form extends View
      */
     public $controlDisplaySelector = '.field';
 
-    /** @var array Use this apiConfig variable to pass API settings to Fomantic-UI in .api(). */
+    /** @var array<string, mixed> Use this apiConfig variable to pass API settings to Fomantic-UI in .api(). */
     public $apiConfig = [];
 
-    /** @var array Use this formConfig variable to pass settings to Fomantic-UI in .from(). */
+    /** @var array<string, mixed> Use this formConfig variable to pass settings to Fomantic-UI in .from(). */
     public $formConfig = [];
 
     // {{{ Base Methods
@@ -491,7 +489,7 @@ class Form extends View
      * Set Fomantic-UI Api settings to use with form. A complete list is here:
      * https://fomantic-ui.com/behaviors/api.html#/settings .
      *
-     * @param array $config
+     * @param array<string, mixed> $config
      *
      * @return $this
      */
@@ -506,7 +504,7 @@ class Form extends View
      * Set Fomantic-UI Form settings to use with form. A complete list is here:
      * https://fomantic-ui.com/behaviors/form.html#/settings .
      *
-     * @param array $config
+     * @param array<string, mixed> $config
      *
      * @return $this
      */

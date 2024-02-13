@@ -36,11 +36,11 @@ class DragHandler extends Table\Column
     /**
      * Callback when table has been reorder using handle.
      *
-     * @param \Closure(list<string>, string, int, int): (JsExpressionable|View|string|void) $fx
+     * @param \Closure(list<mixed>, mixed, int, int): (JsExpressionable|View|string|void) $fx
      */
     public function onReorder(\Closure $fx): void
     {
-        $this->cb->onReorder($fx);
+        $this->cb->onReorder($fx, $this->table->model->getField($this->table->model->idField));
     }
 
     #[\Override]

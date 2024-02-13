@@ -23,6 +23,19 @@ require_once __DIR__ . '/../init-app.php';
 $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends Columns {
     public array $route = [];
 
+    /**
+     * @return list<mixed>
+     */
+    private function explodeSelectionValue(string $value): array
+    {
+        $res = [];
+        foreach ($value === '' ? [] : explode(',', $value) as $v) {
+            $res[] = $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($this->model->idField), $v);
+        }
+
+        return $res;
+    }
+
     #[\Override]
     public function setModel(Model $model, array $route = []): void
     {
@@ -34,9 +47,9 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
         $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->setStyle('cursor', 'pointer');
         $table->setModel($model, [$model->titleField]);
 
-        $selections = explode(',', $this->getApp()->tryGetRequestQueryParam($this->name) ?? '');
+        $selections = $this->explodeSelectionValue($this->getApp()->tryGetRequestQueryParam($this->name) ?? '');
 
-        if ($selections[0]) {
+        if ($selections !== []) {
             $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
         }
 
@@ -73,7 +86,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
             $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->setStyle('cursor', 'pointer');
             $table->setModel($pushModel->setLimit(10), [$pushModel->titleField]);
 
-            if ($selections) {
+            if ($selections !== []) {
                 $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
             }
 

@@ -17,7 +17,7 @@ class FormExecutor extends BasicExecutor
     {
         $this->addHeader();
 
-        if (!$this->form) {
+        if ($this->form === null) {
             $this->form = Form::addTo($this);
         }
 

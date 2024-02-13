@@ -22,10 +22,10 @@ use Atk4\Ui\View;
 class Control extends View
 {
     /** @var Form|null to which this field belongs */
-    public $form;
+    public ?View $form = null;
 
     /** @var EntityFieldPair<Model, Field>|null */
-    public $entityField;
+    public ?EntityFieldPair $entityField = null;
 
     /** @var string */
     public $controlClass = '';
@@ -70,7 +70,7 @@ class Control extends View
     {
         parent::init();
 
-        if ($this->form && $this->entityField) {
+        if ($this->form !== null && $this->entityField !== null) {
             if (isset($this->form->controls[$this->entityField->getFieldName()])) {
                 throw (new Exception('Form field already exists'))
                     ->addMoreInfo('name', $this->entityField->getFieldName());
@@ -88,7 +88,7 @@ class Control extends View
     #[\Override]
     public function set($value = null)
     {
-        if ($this->entityField) {
+        if ($this->entityField !== null) {
             $this->entityField->set($value);
         } else {
             $this->content = $value;
@@ -101,7 +101,7 @@ class Control extends View
     protected function renderView(): void
     {
         // it only makes sense to have "name" property inside a field if used inside a form
-        if ($this->form) {
+        if ($this->form !== null) {
             $this->template->trySet('name', $this->shortName);
         }
 

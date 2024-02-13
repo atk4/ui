@@ -409,10 +409,8 @@ class App
 
     /**
      * Get the value of a specific POST parameter from the HTTP request.
-     *
-     * @return mixed
      */
-    public function getRequestPostParam(string $key)
+    public function getRequestPostParam(string $key): string
     {
         $res = $this->tryGetRequestPostParam($key);
         if ($res === null) {

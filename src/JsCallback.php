@@ -17,8 +17,8 @@ class JsCallback extends Callback
     /** @var string Text to display as a confirmation. Set with setConfirm(..). */
     public $confirm;
 
-    /** @var array|null Use this apiConfig variable to pass API settings to Fomantic-UI in .api(). */
-    public $apiConfig;
+    /** @var array<string, mixed> Use this apiConfig variable to pass API settings to Fomantic-UI in .api(). */
+    public $apiConfig = [];
 
     /** @var string|null Include web storage data item (key) value to be included in the request. */
     public $storeName;
@@ -41,7 +41,7 @@ class JsCallback extends Callback
             'url' => $this->getJsUrl(),
             'urlOptions' => $this->args,
             'confirm' => $this->confirm,
-            'apiConfig' => $this->apiConfig,
+            'apiConfig' => $this->apiConfig !== [] ? $this->apiConfig : null,
             'storeName' => $this->storeName,
         ])]);
     }

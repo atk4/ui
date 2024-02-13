@@ -113,20 +113,17 @@ class Dropdown extends Input
     {
         // dropdown input tag accepts CSV formatted list of IDs
         return $this->entityField !== null
-            ? (is_array($this->entityField->get()) ? implode(', ', $this->entityField->get()) : $this->entityField->get())
+            ? (is_array($this->entityField->get()) ? implode(', ', $this->entityField->get()) : $this->entityField->get()) // TODO is_array() should be replaced with field type condition
             : parent::getValue();
     }
 
     #[\Override]
     public function set($value = null)
     {
-        if ($this->entityField) {
+        if ($this->entityField !== null) {
             if ($this->entityField->getField()->type === 'json' && is_string($value)) {
                 $value = explode(',', $value);
             }
-            $this->entityField->set($value);
-
-            return $this;
         }
 
         return parent::set($value);
