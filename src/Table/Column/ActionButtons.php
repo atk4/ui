@@ -100,7 +100,7 @@ class ActionButtons extends Table\Column
         $modal = Modal::addTo($owner, $defaults);
 
         $modal->set(function (View $t) use ($callback) {
-            $callback($t, $t->stickyGet($this->name));
+            $callback($t, $this->getApp()->uiPersistence->typecastLoadField($this->table->model->getField($this->table->model->idField), $t->stickyGet($this->name)));
         });
 
         return $this->addButton($button, $modal->jsShow(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)), '', $isDisabled);
