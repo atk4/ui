@@ -83,7 +83,7 @@ class Lookup extends Input
      *
      * Use this apiConfig variable to pass API settings to Fomantic-UI in .dropdown()
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public $apiConfig = ['cache' => false];
 
