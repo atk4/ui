@@ -44,10 +44,8 @@ class Form extends View
     /**
      * HTML <form> element, all inner form controls are linked to it on render
      * with HTML form="form_id" attribute.
-     *
-     * @var View
      */
-    public $formElement;
+    public View $formElement;
 
     /** @var Form\Layout A current layout of a form, needed if you call Form->addControl(). */
     public $layout;
