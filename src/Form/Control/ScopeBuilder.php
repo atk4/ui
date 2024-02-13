@@ -272,7 +272,7 @@ class ScopeBuilder extends Form\Control
 
         $this->scopeBuilderView = View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
 
-        if ($this->form) {
+        if ($this->form !== null) {
             $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
                 $key = $this->entityField->getFieldName();
                 $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key]));
@@ -312,7 +312,7 @@ class ScopeBuilder extends Form\Control
         // this is used when selecting proper operator for the inputType (see self::$operatorsMap)
         $inputsMap = array_column($this->rules, 'inputType', 'id');
 
-        if ($this->entityField && $this->entityField->get() !== null) {
+        if ($this->entityField !== null && $this->entityField->get() !== null) {
             $scope = $this->entityField->get();
         } else {
             $scope = $model->scope();

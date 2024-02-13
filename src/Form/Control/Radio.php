@@ -26,7 +26,7 @@ class Radio extends Form\Control
         parent::init();
 
         // radios are annoying because they don't send value when they are not ticked
-        if ($this->form) {
+        if ($this->form !== null) {
             $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
                 if (!isset($postRawData[$this->shortName])) {
                     $postRawData[$this->shortName] = '';

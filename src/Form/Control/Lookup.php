@@ -334,7 +334,7 @@ class Lookup extends Input
         $data = [];
         if ($this->getApp()->hasRequestQueryParam('form')) {
             parse_str($this->getApp()->getRequestQueryParam('form'), $data);
-        } elseif ($this->form) {
+        } elseif ($this->form !== null) {
             $data = $this->form->model->get();
         } else {
             return;
@@ -386,7 +386,7 @@ class Lookup extends Input
 
         $this->initDropdown($chain);
 
-        if ($this->entityField && $this->entityField->get()) {
+        if ($this->entityField !== null && $this->entityField->get() !== null) {
             $idField = $this->idField ?? $this->model->idField;
 
             $this->model = $this->model->loadBy($idField, $this->entityField->get());
