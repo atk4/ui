@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Data\Model;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
@@ -49,13 +50,12 @@ class Dropdown extends Input
      * Here a custom function for creating the HTML of each dropdown option
      * can be defined. The function gets each row of the model/values property as first parameter.
      * if used with $values property, gets the key of this element as second parameter.
-     * When using with a model, the second parameter is null and can be ignored.
+     * Must return an array with at least 'value' and 'title' elements set.
      * Use additional 'icon' element to add an icon to this row.
      *
      * Example 1 with Model: Title in Uppercase
      * function (Model $row) {
      *     return [
-     *         'value' => $row->getId(),
      *         'title' => mb_strtoupper($row->getTitle()),
      *     ];
      *  }
@@ -63,7 +63,6 @@ class Dropdown extends Input
      * Example 2 with Model: Add an icon
      * function (Model $row) {
      *     return [
-     *         'value' => $row->getId(),
      *         'title' => $row->getTitle(),
      *         'icon' => $row->get('amount') > 1000 ? 'money' : '',
      *     ];
@@ -72,7 +71,6 @@ class Dropdown extends Input
      * Example 3 with Model: Combine Title from model fields
      * function (Model $row) {
      *     return [
-     *         'value' => $row->getId(),
      *         'title' => $row->getTitle() . ' (' . $row->get('title2') . ')',
      *     ];
      * }
@@ -86,9 +84,9 @@ class Dropdown extends Input
      *     ];
      * }
      *
-     * @var \Closure(mixed, int|string|null): array{value: mixed, title: mixed, icon?: mixed}|null
+     * @var \Closure(Model): array{title: mixed, icon?: mixed}|\Closure(mixed, array-key): array{value: mixed, title: mixed, icon?: mixed}
      */
-    public $renderRowFunction;
+    public ?\Closure $renderRowFunction = null;
 
     /** Subtemplate for a single dropdown item. */
     protected HtmlTemplate $_tItem;
@@ -274,8 +272,14 @@ class Dropdown extends Input
      */
     protected function _addCallBackRow($row, $key = null): void
     {
-        $res = ($this->renderRowFunction)($row, $key);
-        $this->_tItem->set('value', (string) $res['value']);
+        if ($this->model !== null) {
+            $res = ($this->renderRowFunction)($row);
+            $this->_tItem->set('value', $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($this->model->idField), $row->getId()));
+        } else {
+            $res = ($this->renderRowFunction)($row, $key); // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/10283#issuecomment-1850438891
+            $this->_tItem->set('value', (string) $res['value']); // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/10283
+        }
+
         $this->_tItem->set('title', $res['title']);
 
         $this->_tItem->del('Icon');

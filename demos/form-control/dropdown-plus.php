@@ -53,7 +53,6 @@ $form->addControl('withModel2', [
     'model' => (new Country($app->db))->setLimit(25),
     'renderRowFunction' => static function (Country $row) {
         return [
-            'value' => $row->getId(),
             'title' => $row->getTitle() . ' (' . $row->iso3 . ')',
         ];
     },
@@ -66,7 +65,6 @@ $form->addControl('withModel3', [
     'model' => (new File($app->db))->setLimit(25),
     'renderRowFunction' => static function (File $row) {
         return [
-            'value' => $row->getId(),
             'title' => $row->getTitle(),
             'icon' => $row->is_folder ? 'folder' : 'file',
         ];

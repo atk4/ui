@@ -379,7 +379,6 @@ This function is called with each model record and needs to return an array:
 ```
 $dropdown->renderRowFunction = function (Model $record) {
     return [
-        'value' => $record->idField,
         'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
     ];
 }
@@ -390,7 +389,6 @@ You can also use this function to add an Icon to a record:
 ```
 $dropdown->renderRowFunction = function (Model $record) {
     return [
-        'value' => $record->idField,
         'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
         'icon' => $record->get('value') > 100 ? 'money' : 'coins',
     ];
@@ -426,7 +424,6 @@ With the according renderRowFunction:
 ```
 function (Model $record) {
     return [
-        'value' => $record->getId(),
         'title' => $record->getTitle,
         'icon' => $record->value > 100 ? 'money' : 'coins',
         'someOtherField' => $record->get('SomeOtherField'),
@@ -435,7 +432,7 @@ function (Model $record) {
 }
 ```
 
-Of course, the tags `value`, `title`, `icon`, `someOtherField` and `someOtherField2` need to be set in my_dropdown.html.
+Of course, the tags `title`, `icon`, `someOtherField` and `someOtherField2` need to be set in my_dropdown.html.
 
 ### Usage with $values property
 
