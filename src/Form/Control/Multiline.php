@@ -802,7 +802,7 @@ class Multiline extends Form\Control
                 'expr' => isset($dummyFields[$field->shortName])
                     ? $dummyFields[$field->shortName]->expr
                     : ($field->shortName === $dummyModel->idField
-                        ? '-1'
+                        ? '99000'
                         : $createExprFromValueFx($entity->getModel()->getPersistence()->typecastSaveField($field, $field->get($entity)))),
                 'type' => $field->type,
                 'actual' => $field->actual,

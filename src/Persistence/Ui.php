@@ -248,6 +248,10 @@ class Ui extends Persistence
                 throw new Exception('Object serialization is not supported');
         }
 
+        if ($value === '' && $field->type === 'atk4_ui_demos_id') { // TODO extend the UI persistence for demos only
+            return null;
+        }
+
         // typecast using DBAL type and normalize
         $value = parent::_typecastLoadField($field, $value);
         $value = (new Field(['type' => $field->type]))->normalize($value);
