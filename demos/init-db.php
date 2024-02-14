@@ -10,7 +10,9 @@ use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Table;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
+use Doctrine\DBAL\Types\Type as DbalType;
 use Mvorisek\Atk4\Hintable\Data\HintablePropertyDef;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 
@@ -23,6 +25,77 @@ try {
     throw (new Exception('This demo requires access to the database. See "demos/init-db.php"'))
         ->addMoreInfo('PDO error', $e->getMessage());
 }
+
+/**
+ * Improve testing by using non-scalar ID with custom DBAL type.
+ */
+class WrappedId
+{
+    private const MIN_VALUE = 1;
+    private const MAX_VALUE = 100_000;
+
+    private int $id;
+
+    public function __construct(int $id)
+    {
+        if ($id < self::MIN_VALUE || $id > self::MAX_VALUE) {
+            throw (new Exception('ID value is outside supported range'))
+                ->addMoreInfo('value', $id);
+        }
+
+        $this->id = $id;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+}
+
+class WrappedIdType extends DbalType
+{
+    public const NAME = 'atk4_ui_demos_id';
+
+    #[\Override]
+    public function getName(): string
+    {
+        return self::NAME;
+    }
+
+    #[\Override]
+    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
+    {
+        return DbalType::getType('integer')->getSQLDeclaration($fieldDeclaration, $platform);
+    }
+
+    #[\Override]
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?int
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return DbalType::getType('integer')->convertToDatabaseValue($value->getId(), $platform);
+    }
+
+    #[\Override]
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?object
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return new WrappedId(DbalType::getType('integer')->convertToPHPValue($value, $platform));
+    }
+
+    #[\Override]
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+    {
+        return true;
+    }
+}
+
+DbalType::addType(WrappedIdType::NAME, WrappedIdType::class);
 
 trait ModelPreventModificationTrait
 {
@@ -124,6 +197,12 @@ trait ModelPreventModificationTrait
 
 /**
  * Improve testing by using prefixed real field and SQL names.
+ *
+ * @method (static|null)                   tryLoad(WrappedId $id = null)     remove parentheses around return type once https://github.com/phpstan/phpstan/issues/10548 is fixed
+ * @method static                          load(WrappedId $id)
+ * @method \Traversable<WrappedId, static> getIterator()
+ * @method WrappedId                       insert(array<string, mixed> $row)
+ * @method static                          delete(WrappedId $id = null)
  */
 class ModelWithPrefixedFields extends Model
 {
@@ -199,6 +278,8 @@ class ModelWithPrefixedFields extends Model
 
         parent::init();
 
+        $this->getField($this->idField)->type = WrappedIdType::NAME;
+
         $this->initPreventModification();
 
         if ($this->getPersistence()->getDatabasePlatform() instanceof PostgreSQLPlatform || class_exists(CodeCoverage::class, false)) {
@@ -215,6 +296,41 @@ class ModelWithPrefixedFields extends Model
         ]);
 
         return parent::addField($name, $seed);
+    }
+
+    #[\Override]
+    public function hasOne(string $link, array $defaults = [])
+    {
+        // TODO remove once HasOne reference can infer type from their model
+        if (!isset($defaults['type'])) {
+            $defaults['type'] = WrappedIdType::NAME;
+        }
+
+        return parent::hasOne($link, $defaults);
+    }
+
+    #[\Override]
+    public function getId(): ?WrappedId
+    {
+        return parent::getId();
+    }
+
+    /**
+     * @param WrappedId|($allowNull is true ? null : never) $value
+     */
+    #[\Override] // @phpstan-ignore-line
+    public function setId($value, bool $allowNull = true)
+    {
+        return parent::setId($value, $allowNull);
+    }
+
+    /**
+     * @return \Traversable<WrappedId, static>
+     */
+    #[\Override]
+    public function createIteratorBy($field, $operator = null, $value = null): \Traversable
+    {
+        return parent::createIteratorBy(...'func_get_args'());
     }
 }
 

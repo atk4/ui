@@ -336,7 +336,7 @@ class Grid extends View
     }
 
     #[\Override]
-    public function jsReload($args = [], $afterSuccess = null, $apiConfig = []): JsExpressionable
+    public function jsReload($args = [], $afterSuccess = null, array $apiConfig = []): JsExpressionable
     {
         return new JsReload($this->container, $args, $afterSuccess, $apiConfig);
     }

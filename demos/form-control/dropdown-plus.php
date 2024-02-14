@@ -27,7 +27,7 @@ $form->addControl('sub_category_id', [Form\Control\DropdownCascade::class, 'casc
 $form->addControl('product_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => SubCategory::hinting()->fieldName()->Products]);
 
 $form->onSubmit(static function (Form $form) use ($app) {
-    $message = $app->encodeJson($form->model->get());
+    $message = $app->encodeJson($app->uiPersistence->typecastSaveRow($form->model, $form->model->get()));
 
     $view = new Message('Values: ');
     $view->setApp($form->getApp());
@@ -53,7 +53,6 @@ $form->addControl('withModel2', [
     'model' => (new Country($app->db))->setLimit(25),
     'renderRowFunction' => static function (Country $row) {
         return [
-            'value' => $row->getId(),
             'title' => $row->getTitle() . ' (' . $row->iso3 . ')',
         ];
     },
@@ -66,7 +65,6 @@ $form->addControl('withModel3', [
     'model' => (new File($app->db))->setLimit(25),
     'renderRowFunction' => static function (File $row) {
         return [
-            'value' => $row->getId(),
             'title' => $row->getTitle(),
             'icon' => $row->is_folder ? 'folder' : 'file',
         ];

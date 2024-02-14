@@ -105,7 +105,7 @@ class Form extends View
     public $controlDisplaySelector = '.field';
 
     /** @var array<string, mixed> Use this apiConfig variable to pass API settings to Fomantic-UI in .api(). */
-    public $apiConfig = [];
+    public array $apiConfig = [];
 
     /** @var array<string, mixed> Use this formConfig variable to pass settings to Fomantic-UI in .from(). */
     public $formConfig = [];

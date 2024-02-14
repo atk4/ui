@@ -50,7 +50,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
         $selections = $this->explodeSelectionValue($this->getApp()->tryGetRequestQueryParam($this->name) ?? '');
 
         if ($selections !== []) {
-            $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
+            $table->js(true)->find('tr[data-id=' . $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($this->model->idField), $selections[0]) . ']')->addClass('active');
         }
 
         $makeJsReloadFx = function (array $path): JsReload {
@@ -65,7 +65,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
         $table->on('click', 'tr', $jsReload);
 
         while ($id = array_shift($selections)) {
-            $path[] = $id;
+            $path[] = $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($this->model->idField), $id);
             $pushModel = new $model($model->getPersistence());
             $pushModel = $pushModel->tryLoad($id);
             if ($pushModel === null) {
@@ -87,7 +87,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
             $table->setModel($pushModel->setLimit(10), [$pushModel->titleField]);
 
             if ($selections !== []) {
-                $table->js(true)->find('tr[data-id=' . $selections[0] . ']')->addClass('active');
+                $table->js(true)->find('tr[data-id=' . $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($this->model->idField), $selections[0]) . ']')->addClass('active');
             }
 
             $jsReload = $makeJsReloadFx($path);

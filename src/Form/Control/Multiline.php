@@ -173,7 +173,7 @@ class Multiline extends Form\Control
      *
      * @var array<string, \Closure(Field, string): void>
      */
-    private $valuePropsBinding = [];
+    private array $valuePropsBinding = [];
 
     /**
      * A JsFunction to execute when Multiline add(+) button is clicked.
@@ -337,8 +337,12 @@ class Multiline extends Form\Control
     {
         $model = $this->model;
 
-        // collects existing IDs
-        $currentIds = array_column($model->export(), $model->idField);
+        // delete removed rows
+        // TODO this is dangerous, deleted row IDs should be passed from UI
+        $idsToDelete = array_filter(array_column($this->rowData, $model->idField), static fn ($v) => $v !== null);
+        foreach ($model->createIteratorBy($model->idField, 'not in', $idsToDelete) as $entity) {
+            $entity->delete();
+        }
 
         foreach ($this->rowData as $row) {
             $entity = $row[$model->idField] !== null
@@ -357,16 +361,6 @@ class Multiline extends Form\Control
             if (!$entity->isLoaded() || $entity->getDirtyRef() !== []) {
                 $entity->save();
             }
-
-            $k = array_search($entity->getId(), $currentIds, true);
-            if ($k !== false) {
-                unset($currentIds[$k]);
-            }
-        }
-
-        // delete removed IDs
-        foreach ($currentIds as $id) {
-            $model->delete($id);
         }
 
         return $this;
@@ -562,7 +556,7 @@ class Multiline extends Form\Control
     public function setLookupOptionValue(Field $field, string $value): void
     {
         $model = $field->getReference()->refModel($this->model);
-        $entity = $model->tryLoadBy($field->getReference()->getTheirFieldName($model), $value);
+        $entity = $model->tryLoadBy($field->getReference()->getTheirFieldName($model), $this->getApp()->uiPersistence->typecastLoadField($field, $value));
         if ($entity !== null) {
             $option = ['key' => $value, 'text' => $entity->get($model->titleField), 'value' => $value];
             foreach ($this->fieldDefs as $key => $component) {
@@ -621,8 +615,10 @@ class Multiline extends Form\Control
             $model = $field->getReference()->refModel($this->model);
             $model->setLimit($limit);
 
+            $theirFieldName = $field->getReference()->getTheirFieldName($model);
             foreach ($model as $item) {
-                $items[$item->get($field->getReference()->getTheirFieldName($model))] = $item->get($model->titleField);
+                $theirValue = $this->getApp()->uiPersistence->typecastSaveField($model->getField($theirFieldName), $item->get($theirFieldName));
+                $items[$theirValue] = $item->get($model->titleField);
             }
         }
 
@@ -632,9 +628,9 @@ class Multiline extends Form\Control
     /**
      * Apply Props to component that require props based on field value.
      */
-    protected function valuePropsBinding(string $values): void
+    protected function valuePropsBinding(string $valueJson): void
     {
-        $fieldValues = $this->getApp()->decodeJson($values);
+        $fieldValues = $this->getApp()->decodeJson($valueJson);
 
         foreach ($fieldValues as $rows) {
             foreach ($rows as $fieldName => $value) {
@@ -656,13 +652,13 @@ class Multiline extends Form\Control
 
         parent::renderView();
 
-        $inputValue = $this->getValue();
-        $this->valuePropsBinding($inputValue);
+        $inputValueJson = $this->getValue();
+        $this->valuePropsBinding($inputValueJson);
 
         $this->multiLine->vue('atk-multiline', [
             'data' => [
                 'formName' => $this->form->formElement->name,
-                'inputValue' => $inputValue,
+                'inputValue' => $inputValueJson,
                 'inputName' => $this->shortName,
                 'fields' => $this->fieldDefs,
                 'url' => $this->renderCallback->getJsUrl(),
@@ -802,7 +798,7 @@ class Multiline extends Form\Control
                 'expr' => isset($dummyFields[$field->shortName])
                     ? $dummyFields[$field->shortName]->expr
                     : ($field->shortName === $dummyModel->idField
-                        ? '-1'
+                        ? '99000'
                         : $createExprFromValueFx($entity->getModel()->getPersistence()->typecastSaveField($field, $field->get($entity)))),
                 'type' => $field->type,
                 'actual' => $field->actual,

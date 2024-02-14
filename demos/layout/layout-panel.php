@@ -110,7 +110,7 @@ View::addTo($app, ['ui' => 'divider']);
 Header::addTo($app, ['UserAction Friendly', 'size' => 4, 'subHeader' => 'Panel can run model action.']);
 
 $panel3 = Panel\Right::addTo($app);
-$countryId = $panel3->stickyGet('id');
+$countryId = $app->uiPersistence->typecastLoadField($country->getField($country->idField), $panel3->stickyGet('id'));
 $msg = Message::addTo($panel3, ['Run Country model action below.']);
 
 $deck = View::addTo($app, ['ui' => 'cards']);

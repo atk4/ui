@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Data\Model;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
@@ -26,7 +27,7 @@ class Dropdown extends Input
      *     'file' => ['File', 'icon' => 'file'],
      * ].
      *
-     * @var array<int|string, mixed>
+     * @var array<array-key, mixed>
      */
     public array $values;
 
@@ -49,14 +50,12 @@ class Dropdown extends Input
      * Here a custom function for creating the HTML of each dropdown option
      * can be defined. The function gets each row of the model/values property as first parameter.
      * if used with $values property, gets the key of this element as second parameter.
-     * When using with a model, the second parameter is null and can be ignored.
-     * Must return an array with at least 'value' and 'caption' elements set.
+     * Must return an array with at least 'value' and 'title' elements set.
      * Use additional 'icon' element to add an icon to this row.
      *
      * Example 1 with Model: Title in Uppercase
      * function (Model $row) {
      *     return [
-     *         'value' => $row->getId(),
      *         'title' => mb_strtoupper($row->getTitle()),
      *     ];
      *  }
@@ -64,7 +63,6 @@ class Dropdown extends Input
      * Example 2 with Model: Add an icon
      * function (Model $row) {
      *     return [
-     *         'value' => $row->getId(),
      *         'title' => $row->getTitle(),
      *         'icon' => $row->get('amount') > 1000 ? 'money' : '',
      *     ];
@@ -73,7 +71,6 @@ class Dropdown extends Input
      * Example 3 with Model: Combine Title from model fields
      * function (Model $row) {
      *     return [
-     *         'value' => $row->getId(),
      *         'title' => $row->getTitle() . ' (' . $row->get('title2') . ')',
      *     ];
      * }
@@ -87,15 +84,15 @@ class Dropdown extends Input
      *     ];
      * }
      *
-     * @var \Closure(mixed, int|string|null): array{value: mixed, title: mixed, icon?: mixed}|null
+     * @var \Closure(Model): array{title: mixed, icon?: mixed}|\Closure(mixed, array-key): array{value: mixed, title: mixed, icon?: mixed}
      */
-    public $renderRowFunction;
+    public ?\Closure $renderRowFunction = null;
 
-    /** @var HtmlTemplate Subtemplate for a single dropdown item. */
-    protected $_tItem;
+    /** Subtemplate for a single dropdown item. */
+    protected HtmlTemplate $_tItem;
 
-    /** @var HtmlTemplate Subtemplate for an icon for a single dropdown item. */
-    protected $_tIcon;
+    /** Subtemplate for an icon for a single dropdown item. */
+    protected HtmlTemplate $_tIcon;
 
     #[\Override]
     protected function init(): void
@@ -235,7 +232,7 @@ class Dropdown extends Input
     {
         foreach ($this->model as $id => $row) {
             $title = $row->getTitle();
-            $this->_tItem->set('value', (string) $id);
+            $this->_tItem->set('value', $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($this->model->idField), $id));
             $this->_tItem->set('title', $title || is_numeric($title) ? (string) $title : '');
             // add item to template
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
@@ -270,13 +267,19 @@ class Dropdown extends Input
      * Used when a custom callback is defined for row rendering. Sets
      * values to row template and appends it to main template.
      *
-     * @param mixed      $row
-     * @param int|string $key
+     * @param mixed                               $row
+     * @param ($row is Model ? never : array-key) $key
      */
     protected function _addCallBackRow($row, $key = null): void
     {
-        $res = ($this->renderRowFunction)($row, $key);
-        $this->_tItem->set('value', (string) $res['value']);
+        if ($this->model !== null) {
+            $res = ($this->renderRowFunction)($row);
+            $this->_tItem->set('value', $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($this->model->idField), $row->getId()));
+        } else {
+            $res = ($this->renderRowFunction)($row, $key); // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/10283#issuecomment-1850438891
+            $this->_tItem->set('value', (string) $res['value']); // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/10283
+        }
+
         $this->_tItem->set('title', $res['title']);
 
         $this->_tItem->del('Icon');

@@ -68,21 +68,35 @@ class DropdownCascade extends Dropdown
      * Return an empty value set if ID is null.
      *
      * @param mixed $id
+     *
+     * @return list<array{value: string, text: mixed, name: mixed}>
      */
     public function getNewValues($id): array
     {
         if ($id === null) {
-            return [['value' => '', 'text' => $this->empty, 'name' => $this->empty]];
+            return [[
+                'value' => '',
+                'text' => $this->empty,
+                'name' => $this->empty,
+            ]];
         }
 
         $model = $this->cascadeFrom->model->load($id)->ref($this->reference);
         $values = [];
         foreach ($model as $row) {
             if ($this->renderRowFunction) {
-                $res = ($this->renderRowFunction)($row); // @phpstan-ignore-line
-                $values[] = ['value' => $res['value'], 'text' => $res['title'], 'name' => $res['title']];
+                $res = ($this->renderRowFunction)($row);
+                $values[] = [
+                    'value' => $this->getApp()->uiPersistence->typecastSaveField($model->getField($model->idField), $row->getId()),
+                    'text' => $res['title'],
+                    'name' => $res['title'],
+                ];
             } else {
-                $values[] = ['value' => $row->getId(), 'text' => $row->get($model->titleField), 'name' => $row->get($model->titleField)];
+                $values[] = [
+                    'value' => $this->getApp()->uiPersistence->typecastSaveField($model->getField($model->idField), $row->getId()),
+                    'text' => $row->get($model->titleField),
+                    'name' => $row->get($model->titleField),
+                ];
             }
         }
 
@@ -93,12 +107,16 @@ class DropdownCascade extends Dropdown
      * Will mark current value as selected from a list
      * of possible values.
      *
-     * @param string|int $value the current field value
+     * @param list<array{value: string, text: mixed, name: mixed}> $values
+     * @param mixed                                                $value  the current field value
      */
     private function getJsValues(array $values, $value): array
     {
+        $model = $this->cascadeFrom->model->ref($this->reference);
+        $valueStr = $this->getApp()->uiPersistence->typecastSaveField($model->getField($model->idField), $value);
+
         foreach ($values as $k => $v) {
-            if ($v['value'] === $value) {
+            if ($v['value'] === $valueStr) {
                 $values[$k]['selected'] = true;
 
                 break;

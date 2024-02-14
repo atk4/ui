@@ -155,7 +155,7 @@ class Link extends Table\Column
                 $key = $val;
             }
 
-            $page[$key] = $row->get($val);
+            $page[$key] = $this->getApp()->uiPersistence->typecastSaveField($row->getField($val), $row->get($val));
         }
 
         return ['c_' . $this->shortName => $this->table->url($page)];

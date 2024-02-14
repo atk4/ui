@@ -61,14 +61,7 @@ $form->onSubmit(static function (Form $form) use ($multiline) {
         return $multiline->saveRows()->model->export();
     });
 
-    // TODO typecast using https://github.com/atk4/ui/pull/1991 once merged
-    foreach ($rows as $kRow => $row) {
-        foreach ($row as $kV => $v) {
-            if ($v instanceof \DateTime) {
-                $rows[$kRow][$kV] = $form->getApp()->uiPersistence->typecastSaveField($multiline->model->getField($kV), $row[$kV]);
-            }
-        }
-    }
+    $rows = array_map(static fn ($row) => $form->getApp()->uiPersistence->typecastSaveRow($multiline->model, $row), $rows);
 
     return new JsToast($form->getApp()->encodeJson($rows));
 });

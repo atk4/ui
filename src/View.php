@@ -891,7 +891,7 @@ class View extends AbstractView
      *
      * @return JsReload
      */
-    public function jsReload($args = [], $afterSuccess = null, $apiConfig = []): JsExpressionable
+    public function jsReload($args = [], $afterSuccess = null, array $apiConfig = []): JsExpressionable
     {
         return new JsReload($this, $args, $afterSuccess, $apiConfig);
     }
@@ -1007,7 +1007,7 @@ class View extends AbstractView
         } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof UserAction\SharedExecutor || $action instanceof Model\UserAction) {
             $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->createExecutor($action, $this) : $action;
 
-            $setupNonSharedExecutorFx = static function (UserAction\ExecutorInterface $ex) use (&$defaults, &$arguments): void {
+            $setupNonSharedExecutorFx = function (UserAction\ExecutorInterface $ex) use (&$defaults, &$arguments): void {
                 /** @var AbstractView&UserAction\ExecutorInterface $ex https://github.com/phpstan/phpstan/issues/3770 */
                 $ex = $ex;
 
@@ -1018,6 +1018,11 @@ class View extends AbstractView
                     // if "id" is not specified we assume arguments[0] is the model ID
                     $arguments[$ex->name] = $arguments[0];
                     unset($arguments[0]);
+                }
+
+                if (isset($arguments[$ex->name]) && !$arguments[$ex->name] instanceof JsExpressionable) {
+                    $exModel = $ex->getAction()->getModel();
+                    $arguments[$ex->name] = $this->getApp()->uiPersistence->typecastSaveField($exModel->getField($exModel->idField), $arguments[$ex->name]);
                 }
 
                 if ($ex instanceof UserAction\JsCallbackExecutor) {

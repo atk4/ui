@@ -18,7 +18,7 @@ class JsCallback extends Callback
     public $confirm;
 
     /** @var array<string, mixed> Use this apiConfig variable to pass API settings to Fomantic-UI in .api(). */
-    public $apiConfig = [];
+    public array $apiConfig = [];
 
     /** @var string|null Include web storage data item (key) value to be included in the request. */
     public $storeName;
