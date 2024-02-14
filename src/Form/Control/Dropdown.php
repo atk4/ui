@@ -26,7 +26,7 @@ class Dropdown extends Input
      *     'file' => ['File', 'icon' => 'file'],
      * ].
      *
-     * @var array<int|string, mixed>
+     * @var array<array-key, mixed>
      */
     public array $values;
 
@@ -50,7 +50,6 @@ class Dropdown extends Input
      * can be defined. The function gets each row of the model/values property as first parameter.
      * if used with $values property, gets the key of this element as second parameter.
      * When using with a model, the second parameter is null and can be ignored.
-     * Must return an array with at least 'value' and 'caption' elements set.
      * Use additional 'icon' element to add an icon to this row.
      *
      * Example 1 with Model: Title in Uppercase
@@ -91,11 +90,11 @@ class Dropdown extends Input
      */
     public $renderRowFunction;
 
-    /** @var HtmlTemplate Subtemplate for a single dropdown item. */
-    protected $_tItem;
+    /** Subtemplate for a single dropdown item. */
+    protected HtmlTemplate $_tItem;
 
-    /** @var HtmlTemplate Subtemplate for an icon for a single dropdown item. */
-    protected $_tIcon;
+    /** Subtemplate for an icon for a single dropdown item. */
+    protected HtmlTemplate $_tIcon;
 
     #[\Override]
     protected function init(): void
@@ -270,8 +269,8 @@ class Dropdown extends Input
      * Used when a custom callback is defined for row rendering. Sets
      * values to row template and appends it to main template.
      *
-     * @param mixed      $row
-     * @param int|string $key
+     * @param mixed                               $row
+     * @param ($row is Model ? never : array-key) $key
      */
     protected function _addCallBackRow($row, $key = null): void
     {

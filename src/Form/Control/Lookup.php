@@ -27,7 +27,7 @@ class Lookup extends Input
 
     public string $inputType = 'hidden';
 
-    /** @var array<int|string, mixed> Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
+    /** @var array<array-key, mixed> Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
     public array $values;
 
     /** @var CallbackLater Object used to capture requests from the browser. */
@@ -85,7 +85,7 @@ class Lookup extends Input
      *
      * @var array<string, mixed>
      */
-    public $apiConfig = ['cache' => false];
+    public array $apiConfig = ['cache' => false];
 
     /**
      * Fomantic-UI dropdown module settings.
@@ -223,7 +223,7 @@ class Lookup extends Input
      *
      * @return array{value: mixed, title: mixed}
      */
-    public function defaultRenderRow(Model $row, $key = null)
+    protected function defaultRenderRow(Model $row)
     {
         $idField = $this->idField ?? $row->idField;
         $titleField = $this->titleField ?? $row->titleField;
