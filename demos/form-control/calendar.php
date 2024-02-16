@@ -53,9 +53,7 @@ $control->addAction(['Clear', 'icon' => 'times red'])
 $form->onSubmit(static function (Form $form) use ($app) {
     $data = [];
     foreach ($form->model->get() as $k => $v) {
-        $data[$k] = $v !== null
-            ? $app->uiPersistence->typecastSaveField($form->model->getField($k), $v)
-            : 'empty';
+        $data[$k] = $app->uiPersistence->typecastSaveField($form->model->getField($k), $v) ?? 'empty';
     }
 
     return new JsToast(implode(', ', $data));

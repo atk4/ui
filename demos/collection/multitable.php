@@ -49,10 +49,6 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
 
         $selections = $this->explodeSelectionValue($this->getApp()->tryGetRequestQueryParam($this->name) ?? '');
 
-        if ($selections !== []) {
-            $table->js(true)->find('tr[data-id=' . $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($this->model->idField), $selections[0]) . ']')->addClass('active');
-        }
-
         $makeJsReloadFx = function (array $path): JsReload {
             return new JsReload($this, [$this->name => new JsExpression('[] + []', [
                 count($path) > 0 ? implode(',', $path) . ',' : '',
@@ -65,19 +61,15 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
         $table->on('click', 'tr', $jsReload);
 
         while ($id = array_shift($selections)) {
+            $table->js(true)->find('tr[data-id=' . $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($this->model->idField), $id) . ']')->addClass('active');
+
             $path[] = $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($this->model->idField), $id);
             $pushModel = new $model($model->getPersistence());
-            $pushModel = $pushModel->tryLoad($id);
-            if ($pushModel === null) {
-                break;
-            }
+            $pushModel = $pushModel->load($id);
+
             $ref = array_shift($route);
             if (!$route) {
                 $route[] = $ref; // repeat last route
-            }
-
-            if (!$pushModel->hasReference($ref)) {
-                break; // no such route
             }
 
             $pushModel = $pushModel->ref($ref);
@@ -85,10 +77,6 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
 
             $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->setStyle('cursor', 'pointer');
             $table->setModel($pushModel->setLimit(10), [$pushModel->titleField]);
-
-            if ($selections !== []) {
-                $table->js(true)->find('tr[data-id=' . $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($this->model->idField), $selections[0]) . ']')->addClass('active');
-            }
 
             $jsReload = $makeJsReloadFx($path);
             $table->on('click', 'tr', $jsReload);
