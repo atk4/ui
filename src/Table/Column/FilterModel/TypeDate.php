@@ -81,17 +81,13 @@ class TypeDate extends Column\FilterModel
                 case 'within':
                     $d1 = $this->getDate($filter['value']);
                     $d2 = $this->getDate($filter['range']);
-                    if ($d2 >= $d1) {
-                        $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
-                        $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
-                    } else {
-                        $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
-                        $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
+                    if ($d1 > $d2) {
+                        [$d1, $d2] = [$d2, $d1];
                     }
                     $model->addCondition($model->expr('[field] between [value] and [value2]', [
                         'field' => $model->getField($filter['name']),
-                        'value' => $value,
-                        'value2' => $value2,
+                        'value' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1),
+                        'value2' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2),
                     ]));
 
                     break;

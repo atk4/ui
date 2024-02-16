@@ -81,17 +81,13 @@ class TypeDatetime extends Column\FilterModel
                 case 'within':
                     $d1 = $this->getDatetime($filter['value'])->setTime(0, 0, 0);
                     $d2 = $this->getDatetime($filter['range'])->setTime(23, 59, 59, 999_999);
-                    if ($d2 >= $d1) {
-                        $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
-                        $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
-                    } else {
-                        $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
-                        $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
+                    if ($d1 > $d2) {
+                        [$d1, $d2] = [$d2, $d1];
                     }
                     $model->addCondition($model->expr('[field] between [value] and [value2]', [
                         'field' => $model->getField($filter['name']),
-                        'value' => $value,
-                        'value2' => $value2,
+                        'value' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1),
+                        'value2' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2),
                     ]));
 
                     break;
@@ -99,18 +95,14 @@ class TypeDatetime extends Column\FilterModel
                 case '=':
                     $d1 = clone $this->getDatetime($filter['value'])->setTime(0, 0, 0);
                     $d2 = $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999_999);
-                    if ($d2 >= $d1) {
-                        $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
-                        $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
-                    } else {
-                        $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
-                        $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
+                    if ($d1 > $d2) {
+                        [$d1, $d2] = [$d2, $d1];
                     }
                     $betweenOperator = $filter['op'] === '!=' ? 'not between' : 'between';
                     $model->addCondition($model->expr('[field] ' . $betweenOperator . ' [value] and [value2]', [
                         'field' => $model->getField($filter['name']),
-                        'value' => $value,
-                        'value2' => $value2,
+                        'value' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1),
+                        'value2' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2),
                     ]));
 
                     break;
