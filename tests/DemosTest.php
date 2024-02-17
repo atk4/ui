@@ -33,6 +33,7 @@ class DemosTest extends TestCase
     private static array $_serverSuperglobalBackup;
 
     private static ?Persistence $_db = null;
+    private static Persistence $_uiPersistence;
 
     protected static string $regexHtml = '~^<!DOCTYPE html>\s*<html.*</html>$~s';
     protected static string $regexJson = '~^(?<json>\s*(?:
@@ -80,6 +81,7 @@ class DemosTest extends TestCase
             }
 
             self::$_db = $app->db;
+            self::$_uiPersistence = $app->uiPersistence;
 
             // prevent $app to run on shutdown
             $app->runCalled = true;
@@ -145,6 +147,7 @@ class DemosTest extends TestCase
 
         // clone DB (mainly because all Models remains attached now, TODO can be removed once they are GCed)
         $app->db = clone self::$_db;
+        $app->uiPersistence = self::$_uiPersistence;
 
         return $app;
     }
