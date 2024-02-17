@@ -9,7 +9,6 @@ use Atk4\Data\Field\PasswordField;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Data\Persistence\Sql\Expression;
-use Atk4\Ui\Demos\WrappedId;
 use Atk4\Ui\Exception;
 
 /**
@@ -271,10 +270,6 @@ class Ui extends Persistence
                 throw new Exception('Object serialization is not supported');
         }
 
-        if ($value === '' && $field->type === 'atk4_ui_demos_id') { // TODO extend the UI persistence for demos only
-            return null;
-        }
-
         // typecast using DBAL type and normalize
         $value = parent::_typecastLoadField($field, $value);
         $value = (new Field(['type' => $field->type]))->normalize($value);
@@ -309,12 +304,6 @@ class Ui extends Persistence
      */
     public function typecastAttributeSaveField(Field $field, $value): ?string
     {
-        if ($field->type === 'atk4_ui_demos_id') {
-            return $value === null
-                ? null
-                : $this->typecastAttributeSaveField(new Field(['type' => 'integer']), $value->getId() + 218_000_000);
-        }
-
         return $this->attributePersistence->typecastSaveField($field, $value);
     }
 
@@ -323,14 +312,6 @@ class Ui extends Persistence
      */
     public function typecastAttributeLoadField(Field $field, ?string $value)
     {
-        if ($field->type === 'atk4_ui_demos_id') {
-            $value = $this->typecastAttributeLoadField(new Field(['type' => 'integer']), $value);
-
-            return $value === null
-                ? null
-                : new WrappedId($value - 218_000_000);
-        }
-
         return $this->attributePersistence->typecastLoadField($field, $value);
     }
 }
