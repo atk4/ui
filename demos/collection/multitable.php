@@ -47,7 +47,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
         $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->setStyle('cursor', 'pointer');
         $table->setModel($model, [$model->titleField]);
 
-        $selections = $this->explodeSelectionValue($this->getApp()->tryGetRequestQueryParam($this->name) ?? '');
+        $selectionIds = $this->explodeSelectionValue($this->getApp()->tryGetRequestQueryParam($this->name) ?? '');
 
         $makeJsReloadFx = function (array $path): JsReload {
             return new JsReload($this, [$this->name => new JsExpression('[] + []', [
@@ -60,7 +60,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
         $jsReload = $makeJsReloadFx($path);
         $table->on('click', 'tr', $jsReload);
 
-        while ($id = array_shift($selections)) {
+        foreach ($selectionIds as $id) {
             $table->js(true)->find('tr[data-id=' . $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getField($this->model->idField), $id) . ']')->addClass('active');
 
             $path[] = $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getField($this->model->idField), $id);
@@ -68,7 +68,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
             $pushModel = $pushModel->load($id);
 
             $ref = array_shift($route);
-            if (!$route) {
+            if ($route === []) {
                 $route[] = $ref; // repeat last route
             }
 
