@@ -72,27 +72,6 @@ class Ui extends Persistence
         $this->attributePersistence->no = '0';
     }
 
-    /**
-     * @param scalar|null $value
-     */
-    private function scalarToString($value): ?string
-    {
-        if ($value === null) {
-            return null;
-        }
-        if (is_bool($value)) {
-            return $value ? '1' : '0';
-        }
-        if (is_int($value)) {
-            return (string) $value;
-        }
-        if (is_float($value)) {
-            return Expression::castFloatToString($value);
-        }
-
-        return $value;
-    }
-
     #[\Override]
     public function typecastSaveField(Field $field, $value): ?string
     {
@@ -185,7 +164,15 @@ class Ui extends Persistence
                 break;
         }
 
-        return $this->scalarToString($value);
+        if (is_int($value)) {
+            $value = $this->_typecastSaveField(new Field(['type' => 'integer']), $value);
+        }
+
+        if (is_float($value)) {
+            $value = $this->_typecastSaveField(new Field(['type' => 'float']), $value);
+        }
+
+        return $value;
     }
 
     #[\Override]
@@ -322,9 +309,7 @@ class Ui extends Persistence
                 : $this->typecastAttributeSaveField(new Field(['type' => 'integer']), $value->getId() + 218_000_000);
         }
 
-        $res = $this->attributePersistence->typecastSaveField($field, $value);
-
-        return $this->scalarToString($res);
+        return $this->attributePersistence->typecastSaveField($field, $value);
     }
 
     /**
