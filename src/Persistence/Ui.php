@@ -53,7 +53,7 @@ class Ui extends Persistence
     /** @var string */
     public $no = 'No';
 
-    protected Persistence $attributePersistence;
+    private Persistence $attributePersistence;
 
     public function __construct()
     {
@@ -61,15 +61,21 @@ class Ui extends Persistence
             $this->timezone = date_default_timezone_get();
         }
 
-        $this->attributePersistence = clone $this;
-        $this->attributePersistence->thousandsSeparator = '';
-        $this->attributePersistence->currency = '';
-        $this->attributePersistence->currencyDecimals = 1;
-        $this->attributePersistence->timezone = 'UTC';
-        $this->attributePersistence->dateFormat = 'Y-m-d';
-        $this->attributePersistence->datetimeFormat = $this->attributePersistence->dateFormat . ' ' . $this->attributePersistence->timeFormat;
-        $this->attributePersistence->yes = '1';
-        $this->attributePersistence->no = '0';
+        $attributePersistence = clone $this;
+        $this->initAttributePersistence($attributePersistence);
+        $this->attributePersistence = $attributePersistence;
+    }
+
+    protected function initAttributePersistence(self $attributePersistence): void
+    {
+        $attributePersistence->thousandsSeparator = '';
+        $attributePersistence->currency = '';
+        $attributePersistence->currencyDecimals = 1;
+        $attributePersistence->timezone = 'UTC';
+        $attributePersistence->dateFormat = 'Y-m-d';
+        $attributePersistence->datetimeFormat = $attributePersistence->dateFormat . ' ' . $attributePersistence->timeFormat;
+        $attributePersistence->yes = '1';
+        $attributePersistence->no = '0';
     }
 
     #[\Override]
