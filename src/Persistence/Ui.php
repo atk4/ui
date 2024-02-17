@@ -53,7 +53,7 @@ class Ui extends Persistence
     /** @var string */
     public $no = 'No';
 
-    private Persistence $attributePersistence;
+    protected Persistence $attributePersistence;
 
     public function __construct()
     {
@@ -61,30 +61,15 @@ class Ui extends Persistence
             $this->timezone = date_default_timezone_get();
         }
 
-        $this->attributePersistence = new class() extends Persistence {};
-    }
-
-    /**
-     * @template T
-     *
-     * @param \Closure(): T $fx
-     *
-     * @return T
-     */
-    private function invokeWithRelaxedEmptyChecks(Field $field, $fx)
-    {
-        // relax empty checks for UI render for not yet set values
-        $fieldNullableOrig = $field->nullable;
-        $fieldRequiredOrig = $field->required;
-        try {
-            $field->nullable = true;
-            $field->required = false;
-
-            return $fx();
-        } finally {
-            $field->nullable = $fieldNullableOrig;
-            $field->required = $fieldRequiredOrig;
-        }
+        $this->attributePersistence = clone $this;
+        $this->attributePersistence->thousandsSeparator = '';
+        $this->attributePersistence->currency = '';
+        $this->attributePersistence->currencyDecimals = 1;
+        $this->attributePersistence->timezone = 'UTC';
+        $this->attributePersistence->dateFormat = 'Y-m-d';
+        $this->attributePersistence->datetimeFormat = $this->attributePersistence->dateFormat . ' ' . $this->attributePersistence->timeFormat;
+        $this->attributePersistence->yes = '1';
+        $this->attributePersistence->no = '0';
     }
 
     /**
@@ -111,7 +96,18 @@ class Ui extends Persistence
     #[\Override]
     public function typecastSaveField(Field $field, $value): ?string
     {
-        return $this->invokeWithRelaxedEmptyChecks($field, fn () => parent::typecastSaveField($field, $value));
+        // relax empty checks for UI render for not yet set values
+        $fieldNullableOrig = $field->nullable;
+        $fieldRequiredOrig = $field->required;
+        try {
+            $field->nullable = true;
+            $field->required = false;
+
+            return parent::typecastSaveField($field, $value);
+        } finally {
+            $field->nullable = $fieldNullableOrig;
+            $field->required = $fieldRequiredOrig;
+        }
     }
 
     #[\Override]
@@ -326,7 +322,7 @@ class Ui extends Persistence
                 : $this->typecastAttributeSaveField(new Field(['type' => 'integer']), $value->getId() + 218_000_000);
         }
 
-        $res = $this->invokeWithRelaxedEmptyChecks($field, fn () => $this->attributePersistence->typecastSaveField($field, $value));
+        $res = $this->attributePersistence->typecastSaveField($field, $value);
 
         return $this->scalarToString($res);
     }

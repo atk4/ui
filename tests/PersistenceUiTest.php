@@ -41,12 +41,17 @@ class PersistenceUiTest extends TestCase
             $this->testTypecast($persistenceSeed, $fieldSeed, $phpValue, $savedUiValue);
         }
 
+        $p2 = new UiPersistence();
         $savedAttributeUiValue = $p->typecastAttributeSaveField($field, $phpValue);
+        self::assertSame($savedAttributeUiValue, $p2->typecastAttributeSaveField($field, $phpValue));
         $readAttributePhpValue = $p->typecastAttributeLoadField($field, $savedAttributeUiValue);
+        $readAttributePhpValue2 = $p2->typecastAttributeLoadField($field, $savedAttributeUiValue);
         if ($readAttributePhpValue instanceof \DateTimeInterface) {
             $this->{'assertEquals'}($phpValue, $readAttributePhpValue);
+            $this->{'assertEquals'}($phpValue, $readAttributePhpValue2);
         } else {
             self::assertSame($phpValue, $readAttributePhpValue);
+            self::assertSame($phpValue, $readAttributePhpValue2);
         }
     }
 
@@ -191,5 +196,64 @@ class PersistenceUiTest extends TestCase
         yield [[], ['type' => 'atk4_money'], 0.3, '.3€', false];
         yield [[], ['type' => 'atk4_money'], -1.3, '-1€3', false];
         yield [['currency' => 'USD'], ['type' => 'atk4_money'], -1.3, '-1 USD 3', false];
+    }
+
+    /**
+     * @param mixed $phpValue
+     *
+     * @dataProvider provideAttributeTypecastCases
+     */
+    public function testAttributeTypecast(array $fieldSeed, $phpValue, ?string $uiValue): void
+    {
+        $p = new UiPersistence();
+        $field = (new Field())->setDefaults($fieldSeed);
+
+        $savedUiValue = $p->typecastAttributeSaveField($field, $phpValue);
+        self::assertSame($uiValue, $savedUiValue);
+
+        $readPhpValue = $p->typecastAttributeLoadField($field, $uiValue);
+        if ($readPhpValue instanceof \DateTimeInterface) {
+            $this->{'assertEquals'}($phpValue, $readPhpValue);
+        } else {
+            self::assertSame($phpValue, $readPhpValue);
+        }
+
+        $savedUiValue = $p->typecastAttributeSaveField($field, $readPhpValue);
+        self::assertSame($uiValue, $savedUiValue);
+    }
+
+    public static function provideAttributeTypecastCases(): iterable
+    {
+        yield [['type' => 'integer'], 1, '1'];
+        yield [['type' => 'integer'], 0, '0'];
+        yield [['type' => 'integer'], 12_345_678, '12345678'];
+        yield [['type' => 'integer'], -1_100_230_000_456_345_678, '-1100230000456345678'];
+        yield [['type' => 'float'], 1.0, '1.0'];
+        yield [['type' => 'float'], 0.0, '0.0'];
+        yield [['type' => 'float'], -1_100_230_000.4567, '-1100230000.4567'];
+        yield [['type' => 'float'], 1.100123, '1.100123'];
+        yield [['type' => 'float'], 1.100123E-6, '1.100123E-6'];
+        yield [['type' => 'float'], 1.100123E+221, '1.100123E+221'];
+        yield [['type' => 'float'], -1.100123E-221, '-1.100123E-221'];
+        yield [['type' => 'boolean'], false, '0'];
+        yield [['type' => 'boolean'], true, '1'];
+
+        yield [['type' => 'date'], new \DateTime('2022-1-2 UTC'), '2022-01-02'];
+        yield [['type' => 'time'], new \DateTime('1970-1-1 10:20 UTC'), '10:20'];
+        yield [['type' => 'time'], new \DateTime('1970-1-1 10:20:30 UTC'), '10:20:30'];
+        yield [['type' => 'time'], new \DateTime('1970-1-1 10:20:30.135789 UTC'), '10:20:30.135789'];
+        yield [['type' => 'datetime'], new \DateTime('2022-1-2 10:20 UTC'), '2022-01-02 10:20'];
+        yield [['type' => 'datetime'], new \DateTime('2022-1-2 10:20:35 UTC'), '2022-01-02 10:20:35'];
+        yield [['type' => 'datetime'], new \DateTime('2022-1-2 10:20:35.42 UTC'), '2022-01-02 10:20:35.42'];
+
+        yield [['type' => 'atk4_money'], 1.0, '1.0'];
+        yield [['type' => 'atk4_money'], 0.0, '0.0'];
+        yield [['type' => 'atk4_money'], 1.1023, '1.1023'];
+        yield [['type' => 'atk4_money'], 1_234_056_789.1, '1234056789.1'];
+        yield [['type' => 'atk4_money'], 234_056_789.101, '234056789.101'];
+
+        foreach (['string', 'text', 'integer', 'float', 'boolean', 'date', 'time', 'datetime', 'atk4_money'] as $type) {
+            yield [['type' => $type], null, null];
+        }
     }
 }
