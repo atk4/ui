@@ -230,7 +230,7 @@ class Lookup extends Input
         $titleField = $this->titleField ?? $row->titleField;
 
         return [
-            'value' => $this->getApp()->uiPersistence->typecastSaveField($row->getField($idField), $row->get($idField)),
+            'value' => $this->getApp()->uiPersistence->typecastAttributeSaveField($row->getField($idField), $row->get($idField)),
             'title' => $row->get($titleField),
         ];
     }

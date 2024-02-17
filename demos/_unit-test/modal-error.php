@@ -34,7 +34,7 @@ $modal->set(static function (View $p) {
     $button = Button::addTo($p)->set('Test ModalExecutor load PHP error');
     $executor = ModalExecutor::assertInstanceOf($p->getExecutorFactory()->createExecutor($country->getUserAction('edit'), $button));
     if (\Closure::bind(static fn () => $executor->loader, null, ModalExecutor::class)()->cb->isTriggered()) {
-        $executor->stickyGet($executor->name, '99000'); // no such record so load will fail
+        $executor->stickyGet($executor->name, '218099000');
     }
     $button->on('click', $executor);
 });

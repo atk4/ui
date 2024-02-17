@@ -9,6 +9,7 @@ use Atk4\Data\Field\PasswordField;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Data\Persistence\Sql\Expression;
+use Atk4\Ui\Demos\WrappedId;
 use Atk4\Ui\Exception;
 
 /**
@@ -52,36 +53,69 @@ class Ui extends Persistence
     /** @var string */
     public $no = 'No';
 
+    private Persistence $attributePersistence;
+
     public function __construct()
     {
         if ($this->timezone === null) {
             $this->timezone = date_default_timezone_get();
         }
+
+        $this->attributePersistence = new class() extends Persistence {};
     }
 
     /**
-     * @return scalar|null
+     * @template T
+     *
+     * @param \Closure(): T $fx
+     *
+     * @return T
      */
-    #[\Override]
-    public function typecastSaveField(Field $field, $value)
+    private function invokeWithRelaxedEmptyChecks(Field $field, $fx)
     {
         // relax empty checks for UI render for not yet set values
         $fieldNullableOrig = $field->nullable;
         $fieldRequiredOrig = $field->required;
-        if (in_array($value, [null, false, 0, 0.0, ''], true)) {
+        try {
             $field->nullable = true;
             $field->required = false;
-        }
-        try {
-            return parent::typecastSaveField($field, $value);
+
+            return $fx();
         } finally {
             $field->nullable = $fieldNullableOrig;
             $field->required = $fieldRequiredOrig;
         }
     }
 
+    /**
+     * @param scalar|null $value
+     */
+    private function scalarToString($value): ?string
+    {
+        if ($value === null) {
+            return null;
+        }
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+        if (is_int($value)) {
+            return (string) $value;
+        }
+        if (is_float($value)) {
+            return Expression::castFloatToString($value);
+        }
+
+        return $value;
+    }
+
     #[\Override]
-    protected function _typecastSaveField(Field $field, $value): string
+    public function typecastSaveField(Field $field, $value): ?string
+    {
+        return $this->invokeWithRelaxedEmptyChecks($field, fn () => parent::typecastSaveField($field, $value));
+    }
+
+    #[\Override]
+    protected function _typecastSaveField(Field $field, $value): ?string
     {
         // always normalize string EOL
         if (is_string($value)) {
@@ -155,7 +189,7 @@ class Ui extends Persistence
                 break;
         }
 
-        return (string) $value;
+        return $this->scalarToString($value);
     }
 
     #[\Override]
@@ -279,5 +313,37 @@ class Ui extends Persistence
         }
 
         return $result;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function typecastAttributeSaveField(Field $field, $value): ?string
+    {
+        if ($field->type === 'atk4_ui_demos_id') {
+            return $value === null
+                ? null
+                : $this->typecastAttributeSaveField(new Field(['type' => 'integer']), $value->getId() + 218_000_000);
+        }
+
+        $res = $this->invokeWithRelaxedEmptyChecks($field, fn () => $this->attributePersistence->typecastSaveField($field, $value));
+
+        return $this->scalarToString($res);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function typecastAttributeLoadField(Field $field, ?string $value)
+    {
+        if ($field->type === 'atk4_ui_demos_id') {
+            $value = $this->typecastAttributeLoadField(new Field(['type' => 'integer']), $value);
+
+            return $value === null
+                ? null
+                : new WrappedId($value - 218_000_000);
+        }
+
+        return $this->attributePersistence->typecastLoadField($field, $value);
     }
 }

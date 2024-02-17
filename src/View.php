@@ -1022,7 +1022,7 @@ class View extends AbstractView
 
                 if (isset($arguments[$ex->name]) && !$arguments[$ex->name] instanceof JsExpressionable) {
                     $exModel = $ex->getAction()->getModel();
-                    $arguments[$ex->name] = $this->getApp()->uiPersistence->typecastSaveField($exModel->getField($exModel->idField), $arguments[$ex->name]);
+                    $arguments[$ex->name] = $this->getApp()->uiPersistence->typecastAttributeSaveField($exModel->getField($exModel->idField), $arguments[$ex->name]);
                 }
 
                 if ($ex instanceof UserAction\JsCallbackExecutor) {

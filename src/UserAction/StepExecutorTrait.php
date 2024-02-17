@@ -187,7 +187,7 @@ trait StepExecutorTrait
             $chain = $this->loader->jsLoad(
                 [
                     'step' => $this->getPreviousStep($this->step),
-                    $this->name => $this->getApp()->uiPersistence->typecastSaveField($this->action->getModel()->getField($this->action->getModel()->idField), $this->action->getEntity()->getId()),
+                    $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getField($this->action->getModel()->idField), $this->action->getEntity()->getId()),
                 ],
                 ['method' => 'POST'],
                 $this->loader->name
@@ -203,7 +203,7 @@ trait StepExecutorTrait
                 $this->loader->jsLoad(
                     [
                         'step' => 'final',
-                        $this->name => $this->getApp()->uiPersistence->typecastSaveField($this->action->getModel()->getField($this->action->getModel()->idField), $this->action->getEntity()->getId()),
+                        $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getField($this->action->getModel()->idField), $this->action->getEntity()->getId()),
                     ],
                     ['method' => 'POST'],
                     $this->loader->name
@@ -363,7 +363,7 @@ trait StepExecutorTrait
             $chain = $this->loader->jsLoad(
                 [
                     'step' => $this->getPreviousStep($step),
-                    $this->name => $this->getApp()->uiPersistence->typecastSaveField($this->action->getModel()->getField($this->action->getModel()->idField), $this->action->getEntity()->getId()),
+                    $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getField($this->action->getModel()->idField), $this->action->getEntity()->getId()),
                 ],
                 ['method' => 'POST'],
                 $this->loader->name
@@ -401,7 +401,7 @@ trait StepExecutorTrait
                 $this->loader->jsLoad(
                     [
                         'step' => $this->isLastStep($step) ? 'final' : $this->getNextStep($step),
-                        $this->name => $this->getApp()->uiPersistence->typecastSaveField($this->action->getModel()->getField($this->action->getModel()->idField), $this->action->getEntity()->getId()),
+                        $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getField($this->action->getModel()->idField), $this->action->getEntity()->getId()),
                     ],
                     ['method' => 'POST'],
                     $this->loader->name

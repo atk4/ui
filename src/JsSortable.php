@@ -77,7 +77,7 @@ class JsSortable extends JsCallback
             $newIndex = (int) $this->getApp()->getRequestPostParam('newIndex');
             $origIndex = (int) $this->getApp()->getRequestPostParam('origIndex');
 
-            $typecastLoadIdFx = fn ($v) => $this->getApp()->uiPersistence->typecastLoadField($idField, $v);
+            $typecastLoadIdFx = fn ($v) => $this->getApp()->uiPersistence->typecastAttributeLoadField($idField, $v);
             $orderedIds = array_map($typecastLoadIdFx, $orderedIds);
             $sourceId = $typecastLoadIdFx($sourceId);
 
