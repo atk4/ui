@@ -26,7 +26,7 @@ $crumb->addCrumb('Countries', []);
 $model = new Country($app->db);
 $model->setLimit(15);
 
-$id = $app->uiPersistence->typecastLoadField($model->getField($model->idField), $crumb->stickyGet('country_id'));
+$id = $app->uiPersistence->typecastAttributeLoadField($model->getField($model->idField), $crumb->stickyGet('country_id'));
 if ($id !== null) {
     // perhaps we edit individual country?
     $model = $model->load($id);

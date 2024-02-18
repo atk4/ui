@@ -252,7 +252,9 @@ class Multiline extends Form\Control
                 if ($fieldName === '__atkml') {
                     $dataRows[$k][$fieldName] = $value;
                 } else {
-                    $dataRows[$k][$fieldName] = $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($fieldName), $value);
+                    $dataRows[$k][$fieldName] = $fieldName === $this->model->idField
+                        ? $this->getApp()->uiPersistence->typecastAttributeLoadField($this->model->getField($fieldName), $value)
+                        : $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($fieldName), $value);
                 }
             }
         }
@@ -288,7 +290,9 @@ class Multiline extends Form\Control
                 $cols = [];
                 foreach ($this->rowFields as $fieldName) {
                     $field = $this->model->getField($fieldName);
-                    $value = $this->getApp()->uiPersistence->typecastSaveField($field, $row->get($field->shortName));
+                    $value = $field->shortName === $this->model->idField
+                        ? $this->getApp()->uiPersistence->typecastAttributeSaveField($field, $row->get($field->shortName))
+                        : $this->getApp()->uiPersistence->typecastSaveField($field, $row->get($field->shortName));
                     $cols[$fieldName] = $value;
                 }
                 $rows[] = $cols;
@@ -617,7 +621,7 @@ class Multiline extends Form\Control
 
             $theirFieldName = $field->getReference()->getTheirFieldName($model);
             foreach ($model as $item) {
-                $theirValue = $this->getApp()->uiPersistence->typecastSaveField($model->getField($theirFieldName), $item->get($theirFieldName));
+                $theirValue = $this->getApp()->uiPersistence->typecastAttributeSaveField($model->getField($theirFieldName), $item->get($theirFieldName));
                 $items[$theirValue] = $item->get($model->titleField);
             }
         }

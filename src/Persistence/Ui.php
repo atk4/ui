@@ -52,27 +52,41 @@ class Ui extends Persistence
     /** @var string */
     public $no = 'No';
 
+    private Persistence $attributePersistence;
+
     public function __construct()
     {
         if ($this->timezone === null) {
             $this->timezone = date_default_timezone_get();
         }
+
+        $attributePersistence = clone $this;
+        $this->initAttributePersistence($attributePersistence);
+        $this->attributePersistence = $attributePersistence;
     }
 
-    /**
-     * @return scalar|null
-     */
+    protected function initAttributePersistence(self $attributePersistence): void
+    {
+        $attributePersistence->thousandsSeparator = '';
+        $attributePersistence->currency = '';
+        $attributePersistence->currencyDecimals = 1;
+        $attributePersistence->timezone = 'UTC';
+        $attributePersistence->dateFormat = 'Y-m-d';
+        $attributePersistence->datetimeFormat = $attributePersistence->dateFormat . ' ' . $attributePersistence->timeFormat;
+        $attributePersistence->yes = '1';
+        $attributePersistence->no = '0';
+    }
+
     #[\Override]
-    public function typecastSaveField(Field $field, $value)
+    public function typecastSaveField(Field $field, $value): ?string
     {
         // relax empty checks for UI render for not yet set values
         $fieldNullableOrig = $field->nullable;
         $fieldRequiredOrig = $field->required;
-        if (in_array($value, [null, false, 0, 0.0, ''], true)) {
+        try {
             $field->nullable = true;
             $field->required = false;
-        }
-        try {
+
             return parent::typecastSaveField($field, $value);
         } finally {
             $field->nullable = $fieldNullableOrig;
@@ -81,7 +95,7 @@ class Ui extends Persistence
     }
 
     #[\Override]
-    protected function _typecastSaveField(Field $field, $value): string
+    protected function _typecastSaveField(Field $field, $value): ?string
     {
         // always normalize string EOL
         if (is_string($value)) {
@@ -155,7 +169,15 @@ class Ui extends Persistence
                 break;
         }
 
-        return (string) $value;
+        if (is_int($value)) {
+            $value = $this->_typecastSaveField(new Field(['type' => 'integer']), $value);
+        }
+
+        if (is_float($value)) {
+            $value = $this->_typecastSaveField(new Field(['type' => 'float']), $value);
+        }
+
+        return $value;
     }
 
     #[\Override]
@@ -248,10 +270,6 @@ class Ui extends Persistence
                 throw new Exception('Object serialization is not supported');
         }
 
-        if ($value === '' && $field->type === 'atk4_ui_demos_id') { // TODO extend the UI persistence for demos only
-            return null;
-        }
-
         // typecast using DBAL type and normalize
         $value = parent::_typecastLoadField($field, $value);
         $value = (new Field(['type' => $field->type]))->normalize($value);
@@ -279,5 +297,21 @@ class Ui extends Persistence
         }
 
         return $result;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function typecastAttributeSaveField(Field $field, $value): ?string
+    {
+        return $this->attributePersistence->typecastSaveField($field, $value);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function typecastAttributeLoadField(Field $field, ?string $value)
+    {
+        return $this->attributePersistence->typecastLoadField($field, $value);
     }
 }

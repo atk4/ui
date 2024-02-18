@@ -232,7 +232,7 @@ class Dropdown extends Input
     {
         foreach ($this->model as $id => $row) {
             $title = $row->getTitle();
-            $this->_tItem->set('value', $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($this->model->idField), $id));
+            $this->_tItem->set('value', $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getField($this->model->idField), $id));
             $this->_tItem->set('title', $title || is_numeric($title) ? (string) $title : '');
             // add item to template
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
@@ -274,7 +274,7 @@ class Dropdown extends Input
     {
         if ($this->model !== null) {
             $res = ($this->renderRowFunction)($row);
-            $this->_tItem->set('value', $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($this->model->idField), $row->getId()));
+            $this->_tItem->set('value', $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getField($this->model->idField), $row->getId()));
         } else {
             $res = ($this->renderRowFunction)($row, $key); // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/10283#issuecomment-1850438891
             $this->_tItem->set('value', (string) $res['value']); // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/10283

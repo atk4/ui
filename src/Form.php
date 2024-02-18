@@ -434,7 +434,11 @@ class Form extends View
                 }
 
                 try {
-                    $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $postRawValue));
+                    if ($control instanceof Control\Dropdown || $control instanceof Control\Lookup || $control instanceof Control\Radio) { // this condition is definitely unacceptable, also should Control::set() be in the catch?
+                        $control->set($this->getApp()->uiPersistence->typecastAttributeLoadField($control->entityField->getField(), $postRawValue));
+                    } else {
+                        $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $postRawValue));
+                    }
                 } catch (\Exception $e) {
                     if ($e instanceof \ErrorException) {
                         throw $e;

@@ -138,7 +138,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
                 $this->loader->jsLoad(
                     [
                         'step' => 'execute',
-                        $this->name => $this->getApp()->uiPersistence->typecastSaveField($this->action->getModel()->getField($this->action->getModel()->idField), $this->action->getEntity()->getId()),
+                        $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getField($this->action->getModel()->idField), $this->action->getEntity()->getId()),
                     ],
                     ['method' => 'POST']
                 ),

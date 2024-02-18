@@ -61,7 +61,7 @@ class Radio extends Form\Control
                 $lister->tRow->dangerouslySetHtml('disabled', 'readonly="readonly"');
             }
 
-            $lister->tRow->set('value', $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $lister->currentRow->getId()));
+            $lister->tRow->set('value', $this->getApp()->uiPersistence->typecastAttributeSaveField($this->entityField->getField(), $lister->currentRow->getId()));
 
             $lister->tRow->dangerouslySetHtml('checked', $lister->currentRow->compare($lister->model->idField, $value) ? 'checked="checked"' : '');
         });
