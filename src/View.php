@@ -144,7 +144,7 @@ class View extends AbstractView
         }
 
         $this->setModel(new Model(new Persistence\Static_($data)), $fields); // @phpstan-ignore-line
-        $this->model->getField($this->model->idField)->type = 'string'; // TODO probably unwanted
+        $this->model->getIdField()->type = 'string'; // TODO probably unwanted
 
         return $this->model;
     }
@@ -1022,7 +1022,7 @@ class View extends AbstractView
 
                 if (isset($arguments[$ex->name]) && !$arguments[$ex->name] instanceof JsExpressionable) {
                     $exModel = $ex->getAction()->getModel();
-                    $arguments[$ex->name] = $this->getApp()->uiPersistence->typecastAttributeSaveField($exModel->getField($exModel->idField), $arguments[$ex->name]);
+                    $arguments[$ex->name] = $this->getApp()->uiPersistence->typecastAttributeSaveField($exModel->getIdField(), $arguments[$ex->name]);
                 }
 
                 if ($ex instanceof UserAction\JsCallbackExecutor) {

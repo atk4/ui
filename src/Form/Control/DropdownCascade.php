@@ -87,13 +87,13 @@ class DropdownCascade extends Dropdown
             if ($this->renderRowFunction) {
                 $res = ($this->renderRowFunction)($row);
                 $values[] = [
-                    'value' => $this->getApp()->uiPersistence->typecastAttributeSaveField($model->getField($model->idField), $row->getId()),
+                    'value' => $this->getApp()->uiPersistence->typecastAttributeSaveField($model->getIdField(), $row->getId()),
                     'text' => $res['title'],
                     'name' => $res['title'],
                 ];
             } else {
                 $values[] = [
-                    'value' => $this->getApp()->uiPersistence->typecastAttributeSaveField($model->getField($model->idField), $row->getId()),
+                    'value' => $this->getApp()->uiPersistence->typecastAttributeSaveField($model->getIdField(), $row->getId()),
                     'text' => $row->get($model->titleField),
                     'name' => $row->get($model->titleField),
                 ];
@@ -113,7 +113,7 @@ class DropdownCascade extends Dropdown
     private function getJsValues(array $values, $value): array
     {
         $model = $this->cascadeFrom->model->ref($this->reference);
-        $valueStr = $this->getApp()->uiPersistence->typecastAttributeSaveField($model->getField($model->idField), $value);
+        $valueStr = $this->getApp()->uiPersistence->typecastAttributeSaveField($model->getIdField(), $value);
 
         foreach ($values as $k => $v) {
             if ($v['value'] === $valueStr) {

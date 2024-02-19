@@ -61,7 +61,7 @@ abstract class AbstractLayout extends View
             } else {
                 $dropdownModel = $control instanceof Control ? $control->model : ($control['model'] ?? null);
                 if ($dropdownModel !== null) {
-                    $fieldSeed['type'] = $dropdownModel->getField($dropdownModel->idField)->type;
+                    $fieldSeed['type'] = $dropdownModel->getIdField()->type;
                 }
             }
         } elseif (is_a($controlClass, Control\Calendar::class, true)) {

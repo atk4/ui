@@ -13,7 +13,7 @@ trait CommonExecutorTrait
         $model = $action->getModel();
 
         $id = $this->getApp()->uiPersistence->typecastAttributeLoadField(
-            $model->getField($model->idField),
+            $model->getIdField(),
             $this->stickyGet($this->name)
         );
 

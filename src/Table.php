@@ -468,7 +468,7 @@ class Table extends Lister
 
             // render row and add to body
             $this->tRow->dangerouslySetHtml($htmlTags);
-            $this->tRow->set('dataId', $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getField($this->model->idField), $this->currentRow->getId()));
+            $this->tRow->set('dataId', $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $this->currentRow->getId()));
             $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
             $this->tRow->del(array_keys($htmlTags));
         } else {

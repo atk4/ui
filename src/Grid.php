@@ -516,7 +516,7 @@ class Grid extends View
     {
         $res = [];
         foreach ($value === '' ? [] : explode(',', $value) as $v) {
-            $res[] = $this->getApp()->uiPersistence->typecastAttributeLoadField($this->model->getField($this->model->idField), $v);
+            $res[] = $this->getApp()->uiPersistence->typecastAttributeLoadField($this->model->getIdField(), $v);
         }
 
         return $res;

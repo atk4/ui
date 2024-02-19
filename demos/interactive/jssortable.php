@@ -58,5 +58,5 @@ $grid->setModel((new Country($app->db))->setLimit(6));
 
 $dragHandler = $grid->addDragHandler();
 $dragHandler->onReorder(static function (array $orderedIds) use ($grid) {
-    return new JsToast('New order: ' . implode(' - ', array_map(static fn ($id) => $grid->getApp()->uiPersistence->typecastSaveField($grid->model->getField($grid->model->idField), $id), $orderedIds)));
+    return new JsToast('New order: ' . implode(' - ', array_map(static fn ($id) => $grid->getApp()->uiPersistence->typecastSaveField($grid->model->getIdField(), $id), $orderedIds)));
 });

@@ -40,7 +40,7 @@ class DragHandler extends Table\Column
      */
     public function onReorder(\Closure $fx): void
     {
-        $this->cb->onReorder($fx, $this->table->model->getField($this->table->model->idField));
+        $this->cb->onReorder($fx, $this->table->model->getIdField());
     }
 
     #[\Override]

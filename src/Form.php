@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
+use Atk4\Data\Exception as DataException;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
@@ -444,14 +445,14 @@ class Form extends View
                         throw $e;
                     }
 
+                    if ($e->getPrevious() !== null && $e instanceof DataException && $e->getMessage() === 'Typecast parse error') {
+                        $e = $e->getPrevious();
+                    }
+
                     $messages = [];
                     do {
                         $messages[] = $e->getMessage();
                     } while (($e = $e->getPrevious()) !== null);
-
-                    if (count($messages) >= 2 && $messages[0] === 'Typecast parse error') {
-                        array_shift($messages);
-                    }
 
                     $errors[$k] = implode(': ', $messages);
                 }
