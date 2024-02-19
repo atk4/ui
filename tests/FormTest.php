@@ -90,13 +90,13 @@ class FormTest extends TestCase
         $res = AppFormTestMock::assertInstanceOf($form->getApp())->output;
 
         if ($checkExpectedErrorsFx !== null) {
-            self::assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');
+            self::assertFalse($wasSubmitCalled);
             self::assertNotEmpty($res['atkjs']);
             $this->formError = $res['atkjs'];
 
             $checkExpectedErrorsFx($res['atkjs']);
         } else {
-            self::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
+            self::assertTrue($wasSubmitCalled);
             self::assertSame('', $res['atkjs']);
         }
     }
@@ -140,7 +140,7 @@ class FormTest extends TestCase
         });
     }
 
-    protected function assertFormControlError(string $field, string $error): void
+    protected function assertFormControlError(string $field, string $expectedError): void
     {
         $n = preg_match_all('~\.form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
         self::assertGreaterThan(0, $n);
@@ -148,11 +148,11 @@ class FormTest extends TestCase
         foreach ($matchesAll as $matches) {
             if ($matches[1] === $field) {
                 $matched = true;
-                self::assertStringContainsString($error, $matches[2], 'Regarding control ' . $field . ' error message');
+                self::assertSame($expectedError, $matches[2]);
             }
         }
 
-        self::assertTrue($matched, 'Form control ' . $field . ' did not produce error');
+        self::assertTrue($matched);
     }
 
     protected function assertFormControlNoErrors(string $field): void
@@ -172,7 +172,6 @@ class FormTest extends TestCase
             $m = new Model();
 
             $options = ['yes please', 'woot'];
-
             $m->addField('opt1', ['values' => $options]);
             $m->addField('opt2', ['values' => $options]);
             $m->addField('opt3', ['values' => $options, 'nullable' => false]);
@@ -180,13 +179,21 @@ class FormTest extends TestCase
             $m->addField('opt4', ['values' => $options, 'required' => true]);
             $m->addField('opt4_z', ['values' => $options, 'required' => true]);
 
+            $m->addField('int', ['type' => 'integer']);
+
             $form = Form::addTo($app);
             $form->setModel($m->createEntity());
 
             return $form;
-        }, ['opt1' => '2', 'opt3_z' => '0', 'opt4' => '', 'opt4_z' => '0'], null, function (string $formError) {
+        }, [
+            'opt1' => '2',
+            'opt3_z' => '0',
+            'opt4' => '',
+            'opt4_z' => '0',
+            'int' => '0x',
+        ], null, function (string $formError) {
             // dropdown validates to make sure option is proper
-            $this->assertFormControlError('opt1', 'not one of the allowed values');
+            $this->assertFormControlError('opt1', 'Value is not one of the allowed values: 0, 1');
 
             // user didn't select any option here
             $this->assertFormControlNoErrors('opt2');
@@ -196,6 +203,8 @@ class FormTest extends TestCase
             $this->assertFormControlNoErrors('opt3_z');
             $this->assertFormControlError('opt4', 'Must not be empty');
             $this->assertFormControlError('opt4_z', 'Must not be empty');
+
+            $this->assertFormControlError('int', 'Must be numeric');
         });
     }
 

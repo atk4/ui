@@ -783,9 +783,7 @@ class Multiline extends Form\Control
             return [];
         }
 
-        $dummyModel = new Model($entity->getModel()->getPersistence(), ['table' => $entity->table]);
-        $dummyModel->removeField('id');
-        $dummyModel->idField = $entity->idField;
+        $dummyModel = new Model($entity->getModel()->getPersistence(), ['table' => $entity->table, 'idField' => false]);
 
         $createExprFromValueFx = static function ($v) use ($dummyModel): Persistence\Sql\Expression {
             if (is_int($v)) {
@@ -801,7 +799,7 @@ class Multiline extends Form\Control
             $dummyModel->addExpression($field->shortName, [
                 'expr' => isset($dummyFields[$field->shortName])
                     ? $dummyFields[$field->shortName]->expr
-                    : ($field->shortName === $dummyModel->idField
+                    : ($field->shortName === $entity->idField
                         ? '99000'
                         : $createExprFromValueFx($entity->getModel()->getPersistence()->typecastSaveField($field, $field->get($entity)))),
                 'type' => $field->type,
