@@ -181,7 +181,7 @@ class Lister extends View
         if ($this->tRow->hasTag('_title')) {
             $this->tRow->set('_title', $this->currentRow->getTitle());
         }
-        $idStr = $this->getApp()->uiPersistence->typecastAttributeSaveField($this->currentRow->getField($this->currentRow->idField), $this->currentRow->getId());
+        $idStr = $this->getApp()->uiPersistence->typecastAttributeSaveField($this->currentRow->getIdField(), $this->currentRow->getId());
         if ($this->tRow->hasTag('_href')) {
             $this->tRow->set('_href', $this->url(['id' => $idStr]));
         }

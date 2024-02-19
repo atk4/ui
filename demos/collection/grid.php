@@ -77,13 +77,13 @@ $deleteExecutor->onHook(BasicExecutor::HOOK_AFTER_EXECUTE, static function () {
 $grid->addSelection();
 
 $grid->addBulkAction(['Show selected', 'icon' => 'binoculars'], static function (Jquery $j, array $ids) use ($grid) {
-    return new JsToast('Selected: ' . implode(', ', array_map(static fn ($id) => $grid->getApp()->uiPersistence->typecastSaveField($grid->model->getField($grid->model->idField), $id), $ids)) . '#');
+    return new JsToast('Selected: ' . implode(', ', array_map(static fn ($id) => $grid->getApp()->uiPersistence->typecastSaveField($grid->model->getIdField(), $id), $ids)) . '#');
 });
 
 // executing a modal on a bulk selection
 $grid->addModalBulkAction(['Delete selected', 'icon' => 'trash'], '', static function (View $modal, array $ids) use ($grid) {
     Message::addTo($modal, [
-        'The selected records will be permanently deleted: ' . implode(', ', array_map(static fn ($id) => $grid->getApp()->uiPersistence->typecastSaveField($grid->model->getField($grid->model->idField), $id), $ids)) . '#',
+        'The selected records will be permanently deleted: ' . implode(', ', array_map(static fn ($id) => $grid->getApp()->uiPersistence->typecastSaveField($grid->model->getIdField(), $id), $ids)) . '#',
         'type' => 'warning',
         'icon' => 'warning',
     ]);

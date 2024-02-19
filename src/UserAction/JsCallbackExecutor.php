@@ -90,7 +90,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         $this->invokeFxWithUrlArgs(function () { // backup/restore $this->args mutated in https://github.com/atk4/ui/blob/8926412a31/src/JsCallback.php#L71
             $this->set(function (Jquery $j, ...$values) {
                 $id = $this->getApp()->uiPersistence->typecastAttributeLoadField(
-                    $this->action->getModel()->getField($this->action->getModel()->idField),
+                    $this->action->getModel()->getIdField(),
                     $this->getApp()->tryGetRequestPostParam($this->name)
                 );
                 if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {

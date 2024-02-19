@@ -278,7 +278,7 @@ class ModelWithPrefixedFields extends Model
 
         parent::init();
 
-        $this->getField($this->idField)->type = WrappedIdType::NAME;
+        $this->getIdField()->type = WrappedIdType::NAME;
 
         $this->initPreventModification();
 

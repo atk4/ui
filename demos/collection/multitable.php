@@ -30,7 +30,7 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
     {
         $res = [];
         foreach ($value === '' ? [] : explode(',', $value) as $v) {
-            $res[] = $this->getApp()->uiPersistence->typecastAttributeLoadField($this->model->getField($this->model->idField), $v);
+            $res[] = $this->getApp()->uiPersistence->typecastAttributeLoadField($this->model->getIdField(), $v);
         }
 
         return $res;
@@ -61,9 +61,9 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
         $table->on('click', 'tr', $jsReload);
 
         foreach ($selectionIds as $id) {
-            $table->js(true)->find('tr[data-id=' . $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getField($this->model->idField), $id) . ']')->addClass('active');
+            $table->js(true)->find('tr[data-id=' . $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $id) . ']')->addClass('active');
 
-            $path[] = $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getField($this->model->idField), $id);
+            $path[] = $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $id);
             $pushModel = new $model($model->getPersistence());
             $pushModel = $pushModel->load($id);
 

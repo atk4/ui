@@ -117,7 +117,7 @@ class Column
 
         $view = $cloneViewWithAddLaterFx($view);
         $view->shortName = 'c' . $this->nameInTableCache . '_' . $nameSuffix . '_r'
-            . $this->getApp()->uiPersistence->typecastAttributeSaveField($row->getField($row->idField), $row->getId());
+            . $this->getApp()->uiPersistence->typecastAttributeSaveField($row->getIdField(), $row->getId());
         $view->name = \Closure::bind(static fn (Table $table) => $view->_shorten($table->name, $view->shortName, null), null, Table::class)($this->table);
 
         return $view;
