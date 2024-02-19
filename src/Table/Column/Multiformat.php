@@ -66,7 +66,7 @@ class Multiformat extends Table\Column
         }
 
         $template = new HtmlTemplate($cellHtml);
-        $template->set($row);
+        $template->trySet($this->getApp()->uiPersistence->typecastSaveRow($row, $row->get()));
         $template->dangerouslySetHtml($htmlTags);
 
         $val = $template->renderToHtml();

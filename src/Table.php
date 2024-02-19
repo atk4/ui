@@ -443,7 +443,7 @@ class Table extends Lister
     #[\Override]
     public function renderRow(): void
     {
-        $this->tRow->set($this->currentRow);
+        $this->tRow->trySet($this->getApp()->uiPersistence->typecastSaveRow($this->currentRow, $this->currentRow->get()));
 
         if ($this->useHtmlTags) {
             // prepare row-specific HTML tags
