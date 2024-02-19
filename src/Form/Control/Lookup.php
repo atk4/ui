@@ -226,8 +226,10 @@ class Lookup extends Input
      */
     protected function defaultRenderRow(Model $row)
     {
-        $idField = $this->idField ?? $row->idField;
-        $titleField = $this->titleField ?? $row->titleField;
+        $idField = $this->idField
+            ?? $row->idField;
+        $titleField = $this->titleField
+            ?? $row->titleField;
 
         return [
             'value' => $this->getApp()->uiPersistence->typecastAttributeSaveField($row->getField($idField), $row->get($idField)),
@@ -391,7 +393,8 @@ class Lookup extends Input
         $this->initDropdown($chain);
 
         if ($this->entityField !== null && $this->entityField->get() !== null) {
-            $idField = $this->idField ?? $this->model->idField;
+            $idField = $this->idField
+                ?? $this->model->idField;
 
             $this->model = $this->model->loadBy($idField, $this->entityField->get());
 
