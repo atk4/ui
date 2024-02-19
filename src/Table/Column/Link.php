@@ -104,7 +104,6 @@ class Link extends Table\Column
 
         if (is_string($this->url)) {
             $this->url = new HtmlTemplate($this->url);
-            $this->url->setApp($this->getApp());
         }
         if (is_string($this->page)) {
             $this->page = [$this->page];

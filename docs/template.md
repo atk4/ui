@@ -270,7 +270,6 @@ following commands:
 
 ```
 $template = HtmlTemplate::addTo($this);
-
 $template->loadFromString('Hello, {name}world{/}');
 ```
 
@@ -320,7 +319,6 @@ Example:
 
 ```
 $template = HtmlTemplate::addTo($this);
-
 $template->loadFromString('Hello, {name}world{/}');
 
 $template->set('name', 'John');

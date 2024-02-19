@@ -66,7 +66,6 @@ class Multiformat extends Table\Column
         }
 
         $template = new HtmlTemplate($cellHtml);
-        $template->setApp($this->getApp());
         $template->set($row);
         $template->dangerouslySetHtml($htmlTags);
 
