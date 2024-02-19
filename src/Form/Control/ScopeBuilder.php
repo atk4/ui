@@ -606,6 +606,8 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Converts a Condition to VueQueryBuilder query array.
+     *
+     * @return array{rule: string, operator: string, value: string|null, option: array|null}
      */
     public function conditionToQuery(Condition $condition, array $inputsMap = []): array
     {

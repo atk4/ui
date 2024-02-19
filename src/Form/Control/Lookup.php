@@ -180,7 +180,7 @@ class Lookup extends Input
      *
      * @param int|bool $limit
      *
-     * @return array<int, array{value: string, title: mixed}>
+     * @return list<array{value: string, title: mixed}>
      */
     public function getData($limit = true): array
     {
