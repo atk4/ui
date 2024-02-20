@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-use Atk4\Core\AppScopeTrait;
 use Atk4\Core\WarnDynamicPropertyTrait;
-use Atk4\Data\Model;
 use Atk4\Ui\HtmlTemplate\TagTree;
 use Atk4\Ui\HtmlTemplate\Value as HtmlValue;
 
@@ -15,7 +13,6 @@ use Atk4\Ui\HtmlTemplate\Value as HtmlValue;
  */
 class HtmlTemplate
 {
-    use AppScopeTrait;
     use WarnDynamicPropertyTrait;
 
     public const TOP_TAG = '_top';
@@ -107,10 +104,6 @@ class HtmlTemplate
         // TODO prune unreachable nodes
         // $template->rebuildTagsIndex();
 
-        if ($this->issetApp()) {
-            $template->setApp($this->getApp());
-        }
-
         return $template;
     }
 
@@ -141,31 +134,13 @@ class HtmlTemplate
      *
      * If tag contains another tag trees, these tag trees are emptied.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      */
     protected function _setOrAppend($tag, string $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
     {
-        if ($tag instanceof Model && $value === null) {
-            if (!$encodeHtml) {
-                throw new Exception('HTML is not allowed to be dangerously set from Model');
-            }
-
-            // $tag passed as model
-            // in this case we don't throw exception if tags don't exist
-            $uiPersistence = $this->getApp()->uiPersistence;
-            foreach ($tag->getFields() as $k => $field) {
-                if ($this->_hasTag($k)) {
-                    $v = $uiPersistence->typecastSaveField($field, $tag->get($k));
-                    $this->_setOrAppend($k, $v, $encodeHtml, $append);
-                }
-            }
-
-            return;
-        }
-
         // $tag passed as associative array [tag => value]
-        if (is_array($tag) && $value === null) {
+        if (is_array($tag) && $value === null) { // @phpstan-ignore-line
             if ($throwIfNotFound) {
                 foreach ($tag as $k => $v) {
                     if (!$this->_hasTag($k)) {
@@ -182,7 +157,7 @@ class HtmlTemplate
         }
 
         if (!is_string($tag) || $tag === '') {
-            throw (new Exception('Tag must be non-empty string'))
+            throw (new Exception('Tag must be ' . (is_string($tag) ? 'non-empty ' : '') . 'string'))
                 ->addMoreInfo('tag', $tag)
                 ->addMoreInfo('value', $value);
         }
@@ -216,8 +191,8 @@ class HtmlTemplate
      * If tag is found inside template several times, all occurrences are
      * replaced.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
@@ -232,8 +207,8 @@ class HtmlTemplate
      * Same as set(), but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
@@ -248,8 +223,8 @@ class HtmlTemplate
      * Set value of a tag to a HTML content. The value is set without
      * encoding, so you must be sure to sanitize.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
@@ -264,8 +239,8 @@ class HtmlTemplate
      * See dangerouslySetHtml() but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
@@ -279,8 +254,8 @@ class HtmlTemplate
     /**
      * Add more content inside a tag.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
@@ -295,8 +270,8 @@ class HtmlTemplate
      * Same as append(), but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
@@ -311,8 +286,8 @@ class HtmlTemplate
      * Add more content inside a tag. The content is appended without
      * encoding, so you must be sure to sanitize.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
@@ -327,8 +302,8 @@ class HtmlTemplate
      * Same as dangerouslyAppendHtml(), but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array<string, string>|Model          $tag
-     * @param ($tag is array|Model ? never : string|null) $value
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */

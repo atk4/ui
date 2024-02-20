@@ -104,7 +104,6 @@ class Link extends Table\Column
 
         if (is_string($this->url)) {
             $this->url = new HtmlTemplate($this->url);
-            $this->url->setApp($this->getApp());
         }
         if (is_string($this->page)) {
             $this->page = [$this->page];
@@ -145,7 +144,9 @@ class Link extends Table\Column
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         if ($this->url) {
-            return ['c_' . $this->shortName => $this->url->set($row)->renderToHtml()];
+            $this->url->trySet($this->getApp()->uiPersistence->typecastSaveRow($row, $row->get()));
+
+            return ['c_' . $this->shortName => $this->url->renderToHtml()];
         }
 
         $page = $this->page ?? [];

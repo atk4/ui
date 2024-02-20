@@ -176,7 +176,7 @@ class Lister extends View
      */
     public function renderRow(): void
     {
-        $this->tRow->trySet($this->currentRow);
+        $this->tRow->trySet($this->getApp()->uiPersistence->typecastSaveRow($this->currentRow, $this->currentRow->get()));
 
         if ($this->tRow->hasTag('_title')) {
             $this->tRow->set('_title', $this->currentRow->getTitle());

@@ -399,7 +399,6 @@ class Table extends Lister
                 $this->tRowMaster->dangerouslySetHtml('cells', $this->getDataRowHtml());
                 $this->tRowMaster->set('dataId', '{$dataId}');
                 $this->tRow = new HtmlTemplate($this->tRowMaster->renderToHtml()); // TODO reparse should not be needed
-                $this->tRow->setApp($this->getApp());
 
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
@@ -444,7 +443,7 @@ class Table extends Lister
     #[\Override]
     public function renderRow(): void
     {
-        $this->tRow->set($this->currentRow);
+        $this->tRow->trySet($this->getApp()->uiPersistence->typecastSaveRow($this->currentRow, $this->currentRow->get()));
 
         if ($this->useHtmlTags) {
             // prepare row-specific HTML tags

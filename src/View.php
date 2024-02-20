@@ -237,10 +237,6 @@ class View extends AbstractView
             }
         }
 
-        if ($this->template !== null && (!$this->template->issetApp() || $this->template->getApp() !== $app)) {
-            $this->template->setApp($app);
-        }
-
         foreach ($addLater as [$object, $region]) {
             $this->add($object, $region);
         }

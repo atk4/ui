@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
-use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 use Atk4\Ui\HtmlTemplate;
 
@@ -183,23 +182,6 @@ class HtmlTemplateTest extends TestCase
         self::assertSameTemplate('{foo}Hello{/} guys and {bar}welcome{/} here', $t);
     }
 
-    public function testSetFromEntity(): void
-    {
-        $model = new Model();
-        $model->addField('foo');
-        $model->addField('bar');
-        $model->addField('baz');
-        $entity = $model->createEntity();
-        $entity->set('foo', 'Hello');
-        $entity->set('bar', '<br>');
-        $entity->set('baz', 'not in template');
-
-        $t = new HtmlTemplate('{$foo} {$bar}');
-        $t->setApp($this->createApp());
-        $t->set($entity);
-        self::assertSameTemplate('{foo}Hello{/foo} {bar}&lt;br&gt;{/bar}', $t);
-    }
-
     public function testSetFromArray(): void
     {
         $t = new HtmlTemplate('{$foo} {$bar}');
@@ -229,15 +211,6 @@ class HtmlTemplateTest extends TestCase
         } finally {
             self::assertSameTemplate('{foo}x{/foo}', $t);
         }
-    }
-
-    public function testSetHtmlFromEntityException(): void
-    {
-        $t = new HtmlTemplate();
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('HTML is not allowed to be dangerously set from Model');
-        $t->dangerouslySetHtml(new Model());
     }
 
     public function testSetEmptyTagException(): void

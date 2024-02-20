@@ -715,7 +715,6 @@ class App
     public function loadTemplate(string $filename)
     {
         $template = new $this->templateClass();
-        $template->setApp($this);
 
         if ((['.' => true, '/' => true, '\\' => true][substr($filename, 0, 1)] ?? false) || str_contains($filename, ':\\')) {
             return $template->loadFromFile($filename);
