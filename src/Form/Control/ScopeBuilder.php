@@ -310,7 +310,10 @@ class ScopeBuilder extends Form\Control
 
         // build a ruleId => inputType map
         // this is used when selecting proper operator for the inputType (see self::$operatorsMap)
-        $inputsMap = array_column($this->rules, 'inputType', 'id');
+        $inputsMap = [];
+        foreach ($this->rules as $rule) {
+            $inputsMap[$rule['id']] = $rule['inputType'] ?? null;
+        }
 
         if ($this->entityField !== null && $this->entityField->get() !== null) {
             $scope = $this->entityField->get();
