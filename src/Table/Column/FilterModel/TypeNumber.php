@@ -26,8 +26,8 @@ class TypeNumber extends Column\FilterModel
         ];
         $this->op->default = '=';
 
-        $this->value->ui['form'] = [Form\Control\Line::class, 'inputType' => 'numberX'];
-        $this->addField('range', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class, 'inputType' => 'numberX']]]);
+        $this->value->ui['form'] = [Form\Control\Line::class];
+        $this->addField('range', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
     }
 
     #[\Override]

@@ -61,7 +61,7 @@ class TypeDate extends Column\FilterModel
         $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);
 
         // the integer field to generate a date when x day selector is used
-        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class, 'inputType' => 'numberX']]]);
+        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
     }
 
     #[\Override]
