@@ -660,12 +660,12 @@ class ScopeBuilder extends Form\Control
                     Condition::OPERATOR_DOESNOT_EQUAL => Condition::OPERATOR_NOT_IN,
                 ];
                 $value = implode(', ', $value);
-                $operator = $map[$operator] ?? Condition::OPERATOR_NOT_IN;
+                $operator = $map[$operator];
             }
 
             $operatorsMap = array_merge(static::$operatorsMap[$inputType] ?? [], static::$operatorsMap['text']);
             $operatorKey = array_search(strtoupper($operator), $operatorsMap, true);
-            $operator = $operatorKey !== false ? $operatorKey : self::OPERATOR_EQUALS;
+            $operator = $operatorKey;
         }
 
         return [
