@@ -213,7 +213,7 @@ class ScopeBuilder extends Form\Control
             'choices' => [__CLASS__, 'getChoices'],
         ],
         'numeric' => [
-            'type' => 'text',
+            'type' => 'numeric',
             'inputType' => 'number',
             'operators' => [
                 self::OPERATOR_SIGN_EQUALS,
