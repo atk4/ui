@@ -106,8 +106,8 @@ class Input extends Form\Control
     {
         return $this->getApp()->getTag('input/', array_merge([
             'name' => $this->shortName,
-            'type' => $this->inputType,
-            'placeholder' => $this->inputType !== 'hidden' ? $this->placeholder : false,
+            'type' => $this->inputType !== 'text' ? $this->inputType : false,
+            'placeholder' => $this->inputType !== 'hidden' && $this->placeholder ? $this->placeholder : false,
             'id' => $this->name . '_input',
             'value' => $this->getValue(),
             'disabled' => $this->disabled && $this->inputType !== 'hidden',
