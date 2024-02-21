@@ -213,7 +213,7 @@ class ScopeBuilder extends Form\Control
             'choices' => [__CLASS__, 'getChoices'],
         ],
         'numeric' => [
-            'type' => 'text',
+            'type' => 'numeric',
             'inputType' => 'number',
             'operators' => [
                 self::OPERATOR_SIGN_EQUALS,
@@ -310,7 +310,10 @@ class ScopeBuilder extends Form\Control
 
         // build a ruleId => inputType map
         // this is used when selecting proper operator for the inputType (see self::$operatorsMap)
-        $inputsMap = array_column($this->rules, 'inputType', 'id');
+        $inputsMap = [];
+        foreach ($this->rules as $rule) {
+            $inputsMap[$rule['id']] = $rule['inputType'] ?? null;
+        }
 
         if ($this->entityField !== null && $this->entityField->get() !== null) {
             $scope = $this->entityField->get();
@@ -657,12 +660,12 @@ class ScopeBuilder extends Form\Control
                     Condition::OPERATOR_DOESNOT_EQUAL => Condition::OPERATOR_NOT_IN,
                 ];
                 $value = implode(', ', $value);
-                $operator = $map[$operator] ?? Condition::OPERATOR_NOT_IN;
+                $operator = $map[$operator];
             }
 
             $operatorsMap = array_merge(static::$operatorsMap[$inputType] ?? [], static::$operatorsMap['text']);
             $operatorKey = array_search(strtoupper($operator), $operatorsMap, true);
-            $operator = $operatorKey !== false ? $operatorKey : self::OPERATOR_EQUALS;
+            $operator = $operatorKey;
         }
 
         return [

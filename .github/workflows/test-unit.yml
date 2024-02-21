@@ -91,7 +91,7 @@ jobs:
         image: mysql:8
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       mariadb:
-        image: mariadb
+        image: mariadb:11.2
         options: --health-cmd="mariadb-admin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       postgres:
         image: postgres:12-alpine
@@ -255,7 +255,7 @@ jobs:
         image: mysql:8
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       mariadb:
-        image: mariadb
+        image: mariadb:11.2
         options: --health-cmd="mariadb-admin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       postgres:
         image: postgres:12-alpine
