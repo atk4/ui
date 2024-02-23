@@ -190,8 +190,10 @@ class JsSse extends JsCallback
         }
 
         // prevent buffering
-        if (ob_get_level()) {
+        $levels = ob_get_level();
+        for ($i = 0; $i < $levels; $i++) {
             ob_end_flush();
         }
+        flush();
     }
 }
