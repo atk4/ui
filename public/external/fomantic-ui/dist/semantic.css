@@ -1,9 +1,9 @@
 /*
- * # Fomantic UI - 2.9.4-beta.20+0224737
+ * # Fomantic UI - 2.9.4-beta.35+d05c619
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
- * Copyright 2023 Contributors
+ * Copyright 2024 Contributors
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  *
@@ -1579,7 +1579,7 @@ input::selection {
   border-top: 1px solid rgba(34, 36, 38, 0.15);
 }
 
-.ui.basic.vertical.buttons:not(.spaced) .button:first-child {
+.ui.basic.vertical.buttons:not(.spaced):not(.circular) .button:first-child {
   border-top: none;
 }
 
@@ -1733,13 +1733,34 @@ input::selection {
         Circular
     --------------- */
 
-.ui.circular.button {
+.ui.ui.circular.buttons .button,
+.ui.ui.ui.ui.circular.button {
   border-radius: 10em;
 }
 
 .ui.circular.button > .icon {
   width: 1em;
   vertical-align: baseline;
+}
+
+.ui.circular.buttons:not(.vertical) .button {
+  margin-right: 0.25em;
+}
+
+.ui.vertical.circular.buttons .button {
+  margin-bottom: 0.25em;
+}
+
+.ui.circular.basic.buttons {
+  border: none;
+}
+
+.ui.circular.basic.buttons .button {
+  border: 1px solid rgba(34, 36, 38, 0.15);
+}
+
+.ui.circular.basic.buttons .button.basic {
+  border: none;
 }
 
 /* -------------------
@@ -28734,6 +28755,7 @@ span.ui.massive.text {
 .ui.form .inverted.segment label,
 .ui.form .inverted.segment .ui.checkbox label,
 .ui.inverted.form .ui.checkbox label,
+.ui.inverted.form .grouped.fields > label,
 .ui.inverted.form .inline.fields > label,
 .ui.inverted.form .inline.fields .field > label,
 .ui.inverted.form .inline.fields .field > p,
@@ -34716,18 +34738,18 @@ Floated Menu / Item
   border-left: none;
 }
 
-.ui.table > tfoot > tr:first-child > th:first-child,
-.ui.table > tfoot > tr:first-child > td:first-child {
+.ui.table > tfoot > tr:last-child > th:first-child,
+.ui.table > tfoot > tr:last-child > td:first-child {
   border-radius: 0 0 0 0.28571429rem;
 }
 
-.ui.table > tfoot > tr:first-child > th:last-child,
-.ui.table > tfoot > tr:first-child > td:last-child {
+.ui.table > tfoot > tr:last-child > th:last-child,
+.ui.table > tfoot > tr:last-child > td:last-child {
   border-radius: 0 0 0.28571429rem 0;
 }
 
-.ui.table > tfoot > tr:first-child > th:only-child,
-.ui.table > tfoot > tr:first-child > td:only-child {
+.ui.table > tfoot > tr:last-child > th:only-child,
+.ui.table > tfoot > tr:last-child > td:only-child {
   border-radius: 0 0 0.28571429rem 0.28571429rem;
 }
 
