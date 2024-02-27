@@ -614,12 +614,13 @@ class ScopeBuilder extends Form\Control
      */
     public function conditionToQuery(Condition $condition, array $inputsMap = []): array
     {
-        if (is_string($condition->key)) {
-            $rule = $condition->key;
-        } elseif ($condition->key instanceof Field) {
-            $rule = $condition->key->shortName;
+        if (is_string($condition->field)) {
+            $rule = $condition->field;
+        } elseif ($condition->field instanceof Field) {
+            $rule = $condition->field->shortName;
         } else {
-            throw new Exception('Unsupported scope key: ' . gettype($condition->key));
+            throw (new Exception('Unsupported scope field type'))
+                ->addMoreInfo('field', $condition->field);
         }
 
         $operator = $condition->operator;
@@ -686,7 +687,7 @@ class ScopeBuilder extends Form\Control
         $option = null;
         switch ($type) {
             case 'lookup':
-                $condField = $condition->getModel()->getField($condition->key);
+                $condField = $condition->getModel()->getField($condition->field);
                 $reference = $condField->getReference();
                 $model = $reference->refModel($condField->getOwner());
                 $fieldName = $reference->getTheirFieldName($model);
