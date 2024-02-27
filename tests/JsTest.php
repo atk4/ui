@@ -29,7 +29,7 @@ class JsTest extends TestCase
     public function testStrings(): void
     {
         self::assertSame('\'\\\'\', \'"\', \'\n\'', (new JsExpression('[], [], []', ['\'', '"', "\n"]))->jsRender());
-        self::assertSame('\'\\\'a"b\\\\\\\'c\\\\" \\\'"\'', (new JsExpression('[]', ['\'a"b\\\'c\\" \'"']))->jsRender());
+        self::assertSame('\'\\\'a"b\\\\\\\'c\\\" \\\'"\'', (new JsExpression('[]', ['\'a"b\\\'c\" \'"']))->jsRender());
     }
 
     public function testNumbers(): void
@@ -56,7 +56,7 @@ class JsTest extends TestCase
         ] as [$in, $expected]) {
             $jsRendered = (new JsExpression('[]', [$in]))->jsRender();
             if (substr($jsRendered, 0, 1) === '\'') {
-                $jsRendered = '"' . str_replace('"', '\\"', substr($jsRendered, 1, -1)) . '"';
+                $jsRendered = '"' . str_replace('"', '\"', substr($jsRendered, 1, -1)) . '"';
             }
             self::assertSame($expected, $jsRendered);
 

@@ -38,7 +38,7 @@ class DemosTest extends TestCase
     protected static string $regexJson = '~^(?<json>\s*(?:
            (?<number>-?(?=[1-9]|0(?!\d))\d+(\.\d+)?(E[+-]?\d+)?)
            |(?<boolean>true|false|null)
-           |(?<string>"([^"\\\\]*|\\\\["\\\\bfnrt/]|\\\\u[0-9a-f]{4})*")
+           |(?<string>"([^"\\\]*|\\\["\\\bfnrt/]|\\\u[0-9a-f]{4})*")
            |(?<array>\[(?:(?&json)(?:,(?&json))*|\s*)\])
            |(?<object>\{(?:(?<pair>\s*(?&string)\s*:(?&json))(?:,(?&pair))*|\s*)\})
         )\s*)$~six';
@@ -417,7 +417,7 @@ class DemosTest extends TestCase
         self::assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         $responseBodyStr = $response->getBody()->getContents();
         self::assertMatchesRegularExpression(self::$regexJson, $responseBodyStr);
-        self::assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
+        self::assertStringNotContainsString(preg_replace('~.+\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
         if ($expectedExceptionMessage !== null) {
             self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
         }
@@ -498,7 +498,7 @@ class DemosTest extends TestCase
         self::assertSame('no-store', $response->getHeaderLine('Cache-Control'));
         $responseBodyStr = $response->getBody()->getContents();
         self::assertMatchesRegularExpression(self::$regexHtml, $responseBodyStr);
-        self::assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
+        self::assertStringNotContainsString(preg_replace('~.+\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
         self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
     }
 
