@@ -781,7 +781,7 @@ class Multiline extends Form\Control
             return [];
         }
 
-        $dummyModel = new Model($entity->getModel()->getPersistence(), ['table' => $entity->table, 'idField' => false]);
+        $dummyModel = new Model($entity->getModel()->getPersistence(), ['table' => $entity->getModel()->table, 'idField' => false]);
 
         $createExprFromValueFx = static function ($v) use ($dummyModel): Persistence\Sql\Expression {
             if (is_int($v)) {
