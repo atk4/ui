@@ -3,13 +3,12 @@ includes:
 
 parameters:
     level: 6
+    checkMissingOverrideMethodAttribute: true
     paths:
         - .
     excludePaths:
         - vendor
         - js
-
-    checkMissingOverrideMethodAttribute: true
 
     ignoreErrors:
         - '~^(Property .+ has|Method .+\(\) (has parameter \$.+ with|return type has)) no value type specified in iterable type .+\.$~'
