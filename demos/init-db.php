@@ -175,22 +175,22 @@ trait ModelPreventModificationTrait
 
     protected function initPreventModification(): void
     {
-        $makeMessageFx = static function (string $actionName, Model $model) {
-            return $model->getModelCaption() . ' action "' . $actionName . '" with "' . $model->getTitle() . '" entity '
+        $makeMessageFx = static function (string $actionName, Model $entity) {
+            return $entity->getModel()->getModelCaption() . ' action "' . $actionName . '" with "' . $entity->getTitle() . '" entity '
                 . ' was executed. In demo mode all changes are reversed.';
         };
 
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), static function (Model $model) use ($makeMessageFx) {
-            return $makeMessageFx('add', $model);
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), static function (Model $entity) use ($makeMessageFx) {
+            return $makeMessageFx('add', $entity);
         });
 
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), static function (Model $model) use ($makeMessageFx) {
-            return $makeMessageFx('edit', $model);
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), static function (Model $entity) use ($makeMessageFx) {
+            return $makeMessageFx('edit', $entity);
         });
 
         $this->getUserAction('delete')->confirmation = 'Please go ahead. Demo mode does not really delete data.';
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), static function (Model $model) use ($makeMessageFx) {
-            return $makeMessageFx('delete', $model);
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), static function (Model $entity) use ($makeMessageFx) {
+            return $makeMessageFx('delete', $entity);
         });
     }
 }
