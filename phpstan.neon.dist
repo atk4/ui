@@ -12,11 +12,11 @@ parameters:
     checkMissingOverrideMethodAttribute: true
 
     ignoreErrors:
-        - '~^(Property .+ has|Method .+\(\) (has parameter \$.+ with|return type has)) no value type specified in iterable type .+\.~'
+        - '~^(Property .+ has|Method .+\(\) (has parameter \$.+ with|return type has)) no value type specified in iterable type .+\.$~'
 
         # relax strict rules
-        - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
-        - '~^Variable (static )?(property access|method call) on .+\.~'
+        - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.$~'
+        - '~^Variable (static )?(property access|method call) on .+\.$~'
 
         # https://github.com/phpstan/phpstan/issues/10337
         -
