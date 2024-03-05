@@ -557,7 +557,7 @@ class Multiline extends Form\Control
 
     public function setLookupOptionValue(Field $field, string $value): void
     {
-        $model = $field->getReference()->refModel($this->model);
+        $model = $field->getReference()->createTheirModel();
         $entity = $model->tryLoadBy($field->getReference()->getTheirFieldName($model), $this->getApp()->uiPersistence->typecastLoadField($field, $value));
         if ($entity !== null) {
             $option = ['key' => $value, 'text' => $entity->get($model->titleField), 'value' => $value];
@@ -614,7 +614,7 @@ class Multiline extends Form\Control
         if ($field->values !== null) {
             $items = array_slice($field->values, 0, $limit, true);
         } elseif ($field->hasReference()) {
-            $model = $field->getReference()->refModel($this->model);
+            $model = $field->getReference()->createTheirModel();
             $model->setLimit($limit);
 
             $theirFieldName = $field->getReference()->getTheirFieldName($model);

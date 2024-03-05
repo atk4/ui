@@ -458,7 +458,7 @@ class ScopeBuilder extends Form\Control
         if ($field->values !== null) {
             $items = array_slice($field->values, 0, $limit, true);
         } elseif ($field->hasReference()) {
-            $model = $field->getReference()->refModel($this->model);
+            $model = $field->getReference()->createTheirModel();
             $model->setLimit($limit);
 
             foreach ($model as $item) {
@@ -689,7 +689,7 @@ class ScopeBuilder extends Form\Control
             case 'lookup':
                 $condField = $condition->getModel()->getField($condition->field);
                 $reference = $condField->getReference();
-                $model = $reference->refModel($condField->getOwner());
+                $model = $reference->createTheirModel();
                 $fieldName = $reference->getTheirFieldName($model);
                 $entity = $model->tryLoadBy($fieldName, $value);
                 if ($entity !== null) {
