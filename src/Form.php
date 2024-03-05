@@ -368,7 +368,7 @@ class Form extends View
 
         if ($field->type === 'json' && $field->hasReference()) {
             $limit = ($field->getReference() instanceof ContainsMany) ? 0 : 1;
-            $model = $field->getReference()->refModel($this->model);
+            $model = $field->getReference()->createTheirModel();
             $fallbackSeed = [Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
         } elseif ($field->type !== 'boolean') {
             if ($field->enum !== null) {
@@ -376,7 +376,7 @@ class Form extends View
             } elseif ($field->values !== null) {
                 $fallbackSeed = [Control\Dropdown::class, 'values' => $field->values];
             } elseif ($field->hasReference()) {
-                $fallbackSeed = [Control\Lookup::class, 'model' => $field->getReference()->refModel($this->model)];
+                $fallbackSeed = [Control\Lookup::class, 'model' => $field->getReference()->createTheirModel()];
             }
         }
 
