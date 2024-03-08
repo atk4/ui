@@ -25,7 +25,7 @@ class ActionButtons extends Table\Column
     /** @var array<string, View> Stores all the buttons that have been added. */
     public $buttons = [];
 
-    /** @var array<string, \Closure(Model): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
+    /** @var array<string, \Closure<T of Model>(T): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
     protected $isEnabledFxs = [];
 
     #[\Override]
@@ -41,7 +41,7 @@ class ActionButtons extends Table\Column
      *
      * @param string|array|View                                       $button
      * @param JsExpressionable|JsCallbackSetClosure|ExecutorInterface $action
-     * @param bool|\Closure(Model): bool                              $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool                              $isDisabled
      *
      * @return View
      */
@@ -79,11 +79,11 @@ class ActionButtons extends Table\Column
      * load contents through $callback. Will pass a virtual page.
      *
      * @param string|array|View           $button
-     * @param string|array                $defaults   modal title or modal defaults array
+     * @param string|array                $defaults modal title or modal defaults array
      * @param \Closure(View, mixed): void $callback
      * @param View                        $owner
      * @param array                       $args
-     * @param bool|\Closure(Model): bool  $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool  $isDisabled
      *
      * @return View
      */

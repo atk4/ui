@@ -42,7 +42,7 @@ class Lookup extends Input
      *
      * If left null, then search will be performed on a model's title field
      *
-     * @var list<string>|\Closure(Model, string): void|null
+     * @var list<string>|\Closure<T of Model>(T, string): void|null
      */
     public $search;
 
@@ -54,7 +54,7 @@ class Lookup extends Input
      * with dependency
      * Then model of the 'state' field can be limited to states of the currently selected 'country'.
      *
-     * @var \Closure(Model, array<string, mixed>): void|null
+     * @var \Closure<T of Model>(T, array<string, mixed>): void|null
      */
     public $dependency;
 
@@ -113,7 +113,7 @@ class Lookup extends Input
      * Define callback for generating the row data
      * If left empty default callback Lookup::defaultRenderRow is used.
      *
-     * @var \Closure($this, Model): array{title: mixed}
+     * @var \Closure<T of Model>($this, T): array{title: mixed}
      */
     public ?\Closure $renderRowFunction = null;
 

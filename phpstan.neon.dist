@@ -23,6 +23,12 @@ parameters:
             message: '~^Call to method Atk4\\Ui\\App::callExit\(\) with true will always evaluate to true\.$~'
             count: 2
 
+        # assign to generic callable property is broken https://github.com/phpstan/phpstan/issues/8964
+        -
+            message: '~^Property Atk4\\Data\\Model\\UserAction::\$(callback|enabled) .*Closure<.+ does not accept .*Closure\(.+\.$~'
+            path: '*'
+            count: 2
+
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
         -
