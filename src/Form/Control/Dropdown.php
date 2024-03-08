@@ -276,8 +276,8 @@ class Dropdown extends Input
             $res = ($this->renderRowFunction)($row);
             $this->_tItem->set('value', $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $row->getId()));
         } else {
-            $res = ($this->renderRowFunction)($row, $key); // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/10283#issuecomment-1850438891
-            $this->_tItem->set('value', (string) $res['value']); // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/10283
+            $res = ($this->renderRowFunction)($row, $key);
+            $this->_tItem->set('value', (string) $res['value']);
         }
 
         $this->_tItem->set('title', $res['title']);
