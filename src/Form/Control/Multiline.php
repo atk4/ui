@@ -171,7 +171,7 @@ class Multiline extends Form\Control
      * Set during fieldDefinition and apply during renderView() after getValue().
      * Must contains callable function and function will receive $model field and value as parameter.
      *
-     * @var array<string, \Closure(Field, string): void>
+     * @var array<string, \Closure<T of Field>(T, string): void>
      */
     private array $valuePropsBinding = [];
 

@@ -84,7 +84,7 @@ class Dropdown extends Input
      *     ];
      * }
      *
-     * @var \Closure(Model): array{title: mixed, icon?: mixed}|\Closure(mixed, array-key): array{value: mixed, title: mixed, icon?: mixed}
+     * @var \Closure<T of Model>(T): array{title: mixed, icon?: mixed}|\Closure(mixed, array-key): array{value: mixed, title: mixed, icon?: mixed}
      */
     public ?\Closure $renderRowFunction = null;
 

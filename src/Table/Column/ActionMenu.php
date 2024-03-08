@@ -25,7 +25,7 @@ class ActionMenu extends Table\Column
     /** @var array<int, View> Menu items collections. */
     protected $items = [];
 
-    /** @var array<string, \Closure(Model): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
+    /** @var array<string, \Closure<T of Model>(T): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
     protected $isEnabledFxs = [];
 
     /** @var string Dropdown label. */
@@ -55,7 +55,7 @@ class ActionMenu extends Table\Column
      *
      * @param View|string                                             $item
      * @param JsExpressionable|JsCallbackSetClosure|ExecutorInterface $action
-     * @param bool|\Closure(Model): bool                              $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool                              $isDisabled
      *
      * @return View
      */

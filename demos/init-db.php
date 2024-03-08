@@ -146,7 +146,7 @@ trait ModelPreventModificationTrait
     }
 
     /**
-     * @param \Closure(Model): string $outputCallback
+     * @param \Closure($this): string $outputCallback
      */
     protected function wrapUserActionCallbackPreventModification(Model\UserAction $action, \Closure $outputCallback): void
     {
