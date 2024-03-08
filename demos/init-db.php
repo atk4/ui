@@ -198,7 +198,7 @@ trait ModelPreventModificationTrait
 /**
  * Improve testing by using prefixed real field and SQL names.
  *
- * @method (static|null)                   tryLoad(WrappedId $id = null)     remove parentheses around return type once https://github.com/phpstan/phpstan/issues/10548 is fixed
+ * @method static|null                     tryLoad(WrappedId $id = null)
  * @method static                          load(WrappedId $id)
  * @method \Traversable<WrappedId, static> getIterator()
  * @method WrappedId                       insert(array<string, mixed> $row)
