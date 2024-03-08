@@ -146,7 +146,7 @@ trait ModelPreventModificationTrait
     }
 
     /**
-     * @param \Closure($this): string $outputCallback
+     * @param \Closure(static): string $outputCallback
      */
     protected function wrapUserActionCallbackPreventModification(Model\UserAction $action, \Closure $outputCallback): void
     {
@@ -169,7 +169,7 @@ trait ModelPreventModificationTrait
                 $action->callback = $callbackBackup;
             }
 
-            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedEntity : $model, ...$args);
+            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedEntity : $model, ...$args); // @phpstan-ignore-line
         };
     }
 

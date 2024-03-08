@@ -79,7 +79,7 @@ class ActionButtons extends Table\Column
      * load contents through $callback. Will pass a virtual page.
      *
      * @param string|array|View           $button
-     * @param string|array                $defaults   modal title or modal defaults array
+     * @param string|array                $defaults modal title or modal defaults array
      * @param \Closure(View, mixed): void $callback
      * @param View                        $owner
      * @param array                       $args
