@@ -224,7 +224,7 @@ jobs:
 
       - name: Upload coverage logs 2/2 (only for latest Phpunit)
         if: env.LOG_COVERAGE
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
@@ -453,7 +453,7 @@ jobs:
 
       - name: Upload coverage logs 2/2 (only for coverage)
         if: env.LOG_COVERAGE
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
