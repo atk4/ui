@@ -30,7 +30,7 @@ class User extends \Atk4\Data\Model
         $this->addField('firstname', ['type' => 'string']);
         $this->addField('lastname', ['type' => 'string']);
 
-        $this->containsMany('addresses', [Address::class, 'system' => false]);
+        $this->containsMany('addresses', ['model' => [Address::class], 'system' => false]);
     }
 }
 
@@ -81,7 +81,7 @@ class Email extends \Atk4\Data\Model
 
         $this->addField('email_address', ['type' => 'string']);
 
-        $this->hasOne('user_id', [User::class]);
+        $this->hasOne('user_id', ['model' => [User::class]]);
     }
 }
 
@@ -99,7 +99,7 @@ class User extends \Atk4\Data\Model
         $this->addField('firstname', ['type' => 'string']);
         $this->addField('lastname', ['type' => 'string']);
 
-        $this->hasMany('Emails', [Email::class]);
+        $this->hasMany('Emails', ['model' => [Email::class]]);
     }
 }
 ```
