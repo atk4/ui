@@ -31,10 +31,10 @@ Label::addTo($form, ['Lookup countries', 'class.top attached' => true], ['AboveC
 $model = new Model($app->db, ['table' => 'test']);
 
 // lookup without plus button
-$model->hasOne('country1', ['model' => [Country::class], 'type' => WrappedIdType::NAME]);
+$model->hasOne('country1', ['model' => [Country::class]]);
 
 // lookup with plus button
-$model->hasOne('country2', ['model' => [Country::class], 'type' => WrappedIdType::NAME, 'ui' => ['form' => ['plus' => true]]]);
+$model->hasOne('country2', ['model' => [Country::class], 'ui' => ['form' => ['plus' => true]]]);
 
 $form->setModel($model->createEntity());
 

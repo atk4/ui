@@ -7,7 +7,6 @@ namespace Atk4\Ui\Demos;
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use Atk4\Data\Reference;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Table;
@@ -300,17 +299,6 @@ class ModelWithPrefixedFields extends Model
     }
 
     #[\Override]
-    public function hasOne(string $link, array $defaults): Reference
-    {
-        // TODO remove once HasOne reference can infer type from their model
-        if (!isset($defaults['type'])) {
-            $defaults['type'] = WrappedIdType::NAME;
-        }
-
-        return parent::hasOne($link, $defaults);
-    }
-
-    #[\Override]
     public function getId(): ?WrappedId
     {
         return parent::getId();
@@ -437,7 +425,6 @@ class Stat extends ModelWithPrefixedFields
         $this->hasOne($this->fieldName()->client_country_iso, [
             'model' => [Country::class],
             'theirField' => Country::hinting()->fieldName()->iso,
-            'type' => 'string',
             'ui' => [
                 'form' => [Form\Control\Line::class],
                 'table' => [Table\Column\CountryFlag::class],
