@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Data\Reference;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Table;
@@ -299,7 +300,7 @@ class ModelWithPrefixedFields extends Model
     }
 
     #[\Override]
-    public function hasOne(string $link, array $defaults = [])
+    public function hasOne(string $link, array $defaults): Reference
     {
         // TODO remove once HasOne reference can infer type from their model
         if (!isset($defaults['type'])) {
