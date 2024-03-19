@@ -345,9 +345,9 @@ class Grid extends View
      * Adds a new button into the action column on the right. For Crud this
      * column will already contain "delete" and "edit" buttons.
      *
-     * @param string|array|View                     $button Label text, object or seed for the Button
+     * @param string|array|View                     $button     Label text, object or seed for the Button
      * @param JsExpressionable|JsCallbackSetClosure $action
-     * @param bool|\Closure<T of Model>(T): bool $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool    $isDisabled
      *
      * @return View
      */
@@ -395,7 +395,7 @@ class Grid extends View
      *
      * @param View|string                           $view
      * @param JsExpressionable|JsCallbackSetClosure $action
-     * @param bool|\Closure<T of Model>(T): bool $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool    $isDisabled
      *
      * @return View
      */
@@ -496,10 +496,10 @@ class Grid extends View
      * Similar to addActionButton but when button is clicked, modal is displayed
      * with the $title and $callback is executed.
      *
-     * @param string|array|View           $button
-     * @param string                      $title
-     * @param \Closure(View, mixed): void $callback
-     * @param array                       $args     extra URL argument for callback
+     * @param string|array|View                  $button
+     * @param string                             $title
+     * @param \Closure(View, mixed): void        $callback
+     * @param array                              $args       extra URL argument for callback
      * @param bool|\Closure<T of Model>(T): bool $isDisabled
      *
      * @return View

@@ -55,7 +55,7 @@ class ActionMenu extends Table\Column
      *
      * @param View|string                                             $item
      * @param JsExpressionable|JsCallbackSetClosure|ExecutorInterface $action
-     * @param bool|\Closure<T of Model>(T): bool                              $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool                      $isDisabled
      *
      * @return View
      */
