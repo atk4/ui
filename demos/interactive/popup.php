@@ -140,7 +140,7 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
      * Associate your shelf with cart, so that when item is clicked, the content of a
      * cart is updated.
      */
-    public function linkCart(View $cart, JsExpressionable $jsAction = null): void
+    public function linkCart(View $cart, ?JsExpressionable $jsAction = null): void
     {
         $this->on('click', '.item', static function (Jquery $a, string $b) use ($cart, $jsAction) {
             $cart->addItem($b);

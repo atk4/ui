@@ -196,7 +196,7 @@ class SessionManager
      * Forget session data for $key. If $key is omitted will forget all
      * associated session data.
      */
-    public function forget(string $namespace, string $key = null): void
+    public function forget(string $namespace, ?string $key = null): void
     {
         $this->atomicSession(function () use ($namespace, $key) {
             if ($key === null) {

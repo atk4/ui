@@ -42,7 +42,7 @@ class Accordion extends View
      *
      * @return AccordionSection
      */
-    public function addSection($title, \Closure $callback = null, $icon = 'dropdown')
+    public function addSection($title, ?\Closure $callback = null, $icon = 'dropdown')
     {
         $section = AccordionSection::addTo($this, ['title' => $title, 'icon' => $icon]);
 

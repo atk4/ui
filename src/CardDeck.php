@@ -134,7 +134,7 @@ class CardDeck extends View
      * @param array<int, string>|null $fields
      */
     #[\Override]
-    public function setModel(Model $model, array $fields = null, array $extra = null): void
+    public function setModel(Model $model, ?array $fields = null, ?array $extra = null): void
     {
         parent::setModel($model);
 
@@ -246,7 +246,7 @@ class CardDeck extends View
     /**
      * Override this method for setting notifier based on action or model value.
      */
-    protected function jsCreateNotifier(Model\UserAction $action, string $msg = null): JsBlock
+    protected function jsCreateNotifier(Model\UserAction $action, ?string $msg = null): JsBlock
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {

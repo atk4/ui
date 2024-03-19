@@ -14,7 +14,7 @@ use Atk4\Ui\Table;
 class Html extends Table\Column
 {
     #[\Override]
-    public function getDataCellHtml(Field $field = null, array $attr = []): string
+    public function getDataCellHtml(?Field $field = null, array $attr = []): string
     {
         return '{$_' . $field->shortName . '}';
     }

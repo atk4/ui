@@ -357,7 +357,7 @@ class Country extends ModelWithPrefixedFields
     }
 
     #[\Override]
-    public function validate(string $intent = null): array
+    public function validate(?string $intent = null): array
     {
         $errors = parent::validate($intent);
 
@@ -502,7 +502,7 @@ class File extends ModelWithPrefixedFields
             ->addTitle();
     }
 
-    public function importFromFilesystem(string $path, bool $isSub = null): void
+    public function importFromFilesystem(string $path, ?bool $isSub = null): void
     {
         if ($isSub === null) {
             if ($this->isEntity()) { // TODO should be not needed once UserAction is for non-entity only

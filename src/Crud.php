@@ -86,7 +86,7 @@ class Crud extends Grid
     }
 
     #[\Override]
-    public function setModel(Model $model, array $fields = null): void
+    public function setModel(Model $model, ?array $fields = null): void
     {
         $model->assertIsModel();
 
@@ -221,7 +221,7 @@ class Crud extends Grid
     /**
      * Override this method for setting notifier based on action or model value.
      */
-    protected function jsCreateNotifier(string $msg = null): JsExpressionable
+    protected function jsCreateNotifier(?string $msg = null): JsExpressionable
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {

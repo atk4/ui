@@ -111,7 +111,7 @@ class Link extends Table\Column
     }
 
     #[\Override]
-    public function getDataCellTemplate(Field $field = null): string
+    public function getDataCellTemplate(?Field $field = null): string
     {
         $attr = ['href' => '{$c_' . $this->shortName . '}'];
 

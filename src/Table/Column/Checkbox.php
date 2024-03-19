@@ -43,7 +43,7 @@ class Checkbox extends Table\Column
     }
 
     #[\Override]
-    public function getHeaderCellHtml(Field $field = null, $value = null): string
+    public function getHeaderCellHtml(?Field $field = null, $value = null): string
     {
         if ($field !== null) {
             throw (new Exception('Checkbox must be placed in an empty column, don\'t specify any field'))
@@ -55,7 +55,7 @@ class Checkbox extends Table\Column
     }
 
     #[\Override]
-    public function getDataCellTemplate(Field $field = null): string
+    public function getDataCellTemplate(?Field $field = null): string
     {
         return $this->getApp()->getTag('div', ['class' => 'ui fitted checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]);
     }

@@ -38,7 +38,7 @@ class JsReload implements JsExpressionable
      * @param array<string, string|int|JsExpressionable> $args
      * @param array<string, mixed>                       $apiConfig
      */
-    public function __construct(View $view, array $args = [], JsExpressionable $afterSuccess = null, array $apiConfig = [], bool $includeStorage = false)
+    public function __construct(View $view, array $args = [], ?JsExpressionable $afterSuccess = null, array $apiConfig = [], bool $includeStorage = false)
     {
         $this->view = $view;
         $this->args = $args;

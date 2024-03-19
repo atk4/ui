@@ -406,7 +406,7 @@ class Multiline extends Form\Control
      * @param array<int, string>|null $fields
      */
     #[\Override]
-    public function setModel(Model $model, array $fields = null): void
+    public function setModel(Model $model, ?array $fields = null): void
     {
         parent::setModel($model);
 
@@ -427,7 +427,7 @@ class Multiline extends Form\Control
      * Otherwise, form will try to save 'multiline' field value as an array when form is save.
      * $multiline = $form->addControl('multiline', [Multiline::class], ['neverPersist' => true])
      */
-    public function setReferenceModel(string $refModelName, Model $entity = null, array $fieldNames = []): void
+    public function setReferenceModel(string $refModelName, ?Model $entity = null, array $fieldNames = []): void
     {
         if ($entity === null) {
             if (!$this->form->model->isEntity()) {

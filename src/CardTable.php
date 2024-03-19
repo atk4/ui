@@ -20,7 +20,7 @@ class CardTable extends Table
      * @param array<int, string>|null $fields
      */
     #[\Override]
-    public function setModel(Model $entity, array $fields = null): void
+    public function setModel(Model $entity, ?array $fields = null): void
     {
         if ($this->_bypass) {
             parent::setModel($entity);

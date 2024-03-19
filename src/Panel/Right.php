@@ -95,7 +95,7 @@ class Right extends View implements Loadable
      * @param string|null           $activeCss     the CSS class name to apply on triggering element when panel is open
      * @param JsExpressionable      $jsTrigger     JS expression that trigger panel to open. Default = $(this).
      */
-    public function jsOpen(array $urlArgs = [], array $dataAttribute = [], string $activeCss = null, JsExpressionable $jsTrigger = null): JsExpressionable
+    public function jsOpen(array $urlArgs = [], array $dataAttribute = [], ?string $activeCss = null, ?JsExpressionable $jsTrigger = null): JsExpressionable
     {
         return $this->jsService()->openPanel([
             'triggered' => $jsTrigger ?? new Jquery(),
@@ -127,7 +127,7 @@ class Right extends View implements Loadable
      * JS flyoutService will prevent closing of Flyout if a confirmation modal
      * is attached to it and flyoutService detect that the current open flyoutContent has warning on.
      */
-    public function addConfirmation(string $msg, string $title = 'Closing panel!', string $okButton = null, string $cancelButton = null): void
+    public function addConfirmation(string $msg, string $title = 'Closing panel!', ?string $okButton = null, ?string $cancelButton = null): void
     {
         if (!$okButton) {
             $okButton = (new Button(['Ok']))->addClass('ok');

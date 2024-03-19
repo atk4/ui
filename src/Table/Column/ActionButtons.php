@@ -41,7 +41,7 @@ class ActionButtons extends Table\Column
      *
      * @param string|array|View                                       $button
      * @param JsExpressionable|JsCallbackSetClosure|ExecutorInterface $action
-     * @param bool|\Closure<T of Model>(T): bool                              $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool                      $isDisabled
      *
      * @return View
      */
@@ -78,12 +78,12 @@ class ActionButtons extends Table\Column
      * Adds a new button which will open a modal dialog and dynamically
      * load contents through $callback. Will pass a virtual page.
      *
-     * @param string|array|View           $button
-     * @param string|array                $defaults modal title or modal defaults array
-     * @param \Closure(View, mixed): void $callback
-     * @param View                        $owner
-     * @param array                       $args
-     * @param bool|\Closure<T of Model>(T): bool  $isDisabled
+     * @param string|array|View                  $button
+     * @param string|array                       $defaults   modal title or modal defaults array
+     * @param \Closure(View, mixed): void        $callback
+     * @param View                               $owner
+     * @param array                              $args
+     * @param bool|\Closure<T of Model>(T): bool $isDisabled
      *
      * @return View
      */
@@ -118,7 +118,7 @@ class ActionButtons extends Table\Column
     }
 
     #[\Override]
-    public function getDataCellTemplate(Field $field = null): string
+    public function getDataCellTemplate(?Field $field = null): string
     {
         if (count($this->buttons) === 0) {
             return '';

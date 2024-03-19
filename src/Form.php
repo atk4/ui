@@ -156,11 +156,9 @@ class Form extends View
     /**
      * Setter for control display rules.
      *
-     * @param array $rules
-     *
      * @return $this
      */
-    public function setControlsDisplayRules($rules = [])
+    public function setControlsDisplayRules(array $rules = [])
     {
         $this->controlDisplayRules = $rules;
 
@@ -170,12 +168,11 @@ class Form extends View
     /**
      * Set display rule for a group collection.
      *
-     * @param array       $rules
      * @param string|View $selector
      *
      * @return $this
      */
-    public function setGroupDisplayRules($rules = [], $selector = '.atk-form-group')
+    public function setGroupDisplayRules(array $rules = [], $selector = '.atk-form-group')
     {
         if (is_object($selector)) {
             $selector = '#' . $selector->getHtmlId();
@@ -191,7 +188,7 @@ class Form extends View
      * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
     #[\Override]
-    public function setModel(Model $entity, array $fields = null): void
+    public function setModel(Model $entity, ?array $fields = null): void
     {
         $entity->assertIsEntity();
 

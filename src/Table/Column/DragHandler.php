@@ -44,7 +44,7 @@ class DragHandler extends Table\Column
     }
 
     #[\Override]
-    public function getDataCellTemplate(Field $field = null): string
+    public function getDataCellTemplate(?Field $field = null): string
     {
         return $this->getApp()->getTag($this->tag, ['class' => $this->class . ' atk-handle', 'style' => 'cursor:pointer; color: #bcbdbd']);
     }

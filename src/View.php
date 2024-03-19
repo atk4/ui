@@ -185,7 +185,7 @@ class View extends AbstractView
      *
      * @return $this
      */
-    public function link($url, string $target = null)
+    public function link($url, ?string $target = null)
     {
         $this->setElement('a');
 
@@ -389,7 +389,7 @@ class View extends AbstractView
      *
      * @return $this
      */
-    public function setStyle($property, string $value = null)
+    public function setStyle($property, ?string $value = null)
     {
         if (is_array($property)) {
             foreach ($property as $k => $v) {
@@ -507,7 +507,7 @@ class View extends AbstractView
      * If GET argument is not presently set you can specify a 2nd argument
      * to forge-set the GET argument for current view and it's sub-views.
      */
-    public function stickyGet(string $name, string $newValue = null): ?string
+    public function stickyGet(string $name, ?string $newValue = null): ?string
     {
         $this->stickyArgs[$name] = $newValue ?? $this->stickyArgs[$name] ?? $this->getApp()->tryGetRequestQueryParam($name);
 
