@@ -398,7 +398,7 @@ class DemosTest extends TestCase
      *
      * @dataProvider provideDemoJsonResponseCases
      */
-    public function testDemoJsonResponse(string $path, string $expectedExceptionMessage = null): void
+    public function testDemoJsonResponse(string $path, ?string $expectedExceptionMessage = null): void
     {
         if (static::class === self::class) {
             if ($expectedExceptionMessage !== null) {

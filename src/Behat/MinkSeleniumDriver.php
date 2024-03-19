@@ -58,7 +58,7 @@ class MinkSeleniumDriver extends Selenium2Driver
         $this->getWebDriverSession()->moveto(['element' => $element->getID()]);
     }
 
-    private function executeJsSelectText(WebDriverElement $element, int $start, int $stop = null): void
+    private function executeJsSelectText(WebDriverElement $element, int $start, ?int $stop = null): void
     {
         $this->executeScript(
             'arguments[0].setSelectionRange(Math.min(arguments[1], Number.MAX_SAFE_INTEGER), Math.min(arguments[2], Number.MAX_SAFE_INTEGER));',

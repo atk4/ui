@@ -118,7 +118,7 @@ class ActionButtons extends Table\Column
     }
 
     #[\Override]
-    public function getDataCellTemplate(Field $field = null): string
+    public function getDataCellTemplate(?Field $field = null): string
     {
         if (count($this->buttons) === 0) {
             return '';

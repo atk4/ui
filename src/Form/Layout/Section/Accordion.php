@@ -46,7 +46,7 @@ class Accordion extends UiAccordion
      * @return Form\Layout
      */
     #[\Override]
-    public function addSection($title, \Closure $callback = null, $icon = 'dropdown')
+    public function addSection($title, ?\Closure $callback = null, $icon = 'dropdown')
     {
         $section = parent::addSection($title, $callback, $icon);
 

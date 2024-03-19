@@ -420,7 +420,7 @@ class ScopeBuilder extends Form\Control
         }
     }
 
-    protected function getRule(string $type, array $defaults = [], Field $field = null): array
+    protected function getRule(string $type, array $defaults = [], ?Field $field = null): array
     {
         $rule = static::$ruleTypes[$type] ?? static::$ruleTypes['default'];
 

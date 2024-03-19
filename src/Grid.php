@@ -361,7 +361,7 @@ class Grid extends View
      *
      * @return View
      */
-    public function addExecutorButton(ExecutorInterface $executor, Button $button = null)
+    public function addExecutorButton(ExecutorInterface $executor, ?Button $button = null)
     {
         if ($button !== null) {
             $this->add($button);
@@ -616,7 +616,7 @@ class Grid extends View
      * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
     #[\Override]
-    public function setModel(Model $model, array $fields = null): void
+    public function setModel(Model $model, ?array $fields = null): void
     {
         $this->table->setModel($model, $fields);
 

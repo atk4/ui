@@ -124,7 +124,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      *
      * @return $this
      */
-    public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', string $selector = null): self
+    public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', ?string $selector = null): self
     {
         if (!$this->actionInitialized) {
             throw new Exception('Action must be set prior to assign trigger');

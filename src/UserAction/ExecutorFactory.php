@@ -121,7 +121,7 @@ class ExecutorFactory
     /**
      * Register a trigger caption.
      */
-    public function registerCaption(UserAction $action, string $caption, bool $isSpecific = false, string $type = null): void
+    public function registerCaption(UserAction $action, string $caption, bool $isSpecific = false, ?string $type = null): void
     {
         if ($isSpecific) {
             $this->triggerCaption[$this->getModelKey($action)][$action->shortName] = $caption;
@@ -135,12 +135,12 @@ class ExecutorFactory
     /**
      * @return ($type is self::MENU_ITEM|self::TABLE_MENU_ITEM ? MenuItem : Button)
      */
-    public function createTrigger(UserAction $action, string $type = null): View
+    public function createTrigger(UserAction $action, ?string $type = null): View
     {
         return $this->createActionTrigger($action, $type); // @phpstan-ignore-line
     }
 
-    public function getCaption(UserAction $action, string $type = null): string
+    public function getCaption(UserAction $action, ?string $type = null): string
     {
         return $this->getActionCaption($action, $type);
     }
@@ -148,7 +148,7 @@ class ExecutorFactory
     /**
      * @return AbstractView&ExecutorInterface
      */
-    public function createExecutor(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
+    public function createExecutor(UserAction $action, View $owner, ?string $requiredType = null): ExecutorInterface
     {
         if ($requiredType !== null) {
             if (!($this->executorSeed[$requiredType] ?? null)) {
@@ -180,7 +180,7 @@ class ExecutorFactory
     /**
      * Create executor View for firing model user action.
      */
-    protected function createActionTrigger(UserAction $action, string $type = null): View
+    protected function createActionTrigger(UserAction $action, ?string $type = null): View
     {
         $viewType = array_merge(['default' => [$this, 'getDefaultTrigger']], $this->triggerSeed[$type] ?? []);
         $seed = $viewType[$this->getModelKey($action)][$action->shortName] ?? null;
@@ -201,7 +201,7 @@ class ExecutorFactory
     /**
      * Return executor default trigger seed based on type.
      */
-    protected function getDefaultTrigger(UserAction $action, string $type = null): array
+    protected function getDefaultTrigger(UserAction $action, ?string $type = null): array
     {
         switch ($type) {
             case self::CARD_BUTTON:
@@ -231,7 +231,7 @@ class ExecutorFactory
     /**
      * Return action caption set in actionLabel or default.
      */
-    protected function getActionCaption(UserAction $action, string $type = null): string
+    protected function getActionCaption(UserAction $action, ?string $type = null): string
     {
         $caption = $this->triggerCaption[$type][$action->shortName] ?? null;
         if ($caption === null) {

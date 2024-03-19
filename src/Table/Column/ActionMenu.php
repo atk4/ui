@@ -95,7 +95,7 @@ class ActionMenu extends Table\Column
     }
 
     #[\Override]
-    public function getHeaderCellHtml(Field $field = null, $value = null): string
+    public function getHeaderCellHtml(?Field $field = null, $value = null): string
     {
         $this->table->js(true)->find('.atk-action-menu')->dropdown(
             array_merge(
@@ -113,7 +113,7 @@ class ActionMenu extends Table\Column
     }
 
     #[\Override]
-    public function getDataCellTemplate(Field $field = null): string
+    public function getDataCellTemplate(?Field $field = null): string
     {
         if (!$this->items) {
             return '';

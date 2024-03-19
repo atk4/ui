@@ -101,7 +101,7 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends M
     }
 
     #[\Override]
-    public function validate(string $intent = null): array
+    public function validate(?string $intent = null): array
     {
         $errors = parent::validate($intent);
 

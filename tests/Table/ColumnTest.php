@@ -60,7 +60,7 @@ class ColumnTest extends TestCase
     {
         $this->table->addColumn('name', new class() extends Table\Column {
             #[\Override]
-            public function getDataCellHtml(Field $field = null, array $attr = []): string
+            public function getDataCellHtml(?Field $field = null, array $attr = []): string
             {
                 $entity = $this->table->currentRow;
 

@@ -131,7 +131,7 @@ class Column
      *
      * @return mixed
      */
-    public function addPopup(Popup $popup = null, $icon = 'table-filter-off')
+    public function addPopup(?Popup $popup = null, $icon = 'table-filter-off')
     {
         $id = $this->name . '_ac';
 
@@ -216,7 +216,7 @@ class Column
      *
      * @return Column\JsHeaderDropdownCallback
      */
-    public function setHeaderDropdown($items, string $icon = 'caret square down', string $menuId = null): JsCallback
+    public function setHeaderDropdown($items, string $icon = 'caret square down', ?string $menuId = null): JsCallback
     {
         $this->hasHeaderAction = true;
         $id = $this->name . '_ac';
@@ -346,7 +346,7 @@ class Column
      *
      * @param mixed $value
      */
-    public function getHeaderCellHtml(Field $field = null, $value = null): string
+    public function getHeaderCellHtml(?Field $field = null, $value = null): string
     {
         $tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value]);
         if ($tags) {
@@ -416,7 +416,7 @@ class Column
      *
      * If you need to format data manually, you can use $this->table->onHook(Lister::HOOK_BEFORE_ROW or Lister::HOOK_AFTER_ROW, ...);
      */
-    public function getDataCellHtml(Field $field = null, array $attr = []): string
+    public function getDataCellHtml(?Field $field = null, array $attr = []): string
     {
         return $this->getTag('body', $attr, [$this->getDataCellTemplate($field)]);
     }
@@ -432,7 +432,7 @@ class Column
      * applied to the same column. The first one to be applied is executed first, then
      * a subsequent ones are executed.
      */
-    public function getDataCellTemplate(Field $field = null): string
+    public function getDataCellTemplate(?Field $field = null): string
     {
         if ($field) {
             return '{$' . $field->shortName . '}';

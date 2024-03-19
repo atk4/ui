@@ -203,7 +203,7 @@ class Lister extends View
      * render tree (instead of cloned template).
      */
     #[\Override]
-    public function renderToJsonArr(string $region = null): array
+    public function renderToJsonArr(?string $region = null): array
     {
         $this->renderAll();
 

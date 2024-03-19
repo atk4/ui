@@ -357,7 +357,7 @@ class Table extends Lister
      * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
     #[\Override]
-    public function setModel(Model $model, array $fields = null): void
+    public function setModel(Model $model, ?array $fields = null): void
     {
         $model->assertIsModel();
 

@@ -137,7 +137,7 @@ class HtmlTemplate
      * @param string|array<string, string>          $tag
      * @param ($tag is array ? never : string|null) $value
      */
-    protected function _setOrAppend($tag, string $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
+    protected function _setOrAppend($tag, ?string $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
     {
         // $tag passed as associative array [tag => value]
         if (is_array($tag) && $value === null) { // @phpstan-ignore-line
@@ -196,7 +196,7 @@ class HtmlTemplate
      *
      * @return $this
      */
-    public function set($tag, string $value = null): self
+    public function set($tag, ?string $value = null): self
     {
         $this->_setOrAppend($tag, $value, true, false);
 
@@ -212,7 +212,7 @@ class HtmlTemplate
      *
      * @return $this
      */
-    public function trySet($tag, string $value = null): self
+    public function trySet($tag, ?string $value = null): self
     {
         $this->_setOrAppend($tag, $value, true, false, false);
 
@@ -228,7 +228,7 @@ class HtmlTemplate
      *
      * @return $this
      */
-    public function dangerouslySetHtml($tag, string $value = null): self
+    public function dangerouslySetHtml($tag, ?string $value = null): self
     {
         $this->_setOrAppend($tag, $value, false, false);
 
@@ -244,7 +244,7 @@ class HtmlTemplate
      *
      * @return $this
      */
-    public function tryDangerouslySetHtml($tag, string $value = null): self
+    public function tryDangerouslySetHtml($tag, ?string $value = null): self
     {
         $this->_setOrAppend($tag, $value, false, false, false);
 
@@ -427,7 +427,7 @@ class HtmlTemplate
         return $this;
     }
 
-    protected function parseTemplateTree(array &$inputReversed, string $openedTag = null): TagTree
+    protected function parseTemplateTree(array &$inputReversed, ?string $openedTag = null): TagTree
     {
         $tagTree = new TagTree($this, $openedTag ?? self::TOP_TAG);
 
@@ -538,7 +538,7 @@ class HtmlTemplate
         return implode('', $res);
     }
 
-    public function renderToHtml(string $region = null): string
+    public function renderToHtml(?string $region = null): string
     {
         return $this->renderTagTreeToHtml($this->getTagTree($region ?? self::TOP_TAG));
     }

@@ -65,7 +65,7 @@ class FormTest extends TestCase
      * @param \Closure(Model): void  $submitFx
      * @param \Closure(string): void $checkExpectedErrorsFx
      */
-    protected function assertFormSubmit(\Closure $createFormFx, array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
+    protected function assertFormSubmit(\Closure $createFormFx, array $postData, ?\Closure $submitFx = null, ?\Closure $checkExpectedErrorsFx = null): void
     {
         $form = $this->simulateViewCallback(function (ServerRequestInterface $request) use ($createFormFx) {
             $app = $this->createApp([AppFormTestMock::class, 'request' => $request]);

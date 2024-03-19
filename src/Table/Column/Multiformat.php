@@ -28,7 +28,7 @@ class Multiformat extends Table\Column
     }
 
     #[\Override]
-    public function getDataCellHtml(Field $field = null, array $attr = []): string
+    public function getDataCellHtml(?Field $field = null, array $attr = []): string
     {
         return '{$c_' . $this->shortName . '}';
     }

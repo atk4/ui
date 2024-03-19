@@ -167,7 +167,7 @@ class Card extends View
      * @param array<int, string>|null $fields
      */
     #[\Override]
-    public function setModel(Model $entity, array $fields = null): void
+    public function setModel(Model $entity, ?array $fields = null): void
     {
         $entity->assertIsLoaded();
 
@@ -188,7 +188,7 @@ class Card extends View
      *
      * @return View
      */
-    public function addSection(string $title = null, Model $model = null, array $fields = null, bool $useTable = false, bool $useLabel = false)
+    public function addSection(?string $title = null, ?Model $model = null, ?array $fields = null, bool $useTable = false, bool $useLabel = false)
     {
         $section = CardSection::addToWithCl($this, array_merge($this->cardSectionSeed, ['card' => $this]), ['Section']);
         if ($title) {
@@ -208,7 +208,7 @@ class Card extends View
      *
      * @return $this
      */
-    public function addClickAction(Model\UserAction $action, Button $button = null, array $args = [], string $confirm = null): self
+    public function addClickAction(Model\UserAction $action, ?Button $button = null, array $args = [], ?string $confirm = null): self
     {
         $button = $this->addButton($button ?? $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::CARD_BUTTON));
 
@@ -257,7 +257,7 @@ class Card extends View
     /**
      * Set extra content using model field.
      */
-    public function addExtraFields(Model $model, array $fields, string $glue = null): void
+    public function addExtraFields(Model $model, array $fields, ?string $glue = null): void
     {
         // display extra field in line
         if ($glue) {

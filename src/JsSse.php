@@ -113,7 +113,7 @@ class JsSse extends JsCallback
     /**
      * Output a SSE Event.
      */
-    public function sendEvent(string $id, string $data, string $eventName = null): void
+    public function sendEvent(string $id, string $data, ?string $eventName = null): void
     {
         $this->sendBlock($id, $data, $eventName);
     }
@@ -141,7 +141,7 @@ class JsSse extends JsCallback
         }, null, $app)();
     }
 
-    public function sendBlock(string $id, string $data, string $eventName = null): void
+    public function sendBlock(string $id, string $data, ?string $eventName = null): void
     {
         if (connection_aborted()) {
             $this->hook(self::HOOK_ABORTED);
