@@ -122,7 +122,7 @@ class Grid extends View
             $menuElementNameCountsBackup = \Closure::bind(fn () => $this->_elementNameCounts, $this->menu, AbstractView::class)();
             try {
                 $menuRight = $this->menu->addMenuRight(); // @phpstan-ignore-line
-                $menuItemView = View::addTo($menuRight->addItem()->setElement('div'));
+                $menuItemView = View::addTo($menuRight->addItem());
                 $quickSearch = JsSearch::addTo($menuItemView);
                 $this->stickyGet($quickSearch->name . '_q');
                 $this->menu->removeElement($menuRight->shortName);
@@ -316,7 +316,7 @@ class Grid extends View
             throw new Exception('Unable to add QuickSearch without Menu');
         }
 
-        $view = View::addTo($this->menu->addMenuRight()->addItem()->setElement('div'));
+        $view = View::addTo($this->menu->addMenuRight()->addItem());
 
         $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
         $q = $this->stickyGet($this->quickSearch->name . '_q') ?? '';
