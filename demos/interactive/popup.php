@@ -115,25 +115,25 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
         $c1 = $cols->addColumn();
         Header::addTo($c1, ['size' => 'small'])->set('Snacks');
         $l1 = View::addTo($c1, ['ui' => 'list']);
-        MenuItem::addTo($l1, ['content' => 'Crisps', 'ui' => 'item'])->setElement('a');
-        MenuItem::addTo($l1, ['content' => 'Pork Scratchings', 'ui' => 'item'])->setElement('a');
-        MenuItem::addTo($l1, ['content' => 'Candies', 'ui' => 'item'])->setElement('a');
-        MenuItem::addTo($l1, ['content' => 'Sweets', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l1, ['content' => 'Crisps', 'ui' => 'item']);
+        MenuItem::addTo($l1, ['content' => 'Pork Scratchings', 'ui' => 'item']);
+        MenuItem::addTo($l1, ['content' => 'Candies', 'ui' => 'item']);
+        MenuItem::addTo($l1, ['content' => 'Sweets', 'ui' => 'item']);
 
         $c2 = $cols->addColumn();
         Header::addTo($c2, ['size' => 'small'])->set('Drinks');
         $l2 = View::addTo($c2, ['ui' => 'list']);
-        MenuItem::addTo($l2, ['content' => 'Fizzy Drink', 'ui' => 'item'])->setElement('a');
-        MenuItem::addTo($l2, ['content' => 'Hot Latte', 'ui' => 'item'])->setElement('a');
-        MenuItem::addTo($l2, ['content' => 'Water', 'ui' => 'item'])->setElement('a');
-        MenuItem::addTo($l2, ['content' => 'Apple Juice', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l2, ['content' => 'Fizzy Drink', 'ui' => 'item']);
+        MenuItem::addTo($l2, ['content' => 'Hot Latte', 'ui' => 'item']);
+        MenuItem::addTo($l2, ['content' => 'Water', 'ui' => 'item']);
+        MenuItem::addTo($l2, ['content' => 'Apple Juice', 'ui' => 'item']);
 
         $c3 = $cols->addColumn();
         Header::addTo($c3, ['size' => 'small'])->set('Mains');
         $l3 = View::addTo($c3, ['ui' => 'list']);
-        MenuItem::addTo($l3, ['content' => 'Chicken Tikka', 'ui' => 'item'])->setElement('a');
-        MenuItem::addTo($l3, ['content' => 'Green Curry', 'ui' => 'item'])->setElement('a');
-        MenuItem::addTo($l3, ['content' => 'Pastries', 'ui' => 'item'])->setElement('a');
+        MenuItem::addTo($l3, ['content' => 'Chicken Tikka', 'ui' => 'item']);
+        MenuItem::addTo($l3, ['content' => 'Green Curry', 'ui' => 'item']);
+        MenuItem::addTo($l3, ['content' => 'Pastries', 'ui' => 'item']);
     }
 
     /**

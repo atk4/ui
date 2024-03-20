@@ -15,6 +15,8 @@ class MenuItem extends View
     #[\Override]
     protected function renderView(): void
     {
+        $this->addClass('link'); // set "link" mouse cursor
+
         if ($this->label) {
             Label::addTo($this, [$this->label]);
         }
