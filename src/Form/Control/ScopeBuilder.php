@@ -15,7 +15,7 @@ use Atk4\Ui\View;
 
 /**
  * Scope Builder form control that will allow to create model scope
- * for complex user-defined filters
+ * for complex user-defined filters.
  *
  * WARNING: Possible security issue when applying json serialized scope condition
  * to model - not tested. Use at own risk.
