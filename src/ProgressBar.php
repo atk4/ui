@@ -30,7 +30,7 @@ class ProgressBar extends View
     public $max = 100;
 
     /**
-     * @param array|string $label
+     * @param array<0|string, mixed>|string $label
      */
     public function __construct(int $value = 0, $label = [])
     {
@@ -39,6 +39,7 @@ class ProgressBar extends View
         parent::__construct($label);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->js(true)->progress(['percent' => $this->value]);
@@ -47,7 +48,7 @@ class ProgressBar extends View
     }
 
     /**
-     * Return js action for incrementing progress by one.
+     * Return JS action for incrementing progress by one.
      */
     public function jsIncrement(): JsExpressionable
     {
@@ -55,7 +56,7 @@ class ProgressBar extends View
     }
 
     /**
-     * Return js action for setting value (client-side).
+     * Return JS action for setting value.
      */
     public function jsValue(int $value): JsExpressionable
     {

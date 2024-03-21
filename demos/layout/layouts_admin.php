@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\App;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Layout;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $layout = Layout\Admin::addTo($app);
@@ -54,7 +55,7 @@ $formGroup = $form->addGroup('Address');
 $formGroup->addControl('address', ['width' => 'twelve']);
 $formGroup->addControl('zip', ['width' => 'four']);
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     $errors = [];
     foreach (['first_name', 'last_name', 'address'] as $field) {
         if (!$form->model->get($field)) {

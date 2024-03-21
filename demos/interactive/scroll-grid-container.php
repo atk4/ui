@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Card;
 use Atk4\Ui\Columns;
@@ -13,7 +14,7 @@ use Atk4\Ui\Header;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Dynamic scroll in Crud and Grid', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
@@ -31,13 +32,13 @@ $g1->setModel($m1);
 $g1->addQuickSearch([Country::hinting()->fieldName()->name, Country::hinting()->fieldName()->iso]);
 
 // demo for additional action buttons in Crud + JsPaginator
-$g1->addModalAction(['icon' => 'cogs'], 'Details', function (View $p, $id) use ($g1) {
+$g1->addModalAction(['icon' => 'cogs'], 'Details', static function (View $p, $id) use ($g1) {
     Card::addTo($p)->setModel($g1->model->load($id));
 });
-$g1->addActionButton('red', function (Jquery $js) {
+$g1->addActionButton('red', static function (Jquery $js) {
     return $js->closest('tr')->css('color', 'red');
 });
-// THIS SHOULD GO AFTER YOU CALL Grid::addActionButton() !!!
+// THIS SHOULD GO AFTER YOU CALL Grid::addActionButton()
 $g1->addJsPaginatorInContainer(30, 350);
 
 $c2 = $c->addColumn();

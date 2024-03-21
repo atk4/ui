@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-use Atk4\Core\AppScopeTrait;
 use Atk4\Core\WarnDynamicPropertyTrait;
-use Atk4\Data\Model;
 use Atk4\Ui\HtmlTemplate\TagTree;
 use Atk4\Ui\HtmlTemplate\Value as HtmlValue;
 
@@ -15,7 +13,6 @@ use Atk4\Ui\HtmlTemplate\Value as HtmlValue;
  */
 class HtmlTemplate
 {
-    use AppScopeTrait;
     use WarnDynamicPropertyTrait;
 
     public const TOP_TAG = '_top';
@@ -37,13 +34,13 @@ class HtmlTemplate
         $this->loadFromString($template);
     }
 
-    public function _hasTag(string $tag): bool
+    protected function _hasTag(string $tag): bool
     {
         return isset($this->tagTrees[$tag]);
     }
 
     /**
-     * @param string|array $tag
+     * @param string|list<string> $tag
      */
     public function hasTag($tag): bool
     {
@@ -100,23 +97,19 @@ class HtmlTemplate
         unset($template->tagTrees[$tag]);
         $template->tagTrees[self::TOP_TAG] = $topTagTree;
         $topTag = self::TOP_TAG;
-        \Closure::bind(function () use ($topTagTree, $topTag) {
+        \Closure::bind(static function () use ($topTagTree, $topTag) {
             $topTagTree->tag = $topTag;
         }, null, TagTree::class)();
 
         // TODO prune unreachable nodes
         // $template->rebuildTagsIndex();
 
-        if ($this->issetApp()) {
-            $template->setApp($this->getApp());
-        }
-
         return $template;
     }
 
     protected function _unsetFromTagTree(TagTree $tagTree, int $k): void
     {
-        \Closure::bind(function () use ($tagTree, $k) {
+        \Closure::bind(static function () use ($tagTree, $k) {
             if ($k === array_key_last($tagTree->children)) {
                 array_pop($tagTree->children);
             } else {
@@ -141,30 +134,30 @@ class HtmlTemplate
      *
      * If tag contains another tag trees, these tag trees are emptied.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      */
-    protected function _setOrAppend($tag, string $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
+    protected function _setOrAppend($tag, ?string $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
     {
-        if ($tag instanceof Model) {
-            if (!$encodeHtml) {
-                throw new Exception('HTML is not allowed to be dangerously set from Model');
+        // $tag passed as associative array [tag => value]
+        if (is_array($tag) && $value === null) { // @phpstan-ignore-line
+            if ($throwIfNotFound) {
+                foreach ($tag as $k => $v) {
+                    if (!$this->_hasTag($k)) {
+                        $this->_setOrAppend($k, $v, $encodeHtml, $append, true);
+                    }
+                }
             }
 
-            $tag = $this->getApp()->uiPersistence->typecastSaveRow($tag, $tag->get());
-        }
-
-        // $tag passed as associative array [tag => value]
-        // in this case we don't throw exception if tags don't exist
-        if (is_array($tag) && $value === null) {
             foreach ($tag as $k => $v) {
-                $this->_setOrAppend($k, $v, $encodeHtml, $append, false);
+                $this->_setOrAppend($k, $v, $encodeHtml, $append, $throwIfNotFound);
             }
 
             return;
         }
 
         if (!is_string($tag) || $tag === '') {
-            throw (new Exception('Tag must be non-empty string'))
+            throw (new Exception('Tag must be ' . (is_string($tag) ? 'non-empty ' : '') . 'string'))
                 ->addMoreInfo('tag', $tag)
                 ->addMoreInfo('value', $value);
         }
@@ -198,19 +191,12 @@ class HtmlTemplate
      * If tag is found inside template several times, all occurrences are
      * replaced.
      *
-     * ALTERNATIVE USE(2) of this function is to pass associative array as
-     * a single argument. This will assign multiple tags with one call.
-     * Sample use is:
-     *
-     *  set($_GET);
-     *
-     * would read and set multiple region values from $_GET array.
-     *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
-    public function set($tag, string $value = null): self
+    public function set($tag, ?string $value = null): self
     {
         $this->_setOrAppend($tag, $value, true, false);
 
@@ -221,11 +207,12 @@ class HtmlTemplate
      * Same as set(), but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
-    public function trySet($tag, string $value = null): self
+    public function trySet($tag, ?string $value = null): self
     {
         $this->_setOrAppend($tag, $value, true, false, false);
 
@@ -236,11 +223,12 @@ class HtmlTemplate
      * Set value of a tag to a HTML content. The value is set without
      * encoding, so you must be sure to sanitize.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
-    public function dangerouslySetHtml($tag, string $value = null): self
+    public function dangerouslySetHtml($tag, ?string $value = null): self
     {
         $this->_setOrAppend($tag, $value, false, false);
 
@@ -251,11 +239,12 @@ class HtmlTemplate
      * See dangerouslySetHtml() but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
-    public function tryDangerouslySetHtml($tag, string $value = null): self
+    public function tryDangerouslySetHtml($tag, ?string $value = null): self
     {
         $this->_setOrAppend($tag, $value, false, false, false);
 
@@ -265,7 +254,8 @@ class HtmlTemplate
     /**
      * Add more content inside a tag.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
@@ -280,7 +270,8 @@ class HtmlTemplate
      * Same as append(), but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
@@ -295,7 +286,8 @@ class HtmlTemplate
      * Add more content inside a tag. The content is appended without
      * encoding, so you must be sure to sanitize.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
@@ -310,7 +302,8 @@ class HtmlTemplate
      * Same as dangerouslyAppendHtml(), but won't generate exception for non-existing
      * $tag.
      *
-     * @param string|array|Model $tag
+     * @param string|array<string, string>          $tag
+     * @param ($tag is array ? never : string|null) $value
      *
      * @return $this
      */
@@ -325,7 +318,7 @@ class HtmlTemplate
      * Empty contents of specified region. If region contains sub-hierarchy,
      * it will be also removed.
      *
-     * @param string|array $tag
+     * @param string|list<string> $tag
      *
      * @return $this
      */
@@ -340,7 +333,7 @@ class HtmlTemplate
         }
 
         $tagTree = $this->getTagTree($tag);
-        \Closure::bind(function () use ($tagTree) {
+        \Closure::bind(static function () use ($tagTree) {
             $tagTree->children = [];
         }, null, TagTree::class)();
 
@@ -353,7 +346,7 @@ class HtmlTemplate
     /**
      * Similar to del() but won't throw exception if tag is not present.
      *
-     * @param string|array $tag
+     * @param string|list<string> $tag
      *
      * @return $this
      */
@@ -409,7 +402,7 @@ class HtmlTemplate
         if (!isset(self::$_filesCache[$filename])) {
             $data = @file_get_contents($filename);
             if ($data !== false) {
-                $data = preg_replace('~(?:\r\n?|\n)$~s', '', $data); // always trim end NL
+                $data = preg_replace('~(?:\r\n?|\n)$~sD', '', $data); // always trim end NL
             }
             self::$_filesCache[$filename] = $data;
         }
@@ -419,7 +412,7 @@ class HtmlTemplate
             return false;
         }
 
-        $this->loadFromString($str);
+        $this->loadFromString($str, true);
 
         return $this;
     }
@@ -427,14 +420,14 @@ class HtmlTemplate
     /**
      * @return $this
      */
-    public function loadFromString(string $str): self
+    public function loadFromString(string $str, bool $allowParseCache = false): self
     {
-        $this->parseTemplate($str);
+        $this->parseTemplate($str, $allowParseCache);
 
         return $this;
     }
 
-    protected function parseTemplateTree(array &$inputReversed, string $openedTag = null): TagTree
+    protected function parseTemplateTree(array &$inputReversed, ?string $openedTag = null): TagTree
     {
         $tagTree = new TagTree($this, $openedTag ?? self::TOP_TAG);
 
@@ -478,7 +471,7 @@ class HtmlTemplate
         return $tagTree;
     }
 
-    protected function parseTemplate(string $str): void
+    protected function parseTemplate(string $str, bool $allowParseCache): void
     {
         $cKey = static::class . "\0" . $str;
         if (!isset(self::$_parseCache[$cKey])) {
@@ -492,27 +485,33 @@ class HtmlTemplate
             try {
                 $this->tagTrees[self::TOP_TAG] = $this->parseTemplateTree($inputReversed);
                 $tagTrees = $this->tagTrees;
-
-                if (self::$_parseCacheParentTemplate === null) {
-                    $cKeySelfEmpty = self::class . "\0";
-                    self::$_parseCache[$cKeySelfEmpty] = [];
-                    try {
-                        self::$_parseCacheParentTemplate = new self();
-                    } finally {
-                        unset(self::$_parseCache[$cKeySelfEmpty]);
-                    }
-                }
-                $parentTemplate = self::$_parseCacheParentTemplate;
-
-                \Closure::bind(function () use ($tagTrees, $parentTemplate) {
-                    foreach ($tagTrees as $tagTree) {
-                        $tagTree->parentTemplate = $parentTemplate;
-                    }
-                }, null, TagTree::class)();
-                self::$_parseCache[$cKey] = $tagTrees;
             } finally {
                 $this->tagTrees = [];
             }
+
+            if (!$allowParseCache) {
+                $this->tagTrees = $tagTrees;
+
+                return;
+            }
+
+            if (self::$_parseCacheParentTemplate === null) {
+                $cKeySelfEmpty = self::class . "\0";
+                self::$_parseCache[$cKeySelfEmpty] = [];
+                try {
+                    self::$_parseCacheParentTemplate = new self();
+                } finally {
+                    unset(self::$_parseCache[$cKeySelfEmpty]);
+                }
+            }
+            $parentTemplate = self::$_parseCacheParentTemplate;
+
+            \Closure::bind(static function () use ($tagTrees, $parentTemplate) {
+                foreach ($tagTrees as $tagTree) {
+                    $tagTree->parentTemplate = $parentTemplate;
+                }
+            }, null, TagTree::class)();
+            self::$_parseCache[$cKey] = $tagTrees;
         }
 
         $this->tagTrees = $this->cloneTagTrees(self::$_parseCache[$cKey]);
@@ -539,7 +538,7 @@ class HtmlTemplate
         return implode('', $res);
     }
 
-    public function renderToHtml(string $region = null): string
+    public function renderToHtml(?string $region = null): string
     {
         return $this->renderTagTreeToHtml($this->getTagTree($region ?? self::TOP_TAG));
     }
@@ -552,7 +551,7 @@ class HtmlTemplate
                 $res[] = $v->getHtml();
             } elseif ($v instanceof TagTree) {
                 $res[] = $this->renderTagTreeToHtml($v);
-            } elseif ($v instanceof self) { // @phpstan-ignore-line
+            } elseif ($v instanceof self) {
                 $res[] = $v->renderToHtml();
             } else {
                 throw (new Exception('Unexpected value class'))

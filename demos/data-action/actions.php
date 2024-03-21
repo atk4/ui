@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Header;
@@ -12,7 +13,7 @@ use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\UserAction;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $files = new File($app->db);
@@ -22,7 +23,7 @@ $action = $files->addUserAction('import_from_filesystem', [
     // Which fields may be edited for the action. Default to all fields.
     // ModalExecutor for example, will only display fields set in this array.
     'fields' => [$files->fieldName()->name],
-    // callback function to call in model when action execute.
+    // Callback function to call in model when action execute.
     // Can use a closure function or model method.
     'callback' => 'importFromFilesystem',
     // Some Ui action executor will use this property for displaying text in button.
@@ -30,7 +31,7 @@ $action = $files->addUserAction('import_from_filesystem', [
     'description' => 'Import file in a specify path.',
     // Display information prior to execute the action.
     // ModalExecutor or PreviewExecutor will display preview.
-    'preview' => function (Model $model, $path) {
+    'preview' => static function (Model $model, string $path) {
         return 'Execute Import using path: "' . $path . '"';
     },
     // Argument needed to run the callback action method.
@@ -54,20 +55,19 @@ $leftColumn = $columns->addColumn();
 
 Header::addTo($rightColumn, [
     'JsCallbackExecutor',
-    'subHeader' => 'Path argument is set via POST url when setting actions in executor.',
+    'subHeader' => 'Path argument is set via POST URL when setting actions in executor.',
 ]);
 // Explicitly adding an Action executor.
 $executor = UserAction\JsCallbackExecutor::addTo($rightColumn);
-// Passing Model action to executor and action argument via url.
+// Passing Model action to executor and action argument via URL.
 $executor->setAction($action->getActionForEntity($files->createEntity()));
 // Setting user response after model action get execute.
-$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, static function () {
     return new JsToast('Files imported');
 });
-$executor->executeModelAction(['path' => '.']);
 
-$btn = Button::addTo($rightColumn, ['Import File']);
-$btn->on('click', $executor, ['confirm' => 'This will import a lot of file. Are you sure?']);
+$button = Button::addTo($rightColumn, ['Import File']);
+$button->on('click', $executor, ['args' => ['path' => '.'], 'confirm' => 'This will import a lot of file. Are you sure?']);
 
 Header::addTo($rightColumn, ['BasicExecutor']);
 $executor = UserAction\BasicExecutor::addTo($rightColumn, ['executorButton' => [Button::class, 'Import', 'class.primary' => true]]);
@@ -75,7 +75,7 @@ $executor->setAction($action->getActionForEntity($files->createEntity()));
 $executor->ui = 'segment';
 $executor->description = 'Execute Import action using "BasicExecutor" with argument "path" equal to "."';
 $executor->setArguments(['path' => '.']);
-$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, static function () {
     return new JsToast('Done!');
 });
 
@@ -88,7 +88,7 @@ $executor->ui = 'segment';
 $executor->previewType = 'console';
 $executor->description = 'Displays preview in console prior to executing';
 $executor->setArguments(['path' => '.']);
-$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, static function () {
     return new JsToast('Confirm!');
 });
 
@@ -98,7 +98,7 @@ $executor->setAction($action->getActionForEntity($files->createEntity()));
 $executor->ui = 'segment';
 $executor->description = 'Only fields set in $action[field] array will be added in form.';
 $executor->setArguments(['path' => '.']);
-$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function (UserAction\FormExecutor $executor) {
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, static function (UserAction\FormExecutor $executor) {
     return new JsToast('Confirm!');
 });
 
@@ -109,6 +109,6 @@ $executor = UserAction\ArgumentFormExecutor::addTo($leftColumn, ['executorButton
 $executor->setAction($action->getActionForEntity($files->createEntity()));
 $executor->description = 'ArgumentFormExecutor will ask user about arguments set in actions.';
 $executor->ui = 'segment';
-$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, function () {
+$executor->onHook(UserAction\BasicExecutor::HOOK_AFTER_EXECUTE, static function () {
     return new JsToast('Imported!');
 });

@@ -1,5 +1,6 @@
 import $ from 'external/jquery';
 import atk from 'atk';
+import lodashEscape from 'lodash/escape';
 
 /**
  * Handle Fomantic-UI API functionality throughout the app.
@@ -24,15 +25,15 @@ class ApiService {
     }
 
     /**
-     * Execute js code.
+     * Execute JS code.
      *
-     * This function should be called using .call() by passing proper context for 'this'.
-     * ex: apiService.evalResponse.call(this, code)
-     *
+     * @param {object} thisObject
      * @param {string} code
      */
-    evalResponse(code) {
-        eval(code); // eslint-disable-line no-eval
+    evalJsCode(thisObject, code) {
+        (function () {
+            eval('\'use strict\'; (() => {' + code + '})()'); // eslint-disable-line no-eval
+        }).call(thisObject);
     }
 
     /**
@@ -73,40 +74,52 @@ class ApiService {
         try {
             if (response.success) {
                 if (response.html && response.id) {
-                    // prevent modal duplication.
-                    // apiService.removeModalDuplicate(response.html);
-                    const modelsContainer = $('.ui.dimmer.modals.page')[0];
-                    $($.parseHTML(response.html)).find('.ui.modal[id]').each((i, e) => {
-                        $(modelsContainer).find('#' + e.id).remove();
+                    const $target = $('#' + response.id);
+                    if ($target.length !== 1) {
+                        throw new Error('Target DOM element not found');
+                    }
+
+                    let responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
+                    const responseElement = responseBody.childNodes[0];
+                    if (responseBody.childNodes.length !== 1 || responseElement.id !== response.id) {
+                        throw new Error('Unexpected HTML response');
+                    }
+                    responseBody = null;
+
+                    // prevent modal duplication
+                    const $modalsContainers = $('body > .ui.dimmer.modals.page, body > .atk-side-panels');
+                    $(responseElement).find('.ui.modal[id], .atk-right-panel[id]').each((i, e) => {
+                        $modalsContainers.find('#' + e.id).remove();
                     });
 
-                    const result = $('#' + response.id).replaceWith(response.html);
-                    if (result.length === 0) {
-                        // TODO Find a better solution for long term.
-                        // Need a way to gracefully abort server request.
-                        // when user cancel a request by selecting another request.
-                        console.error('Unable to replace element with id: ' + response.id);
-                        // throw Error('Unable to replace element with id: ' + response.id);
+                    if ($target.hasClass('ui modal') || $target.hasClass('atk-right-panel')) {
+                        $.each([...$target[0].childNodes], (i, node) => {
+                            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
+                                return;
+                            }
+
+                            $(node).remove();
+                        });
+                        $.each([...responseElement.childNodes], (i, node) => {
+                            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
+                                return;
+                            }
+
+                            $target.append(node);
+                        });
+                    } else {
+                        $target.replaceWith(response.html);
                     }
                 }
-                if (response.portals) {
-                    // Create app portal from json response.
-                    const portals = Object.keys(response.portals);
-                    for (const portalID of portals) {
-                        const m = $('.ui.dimmer.modals.page, .atk-side-panels').find('#' + portalID);
-                        if (m.length === 0) {
-                            $(document.body).append(response.portals[portalID].html);
-                            atk.apiService.evalResponse(response.portals[portalID].js);
-                        }
-                    }
-                }
+
                 if (response.atkjs) {
-                    atk.apiService.evalResponse.call(this, response.atkjs);
+                    atk.apiService.evalJsCode(this, response.atkjs);
                 }
+
                 if (atk.apiService.afterSuccessCallbacks.length > 0) {
                     const callbacks = atk.apiService.afterSuccessCallbacks;
                     for (const callback of callbacks) {
-                        atk.apiService.evalResponse.call(this, callback);
+                        atk.apiService.evalJsCode(this, callback);
                     }
                     atk.apiService.afterSuccessCallbacks.splice(0);
                 }
@@ -114,7 +127,7 @@ class ApiService {
                 throw new Error(response.message);
             }
         } catch (e) {
-            atk.apiService.showErrorModal(atk.apiService.getErrorHtml(e.message));
+            atk.apiService.showErrorModal(atk.apiService.getErrorHtml('API JavaScript Error', e.message));
         }
     }
 
@@ -130,24 +143,23 @@ class ApiService {
      * Handle a server response failure.
      */
     onFailure(response) {
-        // if json is returned, it should contain the error within message property
+        // if JSON is returned, it should contain the HTML error in message property
         if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
             atk.apiService.showErrorModal(response.message);
         } else {
-            // check if we have html returned by server with <body> content.
-            const body = response.match(/<body[^>]*>[\S\s]*<\/body>/gi);
-            if (body) {
-                atk.apiService.showErrorModal(body);
-            } else {
-                atk.apiService.showErrorModal(response);
-            }
+            atk.apiService.showErrorModal(
+                atk.apiService.getErrorHtml('API Server Error', '')
+                    + '<div><pre style="margin-bottom: 0px;"><code style="display: block; padding: 1em; color: #adbac7; background: #22272e;">'
+                    + lodashEscape(response)
+                    + '</code></pre></div>'
+            );
         }
     }
 
     /**
      * Make our own ajax request test if need to.
      * if a plugin must call $.ajax or $.getJson directly instead of Fomantic-UI api,
-     * we could send the json response to this.
+     * we could send the JSON response to this.
      */
     atkProcessExternalResponse(response, content = null) {
         if (response.success) {
@@ -159,9 +171,9 @@ class ApiService {
 
     /**
      * Will wrap Fomantic-UI api call into a Promise.
-     * Can be used to retrieve json data from the server.
+     * Can be used to retrieve JSON data from the server.
      * Using this will bypass regular successTest i.e. any
-     * atkjs (javascript) return from server will not be evaluated.
+     * atkjs (JavaScript) return from server will not be evaluated.
      *
      * Make sure to control the server output when using
      * this function. It must at least return { success: true } in order for
@@ -171,6 +183,7 @@ class ApiService {
      *
      * @param   {string}       url      the URL to fetch data
      * @param   {object}       settings the Fomantic-UI api settings object.
+     *
      * @returns {Promise<any>}
      */
     suiFetch(url, settings = {}, el = 'body') {
@@ -202,31 +215,31 @@ class ApiService {
     /**
      * Display App error in a Fomantic-UI modal.
      */
-    showErrorModal(errorMsg) {
+    showErrorModal(contentHtml) {
         if (atk.modalService.modals.length > 0) {
-            const $modal = $(atk.modalService.modals[atk.modalService.modals.length - 1]);
+            const $modal = $(atk.modalService.modals.at(-1));
             if ($modal.data('closeOnLoadingError')) {
                 $modal.removeData('closeOnLoadingError').modal('hide');
             }
         }
 
-        // catch application error and display them in a new modal window.
+        // catch application error and display them in a new modal window
         const m = $('<div>')
             .appendTo('body')
             .addClass('ui scrolling modal')
             .css('padding', '1em')
-            .html(errorMsg);
+            .html(contentHtml);
         m.data('needRemove', true).modal().modal('show');
     }
 
-    getErrorHtml(error) {
-        return `<div class="ui negative icon message">
-                <i class="warning sign icon"></i>
-                <div class="content">
-                  <div class="header">Javascript Error</div>
-                  <div>${error}</div>
-                </div>
-              </div>`;
+    getErrorHtml(titleHtml, messageHtml) {
+        return `<div class="ui negative icon message" style="margin: 0px;">
+              <i class="warning sign icon"></i>
+              <div class="content">
+                <div class="header">${titleHtml}</div>
+                <div>${messageHtml}</div>
+              </div>
+            </div>`;
     }
 }
 

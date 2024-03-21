@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Card;
 use Atk4\Ui\Form;
@@ -17,7 +18,7 @@ use Atk4\Ui\Panel;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $country = new Country($app->db);
@@ -30,8 +31,8 @@ Header::addTo($app, ['Right Panel', 'subHeader' => 'Content on the fly!']);
 Header::addTo($app, ['Static', 'size' => 4, 'subHeader' => 'Panel may have static content only.']);
 $panel = Panel\Right::addTo($app, ['dynamic' => []]);
 Message::addTo($panel, ['This panel contains only static content.']);
-$btn = Button::addTo($app, ['Open Static']);
-$btn->on('click', $panel->jsOpen());
+$button = Button::addTo($app, ['Open Static']);
+$button->on('click', $panel->jsOpen());
 View::addTo($app, ['ui' => 'divider']);
 
 // PANEL_1
@@ -40,19 +41,19 @@ Header::addTo($app, ['Dynamic', 'size' => 4, 'subHeader' => 'Panel can load cont
 $panel1 = Panel\Right::addTo($app);
 
 Message::addTo($panel1, ['This panel will load content dynamically below according to button select on the right.']);
-$btn = Button::addTo($app, ['Button 1']);
-$btn->js(true)->data('btn', '1');
-$btn->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
+$button = Button::addTo($app, ['Button 1']);
+$button->js(true)->data('btn', '1');
+$button->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
 
-$btn = Button::addTo($app, ['Button 2']);
-$btn->js(true)->data('btn', '2');
-$btn->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
+$button = Button::addTo($app, ['Button 2']);
+$button->js(true)->data('btn', '2');
+$button->on('click', $panel1->jsOpen([], ['btn'], 'orange'));
 
 $view = View::addTo($app, ['ui' => 'segment']);
 $text = Text::addTo($view);
-$text->set($_GET['txt'] ?? 'Not Complete');
+$text->set($app->tryGetRequestQueryParam('txt') ?? 'Not Completed');
 
-$panel1->onOpen(function (Panel\Content $p) use ($view) {
+$panel1->onOpen(static function (Panel\Content $p) use ($view) {
     $panel = View::addTo($p, ['ui' => 'basic segment']);
     $buttonNumber = $panel->stickyGet('btn');
 
@@ -66,7 +67,7 @@ $panel1->onOpen(function (Panel\Content $p) use ($view) {
     $panelButton = Button::addTo($panel, ['Complete']);
     $panelButton->on('click', new JsBlock([
         $p->getOwner()->jsClose(),
-        new JsReload($view, ['txt' => 'Complete using button #' . $buttonNumber]),
+        new JsReload($view, ['txt' => 'Completed using button #' . $buttonNumber]),
     ]));
 });
 
@@ -87,14 +88,14 @@ $txt = Text::addTo($msg);
 $txt->addParagraph('This panel can only be closed via it\'s close icon at top right.');
 $txt->addParagraph('Try to change dropdown value and close without saving!');
 
-$panel2->onOpen(function (Panel\Content $p) {
+$panel2->onOpen(static function (Panel\Content $p) {
     $form = Form::addTo($p);
     $form->addHeader('Settings');
     $form->addControl('name', [Form\Control\Dropdown::class, 'values' => [1 => 'Option 1', 2 => 'Option 2']])
         ->set('1')
         ->onChange($p->getOwner()->jsDisplayWarning(true));
 
-    $form->onSubmit(function (Form $form) use ($p) {
+    $form->onSubmit(static function (Form $form) use ($p) {
         return new JsBlock([
             new JsToast('Saved, closing panel.'),
             $p->getOwner()->jsDisplayWarning(false),
@@ -109,7 +110,7 @@ View::addTo($app, ['ui' => 'divider']);
 Header::addTo($app, ['UserAction Friendly', 'size' => 4, 'subHeader' => 'Panel can run model action.']);
 
 $panel3 = Panel\Right::addTo($app);
-$countryId = $panel3->stickyGet('id');
+$countryId = $app->uiPersistence->typecastAttributeLoadField($country->getIdField(), $panel3->stickyGet('id'));
 $msg = Message::addTo($panel3, ['Run Country model action below.']);
 
 $deck = View::addTo($app, ['ui' => 'cards']);
@@ -121,7 +122,7 @@ foreach ($country as $ct) {
     $c->on('click', $panel3->jsOpen([], ['id'], 'orange'));
 }
 
-$panel3->onOpen(function (Panel\Content $p) use ($country, $countryId) {
+$panel3->onOpen(static function (Panel\Content $p) use ($country, $countryId) {
     $seg = View::addTo($p, ['ui' => 'basic segment center aligned']);
     Header::addTo($seg, [$country->load($countryId)->getTitle()]);
     $buttons = View::addTo($seg, ['ui' => 'vertical basic buttons']);

@@ -7,6 +7,7 @@ namespace Atk4\Ui\Form\Control;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 
@@ -28,28 +29,36 @@ class Calendar extends Input
     /**
      * Set Flatpickr option.
      *
-     * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      */
-    public function setOption($name, $value): void
+    public function setOption(string $name, $value): void
     {
         $this->options[$name] = $value;
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
 
+        $this->options['allowInput'] ??= true;
+
         // setup format
         $phpFormat = $this->getApp()->uiPersistence->{$this->type . 'Format'};
-        $this->options['dateFormat'] = $this->convertPhpDtFormatToFlatpickr($phpFormat);
-
+        $this->options['dateFormat'] = $this->convertPhpDtFormatToFlatpickr($phpFormat, true);
         if ($this->type === 'datetime' || $this->type === 'time') {
+            $this->options['noCalendar'] = $this->type === 'time';
             $this->options['enableTime'] = true;
-            $this->options['time_24hr'] ??= $this->isDtFormatWith24hrTime($phpFormat);
-            $this->options['noCalendar'] = ($this->type === 'time');
+            $this->options['time_24hr'] = $this->isDtFormatWith24hrTime($phpFormat);
             $this->options['enableSeconds'] ??= $this->isDtFormatWithSeconds($phpFormat);
-            $this->options['allowInput'] ??= $this->isDtFormatWithMicroseconds($phpFormat);
+            $this->options['formatSecondsPrecision'] ??= $this->isDtFormatWithMicroseconds($phpFormat) ? 6 : -1;
+            $this->options['disableMobile'] = true;
+            if (!$this->options['enableSeconds']) {
+                $this->options['formatDate'] = new JsFunction(
+                    ['date', 'format', 'locale', 'formatSecondsPrecision'],
+                    [new JsExpression('return flatpickr.formatDate(date, format, locale, formatSecondsPrecision).replace(/: ?0+(?! ?\.)(?=(?: |$))/, \'\');')]
+                );
+            }
         }
 
         // setup locale
@@ -58,6 +67,7 @@ class Calendar extends Input
         ];
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->readOnly) {
@@ -72,6 +82,7 @@ class Calendar extends Input
     /**
      * @param JsExpressionable $expr
      */
+    #[\Override]
     public function onChange($expr, $default = []): void
     {
         if (!$expr instanceof JsBlock) {
@@ -84,8 +95,8 @@ class Calendar extends Input
     /**
      * Get the FlatPickr instance of this input in order to
      * get it's properties like selectedDates or run it's methods.
-     * Ex: clearing date via js
-     *     $btn->on('click', $f->getControl('date')->getJsInstance()->clear());.
+     * Ex: clearing date via JS
+     *     $button->on('click', $f->getControl('date')->getJsInstance()->clear());.
      *
      * @return JsChain
      */
@@ -102,8 +113,12 @@ class Calendar extends Input
         return $phpFormat;
     }
 
-    public function convertPhpDtFormatToFlatpickr(string $phpFormat): string
+    public function convertPhpDtFormatToFlatpickr(string $phpFormat, bool $enforceSeconds): string
     {
+        if ($enforceSeconds) {
+            $phpFormat = preg_replace('~: ?i\K(?!\w| ?: ?s)~', ':s', $phpFormat);
+        }
+
         $res = $this->expandPhpDtFormat($phpFormat);
         foreach ([
             '~[aA]~' => 'K',

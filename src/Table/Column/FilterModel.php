@@ -70,7 +70,7 @@ abstract class FilterModel extends Model
             'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
         ][$field->type];
 
-        // You can set your own filter model class.
+        // you can set your own filter model class
         if (isset($field->ui['filterModel'])) {
             if ($field->ui['filterModel'] instanceof self) {
                 return $field->ui['filterModel'];
@@ -83,6 +83,7 @@ abstract class FilterModel extends Model
         return $filterModel;
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -96,29 +97,23 @@ abstract class FilterModel extends Model
         $this->afterInit();
     }
 
-    /**
-     * Perform further initialization.
-     */
     public function afterInit(): void
     {
         $this->addField('name', ['default' => $this->lookupField->shortName, 'system' => true]);
 
-        // create a name for our filter model to save as session data.
+        // create a name for our filter model to save as session data
         $this->name = 'filter_model_' . $this->lookupField->shortName;
 
-        if ($_GET['atk_clear_filter'] ?? false) {
+        if ($this->getApp()->tryGetRequestQueryParam('atk_clear_filter') ?? false) {
             $this->forget();
         }
 
-        // Add hook in order to persist data in session.
+        // add hook in order to persist data in session
         $this->onHook(self::HOOK_AFTER_SAVE, function (Model $model) {
             $this->memorize('data', $model->get());
         });
     }
 
-    /**
-     * Recall filter model data.
-     */
     public function recallData(): ?array
     {
         return $this->recall('data');
@@ -127,10 +122,8 @@ abstract class FilterModel extends Model
     /**
      * Method that will set conditions on a model base on $op and $value value.
      * Each FilterModel\TypeModel should override this method.
-     *
-     * @return Model
      */
-    abstract public function setConditionForModel(Model $model);
+    abstract public function setConditionForModel(Model $model): void;
 
     /**
      * Method that will set Field display condition in a form.
@@ -142,9 +135,6 @@ abstract class FilterModel extends Model
         return [];
     }
 
-    /**
-     * Check if this model is using session or not.
-     */
     public function clearData(): void
     {
         $this->forget();

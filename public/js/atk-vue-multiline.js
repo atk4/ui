@@ -287,12 +287,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.some.js */ "./node_modules/core-js/modules/esnext.async-iterator.some.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.some.js */ "./node_modules/core-js/modules/esnext.async-iterator.some.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.some.js */ "./node_modules/core-js/modules/esnext.iterator.some.js");
 /* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
@@ -364,18 +364,12 @@ __webpack_require__.r(__webpack_exports__);
       return columns.filter(v => v.isVisible);
     },
     onTab: function (columnIndex) {
-      if (columnIndex === this.columns.filter(column => column.isEditable).length) {
+      if (columnIndex === this.columns.filter(column => column.isEditable).length - 1) {
         this.$emit('onTabLastColumn');
       }
     },
     hasColumnError: function (column) {
       return this.errors.some(v => column.name === v.name);
-    },
-    getColumnWidth: function (column) {
-      return column.fieldOptions ? column.fieldOptions.width : null;
-    },
-    onEdit: function () {
-      this.isEditing = true;
     },
     onToggleDelete: function (e) {
       atk__WEBPACK_IMPORTED_MODULE_5__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete', {
@@ -435,23 +429,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
 /* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.some.js */ "./node_modules/core-js/modules/esnext.async-iterator.some.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/esnext.iterator.some.js */ "./node_modules/core-js/modules/esnext.iterator.some.js");
-/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
-/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-/* harmony import */ var _multiline_body_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./multiline-body.component */ "./src/vue-components/multiline/multiline-body.component.js");
-/* harmony import */ var _multiline_header_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./multiline-header.component */ "./src/vue-components/multiline/multiline-header.component.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.some.js */ "./node_modules/core-js/modules/esnext.async-iterator.some.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
+/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/esnext.iterator.some.js */ "./node_modules/core-js/modules/esnext.iterator.some.js");
+/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/esnext.json.parse.js */ "./node_modules/core-js/modules/esnext.json.parse.js");
+/* harmony import */ var core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
+/* harmony import */ var _multiline_body_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./multiline-body.component */ "./src/vue-components/multiline/multiline-body.component.js");
+/* harmony import */ var _multiline_header_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./multiline-header.component */ "./src/vue-components/multiline/multiline-header.component.js");
+
 
 
 
@@ -487,7 +484,7 @@ __webpack_require__.r(__webpack_exports__);
                         <SuiTableHeaderCell />
                         <SuiTableHeaderCell :colspan="getSpan" textAlign="right">
                             <SuiButtonGroup>
-                                <SuiButton ref="addBtn" size="small" type="button" icon :disabled="isLimitReached" @click.stop.prevent="onAdd">
+                                <SuiButton ref="addButton" size="small" type="button" icon :disabled="isLimitReached" @click.stop.prevent="onAdd">
                                     <SuiIcon name="plus" />
                                 </SuiButton>
                                 <SuiButton size="small" type="button" icon :disabled="isDeleteDisable" @click.stop.prevent="onDelete">
@@ -531,16 +528,16 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   components: {
-    AtkMultilineHeader: _multiline_header_component__WEBPACK_IMPORTED_MODULE_11__["default"],
-    AtkMultilineBody: _multiline_body_component__WEBPACK_IMPORTED_MODULE_10__["default"]
+    AtkMultilineHeader: _multiline_header_component__WEBPACK_IMPORTED_MODULE_12__["default"],
+    AtkMultilineBody: _multiline_body_component__WEBPACK_IMPORTED_MODULE_11__["default"]
   },
   mounted: function () {
     this.rowData = this.buildRowData(this.valueJson ?? '[]');
     this.updateInputValue();
-    atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.parentElement.id + '-update-row', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_10__["default"].eventBus.on(this.$root.$el.parentElement.id + '-update-row', payload => {
       this.onUpdate(payload.rowId, payload.fieldName, payload.value);
     });
-    atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.parentElement.id + '-toggle-delete', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_10__["default"].eventBus.on(this.$root.$el.parentElement.id + '-toggle-delete', payload => {
       const i = this.deletables.indexOf(payload.rowId);
       if (i !== -1) {
         this.deletables.splice(i, 1);
@@ -548,7 +545,7 @@ __webpack_require__.r(__webpack_exports__);
         this.deletables.push(payload.rowId);
       }
     });
-    atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.parentElement.id + '-toggle-delete-all', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_10__["default"].eventBus.on(this.$root.$el.parentElement.id + '-toggle-delete-all', payload => {
       this.deletables = [];
       if (payload.isOn) {
         for (const row of this.rowData) {
@@ -556,7 +553,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     });
-    atk__WEBPACK_IMPORTED_MODULE_9__["default"].eventBus.on(this.$root.$el.parentElement.id + '-multiline-rows-error', payload => {
+    atk__WEBPACK_IMPORTED_MODULE_10__["default"].eventBus.on(this.$root.$el.parentElement.id + '-multiline-rows-error', payload => {
       this.errors = {
         ...payload.errors
       };
@@ -594,7 +591,7 @@ __webpack_require__.r(__webpack_exports__);
       this.clearError(atkmlId, fieldName);
       this.updateInputValue();
       if (!this.onUpdate.debouncedFx) {
-        this.onUpdate.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_9__["default"].createDebouncedFx(() => {
+        this.onUpdate.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_10__["default"].createDebouncedFx(() => {
           this.onUpdate.debouncedFx = null;
           this.fetchExpression(atkmlId);
           this.fetchOnUpdateAction(fieldName);
@@ -662,13 +659,11 @@ __webpack_require__.r(__webpack_exports__);
     },
     /**
      * Send on change action to server.
-     * Use regular api call in order
-     * for return js to be fully evaluated.
      */
     fetchOnUpdateAction: function () {
       let fieldName = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
       if (this.hasChangeCb && (fieldName === null || this.eventFields.includes(fieldName))) {
-        external_jquery__WEBPACK_IMPORTED_MODULE_8___default()(this.$refs.addBtn.$el).api({
+        external_jquery__WEBPACK_IMPORTED_MODULE_9___default()(this.$refs.addButton.$el).api({
           on: 'now',
           url: this.data.url,
           method: 'POST',
@@ -683,10 +678,10 @@ __webpack_require__.r(__webpack_exports__);
       const data = {
         ...row
       };
-      const context = this.$refs.addBtn.$el;
+      const context = this.$refs.addButton.$el;
       data.__atkml_action = 'update-row';
       try {
-        return await atk__WEBPACK_IMPORTED_MODULE_9__["default"].apiService.suiFetch(this.data.url, {
+        return await atk__WEBPACK_IMPORTED_MODULE_10__["default"].apiService.suiFetch(this.data.url, {
           data: data,
           method: 'POST',
           stateContext: context
@@ -794,25 +789,24 @@ __webpack_require__.r(__webpack_exports__);
         />`,
   props: ['config', 'modelValue'],
   data: function () {
-    const {
-      useDefault,
-      ...otherConfig
-    } = this.config;
-    if (useDefault && !otherConfig.defaultDate && !this.modelValue) {
-      otherConfig.defaultDate = new Date();
+    const config = {
+      ...this.config
+    };
+    if (config.defaultDate && !this.modelValue) {
+      config.defaultDate = new Date();
     } else if (this.modelValue) {
-      otherConfig.defaultDate = this.modelValue;
+      config.defaultDate = this.modelValue;
     }
-    if (!otherConfig.locale) {
-      otherConfig.locale = flatpickr.l10ns.default;
+    if (!config.locale) {
+      config.locale = flatpickr.l10ns.default;
     }
     return {
-      flatPickr: otherConfig
+      flatPickr: config
     };
   },
   emits: ['setDefault'],
   mounted: function () {
-    // if value is not set but default date is, then emit proper string value to parent.
+    // if value is not set but default date is, then emit proper string value to parent
     if (!this.modelValue && this.flatPickr.defaultDate) {
       this.onUpdate(this.flatPickr.defaultDate instanceof Date ? flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat) : this.flatPickr.defaultDate);
     }
@@ -845,9 +839,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-
-
 
 
 
@@ -856,7 +847,6 @@ __webpack_require__.r(__webpack_exports__);
  *
  * Properties:
  * config:
- * url: the callback URL. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
  * reference: the reference field name associate with model or hasOne name. This field name will be sent along with URL callback parameter as of 'field=name'.
  * Note: The remaining config object may contain any or SuiDropdown { props: value } pair.
  *
@@ -870,8 +860,7 @@ __webpack_require__.r(__webpack_exports__);
             v-bind="dropdownProps"
             ref="drop"
             :modelValue="getDropdownValue(modelValue)"
-            ` /* :loading="isLoading" */ + `@update:modelValue="onUpdate"
-            @filtered="onFiltered"
+            @update:modelValue="onUpdate"
         ></SuiDropdown>`,
   props: ['config', 'modelValue', 'optionalValue'],
   data: function () {
@@ -884,7 +873,6 @@ __webpack_require__.r(__webpack_exports__);
     return {
       dropdownProps: otherConfig,
       url: url || null,
-      isLoading: false,
       field: reference,
       query: '',
       temp: ''
@@ -902,49 +890,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     onUpdate: function (value) {
       this.$emit('update:modelValue', value.value);
-    },
-    /**
-     * Receive user input text for search.
-     */
-    onFiltered: function (inputValue) {
-      if (inputValue) {
-        this.isLoading = true;
-      }
-      if (!this.onFiltered.debouncedFx) {
-        this.onFiltered.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_3__["default"].createDebouncedFx(() => {
-          this.onFiltered.debouncedFx = null;
-          if (this.query !== this.temp) {
-            this.query = this.temp;
-            if (this.query) {
-              this.fetchItems(this.query);
-            }
-          }
-        }, 250);
-      }
-      this.temp = inputValue;
-      this.onFiltered.debouncedFx(this);
-    },
-    /**
-     * Fetch new data from server.
-     */
-    fetchItems: async function (q) {
-      try {
-        const data = {
-          atkVueLookupQuery: q,
-          atkVueLookupField: this.field
-        };
-        const response = await atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.suiFetch(this.url, {
-          method: 'get',
-          data: data
-        });
-        if (response.success) {
-          this.dropdownProps.options = response.results;
-        }
-      } catch (e) {
-        console.error(e);
-      } finally {
-        this.isLoading = false;
-      }
     }
   }
 });

@@ -43,7 +43,7 @@ class Ui extends Persistence
     /** @var string */
     public $timeFormat = 'H:i';
     /** @var string */
-    public $datetimeFormat = 'M j, Y H:i:s';
+    public $datetimeFormat = 'M j, Y H:i';
     /** @var int Calendar input first day of week, 0 = Sunday, 1 = Monday. */
     public $firstDayOfWeek = 0;
 
@@ -52,26 +52,41 @@ class Ui extends Persistence
     /** @var string */
     public $no = 'No';
 
+    private Persistence $attributePersistence;
+
     public function __construct()
     {
         if ($this->timezone === null) {
             $this->timezone = date_default_timezone_get();
         }
+
+        $attributePersistence = clone $this;
+        $this->initAttributePersistence($attributePersistence);
+        $this->attributePersistence = $attributePersistence;
     }
 
-    /**
-     * @return scalar|null
-     */
-    public function typecastSaveField(Field $field, $value)
+    protected function initAttributePersistence(self $attributePersistence): void
+    {
+        $attributePersistence->thousandsSeparator = '';
+        $attributePersistence->currency = '';
+        $attributePersistence->currencyDecimals = 1;
+        $attributePersistence->timezone = 'UTC';
+        $attributePersistence->dateFormat = 'Y-m-d';
+        $attributePersistence->datetimeFormat = $attributePersistence->dateFormat . ' ' . $attributePersistence->timeFormat;
+        $attributePersistence->yes = '1';
+        $attributePersistence->no = '0';
+    }
+
+    #[\Override]
+    public function typecastSaveField(Field $field, $value): ?string
     {
         // relax empty checks for UI render for not yet set values
         $fieldNullableOrig = $field->nullable;
         $fieldRequiredOrig = $field->required;
-        if (in_array($value, [null, false, 0, 0.0, ''], true)) {
+        try {
             $field->nullable = true;
             $field->required = false;
-        }
-        try {
+
             return parent::typecastSaveField($field, $value);
         } finally {
             $field->nullable = $fieldNullableOrig;
@@ -79,7 +94,8 @@ class Ui extends Persistence
         }
     }
 
-    protected function _typecastSaveField(Field $field, $value): string
+    #[\Override]
+    protected function _typecastSaveField(Field $field, $value): ?string
     {
         // always normalize string EOL
         if (is_string($value)) {
@@ -129,19 +145,42 @@ class Ui extends Persistence
                         'time' => $this->timeFormat,
                     ][$field->type];
 
+                    $valueHasSeconds = (int) $value->format('s') !== 0;
+                    $valueHasMicroseconds = (int) $value->format('u') !== 0;
+                    $formatHasMicroseconds = str_contains($format, '.u');
+                    if ($valueHasSeconds || $valueHasMicroseconds) {
+                        $format = preg_replace('~(?<=:i)(?!:s)~', ':s', $format);
+                    }
+                    if ($valueHasMicroseconds) {
+                        $format = preg_replace('~(?<=:s)(?!\.u)~', '.u', $format);
+                    }
+
                     if ($field->type === 'datetime') {
                         $value = new \DateTime($value->format('Y-m-d H:i:s.u'), $value->getTimezone());
                         $value->setTimezone(new \DateTimeZone($this->timezone));
                     }
                     $value = $value->format($format);
+
+                    if (!$formatHasMicroseconds) {
+                        $value = preg_replace('~(?<!\d|:)\d{1,2}:\d{1,2}(?::\d{1,2})?\.\d*?\K0+(?!\d)~', '', $value);
+                    }
                 }
 
                 break;
         }
 
-        return (string) $value;
+        if (is_int($value)) {
+            $value = $this->_typecastSaveField(new Field(['type' => 'integer']), $value);
+        }
+
+        if (is_float($value)) {
+            $value = $this->_typecastSaveField(new Field(['type' => 'float']), $value);
+        }
+
+        return $value;
     }
 
+    #[\Override]
     protected function _typecastLoadField(Field $field, $value)
     {
         switch ($field->type) {
@@ -200,6 +239,13 @@ class Ui extends Persistence
                     'time' => $this->timeFormat,
                 ][$field->type];
 
+                if (preg_match('~(?<!\d|:)\d{1,2}:\d{1,2}:\d{1,2}(?!\d)~', $value)) {
+                    $format = preg_replace('~(?<=:i)(?!:s)~', ':s', $format);
+                }
+                if (preg_match('~(?<!\d|:)\d{1,2}:\d{1,2}(?::\d{1,2})?\.\d{1,9}(?!\d)~', $value)) {
+                    $format = preg_replace('~(?<=:s)(?!\.u)~', '.u', $format);
+                }
+
                 $valueOrig = $value;
                 $value = $dtClass::createFromFormat('!' . $format, $value, $field->type === 'datetime' ? new $tzClass($this->timezone) : null);
                 if ($value === false) {
@@ -217,7 +263,7 @@ class Ui extends Persistence
 
                 break;
                 // <-- reindent once https://github.com/FriendsOfPHP/PHP-CS-Fixer/pull/6490 is merged
-                // SECURTIY: Do not unserialize any user input
+                // SECURITY: do not unserialize any user input
                 // https://github.com/search?q=unserialize+repo%3Adoctrine%2Fdbal+path%3A%2Fsrc%2FTypes
             case 'object':
             case 'array':
@@ -242,6 +288,7 @@ class Ui extends Persistence
     /**
      * Override parent method to ignore key change by Field::actual property.
      */
+    #[\Override]
     public function typecastSaveRow(Model $model, array $row): array
     {
         $result = [];
@@ -250,5 +297,21 @@ class Ui extends Persistence
         }
 
         return $result;
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function typecastAttributeSaveField(Field $field, $value): ?string
+    {
+        return $this->attributePersistence->typecastSaveField($field, $value);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function typecastAttributeLoadField(Field $field, ?string $value)
+    {
+        return $this->attributePersistence->typecastLoadField($field, $value);
     }
 }

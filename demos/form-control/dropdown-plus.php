@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Message;
 use Atk4\Ui\Text;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $demo = Demo::addTo($app);
@@ -25,8 +26,8 @@ $form->addControl('category_id', [Form\Control\Dropdown::class, 'model' => new C
 $form->addControl('sub_category_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => Category::hinting()->fieldName()->SubCategories]);
 $form->addControl('product_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => SubCategory::hinting()->fieldName()->Products]);
 
-$form->onSubmit(function (Form $form) use ($app) {
-    $message = $app->encodeJson($form->model->get());
+$form->onSubmit(static function (Form $form) use ($app) {
+    $message = $app->encodeJson($app->uiPersistence->typecastSaveRow($form->model, $form->model->get()));
 
     $view = new Message('Values: ');
     $view->setApp($form->getApp());
@@ -50,9 +51,8 @@ $form->addControl('withModel2', [
     Form\Control\Dropdown::class,
     'caption' => 'Dropdown with data from Model and custom render',
     'model' => (new Country($app->db))->setLimit(25),
-    'renderRowFunction' => function (Country $row) {
+    'renderRowFunction' => static function (Country $row) {
         return [
-            'value' => $row->getId(),
             'title' => $row->getTitle() . ' (' . $row->iso3 . ')',
         ];
     },
@@ -63,9 +63,8 @@ $form->addControl('withModel3', [
     Form\Control\Dropdown::class,
     'caption' => 'Dropdown with data from Model and custom render with icon',
     'model' => (new File($app->db))->setLimit(25),
-    'renderRowFunction' => function (File $row) {
+    'renderRowFunction' => static function (File $row) {
         return [
-            'value' => $row->getId(),
             'title' => $row->getTitle(),
             'icon' => $row->is_folder ? 'folder' : 'file',
         ];
@@ -101,14 +100,14 @@ $form->addControl('multi', [
     Form\Control\Dropdown::class,
     'caption' => 'Multiple selection',
     'empty' => 'Choose has many options needed',
-    'isMultiple' => true,
+    'multiple' => true,
     'values' => ['default' => 'Default', 'option1' => 'Option 1', 'option2' => 'Option 2'],
 ]);
 
-$form->onSubmit(function (Form $form) use ($app) {
+$form->onSubmit(static function (Form $form) use ($app) {
     $message = $app->encodeJson($form->model->get());
 
-    $view = new Message('Values: ');
+    $view = new Message('Values:');
     $view->setApp($form->getApp());
     $view->invokeInit();
     $view->text->addParagraph($message);

@@ -6,6 +6,7 @@ namespace Atk4\Ui\Behat;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Doctrine\DBAL\Types\Type;
 
 trait RwDemosContextTrait
 {
@@ -57,7 +58,7 @@ trait RwDemosContextTrait
         $model->removeField('id');
         foreach ($tableColumns as $tableColumn) {
             $model->addField($tableColumn->getName(), [
-                'type' => $tableColumn->getType()->getName(), // @phpstan-ignore-line Type::getName() is deprecated in DBAL 4.0
+                'type' => Type::getTypeRegistry()->lookupName($tableColumn->getType()), // TODO simplify once https://github.com/doctrine/dbal/pull/6130 is merged
                 'nullable' => !$tableColumn->getNotnull(),
             ]);
         }
@@ -94,7 +95,7 @@ trait RwDemosContextTrait
     }
 
     /**
-     * @return array<string, \stdClass&object{ addedIds: list<int>, changedIds: list<int>, deletedIds: list<int> }>
+     * @return array<string, \stdClass&object{ addedIds: list<int>, updatedIds: list<int>, deletedIds: list<int> }>
      */
     protected function discoverDatabaseChanges(): array
     {
@@ -105,7 +106,7 @@ trait RwDemosContextTrait
 
             $changes = new \stdClass();
             $changes->addedIds = [];
-            $changes->changedIds = [];
+            $changes->updatedIds = [];
             $changes->deletedIds = array_fill_keys(array_keys($data), true);
             foreach ($model as $entity) {
                 $id = $entity->getId();
@@ -122,7 +123,7 @@ trait RwDemosContextTrait
                     }
 
                     if ($isChanged) {
-                        $changes->changedIds[] = $id;
+                        $changes->updatedIds[] = $id;
                     }
 
                     unset($changes->deletedIds[$id]);
@@ -130,7 +131,7 @@ trait RwDemosContextTrait
             }
             $changes->deletedIds = array_keys($changes->deletedIds);
 
-            if (count($changes->addedIds) > 0 || count($changes->changedIds) > 0 || count($changes->deletedIds) > 0) {
+            if (count($changes->addedIds) > 0 || count($changes->updatedIds) > 0 || count($changes->deletedIds) > 0) {
                 $changesByTable[$table] = $changes;
             }
         }
@@ -155,8 +156,10 @@ trait RwDemosContextTrait
                             $model->delete($id);
                         }
 
-                        foreach ([...$changes->changedIds, ...$changes->deletedIds] as $id) {
-                            $entity = in_array($id, $changes->changedIds, true) ? $model->load($id) : $model->createEntity();
+                        foreach ([...$changes->updatedIds, ...$changes->deletedIds] as $id) {
+                            $entity = in_array($id, $changes->updatedIds, true)
+                                ? $model->load($id)
+                                : $model->createEntity();
                             $entity->setMulti($data[$id]);
                             $entity->save();
                         }

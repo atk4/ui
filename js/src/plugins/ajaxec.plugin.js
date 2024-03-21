@@ -10,7 +10,7 @@ export default class AtkAjaxecPlugin extends AtkPlugin {
             return;
         }
 
-        // Allow user to confirm if available.
+        // allow user to confirm if available
         if (this.settings.confirm) {
             if (window.confirm(this.settings.confirm)) { // eslint-disable-line no-alert
                 this.doExecute();
@@ -30,7 +30,7 @@ export default class AtkAjaxecPlugin extends AtkPlugin {
         // retrieve param from URL
         let urlParams = atk.urlHelper.parseParams(this.settings.url);
 
-        // get store object.
+        // get store object
         const store = atk.dataService.getStoreData(this.settings.storeName);
 
         const settings = {
@@ -42,7 +42,7 @@ export default class AtkAjaxecPlugin extends AtkPlugin {
         };
 
         if (settings.method.toUpperCase() === 'GET') {
-            // set data, store and add it to URL param.
+            // set data, store and add it to URL param
             urlParams = Object.assign(urlParams, data, store);
         } else {
             settings.data = Object.assign(data, store);

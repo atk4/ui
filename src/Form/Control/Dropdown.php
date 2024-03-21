@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Data\Model;
+use Atk4\Ui\HtmlTemplate;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 
 class Dropdown extends Input
 {
-    public $ui = 'dropdown fluid search selection';
     public $defaultTemplate = 'form/control/dropdown.html';
 
     public string $inputType = 'hidden';
@@ -25,22 +27,12 @@ class Dropdown extends Input
      *     'file' => ['File', 'icon' => 'file'],
      * ].
      *
-     * @var array<int|string, mixed>
+     * @var array<array-key, mixed>
      */
     public array $values;
 
     /** @var string The string to set as an empty values. */
     public $empty = "\u{00a0}"; // Unicode NBSP
-
-    /**
-     * The icon to display at the dropdown menu.
-     *  The template default is set to: 'dropdown'.
-     *  Note: dropdown icon is show on the right side of the menu
-     *  while other icon are usually display on the left side.
-     *
-     * @var string|null
-     */
-    public $dropIcon;
 
     /** @var array Dropdown options as per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
@@ -52,20 +44,18 @@ class Dropdown extends Input
      *
      * @var bool
      */
-    public $isMultiple = false;
+    public $multiple = false;
 
     /**
-     * Here a custom function for creating the html of each dropdown option
+     * Here a custom function for creating the HTML of each dropdown option
      * can be defined. The function gets each row of the model/values property as first parameter.
      * if used with $values property, gets the key of this element as second parameter.
-     * When using with a model, the second parameter is null and can be ignored.
-     * Must return an array with at least 'value' and 'caption' elements set.
+     * Must return an array with at least 'value' and 'title' elements set.
      * Use additional 'icon' element to add an icon to this row.
      *
      * Example 1 with Model: Title in Uppercase
      * function (Model $row) {
      *     return [
-     *         'value' => $row->getId(),
      *         'title' => mb_strtoupper($row->getTitle()),
      *     ];
      *  }
@@ -73,7 +63,6 @@ class Dropdown extends Input
      * Example 2 with Model: Add an icon
      * function (Model $row) {
      *     return [
-     *         'value' => $row->getId(),
      *         'title' => $row->getTitle(),
      *         'icon' => $row->get('amount') > 1000 ? 'money' : '',
      *     ];
@@ -82,7 +71,6 @@ class Dropdown extends Input
      * Example 3 with Model: Combine Title from model fields
      * function (Model $row) {
      *     return [
-     *         'value' => $row->getId(),
      *         'title' => $row->getTitle() . ' (' . $row->get('title2') . ')',
      *     ];
      * }
@@ -96,16 +84,17 @@ class Dropdown extends Input
      *     ];
      * }
      *
-     * @var \Closure|null
+     * @var \Closure<T of Model>(T): array{title: mixed, icon?: mixed}|\Closure(mixed, array-key): array{value: mixed, title: mixed, icon?: mixed}
      */
-    public $renderRowFunction;
+    public ?\Closure $renderRowFunction = null;
 
-    /** @var object Subtemplate for a single dropdown item. */
-    protected $_tItem;
+    /** Subtemplate for a single dropdown item. */
+    protected HtmlTemplate $_tItem;
 
-    /** @var object Subtemplate for an icon for a single dropdown item. */
-    protected $_tIcon;
+    /** Subtemplate for an icon for a single dropdown item. */
+    protected HtmlTemplate $_tIcon;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -116,45 +105,29 @@ class Dropdown extends Input
         $this->_tItem->del('Icon');
     }
 
-    /**
-     * Returns presentable value to be inserted into input tag.
-     *
-     * Dropdown input tag accepts only CSV formatted list of IDs.
-     *
-     * @return mixed
-     */
+    #[\Override]
     public function getValue()
     {
+        // dropdown input tag accepts CSV formatted list of IDs
         return $this->entityField !== null
-            ? (is_array($this->entityField->get()) ? implode(', ', $this->entityField->get()) : $this->entityField->get())
+            ? (is_array($this->entityField->get()) ? implode(', ', $this->entityField->get()) : $this->entityField->get()) // TODO is_array() should be replaced with field type condition
             : parent::getValue();
     }
 
-    /**
-     * Sets the value of this field. If field is a part of the form and is associated with
-     * the model, then the model's value will also be affected.
-     *
-     * @param mixed $value
-     * @param never $ignore
-     *
-     * @return $this
-     */
-    public function set($value = null, $ignore = null)
+    #[\Override]
+    public function set($value = null)
     {
-        if ($this->entityField) {
+        if ($this->entityField !== null) {
             if ($this->entityField->getField()->type === 'json' && is_string($value)) {
                 $value = explode(',', $value);
             }
-            $this->entityField->set($value);
-
-            return $this;
         }
 
-        return parent::set($value, $ignore);
+        return parent::set($value);
     }
 
     /**
-     * Set js dropdown() specific option;.
+     * Set JS dropdown() specific option;.
      *
      * @param string $option
      * @param mixed  $value
@@ -165,7 +138,7 @@ class Dropdown extends Input
     }
 
     /**
-     * Set js dropdown() options.
+     * Set JS dropdown() options.
      *
      * @param array $options
      */
@@ -175,20 +148,25 @@ class Dropdown extends Input
     }
 
     /**
-     * Render js for dropdown.
+     * @param bool|string      $when
+     * @param JsExpressionable $action
+     *
+     * @return Jquery
      */
-    protected function jsRenderDropdown(): JsExpressionable
+    protected function jsDropdown($when = false, $action = null): JsExpressionable
     {
-        return $this->js(true)->dropdown($this->dropdownOptions);
+        return $this->js($when, $action, 'div.ui.dropdown:has(> #' . $this->name . '_input)');
     }
 
-    /**
-     * Render values as html for Dropdown.
-     */
+    protected function jsRenderDropdown(): JsExpressionable
+    {
+        return $this->jsDropdown(true)->dropdown($this->dropdownOptions);
+    }
+
     protected function htmlRenderValue(): void
     {
         // add selection only if no value is required and Dropdown has no multiple selections enabled
-        if ($this->entityField !== null && !$this->entityField->getField()->required && !$this->isMultiple) {
+        if ($this->entityField !== null && !$this->entityField->getField()->required && !$this->multiple) {
             $this->_tItem->set('value', '');
             $this->_tItem->set('title', $this->empty);
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
@@ -201,7 +179,7 @@ class Dropdown extends Input
                     $this->_addCallBackRow($row);
                 }
             } else {
-                // for standard model rendering, only load id and title field
+                // for standard model rendering, only load ID and title field
                 $this->model->setOnlyFields([$this->model->titleField, $this->model->idField]);
                 $this->_renderItemsForModel();
             }
@@ -216,34 +194,30 @@ class Dropdown extends Input
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
-        if ($this->isMultiple) {
-            $this->addClass('multiple');
+        if ($this->multiple) {
+            $this->template->dangerouslySetHtml('multipleClass', 'multiple');
         }
 
         if ($this->readOnly || $this->disabled) {
-            $this->setDropdownOption('allowTab', false);
-            $this->removeClass('search');
-            if ($this->isMultiple) {
-                $this->js(true)->find('a i.delete.icon')->attr('class', 'disabled');
+            if ($this->multiple) {
+                $this->jsDropdown(true)->find('a i.delete.icon')->attr('class', 'disabled');
             }
         }
 
         if ($this->disabled) {
-            $this->addClass('disabled');
-        }
+            $this->template->set('disabledClass', 'disabled');
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
+        } elseif ($this->readOnly) {
+            $this->template->set('disabledClass', 'read-only');
+            $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
 
-        if ($this->readOnly) {
-            $this->setDropdownOption('allowTab', false);
             $this->setDropdownOption('onShow', new JsFunction([], [new JsExpression('return false')]));
         }
 
-        if ($this->dropIcon) {
-            $this->template->trySet('DropIcon', $this->dropIcon);
-        }
-
-        $this->template->trySet('DefaultText', $this->empty);
+        $this->template->set('DefaultText', $this->empty);
 
         $this->htmlRenderValue();
         $this->jsRenderDropdown();
@@ -256,9 +230,9 @@ class Dropdown extends Input
      */
     protected function _renderItemsForModel(): void
     {
-        foreach ($this->model as $key => $row) {
+        foreach ($this->model as $id => $row) {
             $title = $row->getTitle();
-            $this->_tItem->set('value', (string) $key);
+            $this->_tItem->set('value', $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $id));
             $this->_tItem->set('title', $title || is_numeric($title) ? (string) $title : '');
             // add item to template
             $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
@@ -293,16 +267,21 @@ class Dropdown extends Input
      * Used when a custom callback is defined for row rendering. Sets
      * values to row template and appends it to main template.
      *
-     * @param mixed      $row
-     * @param int|string $key
+     * @param mixed                               $row
+     * @param ($row is Model ? never : array-key) $key
      */
     protected function _addCallBackRow($row, $key = null): void
     {
-        $res = ($this->renderRowFunction)($row, $key);
-        $this->_tItem->set('value', (string) $res['value']);
+        if ($this->model !== null) {
+            $res = ($this->renderRowFunction)($row);
+            $this->_tItem->set('value', $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $row->getId()));
+        } else {
+            $res = ($this->renderRowFunction)($row, $key);
+            $this->_tItem->set('value', (string) $res['value']);
+        }
+
         $this->_tItem->set('title', $res['title']);
 
-        // Icon
         $this->_tItem->del('Icon');
         if (isset($res['icon']) && $res['icon']) {
             // compatibility with how $values property works on icons: 'icon'

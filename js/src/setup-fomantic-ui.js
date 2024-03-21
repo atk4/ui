@@ -32,7 +32,7 @@ const fomanticServicesMap = {
 // https://github.com/fomantic/Fomantic-UI/issues/2526
 $.extend = $.fn.extend = new Proxy($.fn.extend, { // eslint-disable-line no-multi-assign
     apply: function (target, thisArg, args) {
-        // https://github.com/fomantic/Fomantic-UI/blob/c30ed51ca12fc1762b04c2fd1a83d087c0124d07/src/definitions/behaviors/api.js#L48
+        // https://github.com/fomantic/Fomantic-UI/blob/c30ed51ca1/src/definitions/behaviors/api.js#L48
         const firstIndex = args[0] === true ? 1 : 0;
         const secondIndex = args[0] === true ? 2 : 1;
         if (args.length >= (args[0] === true ? 3 : 2)

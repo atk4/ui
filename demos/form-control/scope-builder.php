@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Form;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $model = new Stat($app->db, ['caption' => 'Demo Stat']);
@@ -17,6 +18,6 @@ $form = Form::addTo($app);
 
 $form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model, 'options' => ['debug' => true]]);
 
-$form->onSubmit(function (Form $form) use ($model) {
+$form->onSubmit(static function (Form $form) use ($model) {
     return "Scope selected:\n\n" . $form->model->get('qb')->toWords($model);
 });

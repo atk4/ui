@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Core\DebugTrait;
 use Atk4\Core\Exception as CoreException;
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Console;
 use Atk4\Ui\Form;
@@ -16,7 +17,7 @@ use Atk4\Ui\Tabs;
 use Atk4\Ui\View;
 use Atk4\Ui\VirtualPage;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $testRunClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
@@ -49,7 +50,7 @@ Header::addTo($tab, [
     'Console output streaming',
     'subHeader' => 'any output your PHP script produces through console is displayed to user in real-time',
 ]);
-Console::addTo($tab)->set(function (Console $console) {
+Console::addTo($tab)->set(static function (Console $console) {
     $console->output('Executing test process...');
     sleep(1);
     $console->output('Now trying something dangerous..');
@@ -59,16 +60,16 @@ Console::addTo($tab)->set(function (Console $console) {
     throw new CoreException('BOOM - exceptions are caught');
 });
 
-$tab = $tabs->addTab('runMethod()', function (VirtualPage $vp) use ($testRunClass) {
+$tab = $tabs->addTab('runMethod()', static function (VirtualPage $vp) use ($testRunClass) {
     Header::addTo($vp, [
         'icon' => 'terminal',
-        'Non-interractive method invocation',
-        'subHeader' => 'console can invoke a method, which normaly would be non-interractive and can still capture debug output',
+        'Non-interactive method invocation',
+        'subHeader' => 'console can invoke a method, which normally would be non-interactive and can still capture debug output',
     ]);
     Console::addTo($vp)->runMethod($testRunClass::addTo($vp), 'generateReport');
 });
 
-$tab = $tabs->addTab('exec() single', function (VirtualPage $vp) {
+$tab = $tabs->addTab('exec() single', static function (VirtualPage $vp) {
     Header::addTo($vp, [
         'icon' => 'terminal',
         'Command execution',
@@ -79,7 +80,7 @@ $tab = $tabs->addTab('exec() single', function (VirtualPage $vp) {
     Console::addTo($vp)->exec('/bin/pwd');
 });
 
-$tab = $tabs->addTab('exec() chain', function (VirtualPage $vp) {
+$tab = $tabs->addTab('exec() chain', static function (VirtualPage $vp) {
     Header::addTo($vp, [
         'icon' => 'terminal',
         'Command execution',
@@ -87,14 +88,14 @@ $tab = $tabs->addTab('exec() chain', function (VirtualPage $vp) {
     ]);
     $message = Message::addTo($vp, ['This demo may not work', 'type' => 'warning']);
     $message->text->addParagraph('This demo requires Linux OS and will display error otherwise.');
-    Console::addTo($vp)->set(function (Console $console) {
+    Console::addTo($vp)->set(static function (Console $console) {
         $console->exec('/sbin/ping', ['-c', '5', '-i', '1', '192.168.0.1']);
         $console->exec('/sbin/ping', ['-c', '5', '-i', '2', '8.8.8.8']);
         $console->exec('/bin/no-such-command');
     });
 });
 
-$tab = $tabs->addTab('composer update', function (VirtualPage $vp) {
+$tab = $tabs->addTab('composer update', static function (VirtualPage $vp) {
     Header::addTo($vp, [
         'icon' => 'terminal',
         'Command execution',
@@ -112,7 +113,7 @@ $tab = $tabs->addTab('composer update', function (VirtualPage $vp) {
     $button->on('click', $console->jsExecute());
 });
 
-$tab = $tabs->addTab('Use after form submit', function (VirtualPage $vp) {
+$tab = $tabs->addTab('Use after form submit', static function (VirtualPage $vp) {
     Header::addTo($vp, [
         'icon' => 'terminal',
         'How to log form submit process',
@@ -126,7 +127,7 @@ $tab = $tabs->addTab('Use after form submit', function (VirtualPage $vp) {
     $form->addControl('bar');
 
     $console = Console::addTo($vp, ['event' => false]);
-    $console->set(function (Console $console) {
+    $console->set(static function (Console $console) {
         $model = $_SESSION['atk4_ui_console_demo'];
         $console->output('Executing process...');
         $console->info(var_export($model->get(), true));
@@ -137,7 +138,7 @@ $tab = $tabs->addTab('Use after form submit', function (VirtualPage $vp) {
     });
     $console->js(true)->hide();
 
-    $form->onSubmit(function (Form $form) use ($console) {
+    $form->onSubmit(static function (Form $form) use ($console) {
         $_SESSION['atk4_ui_console_demo'] = $form->model; // only option is to store model in session here in demo
 
         return new JsBlock([

@@ -13,6 +13,9 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
 use Atk4\Ui\Layout;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -31,8 +34,17 @@ class DemosTest extends TestCase
 
     private static ?Persistence $_db = null;
 
-    private static array $_failedParentTests = [];
+    protected static string $regexHtml = '~^<!DOCTYPE html>\s*<html.*</html>$~s';
+    protected static string $regexJson = '~^(?<json>\s*(?:
+           (?<number>-?(?=[1-9]|0(?!\d))\d+(\.\d+)?(E[+-]?\d+)?)
+           |(?<boolean>true|false|null)
+           |(?<string>"([^"\\\]*|\\\["\\\bfnrt/]|\\\u[0-9a-f]{4})*")
+           |(?<array>\[(?:(?&json)(?:,(?&json))*|\s*)\])
+           |(?<object>\{(?:(?<pair>\s*(?&string)\s*:(?&json))(?:,(?&pair))*|\s*)\})
+        )\s*)$~six';
+    protected static string $regexSseLine = '~^(id|event|data).*$~s';
 
+    #[\Override]
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
@@ -40,6 +52,7 @@ class DemosTest extends TestCase
         self::$_serverSuperglobalBackup = $_SERVER;
     }
 
+    #[\Override]
     public static function tearDownAfterClass(): void
     {
         $_SERVER = self::$_serverSuperglobalBackup;
@@ -47,6 +60,7 @@ class DemosTest extends TestCase
         parent::tearDownAfterClass();
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -72,40 +86,28 @@ class DemosTest extends TestCase
         }
     }
 
-    protected function onNotSuccessfulTest(\Throwable $t): void
-    {
-        if (!in_array($this->getStatus(), [
-            \PHPUnit\Runner\BaseTestRunner::STATUS_PASSED,
-            \PHPUnit\Runner\BaseTestRunner::STATUS_SKIPPED,
-            \PHPUnit\Runner\BaseTestRunner::STATUS_INCOMPLETE,
-        ], true)) {
-            if (!isset(self::$_failedParentTests[$this->getName()])) {
-                self::$_failedParentTests[$this->getName()] = $this->getStatus();
-            } else {
-                static::markTestIncomplete('Test failed, but non-HTTP test failed too, fix it first');
-            }
-        }
-
-        throw $t;
-    }
-
     protected function setSuperglobalsFromRequest(RequestInterface $request): void
     {
         $this->resetSuperglobals();
 
         $rootDirRealpath = realpath(static::ROOT_DIR);
 
+        $requestPath = $request->getUri()->getPath();
+        $requestQuery = $request->getUri()->getQuery();
         $_SERVER = [
             'REQUEST_METHOD' => $request->getMethod(),
-            'HTTP_HOST' => $request->getUri()->getHost(),
-            'REQUEST_URI' => (string) $request->getUri(),
-            'QUERY_STRING' => $request->getUri()->getQuery(),
+            'REQUEST_URI' => $requestPath . ($requestQuery !== '' ? '?' . $requestQuery : ''),
+            'QUERY_STRING' => $requestQuery,
             'DOCUMENT_ROOT' => $rootDirRealpath,
-            'SCRIPT_FILENAME' => $rootDirRealpath . $request->getUri()->getPath(),
+            'SCRIPT_FILENAME' => $rootDirRealpath . $requestPath,
         ];
+        foreach (array_keys($request->getHeaders()) as $k) {
+            $kSever = 'HTTP_' . str_replace('-', '_', strtoupper($k));
+            $_SERVER[$kSever] = $request->getHeaderLine($k);
+        }
 
         $_GET = [];
-        parse_str($request->getUri()->getQuery(), $queryArr);
+        parse_str($requestQuery, $queryArr);
         foreach ($queryArr as $k => $v) {
             $_GET[$k] = $v;
         }
@@ -130,16 +132,16 @@ class DemosTest extends TestCase
     protected function createTestingApp(): App
     {
         $app = new class(['callExit' => false, 'catchExceptions' => false, 'alwaysRun' => false]) extends App {
-            public function callExit(): void
+            #[\Override]
+            public function callExit(bool $calledFromShutdownHandler = false): void
             {
                 throw new DemosTestExitError();
             }
 
-            protected function emitResponse(): void
-            {
-            }
+            #[\Override]
+            protected function emitResponse(): void {}
         };
-        $app->initLayout([Layout\Maestro::class]);
+        $app->initLayout([Layout::class]);
 
         // clone DB (mainly because all Models remains attached now, TODO can be removed once they are GCed)
         $app->db = clone self::$_db;
@@ -150,7 +152,7 @@ class DemosTest extends TestCase
     protected function assertNoGlobalSticky(App $app): void
     {
         $appSticky = array_diff_assoc(
-            \Closure::bind(fn () => $app->stickyGetArguments, null, App::class)(),
+            \Closure::bind(static fn () => $app->stickyGetArguments, null, App::class)(),
             ['__atk_json' => false, '__atk_tab' => false, 'APP_CALL_EXIT' => true, 'APP_CATCH_EXCEPTIONS' => true]
         );
         if ($appSticky !== []) {
@@ -169,6 +171,7 @@ class DemosTest extends TestCase
             ob_start();
             try {
                 $app = $this->createTestingApp();
+                $this->resetSuperglobals();
                 try {
                     require $localPath;
 
@@ -180,7 +183,7 @@ class DemosTest extends TestCase
                 } catch (DemosTestExitError $e) {
                 }
             } finally {
-                static::assertSame('', ob_get_clean());
+                self::assertSame('', ob_get_clean());
                 $this->resetSuperglobals();
             }
 
@@ -189,7 +192,7 @@ class DemosTest extends TestCase
                 $app->getResponse()->getBody()->rewind();
             }
 
-            return new \GuzzleHttp\Promise\FulfilledPromise($app->getResponse());
+            return new FulfilledPromise($app->getResponse());
         };
 
         return new Client(['base_uri' => 'http://localhost/', 'handler' => $handler]);
@@ -199,8 +202,8 @@ class DemosTest extends TestCase
     {
         try {
             return $this->getClient()->request(isset($options['form_params']) ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
-        } catch (\GuzzleHttp\Exception\ServerException $ex) {
-            $exFactoryWithFullBody = new class('', $ex->getRequest()) extends \GuzzleHttp\Exception\RequestException {
+        } catch (ServerException $ex) {
+            $exFactoryWithFullBody = new class('', $ex->getRequest()) extends RequestException {
                 public static function getResponseBodySummary(ResponseInterface $response): string
                 {
                     $body = $response->getBody();
@@ -222,7 +225,7 @@ class DemosTest extends TestCase
     {
         try {
             $response = $this->getResponseFromRequest($path, $options);
-        } catch (\GuzzleHttp\Exception\ServerException $e) {
+        } catch (ServerException $e) {
             $response = $e->getResponse();
         } catch (UnhandledCallbackExceptionError $e) {
             while ($e instanceof UnhandledCallbackExceptionError) {
@@ -240,25 +243,7 @@ class DemosTest extends TestCase
         return 'demos/' . $path;
     }
 
-    /** @var string */
-    protected $regexHtml = '~^<!DOCTYPE~';
-    /** @var string */
-    protected $regexJson = '~
-        (?(DEFINE)
-           (?<number>   -? (?= [1-9]|0(?!\d) ) \d+ (\.\d+)? ([eE] [+-]? \d+)? )
-           (?<boolean>   true | false | null )
-           (?<string>    " ([^"\\\\]* | \\\\ ["\\\\bfnrt/] | \\\\ u [0-9a-f]{4} )* " )
-           (?<array>     \[  (?:  (?&json)  (?: , (?&json)  )*  )?  \s* \] )
-           (?<pair>      \s* (?&string) \s* : (?&json)  )
-           (?<object>    \{  (?:  (?&pair)  (?: , (?&pair)  )*  )?  \s* \} )
-           (?<json>   \s* (?: (?&number) | (?&boolean) | (?&string) | (?&array) | (?&object) ) \s* )
-        )
-        \A (?&json) \Z
-        ~six';
-    /** @var string */
-    protected $regexSse = '~^(id|event|data).*$~m';
-
-    public function demoFilesProvider(): array
+    public static function provideDemosStatusAndHtmlResponseCases(): iterable
     {
         $excludeDirs = ['_demo-data', '_includes'];
         $excludeFiles = ['_unit-test/stream.php', 'layout/layouts_error.php'];
@@ -297,17 +282,19 @@ class DemosTest extends TestCase
             }
         }
 
-        return array_map(fn (string $v) => [$v], $files);
+        foreach ($files as $path) {
+            yield [$path];
+        }
     }
 
     /**
-     * @dataProvider demoFilesProvider
+     * @dataProvider provideDemosStatusAndHtmlResponseCases
      */
     public function testDemosStatusAndHtmlResponse(string $path): void
     {
         $response = $this->getResponseFromRequest($path);
-        static::assertSame(200, $response->getStatusCode());
-        static::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
+        self::assertSame(200, $response->getStatusCode());
+        self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
     }
 
     public function testDemoResponseError(): void
@@ -319,41 +306,40 @@ class DemosTest extends TestCase
 
         $response = $this->getResponseFromRequest5xx('layout/layouts_error.php');
 
-        static::assertSame(500, $response->getStatusCode());
-        static::assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
+        self::assertSame(500, $response->getStatusCode());
+        self::assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
+        self::assertSame('no-store', $response->getHeaderLine('Cache-Control'));
+        self::assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
     }
 
-    public function casesDemoGetProvider(): array
+    public static function provideDemoGetCases(): iterable
     {
-        $files = [];
-        $files[] = ['others/sticky.php?xx=YEY'];
-        $files[] = ['others/sticky.php?c=OHO'];
-        $files[] = ['others/sticky.php?xx=YEY&c=OHO'];
-
-        return $files;
+        yield ['others/sticky.php?xx=YEY'];
+        yield ['others/sticky.php?c=OHO'];
+        yield ['others/sticky.php?xx=YEY&c=OHO'];
     }
 
     /**
-     * @dataProvider casesDemoGetProvider
+     * @dataProvider provideDemoGetCases
      */
     public function testDemoGet(string $path): void
     {
         $response = $this->getResponseFromRequest($path);
-        static::assertSame(200, $response->getStatusCode());
-        static::assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
-        static::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
+        self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
     }
 
     public function testHugeOutputStream(): void
     {
-        $sizeMb = 50;
+        $sizeMb = 40;
         $sizeBytes = $sizeMb * 1024 * 1024;
         $response = $this->getResponseFromRequest('_unit-test/stream.php?size_mb=' . $sizeMb);
-        static::assertSame(200, $response->getStatusCode());
-        static::assertSame('application/octet-stream', $response->getHeaderLine('Content-Type'));
-        static::assertSame((string) $sizeBytes, $response->getHeaderLine('Content-Length'));
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame('application/octet-stream', $response->getHeaderLine('Content-Type'));
+        self::assertSame((string) $sizeBytes, $response->getHeaderLine('Content-Length'));
 
-        $hugePseudoStreamFx = function (int $pos) {
+        $hugePseudoStreamFx = static function (int $pos) {
             return "\n\0" . str_repeat($pos . ',', 1024);
         };
         $pos = 0;
@@ -367,7 +353,7 @@ class DemosTest extends TestCase
             $pos += $length;
 
             if ($buffer !== $response->getBody()->read($length)) {
-                static::assertSame(-1, $pos);
+                self::assertSame(-1, $pos);
             }
         }
     }
@@ -376,7 +362,7 @@ class DemosTest extends TestCase
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
-            static::assertTrue(true); // @phpstan-ignore-line
+            self::assertTrue(true); // @phpstan-ignore-line
 
             return;
         }
@@ -388,40 +374,36 @@ class DemosTest extends TestCase
             ]]
         );
 
-        static::assertSame(200, $response->getStatusCode());
-        static::assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
+        self::assertSame(200, $response->getStatusCode());
+        self::assertMatchesRegularExpression(self::$regexJson, $response->getBody()->getContents());
 
         $response = $this->getResponseFromRequest('interactive/wizard.php?atk_admin_wizard=2&name=Country');
-        static::assertSame(200, $response->getStatusCode());
-        static::assertMatchesRegularExpression($this->regexHtml, $response->getBody()->getContents());
+        self::assertSame(200, $response->getStatusCode());
+        self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
+    }
+
+    public static function provideDemoJsonResponseCases(): iterable
+    {
+        // simple reload
+        yield ['_unit-test/reload.php?__atk_reload=reload'];
+        // loader callback reload
+        yield ['_unit-test/reload.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'c_reload=ajax&' . Callback::URL_QUERY_TARGET . '=c_reload'];
+        // test catch exceptions
+        yield ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m_cb&__atk_json=1', 'Test throw exception!'];
+        yield ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm2_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m2_cb&__atk_json=1', 'Test trigger error!'];
     }
 
     /**
      * Test reload and loader callback.
+     *
+     * @dataProvider provideDemoJsonResponseCases
      */
-    public function jsonResponseProvider(): array
-    {
-        $files = [];
-        // simple reload
-        $files[] = ['_unit-test/reload.php?__atk_reload=reload'];
-        // loader callback reload
-        $files[] = ['_unit-test/reload.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'c_reload=ajax&' . Callback::URL_QUERY_TARGET . '=c_reload'];
-        // test catch exceptions
-        $files[] = ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m_cb&__atk_json=1', 'Test throw exception!'];
-        $files[] = ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm2_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m2_cb&__atk_json=1', 'Test trigger error!'];
-
-        return $files;
-    }
-
-    /**
-     * @dataProvider jsonResponseProvider
-     */
-    public function testDemoAssertJsonResponse(string $path, string $expectedExceptionMessage = null): void
+    public function testDemoJsonResponse(string $path, ?string $expectedExceptionMessage = null): void
     {
         if (static::class === self::class) {
             if ($expectedExceptionMessage !== null) {
                 if (str_contains($path, '=m2_cb&')) {
-                    static::assertTrue(true); // @phpstan-ignore-line
+                    self::assertTrue(true); // @phpstan-ignore-line
 
                     return;
                 }
@@ -431,128 +413,124 @@ class DemosTest extends TestCase
         }
 
         $response = $this->getResponseFromRequest5xx($path);
-        static::assertSame(200, $response->getStatusCode());
-        static::assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         $responseBodyStr = $response->getBody()->getContents();
-        static::assertMatchesRegularExpression($this->regexJson, $responseBodyStr);
-        static::assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
+        self::assertMatchesRegularExpression(self::$regexJson, $responseBodyStr);
+        self::assertStringNotContainsString(preg_replace('~.+\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
         if ($expectedExceptionMessage !== null) {
-            static::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
+            self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
         }
+    }
+
+    public static function provideDemoSseResponseCases(): iterable
+    {
+        yield ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
+        yield ['_unit-test/console.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
+        yield ['_unit-test/console_run.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
+        yield ['_unit-test/console_exec.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
     }
 
     /**
      * Test JsSse and Console.
+     *
+     * @dataProvider provideDemoSseResponseCases
      */
-    public function sseResponseProvider(): array
-    {
-        $files = [];
-        $files[] = ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
-        $files[] = ['_unit-test/console.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
-        $files[] = ['_unit-test/console_run.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
-        $files[] = ['_unit-test/console_exec.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
-
-        return $files;
-    }
-
-    /**
-     * @dataProvider sseResponseProvider
-     */
-    public function testDemoAssertSseResponse(string $path): void
+    public function testDemoSseResponse(string $path): void
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
-            static::assertTrue(true); // @phpstan-ignore-line
+            self::assertTrue(true); // @phpstan-ignore-line
 
             return;
         }
 
         $response = $this->getResponseFromRequest($path);
-        static::assertSame(200, $response->getStatusCode());
+        self::assertSame(200, $response->getStatusCode());
 
         $outputLines = preg_split('~\r?\n|\r~', $response->getBody()->getContents(), -1, \PREG_SPLIT_NO_EMPTY);
 
         // check SSE Syntax
-        static::assertGreaterThan(0, count($outputLines));
+        self::assertGreaterThan(0, count($outputLines));
         foreach ($outputLines as $index => $line) {
-            preg_match_all($this->regexSse, $line, $matchesAll);
-            $format_match_string = implode('', $matchesAll[0] ?? ['error']);
-
-            static::assertSame(
+            preg_match_all(self::$regexSseLine, $line, $matchesAll);
+            self::assertSame(
                 $line,
-                $format_match_string,
+                implode('', $matchesAll[0] ?? ['error']),
                 'Testing SSE response line ' . $index . ' with content ' . $line
             );
         }
     }
 
-    public function jsonResponsePostProvider(): array
+    public static function provideDemoJsonResponsePostCases(): iterable
     {
-        $files = [];
-        $files[] = [
+        yield [
             '_unit-test/post.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_submit=ajax&' . Callback::URL_QUERY_TARGET . '=test_submit',
-            [
-                'f1' => 'v1',
-            ],
+            ['f1' => 'v1'],
         ];
-
-        return $files;
     }
 
     /**
-     * @dataProvider jsonResponsePostProvider
+     * @dataProvider provideDemoJsonResponsePostCases
      */
-    public function testDemoAssertJsonResponsePost(string $path, array $postData): void
+    public function testDemoJsonResponsePost(string $path, array $postData): void
     {
         $response = $this->getResponseFromRequest($path, ['form_params' => $postData]);
-        static::assertSame(200, $response->getStatusCode());
-        static::assertMatchesRegularExpression($this->regexJson, $response->getBody()->getContents());
+        self::assertSame(200, $response->getStatusCode());
+        self::assertMatchesRegularExpression(self::$regexJson, $response->getBody()->getContents());
     }
 
     /**
-     * @dataProvider demoCallbackErrorProvider
+     * @dataProvider provideDemoCallbackErrorCases
+     *
+     * @slowThreshold 1500
      */
-    public function testDemoCallbackError(string $path, string $expectedExceptionMessage): void
+    public function testDemoCallbackError(string $path, string $expectedExceptionMessage, array $options = []): void
     {
         if (static::class === self::class) {
             $this->expectExceptionMessage($expectedExceptionMessage);
         }
 
-        $response = $this->getResponseFromRequest5xx($path);
+        $response = $this->getResponseFromRequest5xx($path, $options);
 
-        static::assertSame(500, $response->getStatusCode());
+        self::assertSame(500, $response->getStatusCode());
+        self::assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
+        self::assertSame('no-store', $response->getHeaderLine('Cache-Control'));
         $responseBodyStr = $response->getBody()->getContents();
-        static::assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
-        static::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
+        self::assertMatchesRegularExpression(self::$regexHtml, $responseBodyStr);
+        self::assertStringNotContainsString(preg_replace('~.+\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
+        self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
     }
 
-    public function demoCallbackErrorProvider(): array
+    public static function provideDemoCallbackErrorCases(): iterable
     {
-        return [
-            [
-                '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
-                'Callback requested, but never reached. You may be missing some arguments in request URL.',
-            ],
-            [
-                '_unit-test/callback-nested.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
-                'Callback requested, but never reached. You may be missing some arguments in request URL.',
-            ],
-            [
-                '_unit-test/callback-nested.php?err_main_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_main_loader',
-                'Exception from Main Loader',
-            ],
-            [
-                '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
-                'Exception from Sub Loader',
-            ],
-            [
-                '_unit-test/callback-nested.php?err_sub_loader2&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
-                'Exception II from Sub Loader',
-            ],
+        yield [
+            '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
+            'Callback requested, but never reached. You may be missing some arguments in request URL.',
+        ];
+        yield [
+            '_unit-test/callback-nested.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
+            'Callback requested, but never reached. You may be missing some arguments in request URL.',
+        ];
+        yield [
+            '_unit-test/callback-nested.php?err_main_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_main_loader',
+            'Exception from Main Loader',
+        ];
+        yield [
+            '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
+            'Exception from Sub Loader',
+        ];
+        yield [
+            '_unit-test/callback-nested.php?err_sub_loader2&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
+            'Exception II from Sub Loader',
+        ];
+
+        yield [
+            '_unit-test/post.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_submit=ajax&' . Callback::URL_QUERY_TARGET . '=test_submit',
+            'Form POST param does not exist',
+            ['form_params' => []],
         ];
     }
 }
 
-class DemosTestExitError extends \Error
-{
-}
+class DemosTestExitError extends \Error {}

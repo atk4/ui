@@ -13,7 +13,7 @@ use Atk4\Ui\Js\JsExpressionable;
  */
 class Loader extends View
 {
-    public $ui = 'segment';
+    public $ui = 'basic fitted segment';
 
     /**
      * Shim is a filler object that is displayed inside loader while the actual content is fetched
@@ -21,7 +21,7 @@ class Loader extends View
      * by an actual content when loading stops. Additionally there will be loading indicator
      * on top of this content.
      *
-     * @var View
+     * @var View|non-empty-array<mixed>
      */
     public $shim;
 
@@ -39,9 +39,10 @@ class Loader extends View
     /** @var Callback for triggering */
     public $cb;
 
-    /** @var array Url arguments. */
+    /** @var array URL arguments. */
     public $urlArgs = [];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -55,6 +56,13 @@ class Loader extends View
         }
     }
 
+    private function getShimIfOwner(): View
+    {
+        return $this->getOwner() === $this->shim
+            ? $this->shim
+            : $this;
+    }
+
     /**
      * Set callback function for this loader.
      *
@@ -66,25 +74,18 @@ class Loader extends View
      *    $p->set('new content');
      *  });
      *
-     * Or
-     *  $l1->set([$my_object, 'run_long_process']);
-     *
      * @param \Closure($this): void $fx
-     * @param never                 $ignore
-     *
-     * @return $this
      */
-    public function set($fx = null, $ignore = null)
+    #[\Override]
+    public function set($fx = null)
     {
         if (!$fx instanceof \Closure) {
             throw new \TypeError('$fx must be of type Closure');
-        } elseif (func_num_args() > 1) {
-            throw new Exception('Only one argument is needed by Loader::set()');
         }
 
         $this->cb->set(function () use ($fx) {
             $fx($this);
-            $this->cb->terminateJson($this);
+            $this->cb->terminateJson($this->getShimIfOwner());
         });
 
         return $this;
@@ -94,28 +95,33 @@ class Loader extends View
      * Automatically call the jsLoad on a supplied event unless it was already triggered
      * or if user have invoked jsLoad manually.
      */
+    #[\Override]
     protected function renderView(): void
     {
         if (!$this->cb->isTriggered()) {
             if ($this->loadEvent) {
                 $this->js($this->loadEvent, $this->jsLoad($this->urlArgs));
             }
-            $this->add($this->shim);
+
+            if (!is_object($this->shim) || !$this->shim->isInitialized()) {
+                $this->add($this->shim);
+            }
         }
 
         parent::renderView();
     }
 
     /**
-     * Return a js action that will trigger the loader to start.
+     * Return a JS action that will trigger the loader to start.
      *
-     * @param string $storeName
+     * @param array<string, mixed> $apiConfig
+     * @param string               $storeName
      *
      * @return JsChain
      */
     public function jsLoad(array $args = [], array $apiConfig = [], $storeName = null): JsExpressionable
     {
-        return $this->js()->atkReloadView([
+        return $this->getShimIfOwner()->js()->atkReloadView([
             'url' => $this->cb->getUrl(),
             'urlOptions' => $args,
             'apiConfig' => $apiConfig !== [] ? $apiConfig : null,

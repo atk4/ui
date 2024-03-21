@@ -1,9 +1,9 @@
 /*
- * # Fomantic UI - 2.9.3-beta.20+1e3f606
+ * # Fomantic UI - 2.9.4-beta.35+d05c619
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
- * Copyright 2023 Contributors
+ * Copyright 2024 Contributors
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  *
@@ -293,7 +293,9 @@
                         });
                     }
                     clearTimeout(module.performance.timer);
-                    module.performance.timer = setTimeout(module.performance.display, 500);
+                    module.performance.timer = setTimeout(function () {
+                        module.performance.display();
+                    }, 500);
                 },
                 display: function () {
                     var
@@ -984,6 +986,13 @@
                                     fullFields[name].rules.push({ type: rule });
                                 });
                             }
+
+                            $.each(fullFields[name].rules, function (index, rule) {
+                                var ruleName = module.get.ruleName(rule);
+                                if (ruleName === 'empty') {
+                                    module.warn('*** DEPRECATED *** : Rule "empty" for field "' + name + '" will be removed in a future version. -> Use "notEmpty" rule instead.');
+                                }
+                            });
                         });
 
                         return fullFields;
@@ -997,9 +1006,10 @@
                             ancillary     = module.get.ancillaryValue(rule),
                             $field        = module.get.field(field.identifier),
                             value         = $field.val(),
-                            prompt        = isFunction(rule.prompt)
-                                ? rule.prompt(value)
-                                : rule.prompt || settings.prompt[ruleName] || settings.text.unspecifiedRule,
+                            promptCheck   = rule.prompt || settings.prompt[ruleName] || settings.text.unspecifiedRule,
+                            prompt        = String(isFunction(promptCheck)
+                                ? promptCheck.call($field[0], value)
+                                : promptCheck),
                             requiresValue = prompt.search('{value}') !== -1,
                             requiresName  = prompt.search('{name}') !== -1,
                             parts,
@@ -1037,10 +1047,10 @@
                     },
                     settings: function () {
                         if ($.isPlainObject(parameters)) {
-                            if (parameters.fields) {
-                                parameters.fields = module.get.fieldsFromShorthand(parameters.fields);
-                            }
                             settings = $.extend(true, {}, $.fn.form.settings, parameters);
+                            if (settings.fields) {
+                                settings.fields = module.get.fieldsFromShorthand(settings.fields);
+                            }
                             validation = $.extend(true, {}, $.fn.form.settings.defaults, settings.fields);
                             module.verbose('Extending settings', validation, settings);
                         } else {
@@ -1065,7 +1075,7 @@
                         // refresh selector cache
                         (instance || module).refresh();
                     },
-                    field: function (identifier, strict) {
+                    field: function (identifier, strict, ignoreMissing) {
                         module.verbose('Finding field with identifier', identifier);
                         identifier = module.escape.string(identifier);
                         var t;
@@ -1085,7 +1095,9 @@
                         if (t.length > 0) {
                             return t;
                         }
-                        module.error(error.noField.replace('{identifier}', identifier));
+                        if (!ignoreMissing) {
+                            module.error(error.noField.replace('{identifier}', identifier));
+                        }
 
                         return strict ? $() : $('<input/>');
                     },
@@ -1155,7 +1167,7 @@
                             var
                                 $field       = $(field),
                                 $calendar    = $field.closest(selector.uiCalendar),
-                                name         = $field.prop('name'),
+                                name         = $field.prop('name') || $field.prop('id'),
                                 value        = $field.val(),
                                 isCheckbox   = $field.is(selector.checkbox),
                                 isRadio      = $field.is(selector.radio),
@@ -1263,10 +1275,10 @@
 
                 has: {
 
-                    field: function (identifier) {
+                    field: function (identifier, ignoreMissing) {
                         module.verbose('Checking for existence of a field with identifier', identifier);
 
-                        return module.get.field(identifier, true).length > 0;
+                        return module.get.field(identifier, true, ignoreMissing).length > 0;
                     },
 
                 },
@@ -1357,7 +1369,8 @@
                             $field       = module.get.field(identifier),
                             $fieldGroup  = $field.closest($group),
                             $prompt      = $fieldGroup.children(selector.prompt),
-                            promptExists = $prompt.length > 0
+                            promptExists = $prompt.length > 0,
+                            canTransition = settings.transition && module.can.useElement('transition')
                         ;
                         module.verbose('Adding field error state', identifier);
                         if (!internal) {
@@ -1366,8 +1379,22 @@
                             ;
                         }
                         if (settings.inline) {
+                            if (promptExists) {
+                                if (canTransition) {
+                                    if ($prompt.transition('is animating')) {
+                                        $prompt.transition('stop all');
+                                    }
+                                } else if ($prompt.is(':animated')) {
+                                    $prompt.stop(true, true);
+                                }
+                                $prompt = $fieldGroup.children(selector.prompt);
+                                promptExists = $prompt.length > 0;
+                            }
                             if (!promptExists) {
                                 $prompt = $('<div/>').addClass(className.label);
+                                if (!canTransition) {
+                                    $prompt.css('display', 'none');
+                                }
                                 $prompt
                                     .appendTo($fieldGroup)
                                 ;
@@ -1376,7 +1403,7 @@
                                 .html(settings.templates.prompt(errors))
                             ;
                             if (!promptExists) {
-                                if (settings.transition && module.can.useElement('transition')) {
+                                if (canTransition) {
                                     module.verbose('Displaying error with css transition', settings.transition);
                                     $prompt.transition(settings.transition + ' in', settings.duration);
                                 } else {
@@ -1385,9 +1412,9 @@
                                         .fadeIn(settings.duration)
                                     ;
                                 }
-                            } else {
-                                module.verbose('Inline errors are disabled, no inline error added', identifier);
                             }
+                        } else {
+                            module.verbose('Inline errors are disabled, no inline error added', identifier);
                         }
                     },
                     errors: function (errors) {
@@ -1451,7 +1478,7 @@
                         }
                         if (rule === undefined) {
                             module.debug('Removed all rules');
-                            if (module.has.field(field)) {
+                            if (module.has.field(field, true)) {
                                 validation[field].rules = [];
                             } else {
                                 delete validation[field];
@@ -1652,7 +1679,7 @@
                         module.debug('Enabling auto check on required fields');
                         if (validation) {
                             $.each(validation, function (fieldName) {
-                                if (!module.has.field(fieldName)) {
+                                if (!module.has.field(fieldName, true)) {
                                     module.verbose('Field not found, removing from validation', fieldName);
                                     module.remove.field(fieldName);
                                 }
@@ -1666,20 +1693,20 @@
                                 isRequired = $el.prop('required') || $elGroup.hasClass(className.required) || $elGroup.parent().hasClass(className.required),
                                 isDisabled = $el.is(':disabled') || $elGroup.hasClass(className.disabled) || $elGroup.parent().hasClass(className.disabled),
                                 validation = module.get.validation($el),
-                                hasEmptyRule = validation
+                                hasNotEmptyRule = validation
                                     ? $.grep(validation.rules, function (rule) {
-                                        return rule.type === 'empty';
-                                    }) !== 0
+                                        return ['notEmpty', 'checked', 'empty'].indexOf(rule.type) >= 0;
+                                    }).length > 0
                                     : false,
                                 identifier = module.get.identifier(validation, $el)
                             ;
-                            if (isRequired && !isDisabled && !hasEmptyRule && identifier !== undefined) {
+                            if (isRequired && !isDisabled && !hasNotEmptyRule && identifier !== undefined) {
                                 if (isCheckbox) {
                                     module.verbose("Adding 'checked' rule on field", identifier);
                                     module.add.rule(identifier, 'checked');
                                 } else {
-                                    module.verbose("Adding 'empty' rule on field", identifier);
-                                    module.add.rule(identifier, 'empty');
+                                    module.verbose("Adding 'notEmpty' rule on field", identifier);
+                                    module.add.rule(identifier, 'notEmpty');
                                 }
                             }
                         });
@@ -1777,13 +1804,15 @@
                             fieldValid  = true,
                             fieldErrors = [],
                             isDisabled = $field.filter(':not(:disabled)').length === 0,
-                            validationMessage = $field[0].validationMessage
+                            validationMessage = $field[0].validationMessage,
+                            noNativeValidation = field.noNativeValidation || settings.noNativeValidation || $field.filter('[formnovalidate],[novalidate]').length > 0 || $module.filter('[novalidate]').length > 0,
+                            errorLimit
                         ;
                         if (!field.identifier) {
                             module.debug('Using field name as identifier', identifier);
                             field.identifier = identifier;
                         }
-                        if (validationMessage) {
+                        if (validationMessage && !noNativeValidation) {
                             module.debug('Field is natively invalid', identifier);
                             fieldErrors.push(validationMessage);
                             fieldValid = false;
@@ -1800,8 +1829,9 @@
                         } else if (field.depends && module.is.empty($dependsField)) {
                             module.debug('Field depends on another value that is not present or empty. Skipping', $dependsField);
                         } else if (field.rules !== undefined) {
+                            errorLimit = field.errorLimit || settings.errorLimit;
                             $.each(field.rules, function (index, rule) {
-                                if (module.has.field(identifier)) {
+                                if (module.has.field(identifier) && (!errorLimit || fieldErrors.length < errorLimit)) {
                                     var invalidFields = module.validate.rule(field, rule, true) || [];
                                     if (invalidFields.length > 0) {
                                         module.debug('Field is invalid', identifier, rule.type);
@@ -1918,6 +1948,12 @@
                         module.error.apply(console, arguments);
                     }
                 },
+                warn: function () {
+                    if (!settings.silent) {
+                        module.warn = Function.prototype.bind.call(console.warn, console, settings.name + ':');
+                        module.warn.apply(console, arguments);
+                    }
+                },
                 performance: {
                     log: function (message) {
                         var
@@ -1938,7 +1974,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -2032,6 +2070,7 @@
         name: 'Form',
         namespace: 'form',
 
+        silent: false,
         debug: false,
         verbose: false,
         performance: true,
@@ -2053,6 +2092,8 @@
         preventLeaving: false,
         errorFocus: true,
         dateHandling: 'date', // 'date', 'input', 'formatter'
+        errorLimit: 0,
+        noNativeValidation: false,
 
         onValid: function () {},
         onInvalid: function () {},
@@ -2095,6 +2136,7 @@
             maxValue: '{name} must have a maximum value of {ruleValue}',
             minValue: '{name} must have a minimum value of {ruleValue}',
             empty: '{name} must have a value',
+            notEmpty: '{name} must have a value',
             checked: '{name} must be checked',
             email: '{name} must be a valid e-mail',
             url: '{name} must be a valid url',
@@ -2227,8 +2269,13 @@
         rules: {
 
             // is not empty or blank string
-            empty: function (value) {
+            notEmpty: function (value) {
                 return !(value === undefined || value === '' || (Array.isArray(value) && value.length === 0));
+            },
+
+            /* Deprecated */
+            empty: function (value) {
+                return $.fn.form.settings.rules.notEmpty(value);
             },
 
             // checkbox checked
@@ -3012,7 +3059,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -4638,7 +4687,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -5371,7 +5422,7 @@
                         ;
 
                         var
-                            r = module.get.radios(),
+                            r = module.get.radios().not(selector.disabled),
                             rIndex = r.index($module),
                             rLen = r.length,
                             checkIndex = false
@@ -5389,7 +5440,10 @@
 
                                 return false;
                             }
-                            if (settings.beforeChecked.apply($(r[checkIndex]).children(selector.input)[0]) === false) {
+                            var nextOption = $(r[checkIndex]),
+                                nextInput = nextOption.children(selector.input),
+                                disallowOption = nextOption.hasClass(className.readOnly) || nextInput.prop('readonly');
+                            if (disallowOption || settings.beforeChecked.apply(nextInput[0]) === false) {
                                 module.verbose('Next option should not allow check, cancelling key navigation');
 
                                 return false;
@@ -5402,7 +5456,9 @@
                             $input.trigger('blur');
                             shortcutPressed = true;
                             event.stopPropagation();
-                        } else if (!event.ctrlKey && module.can.change()) {
+                        } else if (!module.can.change()) {
+                            shortcutPressed = true;
+                        } else if (!event.ctrlKey) {
                             if (key === keyCode.space || (key === keyCode.enter && settings.enableEnterKey)) {
                                 module.verbose('Enter/space key pressed, toggling checkbox');
                                 module.toggle();
@@ -5884,7 +5940,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -6032,6 +6090,7 @@
 
         selector: {
             checkbox: '.ui.checkbox',
+            disabled: '.disabled, :has(input[disabled])',
             label: 'label',
             input: 'input[type="checkbox"], input[type="radio"]',
             link: 'a[href]',
@@ -6561,7 +6620,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -7118,7 +7179,7 @@
                             module.verbose('Adding clear icon');
                             $clear = $('<i />')
                                 .addClass('remove icon')
-                                .insertBefore($text)
+                                .insertAfter($icon)
                             ;
                         }
                         if (module.is.search() && !module.has.search()) {
@@ -7284,7 +7345,7 @@
                     callback = isFunction(callback)
                         ? callback
                         : function () {};
-                    if ((focused || iconClicked) && module.is.remote() && module.is.noApiCache()) {
+                    if ((focused || iconClicked) && module.is.remote() && module.is.noApiCache() && !module.has.maxSelections()) {
                         module.clearItems();
                     }
                     if (!module.can.show() && module.is.remote()) {
@@ -7334,7 +7395,10 @@
                             if ($subMenu.length > 0) {
                                 module.verbose('Hiding sub-menu', $subMenu);
                                 $subMenu.each(function () {
-                                    module.animate.hide(false, $(this));
+                                    var $sub = $(this);
+                                    if (!module.is.animating($sub)) {
+                                        module.animate.hide(false, $sub);
+                                    }
                                 });
                             }
                         }
@@ -7529,6 +7593,8 @@
                         }
                     ;
                     if (settings.useLabels && module.has.maxSelections()) {
+                        module.show();
+
                         return;
                     }
                     if (settings.apiSettings) {
@@ -7640,11 +7706,13 @@
                                 ? query
                                 : module.get.query()
                         ),
-                        results          =  null,
-                        escapedTerm      = module.escape.string(searchTerm),
-                        regExpFlags      = (settings.ignoreSearchCase ? 'i' : '') + 'gm',
+                        results = null,
+                        escapedTerm = module.escape.string(searchTerm),
+                        regExpIgnore = settings.ignoreSearchCase ? 'i' : '',
+                        regExpFlags = regExpIgnore + 'gm',
                         beginsWithRegExp = new RegExp('^' + escapedTerm, regExpFlags)
                     ;
+                    module.remove.filteredItem();
                     // avoid loop if we're matching nothing
                     if (module.has.query()) {
                         results = [];
@@ -7688,12 +7756,34 @@
                         ;
                     }
                     module.debug('Showing only matched items', searchTerm);
-                    module.remove.filteredItem();
                     if (results) {
                         $item
                             .not(results)
                             .addClass(className.filtered)
                         ;
+                        if (settings.highlightMatches && (settings.match === 'both' || settings.match === 'text')) {
+                            var querySplit = query.split(''),
+                                diacriticReg = settings.ignoreDiacritics ? '[\u0300-\u036F]?' : '',
+                                htmlReg = '(?![^<]*>)',
+                                markedRegExp = new RegExp(htmlReg + '(' + querySplit.join(diacriticReg + ')(.*?)' + htmlReg + '(') + diacriticReg + ')', regExpIgnore),
+                                markedReplacer = function () {
+                                    var args = [].slice.call(arguments, 1, querySplit.length * 2).map(function (x, i) {
+                                        return i & 1 ? x : '<mark>' + x + '</mark>'; // eslint-disable-line no-bitwise
+                                    });
+
+                                    return args.join('');
+                                }
+                            ;
+                            $.each(results, function (index, result) {
+                                var $result = $(result),
+                                    markedHTML = module.get.choiceText($result, true)
+                                ;
+                                if (settings.ignoreDiacritics) {
+                                    markedHTML = markedHTML.normalize('NFD');
+                                }
+                                $result.html(markedHTML.replace(markedRegExp, markedReplacer));
+                            });
+                        }
                     }
 
                     if (!module.has.query()) {
@@ -7729,8 +7819,10 @@
                         termLength  = term.length,
                         queryLength = query.length
                     ;
-                    query = settings.ignoreSearchCase ? query.toLowerCase() : query;
-                    term = settings.ignoreSearchCase ? term.toLowerCase() : term;
+                    if (settings.ignoreSearchCase) {
+                        query = query.toLowerCase();
+                        term = term.toLowerCase();
+                    }
                     if (queryLength > termLength) {
                         return false;
                     }
@@ -7852,8 +7944,8 @@
                             notFoundTokens = []
                         ;
                         tokens.forEach(function (value) {
-                            if (module.set.selected(module.escape.htmlEntities(value.trim()), null, true, true) === false) {
-                                notFoundTokens.push(value);
+                            if (module.set.selected(module.escape.htmlEntities(value.trim()), null, false, true) === false) {
+                                notFoundTokens.push(value.trim());
                             }
                         });
                         event.preventDefault();
@@ -7937,7 +8029,7 @@
                                 if (!itemActivated && !pageLostFocus) {
                                     if (settings.forceSelection) {
                                         module.forceSelection();
-                                    } else if (!settings.allowAdditions) {
+                                    } else if (!settings.allowAdditions && !settings.keepSearchTerm && !module.has.menuSearch()) {
                                         module.remove.searchTerm();
                                     }
                                     module.hide();
@@ -7986,7 +8078,9 @@
                             module.set.filtered();
                         }
                         clearTimeout(module.timer);
-                        module.timer = setTimeout(module.search, settings.delay.search);
+                        module.timer = setTimeout(function () {
+                            module.search();
+                        }, settings.delay.search);
                     },
                     label: {
                         click: function (event) {
@@ -8163,7 +8257,9 @@
                                         module.remove.userAddition();
                                     }
                                     if (!settings.keepSearchTerm) {
-                                        module.remove.filteredItem();
+                                        if (module.is.multiple()) {
+                                            module.remove.filteredItem();
+                                        }
                                         module.remove.searchTerm();
                                     }
                                     if (!module.is.visible() && $target.length > 0) {
@@ -8925,7 +9021,7 @@
                                         return;
                                     }
                                     if (isMultiple) {
-                                        if ($.inArray(module.escape.htmlEntities(String(optionValue)), value.map(String)) !== -1) {
+                                        if ($.inArray(module.escape.htmlEntities(String(optionValue)), value.map(String).map(module.escape.htmlEntities)) !== -1) {
                                             $selectedItem = $selectedItem
                                                 ? $selectedItem.add($choice)
                                                 : $choice;
@@ -8986,7 +9082,7 @@
                             return false;
                         }
 
-                        return true;
+                        return false;
                     },
                     disabled: function () {
                         $search.attr('tabindex', module.is.disabled() ? -1 : 0);
@@ -9076,7 +9172,7 @@
                                 $.each(values, function (value, name) {
                                     module.set.text(name);
                                 });
-                            } else {
+                            } else if (settings.useLabels) {
                                 $.each(values, function (value, name) {
                                     module.add.label(value, name);
                                 });
@@ -9337,7 +9433,7 @@
                             } else {
                                 $combo.text(text);
                             }
-                        } else if (settings.action === 'activate') {
+                        } else if (settings.action === 'activate' || isFunction(settings.action)) {
                             if (text !== module.get.placeholderText() || isNotPlaceholder) {
                                 $text.removeClass(className.placeholder);
                             }
@@ -9556,8 +9652,8 @@
                                             module.save.remoteData(selectedText, selectedValue);
                                         }
                                         if (settings.useLabels) {
-                                            module.add.value(selectedValue, selectedText, $selected, preventChangeTrigger);
                                             module.add.label(selectedValue, selectedText, shouldAnimate);
+                                            module.add.value(selectedValue, selectedText, $selected, preventChangeTrigger);
                                             module.set.activeItem($selected);
                                             module.filterActive();
                                             module.select.nextAvailable($selectedItem);
@@ -9830,6 +9926,12 @@
                         $item.removeClass(className.active);
                     },
                     filteredItem: function () {
+                        if (settings.highlightMatches) {
+                            $.each($item, function (index, item) {
+                                var $markItem = $(item);
+                                $markItem.html($markItem.html().replace(/<\/?mark>/g, ''));
+                            });
+                        }
                         if (settings.useLabels && module.has.maxSelections()) {
                             return;
                         }
@@ -10497,12 +10599,16 @@
                     show: function () {
                         module.verbose('Delaying show event to ensure user intent');
                         clearTimeout(module.timer);
-                        module.timer = setTimeout(module.show, settings.delay.show);
+                        module.timer = setTimeout(function () {
+                            module.show();
+                        }, settings.delay.show);
                     },
                     hide: function () {
                         module.verbose('Delaying hide event to ensure user intent');
                         clearTimeout(module.timer);
-                        module.timer = setTimeout(module.hide, settings.delay.hide);
+                        module.timer = setTimeout(function () {
+                            module.hide();
+                        }, settings.delay.hide);
                     },
                 },
 
@@ -10535,6 +10641,7 @@
                         return text.replace(regExp.escape, '\\$&');
                     },
                     htmlEntities: function (string, forceAmpersand) {
+                        forceAmpersand = typeof forceAmpersand === 'number' ? false : forceAmpersand;
                         var
                             badChars     = /["'<>`]/g,
                             shouldEscape = /["&'<>`]/,
@@ -10551,8 +10658,7 @@
                         ;
                         if (shouldEscape.test(string)) {
                             string = string.replace(forceAmpersand ? /&/g : /&(?![\d#a-z]{1,12};)/gi, '&amp;');
-
-                            return string.replace(badChars, escapedChar);
+                            string = string.replace(badChars, escapedChar);
                         }
 
                         return string;
@@ -10628,7 +10734,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -10755,6 +10863,7 @@
 
         match: 'both', // what to match against with search selection (both, text, or label)
         fullTextSearch: 'exact', // search anywhere in value (set to 'exact' to require exact matches)
+        highlightMatches: false, // Whether search result should highlight matching strings
         ignoreDiacritics: false, // match results also if they contain diacritics of the same base character (for example searching for "a" will also match "á" or "â" or "à", etc...)
         hideDividers: false, // Whether to hide any divider elements (specified in selector.divider) that are sibling to any items when searched (set to true will hide all dividers, set to 'empty' will hide them when they are not followed by a visible item)
 
@@ -10979,8 +11088,7 @@
             ;
             if (shouldEscape.test(string)) {
                 string = string.replace(/&(?![\d#a-z]{1,12};)/gi, '&amp;');
-
-                return string.replace(badChars, escapedChar);
+                string = string.replace(badChars, escapedChar);
             }
 
             return string;
@@ -11539,7 +11647,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -12002,9 +12112,6 @@
                         .off(eventNamespace)
                         .removeData(moduleNamespace)
                     ;
-                    if (module.is.ios()) {
-                        module.remove.ios();
-                    }
                     $closeIcon.off(elementNamespace);
                     if ($inputs) {
                         $inputs.off(elementNamespace);
@@ -12659,12 +12766,6 @@
                         });
                     },
 
-                    // ios only (scroll on html not document). This prevent auto-resize canvas/scroll in ios
-                    // (This is no longer necessary in latest iOS)
-                    ios: function () {
-                        $html.addClass(className.ios);
-                    },
-
                     // container
                     pushed: function () {
                         $context.addClass(className.pushed);
@@ -12712,11 +12813,6 @@
                         $document
                             .off('keydown' + eventNamespace)
                         ;
-                    },
-
-                    // ios scroll on html not document
-                    ios: function () {
-                        $html.removeClass(className.ios);
                     },
 
                     // context
@@ -12839,20 +12935,6 @@
                         }
 
                         return module.cache.isIE;
-                    },
-                    ios: function () {
-                        var
-                            userAgent      = navigator.userAgent,
-                            isIOS          = userAgent.match(regExp.ios),
-                            isMobileChrome = userAgent.match(regExp.mobileChrome)
-                        ;
-                        if (isIOS && !isMobileChrome) {
-                            module.verbose('Browser was found to be iOS', userAgent);
-
-                            return true;
-                        }
-
-                        return false;
                     },
                     mobile: function () {
                         var
@@ -13016,7 +13098,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -13200,7 +13284,6 @@
             blurring: 'blurring',
             closing: 'closing',
             dimmed: 'dimmed',
-            ios: 'ios',
             locked: 'locked',
             pushable: 'pushable',
             pushed: 'pushed',
@@ -13233,8 +13316,6 @@
         },
 
         regExp: {
-            ios: /(iPad|iPhone|iPod)/g,
-            mobileChrome: /(CriOS)/g,
             mobile: /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/g,
         },
 
@@ -13868,7 +13949,9 @@
                     },
                     debounce: function (method, delay) {
                         clearTimeout(module.timer);
-                        module.timer = setTimeout(method, delay);
+                        module.timer = setTimeout(function () {
+                            method();
+                        }, delay);
                     },
                     keyboard: function (event) {
                         var
@@ -14614,7 +14697,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -15054,7 +15139,9 @@
                     }
 
                     if (settings.displayTime > 0) {
-                        setTimeout(module.hide, settings.displayTime);
+                        setTimeout(function () {
+                            module.hide();
+                        }, settings.displayTime);
                     }
                     module.show();
                 },
@@ -15110,8 +15197,10 @@
                         module.debug('Dismissing nag', settings.storageMethod, settings.key, settings.value, settings.expires);
                         module.storage.set(settings.key, settings.value);
                     }
-                    event.stopImmediatePropagation();
-                    event.preventDefault();
+                    if (event) {
+                        event.stopImmediatePropagation();
+                        event.preventDefault();
+                    }
                 },
 
                 should: {
@@ -15343,7 +15432,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -15712,7 +15803,9 @@
                         ;
                         clearTimeout(module.hideTimer);
                         if (!openedWithTouch || (openedWithTouch && settings.addTouchEvents)) {
-                            module.showTimer = setTimeout(module.show, delay);
+                            module.showTimer = setTimeout(function () {
+                                module.show();
+                            }, delay);
                         }
                     },
                     end: function () {
@@ -15722,7 +15815,9 @@
                                 : settings.delay
                         ;
                         clearTimeout(module.showTimer);
-                        module.hideTimer = setTimeout(module.hide, delay);
+                        module.hideTimer = setTimeout(function () {
+                            module.hide();
+                        }, delay);
                     },
                     touchstart: function (event) {
                         openedWithTouch = true;
@@ -16762,7 +16857,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -17856,7 +17953,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -18708,7 +18807,8 @@
                         var
                             step = module.get.step(),
                             min = module.get.min(),
-                            quotient = step === 0 ? 0 : Math.floor((settings.max - min) / step),
+                            precision = module.get.precision(),
+                            quotient = step === 0 ? 0 : Math.floor(Math.round(((settings.max - min) / step) * precision) / precision),
                             remainder = step === 0 ? 0 : (settings.max - min) % step
                         ;
 
@@ -18718,7 +18818,9 @@
                         return settings.step;
                     },
                     numLabels: function () {
-                        var value = Math.round((module.get.max() - module.get.min()) / (module.get.step() === 0 ? 1 : module.get.step()));
+                        var step = module.get.step(),
+                            precision = module.get.precision(),
+                            value = Math.round(((module.get.max() - module.get.min()) / (step === 0 ? 1 : step)) * precision) / precision;
                         module.debug('Determined that there should be ' + value + ' labels');
 
                         return value;
@@ -18733,7 +18835,9 @@
 
                         switch (settings.labelType) {
                             case settings.labelTypes.number: {
-                                return Math.round(((value * (module.get.step() === 0 ? 1 : module.get.step())) + module.get.min()) * precision) / precision;
+                                var step = module.get.step();
+
+                                return Math.round(((value * (step === 0 ? 1 : step)) + module.get.min()) * precision) / precision;
                             }
                             case settings.labelTypes.letter: {
                                 return alphabet[value % 26];
@@ -19296,7 +19400,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -19837,7 +19943,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -20134,7 +20242,10 @@
                         // this makes sure $.extend does not add specified search fields to default fields
                         // this is the only setting which should not extend defaults
                         if (parameters && parameters.searchFields !== undefined) {
-                            settings.searchFields = parameters.searchFields;
+                            settings.searchFields = Array.isArray(parameters.searchFields)
+                                ? parameters.searchFields
+                                : [parameters.searchFields]
+                            ;
                         }
                     },
                 },
@@ -20168,7 +20279,9 @@
                             callback      = function () {
                                 module.cancel.query();
                                 module.remove.focus();
-                                module.timer = setTimeout(module.hideResults, settings.hideDelay);
+                                module.timer = setTimeout(function () {
+                                    module.hideResults();
+                                }, settings.hideDelay);
                             }
                         ;
                         if (pageLostFocus) {
@@ -20628,7 +20741,7 @@
                             exactResults = [],
                             fuzzyResults = [],
                             searchExp    = searchTerm.replace(regExp.escape, '\\$&'),
-                            matchRegExp  = new RegExp(regExp.beginsWith + searchExp, 'i'),
+                            matchRegExp = new RegExp(regExp.beginsWith + searchExp, settings.ignoreSearchCase ? 'i' : ''),
 
                             // avoid duplicates when pushing results
                             addResult = function (array, result) {
@@ -20664,13 +20777,14 @@
                             var concatenatedContent = [];
                             $.each(searchFields, function (index, field) {
                                 var
-                                    fieldExists = (typeof content[field] === 'string') || (typeof content[field] === 'number')
+                                    fieldExists = typeof content[field] === 'string' || typeof content[field] === 'number'
                                 ;
                                 if (fieldExists) {
                                     var text;
                                     text = typeof content[field] === 'string'
                                         ? module.remove.diacritics(content[field])
                                         : content[field].toString();
+                                    text = $('<div/>', { html: text }).text().trim();
                                     if (settings.fullTextSearch === 'all') {
                                         concatenatedContent.push(text);
                                         if (index < lastSearchFieldIndex) {
@@ -20701,8 +20815,10 @@
                     },
                 },
                 exactSearch: function (query, term) {
-                    query = query.toLowerCase();
-                    term = term.toLowerCase();
+                    if (settings.ignoreSearchCase) {
+                        query = query.toLowerCase();
+                        term = term.toLowerCase();
+                    }
 
                     return term.indexOf(query) > -1;
                 },
@@ -20729,8 +20845,10 @@
                     if (typeof query !== 'string') {
                         return false;
                     }
-                    query = query.toLowerCase();
-                    term = term.toLowerCase();
+                    if (settings.ignoreSearchCase) {
+                        query = query.toLowerCase();
+                        term = term.toLowerCase();
+                    }
                     if (queryLength > termLength) {
                         return false;
                     }
@@ -21085,6 +21203,39 @@
                                 response[fields.results] = response[fields.results].slice(0, settings.maxResults);
                             }
                         }
+                        if (settings.highlightMatches) {
+                            var results = response[fields.results],
+                                regExpIgnore = settings.ignoreSearchCase ? 'i' : '',
+                                querySplit = module.get.value().split(''),
+                                diacriticReg = settings.ignoreDiacritics ? '[\u0300-\u036F]?' : '',
+                                htmlReg = '(?![^<]*>)',
+                                markedRegExp = new RegExp(htmlReg + '(' + querySplit.join(diacriticReg + ')(.*?)' + htmlReg + '(') + diacriticReg + ')', regExpIgnore),
+                                markedReplacer = function () {
+                                    var args = [].slice.call(arguments, 1, querySplit.length * 2).map(function (x, i) {
+                                        return i & 1 ? x : '<mark>' + x + '</mark>'; // eslint-disable-line no-bitwise
+                                    });
+
+                                    return args.join('');
+                                }
+                            ;
+                            $.each(results, function (label, content) {
+                                $.each(settings.searchFields, function (index, field) {
+                                    var
+                                        fieldExists = typeof content[field] === 'string' || typeof content[field] === 'number'
+                                    ;
+                                    if (fieldExists) {
+                                        var markedHTML = typeof content[field] === 'string'
+                                            ? content[field]
+                                            : content[field].toString();
+                                        if (settings.ignoreDiacritics) {
+                                            markedHTML = markedHTML.normalize('NFD');
+                                        }
+                                        markedHTML = markedHTML.replace(/<\/?mark>/g, '');
+                                        response[fields.results][label][field] = markedHTML.replace(markedRegExp, markedReplacer);
+                                    }
+                                });
+                            });
+                        }
                         if (isFunction(template)) {
                             html = template(response, fields, settings.preserveHTML);
                         } else {
@@ -21170,7 +21321,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -21311,8 +21464,14 @@
         // search anywhere in value (set to 'exact' to require exact matches
         fullTextSearch: 'exact',
 
+        // Whether search result should highlight matching strings
+        highlightMatches: false,
+
         // match results also if they contain diacritics of the same base character (for example searching for "a" will also match "á" or "â" or "à", etc...)
         ignoreDiacritics: false,
+
+        // whether to consider case sensitivity on local searching
+        ignoreSearchCase: true,
 
         // whether to add events to prompt automatically
         automatic: true,
@@ -21431,8 +21590,9 @@
                     };
                 if (shouldEscape.test(string)) {
                     string = string.replace(/&(?![\d#a-z]{1,12};)/gi, '&amp;');
-
-                    return string.replace(badChars, escapedChar);
+                    string = string.replace(badChars, escapedChar);
+                    // FUI controlled HTML is still allowed
+                    string = string.replace(/&lt;(\/)*mark&gt;/g, '<$1mark>');
                 }
 
                 return string;
@@ -22191,7 +22351,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -22484,9 +22646,6 @@
                         .off(eventNamespace)
                         .removeData(moduleNamespace)
                     ;
-                    if (module.is.ios()) {
-                        module.remove.ios();
-                    }
                     // bound by uuid
                     $context.off(elementNamespace);
                     $window.off(elementNamespace);
@@ -22950,11 +23109,6 @@
                             $pusher.removeClass(className.blurring);
                         }
                     },
-                    // ios only (scroll on html not document). This prevent auto-resize canvas/scroll in ios
-                    // (This is no longer necessary in latest iOS)
-                    ios: function () {
-                        $html.addClass(className.ios);
-                    },
 
                     // container
                     pushed: function () {
@@ -23001,11 +23155,6 @@
                         if ($style && $style.length > 0) {
                             $style.remove();
                         }
-                    },
-
-                    // ios scroll on html not document
-                    ios: function () {
-                        $html.removeClass(className.ios);
                     },
 
                     // context
@@ -23127,20 +23276,6 @@
                         return module.cache.isIE;
                     },
 
-                    ios: function () {
-                        var
-                            userAgent      = navigator.userAgent,
-                            isIOS          = userAgent.match(regExp.ios),
-                            isMobileChrome = userAgent.match(regExp.mobileChrome)
-                        ;
-                        if (isIOS && !isMobileChrome) {
-                            module.verbose('Browser was found to be iOS', userAgent);
-
-                            return true;
-                        }
-
-                        return false;
-                    },
                     mobile: function () {
                         var
                             userAgent    = navigator.userAgent,
@@ -23253,7 +23388,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -23400,7 +23537,6 @@
             blurring: 'blurring',
             closing: 'closing',
             dimmed: 'dimmed',
-            ios: 'ios',
             locked: 'locked',
             pushable: 'pushable',
             pushed: 'pushed',
@@ -23420,8 +23556,6 @@
         },
 
         regExp: {
-            ios: /(iPad|iPhone|iPod)/g,
-            mobileChrome: /(CriOS)/g,
             mobile: /Mobile|iP(hone|od|ad)|Android|BlackBerry|IEMobile|Kindle|NetFront|Silk-Accelerated|(hpw|web)OS|Fennec|Minimo|Opera M(obi|ini)|Blazer|Dolfin|Dolphin|Skyfire|Zune/g,
         },
 
@@ -24175,7 +24309,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 0);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 0);
                     },
                     display: function () {
                         var
@@ -24435,7 +24571,7 @@
                     module.bind.events();
 
                     if (settings.history && !initializedHistory) {
-                        module.initializeHistory();
+                        settings.history = module.initializeHistory();
                         initializedHistory = true;
                     }
 
@@ -24445,7 +24581,7 @@
                         module.debug('No active tab detected, setting tab active', activeTab);
                         module.changeTab(activeTab);
                     }
-                    if (activeTab !== null && settings.history) {
+                    if (activeTab !== null && settings.history && settings.historyType === 'state') {
                         var autoUpdate = $.address.autoUpdate();
                         $.address.autoUpdate(false);
                         $.address.value(activeTab);
@@ -24538,6 +24674,8 @@
                     $.address
                         .bind('change', module.event.history.change)
                     ;
+
+                    return true;
                 },
 
                 event: {
@@ -25122,7 +25260,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -25993,7 +26133,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -26385,7 +26527,9 @@
                         ? ($allModules.length - index) * interval
                         : index * interval;
                     module.debug('Delaying animation by', delay);
-                    setTimeout(module.animate, delay);
+                    setTimeout(function () {
+                        module.animate();
+                    }, delay);
                 },
 
                 animate: function (overrideSettings) {
@@ -27092,7 +27236,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -27323,6 +27469,7 @@
                     : $.extend({}, $.fn.api.settings),
 
                 // internal aliases
+                regExp          = settings.regExp,
                 namespace       = settings.namespace,
                 metadata        = settings.metadata,
                 selector        = settings.selector,
@@ -27625,8 +27772,8 @@
                             optionalVariables
                         ;
                         if (url) {
-                            requiredVariables = url.match(settings.regExp.required);
-                            optionalVariables = url.match(settings.regExp.optional);
+                            requiredVariables = url.match(regExp.required);
+                            optionalVariables = url.match(regExp.optional);
                             urlData = urlData || settings.urlData;
                             if (requiredVariables) {
                                 module.debug('Looking for required URL variables', requiredVariables);
@@ -27723,7 +27870,7 @@
                                 });
                             });
                             $.each(formArray, function (i, el) {
-                                if (!settings.regExp.validate.test(el.name)) {
+                                if (!regExp.validate.test(el.name)) {
                                     return;
                                 }
                                 var
@@ -27734,7 +27881,7 @@
                                         || (String(floatValue) === el.value
                                             ? floatValue
                                             : (el.value === 'false' ? false : el.value)),
-                                    nameKeys = el.name.match(settings.regExp.key) || [],
+                                    nameKeys = el.name.match(regExp.key) || [],
                                     pushKey = el.name.replace(/\[]$/, '')
                                 ;
                                 if (!(pushKey in pushes)) {
@@ -27754,9 +27901,9 @@
 
                                     if (k === '' && !Array.isArray(value)) { // foo[]
                                         value = build([], pushes[pushKey]++, value);
-                                    } else if (settings.regExp.fixed.test(k)) { // foo[n]
+                                    } else if (regExp.fixed.test(k)) { // foo[n]
                                         value = build([], k, value);
-                                    } else if (settings.regExp.named.test(k)) { // foo; foo[bar]
+                                    } else if (regExp.named.test(k)) { // foo; foo[bar]
                                         value = build({}, k, value);
                                     }
                                 }
@@ -27911,7 +28058,9 @@
                                 module.debug('Adding error state');
                                 module.set.error();
                                 if (module.should.removeError()) {
-                                    setTimeout(module.remove.error, settings.errorDuration);
+                                    setTimeout(function () {
+                                        module.remove.error();
+                                    }, settings.errorDuration);
                                 }
                             }
                             module.debug('API Request failed', errorMessage, xhr);
@@ -28235,7 +28384,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -28959,7 +29110,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var
@@ -30252,7 +30405,9 @@
                             });
                         }
                         clearTimeout(module.performance.timer);
-                        module.performance.timer = setTimeout(module.performance.display, 500);
+                        module.performance.timer = setTimeout(function () {
+                            module.performance.display();
+                        }, 500);
                     },
                     display: function () {
                         var

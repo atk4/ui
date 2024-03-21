@@ -22,14 +22,10 @@ use Atk4\Ui\View;
 class Control extends View
 {
     /** @var Form|null to which this field belongs */
-    public $form;
+    public ?View $form = null;
 
-    /**
-     * @var EntityFieldPair|null
-     *
-     * @phpstan-var EntityFieldPair<Model, Field>|null
-     */
-    public $entityField;
+    /** @var EntityFieldPair<Model, Field>|null */
+    public ?EntityFieldPair $entityField = null;
 
     /** @var string */
     public $controlClass = '';
@@ -40,7 +36,7 @@ class Control extends View
     /** @var bool rendered or not input label in generic Form\Layout template. */
     public $renderLabel = true;
 
-    /** @var string */
+    /** @var string Specify width for Fomantic-UI grid. For "four wide" use 'four'. */
     public $width;
 
     /**
@@ -63,25 +59,20 @@ class Control extends View
      */
     public $hint;
 
-    /**
-     * Is input field disabled?
-     * Disabled input fields are not editable and will not be submitted.
-     */
+    /** Disabled field is not editable and will not be submitted. */
     public bool $disabled = false;
 
-    /**
-     * Is input field read only?
-     * Read only input fields are not editable, but will be submitted.
-     */
+    /** Read-only field is not editable, but will be submitted. */
     public bool $readOnly = false;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
 
-        if ($this->form && $this->entityField) {
+        if ($this->form !== null && $this->entityField !== null) {
             if (isset($this->form->controls[$this->entityField->getFieldName()])) {
-                throw (new Exception('Form already has a field with the same name'))
+                throw (new Exception('Form field already exists'))
                     ->addMoreInfo('name', $this->entityField->getFieldName());
             }
             $this->form->controls[$this->entityField->getFieldName()] = $this;
@@ -93,13 +84,11 @@ class Control extends View
      * the model, then the model's value will also be affected.
      *
      * @param mixed $value
-     * @param never $ignore
-     *
-     * @return $this
      */
-    public function set($value = null, $ignore = null)
+    #[\Override]
+    public function set($value = null)
     {
-        if ($this->entityField) {
+        if ($this->entityField !== null) {
             $this->entityField->set($value);
         } else {
             $this->content = $value;
@@ -108,19 +97,18 @@ class Control extends View
         return $this;
     }
 
-    /**
-     * It only makes sense to have "name" property inside a field if
-     * it was used inside a form.
-     */
+    #[\Override]
     protected function renderView(): void
     {
-        if ($this->form) {
+        // it only makes sense to have "name" property inside a field if used inside a form
+        if ($this->form !== null) {
             $this->template->trySet('name', $this->shortName);
         }
 
         parent::renderView();
     }
 
+    #[\Override]
     protected function renderTemplateToHtml(): string
     {
         $output = parent::renderTemplateToHtml();
@@ -137,16 +125,12 @@ class Control extends View
      * If $expr is JsExpressionable, then it will execute it instantly.
      * If $expr is callback method, then it'll make additional request to webserver.
      *
-     * Could be preferable to set useDefault to false. For example when
-     * needing to clear form error or when form canLeave property is false.
-     * Otherwise, change handler will not be propagate to all handlers.
-     *
      * Examples:
      * $control->onChange(new JsExpression('console.log(\'changed\')'));
      * $control->onChange(new JsExpression('$(this).parents(\'.form\').form(\'submit\')'));
      *
      * @param JsExpressionable|JsCallbackSetClosure|array{JsCallbackSetClosure} $expr
-     * @param array|bool $defaults
+     * @param array|bool                                                        $defaults
      */
     public function onChange($expr, $defaults = []): void
     {
@@ -163,12 +147,12 @@ class Control extends View
      *
      * $field->jsInput(true)->val(123);
      *
-     * @param bool|string      $when
-     * @param JsExpressionable $action
+     * @param bool|string                                     $when
+     * @param ($when is false ? null : JsExpressionable|null) $action
      *
-     * @return Jquery
+     * @return ($action is null ? Jquery : null)
      */
-    public function jsInput($when = false, $action = null): JsExpressionable
+    public function jsInput($when = false, $action = null): ?JsExpressionable
     {
         return $this->js($when, $action, '#' . $this->name . '_input');
     }

@@ -36,9 +36,10 @@ class Lister extends View
     /** @var int|null The number of item per page for JsPaginator. */
     public $ipp;
 
-    /** @var Model Current row entity */
-    public $currentRow;
+    /** Current row entity */
+    public ?Model $currentRow = null;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -73,13 +74,13 @@ class Lister extends View
 
     /**
      * Add Dynamic paginator when scrolling content via Javascript.
-     * Will output x item in lister set per ipp until user scroll content to the end of page.
+     * Will output x item in lister set per IPP until user scroll content to the end of page.
      * When this happen, content will be reload x number of items.
      *
      * @param int    $ipp          Number of item per page
-     * @param array  $options      an array with js Scroll plugin options
-     * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
-     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
+     * @param array  $options      an array with JS Scroll plugin options
+     * @param View   $container    the container holding the lister for scrolling purpose
+     * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
      */
@@ -102,7 +103,7 @@ class Lister extends View
             // let client know that there are no more records
             $jsonArr['noMoreScrollPages'] = $this->_renderedRowsCount < $ipp;
 
-            // return json response
+            // return JSON response
             $this->getApp()->terminateJson($jsonArr);
         });
 
@@ -112,6 +113,7 @@ class Lister extends View
     /** @var int This will count how many rows are rendered. Needed for JsPaginator for example. */
     protected $_renderedRowsCount = 0;
 
+    #[\Override]
     protected function renderView(): void
     {
         if (!$this->template) {
@@ -119,24 +121,22 @@ class Lister extends View
         }
 
         // if no model is set, don't show anything (even warning)
-        if (!$this->model) {
+        if ($this->model === null) {
             parent::renderView();
 
             return;
         }
 
-        // Iterate data rows
+        // iterate data rows
         $this->_renderedRowsCount = 0;
 
-        // TODO we should not iterate using $this->model variable,
-        // then also backup/tryfinally would be not needed
-        // the same in Table class
-        $modelBackup = $this->model;
         $tRowBackup = $this->tRow;
         try {
-            foreach ($this->model as $this->model) {
-                $this->currentRow = $this->model;
+            foreach ($this->model as $entity) {
+                $this->currentRow = $entity;
+
                 $this->tRow = clone $tRowBackup;
+
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
                 }
@@ -146,8 +146,8 @@ class Lister extends View
                 ++$this->_renderedRowsCount;
             }
         } finally {
-            $this->model = $modelBackup;
             $this->tRow = $tRowBackup;
+            $this->currentRow = null;
         }
 
         // empty message
@@ -176,11 +176,16 @@ class Lister extends View
      */
     public function renderRow(): void
     {
-        $this->tRow->trySet($this->currentRow);
+        $this->tRow->trySet($this->getApp()->uiPersistence->typecastSaveRow($this->currentRow, $this->currentRow->get()));
 
-        $this->tRow->trySet('_title', $this->model->getTitle());
-        $this->tRow->trySet('_href', $this->url(['id' => $this->currentRow->getId()]));
-        $this->tRow->trySet('_id', $this->name . '-' . $this->currentRow->getId());
+        if ($this->tRow->hasTag('_title')) {
+            $this->tRow->set('_title', $this->currentRow->getTitle());
+        }
+        $idStr = $this->getApp()->uiPersistence->typecastAttributeSaveField($this->currentRow->getIdField(), $this->currentRow->getId());
+        if ($this->tRow->hasTag('_href')) {
+            $this->tRow->set('_href', $this->url(['id' => $idStr]));
+        }
+        $this->tRow->trySet('_id', $this->name . '-' . $idStr);
 
         $html = $this->tRow->renderToHtml();
         if ($this->template->hasTag('rows')) {
@@ -197,7 +202,8 @@ class Lister extends View
      * is wrong by design. Each table row should be probably rendered natively using cloned
      * render tree (instead of cloned template).
      */
-    public function renderToJsonArr(string $region = null): array
+    #[\Override]
+    public function renderToJsonArr(?string $region = null): array
     {
         $this->renderAll();
 
@@ -211,7 +217,7 @@ class Lister extends View
 
         return [
             'success' => true,
-            'atkjs' => $this->getJs(),
+            'atkjs' => $this->getJs()->jsRender(),
             'html' => $this->template->renderToHtml($region),
             'id' => $this->name,
         ];

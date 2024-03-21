@@ -13,6 +13,7 @@ class Custom extends Form\AbstractLayout
 {
     public $defaultTemplate;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -22,13 +23,7 @@ class Custom extends Form\AbstractLayout
         }
     }
 
-    /**
-     * Adds Button into {$Buttons}.
-     *
-     * @param Button|array $seed
-     *
-     * @return Button
-     */
+    #[\Override]
     public function addButton($seed)
     {
         return $this->add(Factory::mergeSeeds([Button::class], $seed), 'Buttons');

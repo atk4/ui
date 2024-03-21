@@ -17,7 +17,7 @@ class Paginator extends View
 
     /**
      * Override what is the current page. If not set, Paginator will look inside
-     * $_GET[$this->name]. If page > total, then page = total.
+     * $_GET[self::$urlTrigger]. If page > total, then page = total.
      */
     public ?int $page = null;
 
@@ -46,6 +46,7 @@ class Paginator extends View
      */
     public array $reloadArgs = [];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -79,7 +80,7 @@ class Paginator extends View
      */
     public function getCurrentPage(): int
     {
-        return (int) ($_GET[$this->urlTrigger] ?? 1);
+        return (int) ($this->getApp()->tryGetRequestQueryParam($this->urlTrigger) ?? 1);
     }
 
     /**
@@ -172,8 +173,8 @@ class Paginator extends View
     public function renderItem($t, $page = null): void
     {
         if ($page) {
-            $t->trySet('page', (string) $page);
-            $t->trySet('link', $this->getPageUrl($page));
+            $t->set('page', (string) $page);
+            $t->set('link', $this->getPageUrl($page));
 
             $t->trySet('active', $page === $this->page ? 'active' : '');
         }
@@ -181,24 +182,25 @@ class Paginator extends View
         $this->template->dangerouslyAppendHtml('rows', $t->renderToHtml());
     }
 
+    #[\Override]
     protected function renderView(): void
     {
-        $t_item = $this->template->cloneRegion('Item');
-        $t_first = $this->template->hasTag('FirstItem') ? $this->template->cloneRegion('FirstItem') : $t_item;
-        $t_last = $this->template->hasTag('LastItem') ? $this->template->cloneRegion('LastItem') : $t_item;
-        $t_spacer = $this->template->cloneRegion('Spacer');
+        $tItem = $this->template->cloneRegion('Item');
+        $tFirst = $this->template->hasTag('FirstItem') ? $this->template->cloneRegion('FirstItem') : $tItem;
+        $tLast = $this->template->hasTag('LastItem') ? $this->template->cloneRegion('LastItem') : $tItem;
+        $tSpacer = $this->template->cloneRegion('Spacer');
 
         $this->template->del('rows');
 
         foreach ($this->getPaginatorItems() as $item) {
             if ($item === '[') {
-                $this->renderItem($t_first, 1);
+                $this->renderItem($tFirst, 1);
             } elseif ($item === '...') {
-                $this->renderItem($t_spacer);
+                $this->renderItem($tSpacer);
             } elseif ($item === ']') {
-                $this->renderItem($t_last, $this->total);
+                $this->renderItem($tLast, $this->total);
             } else {
-                $this->renderItem($t_item, $item);
+                $this->renderItem($tItem, $item);
             }
         }
 

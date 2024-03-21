@@ -7,6 +7,4 @@ namespace Atk4\Ui\Exception;
 /**
  * @internal
  */
-final class UnhandledCallbackExceptionError extends \Error
-{
-}
+final class UnhandledCallbackExceptionError extends \Error {}

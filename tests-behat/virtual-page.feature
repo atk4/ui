@@ -11,10 +11,15 @@ Feature: VirtualPage
     Given I am on "interactive/virtual.php"
     Then I press button 'Load in Modal'
     Then Modal is open with text 'Contents of your pop-up here'
+    Then I click close modal
+
+  Scenario:
+    Then I click link 'Inside current layout'
+    Then I check if text in ".__atk-behat-test-content" match text "Contents of your pop-up here"
 
   Scenario:
     Given I am on "interactive/virtual.php"
-    Then I click link 'Inside current layout'
+    Then I click link 'On a blank page'
     Then I check if text in ".__atk-behat-test-content" match text "Contents of your pop-up here"
 
   Scenario:

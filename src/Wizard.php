@@ -10,22 +10,20 @@ use Atk4\Ui\Js\JsExpressionable;
 
 class Wizard extends View
 {
-    use SessionTrait;
-
     public $defaultTemplate = 'wizard.html';
     public $ui = 'steps top attached';
 
     /** @var string Get argument for this wizard. */
     public $urlTrigger;
 
-    /** @var array List of steps. */
-    public $steps = [];
+    /** @var array<int, WizardStep> List of steps. */
+    public array $steps = [];
 
     /** @var int Current step. */
     public $currentStep;
 
     /** @var Button Button for going to previous step. */
-    public $buttonPrev;
+    public $buttonPrevious;
     /** @var Button Button for going to next step. */
     public $buttonNext;
     /** @var Button */
@@ -38,12 +36,13 @@ class Wizard extends View
      * Icon that will be used on all steps by default.
      *  - 'empty', since no such icon exists, no visible icon will be used unless step is completed
      *  - 'square outline', use this (or any other) Fomantic-UI icon by default
-     *  - false, disables icons alltogether (or using checkboxes for completed steps).
+     *  - false, disables icons altogether (or using checkboxes for completed steps).
      *
      * @var string|false
      */
     public $defaultIcon = 'empty'; // 'square outline'
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -59,8 +58,8 @@ class Wizard extends View
 
         // add buttons
         if ($this->currentStep) {
-            $this->buttonPrev = Button::addTo($this, ['Back', 'class.basic' => true], ['Left']);
-            $this->buttonPrev->link($this->getUrl($this->currentStep - 1));
+            $this->buttonPrevious = Button::addTo($this, ['Back', 'class.basic' => true], ['Left']);
+            $this->buttonPrevious->link($this->getUrl($this->currentStep - 1));
         }
 
         $this->buttonNext = Button::addTo($this, ['Next', 'class.primary' => true], ['Right']);
@@ -119,7 +118,7 @@ class Wizard extends View
         if (count($this->steps) === $this->currentStep + 1) {
             $this->buttonFinish->link($this->getUrl(count($this->steps)));
         } elseif ($this->currentStep === count($this->steps)) {
-            $this->buttonPrev->destroy();
+            $this->buttonPrevious->destroy();
             $this->buttonNext->addClass('disabled')->set('Completed');
             $this->buttonFinish->destroy();
 
@@ -129,6 +128,7 @@ class Wizard extends View
         }
     }
 
+    #[\Override]
     public function add($seed, $region = null): AbstractView
     {
         $result = parent::add($seed, $region);
@@ -159,13 +159,14 @@ class Wizard extends View
      */
     public function jsNext(): JsExpressionable
     {
-        return new JsExpression('document.location = []', [$this->urlNext()]);
+        return new JsExpression('window.location = []', [$this->urlNext()]);
     }
 
+    #[\Override]
     protected function recursiveRender(): void
     {
-        if (!$this->steps) {
-            $this->addStep(['No Steps Defined', 'icon' => 'configure', 'description' => 'use $wizard->addStep() now'], function (self $p) {
+        if ($this->steps === []) {
+            $this->addStep(['No Steps Defined', 'icon' => 'configure', 'description' => 'use $wizard->addStep() now'], static function (self $p) {
                 Message::addTo($p, ['Step content will appear here', 'type' => 'error', 'text' => 'Specify callback to addStep() which would populate this area.']);
             });
         }
@@ -177,9 +178,10 @@ class Wizard extends View
         parent::recursiveRender();
     }
 
+    #[\Override]
     protected function renderView(): void
     {
-        // Set proper width to the wizard
+        // set proper width to the wizard
         $c = count($this->steps);
         $enumeration = ['one', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
         $this->ui = $enumeration[$c] . ' ' . $this->ui;

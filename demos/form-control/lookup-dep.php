@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Label;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Lookup dependency']);
@@ -23,7 +24,7 @@ $form->addControl('starts_with', [
         'b' => 'Letter B',
         'c' => 'Letter C',
     ],
-    'isMultiple' => true,
+    'multiple' => true,
     'hint' => 'Select start letter that lookup selection of Country will depend on.',
     'placeholder' => 'Search for country starting with ...',
 ]);
@@ -37,7 +38,7 @@ $form->addControl('contains', [
 $lookup = $form->addControl('country', [
     Form\Control\Lookup::class,
     'model' => new Country($app->db),
-    'dependency' => function (Country $model, $data) {
+    'dependency' => static function (Country $model, $data) {
         foreach (explode(',', $data['starts_with'] ?? '') as $letter) {
             $model->addCondition($model->fieldName()->name, 'like', $letter . '%');
         }
@@ -47,10 +48,14 @@ $lookup = $form->addControl('country', [
         }
     },
     'placeholder' => 'Selection depends on Dropdown above',
-    'search' => [Country::hinting()->fieldName()->name, Country::hinting()->fieldName()->iso, Country::hinting()->fieldName()->iso3],
+    'search' => [
+        Country::hinting()->fieldName()->name,
+        Country::hinting()->fieldName()->iso,
+        Country::hinting()->fieldName()->iso3,
+    ],
 ]);
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     return 'Submitted: ' . print_r($form->model->get(), true);
 });
 
@@ -73,15 +78,19 @@ $form->addControl('ends_with', [
 $lookup = $form->addControl('country', [
     Form\Control\Lookup::class,
     'model' => new Country($app->db),
-    'dependency' => function (Country $model, $data) {
+    'dependency' => static function (Country $model, $data) {
         if (isset($data['ends_with'])) {
             $model->addCondition($model->fieldName()->name, 'like', '%' . $data['ends_with']);
         }
     },
     'multiple' => true,
-    'search' => [Country::hinting()->fieldName()->name, Country::hinting()->fieldName()->iso, Country::hinting()->fieldName()->iso3],
+    'search' => [
+        Country::hinting()->fieldName()->name,
+        Country::hinting()->fieldName()->iso,
+        Country::hinting()->fieldName()->iso3,
+    ],
 ]);
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     return 'Submitted: ' . print_r($form->model->get(), true);
 });

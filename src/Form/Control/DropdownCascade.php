@@ -22,6 +22,7 @@ class DropdownCascade extends Dropdown
     /** @var string|Model|null The hasMany reference model that will generate value for this dropdown list. */
     public $reference;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -30,8 +31,8 @@ class DropdownCascade extends Dropdown
             $this->cascadeFrom = $this->form->getControl($this->cascadeFrom);
         }
 
-        $cascadeFromValue = isset($_POST[$this->cascadeFrom->name])
-            ? $this->getApp()->uiPersistence->typecastLoadField($this->cascadeFrom->entityField->getField(), $_POST[$this->cascadeFrom->name])
+        $cascadeFromValue = $this->getApp()->hasRequestPostParam($this->cascadeFrom->name)
+            ? $this->getApp()->uiPersistence->typecastAttributeLoadField($this->cascadeFrom->entityField->getField(), $this->getApp()->getRequestPostParam($this->cascadeFrom->name))
             : $this->cascadeFrom->entityField->get();
 
         $this->model = $this->cascadeFrom->model ? $this->cascadeFrom->model->ref($this->reference) : null;
@@ -39,48 +40,63 @@ class DropdownCascade extends Dropdown
         // populate default dropdown values
         $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($cascadeFromValue), $this->entityField->get());
 
-        // js to execute for the onChange handler of the parent dropdown.
+        // JS to execute for the onChange handler of the parent dropdown
         $expr = [
             function (Jquery $j) use ($cascadeFromValue) {
                 return new JsBlock([
-                    $this->js()->dropdown('change values', $this->getNewValues($cascadeFromValue)),
-                    $this->js()->removeClass('loading'),
+                    $this->jsDropdown()->dropdown('change values', $this->getNewValues($cascadeFromValue)),
+                    $this->jsDropdown()->removeClass('loading'),
                 ]);
             },
-            $this->js()->dropdown('clear'),
-            $this->js()->addClass('loading'),
+            $this->jsDropdown()->dropdown('clear'),
+            $this->jsDropdown()->addClass('loading'),
         ];
 
         $this->cascadeFrom->onChange($expr, ['args' => [$this->cascadeFrom->name => $this->cascadeFrom->jsInput()->val()]]);
     }
 
-    public function set($value = null, $ignore = null)
+    #[\Override]
+    public function set($value = null)
     {
         $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($this->cascadeFrom->entityField->get()), $value);
 
-        return parent::set($value, $ignore);
+        return parent::set($value);
     }
 
     /**
-     * Generate new dropdown values based on cascadeInput model selected id.
-     * Return an empty value set if id is null.
+     * Generate new dropdown values based on cascadeInput model selected ID.
+     * Return an empty value set if ID is null.
      *
-     * @param string|int $id
+     * @param mixed $id
+     *
+     * @return list<array{value: string, text: mixed, name: mixed}>
      */
     public function getNewValues($id): array
     {
-        if (!$id) {
-            return [['value' => '', 'text' => $this->empty, 'name' => $this->empty]];
+        if ($id === null) {
+            return [[
+                'value' => '',
+                'text' => $this->empty,
+                'name' => $this->empty,
+            ]];
         }
 
         $model = $this->cascadeFrom->model->load($id)->ref($this->reference);
         $values = [];
-        foreach ($model as $k => $row) {
+        foreach ($model as $row) {
             if ($this->renderRowFunction) {
-                $res = ($this->renderRowFunction)($row, $k);
-                $values[] = ['value' => $res['value'], 'text' => $res['title'], 'name' => $res['title']];
+                $res = ($this->renderRowFunction)($row);
+                $values[] = [
+                    'value' => $this->getApp()->uiPersistence->typecastAttributeSaveField($model->getIdField(), $row->getId()),
+                    'text' => $res['title'],
+                    'name' => $res['title'],
+                ];
             } else {
-                $values[] = ['value' => $row->getId(), 'text' => $row->get($model->titleField), 'name' => $row->get($model->titleField)];
+                $values[] = [
+                    'value' => $this->getApp()->uiPersistence->typecastAttributeSaveField($model->getIdField(), $row->getId()),
+                    'text' => $row->get($model->titleField),
+                    'name' => $row->get($model->titleField),
+                ];
             }
         }
 
@@ -91,12 +107,16 @@ class DropdownCascade extends Dropdown
      * Will mark current value as selected from a list
      * of possible values.
      *
-     * @param string|int $value the current field value
+     * @param list<array{value: string, text: mixed, name: mixed}> $values
+     * @param mixed                                                $value  the current field value
      */
     private function getJsValues(array $values, $value): array
     {
+        $model = $this->cascadeFrom->model->ref($this->reference);
+        $valueStr = $this->getApp()->uiPersistence->typecastAttributeSaveField($model->getIdField(), $value);
+
         foreach ($values as $k => $v) {
-            if ($v['value'] === $value) {
+            if ($v['value'] === $valueStr) {
                 $values[$k]['selected'] = true;
 
                 break;
@@ -106,15 +126,17 @@ class DropdownCascade extends Dropdown
         return $values;
     }
 
+    #[\Override]
     protected function htmlRenderValue(): void
     {
-        // Called in parent::renderView(), but values are rendered only via js
+        // called in parent::renderView(), but values are rendered only via JS
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         // multiple selection is not supported
-        $this->isMultiple = false;
+        $this->multiple = false;
 
         parent::renderView();
     }

@@ -24,15 +24,10 @@ class DataService {
         } catch (e) {
             return e instanceof DOMException
                 && (
-                    // everything except Firefox
-                    e.code === 22
-                    // Firefox
-                    || e.code === 1014
-                    // test name field too, because code might not be present
-                    // everything except Firefox
-                    || e.name === 'QuotaExceededError'
-                    // Firefox
-                    || e.name === 'NS_ERROR_DOM_QUOTA_REACHED'
+                    e.code === 22 // everything except Firefox
+                    || e.code === 1014 // Firefox
+                    || e.name === 'QuotaExceededError' // test name field too, because code might not be present, everything except Firefox
+                    || e.name === 'NS_ERROR_DOM_QUOTA_REACHED' // Firefox
                 )
                 // acknowledge QuotaExceededError only if there's something already stored
                 && (storage && storage.length > 0);
@@ -40,7 +35,7 @@ class DataService {
     }
 
     /**
-     * Check for valid json string.
+     * Check for valid JSON string.
      *
      * @returns {boolean}
      */
@@ -113,7 +108,7 @@ class DataService {
 
     /**
      * Similar to set data but make sure that value is
-     * a valid json string prior to set data.
+     * a valid JSON string prior to set data.
      */
     setJsonData(item, value, type = 'local') {
         if (!this.isJsonString(value)) {
@@ -125,7 +120,7 @@ class DataService {
     /**
      * Will either create or merge with existing data.
      * Merging is done with Object assign, prioritizing new value.
-     * Previous data, if exist, and value must be a valid json string.
+     * Previous data, if exist, and value must be a valid JSON string.
      */
     addJsonData(item, value, type = 'local') {
         const previous = this.getData(item, type);

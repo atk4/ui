@@ -9,6 +9,7 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Table;
 
 /**
@@ -27,10 +28,11 @@ class Checkbox extends Table\Column
     public function jsChecked(): JsExpressionable
     {
         return (new Jquery($this->table))->find('.checked.' . $this->class)->closest('tr')
-            ->map(new \Atk4\Ui\Js\JsFunction([], [new JsExpression('return $(this).data(\'id\')')]))
+            ->map(new JsFunction([], [new JsExpression('return $(this).data(\'id\')')]))
             ->get()->join(',');
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -40,7 +42,8 @@ class Checkbox extends Table\Column
         }
     }
 
-    public function getHeaderCellHtml(Field $field = null, $value = null): string
+    #[\Override]
+    public function getHeaderCellHtml(?Field $field = null, $value = null): string
     {
         if ($field !== null) {
             throw (new Exception('Checkbox must be placed in an empty column, don\'t specify any field'))
@@ -51,8 +54,9 @@ class Checkbox extends Table\Column
         return parent::getHeaderCellHtml($field);
     }
 
-    public function getDataCellTemplate(Field $field = null): string
+    #[\Override]
+    public function getDataCellTemplate(?Field $field = null): string
     {
-        return $this->getApp()->getTag('div', ['class' => 'ui checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]);
+        return $this->getApp()->getTag('div', ['class' => 'ui fitted checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]);
     }
 }

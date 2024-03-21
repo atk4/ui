@@ -11,13 +11,13 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
         this.searchAction = this.$el.find('.atk-search-button');
         this.searchIcon = this.searchAction.find('i.atk-search-icon');
         this.removeIcon = this.searchAction.find('i.atk-remove-icon').hide();
-        this.$el.data('preValue', '');
+        this.$el.data('previousValue', '');
 
         this.setInputAction();
         this.setSearchAction();
         this.onEscapeKeyAction();
 
-        // Set input initial value.
+        // set input initial value
         if (this.settings.q) {
             this.setFilter(this.settings.q);
         }
@@ -46,13 +46,13 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
                     this.setFilterState(false);
                     this.textInput.val('');
                 });
-            } else if (e.target.value !== this.$el.data('preValue')) {
+            } else if (e.target.value !== this.$el.data('previousValue')) {
                 this.doSearch(this.settings.url, e.target.value, options, () => {
                     this.setButtonState(true);
                     this.setFilterState(true);
                 });
             }
-            this.$el.data('preValue', e.target.value);
+            this.$el.data('previousValue', e.target.value);
         }, this.settings.timeOut));
     }
 
@@ -67,15 +67,15 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
                     this.setButtonState(true);
                     this.setFilterState(true);
                 });
-                this.$el.data('preValue', e.target.value);
+                this.$el.data('previousValue', e.target.value);
             } else if ((e.keyCode === 27 && e.target.value) || (e.keyCode === 13 && e.target.value === '')) {
                 this.doSearch(this.settings.url, null, options, () => {
                     this.setButtonState(false);
                     this.setFilterState(false);
                 });
-                this.$el.data('preValue', '');
+                this.$el.data('previousValue', '');
                 this.textInput.val('');
-            } else if (this.$el.data('preValue') !== e.target.value) {
+            } else if (this.$el.data('previousValue') !== e.target.value) {
                 this.setButtonState(false);
             }
         });
@@ -109,7 +109,7 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
                     this.setFilterState(false);
                 });
                 this.textInput.val('');
-                this.$el.data('preValue', '');
+                this.$el.data('previousValue', '');
             }
 
             if (!this.state.button && this.textInput.val()) {
@@ -131,7 +131,7 @@ export default class AtkJsSearchPlugin extends AtkPlugin {
         this.textInput.val(text);
         this.setButtonState(true);
         this.setFilterState(true);
-        this.$el.data('preValue', text);
+        this.$el.data('previousValue', text);
     }
 
     /**

@@ -7,6 +7,4 @@ namespace Atk4\Ui\Exception;
 /**
  * @internal
  */
-final class ExitApplicationError extends \Error
-{
-}
+final class ExitApplicationError extends \Error {}

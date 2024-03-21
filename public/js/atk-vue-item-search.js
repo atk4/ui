@@ -20,12 +20,11 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Will allow user to send data query request to server.
  * Request should filter the data and reload the data view.
- * The request is send using Fomantic-UI api.
  *
  * Properties need for this component are:
  * context: string, a jQuery selector where the 'loading' class will be apply by Fomantic-UI - default to this component.
  * url:     string, the URL to call.
- * q:       string, the initial string for the query. Useful if this search is part of the relaod.
+ * q:       string, the initial string for the query. Useful if this search is part of the reload.
  * reload:  string, an Id selector for jQuery, '#' is append automatically.
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -41,8 +40,7 @@ __webpack_require__.r(__webpack_exports__);
                 @keyup="onKeyup"
                 @keyup.esc="onEscape"
             />
-            <i class="atk-search-icon" :class="classIcon" />
-            <span style="width: 12px; cursor: pointer;" @click="onClear" />
+            <i class="atk-search-icon link" :class="classIcon" @click="onClear" />
         </div>`,
   props: {
     context: String,

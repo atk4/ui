@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
@@ -17,12 +18,13 @@ use Atk4\Ui\Modal;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Modal View']);
 
 $session = new Session($app);
+
 // Re-usable component implementing counter
 
 Header::addTo($app, ['Static Modal Dialog']);
@@ -31,24 +33,30 @@ $bar = View::addTo($app, ['ui' => 'buttons']);
 
 $modal = Modal::addTo($app, ['title' => 'Add a name']);
 LoremIpsum::addTo($modal);
-Button::addTo($modal, ['Hide'])->on('click', $modal->jsHide());
+Button::addTo($modal, ['Hide'])
+    ->on('click', $modal->jsHide());
 
 $modalNoTitle = Modal::addTo($app, ['title' => false]);
 LoremIpsum::addTo($modalNoTitle);
-Button::addTo($modalNoTitle, ['Hide'])->on('click', $modalNoTitle->jsHide());
+Button::addTo($modalNoTitle, ['Hide'])
+    ->on('click', $modalNoTitle->jsHide());
 
 $modalScrolling = Modal::addTo($app, ['title' => 'Long Content that Scrolls inside Modal']);
 $modalScrolling->addScrolling();
 LoremIpsum::addTo($modalScrolling);
 LoremIpsum::addTo($modalScrolling);
 LoremIpsum::addTo($modalScrolling);
-Button::addTo($modalScrolling, ['Hide'])->on('click', $modalScrolling->jsHide());
+Button::addTo($modalScrolling, ['Hide'])
+    ->on('click', $modalScrolling->jsHide());
 
-Button::addTo($bar, ['Show'])->on('click', $modal->jsShow());
-Button::addTo($bar, ['No Title'])->on('click', $modalNoTitle->jsShow());
-Button::addTo($bar, ['Scrolling Content'])->on('click', $modalScrolling->jsShow());
+Button::addTo($bar, ['Show'])
+    ->on('click', $modal->jsShow());
+Button::addTo($bar, ['No Title'])
+    ->on('click', $modalNoTitle->jsShow());
+Button::addTo($bar, ['Scrolling Content'])
+    ->on('click', $modalScrolling->jsShow());
 
-// Modal demos.
+// Modal demos
 
 // REGULAR
 
@@ -64,35 +72,36 @@ $button->on('click', $simpleModal->jsShow());
 
 Header::addTo($app, ['Three levels of Modal loading dynamic content via callback']);
 
-// vp1Modal will be render into page but hide until $vp1Modal->jsShow() is activate.
+// vp1Modal will be render into page but hide until $vp1Modal->jsShow() is activate
 $vp1Modal = Modal::addTo($app, ['title' => 'Lorem Ipsum load dynamically']);
 
-// vp2Modal will be render into page but hide until $vp1Modal->jsShow() is activate.
+// vp2Modal will be render into page but hide until $vp1Modal->jsShow() is activate
 $vp2Modal = Modal::addTo($app, ['title' => 'Text message load dynamically'])->addClass('small');
 
 $vp3Modal = Modal::addTo($app, ['title' => 'Third level modal'])->addClass('small');
-$vp3Modal->set(function (View $p) {
+$vp3Modal->set(static function (View $p) {
     Text::addTo($p)->set('This is yet another modal');
     LoremIpsum::addTo($p, ['size' => 2]);
 });
 
-// When $vp1Modal->jsShow() is activate, it will dynamically add this content to it.
-$vp1Modal->set(function (View $p) use ($vp2Modal) {
+// when $vp1Modal->jsShow() is activate, it will dynamically add this content to it
+$vp1Modal->set(static function (View $p) use ($vp2Modal) {
     ViewTester::addTo($p);
-    View::addTo($p, ['Showing lorem ipsum']); // need in behat test.
+    View::addTo($p, ['Showing lorem ipsum']); // need in behat test
     LoremIpsum::addTo($p, ['size' => 2]);
     $form = Form::addTo($p);
     $form->addControl('color', [], ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
-    $form->onSubmit(function (Form $form) use ($vp2Modal) {
+    $form->onSubmit(static function (Form $form) use ($vp2Modal) {
         return $vp2Modal->jsShow(['color' => $form->model->get('color')]);
     });
 });
 
-// When $vp2Modal->jsShow() is activate, it will dynamically add this content to it.
-$vp2Modal->set(function (View $p) use ($vp3Modal) {
+// when $vp2Modal->jsShow() is activate, it will dynamically add this content to it
+$vp2Modal->set(static function (View $p) use ($vp3Modal) {
     ViewTester::addTo($p);
-    Message::addTo($p, [$_GET['color'] ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
-    Button::addTo($p)->set('Third modal')->on('click', $vp3Modal->jsShow());
+    Message::addTo($p, [$p->getApp()->tryGetRequestQueryParam('color') ?? 'No color'])->text->addParagraph('This text is loaded using a second modal.');
+    Button::addTo($p)->set('Third modal')
+        ->on('click', $vp3Modal->jsShow());
 });
 
 $bar = View::addTo($app, ['ui' => 'buttons']);
@@ -154,28 +163,28 @@ $button->on('click', $denyApproveModal->jsShow());
 
 Header::addTo($app, ['Multiple page modal']);
 
-// Add modal to layout.
+// add modal to layout
 $stepModal = Modal::addTo($app, ['title' => 'Multi step actions']);
 
-// Add buttons to modal for next and previous actions.
+// add buttons to modal for next and previous actions
 $action = new View(['ui' => 'buttons']);
-$prevAction = new Button(['Prev', 'icon' => 'left arrow']);
+$previousAction = new Button(['Previous', 'icon' => 'left arrow']);
 $nextAction = new Button(['Next', 'iconRight' => 'right arrow']);
 
-$action->add($prevAction);
+$action->add($previousAction);
 $action->add($nextAction);
 
 $stepModal->addButtonAction($action);
 
 // Set modal functionality. Will changes content according to page being displayed.
-$stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
+$stepModal->set(static function (View $p) use ($session, $previousAction, $nextAction) {
     $page = $session->recall('page', 1);
     $success = $session->recall('success', false);
-    if (isset($_GET['move'])) {
-        if ($_GET['move'] === 'next' && $success) {
+    if ($p->getApp()->hasRequestQueryParam('move')) {
+        $move = $p->getApp()->getRequestQueryParam('move');
+        if ($move === 'next' && $success) {
             ++$page;
-        }
-        if ($_GET['move'] === 'prev' && $page > 1) {
+        } elseif ($move === 'previous' && $page > 1) {
             --$page;
         }
         $session->memorize('success', false);
@@ -187,9 +196,9 @@ $stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
     if ($page === 1) {
         Message::addTo($p)->set('Thanks for choosing us. We will be asking some questions along the way.');
         $session->memorize('success', true);
-        $p->js(true, $prevAction->js()->show());
+        $p->js(true, $previousAction->js()->show());
         $p->js(true, $nextAction->js()->show());
-        $p->js(true, $prevAction->js()->addClass('disabled'));
+        $p->js(true, $previousAction->js()->addClass('disabled'));
         $p->js(true, $nextAction->js()->removeClass('disabled'));
     } elseif ($page === 2) {
         $modelRegister = new Model(new Persistence\Array_());
@@ -198,7 +207,7 @@ $stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
         $form = Form::addTo($p, ['class.segment' => true]);
         $form->setModel($modelRegister->createEntity());
 
-        $form->onSubmit(function (Form $form) use ($nextAction, $session) {
+        $form->onSubmit(static function (Form $form) use ($nextAction, $session) {
             if ($form->model->get('name') !== 'John') {
                 return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
             }
@@ -212,28 +221,26 @@ $stepModal->set(function (View $p) use ($session, $prevAction, $nextAction) {
 
             return $js;
         });
-        $p->js(true, $prevAction->js()->removeClass('disabled'));
+        $p->js(true, $previousAction->js()->removeClass('disabled'));
         $p->js(true, $nextAction->js()->addClass('disabled'));
     } elseif ($page === 3) {
         $name = $session->recall('name');
         Message::addTo($p)->set("Thank you {$name} for visiting us! We will be in touch");
         $session->memorize('success', true);
-        $p->js(true, $prevAction->js()->hide());
+        $p->js(true, $previousAction->js()->hide());
         $p->js(true, $nextAction->js()->hide());
     }
 });
 
-// Bind next action to modal next button.
+$previousAction->on('click', $stepModal->js()->atkReloadView(
+    ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'previous']]
+));
+
 $nextAction->on('click', $stepModal->js()->atkReloadView(
     ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'next']]
 ));
 
-// Bin prev action to modal previous button.
-$prevAction->on('click', $stepModal->js()->atkReloadView(
-    ['url' => $stepModal->cb->getJsUrl(), 'urlOptions' => ['move' => 'prev']]
-));
-
-// Bind display modal to page display button.
+// bind display modal to page display button
 $menuBar = View::addTo($app, ['ui' => 'buttons']);
 $button = Button::addTo($menuBar)->set('Multi Step Modal');
 $button->on('click', $stepModal->jsShow());

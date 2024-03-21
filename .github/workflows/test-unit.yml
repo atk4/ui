@@ -24,7 +24,7 @@ jobs:
             type: 'StaticAnalysis'
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure PHP
         run: |
@@ -37,7 +37,7 @@ jobs:
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Setup cache 2/2
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-smoke-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
@@ -46,8 +46,8 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap --dev; fi
-          if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev; fi
+          if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpunit/phpunit ergebnis/phpunit-slow-test-detector --dev; fi
+          if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer ergebnis/composer-normalize --dev; fi
           if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/\* behat/\* --dev; fi
           composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
 
@@ -55,7 +55,7 @@ jobs:
         if: startsWith(matrix.type, 'Phpunit')
         run: |
           php demos/_demo-data/create-db.php
-          vendor/bin/phpunit --exclude-group none --no-coverage -v
+          vendor/bin/phpunit --exclude-group none --no-coverage --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
 
       - name: Check Coding Style (only for CodingStyle)
         if: matrix.type == 'CodingStyle'
@@ -79,22 +79,22 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1', '8.2']
+        php: ['7.4', '8.0', '8.1', '8.2', '8.3']
         type: ['Phpunit', 'Phpunit Lowest']
         include:
-          - php: '8.1' # TODO replace with 'latest' once it represents at least PHP 8.1
+          - php: 'latest'
             type: 'Phpunit Burn'
     env:
-      LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == '8.0' && matrix.type == 'Phpunit' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
+      LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == '8.3' && matrix.type == 'Phpunit' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
     services:
       mysql:
-        image: mysql:8
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
+        image: mysql
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       mariadb:
         image: mariadb
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: --health-cmd="mariadb-admin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       postgres:
-        image: postgres:12-alpine
+        image: postgres:alpine
         env:
           POSTGRES_USER: atk4_test_user
           POSTGRES_PASSWORD: atk4_pass
@@ -111,7 +111,7 @@ jobs:
           ORACLE_PASSWORD: atk4_pass
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure PHP
         run: |
@@ -124,7 +124,7 @@ jobs:
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Setup cache 2/2
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
@@ -133,13 +133,13 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "Phpunit Lowest" ] && [ "${{ matrix.type }}" != "Phpunit Burn" ]; then composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap --dev; fi
-          if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev; fi
+          if [ "${{ matrix.type }}" != "Phpunit" ] && [ "${{ matrix.type }}" != "Phpunit Lowest" ] && [ "${{ matrix.type }}" != "Phpunit Burn" ]; then composer remove --no-interaction --no-update phpunit/phpunit ergebnis/phpunit-slow-test-detector --dev; fi
+          if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer ergebnis/composer-normalize --dev; fi
           if [ "${{ matrix.type }}" != "StaticAnalysis" ]; then composer remove --no-interaction --no-update phpstan/\* behat/\* --dev; fi
-          if [ -n "$LOG_COVERAGE" ]; then composer require --no-interaction --no-update phpunit/phpcov; fi
+          if [ -n "$LOG_COVERAGE" ]; then composer require --no-interaction --no-install phpunit/phpcov; fi
           composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
           if [ "${{ matrix.type }}" = "Phpunit Lowest" ]; then composer update --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader; fi
-          if [ "${{ matrix.type }}" = "Phpunit Burn" ]; then sed -i 's~ *public function runBare(): void~public function runBare(): void { gc_collect_cycles(); gc_collect_cycles(); $memDiffs = array_fill(0, '"$(if [ \"$GITHUB_EVENT_NAME\" == \"schedule\" ]; then echo 64; else echo 16; fi)"', 0); for ($i = -1; $i < count($memDiffs); ++$i) { $this->_runBare(); gc_collect_cycles(); gc_collect_cycles(); $mem = memory_get_usage(); if ($i !== -1) { $memDiffs[$i] = $mem - $memPrev; } $memPrev = $mem; rsort($memDiffs); if (array_sum($memDiffs) >= 4096 * 1024 || $memDiffs[2] > 0) { $this->onNotSuccessfulTest(new AssertionFailedError( "Memory leak detected! (" . implode(" + ", array_map(fn ($v) => number_format($v / 1024, 3, ".", " "), array_filter($memDiffs))) . " KB, " . ($i + 2) . " iterations)" )); } } } private function _runBare(): void~' vendor/phpunit/phpunit/src/Framework/TestCase.php && cat vendor/phpunit/phpunit/src/Framework/TestCase.php | grep '_runBare('; fi
+          if [ "${{ matrix.type }}" = "Phpunit Burn" ]; then sed -i 's~public function runBare(): void~public function runBare(): void { gc_collect_cycles(); $memDiffs = array_fill(0, '"$(if [ \"$GITHUB_EVENT_NAME\" == \"schedule\" ]; then echo 64; else echo 16; fi)"', 0); $emitter = Event\\Facade::emitter(); for ($i = -1; $i < count($memDiffs); ++$i) { $this->_runBare(); if ($this->inIsolation) { $dispatcher = \\Closure::bind(static fn () => $emitter->dispatcher, null, Event\\DispatchingEmitter::class)(); if ($i === -1) { $dispatcherEvents = $dispatcher->flush()->asArray(); } else { $dispatcher->flush(); } foreach ($dispatcherEvents as $event) { $dispatcher->dispatch($event); } } gc_collect_cycles(); $mem = memory_get_usage(); if ($i !== -1) { $memDiffs[$i] = $mem - $memPrev; } $memPrev = $mem; rsort($memDiffs); if (array_sum($memDiffs) >= 4096 * 1024 || $memDiffs[2] > 0) { $e = new AssertionFailedError("Memory leak detected! (" . implode(" + ", array_map(static fn ($v) => number_format($v / 1024, 3, ".", " "), array_filter($memDiffs))) . " KB, " . ($i + 2) . " iterations)"); $this->status = TestStatus::failure($e->getMessage()); $emitter->testFailed($this->valueObjectForEvents(), Event\\Code\\ThrowableBuilder::from($e), Event\\Code\\ComparisonFailureBuilder::from($e)); $this->onNotSuccessfulTest($e); } } } private function _runBare(): void~' vendor/phpunit/phpunit/src/Framework/TestCase.php && cat vendor/phpunit/phpunit/src/Framework/TestCase.php | grep '_runBare('; fi
 
       - name: Init
         run: |
@@ -152,11 +152,11 @@ jobs:
       - name: "Run tests: SQLite"
         run: |
           php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-sqlite.cov; fi
 
-      - name: "Run tests: MySQL"
-        if: success() || failure()
+      - name: "Run tests: MySQL (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "mysql:host=mysql;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -164,11 +164,11 @@ jobs:
         run: |
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mysql.cov; fi
 
-      - name: "Run tests: MariaDB (only for cron)"
-        if: (success() || failure()) && github.event_name == 'schedule'
+      - name: "Run tests: MariaDB"
+        if: success() || failure()
         env:
           DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -176,7 +176,7 @@ jobs:
         run: |
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mariadb.cov; fi
 
       - name: "Run tests: PostgreSQL (only for cron)"
@@ -188,7 +188,7 @@ jobs:
         run: |
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-postgres.cov; fi
 
       - name: "Run tests: MSSQL (only for cron)"
@@ -200,20 +200,20 @@ jobs:
         run: |
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mssql.cov; fi
 
       - name: "Run tests: Oracle (only for cron)"
         if: (success() || failure()) && github.event_name == 'schedule'
         env:
-          DB_DSN: "oci:dbname=oracle/xe"
+          DB_DSN: "oci:dbname=oracle/free"
           DB_USER: system
           DB_PASSWORD: atk4_pass
           NLS_LANG: AMERICAN_AMERICA.AL32UTF8
         run: |
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
-          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) -v
+          php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-oracle.cov; fi
 
       - name: Upload coverage logs 1/2 (only for latest Phpunit)
@@ -238,24 +238,27 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.0', '8.1', '8.2']
+        # Selenium with PHP 7.4 and 8.0 was failing too often on initial/create session request, probably because of older (Alpine 3.16) base image
+        php: ['8.1', '8.2', '8.3']
         type: ['Chrome', 'Chrome Lowest']
         include:
           - php: 'latest'
             type: 'Firefox'
           - php: 'latest'
             type: 'Chrome Slow'
+          - php: 'latest'
+            type: 'Firefox Slow'
     env:
-      LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == '8.0' && matrix.type == 'Chrome' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
+      LOG_COVERAGE: "${{ fromJSON('{true: \"1\", false: \"\"}')[matrix.php == '8.3' && matrix.type == 'Chrome' && (github.event_name == 'pull_request' || (github.event_name == 'push' && (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/master')))] }}"
     services:
       mysql:
-        image: mysql:8
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --entrypoint sh mysql:8 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
+        image: mysql
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       mariadb:
         image: mariadb
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: --health-cmd="mariadb-admin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       postgres:
-        image: postgres:12-alpine
+        image: postgres:alpine
         env:
           POSTGRES_USER: atk4_test_user
           POSTGRES_PASSWORD: atk4_pass
@@ -272,7 +275,7 @@ jobs:
           ORACLE_PASSWORD: atk4_pass
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure PHP
         run: |
@@ -285,14 +288,14 @@ jobs:
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Setup cache 2/2
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-behat-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
-      - name: Install JS dependencies (only for coverage or Slow)
+      - name: Install JS dependencies (only for coverage or Chrome Slow)
         if: env.LOG_COVERAGE || matrix.type == 'Chrome Slow'
         run: |
           if [ -n "$LOG_COVERAGE" ]; then
@@ -313,39 +316,35 @@ jobs:
             (cd public/external && npm ci --loglevel=error && git clean -dxfq .)
           fi
 
-      - name: Lint JS files (only for Slow)
+      - name: Lint JS files (only for Chrome Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
+          cp public/external/postinstall.js js
           (cd js && npm run lint)
 
-      - name: Compile HTML files (only for Slow)
+      - name: Compile HTML files (only for Chrome Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
           cp -r template template.orig
           find template -not -type d -not -name '*.pug' -delete
           (cd template && pug --doctype html --pretty --silent .)
 
-      - name: Compile CSS files (only for Slow)
+      - name: Compile CSS files (only for Chrome Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
           lessc public/css/agileui.less public/css/agileui.min.css --clean-css="--s1 --advanced" --source-map
 
-      - name: Compile JS files (only for coverage or Slow)
+      - name: Compile JS files (only for coverage or Chrome Slow)
         if: env.LOG_COVERAGE || matrix.type == 'Chrome Slow'
         run: |
           if [ -n "$LOG_COVERAGE" ]; then
             rm -r public/js
             (cd js && ISTANBUL_COVERAGE=1 npm run build)
           else
-            # fix webpack build repeatability
-            # https://github.com/vuejs/vue-loader/blob/v17.0.1/src/index.ts#L284 should be fine,
-            # the import itself is relativized, but the variable (generated by webpack) is not
-            # https://github.com/vuejs/vue-loader/issues/2028
-            sed -i -E 's~(import exportComponent from )\$\{exportHelperPath\}(`;)~\1'"'"'vue-loader/dist/exportHelper.js'"'"'\2~' js/node_modules/vue-loader/dist/index.js
             (cd js && npm run build)
           fi
 
-      - name: Diff compiled files (only for Slow)
+      - name: Diff compiled files (only for Chrome Slow)
         if: matrix.type == 'Chrome Slow'
         run: |
           diff -ru public.orig public
@@ -354,10 +353,10 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          composer remove --no-interaction --no-update phpunit/phpunit johnkary/phpunit-speedtrap --dev
-          composer remove --no-interaction --no-update friendsofphp/php-cs-fixer --dev
+          composer remove --no-interaction --no-update phpunit/phpunit ergebnis/phpunit-slow-test-detector --dev
+          composer remove --no-interaction --no-update friendsofphp/php-cs-fixer ergebnis/composer-normalize --dev
           composer remove --no-interaction --no-update phpstan/\* --dev
-          if [ -n "$LOG_COVERAGE" ]; then composer require --no-interaction --no-update phpunit/phpcov; fi
+          if [ -n "$LOG_COVERAGE" ]; then composer require --no-interaction --no-install phpunit/phpcov; fi
           composer update --ansi --prefer-dist --no-interaction --no-progress --optimize-autoloader
           if [ "${{ matrix.type }}" = "Chrome Lowest" ]; then composer update --ansi --prefer-dist --prefer-lowest --prefer-stable --no-interaction --no-progress --optimize-autoloader; fi
 
@@ -376,16 +375,16 @@ jobs:
           ci_wait_until '[ -e /tmp/.X11-unix/X99 ]'
           su browser -c 'java -Dwebdriver.chrome.whitelistedIps=127.0.0.1 -jar /opt/selenium-server-standalone.jar -role standalone -host 127.0.0.1 -port 4444 -sessionTimeout 15 -browserTimeout 12 > /dev/null 2>&1 &'
           ci_wait_until 'nc -w 1 127.0.0.1 4444'
-          if [ "${{ matrix.type }}" = "Firefox" ]; then sed -i "s~chrome~firefox~" behat.yml.dist; fi
-          if [ "${{ matrix.type }}" = "Chrome Slow" ]; then echo 'sleep(1);' >> demos/init-app.php; fi
+          if [ "${{ matrix.type }}" = "Firefox" ] || [ "${{ matrix.type }}" = "Firefox Slow" ]; then sed -i "s~chrome~firefox~" behat.yml.dist; fi
+          if [ "${{ matrix.type }}" = "Chrome Slow" ] || [ "${{ matrix.type }}" = "Firefox Slow" ]; then echo 'usleep(500_000);' >> demos/init-app.php; fi
 
       - name: "Run tests: SQLite"
         run: |
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MySQL (only for coverage or cron)"
-        if: (success() || failure()) && (env.LOG_COVERAGE || github.event_name == 'schedule')
+      - name: "Run tests: MySQL (only for cron)"
+        if: (success() || failure()) && github.event_name == 'schedule'
         env:
           DB_DSN: "mysql:host=mysql;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -395,8 +394,8 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat -vv --config behat.yml.dist
 
-      - name: "Run tests: MariaDB (only for cron)"
-        if: (success() || failure()) && github.event_name == 'schedule'
+      - name: "Run tests: MariaDB (only for coverage or cron)"
+        if: (success() || failure()) && (env.LOG_COVERAGE || github.event_name == 'schedule')
         env:
           DB_DSN: "mysql:host=mariadb;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -431,7 +430,7 @@ jobs:
       - name: "Run tests: Oracle (only for cron)"
         if: (success() || failure()) && github.event_name == 'schedule'
         env:
-          DB_DSN: "oci:dbname=oracle/xe"
+          DB_DSN: "oci:dbname=oracle/free"
           DB_USER: system
           DB_PASSWORD: atk4_pass
           NLS_LANG: AMERICAN_AMERICA.AL32UTF8
@@ -459,3 +458,31 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
           files: coverage/merged.xml,coverage/js/clover.xml
+
+  docs-test:
+    name: Docs
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/mvorisek/image-php:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Python and dependencies
+        run: |
+          apk add python3 py3-pip
+          python --version
+          python -m venv .venv
+          source .venv/bin/activate
+          (cd docs && pip install -r requirements.txt)
+
+      - name: Build
+        run: |
+          mv docs/baseline.txt docs/baseline.orig.txt
+          source .venv/bin/activate
+          (cd docs && python -m sphinx -T -b html . out 2>&1 | tee baseline.txt)
+          sed -i -r 's~[^:]*/docs/([^:]*:)([0-9]+:)?~\1~;t;d' docs/baseline.txt
+
+      - name: Diff build baseline
+        run: |
+          diff -u docs/baseline.orig.txt docs/baseline.txt

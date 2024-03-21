@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\CardDeck;
 use Atk4\Ui\Crud;
@@ -11,7 +12,7 @@ use Atk4\Ui\Message;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Executor Factory in View Instance', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
@@ -29,7 +30,7 @@ $msg->text->addParagraph('In this example, Crud and Card button was changed and 
 
 // overriding basic ExecutorFactory in order to change Table and Modal button
 // and also changing default add action label
-$myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends ExecutorFactory {
+$myFactory = AnonymousClassNameCache::get_class(static fn () => new class() extends ExecutorFactory {
     public $buttonPrimaryColor = 'green';
 
     protected $triggerSeed = [
@@ -48,7 +49,7 @@ $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends Exe
     ];
 });
 
-// Set new executor factory globally.
+// set new executor factory globally
 $app->setExecutorFactory(new $myFactory());
 
 $country = new Country($app->db);

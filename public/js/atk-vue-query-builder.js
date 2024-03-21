@@ -31,25 +31,24 @@ __webpack_require__.r(__webpack_exports__);
         />`,
   props: ['config', 'modelValue'],
   data: function () {
-    const {
-      useDefault,
-      ...otherConfig
-    } = this.config;
-    if (useDefault && !otherConfig.defaultDate && !this.modelValue) {
-      otherConfig.defaultDate = new Date();
+    const config = {
+      ...this.config
+    };
+    if (config.defaultDate && !this.modelValue) {
+      config.defaultDate = new Date();
     } else if (this.modelValue) {
-      otherConfig.defaultDate = this.modelValue;
+      config.defaultDate = this.modelValue;
     }
-    if (!otherConfig.locale) {
-      otherConfig.locale = flatpickr.l10ns.default;
+    if (!config.locale) {
+      config.locale = flatpickr.l10ns.default;
     }
     return {
-      flatPickr: otherConfig
+      flatPickr: config
     };
   },
   emits: ['setDefault'],
   mounted: function () {
-    // if value is not set but default date is, then emit proper string value to parent.
+    // if value is not set but default date is, then emit proper string value to parent
     if (!this.modelValue && this.flatPickr.defaultDate) {
       this.onUpdate(this.flatPickr.defaultDate instanceof Date ? flatpickr.formatDate(this.config.defaultDate, this.config.dateFormat) : this.flatPickr.defaultDate);
     }
@@ -82,9 +81,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-
-
 
 
 
@@ -93,7 +89,6 @@ __webpack_require__.r(__webpack_exports__);
  *
  * Properties:
  * config:
- * url: the callback URL. Callback should return model data in form of { key: modelId, text: modelTitle, value: modelId }
  * reference: the reference field name associate with model or hasOne name. This field name will be sent along with URL callback parameter as of 'field=name'.
  * Note: The remaining config object may contain any or SuiDropdown { props: value } pair.
  *
@@ -107,8 +102,7 @@ __webpack_require__.r(__webpack_exports__);
             v-bind="dropdownProps"
             ref="drop"
             :modelValue="getDropdownValue(modelValue)"
-            ` /* :loading="isLoading" */ + `@update:modelValue="onUpdate"
-            @filtered="onFiltered"
+            @update:modelValue="onUpdate"
         ></SuiDropdown>`,
   props: ['config', 'modelValue', 'optionalValue'],
   data: function () {
@@ -121,7 +115,6 @@ __webpack_require__.r(__webpack_exports__);
     return {
       dropdownProps: otherConfig,
       url: url || null,
-      isLoading: false,
       field: reference,
       query: '',
       temp: ''
@@ -139,49 +132,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     onUpdate: function (value) {
       this.$emit('update:modelValue', value.value);
-    },
-    /**
-     * Receive user input text for search.
-     */
-    onFiltered: function (inputValue) {
-      if (inputValue) {
-        this.isLoading = true;
-      }
-      if (!this.onFiltered.debouncedFx) {
-        this.onFiltered.debouncedFx = atk__WEBPACK_IMPORTED_MODULE_3__["default"].createDebouncedFx(() => {
-          this.onFiltered.debouncedFx = null;
-          if (this.query !== this.temp) {
-            this.query = this.temp;
-            if (this.query) {
-              this.fetchItems(this.query);
-            }
-          }
-        }, 250);
-      }
-      this.temp = inputValue;
-      this.onFiltered.debouncedFx(this);
-    },
-    /**
-     * Fetch new data from server.
-     */
-    fetchItems: async function (q) {
-      try {
-        const data = {
-          atkVueLookupQuery: q,
-          atkVueLookupField: this.field
-        };
-        const response = await atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.suiFetch(this.url, {
-          method: 'get',
-          data: data
-        });
-        if (response.success) {
-          this.dropdownProps.options = response.results;
-        }
-      } catch (e) {
-        console.error(e);
-      } finally {
-        this.isLoading = false;
-      }
     }
   }
 });
@@ -386,9 +336,9 @@ __webpack_require__.r(__webpack_exports__);
         removeGroupClass: 'small icon times',
         textInputPlaceholder: 'value',
         spaceRule: 'fitted',
-        // can be fitted, compact or padded.
+        // can be fitted, compact or padded
         hiddenOperator: ['is empty', 'is not empty'],
-        // a list of operators that when select, will hide user input.
+        // a list of operators that when select, will hide user input
         ...labels
       };
     }
@@ -405,7 +355,7 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */   render: () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
@@ -472,10 +422,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           onClick: $event => $options.addNewRule(rule.id)
         }, null, 8 /* PROPS */, ["text", "onClick"]);
       }), 128 /* KEYED_FRAGMENT */))]),
-
       _: 1 /* STABLE */
     })]),
-
     _: 1 /* STABLE */
   }, 8 /* PROPS */, ["text"]), _ctx.depth < _ctx.maxDepth ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", {
     key: 0,
@@ -503,7 +451,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */   render: () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
@@ -580,7 +528,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(operator), 9 /* TEXT, PROPS */, _hoisted_11);
   }), 128 /* KEYED_FRAGMENT */))], 512 /* NEED_PATCH */), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelSelect, _ctx.query.operator]])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_12, [$options.canDisplay('input') ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
     "onUpdate:modelValue": _cache[2] || (_cache[2] = $event => _ctx.query.value = $event),
-    type: _ctx.rule.inputType,
+    type: _ctx.rule.inputType === 'number' ? 'text' : _ctx.rule.inputType,
     placeholder: _ctx.labels.textInputPlaceholder
   }, null, 8 /* PROPS */, _hoisted_14), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelDynamic, _ctx.query.value]])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), $options.canDisplay('checkbox') ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
     key: 1
@@ -627,7 +575,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */   render: () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
@@ -683,7 +631,39 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.vue-query-builder .vqb-group .rule-actions {\n  margin-bottom: 20px;\n}\n.vue-query-builder .vqb-rule {\n  margin-top: 15px;\n  margin-bottom: 15px;\n  background-color: #f5f5f5;\n  border-color: #ddd;\n  padding: 15px;\n}\n.vue-query-builder .vqb-group.depth-1 .vqb-rule,\n.vue-query-builder .vqb-group.depth-2 {\n  border-left: 2px solid #8bc34a;\n}\n.vue-query-builder .vqb-group.depth-2 .vqb-rule,\n.vue-query-builder .vqb-group.depth-3 {\n  border-left: 2px solid #00bcd4;\n}\n.vue-query-builder .vqb-group.depth-3 .vqb-rule,\n.vue-query-builder .vqb-group.depth-4 {\n  border-left: 2px solid #ff5722;\n}\n.vue-query-builder .close {\n  opacity: 1;\n  color: rgb(150, 150, 150);\n}\n@media (min-width: 768px) {\n.vue-query-builder .vqb-rule.form-inline .form-group {\n    display: block;\n}\n}\n", "",{"version":3,"sources":["webpack://./node_modules/vue-query-builder/src/layouts/Bootstrap5/Bootstrap5Group.vue"],"names":[],"mappings":";AA0FA;EACE,mBAAmB;AACrB;AAEA;EACE,gBAAgB;EAChB,mBAAmB;EACnB,yBAAyB;EACzB,kBAAkB;EAClB,aAAa;AACf;AAEA;;EAEE,8BAA8B;AAChC;AAEA;;EAEE,8BAA8B;AAChC;AAEA;;EAEE,8BAA8B;AAChC;AAEA;EACE,UAAU;EACV,yBAAyB;AAC3B;AAEA;AACE;IACE,cAAc;AAChB;AACF","sourcesContent":["<template>\n  <!-- eslint-disable vue/no-v-html -->\n  <div class=\"vqb-group card\" :class=\"'depth-' + depth.toString()\">\n    <div class=\"vqb-group-heading card-header\">\n      <div class=\"match-type-container row gy-2 gx-3 align-items-center\">\n        <div class=\"col-auto\">\n          <label class=\"me-2\" for=\"vqb-match-type\">\n            {{ labels.matchType }}\n          </label>\n        </div>\n        <div class=\"col-auto\">\n          <select\n            id=\"vqb-match-type\"\n            v-model=\"query.logicalOperator\"\n            class=\"form-select\"\n          >\n            <option\n              v-for=\"label in labels.matchTypes\"\n              :key=\"label.id\"\n              :value=\"label.id\"\n            >\n              {{ label.label }}\n            </option>\n          </select>\n        </div>\n        <div class=\"col-auto\" v-if=\"depth > 1\">\n          <button\n            type=\"button\"\n            class=\"btn-close btn-small\"\n            @click=\"remove\"\n          ></button>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"vqb-group-body card-body\">\n      <div class=\"rule-actions\">\n        <div class=\"row gy-2 gx-3 align-items-center\">\n          <div class=\"col-auto\">\n            <select\n              :value=\"selectedRuleId\"\n              @input=\"updateRule\"\n              class=\"form-select me-2\"\n            >\n              <option v-for=\"rule in rules\" :key=\"rule.id\" :value=\"rule.id\">\n                {{ rule.label }}\n              </option>\n            </select>\n          </div>\n          <div class=\"col-auto\">\n            <button\n              type=\"button\"\n              class=\"btn btn-secondary me-2\"\n              @click=\"addRule\"\n            >\n              {{ labels.addRule }}\n            </button>\n          </div>\n          <div class=\"col-auto\">\n            <button\n              v-if=\"depth < maxDepth\"\n              type=\"button\"\n              class=\"btn btn-secondary\"\n              @click=\"addGroup\"\n            >\n              {{ labels.addGroup }}\n            </button>\n          </div>\n        </div>\n      </div>\n\n      <query-builder-children v-bind=\"$props\" />\n    </div>\n  </div>\n</template>\n\n<script>\nimport QueryBuilderGroup from \"../../components/QueryBuilderGroup\";\nimport QueryBuilderChildren from \"../../components/QueryBuilderChildren\";\nexport default {\n  name: \"QueryBuilderGroup\",\n\n  components: { QueryBuilderChildren },\n\n  extends: QueryBuilderGroup,\n  methods: {},\n};\n</script>\n\n<style>\n.vue-query-builder .vqb-group .rule-actions {\n  margin-bottom: 20px;\n}\n\n.vue-query-builder .vqb-rule {\n  margin-top: 15px;\n  margin-bottom: 15px;\n  background-color: #f5f5f5;\n  border-color: #ddd;\n  padding: 15px;\n}\n\n.vue-query-builder .vqb-group.depth-1 .vqb-rule,\n.vue-query-builder .vqb-group.depth-2 {\n  border-left: 2px solid #8bc34a;\n}\n\n.vue-query-builder .vqb-group.depth-2 .vqb-rule,\n.vue-query-builder .vqb-group.depth-3 {\n  border-left: 2px solid #00bcd4;\n}\n\n.vue-query-builder .vqb-group.depth-3 .vqb-rule,\n.vue-query-builder .vqb-group.depth-4 {\n  border-left: 2px solid #ff5722;\n}\n\n.vue-query-builder .close {\n  opacity: 1;\n  color: rgb(150, 150, 150);\n}\n\n@media (min-width: 768px) {\n  .vue-query-builder .vqb-rule.form-inline .form-group {\n    display: block;\n  }\n}\n</style>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `
+.vue-query-builder .vqb-group .rule-actions {
+  margin-bottom: 20px;
+}
+.vue-query-builder .vqb-rule {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  background-color: #f5f5f5;
+  border-color: #ddd;
+  padding: 15px;
+}
+.vue-query-builder .vqb-group.depth-1 .vqb-rule,
+.vue-query-builder .vqb-group.depth-2 {
+  border-left: 2px solid #8bc34a;
+}
+.vue-query-builder .vqb-group.depth-2 .vqb-rule,
+.vue-query-builder .vqb-group.depth-3 {
+  border-left: 2px solid #00bcd4;
+}
+.vue-query-builder .vqb-group.depth-3 .vqb-rule,
+.vue-query-builder .vqb-group.depth-4 {
+  border-left: 2px solid #ff5722;
+}
+.vue-query-builder .close {
+  opacity: 1;
+  color: rgb(150, 150, 150);
+}
+@media (min-width: 768px) {
+.vue-query-builder .vqb-rule.form-inline .form-group {
+    display: block;
+}
+}
+`, "",{"version":3,"sources":["webpack://./node_modules/vue-query-builder/src/layouts/Bootstrap5/Bootstrap5Group.vue"],"names":[],"mappings":";AA0FA;EACE,mBAAmB;AACrB;AAEA;EACE,gBAAgB;EAChB,mBAAmB;EACnB,yBAAyB;EACzB,kBAAkB;EAClB,aAAa;AACf;AAEA;;EAEE,8BAA8B;AAChC;AAEA;;EAEE,8BAA8B;AAChC;AAEA;;EAEE,8BAA8B;AAChC;AAEA;EACE,UAAU;EACV,yBAAyB;AAC3B;AAEA;AACE;IACE,cAAc;AAChB;AACF","sourcesContent":["<template>\n  <!-- eslint-disable vue/no-v-html -->\n  <div class=\"vqb-group card\" :class=\"'depth-' + depth.toString()\">\n    <div class=\"vqb-group-heading card-header\">\n      <div class=\"match-type-container row gy-2 gx-3 align-items-center\">\n        <div class=\"col-auto\">\n          <label class=\"me-2\" for=\"vqb-match-type\">\n            {{ labels.matchType }}\n          </label>\n        </div>\n        <div class=\"col-auto\">\n          <select\n            id=\"vqb-match-type\"\n            v-model=\"query.logicalOperator\"\n            class=\"form-select\"\n          >\n            <option\n              v-for=\"label in labels.matchTypes\"\n              :key=\"label.id\"\n              :value=\"label.id\"\n            >\n              {{ label.label }}\n            </option>\n          </select>\n        </div>\n        <div class=\"col-auto\" v-if=\"depth > 1\">\n          <button\n            type=\"button\"\n            class=\"btn-close btn-small\"\n            @click=\"remove\"\n          ></button>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"vqb-group-body card-body\">\n      <div class=\"rule-actions\">\n        <div class=\"row gy-2 gx-3 align-items-center\">\n          <div class=\"col-auto\">\n            <select\n              :value=\"selectedRuleId\"\n              @input=\"updateRule\"\n              class=\"form-select me-2\"\n            >\n              <option v-for=\"rule in rules\" :key=\"rule.id\" :value=\"rule.id\">\n                {{ rule.label }}\n              </option>\n            </select>\n          </div>\n          <div class=\"col-auto\">\n            <button\n              type=\"button\"\n              class=\"btn btn-secondary me-2\"\n              @click=\"addRule\"\n            >\n              {{ labels.addRule }}\n            </button>\n          </div>\n          <div class=\"col-auto\">\n            <button\n              v-if=\"depth < maxDepth\"\n              type=\"button\"\n              class=\"btn btn-secondary\"\n              @click=\"addGroup\"\n            >\n              {{ labels.addGroup }}\n            </button>\n          </div>\n        </div>\n      </div>\n\n      <query-builder-children v-bind=\"$props\" />\n    </div>\n  </div>\n</template>\n\n<script>\nimport QueryBuilderGroup from \"../../components/QueryBuilderGroup\";\nimport QueryBuilderChildren from \"../../components/QueryBuilderChildren\";\nexport default {\n  name: \"QueryBuilderGroup\",\n\n  components: { QueryBuilderChildren },\n\n  extends: QueryBuilderGroup,\n  methods: {},\n};\n</script>\n\n<style>\n.vue-query-builder .vqb-group .rule-actions {\n  margin-bottom: 20px;\n}\n\n.vue-query-builder .vqb-rule {\n  margin-top: 15px;\n  margin-bottom: 15px;\n  background-color: #f5f5f5;\n  border-color: #ddd;\n  padding: 15px;\n}\n\n.vue-query-builder .vqb-group.depth-1 .vqb-rule,\n.vue-query-builder .vqb-group.depth-2 {\n  border-left: 2px solid #8bc34a;\n}\n\n.vue-query-builder .vqb-group.depth-2 .vqb-rule,\n.vue-query-builder .vqb-group.depth-3 {\n  border-left: 2px solid #00bcd4;\n}\n\n.vue-query-builder .vqb-group.depth-3 .vqb-rule,\n.vue-query-builder .vqb-group.depth-4 {\n  border-left: 2px solid #ff5722;\n}\n\n.vue-query-builder .close {\n  opacity: 1;\n  color: rgb(150, 150, 150);\n}\n\n@media (min-width: 768px) {\n  .vue-query-builder .vqb-rule.form-inline .form-group {\n    display: block;\n  }\n}\n</style>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -709,7 +689,61 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.vue-query-builder .vqb-group .rule-actions {\n        margin-bottom: 0px;\n}\n.vue-query-builder .vqb-rule {\n        margin-top: 0px;\n        margin-bottom: 0px;\n        padding: 0px;\n}\n.atk-qb-select, .ui.form select.atk-qb-select {\n       padding: 2px 6px 4px 4px;\n}\n.atk-qb-remove {\n        cursor: pointer;\n        color: rgba(0, 0, 0, 0.6);\n}\n.ui.selection.dropdown.atk-qb-rule-select {\n        background-color: rgba(0, 0, 0, 0);\n}\n.ui.selection.dropdown .atk-qb-rule-select-menu {\n        width: max-content;\n        z-index: 1000;\n}\n.vbq-group-heading > .ui.grid > .column:not(.row) {\n        padding-bottom: 0.5em;\n        padding-top: 0.5em;\n}\n.vue-query-builder .ui.card.compact {\n        margin-top: 0.5em;\n        margin-bottom: 0.5em;\n}\n.vue-query-builder .ui.card.fitted {\n        margin-top: 0em;\n        margin-bottom: 0em;\n}\n.vue-query-builder .ui.card.padded {\n        margin-top: 1em;\n        margin-bottom: 1em;\n}\n.ui.card > .vbq-group-heading.content {\n        background-color: #f3f4f5;\n}\n.vue-query-builder .vqb-group.depth-1 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-2 {\n        border-left: 2px solid #8bc34a;\n}\n.vue-query-builder .vqb-group.depth-2 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-3 {\n        border-left: 2px solid #00bcd4;\n}\n.vue-query-builder .vqb-group.depth-3 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-4 {\n        border-left: 2px solid #ff5722;\n}\n", "",{"version":3,"sources":["webpack://./src/vue-components/query-builder/fomantic-ui-group.component.vue"],"names":[],"mappings":";AAuGI;QACI,kBAAkB;AACtB;AAEA;QACI,eAAe;QACf,kBAAkB;QAClB,YAAY;AAChB;AAEA;OACG,wBAAwB;AAC3B;AACA;QACI,eAAe;QACf,yBAAyB;AAC7B;AACA;QACI,kCAAkC;AACtC;AACA;QACI,kBAAkB;QAClB,aAAa;AACjB;AACA;QACI,qBAAqB;QACrB,kBAAkB;AACtB;AACA;QACI,iBAAiB;QACjB,oBAAoB;AACxB;AACA;QACI,eAAe;QACf,kBAAkB;AACtB;AACA;QACI,eAAe;QACf,kBAAkB;AACtB;AACA;QACI,yBAAyB;AAC7B;AACA;;QAEI,8BAA8B;AAClC;AACA;;QAEI,8BAA8B;AAClC;AACA;;QAEI,8BAA8B;AAClC","sourcesContent":["<template>\n    <div\n        class=\"vqb-group ui fluid card\"\n        :class=\"[labels.spaceRule, 'depth-' + depth]\"\n    >\n        <div\n            class=\"vbq-group-heading content\"\n            :class=\"'depth-' + depth\"\n        >\n            <div class=\"ui grid\">\n                <div class=\"fourteen wide column\">\n                    <div class=\"ui horizontal list\">\n                        <div class=\"item\">\n                            <h4 class=\"ui inline\">\n                                {{ labels.matchType }}\n                            </h4>\n                        </div>\n                        <div class=\"item\">\n                            <select\n                                v-model=\"query.logicalOperator\"\n                                class=\"atk-qb-select\"\n                            >\n                                <option\n                                    v-for=\"label in labels.matchTypes\"\n                                    :key=\"label.id\"\n                                    :value=\"label.id\"\n                                >\n                                    {{ label.label }}\n                                </option>\n                            </select>\n                        </div>\n                        <div class=\"item\">\n                            <div class=\"rule-actions\">\n                                <div>\n                                    <SuiDropdown\n                                        :text=\"labels.addRule\"\n                                        class=\"ui mini basic button atk-qb-rule-select\"\n                                        selection\n                                    >\n                                        <SuiDropdownMenu class=\"atk-qb-rule-select-menu\">\n                                            <SuiDropdownItem\n                                                v-for=\"rule in rules\"\n                                                :key=\"rule.id\"\n                                                :text=\"rule.label\"\n                                                @click=\"addNewRule(rule.id)\"\n                                            />\n                                        </SuiDropdownMenu>\n                                    </SuiDropdown>\n                                    <button\n                                        v-if=\"depth < maxDepth\"\n                                        type=\"button\"\n                                        class=\"ui mini basic button\"\n                                        @click=\"addGroup\"\n                                    >\n                                        {{ labels.addGroup }}\n                                    </button>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"two wide right aligned column\">\n                    <i\n                        v-if=\"depth > 1\"\n                        class=\"atk-qb-remove\"\n                        :class=\"labels.removeGroupClass\"\n                        @click=\"remove\"\n                    />\n                </div>\n            </div>\n        </div>\n        <div class=\"vbq-group-body content\">\n            <QueryBuilderChildren v-bind=\"$props\" />\n        </div>\n    </div>\n</template>\n\n<script>\nimport VueQueryBuilderGroup from 'vue-query-builder/src/components/QueryBuilderGroup';\n\nexport default {\n    name: 'QueryBuilderGroup',\n    extends: VueQueryBuilderGroup,\n    data: function () {\n        return {\n            selectedSuiRule: null,\n        };\n    },\n    methods: {\n        /**\n         * Add a new rule via Dropdown item.\n         */\n        addNewRule: function (ruleId) {\n            this.selectedRule = this.rules.find((rule) => rule.id === ruleId);\n            if (this.selectedRule) {\n                this.addRule();\n            }\n        },\n    },\n};\n</script>\n\n<style>\n    .vue-query-builder .vqb-group .rule-actions {\n        margin-bottom: 0px;\n    }\n\n    .vue-query-builder .vqb-rule {\n        margin-top: 0px;\n        margin-bottom: 0px;\n        padding: 0px;\n    }\n\n    .atk-qb-select, .ui.form select.atk-qb-select {\n       padding: 2px 6px 4px 4px;\n    }\n    .atk-qb-remove {\n        cursor: pointer;\n        color: rgba(0, 0, 0, 0.6);\n    }\n    .ui.selection.dropdown.atk-qb-rule-select {\n        background-color: rgba(0, 0, 0, 0);\n    }\n    .ui.selection.dropdown .atk-qb-rule-select-menu {\n        width: max-content;\n        z-index: 1000;\n    }\n    .vbq-group-heading > .ui.grid > .column:not(.row) {\n        padding-bottom: 0.5em;\n        padding-top: 0.5em;\n    }\n    .vue-query-builder .ui.card.compact {\n        margin-top: 0.5em;\n        margin-bottom: 0.5em;\n    }\n    .vue-query-builder .ui.card.fitted {\n        margin-top: 0em;\n        margin-bottom: 0em;\n    }\n    .vue-query-builder .ui.card.padded {\n        margin-top: 1em;\n        margin-bottom: 1em;\n    }\n    .ui.card > .vbq-group-heading.content {\n        background-color: #f3f4f5;\n    }\n    .vue-query-builder .vqb-group.depth-1 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-2 {\n        border-left: 2px solid #8bc34a;\n    }\n    .vue-query-builder .vqb-group.depth-2 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-3 {\n        border-left: 2px solid #00bcd4;\n    }\n    .vue-query-builder .vqb-group.depth-3 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-4 {\n        border-left: 2px solid #ff5722;\n    }\n</style>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `
+.vue-query-builder .vqb-group .rule-actions {
+        margin-bottom: 0px;
+}
+.vue-query-builder .vqb-rule {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        padding: 0px;
+}
+.atk-qb-select, .ui.form select.atk-qb-select {
+       padding: 2px 6px 4px 4px;
+}
+.atk-qb-remove {
+        cursor: pointer;
+        color: rgba(0, 0, 0, 0.6);
+}
+.ui.selection.dropdown.atk-qb-rule-select {
+        background-color: rgba(0, 0, 0, 0);
+}
+.ui.selection.dropdown .atk-qb-rule-select-menu {
+        width: max-content;
+        z-index: 1000;
+}
+.vbq-group-heading > .ui.grid > .column:not(.row) {
+        padding-bottom: 0.5em;
+        padding-top: 0.5em;
+}
+.vue-query-builder .ui.card.compact {
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+}
+.vue-query-builder .ui.card.fitted {
+        margin-top: 0em;
+        margin-bottom: 0em;
+}
+.vue-query-builder .ui.card.padded {
+        margin-top: 1em;
+        margin-bottom: 1em;
+}
+.ui.card > .vbq-group-heading.content {
+        background-color: #f3f4f5;
+}
+.vue-query-builder .vqb-group.depth-1 .vqb-rule,
+    .vue-query-builder .vqb-group.depth-2 {
+        border-left: 2px solid #8bc34a;
+}
+.vue-query-builder .vqb-group.depth-2 .vqb-rule,
+    .vue-query-builder .vqb-group.depth-3 {
+        border-left: 2px solid #00bcd4;
+}
+.vue-query-builder .vqb-group.depth-3 .vqb-rule,
+    .vue-query-builder .vqb-group.depth-4 {
+        border-left: 2px solid #ff5722;
+}
+`, "",{"version":3,"sources":["webpack://./src/vue-components/query-builder/fomantic-ui-group.component.vue"],"names":[],"mappings":";AAuGI;QACI,kBAAkB;AACtB;AAEA;QACI,eAAe;QACf,kBAAkB;QAClB,YAAY;AAChB;AAEA;OACG,wBAAwB;AAC3B;AACA;QACI,eAAe;QACf,yBAAyB;AAC7B;AACA;QACI,kCAAkC;AACtC;AACA;QACI,kBAAkB;QAClB,aAAa;AACjB;AACA;QACI,qBAAqB;QACrB,kBAAkB;AACtB;AACA;QACI,iBAAiB;QACjB,oBAAoB;AACxB;AACA;QACI,eAAe;QACf,kBAAkB;AACtB;AACA;QACI,eAAe;QACf,kBAAkB;AACtB;AACA;QACI,yBAAyB;AAC7B;AACA;;QAEI,8BAA8B;AAClC;AACA;;QAEI,8BAA8B;AAClC;AACA;;QAEI,8BAA8B;AAClC","sourcesContent":["<template>\n    <div\n        class=\"vqb-group ui fluid card\"\n        :class=\"[labels.spaceRule, 'depth-' + depth]\"\n    >\n        <div\n            class=\"vbq-group-heading content\"\n            :class=\"'depth-' + depth\"\n        >\n            <div class=\"ui grid\">\n                <div class=\"fourteen wide column\">\n                    <div class=\"ui horizontal list\">\n                        <div class=\"item\">\n                            <h4 class=\"ui inline\">\n                                {{ labels.matchType }}\n                            </h4>\n                        </div>\n                        <div class=\"item\">\n                            <select\n                                v-model=\"query.logicalOperator\"\n                                class=\"atk-qb-select\"\n                            >\n                                <option\n                                    v-for=\"label in labels.matchTypes\"\n                                    :key=\"label.id\"\n                                    :value=\"label.id\"\n                                >\n                                    {{ label.label }}\n                                </option>\n                            </select>\n                        </div>\n                        <div class=\"item\">\n                            <div class=\"rule-actions\">\n                                <div>\n                                    <SuiDropdown\n                                        :text=\"labels.addRule\"\n                                        class=\"ui mini basic button atk-qb-rule-select\"\n                                        selection\n                                    >\n                                        <SuiDropdownMenu class=\"atk-qb-rule-select-menu\">\n                                            <SuiDropdownItem\n                                                v-for=\"rule in rules\"\n                                                :key=\"rule.id\"\n                                                :text=\"rule.label\"\n                                                @click=\"addNewRule(rule.id)\"\n                                            />\n                                        </SuiDropdownMenu>\n                                    </SuiDropdown>\n                                    <button\n                                        v-if=\"depth < maxDepth\"\n                                        type=\"button\"\n                                        class=\"ui mini basic button\"\n                                        @click=\"addGroup\"\n                                    >\n                                        {{ labels.addGroup }}\n                                    </button>\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </div>\n                <div class=\"two wide right aligned column\">\n                    <i\n                        v-if=\"depth > 1\"\n                        class=\"atk-qb-remove\"\n                        :class=\"labels.removeGroupClass\"\n                        @click=\"remove\"\n                    />\n                </div>\n            </div>\n        </div>\n        <div class=\"vbq-group-body content\">\n            <QueryBuilderChildren v-bind=\"$props\" />\n        </div>\n    </div>\n</template>\n\n<script>\nimport VueQueryBuilderGroup from 'vue-query-builder/src/components/QueryBuilderGroup';\n\nexport default {\n    name: 'QueryBuilderGroup',\n    extends: VueQueryBuilderGroup,\n    data: function () {\n        return {\n            selectedSuiRule: null,\n        };\n    },\n    methods: {\n        /**\n         * Add a new rule via Dropdown item.\n         */\n        addNewRule: function (ruleId) {\n            this.selectedRule = this.rules.find((rule) => rule.id === ruleId);\n            if (this.selectedRule) {\n                this.addRule();\n            }\n        },\n    },\n};\n</script>\n\n<style>\n    .vue-query-builder .vqb-group .rule-actions {\n        margin-bottom: 0px;\n    }\n\n    .vue-query-builder .vqb-rule {\n        margin-top: 0px;\n        margin-bottom: 0px;\n        padding: 0px;\n    }\n\n    .atk-qb-select, .ui.form select.atk-qb-select {\n       padding: 2px 6px 4px 4px;\n    }\n    .atk-qb-remove {\n        cursor: pointer;\n        color: rgba(0, 0, 0, 0.6);\n    }\n    .ui.selection.dropdown.atk-qb-rule-select {\n        background-color: rgba(0, 0, 0, 0);\n    }\n    .ui.selection.dropdown .atk-qb-rule-select-menu {\n        width: max-content;\n        z-index: 1000;\n    }\n    .vbq-group-heading > .ui.grid > .column:not(.row) {\n        padding-bottom: 0.5em;\n        padding-top: 0.5em;\n    }\n    .vue-query-builder .ui.card.compact {\n        margin-top: 0.5em;\n        margin-bottom: 0.5em;\n    }\n    .vue-query-builder .ui.card.fitted {\n        margin-top: 0em;\n        margin-bottom: 0em;\n    }\n    .vue-query-builder .ui.card.padded {\n        margin-top: 1em;\n        margin-bottom: 1em;\n    }\n    .ui.card > .vbq-group-heading.content {\n        background-color: #f3f4f5;\n    }\n    .vue-query-builder .vqb-group.depth-1 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-2 {\n        border-left: 2px solid #8bc34a;\n    }\n    .vue-query-builder .vqb-group.depth-2 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-3 {\n        border-left: 2px solid #00bcd4;\n    }\n    .vue-query-builder .vqb-group.depth-3 .vqb-rule,\n    .vue-query-builder .vqb-group.depth-4 {\n        border-left: 2px solid #ff5722;\n    }\n</style>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -735,7 +769,29 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n.ui.input.atk-qb > input, .ui.input.atk-qb span > input, .ui.form .input.atk-qb {\n        padding: 6px;\n}\n.ui.grid > .row.atk-qb {\n        padding: 8px 0px;\n        min-height: 62px;\n}\n.inline.fields.atk-qb, .ui.form .inline.fields.atk-qb {\n        margin: 0px;\n}\n.atk-qb-date-picker {\n        border: 1px solid rgba(34, 36, 38, 0.15);\n}\ninput[type=input].atk-qb-date-picker:focus {\n        border-color: #85b7d9;\n}\n.ui.card.vqb-rule > .content {\n        padding-bottom: 0.5em;\n        padding-top: 0.5em;\n        background-color: #f3f4f5;\n}\n", "",{"version":3,"sources":["webpack://./src/vue-components/query-builder/fomantic-ui-rule.component.vue"],"names":[],"mappings":";AA4LI;QACI,YAAY;AAChB;AACA;QACI,gBAAgB;QAChB,gBAAgB;AACpB;AACA;QACI,WAAW;AACf;AACA;QACI,wCAAwC;AAC5C;AACA;QACI,qBAAqB;AACzB;AACA;QACI,qBAAqB;QACrB,kBAAkB;QAClB,yBAAyB;AAC7B","sourcesContent":["<template>\n    <div\n        class=\"vqb-rule ui fluid card\"\n        :class=\"labels.spaceRule\"\n        :data-name=\"rule.id\"\n    >\n        <div class=\"content\">\n            <div class=\"ui grid\">\n                <div class=\"middle aligned row atk-qb\">\n                    <div class=\"thirteen wide column\">\n                        <div class=\"ui horizontal list\">\n                            <div class=\"item vqb-rule-label\">\n                                <h5 class>\n                                    {{ rule.label }}\n                                </h5>\n                            </div>\n                            <div\n                                v-if=\"rule.operands !== undefined\"\n                                class=\"item vqb-rule-operand\"\n                            >\n                                <select\n                                    v-model=\"query.operand\"\n                                    class=\"atk-qb-select\"\n                                >\n                                    <option\n                                        v-for=\"operand in rule.operands\"\n                                        :key=\"operand\"\n                                    >\n                                        {{ operand }}\n                                    </option>\n                                </select>\n                            </div>\n                            <div\n                                v-if=\"rule.operators !== undefined && rule.operators.length > 1\"\n                                class=\"item vqb-rule-operator\"\n                            >\n                                <select\n                                    v-model=\"query.operator\"\n                                    class=\"atk-qb-select\"\n                                >\n                                    <option\n                                        v-for=\"operator in rule.operators\"\n                                        :key=\"operator\"\n                                        :value=\"operator\"\n                                    >\n                                        {{ operator }}\n                                    </option>\n                                </select>\n                            </div>\n                            <div class=\"item vqb-rule-input\">\n                                <template v-if=\"canDisplay('input')\">\n                                    <div class=\"ui small input atk-qb\">\n                                        <input\n                                            v-model=\"query.value\"\n                                            :type=\"rule.inputType\"\n                                            :placeholder=\"labels.textInputPlaceholder\"\n                                        >\n                                    </div>\n                                </template>\n                                <template v-if=\"canDisplay('checkbox')\">\n                                    <!-- TODO <SuiFormFields -->\n                                    <div\n                                        inline\n                                        class=\"atk-qb\"\n                                    >\n                                        <div\n                                            v-for=\"choice in rule.choices\"\n                                            :key=\"choice.value\"\n                                            class=\"field\"\n                                        >\n                                            <!-- TODO radio support in https://github.com/nightswinger/vue-fomantic-ui/blob/v0.13.0/src/modules/Checkbox/Checkbox.tsx -->\n                                            <SuiCheckbox\n                                                v-model=\"query.value\"\n                                                :label=\"choice.label\"\n                                                :radio=\"isRadio\"\n                                                :value=\"choice.value\"\n                                            />\n                                        </div>\n                                    <!-- TODO </SuiFormFields> -->\n                                    </div>\n                                </template>\n                                <template v-if=\"canDisplay('select')\">\n                                    <select\n                                        v-model=\"query.value\"\n                                        class=\"atk-qb-select\"\n                                    >\n                                        <option\n                                            v-for=\"choice in rule.choices\"\n                                            :key=\"choice.value\"\n                                            :value=\"choice.value\"\n                                        >\n                                            {{ choice.label }}\n                                        </option>\n                                    </select>\n                                </template>\n                                <template v-if=\"canDisplay('custom-component')\">\n                                    <div class=\"ui small input atk-qb\">\n                                        <component\n                                            :is=\"rule.component\"\n                                            v-model=\"query.value\"\n                                            :config=\"rule.componentProps\"\n                                            :optionalValue=\"query.option\"\n                                        />\n                                    </div>\n                                </template>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"right aligned three wide column\">\n                        <i\n                            :class=\"labels.removeRuleClass\"\n                            class=\"atk-qb-remove\"\n                            @click=\"remove\"\n                        />\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</template>\n\n<script>\nimport VueQueryBuilderRule from 'vue-query-builder/src/components/QueryBuilderRule';\nimport AtkDatePicker from '../share/atk-date-picker';\nimport AtkLookup from '../share/atk-lookup';\n\nexport default {\n    components: {\n        AtkDatePicker: AtkDatePicker,\n        AtkLookup: AtkLookup,\n    },\n    extends: VueQueryBuilderRule,\n    inject: ['getRootData'],\n    data: function () {\n        return {};\n    },\n    computed: {\n        isInput: function () {\n            return this.rule.type === 'text' || this.rule.type === 'numeric';\n        },\n        isComponent: function () {\n            return this.rule.type === 'custom-component';\n        },\n        isRadio: function () {\n            return this.rule.type === 'radio';\n        },\n        isCheckbox: function () {\n            return this.rule.type === 'checkbox' || this.isRadio;\n        },\n        isSelect: function () {\n            return this.rule.type === 'select';\n        },\n    },\n    methods: {\n        /**\n         * Check if an input can be display in regards to:\n         * it's operator and then it's type.\n         *\n         * @returns {boolean}\n         */\n        canDisplay: function (type) {\n            if (this.labels.hiddenOperator.includes(this.query.operator)) {\n                return false;\n            }\n\n            switch (type) {\n                case 'input': {\n                    return this.isInput;\n                }\n                case 'checkbox': {\n                    return this.isCheckbox;\n                }\n                case 'select': {\n                    return this.isSelect;\n                }\n                case 'custom-component': {\n                    return this.isComponent;\n                }\n                default: {\n                    return false;\n                }\n            }\n        },\n    },\n};\n</script>\n\n<style>\n    .ui.input.atk-qb > input, .ui.input.atk-qb span > input, .ui.form .input.atk-qb {\n        padding: 6px;\n    }\n    .ui.grid > .row.atk-qb {\n        padding: 8px 0px;\n        min-height: 62px;\n    }\n    .inline.fields.atk-qb, .ui.form .inline.fields.atk-qb {\n        margin: 0px;\n    }\n    .atk-qb-date-picker {\n        border: 1px solid rgba(34, 36, 38, 0.15);\n    }\n    input[type=input].atk-qb-date-picker:focus {\n        border-color: #85b7d9;\n    }\n    .ui.card.vqb-rule > .content {\n        padding-bottom: 0.5em;\n        padding-top: 0.5em;\n        background-color: #f3f4f5;\n    }\n</style>\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, `
+.ui.input.atk-qb > input, .ui.input.atk-qb span > input, .ui.form .input.atk-qb {
+        padding: 6px;
+}
+.ui.grid > .row.atk-qb {
+        padding: 8px 0px;
+        min-height: 62px;
+}
+.inline.fields.atk-qb, .ui.form .inline.fields.atk-qb {
+        margin: 0px;
+}
+.atk-qb-date-picker {
+        border: 1px solid rgba(34, 36, 38, 0.15);
+}
+input[type=input].atk-qb-date-picker:focus {
+        border-color: #85b7d9;
+}
+.ui.card.vqb-rule > .content {
+        padding-bottom: 0.5em;
+        padding-top: 0.5em;
+        background-color: #f3f4f5;
+}
+`, "",{"version":3,"sources":["webpack://./src/vue-components/query-builder/fomantic-ui-rule.component.vue"],"names":[],"mappings":";AA4LI;QACI,YAAY;AAChB;AACA;QACI,gBAAgB;QAChB,gBAAgB;AACpB;AACA;QACI,WAAW;AACf;AACA;QACI,wCAAwC;AAC5C;AACA;QACI,qBAAqB;AACzB;AACA;QACI,qBAAqB;QACrB,kBAAkB;QAClB,yBAAyB;AAC7B","sourcesContent":["<template>\n    <div\n        class=\"vqb-rule ui fluid card\"\n        :class=\"labels.spaceRule\"\n        :data-name=\"rule.id\"\n    >\n        <div class=\"content\">\n            <div class=\"ui grid\">\n                <div class=\"middle aligned row atk-qb\">\n                    <div class=\"thirteen wide column\">\n                        <div class=\"ui horizontal list\">\n                            <div class=\"item vqb-rule-label\">\n                                <h5 class>\n                                    {{ rule.label }}\n                                </h5>\n                            </div>\n                            <div\n                                v-if=\"rule.operands !== undefined\"\n                                class=\"item vqb-rule-operand\"\n                            >\n                                <select\n                                    v-model=\"query.operand\"\n                                    class=\"atk-qb-select\"\n                                >\n                                    <option\n                                        v-for=\"operand in rule.operands\"\n                                        :key=\"operand\"\n                                    >\n                                        {{ operand }}\n                                    </option>\n                                </select>\n                            </div>\n                            <div\n                                v-if=\"rule.operators !== undefined && rule.operators.length > 1\"\n                                class=\"item vqb-rule-operator\"\n                            >\n                                <select\n                                    v-model=\"query.operator\"\n                                    class=\"atk-qb-select\"\n                                >\n                                    <option\n                                        v-for=\"operator in rule.operators\"\n                                        :key=\"operator\"\n                                        :value=\"operator\"\n                                    >\n                                        {{ operator }}\n                                    </option>\n                                </select>\n                            </div>\n                            <div class=\"item vqb-rule-input\">\n                                <template v-if=\"canDisplay('input')\">\n                                    <div class=\"ui small input atk-qb\">\n                                        <input\n                                            v-model=\"query.value\"\n                                            :type=\"rule.inputType === 'number' ? 'text' : rule.inputType\"\n                                            :placeholder=\"labels.textInputPlaceholder\"\n                                        >\n                                    </div>\n                                </template>\n                                <template v-if=\"canDisplay('checkbox')\">\n                                    <!-- TODO <SuiFormFields -->\n                                    <div\n                                        inline\n                                        class=\"atk-qb\"\n                                    >\n                                        <div\n                                            v-for=\"choice in rule.choices\"\n                                            :key=\"choice.value\"\n                                            class=\"field\"\n                                        >\n                                            <!-- TODO radio support in https://github.com/nightswinger/vue-fomantic-ui/blob/v0.13.0/src/modules/Checkbox/Checkbox.tsx -->\n                                            <SuiCheckbox\n                                                v-model=\"query.value\"\n                                                :label=\"choice.label\"\n                                                :radio=\"isRadio\"\n                                                :value=\"choice.value\"\n                                            />\n                                        </div>\n                                    <!-- TODO </SuiFormFields> -->\n                                    </div>\n                                </template>\n                                <template v-if=\"canDisplay('select')\">\n                                    <select\n                                        v-model=\"query.value\"\n                                        class=\"atk-qb-select\"\n                                    >\n                                        <option\n                                            v-for=\"choice in rule.choices\"\n                                            :key=\"choice.value\"\n                                            :value=\"choice.value\"\n                                        >\n                                            {{ choice.label }}\n                                        </option>\n                                    </select>\n                                </template>\n                                <template v-if=\"canDisplay('custom-component')\">\n                                    <div class=\"ui small input atk-qb\">\n                                        <component\n                                            :is=\"rule.component\"\n                                            v-model=\"query.value\"\n                                            :config=\"rule.componentProps\"\n                                            :optionalValue=\"query.option\"\n                                        />\n                                    </div>\n                                </template>\n                            </div>\n                        </div>\n                    </div>\n                    <div class=\"right aligned three wide column\">\n                        <i\n                            :class=\"labels.removeRuleClass\"\n                            class=\"atk-qb-remove\"\n                            @click=\"remove\"\n                        />\n                    </div>\n                </div>\n            </div>\n        </div>\n    </div>\n</template>\n\n<script>\nimport VueQueryBuilderRule from 'vue-query-builder/src/components/QueryBuilderRule';\nimport AtkDatePicker from '../share/atk-date-picker';\nimport AtkLookup from '../share/atk-lookup';\n\nexport default {\n    components: {\n        AtkDatePicker: AtkDatePicker,\n        AtkLookup: AtkLookup,\n    },\n    extends: VueQueryBuilderRule,\n    inject: ['getRootData'],\n    data: function () {\n        return {};\n    },\n    computed: {\n        isInput: function () {\n            return this.rule.type === 'text' || this.rule.type === 'numeric';\n        },\n        isComponent: function () {\n            return this.rule.type === 'custom-component';\n        },\n        isRadio: function () {\n            return this.rule.type === 'radio';\n        },\n        isCheckbox: function () {\n            return this.rule.type === 'checkbox' || this.isRadio;\n        },\n        isSelect: function () {\n            return this.rule.type === 'select';\n        },\n    },\n    methods: {\n        /**\n         * Check if an input can be display in regards to:\n         * it's operator and then it's type.\n         *\n         * @returns {boolean}\n         */\n        canDisplay: function (type) {\n            if (this.labels.hiddenOperator.includes(this.query.operator)) {\n                return false;\n            }\n\n            switch (type) {\n                case 'input': {\n                    return this.isInput;\n                }\n                case 'checkbox': {\n                    return this.isCheckbox;\n                }\n                case 'select': {\n                    return this.isSelect;\n                }\n                case 'custom-component': {\n                    return this.isComponent;\n                }\n                default: {\n                    return false;\n                }\n            }\n        },\n    },\n};\n</script>\n\n<style>\n    .ui.input.atk-qb > input, .ui.input.atk-qb span > input, .ui.form .input.atk-qb {\n        padding: 6px;\n    }\n    .ui.grid > .row.atk-qb {\n        padding: 8px 0px;\n        min-height: 62px;\n    }\n    .inline.fields.atk-qb, .ui.form .inline.fields.atk-qb {\n        margin: 0px;\n    }\n    .atk-qb-date-picker {\n        border: 1px solid rgba(34, 36, 38, 0.15);\n    }\n    input[type=input].atk-qb-date-picker:focus {\n        border-color: #85b7d9;\n    }\n    .ui.card.vqb-rule > .content {\n        padding-bottom: 0.5em;\n        padding-top: 0.5em;\n        background-color: #f3f4f5;\n    }\n</style>\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1832,13 +1888,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _VueQueryBuilder_vue_vue_type_template_id_204b91d2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./VueQueryBuilder.vue?vue&type=template&id=204b91d2 */ "./node_modules/vue-query-builder/src/VueQueryBuilder.vue?vue&type=template&id=204b91d2");
 /* harmony import */ var _VueQueryBuilder_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./VueQueryBuilder.vue?vue&type=script&lang=js */ "./node_modules/vue-query-builder/src/VueQueryBuilder.vue?vue&type=script&lang=js");
-/* harmony import */ var vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_VueQueryBuilder_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_VueQueryBuilder_vue_vue_type_template_id_204b91d2__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"node_modules/vue-query-builder/src/VueQueryBuilder.vue"]])
+const __exports__ = /*#__PURE__*/(0,_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_VueQueryBuilder_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_VueQueryBuilder_vue_vue_type_template_id_204b91d2__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"node_modules/vue-query-builder/src/VueQueryBuilder.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -1859,13 +1915,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _QueryBuilderChildren_vue_vue_type_template_id_c30a3bae__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./QueryBuilderChildren.vue?vue&type=template&id=c30a3bae */ "./node_modules/vue-query-builder/src/components/QueryBuilderChildren.vue?vue&type=template&id=c30a3bae");
 /* harmony import */ var _QueryBuilderChildren_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./QueryBuilderChildren.vue?vue&type=script&lang=js */ "./node_modules/vue-query-builder/src/components/QueryBuilderChildren.vue?vue&type=script&lang=js");
-/* harmony import */ var vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_QueryBuilderChildren_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_QueryBuilderChildren_vue_vue_type_template_id_c30a3bae__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"node_modules/vue-query-builder/src/components/QueryBuilderChildren.vue"]])
+const __exports__ = /*#__PURE__*/(0,_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_QueryBuilderChildren_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_QueryBuilderChildren_vue_vue_type_template_id_c30a3bae__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"node_modules/vue-query-builder/src/components/QueryBuilderChildren.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -1886,13 +1942,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _QueryBuilderGroup_vue_vue_type_template_id_160f5c76__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./QueryBuilderGroup.vue?vue&type=template&id=160f5c76 */ "./node_modules/vue-query-builder/src/components/QueryBuilderGroup.vue?vue&type=template&id=160f5c76");
 /* harmony import */ var _QueryBuilderGroup_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./QueryBuilderGroup.vue?vue&type=script&lang=js */ "./node_modules/vue-query-builder/src/components/QueryBuilderGroup.vue?vue&type=script&lang=js");
-/* harmony import */ var vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_QueryBuilderGroup_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_QueryBuilderGroup_vue_vue_type_template_id_160f5c76__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"node_modules/vue-query-builder/src/components/QueryBuilderGroup.vue"]])
+const __exports__ = /*#__PURE__*/(0,_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_QueryBuilderGroup_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_QueryBuilderGroup_vue_vue_type_template_id_160f5c76__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"node_modules/vue-query-builder/src/components/QueryBuilderGroup.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -1913,13 +1969,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _QueryBuilderRule_vue_vue_type_template_id_c96aa4b4__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./QueryBuilderRule.vue?vue&type=template&id=c96aa4b4 */ "./node_modules/vue-query-builder/src/components/QueryBuilderRule.vue?vue&type=template&id=c96aa4b4");
 /* harmony import */ var _QueryBuilderRule_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./QueryBuilderRule.vue?vue&type=script&lang=js */ "./node_modules/vue-query-builder/src/components/QueryBuilderRule.vue?vue&type=script&lang=js");
-/* harmony import */ var vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_QueryBuilderRule_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_QueryBuilderRule_vue_vue_type_template_id_c96aa4b4__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"node_modules/vue-query-builder/src/components/QueryBuilderRule.vue"]])
+const __exports__ = /*#__PURE__*/(0,_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_QueryBuilderRule_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_QueryBuilderRule_vue_vue_type_template_id_c96aa4b4__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"node_modules/vue-query-builder/src/components/QueryBuilderRule.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -1941,7 +1997,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Bootstrap5Group_vue_vue_type_template_id_987e31f0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Bootstrap5Group.vue?vue&type=template&id=987e31f0 */ "./node_modules/vue-query-builder/src/layouts/Bootstrap5/Bootstrap5Group.vue?vue&type=template&id=987e31f0");
 /* harmony import */ var _Bootstrap5Group_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Bootstrap5Group.vue?vue&type=script&lang=js */ "./node_modules/vue-query-builder/src/layouts/Bootstrap5/Bootstrap5Group.vue?vue&type=script&lang=js");
 /* harmony import */ var _Bootstrap5Group_vue_vue_type_style_index_0_id_987e31f0_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Bootstrap5Group.vue?vue&type=style&index=0&id=987e31f0&lang=css */ "./node_modules/vue-query-builder/src/layouts/Bootstrap5/Bootstrap5Group.vue?vue&type=style&index=0&id=987e31f0&lang=css");
-/* harmony import */ var vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
@@ -1949,7 +2005,7 @@ __webpack_require__.r(__webpack_exports__);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_Bootstrap5Group_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Bootstrap5Group_vue_vue_type_template_id_987e31f0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"node_modules/vue-query-builder/src/layouts/Bootstrap5/Bootstrap5Group.vue"]])
+const __exports__ = /*#__PURE__*/(0,_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_Bootstrap5Group_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Bootstrap5Group_vue_vue_type_template_id_987e31f0__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"node_modules/vue-query-builder/src/layouts/Bootstrap5/Bootstrap5Group.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -1970,13 +2026,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Bootstrap5Rule_vue_vue_type_template_id_076e37fa__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Bootstrap5Rule.vue?vue&type=template&id=076e37fa */ "./node_modules/vue-query-builder/src/layouts/Bootstrap5/Bootstrap5Rule.vue?vue&type=template&id=076e37fa");
 /* harmony import */ var _Bootstrap5Rule_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Bootstrap5Rule.vue?vue&type=script&lang=js */ "./node_modules/vue-query-builder/src/layouts/Bootstrap5/Bootstrap5Rule.vue?vue&type=script&lang=js");
-/* harmony import */ var vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Bootstrap5Rule_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Bootstrap5Rule_vue_vue_type_template_id_076e37fa__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"node_modules/vue-query-builder/src/layouts/Bootstrap5/Bootstrap5Rule.vue"]])
+const __exports__ = /*#__PURE__*/(0,_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_Bootstrap5Rule_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_Bootstrap5Rule_vue_vue_type_template_id_076e37fa__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"node_modules/vue-query-builder/src/layouts/Bootstrap5/Bootstrap5Rule.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -1998,7 +2054,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fomantic_ui_group_component_vue_vue_type_template_id_5a4d40f3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fomantic-ui-group.component.vue?vue&type=template&id=5a4d40f3 */ "./src/vue-components/query-builder/fomantic-ui-group.component.vue?vue&type=template&id=5a4d40f3");
 /* harmony import */ var _fomantic_ui_group_component_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fomantic-ui-group.component.vue?vue&type=script&lang=js */ "./src/vue-components/query-builder/fomantic-ui-group.component.vue?vue&type=script&lang=js");
 /* harmony import */ var _fomantic_ui_group_component_vue_vue_type_style_index_0_id_5a4d40f3_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./fomantic-ui-group.component.vue?vue&type=style&index=0&id=5a4d40f3&lang=css */ "./src/vue-components/query-builder/fomantic-ui-group.component.vue?vue&type=style&index=0&id=5a4d40f3&lang=css");
-/* harmony import */ var vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
@@ -2006,7 +2062,7 @@ __webpack_require__.r(__webpack_exports__);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_fomantic_ui_group_component_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_fomantic_ui_group_component_vue_vue_type_template_id_5a4d40f3__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/vue-components/query-builder/fomantic-ui-group.component.vue"]])
+const __exports__ = /*#__PURE__*/(0,_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_fomantic_ui_group_component_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_fomantic_ui_group_component_vue_vue_type_template_id_5a4d40f3__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/vue-components/query-builder/fomantic-ui-group.component.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -2028,7 +2084,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _fomantic_ui_rule_component_vue_vue_type_template_id_70644af6__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fomantic-ui-rule.component.vue?vue&type=template&id=70644af6 */ "./src/vue-components/query-builder/fomantic-ui-rule.component.vue?vue&type=template&id=70644af6");
 /* harmony import */ var _fomantic_ui_rule_component_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fomantic-ui-rule.component.vue?vue&type=script&lang=js */ "./src/vue-components/query-builder/fomantic-ui-rule.component.vue?vue&type=script&lang=js");
 /* harmony import */ var _fomantic_ui_rule_component_vue_vue_type_style_index_0_id_70644af6_lang_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./fomantic-ui-rule.component.vue?vue&type=style&index=0&id=70644af6&lang=css */ "./src/vue-components/query-builder/fomantic-ui-rule.component.vue?vue&type=style&index=0&id=70644af6&lang=css");
-/* harmony import */ var vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
@@ -2036,7 +2092,7 @@ __webpack_require__.r(__webpack_exports__);
 ;
 
 
-const __exports__ = /*#__PURE__*/(0,vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_fomantic_ui_rule_component_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_fomantic_ui_rule_component_vue_vue_type_template_id_70644af6__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/vue-components/query-builder/fomantic-ui-rule.component.vue"]])
+const __exports__ = /*#__PURE__*/(0,_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_3__["default"])(_fomantic_ui_rule_component_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_fomantic_ui_rule_component_vue_vue_type_template_id_70644af6__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/vue-components/query-builder/fomantic-ui-rule.component.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -2057,13 +2113,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _query_builder_component_vue_vue_type_template_id_5e810cb3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./query-builder.component.vue?vue&type=template&id=5e810cb3 */ "./src/vue-components/query-builder/query-builder.component.vue?vue&type=template&id=5e810cb3");
 /* harmony import */ var _query_builder_component_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./query-builder.component.vue?vue&type=script&lang=js */ "./src/vue-components/query-builder/query-builder.component.vue?vue&type=script&lang=js");
-/* harmony import */ var vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
+/* harmony import */ var _node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/dist/exportHelper.js */ "./node_modules/vue-loader/dist/exportHelper.js");
 
 
 
 
 ;
-const __exports__ = /*#__PURE__*/(0,vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_query_builder_component_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_query_builder_component_vue_vue_type_template_id_5e810cb3__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/vue-components/query-builder/query-builder.component.vue"]])
+const __exports__ = /*#__PURE__*/(0,_node_modules_vue_loader_dist_exportHelper_js__WEBPACK_IMPORTED_MODULE_2__["default"])(_query_builder_component_vue_vue_type_script_lang_js__WEBPACK_IMPORTED_MODULE_1__["default"], [['render',_query_builder_component_vue_vue_type_template_id_5e810cb3__WEBPACK_IMPORTED_MODULE_0__.render],['__file',"src/vue-components/query-builder/query-builder.component.vue"]])
 /* hot reload */
 if (false) {}
 
@@ -2125,7 +2181,7 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_node_modules_source_map_loader_dist_cjs_js_fomantic_ui_group_component_vue_vue_type_template_id_5a4d40f3__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_node_modules_source_map_loader_dist_cjs_js_fomantic_ui_group_component_vue_vue_type_template_id_5a4d40f3__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_node_modules_source_map_loader_dist_cjs_js_fomantic_ui_group_component_vue_vue_type_template_id_5a4d40f3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!../../../node_modules/source-map-loader/dist/cjs.js!./fomantic-ui-group.component.vue?vue&type=template&id=5a4d40f3 */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./node_modules/source-map-loader/dist/cjs.js!./src/vue-components/query-builder/fomantic-ui-group.component.vue?vue&type=template&id=5a4d40f3");
 
@@ -2140,7 +2196,7 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_node_modules_source_map_loader_dist_cjs_js_fomantic_ui_rule_component_vue_vue_type_template_id_70644af6__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_node_modules_source_map_loader_dist_cjs_js_fomantic_ui_rule_component_vue_vue_type_template_id_70644af6__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_node_modules_source_map_loader_dist_cjs_js_fomantic_ui_rule_component_vue_vue_type_template_id_70644af6__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!../../../node_modules/source-map-loader/dist/cjs.js!./fomantic-ui-rule.component.vue?vue&type=template&id=70644af6 */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./node_modules/source-map-loader/dist/cjs.js!./src/vue-components/query-builder/fomantic-ui-rule.component.vue?vue&type=template&id=70644af6");
 
@@ -2155,7 +2211,7 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_node_modules_source_map_loader_dist_cjs_js_query_builder_component_vue_vue_type_template_id_5e810cb3__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */   render: () => (/* reexport safe */ _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_node_modules_source_map_loader_dist_cjs_js_query_builder_component_vue_vue_type_template_id_5e810cb3__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _node_modules_babel_loader_lib_index_js_node_modules_vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_node_modules_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_node_modules_source_map_loader_dist_cjs_js_query_builder_component_vue_vue_type_template_id_5e810cb3__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib/index.js!../../../node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!../../../node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!../../../node_modules/source-map-loader/dist/cjs.js!./query-builder.component.vue?vue&type=template&id=5e810cb3 */ "./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./node_modules/source-map-loader/dist/cjs.js!./src/vue-components/query-builder/query-builder.component.vue?vue&type=template&id=5e810cb3");
 
@@ -2296,7 +2352,7 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_VueQueryBuilder_vue_vue_type_template_id_204b91d2__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */   render: () => (/* reexport safe */ _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_VueQueryBuilder_vue_vue_type_template_id_204b91d2__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_VueQueryBuilder_vue_vue_type_template_id_204b91d2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!../../vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!../../source-map-loader/dist/cjs.js!./VueQueryBuilder.vue?vue&type=template&id=204b91d2 */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./node_modules/source-map-loader/dist/cjs.js!./node_modules/vue-query-builder/src/VueQueryBuilder.vue?vue&type=template&id=204b91d2");
 
@@ -2311,7 +2367,7 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_QueryBuilderChildren_vue_vue_type_template_id_c30a3bae__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */   render: () => (/* reexport safe */ _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_QueryBuilderChildren_vue_vue_type_template_id_c30a3bae__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_QueryBuilderChildren_vue_vue_type_template_id_c30a3bae__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!../../../vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!../../../source-map-loader/dist/cjs.js!./QueryBuilderChildren.vue?vue&type=template&id=c30a3bae */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./node_modules/source-map-loader/dist/cjs.js!./node_modules/vue-query-builder/src/components/QueryBuilderChildren.vue?vue&type=template&id=c30a3bae");
 
@@ -2326,7 +2382,7 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_QueryBuilderGroup_vue_vue_type_template_id_160f5c76__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */   render: () => (/* reexport safe */ _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_QueryBuilderGroup_vue_vue_type_template_id_160f5c76__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_QueryBuilderGroup_vue_vue_type_template_id_160f5c76__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!../../../vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!../../../source-map-loader/dist/cjs.js!./QueryBuilderGroup.vue?vue&type=template&id=160f5c76 */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./node_modules/source-map-loader/dist/cjs.js!./node_modules/vue-query-builder/src/components/QueryBuilderGroup.vue?vue&type=template&id=160f5c76");
 
@@ -2341,7 +2397,7 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_QueryBuilderRule_vue_vue_type_template_id_c96aa4b4__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */   render: () => (/* reexport safe */ _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_QueryBuilderRule_vue_vue_type_template_id_c96aa4b4__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_QueryBuilderRule_vue_vue_type_template_id_c96aa4b4__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!../../../vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!../../../source-map-loader/dist/cjs.js!./QueryBuilderRule.vue?vue&type=template&id=c96aa4b4 */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./node_modules/source-map-loader/dist/cjs.js!./node_modules/vue-query-builder/src/components/QueryBuilderRule.vue?vue&type=template&id=c96aa4b4");
 
@@ -2356,7 +2412,7 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_Bootstrap5Group_vue_vue_type_template_id_987e31f0__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */   render: () => (/* reexport safe */ _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_Bootstrap5Group_vue_vue_type_template_id_987e31f0__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_Bootstrap5Group_vue_vue_type_template_id_987e31f0__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!../../../../vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!../../../../source-map-loader/dist/cjs.js!./Bootstrap5Group.vue?vue&type=template&id=987e31f0 */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./node_modules/source-map-loader/dist/cjs.js!./node_modules/vue-query-builder/src/layouts/Bootstrap5/Bootstrap5Group.vue?vue&type=template&id=987e31f0");
 
@@ -2371,7 +2427,7 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* reexport safe */ _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_Bootstrap5Rule_vue_vue_type_template_id_076e37fa__WEBPACK_IMPORTED_MODULE_0__.render)
+/* harmony export */   render: () => (/* reexport safe */ _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_Bootstrap5Rule_vue_vue_type_template_id_076e37fa__WEBPACK_IMPORTED_MODULE_0__.render)
 /* harmony export */ });
 /* harmony import */ var _vue_loader_dist_templateLoader_js_ruleSet_1_rules_3_vue_loader_dist_index_js_ruleSet_1_rules_9_use_0_source_map_loader_dist_cjs_js_Bootstrap5Rule_vue_vue_type_template_id_076e37fa__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!../../../../vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!../../../../source-map-loader/dist/cjs.js!./Bootstrap5Rule.vue?vue&type=template&id=076e37fa */ "./node_modules/vue-loader/dist/templateLoader.js??ruleSet[1].rules[3]!./node_modules/vue-loader/dist/index.js??ruleSet[1].rules[9].use[0]!./node_modules/source-map-loader/dist/cjs.js!./node_modules/vue-query-builder/src/layouts/Bootstrap5/Bootstrap5Rule.vue?vue&type=template&id=076e37fa");
 
@@ -2386,7 +2442,7 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */   render: () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
@@ -2416,7 +2472,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */   render: () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
@@ -2441,7 +2497,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         onChildDeletionRequested: _ctx.$parent.removeChild,
         groupComponent: $props.groupComponent,
         ruleComponent: $props.ruleComponent
-      }, null, 40 /* PROPS, HYDRATE_EVENTS */, ["type", "query", "onUpdate:query", "rule-types", "rules", "rule", "index", "max-depth", "depth", "labels", "onChildDeletionRequested", "groupComponent", "ruleComponent"]))
+      }, null, 40 /* PROPS, NEED_HYDRATION */, ["type", "query", "onUpdate:query", "rule-types", "rules", "rule", "index", "max-depth", "depth", "labels", "onChildDeletionRequested", "groupComponent", "ruleComponent"]))
     }), 128 /* KEYED_FRAGMENT */))
   ]))
 }
@@ -2456,7 +2512,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */   render: () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
@@ -2475,7 +2531,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */   render: () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
@@ -2494,7 +2550,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */   render: () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
@@ -2576,7 +2632,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
                     value: rule.id
                   }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(rule.label), 9 /* TEXT, PROPS */, _hoisted_13))
                 }), 128 /* KEYED_FRAGMENT */))
-              ], 40 /* PROPS, HYDRATE_EVENTS */, _hoisted_12)
+              ], 40 /* PROPS, NEED_HYDRATION */, _hoisted_12)
             ]),
             (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [
               (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
@@ -2613,7 +2669,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "render": () => (/* binding */ render)
+/* harmony export */   render: () => (/* binding */ render)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 

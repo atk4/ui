@@ -19,16 +19,16 @@ use Atk4\Ui\VirtualPage;
 /**
  * A Step Action Executor that use a VirtualPage.
  */
-class VpExecutor extends View implements JsExecutorInterface
+class VpExecutor extends VirtualPage implements JsExecutorInterface
 {
     use CommonExecutorTrait;
     use HookTrait;
+    use InnerLoaderTrait;
     use StepExecutorTrait;
 
     public const HOOK_STEP = self::class . '@onStep';
 
-    /** @var VirtualPage */
-    protected $vp;
+    public $ui = 'container basic fitted segment';
 
     /** @var string|null */
     public $title;
@@ -43,8 +43,9 @@ class VpExecutor extends View implements JsExecutorInterface
     public $stepListItems = ['args' => 'Fill argument(s)', 'fields' => 'Edit Record(s)', 'preview' => 'Preview', 'final' => 'Complete'];
 
     /** @var array */
-    public $cancelBtnSeed = [Button::class, ['Cancel', 'class.small left floated basic blue' => true, 'icon' => 'left arrow']];
+    public $cancelButtonSeed = [Button::class, ['Cancel', 'class.small left floated basic blue' => true, 'icon' => 'left arrow']];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -54,16 +55,16 @@ class VpExecutor extends View implements JsExecutorInterface
 
     protected function initExecutor(): void
     {
-        $this->vp = VirtualPage::addTo($this);
         /** @var Button $b */
-        $b = $this->vp->add(Factory::factory($this->cancelBtnSeed));
+        $b = $this->add(Factory::factory($this->cancelButtonSeed));
         $b->link($this->getApp()->url());
-        View::addTo($this->vp, ['ui' => 'clearing divider']);
+        View::addTo($this, ['ui' => 'clearing divider']);
 
-        $this->header = Header::addTo($this->vp);
-        $this->stepList = View::addTo($this->vp)->addClass('ui horizontal bulleted link list');
+        $this->header = Header::addTo($this);
+        $this->stepList = View::addTo($this)->addClass('ui horizontal bulleted link list');
     }
 
+    #[\Override]
     public function getAction(): Model\UserAction
     {
         return $this->action;
@@ -73,25 +74,32 @@ class VpExecutor extends View implements JsExecutorInterface
      * Make sure modal id is unique.
      * Since User action can be added via callbacks, we need
      * to make sure that view id is properly set for loader and button
-     * js action to run properly.
+     * JS action to run properly.
      */
-    protected function afterActionInit(Model\UserAction $action): void
+    protected function afterActionInit(): void
     {
-        $this->loader = Loader::addTo($this->vp, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
+        $this->loader = Loader::addTo($this, ['shim' => $this, 'loadEvent' => false]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
+
+        if ($this->cb->canTerminate()) {
+            $this->js(true, $this->loader->jsLoad([
+                $this->name => $this->getApp()->getRequestQueryParam($this->name),
+            ]));
+        }
     }
 
+    #[\Override]
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
-        $this->afterActionInit($action);
+        $this->afterActionInit();
 
-        // get necessary step need prior to execute action.
-        $this->steps = $this->getSteps($action);
-        if ($this->steps) {
+        // get necessary step need prior to execute action
+        $this->steps = $this->getSteps();
+        if ($this->steps !== []) {
             $this->header->set($this->title ?? $action->getDescription());
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
-            $this->vp->add($this->createButtonBar($this->action)->setStyle(['text-align' => 'end']));
+            $this->add($this->createButtonBar()->setStyle(['text-align' => 'end']));
             $this->addStepList();
         }
 
@@ -100,22 +108,24 @@ class VpExecutor extends View implements JsExecutorInterface
         return $this;
     }
 
+    #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
     {
         $urlArgs['step'] = $this->step;
 
-        return new JsBlock([(new JsChain('atk.utils'))->redirect($this->vp->getUrl(), $urlArgs)]);
+        return new JsBlock([(new JsChain('atk.utils'))->redirect($this->getUrl(), $urlArgs)]);
     }
 
     /**
      * Perform model action by stepping through args - fields - preview.
      */
+    #[\Override]
     public function executeModelAction(): void
     {
         $this->action = $this->executeModelActionLoad($this->action);
 
-        $this->vp->set(function () {
-            $this->jsSetBtnState($this->loader, $this->step);
+        $this->set(function () {
+            $this->jsSetButtonsState($this->loader, $this->step);
             $this->jsSetListState($this->loader, $this->step);
             $this->runSteps();
         });
@@ -128,13 +138,13 @@ class VpExecutor extends View implements JsExecutorInterface
         }
 
         foreach ($this->steps as $step) {
-            View::addTo($this->stepList)->set($this->stepListItems[$step])->addClass('item')->setAttr(['data-list-item' => $step]);
+            // TODO replace `(View::class)` with `View` once https://github.com/phpstan/phpstan/issues/10469 is fixed
+            (View::class)::addTo($this->stepList)->set($this->stepListItems[$step])->addClass('item')->setAttr(['data-list-item' => $step]);
         }
     }
 
     protected function jsSetListState(View $view, string $currentStep): void
     {
-        $view->js(true, $this->stepList->js()->find('.item')->removeClass('active'));
         foreach ($this->steps as $step) {
             if ($step === $currentStep) {
                 $view->js(true, $this->stepList->js()->find('[data-list-item="' . $step . '"]')->addClass('active'));
@@ -143,10 +153,10 @@ class VpExecutor extends View implements JsExecutorInterface
     }
 
     /**
-     * Return proper js statement need after action execution.
+     * Return proper JS statement need after action execution.
      *
-     * @param mixed      $obj
-     * @param string|int $id
+     * @param mixed $obj
+     * @param mixed $id
      */
     protected function jsGetExecute($obj, $id): JsBlock
     {
@@ -158,7 +168,7 @@ class VpExecutor extends View implements JsExecutorInterface
             JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
                 ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
             $this->loader->jsClearStoreData(true),
-            (new JsChain('atk.utils'))->redirect($this->url()),
+            (new JsChain('atk.utils'))->redirect($this->getOwner()->url()),
         ]);
     }
 }

@@ -9,10 +9,11 @@ namespace Atk4\Ui;
  */
 class HelloWorld extends View
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
 
-        $this->set('Content', 'Hello World');
+        $this->set('Hello World');
     }
 }

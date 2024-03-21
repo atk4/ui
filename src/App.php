@@ -16,8 +16,10 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\Exception\ExitApplicationError;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -26,7 +28,10 @@ use Nyholm\Psr7Server\ServerRequestCreator;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UploadedFileInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation;
 
 class App
 {
@@ -35,8 +40,14 @@ class App
     use DynamicMethodTrait;
     use HookTrait;
 
+    private const UNHANDLEABLE_ERROR_LEVELS = \E_ERROR | \E_PARSE | \E_CORE_ERROR | \E_CORE_WARNING | \E_COMPILE_ERROR | \E_COMPILE_WARNING;
+    private const UNSUPPRESSIBLE_ERROR_LEVELS = \PHP_MAJOR_VERSION >= 8 ? (\E_ERROR | \E_PARSE | \E_CORE_ERROR | \E_COMPILE_ERROR | \E_USER_ERROR | \E_RECOVERABLE_ERROR) : 0;
+
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
     public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
+
+    private static ?string $shutdownReservedMemory; // @phpstan-ignore-line
+    private static ?int $errorReportingLevel = null;
 
     /** @var array|false Location where to load JS/CSS files */
     public $cdn = [
@@ -44,6 +55,7 @@ class App
         'jquery' => '/public/external/jquery/dist',
         'fomantic-ui' => '/public/external/fomantic-ui/dist',
         'flatpickr' => '/public/external/flatpickr/dist',
+        'highlight.js' => '/public/external/@highlightjs/cdn-assets',
         'chart.js' => '/public/external/chart.js/dist', // for atk4/chart
     ];
 
@@ -55,7 +67,7 @@ class App
      *
      * @TODO remove, no longer needed for CDN versioning as we bundle all resources
      */
-    public $version = '5.0-dev';
+    public $version = '5.1-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -69,22 +81,16 @@ class App
     /** @var bool Will replace an exception handler with our own, that will output errors nicely. */
     public $catchExceptions = true;
 
-    /** @var bool Will display error if callback wasn't triggered. */
-    public $catchRunawayCallbacks = true;
+    /** Will display error if callback wasn't triggered. */
+    protected bool $catchRunawayCallbacks = true;
 
-    /** @var bool Will always run application even if developer didn't explicitly executed run();. */
-    public $alwaysRun = true;
+    /** Will always run application even if developer didn't explicitly executed run();. */
+    protected bool $alwaysRun = true;
 
-    /**
-     * Will be set to true after app->run() is called, which may be done automatically
-     * on exit.
-     */
+    /** Will be set to true after app->run() is called, which may be done automatically on exit. */
     public bool $runCalled = false;
 
-    /**
-     * Will be set to true, when exit is called. Sometimes exit is intercepted by shutdown
-     * handler and we don't want to execute 'beforeExit' multiple times.
-     */
+    /** Will be set to true after exit is called. */
     private bool $exitCalled = false;
 
     public bool $isRendering = false;
@@ -108,24 +114,25 @@ class App
 
     private ResponseInterface $response;
 
-    /** @var array<string, View> Modal view that need to be rendered using json output. */
-    private $portals = [];
+    /**
+     * If filename path part is missing during building of URL, this page will be used.
+     * Set to empty string when when your webserver supports index.php autoindex or you use mod_rewrite with routing.
+     *
+     * @internal only for self::url() method
+     */
+    protected string $urlBuildingIndexPage = 'index';
 
     /**
-     * @var string used in method App::url to build the url
+     * Remove and re-add the extension of the file during parsing requests and building URL.
      *
-     * Used only in method App::url
-     * Remove and re-add the extension of the file during parsing requests and building urls
+     * @internal only for self::url() method
      */
-    protected $urlBuildingExt = '.php';
+    protected string $urlBuildingExt = '.php';
 
     /** @var bool Call exit in place of throw Exception when Application need to exit. */
     public $callExit = true;
 
-    /** @var string|null */
-    public $page;
-
-    /** @var array global sticky arguments */
+    /** @var array<string, bool> global sticky arguments */
     protected array $stickyGetArguments = [
         '__atk_json' => false,
         '__atk_tab' => false,
@@ -181,11 +188,16 @@ class App
             }
         }
 
-        // Set our exception handler
+        // set our exception handler
         if ($this->catchExceptions) {
             set_exception_handler(\Closure::fromCallable([$this, 'caughtException']));
-            set_error_handler(static function (int $severity, string $msg, string $file, int $line): bool {
-                if ((error_reporting() & ~(\PHP_MAJOR_VERSION >= 8 ? 4437 : 0)) === 0) {
+
+            $createErrorExceptionArgsFx = static function (int $severity, string $msg, string $file, int $line) {
+                return [$msg, 0, $severity, $file, $line];
+            };
+
+            set_error_handler(function (int $severity, string $msg, string $file, int $line) use ($createErrorExceptionArgsFx): bool {
+                if ((error_reporting() & ~self::UNSUPPRESSIBLE_ERROR_LEVELS) === 0) {
                     $isFirstFrame = true;
                     foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS, 10), 1) as $frame) {
                         // allow to suppress any warning outside Atk4
@@ -204,12 +216,24 @@ class App
                     }
                 }
 
-                throw new \ErrorException($msg, 0, $severity, $file, $line);
+                $this->throwOrCaughtExceptionIfInShutdown(new \ErrorException(...$createErrorExceptionArgsFx($severity, $msg, $file, $line)));
             });
+
+            register_shutdown_function(function () use ($createErrorExceptionArgsFx): void {
+                $error = error_get_last();
+                if ($error !== null && ($error['type'] & self::UNHANDLEABLE_ERROR_LEVELS) !== 0) {
+                    $this->throwOrCaughtExceptionIfInShutdown(new \ErrorException(...$createErrorExceptionArgsFx($error['type'], $error['message'], $error['file'], $error['line'])));
+                }
+            });
+            self::$errorReportingLevel = error_reporting();
+            error_reporting(self::$errorReportingLevel & ~self::UNHANDLEABLE_ERROR_LEVELS);
+
             http_response_code(500);
+            header('Content-Type: text/plain');
+            header('Cache-Control: no-store');
         }
 
-        // Always run app on shutdown
+        // always run app on shutdown
         if ($this->alwaysRun) {
             $this->setupAlwaysRun();
         }
@@ -218,28 +242,17 @@ class App
             $this->uiPersistence = new UiPersistence();
         }
 
+        if (!str_starts_with($this->getRequest()->getUri()->getPath(), '/')) {
+            throw (new Exception('Request URL path must always start with \'/\''))
+                ->addMoreInfo('url', (string) $this->getRequest()->getUri());
+        }
+
         if ($this->session === null) {
             $this->session = new App\SessionManager();
         }
 
-        // setting up default executor factory.
+        // setting up default executor factory
         $this->executorFactory = Factory::factory([ExecutorFactory::class]);
-    }
-
-    /**
-     * Register a portal view.
-     * Fomantic-ui Modal or atk Panel are teleported in HTML template
-     * within specific location. This will keep track
-     * of them when terminating app using json.
-     *
-     * @param Modal|Panel\Right $portal
-     */
-    public function registerPortals($portal): void
-    {
-        // TODO in https://github.com/atk4/ui/pull/1771 it has been discovered this method causes DOM code duplication,
-        // for some reasons, it seems even not needed, at least all Unit & Behat tests pass
-        // must be investigated
-        // $this->portals[$portal->name] = $portal;
     }
 
     public function setExecutorFactory(ExecutorFactory $factory): void
@@ -263,38 +276,49 @@ class App
         $this->templateDir[] = dirname(__DIR__) . '/template';
     }
 
-    protected function callBeforeExit(): void
+    /**
+     * @return ($calledFromShutdownHandler is true ? void : never)
+     */
+    public function callExit(bool $calledFromShutdownHandler = false): void
     {
         if (!$this->exitCalled) {
             $this->exitCalled = true;
             $this->hook(self::HOOK_BEFORE_EXIT);
+        }
+
+        if (!$calledFromShutdownHandler) {
+            if (!$this->callExit) {
+                // case process is not in shutdown mode
+                // App as already done everything
+                // App need to stop output
+                // set_handler to catch/trap any exception
+                set_exception_handler(static function (\Throwable $t): void {});
+
+                // raise exception to be trapped and stop execution
+                throw new ExitApplicationError();
+            }
+
+            exit;
         }
     }
 
     /**
      * @return never
      */
-    public function callExit(): void
+    private function throwOrCaughtExceptionIfInShutdown(\Throwable $exception): void
     {
-        $this->callBeforeExit();
+        if (\PHP_VERSION_ID < 80300 && self::$shutdownReservedMemory === null) {
+            // remove method once PHP 8.2 support is dropped
+            // https://github.com/php/php-src/issues/10695
+            $this->caughtException($exception);
 
-        if (!$this->callExit) {
-            // case process is not in shutdown mode
-            // App as already done everything
-            // App need to stop output
-            // set_handler to catch/trap any exception
-            set_exception_handler(static function (\Throwable $t): void {});
-            // raise exception to be trapped and stop execution
-            throw new ExitApplicationError();
+            exit(1);
         }
 
-        exit;
+        throw $exception;
     }
 
-    /**
-     * Catch exception.
-     */
-    public function caughtException(\Throwable $exception): void
+    protected function caughtException(\Throwable $exception): void
     {
         if ($exception instanceof LateOutputError) {
             $this->outputLateOutputError($exception);
@@ -313,11 +337,12 @@ class App
 
         $this->layout->template->dangerouslySetHtml('Content', $this->renderExceptionHtml($exception));
 
-        // remove header
         $this->layout->template->tryDel('Header');
 
-        if (($this->isJsUrlRequest() || strtolower($_SERVER['HTTP_X_REQUESTED_WITH'] ?? '') === 'xmlhttprequest')
-                && !isset($_GET['__atk_tab'])) {
+        $this->setResponseHeader('Cache-Control', 'no-store');
+
+        if (($this->isJsUrlRequest() || $this->getRequest()->getHeaderLine('X-Requested-With') === 'XMLHttpRequest')
+                && !$this->hasRequestQueryParam('__atk_tab')) {
             $this->outputResponseJson([
                 'success' => false,
                 'message' => $this->layout->getHtml(),
@@ -327,14 +352,103 @@ class App
             $this->run();
         }
 
-        // Process is already in shutdown/stop
-        // no need of call exit function
-        $this->callBeforeExit();
+        // process is already in shutdown because of uncaught exception
+        $this->callExit(true);
     }
 
     public function getRequest(): ServerRequestInterface
     {
         return $this->request;
+    }
+
+    /**
+     * Check if a specific GET parameter exists in the HTTP request.
+     */
+    public function hasRequestQueryParam(string $key): bool
+    {
+        return $this->tryGetRequestQueryParam($key) !== null;
+    }
+
+    /**
+     * Try to get the value of a specific GET parameter from the HTTP request.
+     */
+    public function tryGetRequestQueryParam(string $key): ?string
+    {
+        return $this->getRequest()->getQueryParams()[$key] ?? null;
+    }
+
+    /**
+     * Get the value of a specific GET parameter from the HTTP request.
+     */
+    public function getRequestQueryParam(string $key): string
+    {
+        $res = $this->tryGetRequestQueryParam($key);
+        if ($res === null) {
+            throw (new Exception('GET param does not exist'))
+                ->addMoreInfo('key', $key);
+        }
+
+        return $res;
+    }
+
+    /**
+     * Check if a specific POST parameter exists in the HTTP request.
+     */
+    public function hasRequestPostParam(string $key): bool
+    {
+        return $this->tryGetRequestPostParam($key) !== null;
+    }
+
+    /**
+     * Try to get the value of a specific POST parameter from the HTTP request.
+     */
+    public function tryGetRequestPostParam(string $key): ?string
+    {
+        return $this->getRequest()->getParsedBody()[$key] ?? null;
+    }
+
+    /**
+     * Get the value of a specific POST parameter from the HTTP request.
+     */
+    public function getRequestPostParam(string $key): string
+    {
+        $res = $this->tryGetRequestPostParam($key);
+        if ($res === null) {
+            throw (new Exception('POST param does not exist'))
+                ->addMoreInfo('key', $key);
+        }
+
+        return $res;
+    }
+
+    /**
+     * Check if a specific uploaded file exists in the HTTP request.
+     */
+    public function hasRequestUploadedFile(string $key): bool
+    {
+        return $this->tryGetRequestUploadedFile($key) !== null;
+    }
+
+    /**
+     * Try to get a specific uploaded file from the HTTP request.
+     */
+    public function tryGetRequestUploadedFile(string $key): ?UploadedFileInterface
+    {
+        return $this->getRequest()->getUploadedFiles()[$key] ?? null;
+    }
+
+    /**
+     * Get a specific uploaded file from the HTTP request.
+     */
+    public function getRequestUploadedFile(string $key): UploadedFileInterface
+    {
+        $res = $this->tryGetRequestUploadedFile($key);
+        if ($res === null) {
+            throw (new Exception('FILES upload does not exist'))
+                ->addMoreInfo('key', $key);
+        }
+
+        return $res;
     }
 
     public function getResponse(): ResponseInterface
@@ -380,7 +494,7 @@ class App
         if ($value === '') {
             $this->response = $this->response->withoutHeader($name);
         } else {
-            $name = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', function ($matches) {
+            $name = preg_replace_callback('~(?<![a-zA-Z])[a-z]~', static function ($matches) {
                 return strtoupper($matches[0]);
             }, strtolower($name));
 
@@ -392,7 +506,7 @@ class App
 
     /**
      * Will perform a preemptive output and terminate. Do not use this
-     * directly, instead call it form Callback, JsCallback or similar
+     * directly, instead call it from Callback, JsCallback or similar
      * other classes.
      *
      * @param string|StreamInterface|array $output Array type is supported only for JSON response
@@ -413,26 +527,10 @@ class App
             if (is_string($output)) {
                 $output = $this->decodeJson($output);
             }
-            $output['portals'] = $this->getRenderedPortals();
 
             $this->outputResponseJson($output);
-        } elseif (isset($_GET['__atk_tab']) && $type === 'text/html') {
-            // ugly hack for TABS
-            // because Fomantic-UI tab only deal with html and not JSON
-            // we need to hack output to include app modal.
-            $ids = [];
-            $remove_function = '';
-            foreach ($this->getRenderedPortals() as $key => $modal) {
-                // add modal rendering to output
-                $ids[] = '#' . $key;
-                $output['atkjs'] .= '; ' . $modal['js'];
-                $output['html'] .= $modal['html'];
-            }
-            if (count($ids) > 0) {
-                $remove_function = '$(\'.ui.dimmer.modals.page, .atk-side-panels\').find(\'' . implode(', ', $ids) . '\').remove();';
-            }
-
-            $output = $this->getTag('script', [], '$(function () {' . $remove_function . $output['atkjs'] . '});')
+        } elseif ($this->hasRequestQueryParam('__atk_tab') && $type === 'text/html') {
+            $output = $this->getTag('script', [], '$(function () {' . $output['atkjs'] . '});')
                 . $output['html'];
 
             $this->outputResponseHtml($output);
@@ -508,8 +606,7 @@ class App
      */
     public function initIncludes(): void
     {
-        /** @var bool */
-        $minified = true;
+        $minified = !file_exists(__DIR__ . '/../.git');
 
         // jQuery
         $this->requireJs($this->cdn['jquery'] . '/jquery' . ($minified ? '.min' : '') . '.js');
@@ -531,8 +628,8 @@ class App
         $this->requireJs($this->cdn['atk'] . '/js/atkjs-ui' . ($minified ? '.min' : '') . '.js');
         $this->requireCss($this->cdn['atk'] . '/css/agileui.min.css');
 
-        // Set js bundle dynamic loading path.
-        $this->html->template->tryDangerouslySetHtml(
+        // set JS bundle dynamic loading path
+        $this->html->template->dangerouslySetHtml(
             'InitJsBundle',
             (new JsExpression('window.__atkBundlePublicPath = [];', [$this->cdn['atk']]))->jsRender()
         );
@@ -580,12 +677,15 @@ class App
 
             $this->html->template->set('title', $this->title);
             $this->html->renderAll();
-            $this->html->template->dangerouslyAppendHtml('Head', $this->getTag('script', [], '$(function () {' . $this->html->getJs() . ';});'));
+            $this->html->template->dangerouslyAppendHtml(
+                'Head',
+                $this->getTag('script', [], (new Jquery(new JsFunction([], $this->html->getJs())))->jsRender() . ';')
+            );
             $this->isRendering = false;
 
-            if (isset($_GET[Callback::URL_QUERY_TARGET]) && $this->catchRunawayCallbacks) {
+            if ($this->hasRequestQueryParam(Callback::URL_QUERY_TARGET) && $this->catchRunawayCallbacks) {
                 throw (new Exception('Callback requested, but never reached. You may be missing some arguments in request URL.'))
-                    ->addMoreInfo('callback', $_GET[Callback::URL_QUERY_TARGET]);
+                    ->addMoreInfo('callback', $this->getRequestQueryParam(Callback::URL_QUERY_TARGET));
             }
 
             $output = $this->html->template->renderToHtml();
@@ -615,7 +715,6 @@ class App
     public function loadTemplate(string $filename)
     {
         $template = new $this->templateClass();
-        $template->setApp($this);
 
         if ((['.' => true, '/' => true, '\\' => true][substr($filename, 0, 1)] ?? false) || str_contains($filename, ':\\')) {
             return $template->loadFromFile($filename);
@@ -634,11 +733,6 @@ class App
             ->addMoreInfo('templateDir', $this->templateDir);
     }
 
-    protected function getRequestUrl(): string
-    {
-        return $this->request->getUri()->getPath();
-    }
-
     protected function createRequestPathFromLocalPath(string $localPath): string
     {
         // $localPath does not need realpath() as the path is expected to be built using __DIR__
@@ -649,16 +743,16 @@ class App
         if ($requestUrlPath === null) {
             if (\PHP_SAPI === 'cli') { // for phpunit
                 $requestUrlPath = '/';
-                $requestLocalPath = \Closure::bind(function () {
-                    return dirname((new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory());
+                $requestLocalPath = \Closure::bind(static function () {
+                    return (new ExceptionRenderer\Html(new \Exception()))->getVendorDirectory();
                 }, null, ExceptionRenderer\Html::class)();
             } else {
-                $request = \Symfony\Component\HttpFoundation\Request::createFromGlobals();
+                $request = new HttpFoundation\Request([], [], [], [], [], $_SERVER);
                 $requestUrlPath = $request->getBasePath();
                 $requestLocalPath = realpath($request->server->get('SCRIPT_FILENAME'));
             }
         }
-        $fs = new \Symfony\Component\Filesystem\Filesystem();
+        $fs = new Filesystem();
         $localPathRelative = $fs->makePathRelative($localPath, dirname($requestLocalPath));
         $res = '/' . $fs->makePathRelative($requestUrlPath . '/' . $localPathRelative, '/');
         // fix https://github.com/symfony/symfony/pull/40051
@@ -676,7 +770,7 @@ class App
     {
         $this->stickyGetArguments[$name] = !$isDeleting;
 
-        return $_GET[$name] ?? null;
+        return $this->tryGetRequestQueryParam($name);
     }
 
     /**
@@ -690,44 +784,39 @@ class App
     /**
      * Build a URL that application can use for loading HTML data.
      *
-     * @param array|string $page                URL as string or array with page name as first element and other GET arguments
-     * @param bool         $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
+     * @param string|array<0|string, string|int|false> $page                URL as string or array with page path as first element and other GET arguments
+     * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function url($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
+    public function url($page = [], array $extraRequestUrlArgs = []): string
     {
-        if ($useRequestUrl) {
-            $page = $_SERVER['REQUEST_URI'];
-        }
-
-        if ($this->page === null) {
-            $requestUrl = $this->getRequestUrl();
-            if (substr($requestUrl, -1, 1) === '/') {
-                $this->page = 'index';
-            } else {
-                $this->page = basename($requestUrl, $this->urlBuildingExt);
-            }
-        }
-
-        $pagePath = '';
         if (is_string($page)) {
-            $page_arr = explode('?', $page, 2);
-            $pagePath = $page_arr[0];
-            parse_str($page_arr[1] ?? '', $page);
+            $pageExploded = explode('?', $page, 2);
+            parse_str($pageExploded[1] ?? '', $page);
+            $pagePath = $pageExploded[0] !== '' ? $pageExploded[0] : null;
         } else {
-            $pagePath = $page[0] ?? $this->page; // use current page by default
+            $pagePath = $page[0] ?? null;
             unset($page[0]);
-            if ($pagePath) {
-                $pagePath .= $this->urlBuildingExt;
-            }
+        }
+
+        $request = $this->getRequest();
+
+        if ($pagePath === null) {
+            $pagePath = $request->getUri()->getPath();
+        }
+        if (str_ends_with($pagePath, '/')) {
+            $pagePath .= $this->urlBuildingIndexPage;
+        }
+        if (!str_ends_with($pagePath, '/') && !str_contains(basename($pagePath), '.')) {
+            $pagePath .= $this->urlBuildingExt;
         }
 
         $args = $extraRequestUrlArgs;
 
         // add sticky arguments
+        $requestQueryParams = $request->getQueryParams();
         foreach ($this->stickyGetArguments as $k => $v) {
-            if ($v && isset($_GET[$k])) {
-                $args[$k] = $_GET[$k];
+            if ($v && isset($requestQueryParams[$k])) {
+                $args[$k] = $requestQueryParams[$k];
             } else {
                 unset($args[$k]);
             }
@@ -735,34 +824,31 @@ class App
 
         // add arguments
         foreach ($page as $k => $v) {
-            if ($v === null || $v === false) {
+            if ($v === false) {
                 unset($args[$k]);
             } else {
                 $args[$k] = $v;
             }
         }
 
-        // put URL together
         $pageQuery = http_build_query($args, '', '&', \PHP_QUERY_RFC3986);
-        $url = $pagePath . ($pageQuery ? '?' . $pageQuery : '');
 
-        return $url;
+        return $pagePath . ($pageQuery !== '' ? '?' . $pageQuery : '');
     }
 
     /**
-     * Build a URL that application can use for js call-backs. Some framework integration will use a different routing
-     * mechanism for NON-HTML response.
+     * Build a URL that application can use for JS callbacks. Some framework integration will use a different routing
+     * mechanism for non-HTML response.
      *
-     * @param array|string $page                URL as string or array with page name as first element and other GET arguments
-     * @param bool         $useRequestUrl       Simply return $_SERVER['REQUEST_URI'] if needed
-     * @param array        $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
+     * @param string|array<0|string, string|int|false> $page                URL as string or array with page path as first element and other GET arguments
+     * @param array<string, string>                    $extraRequestUrlArgs additional URL arguments, deleting sticky can delete them
      */
-    public function jsUrl($page = [], $useRequestUrl = false, $extraRequestUrlArgs = []): string
+    public function jsUrl($page = [], array $extraRequestUrlArgs = []): string
     {
         // append to the end but allow override
         $extraRequestUrlArgs = array_merge($extraRequestUrlArgs, ['__atk_json' => 1], $extraRequestUrlArgs);
 
-        return $this->url($page, $useRequestUrl, $extraRequestUrlArgs);
+        return $this->url($page, $extraRequestUrlArgs);
     }
 
     /**
@@ -770,7 +856,7 @@ class App
      */
     public function isJsUrlRequest(): bool
     {
-        return isset($_GET['__atk_json']) && $_GET['__atk_json'] !== '0';
+        return $this->hasRequestQueryParam('__atk_json') && $this->getRequestQueryParam('__atk_json') !== '0';
     }
 
     /**
@@ -806,7 +892,7 @@ class App
     /**
      * A convenient wrapper for sending user to another page.
      *
-     * @param array|string $page Destination page
+     * @param string|array<0|string, string|int|false> $page
      */
     public function redirect($page, bool $permanent = false): void
     {
@@ -818,7 +904,7 @@ class App
     /**
      * Generate action for redirecting user to another page.
      *
-     * @param string|array $page Destination URL or page/arguments
+     * @param string|array<0|string, string|int|false> $page
      */
     public function jsRedirect($page, bool $newWindow = false): JsExpressionable
     {
@@ -892,12 +978,12 @@ class App
      * ])
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
-     * @param array<0|string, string|bool>                                                                              $attr
-     * @param string|array<int, array{0?: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
+     * @param array<0|string, string|bool>                                                                             $attr
+     * @param string|array<int, array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
      */
-    public function getTag(string $tag = null, array $attr = [], $value = null): string
+    public function getTag(string $tag, array $attr = [], $value = null): string
     {
-        $tag = strtolower($tag === null ? 'div' : $tag);
+        $tag = strtolower($tag);
         $tagOrig = $tag;
 
         $isOpening = true;
@@ -1003,7 +1089,7 @@ class App
     public function encodeJson($data, bool $forceObject = false): string
     {
         if (is_array($data) || is_object($data)) {
-            $checkNoObjectFx = function ($v) {
+            $checkNoObjectFx = static function ($v) {
                 if (is_object($v)) {
                     throw (new Exception('Object to JSON encode is not supported'))
                         ->addMoreInfo('value', $v);
@@ -1026,8 +1112,8 @@ class App
 
         // IMPORTANT: always convert large integers to string, otherwise numbers can be rounded by JS
         // replace large JSON integers only, do not replace anything in JSON/JS strings
-        $json = preg_replace_callback('~"(?:[^"\\\\]+|\\\\.)*+"\K|\'(?:[^\'\\\\]+|\\\\.)*+\'\K'
-            . '|(?:^|[{\[,:])[ \n\r\t]*\K-?[1-9]\d{15,}(?=[ \n\r\t]*(?:$|[}\],:]))~s', function ($matches) {
+        $json = preg_replace_callback('~"(?:[^"\\\]+|\\\.)*+"\K|\'(?:[^\'\\\]+|\\\.)*+\'\K'
+            . '|(?:^|[{\[,:])[ \n\r\t]*\K-?[1-9]\d{15,}(?=[ \n\r\t]*(?:$|[}\],:]))~s', static function ($matches) {
                 if ($matches[0] === '' || abs((int) $matches[0]) < (2 ** 53)) {
                     return $matches[0];
                 }
@@ -1046,7 +1132,7 @@ class App
      *   $app->initLayout([Layout\Centered::class]);
      *   $app->layout->template->dangerouslySetHtml('Content', $e->getHtml());
      *   $app->run();
-     *   $app->callBeforeExit();
+     *   $app->callExit();
      */
     public function renderExceptionHtml(\Throwable $exception): string
     {
@@ -1055,34 +1141,32 @@ class App
 
     protected function setupAlwaysRun(): void
     {
-        register_shutdown_function(
-            function () {
-                if (!$this->runCalled) {
-                    try {
-                        $this->run();
-                    } catch (ExitApplicationError $e) {
-                        // let the process go and stop on ->callExit below
-                    } catch (\Throwable $e) {
-                        // set_exception_handler does not work in shutdown
-                        // https://github.com/php/php-src/issues/10695
-                        $this->caughtException($e);
-                    }
-
-                    // call with true to trigger beforeExit event
-                    $this->callBeforeExit();
+        register_shutdown_function(function () {
+            if (!$this->runCalled) {
+                try {
+                    $this->run();
+                    $this->callExit(true);
+                } catch (ExitApplicationError $e) {
+                    // continue shutdown
+                } catch (\Throwable $e) {
+                    // set_exception_handler does not work in shutdown
+                    // https://github.com/php/php-src/issues/10695
+                    $this->caughtException($e);
                 }
             }
-        );
+        });
     }
-
-    // RESPONSES
 
     /**
      * @internal should be called only from self::outputResponse() and self::outputLateOutputError()
      */
     protected function emitResponse(): void
     {
-        http_response_code($this->response->getStatusCode());
+        if (http_response_code() !== 500 || $this->response->getStatusCode() !== 500 || $this->response->getHeaders() !== []) { // avoid throwing late error in loop
+            http_response_code($this->response->getStatusCode());
+            header_remove('Content-Type');
+            header_remove('Cache-Control');
+        }
 
         foreach ($this->response->getHeaders() as $name => $values) {
             foreach ($values as $value) {
@@ -1105,9 +1189,6 @@ class App
         }
     }
 
-    /**
-     * Output Response to the client.
-     */
     protected function outputResponse(string $data): void
     {
         foreach (ob_get_status(true) as $status) {
@@ -1172,8 +1253,6 @@ class App
     }
 
     /**
-     * Output JSON response to the client.
-     *
      * @param string|array $data
      */
     private function outputResponseJson($data): void
@@ -1185,21 +1264,17 @@ class App
         $this->setResponseHeader('Content-Type', 'application/json');
         $this->outputResponse($data);
     }
-
-    /**
-     * Generated html and js for portal view registered to app.
-     */
-    private function getRenderedPortals(): array
-    {
-        // prevent looping (calling App::terminateJson() recursively) if JsReload is used in Modal
-        unset($_GET['__atk_reload']);
-
-        $portals = [];
-        foreach ($this->portals as $view) {
-            $portals[$view->name]['html'] = $view->getHtml();
-            $portals[$view->name]['js'] = $view->getJsRenderActions();
-        }
-
-        return $portals;
-    }
 }
+
+\Closure::bind(static function (): void {
+    // reserve 1 MB of memory for shutdown
+    App::$shutdownReservedMemory = str_repeat(str_repeat('shutdownReserved', 256), 256);
+
+    register_shutdown_function(static function (): void {
+        App::$shutdownReservedMemory = null;
+
+        if (App::$errorReportingLevel !== null) {
+            error_reporting(error_reporting() | (App::$errorReportingLevel & App::UNHANDLEABLE_ERROR_LEVELS));
+        }
+    });
+}, null, App::class)();

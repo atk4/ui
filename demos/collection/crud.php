@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\App;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Form;
@@ -15,20 +16,20 @@ use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\ModalExecutor;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $model = new Country($app->db);
 
 $crud = Crud::addTo($app, ['ipp' => 10]);
 
-// callback for model action add form.
-$crud->onFormAdd(function (Form $form, ModalExecutor $ex) use ($model) {
+// callback for model action add form
+$crud->onFormAdd(static function (Form $form, ModalExecutor $ex) use ($model) {
     $form->js(true, $form->getControl($model->fieldName()->name)->jsInput()->val('Entering value via javascript'));
 });
 
-// callback for model action edit form.
-$crud->onFormEdit(function (Form $form) use ($model) {
+// callback for model action edit form
+$crud->onFormEdit(static function (Form $form) use ($model) {
     $form->js(true, $form->getControl($model->fieldName()->name)->jsInput()->attr('readonly', true));
 });
 
@@ -51,10 +52,10 @@ $crud = Crud::addTo($column, [
     'menu' => ['class' => ['green inverted']],
     'table' => ['class' => ['red inverted']],
 ]);
-// Condition on the model can be applied on a model
+// condition on the model can be applied on a model
 $model = new Country($app->db);
 $model->addCondition($model->fieldName()->numcode, '<', 200);
-$model->onHook(Model::HOOK_VALIDATE, function (Country $model, ?string $intent) {
+$model->onHook(Model::HOOK_VALIDATE, static function (Country $model, ?string $intent) {
     $err = [];
     if ($model->numcode >= 200) {
         $err[$model->fieldName()->numcode] = 'Should be less than 200';
@@ -64,8 +65,8 @@ $model->onHook(Model::HOOK_VALIDATE, function (Country $model, ?string $intent) 
 });
 $crud->setModel($model);
 
-// Because Crud inherits Grid, you can also define custom actions
-$crud->addModalAction(['icon' => 'cogs'], 'Details', function (View $p, $id) use ($crud) {
+// because Crud inherits Grid, you can also define custom actions
+$crud->addModalAction(['icon' => 'cogs'], 'Details', static function (View $p, $id) use ($crud) {
     $model = Country::assertInstanceOf($crud->model);
     Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $id . ')']);
 });
@@ -74,6 +75,7 @@ $column = $columns->addColumn();
 Header::addTo($column, ['Customizations']);
 
 $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() extends ModalExecutor {
+    #[\Override]
     public function addFormTo(View $view): Form
     {
         $columns = Columns::addTo($view);
@@ -82,7 +84,7 @@ $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() exten
 
         $result = parent::addFormTo($left);
 
-        if ($this->action->getEntity()->get(File::hinting()->fieldName()->is_folder)) {
+        if (File::assertInstanceOf($this->action->getEntity())->is_folder) {
             Grid::addTo($right, ['menu' => false, 'ipp' => 5])
                 ->setModel(File::assertInstanceOf($this->getAction()->getModel())->SubFolder);
         } else {
@@ -102,6 +104,6 @@ $crud = Crud::addTo($column, [
 
 $crud->menu->addItem(['Rescan', 'icon' => 'recycle']);
 
-// Condition on the model can be applied after setting the model
+// condition on the model can be applied after setting the model
 $crud->setModel($file);
 $file->addCondition($file->fieldName()->parent_folder_id, null);

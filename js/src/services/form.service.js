@@ -25,7 +25,6 @@ class FormService {
             {
                 rules: $.extend(true, {}, $.fn.form.settings.rules, {
                     rules: {
-                        notEmpty: $.fn.form.settings.rules.empty,
                         isVisible: this.isVisible,
                         isEqual: this.isEqual,
                     },
@@ -81,29 +80,26 @@ class FormService {
     /**
      * Validate a field using our own or Fomantic-UI validation rule function.
      *
-     * @param   {$}             form      Form containing the field.
+     * @param   {$}             $form     Form containing the field.
      * @param   {string}        fieldName Name of field
      * @param   {string|object} rule      Rule to apply test.
+     *
      * @returns {*|false}
      */
-    validateField(form, fieldName, rule) {
+    validateField($form, fieldName, rule) {
         rule = this.normalizeRule(rule);
         const ruleFunction = this.getRuleFunction(this.getRuleName(rule));
-        if (ruleFunction) {
-            const $field = this.getField(form, fieldName);
-            if (!$field) {
-                console.error('You are validating a field that does not exist: ' + fieldName);
+        if (!ruleFunction) {
+            console.error('Rule does not exist: ' + this.getRuleName(rule));
 
-                return false;
-            }
-            const value = this.getFieldValue($field);
-            const ancillary = this.getAncillaryValue(rule);
-
-            return ruleFunction.call($field, value, ancillary);
+            return false;
         }
-        console.error('Rule does not exist: ' + this.getRuleName(rule));
 
-        return false;
+        const $field = this.getField($form, fieldName);
+        const value = this.getFieldValue($field);
+        const ancillary = this.getAncillaryValue(rule);
+
+        return ruleFunction.call($field, value, ancillary);
     }
 
     normalizeRule(rule) {
@@ -121,7 +117,7 @@ class FormService {
     getContainer($field, selector) {
         const $container = $field.closest(selector);
         if ($container.length > 1) {
-            // radio button.
+            // radio button
             return this.getContainer($container.parent(), selector);
         } if ($container.length === 0) {
             return null;
@@ -130,18 +126,8 @@ class FormService {
         return $container;
     }
 
-    getField(form, identifier) {
-        if (form.find('#' + identifier).length > 0) {
-            return form.find('#' + identifier);
-        }
-        if (form.find('[name="' + identifier + '"]').length > 0) {
-            return form.find('[name="' + identifier + '"]');
-        }
-        if (form.find('[name="' + identifier + '[]"]').length > 0) {
-            return form.find('[name="' + identifier + '[]"]');
-        }
-
-        return false;
+    getField($form, identifier) {
+        return $form.form('get field', identifier);
     }
 
     getFieldValue($field) {
@@ -157,7 +143,7 @@ class FormService {
     }
 
     getAncillaryValue(rule) {
-        // must have a rule.value property and must be a bracketed rule.
+        // must have a rule.value property and must be a bracketed rule
         if (!rule.value && !this.isBracketedRule(rule)) {
             return false;
         }

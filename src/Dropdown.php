@@ -21,6 +21,7 @@ class Dropdown extends Lister
     /** @var array As per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -44,18 +45,20 @@ class Dropdown extends Lister
      */
     public function onChange(\Closure $fx): void
     {
-        // setting dropdown option for using callback url.
+        // setting dropdown option for using callback URL
         $this->dropdownOptions['onChange'] = new JsFunction(['value', 'name', 't'], [
             new JsExpression(
                 'if ($(this).data(\'currentValue\') != value) { $(this).atkAjaxec({ url: [url], urlOptions: { item: value } }); $(this).data(\'currentValue\', value); }',
                 ['url' => $this->cb->getJsUrl()]
-            ), ]);
+            ),
+        ]);
 
-        $this->cb->set(function (Jquery $j, string $value) use ($fx) {
+        $this->cb->set(static function (Jquery $j, string $value) use ($fx) {
             return $fx($value);
         }, ['item' => 'value']);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->js(true)->dropdown($this->dropdownOptions);

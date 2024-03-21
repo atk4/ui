@@ -22,20 +22,20 @@ class JsTest extends TestCase
 
     public function testBasicExpressions(): void
     {
-        static::assertSame('2 + 2', (new JsExpression('2 + 2'))->jsRender());
-        static::assertSame('3 + 4', (new JsExpression('[] + []', [3, 4]))->jsRender());
+        self::assertSame('2 + 2', (new JsExpression('2 + 2'))->jsRender());
+        self::assertSame('3 + 4', (new JsExpression('[] + []', [3, 4]))->jsRender());
     }
 
     public function testStrings(): void
     {
-        static::assertSame('\'\\\'\', \'"\', \'\n\'', (new JsExpression('[], [], []', ['\'', '"', "\n"]))->jsRender());
-        static::assertSame('\'\\\'a"b\\\\\\\'c\\\\" \\\'"\'', (new JsExpression('[]', ['\'a"b\\\'c\\" \'"']))->jsRender());
+        self::assertSame('\'\\\'\', \'"\', \'\n\'', (new JsExpression('[], [], []', ['\'', '"', "\n"]))->jsRender());
+        self::assertSame('\'\\\'a"b\\\\\\\'c\\\" \\\'"\'', (new JsExpression('[]', ['\'a"b\\\'c\" \'"']))->jsRender());
     }
 
     public function testNumbers(): void
     {
         if (\PHP_INT_SIZE === 4) {
-            static::markTestIncomplete('Test is not supported on 32bit php');
+            self::markTestIncomplete('Test is not supported on 32bit php');
         }
 
         $longStrBase = '"a":10,"b":9007199254740992,x="\"c\":10,\"d\":9007199254740992,"';
@@ -56,9 +56,9 @@ class JsTest extends TestCase
         ] as [$in, $expected]) {
             $jsRendered = (new JsExpression('[]', [$in]))->jsRender();
             if (substr($jsRendered, 0, 1) === '\'') {
-                $jsRendered = '"' . str_replace('"', '\\"', substr($jsRendered, 1, -1)) . '"';
+                $jsRendered = '"' . str_replace('"', '\"', substr($jsRendered, 1, -1)) . '"';
             }
-            static::assertSame($expected, $jsRendered);
+            self::assertSame($expected, $jsRendered);
 
             // test JSON renderer in App too
             // test extensively because of complex custom regex impl
@@ -70,11 +70,11 @@ class JsTest extends TestCase
                 [[$expectedRaw], [$in]], // as value in JSON array
                 [['x' => $expectedRaw], ['x' => $in]], // as value in JSON object
             ] as [$expectedData, $inData]) {
-                static::assertSame(json_encode($expectedData), preg_replace('~\s+~', '', $app->encodeJson($inData)));
+                self::assertSame(json_encode($expectedData), preg_replace('~\s+~', '', $app->encodeJson($inData)));
 
                 // do not change any numbers to string in JSON/JS strings
                 $inDataJson = json_encode($inData);
-                static::assertSame(json_encode(['x' => $inDataJson]), preg_replace('~\s+~', '', $app->encodeJson(['x' => $inDataJson])));
+                self::assertSame(json_encode(['x' => $inDataJson]), preg_replace('~\s+~', '', $app->encodeJson(['x' => $inDataJson])));
             }
         }
     }
@@ -99,7 +99,7 @@ class JsTest extends TestCase
 
     public function testNestedExpressions(): void
     {
-        static::assertSame(
+        self::assertSame(
             '10-(2 + 3)',
             (new JsExpression(
                 '[]-[]',
@@ -112,28 +112,28 @@ class JsTest extends TestCase
     {
         $c = new JsChain('$myInput');
         $c->getTextInRange('start', 'end'); // @phpstan-ignore-line
-        static::assertSame('$myInput.getTextInRange(\'start\', \'end\')', $c->jsRender());
+        self::assertSame('$myInput.getTextInRange(\'start\', \'end\')', $c->jsRender());
     }
 
     public function testChain2(): void
     {
         $c = new JsChain('$myInput');
         $c->getTextInRange(new JsExpression('getStart()'), 'end'); // @phpstan-ignore-line
-        static::assertSame('$myInput.getTextInRange(getStart(), \'end\')', $c->jsRender());
+        self::assertSame('$myInput.getTextInRange(getStart(), \'end\')', $c->jsRender());
     }
 
     public function testChainNameStartingWithDigit(): void
     {
         $c = new JsChain('$myInput');
         $c->{'1x'}(2);
-        static::assertSame('$myInput[\'1x\'](2)', $c->jsRender());
+        self::assertSame('$myInput[\'1x\'](2)', $c->jsRender());
     }
 
     public function testChainNameWithDot(): void
     {
         $c = new JsChain('$myInput');
         $c->{'x.y'}(2);
-        static::assertSame('$myInput[\'x.y\'](2)', $c->jsRender());
+        self::assertSame('$myInput[\'x.y\'](2)', $c->jsRender());
     }
 
     public function testJquery(): void
@@ -141,7 +141,7 @@ class JsTest extends TestCase
         $c = new Jquery('.mytag');
         $c->find('li')->first()->hide();
 
-        static::assertSame('$(\'.mytag\').find(\'li\').first().hide()', $c->jsRender());
+        self::assertSame('$(\'.mytag\').find(\'li\').first().hide()', $c->jsRender());
     }
 
     public function testArgs(): void
@@ -149,7 +149,7 @@ class JsTest extends TestCase
         $c = new Jquery('.mytag');
         $c->val((new Jquery('.othertag'))->val());
 
-        static::assertSame('$(\'.mytag\').val($(\'.othertag\').val())', $c->jsRender());
+        self::assertSame('$(\'.mytag\').val($(\'.othertag\').val())', $c->jsRender());
     }
 
     public function testComplex1(): void
@@ -163,11 +163,20 @@ class JsTest extends TestCase
             $b1->height($b2->height()),
         ]));
 
-        static::assertSame(<<<'EOF'
+        self::assertSame(<<<'EOF'
             $(document).first(function () {
                 $('.box1').height($('.box2').height());
             })
             EOF, $fx->jsRender());
+    }
+
+    public function testFunctionEmpty(): void
+    {
+        $js = new JsFunction([], []);
+        self::assertSame('function () {}', $js->jsRender());
+
+        $js = new JsFunction([], new JsBlock());
+        self::assertSame('function () {}', $js->jsRender());
     }
 
     public function testTagNotDefinedRenderException(): void
@@ -197,8 +206,8 @@ class JsTest extends TestCase
 
         $jsBlock = new JsBlock($statements);
 
-        static::assertSame($statements, $jsBlock->getStatements());
-        static::assertSame(<<<'EOF'
+        self::assertSame($statements, $jsBlock->getStatements());
+        self::assertSame(<<<'EOF'
             a();
             b('foo');
             EOF, $jsBlock->jsRender());
@@ -213,6 +222,7 @@ class JsTest extends TestCase
             new JsExpression(''),
             new JsBlock(),
             new class() extends JsBlock {
+                #[\Override]
                 public function jsRender(): string
                 {
                     return 'if (foo) { a(); }';
@@ -220,12 +230,23 @@ class JsTest extends TestCase
             },
         ]);
 
-        static::assertSame(<<<'EOF'
+        self::assertSame(<<<'EOF'
             a();
             b();
             let fx = () => { a(); b(); };
             if (foo) { a(); }
             EOF, $jsBlock->jsRender());
+    }
+
+    public function testBlockInExpression(): void
+    {
+        $jsExpression = new JsExpression('a()');
+        $jsBlock = new JsBlock([$jsExpression]);
+        $jsExpressionWithJsBlock = new JsExpression('[]', [$jsBlock]);
+
+        self::assertSame('(a())', (new JsExpression('[]', [$jsExpression]))->jsRender());
+        self::assertSame('a();', (new JsExpression('[]', [$jsBlock]))->jsRender());
+        self::assertSame('a();', (new JsExpression('[]', [$jsExpressionWithJsBlock]))->jsRender());
     }
 
     public function testBlockInvalidStringTypeException(): void

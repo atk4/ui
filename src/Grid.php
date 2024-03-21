@@ -52,7 +52,7 @@ class Grid extends View
     public $actionButtons;
 
     /**
-     * Calling addAction will add a new column inside $table with dropdown menu,
+     * Calling addActionMenuItem will add a new column inside $table with dropdown menu,
      * and will be re-used for next addActionMenuItem().
      *
      * @var Table\Column|null
@@ -86,12 +86,13 @@ class Grid extends View
 
     public $defaultTemplate = 'grid.html';
 
-    /** @var array Defines which Table Decorator to use for ActionButtons. */
-    protected $actionButtonsDecorator = [Table\Column\ActionButtons::class];
+    /** @var array Table\Column seed to use for ActionButtons. */
+    protected $actionButtonsSeed = [Table\Column\ActionButtons::class];
 
-    /** @var array Defines which Table Decorator to use for ActionMenu. */
-    protected $actionMenuDecorator = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
+    /** @var array Table\Column seed to use for ActionMenu. */
+    protected $actionMenuSeed = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -141,31 +142,11 @@ class Grid extends View
     }
 
     /**
-     * Set Table\Column\Actions seed.
-     *
-     * @param array $seed
-     */
-    public function setActionDecorator($seed): void
-    {
-        $this->actionButtonsDecorator = $seed;
-    }
-
-    /**
-     * Set Table\Column\ActionMenu seed.
-     *
-     * @param array $seed
-     */
-    public function setActionMenuDecorator($seed): void
-    {
-        $this->actionMenuDecorator = $seed;
-    }
-
-    /**
      * Add new column to grid. If column with this name already exists,
      * an. Simply calls Table::addColumn(), so check that method out.
      *
-     * @param string|null        $name            Data model field name
-     * @param array|Table\Column $columnDecorator
+     * @param string|null                             $name            Data model field name
+     * @param array|Table\Column                      $columnDecorator
      * @param ($name is null ? array{} : array|Field) $field
      *
      * @return Table\Column
@@ -188,7 +169,7 @@ class Grid extends View
     }
 
     /**
-     * Add a new buton to the Grid Menu with a given text.
+     * Add a new button to the Grid Menu with a given text.
      *
      * @param string $label
      */
@@ -206,8 +187,8 @@ class Grid extends View
      *
      * If an array is passed, it will also add an ItemPerPageSelector to paginator.
      *
-     * @param int|array $ipp
-     * @param string    $label
+     * @param int|list<int> $ipp
+     * @param string        $label
      */
     public function setIpp($ipp, $label = 'Items per page:'): void
     {
@@ -221,12 +202,12 @@ class Grid extends View
     /**
      * Add ItemsPerPageSelector View in grid menu or paginator in order to dynamically setup number of item per page.
      *
-     * @param array  $items an array of item's per page value
-     * @param string $label the memu item label
+     * @param list<int> $items an array of item's per page value
+     * @param string    $label the memu item label
      *
      * @return $this
      */
-    public function addItemsPerPageSelector($items = [10, 25, 50, 100], $label = 'Items per page:')
+    public function addItemsPerPageSelector(array $items = [10, 100, 1000], $label = 'Items per page:')
     {
         $ipp = (int) $this->container->stickyGet('ipp');
         if ($ipp) {
@@ -252,7 +233,7 @@ class Grid extends View
             }
             $this->applySort();
 
-            // return the view to reload.
+            // return the view to reload
             return $this->container;
         });
 
@@ -263,9 +244,9 @@ class Grid extends View
      * Add dynamic scrolling paginator.
      *
      * @param int    $ipp          number of item per page to start with
-     * @param array  $options      an array with js Scroll plugin options
-     * @param View   $container    The container holding the lister for scrolling purpose. Default to view owner.
-     * @param string $scrollRegion A specific template region to render. Render output is append to container html element.
+     * @param array  $options      an array with JS Scroll plugin options
+     * @param View   $container    the container holding the lister for scrolling purpose
+     * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
      */
@@ -273,7 +254,7 @@ class Grid extends View
     {
         if ($this->paginator) {
             $this->paginator->destroy();
-            // prevent action(count) to be output twice.
+            // prevent action(count) to be output twice
             $this->paginator = null;
         }
 
@@ -294,9 +275,9 @@ class Grid extends View
      *
      * @param int    $ipp             number of item per page to start with
      * @param int    $containerHeight number of pixel the table container should be
-     * @param array  $options         an array with js Scroll plugin options
-     * @param View   $container       The container holding the lister for scrolling purpose. Default to view owner.
-     * @param string $scrollRegion    A specific template region to render. Render output is append to container html element.
+     * @param array  $options         an array with JS Scroll plugin options
+     * @param View   $container       the container holding the lister for scrolling purpose
+     * @param string $scrollRegion    A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
      */
@@ -307,14 +288,14 @@ class Grid extends View
             'hasFixTableHeader' => true,
             'tableContainerHeight' => $containerHeight,
         ]);
-        // adding a state context to js scroll plugin.
+        // adding a state context to JS scroll plugin
         $options = array_merge(['stateContext' => $this->container], $options);
 
         return $this->addJsPaginator($ipp, $options, $container, $scrollRegion);
     }
 
     /**
-     * Add Search input field using js action.
+     * Add Search input field using JS action.
      * By default, will query server when using Enter key on input search field.
      * You can change it to query server on each keystroke by passing $autoQuery true,.
      *
@@ -323,7 +304,7 @@ class Grid extends View
      */
     public function addQuickSearch($fields = [], $hasAutoQuery = false): void
     {
-        if (!$this->model) {
+        if ($this->model === null) {
             throw new Exception('Call setModel() before addQuickSearch()');
         }
 
@@ -354,7 +335,8 @@ class Grid extends View
         $this->quickSearch->initValue = $q;
     }
 
-    public function jsReload($args = [], $afterSuccess = null, $apiConfig = []): JsExpressionable
+    #[\Override]
+    public function jsReload($args = [], $afterSuccess = null, array $apiConfig = []): JsExpressionable
     {
         return new JsReload($this->container, $args, $afterSuccess, $apiConfig);
     }
@@ -365,7 +347,7 @@ class Grid extends View
      *
      * @param string|array|View                     $button     Label text, object or seed for the Button
      * @param JsExpressionable|JsCallbackSetClosure $action
-     * @param bool                                  $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool    $isDisabled
      *
      * @return View
      */
@@ -379,37 +361,45 @@ class Grid extends View
      *
      * @return View
      */
-    public function addExecutorButton(UserAction\ExecutorInterface $executor, Button $button = null)
+    public function addExecutorButton(ExecutorInterface $executor, ?Button $button = null)
     {
-        $btn = $button ? $this->add($button) : $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_BUTTON);
+        if ($button !== null) {
+            $this->add($button);
+        } else {
+            $button = $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_BUTTON);
+        }
+
         $confirmation = $executor->getAction()->getConfirmation();
         if (!$confirmation) {
             $confirmation = '';
         }
-        $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+        $disabled = is_bool($executor->getAction()->enabled)
+            ? !$executor->getAction()->enabled
+            : $executor->getAction()->enabled;
 
-        return $this->getActionButtons()->addButton($btn, $executor, $confirmation, $disabled);
+        return $this->getActionButtons()->addButton($button, $executor, $confirmation, $disabled);
     }
 
     private function getActionButtons(): Table\Column\ActionButtons
     {
         if ($this->actionButtons === null) {
-            $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsDecorator);
+            $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsSeed);
         }
 
         return $this->actionButtons; // @phpstan-ignore-line
     }
 
     /**
-     * Similar to addAction. Will add Button that when click will display
+     * Similar to addActionButton. Will add Button that when click will display
      * a Dropdown menu.
      *
      * @param View|string                           $view
      * @param JsExpressionable|JsCallbackSetClosure $action
+     * @param bool|\Closure<T of Model>(T): bool    $isDisabled
      *
      * @return View
      */
-    public function addActionMenuItem($view, $action = null, string $confirmMsg = '', bool $isDisabled = false)
+    public function addActionMenuItem($view, $action = null, string $confirmMsg = '', $isDisabled = false)
     {
         return $this->getActionMenu()->addActionMenuItem($view, $action, $confirmMsg, $isDisabled);
     }
@@ -420,12 +410,15 @@ class Grid extends View
     public function addExecutorMenuItem(ExecutorInterface $executor)
     {
         $item = $this->getExecutorFactory()->createTrigger($executor->getAction(), ExecutorFactory::TABLE_MENU_ITEM);
-        // ConfirmationExecutor take care of showing the user confirmation, thus make it empty.
+
+        // ConfirmationExecutor take care of showing the user confirmation, thus make it empty
         $confirmation = !$executor instanceof ConfirmationExecutor ? $executor->getAction()->getConfirmation() : '';
         if (!$confirmation) {
             $confirmation = '';
         }
-        $disabled = is_bool($executor->getAction()->enabled) ? !$executor->getAction()->enabled : $executor->getAction()->enabled;
+        $disabled = is_bool($executor->getAction()->enabled)
+            ? !$executor->getAction()->enabled
+            : $executor->getAction()->enabled;
 
         return $this->getActionMenu()->addActionMenuItem($item, $executor, $confirmation, $disabled);
     }
@@ -436,27 +429,10 @@ class Grid extends View
     private function getActionMenu()
     {
         if (!$this->actionMenu) {
-            $this->actionMenu = $this->table->addColumn(null, $this->actionMenuDecorator);
+            $this->actionMenu = $this->table->addColumn(null, $this->actionMenuSeed);
         }
 
         return $this->actionMenu; // @phpstan-ignore-line
-    }
-
-    /**
-     * Add action menu items using Model.
-     * You may specify the scope of actions to be added.
-     *
-     * @param string|null $appliesTo the scope of model action
-     */
-    public function addActionMenuFromModel(string $appliesTo = null): void
-    {
-        if (!$this->model) {
-            throw new Exception('Model not set, set it prior to add item');
-        }
-
-        foreach ($this->model->getUserActions($appliesTo) as $action) {
-            $this->addActionMenuItem($action);
-        }
     }
 
     /**
@@ -481,26 +457,21 @@ class Grid extends View
     /**
      * Add a dropdown menu to header column.
      *
-     * @param string $columnName the name of column where to add dropdown
-     * @param array  $items      the menu items to add
-     * @param \Closure(string): (JsExpressionable|View|string|void) $fx the callback function to execute when an item is selected
-     * @param string $icon   the icon
-     * @param string $menuId the menu id return by callback
+     * @param string                                                $columnName the name of column where to add dropdown
+     * @param array                                                 $items      the menu items to add
+     * @param \Closure(string): (JsExpressionable|View|string|void) $fx         the callback function to execute when an item is selected
+     * @param string                                                $icon       the icon
+     * @param string                                                $menuId     the menu ID return by callback
      */
     public function addDropdown(string $columnName, $items, \Closure $fx, $icon = 'caret square down', $menuId = null): void
     {
-        if (!isset($this->table->columns[$columnName])) {
-            throw (new Exception('Column does not exist'))
-                ->addMoreInfo('name', $columnName);
-        }
-
         $column = $this->table->columns[$columnName];
 
         if (!$menuId) {
             $menuId = $columnName;
         }
 
-        $column->addDropdown($items, function (string $item) use ($fx) {
+        $column->addDropdown($items, static function (string $item) use ($fx) {
             return $fx($item);
         }, $icon, $menuId);
     }
@@ -516,36 +487,93 @@ class Grid extends View
      */
     public function addPopup($columnName, $popup = null, $icon = 'caret square down')
     {
-        if (!isset($this->table->columns[$columnName])) {
-            throw new Exception('The column where you want to add popup does not exist: ' . $columnName);
-        }
         $column = $this->table->columns[$columnName];
 
         return $column->addPopup($popup, $icon);
     }
 
     /**
-     * Similar to addAction but when button is clicked, modal is displayed
-     * with the $title and $callback is executed through VirtualPage.
+     * Similar to addActionButton but when button is clicked, modal is displayed
+     * with the $title and $callback is executed.
      *
-     * @param string|array|View                 $button
-     * @param string                            $title
-     * @param \Closure(View, string|null): void $callback
-     * @param array                             $args     extra url argument for callback
+     * @param string|array|View                  $button
+     * @param string                             $title
+     * @param \Closure(View, mixed): void        $callback
+     * @param array                              $args       extra URL argument for callback
+     * @param bool|\Closure<T of Model>(T): bool $isDisabled
      *
      * @return View
      */
-    public function addModalAction($button, $title, \Closure $callback, $args = [])
+    public function addModalAction($button, $title, \Closure $callback, $args = [], $isDisabled = false)
     {
-        return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args);
+        return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args, $isDisabled);
     }
 
     /**
-     * Get sortBy value from url parameter.
+     * @return list<mixed>
+     */
+    private function explodeSelectionValue(string $value): array
+    {
+        $res = [];
+        foreach ($value === '' ? [] : explode(',', $value) as $v) {
+            $res[] = $this->getApp()->uiPersistence->typecastAttributeLoadField($this->model->getIdField(), $v);
+        }
+
+        return $res;
+    }
+
+    /**
+     * Similar to addActionButton but apply to a multiple records selection and display in menu.
+     * When menu item is clicked, $callback is executed.
+     *
+     * @param string|array|MenuItem                           $item
+     * @param \Closure(Jquery, list<mixed>): JsExpressionable $callback
+     * @param array                                           $args     extra URL argument for callback
+     *
+     * @return View
+     */
+    public function addBulkAction($item, \Closure $callback, $args = [])
+    {
+        $menuItem = $this->menu->addItem($item);
+        $menuItem->on('click', function (Jquery $j, string $value) use ($callback) {
+            return $callback($j, $this->explodeSelectionValue($value));
+        }, [$this->selection->jsChecked()]);
+
+        return $menuItem;
+    }
+
+    /**
+     * Similar to addModalAction but apply to a multiple records selection and display in menu.
+     * When menu item is clicked, modal is displayed with the $title and $callback is executed.
+     *
+     * @param string|array|MenuItem             $item
+     * @param string                            $title
+     * @param \Closure(View, list<mixed>): void $callback
+     * @param array                             $args     extra URL argument for callback
+     *
+     * @return View
+     */
+    public function addModalBulkAction($item, $title, \Closure $callback, $args = [])
+    {
+        $modalDefaults = is_string($title) ? ['title' => $title] : []; // @phpstan-ignore-line
+
+        $modal = Modal::addTo($this->getOwner(), $modalDefaults);
+        $modal->set(function (View $t) use ($callback) {
+            $callback($t, $this->explodeSelectionValue($t->stickyGet($this->name) ?? ''));
+        });
+
+        $menuItem = $this->menu->addItem($item);
+        $menuItem->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)));
+
+        return $menuItem;
+    }
+
+    /**
+     * Get sortBy value from URL parameter.
      */
     public function getSortBy(): ?string
     {
-        return $_GET[$this->sortTrigger] ?? null;
+        return $this->getApp()->tryGetRequestQueryParam($this->sortTrigger);
     }
 
     /**
@@ -564,7 +592,7 @@ class Grid extends View
         }
 
         $isDesc = false;
-        if ($sortBy && $sortBy[0] === '-') {
+        if ($sortBy && substr($sortBy, 0, 1) === '-') {
             $isDesc = true;
             $sortBy = substr($sortBy, 1);
         }
@@ -585,17 +613,12 @@ class Grid extends View
     }
 
     /**
-     * Sets data Model of Grid.
-     *
-     * If $columns is not defined, then automatically will add columns for all
-     * visible model fields. If $columns is set to false, then will not add
-     * columns at all.
-     *
-     * @param array<int, string>|null $columns
+     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
-    public function setModel(Model $model, array $columns = null): void
+    #[\Override]
+    public function setModel(Model $model, ?array $fields = null): void
     {
-        $this->table->setModel($model, $columns);
+        $this->table->setModel($model, $fields);
 
         parent::setModel($model);
 
@@ -614,7 +637,7 @@ class Grid extends View
     {
         $this->selection = $this->table->addColumn(null, [Table\Column\Checkbox::class]);
 
-        // Move last column to the beginning in table column array.
+        // move last column to the beginning in table column array
         array_unshift($this->table->columns, array_pop($this->table->columns));
 
         return $this->selection;
@@ -630,24 +653,19 @@ class Grid extends View
     {
         $handler = $this->table->addColumn(null, [Table\Column\DragHandler::class]);
 
-        // Move last column to the beginning in table column array.
+        // move last column to the beginning in table column array
         array_unshift($this->table->columns, array_pop($this->table->columns));
 
         return $handler;
     }
 
-    /**
-     * Will set model limit according to paginator value.
-     */
     private function setModelLimitFromPaginator(): void
     {
         $this->paginator->setTotal((int) ceil($this->model->executeCountQuery() / $this->ipp));
         $this->model->setLimit($this->ipp, ($this->paginator->page - 1) * $this->ipp);
     }
 
-    /**
-     * Before rendering take care of data sorting.
-     */
+    #[\Override]
     protected function renderView(): void
     {
         // take care of sorting
@@ -658,6 +676,7 @@ class Grid extends View
         parent::renderView();
     }
 
+    #[\Override]
     protected function recursiveRender(): void
     {
         // bind with paginator

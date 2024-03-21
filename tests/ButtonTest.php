@@ -16,8 +16,8 @@ class ButtonTest extends TestCase
      */
     public function testButtonIcon(): void
     {
-        $b = new Button(['Load', 'icon' => 'pause']);
-        $b->setApp($this->createApp());
-        $b->render();
+        $button = new Button(['Load', 'icon' => 'pause']);
+        $button->setApp($this->createApp());
+        $button->render();
     }
 }

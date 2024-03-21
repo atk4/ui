@@ -28,17 +28,19 @@ use Atk4\Ui\View;
  * ModalExecutor modal view may be generated via callbacks.
  * These modal are added to app->html view if not already added
  * and the api service take care of generating them when output
- * in json via callback. It is important that these ModalExecutor modals
- * stay within the page html content for loader to run each steps properly.
+ * in JSON via callback. It is important that these ModalExecutor modals
+ * stay within the page HTML content for loader to run each steps properly.
  */
 class ModalExecutor extends Modal implements JsExecutorInterface
 {
     use CommonExecutorTrait;
     use HookTrait;
+    use InnerLoaderTrait;
     use StepExecutorTrait;
 
     public const HOOK_STEP = self::class . '@onStep';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -46,10 +48,9 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         $this->initExecutor();
     }
 
-    protected function initExecutor(): void
-    {
-    }
+    protected function initExecutor(): void {}
 
+    #[\Override]
     public function getAction(): Model\UserAction
     {
         return $this->action;
@@ -59,27 +60,26 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      * Make sure modal id is unique.
      * Since User action can be added via callbacks, we need
      * to make sure that view id is properly set for loader and button
-     * js action to run properly.
+     * JS action to run properly.
      */
-    protected function afterActionInit(Model\UserAction $action): void
+    protected function afterActionInit(): void
     {
-        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
-        $this->loader->loadEvent = false;
-        $this->loader->addClass('atk-hide-loading-content');
+        $this->loader = Loader::addTo($this, ['shim' => $this, 'loadEvent' => false]);
         $this->actionData = $this->loader->jsGetStoreData()['session'];
     }
 
+    #[\Override]
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
-        $this->afterActionInit($action);
+        $this->afterActionInit();
 
-        // get necessary step need prior to execute action.
-        $this->steps = $this->getSteps($action);
-        if ($this->steps) {
+        // get necessary step need prior to execute action
+        $this->steps = $this->getSteps();
+        if ($this->steps !== []) {
             $this->title ??= $action->getDescription();
 
-            // get current step.
+            // get current step
             $this->step = $this->stickyGet('step') ?? $this->steps[0];
         }
 
@@ -91,24 +91,26 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     /**
      * Perform model action by stepping through args - fields - preview.
      */
+    #[\Override]
     public function executeModelAction(): void
     {
         $this->action = $this->executeModelActionLoad($this->action);
 
-        // Add buttons to modal for next and previous.
-        $this->addButtonAction($this->createButtonBar($this->action));
-        $this->jsSetBtnState($this->loader, $this->step);
+        // add buttons to modal for next and previous
+        $this->addButtonAction($this->createButtonBar());
+        $this->jsSetButtonsState($this->loader, $this->step);
         $this->runSteps();
     }
 
-    private function jsShowAndLoad(array $urlArgs, array $apiConfig): JsBlock
+    /**
+     * @param array<string, string> $urlArgs
+     */
+    private function jsLoadAndShow(array $urlArgs): JsBlock
     {
         return new JsBlock([
-            $this->jsShow(),
-            $this->js()->data('closeOnLoadingError', true),
             $this->loader->jsLoad($urlArgs, [
-                'method' => 'post',
-                'onSuccess' => new JsFunction([], [$this->js()->removeData('closeOnLoadingError')]),
+                'method' => 'POST',
+                'onSuccess' => new JsFunction([], [$this->jsShow()]),
             ]),
         ]);
     }
@@ -118,19 +120,21 @@ class ModalExecutor extends Modal implements JsExecutorInterface
      * If action require steps, it will automatically initialize
      * proper step to execute first.
      *
+     * @param array<string, string> $urlArgs
+     *
      * @return $this
      */
-    public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', string $selector = null): self
+    public function assignTrigger(View $view, array $urlArgs = [], string $when = 'click', ?string $selector = null): self
     {
         if (!$this->actionInitialized) {
             throw new Exception('Action must be set prior to assign trigger');
         }
 
-        if ($this->steps) {
-            // use modal for stepping action.
+        if ($this->steps !== []) {
+            // use modal for stepping action
             $urlArgs['step'] = $this->step;
             if ($this->action->enabled) {
-                $view->on($when, $selector, $this->jsShowAndLoad($urlArgs, ['method' => 'post']));
+                $view->on($when, $selector, $this->jsLoadAndShow($urlArgs));
             } else {
                 $view->addClass('disabled');
             }
@@ -139,6 +143,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
         return $this;
     }
 
+    #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
     {
         if (!$this->actionInitialized) {
@@ -147,14 +152,14 @@ class ModalExecutor extends Modal implements JsExecutorInterface
 
         $urlArgs['step'] = $this->step;
 
-        return $this->jsShowAndLoad($urlArgs, ['method' => 'post']);
+        return $this->jsLoadAndShow($urlArgs);
     }
 
     /**
-     * Return proper js statement need after action execution.
+     * Return proper JS statement need after action execution.
      *
-     * @param mixed      $obj
-     * @param string|int $id
+     * @param mixed $obj
+     * @param mixed $id
      */
     protected function jsGetExecute($obj, $id): JsBlock
     {

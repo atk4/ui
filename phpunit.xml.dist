@@ -1,4 +1,4 @@
-<phpunit bootstrap="vendor/autoload.php" printerClass="Atk4\Core\Phpunit\ResultPrinter" colors="true">
+<phpunit bootstrap="vendor/autoload.php" colors="true">
     <testsuites>
         <testsuite name="tests">
             <directory>tests</directory>
@@ -16,10 +16,10 @@
             <group>require_session</group>
         </exclude>
     </groups>
-    <listeners>
-        <listener class="JohnKary\PHPUnit\Listener\SpeedTrapListener" />
-    </listeners>
-    <coverage>
+    <extensions>
+        <bootstrap class="Ergebnis\PHPUnit\SlowTestDetector\Extension" />
+    </extensions>
+    <source>
         <include>
             <directory>src</directory>
             <directory>tests</directory>
@@ -27,6 +27,8 @@
         <exclude>
             <directory>src/Behat</directory>
         </exclude>
+    </source>
+    <coverage>
         <report>
             <php outputFile="coverage/phpunit.cov" />
         </report>

@@ -9,13 +9,14 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\CallbackLater;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsModal;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\VirtualPage;
 
 class Lookup extends Input
@@ -26,8 +27,8 @@ class Lookup extends Input
 
     public string $inputType = 'hidden';
 
-    /** @var array Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
-    public $values = [];
+    /** @var array<array-key, mixed> Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
+    public array $values;
 
     /** @var CallbackLater Object used to capture requests from the browser. */
     public $callback;
@@ -37,11 +38,11 @@ class Lookup extends Input
 
     /**
      * Either set this to array of fields which must be searched (e.g. "name", "surname"), or define this
-     * as a callback to be executed callback($model, $search_string);.
+     * as a callback to be executed callback($model, $query);.
      *
      * If left null, then search will be performed on a model's title field
      *
-     * @var array|\Closure|null
+     * @var list<string>|\Closure<T of Model>(T, string): void|null
      */
     public $search;
 
@@ -53,7 +54,7 @@ class Lookup extends Input
      * with dependency
      * Then model of the 'state' field can be limited to states of the currently selected 'country'.
      *
-     * @var \Closure|null
+     * @var \Closure<T of Model>(T, array<string, mixed>): void|null
      */
     public $dependency;
 
@@ -82,9 +83,9 @@ class Lookup extends Input
      *
      * Use this apiConfig variable to pass API settings to Fomantic-UI in .dropdown()
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    public $apiConfig = ['cache' => false];
+    public array $apiConfig = ['cache' => false];
 
     /**
      * Fomantic-UI dropdown module settings.
@@ -112,9 +113,9 @@ class Lookup extends Input
      * Define callback for generating the row data
      * If left empty default callback Lookup::defaultRenderRow is used.
      *
-     * @var \Closure|null
+     * @var \Closure<T of Model>($this, T): array{title: mixed}
      */
-    public $renderRowFunction;
+    public ?\Closure $renderRowFunction = null;
 
     /**
      * Whether or not to accept multiple value.
@@ -125,12 +126,12 @@ class Lookup extends Input
      */
     public $multiple = false;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
 
         $this->template->set([
-            'inputId' => $this->name . '-ac',
             'placeholder' => $this->placeholder,
         ]);
 
@@ -140,6 +141,17 @@ class Lookup extends Input
         $this->callback->set(function () {
             $this->outputApiResponse();
         });
+    }
+
+    /**
+     * @param bool|string      $when
+     * @param JsExpressionable $action
+     *
+     * @return Jquery
+     */
+    protected function jsDropdown($when = false, $action = null): JsExpressionable
+    {
+        return $this->js($when, $action, 'div.ui.dropdown:has(> #' . $this->name . '_input)');
     }
 
     /**
@@ -155,7 +167,7 @@ class Lookup extends Input
      *
      * @return never
      */
-    public function outputApiResponse()
+    public function outputApiResponse(): void
     {
         $this->getApp()->terminateJson([
             'success' => true,
@@ -168,14 +180,10 @@ class Lookup extends Input
      *
      * @param int|bool $limit
      *
-     * @return array<int, array{value: mixed, title: mixed}>
+     * @return list<array{value: string, title: mixed}>
      */
     public function getData($limit = true): array
     {
-        if (!$this->model) {
-            throw new Exception('Model must be set for Lookup');
-        }
-
         $this->applyLimit($limit);
 
         $this->applySearchConditions();
@@ -197,12 +205,15 @@ class Lookup extends Input
     /**
      * Renders the Lookup row depending on properties set.
      *
-     * @return array{value: mixed, title: mixed}
+     * @return array{value: string, title: mixed}
      */
     public function renderRow(Model $row): array
     {
         if ($this->renderRowFunction !== null) {
-            return ($this->renderRowFunction)($this, $row);
+            return array_merge(
+                ['value' => $this->defaultRenderRow($row)['value']],
+                ($this->renderRowFunction)($this, $row)
+            );
         }
 
         return $this->defaultRenderRow($row);
@@ -211,16 +222,19 @@ class Lookup extends Input
     /**
      * Default callback for generating data row.
      *
-     * @param string $key
-     *
-     * @return array{value: mixed, title: mixed}
+     * @return array{value: string, title: mixed}
      */
-    public function defaultRenderRow(Model $row, $key = null)
+    protected function defaultRenderRow(Model $row)
     {
-        $idField = $this->idField ?? $row->idField;
-        $titleField = $this->titleField ?? $row->titleField;
+        $idField = $this->idField
+            ?? $row->idField;
+        $titleField = $this->titleField
+            ?? $row->titleField;
 
-        return ['value' => $row->get($idField), 'title' => $row->get($titleField)];
+        return [
+            'value' => $this->getApp()->uiPersistence->typecastAttributeSaveField($row->getField($idField), $row->get($idField)),
+            'title' => $row->get($titleField),
+        ];
     }
 
     /**
@@ -252,18 +266,20 @@ class Lookup extends Input
         $vp->set(function (VirtualPage $p) {
             $form = Form::addTo($p);
 
-            $entity = (clone $this->model)->setOnlyFields($this->plus['fields'] ?? null)->createEntity();
-
-            $form->setModel($entity);
+            $entity = $this->model->createEntity();
+            $form->setModel($entity, $this->plus['fields'] ?? null);
 
             $form->onSubmit(function (Form $form) {
-                $form->model->save();
+                $msg = $form->model->getUserAction('add')->execute();
 
                 $res = new JsBlock();
+                if (is_string($msg)) {
+                    $res->addStatement(new JsToast($msg));
+                }
                 $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
 
                 $row = $this->renderRow($form->model);
-                $chain = new Jquery('#' . $this->name . '-ac');
+                $chain = $this->jsDropdown();
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
                 $res->addStatement($chain);
 
@@ -292,22 +308,23 @@ class Lookup extends Input
      */
     protected function applySearchConditions(): void
     {
-        if (($_GET['q'] ?? '') === '') {
+        $query = $this->getApp()->tryGetRequestQueryParam('q') ?? '';
+        if ($query === '') {
             return;
         }
 
         if ($this->search instanceof \Closure) {
-            ($this->search)($this->model, $_GET['q']);
+            ($this->search)($this->model, $query);
         } elseif (is_array($this->search)) {
             $scope = Model\Scope::createOr();
             foreach ($this->search as $field) {
-                $scope->addCondition($field, 'like', '%' . $_GET['q'] . '%');
+                $scope->addCondition($field, 'like', '%' . $query . '%');
             }
             $this->model->addCondition($scope);
         } else {
             $titleField = $this->titleField ?? $this->model->titleField;
 
-            $this->model->addCondition($titleField, 'like', '%' . $_GET['q'] . '%');
+            $this->model->addCondition($titleField, 'like', '%' . $query . '%');
         }
     }
 
@@ -321,29 +338,15 @@ class Lookup extends Input
         }
 
         $data = [];
-        if (isset($_GET['form'])) {
-            parse_str($_GET['form'], $data);
-        } elseif ($this->form) {
+        if ($this->getApp()->hasRequestQueryParam('form')) {
+            parse_str($this->getApp()->getRequestQueryParam('form'), $data);
+        } elseif ($this->form !== null) {
             $data = $this->form->model->get();
         } else {
             return;
         }
 
         ($this->dependency)($this->model, $data);
-    }
-
-    /**
-     * Set Fomantic-UI Api settings to use with dropdown.
-     *
-     * @param array $config
-     *
-     * @return $this
-     */
-    public function setApiConfig($config)
-    {
-        $this->apiConfig = array_merge($this->apiConfig, $config);
-
-        return $this;
     }
 
     /**
@@ -361,6 +364,7 @@ class Lookup extends Input
         $chain->dropdown($settings);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->multiple) {
@@ -368,17 +372,14 @@ class Lookup extends Input
         }
 
         if ($this->disabled) {
-            $this->settings['allowTab'] = false;
-
-            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
             $this->template->set('disabledClass', 'disabled');
-        }
+            $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
+        } elseif ($this->readOnly) {
+            $this->template->set('disabledClass', 'read-only');
+            $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
 
-        if ($this->readOnly) {
-            $this->settings['allowTab'] = false;
             $this->settings['apiSettings'] = null;
             $this->settings['onShow'] = new JsFunction([], [new JsExpression('return false')]);
-            $this->template->dangerouslySetHtml('readonly', 'readonly="readonly"');
         }
 
         if ($this->dependency) {
@@ -387,17 +388,18 @@ class Lookup extends Input
             ], $this->apiConfig['data'] ?? []);
         }
 
-        $chain = new Jquery('#' . $this->name . '-ac');
+        $chain = $this->jsDropdown();
 
         $this->initDropdown($chain);
 
-        if ($this->entityField && $this->entityField->get()) {
-            $idField = $this->idField ?? $this->model->idField;
+        if ($this->entityField !== null && $this->entityField->get() !== null) {
+            $idField = $this->idField
+                ?? $this->model->idField;
 
             $this->model = $this->model->loadBy($idField, $this->entityField->get());
 
             $row = $this->renderRow($this->model);
-            $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
+            $chain->dropdown('set value', $row['value'], true)->dropdown('set text', $row['title'], true);
         }
 
         $this->js(true, $chain);

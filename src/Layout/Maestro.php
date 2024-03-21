@@ -19,6 +19,7 @@ class Maestro extends Admin
     /** @var string */
     public $menuTemplate = 'layout/maestro-sidenav.html';
 
+    #[\Override]
     public function addMenuGroup($seed): Menu
     {
         $gr = $this->menuLeft->addGroup($seed, $this->menuTemplate)->addClass('atk-maestro-sidenav');
@@ -27,6 +28,7 @@ class Maestro extends Admin
         return $gr;
     }
 
+    #[\Override]
     public function addMenuItem($name, $action = null, $group = null): MenuItem
     {
         $i = parent::addMenuItem($name, $action, $group);
@@ -37,12 +39,13 @@ class Maestro extends Admin
         return $i;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         parent::renderView();
 
-        // initialize all menu group at ounce.
-        // since atkSideNav plugin default setting are for Maestro, no need to pass settings to initialize it.
+        // initialize all menu group at once
+        // since atkSideNav plugin default setting are for Maestro, no need to pass settings to initialize it
         $js = (new Jquery('.atk-maestro-sidenav'))->atkSidenav();
 
         $this->js(true, $js);

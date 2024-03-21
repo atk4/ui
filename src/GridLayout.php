@@ -32,6 +32,7 @@ class GridLayout extends View
     /** @var string CSS class for columns view */
     public $columnClass = '';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -47,13 +48,10 @@ class GridLayout extends View
         $this->tRow->del('column');
         $this->tWrap->del('rows');
 
-        // Will need to manipulate template a little
+        // will need to manipulate template a little
         $this->buildTemplate();
     }
 
-    /**
-     * Build and set view template.
-     */
     protected function buildTemplate(): void
     {
         $this->tWrap->del('rows');
@@ -75,11 +73,11 @@ class GridLayout extends View
 
         // TODO replace later, the only use of direct template tree manipulation
         $t = $this->template;
-        \Closure::bind(function () use ($t, $tmp) {
-            $cloneTagTreeFx = function (HtmlTemplate\TagTree $src) use (&$cloneTagTreeFx, $t) {
+        \Closure::bind(static function () use ($t, $tmp) {
+            $cloneTagTreeFx = static function (HtmlTemplate\TagTree $src) use (&$cloneTagTreeFx, $t) {
                 $tagTree = $src->clone($t);
                 $t->tagTrees[$src->getTag()] = $tagTree;
-                \Closure::bind(function () use ($tagTree, $cloneTagTreeFx, $src) {
+                \Closure::bind(static function () use ($tagTree, $cloneTagTreeFx, $src) {
                     foreach ($tagTree->children as $v) {
                         if (is_string($v)) {
                             $cloneTagTreeFx($src->getParentTemplate()->getTagTree($v));

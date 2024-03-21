@@ -19,11 +19,11 @@ class ListerTest extends TestCase
      */
     public function testListerRender(): void
     {
-        $v = new View();
-        $v->setApp($this->createApp());
-        $v->invokeInit();
-        $l = Lister::addTo($v, ['defaultTemplate' => 'lister.html']);
-        $l->setSource(['foo', 'bar']);
+        $view = new View();
+        $view->setApp($this->createApp());
+        $view->invokeInit();
+        $lister = Lister::addTo($view, ['defaultTemplate' => 'lister.html']);
+        $lister->setSource(['foo', 'bar']);
     }
 
     /**
@@ -31,21 +31,21 @@ class ListerTest extends TestCase
      */
     public function testListerRender2(): void
     {
-        $v = new View(['template' => new HtmlTemplate('hello{list}, world{/list}')]);
-        $v->setApp($this->createApp());
-        $v->invokeInit();
-        $l = Lister::addTo($v, [], ['list']);
-        $l->setSource(['foo', 'bar']);
-        static::assertSame('hello, world, world', $v->render());
+        $view = new View(['template' => new HtmlTemplate('hello{list}, world{/list}')]);
+        $view->setApp($this->createApp());
+        $view->invokeInit();
+        $lister = Lister::addTo($view, [], ['list']);
+        $lister->setSource(['foo', 'bar']);
+        self::assertSame('hello, world, world', $view->render());
     }
 
     public function testAddAfterRender(): void
     {
-        $v = new View();
-        $v->setApp($this->createApp());
-        $v->invokeInit();
+        $view = new View();
+        $view->setApp($this->createApp());
+        $view->invokeInit();
 
         $this->expectException(Exception::class);
-        Lister::addTo($v);
+        Lister::addTo($view);
     }
 }

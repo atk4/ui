@@ -6,6 +6,8 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Ui\Callback;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Psr7\LazyOpenStream;
 use Symfony\Component\Process\Process;
 
 /**
@@ -31,6 +33,7 @@ class DemosHttpTest extends DemosTest
     /** @var int */
     protected $port = 9687;
 
+    #[\Override]
     public static function tearDownAfterClass(): void
     {
         // stop the test server
@@ -50,6 +53,7 @@ class DemosHttpTest extends DemosTest
         parent::tearDownAfterClass();
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -93,7 +97,7 @@ class DemosHttpTest extends DemosTest
                 $this->getResponseFromRequest('?ping');
 
                 break;
-            } catch (\GuzzleHttp\Exception\ConnectException $e) {
+            } catch (ConnectException $e) {
                 if (microtime(true) - $ts > 5) {
                     throw $e;
                 }
@@ -101,11 +105,17 @@ class DemosHttpTest extends DemosTest
         }
     }
 
+    #[\Override]
     protected function getClient(): Client
     {
-        return new Client(['base_uri' => 'http://localhost:' . $this->port]);
+        // never buffer the response thru disk, remove once streaming with curl is supported
+        // https://github.com/guzzle/guzzle/issues/3115
+        $sink = new LazyOpenStream('php://memory', 'w+');
+
+        return new Client(['base_uri' => 'http://localhost:' . $this->port, 'sink' => $sink]);
     }
 
+    #[\Override]
     protected function getPathWithAppVars(string $path): string
     {
         $path .= (!str_contains($path, '?') ? '?' : '&')
@@ -114,8 +124,39 @@ class DemosHttpTest extends DemosTest
         return parent::getPathWithAppVars($path);
     }
 
+    #[\Override]
+    public static function provideDemoCallbackErrorCases(): iterable
+    {
+        yield from parent::provideDemoCallbackErrorCases();
+
+        yield [
+            '_unit-test/fatal-error.php?type=oom',
+            'Allowed memory size of 16777216 bytes exhausted',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=time-limit',
+            'Maximum execution time of 1 second exceeded',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=compile-error',
+            'Non-abstract method Cl::foo() must contain body',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=compile-warning',
+            'Unsupported declare \'x\'',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=exception-in-shutdown',
+            'Exception from shutdown',
+        ];
+        yield [
+            '_unit-test/fatal-error.php?type=warning-in-shutdown',
+            'Warning from shutdown',
+        ];
+    }
+
     /**
-     * @dataProvider demoLateOutputErrorProvider
+     * @dataProvider provideDemoLateOutputErrorCases
      */
     public function testDemoLateOutputError(string $urlTrigger, string $expectedOutput): void
     {
@@ -124,20 +165,20 @@ class DemosHttpTest extends DemosTest
 
         $response = $this->getResponseFromRequest5xx($path);
 
-        static::assertSame(500, $response->getStatusCode());
-        static::assertSame($expectedOutput, $response->getBody()->getContents());
+        self::assertSame(500, $response->getStatusCode());
+        self::assertSame('text/plain', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
+        self::assertSame('no-store', $response->getHeaderLine('Cache-Control'));
+        self::assertSame($expectedOutput, $response->getBody()->getContents());
     }
 
-    public function demoLateOutputErrorProvider(): array
+    public static function provideDemoLateOutputErrorCases(): iterable
     {
         $hOutput = "\n" . '!! FATAL UI ERROR: Headers already sent, more headers cannot be set at this stage !!' . "\n";
         $oOutput = 'unmanaged output' . "\n" . '!! FATAL UI ERROR: Unexpected output detected !!' . "\n";
 
-        return [
-            ['err_headers_already_sent_2', $hOutput],
-            ['err_unexpected_output_detected_2', $oOutput],
-            ['err_headers_already_sent_1', $hOutput],
-            ['err_unexpected_output_detected_1', $oOutput],
-        ];
+        yield ['err_headers_already_sent_2', $hOutput];
+        yield ['err_unexpected_output_detected_2', $oOutput];
+        yield ['err_headers_already_sent_1', $hOutput];
+        yield ['err_unexpected_output_detected_1', $oOutput];
     }
 }

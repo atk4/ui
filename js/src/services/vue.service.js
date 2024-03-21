@@ -14,10 +14,10 @@ class VueService {
                     return this.initData;
                 },
             },
-            // provide method to our child component.
+            // provide method to our child component
             // child component would need to inject a method to have access using the inject property,
             // inject: ['getRootData'],
-            // Once inject you can get initial data using this.getRootData().
+            // once inject you can get initial data using this.getRootData()
             provide: function () {
                 return {
                     getRootData: this.getData,
@@ -142,7 +142,7 @@ class VueService {
         });
     }
 
-    /*
+    /**
      * Add component to vues container.
      * Group apps that are using the same component.
      */

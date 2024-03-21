@@ -10,6 +10,7 @@ use Atk4\Ui\Table\Column;
 
 class TypeNumber extends Column\FilterModel
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -25,18 +26,23 @@ class TypeNumber extends Column\FilterModel
         ];
         $this->op->default = '=';
 
-        $this->value->ui['form'] = [Form\Control\Line::class, 'inputType' => 'number'];
-        $this->addField('range', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class, 'inputType' => 'number']]]);
+        $this->value->ui['form'] = [Form\Control\Line::class];
+        $this->addField('range', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
     }
 
-    public function setConditionForModel(Model $model)
+    #[\Override]
+    public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
         if ($filter !== null) {
             switch ($filter['op']) {
                 case 'between':
                     $model->addCondition(
-                        $model->expr('[field] between [value] and [range]', ['field' => $model->getField($filter['name']), 'value' => $filter['value'], 'range' => $filter['range']])
+                        $model->expr('[field] between [value] and [range]', [
+                            'field' => $model->getField($filter['name']),
+                            'value' => $filter['value'],
+                            'range' => $filter['range'],
+                        ])
                     );
 
                     break;
@@ -44,10 +50,9 @@ class TypeNumber extends Column\FilterModel
                     $model->addCondition($filter['name'], $filter['op'], $filter['value']);
             }
         }
-
-        return $model;
     }
 
+    #[\Override]
     public function getFormDisplayRules(): array
     {
         return [

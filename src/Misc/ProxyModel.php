@@ -6,6 +6,4 @@ namespace Atk4\Ui\Misc;
 
 use Atk4\Data\Model;
 
-class ProxyModel extends Model
-{
-}
+class ProxyModel extends Model {}

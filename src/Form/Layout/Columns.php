@@ -21,12 +21,8 @@ class Columns extends Form\Layout
     /** @var string size CSS class */
     public $size = '';
 
-    /**
-     * Sets form model and adds form controls.
-     *
-     * @param array<int, string>|null $fields
-     */
-    public function setModel(Model $entity, array $fields = null): void
+    #[\Override]
+    public function setModel(Model $entity, ?array $fields = null): void
     {
         // dont add any fields automatically
         parent::setModel($entity, []);

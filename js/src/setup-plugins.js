@@ -23,12 +23,12 @@ import AtkSidenavPlugin from './plugins/sidenav.plugin';
 atk.registerPlugin = function (name, cl, shorthand = false) {
     const dataName = '__' + name;
 
-    // add plugin to atk namespace.
+    // add plugin to atk namespace
     atk[name] = cl;
 
-    // register plugin to jQuery fn prototype.
+    // register plugin to jQuery fn prototype
     $.fn[name] = function (option = {}, args = []) {
-        // Check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
+        // check if we are calling a plugin specific function: $(element).plugin('function', [arg1, arg2]);
         if (typeof option === 'string') {
             return this.data(dataName).call(option, args);
         }
@@ -36,7 +36,7 @@ atk.registerPlugin = function (name, cl, shorthand = false) {
         return this.each(function () {
             const options = $.extend({}, cl.DEFAULTS, typeof option === 'object' && option);
             // create plugin using the constructor function store in atk namespace object
-            // and add a reference of it to this jQuery object data.
+            // and add a reference of it to this jQuery object data
             $(this).data(dataName, new atk[name](this, options));
         });
     };

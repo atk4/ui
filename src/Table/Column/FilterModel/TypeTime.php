@@ -9,6 +9,7 @@ use Atk4\Ui\Table\Column;
 
 class TypeTime extends Column\FilterModel
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -28,7 +29,8 @@ class TypeTime extends Column\FilterModel
         $this->addField('range', ['ui' => ['caption' => ''], 'type' => 'time']);
     }
 
-    public function setConditionForModel(Model $model)
+    #[\Override]
+    public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
         if ($filter !== null) {
@@ -36,24 +38,23 @@ class TypeTime extends Column\FilterModel
                 case 'between':
                     $d1 = $filter['value'];
                     $d2 = $filter['range'];
-                    if ($d2 >= $d1) {
-                        $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
-                        $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
-                    } else {
-                        $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
-                        $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
+                    if ($d1 > $d2) {
+                        [$d1, $d2] = [$d2, $d1];
                     }
-                    $model->addCondition($model->expr('[field] between [value] and [value2]', ['field' => $model->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $model->addCondition($model->expr('[field] between [value] and [value2]', [
+                        'field' => $model->getField($filter['name']),
+                        'value' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1),
+                        'value2' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2),
+                    ]));
 
                     break;
                 default:
                     $model->addCondition($filter['name'], $filter['op'], $filter['value']);
             }
         }
-
-        return $model;
     }
 
+    #[\Override]
     public function getFormDisplayRules(): array
     {
         return [

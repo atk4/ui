@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Grid;
 use Atk4\Ui\Header;
@@ -13,7 +14,7 @@ use Atk4\Ui\JsSortable;
 use Atk4\Ui\Lister;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $view = View::addTo($app, ['template' => new HtmlTemplate(
@@ -26,7 +27,7 @@ $view = View::addTo($app, ['template' => new HtmlTemplate(
 )]);
 
 $lister = Lister::addTo($view, [], ['List']);
-$lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
+$lister->onHook(Lister::HOOK_BEFORE_ROW, static function (Lister $lister) {
     $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 });
@@ -36,13 +37,13 @@ $lister->setModel($model);
 
 $sortable = JsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
-$sortable->onReorder(function (array $order, string $src, int $pos, int $oldPos) {
-    if ($_GET['btn'] ?? null) {
-        return new JsToast(implode(' - ', $order));
+$sortable->onReorder(static function (array $orderedNames, string $sourceName, int $pos, int $oldPos) use ($app) {
+    if ($app->tryGetRequestQueryParam('btn')) {
+        return new JsToast(implode(' - ', $orderedNames));
     }
 
-    return new JsToast($src . ' moved from position ' . $oldPos . ' to ' . $pos);
-});
+    return new JsToast($sourceName . ' moved from position ' . $oldPos . ' to ' . $pos);
+}, $model->getField($model->fieldName()->name));
 
 $button = Button::addTo($app)->set('Get countries order');
 $button->on('click', $sortable->jsSendSortOrders(['btn' => '1']));
@@ -56,6 +57,6 @@ $grid = Grid::addTo($app, ['paginator' => false]);
 $grid->setModel((new Country($app->db))->setLimit(6));
 
 $dragHandler = $grid->addDragHandler();
-$dragHandler->onReorder(function (array $order) {
-    return new JsToast('New order: ' . implode(' - ', $order));
+$dragHandler->onReorder(static function (array $orderedIds) use ($grid) {
+    return new JsToast('New order: ' . implode(' - ', array_map(static fn ($id) => $grid->getApp()->uiPersistence->typecastSaveField($grid->model->getIdField(), $id), $orderedIds)));
 });

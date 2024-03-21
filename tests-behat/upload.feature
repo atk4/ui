@@ -8,12 +8,12 @@ Feature: Upload
     When I select file input "file" with "Žlutý kůň" as "$kůň"
     Then Toast display should contain text "(name: $kůň, md5: b047fb155be776f5bbae061c7b08cdf0)"
 
-    When I click using selector "xpath(//div.action[.//input[@name='file']]//div.button)"
+    When I click using selector "//div.action[.//input[@name='file']]//div.button"
     Then Toast display should contain text "has been removed"
 
     When I select file input "img" with "Foo" as "bar.png"
     Then Toast display should contain text "is uploaded"
 
-    When I click using selector "xpath(//div.action[.//input[@name='img']]//div.button)"
+    When I click using selector "//div.action[.//input[@name='img']]//div.button"
     Then Toast display should contain text "has been removed"
-    Then Element "xpath(//div.action[.//div//input[@name='img']]//img)" attribute "src" should contain text "default.png"
+    Then Element "//div.action[.//div//input[@name='img']]//img" attribute "src" should contain text "default.png"

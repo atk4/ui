@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Dropdown as UiDropdown;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Menu;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $menu = Menu::addTo($app);
@@ -19,8 +20,8 @@ $menu->addItem('bar');
 $menu->addItem('baz');
 $dropdown = UiDropdown::addTo($menu, ['With Callback', 'dropdownOptions' => ['on' => 'hover']]);
 $dropdown->setSource(['a', 'b', 'c']);
-$dropdown->onChange(function (string $itemId) {
-    return 'New seleced item id: ' . $itemId;
+$dropdown->onChange(static function (string $itemId) {
+    return 'New selected item ID: ' . $itemId;
 });
 
 $submenu = $menu->addMenu('Sub-menu');

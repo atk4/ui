@@ -9,15 +9,23 @@ use Atk4\Ui\Table\Column;
 
 class TypeString extends Column\FilterModel
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
 
-        $this->op->values = ['is' => 'Is', 'is not' => 'Is Not', 'contains' => 'Contains', 'start' => 'Start with', 'end' => 'End with'];
+        $this->op->values = [
+            'is' => 'Is',
+            'is not' => 'Is Not',
+            'contains' => 'Contains',
+            'start' => 'Start with',
+            'end' => 'End with',
+        ];
         $this->op->default = 'is';
     }
 
-    public function setConditionForModel(Model $model)
+    #[\Override]
+    public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
         if ($filter !== null) {
@@ -44,7 +52,5 @@ class TypeString extends Column\FilterModel
                     break;
             }
         }
-
-        return $model;
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Data\Field;
 use Atk4\Ui\Js\JsExpression;
 
 /**
@@ -15,15 +16,10 @@ class ItemsPerPageSelector extends View
     public $defaultTemplate = 'pagelength.html';
     public $ui = 'selection compact dropdown';
 
-    /** @var array Default page length menu items. */
-    public $pageLengthItems = [10, 25, 50, 100];
+    /** @var list<int> Default page length menu items. */
+    public $pageLengthItems = [10, 100, 1000];
 
-    /**
-     * Default button label.
-     *  - [ipp] will be replace by the number of pages selected.
-     *
-     * @var string
-     */
+    /** @var string */
     public $label = 'Items per page:';
 
     /** @var int The current number of item per page. */
@@ -32,6 +28,12 @@ class ItemsPerPageSelector extends View
     /** @var Callback|null The callback function. */
     public $cb;
 
+    private function formatInteger(int $value): string
+    {
+        return $this->getApp()->uiPersistence->typecastSaveField(new Field(['type' => 'integer']), $value);
+    }
+
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -39,13 +41,13 @@ class ItemsPerPageSelector extends View
         Icon::addTo($this)->set('dropdown');
         $this->template->trySet('Label', $this->label);
 
-        // Callback later will give us time to properly render menu item before final output.
+        // CallbackLater will give us time to properly render menu item before final output
         $this->cb = CallbackLater::addTo($this);
 
         if (!$this->currentIpp) {
             $this->currentIpp = $this->pageLengthItems[0];
         }
-        $this->set((string) $this->currentIpp);
+        $this->set($this->formatInteger($this->currentIpp));
     }
 
     /**
@@ -58,9 +60,8 @@ class ItemsPerPageSelector extends View
     public function onPageLengthSelect(\Closure $fx): void
     {
         $this->cb->set(function () use ($fx) {
-            $ipp = isset($_GET['ipp']) ? (int) $_GET['ipp'] : null;
-            // $this->pageLength->set(preg_replace("/\[ipp\]/", $ipp, $this->label));
-            $this->set($ipp);
+            $ipp = $this->getApp()->hasRequestQueryParam('ipp') ? (int) $this->getApp()->getRequestQueryParam('ipp') : null;
+            $this->set($this->formatInteger($ipp));
             $reload = $fx($ipp);
             if ($reload) {
                 $this->getApp()->terminateJson($reload);
@@ -68,11 +69,12 @@ class ItemsPerPageSelector extends View
         });
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $menuItems = [];
-        foreach ($this->pageLengthItems as $key => $item) {
-            $menuItems[] = ['name' => $item, 'value' => $item];
+        foreach ($this->pageLengthItems as $item) {
+            $menuItems[] = ['name' => $this->formatInteger($item), 'value' => $item];
         }
 
         $function = new JsExpression('function (value, text, item) {

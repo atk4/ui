@@ -22,6 +22,7 @@ class DragHandler extends Table\Column
     /** @var JsSortable */
     public $cb;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -35,14 +36,15 @@ class DragHandler extends Table\Column
     /**
      * Callback when table has been reorder using handle.
      *
-     * @param \Closure(list<string>, string, int, int): (JsExpressionable|View|string|void) $fx
+     * @param \Closure(list<mixed>, mixed, int, int): (JsExpressionable|View|string|void) $fx
      */
     public function onReorder(\Closure $fx): void
     {
-        $this->cb->onReorder($fx);
+        $this->cb->onReorder($fx, $this->table->model->getIdField());
     }
 
-    public function getDataCellTemplate(Field $field = null): string
+    #[\Override]
+    public function getDataCellTemplate(?Field $field = null): string
     {
         return $this->getApp()->getTag($this->tag, ['class' => $this->class . ' atk-handle', 'style' => 'cursor:pointer; color: #bcbdbd']);
     }

@@ -19,9 +19,11 @@ trait SessionTrait
     }
 
     /**
-     * @param \Closure(): mixed $fx
+     * @template T
      *
-     * @return mixed
+     * @param \Closure(): T $fx
+     *
+     * @return T
      */
     public function atomicSession(\Closure $fx, bool $readAndCloseImmediately = false)
     {
@@ -71,7 +73,7 @@ trait SessionTrait
      *
      * @return $this
      */
-    public function forget(string $key = null)
+    public function forget(?string $key = null)
     {
         $this->getSessionManager()->forget($this->name, $key);
 

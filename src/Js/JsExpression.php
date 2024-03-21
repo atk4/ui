@@ -27,6 +27,7 @@ class JsExpression implements JsExpressionable
         $this->args = $args;
     }
 
+    #[\Override]
     public function jsRender(): string
     {
         $namelessCount = 0;
@@ -35,7 +36,7 @@ class JsExpression implements JsExpressionable
             function ($matches) use (&$namelessCount): string {
                 $identifier = substr($matches[0], 1, -1);
 
-                // Allow template to contain []
+                // allow template to contain []
                 if ($identifier === '') {
                     $identifier = $namelessCount++;
                 }
@@ -53,13 +54,12 @@ class JsExpression implements JsExpressionable
                     return $value;
                 }
 
-                if ($value instanceof JsExpressionable) {
-                    $value = '(' . $value->jsRender() . ')';
-                } else {
-                    $value = $this->_jsEncode($value);
+                $valueStr = $this->_jsEncode($value);
+                if ($value instanceof JsExpressionable && !str_ends_with($valueStr, ';')) {
+                    $valueStr = '(' . $valueStr . ')';
                 }
 
-                return $value;
+                return $valueStr;
             },
             $this->template
         );
@@ -97,7 +97,7 @@ class JsExpression implements JsExpressionable
             }
         } elseif (is_string($value)) {
             $res = json_encode($value, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
-            $res = '\'' . str_replace('\'', '\\\'', str_replace('\\"', '"', substr($res, 1, -1))) . '\'';
+            $res = '\'' . str_replace('\'', '\\\'', str_replace('\"', '"', substr($res, 1, -1))) . '\'';
         } elseif (is_bool($value)) {
             $res = $value ? 'true' : 'false';
         } elseif (is_int($value)) {

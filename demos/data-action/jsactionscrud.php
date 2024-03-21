@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\App;
 use Atk4\Ui\Crud;
 use Atk4\Ui\Header;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Actions in Crud', 'subHeader' => 'Crud will automatically setup Menu items based on actions defined in model.']);
@@ -17,12 +18,12 @@ Header::addTo($app, ['Actions in Crud', 'subHeader' => 'Crud will automatically 
 
 $files = new File($app->db);
 
-// This action must appear on top of the Crud
+// this action must appear on top of the Crud
 $files->addUserAction('import_from_filesystem', [
     'caption' => 'Import',
     'callback' => 'importFromFilesystem',
     'description' => 'Import file using path:',
-    'preview' => function (Model $model, $path) {
+    'preview' => static function (Model $model, $path) {
         return 'Execute Import using path: "' . $path . '"';
     },
     'args' => [
@@ -31,7 +32,7 @@ $files->addUserAction('import_from_filesystem', [
     'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORDS,
 ]);
 
-$files->addUserAction('download', function (Model $model) {
+$files->addUserAction('download', static function (Model $model) {
     return 'File has been download!';
 });
 

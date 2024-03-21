@@ -20,7 +20,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
      * Setup field initial state.
      */
     setInitialState() {
-        // Set progress bar.
+        // set progress bar
         this.bar.progress({
             text: {
                 percent: '{percent}%',
@@ -61,14 +61,14 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
             }
         });
 
-        // add event handler to action button.
+        // add event handler to action button
         this.action.on('click', (e) => {
             if (!this.textInput.val()) {
                 this.fileInput.click();
             } else {
-                // When upload is complete a js action can be send to set an id
+                // When upload is complete a JS action can be send to set an ID
                 // to the uploaded file via the jQuery data property.
-                // Check if that id exist and send it with
+                // Check if that ID exist and send it with
                 // delete callback, If not, default to file name.
                 let id = this.$el.data().fileId;
                 if (id === '' || id === undefined || id === null) {
@@ -78,7 +78,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
             }
         });
 
-        // add event handler to file input.
+        // add event handler to file input
         this.fileInput.on('change', (e) => {
             if (e.target.files.length > 0) {
                 this.textInput.val(e.target.files[0].name);
@@ -88,7 +88,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
     }
 
     /**
-     * Set the action button html content.
+     * Set the action button HTML content.
      * Set the input text content.
      */
     setState(mode) {
@@ -120,13 +120,12 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
      * @param {FileList} files
      */
     doFileUpload(files) {
-        // if submit button id is set, then disable submit
-        // during upload.
+        // if submit button id is set, then disable submit during upload
         if (this.settings.submit) {
             $('#' + this.settings.submit).addClass('disabled');
         }
 
-        // setup task on upload completion.
+        // setup task on upload completion
         const completeCb = (response, content) => {
             if (response.success) {
                 this.bar.progress('set label', this.settings.completeLabel);
@@ -138,7 +137,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
             }
         };
 
-        // setup progress bar update via xhr.
+        // setup progress bar update via xhr
         const xhrCb = () => {
             const xhr = new window.XMLHttpRequest();
             xhr.upload.addEventListener('progress', (event) => {
@@ -181,7 +180,7 @@ export default class AtkFileUploadPlugin extends AtkPlugin {
     }
 
     /**
-     * Return the html content for erase action button.
+     * Return the HTML content for erase action button.
      *
      * @returns {string}
      */

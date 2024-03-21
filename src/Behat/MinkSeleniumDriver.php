@@ -5,23 +5,14 @@ declare(strict_types=1);
 namespace Atk4\Ui\Behat;
 
 use Atk4\Core\WarnDynamicPropertyTrait;
-use Behat\Mink\Element\NodeElement;
-use Behat\Mink\Exception\DriverException;
-use WebDriver\Element;
+use Behat\Mink\Driver\Selenium2Driver;
+use WebDriver\Element as WebDriverElement;
 
-/**
- * Selenium2Driver driver with the following fixes:
- * - https://github.com/minkphp/MinkSelenium2Driver/pull/327
- * - https://github.com/minkphp/MinkSelenium2Driver/pull/328
- * - https://github.com/minkphp/MinkSelenium2Driver/pull/352
- * - https://github.com/minkphp/MinkSelenium2Driver/pull/359
- * .
- */
-class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
+class MinkSeleniumDriver extends Selenium2Driver
 {
     use WarnDynamicPropertyTrait;
 
-    public function __construct(\Behat\Mink\Driver\Selenium2Driver $driver) // @phpstan-ignore-line
+    public function __construct(Selenium2Driver $driver) // @phpstan-ignore-line
     {
         $class = self::class;
         while (($class = get_parent_class($class)) !== false) {
@@ -33,190 +24,81 @@ class MinkSeleniumDriver extends \Behat\Mink\Driver\Selenium2Driver
         }
     }
 
+    #[\Override]
     public function getText($xpath): string
     {
-        $text = $this->executeJsOnXpath($xpath, 'return {{ELEMENT}}.innerText;');
-        $text = trim(preg_replace('~\s+~s', ' ', $text));
-
-        return $text;
+        // HTMLElement::innerText returns rendered text as when copied to the clipboard
+        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText
+        // https://github.com/minkphp/MinkSelenium2Driver/pull/327
+        // https://github.com/minkphp/MinkSelenium2Driver/pull/328
+        return $this->executeJsOnXpath($xpath, 'return {{ELEMENT}}.innerText;');
     }
 
-    protected function createMinkElementFromWebDriverElement(Element $element): NodeElement
+    protected function findElement(string $xpath): WebDriverElement
     {
-        // WebDriver element contains only a temporary ID assigned by Selenium,
-        // to create a Mink element we must build a xpath for it first
-        $script = <<<'EOF'
-            var buildXpathFromElement;
-            buildXpathFromElement = function (element) {
-                var tagNameLc = element.tagName.toLowerCase();
-                if (element.parentElement === null) {
-                    return '/' + tagNameLc;
-                }
-
-                if (element.id && document.querySelectorAll(tagNameLc + '#' + element.id).length === 1) {
-                    return '//' + tagNameLc + '[@id=\'' + element.id + '\']';
-                }
-
-                var children = element.parentElement.children;
-                var pos = 0;
-                for (var i = 0; i < children.length; i++) {
-                    if (children[i].tagName.toLowerCase() === tagNameLc) {
-                        pos++;
-                        if (children[i] === element) {
-                            break;
-                        }
-                    }
-                }
-
-                var xpath = buildXpathFromElement(element.parentElement) + '/' + tagNameLc + '[' + pos + ']';
-
-                return xpath;
-            };
-
-            return buildXpathFromElement(arguments[0]);
-            EOF;
-        $xpath = $this->getWebDriverSession()->execute([
-            'script' => $script,
-            'args' => [$element],
-        ]);
-
-        $minkElements = $this->find($xpath);
-        if (count($minkElements) === 0) {
-            throw new DriverException(sprintf('XPath "%s" built from WebDriver element did not find any element', $xpath));
-        }
-        if (count($minkElements) > 1) {
-            throw new DriverException(sprintf('XPath "%s" built from WebDriver element find more than one element', $xpath));
-        }
-
-        return reset($minkElements);
+        return \Closure::bind(function () use ($xpath) {
+            return $this->findElement($xpath);
+        }, $this, parent::class)();
     }
 
-    private function findElement(string $xpath): Element
+    protected function clickOnElement(WebDriverElement $element): void
     {
-        return $this->getWebDriverSession()->element('xpath', $xpath);
+        \Closure::bind(function () use ($element) {
+            $this->clickOnElement($element);
+        }, $this, parent::class)();
     }
 
-    private function serializeExecuteArguments(array $args): array
+    #[\Override]
+    protected function mouseOverElement(WebDriverElement $element): void
     {
-        foreach ($args as $k => $v) {
-            if ($v instanceof NodeElement) {
-                $args[$k] = $this->findElement($v->getXpath());
-            } elseif (is_array($v)) {
-                $args[$k] = $this->serializeExecuteArguments($v);
-            }
-        }
+        // move the element into the viewport
+        // needed at least for Firefox as Selenium moveto does move the mouse cursor only
+        $this->executeScript('arguments[0].scrollIntoView({ behaviour: \'instant\', block: \'center\', inline: \'center\' })', [$element]);
 
-        return $args;
+        $this->getWebDriverSession()->moveto(['element' => $element->getID()]);
+    }
+
+    private function executeJsSelectText(WebDriverElement $element, int $start, ?int $stop = null): void
+    {
+        $this->executeScript(
+            'arguments[0].setSelectionRange(Math.min(arguments[1], Number.MAX_SAFE_INTEGER), Math.min(arguments[2], Number.MAX_SAFE_INTEGER));',
+            [$element, $start, $stop ?? $start]
+        );
     }
 
     /**
-     * @param mixed $data
-     *
-     * @return mixed
+     * @param 'type' $action
+     * @param string $options
      */
-    private function unserializeExecuteResult($data)
+    protected function executeSynJsAndWait(string $action, WebDriverElement $element, $options): void
     {
-        if ($data instanceof Element) {
-            return $this->createMinkElementFromWebDriverElement($data);
-        } elseif (is_array($data)) {
-            foreach ($data as $k => $v) {
-                $data[$k] = $this->unserializeExecuteResult($v);
-            }
+        $this->withSyn();
+
+        $waitUniqueKey = '__wait__' . hash('sha256', microtime(true) . random_bytes(64));
+        $this->executeScript(
+            'window.syn[arguments[2]] = true; window.syn.' . $action . '(arguments[0], arguments[1], () => delete window.syn[arguments[2]]);',
+            [$element, $options, $waitUniqueKey]
+        );
+        $this->wait(5000, 'typeof window.syn[arguments[0]] === \'undefined\'', [$waitUniqueKey]);
+    }
+
+    /**
+     * @param string $text special characters can be passed like "[shift]T[shift-up]eest[left][left][backspace]"
+     */
+    public function keyboardWrite(string $xpath, $text): void
+    {
+        $element = $this->findElement($xpath);
+
+        $focusedElement = $this->getWebDriverSession()->activeElement();
+        if ($element->getID() !== $focusedElement->getID()) {
+            $this->clickOnElement($element);
+            $focusedElement = $this->getWebDriverSession()->activeElement();
         }
 
-        return $data;
-    }
-
-    protected function executeJsOnXpath($xpath, $script, $sync = true)
-    {
-        $options = [
-            'script' => str_replace('{{ELEMENT}}', 'arguments[0]', $script),
-            'args' => [$this->findElement($xpath)],
-        ];
-
-        $result = $sync
-            ? $this->getWebDriverSession()->execute($options)
-            : $this->getWebDriverSession()->execute_async($options);
-
-        return $this->unserializeExecuteResult($result);
-    }
-
-    public function executeScript($script, array $args = []): void
-    {
-        if (preg_match('~^function[\s\(]~', $script)) {
-            $script = preg_replace('~;$~', '', $script);
-            $script = '(' . $script . ')';
+        if (in_array($focusedElement->name(), ['input', 'textarea'], true)) {
+            $this->executeJsSelectText($focusedElement, \PHP_INT_MAX);
         }
 
-        $this->getWebDriverSession()->execute([
-            'script' => $script,
-            'args' => $this->serializeExecuteArguments($args),
-        ]);
-    }
-
-    public function evaluateScript($script, array $args = [])
-    {
-        if (!str_starts_with(trim($script), 'return ')) {
-            $script = 'return ' . $script;
-        }
-
-        $result = $this->getWebDriverSession()->execute([
-            'script' => $script,
-            'args' => $this->serializeExecuteArguments($args),
-        ]);
-
-        return $this->unserializeExecuteResult($result);
-    }
-
-    public function wait($timeout, $condition, array $args = []): bool
-    {
-        $script = 'return (' . rtrim($condition, " \t\n\r;") . ');';
-        $start = microtime(true);
-        $end = $start + $timeout / 1000.0;
-
-        do {
-            $result = $this->getWebDriverSession()->execute([
-                'script' => $script,
-                'args' => $this->serializeExecuteArguments($args),
-            ]);
-            if ($result) {
-                break;
-            }
-            usleep(10_000);
-        } while (microtime(true) < $end);
-
-        return (bool) $result;
-    }
-
-    public function dragTo($sourceXpath, $destinationXpath): void
-    {
-        $source = $this->findElement($sourceXpath);
-        $destination = $this->findElement($destinationXpath);
-
-        $this->getWebDriverSession()->moveto(['element' => $source->getID()]);
-
-        $this->executeScript(<<<'EOF'
-            var event = document.createEvent("HTMLEvents");
-
-            event.initEvent("dragstart", true, true);
-            event.dataTransfer = {};
-
-            arguments[0].dispatchEvent(event);
-            EOF, [$source]);
-
-        $this->getWebDriverSession()->buttondown();
-        if ($destination->getID() !== $source->getID()) {
-            $this->getWebDriverSession()->moveto(['element' => $destination->getID()]);
-        }
-        $this->getWebDriverSession()->buttonup();
-
-        $this->executeScript(<<<'EOF'
-            var event = document.createEvent("HTMLEvents");
-
-            event.initEvent("drop", true, true);
-            event.dataTransfer = {};
-
-            arguments[0].dispatchEvent(event);
-            EOF, [$destination]);
+        $this->executeSynJsAndWait('type', $element, $text);
     }
 }

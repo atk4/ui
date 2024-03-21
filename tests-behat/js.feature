@@ -1,5 +1,4 @@
 Feature: JS
-  Test javascript
 
   Scenario:
     Given I am on "javascript/js.php"
@@ -20,11 +19,11 @@ Feature: JS
     Then I don't see button "C"
     Then I don't see button "Hide button C and self"
 
-    # "xpath(//div.ui.header[text()[normalize-space()='Callbacks']]/following-sibling::div.ui.button[1])" is long for nice CI output
-    When I check if text in "xpath(//div.ui.button[8])" match text "Callback Test"
+    # "//div.ui.header[text()[normalize-space()='Callbacks']]/following-sibling::div.ui.button[1]" is too long for nice CI output
+    When I check if text in "//div.ui.button[8]" match text "Callback Test"
     When I press button "Callback Test"
-    # "xpath(//div.ui.header[text()[normalize-space()='Callbacks']]/following-sibling::div.ui.button[1])" is long for nice CI output
-    Then I check if text in "xpath(//div.ui.button[8])" match regex "~^\d+$~"
+    # "//div.ui.header[text()[normalize-space()='Callbacks']]/following-sibling::div.ui.button[1]" is too long for nice CI output
+    Then I check if text in "//div.ui.button[8]" match regex "~^\d+$~"
 
   Scenario: JsCallback exception is displayed
     When I press button "failure"

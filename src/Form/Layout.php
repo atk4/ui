@@ -36,17 +36,19 @@ class Layout extends AbstractLayout
     /** @var bool Set true if you want fields to appear in-line. */
     public $inline = false;
 
-    /** @var HtmlTemplate|null Template holding input html. */
+    /** @var HtmlTemplate|null Template holding input HTML. */
     public $inputTemplate;
 
     /** @var array Seed for creating input hint View used in this layout. */
-    public $defaultHint = [Label::class, 'class' => ['pointing']];
+    public $defaultHintSeed = [Label::class, 'class' => ['pointing']];
 
+    #[\Override]
     protected function _addControl(Control $control, Field $field): Control
     {
         return $this->add($control, ['desired_name' => $field->shortName]);
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -56,21 +58,13 @@ class Layout extends AbstractLayout
         }
     }
 
-    /**
-     * Adds Button.
-     *
-     * @param Button|array $seed
-     *
-     * @return Button
-     */
+    #[\Override]
     public function addButton($seed)
     {
         return $this->add(Factory::mergeSeeds([Button::class], $seed), 'Buttons');
     }
 
     /**
-     * Adds Header in form layout.
-     *
      * @param string|array $label
      *
      * @return $this
@@ -127,9 +121,7 @@ class Layout extends AbstractLayout
         return $v;
     }
 
-    /**
-     * Recursively renders this view.
-     */
+    #[\Override]
     protected function recursiveRender(): void
     {
         $labeledControl = $this->inputTemplate->cloneRegion('LabeledControl');
@@ -140,7 +132,7 @@ class Layout extends AbstractLayout
         $this->template->del('Content');
 
         foreach ($this->elements as $element) {
-            // Buttons go under Button section
+            // buttons go under Button section
             if ($element instanceof Button) {
                 $this->template->dangerouslyAppendHtml('Buttons', $element->getHtml());
 
@@ -169,7 +161,7 @@ class Layout extends AbstractLayout
                 continue;
             }
 
-            // Anything but controls or explicitly defined controls get inserted directly
+            // anything but controls or explicitly defined controls get inserted directly
             if (!$element instanceof Control || !$element->layoutWrap) {
                 $this->template->dangerouslyAppendHtml('Content', $element->getHtml()); // @phpstan-ignore-line
 
@@ -179,7 +171,7 @@ class Layout extends AbstractLayout
             $template = $element->renderLabel ? $labeledControl : $noLabelControl;
             $label = $element->caption ?? $element->entityField->getField()->getCaption();
 
-            // Anything but form controls gets inserted directly
+            // anything but form controls gets inserted directly
             if ($element instanceof Control\Checkbox) {
                 $template = $noLabelControl;
                 $element->template->set('Content', $label);
@@ -198,7 +190,7 @@ class Layout extends AbstractLayout
                 }
             }
 
-            // Controls get extra pampering
+            // controls get extra pampering
             $template->dangerouslySetHtml('Input', $element->getHtml());
             $template->trySet('label', $label);
             $template->trySet('labelFor', $element->name . '_input');
@@ -213,7 +205,7 @@ class Layout extends AbstractLayout
             }
 
             if ($element->hint && $template->hasTag('Hint')) {
-                $hint = Factory::factory($this->defaultHint);
+                $hint = Factory::factory($this->defaultHintSeed);
                 $hint->name = $element->name . '_hint';
                 if (is_object($element->hint) || is_array($element->hint)) {
                     $hint->add($element->hint);
@@ -227,7 +219,7 @@ class Layout extends AbstractLayout
             }
 
             if ($this->template->hasTag($element->shortName)) {
-                $this->template->tryDangerouslySetHtml($element->shortName, $template->renderToHtml());
+                $this->template->dangerouslySetHtml($element->shortName, $template->renderToHtml());
             } else {
                 $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
             }

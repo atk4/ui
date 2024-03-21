@@ -30,24 +30,55 @@ class CoverageUtil
         self::$coverage->start(self::class);
     }
 
+    /**
+     * @return list<string>
+     */
+    private static function listFiles(string $directory): array
+    {
+        $res = [];
+        foreach (array_diff(scandir($directory), ['.', '..']) as $v) {
+            $path = $directory . '/' . $v;
+            if (is_dir($path)) {
+                foreach (self::listFiles($path) as $path2) {
+                    $res[] = $path2;
+                }
+            } else {
+                $res[] = $path;
+            }
+        }
+
+        return $res;
+    }
+
     public static function startFromPhpunitConfig(string $phpunitConfigDir): void
     {
-        $filter = new Filter();
+        $phpunitCoverageConfig = simplexml_load_file($phpunitConfigDir . '/phpunit.xml.dist')->source;
 
-        $phpunitCoverageConfig = simplexml_load_file($phpunitConfigDir . '/phpunit.xml.dist')->coverage;
-        foreach ($phpunitCoverageConfig->include->directory ?? [] as $path) {
-            $filter->includeDirectory($phpunitConfigDir . '/' . $path);
-        }
-        foreach ($phpunitCoverageConfig->include->file ?? [] as $path) {
-            $filter->includeFile($phpunitConfigDir . '/' . $path);
-        }
+        $excludeFiles = [];
         foreach ($phpunitCoverageConfig->exclude->directory ?? [] as $path) {
-            $filter->excludeDirectory($phpunitConfigDir . '/' . $path);
+            foreach (self::listFiles($phpunitConfigDir . '/' . $path) as $path2) {
+                $excludeFiles[] = $path2;
+            }
         }
         foreach ($phpunitCoverageConfig->exclude->file ?? [] as $path) {
-            $filter->excludeFile($phpunitConfigDir . '/' . $path);
+            $excludeFiles[] = $phpunitConfigDir . '/' . $path;
         }
 
+        $files = [];
+        foreach ($phpunitCoverageConfig->include->directory ?? [] as $path) {
+            foreach (self::listFiles($phpunitConfigDir . '/' . $path) as $path2) {
+                $files[] = $path2;
+            }
+        }
+        $files = array_diff($files, $excludeFiles);
+
+        foreach ($phpunitCoverageConfig->include->file ?? [] as $path) {
+            $files[] = $phpunitConfigDir . '/' . $path;
+        }
+
+        // https://github.com/sebastianbergmann/phpunit/blob/11.0.2/src/TextUI/Configuration/CodeCoverageFilterRegistry.php#L57
+        $filter = new Filter();
+        $filter->includeFiles($files);
         static::start($filter);
 
         // fix https://github.com/sebastianbergmann/php-code-coverage/issues/942

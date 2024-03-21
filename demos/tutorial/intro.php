@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Card;
 use Atk4\Ui\Form;
@@ -17,12 +18,12 @@ use Atk4\Ui\Text;
 use Atk4\Ui\View;
 use Atk4\Ui\Wizard;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $wizard = Wizard::addTo($app);
 
-$wizard->addStep('User Interface', function (Wizard $page) {
+$wizard->addStep('User Interface', static function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(<<<'EOF'
         Agile Toolkit is a "Low Code Framework" written in PHP. It is designed to simplify all aspects of web application creation:
@@ -56,21 +57,21 @@ $wizard->addStep('User Interface', function (Wizard $page) {
 
     $t->addParagraph('It all has started with a "Button" though:');
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(static function (View $owner) {
         Button::addTo($owner, ['Hello from the button!']);
     });
 });
 
-$wizard->addStep('Interactivity', function (Wizard $page) {
+$wizard->addStep('Interactivity', static function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(<<<'EOF'
         PHP is a server-side language. That prompted us to implement server-side UI actions. They are very easy to define -
         no need to create any routes or custom routines, simply define a PHP closure like this:
         EOF);
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(static function (View $owner) {
         $button = Button::addTo($owner, ['Click for the greeting!']);
-        $button->on('click', function () {
+        $button->on('click', static function () {
             return 'Hello World!';
         });
     });
@@ -81,7 +82,7 @@ $wizard->addStep('Interactivity', function (Wizard $page) {
         written in VueJS) and the backend. We also support seamless reloading of any UI widget:
         EOF);
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(static function (View $owner) {
         $seg = View::addTo($owner, ['ui' => 'segment']);
 
         Text::addTo($seg)->set('Number of buttons: ');
@@ -94,8 +95,9 @@ $wizard->addStep('Interactivity', function (Wizard $page) {
 
         View::addTo($seg, ['ui' => 'divider']);
 
-        for ($i = 1; $i <= ($_GET['count'] ?? 1); ++$i) {
-            Button::addTo($seg, [$i]);
+        $count = $seg->getApp()->tryGetRequestQueryParam('count') ?? 1;
+        for ($i = 1; $i <= $count; ++$i) {
+            Button::addTo($seg, [(string) $i]);
         }
     });
 
@@ -106,14 +108,14 @@ $wizard->addStep('Interactivity', function (Wizard $page) {
         EOF);
 });
 
-$wizard->addStep('Business Model', function (Wizard $page) {
+$wizard->addStep('Business Model', static function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(<<<'EOF'
         One major benefit of Server Side Rendered applications is ability to directly interact with data. In other applications
         you may need to manually process data but in Agile Toolkit we use data mapping framework.
         EOF);
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(static function (View $owner) {
         /* Showing Class definition.
         class DemoInvoice extends Model
         {
@@ -131,7 +133,7 @@ $wizard->addStep('Business Model', function (Wizard $page) {
         session_start();
 
         $model = new DemoInvoice(new Persistence\Array_($_SESSION['atk4_ui_intro_demo'] ?? []));
-        $model->onHook(Model::HOOK_AFTER_SAVE, function (Model $model) {
+        $model->onHook(Model::HOOK_AFTER_SAVE, static function (Model $model) {
             $_SESSION['atk4_ui_intro_demo'][$model->getId()] = (clone $model->getModel())->addCondition($model->idField, $model->getId())->export(null, null, false)[$model->getId()];
         });
 
@@ -151,7 +153,7 @@ $wizard->addStep('Business Model', function (Wizard $page) {
         }
         $form->setModel($entity);
 
-        $form->onSubmit(function (Form $form) {
+        $form->onSubmit(static function (Form $form) {
             $form->model->save();
 
             return new JsToast('Saved!');
@@ -176,17 +178,17 @@ $wizard->addStep('Business Model', function (Wizard $page) {
         EOF);
 });
 
-$wizard->addStep('Persistence', function (Wizard $page) {
+$wizard->addStep('Persistence', static function (Wizard $page) {
     $t = Text::addTo($page);
     $t->addParagraph(<<<'EOF'
         Once your model is defined, it can be re-used later with any generic view:
         EOF);
 
-    Demo::addTo($page)->setCodeAndCall(function (View $owner) {
+    Demo::addTo($page)->setCodeAndCall(static function (View $owner) {
         session_start();
 
         $model = new DemoInvoice(new Persistence\Array_($_SESSION['atk4_ui_intro_demo'] ?? []));
-        $model->onHook(Model::HOOK_AFTER_SAVE, function (Model $model) {
+        $model->onHook(Model::HOOK_AFTER_SAVE, static function (Model $model) {
             $_SESSION['atk4_ui_intro_demo'][$model->getId()] = (clone $model->getModel())->addCondition($model->idField, $model->getId())->export(null, null, false)[$model->getId()];
         });
 
@@ -207,7 +209,7 @@ $wizard->addStep('Persistence', function (Wizard $page) {
         EOF);
 });
 
-$wizard->addFinish(function (Wizard $page) {
+$wizard->addFinish(static function (Wizard $page) {
     PromotionText::addTo($page);
     Button::addTo($page, ['Exit demo', 'class.primary' => true, 'icon' => 'left arrow'], ['Left'])
         ->link('../');

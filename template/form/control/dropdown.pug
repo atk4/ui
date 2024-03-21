@@ -1,12 +1,14 @@
 | <div {$attributes}>
 | {$BeforeInput}{$AfterBeforeInput}
-| {Input}<input type="{inputType}text{/}" {$inputAttributes}>{/}
-| <i class="{DropIcon}dropdown{/} icon"></i>
-| <div class="default text">{DefaultText}...{/}</div>
+| <div class="ui dropdown {$multipleClass} search selection {$disabledClass}" style="width: 100%;">
+| {$Input}
+| <i class="dropdown icon"></i>
+| <input class="search" {$disabled} style="width: 100%;">
+| <div class="default text">{$DefaultText}</div>
 | <div class="menu">
-| {Item}
-| <div class="item" data-value="{$value}">{Icon}<i class="{$iconClass}"></i>{/Icon}{$title}</div>
+| {Item}<div class="item" data-value="{$value}">{Icon}<i class="{$iconClass}"></i>{/Icon}{$title}</div>
 | {/Item}
+| </div>
 | </div>
 | {$AfterInput}{$AfterAfterInput}
 | </div>

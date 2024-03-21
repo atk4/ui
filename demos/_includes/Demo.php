@@ -6,7 +6,8 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\Columns;
 use Atk4\Ui\Exception;
-use Atk4\Ui\Js\JsChain;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\View;
 
 class Demo extends Columns
@@ -19,14 +20,12 @@ class Demo extends Columns
     /** @var bool */
     public static $isInitialized = false;
 
-    /** @var string */
-    public $highlightDefaultStyle = 'dark';
-
     /** @var int */
     public $leftWidth = 8;
     /** @var int */
     public $rightWidth = 8;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -50,11 +49,11 @@ class Demo extends Columns
             $funcRefl->getEndLine() - $funcRefl->getStartLine() - 1
         );
 
-        $minIndent = min(array_map(function (string $l): int {
+        $minIndent = min(array_map(static function (string $l): int {
             return strlen($l) - strlen(ltrim($l, ' '));
         }, array_filter($codeArr)));
 
-        return implode("\n", array_map(function (string $l) use ($minIndent) {
+        return implode("\n", array_map(static function (string $l) use ($minIndent) {
             return substr($l, $minIndent);
         }, $codeArr));
     }
@@ -67,7 +66,10 @@ class Demo extends Columns
         $code = $this->extractCodeFromClosure($fx);
 
         $this->highLightCode();
-        View::addTo(View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])->addClass($lang)->set($code);
+        View::addTo(View::addTo($this->left, ['element' => 'pre']), ['element' => 'code'])
+            ->addClass('language-' . $lang)
+            ->set($code)
+            ->js(true)->each(new JsFunction(['i, el'], [new JsExpression('hljs.highlightElement(el)')]));
 
         $fx($this->right);
     }
@@ -75,9 +77,8 @@ class Demo extends Columns
     public function highLightCode(): void
     {
         if (!self::$isInitialized) {
-            $this->getApp()->requireCss('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.16.2/styles/' . $this->highlightDefaultStyle . '.min.css');
-            $this->getApp()->requireJs('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.16.2/highlight.min.js');
-            $this->js(true, (new JsChain('hljs'))->initHighlighting());
+            $this->getApp()->requireCss($this->getApp()->cdn['highlight.js'] . '/styles/github-dark-dimmed.min.css');
+            $this->getApp()->requireJs($this->getApp()->cdn['highlight.js'] . '/highlight.min.js');
             self::$isInitialized = true;
         }
     }

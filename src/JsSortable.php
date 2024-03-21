@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Data\Field;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpressionable;
 
 class JsSortable extends JsCallback
 {
-    /** @var string The html element that contains others element for reordering. */
+    /** @var string The HTML element that contains others element for reordering. */
     public $container = 'tbody';
 
-    /** @var string The html element inside the container that need reordering. */
+    /** @var string The HTML element inside the container that need reordering. */
     public $draggable = 'tr';
 
     /**
-     * The data label set as data-label attribute on the html element.
+     * The data label set as data-label attribute on the HTML element.
      *  The callback will send source parameter on the moved element using this attribute.
      *  default to data-id.
      *
@@ -28,7 +29,7 @@ class JsSortable extends JsCallback
     public $dataLabel = 'id';
 
     /**
-     * The css class name of the handle element for dragging purpose.
+     * The CSS class name of the handle element for dragging purpose.
      * If null, the entire element become the dragging handle.
      *
      * @var string|null
@@ -41,6 +42,7 @@ class JsSortable extends JsCallback
     /** @var View|null The View that need reordering. */
     public $view;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -48,7 +50,7 @@ class JsSortable extends JsCallback
         if (!$this->view) {
             $this->view = $this->getOwner();
         }
-        $this->getApp()->requireJs($this->getApp()->cdn['atk'] . '/external/@shopify/draggable/lib/draggable.bundle.js');
+        $this->getApp()->requireJs($this->getApp()->cdn['atk'] . '/external/@shopify/draggable/build/umd/index.min.js');
 
         $this->view->js(true)->atkJsSortable([
             'url' => $this->getJsUrl(),
@@ -64,24 +66,29 @@ class JsSortable extends JsCallback
     /**
      * Callback when container has been reorder.
      *
-     * @param \Closure(list<string>, string, int, int): (JsExpressionable|View|string|void) $fx
+     * @param \Closure(list<mixed>, mixed, int, int): (JsExpressionable|View|string|void) $fx
      */
-    public function onReorder(\Closure $fx): void
+    public function onReorder(\Closure $fx, Field $idField): void
     {
-        $this->set(function () use ($fx) {
-            $sortOrders = explode(',', $_POST['order']);
-            $source = $_POST['source'];
-            $newIndex = (int) $_POST['newIndex'];
-            $origIndex = (int) $_POST['origIndex'];
+        $this->set(function () use ($fx, $idField) {
+            // TODO comma can be in the order/ID value
+            $orderedIds = explode(',', $this->getApp()->getRequestPostParam('order'));
+            $sourceId = $this->getApp()->getRequestPostParam('source');
+            $newIndex = (int) $this->getApp()->getRequestPostParam('newIndex');
+            $origIndex = (int) $this->getApp()->getRequestPostParam('origIndex');
 
-            return $fx($sortOrders, $source, $newIndex, $origIndex);
+            $typecastLoadIdFx = fn ($v) => $this->getApp()->uiPersistence->typecastAttributeLoadField($idField, $v);
+            $orderedIds = array_map($typecastLoadIdFx, $orderedIds);
+            $sourceId = $typecastLoadIdFx($sourceId);
+
+            return $fx($orderedIds, $sourceId, $newIndex, $origIndex);
         });
     }
 
     /**
-     * Return js action to retrieve order.
+     * Return JS action to retrieve order.
      *
-     * @param array|null $urlOptions
+     * @param array<string, string>|null $urlOptions
      *
      * @return JsChain
      */

@@ -31,16 +31,18 @@ class JsSse extends JsCallback
     /** @var \Closure|null custom function for outputting (instead of echo) */
     public $echoFunction;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
 
-        if ($_GET['__atk_sse'] ?? null) {
+        if ($this->getApp()->tryGetRequestQueryParam('__atk_sse')) {
             $this->browserSupport = true;
             $this->initSse();
         }
     }
 
+    #[\Override]
     public function jsExecute(): JsBlock
     {
         $this->assertIsInitialized();
@@ -56,6 +58,23 @@ class JsSse extends JsCallback
         return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)]);
     }
 
+    #[\Override]
+    public function set($fx = null, $args = null)
+    {
+        if (!$fx instanceof \Closure) {
+            throw new \TypeError('$fx must be of type Closure');
+        }
+
+        return parent::set(static function (Jquery $chain) use ($fx, $args) {
+            // TODO replace EventSource to support POST
+            // https://github.com/Yaffle/EventSource
+            // https://github.com/mpetazzoni/sse.js
+            // https://github.com/EventSource/eventsource
+            // https://github.com/byjg/jquery-sse
+            return $fx($chain, ...array_values($args ?? []));
+        });
+    }
+
     /**
      * Sending an SSE action.
      */
@@ -63,20 +82,23 @@ class JsSse extends JsCallback
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
-            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec]), 'atkSseAction');
+            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec->jsRender()]), 'atkSseAction');
         }
     }
 
     /**
      * @return never
      */
-    public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
+    #[\Override]
+    public function terminateAjax(JsBlock $ajaxec, $msg = null, bool $success = true): void
     {
+        $ajaxecStr = $ajaxec->jsRender();
+
         if ($this->browserSupport) {
-            if ($ajaxec) {
+            if ($ajaxecStr !== '') {
                 $this->sendEvent(
                     'js',
-                    $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec]),
+                    $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxecStr]),
                     'atkSseAction'
                 );
             }
@@ -85,13 +107,13 @@ class JsSse extends JsCallback
             $this->getApp()->terminate();
         }
 
-        $this->getApp()->terminateJson(['success' => $success, 'atkjs' => $ajaxec]);
+        $this->getApp()->terminateJson(['success' => $success, 'atkjs' => $ajaxecStr]);
     }
 
     /**
      * Output a SSE Event.
      */
-    public function sendEvent(string $id, string $data, string $eventName = null): void
+    public function sendEvent(string $id, string $data, ?string $eventName = null): void
     {
         $this->sendBlock($id, $data, $eventName);
     }
@@ -104,9 +126,6 @@ class JsSse extends JsCallback
         flush();
     }
 
-    /**
-     * Send Data.
-     */
     private function output(string $content): void
     {
         if ($this->echoFunction) {
@@ -122,15 +141,12 @@ class JsSse extends JsCallback
         }, null, $app)();
     }
 
-    /**
-     * Send a SSE data block.
-     */
-    public function sendBlock(string $id, string $data, string $eventName = null): void
+    public function sendBlock(string $id, string $data, ?string $eventName = null): void
     {
         if (connection_aborted()) {
             $this->hook(self::HOOK_ABORTED);
 
-            // stop execution when aborted if not keepAlive.
+            // stop execution when aborted if not keepAlive
             if (!$this->keepAlive) {
                 $this->getApp()->callExit();
             }
@@ -149,13 +165,12 @@ class JsSse extends JsCallback
      */
     private function wrapData(string $string): string
     {
-        return implode('', array_map(function (string $v): string {
+        return implode('', array_map(static function (string $v): string {
             return 'data: ' . $v . "\n";
         }, preg_split('~\r?\n|\r~', $string)));
     }
 
     /**
-     * Initialise this sse.
      * It will ignore user abort by default.
      */
     protected function initSse(): void
@@ -165,7 +180,7 @@ class JsSse extends JsCallback
 
         $this->getApp()->setResponseHeader('content-type', 'text/event-stream');
 
-        // disable buffering for nginx, see http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
+        // disable buffering for nginx, see https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
         $this->getApp()->setResponseHeader('x-accel-buffering', 'no');
 
         // disable compression

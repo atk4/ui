@@ -20,6 +20,7 @@ class CardSection extends View
     /** @var array<int, string> */
     public $tableClass = ['fixed', 'small'];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

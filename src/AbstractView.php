@@ -50,7 +50,7 @@ abstract class AbstractView
      */
     protected function init(): void
     {
-        if ($this->name === null) {
+        if (($this->name ?? null) === null) {
             $this->name = 'atk';
         }
 
@@ -69,9 +69,7 @@ abstract class AbstractView
      */
     public function add(self $object, array $args = []): self
     {
-        if (func_num_args() > 2) { // prevent bad usage
-            throw new \Error('Too many method arguments');
-        } elseif ($this->_rendered) {
+        if ($this->_rendered) {
             throw new Exception('You cannot add anything into the view after it was rendered');
         }
 

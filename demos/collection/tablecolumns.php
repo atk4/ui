@@ -6,13 +6,15 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\App;
 use Atk4\Ui\Header;
 use Atk4\Ui\Table;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $modelColorClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -115,17 +117,17 @@ Header::addTo($app, ['Table column', 'subHeader' => 'Table column decorator can 
 $model = new $modelColorClass(new Persistence\Static_([]));
 
 foreach (range(1, 10) as $id) {
-    $key_value = random_int(1, 4);
+    $keyValue = random_int(1, 4);
 
     $model->insert([
         'id' => $id,
         'name' => 'name ' . $id,
-        'key_value' => $key_value,
-        'key_value_string' => $keyValueString[$key_value],
+        'key_value' => $keyValue,
+        'key_value_string' => $keyValueString[$keyValue],
         'value_not_always_present' => random_int(0, 100) > 50 ? 'have value' : '',
         'interests' => '1st label, 2nd label',
         'rating' => random_int(100, 300) / 100,
-        'note' => 'lorem ipsum lorem dorem lorem',
+        'note' => $id !== 3 ? 'lorem ipsum lorem dorem lorem' : null,
     ]);
 }
 

@@ -57,9 +57,11 @@ class SessionManager
     }
 
     /**
-     * @param \Closure(): mixed $fx
+     * @template T
      *
-     * @return mixed
+     * @param \Closure(): T $fx
+     *
+     * @return T
      */
     public function atomicSession(\Closure $fx, bool $readAndCloseImmediately = false)
     {
@@ -110,8 +112,7 @@ class SessionManager
         $found = false;
 
         if (self::$readCache === null) {
-            $this->atomicSession(function (): void {
-            }, true);
+            $this->atomicSession(static function (): void {}, true);
         }
 
         if (isset(self::$readCache[$this->rootNamespace][$namespace])
@@ -195,7 +196,7 @@ class SessionManager
      * Forget session data for $key. If $key is omitted will forget all
      * associated session data.
      */
-    public function forget(string $namespace, string $key = null): void
+    public function forget(string $namespace, ?string $key = null): void
     {
         $this->atomicSession(function () use ($namespace, $key) {
             if ($key === null) {

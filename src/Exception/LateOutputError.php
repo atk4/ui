@@ -7,6 +7,4 @@ namespace Atk4\Ui\Exception;
 /**
  * @internal
  */
-final class LateOutputError extends \Error
-{
-}
+final class LateOutputError extends \Error {}

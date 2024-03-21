@@ -12,7 +12,7 @@ Feature: Nested modals /w error handling
 
   Scenario: Modal with JS error
     When I press button "Test Modal load JS error"
-    Then Modal is open with text "Javascript Error"
+    Then Modal is open with text "API JavaScript Error"
     Then Modal is open with text 'Fomantic-UI "modal.onShow" setting cannot be customized outside atk'
     Then I hide js modal
     When I press button "Test Modal load JS error"

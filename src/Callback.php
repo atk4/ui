@@ -33,11 +33,13 @@ class Callback extends AbstractView
     /** @var bool Allow this callback to trigger during a reload. */
     public $triggerOnReload = true;
 
+    #[\Override]
     public function add(AbstractView $object, array $args = []): AbstractView
     {
         throw new Exception('Callback cannot contain children');
     }
 
+    #[\Override]
     protected function init(): void
     {
         $this->getApp(); // assert has App
@@ -47,7 +49,7 @@ class Callback extends AbstractView
         $this->setUrlTrigger($this->urlTrigger);
     }
 
-    public function setUrlTrigger(string $trigger = null): void
+    public function setUrlTrigger(?string $trigger = null): void
     {
         $this->urlTrigger = $trigger ?? $this->name;
 
@@ -60,14 +62,14 @@ class Callback extends AbstractView
     }
 
     /**
-     * Executes user-specified action when call-back is triggered.
+     * Executes user-specified action when callback is triggered.
      *
      * @template T
      *
      * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): T $fx
      * @param array                                                                             $fxArgs
      *
-     * @phpstan-return T|null
+     * @return T|null
      */
     public function set($fx = null, $fxArgs = null)
     {
@@ -99,15 +101,12 @@ class Callback extends AbstractView
      */
     public function isTriggered(): bool
     {
-        return isset($_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger]);
+        return $this->getApp()->hasRequestQueryParam(self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger);
     }
 
-    /**
-     * Return callback triggered value.
-     */
     public function getTriggeredValue(): string
     {
-        return $_GET[self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger] ?? '';
+        return $this->getApp()->tryGetRequestQueryParam(self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger) ?? '';
     }
 
     /**
@@ -115,7 +114,7 @@ class Callback extends AbstractView
      */
     public function canTerminate(): bool
     {
-        return isset($_GET[self::URL_QUERY_TARGET]) && $_GET[self::URL_QUERY_TARGET] === $this->urlTrigger;
+        return $this->getApp()->hasRequestQueryParam(self::URL_QUERY_TARGET) && $this->getApp()->getRequestQueryParam(self::URL_QUERY_TARGET) === $this->urlTrigger;
     }
 
     /**
@@ -123,11 +122,11 @@ class Callback extends AbstractView
      */
     public function canTrigger(): bool
     {
-        return $this->triggerOnReload || !isset($_GET['__atk_reload']);
+        return $this->triggerOnReload || !$this->getApp()->hasRequestQueryParam('__atk_reload');
     }
 
     /**
-     * Return URL that will trigger action on this call-back. If you intend to request
+     * Return URL that will trigger action on this callback. If you intend to request
      * the URL directly in your browser (as iframe, new tab, or document location), you
      * should use getUrl instead.
      */
@@ -137,7 +136,7 @@ class Callback extends AbstractView
     }
 
     /**
-     * Return URL that will trigger action on this call-back. If you intend to request
+     * Return URL that will trigger action on this callback. If you intend to request
      * the URL loading from inside JavaScript, it's always advised to use getJsUrl instead.
      */
     public function getUrl(string $value = 'callback'): string
@@ -146,10 +145,13 @@ class Callback extends AbstractView
     }
 
     /**
-     * Return proper url argument for this callback.
+     * Return proper URL argument for this callback.
      */
-    private function getUrlArguments(string $value = null): array
+    private function getUrlArguments(?string $value = null): array
     {
-        return [self::URL_QUERY_TARGET => $this->urlTrigger, self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger => $value ?? $this->getTriggeredValue()];
+        return [
+            self::URL_QUERY_TARGET => $this->urlTrigger,
+            self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger => $value ?? ($this->isTriggered() ? $this->getTriggeredValue() : ''),
+        ];
     }
 }

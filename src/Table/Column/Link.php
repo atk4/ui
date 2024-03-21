@@ -12,7 +12,7 @@ use Atk4\Ui\Table;
 /**
  * Implements Column helper for grid.
  * Use
- *   new Link('http://yahoo.com?id={$id}');
+ *   new Link('https://yahoo.com?id={$id}');
  * or
  *   new Link(['order', 'id' => 'id' ]);
  * or
@@ -26,27 +26,27 @@ class Link extends Table\Column
      * If $url is set up, we will use pattern-matching to fill-in any part of this
      * with values of the model.
      *
-     * @var string|HtmlTemplate Destination definition
+     * @var string|HtmlTemplate
      */
     public $url;
 
     /**
      * If string 'example', then will be passed to $app->url('example') along with any defined arguments.
-     * If set as arrray, then non-0 key/values will be also passed to the URL:
+     * If set as array, then non-0 key/values will be also passed to the URL:
      *  $page = ['example', 'type' => '123'];.
      *
      * $url = $app->url(['example', 'type' => '123']);
      *
-     * In addition to abpove "args" refer to values picked up from a current row.
+     * In addition to above "args" refer to values picked up from a current row.
      *
-     * @var string|array|null
+     * @var string|array<0|string, string|int|false>|null
      */
     public $page;
 
     /**
      * When constructing a URL using 'page', this specifies list of values which will be added
      * to the destination URL. For example if you set $args = ['document_id' => 'id'] then row value
-     * of ['id'] will be added to url's property "document_id".
+     * of ['id'] will be added to URL's property "document_id".
      *
      * For a full example:
      *  $page = ['example', 'type' => 'client'];
@@ -57,7 +57,7 @@ class Link extends Table\Column
      * You can also pass non-key arguments ['id', 'title'] and they will be added up
      * as ?id=4&title=John%20Smith
      *
-     * @var array
+     * @var array<int|string, string>
      */
     public $args = [];
 
@@ -78,27 +78,26 @@ class Link extends Table\Column
      */
     public $target;
 
-    /** @var bool add download in the tag to force download from the url. */
+    /** @var bool add download in the tag to force download from the URL. */
     public $forceDownload = false;
 
     /**
-     * @param string|array $page
+     * @param string|array<0|string, string|int|false> $page
      */
     public function __construct($page = [], array $args = [], array $defaults = [])
     {
         if (is_array($page)) {
-            $page = ['page' => $page];
+            $defaults['page'] = $page;
         } else {
-            $page = ['url' => $page];
+            $defaults['url'] = $page;
         }
 
-        if ($args) {
-            $page['args'] = $args;
-        }
+        $defaults['args'] = $args;
 
-        parent::__construct(array_replace($defaults, $page));
+        parent::__construct($defaults);
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -111,7 +110,8 @@ class Link extends Table\Column
         }
     }
 
-    public function getDataCellTemplate(Field $field = null): string
+    #[\Override]
+    public function getDataCellTemplate(?Field $field = null): string
     {
         $attr = ['href' => '{$c_' . $this->shortName . '}'];
 
@@ -123,41 +123,42 @@ class Link extends Table\Column
             $attr['target'] = $this->target;
         }
 
-        $icon = '';
+        $iconHtml = '';
         if ($this->icon) {
-            $icon = $this->getApp()->getTag('i', ['class' => $this->icon . ' icon'], '');
+            $iconHtml = $this->getApp()->getTag('i', ['class' => $this->icon . ' icon'], '');
         }
 
-        $label = '';
+        $labelHtml = '';
         if ($this->useLabel) {
-            $label = $field ? ('{$' . $field->shortName . '}') : '[Link]';
+            $labelHtml = $field ? ('{$' . $field->shortName . '}') : '[Link]';
         }
 
         if ($this->class) {
             $attr['class'] = $this->class;
         }
 
-        return $this->getApp()->getTag('a', $attr, [$icon, $label]); // TODO $label is not HTML encoded
+        return $this->getApp()->getTag('a', $attr, [$iconHtml, $labelHtml]);
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         if ($this->url) {
-            $rowValues = $this->getApp()->uiPersistence->typecastSaveRow($row, $row->get());
+            $this->url->trySet($this->getApp()->uiPersistence->typecastSaveRow($row, $row->get()));
 
-            return ['c_' . $this->shortName => $this->url->set($rowValues)->renderToHtml()];
+            return ['c_' . $this->shortName => $this->url->renderToHtml()];
         }
 
-        $p = $this->page ?? [];
+        $page = $this->page ?? [];
 
         foreach ($this->args as $key => $val) {
             if (is_int($key)) {
                 $key = $val;
             }
 
-            $p[$key] = $row->get($val);
+            $page[$key] = $this->getApp()->uiPersistence->typecastAttributeSaveField($row->getField($val), $row->get($val));
         }
 
-        return ['c_' . $this->shortName => $this->table->url($p)];
+        return ['c_' . $this->shortName => $this->table->url($page)];
     }
 }

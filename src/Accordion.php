@@ -42,7 +42,7 @@ class Accordion extends View
      *
      * @return AccordionSection
      */
-    public function addSection($title, \Closure $callback = null, $icon = 'dropdown')
+    public function addSection($title, ?\Closure $callback = null, $icon = 'dropdown')
     {
         $section = AccordionSection::addTo($this, ['title' => $title, 'icon' => $icon]);
 
@@ -111,7 +111,7 @@ class Accordion extends View
     }
 
     /**
-     * Return an accordion js behavior command
+     * Return an accordion JS behavior command
      * as in Fomantic-UI behavior for Accordion module.
      * Ex: toggle an accordion from it's index value.
      * $accordion->jsBehavior('toggle', 1).
@@ -134,9 +134,9 @@ class Accordion extends View
     public function getSectionIdx(AccordionSection $section)
     {
         $idx = -1;
-        foreach ($this->sections as $key => $accordion_section) {
-            if ($accordion_section->name === $section->name) {
-                $idx = $key;
+        foreach ($this->sections as $k => $v) {
+            if ($v->name === $section->name) {
+                $idx = $k;
 
                 break;
             }
@@ -145,6 +145,7 @@ class Accordion extends View
         return $idx;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->type) {

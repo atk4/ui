@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Field;
 use Atk4\Data\Persistence;
 use Atk4\Ui\App;
 use Atk4\Ui\Behat\CoverageUtil;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Layout;
+use Atk4\Ui\Persistence\Ui as UiPersistence;
 
 date_default_timezone_set('UTC');
 
@@ -19,7 +21,7 @@ require_once __DIR__ . '/init-autoloader.php';
 $coverageSaveFx = null;
 if (is_dir(__DIR__ . '/../coverage') && !CoverageUtil::isCalledFromPhpunit()) {
     CoverageUtil::startFromPhpunitConfig(__DIR__ . '/..');
-    $coverageSaveFx = function (): void {
+    $coverageSaveFx = static function (): void {
         CoverageUtil::saveData(__DIR__ . '/../coverage');
     };
 }
@@ -28,8 +30,62 @@ $app = new App([
     'callExit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
     'catchExceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
     'alwaysRun' => (bool) ($_GET['APP_ALWAYS_RUN'] ?? true),
+    'uiPersistence' => new class() extends UiPersistence {
+        #[\Override]
+        protected function _typecastLoadField(Field $field, $value)
+        {
+            if ($field->type === WrappedIdType::NAME && is_string($value) && trim($value) === '') {
+                return null;
+            }
+
+            return parent::_typecastLoadField($field, $value);
+        }
+
+        #[\Override]
+        public function typecastAttributeSaveField(Field $field, $value): ?string
+        {
+            if ($field->type === WrappedIdType::NAME) {
+                return $value === null
+                    ? null
+                    : $this->typecastAttributeSaveField(new Field(['type' => 'integer']), $value->getId() + 218_000_000);
+            }
+
+            return parent::typecastAttributeSaveField($field, $value);
+        }
+
+        #[\Override]
+        public function typecastAttributeLoadField(Field $field, ?string $value)
+        {
+            if ($field->type === WrappedIdType::NAME) {
+                $value = $this->typecastAttributeLoadField(new Field(['type' => 'integer']), $value);
+
+                return $value === null
+                    ? null
+                    : new WrappedId($value - 218_000_000);
+            }
+
+            return parent::typecastAttributeLoadField($field, $value);
+        }
+    },
 ]);
 $app->title = 'Agile UI Demo v' . $app->version;
+
+unset($_SERVER);
+unset($_GET);
+unset($_POST);
+unset($_FILES);
+if (isset($_COOKIE)) { // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9953
+    $sessionCookieName = function_exists('session_name') ? session_name() : false;
+    foreach (array_keys($_COOKIE) as $k) {
+        if ($k !== $sessionCookieName) {
+            unset($_COOKIE[$k]);
+        }
+    }
+    if ($_COOKIE === []) {
+        unset($_COOKIE);
+    }
+}
+unset($_SESSION);
 
 if ($app->callExit !== true) {
     $app->stickyGet('APP_CALL_EXIT');
@@ -47,12 +103,10 @@ unset($coverageSaveFx);
 
 final class AnonymousClassNameCache
 {
-    /** @var array<string, string> */
+    /** @var array<string, class-string> */
     private static $classNameByFxHash = [];
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     /**
      * @template T of object
@@ -83,11 +137,11 @@ try {
     throw new Exception('Database error: ' . $e->getMessage());
 }
 
-[$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(/|\?|$))|\?~s', $_SERVER['REQUEST_URI'], 3);
+[$rootUrl, $relUrl] = preg_split('~(?<=/)(?=demos(?:/|$))~s', $app->getRequest()->getUri()->getPath(), 3);
 $demosUrl = $rootUrl . 'demos/';
 
 // allow custom layout override
-$app->initLayout([!isset($_GET['layout']) ? Layout\Maestro::class : $app->stickyGet('layout')]);
+$app->initLayout([!$app->hasRequestQueryParam('layout') ? Layout\Maestro::class : $app->stickyGet('layout')]);
 
 $layout = $app->layout;
 if ($layout instanceof Layout\NavigableInterface) {

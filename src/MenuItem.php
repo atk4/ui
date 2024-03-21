@@ -12,6 +12,7 @@ class MenuItem extends View
     /** @var string Specify icon for this menu item. */
     public $icon;
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->label) {

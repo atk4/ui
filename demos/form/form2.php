@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
@@ -13,7 +14,7 @@ use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Label;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // create header
@@ -30,14 +31,15 @@ $form->setModel((new Country($app->db))->createEntity(), []);
 
 // form basic field group
 $formAddress = $form->addGroup('Basic Country Information');
-$name = $formAddress->addControl(Country::hinting()->fieldName()->name, ['width' => 'sixteen']);
-$name->addAction(['Check Duplicate', 'iconRight' => 'search'])->on('click', function (Jquery $jquery, string $name) use ($app, $form) {
-    if ((new Country($app->db))->tryLoadBy(Country::hinting()->fieldName()->name, $name) !== null) {
-        return $form->js()->form('add prompt', Country::hinting()->fieldName()->name, 'This country name is already added.');
-    }
+$nameInput = $formAddress->addControl(Country::hinting()->fieldName()->name, ['width' => 'sixteen']);
+$nameInput->addAction(['Check Duplicate', 'iconRight' => 'search'])
+    ->on('click', static function (Jquery $jquery, string $name) use ($app, $form) {
+        if ((new Country($app->db))->tryLoadBy(Country::hinting()->fieldName()->name, $name) !== null) {
+            return $form->js()->form('add prompt', Country::hinting()->fieldName()->name, 'This country name is already added.');
+        }
 
-    return new JsToast('This country name can be added.');
-}, ['args' => ['_n' => $name->jsInput()->val()]]);
+        return new JsToast('This country name can be added.');
+    }, ['args' => [$nameInput->jsInput()->val()]]);
 
 // form codes field group
 $formCodes = $form->addGroup(['Codes']);
@@ -53,7 +55,7 @@ $formNames->addControl('middle_name', ['width' => 'five', 'caption' => 'Middle N
 $formNames->addControl('last_name', ['width' => 'six', 'caption' => 'Last Name']);
 
 // form on submit
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     $countryEntity = (new Country($form->getApp()->db))->createEntity();
     // Model will have some validation too
     foreach ($form->model->getFields('editable') as $k => $field) {
@@ -62,7 +64,7 @@ $form->onSubmit(function (Form $form) {
         }
     }
 
-    // In-form validation
+    // in-form validation
     $errors = [];
     if (mb_strlen($form->model->get('first_name')) < 3) {
         $errors[] = $form->jsError('first_name', 'too short, ' . $form->model->get('first_name'));
@@ -86,6 +88,7 @@ $form->onSubmit(function (Form $form) {
 $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
     public $table = 'person';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -97,7 +100,8 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends M
         $this->hasOne('country_dropdown_id', ['model' => [Country::class], 'ui' => ['form' => new Form\Control\Dropdown()]]); // this works slow
     }
 
-    public function validate(string $intent = null): array
+    #[\Override]
+    public function validate(?string $intent = null): array
     {
         $errors = parent::validate($intent);
 
@@ -112,6 +116,6 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class() extends M
 $form = Form::addTo($app)->addClass('segment');
 $form->setModel((new $personClass($app->db))->createEntity());
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     return new JsToast('Form saved!');
 });

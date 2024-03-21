@@ -1,0 +1,16 @@
+version: 2
+
+build:
+  # https://github.com/readthedocs/readthedocs.org/issues/8861
+  os: ubuntu-22.04
+  tools:
+    # https://github.com/readthedocs/readthedocs.org/issues/9719
+    python: '3'
+
+python:
+  install:
+    # https://github.com/readthedocs/readthedocs.org/issues/10806
+    - requirements: docs/requirements.txt
+
+formats:
+  - pdf

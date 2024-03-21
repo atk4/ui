@@ -86,9 +86,9 @@ class Popup extends View
     public $stopClickEvent = false;
 
     /**
-     * @param View|array|null $triggerBy
+     * @param View|array<string, mixed> $triggerBy
      */
-    public function __construct($triggerBy = null)
+    public function __construct($triggerBy = [])
     {
         if (is_object($triggerBy)) {
             $triggerBy = ['triggerBy' => $triggerBy];
@@ -97,6 +97,7 @@ class Popup extends View
         parent::__construct($triggerBy);
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -122,20 +123,16 @@ class Popup extends View
 
     /**
      * Set callback for loading content dynamically.
-     * Callback will receive a view attach to this popup
+     * Callback will receive a view attached to this popup
      * for adding content to it.
      *
      * @param \Closure(View): void $fx
-     * @param never                $ignore
-     *
-     * @return $this
      */
-    public function set($fx = null, $ignore = null)
+    #[\Override]
+    public function set($fx = null)
     {
         if (!$fx instanceof \Closure) {
             throw new \TypeError('$fx must be of type Closure');
-        } elseif (func_num_args() > 1) {
-            throw new Exception('Only one argument is needed by Popup::set()');
         }
 
         $this->cb = Callback::addTo($this);
@@ -148,11 +145,11 @@ class Popup extends View
             $this->minHeight = '45px';
         }
 
-        // create content view to pass to callback.
+        // create content view to pass to callback
         $content = $this->add($this->dynamicContent);
         $this->cb->set($fx, [$content]);
-        // only render our content view.
-        // PopupService will replace content with this one.
+        // only render our content view
+        // PopupService will replace content with this one
         $this->cb->terminateJson($content);
 
         return $this;
@@ -171,7 +168,7 @@ class Popup extends View
     }
 
     /**
-     * Allow to pass a target selector by name, i.e. a css class name.
+     * Allow to pass a target selector by name, i.e. a CSS class name.
      *
      * @param string $name
      *
@@ -211,7 +208,7 @@ class Popup extends View
     }
 
     /**
-     * Return js action need to display popup.
+     * Return JS action need to display popup.
      * When a grid is reloading, this method can be call
      * in order to display the popup once again.
      *
@@ -232,6 +229,7 @@ class Popup extends View
         return $chain;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->triggerBy) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Header;
@@ -17,7 +18,7 @@ use Atk4\Ui\Table;
 use Atk4\Ui\View;
 use Atk4\Ui\VirtualPage;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $img = $app->cdn['atk'] . '/logo.png';
@@ -61,21 +62,26 @@ Header::addTo($app, ['Can be rendered into HTML']);
 View::addTo($app, ['ui' => 'segment', 'class.raised' => true, 'element' => 'pre'])->set($plane->render());
 
 Header::addTo($app, ['Has a unique global identifier']);
-Label::addTo($app, ['Plane ID: ', 'detail' => $plane->name]);
+Label::addTo($app, ['Plane ID:', 'detail' => $plane->name]);
 
-Header::addTo($app, ['Can interract with JavaScript actions']);
-Button::addTo($app, ['Hide plane', 'icon' => 'down arrow'])->on('click', $plane->js()->hide());
-Button::addTo($app, ['Show plane', 'icon' => 'up arrow'])->on('click', $plane->js()->show());
-Button::addTo($app, ['Jiggle plane', 'icon' => 'expand'])->on('click', $plane->js()->transition('jiggle'));
-Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])->on('click', new JsReload($plane));
+Header::addTo($app, ['Can interact with JavaScript actions']);
+Button::addTo($app, ['Hide plane', 'icon' => 'down arrow'])
+    ->on('click', $plane->js()->hide());
+Button::addTo($app, ['Show plane', 'icon' => 'up arrow'])
+    ->on('click', $plane->js()->show());
+Button::addTo($app, ['Jiggle plane', 'icon' => 'expand'])
+    ->on('click', $plane->js()->transition('jiggle'));
+Button::addTo($app, ['Reload plane', 'icon' => 'refresh'])
+    ->on('click', new JsReload($plane));
 
 Header::addTo($app, ['Can be on a Virtual Page']);
-$vp = VirtualPage::addTo($app)->set(function (VirtualPage $vp) use ($planeTemplate) {
+$vp = VirtualPage::addTo($app)->set(static function (VirtualPage $vp) use ($planeTemplate) {
     $plane = View::addTo($vp, ['template' => $planeTemplate]);
-    Label::addTo($vp, ['Plane ID: ', 'class.bottom attached' => true, 'detail' => $plane->name]);
+    Label::addTo($vp, ['Plane ID:', 'class.bottom attached' => true, 'detail' => $plane->name]);
 });
 
-Button::addTo($app, ['Show $plane in a dialog', 'icon' => 'clone'])->on('click', new JsModal('Plane Box', $vp));
+Button::addTo($app, ['Show $plane in a dialog', 'icon' => 'clone'])
+    ->on('click', new JsModal('Plane Box', $vp));
 
 Header::addTo($app, ['All components extend View (even paginator)']);
 $columns = Columns::addTo($app);

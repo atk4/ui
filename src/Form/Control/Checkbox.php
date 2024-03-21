@@ -25,55 +25,52 @@ class Checkbox extends Form\Control
 
     public function __construct($label = [])
     {
-        if (func_num_args() > 1) { // prevent bad usage
-            throw new \Error('Too many method arguments');
-        }
-
         parent::__construct($label);
 
         $this->label = $this->content;
         $this->content = null;
     }
 
+    #[\Override]
     protected function init(): void
     {
-        // TODO exception should be generalized for type acceptable for any form control
-        if ($this->entityField && $this->entityField->getField()->type !== 'boolean') {
-            throw (new Exception('Checkbox form control requires field with boolean type'))
-                ->addMoreInfo('type', $this->entityField->getField()->type);
-        }
-
         parent::init();
 
-        // checkboxes are annoying because they don't send value when they are
-        // not ticked. We assume they are ticked and sent boolean "false" as a
-        // workaround. Otherwise send boolean "true".
-        if ($this->form) {
+        // checkboxes are annoying because they don't send value when they are not ticked
+        if ($this->form !== null) {
             $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
-                $postRawData[$this->entityField->getFieldName()] = isset($postRawData[$this->entityField->getFieldName()]);
+                if (!isset($postRawData[$this->shortName])) {
+                    $postRawData[$this->shortName] = '0';
+                }
             });
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->label) {
             $this->template->set('Content', $this->label);
         }
 
-        if ($this->entityField ? $this->entityField->get() : $this->content) {
+        if ($this->entityField !== null && !is_bool($this->entityField->get() ?? false)) {
+            throw (new Exception('Checkbox form control requires field with boolean type'))
+                ->addMoreInfo('type', $this->entityField->getField()->type)
+                ->addMoreInfo('value', $this->entityField->get());
+        }
+
+        if ($this->entityField !== null ? $this->entityField->get() : $this->content) {
             $this->template->dangerouslySetHtml('checked', 'checked="checked"');
         }
 
         $this->content = null;
 
-        if ($this->readOnly) {
-            $this->addClass('read-only');
-        }
-
         if ($this->disabled) {
             $this->addClass('disabled');
             $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
+        } elseif ($this->readOnly) {
+            $this->addClass('read-only');
+            $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
         }
 
         $this->js(true)->checkbox();

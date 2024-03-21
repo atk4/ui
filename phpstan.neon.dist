@@ -3,24 +3,34 @@ includes:
 
 parameters:
     level: 6
+    checkMissingOverrideMethodAttribute: true
     paths:
-        - ./
+        - .
     excludePaths:
-        - vendor/
-        - js/
+        - vendor
+        - js
 
     ignoreErrors:
-        - '~^(Property .+ has|Method .+\(\) (has parameter \$.+ with|return type has)) no value type specified in iterable type .+\.~'
+        - '~^(Property .+ has|Method .+\(\) (has parameter \$.+ with|return type has)) no value type specified in iterable type .+\.$~'
 
         # relax strict rules
-        - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.~'
-        - '~^Variable (static )?(property access|method call) on .+\.~'
+        - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.$~'
+        - '~^Variable (static )?(property access|method call) on .+\.$~'
+
+        # https://github.com/phpstan/phpstan/issues/10337
+        -
+            path: 'src/App.php'
+            message: '~^Call to method Atk4\\Ui\\App::callExit\(\) with true will always evaluate to true\.$~'
+            count: 2
+
+        # assign to generic callable property is broken https://github.com/phpstan/phpstan/issues/8964
+        -
+            message: '~^Property Atk4\\Data\\Model\\UserAction::\$(callback|enabled) .*Closure<.+ does not accept .*Closure\(.+\.$~'
+            path: '*'
+            count: 2
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
-        -
-            path: 'demos/_includes/Demo.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::initHighlighting\(\)\.$~'
         -
             path: 'demos/collection/grid.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\ExecutorInterface::onHook\(\)\.$~'
@@ -51,6 +61,9 @@ parameters:
         -
             path: 'demos/form-control/upload.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onDelete\(\)\.$~'
+        -
+            path: 'demos/form-control/tree-item-selector.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onItem\(\)\.$~'
         -
             path: 'demos/form-control/upload.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::clearThumbnail\(\)\.$~'
@@ -84,6 +97,12 @@ parameters:
         -
             path: 'demos/form/form2.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$iconLeft\.$~'
+        -
+            path: 'demos/form/jscondform.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::activate\(\)\.$~'
+        -
+            path: 'demos/form/jscondform.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::addSection\(\)\.$~'
         -
             path: 'demos/init-app.php'
             message: '~^Access to an undefined property Atk4\\Ui\\Layout&Atk4\\Ui\\Layout\\NavigableInterface::\$menu\.$~'
@@ -121,11 +140,14 @@ parameters:
             path: 'src/CardDeck.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\ExecutorInterface::onHook\(\)\.$~'
         -
-            path: 'src/Crud.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\UserAction\\JsExecutorInterface::stickyGet\(\)\.$~'
+            path: 'src/Console.php'
+            message: '~^Parameter #1 \$level \(''alert''\|''critical''\|''debug''\|''emergency''\|''error''\|''info''\|''notice''\|''warning''\) of method Atk4\\Ui\\Console::log\(\) should be contravariant with parameter \$level \(mixed\) of method Psr\\Log\\LoggerInterface::log\(\)$~'
         -
-            path: 'src/Form.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::addButton\(\)\.$~'
+            path: 'src/Crud.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\JsExecutorInterface::stickyGet\(\)\.$~'
+        -
+            path: 'src/Crud.php'
+            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\ExecutorInterface::onHook\(\)\.$~'
         -
             path: 'src/Form.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::preventFormLeave\(\)\.$~'
@@ -144,9 +166,6 @@ parameters:
         -
             path: 'src/Js/JsVueService.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::createVue\(\)\.$~'
-        -
-            path: 'src/Menu.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setElement\(\)\.$~'
         -
             path: 'src/Menu.php'
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::addClass\(\)\.$~'
@@ -204,7 +223,7 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\View::setPath\(\)\.$~'
         -
             path: 'src/Tabs.php'
-            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setElement\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setAttr\(\)\.$~'
         -
             path: 'src/UserAction/VpExecutor.php'
             message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::redirect\(\)\.$~'
@@ -221,49 +240,31 @@ parameters:
         # TODO fix contravariance for View::set() method
         -
             path: 'src/Console.php'
-            message: '~^Parameter #1 \$fx \(Closure\(\$this\(Atk4\\Ui\\Console\)\): void\) of method Atk4\\Ui\\Console::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
-        -
-            path: 'src/Console.php'
-            message: '~^Parameter #2 \$event \(bool\|string\) of method Atk4\\Ui\\Console::set\(\) should be contravariant with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
-        -
-            path: 'src/Form/Control.php'
-            message: '~^Parameter #2 \$ignore \(\*NEVER\*\) of method Atk4\\Ui\\Form\\Control::set\(\) should be compatible with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(\$this\): void\) of method Atk4\\Ui\\Console::set\(\) should be compatible with parameter \$content \(string\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Form/Control/Calendar.php'
-            message: '~^Parameter #1 \$expr \(Atk4\\Ui\\Js\\JsExpressionable\) of method Atk4\\Ui\\Form\\Control\\Calendar::onChange\(\) should be contravariant with parameter \$expr \(array{Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void}\|Atk4\\Ui\\Js\\JsExpressionable\|\(Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void\)\) of method Atk4\\Ui\\Form\\Control::onChange\(\)$~'
+            message: '~^Parameter #1 \$expr \(Atk4\\Ui\\Js\\JsExpressionable\) of method Atk4\\Ui\\Form\\Control\\Calendar::onChange\(\) should be contravariant with parameter \$expr \(array\{Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): \(Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void\)\}\|Atk4\\Ui\\Js\\JsExpressionable\|\(Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): \(Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void\)\)\) of method Atk4\\Ui\\Form\\Control::onChange\(\)$~'
         -
             path: 'src/Form/Control/Upload.php'
             message: '~^Parameter #1 \$fileId \(string\) of method Atk4\\Ui\\Form\\Control\\Upload::set\(\) should be contravariant with parameter \$value \(mixed\) of method Atk4\\Ui\\Form\\Control::set\(\)$~'
         -
             path: 'src/JsCallback.php'
-            message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void\) of method Atk4\\Ui\\JsCallback::set\(\) should be contravariant with parameter \$fx \(Closure\(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): mixed\) of method Atk4\\Ui\\Callback::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): \(Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void\)\) of method Atk4\\Ui\\JsCallback::set\(\) should be contravariant with parameter \$fx \(Closure\(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): mixed\) of method Atk4\\Ui\\Callback::set\(\)$~'
         -
             path: 'src/Loader.php'
-            message: '~^Parameter #1 \$fx \(Closure\(\$this\(Atk4\\Ui\\Loader\)\): void\) of method Atk4\\Ui\\Loader::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
-        -
-            path: 'src/Loader.php'
-            message: '~^Parameter #2 \$ignore \(\*NEVER\*\) of method Atk4\\Ui\\Loader::set\(\) should be compatible with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(\$this\): void\) of method Atk4\\Ui\\Loader::set\(\) should be compatible with parameter \$content \(string\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Modal.php'
-            message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\View\): void\) of method Atk4\\Ui\\Modal::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
-        -
-            path: 'src/Modal.php'
-            message: '~^Parameter #2 \$ignore \(\*NEVER\*\) of method Atk4\\Ui\\Modal::set\(\) should be compatible with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\View\): void\) of method Atk4\\Ui\\Modal::set\(\) should be compatible with parameter \$content \(string\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/Popup.php'
-            message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\View\): void\) of method Atk4\\Ui\\Popup::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
-        -
-            path: 'src/Popup.php'
-            message: '~^Parameter #2 \$ignore \(\*NEVER\*\) of method Atk4\\Ui\\Popup::set\(\) should be compatible with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\View\): void\) of method Atk4\\Ui\\Popup::set\(\) should be compatible with parameter \$content \(string\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/VirtualPage.php'
-            message: '~^Parameter #1 \$fx \(Closure\(\$this\(Atk4\\Ui\\VirtualPage\), mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg1 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx \(Closure\(\$this, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void\) of method Atk4\\Ui\\VirtualPage::set\(\) should be compatible with parameter \$content \(string\) of method Atk4\\Ui\\View::set\(\)$~'
         -
             path: 'src/VirtualPage.php'
-            message: '~^Parameter #1 \$fx of method Atk4\\Ui\\Callback::set\(\) expects \(Closure\(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void\)\|null, Closure\(\$this\(Atk4\\Ui\\VirtualPage\), mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void given.$~'
-        -
-            path: 'src/VirtualPage.php'
-            message: '~^Parameter #2 \$fxArgs \(array\) of method Atk4\\Ui\\VirtualPage::set\(\) should be contravariant with parameter \$arg2 \(mixed\) of method Atk4\\Ui\\View::set\(\)$~'
+            message: '~^Parameter #1 \$fx of method Atk4\\Ui\\Callback::set\(\) expects \(Closure\(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void\)\|null, Closure\(\$this, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void given\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 3
@@ -298,6 +299,9 @@ parameters:
             path: 'src/CardDeck.php'
             message: '~^Property Atk4\\Ui\\CardDeck::\$paginator \(Atk4\\Ui\\Paginator\|false\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
         -
+            path: 'src/Form/Control/Input.php'
+            message: '~^Method Atk4\\Ui\\Form\\Control\\Input::prepareRenderButton\(\) should return Atk4\\Ui\\Button but returns \(Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\ExecutorInterface\)\|Atk4\\Ui\\View\.$~'
+        -
             path: 'src/Form/AbstractLayout.php'
             message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) should return Atk4\\Ui\\Form\\Control but returns Atk4\\Ui\\View\.$~'
         -
@@ -314,16 +318,19 @@ parameters:
             message: '~^Method Atk4\\Ui\\Form\\Layout\\Custom::addButton\(\) should return Atk4\\Ui\\Button but returns Atk4\\Ui\\AbstractView\.$~'
         -
             path: 'src/Form/Layout/Section.php'
-            message: '~^Method Atk4\\Ui\\Form\\Layout\\Section::addSection\(\) should return Atk4\\Ui\\Form\\Layout but returns Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Method Atk4\\Ui\\Form\\Layout\\Section::addSection\(\) should return Atk4\\Ui\\Form\\Layout but returns static\(Atk4\\Ui\\Form\\Layout\\Section\)\.$~'
         -
             path: 'src/Form/Layout/Section/Accordion.php'
             message: '~^Return type \(Atk4\\Ui\\Form\\Layout\) of method Atk4\\Ui\\Form\\Layout\\Section\\Accordion::addSection\(\) should be compatible with return type \(Atk4\\Ui\\AccordionSection\) of method Atk4\\Ui\\Accordion::addSection\(\)$~'
         -
             path: 'src/Form/Layout/Section/Accordion.php'
-            message: '~^Method Atk4\\Ui\\Form\\Layout\\Section\\Accordion::addSection\(\) should return Atk4\\Ui\\Form\\Layout but returns Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Method Atk4\\Ui\\Form\\Layout\\Section\\Accordion::addSection\(\) should return Atk4\\Ui\\Form\\Layout but returns static\(Atk4\\Ui\\Form\\Layout\\Section\\Accordion\)\.$~'
+        -
+            path: 'src/Form/Layout/Section/Columns.php'
+            message: '~^Method Atk4\\Ui\\Form\\Layout\\Section\\Columns::addColumn\(\) should return Atk4\\Ui\\Form\\Layout but returns static\(Atk4\\Ui\\Form\\Layout\\Section\\Columns\)\.$~'
         -
             path: 'src/Form/Layout/Section/Tabs.php'
-            message: '~^Method Atk4\\Ui\\Form\\Layout\\Section\\Tabs::addTab\(\) should return Atk4\\Ui\\Form\\Layout but returns Atk4\\Ui\\AbstractView\.$~'
+            message: '~^Method Atk4\\Ui\\Form\\Layout\\Section\\Tabs::addTab\(\) should return Atk4\\Ui\\Form\\Layout but returns static\(Atk4\\Ui\\Form\\Layout\\Section\\Tabs\)\.$~'
         -
             path: 'src/Grid.php'
             message: '~^Property Atk4\\Ui\\Grid::\$menu \(array\|Atk4\\Ui\\Menu\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
@@ -352,14 +359,8 @@ parameters:
             path: 'src/Header.php'
             message: '~^Property Atk4\\Ui\\Header::\$subHeader \(string\) does not accept \$this\(Atk4\\Ui\\Header\)\.$~'
         -
-            path: 'src/JsSearch.php'
-            message: '~^Property Atk4\\Ui\\JsSearch::\$placeHolder \(Atk4\\Ui\\Form\\Control\\Line\|null\) does not accept default value of type string\.$~'
-        -
             path: 'src/Label.php'
             message: '~^Property Atk4\\Ui\\Label::\$detail \(string\|false\|null\) does not accept \$this\(Atk4\\Ui\\Label\)\.$~'
-        -
-            path: 'src/Loader.php'
-            message: '~^Property Atk4\\Ui\\Loader::\$shim \(Atk4\\Ui\\View\) does not accept array<int\|string, array<int\|string, string>\|string>\.$~'
         -
             path: 'src/Menu.php'
             message: '~^Method Atk4\\Ui\\Menu::addDivider\(\) should return Atk4\\Ui\\View but returns Atk4\\Ui\\AbstractView\.$~'
@@ -375,30 +376,18 @@ parameters:
         -
             path: 'src/Wizard.php'
             message: '~^Property Atk4\\Ui\\Form::\$buttonSave \(array\|Atk4\\Ui\\Button\|false\) does not accept null\.$~'
+        -
+            path: 'src/Wizard.php'
+            message: '~^Property Atk4\\Ui\\Wizard::\$steps \(array<int, Atk4\\Ui\\WizardStep>\) does not accept array<int, Atk4\\Ui\\AbstractView>\.$~'
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 5
-        -
-            path: 'src/Form/Layout/Section.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, Atk4\\Ui\\Form\|class-string<Atk4\\Ui\\Form\\Layout>> given\.$~'
-        -
-            path: 'src/Form/Layout/Section/Accordion.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, Atk4\\Ui\\Form\|class-string<Atk4\\Ui\\Form\\Layout>> given\.$~'
-        -
-            path: 'src/Form/Layout/Section/Tabs.php'
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, Atk4\\Ui\\Form\|class-string<Atk4\\Ui\\Form\\Layout>> given\.$~'
-        -
-            path: 'src/Grid.php'
-            message: '~^Parameter #1 \$view of method Atk4\\Ui\\Grid::addActionMenuItem\(\) expects Atk4\\Ui\\View\|string, Atk4\\Data\\Model\\UserAction given\.$~'
         -
             path: 'src/Grid.php'
             message: '~^Parameter #2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Paginator given\.$~'
         -
             path: 'src/Grid.php'
             message: '~^Parameter #2 \$defaults of static method Atk4\\Core\\Factory::factory\(\) expects array, Atk4\\Ui\\Table\|false given\.$~'
-        -
-            path: 'src/JsSearch.php'
-            message: '~^Parameter #2 \$value of method Atk4\\Ui\\HtmlTemplate::trySet\(\) expects string\|null, Atk4\\Ui\\Form\\Control\\Line given\.$~'
         -
             path: 'src/Menu.php'
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, array<int, string>\|string> given\.$~'

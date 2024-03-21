@@ -12,13 +12,13 @@ use Atk4\Ui\View;
  */
 class ItemSearch extends View
 {
-    /** @var View|string the atk4 View to be reloaded or a jquery id selector string View to be reloaded that contains data to be filtered. */
+    /** @var View|string the atk4 View to be reloaded or a id selector string View to be reloaded that contains data to be filtered. */
     public $reload;
 
     /** @var string The initial query. */
     public $q;
 
-    /** @var string The css for the input field. */
+    /** @var string The CSS for the input field. */
     public $inputCss = 'ui input right icon transparent';
 
     /**
@@ -30,18 +30,19 @@ class ItemSearch extends View
     public $inputTimeOut = 250;
 
     /**
-     * The jquery selector where you need to add the Fomantic-UI 'loading' class.
+     * The jQuery selector where you need to add the Fomantic-UI 'loading' class.
      * Default to reload selector.
      *
      * @var View
      */
     public $context;
 
-    /** @var string|null The URL argument name use for query. If null, then->>name will be assiged. */
+    /** @var string|null The URL argument name use for query. If null, then->>name will be assigned. */
     public $queryArg;
 
     public $defaultTemplate = 'item-search.html';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -56,18 +57,13 @@ class ItemSearch extends View
     }
 
     /**
-     * Return query string sent by request.
-     *
      * @return string
      */
     public function getQuery()
     {
-        return $_GET[$this->queryArg] ?? null;
+        return $this->getApp()->tryGetRequestQueryParam($this->queryArg) ?? '';
     }
 
-    /**
-     * Set model condition base on search request.
-     */
     public function setModelCondition(Model $model): void
     {
         $q = $this->getQuery();
@@ -76,13 +72,14 @@ class ItemSearch extends View
         }
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->class = [];
         parent::renderView();
 
-        // reloadId is the view id selector name that needs to be reloaded.
-        // this will be pass as get argument to __atk_reload.
+        // $reloadId is the view ID selector name that needs to be reloaded
+        // this will be pass as get argument to __atk_reload
         if ($this->reload instanceof View) {
             $reloadId = $this->reload->name;
         } else {

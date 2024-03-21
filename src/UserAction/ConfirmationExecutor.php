@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\HookTrait;
-use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
@@ -25,21 +24,15 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 {
     use CommonExecutorTrait;
     use HookTrait;
+    use InnerLoaderTrait;
 
-    /** @var Model\UserAction|null Action to execute */
+    /** @var UserAction|null Action to execute */
     public $action;
 
-    /** @var Loader|null Loader to add content to modal. */
-    public $loader;
-
-    /** @var string */
-    public $loaderUi = 'basic segment';
-    /** @var array|View|null Loader shim object or seed. */
-    public $loaderShim;
     /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
-    /** @var string css class for modal size. */
+    /** @var string CSS class for modal size. */
     public $size = 'tiny';
 
     /** @var string|null */
@@ -50,6 +43,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /** @var Button Cancel button */
     private $cancel;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -58,57 +52,57 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     }
 
     /**
-     * Properly set element id for this modal.
+     * Properly set element ID for this modal.
      */
-    protected function afterActionInit(Model\UserAction $action): void
+    protected function afterActionInit(): void
     {
-        // Add buttons to modal for next and previous.
-        $btns = (new View())->setStyle(['min-height' => '24px']);
-        $this->ok = Button::addTo($btns, ['Ok', 'class.blue' => true]);
-        $this->cancel = Button::addTo($btns, ['Cancel']);
-        $this->add($btns, 'actions');
+        // add buttons to modal for next and previous
+        $buttonsView = (new View())->setStyle(['min-height' => '24px']);
+        $this->ok = Button::addTo($buttonsView, ['Ok', 'class.blue' => true]);
+        $this->cancel = Button::addTo($buttonsView, ['Cancel']);
+        $this->add($buttonsView, 'actions');
         $this->showActions = true;
 
-        $this->loader = Loader::addTo($this, ['ui' => $this->loaderUi, 'shim' => $this->loaderShim]);
-        $this->loader->loadEvent = false;
-        $this->loader->addClass('atk-hide-loading-content');
+        $this->loader = Loader::addTo($this, ['shim' => $this, 'loadEvent' => false]);
     }
 
-    private function jsShowAndLoad(array $urlArgs, array $apiConfig): JsBlock
+    /**
+     * @param array<string, string> $urlArgs
+     */
+    private function jsLoadAndShow(array $urlArgs): JsBlock
     {
         return new JsBlock([
-            $this->jsShow(),
-            $this->js()->data('closeOnLoadingError', true),
             $this->loader->jsLoad($urlArgs, [
-                'method' => 'post',
-                'onSuccess' => new JsFunction([], [$this->js()->removeData('closeOnLoadingError')]),
+                'method' => 'POST',
+                'onSuccess' => new JsFunction([], [$this->jsShow()]),
             ]),
         ]);
     }
 
+    #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
     {
         if (!$this->action) {
             throw new Exception('Action must be set prior to assign trigger');
         }
 
-        return $this->jsShowAndLoad($urlArgs, ['method' => 'post']);
+        return $this->jsLoadAndShow($urlArgs);
     }
 
+    #[\Override]
     public function getAction(): UserAction
     {
         return $this->action;
     }
 
-    public function setAction(Model\UserAction $action)
+    #[\Override]
+    public function setAction(UserAction $action)
     {
         $this->action = $action;
-        $this->afterActionInit($action);
+        $this->afterActionInit();
 
         $this->title ??= $action->getDescription();
         $this->step = $this->stickyGet('step');
-
-        $this->jsSetBtnState($this);
 
         return $this;
     }
@@ -116,27 +110,18 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /**
      * Perform the current step.
      */
+    #[\Override]
     public function executeModelAction(): void
     {
         $this->action = $this->executeModelActionLoad($this->action);
 
         $this->loader->set(function (Loader $p) {
-            $this->jsSetBtnState($p);
-            if ($this->step === 'exec') {
+            if ($this->step === 'execute') {
                 $this->doFinal($p);
             } else {
                 $this->doConfirmation($p);
             }
         });
-    }
-
-    /**
-     * Reset button state.
-     */
-    protected function jsSetBtnState(View $view): void
-    {
-        $view->js(true, $this->ok->js()->off());
-        $view->js(true, $this->cancel->js()->off());
     }
 
     /**
@@ -152,10 +137,10 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
             $this->ok->js()->on('click', new JsFunction([], [
                 $this->loader->jsLoad(
                     [
-                        'step' => 'exec',
-                        $this->name => $this->action->getEntity()->getId(),
+                        'step' => 'execute',
+                        $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getIdField(), $this->action->getEntity()->getId()),
                     ],
-                    ['method' => 'post']
+                    ['method' => 'POST']
                 ),
             ]))
         );
@@ -187,10 +172,10 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     }
 
     /**
-     * Return proper js statement when action execute.
+     * Return proper JS statement when action execute.
      *
-     * @param mixed      $obj
-     * @param string|int $id
+     * @param mixed $obj
+     * @param mixed $id
      */
     protected function jsGetExecute($obj, $id): JsBlock
     {
@@ -200,8 +185,6 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
 
         return new JsBlock([
             $this->jsHide(),
-            $this->ok->js(true)->off(),
-            $this->cancel->js(true)->off(),
             JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
                 ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
         ]);

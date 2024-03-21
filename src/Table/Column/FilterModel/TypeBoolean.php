@@ -11,21 +11,24 @@ class TypeBoolean extends Column\FilterModel
 {
     public $noValueField = true;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
 
-        $this->op->values = ['true' => 'Is Yes', 'false' => 'Is No'];
+        $this->op->values = [
+            'true' => 'Is Yes',
+            'false' => 'Is No',
+        ];
         $this->op->default = 'true';
     }
 
-    public function setConditionForModel(Model $model)
+    #[\Override]
+    public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
         if ($filter !== null) {
             $model->addCondition($filter['name'], $filter['op'] === 'true');
         }
-
-        return $model;
     }
 }

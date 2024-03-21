@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Persistence;
+use Atk4\Ui\App;
 use Atk4\Ui\Form;
 use Atk4\Ui\GridLayout;
 use Atk4\Ui\Header;
@@ -13,10 +14,10 @@ use Atk4\Ui\Label;
 use Atk4\Ui\Tabs;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-Header::addTo($app, ['Display form using Html template', 'subHeader' => 'Fully control how to display fields.']);
+Header::addTo($app, ['Display form using HTML template', 'subHeader' => 'Fully control how to display fields.']);
 
 $tabs = Tabs::addTo($app);
 
@@ -47,7 +48,7 @@ $form = Form::addTo($left, [
         Form\Layout::class,
         [
             'defaultInputTemplate' => __DIR__ . '/templates/input.html',
-            'defaultHint' => [Label::class, 'class' => ['pointing', 'below']],
+            'defaultHintSeed' => [Label::class, 'class' => ['pointing', 'below']],
         ],
     ],
 ]);
@@ -61,6 +62,6 @@ $tab = $tabs->addTab('Custom layout class');
 $form = Form::addTo($tab, ['layout' => [Form\Layout\Custom::class, 'defaultTemplate' => __DIR__ . '/templates/form-custom-layout.html']]);
 $form->setModel((new Country($app->db))->loadAny());
 
-$form->onSubmit(function (Form $form) {
+$form->onSubmit(static function (Form $form) {
     return new JsToast('Saving is disabled');
 });

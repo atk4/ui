@@ -6,6 +6,4 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Exception as CoreException;
 
-class Exception extends CoreException
-{
-}
+class Exception extends CoreException {}

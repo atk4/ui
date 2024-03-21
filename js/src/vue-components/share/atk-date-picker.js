@@ -18,25 +18,25 @@ export default {
         />`,
     props: ['config', 'modelValue'],
     data: function () {
-        const { useDefault, ...otherConfig } = this.config;
+        const config = { ...this.config };
 
-        if (useDefault && !otherConfig.defaultDate && !this.modelValue) {
-            otherConfig.defaultDate = new Date();
+        if (config.defaultDate && !this.modelValue) {
+            config.defaultDate = new Date();
         } else if (this.modelValue) {
-            otherConfig.defaultDate = this.modelValue;
+            config.defaultDate = this.modelValue;
         }
 
-        if (!otherConfig.locale) {
-            otherConfig.locale = flatpickr.l10ns.default;
+        if (!config.locale) {
+            config.locale = flatpickr.l10ns.default;
         }
 
         return {
-            flatPickr: otherConfig,
+            flatPickr: config,
         };
     },
     emits: ['setDefault'],
     mounted: function () {
-        // if value is not set but default date is, then emit proper string value to parent.
+        // if value is not set but default date is, then emit proper string value to parent
         if (!this.modelValue && this.flatPickr.defaultDate) {
             this.onUpdate(
                 this.flatPickr.defaultDate instanceof Date

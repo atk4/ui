@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 View::addTo($app, [
@@ -17,6 +18,7 @@ View::addTo($app, [
 ]);
 
 $myButtonClass = AnonymousClassNameCache::get_class(fn () => new class() extends Button {
+    #[\Override]
     protected function renderView(): void
     {
         $this->link($this->content);
@@ -26,7 +28,7 @@ $myButtonClass = AnonymousClassNameCache::get_class(fn () => new class() extends
     }
 });
 
-// Buttons
+// buttons
 $myButtonClass::addTo($app, [$app->url()]);
 $myButtonClass::addTo($app, [$app->url(['xx' => 'YEY'])]);
 $myButtonClass::addTo($app, [$app->url(['c' => 'OHO'])]);
@@ -37,33 +39,30 @@ Header::addTo($app, ['URLs presented by a blank app']);
 Button::addTo($app, [$app->url()]);
 Button::addTo($app, [$app->url(['b' => 2])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => false])]);
-Button::addTo($app, [$app->url(['b' => 2, 'c' => null])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => 'abc'])]);
 
-// Sticky for xx=
+// sticky for xx=
 Header::addTo($app, ['Now add sticky for xx=' . $app->stickyGet('xx')]);
 Button::addTo($app, [$app->url()]);
 Button::addTo($app, [$app->url(['b' => 2])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => false])]);
-Button::addTo($app, [$app->url(['b' => 2, 'c' => null])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => 'abc'])]);
 
-// Sticky for c=
+// sticky for c=
 Header::addTo($app, ['Now also add sticky for c=' . $app->stickyGet('c')]);
 Button::addTo($app, [$app->url()]);
 Button::addTo($app, [$app->url(['b' => 2])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => false])]);
-Button::addTo($app, [$app->url(['b' => 2, 'c' => null])]);
 Button::addTo($app, [$app->url(['b' => 2, 'c' => 'abc'])]);
 
-// Various ways to build links
+// various ways to build links
 Header::addTo($app, ['Various ways to build links']);
 Button::addTo($app, [$app->url()]);
 Button::addTo($app, [$app->url('other.php')]);
 Button::addTo($app, [$app->url('other')]);
 Button::addTo($app, [$app->url(['other', 'b' => 2])]);
-Button::addTo($app, [$app->url('http://yahoo.com/')]);
-Button::addTo($app, [$app->url('http://yahoo.com/?q=abc')]);
+Button::addTo($app, [$app->url('http://google.com/')]);
+Button::addTo($app, [$app->url('http://google.com/?q=abc')]);
 
 // unset app/global sticky
 $app->stickyForget('xx');

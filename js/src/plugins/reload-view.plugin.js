@@ -3,8 +3,7 @@ import atk from 'atk';
 import AtkPlugin from './atk.plugin';
 
 /**
- * Reload a view using Fomantic-UI API.
- * Prefer method is GET.
+ * Reload a view from server. Default request method is GET.
  *
  * You can include WebStorage value within the request
  * by setting the store name (key) value.
@@ -23,13 +22,13 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
         const url = atk.urlHelper.removeAllParams(this.settings.url);
         const userConfig = this.settings.apiConfig ?? {};
 
-        // add new param and remove duplicate, prioritizing the latest one.
+        // add new param and remove duplicate, prioritizing the latest one
         let urlParams = Object.assign(
             atk.urlHelper.parseParams(this.settings.url),
             this.settings.urlOptions ?? {}
         );
 
-        // get store object.
+        // get store object
         const store = atk.dataService.getStoreData(this.settings.storeName);
 
         // merge user settings
@@ -46,7 +45,30 @@ export default class AtkReloadViewPlugin extends AtkPlugin {
             ...userConfig,
         };
 
-        // if post then we need to set our store into settings data.
+        // workaround Fomantic-UI modal is hidden when "loading" class is set by
+        // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/behaviors/api.js#L524
+        // because of
+        // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/modules/modal.less#L396
+        // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/modules/transition.less#L44
+        // related fix https://github.com/fomantic/Fomantic-UI/pull/2982
+        if (!settings.stateContext && this.$el.hasClass('ui modal') && this.$el.children().length > 0 /* prevent loading in original DOM location */) {
+            [settings.stateContext] = this.$el.children('.content');
+            if (!settings.className) {
+                settings.className = [];
+            }
+            settings.className.loading = 'ui basic fitted segment loading atk-hide-loading-content';
+        }
+        // and for our panel until migrated
+        // https://github.com/atk4/ui/issues/1812#issuecomment-1273092181
+        if (!settings.stateContext && this.$el.hasClass('atk-right-panel') && this.$el.children().length > 0 /* prevent loading in original DOM location */) {
+            [settings.stateContext] = this.$el.children('.ui.segment:not(:has(> .atk-panel-warning))');
+            if (!settings.className) {
+                settings.className = [];
+            }
+            settings.className.loading = 'loading atk-hide-loading-content';
+        }
+
+        // if post then we need to set our store into settings data
         if (settings.method.toUpperCase() === 'POST') {
             settings.data = Object.assign(settings.data, store);
         } else {

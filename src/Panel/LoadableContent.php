@@ -14,7 +14,7 @@ interface LoadableContent
     public function setCb(Callback $cb): void;
 
     /**
-     * Return js Callback url string.
+     * Return JS callback URL string.
      */
     public function getCallbackUrl(): string;
 

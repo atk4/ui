@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Card;
 use Atk4\Ui\Header;
 use Atk4\Ui\Image;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Card Model', 'class.small right floated basic blue' => true, 'iconRight' => 'right arrow'])
@@ -57,7 +58,7 @@ $cardStat->addContent(new Header(['Project Info']));
 $stat = (new Stat($app->db))->loadAny();
 $cardStat->setModel($stat, [$stat->fieldName()->project_name, $stat->fieldName()->project_code, $stat->fieldName()->client_name, $stat->fieldName()->start_date]);
 
-$btn = $cardStat->addButton(new Button(['Email Client']));
+$button = $cardStat->addButton(new Button(['Email Client']));
 
 $cardStat = Card::addTo($deck, ['useLabel' => true]);
 $cardStat->addContent(new Header(['Project Info']));
