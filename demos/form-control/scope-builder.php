@@ -19,6 +19,6 @@ $form = Form::addTo($app);
 $form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model,
     'options' => ['fieldFilter' => ['editable', 'system'], 'addAllReferencedFields' => true, 'debug' => true]]);
 
-$form->onSubmit(static function (Form $form) use ($model) {
+$form->onSubmit(static function (Form $form) {
     return "Scope selected:\n\n" . $form->model->get('qb');
 });
