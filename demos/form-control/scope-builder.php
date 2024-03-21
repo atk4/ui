@@ -22,9 +22,10 @@ $modal = Modal::addTo($app);
 $form = Form::addTo($modal);
 
 /** @var Form\Control\ScopeBuilder The scopebuilder */
-$qb = $form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model, 'options' => ['debug' => true]]);
+$qb = $form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model,
+    'options' => ['addAllReferencedKeys' => true, 'debug' => true]]);
 
-if ($filter = $app->stickyGet('filter')) {
+if ($filter = $crud->stickyGet('filter')) {
     $model->addCondition($qb->queryToScope($app->decodeJson($filter)));
 }
 
@@ -33,7 +34,6 @@ $form->onSubmit(static function (Form $form) use ($modal, $crud) {
         $crud->jsReload(['filter' => $form->model->get('qb')]),
         $modal->jsHide(),
     ]);
-
 });
 
 $crud->menu->addItem(['icon' => 'filter'], $modal->jsShow());
