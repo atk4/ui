@@ -13,6 +13,13 @@ use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\View;
 
+/**
+ * Scope Builder form control that will allow to create model scope
+ * for complex user-defined filters.
+ *
+ * WARNING: Possible security issue when applying json serialized scope condition
+ * to model - not tested. Use at own risk.
+ */
 class ScopeBuilder extends Form\Control
 {
     public $renderLabel = false;
@@ -21,6 +28,8 @@ class ScopeBuilder extends Form\Control
         'enum' => [
             'limit' => 250,
         ],
+        'addAllReferencedFields' => false,
+        'fieldFilter' => ['not system'],
         'debug' => false, // displays query output live on the page if set to true
     ];
     /**
@@ -271,13 +280,6 @@ class ScopeBuilder extends Form\Control
         }
 
         $this->scopeBuilderView = View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
-
-        if ($this->form !== null) {
-            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
-                $key = $this->entityField->getFieldName();
-                $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key]));
-            });
-        }
     }
 
     /**
@@ -297,7 +299,9 @@ class ScopeBuilder extends Form\Control
     protected function buildQuery(Model $model): void
     {
         if (!$this->fields) {
-            $this->fields = array_keys($model->getFields());
+            $this->fields = array_keys($model->getFields(
+                array_key_exists('fieldFilter', $this->options) ? $this->options['fieldFilter'] : ['not system']
+            ));
         }
 
         foreach ($this->fields as $fieldName) {
@@ -305,7 +309,10 @@ class ScopeBuilder extends Form\Control
 
             $this->addFieldRule($field);
 
-            $this->addReferenceRules($field);
+            if (array_key_exists('addAllReferencedFields', $this->options)
+                && $this->options['addAllReferencedFields']) {
+                $this->addReferenceRules($field);
+            }
         }
 
         // build a ruleId => inputType map
@@ -409,7 +416,10 @@ class ScopeBuilder extends Form\Control
             $theirModel = $reference->createTheirModel();
 
             // add rules on all fields of the referenced model
-            foreach ($theirModel->getFields() as $theirField) {
+            foreach ($theirModel->getFields(
+                array_key_exists('fieldFilter', $this->options) ?
+                    $this->options['fieldFilter'] : ['not system']
+            ) as $theirField) {
                 $theirField->ui['scopebuilder'] = [
                     'id' => $reference->link . '/' . $theirField->shortName,
                     'label' => $field->getCaption() . ' is set to record where ' . $theirField->getCaption(),
