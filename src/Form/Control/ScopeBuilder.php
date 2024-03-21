@@ -272,7 +272,6 @@ class ScopeBuilder extends Form\Control
         }
 
         $this->scopeBuilderView = View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
-
     }
 
     /**
