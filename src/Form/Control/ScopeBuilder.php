@@ -291,7 +291,7 @@ class ScopeBuilder extends Form\Control
     protected function buildQuery(Model $model): void
     {
         if (!$this->fields) {
-            $this->fields = array_keys($model->getFields());
+            $this->fields = array_keys($model->getFields(['not system']));
         }
 
         foreach ($this->fields as $fieldName) {
@@ -403,7 +403,7 @@ class ScopeBuilder extends Form\Control
             $theirModel = $reference->createTheirModel();
 
             // add rules on all fields of the referenced model
-            foreach ($theirModel->getFields() as $theirField) {
+            foreach ($theirModel->getFields('not system') as $theirField) {
                 $theirField->ui['scopebuilder'] = [
                     'id' => $reference->link . '/' . $theirField->shortName,
                     'label' => $field->getCaption() . ' is set to record where ' . $theirField->getCaption(),
