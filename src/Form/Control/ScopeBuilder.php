@@ -299,7 +299,9 @@ class ScopeBuilder extends Form\Control
 
             $this->addFieldRule($field);
 
-            if ($this->options['addAllReferencedFields']) { $this->addReferenceRules($field); }
+            if ($this->options['addAllReferencedFields']) {
+                $this->addReferenceRules($field);
+            }
         }
 
         // build a ruleId => inputType map

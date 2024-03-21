@@ -9,7 +9,6 @@ use Atk4\Ui\Crud;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Modal;
-use Atk4\Ui\View;
 
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -32,7 +31,7 @@ if ($filter = $app->stickyGet('filter')) {
 $form->onSubmit(static function (Form $form) use ($modal, $crud) {
     return new JsBlock([
         $crud->jsReload(['filter' => $form->model->get('qb')]),
-        $modal->jsHide()
+        $modal->jsHide(),
     ]);
 
 });
