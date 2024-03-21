@@ -16,7 +16,8 @@ $model->addCondition($model->fieldName()->start_date, '=', new \DateTime('2020-1
 
 $form = Form::addTo($app);
 
-$form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model, 'options' => ['debug' => true]]);
+$form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model,
+    'options' => ['fieldFilter' => ['editable', 'system'], 'addAllReferencedFields' => true, 'debug' => true]]);
 
 $form->onSubmit(static function (Form $form) use ($model) {
     return "Scope selected:\n\n" . $form->model->get('qb')->toWords($model);

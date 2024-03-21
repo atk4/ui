@@ -29,6 +29,7 @@ class ScopeBuilder extends Form\Control
             'limit' => 250,
         ],
         'addAllReferencedFields' => false,
+        'fieldFilter' => ['not system'],
         'debug' => false, // displays query output live on the page if set to true
     ];
     /**
@@ -298,7 +299,9 @@ class ScopeBuilder extends Form\Control
     protected function buildQuery(Model $model): void
     {
         if (!$this->fields) {
-            $this->fields = array_keys($model->getFields(['not system']));
+            $this->fields = array_keys($model->getFields(
+                array_key_exists('fieldFilter', $this->options) ? $this->options['fieldFilter'] : ['not system']
+            ));
         }
 
         foreach ($this->fields as $fieldName) {
@@ -413,7 +416,10 @@ class ScopeBuilder extends Form\Control
             $theirModel = $reference->createTheirModel();
 
             // add rules on all fields of the referenced model
-            foreach ($theirModel->getFields(['not system']) as $theirField) {
+            foreach ($theirModel->getFields(
+                array_key_exists('fieldFilter', $this->options) ?
+                    $this->options['fieldFilter'] : ['not system']
+            ) as $theirField) {
                 $theirField->ui['scopebuilder'] = [
                     'id' => $reference->link . '/' . $theirField->shortName,
                     'label' => $field->getCaption() . ' is set to record where ' . $theirField->getCaption(),
