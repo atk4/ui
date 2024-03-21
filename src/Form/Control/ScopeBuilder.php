@@ -299,8 +299,8 @@ class ScopeBuilder extends Form\Control
 
             $this->addFieldRule($field);
 
-            if (array_key_exists('addAllReferencedFields', $this->options) &&
-                $this->options['addAllReferencedFields']) {
+            if (array_key_exists('addAllReferencedFields', $this->options)
+                && $this->options['addAllReferencedFields']) {
                 $this->addReferenceRules($field);
             }
         }
