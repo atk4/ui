@@ -21,6 +21,7 @@ class ScopeBuilder extends Form\Control
         'enum' => [
             'limit' => 250,
         ],
+        'addAllReferencedFields' => true,
         'debug' => false, // displays query output live on the page if set to true
     ];
     /**
@@ -299,7 +300,7 @@ class ScopeBuilder extends Form\Control
 
             $this->addFieldRule($field);
 
-            $this->addReferenceRules($field);
+            if ($this->options['addAllReferencedFields']) { $this->addReferenceRules($field); }
         }
 
         // build a ruleId => inputType map
