@@ -13,6 +13,13 @@ use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\View;
 
+/**
+ * Scope Builder form control that will allow to create model scope
+ * for complex user-defined filters
+ *
+ * WARNING: Possible security issue when applying json serialized scope condition
+ * to model - not tested. Use at own risk.
+ */
 class ScopeBuilder extends Form\Control
 {
     public $renderLabel = false;
