@@ -272,12 +272,6 @@ class ScopeBuilder extends Form\Control
 
         $this->scopeBuilderView = View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
 
-        if ($this->form !== null) {
-            $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
-                $key = $this->entityField->getFieldName();
-                $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key]));
-            });
-        }
     }
 
     /**
