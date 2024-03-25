@@ -16,7 +16,7 @@ class JsSse extends JsCallback
     /** @var bool Allows us to fall-back to standard functionality of JsCallback if browser does not support SSE. */
     public $browserSupport = false;
 
-    /** @var bool Show Loader when doing sse. */
+    /** @var bool Show Loader when doing SSE. */
     public $showLoader = false;
 
     /** @var bool add window.beforeunload listener for closing js EventSource. Off by default. */
@@ -69,6 +69,25 @@ class JsSse extends JsCallback
         });
     }
 
+    protected function initSse(): void
+    {
+        $this->getApp()->setResponseHeader('content-type', 'text/event-stream');
+
+        // disable buffering for nginx, see https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
+        $this->getApp()->setResponseHeader('x-accel-buffering', 'no');
+
+        // disable compression
+        @ini_set('zlib.output_compression', '0');
+        if (function_exists('apache_setenv')) {
+            @apache_setenv('no-gzip', '1');
+        }
+
+        // prevent buffering
+        while (ob_get_level() > 0) {
+            ob_end_flush();
+        }
+    }
+
     /**
      * Sending an SSE action.
      */
@@ -113,11 +132,13 @@ class JsSse extends JsCallback
     }
 
     /**
-     * Send Data in buffer to client.
+     * Create SSE data string.
      */
-    public function flush(): void
+    private function wrapData(string $string): string
     {
-        flush();
+        return implode('', array_map(static function (string $v): string {
+            return 'data: ' . $v . "\n";
+        }, preg_split('~\r?\n|\r~', $string)));
     }
 
     private function output(string $content): void
@@ -135,6 +156,14 @@ class JsSse extends JsCallback
         }, null, $app)();
     }
 
+    /**
+     * Send Data in buffer to client.
+     */
+    public function flush(): void
+    {
+        flush();
+    }
+
     public function sendBlock(string $id, string $data, ?string $eventName = null): void
     {
         $this->output('id: ' . $id . "\n");
@@ -143,34 +172,5 @@ class JsSse extends JsCallback
         }
         $this->output($this->wrapData($data) . "\n");
         $this->flush();
-    }
-
-    /**
-     * Create SSE data string.
-     */
-    private function wrapData(string $string): string
-    {
-        return implode('', array_map(static function (string $v): string {
-            return 'data: ' . $v . "\n";
-        }, preg_split('~\r?\n|\r~', $string)));
-    }
-
-    protected function initSse(): void
-    {
-        $this->getApp()->setResponseHeader('content-type', 'text/event-stream');
-
-        // disable buffering for nginx, see https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
-        $this->getApp()->setResponseHeader('x-accel-buffering', 'no');
-
-        // disable compression
-        @ini_set('zlib.output_compression', '0');
-        if (function_exists('apache_setenv')) {
-            @apache_setenv('no-gzip', '1');
-        }
-
-        // prevent buffering
-        while (ob_get_level() > 0) {
-            ob_end_flush();
-        }
     }
 }
