@@ -88,7 +88,10 @@ class JsSse extends JsCallback
         $ajaxec = $this->getAjaxec($action);
         $this->sendEvent(
             '',
-            $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec->jsRender()]),
+            $this->getApp()->encodeJson([
+                'success' => $success,
+                'atkjs' => $ajaxec->jsRender(),
+            ]),
             'atkSseAction'
         );
     }
@@ -103,7 +106,10 @@ class JsSse extends JsCallback
         if ($ajaxecStr !== '') {
             $this->sendEvent(
                 '',
-                $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxecStr]),
+                $this->getApp()->encodeJson([
+                    'success' => $success,
+                    'atkjs' => $ajaxecStr,
+                ]),
                 'atkSseAction'
             );
         }
