@@ -73,7 +73,8 @@ class JsSse extends JsCallback
     {
         $this->getApp()->setResponseHeader('content-type', 'text/event-stream');
 
-        // disable buffering for nginx, see https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
+        // disable buffering for nginx
+        // https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
         $this->getApp()->setResponseHeader('x-accel-buffering', 'no');
 
         // prevent buffering
@@ -161,6 +162,11 @@ class JsSse extends JsCallback
      */
     public function flush(): void
     {
+        // workaround flush() ignored by Apache mod_proxy_fcgi
+        // https://stackoverflow.com/questions/30707792/how-to-disable-buffering-with-apache2-and-mod-proxy-fcgi#36298336
+        // https://bz.apache.org/bugzilla/show_bug.cgi?id=68827
+        $this->output('x-flush: ' . str_repeat('x', 4_096) . "\n");
+
         flush();
     }
 

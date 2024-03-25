@@ -42,7 +42,7 @@ class DemosTest extends TestCase
            |(?<array>\[(?:(?&json)(?:,(?&json))*|\s*)\])
            |(?<object>\{(?:(?<pair>\s*(?&string)\s*:(?&json))(?:,(?&pair))*|\s*)\})
         )\s*)$~sx';
-    protected static string $regexSseLine = '~^(id|event|data): .*$~';
+    protected static string $regexSseLine = '~^(id|event|data|x-flush): .*$~';
 
     #[\Override]
     public static function setUpBeforeClass(): void
