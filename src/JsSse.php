@@ -13,16 +13,18 @@ class JsSse extends JsCallback
 {
     use HookTrait;
 
+    private string $lastSentId = '';
+
     /** @var bool Allows us to fall-back to standard functionality of JsCallback if browser does not support SSE. */
     public $browserSupport = false;
 
     /** @var bool Show Loader when doing SSE. */
     public $showLoader = false;
 
-    /** @var bool add window.beforeunload listener for closing js EventSource. Off by default. */
+    /** @var bool Add window.beforeunload listener for closing js EventSource. Off by default. */
     public $closeBeforeUnload = false;
 
-    /** @var \Closure|null custom function for outputting (instead of echo) */
+    /** @var \Closure(string): void|null Custom function for outputting (instead of echo). */
     public $echoFunction;
 
     #[\Override]
@@ -73,18 +75,19 @@ class JsSse extends JsCallback
     {
         $this->getApp()->setResponseHeader('content-type', 'text/event-stream');
 
-        // disable buffering for nginx, see https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
+        // disable buffering for nginx
+        // https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
         $this->getApp()->setResponseHeader('x-accel-buffering', 'no');
-
-        // disable compression
-        @ini_set('zlib.output_compression', '0');
-        if (function_exists('apache_setenv')) {
-            @apache_setenv('no-gzip', '1');
-        }
 
         // prevent buffering
         while (ob_get_level() > 0) {
-            ob_end_flush();
+            // workaround flush() called by ob_end_flush() when zlib.output_compression is enabled
+            // https://github.com/php/php-src/issues/13798
+            if (ob_get_length() === 0) {
+                ob_end_clean();
+            } else {
+                ob_end_flush();
+            }
         }
     }
 
@@ -95,7 +98,7 @@ class JsSse extends JsCallback
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
-            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec->jsRender()]), 'atkSseAction');
+            $this->sendEvent('', $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec->jsRender()]), 'atkSseAction');
         }
     }
 
@@ -110,7 +113,7 @@ class JsSse extends JsCallback
         if ($this->browserSupport) {
             if ($ajaxecStr !== '') {
                 $this->sendEvent(
-                    'js',
+                    '',
                     $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxecStr]),
                     'atkSseAction'
                 );
@@ -123,25 +126,12 @@ class JsSse extends JsCallback
         $this->getApp()->terminateJson(['success' => $success, 'atkjs' => $ajaxecStr]);
     }
 
-    /**
-     * Output a SSE Event.
-     */
-    public function sendEvent(string $id, string $data, ?string $eventName = null): void
+    protected function flush(): void
     {
-        $this->sendBlock($id, $data, $eventName);
+        flush();
     }
 
-    /**
-     * Create SSE data string.
-     */
-    private function wrapData(string $string): string
-    {
-        return implode('', array_map(static function (string $v): string {
-            return 'data: ' . $v . "\n";
-        }, preg_split('~\r?\n|\r~', $string)));
-    }
-
-    private function output(string $content): void
+    private function outputEventResponse(string $content): void
     {
         if ($this->echoFunction) {
             ($this->echoFunction)($content);
@@ -149,28 +139,35 @@ class JsSse extends JsCallback
             return;
         }
 
-        // output headers and content
+        // workaround flush() ignored by Apache mod_proxy_fcgi
+        // https://stackoverflow.com/questions/30707792/how-to-disable-buffering-with-apache2-and-mod-proxy-fcgi#36298336
+        // https://bz.apache.org/bugzilla/show_bug.cgi?id=68827
+        $content .= ': ' . str_repeat('x', 4_096) . "\n\n";
+
         $app = $this->getApp();
         \Closure::bind(static function () use ($app, $content): void {
             $app->outputResponse($content);
         }, null, $app)();
-    }
 
-    /**
-     * Send Data in buffer to client.
-     */
-    public function flush(): void
-    {
-        flush();
-    }
-
-    public function sendBlock(string $id, string $data, ?string $eventName = null): void
-    {
-        $this->output('id: ' . $id . "\n");
-        if ($eventName !== null) {
-            $this->output('event: ' . $eventName . "\n");
-        }
-        $this->output($this->wrapData($data) . "\n");
         $this->flush();
+    }
+
+    protected function sendEvent(string $id, string $data, ?string $name = null): void
+    {
+        $content = '';
+        if ($id !== '' || $this->lastSentId !== '') {
+            $content = 'id: ' . $id . "\n";
+        }
+        if ($name !== null) {
+            $content .= 'event: ' . $name . "\n";
+        }
+        $content .= implode('', array_map(static function (string $v): string {
+            return 'data: ' . $v . "\n";
+        }, preg_split('~\r?\n|\r~', $data)));
+        $content .= "\n";
+
+        $this->outputEventResponse($content);
+
+        $this->lastSentId = $id;
     }
 }
