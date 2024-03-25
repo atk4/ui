@@ -76,15 +76,15 @@ class JsSse extends JsCallback
         // disable buffering for nginx, see https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
         $this->getApp()->setResponseHeader('x-accel-buffering', 'no');
 
-        // disable compression
-        @ini_set('zlib.output_compression', '0');
-        if (function_exists('apache_setenv')) {
-            @apache_setenv('no-gzip', '1');
-        }
-
         // prevent buffering
         while (ob_get_level() > 0) {
-            ob_end_flush();
+            // workaround flush() called by ob_end_flush() when zlib.output_compression is enabled
+            // https://github.com/php/php-src/issues/13798
+            if (ob_get_length() === 0) {
+                ob_end_clean();
+            } else {
+                ob_end_flush();
+            }
         }
     }
 
