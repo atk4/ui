@@ -13,6 +13,8 @@ class JsSse extends JsCallback
 {
     use HookTrait;
 
+    private string $lastSentId = '';
+
     /** @var bool Allows us to fall-back to standard functionality of JsCallback if browser does not support SSE. */
     public $browserSupport = false;
 
@@ -96,7 +98,7 @@ class JsSse extends JsCallback
     {
         if ($this->browserSupport) {
             $ajaxec = $this->getAjaxec($action);
-            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec->jsRender()]), 'atkSseAction');
+            $this->sendEvent('', $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec->jsRender()]), 'atkSseAction');
         }
     }
 
@@ -111,7 +113,7 @@ class JsSse extends JsCallback
         if ($this->browserSupport) {
             if ($ajaxecStr !== '') {
                 $this->sendEvent(
-                    'js',
+                    '',
                     $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxecStr]),
                     'atkSseAction'
                 );
@@ -150,11 +152,14 @@ class JsSse extends JsCallback
         $this->flush();
     }
 
-    protected function sendEvent(string $id, string $data, ?string $eventName = null): void
+    protected function sendEvent(string $id, string $data, ?string $name = null): void
     {
-        $content = 'id: ' . $id . "\n";
-        if ($eventName !== null) {
-            $content .= 'event: ' . $eventName . "\n";
+        $content = '';
+        if ($id !== '' || $this->lastSentId !== '') {
+            $content = 'id: ' . $id . "\n";
+        }
+        if ($name !== null) {
+            $content .= 'event: ' . $name . "\n";
         }
         $content .= implode('', array_map(static function (string $v): string {
             return 'data: ' . $v . "\n";
@@ -162,5 +167,7 @@ class JsSse extends JsCallback
         $content .= "\n";
 
         $this->outputEventResponse($content);
+
+        $this->lastSentId = $id;
     }
 }
