@@ -127,7 +127,7 @@ class JsSse extends JsCallback
     /**
      * Output a SSE Event.
      */
-    public function sendEvent(string $id, string $data, ?string $eventName = null): void
+    protected function sendEvent(string $id, string $data, ?string $eventName = null): void
     {
         $this->sendBlock($id, $data, $eventName);
     }
@@ -160,7 +160,7 @@ class JsSse extends JsCallback
     /**
      * Send Data in buffer to client.
      */
-    public function flush(): void
+    protected function flush(): void
     {
         // workaround flush() ignored by Apache mod_proxy_fcgi
         // https://stackoverflow.com/questions/30707792/how-to-disable-buffering-with-apache2-and-mod-proxy-fcgi#36298336
@@ -170,7 +170,7 @@ class JsSse extends JsCallback
         flush();
     }
 
-    public function sendBlock(string $id, string $data, ?string $eventName = null): void
+    protected function sendBlock(string $id, string $data, ?string $eventName = null): void
     {
         $this->output('id: ' . $id . "\n");
         if ($eventName !== null) {
