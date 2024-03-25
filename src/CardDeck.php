@@ -117,7 +117,7 @@ class CardDeck extends View
 
     protected function addMenuBarSearch(): void
     {
-        $view = View::addTo($this->menu->addMenuRight()->addItem()->setElement('div'));
+        $view = View::addTo($this->menu->addMenuRight()->addItem());
 
         $this->search = $view->add(Factory::factory($this->search, ['context' => $this->container]));
         $this->search->reload = $this->container;

@@ -53,7 +53,7 @@ $group->addItem('Dedicated');
 $menu = Menu::addTo($app, ['vertical']);
 $i = $menu->addItem();
 Header::addTo($i, ['size' => 4])->set('Promotions');
-View::addTo($i, ['element' => 'P'])->set('Check out our promotions');
+View::addTo($i, ['element' => 'p'])->set('Check out our promotions');
 
 // menu without any item should not show
 Menu::addTo($app);

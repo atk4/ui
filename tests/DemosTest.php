@@ -41,8 +41,8 @@ class DemosTest extends TestCase
            |(?<string>"([^"\\\]*|\\\["\\\bfnrt/]|\\\u[0-9a-f]{4})*")
            |(?<array>\[(?:(?&json)(?:,(?&json))*|\s*)\])
            |(?<object>\{(?:(?<pair>\s*(?&string)\s*:(?&json))(?:,(?&pair))*|\s*)\})
-        )\s*)$~six';
-    protected static string $regexSseLine = '~^(id|event|data).*$~s';
+        )\s*)$~sx';
+    protected static string $regexSseLine = '~^(id|event|data): .*$~';
 
     #[\Override]
     public static function setUpBeforeClass(): void
@@ -448,7 +448,10 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest($path);
         self::assertSame(200, $response->getStatusCode());
 
-        $outputLines = preg_split('~\r?\n|\r~', $response->getBody()->getContents(), -1, \PREG_SPLIT_NO_EMPTY);
+        $outputLines = array_filter(
+            explode("\n", $response->getBody()->getContents()),
+            static fn ($v) => $v !== ''
+        );
 
         // check SSE Syntax
         self::assertGreaterThan(0, count($outputLines));
