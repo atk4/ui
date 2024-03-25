@@ -21,10 +21,10 @@ class JsSse extends JsCallback
     /** @var bool Show Loader when doing SSE. */
     public $showLoader = false;
 
-    /** @var bool add window.beforeunload listener for closing js EventSource. Off by default. */
+    /** @var bool Add window.beforeunload listener for closing js EventSource. Off by default. */
     public $closeBeforeUnload = false;
 
-    /** @var \Closure|null custom function for outputting (instead of echo) */
+    /** @var \Closure(string): void|null Custom function for outputting (instead of echo). */
     public $echoFunction;
 
     #[\Override]
