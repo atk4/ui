@@ -124,25 +124,12 @@ class JsSse extends JsCallback
         $this->getApp()->terminateJson(['success' => $success, 'atkjs' => $ajaxecStr]);
     }
 
-    /**
-     * Output a SSE Event.
-     */
-    protected function sendEvent(string $id, string $data, ?string $eventName = null): void
+    protected function flush(): void
     {
-        $this->sendBlock($id, $data, $eventName);
+        flush();
     }
 
-    /**
-     * Create SSE data string.
-     */
-    private function wrapData(string $string): string
-    {
-        return implode('', array_map(static function (string $v): string {
-            return 'data: ' . $v . "\n";
-        }, preg_split('~\r?\n|\r~', $string)));
-    }
-
-    private function output(string $content): void
+    private function outputEventResponse(string $content): void
     {
         if ($this->echoFunction) {
             ($this->echoFunction)($content);
@@ -150,33 +137,30 @@ class JsSse extends JsCallback
             return;
         }
 
-        // output headers and content
+        // workaround flush() ignored by Apache mod_proxy_fcgi
+        // https://stackoverflow.com/questions/30707792/how-to-disable-buffering-with-apache2-and-mod-proxy-fcgi#36298336
+        // https://bz.apache.org/bugzilla/show_bug.cgi?id=68827
+        $content .= ': ' . str_repeat('x', 4_096) . "\n\n";
+
         $app = $this->getApp();
         \Closure::bind(static function () use ($app, $content): void {
             $app->outputResponse($content);
         }, null, $app)();
-    }
 
-    /**
-     * Send Data in buffer to client.
-     */
-    protected function flush(): void
-    {
-        // workaround flush() ignored by Apache mod_proxy_fcgi
-        // https://stackoverflow.com/questions/30707792/how-to-disable-buffering-with-apache2-and-mod-proxy-fcgi#36298336
-        // https://bz.apache.org/bugzilla/show_bug.cgi?id=68827
-        $this->output('x-flush: ' . str_repeat('x', 4_096) . "\n");
-
-        flush();
-    }
-
-    protected function sendBlock(string $id, string $data, ?string $eventName = null): void
-    {
-        $this->output('id: ' . $id . "\n");
-        if ($eventName !== null) {
-            $this->output('event: ' . $eventName . "\n");
-        }
-        $this->output($this->wrapData($data) . "\n");
         $this->flush();
+    }
+
+    protected function sendEvent(string $id, string $data, ?string $eventName = null): void
+    {
+        $content = 'id: ' . $id . "\n";
+        if ($eventName !== null) {
+            $content .= 'event: ' . $eventName . "\n";
+        }
+        $content .= implode('', array_map(static function (string $v): string {
+            return 'data: ' . $v . "\n";
+        }, preg_split('~\r?\n|\r~', $data)));
+        $content .= "\n";
+
+        $this->outputEventResponse($content);
     }
 }
