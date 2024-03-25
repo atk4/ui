@@ -34,7 +34,6 @@ class JsSse extends JsCallback
 
         if ($this->getApp()->tryGetRequestQueryParam('__atk_sse')) {
             $this->browserSupport = true;
-            $this->initSse();
         }
     }
 
@@ -61,7 +60,11 @@ class JsSse extends JsCallback
             throw new \TypeError('$fx must be of type Closure');
         }
 
-        return parent::set(static function (Jquery $chain) use ($fx, $args) {
+        return parent::set(function (Jquery $chain) use ($fx, $args) {
+            if ($this->browserSupport) {
+                $this->initSse();
+            }
+
             // TODO replace EventSource to support POST
             // https://github.com/Yaffle/EventSource
             // https://github.com/mpetazzoni/sse.js
