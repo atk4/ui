@@ -1677,7 +1677,7 @@ class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["def
   main() {
     const element = this.$el;
     const hasLoader = this.settings.showLoader;
-    this.source = new EventSource(this.settings.url + '&__atk_sse=1');
+    this.source = new EventSource(this.settings.url);
     if (hasLoader) {
       element.addClass('loading');
     }

@@ -15,9 +15,6 @@ class JsSse extends JsCallback
 
     private string $lastSentId = '';
 
-    /** @var bool Allows us to fall-back to standard functionality of JsCallback if browser does not support SSE. */
-    public $browserSupport = false;
-
     /** @var bool Show Loader when doing SSE. */
     public $showLoader = false;
 
@@ -26,16 +23,6 @@ class JsSse extends JsCallback
 
     /** @var \Closure(string): void|null Custom function for outputting (instead of echo). */
     public $echoFunction;
-
-    #[\Override]
-    protected function init(): void
-    {
-        parent::init();
-
-        if ($this->getApp()->tryGetRequestQueryParam('__atk_sse')) {
-            $this->browserSupport = true;
-        }
-    }
 
     #[\Override]
     public function jsExecute(): JsBlock
@@ -61,15 +48,14 @@ class JsSse extends JsCallback
         }
 
         return parent::set(function (Jquery $chain) use ($fx, $args) {
-            if ($this->browserSupport) {
-                $this->initSse();
-            }
+            $this->initSse();
 
             // TODO replace EventSource to support POST
             // https://github.com/Yaffle/EventSource
             // https://github.com/mpetazzoni/sse.js
             // https://github.com/EventSource/eventsource
             // https://github.com/byjg/jquery-sse
+
             return $fx($chain, ...array_values($args ?? []));
         });
     }
@@ -99,10 +85,12 @@ class JsSse extends JsCallback
      */
     public function send(JsExpressionable $action, bool $success = true): void
     {
-        if ($this->browserSupport) {
-            $ajaxec = $this->getAjaxec($action);
-            $this->sendEvent('', $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec->jsRender()]), 'atkSseAction');
-        }
+        $ajaxec = $this->getAjaxec($action);
+        $this->sendEvent(
+            '',
+            $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec->jsRender()]),
+            'atkSseAction'
+        );
     }
 
     /**
@@ -112,21 +100,15 @@ class JsSse extends JsCallback
     public function terminateAjax(JsBlock $ajaxec, $msg = null, bool $success = true): void
     {
         $ajaxecStr = $ajaxec->jsRender();
-
-        if ($this->browserSupport) {
-            if ($ajaxecStr !== '') {
-                $this->sendEvent(
-                    '',
-                    $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxecStr]),
-                    'atkSseAction'
-                );
-            }
-
-            // no further output please
-            $this->getApp()->terminate();
+        if ($ajaxecStr !== '') {
+            $this->sendEvent(
+                '',
+                $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxecStr]),
+                'atkSseAction'
+            );
         }
 
-        $this->getApp()->terminateJson(['success' => $success, 'atkjs' => $ajaxecStr]);
+        $this->getApp()->terminate();
     }
 
     protected function flush(): void
