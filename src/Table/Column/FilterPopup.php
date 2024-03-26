@@ -47,8 +47,8 @@ class FilterPopup extends Popup
         $this->setOption('delay', ['hide' => 1500]);
         $this->setHoverable();
 
-        $model = FilterModel::factoryType($this->getApp(), $this->field);
-        $model = $model->createEntity();
+        $entity = FilterModel::factoryType($this->getApp(), $this->field)
+            ->createEntity();
 
         $this->form = Form::addTo($this)->addClass('');
         $this->form->buttonSave->addClass('');
@@ -56,14 +56,14 @@ class FilterPopup extends Popup
 
         $this->form->buttonSave->set('Set');
 
-        $this->form->setControlsDisplayRules($model->getFormDisplayRules());
+        $this->form->setControlsDisplayRules($entity->getFormDisplayRules());
 
         // load data associated with this popup
-        $filter = $model->recallData();
+        $filter = $entity->recallData();
         if ($filter !== null) {
-            $model->setMulti($filter);
+            $entity->setMulti($filter);
         }
-        $this->form->setModel($model);
+        $this->form->setModel($entity);
 
         $this->form->onSubmit(function (Form $form) {
             $form->entity->save();
@@ -72,8 +72,8 @@ class FilterPopup extends Popup
         });
 
         Button::addTo($this->form, ['Clear', 'class.clear' => true])
-            ->on('click', function (Jquery $j) use ($model) {
-                $model->clearData();
+            ->on('click', function (Jquery $j) use ($entity) {
+                $entity->clearData();
 
                 return new JsBlock([
                     $this->form->js()->form('reset'),

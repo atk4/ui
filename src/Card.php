@@ -190,16 +190,16 @@ class Card extends View
      *
      * @return View
      */
-    public function addSection(?string $title = null, ?Model $model = null, ?array $fields = null, bool $useTable = false, bool $useLabel = false)
+    public function addSection(?string $title = null, ?Model $entity = null, ?array $fields = null, bool $useTable = false, bool $useLabel = false)
     {
         $section = CardSection::addToWithCl($this, array_merge($this->cardSectionSeed, ['card' => $this]), ['Section']);
         if ($title) {
             View::addTo($section, [$title, 'class.header' => true]);
         }
 
-        if ($model && $fields) {
-            $section->setModel($model);
-            $section->addFields($model, $fields, $useTable, $useLabel);
+        if ($entity !== null && $fields) {
+            $section->setModel($entity);
+            $section->addFields($entity, $fields, $useTable, $useLabel);
         }
 
         return $section;

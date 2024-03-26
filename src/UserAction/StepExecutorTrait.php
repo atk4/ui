@@ -147,7 +147,7 @@ trait StepExecutorTrait
 
         $form->onSubmit(function (Form $form) {
             // collect arguments
-            $this->setActionDataFromModel('args', $form->entity, array_keys($form->entity->getFields()));
+            $this->setActionDataFromEntity('args', $form->entity, array_keys($form->entity->getFields()));
 
             return $this->jsStepSubmit($this->step);
         });
@@ -168,7 +168,7 @@ trait StepExecutorTrait
 
         $form->onSubmit(function (Form $form) {
             // collect fields defined in Model\UserAction
-            $this->setActionDataFromModel('fields', $form->entity, $this->action->fields);
+            $this->setActionDataFromEntity('fields', $form->entity, $this->action->fields);
 
             return $this->jsStepSubmit($this->step);
         });
@@ -420,11 +420,11 @@ trait StepExecutorTrait
     /**
      * @param array<string> $fields
      */
-    private function setActionDataFromModel(string $step, Model $model, array $fields): void
+    private function setActionDataFromEntity(string $step, Model $entity, array $fields): void
     {
         $data = [];
         foreach ($fields as $k) {
-            $data[$k] = $model->get($k);
+            $data[$k] = $entity->get($k);
         }
         $this->actionData[$step] = $data;
     }

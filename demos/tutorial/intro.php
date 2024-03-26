@@ -133,8 +133,8 @@ $wizard->addStep('Business Model', static function (Wizard $page) {
         session_start();
 
         $model = new DemoInvoice(new Persistence\Array_($_SESSION['atk4_ui_intro_demo'] ?? []));
-        $model->onHook(Model::HOOK_AFTER_SAVE, static function (Model $model) {
-            $_SESSION['atk4_ui_intro_demo'][$model->getId()] = (clone $model->getModel())->addCondition($model->idField, $model->getId())->export(null, null, false)[$model->getId()];
+        $model->onHook(Model::HOOK_AFTER_SAVE, static function (Model $entity) {
+            $_SESSION['atk4_ui_intro_demo'][$entity->getId()] = (clone $entity->getModel())->addCondition($entity->idField, $entity->getId())->export(null, null, false)[$entity->getId()];
         });
 
         Header::addTo($owner, ['Set invoice data:']);
@@ -188,8 +188,8 @@ $wizard->addStep('Persistence', static function (Wizard $page) {
         session_start();
 
         $model = new DemoInvoice(new Persistence\Array_($_SESSION['atk4_ui_intro_demo'] ?? []));
-        $model->onHook(Model::HOOK_AFTER_SAVE, static function (Model $model) {
-            $_SESSION['atk4_ui_intro_demo'][$model->getId()] = (clone $model->getModel())->addCondition($model->idField, $model->getId())->export(null, null, false)[$model->getId()];
+        $model->onHook(Model::HOOK_AFTER_SAVE, static function (Model $entity) {
+            $_SESSION['atk4_ui_intro_demo'][$entity->getId()] = (clone $entity->getModel())->addCondition($entity->idField, $entity->getId())->export(null, null, false)[$entity->getId()];
         });
 
         Header::addTo($owner, ['Record display in Card View using model data.']);

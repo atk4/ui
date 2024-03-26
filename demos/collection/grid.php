@@ -24,8 +24,8 @@ require_once __DIR__ . '/../init-app.php';
 
 $grid = Grid::addTo($app);
 $model = new Country($app->db);
-$model->addUserAction('test', static function (Model $model) {
-    return 'test from ' . $model->getTitle() . ' was successful!';
+$model->addUserAction('test', static function (Model $entity) {
+    return 'test from ' . $entity->getTitle() . ' was successful!';
 });
 
 $grid->setModel($model);
