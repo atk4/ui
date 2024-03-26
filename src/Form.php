@@ -21,7 +21,7 @@ use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 
 /**
- * @property false|null $model use $entity property instead TODO remove null once https://github.com/phpstan/phpstan/issues/10787 is fixed
+ * @property false $model use $entity property instead
  */
 class Form extends View
 {

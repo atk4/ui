@@ -111,7 +111,7 @@ class View extends AbstractView
      * Do not try to create your own "Model" implementation, instead you must be looking for
      * your own "Persistence" implementation.
      *
-     * @phpstan-assert !null $this->model
+     * @XXXphpstan-assert !null $this->model TODO enable once https://github.com/phpstan/phpstan/issues/10787 is fixed
      */
     public function setModel(Model $model): void
     {
@@ -137,7 +137,7 @@ class View extends AbstractView
      *
      * @param array $fields Limit model to particular fields
      *
-     * @phpstan-assert !null $this->model
+     * @phpstan-assert !null $this->model TODO enable once https://github.com/phpstan/phpstan/issues/10787 is fixed
      */
     public function setSource(array $data, $fields = null): Model
     {

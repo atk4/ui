@@ -14,7 +14,7 @@ use Atk4\Ui\View;
 /**
  * A Simple inline editable text Vue component.
  *
- * @property false|null $model use $entity property instead TODO remove null once https://github.com/phpstan/phpstan/issues/10787 is fixed
+ * @property false $model use $entity property instead
  */
 class InlineEdit extends View
 {
