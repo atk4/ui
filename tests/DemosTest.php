@@ -153,7 +153,7 @@ class DemosTest extends TestCase
     {
         $appSticky = array_diff_assoc(
             \Closure::bind(static fn () => $app->stickyGetArguments, null, App::class)(),
-            ['__atk_json' => false, '__atk_tab' => false, 'APP_CALL_EXIT' => true, 'APP_CATCH_EXCEPTIONS' => true]
+            ['__atk_json' => false, 'APP_CALL_EXIT' => true, 'APP_CATCH_EXCEPTIONS' => true]
         );
         if ($appSticky !== []) {
             throw (new Exception('Global GET sticky must never be set by any component'))

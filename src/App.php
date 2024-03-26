@@ -135,7 +135,6 @@ class App
     /** @var array<string, bool> global sticky arguments */
     protected array $stickyGetArguments = [
         '__atk_json' => false,
-        '__atk_tab' => false,
     ];
 
     /** @var class-string */
