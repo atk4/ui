@@ -529,11 +529,6 @@ class App
             }
 
             $this->outputResponseJson($output);
-        } elseif ($this->hasRequestQueryParam('__atk_tab') && $type === 'text/html') {
-            $output = $this->getTag('script', [], '$(function () {' . $output['atkjs'] . '});')
-                . $output['html'];
-
-            $this->outputResponseHtml($output);
         } elseif ($type === 'text/html') {
             $this->outputResponseHtml($output);
         } else {

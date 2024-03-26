@@ -659,19 +659,6 @@ class View extends AbstractView
     }
 
     /**
-     * This method is to render view to place inside a Fomantic-UI Tab.
-     */
-    public function renderToTab(): array
-    {
-        $this->renderAll();
-
-        return [
-            'atkjs' => $this->getJs()->jsRender(),
-            'html' => $this->renderTemplateToHtml(),
-        ];
-    }
-
-    /**
      * Render View using JSON format.
      */
     public function renderToJsonArr(): array
@@ -775,7 +762,6 @@ class View extends AbstractView
 
     /**
      * Create Vue.js instance.
-     * Vue.js instance can be created from Atk4\Ui\View.
      *
      * Component managed and defined by atk does not need componentDefinition variable name
      * because these are already loaded within the atk js namespace.
