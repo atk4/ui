@@ -33,6 +33,7 @@ class View extends AbstractView
     protected array $_jsActions = [];
 
     public ?Model $model = null;
+    public ?Model $entity = null;
 
     /**
      * Name of the region in the parent's template where this object will output itself.
@@ -118,7 +119,13 @@ class View extends AbstractView
             throw new Exception('Different model is already set');
         }
 
-        $this->model = $model;
+        if ($model->isEntity()) {
+            unset($this->{'model'});
+            $this->entity = $model;
+        } else {
+            unset($this->{'entity'});
+            $this->model = $model;
+        }
     }
 
     /**
