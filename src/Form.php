@@ -21,7 +21,7 @@ use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 
 /**
- * @property false $model use $entity property instead
+ * @property false|null $model use $entity property instead TODO remove null once https://github.com/phpstan/phpstan/issues/10787 is fixed
  */
 class Form extends View
 {
@@ -362,7 +362,7 @@ class Form extends View
      */
     public function controlFactory(Field $field, $controlSeed = []): Control
     {
-        $this->model->assertIsEntity($field->getOwner());
+        $this->entity->assertIsEntity($field->getOwner());
 
         $fallbackSeed = [Control\Line::class];
 
@@ -397,7 +397,7 @@ class Form extends View
 
         $defaults = [
             'form' => $this,
-            'entityField' => new EntityFieldPair($this->model, $field->shortName),
+            'entityField' => new EntityFieldPair($this->entity, $field->shortName),
             'shortName' => $field->shortName,
         ];
 

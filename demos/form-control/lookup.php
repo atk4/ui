@@ -53,10 +53,10 @@ $form->onSubmit(static function (Form $form) {
     $view = new Message('Select:');
     $view->setApp($form->getApp());
     $view->invokeInit();
-    $view->text->addParagraph(Country::assertInstanceOf($form->model->ref('country1'))->name ?? 'null');
-    $view->text->addParagraph(Country::assertInstanceOf($form->model->ref('country2'))->name ?? 'null');
-    $view->text->addParagraph($form->model->get('country3') !== '' // related with https://github.com/atk4/ui/pull/1805
-        ? (new Country($form->getApp()->db))->load($form->model->get('country3'))->name
+    $view->text->addParagraph(Country::assertInstanceOf($form->entity->ref('country1'))->name ?? 'null');
+    $view->text->addParagraph(Country::assertInstanceOf($form->entity->ref('country2'))->name ?? 'null');
+    $view->text->addParagraph($form->entity->get('country3') !== '' // related with https://github.com/atk4/ui/pull/1805
+        ? (new Country($form->getApp()->db))->load($form->entity->get('country3'))->name
         : 'null');
 
     return $view;

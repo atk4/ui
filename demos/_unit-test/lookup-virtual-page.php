@@ -22,7 +22,7 @@ $vp->set(static function (VirtualPage $vp) {
     $form = Form::addTo($vp);
     $form->addControl('category', [Form\Control\Lookup::class, 'model' => new Category($vp->getApp()->db)]);
     $form->onSubmit(static function (Form $form) {
-        $category = $form->getControl('category')->model->load($form->model->get('category'));
+        $category = $form->getControl('category')->model->load($form->entity->get('category'));
 
         return new JsToast($category->getTitle());
     });

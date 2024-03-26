@@ -26,7 +26,7 @@ class JsCallback extends Callback
     /**
      * Usually JsCallback should not allow to trigger during a reload.
      * Consider reloading a form, if triggering is allowed during the reload process
-     * then $form->model could be saved during that reload which can lead to unexpected result
+     * then $form->entity could be saved during that reload which can lead to unexpected result
      * if model ID is not properly handled.
      *
      * @var bool

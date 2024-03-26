@@ -58,7 +58,7 @@ $form->addField('email');
 $form->onSubmit(function (Form $form) {
     // implement subscribe here
 
-    return $form->jsSuccess('Subscribed ' . $form->model->get('email') . ' to newsletter.');
+    return $form->jsSuccess('Subscribed ' . $form->entity->get('email') . ' to newsletter.');
 });
 
 // decorate anything

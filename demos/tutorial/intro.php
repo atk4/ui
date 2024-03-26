@@ -154,7 +154,7 @@ $wizard->addStep('Business Model', static function (Wizard $page) {
         $form->setModel($entity);
 
         $form->onSubmit(static function (Form $form) {
-            $form->model->save();
+            $form->entity->save();
 
             return new JsToast('Saved!');
         });

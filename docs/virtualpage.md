@@ -249,7 +249,7 @@ $loader->set(function (\Atk4\Ui\Loader $p) {
     $form->addControl('year');
 
     $form->onSubmit(function (Form $form) use ($p) {
-        return new \Atk4\Ui\Js\JsReload($p, ['year' => $form->model->get('year')]);
+        return new \Atk4\Ui\Js\JsReload($p, ['year' => $form->entity->get('year')]);
     });
 });
 ```

@@ -94,7 +94,7 @@ $formPage = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
 $formPage->addControl('age', new \Atk4\Ui\Form\Control\Line());
 
 $form->onSubmit(function (Form $form) {
-    return $form->model->get('name') . ' has age ' . $form->model->get('age');
+    return $form->entity->get('name') . ' has age ' . $form->entity->get('age');
 });
 ```
 

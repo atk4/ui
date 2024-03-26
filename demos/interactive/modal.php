@@ -92,7 +92,7 @@ $vp1Modal->set(static function (View $p) use ($vp2Modal) {
     $form = Form::addTo($p);
     $form->addControl('color', [], ['enum' => ['red', 'green', 'blue'], 'default' => 'green']);
     $form->onSubmit(static function (Form $form) use ($vp2Modal) {
-        return $vp2Modal->jsShow(['color' => $form->model->get('color')]);
+        return $vp2Modal->jsShow(['color' => $form->entity->get('color')]);
     });
 });
 
@@ -208,15 +208,15 @@ $stepModal->set(static function (View $p) use ($session, $previousAction, $nextA
         $form->setModel($modelRegister->createEntity());
 
         $form->onSubmit(static function (Form $form) use ($nextAction, $session) {
-            if ($form->model->get('name') !== 'John') {
-                return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
+            if ($form->entity->get('name') !== 'John') {
+                return $form->jsError('name', 'Your name is not John! It is "' . $form->entity->get('name') . '". It should be John. Pleeease!');
             }
 
             $session->memorize('success', true);
-            $session->memorize('name', $form->model->get('name'));
+            $session->memorize('name', $form->entity->get('name'));
 
             $js = [];
-            $js[] = $form->jsSuccess('Thank you, ' . $form->model->get('name') . ' you can go on!');
+            $js[] = $form->jsSuccess('Thank you, ' . $form->entity->get('name') . ' you can go on!');
             $js[] = $nextAction->js()->removeClass('disabled');
 
             return $js;

@@ -58,7 +58,7 @@ $formGroup->addControl('zip', ['width' => 'four']);
 $form->onSubmit(static function (Form $form) {
     $errors = [];
     foreach (['first_name', 'last_name', 'address'] as $field) {
-        if (!$form->model->get($field)) {
+        if (!$form->entity->get($field)) {
             $errors[] = $form->jsError($field, 'Field ' . $field . ' is mandatory');
         }
     }

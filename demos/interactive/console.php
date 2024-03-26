@@ -128,11 +128,10 @@ $tab = $tabs->addTab('Use after form submit', static function (VirtualPage $vp) 
 
     $console = Console::addTo($vp, ['event' => false]);
     $console->set(static function (Console $console) use ($form) {
-        $entity = $form->model;
-        $entity->setMulti($_SESSION['atk4_ui_console_demo']);
+        $form->entity->setMulti($_SESSION['atk4_ui_console_demo']);
 
         $console->output('Executing process...');
-        $console->info(var_export($entity->get(), true));
+        $console->info(var_export($form->entity->get(), true));
         sleep(1);
         $console->output('Wait...');
         sleep(3);
@@ -141,7 +140,7 @@ $tab = $tabs->addTab('Use after form submit', static function (VirtualPage $vp) 
     $console->js(true)->hide();
 
     $form->onSubmit(static function (Form $form) use ($console) {
-        $_SESSION['atk4_ui_console_demo'] = $form->model->get();
+        $_SESSION['atk4_ui_console_demo'] = $form->entity->get();
 
         return new JsBlock([
             $console->js()->show(),

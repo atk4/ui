@@ -66,7 +66,7 @@ class FilterPopup extends Popup
         $this->form->setModel($model);
 
         $this->form->onSubmit(function (Form $form) {
-            $form->model->save();
+            $form->entity->save();
 
             return new JsReload($this->reload);
         });
@@ -90,7 +90,7 @@ class FilterPopup extends Popup
 
     public function recallData(): ?array
     {
-        return $this->form->model->recallData();
+        return $this->form->entity->recallData();
     }
 
     /**
@@ -98,6 +98,6 @@ class FilterPopup extends Popup
      */
     public function setFilterCondition(Model $tableModel): void
     {
-        $this->form->model->setConditionForModel($tableModel);
+        $this->form->entity->setConditionForModel($tableModel);
     }
 }

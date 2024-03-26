@@ -144,12 +144,12 @@ class CardDeck extends View
 
         $count = $this->initPaginator();
         if ($count) {
-            foreach ($this->model as $m) {
+            foreach ($this->model as $entity) {
                 /** @var Card */
                 $c = $this->cardHolder->add(Factory::factory($this->cardSeed, ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]));
-                $c->setModel($m, $fields);
+                $c->setModel($entity, $fields);
                 if ($extra) {
-                    $c->addExtraFields($m, $extra, $this->extraGlue);
+                    $c->addExtraFields($entity, $extra, $this->extraGlue);
                 }
                 if ($this->useAction) {
                     foreach ($this->getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD) as $action) {

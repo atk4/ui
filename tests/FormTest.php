@@ -82,7 +82,7 @@ class FormTest extends TestCase
         $form->onSubmit(static function (Form $form) use (&$wasSubmitCalled, $submitFx): void {
             $wasSubmitCalled = true;
             if ($submitFx !== null) {
-                $submitFx($form->model);
+                $submitFx($form->entity);
             }
         });
 
@@ -114,7 +114,7 @@ class FormTest extends TestCase
 
             $form->setModel($m->createEntity(), ['name', 'email']);
 
-            self::assertSame('John', $form->model->get('name'));
+            self::assertSame('John', $form->entity->get('name'));
 
             return $form;
         }, ['email' => 'john@yahoo.com', 'is_admin' => '1'], static function (Model $m) {

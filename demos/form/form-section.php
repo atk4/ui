@@ -22,11 +22,11 @@ $model = new Country($app->db);
 $model = $model->loadAny();
 
 $saveAndDumpValues = static function (Form $form) {
-    $form->model->save();
+    $form->entity->save();
 
     return new JsToast([
         'title' => 'POSTed field values',
-        'message' => '<pre>' . $form->getApp()->encodeJson($form->model->get()) . '</pre>',
+        'message' => '<pre>' . $form->getApp()->encodeJson($form->entity->get()) . '</pre>',
         'class' => 'success',
         'displayTime' => 5000,
     ]);
