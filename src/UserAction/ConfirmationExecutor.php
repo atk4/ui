@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\HookTrait;
+use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
@@ -29,7 +30,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     /** @var UserAction|null Action to execute */
     public $action;
 
-    /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure<T of Model>($this, T, mixed, mixed): ?JsBlock JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
     /** @var string CSS class for modal size. */
@@ -180,7 +181,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     protected function jsGetExecute($obj, $id): JsBlock
     {
         $success = $this->jsSuccess instanceof \Closure
-            ? ($this->jsSuccess)($this, $this->action->getModel(), $id)
+            ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
 
         return new JsBlock([

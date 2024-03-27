@@ -44,7 +44,7 @@ trait StepExecutorTrait
     /** @var bool */
     protected $actionInitialized = false;
 
-    /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure<T of Model>($this, T, mixed, mixed): ?JsBlock JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
     /** @var array A seed for creating form in order to edit arguments/fields user entry. */
