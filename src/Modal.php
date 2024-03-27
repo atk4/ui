@@ -98,7 +98,8 @@ class Modal extends View
 
         $this->cb->set(function () {
             ($this->fx)($this->cbView);
-            $this->cb->terminateJson($this->cbView);
+
+            $this->cb->terminateJsonIfCanTerminate($this->cbView);
         });
     }
 

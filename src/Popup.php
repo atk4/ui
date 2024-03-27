@@ -151,9 +151,8 @@ class Popup extends View
 
             $fx($content);
 
-            // only render our content view
-            // PopupService will replace content with this one
-            $this->cb->terminateJson($content);
+            // only render our content view, PopupService will replace content with this one
+            $this->cb->terminateJsonIfCanTerminate($content);
         });
 
         return $this;
