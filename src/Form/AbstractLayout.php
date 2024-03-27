@@ -40,7 +40,7 @@ abstract class AbstractLayout extends View
     public function addControl(string $name, $control = [], array $fieldSeed = []): Control
     {
         if ($this->form->entity === null) {
-            $this->form->entity = (new ProxyModel())->createEntity();
+            $this->form->setModel((new ProxyModel())->createEntity());
         }
         $model = $this->form->entity->getModel();
 

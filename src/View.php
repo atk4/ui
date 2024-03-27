@@ -104,6 +104,17 @@ class View extends AbstractView
         $this->setDefaults($defaults);
     }
 
+    #[\Override]
+    public function &__get(string $name)
+    {
+        // TODO remove in atk4/ui 6.0
+        if ($name === 'model' && !(new \ReflectionProperty(self::class, 'model'))->isInitialized($this) && $this->entity !== null) {
+            throw new Exception('Use View::$entity property instead for entity access');
+        }
+
+        return parent::__get($name);
+    }
+
     /**
      * Associate this view with a model. Do not place any logic in this class, instead take it
      * to renderView().
@@ -113,8 +124,8 @@ class View extends AbstractView
      */
     public function setModel(Model $model): void
     {
-        if ($this->model !== null) {
-            if ($this->model === $model) {
+        if (((new \ReflectionProperty(self::class, 'model'))->isInitialized($this) ? $this->model : $this->entity) !== null) {
+            if (((new \ReflectionProperty(self::class, 'model'))->isInitialized($this) ? $this->model : $this->entity) === $model) {
                 return;
             }
 

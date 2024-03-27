@@ -146,7 +146,7 @@ class Table extends Lister
         }
 
         if ($this->model === null) {
-            $this->model = new ProxyModel();
+            $this->setModel(new ProxyModel());
         }
         $this->model->assertIsModel();
 

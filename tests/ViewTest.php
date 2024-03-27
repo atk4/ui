@@ -10,6 +10,7 @@ use Atk4\Ui\AbstractView;
 use Atk4\Ui\Callback;
 use Atk4\Ui\Console;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Form;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\JsSse;
 use Atk4\Ui\Loader;
@@ -101,6 +102,22 @@ class ViewTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Different model is already set');
         $v->setModel($m2);
+    }
+
+    public function testSetModelEntity(): void
+    {
+        $form = new Form();
+        $form->setApp($this->createApp());
+        $form->invokeInit();
+        $entity = (new Model())->createEntity();
+        $form->setModel($entity);
+
+        self::assertSame($entity, $form->entity);
+        self::assertFalse((new \ReflectionProperty(Form::class, 'model'))->isInitialized($form));
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Use View::$entity property instead for entity access');
+        $form->model; // @phpstan-ignore-line
     }
 
     public function testSetSourceZeroKeyException(): void
