@@ -141,6 +141,7 @@ class Wizard extends View
             }
 
             $this->buttonNext->on('click', $result->js()->submit());
+            $this->buttonFinish->on('click', $result->js()->submit());
         }
 
         return $result;
