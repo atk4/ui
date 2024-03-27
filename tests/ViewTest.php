@@ -151,4 +151,13 @@ class ViewTest extends TestCase
         yield [Popup::class];
         yield [VirtualPage::class];
     }
+
+    public function testJsCallbackGetUrlException(): void
+    {
+        $v = new JsCallback();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Do not use getUrl on JsCallback, use getJsUrl()');
+        $v->getUrl();
+    }
 }
