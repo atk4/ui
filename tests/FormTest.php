@@ -82,7 +82,7 @@ class FormTest extends TestCase
         $form->onSubmit(static function (Form $form) use (&$wasSubmitCalled, $submitFx): void {
             $wasSubmitCalled = true;
             if ($submitFx !== null) {
-                $submitFx($form->model);
+                $submitFx($form->entity);
             }
         });
 
@@ -114,17 +114,17 @@ class FormTest extends TestCase
 
             $form->setModel($m->createEntity(), ['name', 'email']);
 
-            self::assertSame('John', $form->model->get('name'));
+            self::assertSame('John', $form->entity->get('name'));
 
             return $form;
-        }, ['email' => 'john@yahoo.com', 'is_admin' => '1'], static function (Model $m) {
+        }, ['email' => 'john@yahoo.com', 'is_admin' => '1'], static function (Model $entity) {
             // field has default, but form send back empty value
-            self::assertSame('', $m->get('name'));
+            self::assertSame('', $entity->get('name'));
 
-            self::assertSame('john@yahoo.com', $m->get('email'));
+            self::assertSame('john@yahoo.com', $entity->get('email'));
 
             // security check, unspecified field must not be changed
-            self::assertFalse($m->get('is_admin'));
+            self::assertFalse($entity->get('is_admin'));
         });
     }
 
@@ -135,8 +135,8 @@ class FormTest extends TestCase
             $form->addControl('foo');
 
             return $form;
-        }, ['foo' => '0'], static function (Model $m) {
-            self::assertSame('0', $m->get('foo'));
+        }, ['foo' => '0'], static function (Model $entity) {
+            self::assertSame('0', $entity->get('foo'));
         });
     }
 
@@ -222,9 +222,9 @@ class FormTest extends TestCase
                 $form->setModel($m->createEntity(), ['foo']);
 
                 return $form;
-            }, ['foo' => 'x'], static function (Model $model) use (&$submitReached) {
+            }, ['foo' => 'x'], static function (Model $entity) use (&$submitReached) {
                 $submitReached = true;
-                $model->set('bar', null);
+                $entity->set('bar', null);
             });
         } catch (UnhandledCallbackExceptionError $e) {
             $catchReached = true;

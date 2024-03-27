@@ -206,7 +206,7 @@ $colReload = new \Atk4\Ui\Js\JsReload($col);
 $form = \Atk4\Ui\Form::addTo($col->addColumn());
 $form->setModel(new ToDoItem($s));
 $form->onSubmit(function (Form $form) use ($colReload) {
-    $form->model->save();
+    $form->entity->save();
 
     return $colReload;
 });

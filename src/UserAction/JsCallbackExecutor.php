@@ -34,7 +34,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /** @var Model\UserAction The model user action */
     public $action;
 
-    /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure<T of Model>($this, T, mixed, mixed): ?JsBlock JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
     #[\Override]
@@ -47,9 +47,6 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
-        if (!$this->action->enabled && $this->getOwner() instanceof View) { // @phpstan-ignore-line
-            $this->getOwner()->addClass('disabled');
-        }
 
         return $this;
     }

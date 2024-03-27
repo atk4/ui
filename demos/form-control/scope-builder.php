@@ -19,5 +19,5 @@ $form = Form::addTo($app);
 $form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model, 'options' => ['debug' => true]]);
 
 $form->onSubmit(static function (Form $form) use ($model) {
-    return "Scope selected:\n\n" . $form->model->get('qb')->toWords($model);
+    return "Scope selected:\n\n" . $form->entity->get('qb')->toWords($model);
 });

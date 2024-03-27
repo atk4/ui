@@ -13,6 +13,8 @@ use Atk4\Ui\View;
 
 /**
  * A Simple inline editable text Vue component.
+ *
+ * @property false $model use $entity property instead
  */
 class InlineEdit extends View
 {
@@ -80,7 +82,7 @@ class InlineEdit extends View
         // set default validation error handler
         if (!$this->formatErrorMsg) {
             $this->formatErrorMsg = function (ValidationException $e, string $value) {
-                $caption = $this->model->getField($this->fieldName)->getCaption();
+                $caption = $this->entity->getField($this->fieldName)->getCaption();
 
                 return $caption . ' - ' . $e->getMessage() . '. <br>Trying to set this value: "' . $value . '"';
             };
@@ -90,18 +92,20 @@ class InlineEdit extends View
     #[\Override]
     public function setModel(Model $entity): void
     {
+        $entity->assertIsEntity();
+
         parent::setModel($entity);
 
         if ($this->fieldName === null) {
-            $this->fieldName = $this->model->titleField;
+            $this->fieldName = $this->entity->titleField;
         }
 
-        if ($this->autoSave && $this->model->isLoaded()) {
+        if ($this->autoSave && $this->entity->isLoaded()) {
             $this->cb->set(function () {
                 $postValue = $this->getApp()->getRequestPostParam('value');
                 try {
-                    $this->model->set($this->fieldName, $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($this->fieldName), $postValue));
-                    $this->model->save();
+                    $this->entity->set($this->fieldName, $this->getApp()->uiPersistence->typecastLoadField($this->entity->getField($this->fieldName), $postValue));
+                    $this->entity->save();
 
                     return $this->jsSuccess('Update saved');
                 } catch (ValidationException $e) {
@@ -126,7 +130,7 @@ class InlineEdit extends View
     {
         if (!$this->autoSave) {
             $value = $this->getApp()->uiPersistence->typecastLoadField(
-                $this->model->getField($this->fieldName),
+                $this->entity->getField($this->fieldName),
                 $this->getApp()->tryGetRequestPostParam('value')
             );
             $this->cb->set(static function () use ($fx, $value) {
@@ -163,8 +167,8 @@ class InlineEdit extends View
     {
         parent::renderView();
 
-        if ($this->model !== null && $this->model->isLoaded()) {
-            $initValue = $this->model->get($this->fieldName);
+        if ($this->entity !== null && $this->entity->isLoaded()) {
+            $initValue = $this->entity->get($this->fieldName);
         } else {
             $initValue = $this->initValue;
         }

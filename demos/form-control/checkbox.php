@@ -36,5 +36,5 @@ $form->addControl('test_checked', [Form\Control\Checkbox::class])->set(1);
 $form->addControl('also_checked', ['caption' => 'Also checked by default'], ['type' => 'boolean'])->set(true);
 
 $form->onSubmit(static function (Form $form) use ($app) {
-    return new JsToast($app->encodeJson($form->model->get()));
+    return new JsToast($app->encodeJson($form->entity->get()));
 });

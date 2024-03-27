@@ -27,7 +27,7 @@ $form->addControl('sub_category_id', [Form\Control\DropdownCascade::class, 'casc
 $form->addControl('product_id', [Form\Control\DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => SubCategory::hinting()->fieldName()->Products]);
 
 $form->onSubmit(static function (Form $form) use ($app) {
-    $message = $app->encodeJson($app->uiPersistence->typecastSaveRow($form->model, $form->model->get()));
+    $message = $app->encodeJson($app->uiPersistence->typecastSaveRow($form->entity, $form->entity->get()));
 
     $view = new Message('Values: ');
     $view->setApp($form->getApp());
@@ -105,7 +105,7 @@ $form->addControl('multi', [
 ]);
 
 $form->onSubmit(static function (Form $form) use ($app) {
-    $message = $app->encodeJson($form->model->get());
+    $message = $app->encodeJson($form->entity->get());
 
     $view = new Message('Values:');
     $view->setApp($form->getApp());

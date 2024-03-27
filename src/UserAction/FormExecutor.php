@@ -22,7 +22,7 @@ class FormExecutor extends BasicExecutor
         }
 
         // setup form model using action fields
-        if ($this->form->model === null) {
+        if ($this->form->entity === null) {
             if (!$this->action->fields) {
                 $this->action->fields = $this->getModelFields($this->action->getModel());
             }

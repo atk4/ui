@@ -152,7 +152,7 @@ to populate a content:
 ```
 $grid->addModalAction('Details', 'Additional Details', function (View $p, $id) use ($grid) {
     // $id of the record which was clicked
-    // $grid->model = $grid->model->load($id);
+    // $model = $grid->model->load($id);
 
     LoremIpsum::addTo($p);
 });

@@ -61,8 +61,8 @@ $table = Table::addTo($app);
 $table->setModel($model, ['action']);
 
 // copy of amount through a PHP callback
-$model->addExpression('amount_copy', ['expr' => static function (Model $model) {
-    return $model->get('amount');
+$model->addExpression('amount_copy', ['expr' => static function (Model $entity) {
+    return $entity->get('amount');
 }, 'type' => 'atk4_money']);
 
 // column with 2 decorators that stack. Money will use red ink and alignment, format will change text.

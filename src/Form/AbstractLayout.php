@@ -15,6 +15,8 @@ use Atk4\Ui\View;
 
 /**
  * Custom Layout for a form.
+ *
+ * @property false $model use $entity property instead
  */
 abstract class AbstractLayout extends View
 {
@@ -37,10 +39,10 @@ abstract class AbstractLayout extends View
      */
     public function addControl(string $name, $control = [], array $fieldSeed = []): Control
     {
-        if ($this->form->model === null) {
-            $this->form->model = (new ProxyModel())->createEntity();
+        if ($this->form->entity === null) {
+            $this->form->setModel((new ProxyModel())->createEntity());
         }
-        $model = $this->form->model->getModel();
+        $model = $this->form->entity->getModel();
 
         // TODO this class should not refer to any specific form control
         $controlClass = is_object($control)

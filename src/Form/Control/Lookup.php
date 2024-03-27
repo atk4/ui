@@ -270,7 +270,7 @@ class Lookup extends Input
             $form->setModel($entity, $this->plus['fields'] ?? null);
 
             $form->onSubmit(function (Form $form) {
-                $msg = $form->model->getUserAction('add')->execute();
+                $msg = $form->entity->getUserAction('add')->execute();
 
                 $res = new JsBlock();
                 if (is_string($msg)) {
@@ -278,7 +278,7 @@ class Lookup extends Input
                 }
                 $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
 
-                $row = $this->renderRow($form->model);
+                $row = $this->renderRow($form->entity);
                 $chain = $this->jsDropdown();
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
                 $res->addStatement($chain);
@@ -341,7 +341,7 @@ class Lookup extends Input
         if ($this->getApp()->hasRequestQueryParam('form')) {
             parse_str($this->getApp()->getRequestQueryParam('form'), $data);
         } elseif ($this->form !== null) {
-            $data = $this->form->model->get();
+            $data = $this->form->entity->get();
         } else {
             return;
         }

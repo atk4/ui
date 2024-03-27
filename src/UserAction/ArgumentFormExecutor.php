@@ -40,7 +40,7 @@ class ArgumentFormExecutor extends BasicExecutor
 
         $this->form->onSubmit(function (Form $form) {
             // set arguments from the model
-            $this->setArguments($form->model->get());
+            $this->setArguments($form->entity->get());
 
             return $this->executeModelAction();
         });

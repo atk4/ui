@@ -50,7 +50,7 @@ $i3 = $accordion->addSection('Dynamic Form', static function (VirtualPage $vp) {
     $form = Form::addTo($vp);
     $form->addControl('Email');
     $form->onSubmit(static function (Form $form) {
-        return $form->jsSuccess('Subscribed ' . $form->model->get('Email') . ' to newsletter.');
+        return $form->jsSuccess('Subscribed ' . $form->entity->get('Email') . ' to newsletter.');
     });
 });
 

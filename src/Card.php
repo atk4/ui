@@ -27,6 +27,8 @@ use Atk4\Ui\UserAction\SharedExecutor;
  * When using model or models, the first model that get set via setModel method
  * will have it's idField set as data-id HTML attribute for the card. Thus making
  * the ID available via javascript (new Jquery())->data('id')
+ *
+ * @property false $model use $entity property instead
  */
 class Card extends View
 {
@@ -174,10 +176,10 @@ class Card extends View
         parent::setModel($entity);
 
         if ($fields === null) {
-            $fields = array_keys($this->model->getFields(['editable', 'visible']));
+            $fields = array_keys($this->entity->getFields(['editable', 'visible']));
         }
 
-        $this->template->trySet('dataId', $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $this->model->getId()));
+        $this->template->trySet('dataId', $this->getApp()->uiPersistence->typecastAttributeSaveField($this->entity->getIdField(), $this->entity->getId()));
 
         View::addTo($this->getSection(), [$entity->getTitle(), 'class.header' => true]);
         $this->getSection()->addFields($entity, $fields, $this->useLabel, $this->useTable);
@@ -188,16 +190,16 @@ class Card extends View
      *
      * @return View
      */
-    public function addSection(?string $title = null, ?Model $model = null, ?array $fields = null, bool $useTable = false, bool $useLabel = false)
+    public function addSection(?string $title = null, ?Model $entity = null, ?array $fields = null, bool $useTable = false, bool $useLabel = false)
     {
         $section = CardSection::addToWithCl($this, array_merge($this->cardSectionSeed, ['card' => $this]), ['Section']);
         if ($title) {
             View::addTo($section, [$title, 'class.header' => true]);
         }
 
-        if ($model && $fields) {
-            $section->setModel($model);
-            $section->addFields($model, $fields, $useTable, $useLabel);
+        if ($entity !== null && $fields) {
+            $section->setModel($entity);
+            $section->addFields($entity, $fields, $useTable, $useLabel);
         }
 
         return $section;
@@ -218,10 +220,10 @@ class Card extends View
 
         // setting arg for model ID
         // $args[0] is consider to hold a model ID, i.e. as a JS expression
-        if ($this->model !== null && $this->model->isLoaded() && !isset($args[0])) {
-            $defaults[] = $this->model->getId();
+        if ($this->entity !== null && $this->entity->isLoaded() && !isset($args[0])) {
+            $defaults[] = $this->entity->getId();
             if ($cardDeck === null && !$action->isOwnerEntity()) {
-                $action = $action->getActionForEntity($this->model);
+                $action = $action->getActionForEntity($this->entity);
             }
         }
 
@@ -257,19 +259,19 @@ class Card extends View
     /**
      * Set extra content using model field.
      */
-    public function addExtraFields(Model $model, array $fields, ?string $glue = null): void
+    public function addExtraFields(Model $entity, array $fields, ?string $glue = null): void
     {
         // display extra field in line
         if ($glue) {
             $extra = '';
             foreach ($fields as $field) {
-                $extra .= $model->get($field) . $glue;
+                $extra .= $entity->get($field) . $glue;
             }
             $extra = rtrim($extra, $glue);
             $this->addExtraContent(new View([$extra, 'ui' => 'basic fitted segment']));
         } else {
             foreach ($fields as $field) {
-                $this->addExtraContent(new View([$model->get($field), 'class.ui basic fitted segment' => true]));
+                $this->addExtraContent(new View([$entity->get($field), 'class.ui basic fitted segment' => true]));
             }
         }
     }

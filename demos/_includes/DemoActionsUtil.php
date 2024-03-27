@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
@@ -15,18 +14,18 @@ class DemoActionsUtil
     {
         $country->addUserAction('callback', [
             'description' => 'Callback',
-            'callback' => static function (Country $model) {
-                return 'callback execute using country ' . $model->getTitle();
+            'callback' => static function (Country $entity) {
+                return 'callback execute using country ' . $entity->getTitle();
             },
         ]);
 
         $country->addUserAction('preview', [
             'description' => 'Display Preview prior to run the action',
-            'preview' => static function (Country $model) {
-                return 'Previewing country ' . $model->getTitle();
+            'preview' => static function (Country $entity) {
+                return 'Previewing country ' . $entity->getTitle();
             },
-            'callback' => static function (Country $model) {
-                return 'Done previewing ' . $model->getTitle();
+            'callback' => static function (Country $entity) {
+                return 'Done previewing ' . $entity->getTitle();
             },
         ]);
 
@@ -45,11 +44,11 @@ class DemoActionsUtil
             'args' => [
                 'age' => ['type' => 'integer', 'required' => true],
             ],
-            'callback' => static function (Country $model, int $age) {
+            'callback' => static function (Country $entity, int $age) {
                 if ($age < 18) {
-                    $text = 'Sorry not old enough to visit ' . $model->getTitle();
+                    $text = 'Sorry not old enough to visit ' . $entity->getTitle();
                 } else {
-                    $text = $age . ' is old enough to visit ' . $model->getTitle();
+                    $text = $age . ' is old enough to visit ' . $entity->getTitle();
                 }
 
                 return $text;
@@ -62,10 +61,10 @@ class DemoActionsUtil
             'args' => [
                 'age' => ['type' => 'integer', 'required' => true],
             ],
-            'preview' => static function (Country $model, int $age) {
+            'preview' => static function (Country $entity, int $age) {
                 return 'You age is: ' . $age;
             },
-            'callback' => static function (Model $model, $age) {
+            'callback' => static function (Country $entity, $age) {
                 return 'age = ' . $age;
             },
         ]);
@@ -98,13 +97,13 @@ class DemoActionsUtil
         $country->addUserAction('confirm', [
             'caption' => 'User Confirmation',
             'description' => 'Confirm the action using a ConfirmationExecutor',
-            'confirmation' => static function (UserAction $a) {
-                $iso3 = Country::assertInstanceOf($a->getEntity())->iso3;
+            'confirmation' => static function (UserAction $action) {
+                $iso3 = Country::assertInstanceOf($action->getEntity())->iso3;
 
-                return 'Are you sure you want to perform this action on: <b>' . $a->getEntity()->getTitle() . ' (' . $iso3 . ')</b>';
+                return 'Are you sure you want to perform this action on: <b>' . $action->getEntity()->getTitle() . ' (' . $iso3 . ')</b>';
             },
-            'callback' => static function (Country $model) {
-                return 'Confirm country ' . $model->getTitle();
+            'callback' => static function (Country $entity) {
+                return 'Confirm country ' . $entity->getTitle();
             },
         ]);
 
@@ -126,13 +125,13 @@ class DemoActionsUtil
                 ],
             ],
             'fields' => [$country->fieldName()->iso3],
-            'callback' => static function (Country $model, int $age, string $city, string $gender) {
+            'preview' => static function (Country $entity, int $age, string $city, string $gender) {
+                return 'Gender = ' . $gender . ' / Age = ' . $age;
+            },
+            'callback' => static function (Country $entity, int $age, string $city, string $gender) {
                 $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
 
                 return 'Thank you ' . $n . ' at age ' . $age;
-            },
-            'preview' => static function (Country $model, int $age, string $city, string $gender) {
-                return 'Gender = ' . $gender . ' / Age = ' . $age;
             },
         ]);
     }

@@ -98,8 +98,8 @@ class Crud extends Grid
 
         // grab model ID when using delete
         // must be set before delete action execute
-        $this->model->onHook(Model::HOOK_AFTER_DELETE, function (Model $model) {
-            $this->deletedId = $model->getId();
+        $this->model->onHook(Model::HOOK_AFTER_DELETE, function (Model $entity) {
+            $this->deletedId = $entity->getId();
         });
 
         if ($this->useMenuActions === null) {

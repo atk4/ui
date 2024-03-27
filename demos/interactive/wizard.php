@@ -43,7 +43,7 @@ $wizard->addStep(['Set DSN', 'icon' => 'configure', 'description' => 'Database C
 
     $form->addControl('dsn', ['caption' => 'Connect DSN'], ['required' => true])->placeholder = 'mysql://user:pass@db-host.example.com/mydb';
     $form->onSubmit(static function (Form $form) use ($wizard) {
-        $wizard->memorize('dsn', $form->model->get('dsn'));
+        $wizard->memorize('dsn', $form->entity->get('dsn'));
 
         return $wizard->jsNext();
     });

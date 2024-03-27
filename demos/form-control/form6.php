@@ -34,5 +34,5 @@ $form->addControl('string_d', [], ['values' => ['F' => 'female', 'M' => 'male']]
 $form->addControl('string_r', [Form\Control\Radio::class], ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
 
 $form->onSubmit(static function (Form $form) use ($app) {
-    return new JsToast($app->encodeJson($form->getApp()->uiPersistence->typecastSaveRow($form->model, $form->model->get())));
+    return new JsToast($app->encodeJson($form->getApp()->uiPersistence->typecastSaveRow($form->entity, $form->entity->get())));
 });

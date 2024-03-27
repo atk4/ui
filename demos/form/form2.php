@@ -58,18 +58,18 @@ $formNames->addControl('last_name', ['width' => 'six', 'caption' => 'Last Name']
 $form->onSubmit(static function (Form $form) {
     $countryEntity = (new Country($form->getApp()->db))->createEntity();
     // Model will have some validation too
-    foreach ($form->model->getFields('editable') as $k => $field) {
+    foreach ($form->entity->getFields('editable') as $k => $field) {
         if ($countryEntity->hasField($k)) {
-            $countryEntity->set($k, $form->model->get($k));
+            $countryEntity->set($k, $form->entity->get($k));
         }
     }
 
     // in-form validation
     $errors = [];
-    if (mb_strlen($form->model->get('first_name')) < 3) {
-        $errors[] = $form->jsError('first_name', 'too short, ' . $form->model->get('first_name'));
+    if (mb_strlen($form->entity->get('first_name')) < 3) {
+        $errors[] = $form->jsError('first_name', 'too short, ' . $form->entity->get('first_name'));
     }
-    if (mb_strlen($form->model->get('last_name')) < 5) {
+    if (mb_strlen($form->entity->get('last_name')) < 5) {
         $errors[] = $form->jsError('last_name', 'too short');
     }
 

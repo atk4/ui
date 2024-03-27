@@ -349,9 +349,9 @@ class Country extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->numcode, ['caption' => 'ISO Numeric Code', 'type' => 'integer', 'required' => true]);
         $this->addField($this->fieldName()->phonecode, ['caption' => 'Phone Prefix', 'type' => 'integer', 'required' => true]);
 
-        $this->onHook(Model::HOOK_BEFORE_SAVE, static function (self $model) {
-            if (!$model->sys_name) {
-                $model->sys_name = mb_strtoupper($model->name);
+        $this->onHook(Model::HOOK_BEFORE_SAVE, static function (self $entity) {
+            if (!$entity->sys_name) {
+                $entity->sys_name = mb_strtoupper($entity->name);
             }
         });
     }
@@ -435,9 +435,9 @@ class Stat extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->is_commercial, ['type' => 'boolean']);
         $this->addField($this->fieldName()->currency, ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
         $this->addField($this->fieldName()->currency_symbol, ['neverPersist' => true]);
-        $this->onHook(Model::HOOK_AFTER_LOAD, static function (self $model) {
+        $this->onHook(Model::HOOK_AFTER_LOAD, static function (self $entity) {
             $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
-            $model->currency_symbol = $map[$model->currency] ?? '?';
+            $entity->currency_symbol = $map[$entity->currency] ?? '?';
         });
 
         $this->addField($this->fieldName()->project_budget, ['type' => 'atk4_money']);

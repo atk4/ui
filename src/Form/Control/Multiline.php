@@ -11,7 +11,6 @@ use Atk4\Data\Field\SqlExpressionField;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Data\ValidationException;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Js\JsExpressionable;
@@ -34,7 +33,7 @@ use Atk4\Ui\View;
  *
  * $form->onSubmit(function (Form $form) use ($ml) {
  *     // save Form model and then Multiline model
- *     $form->model->save(); // saving invoice record
+ *     $form->entity->save(); // saving invoice record
  *     $ml->saveRows(); // saving invoice items record related to invoice
  *     return new JsToast('Saved!');
  * });
@@ -219,7 +218,7 @@ class Multiline extends Form\Control
             }
 
             // remove __atml ID from array field
-            if ($this->form->model->getField($this->shortName)->type === 'json') {
+            if ($this->form->entity->getField($this->shortName)->type === 'json') {
                 $rows = [];
                 foreach ($this->rowData as $cols) {
                     unset($cols['__atkml']);
@@ -430,11 +429,7 @@ class Multiline extends Form\Control
     public function setReferenceModel(string $refModelName, ?Model $entity = null, array $fieldNames = []): void
     {
         if ($entity === null) {
-            if (!$this->form->model->isEntity()) {
-                throw new Exception('Model entity is not set');
-            }
-
-            $entity = $this->form->model;
+            $entity = $this->form->entity;
         }
 
         $this->setModel($entity->ref($refModelName), $fieldNames);

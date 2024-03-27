@@ -126,7 +126,7 @@ $control = $form->addControl('surname', new Form\Control\Line([
 ]));
 
 $form->onSubmit(static function (Form $form) {
-    return $form->model->get('name');
+    return $form->entity->get('name');
 });
 
 Header::addTo($app, ['Multiple Form Layouts']);
@@ -142,7 +142,7 @@ $formPage = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
 $formPage->addControl('age', new Form\Control\Line());
 
 $form->onSubmit(static function (Form $form) {
-    return $form->model->get('name') . ' has age ' . $form->model->get('age');
+    return $form->entity->get('name') . ' has age ' . $form->entity->get('age');
 });
 
 Header::addTo($app, ['onChange event', 'subHeader' => 'see in browser console']);

@@ -538,7 +538,7 @@ $table = \Atk4\Ui\Table::addTo($app);
 $form->setModel($bookModel);
 
 $form->onSubmit(function (Form $form) use ($table) {
-    $form->model->save();
+    $form->entity->save();
 
     return new \Atk4\Ui\Js\JsReload($table);
 });
@@ -581,7 +581,7 @@ $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
 $button->on('click', new \Atk4\Ui\Js\JsModal('JSModal Title', $vp));
 
 $form->onSubmit(function (Form $form) use ($table) {
-    $form->model->save();
+    $form->entity->save();
 
     return new \Atk4\Ui\Js\JsBlock([
         $table->jsReload(),
@@ -608,7 +608,7 @@ $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
 $button->on('click', new \Atk4\Ui\Js\JsModal('JSModal Title', $vp));
 
 $form->onSubmit(function (Form $form) use ($table) {
-    $form->model->save();
+    $form->entity->save();
 
     return new \Atk4\Ui\Js\JsBlock([
         $table->jsReload(),
@@ -631,7 +631,7 @@ $vp->set(function (\Atk4\Ui\VirtualPage $p) use ($table, $model) {
     $form = \Atk4\Ui\Form::addTo($p);
     $form->setModel($model);
     $form->onSubmit(function (Form $form) use ($table) {
-        $form->model->save();
+        $form->entity->save();
 
         return new \Atk4\Ui\Js\JsBlock([
             $table->jsReload(),
