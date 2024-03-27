@@ -424,7 +424,7 @@ With the according renderRowFunction:
 ```
 function (Model $entity) {
     return [
-        'title' => $entity->getTitle,
+        'title' => $entity->getTitle(),
         'icon' => $entity->value > 100 ? 'money' : 'coins',
         'someOtherField' => $entity->get('SomeOtherField'),
         'someOtherField2' => $entity->get('SomeOtherField2'),
