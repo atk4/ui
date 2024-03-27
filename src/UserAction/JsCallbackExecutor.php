@@ -47,9 +47,6 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
-        if (!$this->action->enabled && $this->getOwner() instanceof View) { // @phpstan-ignore-line
-            $this->getOwner()->addClass('disabled');
-        }
 
         return $this;
     }
