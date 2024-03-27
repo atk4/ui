@@ -85,7 +85,8 @@ class Loader extends View
 
         $this->cb->set(function () use ($fx) {
             $fx($this);
-            $this->cb->terminateJson($this->getShimIfOwner());
+
+            $this->cb->terminateJsonIfCanTerminate($this->getShimIfOwner());
         });
 
         return $this;
