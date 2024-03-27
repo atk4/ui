@@ -31,6 +31,11 @@ $group->addControl('text_norm', [Form\Control\Textarea::class], ['type' => 'text
 $group->addControl('text_read', [Form\Control\Textarea::class, 'readOnly' => true], ['type' => 'text'])->set("read only\nline2");
 $group->addControl('text_disb', [Form\Control\Textarea::class, 'disabled' => true], ['type' => 'text'])->set("disabled\nline2");
 
+$group = $form->addGroup('Color');
+$group->addControl('color_norm', [Form\Control\Color::class])->set('#ff0000');
+$group->addControl('color_read', [Form\Control\Color::class, 'readOnly' => true])->set(0xff0000);
+$group->addControl('color_disb', [Form\Control\Color::class, 'disabled' => true])->set(0xff0000);
+
 $group = $form->addGroup('Checkbox');
 $group->addControl('c_norm', [Form\Control\Checkbox::class], ['type' => 'boolean'])->set(true);
 $group->addControl('c_read', [Form\Control\Checkbox::class, 'readOnly' => true], ['type' => 'boolean'])->set(true); // allows to change value
