@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\JsToast;
@@ -40,9 +39,9 @@ class FlyersForm extends Form
         $this->addControl('country', [
             Form\Control\Lookup::class,
             'model' => new Country($this->getApp()->db),
-            'dependency' => static function (Model $model, $data) {
+            'dependency' => static function (Country $model, $data) {
                 if (isset($data['contains'])) {
-                    $model->addCondition(Country::hinting()->fieldName()->name, 'like', '%' . $data['contains'] . '%');
+                    $model->addCondition($model->fieldName()->name, 'like', '%' . $data['contains'] . '%');
                 }
             },
             'search' => [

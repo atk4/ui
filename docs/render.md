@@ -31,7 +31,7 @@ or will become child of another view. Method init() is not executed on either ob
 7. init() will identify that there are some "pending children" and will add them in properly.
 
 Most of the UI classes will allow you to operate even if they are not initialized. For instance calling 'setModel()' will
-simply set a $model property and does not really need to rely on $api etc.
+simply set a $model/$entity property and does not really need to rely on $api etc.
 
 Next, lets look at what Initialization really is and why is it important.
 

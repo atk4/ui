@@ -49,7 +49,7 @@ $country->addUserAction('greet', [
             'required' => true,
         ],
     ],
-    'callback' => static function (Country $model, string $name) {
+    'callback' => static function (Country $entity, string $name) {
         return 'Hello ' . $name;
     },
 ]);
