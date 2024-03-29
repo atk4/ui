@@ -121,7 +121,7 @@ class Lister extends View
         }
 
         // if no model is set, don't show anything (even warning)
-        if (!$this->model) {
+        if ($this->model === null) {
             parent::renderView();
 
             return;
@@ -176,15 +176,16 @@ class Lister extends View
      */
     public function renderRow(): void
     {
-        $this->tRow->trySet($this->currentRow);
+        $this->tRow->trySet($this->getApp()->uiPersistence->typecastSaveRow($this->currentRow, $this->currentRow->get()));
 
         if ($this->tRow->hasTag('_title')) {
             $this->tRow->set('_title', $this->currentRow->getTitle());
         }
+        $idStr = $this->getApp()->uiPersistence->typecastAttributeSaveField($this->currentRow->getIdField(), $this->currentRow->getId());
         if ($this->tRow->hasTag('_href')) {
-            $this->tRow->set('_href', $this->url(['id' => $this->currentRow->getId()]));
+            $this->tRow->set('_href', $this->url(['id' => $idStr]));
         }
-        $this->tRow->trySet('_id', $this->name . '-' . $this->currentRow->getId());
+        $this->tRow->trySet('_id', $this->name . '-' . $idStr);
 
         $html = $this->tRow->renderToHtml();
         if ($this->template->hasTag('rows')) {
@@ -202,7 +203,7 @@ class Lister extends View
      * render tree (instead of cloned template).
      */
     #[\Override]
-    public function renderToJsonArr(string $region = null): array
+    public function renderToJsonArr(?string $region = null): array
     {
         $this->renderAll();
 

@@ -37,13 +37,13 @@ $lister->setModel($model);
 
 $sortable = JsSortable::addTo($view, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
 
-$sortable->onReorder(static function (array $order, string $src, int $pos, int $oldPos) use ($app) {
+$sortable->onReorder(static function (array $orderedNames, string $sourceName, int $pos, int $oldPos) use ($app) {
     if ($app->tryGetRequestQueryParam('btn')) {
-        return new JsToast(implode(' - ', $order));
+        return new JsToast(implode(' - ', $orderedNames));
     }
 
-    return new JsToast($src . ' moved from position ' . $oldPos . ' to ' . $pos);
-});
+    return new JsToast($sourceName . ' moved from position ' . $oldPos . ' to ' . $pos);
+}, $model->getField($model->fieldName()->name));
 
 $button = Button::addTo($app)->set('Get countries order');
 $button->on('click', $sortable->jsSendSortOrders(['btn' => '1']));
@@ -57,6 +57,6 @@ $grid = Grid::addTo($app, ['paginator' => false]);
 $grid->setModel((new Country($app->db))->setLimit(6));
 
 $dragHandler = $grid->addDragHandler();
-$dragHandler->onReorder(static function (array $order) {
-    return new JsToast('New order: ' . implode(' - ', $order));
+$dragHandler->onReorder(static function (array $orderedIds) use ($grid) {
+    return new JsToast('New order: ' . implode(' - ', array_map(static fn ($id) => $grid->getApp()->uiPersistence->typecastSaveField($grid->model->getIdField(), $id), $orderedIds)));
 });

@@ -122,7 +122,7 @@ class Grid extends View
             $menuElementNameCountsBackup = \Closure::bind(fn () => $this->_elementNameCounts, $this->menu, AbstractView::class)();
             try {
                 $menuRight = $this->menu->addMenuRight(); // @phpstan-ignore-line
-                $menuItemView = View::addTo($menuRight->addItem()->setElement('div'));
+                $menuItemView = View::addTo($menuRight->addItem());
                 $quickSearch = JsSearch::addTo($menuItemView);
                 $this->stickyGet($quickSearch->name . '_q');
                 $this->menu->removeElement($menuRight->shortName);
@@ -304,7 +304,7 @@ class Grid extends View
      */
     public function addQuickSearch($fields = [], $hasAutoQuery = false): void
     {
-        if (!$this->model) {
+        if ($this->model === null) {
             throw new Exception('Call setModel() before addQuickSearch()');
         }
 
@@ -316,7 +316,7 @@ class Grid extends View
             throw new Exception('Unable to add QuickSearch without Menu');
         }
 
-        $view = View::addTo($this->menu->addMenuRight()->addItem()->setElement('div'));
+        $view = View::addTo($this->menu->addMenuRight()->addItem());
 
         $this->quickSearch = JsSearch::addTo($view, ['reload' => $this->container, 'autoQuery' => $hasAutoQuery]);
         $q = $this->stickyGet($this->quickSearch->name . '_q') ?? '';
@@ -336,7 +336,7 @@ class Grid extends View
     }
 
     #[\Override]
-    public function jsReload($args = [], $afterSuccess = null, $apiConfig = []): JsExpressionable
+    public function jsReload($args = [], $afterSuccess = null, array $apiConfig = []): JsExpressionable
     {
         return new JsReload($this->container, $args, $afterSuccess, $apiConfig);
     }
@@ -347,7 +347,7 @@ class Grid extends View
      *
      * @param string|array|View                     $button     Label text, object or seed for the Button
      * @param JsExpressionable|JsCallbackSetClosure $action
-     * @param bool|\Closure(Model): bool            $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool    $isDisabled
      *
      * @return View
      */
@@ -361,7 +361,7 @@ class Grid extends View
      *
      * @return View
      */
-    public function addExecutorButton(ExecutorInterface $executor, Button $button = null)
+    public function addExecutorButton(ExecutorInterface $executor, ?Button $button = null)
     {
         if ($button !== null) {
             $this->add($button);
@@ -395,7 +395,7 @@ class Grid extends View
      *
      * @param View|string                           $view
      * @param JsExpressionable|JsCallbackSetClosure $action
-     * @param bool|\Closure(Model): bool            $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool    $isDisabled
      *
      * @return View
      */
@@ -496,11 +496,11 @@ class Grid extends View
      * Similar to addActionButton but when button is clicked, modal is displayed
      * with the $title and $callback is executed.
      *
-     * @param string|array|View                 $button
-     * @param string                            $title
-     * @param \Closure(View, string|null): void $callback
-     * @param array                             $args       extra URL argument for callback
-     * @param bool|\Closure(Model): bool        $isDisabled
+     * @param string|array|View                  $button
+     * @param string                             $title
+     * @param \Closure(View, mixed): void        $callback
+     * @param array                              $args       extra URL argument for callback
+     * @param bool|\Closure<T of Model>(T): bool $isDisabled
      *
      * @return View
      */
@@ -510,20 +510,25 @@ class Grid extends View
     }
 
     /**
-     * @return list<string>
+     * @return list<mixed>
      */
     private function explodeSelectionValue(string $value): array
     {
-        return $value === '' ? [] : explode(',', $value);
+        $res = [];
+        foreach ($value === '' ? [] : explode(',', $value) as $v) {
+            $res[] = $this->getApp()->uiPersistence->typecastAttributeLoadField($this->model->getIdField(), $v);
+        }
+
+        return $res;
     }
 
     /**
      * Similar to addActionButton but apply to a multiple records selection and display in menu.
      * When menu item is clicked, $callback is executed.
      *
-     * @param string|array|MenuItem                               $item
-     * @param \Closure(Js\Jquery, list<string>): JsExpressionable $callback
-     * @param array                                               $args     extra URL argument for callback
+     * @param string|array|MenuItem                           $item
+     * @param \Closure(Jquery, list<mixed>): JsExpressionable $callback
+     * @param array                                           $args     extra URL argument for callback
      *
      * @return View
      */
@@ -541,10 +546,10 @@ class Grid extends View
      * Similar to addModalAction but apply to a multiple records selection and display in menu.
      * When menu item is clicked, modal is displayed with the $title and $callback is executed.
      *
-     * @param string|array|MenuItem              $item
-     * @param string                             $title
-     * @param \Closure(View, list<string>): void $callback
-     * @param array                              $args     extra URL argument for callback
+     * @param string|array|MenuItem             $item
+     * @param string                            $title
+     * @param \Closure(View, list<mixed>): void $callback
+     * @param array                             $args     extra URL argument for callback
      *
      * @return View
      */
@@ -611,7 +616,7 @@ class Grid extends View
      * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
     #[\Override]
-    public function setModel(Model $model, array $fields = null): void
+    public function setModel(Model $model, ?array $fields = null): void
     {
         $this->table->setModel($model, $fields);
 

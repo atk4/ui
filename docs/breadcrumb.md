@@ -65,12 +65,12 @@ $model = new User($app->db);
 $id = $app->stickyGet('user_id');
 if ($id) {
     // perhaps we edit individual user?
-    $model = $model->load($id);
-    $crumb->addCrumb($model->get('name'), []);
+    $entity = $model->load($id);
+    $crumb->addCrumb($entity->get('name'), []);
 
     // here we can check for additional criteria and display a deeper level on the crumb
 
-    Form::addTo($app)->setModel($model);
+    Form::addTo($app)->setModel($entity);
 } else {
     // display list of users
     $table = Table::addTo($app);

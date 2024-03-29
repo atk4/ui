@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Field;
 use Atk4\Data\Persistence;
 use Atk4\Ui\App;
 use Atk4\Ui\Behat\CoverageUtil;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Layout;
+use Atk4\Ui\Persistence\Ui as UiPersistence;
 
 date_default_timezone_set('UTC');
 
@@ -28,6 +30,43 @@ $app = new App([
     'callExit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
     'catchExceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
     'alwaysRun' => (bool) ($_GET['APP_ALWAYS_RUN'] ?? true),
+    'uiPersistence' => new class() extends UiPersistence {
+        #[\Override]
+        protected function _typecastLoadField(Field $field, $value)
+        {
+            if ($field->type === WrappedIdType::NAME && is_string($value) && trim($value) === '') {
+                return null;
+            }
+
+            return parent::_typecastLoadField($field, $value);
+        }
+
+        #[\Override]
+        public function typecastAttributeSaveField(Field $field, $value): ?string
+        {
+            if ($field->type === WrappedIdType::NAME) {
+                return $value === null
+                    ? null
+                    : $this->typecastAttributeSaveField(new Field(['type' => 'integer']), $value->getId() + 218_000_000);
+            }
+
+            return parent::typecastAttributeSaveField($field, $value);
+        }
+
+        #[\Override]
+        public function typecastAttributeLoadField(Field $field, ?string $value)
+        {
+            if ($field->type === WrappedIdType::NAME) {
+                $value = $this->typecastAttributeLoadField(new Field(['type' => 'integer']), $value);
+
+                return $value === null
+                    ? null
+                    : new WrappedId($value - 218_000_000);
+            }
+
+            return parent::typecastAttributeLoadField($field, $value);
+        }
+    },
 ]);
 $app->title = 'Agile UI Demo v' . $app->version;
 

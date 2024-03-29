@@ -21,7 +21,7 @@ View::addTo($app, [
 ]);
 
 $formSubmit = static function (Form $form) use ($app) {
-    return new JsToast($app->encodeJson($form->model->get()));
+    return new JsToast($app->encodeJson($form->entity->get()));
 };
 
 $cc = Columns::addTo($app);

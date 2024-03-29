@@ -1561,7 +1561,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Add dynamic scrolling to a View that can accept page argument in URL.
  *
- * default options are:
+ * Default options are:
  * padding: 20         The amount of padding needed prior to request a page load.
  * initialPage: 1      The initial page load when calling this plugin.
  * appendTo: null      The HTML element where new content should be append to.
@@ -1756,7 +1756,7 @@ class AtkServerEventPlugin extends _atk_plugin__WEBPACK_IMPORTED_MODULE_2__["def
   main() {
     const element = this.$el;
     const hasLoader = this.settings.showLoader;
-    this.source = new EventSource(this.settings.url + '&__atk_sse=1');
+    this.source = new EventSource(this.settings.url);
     if (hasLoader) {
       element.addClass('loading');
     }

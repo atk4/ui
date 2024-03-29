@@ -328,10 +328,10 @@ Sometimes your formatting may change depending on value. For example you may wan
 only on certain rows. For this you can use an `\Atk4\Ui\Table\Column\Multiformat` decorator:
 
 ```
-$table->addColumn('amount', [\Atk4\Ui\Table\Column\Multiformat::class, function (Model $model) {
-    if ($model->get('is_invoiced') > 0) {
+$table->addColumn('amount', [\Atk4\Ui\Table\Column\Multiformat::class, function (Model $entity) {
+    if ($entity->get('is_invoiced') > 0) {
         return [\Atk4\Ui\Table\Column\Money::class, [\Atk4\Ui\Table\Column\Link::class, 'invoice', ['invoice_id' => 'id']]];
-    } elseif (abs($model->get('is_refunded')) < 50) {
+    } elseif (abs($entity->get('is_refunded')) < 50) {
         return [[\Atk4\Ui\Table\Column\Template::class, 'Amount was <b>refunded</b>']];
     }
 

@@ -72,8 +72,8 @@ $control->onItem(static function (int $value) use ($pathFromIdFx, $items) {
 
 $form->onSubmit(static function (Form $form) use ($app) {
     $response = [
-        'multiple' => $form->model->get('tree'),
-        'single' => $form->model->get('tree1'),
+        'multiple' => $form->entity->get('tree'),
+        'single' => $form->entity->get('tree1'),
     ];
 
     $view = new Message('Items:');

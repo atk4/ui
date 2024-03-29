@@ -145,8 +145,8 @@ class Table extends Lister
                 ->addMoreInfo('name', $name);
         }
 
-        if (!$this->model) {
-            $this->model = new ProxyModel();
+        if ($this->model === null) {
+            $this->setModel(new ProxyModel());
         }
         $this->model->assertIsModel();
 
@@ -194,7 +194,7 @@ class Table extends Lister
      */
     public function setFilterColumn($cols = null): void
     {
-        if (!$this->model) {
+        if ($this->model === null) {
             throw new Exception('Model need to be defined in order to use column filtering');
         }
 
@@ -357,7 +357,7 @@ class Table extends Lister
      * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
     #[\Override]
-    public function setModel(Model $model, array $fields = null): void
+    public function setModel(Model $model, ?array $fields = null): void
     {
         $model->assertIsModel();
 
@@ -399,7 +399,6 @@ class Table extends Lister
                 $this->tRowMaster->dangerouslySetHtml('cells', $this->getDataRowHtml());
                 $this->tRowMaster->set('dataId', '{$dataId}');
                 $this->tRow = new HtmlTemplate($this->tRowMaster->renderToHtml()); // TODO reparse should not be needed
-                $this->tRow->setApp($this->getApp());
 
                 if ($this->hook(self::HOOK_BEFORE_ROW) === false) {
                     continue;
@@ -444,7 +443,7 @@ class Table extends Lister
     #[\Override]
     public function renderRow(): void
     {
-        $this->tRow->set($this->currentRow);
+        $this->tRow->trySet($this->getApp()->uiPersistence->typecastSaveRow($this->currentRow, $this->currentRow->get()));
 
         if ($this->useHtmlTags) {
             // prepare row-specific HTML tags
@@ -468,7 +467,7 @@ class Table extends Lister
 
             // render row and add to body
             $this->tRow->dangerouslySetHtml($htmlTags);
-            $this->tRow->set('dataId', (string) $this->currentRow->getId());
+            $this->tRow->set('dataId', $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $this->currentRow->getId()));
             $this->template->dangerouslyAppendHtml('Body', $this->tRow->renderToHtml());
             $this->tRow->del(array_keys($htmlTags));
         } else {

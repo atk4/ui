@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
 use Atk4\Core\HookTrait;
+use Atk4\Data\Exception as DataException;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
@@ -19,6 +20,9 @@ use Atk4\Ui\Js\JsConditionalForm;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 
+/**
+ * @property false $model use $entity property instead
+ */
 class Form extends View
 {
     use HookTrait;
@@ -44,10 +48,8 @@ class Form extends View
     /**
      * HTML <form> element, all inner form controls are linked to it on render
      * with HTML form="form_id" attribute.
-     *
-     * @var View
      */
-    public $formElement;
+    public View $formElement;
 
     /** @var Form\Layout A current layout of a form, needed if you call Form->addControl(). */
     public $layout;
@@ -106,10 +108,10 @@ class Form extends View
      */
     public $controlDisplaySelector = '.field';
 
-    /** @var array Use this apiConfig variable to pass API settings to Fomantic-UI in .api(). */
-    public $apiConfig = [];
+    /** @var array<string, mixed> Use this apiConfig variable to pass API settings to Fomantic-UI in .api(). */
+    public array $apiConfig = [];
 
-    /** @var array Use this formConfig variable to pass settings to Fomantic-UI in .from(). */
+    /** @var array<string, mixed> Use this formConfig variable to pass settings to Fomantic-UI in .from(). */
     public $formConfig = [];
 
     // {{{ Base Methods
@@ -157,11 +159,9 @@ class Form extends View
     /**
      * Setter for control display rules.
      *
-     * @param array $rules
-     *
      * @return $this
      */
-    public function setControlsDisplayRules($rules = [])
+    public function setControlsDisplayRules(array $rules = [])
     {
         $this->controlDisplayRules = $rules;
 
@@ -171,12 +171,11 @@ class Form extends View
     /**
      * Set display rule for a group collection.
      *
-     * @param array       $rules
      * @param string|View $selector
      *
      * @return $this
      */
-    public function setGroupDisplayRules($rules = [], $selector = '.atk-form-group')
+    public function setGroupDisplayRules(array $rules = [], $selector = '.atk-form-group')
     {
         if (is_object($selector)) {
             $selector = '#' . $selector->getHtmlId();
@@ -192,7 +191,7 @@ class Form extends View
      * @param array<int, string>|null $fields if null, then all "editable" fields will be added
      */
     #[\Override]
-    public function setModel(Model $entity, array $fields = null): void
+    public function setModel(Model $entity, ?array $fields = null): void
     {
         $entity->assertIsEntity();
 
@@ -363,21 +362,21 @@ class Form extends View
      */
     public function controlFactory(Field $field, $controlSeed = []): Control
     {
-        $this->model->assertIsEntity($field->getOwner());
+        $this->entity->assertIsEntity($field->getOwner());
 
         $fallbackSeed = [Control\Line::class];
 
         if ($field->type === 'json' && $field->hasReference()) {
             $limit = ($field->getReference() instanceof ContainsMany) ? 0 : 1;
-            $model = $field->getReference()->refModel($this->model);
+            $model = $field->getReference()->createTheirModel();
             $fallbackSeed = [Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
         } elseif ($field->type !== 'boolean') {
-            if ($field->enum) {
+            if ($field->enum !== null) {
                 $fallbackSeed = [Control\Dropdown::class, 'values' => array_combine($field->enum, $field->enum)];
-            } elseif ($field->values) {
+            } elseif ($field->values !== null) {
                 $fallbackSeed = [Control\Dropdown::class, 'values' => $field->values];
             } elseif ($field->hasReference()) {
-                $fallbackSeed = [Control\Lookup::class, 'model' => $field->getReference()->refModel($this->model)];
+                $fallbackSeed = [Control\Lookup::class, 'model' => $field->getReference()->createTheirModel()];
             }
         }
 
@@ -398,7 +397,7 @@ class Form extends View
 
         $defaults = [
             'form' => $this,
-            'entityField' => new EntityFieldPair($this->model, $field->shortName),
+            'entityField' => new EntityFieldPair($this->entity, $field->shortName),
             'shortName' => $field->shortName,
         ];
 
@@ -436,20 +435,24 @@ class Form extends View
                 }
 
                 try {
-                    $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $postRawValue));
+                    if ($control instanceof Control\Dropdown || $control instanceof Control\Lookup || $control instanceof Control\Radio) { // this condition is definitely unacceptable, also should Control::set() be in the catch?
+                        $control->set($this->getApp()->uiPersistence->typecastAttributeLoadField($control->entityField->getField(), $postRawValue));
+                    } else {
+                        $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $postRawValue));
+                    }
                 } catch (\Exception $e) {
                     if ($e instanceof \ErrorException) {
                         throw $e;
+                    }
+
+                    if ($e->getPrevious() !== null && $e instanceof DataException && $e->getMessage() === 'Typecast parse error') {
+                        $e = $e->getPrevious();
                     }
 
                     $messages = [];
                     do {
                         $messages[] = $e->getMessage();
                     } while (($e = $e->getPrevious()) !== null);
-
-                    if (count($messages) >= 2 && $messages[0] === 'Typecast parse error') {
-                        array_shift($messages);
-                    }
 
                     $errors[$k] = implode(': ', $messages);
                 }
@@ -491,7 +494,7 @@ class Form extends View
      * Set Fomantic-UI Api settings to use with form. A complete list is here:
      * https://fomantic-ui.com/behaviors/api.html#/settings .
      *
-     * @param array $config
+     * @param array<string, mixed> $config
      *
      * @return $this
      */
@@ -506,7 +509,7 @@ class Form extends View
      * Set Fomantic-UI Form settings to use with form. A complete list is here:
      * https://fomantic-ui.com/behaviors/form.html#/settings .
      *
-     * @param array $config
+     * @param array<string, mixed> $config
      *
      * @return $this
      */

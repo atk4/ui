@@ -25,7 +25,7 @@ class ActionButtons extends Table\Column
     /** @var array<string, View> Stores all the buttons that have been added. */
     public $buttons = [];
 
-    /** @var array<string, \Closure(Model): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
+    /** @var array<string, \Closure<T of Model>(T): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
     protected $isEnabledFxs = [];
 
     #[\Override]
@@ -41,7 +41,7 @@ class ActionButtons extends Table\Column
      *
      * @param string|array|View                                       $button
      * @param JsExpressionable|JsCallbackSetClosure|ExecutorInterface $action
-     * @param bool|\Closure(Model): bool                              $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool                      $isDisabled
      *
      * @return View
      */
@@ -78,12 +78,12 @@ class ActionButtons extends Table\Column
      * Adds a new button which will open a modal dialog and dynamically
      * load contents through $callback. Will pass a virtual page.
      *
-     * @param string|array|View                 $button
-     * @param string|array                      $defaults   modal title or modal defaults array
-     * @param \Closure(View, string|null): void $callback
-     * @param View                              $owner
-     * @param array                             $args
-     * @param bool|\Closure(Model): bool        $isDisabled
+     * @param string|array|View                  $button
+     * @param string|array                       $defaults   modal title or modal defaults array
+     * @param \Closure(View, mixed): void        $callback
+     * @param View                               $owner
+     * @param array                              $args
+     * @param bool|\Closure<T of Model>(T): bool $isDisabled
      *
      * @return View
      */
@@ -100,7 +100,8 @@ class ActionButtons extends Table\Column
         $modal = Modal::addTo($owner, $defaults);
 
         $modal->set(function (View $t) use ($callback) {
-            $callback($t, $t->stickyGet($this->name));
+            $id = $this->getApp()->uiPersistence->typecastAttributeLoadField($this->table->model->getIdField(), $t->stickyGet($this->name));
+            $callback($t, $id);
         });
 
         return $this->addButton($button, $modal->jsShow(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)), '', $isDisabled);
@@ -117,7 +118,7 @@ class ActionButtons extends Table\Column
     }
 
     #[\Override]
-    public function getDataCellTemplate(Field $field = null): string
+    public function getDataCellTemplate(?Field $field = null): string
     {
         if (count($this->buttons) === 0) {
             return '';

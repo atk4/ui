@@ -15,6 +15,8 @@ use Atk4\Ui\View;
 
 /**
  * Custom Layout for a form.
+ *
+ * @property false $model use $entity property instead
  */
 abstract class AbstractLayout extends View
 {
@@ -37,10 +39,10 @@ abstract class AbstractLayout extends View
      */
     public function addControl(string $name, $control = [], array $fieldSeed = []): Control
     {
-        if ($this->form->model === null) {
-            $this->form->model = (new ProxyModel())->createEntity();
+        if ($this->form->entity === null) {
+            $this->form->setModel((new ProxyModel())->createEntity());
         }
-        $model = $this->form->model->getModel();
+        $model = $this->form->entity->getModel();
 
         // TODO this class should not refer to any specific form control
         $controlClass = is_object($control)
@@ -48,6 +50,22 @@ abstract class AbstractLayout extends View
             : ($control[0] ?? (($fieldSeed['ui'] ?? [])['form'][0] ?? null));
         if (is_a($controlClass, Control\Checkbox::class, true)) {
             $fieldSeed['type'] = 'boolean';
+        } elseif (is_a($controlClass, Control\Dropdown::class, true) || is_a($controlClass, Control\Lookup::class, true)) {
+            if (is_a($controlClass, Control\DropdownCascade::class, true)) {
+                $cascadeFromControl = $control instanceof Control\DropdownCascade ? $control->cascadeFrom : ($control['cascadeFrom'] ?? null);
+                if ($cascadeFromControl !== null) {
+                    if (!$cascadeFromControl instanceof Control) {
+                        $cascadeFromControl = $this->form->getControl($cascadeFromControl);
+                    }
+
+                    $fieldSeed['type'] = $cascadeFromControl->entityField->getField()->type;
+                }
+            } else {
+                $dropdownModel = $control instanceof Control ? $control->model : ($control['model'] ?? null);
+                if ($dropdownModel !== null) {
+                    $fieldSeed['type'] = $dropdownModel->getIdField()->type;
+                }
+            }
         } elseif (is_a($controlClass, Control\Calendar::class, true)) {
             $calendarType = $control instanceof Control\Calendar ? $control->type : ($control['type'] ?? null);
             if ($calendarType !== null) {
@@ -94,7 +112,7 @@ abstract class AbstractLayout extends View
      * @param array<int, string>|null $fields
      */
     #[\Override]
-    public function setModel(Model $entity, array $fields = null): void
+    public function setModel(Model $entity, ?array $fields = null): void
     {
         $entity->assertIsEntity();
 

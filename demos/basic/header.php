@@ -19,7 +19,7 @@ Header::addTo($seg, ['H2 Header', 'size' => 2]);
 Header::addTo($seg, ['H3 Header', 'size' => 3]);
 Header::addTo($seg, ['H4 Header', 'size' => 4]);
 Header::addTo($seg, ['H5 Header', 'size' => 5, 'class.dividing' => true]);
-View::addTo($seg, ['element' => 'P'])->set('This is a following paragraph of text');
+View::addTo($seg, ['element' => 'p'])->set('This is a following paragraph of text');
 
 Header::addTo($seg, ['H1', 'size' => 1, 'subHeader' => 'H1 subheader']);
 Header::addTo($seg, ['H5', 'size' => 5, 'subHeader' => 'H5 subheader']);

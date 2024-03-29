@@ -11,7 +11,6 @@ use Atk4\Data\Field\SqlExpressionField;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Data\ValidationException;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Js\JsExpressionable;
@@ -34,7 +33,7 @@ use Atk4\Ui\View;
  *
  * $form->onSubmit(function (Form $form) use ($ml) {
  *     // save Form model and then Multiline model
- *     $form->model->save(); // saving invoice record
+ *     $form->entity->save(); // saving invoice record
  *     $ml->saveRows(); // saving invoice items record related to invoice
  *     return new JsToast('Saved!');
  * });
@@ -157,7 +156,7 @@ class Multiline extends Form\Control
     /** @var array The fields names used in each row. */
     public $rowFields;
 
-    /** @var array The data sent for each row. */
+    /** @var list<array<string, mixed>> The data sent for each row. */
     public $rowData;
 
     /** @var int The max number of records (rows) that can be added to Multiline. 0 means no limit. */
@@ -171,9 +170,9 @@ class Multiline extends Form\Control
      * Set during fieldDefinition and apply during renderView() after getValue().
      * Must contains callable function and function will receive $model field and value as parameter.
      *
-     * @var array<string, \Closure(Field, string): void>
+     * @var array<string, \Closure<T of Field>(T, string): void>
      */
-    private $valuePropsBinding = [];
+    private array $valuePropsBinding = [];
 
     /**
      * A JsFunction to execute when Multiline add(+) button is clicked.
@@ -219,9 +218,9 @@ class Multiline extends Form\Control
             }
 
             // remove __atml ID from array field
-            if ($this->form->model->getField($this->shortName)->type === 'json') {
+            if ($this->form->entity->getField($this->shortName)->type === 'json') {
                 $rows = [];
-                foreach ($this->rowData as $key => $cols) {
+                foreach ($this->rowData as $cols) {
                     unset($cols['__atkml']);
                     $rows[] = $cols;
                 }
@@ -234,7 +233,7 @@ class Multiline extends Form\Control
             // when errors are coming from this Multiline field, then notify Multiline component about them
             // otherwise use normal field error
             if ($fieldName === $this->shortName) {
-                // multiline.js component listen to 'multiline-rows-error' event
+                // multiline js component listen to 'multiline-rows-error' event
                 $jsError = $this->jsEmitEvent($this->multiLine->name . '-multiline-rows-error', ['errors' => $this->rowErrors]);
             } else {
                 $jsError = $form->js()->form('add prompt', $fieldName, $str);
@@ -252,7 +251,9 @@ class Multiline extends Form\Control
                 if ($fieldName === '__atkml') {
                     $dataRows[$k][$fieldName] = $value;
                 } else {
-                    $dataRows[$k][$fieldName] = $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($fieldName), $value);
+                    $dataRows[$k][$fieldName] = $fieldName === $this->model->idField
+                        ? $this->getApp()->uiPersistence->typecastAttributeLoadField($this->model->getField($fieldName), $value)
+                        : $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($fieldName), $value);
                 }
             }
         }
@@ -288,7 +289,9 @@ class Multiline extends Form\Control
                 $cols = [];
                 foreach ($this->rowFields as $fieldName) {
                     $field = $this->model->getField($fieldName);
-                    $value = $this->getApp()->uiPersistence->typecastSaveField($field, $row->get($field->shortName));
+                    $value = $field->shortName === $this->model->idField
+                        ? $this->getApp()->uiPersistence->typecastAttributeSaveField($field, $row->get($field->shortName))
+                        : $this->getApp()->uiPersistence->typecastSaveField($field, $row->get($field->shortName));
                     $cols[$fieldName] = $value;
                 }
                 $rows[] = $cols;
@@ -337,8 +340,12 @@ class Multiline extends Form\Control
     {
         $model = $this->model;
 
-        // collects existing IDs
-        $currentIds = array_column($model->export(), $model->idField);
+        // delete removed rows
+        // TODO this is dangerous, deleted row IDs should be passed from UI
+        $idsToDelete = array_filter(array_column($this->rowData, $model->idField), static fn ($v) => $v !== null);
+        foreach ($model->createIteratorBy($model->idField, 'not in', $idsToDelete) as $entity) {
+            $entity->delete();
+        }
 
         foreach ($this->rowData as $row) {
             $entity = $row[$model->idField] !== null
@@ -357,16 +364,6 @@ class Multiline extends Form\Control
             if (!$entity->isLoaded() || $entity->getDirtyRef() !== []) {
                 $entity->save();
             }
-
-            $k = array_search($entity->getId(), $currentIds, true);
-            if ($k !== false) {
-                unset($currentIds[$k]);
-            }
-        }
-
-        // delete removed IDs
-        foreach ($currentIds as $id) {
-            $model->delete($id);
         }
 
         return $this;
@@ -408,7 +405,7 @@ class Multiline extends Form\Control
      * @param array<int, string>|null $fields
      */
     #[\Override]
-    public function setModel(Model $model, array $fields = null): void
+    public function setModel(Model $model, ?array $fields = null): void
     {
         parent::setModel($model);
 
@@ -429,14 +426,10 @@ class Multiline extends Form\Control
      * Otherwise, form will try to save 'multiline' field value as an array when form is save.
      * $multiline = $form->addControl('multiline', [Multiline::class], ['neverPersist' => true])
      */
-    public function setReferenceModel(string $refModelName, Model $entity = null, array $fieldNames = []): void
+    public function setReferenceModel(string $refModelName, ?Model $entity = null, array $fieldNames = []): void
     {
         if ($entity === null) {
-            if (!$this->form->model->isEntity()) {
-                throw new Exception('Model entity is not set');
-            }
-
-            $entity = $this->form->model;
+            $entity = $this->form->entity;
         }
 
         $this->setModel($entity->ref($refModelName), $fieldNames);
@@ -485,8 +478,6 @@ class Multiline extends Form\Control
     protected function getSuiInputProps(Field $field): array
     {
         $props = $this->componentProps[self::INPUT] ?? [];
-
-        $props['type'] = ($field->type === 'integer' || $field->type === 'float' || $field->type === 'atk4_money') ? 'number' : 'text';
 
         return array_merge($props, $field->ui['multiline'][self::INPUT] ?? []);
     }
@@ -561,8 +552,8 @@ class Multiline extends Form\Control
 
     public function setLookupOptionValue(Field $field, string $value): void
     {
-        $model = $field->getReference()->refModel($this->model);
-        $entity = $model->tryLoadBy($field->getReference()->getTheirFieldName($model), $value);
+        $model = $field->getReference()->createTheirModel();
+        $entity = $model->tryLoadBy($field->getReference()->getTheirFieldName($model), $this->getApp()->uiPersistence->typecastLoadField($field, $value));
         if ($entity !== null) {
             $option = ['key' => $value, 'text' => $entity->get($model->titleField), 'value' => $value];
             foreach ($this->fieldDefs as $key => $component) {
@@ -586,7 +577,7 @@ class Multiline extends Form\Control
             $component = $this->fieldMapToComponent[$name];
         } elseif (!$field->isEditable()) {
             $component = $this->fieldMapToComponent['readonly'];
-        } elseif ($field->enum || $field->values) {
+        } elseif ($field->enum !== null || $field->values !== null) {
             $component = $this->fieldMapToComponent['select'];
         } elseif ($field->type === 'date' || $field->type === 'time' || $field->type === 'datetime') {
             $component = $this->fieldMapToComponent['date'];
@@ -618,11 +609,13 @@ class Multiline extends Form\Control
         if ($field->values !== null) {
             $items = array_slice($field->values, 0, $limit, true);
         } elseif ($field->hasReference()) {
-            $model = $field->getReference()->refModel($this->model);
+            $model = $field->getReference()->createTheirModel();
             $model->setLimit($limit);
 
+            $theirFieldName = $field->getReference()->getTheirFieldName($model);
             foreach ($model as $item) {
-                $items[$item->get($field->getReference()->getTheirFieldName($model))] = $item->get($model->titleField);
+                $theirValue = $this->getApp()->uiPersistence->typecastAttributeSaveField($model->getField($theirFieldName), $item->get($theirFieldName));
+                $items[$theirValue] = $item->get($model->titleField);
             }
         }
 
@@ -632,9 +625,9 @@ class Multiline extends Form\Control
     /**
      * Apply Props to component that require props based on field value.
      */
-    protected function valuePropsBinding(string $values): void
+    protected function valuePropsBinding(string $valueJson): void
     {
-        $fieldValues = $this->getApp()->decodeJson($values);
+        $fieldValues = $this->getApp()->decodeJson($valueJson);
 
         foreach ($fieldValues as $rows) {
             foreach ($rows as $fieldName => $value) {
@@ -656,13 +649,13 @@ class Multiline extends Form\Control
 
         parent::renderView();
 
-        $inputValue = $this->getValue();
-        $this->valuePropsBinding($inputValue);
+        $inputValueJson = $this->getValue();
+        $this->valuePropsBinding($inputValueJson);
 
         $this->multiLine->vue('atk-multiline', [
             'data' => [
                 'formName' => $this->form->formElement->name,
-                'inputValue' => $inputValue,
+                'inputValue' => $inputValueJson,
                 'inputName' => $this->shortName,
                 'fields' => $this->fieldDefs,
                 'url' => $this->renderCallback->getJsUrl(),
@@ -783,9 +776,7 @@ class Multiline extends Form\Control
             return [];
         }
 
-        $dummyModel = new Model($entity->getModel()->getPersistence(), ['table' => $entity->table]);
-        $dummyModel->removeField('id');
-        $dummyModel->idField = $entity->idField;
+        $dummyModel = new Model($entity->getModel()->getPersistence(), ['table' => $entity->getModel()->table, 'idField' => false]);
 
         $createExprFromValueFx = static function ($v) use ($dummyModel): Persistence\Sql\Expression {
             if (is_int($v)) {
@@ -801,8 +792,8 @@ class Multiline extends Form\Control
             $dummyModel->addExpression($field->shortName, [
                 'expr' => isset($dummyFields[$field->shortName])
                     ? $dummyFields[$field->shortName]->expr
-                    : ($field->shortName === $dummyModel->idField
-                        ? '-1'
+                    : ($field->shortName === $entity->idField
+                        ? '99000'
                         : $createExprFromValueFx($entity->getModel()->getPersistence()->typecastSaveField($field, $field->get($entity)))),
                 'type' => $field->type,
                 'actual' => $field->actual,

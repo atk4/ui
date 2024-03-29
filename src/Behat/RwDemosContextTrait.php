@@ -157,7 +157,9 @@ trait RwDemosContextTrait
                         }
 
                         foreach ([...$changes->updatedIds, ...$changes->deletedIds] as $id) {
-                            $entity = in_array($id, $changes->updatedIds, true) ? $model->load($id) : $model->createEntity();
+                            $entity = in_array($id, $changes->updatedIds, true)
+                                ? $model->load($id)
+                                : $model->createEntity();
                             $entity->setMulti($data[$id]);
                             $entity->save();
                         }

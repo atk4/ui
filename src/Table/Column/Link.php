@@ -104,7 +104,6 @@ class Link extends Table\Column
 
         if (is_string($this->url)) {
             $this->url = new HtmlTemplate($this->url);
-            $this->url->setApp($this->getApp());
         }
         if (is_string($this->page)) {
             $this->page = [$this->page];
@@ -112,7 +111,7 @@ class Link extends Table\Column
     }
 
     #[\Override]
-    public function getDataCellTemplate(Field $field = null): string
+    public function getDataCellTemplate(?Field $field = null): string
     {
         $attr = ['href' => '{$c_' . $this->shortName . '}'];
 
@@ -145,7 +144,9 @@ class Link extends Table\Column
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         if ($this->url) {
-            return ['c_' . $this->shortName => $this->url->set($row)->renderToHtml()];
+            $this->url->trySet($this->getApp()->uiPersistence->typecastSaveRow($row, $row->get()));
+
+            return ['c_' . $this->shortName => $this->url->renderToHtml()];
         }
 
         $page = $this->page ?? [];
@@ -155,7 +156,7 @@ class Link extends Table\Column
                 $key = $val;
             }
 
-            $page[$key] = $row->get($val);
+            $page[$key] = $this->getApp()->uiPersistence->typecastAttributeSaveField($row->getField($val), $row->get($val));
         }
 
         return ['c_' . $this->shortName => $this->table->url($page)];

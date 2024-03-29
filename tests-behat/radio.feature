@@ -5,8 +5,9 @@ Feature: Radio
     When I press button "Save"
     Then Toast display should contain text '"enum_d": "male", "enum_r": "male"'
     Then Toast display should contain text '"list_d": "1", "list_r": "1"'
-    Then Toast display should contain text '"int_d": "7", "int_r": "7"'
+    Then Toast display should contain text '"int_d": "7 000", "int_r": "7 000"'
     Then Toast display should contain text '"string_d": "M", "string_r": "M"'
+    Then Element "//input[@name='int_r' and @checked='checked']" attribute "value" should contain text "7000"
 
     Then I select value "female" in lookup "enum_d"
     When I click using selector "//div.ui.radio[not(self::*.checked)][input[@name='enum_r'] and label[text()='female']]"
@@ -15,7 +16,7 @@ Feature: Radio
     When I press button "Save"
     Then Toast display should contain text '"enum_d": "female", "enum_r": "female"'
     Then Toast display should contain text '"list_d": "0", "list_r": "0"'
-    Then Toast display should contain text '"int_d": "7", "int_r": "7"'
+    Then Toast display should contain text '"int_d": "7 000", "int_r": "7 000"'
     Then Toast display should contain text '"string_d": "M", "string_r": "M"'
     Then I select value "female" in lookup "int_d"
     When I click using selector "//div.ui.radio[not(self::*.checked)][input[@name='int_r'] and label[text()='female']]"

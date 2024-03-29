@@ -24,15 +24,15 @@ $form = Form::addTo($cc->addColumn());
 $form->addControl('enum_d', [], ['enum' => ['female', 'male']])->set('male');
 $form->addControl('enum_r', [Form\Control\Radio::class], ['enum' => ['female', 'male']])->set('male');
 
-$form->addControl('list_d', [], ['values' => ['female', 'male']])->set(1);
-$form->addControl('list_r', [Form\Control\Radio::class], ['values' => ['female', 'male']])->set(1);
+$form->addControl('list_d', [], ['type' => 'integer', 'values' => ['female', 'male']])->set(1);
+$form->addControl('list_r', [Form\Control\Radio::class], ['type' => 'integer', 'values' => ['female', 'male']])->set(1);
 
-$form->addControl('int_d', [], ['values' => [5 => 'female', 7 => 'male']])->set(7);
-$form->addControl('int_r', [Form\Control\Radio::class], ['values' => [5 => 'female', 7 => 'male']])->set(7);
+$form->addControl('int_d', [], ['type' => 'integer', 'values' => [5 => 'female', 7000 => 'male']])->set(7000);
+$form->addControl('int_r', [Form\Control\Radio::class], ['type' => 'integer', 'values' => [5 => 'female', 7000 => 'male']])->set(7000);
 
 $form->addControl('string_d', [], ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
 $form->addControl('string_r', [Form\Control\Radio::class], ['values' => ['F' => 'female', 'M' => 'male']])->set('M');
 
 $form->onSubmit(static function (Form $form) use ($app) {
-    return new JsToast($app->encodeJson($form->model->get()));
+    return new JsToast($app->encodeJson($form->getApp()->uiPersistence->typecastSaveRow($form->entity, $form->entity->get())));
 });

@@ -33,7 +33,7 @@ $button = Button::addTo($app, ['First', 'class.atk-test' => true]);
 $button->on('click', new JsModal('Edit First Record', $vp));
 
 $form->onSubmit(static function (Form $form) use ($table) {
-    $form->model->save();
+    $form->entity->save();
 
     return new JsBlock([
         $table->jsReload(),

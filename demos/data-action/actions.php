@@ -31,7 +31,7 @@ $action = $files->addUserAction('import_from_filesystem', [
     'description' => 'Import file in a specify path.',
     // Display information prior to execute the action.
     // ModalExecutor or PreviewExecutor will display preview.
-    'preview' => static function (Model $model, string $path) {
+    'preview' => static function (Model $entity, string $path) {
         return 'Execute Import using path: "' . $path . '"';
     },
     // Argument needed to run the callback action method.

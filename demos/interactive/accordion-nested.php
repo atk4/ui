@@ -42,7 +42,7 @@ $addAccordionFx = static function ($view, int $maxDepth, int $level = 0) use (&$
         $form = Form::addTo($vp);
         $form->addControl('email');
         $form->onSubmit(static function (Form $form) {
-            return $form->jsSuccess('Subscribed ' . $form->model->get('email') . ' to newsletter.');
+            return $form->jsSuccess('Subscribed ' . $form->entity->get('email') . ' to newsletter.');
         });
 
         $addAccordionFx($vp, $maxDepth, $level + 1);

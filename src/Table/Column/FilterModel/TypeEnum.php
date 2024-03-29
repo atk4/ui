@@ -18,11 +18,11 @@ class TypeEnum extends Column\FilterModel
         $this->afterInit();
 
         $this->op = null;
-        if ($this->lookupField->values) {
+        if ($this->lookupField->values !== null) {
             foreach ($this->lookupField->values as $key => $value) {
                 $this->addField($key, ['type' => 'boolean', 'ui' => ['caption' => $value]]);
             }
-        } elseif ($this->lookupField->enum) {
+        } elseif ($this->lookupField->enum !== null) {
             foreach ($this->lookupField->enum as $enum) {
                 $this->addField($enum, ['type' => 'boolean', 'ui' => ['caption' => $enum]]);
             }

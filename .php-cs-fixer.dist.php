@@ -1,10 +1,15 @@
 <?php
 
-$finder = PhpCsFixer\Finder::create()
-    ->in([__DIR__])
-    ->exclude(['vendor', 'js']);
+declare(strict_types=1);
 
-return (new PhpCsFixer\Config())
+use PhpCsFixer\Config;
+use PhpCsFixer\Finder;
+
+$finder = Finder::create()
+    ->in([__DIR__])
+    ->exclude(['vendor']);
+
+return (new Config())
     ->setRiskyAllowed(true)
     ->setRules([
         '@PhpCsFixer' => true,
@@ -33,6 +38,7 @@ return (new PhpCsFixer\Config())
         'blank_line_before_statement' => [
             'statements' => ['break', 'continue', 'declare', 'return', 'throw', 'exit'],
         ],
+        'final_internal_class' => false,
         'combine_consecutive_issets' => false,
         'combine_consecutive_unsets' => false,
         'multiline_whitespace_before_semicolons' => false,
@@ -45,9 +51,6 @@ return (new PhpCsFixer\Config())
         'comment_to_phpdoc' => false,
         'general_phpdoc_annotation_remove' => [
             'annotations' => ['author', 'copyright', 'throws'],
-        ],
-        'nullable_type_declaration_for_default_null_value' => [
-            'use_nullable_type_declaration' => false,
         ],
 
         // fn => without curly brackets is less readable,

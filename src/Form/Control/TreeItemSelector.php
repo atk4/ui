@@ -21,7 +21,7 @@ use Atk4\Ui\View;
  *
  * Only item ID are store within the input field.
  *
- * see demos/tree-item-selector.php to see how tree items are build.
+ * See demos/form-control/tree-item-selector.php to see how tree items are build.
  */
 class TreeItemSelector extends Form\Control
 {

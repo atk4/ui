@@ -45,7 +45,7 @@ directly in PHP:
 $form->onSubmit(function (Form $form) {
     // implement subscribe here
 
-    return "Subscribed " . $form->model->get('email') . " to newsletter.";
+    return "Subscribed " . $form->entity->get('email') . " to newsletter.";
 });
 ```
 
@@ -68,10 +68,10 @@ Even if model not explicitly set (see section below) each form has an underlying
 
 ```
 // single field
-$form->model->set('email', 'some@email.com');
+$form->entity->set('email', 'some@email.com');
 
 // or multiple fields
-$form->model->set([
+$form->entity->set([
     'name' => 'John',
     'email' => 'some@email.com',
 ]);
@@ -316,15 +316,15 @@ $form->addControl('accept_terms', [], ['type' => 'boolean']);
 
 // submit event
 $form->onSubmit(function (Form $form) {
-    if ($form->model->get('password') != $form->model->get('password_verify')) {
+    if ($form->entity->get('password') != $form->entity->get('password_verify')) {
         return $form->jsError('password_verify', 'Passwords do not match');
     }
 
-    if (!$form->model->get('accept_terms')) {
+    if (!$form->entity->get('accept_terms')) {
         return $form->jsError('accept_terms', 'Read and accept terms');
     }
 
-    $form->model->save(); // will only store email / password
+    $form->entity->save(); // will only store email / password
 
     return $form->jsSuccess('Thank you. Check your email now');
 });
@@ -344,7 +344,7 @@ $form->addControl('date1', [], ['type' => 'date']);
 $form->addControl('date2', [\Atk4\Ui\Form\Control\Calendar::class, 'type' => 'date']);
 
 $form->onSubmit(function (Form $form) {
-    echo 'date1 = ' . print_r($form->model->get('date1'), true) . ' and date2 = ' . print_r($form->model->get('date2'), true);
+    echo 'date1 = ' . print_r($form->entity->get('date1'), true) . ' and date2 = ' . print_r($form->entity->get('date2'), true);
 });
 ```
 
@@ -445,7 +445,7 @@ able to add them again in sub-layouts.
 
 ### Loading Values
 
-Although you can set form control values individually using `$form->model->set('field', $value)`
+Although you can set form control values individually using `$form->entity->set('field', $value)`
 it's always nicer to load values for the database. Given a `User` model this is how
 you can create a form to change profile of a currently logged user:
 
@@ -585,11 +585,11 @@ that would perform the check can be defined displaying error or success messages
 
 ```
 $form->onSubmit(function (Form $form) {
-    if (!$form->model->get('terms')) {
+    if (!$form->entity->get('terms')) {
         return $form->jsError('terms', 'You must accept terms and conditions');
     }
 
-    $form->model->save();
+    $form->entity->save();
 
     return $form->jsSuccess('Registration Successful', 'We will call you soon.');
 });
@@ -604,11 +604,11 @@ with a message about failure to accept of terms and conditions:
 $form->onSubmit(function (Form $form) {
     $errors = [];
 
-    if (!$form->model->get('name')) {
+    if (!$form->entity->get('name')) {
         $errors[] = $form->jsError('name', 'Name must be specified');
     }
 
-    if (!$form->model->get('surname')) {
+    if (!$form->entity->get('surname')) {
         $errors[] = $form->jsError('surname', 'Surname must be specified');
     }
 
@@ -616,11 +616,11 @@ $form->onSubmit(function (Form $form) {
         return new \Atk4\Ui\Js\JsBlock($errors);
     }
 
-    if (!$form->model->get('terms')) {
+    if (!$form->entity->get('terms')) {
         return $form->jsError('terms', 'You must accept terms and conditions');
     }
 
-    $form->model->save();
+    $form->entity->save();
 
     return $form->jsSuccess('Registration Successful', 'We will call you soon.');
 });

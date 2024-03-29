@@ -124,7 +124,7 @@ $wizard->addStep('Arguments', static function (Wizard $page) {
                     'type' => 'string',
                 ],
             ],
-            'callback' => static function (Model $model, string $name) {
+            'callback' => static function (Model $entity, string $name) {
                 return 'Hi ' . $name;
             },
         ]);
@@ -137,7 +137,7 @@ $wizard->addStep('Arguments', static function (Wizard $page) {
                     'required' => true,
                 ],
             ],
-            'callback' => static function (Model $model, int $age) {
+            'callback' => static function (Model $entity, int $age) {
                 return 'Age is ' . $age;
             },
         ]);
@@ -164,16 +164,16 @@ $wizard->addStep('Crud integration', static function (Wizard $page) {
     Demo::addTo($page)->setCodeAndCall(static function (View $owner) {
         $country = new Country($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
-        $country->getUserAction('delete')->enabled = static function (Country $m) {
-            return $m->id % 2 === 0;
+        $country->getUserAction('delete')->enabled = static function (Country $entity) {
+            return $entity->id % 2 === 0;
         };
         $country->addUserAction('mail', [
             'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'preview' => static function (Country $model) {
-                return 'Here is email preview for ' . $model->name;
+            'preview' => static function (Country $entity) {
+                return 'Here is email preview for ' . $entity->name;
             },
-            'callback' => static function (Country $model) {
-                return 'Email sent to ' . $model->name;
+            'callback' => static function (Country $entity) {
+                return 'Email sent to ' . $entity->name;
             },
             'description' => 'Email testing',
         ]);
@@ -194,8 +194,8 @@ $wizard->addStep('Crud integration', static function (Wizard $page) {
         $model->addUserAction('mail', [
             'fields' => [$model->fieldName()->currency],
             'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,
-            'callback' => static function (Stat $model) {
-                return 'Email sent in ' . $model->currency . ' currency';
+            'callback' => static function (Stat $entity) {
+                return 'Email sent in ' . $entity->currency . ' currency';
             },
             'description' => 'Email testing',
         ]);

@@ -22,7 +22,7 @@ class Columns extends Form\Layout
     public $size = '';
 
     #[\Override]
-    public function setModel(Model $entity, array $fields = null): void
+    public function setModel(Model $entity, ?array $fields = null): void
     {
         // dont add any fields automatically
         parent::setModel($entity, []);

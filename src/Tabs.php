@@ -20,7 +20,7 @@ class Tabs extends View
      *
      * @return View
      */
-    public function addTab($name, \Closure $callback = null, array $settings = [])
+    public function addTab($name, ?\Closure $callback = null, array $settings = [])
     {
         $item = $this->addTabMenuItem($name, $settings);
         $sub = $this->addSubView($item->name);

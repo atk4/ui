@@ -34,7 +34,7 @@ $form->addControl('email');
 $form->onSubmit(static function (Form $form) {
     // implement subscribe here
 
-    return $form->jsSuccess('Subscribed ' . $form->model->get('email') . ' to newsletter.');
+    return $form->jsSuccess('Subscribed ' . $form->entity->get('email') . ' to newsletter.');
 });
 
 $form->buttonSave->set('Subscribe');
@@ -59,7 +59,7 @@ $form->addControl('status_string_required', [Form\Control\Dropdown::class], ['ty
 $form->addControl('status_integer_required', [Form\Control\Dropdown::class], ['type' => 'integer', 'values' => $values, 'required' => true]);
 
 $form->onSubmit(static function (Form $form) use ($app) {
-    return new JsToast($app->encodeJson($form->model->get()));
+    return new JsToast($app->encodeJson($form->entity->get()));
 });
 
 Header::addTo($tab, ['Comparing Field type vs Form control class']);
@@ -69,7 +69,7 @@ $form->addControl('control', [Form\Control\Calendar::class, 'type' => 'date', 'c
 $form->buttonSave->set('Compare Date');
 
 $form->onSubmit(static function (Form $form) {
-    $message = 'field = ' . print_r($form->model->get('field'), true) . '; <br> control = ' . print_r($form->model->get('control'), true);
+    $message = 'field = ' . print_r($form->entity->get('field'), true) . '; <br> control = ' . print_r($form->entity->get('control'), true);
     $view = new Message('Date field vs control:');
     $view->setApp($form->getApp());
     $view->invokeInit();
@@ -194,8 +194,8 @@ $form = Form::addTo($tab, ['class.segment' => true]);
 $form->setModel($modelRegister);
 
 $form->onSubmit(static function (Form $form) {
-    if ($form->model->get('name') !== 'John') {
-        return $form->jsError('name', 'Your name is not John! It is "' . $form->model->get('name') . '". It should be John. Pleeease!');
+    if ($form->entity->get('name') !== 'John') {
+        return $form->jsError('name', 'Your name is not John! It is "' . $form->entity->get('name') . '". It should be John. Pleeease!');
     }
 
     return new JsBlock([
@@ -233,13 +233,13 @@ $group->addControl('last_name', ['width' => 'five']);
 
 $form->onSubmit(static function (Form $form) {
     $errors = [];
-    foreach ($form->model->getFields() as $name => $ff) {
+    foreach ($form->entity->getFields() as $name => $ff) {
         if ($name === 'id') {
             continue;
         }
 
-        if ($form->model->get($name) !== 'a') {
-            $errors[] = $form->jsError($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $form->model->get($name));
+        if ($form->entity->get($name) !== 'a') {
+            $errors[] = $form->jsError($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $form->entity->get($name));
         }
     }
 

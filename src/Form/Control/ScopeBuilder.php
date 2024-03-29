@@ -213,7 +213,7 @@ class ScopeBuilder extends Form\Control
             'choices' => [__CLASS__, 'getChoices'],
         ],
         'numeric' => [
-            'type' => 'text',
+            'type' => 'numeric',
             'inputType' => 'number',
             'operators' => [
                 self::OPERATOR_SIGN_EQUALS,
@@ -272,7 +272,7 @@ class ScopeBuilder extends Form\Control
 
         $this->scopeBuilderView = View::addTo($this, ['template' => $this->scopeBuilderTemplate]);
 
-        if ($this->form) {
+        if ($this->form !== null) {
             $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
                 $key = $this->entityField->getFieldName();
                 $postRawData[$key] = $this->queryToScope($this->getApp()->decodeJson($postRawData[$key]));
@@ -310,9 +310,12 @@ class ScopeBuilder extends Form\Control
 
         // build a ruleId => inputType map
         // this is used when selecting proper operator for the inputType (see self::$operatorsMap)
-        $inputsMap = array_column($this->rules, 'inputType', 'id');
+        $inputsMap = [];
+        foreach ($this->rules as $rule) {
+            $inputsMap[$rule['id']] = $rule['inputType'] ?? null;
+        }
 
-        if ($this->entityField && $this->entityField->get() !== null) {
+        if ($this->entityField !== null && $this->entityField->get() !== null) {
             $scope = $this->entityField->get();
         } else {
             $scope = $model->scope();
@@ -326,7 +329,7 @@ class ScopeBuilder extends Form\Control
      */
     protected function addFieldRule(Field $field): void
     {
-        if ($field->enum || $field->values) {
+        if ($field->enum !== null || $field->values !== null) {
             $type = 'enum';
         } elseif ($field->hasReference()) {
             $type = 'lookup';
@@ -417,7 +420,7 @@ class ScopeBuilder extends Form\Control
         }
     }
 
-    protected function getRule(string $type, array $defaults = [], Field $field = null): array
+    protected function getRule(string $type, array $defaults = [], ?Field $field = null): array
     {
         $rule = static::$ruleTypes[$type] ?? static::$ruleTypes['default'];
 
@@ -455,7 +458,7 @@ class ScopeBuilder extends Form\Control
         if ($field->values !== null) {
             $items = array_slice($field->values, 0, $limit, true);
         } elseif ($field->hasReference()) {
-            $model = $field->getReference()->refModel($this->model);
+            $model = $field->getReference()->createTheirModel();
             $model->setLimit($limit);
 
             foreach ($model as $item) {
@@ -560,6 +563,10 @@ class ScopeBuilder extends Form\Control
                 $value = explode($this->detectDelimiter($value), $value);
 
                 break;
+            default:
+                $value = $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($key), $value);
+
+                break;
         }
 
         $operatorsMap = array_merge(...array_values(static::$operatorsMap));
@@ -602,15 +609,18 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Converts a Condition to VueQueryBuilder query array.
+     *
+     * @return array{rule: string, operator: string, value: string|null, option: array|null}
      */
     public function conditionToQuery(Condition $condition, array $inputsMap = []): array
     {
-        if (is_string($condition->key)) {
-            $rule = $condition->key;
-        } elseif ($condition->key instanceof Field) {
-            $rule = $condition->key->shortName;
+        if (is_string($condition->field)) {
+            $rule = $condition->field;
+        } elseif ($condition->field instanceof Field) {
+            $rule = $condition->field->shortName;
         } else {
-            throw new Exception('Unsupported scope key: ' . gettype($condition->key));
+            throw (new Exception('Unsupported scope field type'))
+                ->addMoreInfo('field', $condition->field);
         }
 
         $operator = $condition->operator;
@@ -651,12 +661,12 @@ class ScopeBuilder extends Form\Control
                     Condition::OPERATOR_DOESNOT_EQUAL => Condition::OPERATOR_NOT_IN,
                 ];
                 $value = implode(', ', $value);
-                $operator = $map[$operator] ?? Condition::OPERATOR_NOT_IN;
+                $operator = $map[$operator];
             }
 
             $operatorsMap = array_merge(static::$operatorsMap[$inputType] ?? [], static::$operatorsMap['text']);
             $operatorKey = array_search(strtoupper($operator), $operatorsMap, true);
-            $operator = $operatorKey !== false ? $operatorKey : self::OPERATOR_EQUALS;
+            $operator = $operatorKey;
         }
 
         return [
@@ -677,9 +687,9 @@ class ScopeBuilder extends Form\Control
         $option = null;
         switch ($type) {
             case 'lookup':
-                $condField = $condition->getModel()->getField($condition->key);
+                $condField = $condition->getModel()->getField($condition->field);
                 $reference = $condField->getReference();
-                $model = $reference->refModel($condField->getOwner());
+                $model = $reference->createTheirModel();
                 $fieldName = $reference->getTheirFieldName($model);
                 $entity = $model->tryLoadBy($fieldName, $value);
                 if ($entity !== null) {

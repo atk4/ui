@@ -37,7 +37,7 @@ class Checkbox extends Form\Control
         parent::init();
 
         // checkboxes are annoying because they don't send value when they are not ticked
-        if ($this->form) {
+        if ($this->form !== null) {
             $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
                 if (!isset($postRawData[$this->shortName])) {
                     $postRawData[$this->shortName] = '0';
@@ -53,13 +53,13 @@ class Checkbox extends Form\Control
             $this->template->set('Content', $this->label);
         }
 
-        if ($this->entityField && !is_bool($this->entityField->get() ?? false)) {
+        if ($this->entityField !== null && !is_bool($this->entityField->get() ?? false)) {
             throw (new Exception('Checkbox form control requires field with boolean type'))
                 ->addMoreInfo('type', $this->entityField->getField()->type)
                 ->addMoreInfo('value', $this->entityField->get());
         }
 
-        if ($this->entityField ? $this->entityField->get() : $this->content) {
+        if ($this->entityField !== null ? $this->entityField->get() : $this->content) {
             $this->template->dangerouslySetHtml('checked', 'checked="checked"');
         }
 

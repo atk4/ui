@@ -17,12 +17,12 @@ class FormExecutor extends BasicExecutor
     {
         $this->addHeader();
 
-        if (!$this->form) {
+        if ($this->form === null) {
             $this->form = Form::addTo($this);
         }
 
         // setup form model using action fields
-        if (!$this->form->model) {
+        if ($this->form->entity === null) {
             if (!$this->action->fields) {
                 $this->action->fields = $this->getModelFields($this->action->getModel());
             }

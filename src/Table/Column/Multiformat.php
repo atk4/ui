@@ -14,11 +14,11 @@ use Atk4\Ui\Table;
  */
 class Multiformat extends Table\Column
 {
-    /** @var \Closure(Model, Field|null): list<array<0|string, mixed>|Table\Column> Method to execute which will return array of seeds for decorators */
+    /** @var \Closure<TModel of Model, TField of Field>(TModel, TField|null): list<array<0|string, mixed>|Table\Column> Method to execute which will return array of seeds for decorators */
     protected \Closure $decoratorsFx;
 
     /**
-     * @param \Closure(Model, Field|null): list<array<0|string, mixed>|Table\Column> $decoratorsFx
+     * @param \Closure<TModel of Model, TField of Field>(TModel, TField|null): list<array<0|string, mixed>|Table\Column> $decoratorsFx
      */
     public function __construct(\Closure $decoratorsFx)
     {
@@ -28,7 +28,7 @@ class Multiformat extends Table\Column
     }
 
     #[\Override]
-    public function getDataCellHtml(Field $field = null, array $attr = []): string
+    public function getDataCellHtml(?Field $field = null, array $attr = []): string
     {
         return '{$c_' . $this->shortName . '}';
     }
@@ -66,8 +66,7 @@ class Multiformat extends Table\Column
         }
 
         $template = new HtmlTemplate($cellHtml);
-        $template->setApp($this->getApp());
-        $template->set($row);
+        $template->trySet($this->getApp()->uiPersistence->typecastSaveRow($row, $row->get()));
         $template->dangerouslySetHtml($htmlTags);
 
         $val = $template->renderToHtml();

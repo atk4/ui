@@ -73,7 +73,7 @@ trait SessionTrait
      *
      * @return $this
      */
-    public function forget(string $key = null)
+    public function forget(?string $key = null)
     {
         $this->getSessionManager()->forget($this->name, $key);
 

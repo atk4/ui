@@ -19,8 +19,8 @@ $model->addCondition($model->fieldName()->name, '=', 'Mustard');
 $app->getExecutorFactory()->useTriggerDefault(ExecutorFactory::TABLE_BUTTON);
 
 $edit = $model->getUserAction('edit');
-$edit->callback = static function (Product $model) {
-    return $model->product_category_id->getTitle() . ' - ' . $model->product_sub_category_id->getTitle();
+$edit->callback = static function (Product $entity) {
+    return $entity->product_category_id->getTitle() . ' - ' . $entity->product_sub_category_id->getTitle();
 };
 
 $crud = Crud::addTo($app);

@@ -129,7 +129,7 @@ $lister->setSource([
 Your {row} template may contain few special tags:
 
 - {$_id} - will be set to ID of the record (regardless of how your id_field is called)
-- {$_title} - will be set to the title of your record (see $model->$titleField)
+- {$_title} - will be set to the title of your record (see Model::$titleField)
 - {$_href} - will point to current page but with ?id=123 extra GET argument.
 
 ## Load page content dynamically when scrolling

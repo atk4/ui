@@ -38,11 +38,11 @@ class DemosTest extends TestCase
     protected static string $regexJson = '~^(?<json>\s*(?:
            (?<number>-?(?=[1-9]|0(?!\d))\d+(\.\d+)?(E[+-]?\d+)?)
            |(?<boolean>true|false|null)
-           |(?<string>"([^"\\\\]*|\\\\["\\\\bfnrt/]|\\\\u[0-9a-f]{4})*")
+           |(?<string>"([^"\\\]*|\\\["\\\bfnrt/]|\\\u[0-9a-f]{4})*")
            |(?<array>\[(?:(?&json)(?:,(?&json))*|\s*)\])
            |(?<object>\{(?:(?<pair>\s*(?&string)\s*:(?&json))(?:,(?&pair))*|\s*)\})
-        )\s*)$~six';
-    protected static string $regexSseLine = '~^(id|event|data).*$~s';
+        )\s*)$~sx';
+    protected static string $regexSseLine = '~^(event|data|(?=: x{4096}$)): .*$~';
 
     #[\Override]
     public static function setUpBeforeClass(): void
@@ -153,7 +153,7 @@ class DemosTest extends TestCase
     {
         $appSticky = array_diff_assoc(
             \Closure::bind(static fn () => $app->stickyGetArguments, null, App::class)(),
-            ['__atk_json' => false, '__atk_tab' => false, 'APP_CALL_EXIT' => true, 'APP_CATCH_EXCEPTIONS' => true]
+            ['__atk_json' => false, 'APP_CALL_EXIT' => true, 'APP_CATCH_EXCEPTIONS' => true]
         );
         if ($appSticky !== []) {
             throw (new Exception('Global GET sticky must never be set by any component'))
@@ -398,7 +398,7 @@ class DemosTest extends TestCase
      *
      * @dataProvider provideDemoJsonResponseCases
      */
-    public function testDemoJsonResponse(string $path, string $expectedExceptionMessage = null): void
+    public function testDemoJsonResponse(string $path, ?string $expectedExceptionMessage = null): void
     {
         if (static::class === self::class) {
             if ($expectedExceptionMessage !== null) {
@@ -417,7 +417,7 @@ class DemosTest extends TestCase
         self::assertSame('application/json', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         $responseBodyStr = $response->getBody()->getContents();
         self::assertMatchesRegularExpression(self::$regexJson, $responseBodyStr);
-        self::assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
+        self::assertStringNotContainsString(preg_replace('~.+\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
         if ($expectedExceptionMessage !== null) {
             self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
         }
@@ -425,10 +425,10 @@ class DemosTest extends TestCase
 
     public static function provideDemoSseResponseCases(): iterable
     {
-        yield ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
-        yield ['_unit-test/console.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
-        yield ['_unit-test/console_run.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
-        yield ['_unit-test/console_exec.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1&__atk_sse=1'];
+        yield ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
+        yield ['_unit-test/console.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
+        yield ['_unit-test/console_run.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
+        yield ['_unit-test/console_exec.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
     }
 
     /**
@@ -448,7 +448,10 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest($path);
         self::assertSame(200, $response->getStatusCode());
 
-        $outputLines = preg_split('~\r?\n|\r~', $response->getBody()->getContents(), -1, \PREG_SPLIT_NO_EMPTY);
+        $outputLines = array_filter(
+            explode("\n", $response->getBody()->getContents()),
+            static fn ($v) => $v !== ''
+        );
 
         // check SSE Syntax
         self::assertGreaterThan(0, count($outputLines));
@@ -498,7 +501,7 @@ class DemosTest extends TestCase
         self::assertSame('no-store', $response->getHeaderLine('Cache-Control'));
         $responseBodyStr = $response->getBody()->getContents();
         self::assertMatchesRegularExpression(self::$regexHtml, $responseBodyStr);
-        self::assertStringNotContainsString(preg_replace('~.+\\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
+        self::assertStringNotContainsString(preg_replace('~.+\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
         self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
     }
 

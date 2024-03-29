@@ -272,7 +272,7 @@ class Context extends RawMinkContext implements BehatContext
     protected function unquoteStepArgument(string $argument): string
     {
         // copied from https://github.com/Behat/MinkExtension/blob/v2.2/src/Behat/MinkExtension/Context/MinkContext.php#L567
-        return str_replace('\\"', '"', $argument);
+        return str_replace('\"', '"', $argument);
     }
 
     /**

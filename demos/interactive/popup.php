@@ -140,7 +140,7 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
      * Associate your shelf with cart, so that when item is clicked, the content of a
      * cart is updated.
      */
-    public function linkCart(View $cart, JsExpressionable $jsAction = null): void
+    public function linkCart(View $cart, ?JsExpressionable $jsAction = null): void
     {
         $this->on('click', '.item', static function (Jquery $a, string $b) use ($cart, $jsAction) {
             $cart->addItem($b);
@@ -256,13 +256,13 @@ $signup->set(static function (View $pop) {
         // popup handles callbacks properly, so dynamic element such as form works
         // perfectly inside a popup.
         $form->onSubmit(static function (Form $form) {
-            if ($form->model->get('password') !== '123') {
+            if ($form->entity->get('password') !== '123') {
                 return $form->jsError('password', 'Please use password "123"');
             }
 
             // refreshes entire page
-            return $form->getApp()->jsRedirect(['logged' => $form->model->get('email')]);
-            // return new JsExpression('alert([])', ['Thank you ' . $form->model->get('email')]);
+            return $form->getApp()->jsRedirect(['logged' => $form->entity->get('email')]);
+            // return new JsExpression('alert([])', ['Thank you ' . $form->entity->get('email')]);
         });
     }
 });

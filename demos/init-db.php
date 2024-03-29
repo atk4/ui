@@ -10,7 +10,9 @@ use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Table;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
+use Doctrine\DBAL\Types\Type as DbalType;
 use Mvorisek\Atk4\Hintable\Data\HintablePropertyDef;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 
@@ -23,6 +25,77 @@ try {
     throw (new Exception('This demo requires access to the database. See "demos/init-db.php"'))
         ->addMoreInfo('PDO error', $e->getMessage());
 }
+
+/**
+ * Improve testing by using non-scalar ID with custom DBAL type.
+ */
+class WrappedId
+{
+    private const MIN_VALUE = 1;
+    private const MAX_VALUE = 100_000;
+
+    private int $id;
+
+    public function __construct(int $id)
+    {
+        if ($id < self::MIN_VALUE || $id > self::MAX_VALUE) {
+            throw (new Exception('ID value is outside supported range'))
+                ->addMoreInfo('value', $id);
+        }
+
+        $this->id = $id;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+}
+
+class WrappedIdType extends DbalType
+{
+    public const NAME = 'atk4_ui_demos_id';
+
+    #[\Override]
+    public function getName(): string
+    {
+        return self::NAME;
+    }
+
+    #[\Override]
+    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
+    {
+        return DbalType::getType('integer')->getSQLDeclaration($fieldDeclaration, $platform);
+    }
+
+    #[\Override]
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?int
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return DbalType::getType('integer')->convertToDatabaseValue($value->getId(), $platform);
+    }
+
+    #[\Override]
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?object
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return new WrappedId(DbalType::getType('integer')->convertToPHPValue($value, $platform));
+    }
+
+    #[\Override]
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+    {
+        return true;
+    }
+}
+
+DbalType::addType(WrappedIdType::NAME, WrappedIdType::class);
 
 trait ModelPreventModificationTrait
 {
@@ -73,7 +146,7 @@ trait ModelPreventModificationTrait
     }
 
     /**
-     * @param \Closure(Model): string $outputCallback
+     * @param \Closure(static): string $outputCallback
      */
     protected function wrapUserActionCallbackPreventModification(Model\UserAction $action, \Closure $outputCallback): void
     {
@@ -96,32 +169,41 @@ trait ModelPreventModificationTrait
                 $action->callback = $callbackBackup;
             }
 
-            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedEntity : $model, ...$args);
+            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedEntity : $model, ...$args); // @phpstan-ignore-line
         };
     }
 
     protected function initPreventModification(): void
     {
-        $makeMessageFx = static function (string $actionName, Model $model) {
-            return $model->getModelCaption() . ' action "' . $actionName . '" with "' . $model->getTitle() . '" entity '
+        $makeMessageFx = static function (string $actionName, Model $entity) {
+            return $entity->getModel()->getModelCaption() . ' action "' . $actionName . '" with "' . $entity->getTitle() . '" entity '
                 . ' was executed. In demo mode all changes are reversed.';
         };
 
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), static function (Model $model) use ($makeMessageFx) {
-            return $makeMessageFx('add', $model);
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), static function (Model $entity) use ($makeMessageFx) {
+            return $makeMessageFx('add', $entity);
         });
 
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), static function (Model $model) use ($makeMessageFx) {
-            return $makeMessageFx('edit', $model);
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), static function (Model $entity) use ($makeMessageFx) {
+            return $makeMessageFx('edit', $entity);
         });
 
         $this->getUserAction('delete')->confirmation = 'Please go ahead. Demo mode does not really delete data.';
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), static function (Model $model) use ($makeMessageFx) {
-            return $makeMessageFx('delete', $model);
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), static function (Model $entity) use ($makeMessageFx) {
+            return $makeMessageFx('delete', $entity);
         });
     }
 }
 
+/**
+ * Improve testing by using prefixed real field and SQL names.
+ *
+ * @method static|null                     tryLoad(WrappedId $id = null)
+ * @method static                          load(WrappedId $id)
+ * @method \Traversable<WrappedId, static> getIterator()
+ * @method WrappedId                       insert(array<string, mixed> $row)
+ * @method static                          delete(WrappedId $id = null)
+ */
 class ModelWithPrefixedFields extends Model
 {
     use ModelPreventModificationTrait;
@@ -196,6 +278,8 @@ class ModelWithPrefixedFields extends Model
 
         parent::init();
 
+        $this->getIdField()->type = WrappedIdType::NAME;
+
         $this->initPreventModification();
 
         if ($this->getPersistence()->getDatabasePlatform() instanceof PostgreSQLPlatform || class_exists(CodeCoverage::class, false)) {
@@ -212,6 +296,30 @@ class ModelWithPrefixedFields extends Model
         ]);
 
         return parent::addField($name, $seed);
+    }
+
+    #[\Override]
+    public function getId(): ?WrappedId
+    {
+        return parent::getId();
+    }
+
+    /**
+     * @param WrappedId|($allowNull is true ? null : never) $value
+     */
+    #[\Override] // @phpstan-ignore-line
+    public function setId($value, bool $allowNull = true)
+    {
+        return parent::setId($value, $allowNull);
+    }
+
+    /**
+     * @return \Traversable<WrappedId, static>
+     */
+    #[\Override]
+    public function createIteratorBy($field, $operator = null, $value = null): \Traversable
+    {
+        return parent::createIteratorBy(...'func_get_args'());
     }
 }
 
@@ -241,15 +349,15 @@ class Country extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->numcode, ['caption' => 'ISO Numeric Code', 'type' => 'integer', 'required' => true]);
         $this->addField($this->fieldName()->phonecode, ['caption' => 'Phone Prefix', 'type' => 'integer', 'required' => true]);
 
-        $this->onHook(Model::HOOK_BEFORE_SAVE, static function (self $model) {
-            if (!$model->sys_name) {
-                $model->sys_name = mb_strtoupper($model->name);
+        $this->onHook(Model::HOOK_BEFORE_SAVE, static function (self $entity) {
+            if (!$entity->sys_name) {
+                $entity->sys_name = mb_strtoupper($entity->name);
             }
         });
     }
 
     #[\Override]
-    public function validate(string $intent = null): array
+    public function validate(?string $intent = null): array
     {
         $errors = parent::validate($intent);
 
@@ -317,7 +425,6 @@ class Stat extends ModelWithPrefixedFields
         $this->hasOne($this->fieldName()->client_country_iso, [
             'model' => [Country::class],
             'theirField' => Country::hinting()->fieldName()->iso,
-            'type' => 'string',
             'ui' => [
                 'form' => [Form\Control\Line::class],
                 'table' => [Table\Column\CountryFlag::class],
@@ -328,9 +435,9 @@ class Stat extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->is_commercial, ['type' => 'boolean']);
         $this->addField($this->fieldName()->currency, ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
         $this->addField($this->fieldName()->currency_symbol, ['neverPersist' => true]);
-        $this->onHook(Model::HOOK_AFTER_LOAD, static function (self $model) {
+        $this->onHook(Model::HOOK_AFTER_LOAD, static function (self $entity) {
             $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
-            $model->currency_symbol = $map[$model->currency] ?? '?';
+            $entity->currency_symbol = $map[$entity->currency] ?? '?';
         });
 
         $this->addField($this->fieldName()->project_budget, ['type' => 'atk4_money']);
@@ -395,7 +502,7 @@ class File extends ModelWithPrefixedFields
             ->addTitle();
     }
 
-    public function importFromFilesystem(string $path, bool $isSub = null): void
+    public function importFromFilesystem(string $path, ?bool $isSub = null): void
     {
         if ($isSub === null) {
             if ($this->isEntity()) { // TODO should be not needed once UserAction is for non-entity only

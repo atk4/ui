@@ -34,7 +34,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /** @var Model\UserAction The model user action */
     public $action;
 
-    /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure<T of Model>($this, T, mixed, mixed): ?JsBlock JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
     #[\Override]
@@ -47,9 +47,6 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
-        if (!$this->action->enabled && $this->getOwner() instanceof View) { // @phpstan-ignore-line
-            $this->getOwner()->addClass('disabled');
-        }
 
         return $this;
     }
@@ -89,8 +86,8 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     {
         $this->invokeFxWithUrlArgs(function () { // backup/restore $this->args mutated in https://github.com/atk4/ui/blob/8926412a31/src/JsCallback.php#L71
             $this->set(function (Jquery $j, ...$values) {
-                $id = $this->getApp()->uiPersistence->typecastLoadField(
-                    $this->action->getModel()->getField($this->action->getModel()->idField),
+                $id = $this->getApp()->uiPersistence->typecastAttributeLoadField(
+                    $this->action->getModel()->getIdField(),
                     $this->getApp()->tryGetRequestPostParam($this->name)
                 );
                 if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {

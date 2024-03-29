@@ -30,7 +30,7 @@ $countryLoader = Loader::addTo($c->addColumn(), ['loadEvent' => false, 'shim' =>
 $grid->table->onRowClick($countryLoader->jsLoad(['id' => $grid->jsRow()->data('id')]));
 
 $countryLoader->set(static function (Loader $p) {
-    Form::addTo($p)->setModel(
-        (new Country($p->getApp()->db))->load($p->getApp()->getRequestQueryParam('id'))
-    );
+    $country = new Country($p->getApp()->db);
+    $id = $p->getApp()->uiPersistence->typecastAttributeLoadField($country->getIdField(), $p->getApp()->getRequestQueryParam('id'));
+    Form::addTo($p)->setModel($country->load($id));
 });

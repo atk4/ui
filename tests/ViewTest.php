@@ -10,6 +10,7 @@ use Atk4\Ui\AbstractView;
 use Atk4\Ui\Callback;
 use Atk4\Ui\Console;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Form;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\JsSse;
 use Atk4\Ui\Loader;
@@ -103,6 +104,22 @@ class ViewTest extends TestCase
         $v->setModel($m2);
     }
 
+    public function testSetModelEntity(): void
+    {
+        $form = new Form();
+        $form->setApp($this->createApp());
+        $form->invokeInit();
+        $entity = (new Model())->createEntity();
+        $form->setModel($entity);
+
+        self::assertSame($entity, $form->entity);
+        self::assertFalse((new \ReflectionProperty(Form::class, 'model'))->isInitialized($form));
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Use View::$entity property instead for entity access');
+        $form->model; // @phpstan-ignore-line
+    }
+
     public function testSetSourceZeroKeyException(): void
     {
         $v = new View();
@@ -150,5 +167,14 @@ class ViewTest extends TestCase
         yield [Modal::class];
         yield [Popup::class];
         yield [VirtualPage::class];
+    }
+
+    public function testJsCallbackGetUrlException(): void
+    {
+        $v = new JsCallback();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Do not use getUrl on JsCallback, use getJsUrl()');
+        $v->getUrl();
     }
 }

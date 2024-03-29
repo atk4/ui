@@ -72,3 +72,10 @@ Feature: UserAction executor and UserConfirmation modal
     When I fill field using "//input[../div[text()='Greet']]" with "Laura"
     When I press button "Greet"
     Then Toast display should contain text "Hello Laura"
+
+  Scenario: testing JsCallbackExecutor in grid menu
+    Given I am on "data-action/jsactionsgrid.php"
+    When I click using selector "//tr[td[text()='Argentina']]//div.ui.dropdown[div[text()='Actions...']]"
+    Then No toast should be displayed
+    When I click using selector "//tr[td[text()='Argentina']]//div.ui.dropdown[div[text()='Actions...']]//div.menu/div[text()='Callback']"
+    Then Toast display should contain text "Success: callback execute using country Argentina"

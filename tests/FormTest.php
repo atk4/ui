@@ -65,7 +65,7 @@ class FormTest extends TestCase
      * @param \Closure(Model): void  $submitFx
      * @param \Closure(string): void $checkExpectedErrorsFx
      */
-    protected function assertFormSubmit(\Closure $createFormFx, array $postData, \Closure $submitFx = null, \Closure $checkExpectedErrorsFx = null): void
+    protected function assertFormSubmit(\Closure $createFormFx, array $postData, ?\Closure $submitFx = null, ?\Closure $checkExpectedErrorsFx = null): void
     {
         $form = $this->simulateViewCallback(function (ServerRequestInterface $request) use ($createFormFx) {
             $app = $this->createApp([AppFormTestMock::class, 'request' => $request]);
@@ -82,7 +82,7 @@ class FormTest extends TestCase
         $form->onSubmit(static function (Form $form) use (&$wasSubmitCalled, $submitFx): void {
             $wasSubmitCalled = true;
             if ($submitFx !== null) {
-                $submitFx($form->model);
+                $submitFx($form->entity);
             }
         });
 
@@ -90,13 +90,13 @@ class FormTest extends TestCase
         $res = AppFormTestMock::assertInstanceOf($form->getApp())->output;
 
         if ($checkExpectedErrorsFx !== null) {
-            self::assertFalse($wasSubmitCalled, 'Expected submission to fail, but it was successful!');
+            self::assertFalse($wasSubmitCalled);
             self::assertNotEmpty($res['atkjs']);
             $this->formError = $res['atkjs'];
 
             $checkExpectedErrorsFx($res['atkjs']);
         } else {
-            self::assertTrue($wasSubmitCalled, 'Expected submission to be successful but it failed');
+            self::assertTrue($wasSubmitCalled);
             self::assertSame('', $res['atkjs']);
         }
     }
@@ -114,17 +114,17 @@ class FormTest extends TestCase
 
             $form->setModel($m->createEntity(), ['name', 'email']);
 
-            self::assertSame('John', $form->model->get('name'));
+            self::assertSame('John', $form->entity->get('name'));
 
             return $form;
-        }, ['email' => 'john@yahoo.com', 'is_admin' => '1'], static function (Model $m) {
+        }, ['email' => 'john@yahoo.com', 'is_admin' => '1'], static function (Model $entity) {
             // field has default, but form send back empty value
-            self::assertSame('', $m->get('name'));
+            self::assertSame('', $entity->get('name'));
 
-            self::assertSame('john@yahoo.com', $m->get('email'));
+            self::assertSame('john@yahoo.com', $entity->get('email'));
 
             // security check, unspecified field must not be changed
-            self::assertFalse($m->get('is_admin'));
+            self::assertFalse($entity->get('is_admin'));
         });
     }
 
@@ -135,12 +135,12 @@ class FormTest extends TestCase
             $form->addControl('foo');
 
             return $form;
-        }, ['foo' => '0'], static function (Model $m) {
-            self::assertSame('0', $m->get('foo'));
+        }, ['foo' => '0'], static function (Model $entity) {
+            self::assertSame('0', $entity->get('foo'));
         });
     }
 
-    protected function assertFormControlError(string $field, string $error): void
+    protected function assertFormControlError(string $field, string $expectedError): void
     {
         $n = preg_match_all('~\.form\(\'add prompt\', \'([^\']*)\', \'([^\']*)\'\)~', $this->formError, $matchesAll, \PREG_SET_ORDER);
         self::assertGreaterThan(0, $n);
@@ -148,11 +148,11 @@ class FormTest extends TestCase
         foreach ($matchesAll as $matches) {
             if ($matches[1] === $field) {
                 $matched = true;
-                self::assertStringContainsString($error, $matches[2], 'Regarding control ' . $field . ' error message');
+                self::assertSame($expectedError, $matches[2]);
             }
         }
 
-        self::assertTrue($matched, 'Form control ' . $field . ' did not produce error');
+        self::assertTrue($matched);
     }
 
     protected function assertFormControlNoErrors(string $field): void
@@ -172,7 +172,6 @@ class FormTest extends TestCase
             $m = new Model();
 
             $options = ['yes please', 'woot'];
-
             $m->addField('opt1', ['values' => $options]);
             $m->addField('opt2', ['values' => $options]);
             $m->addField('opt3', ['values' => $options, 'nullable' => false]);
@@ -180,13 +179,21 @@ class FormTest extends TestCase
             $m->addField('opt4', ['values' => $options, 'required' => true]);
             $m->addField('opt4_z', ['values' => $options, 'required' => true]);
 
+            $m->addField('int', ['type' => 'integer']);
+
             $form = Form::addTo($app);
             $form->setModel($m->createEntity());
 
             return $form;
-        }, ['opt1' => '2', 'opt3_z' => '0', 'opt4' => '', 'opt4_z' => '0'], null, function (string $formError) {
+        }, [
+            'opt1' => '2',
+            'opt3_z' => '0',
+            'opt4' => '',
+            'opt4_z' => '0',
+            'int' => '0x',
+        ], null, function (string $formError) {
             // dropdown validates to make sure option is proper
-            $this->assertFormControlError('opt1', 'not one of the allowed values');
+            $this->assertFormControlError('opt1', 'Value is not one of the allowed values: 0, 1');
 
             // user didn't select any option here
             $this->assertFormControlNoErrors('opt2');
@@ -196,6 +203,8 @@ class FormTest extends TestCase
             $this->assertFormControlNoErrors('opt3_z');
             $this->assertFormControlError('opt4', 'Must not be empty');
             $this->assertFormControlError('opt4_z', 'Must not be empty');
+
+            $this->assertFormControlError('int', 'Must be numeric');
         });
     }
 
@@ -213,9 +222,9 @@ class FormTest extends TestCase
                 $form->setModel($m->createEntity(), ['foo']);
 
                 return $form;
-            }, ['foo' => 'x'], static function (Model $model) use (&$submitReached) {
+            }, ['foo' => 'x'], static function (Model $entity) use (&$submitReached) {
                 $submitReached = true;
-                $model->set('bar', null);
+                $entity->set('bar', null);
             });
         } catch (UnhandledCallbackExceptionError $e) {
             $catchReached = true;

@@ -27,8 +27,8 @@ class Lookup extends Input
 
     public string $inputType = 'hidden';
 
-    /** @var array Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
-    public $values = [];
+    /** @var array<array-key, mixed> Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
+    public array $values;
 
     /** @var CallbackLater Object used to capture requests from the browser. */
     public $callback;
@@ -42,7 +42,7 @@ class Lookup extends Input
      *
      * If left null, then search will be performed on a model's title field
      *
-     * @var list<string>|\Closure(Model, string): void|null
+     * @var list<string>|\Closure<T of Model>(T, string): void|null
      */
     public $search;
 
@@ -54,7 +54,7 @@ class Lookup extends Input
      * with dependency
      * Then model of the 'state' field can be limited to states of the currently selected 'country'.
      *
-     * @var \Closure(Model, array<string, mixed>): void|null
+     * @var \Closure<T of Model>(T, array<string, mixed>): void|null
      */
     public $dependency;
 
@@ -83,9 +83,9 @@ class Lookup extends Input
      *
      * Use this apiConfig variable to pass API settings to Fomantic-UI in .dropdown()
      *
-     * @var array
+     * @var array<string, mixed>
      */
-    public $apiConfig = ['cache' => false];
+    public array $apiConfig = ['cache' => false];
 
     /**
      * Fomantic-UI dropdown module settings.
@@ -113,9 +113,9 @@ class Lookup extends Input
      * Define callback for generating the row data
      * If left empty default callback Lookup::defaultRenderRow is used.
      *
-     * @var \Closure($this, Model): array{value: mixed, title: mixed}|null
+     * @var \Closure<T of Model>($this, T): array{title: mixed}
      */
-    public $renderRowFunction;
+    public ?\Closure $renderRowFunction = null;
 
     /**
      * Whether or not to accept multiple value.
@@ -180,7 +180,7 @@ class Lookup extends Input
      *
      * @param int|bool $limit
      *
-     * @return array<int, array{value: mixed, title: mixed}>
+     * @return list<array{value: string, title: mixed}>
      */
     public function getData($limit = true): array
     {
@@ -205,12 +205,15 @@ class Lookup extends Input
     /**
      * Renders the Lookup row depending on properties set.
      *
-     * @return array{value: mixed, title: mixed}
+     * @return array{value: string, title: mixed}
      */
     public function renderRow(Model $row): array
     {
         if ($this->renderRowFunction !== null) {
-            return ($this->renderRowFunction)($this, $row);
+            return array_merge(
+                ['value' => $this->defaultRenderRow($row)['value']],
+                ($this->renderRowFunction)($this, $row)
+            );
         }
 
         return $this->defaultRenderRow($row);
@@ -219,16 +222,19 @@ class Lookup extends Input
     /**
      * Default callback for generating data row.
      *
-     * @param string $key
-     *
-     * @return array{value: mixed, title: mixed}
+     * @return array{value: string, title: mixed}
      */
-    public function defaultRenderRow(Model $row, $key = null)
+    protected function defaultRenderRow(Model $row)
     {
-        $idField = $this->idField ?? $row->idField;
-        $titleField = $this->titleField ?? $row->titleField;
+        $idField = $this->idField
+            ?? $row->idField;
+        $titleField = $this->titleField
+            ?? $row->titleField;
 
-        return ['value' => $row->get($idField), 'title' => $row->get($titleField)];
+        return [
+            'value' => $this->getApp()->uiPersistence->typecastAttributeSaveField($row->getField($idField), $row->get($idField)),
+            'title' => $row->get($titleField),
+        ];
     }
 
     /**
@@ -264,7 +270,7 @@ class Lookup extends Input
             $form->setModel($entity, $this->plus['fields'] ?? null);
 
             $form->onSubmit(function (Form $form) {
-                $msg = $form->model->getUserAction('add')->execute();
+                $msg = $form->entity->getUserAction('add')->execute();
 
                 $res = new JsBlock();
                 if (is_string($msg)) {
@@ -272,7 +278,7 @@ class Lookup extends Input
                 }
                 $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
 
-                $row = $this->renderRow($form->model);
+                $row = $this->renderRow($form->entity);
                 $chain = $this->jsDropdown();
                 $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
                 $res->addStatement($chain);
@@ -334,8 +340,8 @@ class Lookup extends Input
         $data = [];
         if ($this->getApp()->hasRequestQueryParam('form')) {
             parse_str($this->getApp()->getRequestQueryParam('form'), $data);
-        } elseif ($this->form) {
-            $data = $this->form->model->get();
+        } elseif ($this->form !== null) {
+            $data = $this->form->entity->get();
         } else {
             return;
         }
@@ -386,8 +392,9 @@ class Lookup extends Input
 
         $this->initDropdown($chain);
 
-        if ($this->entityField && $this->entityField->get()) {
-            $idField = $this->idField ?? $this->model->idField;
+        if ($this->entityField !== null && $this->entityField->get() !== null) {
+            $idField = $this->idField
+                ?? $this->model->idField;
 
             $this->model = $this->model->loadBy($idField, $this->entityField->get());
 

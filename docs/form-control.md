@@ -94,7 +94,7 @@ $formPage = Form\Layout::addTo($tabs->addTab('Other Info'), ['form' => $form]);
 $formPage->addControl('age', new \Atk4\Ui\Form\Control\Line());
 
 $form->onSubmit(function (Form $form) {
-    return $form->model->get('name') . ' has age ' . $form->model->get('age');
+    return $form->entity->get('name') . ' has age ' . $form->entity->get('age');
 });
 ```
 
@@ -377,24 +377,22 @@ If you want to customize how a record is displayed and/or add an icon, Dropdown 
 This function is called with each model record and needs to return an array:
 
 ```
-$dropdown->renderRowFunction = function (Model $record) {
+$dropdown->renderRowFunction = function (Model $entity) {
     return [
-        'value' => $record->idField,
-        'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
+        'title' => $entity->getTitle() . ' (' . $entity->get('subtitle') . ')',
     ];
-}
+};
 ```
 
 You can also use this function to add an Icon to a record:
 
 ```
-$dropdown->renderRowFunction = function (Model $record) {
+$dropdown->renderRowFunction = function (Model $entity) {
     return [
-        'value' => $record->idField,
-        'title' => $record->getTitle() . ' (' . $record->get('subtitle') . ')',
-        'icon' => $record->get('value') > 100 ? 'money' : 'coins',
+        'title' => $entity->getTitle() . ' (' . $entity->get('subtitle') . ')',
+        'icon' => $entity->get('value') > 100 ? 'money' : 'coins',
     ];
-}
+};
 ```
 
 If you'd like to even further adjust How each item is displayed (e.g. complex HTML and more model fields), you can extend the Dropdown class and create your own template with the complex HTML:
@@ -405,7 +403,7 @@ class MyDropdown extends \Atk4\Ui\Dropdown
     public $defaultTemplate = 'my_dropdown.html';
 
     /**
-     * used when a custom callback is defined for row rendering. Sets
+     * Used when a custom callback is defined for row rendering. Sets
      * values to item template and appends it to main template
      */
     protected function _addCallBackRow($row, $key = null)
@@ -424,18 +422,17 @@ class MyDropdown extends \Atk4\Ui\Dropdown
 With the according renderRowFunction:
 
 ```
-function (Model $record) {
+function (Model $entity) {
     return [
-        'value' => $record->getId(),
-        'title' => $record->getTitle,
-        'icon' => $record->value > 100 ? 'money' : 'coins',
-        'someOtherField' => $record->get('SomeOtherField'),
-        'someOtherField2' => $record->get('SomeOtherField2'),
+        'title' => $entity->getTitle(),
+        'icon' => $entity->value > 100 ? 'money' : 'coins',
+        'someOtherField' => $entity->get('SomeOtherField'),
+        'someOtherField2' => $entity->get('SomeOtherField2'),
     ];
 }
 ```
 
-Of course, the tags `value`, `title`, `icon`, `someOtherField` and `someOtherField2` need to be set in my_dropdown.html.
+Of course, the tags `title`, `icon`, `someOtherField` and `someOtherField2` need to be set in my_dropdown.html.
 
 ### Usage with $values property
 

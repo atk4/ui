@@ -93,11 +93,11 @@ class ExecutorFactoryTest extends TestCase
 
         $tableButton = Button::assertInstanceOf($factory->createTrigger($editAction, ExecutorFactory::TABLE_BUTTON));
         self::assertNull($tableButton->content);
-        self::assertSame($tableButton->icon, 'edit');
+        self::assertSame('edit', $tableButton->icon);
 
         $addMenuItem = MenuItem::assertInstanceOf($factory->createTrigger($addAction, ExecutorFactory::MENU_ITEM));
-        self::assertSame($addMenuItem->content, 'Add Test');
-        self::assertSame($addMenuItem->icon, 'plus');
+        self::assertSame('Add Test', $addMenuItem->content);
+        self::assertSame('plus', $addMenuItem->icon);
 
         $tableMenuItem = MenuItem::assertInstanceOf($factory->createTrigger($editAction, ExecutorFactory::TABLE_MENU_ITEM));
         self::assertSame($factory->getCaption($editAction, ExecutorFactory::TABLE_MENU_ITEM), $tableMenuItem->content);

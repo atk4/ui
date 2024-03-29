@@ -86,7 +86,7 @@ class Crud extends Grid
     }
 
     #[\Override]
-    public function setModel(Model $model, array $fields = null): void
+    public function setModel(Model $model, ?array $fields = null): void
     {
         $model->assertIsModel();
 
@@ -98,8 +98,8 @@ class Crud extends Grid
 
         // grab model ID when using delete
         // must be set before delete action execute
-        $this->model->onHook(Model::HOOK_AFTER_DELETE, function (Model $model) {
-            $this->deletedId = $model->getId();
+        $this->model->onHook(Model::HOOK_AFTER_DELETE, function (Model $entity) {
+            $this->deletedId = $entity->getId();
         });
 
         if ($this->useMenuActions === null) {
@@ -206,7 +206,7 @@ class Crud extends Grid
             case Model\UserAction::MODIFIER_DELETE:
                 // use deleted record ID to remove row, fallback to closest tr if ID is not available
                 $js = $this->deletedId
-                    ? $this->js(false, null, 'tr[data-id="' . $this->deletedId . '"]')
+                    ? $this->js(false, null, 'tr[data-id="' . $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $this->deletedId) . '"]')
                     : (new Jquery())->closest('tr');
                 $js = $js->transition('fade left', new JsFunction([], [new JsExpression('this.remove()')]));
 
@@ -221,7 +221,7 @@ class Crud extends Grid
     /**
      * Override this method for setting notifier based on action or model value.
      */
-    protected function jsCreateNotifier(string $msg = null): JsExpressionable
+    protected function jsCreateNotifier(?string $msg = null): JsExpressionable
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {

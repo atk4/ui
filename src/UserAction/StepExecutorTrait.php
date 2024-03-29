@@ -44,7 +44,7 @@ trait StepExecutorTrait
     /** @var bool */
     protected $actionInitialized = false;
 
-    /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure<T of Model>($this, T, mixed, mixed): ?JsBlock JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
     /** @var array A seed for creating form in order to edit arguments/fields user entry. */
@@ -147,7 +147,7 @@ trait StepExecutorTrait
 
         $form->onSubmit(function (Form $form) {
             // collect arguments
-            $this->setActionDataFromModel('args', $form->model, array_keys($form->model->getFields()));
+            $this->setActionDataFromEntity('args', $form->entity, array_keys($form->entity->getFields()));
 
             return $this->jsStepSubmit($this->step);
         });
@@ -168,7 +168,7 @@ trait StepExecutorTrait
 
         $form->onSubmit(function (Form $form) {
             // collect fields defined in Model\UserAction
-            $this->setActionDataFromModel('fields', $form->model, $this->action->fields);
+            $this->setActionDataFromEntity('fields', $form->entity, $this->action->fields);
 
             return $this->jsStepSubmit($this->step);
         });
@@ -187,7 +187,7 @@ trait StepExecutorTrait
             $chain = $this->loader->jsLoad(
                 [
                     'step' => $this->getPreviousStep($this->step),
-                    $this->name => $this->action->getEntity()->getId(),
+                    $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getIdField(), $this->action->getEntity()->getId()),
                 ],
                 ['method' => 'POST'],
                 $this->loader->name
@@ -203,7 +203,7 @@ trait StepExecutorTrait
                 $this->loader->jsLoad(
                     [
                         'step' => 'final',
-                        $this->name => $this->action->getEntity()->getId(),
+                        $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getIdField(), $this->action->getEntity()->getId()),
                     ],
                     ['method' => 'POST'],
                     $this->loader->name
@@ -363,7 +363,7 @@ trait StepExecutorTrait
             $chain = $this->loader->jsLoad(
                 [
                     'step' => $this->getPreviousStep($step),
-                    $this->name => $this->action->getEntity()->getId(),
+                    $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getIdField(), $this->action->getEntity()->getId()),
                 ],
                 ['method' => 'POST'],
                 $this->loader->name
@@ -401,7 +401,7 @@ trait StepExecutorTrait
                 $this->loader->jsLoad(
                     [
                         'step' => $this->isLastStep($step) ? 'final' : $this->getNextStep($step),
-                        $this->name => $this->action->getEntity()->getId(),
+                        $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getIdField(), $this->action->getEntity()->getId()),
                     ],
                     ['method' => 'POST'],
                     $this->loader->name
@@ -420,11 +420,11 @@ trait StepExecutorTrait
     /**
      * @param array<string> $fields
      */
-    private function setActionDataFromModel(string $step, Model $model, array $fields): void
+    private function setActionDataFromEntity(string $step, Model $entity, array $fields): void
     {
         $data = [];
         foreach ($fields as $k) {
-            $data[$k] = $model->get($k);
+            $data[$k] = $entity->get($k);
         }
         $this->actionData[$step] = $data;
     }

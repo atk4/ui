@@ -117,7 +117,7 @@ class CardDeck extends View
 
     protected function addMenuBarSearch(): void
     {
-        $view = View::addTo($this->menu->addMenuRight()->addItem()->setElement('div'));
+        $view = View::addTo($this->menu->addMenuRight()->addItem());
 
         $this->search = $view->add(Factory::factory($this->search, ['context' => $this->container]));
         $this->search->reload = $this->container;
@@ -134,7 +134,7 @@ class CardDeck extends View
      * @param array<int, string>|null $fields
      */
     #[\Override]
-    public function setModel(Model $model, array $fields = null, array $extra = null): void
+    public function setModel(Model $model, ?array $fields = null, ?array $extra = null): void
     {
         parent::setModel($model);
 
@@ -144,12 +144,12 @@ class CardDeck extends View
 
         $count = $this->initPaginator();
         if ($count) {
-            foreach ($this->model as $m) {
+            foreach ($this->model as $entity) {
                 /** @var Card */
                 $c = $this->cardHolder->add(Factory::factory($this->cardSeed, ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]));
-                $c->setModel($m, $fields);
+                $c->setModel($entity, $fields);
                 if ($extra) {
-                    $c->addExtraFields($m, $extra, $this->extraGlue);
+                    $c->addExtraFields($entity, $extra, $this->extraGlue);
                 }
                 if ($this->useAction) {
                     foreach ($this->getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD) as $action) {
@@ -246,7 +246,7 @@ class CardDeck extends View
     /**
      * Override this method for setting notifier based on action or model value.
      */
-    protected function jsCreateNotifier(Model\UserAction $action, string $msg = null): JsBlock
+    protected function jsCreateNotifier(Model\UserAction $action, ?string $msg = null): JsBlock
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {

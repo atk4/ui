@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Data\Field;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpressionable;
 
@@ -65,17 +66,22 @@ class JsSortable extends JsCallback
     /**
      * Callback when container has been reorder.
      *
-     * @param \Closure(list<string>, string, int, int): (JsExpressionable|View|string|void) $fx
+     * @param \Closure(list<mixed>, mixed, int, int): (JsExpressionable|View|string|void) $fx
      */
-    public function onReorder(\Closure $fx): void
+    public function onReorder(\Closure $fx, Field $idField): void
     {
-        $this->set(function () use ($fx) {
-            $sortOrders = explode(',', $this->getApp()->getRequestPostParam('order'));
-            $source = $this->getApp()->getRequestPostParam('source');
+        $this->set(function () use ($fx, $idField) {
+            // TODO comma can be in the order/ID value
+            $orderedIds = explode(',', $this->getApp()->getRequestPostParam('order'));
+            $sourceId = $this->getApp()->getRequestPostParam('source');
             $newIndex = (int) $this->getApp()->getRequestPostParam('newIndex');
             $origIndex = (int) $this->getApp()->getRequestPostParam('origIndex');
 
-            return $fx($sortOrders, $source, $newIndex, $origIndex);
+            $typecastLoadIdFx = fn ($v) => $this->getApp()->uiPersistence->typecastAttributeLoadField($idField, $v);
+            $orderedIds = array_map($typecastLoadIdFx, $orderedIds);
+            $sourceId = $typecastLoadIdFx($sourceId);
+
+            return $fx($orderedIds, $sourceId, $newIndex, $origIndex);
         });
     }
 

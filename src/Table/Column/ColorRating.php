@@ -61,7 +61,7 @@ class ColorRating extends Table\Column
     }
 
     #[\Override]
-    public function getDataCellHtml(Field $field = null, array $attr = []): string
+    public function getDataCellHtml(?Field $field = null, array $attr = []): string
     {
         if ($field === null) {
             throw new Exception('ColorRating can be used only with model field');

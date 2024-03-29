@@ -56,7 +56,7 @@ $lookup = $form->addControl('country', [
 ]);
 
 $form->onSubmit(static function (Form $form) {
-    return 'Submitted: ' . print_r($form->model->get(), true);
+    return 'Submitted: ' . print_r($form->entity->get(), true);
 });
 
 Header::addTo($app, ['Lookup multiple values']);
@@ -92,5 +92,5 @@ $lookup = $form->addControl('country', [
 ]);
 
 $form->onSubmit(static function (Form $form) {
-    return 'Submitted: ' . print_r($form->model->get(), true);
+    return 'Submitted: ' . print_r($form->entity->get(), true);
 });

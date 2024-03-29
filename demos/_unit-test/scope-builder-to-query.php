@@ -34,9 +34,14 @@ $q = [
         ],
     ],
 ];
-$scope = (new Form\Control\ScopeBuilder())->queryToScope($q);
 
 $product = new Product($app->db);
+
+$scopeBuilder = new Form\Control\ScopeBuilder();
+$scopeBuilder->setApp($app);
+$scopeBuilder->model = $product;
+
+$scope = $scopeBuilder->queryToScope($q);
 
 $g = Grid::addTo($app);
 $g->setModel($product->addCondition($scope));
