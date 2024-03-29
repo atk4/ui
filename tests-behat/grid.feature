@@ -42,16 +42,16 @@ Feature: Grid
 
   Scenario: master checkbox
     Given I am on "_unit-test/grid-rowclick.php"
-    When I press button "Show Selection"
+    When I press button "Show selected"
     Then Toast display should contain text "Selected: #"
     When I click using selector "//tr[1]//div.ui.child.checkbox"
-    Then I press button "Show Selection"
+    Then I press button "Show selected"
     Then Toast display should contain text "Selected: 1#"
     When I click using selector "//tr//div.ui.master.checkbox"
-    Then I press button "Show Selection"
-    Then Toast display should contain text "Selected: 1,2,3,4,5#"
+    Then I press button "Show selected"
+    Then Toast display should contain text "Selected: 1, 2, 3, 4, 5#"
     When I click using selector "//tr//div.ui.master.checkbox"
-    Then I press button "Show Selection"
+    Then I press button "Show selected"
     Then Toast display should contain text "Selected: #"
 
   Scenario: popup column header

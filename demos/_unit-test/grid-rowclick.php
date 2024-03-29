@@ -6,6 +6,7 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\App;
 use Atk4\Ui\Grid;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsToast;
@@ -40,13 +41,9 @@ $grid->table->onRowClick(static function () {
 
 $sel = $grid->addSelection();
 
-$grid->menu->addItem('Show Selection')->on(
-    'click',
-    static function ($f, $ids) {
-        return new JsToast('Selected: ' . $ids . '#');
-    },
-    [$sel->jsChecked()]
-);
+$grid->addBulkAction('Show selected', static function (Jquery $j, array $ids) use ($grid) {
+    return new JsToast('Selected: ' . implode(', ', array_map(static fn ($id) => $grid->getApp()->uiPersistence->typecastSaveField($grid->model->getIdField(), $id), $ids)) . '#');
+});
 
 // emulate navigate for <a> for Behat
 // TODO emulate for all tests automatically in our Atk4\Ui\Behat\Context
