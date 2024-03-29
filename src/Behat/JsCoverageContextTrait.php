@@ -40,7 +40,7 @@ trait JsCoverageContextTrait
                     throw new Error('"window.__coverage__" is not defined');
                 }
 
-                const transformCoverageFx = function (istanbulCoverage) {
+                const transformCoverageFx = function (istanbulCoverage, seenPaths) {
                     const res = {};
                     Object.entries(istanbulCoverage).forEach(([path, data]) => {
                         const resSingle = {};
@@ -66,7 +66,7 @@ trait JsCoverageContextTrait
                 if (window.__coverage_beforeunload__ !== true) {
                     window.addEventListener('beforeunload', () => {
                         const navigateCoverages = JSON.parse(window.sessionStorage.getItem('__coverage_navigate__') ?? '[]');
-                        navigateCoverages.push(transformCoverageFx(window.__coverage__));
+                        navigateCoverages.push(transformCoverageFx(window.__coverage__, new Set()));
                         window.sessionStorage.setItem('__coverage_navigate__', JSON.stringify(navigateCoverages));
                     });
                     window.__coverage_beforeunload__ = true;
@@ -76,7 +76,7 @@ trait JsCoverageContextTrait
 
                 const res = [];
                 for (const coverage of [windowCoverage, ...navigateCoverages]) {
-                    res.push(transformCoverageFx(coverage));
+                    res.push(transformCoverageFx(coverage, seenPaths));
                 }
 
                 return res;
