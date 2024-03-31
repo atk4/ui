@@ -103,7 +103,7 @@ class JsCallback extends Callback
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
      */
-    public function terminateAjaxIfCanTerminate(JsBlock $ajaxec): void
+    protected function terminateAjaxIfCanTerminate(JsBlock $ajaxec): void
     {
         $data = [
             'success' => true,
