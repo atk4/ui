@@ -399,4 +399,7 @@ parameters:
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\App::add\(\) expects Atk4\\Ui\\AbstractView, array given\.$~'
         -
             path: 'src/Popup.php'
-            message: '~^Parameter #1 \$view of method Atk4\\Ui\\Callback::terminateJson\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\AbstractView given\.$~'
+            message: '~^Parameter #1 \$ of closure expects Atk4\\Ui\\View, Atk4\\Ui\\AbstractView given\.$~'
+        -
+            path: 'src/Popup.php'
+            message: '~^Parameter #1 \$view of method Atk4\\Ui\\Callback::terminateJsonIfCanTerminate\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\AbstractView given\.$~'
