@@ -100,7 +100,7 @@ class JsSse extends JsCallback
      * @return never
      */
     #[\Override]
-    public function terminateAjax(JsBlock $ajaxec, $msg = null, bool $success = true): void
+    public function terminateAjaxIfCanTerminate(JsBlock $ajaxec, $msg = null, bool $success = true): void
     {
         $ajaxecStr = $ajaxec->jsRender();
         if ($ajaxecStr !== '') {
