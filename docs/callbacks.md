@@ -229,7 +229,10 @@ $label->link($cb->getUrl());
 When you trigger callback, you'll see the output:
 
 ```
-{"success": true, "message": "Success", "eval": "alert(\"ok\")"}
+{
+    "success": true,
+    "atkjs": "alert(\"ok\");"
+}
 ```
 
 This is how JsCallback renders actions and sends them back to the browser. In order to retrieve and execute actions,
