@@ -25,7 +25,7 @@ class Value
      */
     public function set(string $value): self
     {
-        if (\PHP_MAJOR_VERSION === 7 || (\PHP_MAJOR_VERSION === 8 && \PHP_MAJOR_VERSION <= 1) // @phpstan-ignore-line
+        if (\PHP_VERSION_ID < 80200
                 ? !preg_match('~~u', $value) // much faster in PHP 8.1 and lower
                 : !mb_check_encoding($value, 'UTF-8')
         ) {
