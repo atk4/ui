@@ -7,6 +7,7 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Table;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 
 class TableTest extends TestCase
 {
@@ -15,6 +16,7 @@ class TableTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testAddColumnWithoutModel(): void
     {
         $table = new Table();

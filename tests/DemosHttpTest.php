@@ -8,6 +8,8 @@ use Atk4\Ui\Callback;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\LazyOpenStream;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Process\Process;
 
 /**
@@ -15,6 +17,7 @@ use Symfony\Component\Process\Process;
  *
  * @group demos_http
  */
+#[Group('demos_http')]
 class DemosHttpTest extends DemosTest
 {
     /** @var Process|null */
@@ -158,6 +161,7 @@ class DemosHttpTest extends DemosTest
     /**
      * @dataProvider provideDemoLateOutputErrorCases
      */
+    #[DataProvider('provideDemoLateOutputErrorCases')]
     public function testDemoLateOutputError(string $urlTrigger, string $expectedOutput): void
     {
         $path = '_unit-test/late-output-error.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . $urlTrigger . '=ajax&'

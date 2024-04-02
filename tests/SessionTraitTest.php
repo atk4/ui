@@ -10,12 +10,16 @@ use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\App;
 use Atk4\Ui\Exception;
 use Atk4\Ui\SessionTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 
 /**
  * @group require_session
  *
  * @runTestsInSeparateProcesses
  */
+#[Group('require_session')]
+#[RunTestsInSeparateProcesses]
 class SessionTraitTest extends TestCase
 {
     use CreateAppTrait;

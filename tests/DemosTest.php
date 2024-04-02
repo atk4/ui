@@ -17,6 +17,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -290,6 +291,7 @@ class DemosTest extends TestCase
     /**
      * @dataProvider provideDemosStatusAndHtmlResponseCases
      */
+    #[DataProvider('provideDemosStatusAndHtmlResponseCases')]
     public function testDemosStatusAndHtmlResponse(string $path): void
     {
         $response = $this->getResponseFromRequest($path);
@@ -322,6 +324,7 @@ class DemosTest extends TestCase
     /**
      * @dataProvider provideDemoGetCases
      */
+    #[DataProvider('provideDemoGetCases')]
     public function testDemoGet(string $path): void
     {
         $response = $this->getResponseFromRequest($path);
@@ -398,6 +401,7 @@ class DemosTest extends TestCase
      *
      * @dataProvider provideDemoJsonResponseCases
      */
+    #[DataProvider('provideDemoJsonResponseCases')]
     public function testDemoJsonResponse(string $path, ?string $expectedExceptionMessage = null): void
     {
         if (static::class === self::class) {
@@ -436,6 +440,7 @@ class DemosTest extends TestCase
      *
      * @dataProvider provideDemoSseResponseCases
      */
+    #[DataProvider('provideDemoSseResponseCases')]
     public function testDemoSseResponse(string $path): void
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
@@ -476,6 +481,7 @@ class DemosTest extends TestCase
     /**
      * @dataProvider provideDemoJsonResponsePostCases
      */
+    #[DataProvider('provideDemoJsonResponsePostCases')]
     public function testDemoJsonResponsePost(string $path, array $postData): void
     {
         $response = $this->getResponseFromRequest($path, ['form_params' => $postData]);
@@ -488,6 +494,7 @@ class DemosTest extends TestCase
      *
      * @slowThreshold 1500
      */
+    #[DataProvider('provideDemoCallbackErrorCases')]
     public function testDemoCallbackError(string $path, string $expectedExceptionMessage, array $options = []): void
     {
         if (static::class === self::class) {

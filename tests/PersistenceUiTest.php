@@ -7,6 +7,7 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Field;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PersistenceUiTest extends TestCase
 {
@@ -16,6 +17,8 @@ class PersistenceUiTest extends TestCase
      * @dataProvider provideTypecastBidirectionalCases
      * @dataProvider provideTypecastLoadOnlyCases
      */
+    #[DataProvider('provideTypecastBidirectionalCases')]
+    #[DataProvider('provideTypecastLoadOnlyCases')]
     public function testTypecast(array $persistenceSeed, array $fieldSeed, $phpValue, ?string $uiValue, bool $isUiValueNormalized = true): void
     {
         $p = (new UiPersistence())->setDefaults($persistenceSeed);
@@ -203,6 +206,7 @@ class PersistenceUiTest extends TestCase
      *
      * @dataProvider provideAttributeTypecastCases
      */
+    #[DataProvider('provideAttributeTypecastCases')]
     public function testAttributeTypecast(array $fieldSeed, $phpValue, ?string $uiValue): void
     {
         $p = new UiPersistence();

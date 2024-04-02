@@ -18,6 +18,7 @@ use Atk4\Ui\Modal;
 use Atk4\Ui\Popup;
 use Atk4\Ui\View;
 use Atk4\Ui\VirtualPage;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ViewTest extends TestCase
 {
@@ -146,6 +147,7 @@ class ViewTest extends TestCase
      *
      * @dataProvider provideSetNotClosureErrorCases
      */
+    #[DataProvider('provideSetNotClosureErrorCases')]
     public function testSetNotClosureError(string $class): void
     {
         $v = new $class();
