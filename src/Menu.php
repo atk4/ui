@@ -132,7 +132,7 @@ class Menu extends View
         if (isset($name['icon'])) {
             Icon::addTo($group, [$name['icon']], ['Icon'])->removeClass('item');
         } elseif (isset($name['label'])) {
-            Label::addTo($group, [$name['label']], ['Icon'])->removeClass('item')->addClass('mini');
+            Label::addTo($group, [$name['label']], ['Icon'])->removeClass('item')->addClass('tiny');
         }
 
         return $group;
