@@ -9,8 +9,8 @@ use Atk4\Ui\Js\JsReload;
 
 class Paginator extends View
 {
-    public $ui = 'pagination menu';
     public $defaultTemplate = 'paginator.html';
+    public $ui = 'pagination menu wrapping';
 
     /** Specify how many pages this paginator has in total. */
     public int $total;

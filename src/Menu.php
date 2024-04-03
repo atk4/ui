@@ -11,7 +11,7 @@ use Atk4\Ui\Js\JsExpressionable;
 
 class Menu extends View
 {
-    public $ui = 'menu';
+    public $ui = 'menu wrapping';
 
     /**
      * If you set this to false, then upon clicking on the item, it won't
