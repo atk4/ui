@@ -449,6 +449,9 @@ $layout->menuLeft->addItem(['Layouts', 'icon' => 'object group'], ['layouts']);
 
 $editGroup = $layout->menuLeft->addGroup(['Edit', 'icon' => 'edit']);
 $editGroup->addItem('Basics', ['edit/basic']);
+
+$newsGroup = $layout->menuLeft->addGroup(['News', 'label' => ['28', 'class.red' => true]]);
+$newsGroup->addItem('Emails', ['news/emails']);
 ```
 
 :::{php:attr} menu
