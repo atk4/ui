@@ -471,7 +471,7 @@ class Percent extends Field
  * @property string $name             @Atk4\Field()
  * @property string $type             @Atk4\Field()
  * @property bool   $is_folder        @Atk4\Field()
- * @property File   $SubFolder        @Atk4\RefMany()
+ * @property File   $subFolder        @Atk4\RefMany()
  * @property int    $count            @Atk4\Field()
  * @property Folder $parent_folder_id @Atk4\RefOne()
  */
@@ -490,7 +490,7 @@ class File extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->type, ['caption' => 'MIME Type']);
         $this->addField($this->fieldName()->is_folder, ['type' => 'boolean']);
 
-        $this->hasMany($this->fieldName()->SubFolder, [
+        $this->hasMany($this->fieldName()->subFolder, [
             'model' => [self::class],
             'theirField' => self::hinting()->fieldName()->parent_folder_id,
         ])
@@ -538,7 +538,7 @@ class File extends ModelWithPrefixedFields
             ]);
 
             if ($fileinfo->isDir()) {
-                $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
+                $entity->subFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
             }
 
             // skip full/slow import for Behat CI testing
@@ -562,8 +562,8 @@ class Folder extends File
 
 /**
  * @property string      $name          @Atk4\Field()
- * @property SubCategory $SubCategories @Atk4\RefMany()
- * @property Product     $Products      @Atk4\RefMany()
+ * @property SubCategory $subCategories @Atk4\RefMany()
+ * @property Product     $products      @Atk4\RefMany()
  */
 class Category extends ModelWithPrefixedFields
 {
@@ -576,11 +576,11 @@ class Category extends ModelWithPrefixedFields
 
         $this->addField($this->fieldName()->name);
 
-        $this->hasMany($this->fieldName()->SubCategories, [
+        $this->hasMany($this->fieldName()->subCategories, [
             'model' => [SubCategory::class],
             'theirField' => SubCategory::hinting()->fieldName()->product_category_id,
         ]);
-        $this->hasMany($this->fieldName()->Products, [
+        $this->hasMany($this->fieldName()->products, [
             'model' => [Product::class],
             'theirField' => Product::hinting()->fieldName()->product_category_id,
         ]);
@@ -590,7 +590,7 @@ class Category extends ModelWithPrefixedFields
 /**
  * @property string   $name                @Atk4\Field()
  * @property Category $product_category_id @Atk4\RefOne()
- * @property Product  $Products            @Atk4\RefMany()
+ * @property Product  $products            @Atk4\RefMany()
  */
 class SubCategory extends ModelWithPrefixedFields
 {
@@ -606,7 +606,7 @@ class SubCategory extends ModelWithPrefixedFields
         $this->hasOne($this->fieldName()->product_category_id, [
             'model' => [Category::class],
         ]);
-        $this->hasMany($this->fieldName()->Products, [
+        $this->hasMany($this->fieldName()->products, [
             'model' => [Product::class],
             'theirField' => Product::hinting()->fieldName()->product_sub_category_id,
         ]);
