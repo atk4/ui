@@ -43,7 +43,7 @@ class DemosTest extends TestCase
            |(?<array>\[(?:(?&json)(?:,(?&json))*|\s*)\])
            |(?<object>\{(?:(?<pair>\s*(?&string)\s*:(?&json))(?:,(?&pair))*|\s*)\})
         )\s*)$~sx';
-    protected static string $regexSseLine = '~^(event|data|(?=: x{4096}$)): .*$~';
+    protected static string $regexSse = '~^(event: [^\n]+\n(data: [^\n]*\n)+\n: x{4096}\n\n)+$~';
 
     #[\Override]
     public static function setUpBeforeClass(): void
@@ -452,22 +452,7 @@ class DemosTest extends TestCase
 
         $response = $this->getResponseFromRequest($path);
         self::assertSame(200, $response->getStatusCode());
-
-        $outputLines = array_filter(
-            explode("\n", $response->getBody()->getContents()),
-            static fn ($v) => $v !== ''
-        );
-
-        // check SSE Syntax
-        self::assertGreaterThan(0, count($outputLines));
-        foreach ($outputLines as $index => $line) {
-            preg_match_all(self::$regexSseLine, $line, $matchesAll);
-            self::assertSame(
-                $line,
-                implode('', $matchesAll[0] ?? ['error']),
-                'Testing SSE response line ' . $index . ' with content ' . $line
-            );
-        }
+        self::assertMatchesRegularExpression(self::$regexSse, $response->getBody()->getContents());
     }
 
     public static function provideDemoJsonResponsePostCases(): iterable
