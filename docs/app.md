@@ -378,7 +378,7 @@ $grid->setModel($user);
 $grid->addPaginator(); // initialize and populate paginator
 $grid->addButton('Test'); // initialize and populate toolbar
 
-echo $grid->render();
+echo $grid->renderToHtml();
 ```
 
 All of the objects created above - button, grid, toolbar and paginator will share the same
@@ -393,7 +393,7 @@ You can create App object on your own then add elements into it:
 $app = new App('My App');
 $app->add($grid);
 
-echo $grid->render();
+echo $grid->renderToHtml();
 ```
 
 This does not change the output, but you can use the 'App' class to your advantage as a

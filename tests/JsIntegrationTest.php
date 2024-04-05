@@ -19,7 +19,7 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['icon' => 'pencil']);
         $v->setApp($this->createApp());
-        $v->render();
+        $v->renderToHtml();
 
         self::assertNotEmpty($v->icon);
         self::assertNotEmpty($v->icon->name); // @phpstan-ignore-line
@@ -32,7 +32,7 @@ class JsIntegrationTest extends TestCase
         $b1 = Button::addTo($v);
         $b2 = Button::addTo($v);
         $v->setApp($this->createApp());
-        $v->render();
+        $v->renderToHtml();
 
         self::assertNotSame($b1->name, $b2->name);
     }
@@ -42,7 +42,7 @@ class JsIntegrationTest extends TestCase
         $v = new Button(['name' => 'b']);
         $j = $v->js()->hide();
         $v->setApp($this->createApp());
-        $v->render();
+        $v->renderToHtml();
 
         self::assertSame('$(\'#b\').hide()', $j->jsRender());
     }

@@ -11,7 +11,7 @@ $view = new \Atk4\Ui\View();
 
 \Atk4\Ui\Button::addTo($view, ['test']);
 
-echo $view->render();
+echo $view->renderToHtml();
 ```
 
 When render on the $view is executed, it will render button first then incorporate HTML into it's own template before rendering.
@@ -25,9 +25,9 @@ Here is a breakdown of how the above code works:
 At this point Button is NOT element of a view just yet. This is because we can't be sure if $view will be rendered individually
 or will become child of another view. Method init() is not executed on either objects.
 
-4. render() method will call renderAll()
-5. renderAll will find out that the $app property of a view is not set and will initialize it with default App.
-6. renderAll will also find out that the init() has not been called for the $view and will call it.
+4. renderToHtml() method will call renderAll()
+5. renderAll() will find out that the $app property of a view is not set and will initialize it with default App.
+6. renderAll() will also find out that the init() has not been called for the $view and will call it.
 7. init() will identify that there are some "pending children" and will add them in properly.
 
 Most of the UI classes will allow you to operate even if they are not initialized. For instance calling 'setModel()' will
@@ -77,7 +77,7 @@ $b2 = \Atk4\Ui\Button::addTo($v, ['Test2']);
 echo $b2->name; // not set!! Not part of render tree
 ```
 
-At this point, if you execute $v->render() it will create it's own App and will create its own render tree. On the other
+At this point, if you execute $v->renderToHtml() it will create it's own App and will create its own render tree. On the other
 hand, if you add $v inside layout, trees will merge and the same $app will be used:
 
 ```
@@ -91,7 +91,7 @@ should there be any problems with the initialization.
 
 # Rendering outside
 
-It's possible for some views to be rendered outside of the app. In the previous section I speculated that calling $v->render()
+It's possible for some views to be rendered outside of the app. In the previous section I speculated that calling $v->renderToHtml()
 will create its own tree independent from the main one.
 
 Agile UI sometimes uses the following approach to render element on the outside:

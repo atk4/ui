@@ -19,7 +19,7 @@ class RenderTreeTest extends TestCase
     {
         $view = new View();
         $view->setApp($this->createApp());
-        $view->render();
+        $view->renderToHtml();
 
         $view->getApp();
         self::assertNotNull($view->template);
@@ -30,7 +30,7 @@ class RenderTreeTest extends TestCase
         $view = new View();
         $view2 = View::addTo($view);
         $view->setApp($this->createApp());
-        $view->render();
+        $view->renderToHtml();
 
         $view2->getApp();
         self::assertNotNull($view2->template);

@@ -30,8 +30,8 @@ class ViewTest extends TestCase
         $v->set('foo');
 
         $v->setApp($this->createApp());
-        $a = $v->render();
-        $b = $v->render();
+        $a = $v->renderToHtml();
+        $b = $v->renderToHtml();
         self::assertSame($a, $b);
     }
 
@@ -41,7 +41,7 @@ class ViewTest extends TestCase
         $v->set('foo');
 
         $v->setApp($this->createApp());
-        $v->render();
+        $v->renderToHtml();
 
         $this->expectException(Exception::class);
         View::addTo($v);
@@ -51,12 +51,12 @@ class ViewTest extends TestCase
     {
         $v = new View();
         $v->setApp($this->createApp());
-        self::assertSame('<div id="atk"></div>', $v->render());
+        self::assertSame('<div id="atk"></div>', $v->renderToHtml());
 
         $v = new View();
         $v->element = 'img';
         $v->setApp($this->createApp());
-        self::assertSame('<img id="atk">', $v->render());
+        self::assertSame('<img id="atk">', $v->renderToHtml());
     }
 
     public function testAddDelayedInit(): void

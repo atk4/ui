@@ -13,7 +13,7 @@ trait TableTestTrait
      */
     protected function extractTableRow(Table $table, string $rowDataId = '1'): string
     {
-        preg_match('~<.*data-id="' . $rowDataId . '".*>~m', $table->render(), $matches);
+        preg_match('~<.*data-id="' . $rowDataId . '".*>~m', $table->renderToHtml(), $matches);
 
         return preg_replace('~\r?\n|\r~', '', $matches[0]);
     }

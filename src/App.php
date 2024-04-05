@@ -546,7 +546,7 @@ class App
     public function terminateHtml($output): void
     {
         if ($output instanceof View) {
-            $output = $output->render();
+            $output = $output->renderToHtml();
         } elseif ($output instanceof HtmlTemplate) {
             $output = $output->renderToHtml();
         }

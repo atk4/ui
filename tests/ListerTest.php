@@ -38,7 +38,7 @@ class ListerTest extends TestCase
         $view->invokeInit();
         $lister = Lister::addTo($view, [], ['list']);
         $lister->setSource(['foo', 'bar']);
-        self::assertSame('hello, world, world', $view->render());
+        self::assertSame('hello, world, world', $view->renderToHtml());
     }
 
     public function testAddAfterRender(): void

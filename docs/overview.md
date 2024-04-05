@@ -222,7 +222,7 @@ $form->setApp($app);
 $form->invokeInit();
 $form->setModel(new User($db));
 
-$html = $form->render();
+$html = $form->renderToHtml();
 ```
 
 This would render an individual component and will return HTML:
@@ -236,7 +236,7 @@ This would render an individual component and will return HTML:
 </div>
 ```
 
-For other use-cases please look into {php:meth}`View::render()`
+For other use-cases please look into {php:meth}`View::renderToHtml()`
 
 ### Factory
 

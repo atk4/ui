@@ -414,7 +414,7 @@ class MyDropdown extends \Atk4\Ui\Dropdown
         $this->_tItem->set('someOtherField', $res['someOtherField]);
         $this->_tItem->set('someOtherField2', $res['someOtherField2]);
         // add item to template
-        $this->template->dangerouslyAppendHtml('Item', $this->_tItem->render());
+        $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
     }
 }
 ```

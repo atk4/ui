@@ -24,7 +24,7 @@ use Atk4\Ui\UserAction\ExecutorFactory;
 class View extends AbstractView
 {
     /**
-     * When you call render() this will be populated with JavaScript chains.
+     * When you call renderAll() this will be populated with JavaScript chains.
      *
      * @var array<1|string, array<int, JsExpressionable>>
      *
@@ -668,7 +668,7 @@ class View extends AbstractView
      * This method is for those cases when developer want to simply render his
      * view and grab HTML himself.
      */
-    public function render(): string
+    public function renderToHtml(): string
     {
         $this->renderAll();
 

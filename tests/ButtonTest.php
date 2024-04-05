@@ -20,6 +20,6 @@ class ButtonTest extends TestCase
     {
         $button = new Button(['Load', 'icon' => 'pause']);
         $button->setApp($this->createApp());
-        $button->render();
+        $button->renderToHtml();
     }
 }

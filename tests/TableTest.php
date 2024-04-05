@@ -36,7 +36,7 @@ class TableTest extends TestCase
         $table->addColumn('eight', [Table\Column\Link::class, ['id' => 3]]);
         $table->addColumn('nine');
 
-        $table->render();
+        $table->renderToHtml();
     }
 
     public function testAddColumnAlreadyExistsException(): void
