@@ -45,7 +45,7 @@ multiple requests to get there.
 In earlier example, we have called `$app->stickyGet` which creates a global stickyGet. After
 executing, all the invocations to App::url() or View::url() will contain "client_id".
 
-In some cases, Sticky GET only make sense within a certain branch of a Render Tree. For instance,
+In some cases, Sticky GET only make sense within a certain branch of a render tree. For instance,
 when Loader wishes to load content dynamically, it must pass extra _GET parameter to trigger a
 {php:class}`Callback`. Next, when Console needs to establish live SSE stream, it should include
 the SAME get argument to trigger a callback for the Loader, otherwise Console wouldn't be

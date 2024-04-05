@@ -6,10 +6,10 @@
 # Views
 
 Agile UI is a component framework, which follows a software patterns known as
-`Render Tree` and `Two pass HTML rendering`.
+"render tree" and "two pass HTML rendering".
 
 :::{php:class} View
-A View is a most fundamental object that can take part in the Render tree. All
+A View is a most fundamental object that can take part in the render tree. All
 of the other components descend from the `View` class.
 :::
 
@@ -28,8 +28,8 @@ The above code will produce the following HTML block:
 </div>
 ```
 
-All of the views combined form a `Render Tree`. In order to get the HTML output
-from all the `Views` in `Render Tree` you need to execute `render()` for the top-most
+All of the views combined form a "render tree". In order to get the HTML output
+from all the render tree `View`s you need to execute `render()` for the top-most
 leaf:
 
 ```
@@ -460,7 +460,7 @@ Outputs:
 <div class="ui button" id="my-button3">Button</div>
 ```
 
-If ID is not specified it will be set automatically. The top-most element of a Render Tree will
+If ID is not specified it will be set automatically. The top-most element of a render tree will
 use `id=atk` and all of the child elements will create a derived ID based on it's UI role.
 
 ```yaml

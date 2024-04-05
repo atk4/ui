@@ -77,7 +77,7 @@ render
 
 ## Sticky GET
 
-Agile UI implements advanced approach allowing any View object that you add into Render Tree to
+Agile UI implements advanced approach allowing any View object that you add into render tree to
 declare "sticky GET arguments". Here is example:
 
 ```

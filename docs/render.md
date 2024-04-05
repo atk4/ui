@@ -3,7 +3,7 @@
 
 # Introduction
 
-Agile UI allows you to create and combine various objects into a single Render Tree for unified rendering. Tree represents
+Agile UI allows you to create and combine various objects into a single render tree for unified rendering. Tree represents
 all the UI components that will contribute to the HTML generation. Render tree is automatically created and maintained:
 
 ```

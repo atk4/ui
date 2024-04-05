@@ -288,7 +288,7 @@ will automatically populate a user-menu with the name of the user and log-out bu
 
 ## Advanced techniques
 
-By design we make sure that adding a component into a Render Tree (See {ref}`view`)
+By design we make sure that adding a component into a render tree (See {ref}`view`)
 is enough, so App provides a mechanism for components to:
 
 - Depend on JS, CSS, and other assets

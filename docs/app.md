@@ -306,7 +306,7 @@ callback is triggered and need to respond with some JSON.
 :::{php:attr} isRendering
 :::
 
-Will be true if the application is currently rendering recursively through the Render Tree.
+Will be true if the application is currently rendering recursively through the render tree.
 
 ## Links
 

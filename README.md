@@ -224,7 +224,7 @@ _All components can be view using the [demos](https://ui.atk4.org/demos/) applic
 
 | Component       | Description                                                           | Introduced |
 | --------------- | --------------------------------------------------------------------- | ---------- |
-| View            | Template, Render Tree and various patterns                            | 0.1        |
+| View            | Template, render tree and various patterns                            | 0.1        |
 | Button          | Button in various variations including icons, labels, styles and tags | 0.1        |
 | Input           | Decoration of input fields, integration with buttons.                 | 0.2        |
 | JS              | Assign JS events and abstraction of PHP callbacks.                    | 0.2        |
