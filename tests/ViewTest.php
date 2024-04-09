@@ -41,7 +41,7 @@ class ViewTest extends TestCase
         $v->set('foo');
 
         $v->setApp($this->createApp());
-        $v->renderToHtml();
+        $v->renderAll();
 
         $this->expectException(Exception::class);
         View::addTo($v);

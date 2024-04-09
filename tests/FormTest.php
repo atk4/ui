@@ -86,7 +86,7 @@ class FormTest extends TestCase
             }
         });
 
-        $form->renderToHtml();
+        $form->renderAll();
         $res = AppFormTestMock::assertInstanceOf($form->getApp())->output;
 
         if ($checkExpectedErrorsFx !== null) {
@@ -377,7 +377,7 @@ class FormTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Checkbox form control requires field with boolean type');
-        $input->renderToHtml();
+        $input->renderAll();
     }
 
     public function testUploadNoUploadCallbackException(): void
@@ -396,7 +396,7 @@ class FormTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing onUpload callback');
-        $input->renderToHtml();
+        $input->renderAll();
     }
 
     public function testUploadNoDeleteCallbackException(): void
@@ -415,7 +415,7 @@ class FormTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing onDelete callback');
-        $input->renderToHtml();
+        $input->renderAll();
     }
 }
 
