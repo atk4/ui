@@ -145,8 +145,8 @@ class Ui extends Persistence
                         'time' => $this->timeFormat,
                     ][$field->type];
 
-                    $valueHasSeconds = (int) $value->format('s') !== 0;
-                    $valueHasMicroseconds = (int) $value->format('u') !== 0;
+                    $valueHasSeconds = (int) $value->format('s') > 0;
+                    $valueHasMicroseconds = (int) $value->format('u') > 0;
                     $formatHasMicroseconds = str_contains($format, '.u');
                     if ($valueHasSeconds || $valueHasMicroseconds) {
                         $format = preg_replace('~(?<=:i)(?!:s)~', ':s', $format);
