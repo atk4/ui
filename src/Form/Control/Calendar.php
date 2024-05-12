@@ -138,11 +138,11 @@ class Calendar extends Input
 
     public function isDtFormatWithSeconds(string $phpFormat): bool
     {
-        return (bool) preg_match('~[suv]~', $this->expandPhpDtFormat($phpFormat));
+        return preg_match('~[suv]~', $this->expandPhpDtFormat($phpFormat)) === 1;
     }
 
     public function isDtFormatWithMicroseconds(string $phpFormat): bool
     {
-        return (bool) preg_match('~[uv]~', $this->expandPhpDtFormat($phpFormat));
+        return preg_match('~[uv]~', $this->expandPhpDtFormat($phpFormat)) === 1;
     }
 }

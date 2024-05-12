@@ -97,7 +97,7 @@ class JsExpression implements JsExpressionable
             }
         } elseif (is_string($value)) {
             $res = json_encode($value, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_THROW_ON_ERROR);
-            $res = '\'' . str_replace('\'', '\\\'', str_replace('\"', '"', substr($res, 1, -1))) . '\'';
+            $res = '\'' . str_replace(['\'', '\"'], ['\\\'', '"'], substr($res, 1, -1)) . '\'';
         } elseif (is_bool($value)) {
             $res = $value ? 'true' : 'false';
         } elseif (is_int($value)) {
