@@ -77,8 +77,8 @@ class TagTree
      */
     public function add(object $value): self
     {
-        if (!$value instanceof Value && !$value instanceof HtmlTemplate) { // @phpstan-ignore-line
-            if ($value instanceof self) { // @phpstan-ignore-line
+        if (!$value instanceof Value && !$value instanceof HtmlTemplate) { // @phpstan-ignore x
+            if ($value instanceof self) { // @phpstan-ignore x
                 throw new Exception('Tag tree cannot be added directly');
             }
 

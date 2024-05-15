@@ -46,7 +46,7 @@ class App
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
     public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
 
-    private static ?string $shutdownReservedMemory; // @phpstan-ignore-line
+    private static ?string $shutdownReservedMemory; // @phpstan-ignore x
     private static ?int $errorReportingLevel = null;
 
     /** @var array|false Location where to load JS/CSS files */
@@ -588,7 +588,7 @@ class App
             $this->html->invokeInit();
         }
 
-        $this->layout = $this->html->add($layout); // @phpstan-ignore-line
+        $this->layout = $this->html->add($layout); // @phpstan-ignore x
 
         $this->initIncludes();
 
@@ -650,7 +650,7 @@ class App
      */
     public function add($object, $region = null): AbstractView
     {
-        if (!$this->layout) { // @phpstan-ignore-line
+        if (!$this->layout) { // @phpstan-ignore x
             throw (new Exception('App layout is missing'))
                 ->addSolution('$app->initLayout() must be called first');
         }

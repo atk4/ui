@@ -163,7 +163,7 @@ class View extends AbstractView
             }
         }
 
-        $this->setModel(new Model(new Persistence\Static_($data)), $fields); // @phpstan-ignore-line
+        $this->setModel(new Model(new Persistence\Static_($data)), $fields); // @phpstan-ignore x
         $this->model->getIdField()->type = 'string'; // TODO probably unwanted
 
         return $this->model;
@@ -282,7 +282,7 @@ class View extends AbstractView
     #[\Override]
     public function add($object, $region = null): AbstractView
     {
-        if (!is_object($object)) { // @phpstan-ignore-line
+        if (!is_object($object)) { // @phpstan-ignore x
             // for BC do not throw
             // later consider to accept strictly objects only
             $object = AbstractView::fromSeed($object);
@@ -355,7 +355,7 @@ class View extends AbstractView
      */
     public function set($content)
     {
-        if (!is_string($content) && $content !== null) { // @phpstan-ignore-line
+        if (!is_string($content) && $content !== null) { // @phpstan-ignore x
             throw (new Exception('Not sure what to do with argument'))
                 ->addMoreInfo('this', $this)
                 ->addMoreInfo('arg', $content);

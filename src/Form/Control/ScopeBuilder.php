@@ -525,7 +525,7 @@ class ScopeBuilder extends Form\Control
                 break;
         }
 
-        return $scope; // @phpstan-ignore-line
+        return $scope; // @phpstan-ignore x
     }
 
     /**

@@ -47,11 +47,11 @@ class Loader extends View
     {
         parent::init();
 
-        if (!$this->shim) { // @phpstan-ignore-line
+        if (!$this->shim) { // @phpstan-ignore x
             $this->shim = [View::class, 'class' => ['padded segment'], 'style' => ['min-height' => '5em']];
         }
 
-        if (!$this->cb) { // @phpstan-ignore-line
+        if (!$this->cb) { // @phpstan-ignore x
             $this->cb = Callback::addTo($this);
         }
     }
