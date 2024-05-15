@@ -25,8 +25,8 @@ parameters:
 
         # assign to generic callable property is broken https://github.com/phpstan/phpstan/issues/8964
         -
-            message: '~^Property Atk4\\Data\\Model\\UserAction::\$(callback|enabled) .*Closure<.+ does not accept .*Closure\(.+\.$~'
             path: '*'
+            message: '~^Property Atk4\\Data\\Model\\UserAction::\$(callback|enabled) .*Closure<.+ does not accept .*Closure\(.+\.$~'
             count: 2
 
         # TODO these rules are generated, this ignores should be fixed in the code
