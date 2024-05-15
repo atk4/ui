@@ -57,37 +57,37 @@ parameters:
             path: 'demos/form-control/calendar.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::addAction\(\)\.$~'
-            count: 1
+            count: 3
         -
             path: 'demos/form-control/calendar.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::getJsInstance\(\)\.$~'
-            count: 1
+            count: 3
         -
             path: 'demos/form-control/input2.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onDelete\(\)\.$~'
-            count: 1
+            count: 3
         -
             path: 'demos/form-control/input2.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onUpload\(\)\.$~'
-            count: 1
+            count: 3
         -
             path: 'demos/form-control/multiline.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::addColumn\(\)\.$~'
-            count: 1
+            count: 2
         -
             path: 'demos/form-control/upload.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onDelete\(\)\.$~'
-            count: 1
+            count: 2
         -
             path: 'demos/form-control/tree-item-selector.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onItem\(\)\.$~'
-            count: 1
+            count: 2
         -
             path: 'demos/form-control/upload.php'
             identifier: method.notFound
@@ -97,7 +97,7 @@ parameters:
             path: 'demos/form-control/upload.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onUpload\(\)\.$~'
-            count: 1
+            count: 2
         -
             path: 'demos/form-control/upload.php'
             identifier: method.notFound
@@ -112,7 +112,7 @@ parameters:
             path: 'demos/form/form-section-accordion.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::addSection\(\)\.$~'
-            count: 1
+            count: 2
         -
             path: 'demos/form/form-section-accordion.php'
             identifier: method.notFound
@@ -122,17 +122,17 @@ parameters:
             path: 'demos/form/form-section.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::addColumn\(\)\.$~'
-            count: 1
+            count: 4
         -
             path: 'demos/form/form-section.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::addSection\(\)\.$~'
-            count: 1
+            count: 2
         -
             path: 'demos/form/form-section.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::addTab\(\)\.$~'
-            count: 1
+            count: 2
         -
             path: 'demos/form/form2.php'
             identifier: method.notFound
@@ -142,7 +142,7 @@ parameters:
             path: 'demos/form/form2.php'
             identifier: property.notFound
             message: '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$iconLeft\.$~'
-            count: 1
+            count: 4
         -
             path: 'demos/form/jscondform.php'
             identifier: method.notFound
@@ -152,7 +152,7 @@ parameters:
             path: 'demos/form/jscondform.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::addSection\(\)\.$~'
-            count: 1
+            count: 2
         -
             path: 'demos/init-app.php'
             identifier: property.notFound
@@ -172,7 +172,7 @@ parameters:
             path: 'demos/init-db.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Data\\Reference\\HasOne::addTitle\(\)\.$~'
-            count: 1
+            count: 3
         -
             path: 'demos/interactive/jssortable.php'
             identifier: method.notFound
@@ -247,7 +247,7 @@ parameters:
             path: 'src/Form/Control/Multiline.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'
-            count: 1
+            count: 3
         -
             path: 'src/Js/JsVueService.php'
             identifier: method.notFound
@@ -282,7 +282,7 @@ parameters:
             path: 'src/Panel/Right.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::addButtonAction\(\)\.$~'
-            count: 1
+            count: 2
         -
             path: 'src/Panel/Right.php'
             identifier: method.notFound
@@ -300,10 +300,9 @@ parameters:
             count: 1
         -
             path: 'src/SessionTrait.php'
-            count: 4
             identifier: property.notFound
             message: '~^Access to an undefined property Atk4\\Ui\\Tests\\SessionAbstractMock::\$name\.$~'
-            count: 1
+            count: 4
         -
             path: 'src/Table/Column.php'
             identifier: method.notFound
@@ -323,7 +322,7 @@ parameters:
             path: 'src/Table/Column/FilterModel/TypeDatetime.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Data\\Model::expr\(\)\.$~'
-            count: 1
+            count: 2
         -
             path: 'src/Table/Column/FilterModel/TypeNumber.php'
             identifier: method.notFound
@@ -348,7 +347,7 @@ parameters:
             path: 'src/Tabs.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\View::setPath\(\)\.$~'
-            count: 1
+            count: 2
         -
             path: 'src/Tabs.php'
             identifier: method.notFound
@@ -358,7 +357,7 @@ parameters:
             path: 'src/UserAction/VpExecutor.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::redirect\(\)\.$~'
-            count: 1
+            count: 2
         -
             path: 'src/View.php'
             identifier: method.notFound
