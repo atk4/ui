@@ -788,7 +788,7 @@ class Multiline extends Form\Control
             return $dummyModel->expr('[]', [$v]);
         };
 
-        foreach ($entity->getFields() as $field) {
+        foreach ($entity->getFields() as $field) { // @phpstan-ignore foreach.valueOverwrite (https://github.com/phpstan/phpstan/issues/11012)
             $dummyModel->addExpression($field->shortName, [
                 'expr' => isset($dummyFields[$field->shortName])
                     ? $dummyFields[$field->shortName]->expr
