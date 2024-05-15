@@ -74,7 +74,7 @@ unset($_SERVER);
 unset($_GET);
 unset($_POST);
 unset($_FILES);
-if (isset($_COOKIE)) { // @phpstan-ignore x https://github.com/phpstan/phpstan/issues/9953
+if (isset($_COOKIE)) { // @phpstan-ignore isset.variable (https://github.com/phpstan/phpstan/issues/9953)
     $sessionCookieName = function_exists('session_name') ? session_name() : false;
     foreach (array_keys($_COOKIE) as $k) {
         if ($k !== $sessionCookieName) {

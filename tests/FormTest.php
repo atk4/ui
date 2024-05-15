@@ -228,7 +228,7 @@ class FormTest extends TestCase
             });
         } catch (UnhandledCallbackExceptionError $e) {
             $catchReached = true;
-            self::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore x
+            self::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore method.notFound
 
             $this->expectException(ValidationException::class);
             $this->expectExceptionMessage('Must not be null');
@@ -282,7 +282,7 @@ class FormTest extends TestCase
         $controlClass = get_class(new class() extends Form\Control {
             public static bool $firstCreate = true;
 
-            public function __construct() // @phpstan-ignore x
+            public function __construct() // @phpstan-ignore constructor.missingParentCall
             {
                 if (self::$firstCreate) {
                     self::$firstCreate = false;
@@ -317,7 +317,7 @@ class FormTest extends TestCase
         $controlClass = get_class(new class() extends Form\Control {
             public static bool $firstCreate = true;
 
-            public function __construct() // @phpstan-ignore x
+            public function __construct() // @phpstan-ignore constructor.missingParentCall
             {
                 if (self::$firstCreate) {
                     self::$firstCreate = false;

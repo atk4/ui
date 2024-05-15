@@ -118,7 +118,7 @@ class ViewTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Use View::$entity property instead for entity access');
-        $form->model; // @phpstan-ignore x
+        $form->model; // @phpstan-ignore expr.resultUnused
     }
 
     public function testSetSourceZeroKeyException(): void
@@ -139,7 +139,7 @@ class ViewTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Not sure what to do with argument');
-        $v->set(1); // @phpstan-ignore x
+        $v->set(1); // @phpstan-ignore argument.type
     }
 
     /**

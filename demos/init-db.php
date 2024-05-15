@@ -169,7 +169,7 @@ trait ModelPreventModificationTrait
                 $action->callback = $callbackBackup;
             }
 
-            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedEntity : $model, ...$args); // @phpstan-ignore x
+            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedEntity : $model, ...$args); // @phpstan-ignore argument.type
         };
     }
 
@@ -307,7 +307,7 @@ class ModelWithPrefixedFields extends Model
     /**
      * @param WrappedId|($allowNull is true ? null : never) $value
      */
-    #[\Override] // @phpstan-ignore x
+    #[\Override] // @phpstan-ignore method.childParameterType
     public function setId($value, bool $allowNull = true)
     {
         return parent::setId($value, $allowNull);
@@ -669,7 +669,7 @@ class MultilineItem extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->box, ['type' => 'integer', 'required' => true]);
         $this->addExpression($this->fieldName()->total_sql, [
             'expr' => function (Model /* TODO self is not working because of clone in Multiline */ $row) {
-                return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore x
+                return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore method.notFound
             },
             'type' => 'integer',
         ]);

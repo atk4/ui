@@ -14,15 +14,15 @@ class MinkSession extends BaseSession
 
     public function __construct(BaseSession $session)
     {
-        $driver = new MinkSeleniumDriver($session->getDriver()); // @phpstan-ignore x
+        $driver = new MinkSeleniumDriver($session->getDriver()); // @phpstan-ignore argument.type
 
-        parent::__construct($driver, $session->getSelectorsHandler()); // @phpstan-ignore x
+        parent::__construct($driver, $session->getSelectorsHandler()); // @phpstan-ignore method.deprecated
     }
 
     #[\Override]
     public function getDriver(): MinkSeleniumDriver
     {
-        return parent::getDriver(); // @phpstan-ignore x
+        return parent::getDriver(); // @phpstan-ignore return.type
     }
 
     #[\Override]

@@ -215,7 +215,7 @@ class CallbackTest extends TestCase
 
         $this->expectOutputRegex(self::$regexHtml);
         $app->run();
-        self::assertNull($var); // @phpstan-ignore x
+        self::assertNull($var); // @phpstan-ignore staticMethod.alreadyNarrowedType
     }
 
     public function testVirtualPage(): void

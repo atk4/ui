@@ -22,7 +22,7 @@ class JsIntegrationTest extends TestCase
         $v->renderAll();
 
         self::assertNotEmpty($v->icon);
-        self::assertNotEmpty($v->icon->name); // @phpstan-ignore x
+        self::assertNotEmpty($v->icon->name); // @phpstan-ignore staticMethod.alreadyNarrowedType
         self::assertNotSame($v->name, $v->icon->name);
     }
 
@@ -130,9 +130,9 @@ class JsIntegrationTest extends TestCase
         $v = new View(['name' => 'v']);
         $js = $v->js();
 
-        self::assertNotNull($v->js(true, null)); // @phpstan-ignore x
-        self::assertNull($v->js(true, $js)); // @phpstan-ignore x
-        self::assertNull($v->on('click', $js)); // @phpstan-ignore x
+        self::assertNotNull($v->js(true, null)); // @phpstan-ignore staticMethod.alreadyNarrowedType
+        self::assertNull($v->js(true, $js)); // @phpstan-ignore staticMethod.alreadyNarrowedType
+        self::assertNull($v->on('click', $js)); // @phpstan-ignore staticMethod.impossibleType
     }
 
     public function testChainUnsupportedTypeException(): void

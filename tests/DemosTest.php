@@ -72,7 +72,7 @@ class DemosTest extends TestCase
             $this->setSuperglobalsFromRequest(new Request('GET', 'http://localhost/demos/?APP_CALL_EXIT=0&APP_CATCH_EXCEPTIONS=0&APP_ALWAYS_RUN=0'));
 
             /** @var App $app */
-            $app = 'for-phpstan'; // @phpstan-ignore x
+            $app = 'for-phpstan'; // @phpstan-ignore varTag.nativeType
             require_once static::DEMOS_DIR . '/init-app.php';
             $initVars = array_diff_key(get_defined_vars(), $initVars + ['initVars' => true]);
 
@@ -365,7 +365,7 @@ class DemosTest extends TestCase
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
-            self::assertTrue(true); // @phpstan-ignore x
+            self::assertTrue(true); // @phpstan-ignore staticMethod.alreadyNarrowedType
 
             return;
         }
@@ -407,7 +407,7 @@ class DemosTest extends TestCase
         if (static::class === self::class) {
             if ($expectedExceptionMessage !== null) {
                 if (str_contains($path, '=m2_cb&')) {
-                    self::assertTrue(true); // @phpstan-ignore x
+                    self::assertTrue(true); // @phpstan-ignore staticMethod.alreadyNarrowedType
 
                     return;
                 }
@@ -445,7 +445,7 @@ class DemosTest extends TestCase
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
-            self::assertTrue(true); // @phpstan-ignore x
+            self::assertTrue(true); // @phpstan-ignore staticMethod.alreadyNarrowedType
 
             return;
         }

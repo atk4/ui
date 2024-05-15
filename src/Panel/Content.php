@@ -37,7 +37,7 @@ class Content extends View implements LoadableContent
     #[\Override]
     public function setCb(Callback $cb): void
     {
-        $this->cb = $this->add($cb); // @phpstan-ignore x
+        $this->cb = $this->add($cb); // @phpstan-ignore assign.propertyType
     }
 
     /**
