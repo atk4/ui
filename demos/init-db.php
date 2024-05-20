@@ -471,9 +471,9 @@ class Percent extends Field
  * @property string $name             @Atk4\Field()
  * @property string $type             @Atk4\Field()
  * @property bool   $is_folder        @Atk4\Field()
- * @property File   $subFolder        @Atk4\RefMany()
- * @property int    $count            @Atk4\Field()
  * @property Folder $parent_folder_id @Atk4\RefOne()
+ * @property File   $subFolder        @Atk4\RefMany()
+ * @property int    $subCount         @Atk4\Field()
  */
 class File extends ModelWithPrefixedFields
 {
@@ -490,16 +490,16 @@ class File extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->type, ['caption' => 'MIME Type']);
         $this->addField($this->fieldName()->is_folder, ['type' => 'boolean']);
 
-        $this->hasMany($this->fieldName()->subFolder, [
-            'model' => [self::class],
-            'theirField' => self::hinting()->fieldName()->parent_folder_id,
-        ])
-            ->addField($this->fieldName()->count, ['aggregate' => 'count', 'field' => $this->getPersistence()->expr($this, '*')]);
-
         $this->hasOne($this->fieldName()->parent_folder_id, [
             'model' => [Folder::class],
         ])
             ->addTitle();
+
+        $this->hasMany($this->fieldName()->subFolder, [
+            'model' => [self::class],
+            'theirField' => self::hinting()->fieldName()->parent_folder_id,
+        ])
+            ->addField($this->fieldName()->subCount, ['aggregate' => 'count', 'field' => $this->getPersistence()->expr($this, '*')]);
     }
 
     public function importFromFilesystem(string $path, ?bool $isSub = null): void
@@ -512,9 +512,13 @@ class File extends ModelWithPrefixedFields
             }
 
             $this->atomic(function () use ($path) {
-                foreach ($this as $entity) {
-                    $entity->delete();
-                }
+                do {
+                    $empty = true;
+                    foreach ($this->createIteratorBy($this->fieldName()->subFolder . '/#', 0) as $entity) {
+                        $entity->delete();
+                        $empty = false;
+                    }
+                } while (!$empty);
 
                 $path = __DIR__ . '/../' . $path;
 
