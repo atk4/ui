@@ -6,7 +6,7 @@ namespace Atk4\Ui\Behat;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
-use Doctrine\DBAL\Types\Type;
+use Atk4\Data\Schema\Migrator;
 
 trait RwDemosContextTrait
 {
@@ -48,30 +48,12 @@ trait RwDemosContextTrait
         return $db;
     }
 
-    protected function createDatabaseModelFromTable(string $table): Model
-    {
-        $db = $this->getDemosDb();
-        $schemaManager = $db->getConnection()->createSchemaManager();
-        $tableColumns = $schemaManager->listTableColumns($table);
-
-        $model = new Model($db, ['table' => $table]);
-        $model->removeField('id');
-        foreach ($tableColumns as $tableColumn) {
-            $model->addField($tableColumn->getName(), [
-                'type' => Type::getTypeRegistry()->lookupName($tableColumn->getType()), // TODO simplify once https://github.com/doctrine/dbal/pull/6130 is merged
-                'nullable' => !$tableColumn->getNotnull(),
-            ]);
-        }
-        $model->idField = array_key_first($model->getFields());
-
-        return $model;
-    }
-
     protected function createDatabaseModels(): void
     {
         $modelByTable = [];
         foreach ($this->databaseBackupTables as $table) {
-            $modelByTable[$table] = $this->createDatabaseModelFromTable($table);
+            $modelByTable[$table] = (new Migrator($this->getDemosDb()))
+                ->introspectTableToModel($table);
         }
 
         $this->databaseBackupModels = $modelByTable;
