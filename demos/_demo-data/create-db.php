@@ -9,7 +9,6 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Data\Schema\Migrator;
-use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 
 require_once __DIR__ . '/../init-autoloader.php';
 
@@ -79,11 +78,6 @@ class ImportModelWithPrefixedFields extends Model
         }, $rowsMulti));
     }
 }
-
-// TODO impl. typed bind variable in atk4/data
-$fixDatetimeTypeForPostgresqlFx = static function (string $type) use ($db): string {
-    return $db->getDatabasePlatform() instanceof PostgreSQLPlatform ? 'string' : $type;
-};
 
 $model = new ImportModelWithPrefixedFields($db, ['table' => 'client']);
 $model->addField('name', ['type' => 'string']);
@@ -1105,11 +1099,11 @@ $model->addField('project_expenses_est', ['type' => 'float']);
 $model->addField('project_expenses', ['type' => 'float']);
 $model->addField('project_mgmt_cost_pct', ['type' => 'float']);
 $model->addField('project_qa_cost_pct', ['type' => 'float']);
-$model->addField('start_date', ['type' => $fixDatetimeTypeForPostgresqlFx('date')]);
-$model->addField('finish_date', ['type' => $fixDatetimeTypeForPostgresqlFx('date')]);
-$model->addField('finish_time', ['type' => $fixDatetimeTypeForPostgresqlFx('time')]);
-$model->addField('created', ['type' => $fixDatetimeTypeForPostgresqlFx('datetime')]);
-$model->addField('updated', ['type' => $fixDatetimeTypeForPostgresqlFx('datetime')]);
+$model->addField('start_date', ['type' => 'date']);
+$model->addField('finish_date', ['type' => 'date']);
+$model->addField('finish_time', ['type' => 'time']);
+$model->addField('created', ['type' => 'datetime']);
+$model->addField('updated', ['type' => 'datetime']);
 (new Migrator($model))->create();
 $data = [
     ['id' => 1, 'project_name' => 'Agile DSQL', 'project_code' => 'at01', 'description' => 'DSQL is a composable SQL query builder. You can write multi-vendor queries in PHP profiting from better security, clean syntax and avoid human errors.', 'client_name' => 'Agile Toolkit', 'client_address' => 'Some Street,' . "\n" . 'Garden City' . "\n" . 'UK', 'client_country_iso' => 'GB', 'is_commercial' => 0, 'currency' => 'GBP', 'is_completed' => 1, 'project_budget' => 7000, 'project_invoiced' => 0, 'project_paid' => 0, 'project_hour_cost' => 0, 'project_hours_est' => 150, 'project_hours_reported' => 125, 'project_expenses_est' => 50, 'project_expenses' => 0, 'project_mgmt_cost_pct' => 0.1, 'project_qa_cost_pct' => 0.2, 'start_date' => '2016-01-26', 'finish_date' => '2016-06-23', 'finish_time' => '12:50:00', 'created' => '2017-04-06 10:34:34', 'updated' => '2017-04-06 10:35:04'],
@@ -1167,16 +1161,16 @@ $model->import([
 
 $model = new ImportModelWithPrefixedFields($db, ['table' => 'multiline_item']);
 $model->addField('item', ['type' => 'string']);
-$model->addField('inv_date', ['type' => $fixDatetimeTypeForPostgresqlFx('date')]);
-$model->addField('inv_time', ['type' => $fixDatetimeTypeForPostgresqlFx('time')]);
+$model->addField('inv_date', ['type' => 'date']);
+$model->addField('inv_time', ['type' => 'time']);
 $model->addField('country_id', ['type' => 'integer']);
 $model->addField('qty', ['type' => 'integer']);
 $model->addField('box', ['type' => 'integer']);
 (new Migrator($model))->create();
 (new Migrator($model))->createForeignKey([$model->getField('atk_fp_multiline_item__country_id'), $countryIdField]);
 $model->import([
-    ['id' => 1, 'item' => 'Chocolate', 'inv_date' => '2020-02-20', 'inv_time' => '7:20:00', 'country_id' => 80, 'qty' => 7, 'box' => 5],
-    ['id' => 2, 'item' => 'DAP delivery', 'inv_date' => '2020-02-01', 'inv_time' => '8:33:00', 'country_id' => 223, 'qty' => 2, 'box' => 100],
+    ['id' => 1, 'item' => 'Chocolate', 'inv_date' => '2020-02-20', 'inv_time' => '7:20', 'country_id' => 80, 'qty' => 7, 'box' => 5],
+    ['id' => 2, 'item' => 'DAP delivery', 'inv_date' => '2020-02-01', 'inv_time' => '8:33', 'country_id' => 223, 'qty' => 2, 'box' => 100],
 ]);
 
 $model = new ImportModelWithPrefixedFields($db, ['table' => 'multiline_delivery']);
