@@ -167,7 +167,7 @@ class Upload extends Input
                 }
 
                 $jsRes = $fx(...$postFiles);
-                if ($jsRes !== null) { // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9388
+                if ($jsRes !== null) { // @phpstan-ignore notIdentical.alwaysTrue (https://github.com/phpstan/phpstan/issues/9388)
                     $this->addJsAction($jsRes);
                 }
 
@@ -195,7 +195,7 @@ class Upload extends Input
                 $fileId = $this->getApp()->getRequestPostParam('fUploadId');
 
                 $jsRes = $fx($fileId);
-                if ($jsRes !== null) { // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9388
+                if ($jsRes !== null) { // @phpstan-ignore notIdentical.alwaysTrue (https://github.com/phpstan/phpstan/issues/9388)
                     $this->addJsAction($jsRes);
                 }
 

@@ -140,7 +140,7 @@ class HtmlTemplate
     protected function _setOrAppend($tag, ?string $value = null, bool $encodeHtml = true, bool $append = false, bool $throwIfNotFound = true): void
     {
         // $tag passed as associative array [tag => value]
-        if (is_array($tag) && $value === null) { // @phpstan-ignore-line
+        if (is_array($tag) && $value === null) { // @phpstan-ignore identical.alwaysFalse, booleanAnd.alwaysFalse
             if ($throwIfNotFound) {
                 foreach ($tag as $k => $v) {
                     if (!$this->_hasTag($k)) {

@@ -6,10 +6,10 @@
 # Views
 
 Agile UI is a component framework, which follows a software patterns known as
-`Render Tree` and `Two pass HTML rendering`.
+"render tree" and "two pass HTML rendering".
 
 :::{php:class} View
-A View is a most fundamental object that can take part in the Render tree. All
+A View is a most fundamental object that can take part in the render tree. All
 of the other components descend from the `View` class.
 :::
 
@@ -28,12 +28,12 @@ The above code will produce the following HTML block:
 </div>
 ```
 
-All of the views combined form a `Render Tree`. In order to get the HTML output
-from all the `Views` in `Render Tree` you need to execute `render()` for the top-most
+All of the views combined form a "render tree". In order to get the HTML output
+from all the render tree `View`s you need to execute `renderToHtml()` for the top-most
 leaf:
 
 ```
-echo $v->render();
+echo $v->renderToHtml();
 ```
 
 Each of the views will automatically render all of the child views.
@@ -307,7 +307,7 @@ $button = Button::addTo($app, ['icon' => new MyAwesomeIcon('book')]);
 
 ## Rendering of a Tree
 
-:::{php:method} render()
+:::{php:method} renderToHtml()
 Perform render of this View and all the child Views recursively returning a valid HTML string.
 :::
 
@@ -317,8 +317,8 @@ Any view has the ability to render itself. Once executed, render will perform th
 - call recursiveRender() to recursively render sub-elements.
 - return JS code with on-dom-ready instructions along with HTML code of a current view.
 
-You must not override render() in your objects. If you are integrating Agile UI into your
-framework you shouldn't even use `render()`, but instead use `getHtml` and `getJs`.
+You should not override `renderToHtml()` in your objects. If you are integrating Agile UI into your
+framework you shouldn't even use `renderToHtml()`, but instead use `getHtml` and `getJs`.
 
 :::{php:method} getHtml()
 Returns HTML for this View as well as all the child views.
@@ -451,7 +451,7 @@ Agile UI will maintain unique ID for all the elements. The tag is set through 'n
 
 ```
 $b = new \Atk4\Ui\Button(['name' => 'my-button3']);
-echo $b->render();
+echo $b->renderToHtml();
 ```
 
 Outputs:
@@ -460,7 +460,7 @@ Outputs:
 <div class="ui button" id="my-button3">Button</div>
 ```
 
-If ID is not specified it will be set automatically. The top-most element of a Render Tree will
+If ID is not specified it will be set automatically. The top-most element of a render tree will
 use `id=atk` and all of the child elements will create a derived ID based on it's UI role.
 
 ```yaml

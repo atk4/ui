@@ -86,7 +86,7 @@ class FormTest extends TestCase
             }
         });
 
-        $form->render();
+        $form->renderAll();
         $res = AppFormTestMock::assertInstanceOf($form->getApp())->output;
 
         if ($checkExpectedErrorsFx !== null) {
@@ -228,7 +228,7 @@ class FormTest extends TestCase
             });
         } catch (UnhandledCallbackExceptionError $e) {
             $catchReached = true;
-            self::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore-line
+            self::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore method.notFound
 
             $this->expectException(ValidationException::class);
             $this->expectExceptionMessage('Must not be null');
@@ -282,7 +282,7 @@ class FormTest extends TestCase
         $controlClass = get_class(new class() extends Form\Control {
             public static bool $firstCreate = true;
 
-            public function __construct() // @phpstan-ignore-line
+            public function __construct() // @phpstan-ignore constructor.missingParentCall
             {
                 if (self::$firstCreate) {
                     self::$firstCreate = false;
@@ -317,7 +317,7 @@ class FormTest extends TestCase
         $controlClass = get_class(new class() extends Form\Control {
             public static bool $firstCreate = true;
 
-            public function __construct() // @phpstan-ignore-line
+            public function __construct() // @phpstan-ignore constructor.missingParentCall
             {
                 if (self::$firstCreate) {
                     self::$firstCreate = false;
@@ -344,24 +344,24 @@ class FormTest extends TestCase
         $input->readOnly = true;
         $input->setApp($this->createApp());
         $input->shortName = 'i';
-        self::assertStringContainsString(' readonly="readonly"', $input->render());
-        self::assertStringNotContainsString('disabled', $input->render());
+        self::assertStringContainsString(' readonly="readonly"', $input->renderToHtml());
+        self::assertStringNotContainsString('disabled', $input->renderToHtml());
 
         $input = new Form\Control\Line();
         $input->disabled = true;
         $input->readOnly = true;
         $input->setApp($this->createApp());
         $input->shortName = 'i';
-        self::assertStringContainsString(' disabled="disabled"', $input->render());
-        self::assertStringNotContainsString('readonly', $input->render());
+        self::assertStringContainsString(' disabled="disabled"', $input->renderToHtml());
+        self::assertStringNotContainsString('readonly', $input->renderToHtml());
 
         $input = new Form\Control\Hidden();
         $input->disabled = true;
         $input->readOnly = true;
         $input->setApp($this->createApp());
         $input->shortName = 'i';
-        self::assertStringNotContainsString('disabled', $input->render());
-        self::assertStringNotContainsString('readonly', $input->render());
+        self::assertStringNotContainsString('disabled', $input->renderToHtml());
+        self::assertStringNotContainsString('readonly', $input->renderToHtml());
     }
 
     public function testCheckboxWithNonBooleanException(): void
@@ -377,7 +377,7 @@ class FormTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Checkbox form control requires field with boolean type');
-        $input->render();
+        $input->renderAll();
     }
 
     public function testUploadNoUploadCallbackException(): void
@@ -396,7 +396,7 @@ class FormTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing onUpload callback');
-        $input->render();
+        $input->renderAll();
     }
 
     public function testUploadNoDeleteCallbackException(): void
@@ -415,7 +415,7 @@ class FormTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing onDelete callback');
-        $input->render();
+        $input->renderAll();
     }
 }
 

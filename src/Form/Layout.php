@@ -163,7 +163,7 @@ class Layout extends AbstractLayout
 
             // anything but controls or explicitly defined controls get inserted directly
             if (!$element instanceof Control || !$element->layoutWrap) {
-                $this->template->dangerouslyAppendHtml('Content', $element->getHtml()); // @phpstan-ignore-line
+                $this->template->dangerouslyAppendHtml('Content', $element->getHtml()); // @phpstan-ignore method.notFound
 
                 continue;
             }
@@ -227,7 +227,7 @@ class Layout extends AbstractLayout
 
         // collect JS from everywhere
         foreach ($this->elements as $view) {
-            foreach ($view->_jsActions as $when => $actions) { // @phpstan-ignore-line
+            foreach ($view->_jsActions as $when => $actions) { // @phpstan-ignore property.notFound
                 foreach ($actions as $action) {
                     $this->_jsActions[$when][] = $action;
                 }

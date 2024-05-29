@@ -450,7 +450,7 @@ class Multiline extends Form\Control
             'cellProps' => $this->getSuiTableCellProps($field),
             'caption' => $field->getCaption(),
             'default' => $this->getApp()->uiPersistence->typecastSaveField($field, $field->default),
-            'isExpr' => @isset($field->expr), // @phpstan-ignore-line
+            'isExpr' => @isset($field->expr), // @phpstan-ignore property.notFound
             'isEditable' => $field->isEditable(),
             'isHidden' => $field->isHidden(),
             'isVisible' => $field->isVisible(),
@@ -465,7 +465,7 @@ class Multiline extends Form\Control
     {
         $props = [];
 
-        if ($field->type === 'integer' || $field->type === 'atk4_money') {
+        if (in_array($field->type, ['smallint', 'integer', 'bigint', 'float', 'atk4_money'], true)) {
             $props['text-align'] = 'right';
         }
 
@@ -685,9 +685,9 @@ class Multiline extends Form\Control
                 // no break - expression above always terminate
             case 'on-change':
                 $rowsRaw = $this->getApp()->decodeJson($this->getApp()->getRequestPostParam('rows'));
-                $response = ($this->onChangeFunction)($this->typeCastLoadValues($rowsRaw), $this->form);
-                $this->renderCallback->terminateAjax($this->renderCallback->getAjaxec($response));
-                // TODO JsCallback::terminateAjax() should return never
+                $this->renderCallback->set(function () use ($rowsRaw) {
+                    return ($this->onChangeFunction)($this->typeCastLoadValues($rowsRaw), $this->form);
+                });
         }
     }
 
@@ -788,7 +788,7 @@ class Multiline extends Form\Control
             return $dummyModel->expr('[]', [$v]);
         };
 
-        foreach ($entity->getFields() as $field) {
+        foreach ($entity->getFields() as $field) { // @phpstan-ignore foreach.valueOverwrite (https://github.com/phpstan/phpstan/issues/11012)
             $dummyModel->addExpression($field->shortName, [
                 'expr' => isset($dummyFields[$field->shortName])
                     ? $dummyFields[$field->shortName]->expr
@@ -850,13 +850,13 @@ class Multiline extends Form\Control
     /**
      * Return a value according to field used in expression and the expression type.
      * If field used in expression is null, the default value is returned.
-     *
-     * @return string
      */
-    private function getValueForExpression(Field $exprField, string $fieldName, Model $entity)
+    private function getValueForExpression(Field $exprField, string $fieldName, Model $entity): string
     {
         switch ($exprField->type) {
+            case 'smallint':
             case 'integer':
+            case 'bigint':
             case 'float':
             case 'atk4_money':
                 $value = (string) ($entity->get($fieldName) ?? 0);

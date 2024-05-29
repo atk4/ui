@@ -93,7 +93,7 @@ class JsCallback extends Callback
 
             $ajaxec = $this->getAjaxec($response);
 
-            $this->terminateAjax($ajaxec);
+            $this->terminateAjaxIfCanTerminate($ajaxec);
         });
 
         return $this;
@@ -102,17 +102,13 @@ class JsCallback extends Callback
     /**
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
-     *
-     * @param ($success is true ? null : string) $msg     General message, typically won't be displayed
-     * @param bool                               $success Was request successful or not
      */
-    public function terminateAjax(JsBlock $ajaxec, $msg = null, bool $success = true): void
+    protected function terminateAjaxIfCanTerminate(JsBlock $ajaxec): void
     {
-        $data = ['success' => $success];
-        if (!$success) {
-            $data['message'] = $msg;
-        }
-        $data['atkjs'] = $ajaxec->jsRender();
+        $data = [
+            'success' => true,
+            'atkjs' => $ajaxec->jsRender(),
+        ];
 
         if ($this->canTerminate()) {
             $this->getApp()->terminateJson($data);

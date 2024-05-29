@@ -47,11 +47,11 @@ class Loader extends View
     {
         parent::init();
 
-        if (!$this->shim) { // @phpstan-ignore-line
+        if (!$this->shim) { // @phpstan-ignore booleanNot.alwaysFalse
             $this->shim = [View::class, 'class' => ['padded segment'], 'style' => ['min-height' => '5em']];
         }
 
-        if (!$this->cb) { // @phpstan-ignore-line
+        if (!$this->cb) { // @phpstan-ignore booleanNot.alwaysFalse
             $this->cb = Callback::addTo($this);
         }
     }
@@ -85,7 +85,8 @@ class Loader extends View
 
         $this->cb->set(function () use ($fx) {
             $fx($this);
-            $this->cb->terminateJson($this->getShimIfOwner());
+
+            $this->cb->terminateJsonIfCanTerminate($this->getShimIfOwner());
         });
 
         return $this;

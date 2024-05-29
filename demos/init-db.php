@@ -65,7 +65,7 @@ class WrappedIdType extends DbalType
     #[\Override]
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
-        return DbalType::getType('integer')->getSQLDeclaration($fieldDeclaration, $platform);
+        return DbalType::getType('bigint')->getSQLDeclaration($fieldDeclaration, $platform);
     }
 
     #[\Override]
@@ -75,7 +75,7 @@ class WrappedIdType extends DbalType
             return null;
         }
 
-        return DbalType::getType('integer')->convertToDatabaseValue($value->getId(), $platform);
+        return DbalType::getType('bigint')->convertToDatabaseValue($value->getId(), $platform);
     }
 
     #[\Override]
@@ -85,7 +85,7 @@ class WrappedIdType extends DbalType
             return null;
         }
 
-        return new WrappedId(DbalType::getType('integer')->convertToPHPValue($value, $platform));
+        return new WrappedId((int) DbalType::getType('bigint')->convertToPHPValue($value, $platform)); // once DBAL 3.x support is dropped, the explicit cast should no longer be needed
     }
 
     #[\Override]
@@ -169,7 +169,7 @@ trait ModelPreventModificationTrait
                 $action->callback = $callbackBackup;
             }
 
-            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedEntity : $model, ...$args); // @phpstan-ignore-line
+            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedEntity : $model, ...$args); // @phpstan-ignore argument.type
         };
     }
 
@@ -307,7 +307,7 @@ class ModelWithPrefixedFields extends Model
     /**
      * @param WrappedId|($allowNull is true ? null : never) $value
      */
-    #[\Override] // @phpstan-ignore-line
+    #[\Override] // @phpstan-ignore method.childParameterType
     public function setId($value, bool $allowNull = true)
     {
         return parent::setId($value, $allowNull);
@@ -471,9 +471,9 @@ class Percent extends Field
  * @property string $name             @Atk4\Field()
  * @property string $type             @Atk4\Field()
  * @property bool   $is_folder        @Atk4\Field()
- * @property File   $SubFolder        @Atk4\RefMany()
- * @property int    $count            @Atk4\Field()
  * @property Folder $parent_folder_id @Atk4\RefOne()
+ * @property File   $subFolder        @Atk4\RefMany()
+ * @property int    $subCount         @Atk4\Field()
  */
 class File extends ModelWithPrefixedFields
 {
@@ -490,16 +490,16 @@ class File extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->type, ['caption' => 'MIME Type']);
         $this->addField($this->fieldName()->is_folder, ['type' => 'boolean']);
 
-        $this->hasMany($this->fieldName()->SubFolder, [
-            'model' => [self::class],
-            'theirField' => self::hinting()->fieldName()->parent_folder_id,
-        ])
-            ->addField($this->fieldName()->count, ['aggregate' => 'count', 'field' => $this->getPersistence()->expr($this, '*')]);
-
         $this->hasOne($this->fieldName()->parent_folder_id, [
             'model' => [Folder::class],
         ])
             ->addTitle();
+
+        $this->hasMany($this->fieldName()->subFolder, [
+            'model' => [self::class],
+            'theirField' => self::hinting()->fieldName()->parent_folder_id,
+        ])
+            ->addField($this->fieldName()->subCount, ['aggregate' => 'count', 'field' => $this->getPersistence()->expr($this, '*')]);
     }
 
     public function importFromFilesystem(string $path, ?bool $isSub = null): void
@@ -512,9 +512,13 @@ class File extends ModelWithPrefixedFields
             }
 
             $this->atomic(function () use ($path) {
-                foreach ($this as $entity) {
-                    $entity->delete();
-                }
+                do {
+                    $empty = true;
+                    foreach ($this->createIteratorBy($this->fieldName()->subFolder . '/#', 0) as $entity) {
+                        $entity->delete();
+                        $empty = false;
+                    }
+                } while (!$empty);
 
                 $path = __DIR__ . '/../' . $path;
 
@@ -538,7 +542,7 @@ class File extends ModelWithPrefixedFields
             ]);
 
             if ($fileinfo->isDir()) {
-                $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
+                $entity->subFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
             }
 
             // skip full/slow import for Behat CI testing
@@ -562,8 +566,8 @@ class Folder extends File
 
 /**
  * @property string      $name          @Atk4\Field()
- * @property SubCategory $SubCategories @Atk4\RefMany()
- * @property Product     $Products      @Atk4\RefMany()
+ * @property SubCategory $subCategories @Atk4\RefMany()
+ * @property Product     $products      @Atk4\RefMany()
  */
 class Category extends ModelWithPrefixedFields
 {
@@ -576,11 +580,11 @@ class Category extends ModelWithPrefixedFields
 
         $this->addField($this->fieldName()->name);
 
-        $this->hasMany($this->fieldName()->SubCategories, [
+        $this->hasMany($this->fieldName()->subCategories, [
             'model' => [SubCategory::class],
             'theirField' => SubCategory::hinting()->fieldName()->product_category_id,
         ]);
-        $this->hasMany($this->fieldName()->Products, [
+        $this->hasMany($this->fieldName()->products, [
             'model' => [Product::class],
             'theirField' => Product::hinting()->fieldName()->product_category_id,
         ]);
@@ -590,7 +594,7 @@ class Category extends ModelWithPrefixedFields
 /**
  * @property string   $name                @Atk4\Field()
  * @property Category $product_category_id @Atk4\RefOne()
- * @property Product  $Products            @Atk4\RefMany()
+ * @property Product  $products            @Atk4\RefMany()
  */
 class SubCategory extends ModelWithPrefixedFields
 {
@@ -606,7 +610,7 @@ class SubCategory extends ModelWithPrefixedFields
         $this->hasOne($this->fieldName()->product_category_id, [
             'model' => [Category::class],
         ]);
-        $this->hasMany($this->fieldName()->Products, [
+        $this->hasMany($this->fieldName()->products, [
             'model' => [Product::class],
             'theirField' => Product::hinting()->fieldName()->product_sub_category_id,
         ]);
@@ -669,15 +673,15 @@ class MultilineItem extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->box, ['type' => 'integer', 'required' => true]);
         $this->addExpression($this->fieldName()->total_sql, [
             'expr' => function (Model /* TODO self is not working because of clone in Multiline */ $row) {
-                return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore-line
+                return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore method.notFound
             },
-            'type' => 'integer',
+            'type' => 'bigint',
         ]);
         $this->addCalculatedField($this->fieldName()->total_php, [
             'expr' => static function (self $row) {
                 return $row->qty * $row->box;
             },
-            'type' => 'integer',
+            'type' => 'bigint',
         ]);
     }
 }

@@ -96,7 +96,10 @@ $model->addField('nicename', ['type' => 'string']);
 $model->addField('iso3', ['type' => 'string']); // should be CHAR(3) NOT NULL
 $model->addField('numcode', ['type' => 'smallint']);
 $model->addField('phonecode', ['type' => 'integer']);
+$countryIdField = $model->getField('atk_fp_country__id');
 (new Migrator($model))->create();
+(new Migrator($model))->createIndex([$model->getField('atk_fp_country__iso')], true);
+(new Migrator($model))->createIndex([$model->getField('atk_fp_country__iso3')], true);
 $model->import([
     ['id' => 1, 'iso' => 'AF', 'name' => 'AFGHANISTAN', 'nicename' => 'Afghanistan', 'iso3' => 'AFG', 'numcode' => 4, 'phonecode' => 93],
     ['id' => 2, 'iso' => 'AL', 'name' => 'ALBANIA', 'nicename' => 'Albania', 'iso3' => 'ALB', 'numcode' => 8, 'phonecode' => 355],
@@ -337,19 +340,18 @@ $model->import([
     ['id' => 238, 'iso' => 'ZM', 'name' => 'ZAMBIA', 'nicename' => 'Zambia', 'iso3' => 'ZMB', 'numcode' => 894, 'phonecode' => 260],
     ['id' => 239, 'iso' => 'ZW', 'name' => 'ZIMBABWE', 'nicename' => 'Zimbabwe', 'iso3' => 'ZWE', 'numcode' => 716, 'phonecode' => 263],
     ['id' => 240, 'iso' => 'RS', 'name' => 'SERBIA', 'nicename' => 'Serbia', 'iso3' => 'SRB', 'numcode' => 688, 'phonecode' => 381],
-    ['id' => 241, 'iso' => 'AP', 'name' => 'ASIA PACIFIC REGION', 'nicename' => 'Asia / Pacific Region', 'iso3' => '---', 'numcode' => -1, 'phonecode' => -1],
-    ['id' => 242, 'iso' => 'ME', 'name' => 'MONTENEGRO', 'nicename' => 'Montenegro', 'iso3' => 'MNE', 'numcode' => 499, 'phonecode' => 382],
-    ['id' => 243, 'iso' => 'AX', 'name' => 'ALAND ISLANDS', 'nicename' => 'Aland Islands', 'iso3' => 'ALA', 'numcode' => 248, 'phonecode' => 358],
-    ['id' => 244, 'iso' => 'BQ', 'name' => 'BONAIRE, SINT EUSTATIUS AND SABA', 'nicename' => 'Bonaire, Sint Eustatius and Saba', 'iso3' => 'BES', 'numcode' => 535, 'phonecode' => 599],
-    ['id' => 245, 'iso' => 'CW', 'name' => 'CURACAO', 'nicename' => 'Curacao', 'iso3' => 'CUW', 'numcode' => 531, 'phonecode' => 599],
-    ['id' => 246, 'iso' => 'GG', 'name' => 'GUERNSEY', 'nicename' => 'Guernsey', 'iso3' => 'GGY', 'numcode' => 831, 'phonecode' => 44],
-    ['id' => 247, 'iso' => 'IM', 'name' => 'ISLE OF MAN', 'nicename' => 'Isle of Man', 'iso3' => 'IMN', 'numcode' => 833, 'phonecode' => 44],
-    ['id' => 248, 'iso' => 'JE', 'name' => 'JERSEY', 'nicename' => 'Jersey', 'iso3' => 'JEY', 'numcode' => 832, 'phonecode' => 44],
-    ['id' => 249, 'iso' => 'XK', 'name' => 'KOSOVO', 'nicename' => 'Kosovo', 'iso3' => '---', 'numcode' => -1, 'phonecode' => 381],
-    ['id' => 250, 'iso' => 'BL', 'name' => 'SAINT BARTHELEMY', 'nicename' => 'Saint Barthelemy', 'iso3' => 'BLM', 'numcode' => 652, 'phonecode' => 590],
-    ['id' => 251, 'iso' => 'MF', 'name' => 'SAINT MARTIN', 'nicename' => 'Saint Martin', 'iso3' => 'MAF', 'numcode' => 663, 'phonecode' => 590],
-    ['id' => 252, 'iso' => 'SX', 'name' => 'SINT MAARTEN', 'nicename' => 'Sint Maarten', 'iso3' => 'SXM', 'numcode' => 534, 'phonecode' => 1],
-    ['id' => 253, 'iso' => 'SS', 'name' => 'SOUTH SUDAN', 'nicename' => 'South Sudan', 'iso3' => 'SSD', 'numcode' => 728, 'phonecode' => 211],
+    ['id' => 241, 'iso' => 'ME', 'name' => 'MONTENEGRO', 'nicename' => 'Montenegro', 'iso3' => 'MNE', 'numcode' => 499, 'phonecode' => 382],
+    ['id' => 242, 'iso' => 'AX', 'name' => 'ALAND ISLANDS', 'nicename' => 'Aland Islands', 'iso3' => 'ALA', 'numcode' => 248, 'phonecode' => 358],
+    ['id' => 243, 'iso' => 'BQ', 'name' => 'BONAIRE, SINT EUSTATIUS AND SABA', 'nicename' => 'Bonaire, Sint Eustatius and Saba', 'iso3' => 'BES', 'numcode' => 535, 'phonecode' => 599],
+    ['id' => 244, 'iso' => 'CW', 'name' => 'CURACAO', 'nicename' => 'Curacao', 'iso3' => 'CUW', 'numcode' => 531, 'phonecode' => 599],
+    ['id' => 245, 'iso' => 'GG', 'name' => 'GUERNSEY', 'nicename' => 'Guernsey', 'iso3' => 'GGY', 'numcode' => 831, 'phonecode' => 44],
+    ['id' => 246, 'iso' => 'IM', 'name' => 'ISLE OF MAN', 'nicename' => 'Isle of Man', 'iso3' => 'IMN', 'numcode' => 833, 'phonecode' => 44],
+    ['id' => 247, 'iso' => 'JE', 'name' => 'JERSEY', 'nicename' => 'Jersey', 'iso3' => 'JEY', 'numcode' => 832, 'phonecode' => 44],
+    ['id' => 248, 'iso' => 'XK', 'name' => 'KOSOVO', 'nicename' => 'Kosovo', 'iso3' => 'XKK', 'numcode' => -1, 'phonecode' => 381],
+    ['id' => 249, 'iso' => 'BL', 'name' => 'SAINT BARTHELEMY', 'nicename' => 'Saint Barthelemy', 'iso3' => 'BLM', 'numcode' => 652, 'phonecode' => 590],
+    ['id' => 250, 'iso' => 'MF', 'name' => 'SAINT MARTIN', 'nicename' => 'Saint Martin', 'iso3' => 'MAF', 'numcode' => 663, 'phonecode' => 590],
+    ['id' => 251, 'iso' => 'SX', 'name' => 'SINT MAARTEN', 'nicename' => 'Sint Maarten', 'iso3' => 'SXM', 'numcode' => 534, 'phonecode' => 1],
+    ['id' => 252, 'iso' => 'SS', 'name' => 'SOUTH SUDAN', 'nicename' => 'South Sudan', 'iso3' => 'SSD', 'numcode' => 728, 'phonecode' => 211],
 ]);
 
 $model = new ImportModelWithPrefixedFields($db, ['table' => 'file']);
@@ -357,8 +359,8 @@ $model->addField('name', ['type' => 'string']);
 $model->addField('type', ['type' => 'string']);
 $model->addField('is_folder', ['type' => 'boolean']);
 $model->addField('parent_folder_id', ['type' => 'bigint']);
-// KEY `fk_file_file_idx` (`parent_folder_id`)
 (new Migrator($model))->create();
+(new Migrator($model))->createForeignKey([$model->getField('atk_fp_file__parent_folder_id'), $model->getField('atk_fp_file__id')]);
 $model->import([
     ['id' => 1, 'name' => '.gitattributes', 'type' => 'gitattributes', 'is_folder' => false, 'parent_folder_id' => null],
     ['id' => 2, 'name' => '.github', 'type' => 'github', 'is_folder' => true, 'parent_folder_id' => null],
@@ -1113,6 +1115,7 @@ $model->import($data);
 
 $model = new ImportModelWithPrefixedFields($db, ['table' => 'product_category']);
 $model->addField('name', ['type' => 'string']);
+$productCategoryIdField = $model->getField('atk_fp_product_category__id');
 (new Migrator($model))->create();
 $model->import([
     ['id' => 1, 'name' => 'Condiments and Gravies'],
@@ -1123,7 +1126,9 @@ $model->import([
 $model = new ImportModelWithPrefixedFields($db, ['table' => 'product_sub_category']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('product_category_id', ['type' => 'bigint']);
+$productSubcategoryIdField = $model->getField('atk_fp_6f3c91cf51e02fd5__id');
 (new Migrator($model))->create();
+(new Migrator($model))->createForeignKey([$model->getField('atk_fp_6f3c91cf51e02fd5__product_category_id'), $productCategoryIdField]);
 $model->import([
     ['id' => 1, 'name' => 'Gravie', 'product_category_id' => 1],
     ['id' => 2, 'name' => 'Spread', 'product_category_id' => 1],
@@ -1142,6 +1147,8 @@ $model->addField('brand', ['type' => 'string']);
 $model->addField('product_category_id', ['type' => 'bigint']);
 $model->addField('product_sub_category_id', ['type' => 'bigint']);
 (new Migrator($model))->create();
+(new Migrator($model))->createForeignKey([$model->getField('atk_fp_product__product_category_id'), $productCategoryIdField]);
+(new Migrator($model))->createForeignKey([$model->getField('atk_fp_product__6f3c91cf51e02fd5_id'), $productSubcategoryIdField]);
 $model->import([
     ['id' => 1, 'name' => 'Mustard', 'brand' => 'Condiment Corp.', 'product_category_id' => 1, 'product_sub_category_id' => 2],
     ['id' => 2, 'name' => 'Ketchup', 'brand' => 'Condiment Corp.', 'product_category_id' => 1, 'product_sub_category_id' => 2],
@@ -1160,6 +1167,7 @@ $model->addField('country_id', ['type' => 'bigint']);
 $model->addField('qty', ['type' => 'integer']);
 $model->addField('box', ['type' => 'integer']);
 (new Migrator($model))->create();
+(new Migrator($model))->createForeignKey([$model->getField('atk_fp_multiline_item__country_id'), $countryIdField]);
 $model->import([
     ['id' => 1, 'item' => 'Chocolate', 'inv_date' => '2020-02-20', 'inv_time' => '7:20', 'country_id' => 80, 'qty' => 7, 'box' => 5],
     ['id' => 2, 'item' => 'DAP delivery', 'inv_date' => '2020-02-01', 'inv_time' => '8:33', 'country_id' => 223, 'qty' => 2, 'box' => 100],

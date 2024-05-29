@@ -14,7 +14,7 @@ class Text extends View
     public $content = '';
 
     #[\Override]
-    public function render(): string
+    public function renderToHtml(): string
     {
         return $this->content;
     }

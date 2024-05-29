@@ -418,7 +418,7 @@ class Table extends Lister
             }
         } finally {
             $this->tRowMaster->set('cells', null);
-            $this->tRow = null; // @phpstan-ignore-line
+            $this->tRow = null; // @phpstan-ignore assign.propertyType
             $this->currentRow = null;
         }
 

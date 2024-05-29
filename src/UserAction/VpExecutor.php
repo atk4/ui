@@ -165,7 +165,7 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
             : $this->jsSuccess;
 
         return new JsBlock([
-            JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+            JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore ternary.shortNotAllowed
                 ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
             $this->loader->jsClearStoreData(true),
             (new JsChain('atk.utils'))->redirect($this->getOwner()->url()),

@@ -37,7 +37,7 @@ class Content extends View implements LoadableContent
     #[\Override]
     public function setCb(Callback $cb): void
     {
-        $this->cb = $this->add($cb); // @phpstan-ignore-line
+        $this->cb = $this->add($cb); // @phpstan-ignore assign.propertyType
     }
 
     /**
@@ -50,7 +50,8 @@ class Content extends View implements LoadableContent
     {
         $this->cb->set(function () use ($fx) {
             $fx($this);
-            $this->cb->terminateJson($this);
+
+            $this->cb->terminateJsonIfCanTerminate($this);
         });
     }
 

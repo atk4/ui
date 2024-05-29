@@ -414,7 +414,7 @@ class MyDropdown extends \Atk4\Ui\Dropdown
         $this->_tItem->set('someOtherField', $res['someOtherField]);
         $this->_tItem->set('someOtherField2', $res['someOtherField2]);
         // add item to template
-        $this->template->dangerouslyAppendHtml('Item', $this->_tItem->render());
+        $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
     }
 }
 ```
@@ -544,8 +544,8 @@ Assume that each data model are defined and model Category has many Sub-Category
 ```
 $form = \Atk4\Ui\Form::addTo($app);
 $form->addControl('category_id', [Dropdown::class, 'model' => new Category($db)]);
-$form->addControl('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => Category::hinting()->fieldName()->SubCategories]);
-$form->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => SubCategory::hinting()->fieldName()->Products]);
+$form->addControl('sub_category_id', [DropdownCascade::class, 'cascadeFrom' => 'category_id', 'reference' => Category::hinting()->fieldName()->subCategories]);
+$form->addControl('product_id', [DropdownCascade::class, 'cascadeFrom' => 'sub_category_id', 'reference' => SubCategory::hinting()->fieldName()->products]);
 ```
 
 ## Lookup

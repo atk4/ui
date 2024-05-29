@@ -11,14 +11,10 @@ require_once __DIR__ . '/../init-app.php';
 
 $runOnShutdownFx = static function (\Closure $fx) use ($app) {
     // relies on https://github.com/atk4/ui/blob/5.0.0/src/App.php#L1108
-    $app->onHook(App::HOOK_BEFORE_RENDER, static function () use (&$fx) {
-        if ($fx !== null) {
-            try {
-                $fx();
-            } finally {
-                $fx = null;
-            }
-        }
+    $hookIndex = $app->onHook(App::HOOK_BEFORE_RENDER, static function () use ($app, &$hookIndex, $fx) {
+        $app->removeHook(App::HOOK_BEFORE_RENDER, $hookIndex, true);
+
+        $fx();
     });
 };
 

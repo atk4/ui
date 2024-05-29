@@ -83,13 +83,13 @@ class JsSse extends JsCallback
     /**
      * Sending an SSE action.
      */
-    public function send(JsExpressionable $action, bool $success = true): void
+    public function send(JsExpressionable $action): void
     {
         $ajaxec = $this->getAjaxec($action);
         $this->sendEvent(
             '',
             $this->getApp()->encodeJson([
-                'success' => $success,
+                'success' => true,
                 'atkjs' => $ajaxec->jsRender(),
             ]),
             'atkSseAction'
@@ -100,14 +100,14 @@ class JsSse extends JsCallback
      * @return never
      */
     #[\Override]
-    public function terminateAjax(JsBlock $ajaxec, $msg = null, bool $success = true): void
+    protected function terminateAjaxIfCanTerminate(JsBlock $ajaxec): void
     {
         $ajaxecStr = $ajaxec->jsRender();
         if ($ajaxecStr !== '') {
             $this->sendEvent(
                 '',
                 $this->getApp()->encodeJson([
-                    'success' => $success,
+                    'success' => true,
                     'atkjs' => $ajaxecStr,
                 ]),
                 'atkSseAction'
@@ -124,16 +124,16 @@ class JsSse extends JsCallback
 
     private function outputEventResponse(string $content): void
     {
+        // workaround flush() ignored by Apache mod_proxy_fcgi
+        // https://stackoverflow.com/questions/30707792/how-to-disable-buffering-with-apache2-and-mod-proxy-fcgi#36298336
+        // https://bz.apache.org/bugzilla/show_bug.cgi?id=68827
+        $content .= ': ' . str_repeat('x', 4_096) . "\n\n";
+
         if ($this->echoFunction) {
             ($this->echoFunction)($content);
 
             return;
         }
-
-        // workaround flush() ignored by Apache mod_proxy_fcgi
-        // https://stackoverflow.com/questions/30707792/how-to-disable-buffering-with-apache2-and-mod-proxy-fcgi#36298336
-        // https://bz.apache.org/bugzilla/show_bug.cgi?id=68827
-        $content .= ': ' . str_repeat('x', 4_096) . "\n\n";
 
         $app = $this->getApp();
         \Closure::bind(static function () use ($app, $content): void {

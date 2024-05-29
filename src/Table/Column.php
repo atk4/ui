@@ -96,7 +96,7 @@ class Column
 
             \Closure::bind(static function () use ($view, $cloneViewWithAddLaterFx) {
                 foreach ($view->_addLater as $k => [$obj]) {
-                    $view->_addLater[$k][0] = $cloneViewWithAddLaterFx($obj); // @phpstan-ignore-line
+                    $view->_addLater[$k][0] = $cloneViewWithAddLaterFx($obj); // @phpstan-ignore argument.type
                 }
             }, null, View::class)();
 

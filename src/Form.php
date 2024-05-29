@@ -140,8 +140,8 @@ class Form extends View
 
     protected function initLayout(): void
     {
-        if (!is_object($this->layout)) { // @phpstan-ignore-line
-            $this->layout = Factory::factory($this->layout ?? [Form\Layout::class]); // @phpstan-ignore-line
+        if (!is_object($this->layout)) { // @phpstan-ignore function.alreadyNarrowedType
+            $this->layout = Factory::factory($this->layout ?? [Form\Layout::class]); // @phpstan-ignore nullCoalesce.property
         }
         $this->layout->form = $this;
         $this->add($this->layout);

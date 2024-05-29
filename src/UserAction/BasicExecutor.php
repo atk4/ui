@@ -141,7 +141,7 @@ class BasicExecutor extends View implements ExecutorInterface
             ? ($this->jsSuccess)($this, $this->action->getModel())
             : $this->jsSuccess;
 
-        return JsBlock::fromHookResult($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) // @phpstan-ignore-line
+        return JsBlock::fromHookResult($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) // @phpstan-ignore ternary.shortNotAllowed
             ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
     }
 

@@ -12,7 +12,7 @@ class MinkSeleniumDriver extends Selenium2Driver
 {
     use WarnDynamicPropertyTrait;
 
-    public function __construct(Selenium2Driver $driver) // @phpstan-ignore-line
+    public function __construct(Selenium2Driver $driver) // @phpstan-ignore constructor.missingParentCall
     {
         $class = self::class;
         while (($class = get_parent_class($class)) !== false) {

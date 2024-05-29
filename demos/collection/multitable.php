@@ -100,4 +100,4 @@ Button::addTo($app, ['Re-Import From Filesystem', 'class.top attached' => true])
     ->on('click', new JsModal('Now importing ... ', $vp));
 
 $finderClass::addTo($app, ['bottom attached segment'])
-    ->setModel($model->setLimit(10), [$model->fieldName()->SubFolder]);
+    ->setModel($model->setLimit(10), [$model->fieldName()->subFolder]);

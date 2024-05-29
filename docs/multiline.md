@@ -159,7 +159,7 @@ class InventoryItem extends \Atk4\Data\Model
         $this->addField('box', ['type' => 'integer', 'caption' => '# of Boxes', 'required' => true, 'ui' => ['multiline' => [Form\Control\Multiline::TABLE_CELL => ['width' => 2]]]]);
         $this->addExpression('total', ['expr' => function (Model $row) {
             return $row->get('qty') * $row->get('box');
-        }, 'type' => 'integer']);
+        }, 'type' => 'bigint']);
     }
 }
 ```
@@ -242,7 +242,7 @@ $this->addExpression('total', [
     'expr' => function (Model $row) {
         return $row->get('qty') * $row->get('box');
     },
-    'type' => 'integer',
+    'type' => 'bigint',
     'ui' => ['multiline' => [Multiline::TABLE_CELL => ['width' => 1, 'class' => 'blue']]],
 ]);
 ```

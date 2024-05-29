@@ -255,7 +255,9 @@ class ScopeBuilder extends Form\Control
             'operators' => self::DATE_OPERATORS,
             'componentProps' => [__CLASS__, 'getDatePickerProps'],
         ],
+        'smallint' => 'numeric',
         'integer' => 'numeric',
+        'bigint' => 'numeric',
         'float' => 'numeric',
         'atk4_money' => 'numeric',
         'checkbox' => 'boolean',
@@ -525,7 +527,7 @@ class ScopeBuilder extends Form\Control
                 break;
         }
 
-        return $scope; // @phpstan-ignore-line
+        return $scope; // @phpstan-ignore variable.undefined
     }
 
     /**

@@ -18,7 +18,7 @@ class SharedExecutorsContainer extends View
 
     public function getExecutor(Model\UserAction $action): SharedExecutor
     {
-        $action->getOwner()->assertIsModel(); // @phpstan-ignore-line
+        $action->getOwner()->assertIsModel(); // @phpstan-ignore method.nonObject
         $this->getOwner()->model->assertIsModel($action->getModel());
 
         if (!isset($this->sharedExecutors[$action->shortName])) {

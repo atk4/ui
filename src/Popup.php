@@ -145,12 +145,15 @@ class Popup extends View
             $this->minHeight = '45px';
         }
 
-        // create content view to pass to callback
-        $content = $this->add($this->dynamicContent);
-        $this->cb->set($fx, [$content]);
-        // only render our content view
-        // PopupService will replace content with this one
-        $this->cb->terminateJson($content);
+        $this->cb->set(function () use ($fx) {
+            // create content view to pass to callback
+            $content = $this->add($this->dynamicContent);
+
+            $fx($content);
+
+            // only render our content view, PopupService will replace content with this one
+            $this->cb->terminateJsonIfCanTerminate($content);
+        });
 
         return $this;
     }

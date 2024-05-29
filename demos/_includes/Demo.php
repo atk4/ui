@@ -51,7 +51,7 @@ class Demo extends Columns
 
         $minIndent = min(array_map(static function (string $l): int {
             return strlen($l) - strlen(ltrim($l, ' '));
-        }, array_filter($codeArr)));
+        }, array_filter($codeArr, static fn ($v) => $v !== '')));
 
         return implode("\n", array_map(static function (string $l) use ($minIndent) {
             return substr($l, $minIndent);

@@ -6,7 +6,7 @@ namespace Atk4\Ui\Behat;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
-use Doctrine\DBAL\Types\Type;
+use Atk4\Data\Schema\Migrator;
 
 trait RwDemosContextTrait
 {
@@ -39,7 +39,7 @@ trait RwDemosContextTrait
         if ($db === null) {
             try {
                 /** @var Persistence\Sql $db */
-                require_once $this->demosDir . '/init-db.php'; // @phpstan-ignore-line
+                require_once $this->demosDir . '/init-db.php'; // @phpstan-ignore varTag.nativeType
             } catch (\Throwable $e) {
                 throw new \Exception('Database error: ' . $e->getMessage());
             }
@@ -48,30 +48,12 @@ trait RwDemosContextTrait
         return $db;
     }
 
-    protected function createDatabaseModelFromTable(string $table): Model
-    {
-        $db = $this->getDemosDb();
-        $schemaManager = $db->getConnection()->createSchemaManager();
-        $tableColumns = $schemaManager->listTableColumns($table);
-
-        $model = new Model($db, ['table' => $table]);
-        $model->removeField('id');
-        foreach ($tableColumns as $tableColumn) {
-            $model->addField($tableColumn->getName(), [
-                'type' => Type::getTypeRegistry()->lookupName($tableColumn->getType()), // TODO simplify once https://github.com/doctrine/dbal/pull/6130 is merged
-                'nullable' => !$tableColumn->getNotnull(),
-            ]);
-        }
-        $model->idField = array_key_first($model->getFields());
-
-        return $model;
-    }
-
     protected function createDatabaseModels(): void
     {
         $modelByTable = [];
         foreach ($this->databaseBackupTables as $table) {
-            $modelByTable[$table] = $this->createDatabaseModelFromTable($table);
+            $modelByTable[$table] = (new Migrator($this->getDemosDb()))
+                ->introspectTableToModel($table);
         }
 
         $this->databaseBackupModels = $modelByTable;
@@ -136,7 +118,7 @@ trait RwDemosContextTrait
             }
         }
 
-        return $changesByTable; // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9252
+        return $changesByTable;
     }
 
     protected function restoreDatabaseBackup(): void

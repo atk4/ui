@@ -21,4 +21,4 @@ $app->html = null;
 $app->initLayout([Layout::class]);
 
 $layout->setApp($app);
-Text::addTo($app->layout)->addHtml($layout->render());
+Text::addTo($app->layout)->addHtml($layout->renderToHtml());

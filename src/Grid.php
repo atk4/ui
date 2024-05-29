@@ -121,7 +121,7 @@ class Grid extends View
             $appUniqueHashesBackup = $this->getApp()->uniqueNameHashes;
             $menuElementNameCountsBackup = \Closure::bind(fn () => $this->_elementNameCounts, $this->menu, AbstractView::class)();
             try {
-                $menuRight = $this->menu->addMenuRight(); // @phpstan-ignore-line
+                $menuRight = $this->menu->addMenuRight(); // @phpstan-ignore method.notFound
                 $menuItemView = View::addTo($menuRight->addItem());
                 $quickSearch = JsSearch::addTo($menuItemView);
                 $this->stickyGet($quickSearch->name . '_q');
@@ -386,7 +386,7 @@ class Grid extends View
             $this->actionButtons = $this->table->addColumn(null, $this->actionButtonsSeed);
         }
 
-        return $this->actionButtons; // @phpstan-ignore-line
+        return $this->actionButtons; // @phpstan-ignore return.type
     }
 
     /**
@@ -432,7 +432,7 @@ class Grid extends View
             $this->actionMenu = $this->table->addColumn(null, $this->actionMenuSeed);
         }
 
-        return $this->actionMenu; // @phpstan-ignore-line
+        return $this->actionMenu; // @phpstan-ignore return.type
     }
 
     /**
@@ -555,7 +555,7 @@ class Grid extends View
      */
     public function addModalBulkAction($item, $title, \Closure $callback, $args = [])
     {
-        $modalDefaults = is_string($title) ? ['title' => $title] : []; // @phpstan-ignore-line
+        $modalDefaults = is_string($title) ? ['title' => $title] : []; // @phpstan-ignore function.alreadyNarrowedType
 
         $modal = Modal::addTo($this->getOwner(), $modalDefaults);
         $modal->set(function (View $t) use ($callback) {

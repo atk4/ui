@@ -6,6 +6,7 @@ namespace Atk4\Ui\Tests;
 
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Ui\Paginator;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PaginatorTest extends TestCase
 {
@@ -34,6 +35,7 @@ class PaginatorTest extends TestCase
     /**
      * @dataProvider providePaginatorCases
      */
+    #[DataProvider('providePaginatorCases')]
     public function testPaginator(int $page, int $range, int $total, array $expected): void
     {
         $paginator = new Paginator(['page' => $page, 'range' => $range, 'total' => $total]);

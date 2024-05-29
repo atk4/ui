@@ -161,7 +161,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
 
         return new JsBlock([
             $this->jsClose(),
-            JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore-line
+            JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore ternary.shortNotAllowed
                 ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
             $this->loader->jsClearStoreData(true),
         ]);

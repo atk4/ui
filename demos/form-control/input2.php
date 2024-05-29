@@ -58,15 +58,15 @@ $group = $form->addGroup('File upload');
 $onDelete = static function () {};
 $onUpload = static function () {};
 
-$control = $group->addControl('file_norm', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]])->set('normal', 'normal.jpg'); // @phpstan-ignore-line
+$control = $group->addControl('file_norm', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg']]])->set('normal', 'normal.jpg'); // @phpstan-ignore arguments.count
 $control->onDelete($onDelete);
 $control->onUpload($onUpload);
 
-$control = $group->addControl('file_read', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'readOnly' => true]])->set('readonly', 'readonly.jpg'); // @phpstan-ignore-line
+$control = $group->addControl('file_read', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'readOnly' => true]])->set('readonly', 'readonly.jpg'); // @phpstan-ignore arguments.count
 $control->onDelete($onDelete);
 $control->onUpload($onUpload);
 
-$control = $group->addControl('file_disb', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'disabled' => true]])->set('disabled', 'disabled.jpg'); // @phpstan-ignore-line
+$control = $group->addControl('file_disb', [Form\Control\Upload::class, ['accept' => ['.png', '.jpg'], 'disabled' => true]])->set('disabled', 'disabled.jpg'); // @phpstan-ignore arguments.count
 $control->onDelete($onDelete);
 $control->onUpload($onUpload);
 

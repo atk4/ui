@@ -17,6 +17,7 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -42,7 +43,7 @@ class DemosTest extends TestCase
            |(?<array>\[(?:(?&json)(?:,(?&json))*|\s*)\])
            |(?<object>\{(?:(?<pair>\s*(?&string)\s*:(?&json))(?:,(?&pair))*|\s*)\})
         )\s*)$~sx';
-    protected static string $regexSseLine = '~^(event|data|(?=: x{4096}$)): .*$~';
+    protected static string $regexSse = '~^(event: [^\n]+\n(data: [^\n]*\n)+\n: x{4096}\n\n)+$~';
 
     #[\Override]
     public static function setUpBeforeClass(): void
@@ -71,7 +72,7 @@ class DemosTest extends TestCase
             $this->setSuperglobalsFromRequest(new Request('GET', 'http://localhost/demos/?APP_CALL_EXIT=0&APP_CATCH_EXCEPTIONS=0&APP_ALWAYS_RUN=0'));
 
             /** @var App $app */
-            $app = 'for-phpstan'; // @phpstan-ignore-line
+            $app = 'for-phpstan'; // @phpstan-ignore varTag.nativeType
             require_once static::DEMOS_DIR . '/init-app.php';
             $initVars = array_diff_key(get_defined_vars(), $initVars + ['initVars' => true]);
 
@@ -290,6 +291,7 @@ class DemosTest extends TestCase
     /**
      * @dataProvider provideDemosStatusAndHtmlResponseCases
      */
+    #[DataProvider('provideDemosStatusAndHtmlResponseCases')]
     public function testDemosStatusAndHtmlResponse(string $path): void
     {
         $response = $this->getResponseFromRequest($path);
@@ -322,6 +324,7 @@ class DemosTest extends TestCase
     /**
      * @dataProvider provideDemoGetCases
      */
+    #[DataProvider('provideDemoGetCases')]
     public function testDemoGet(string $path): void
     {
         $response = $this->getResponseFromRequest($path);
@@ -362,7 +365,7 @@ class DemosTest extends TestCase
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
-            self::assertTrue(true); // @phpstan-ignore-line
+            self::assertTrue(true); // @phpstan-ignore staticMethod.alreadyNarrowedType
 
             return;
         }
@@ -398,12 +401,13 @@ class DemosTest extends TestCase
      *
      * @dataProvider provideDemoJsonResponseCases
      */
+    #[DataProvider('provideDemoJsonResponseCases')]
     public function testDemoJsonResponse(string $path, ?string $expectedExceptionMessage = null): void
     {
         if (static::class === self::class) {
             if ($expectedExceptionMessage !== null) {
                 if (str_contains($path, '=m2_cb&')) {
-                    self::assertTrue(true); // @phpstan-ignore-line
+                    self::assertTrue(true); // @phpstan-ignore staticMethod.alreadyNarrowedType
 
                     return;
                 }
@@ -436,33 +440,19 @@ class DemosTest extends TestCase
      *
      * @dataProvider provideDemoSseResponseCases
      */
+    #[DataProvider('provideDemoSseResponseCases')]
     public function testDemoSseResponse(string $path): void
     {
         // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         if (static::class === self::class) {
-            self::assertTrue(true); // @phpstan-ignore-line
+            self::assertTrue(true); // @phpstan-ignore staticMethod.alreadyNarrowedType
 
             return;
         }
 
         $response = $this->getResponseFromRequest($path);
         self::assertSame(200, $response->getStatusCode());
-
-        $outputLines = array_filter(
-            explode("\n", $response->getBody()->getContents()),
-            static fn ($v) => $v !== ''
-        );
-
-        // check SSE Syntax
-        self::assertGreaterThan(0, count($outputLines));
-        foreach ($outputLines as $index => $line) {
-            preg_match_all(self::$regexSseLine, $line, $matchesAll);
-            self::assertSame(
-                $line,
-                implode('', $matchesAll[0] ?? ['error']),
-                'Testing SSE response line ' . $index . ' with content ' . $line
-            );
-        }
+        self::assertMatchesRegularExpression(self::$regexSse, $response->getBody()->getContents());
     }
 
     public static function provideDemoJsonResponsePostCases(): iterable
@@ -476,6 +466,7 @@ class DemosTest extends TestCase
     /**
      * @dataProvider provideDemoJsonResponsePostCases
      */
+    #[DataProvider('provideDemoJsonResponsePostCases')]
     public function testDemoJsonResponsePost(string $path, array $postData): void
     {
         $response = $this->getResponseFromRequest($path, ['form_params' => $postData]);
@@ -488,6 +479,7 @@ class DemosTest extends TestCase
      *
      * @slowThreshold 1500
      */
+    #[DataProvider('provideDemoCallbackErrorCases')]
     public function testDemoCallbackError(string $path, string $expectedExceptionMessage, array $options = []): void
     {
         if (static::class === self::class) {

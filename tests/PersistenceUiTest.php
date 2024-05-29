@@ -7,6 +7,7 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Field;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PersistenceUiTest extends TestCase
 {
@@ -16,6 +17,8 @@ class PersistenceUiTest extends TestCase
      * @dataProvider provideTypecastBidirectionalCases
      * @dataProvider provideTypecastLoadOnlyCases
      */
+    #[DataProvider('provideTypecastBidirectionalCases')]
+    #[DataProvider('provideTypecastLoadOnlyCases')]
     public function testTypecast(array $persistenceSeed, array $fieldSeed, $phpValue, ?string $uiValue, bool $isUiValueNormalized = true): void
     {
         $p = (new UiPersistence())->setDefaults($persistenceSeed);
@@ -73,9 +76,11 @@ class PersistenceUiTest extends TestCase
         yield [[], ['type' => 'integer'], 1, '1'];
         yield [[], ['type' => 'integer'], 0, '0'];
         yield [[], ['type' => 'integer'], -1_100_230_000_456_345_678, $fixSpaceToNbspFx('-1 100 230 000 456 345 678')];
+        yield [[], ['type' => 'bigint'], -1_100_230_000_456_345_678, $fixSpaceToNbspFx('-1 100 230 000 456 345 678')];
         yield [['thousandsSeparator' => ''], ['type' => 'integer'], 12_345_678, '12345678'];
         yield [['thousandsSeparator' => ','], ['type' => 'integer'], 12_345_678, '12,345,678'];
         yield [['decimalSeparator' => ',', 'thousandsSeparator' => '.'], ['type' => 'integer'], 12_345_678, '12.345.678'];
+        yield [['decimalSeparator' => ',', 'thousandsSeparator' => '.'], ['type' => 'bigint'], 12_345_678, '12.345.678'];
         yield [[], ['type' => 'float'], 1.0, '1.0'];
         yield [[], ['type' => 'float'], 0.0, '0.0'];
         yield [[], ['type' => 'float'], -1_100_230_000.4567, $fixSpaceToNbspFx('-1 100 230 000.4567')];
@@ -135,14 +140,14 @@ class PersistenceUiTest extends TestCase
         yield [['thousandsSeparator' => ','], ['type' => 'atk4_money'], 12_345_678.3, $fixSpaceToNbspFx('€ 12,345,678.30')];
         yield [['decimalSeparator' => ',', 'thousandsSeparator' => '.'], ['type' => 'atk4_money'], 12_345_678.3, $fixSpaceToNbspFx('€ 12.345.678,30')];
 
-        foreach (['string', 'text', 'integer', 'float', 'boolean', 'date', 'time', 'datetime', 'atk4_money'] as $type) {
+        foreach (['string', 'text', 'smallint', 'integer', 'bigint', 'float', 'boolean', 'date', 'time', 'datetime', 'atk4_money'] as $type) {
             yield [[], ['type' => $type], null, null];
         }
     }
 
     public static function provideTypecastLoadOnlyCases(): iterable
     {
-        foreach (['integer', 'float', 'boolean', 'date', 'time', 'datetime', 'atk4_money'] as $type) {
+        foreach (['smallint', 'integer', 'bigint', 'float', 'boolean', 'date', 'time', 'datetime', 'atk4_money'] as $type) {
             yield [[], ['type' => $type], null, '', false];
         }
 
@@ -158,7 +163,9 @@ class PersistenceUiTest extends TestCase
         yield [[], ['type' => 'boolean'], false, ' 0' . "\n", false];
 
         yield [[], ['type' => 'integer'], 12_345_678, '12345678', false];
+        yield [[], ['type' => 'smallint'], 12_345_678, '12_345_678', false];
         yield [[], ['type' => 'integer'], 12_345_678, '12_345_678', false];
+        yield [[], ['type' => 'bigint'], 12_345_678, '12_345_678', false];
         yield [[], ['type' => 'integer'], 12_345_678, '12 345 678', false];
         yield [[], ['type' => 'integer'], 12_345_678, "\r" . '12345678', false];
         yield [[], ['type' => 'integer'], 628, '6_28', false];
@@ -203,6 +210,7 @@ class PersistenceUiTest extends TestCase
      *
      * @dataProvider provideAttributeTypecastCases
      */
+    #[DataProvider('provideAttributeTypecastCases')]
     public function testAttributeTypecast(array $fieldSeed, $phpValue, ?string $uiValue): void
     {
         $p = new UiPersistence();
@@ -228,6 +236,7 @@ class PersistenceUiTest extends TestCase
         yield [['type' => 'integer'], 0, '0'];
         yield [['type' => 'integer'], 12_345_678, '12345678'];
         yield [['type' => 'integer'], -1_100_230_000_456_345_678, '-1100230000456345678'];
+        yield [['type' => 'bigint'], -1_100_230_000_456_345_678, '-1100230000456345678'];
         yield [['type' => 'float'], 1.0, '1.0'];
         yield [['type' => 'float'], 0.0, '0.0'];
         yield [['type' => 'float'], -1_100_230_000.4567, '-1100230000.4567'];
@@ -252,7 +261,7 @@ class PersistenceUiTest extends TestCase
         yield [['type' => 'atk4_money'], 1_234_056_789.1, '1234056789.1'];
         yield [['type' => 'atk4_money'], 234_056_789.101, '234056789.101'];
 
-        foreach (['string', 'text', 'integer', 'float', 'boolean', 'date', 'time', 'datetime', 'atk4_money'] as $type) {
+        foreach (['string', 'text', 'smallint', 'integer', 'bigint', 'float', 'boolean', 'date', 'time', 'datetime', 'atk4_money'] as $type) {
             yield [['type' => $type], null, null];
         }
     }

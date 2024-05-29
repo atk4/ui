@@ -89,7 +89,7 @@ class Callback extends AbstractView
     /**
      * Terminate this callback by rendering the given view.
      */
-    public function terminateJson(View $view): void
+    public function terminateJsonIfCanTerminate(View $view): void
     {
         if ($this->canTerminate()) {
             $this->getApp()->terminateJson($view);

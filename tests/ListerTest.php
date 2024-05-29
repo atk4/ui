@@ -9,6 +9,7 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Lister;
 use Atk4\Ui\View;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 
 class ListerTest extends TestCase
 {
@@ -17,6 +18,7 @@ class ListerTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testListerRender(): void
     {
         $view = new View();
@@ -36,7 +38,7 @@ class ListerTest extends TestCase
         $view->invokeInit();
         $lister = Lister::addTo($view, [], ['list']);
         $lister->setSource(['foo', 'bar']);
-        self::assertSame('hello, world, world', $view->render());
+        self::assertSame('hello, world, world', $view->renderToHtml());
     }
 
     public function testAddAfterRender(): void

@@ -389,7 +389,7 @@ class Console extends View implements LoggerInterface
                 $result = $object->{$method}(...$args);
             } finally {
                 if (TraitUtil::hasAppScopeTrait($object) && $object->issetApp()) {
-                    $object->getApp()->logger = $loggerBak; // @phpstan-ignore-line
+                    $object->getApp()->logger = $loggerBak; // @phpstan-ignore variable.undefined
                 }
                 if (TraitUtil::hasTrait($object, DebugTrait::class)) {
                     $object->debug = $debugBak;

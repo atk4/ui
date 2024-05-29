@@ -137,7 +137,7 @@ class ExecutorFactory
      */
     public function createTrigger(UserAction $action, ?string $type = null): View
     {
-        return $this->createActionTrigger($action, $type); // @phpstan-ignore-line
+        return $this->createActionTrigger($action, $type); // @phpstan-ignore return.type
     }
 
     public function getCaption(UserAction $action, ?string $type = null): string

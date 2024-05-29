@@ -9,6 +9,7 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Exception\LateOutputError;
 use Atk4\Ui\HtmlTemplate;
 use Nyholm\Psr7\Factory\Psr17Factory;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class AppTest extends TestCase
 {
@@ -186,6 +187,7 @@ class AppTest extends TestCase
      * @param array<0|string, string|int|false> $page
      * @param array<string, string>             $extraRequestUrlArgs
      */
+    #[DataProvider('provideUrlCases')]
     public function testUrl(string $requestUrl, array $appStickyGetArguments, array $page, array $extraRequestUrlArgs, string $expectedUrl): void
     {
         $request = (new Psr17Factory())->createServerRequest('GET', $requestUrl);

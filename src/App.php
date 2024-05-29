@@ -46,7 +46,7 @@ class App
     public const HOOK_BEFORE_EXIT = self::class . '@beforeExit';
     public const HOOK_BEFORE_RENDER = self::class . '@beforeRender';
 
-    private static ?string $shutdownReservedMemory; // @phpstan-ignore-line
+    private static ?string $shutdownReservedMemory; // @phpstan-ignore property.onlyRead
     private static ?int $errorReportingLevel = null;
 
     /** @var array|false Location where to load JS/CSS files */
@@ -67,7 +67,7 @@ class App
      *
      * @TODO remove, no longer needed for CDN versioning as we bundle all resources
      */
-    public $version = '5.1-dev';
+    public $version = '5.2-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -546,7 +546,7 @@ class App
     public function terminateHtml($output): void
     {
         if ($output instanceof View) {
-            $output = $output->render();
+            $output = $output->renderToHtml();
         } elseif ($output instanceof HtmlTemplate) {
             $output = $output->renderToHtml();
         }
@@ -588,7 +588,7 @@ class App
             $this->html->invokeInit();
         }
 
-        $this->layout = $this->html->add($layout); // @phpstan-ignore-line
+        $this->layout = $this->html->add($layout); // @phpstan-ignore assign.propertyType
 
         $this->initIncludes();
 
@@ -650,7 +650,7 @@ class App
      */
     public function add($object, $region = null): AbstractView
     {
-        if (!$this->layout) { // @phpstan-ignore-line
+        if (!$this->layout) { // @phpstan-ignore booleanNot.alwaysFalse
             throw (new Exception('App layout is missing'))
                 ->addSolution('$app->initLayout() must be called first');
         }

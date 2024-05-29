@@ -19,10 +19,10 @@ class JsIntegrationTest extends TestCase
     {
         $v = new Button(['icon' => 'pencil']);
         $v->setApp($this->createApp());
-        $v->render();
+        $v->renderAll();
 
         self::assertNotEmpty($v->icon);
-        self::assertNotEmpty($v->icon->name); // @phpstan-ignore-line
+        self::assertNotEmpty($v->icon->name); // @phpstan-ignore staticMethod.alreadyNarrowedType
         self::assertNotSame($v->name, $v->icon->name);
     }
 
@@ -32,7 +32,7 @@ class JsIntegrationTest extends TestCase
         $b1 = Button::addTo($v);
         $b2 = Button::addTo($v);
         $v->setApp($this->createApp());
-        $v->render();
+        $v->renderAll();
 
         self::assertNotSame($b1->name, $b2->name);
     }
@@ -42,7 +42,7 @@ class JsIntegrationTest extends TestCase
         $v = new Button(['name' => 'b']);
         $j = $v->js()->hide();
         $v->setApp($this->createApp());
-        $v->render();
+        $v->renderAll();
 
         self::assertSame('$(\'#b\').hide()', $j->jsRender());
     }
@@ -130,9 +130,9 @@ class JsIntegrationTest extends TestCase
         $v = new View(['name' => 'v']);
         $js = $v->js();
 
-        self::assertNotNull($v->js(true, null)); // @phpstan-ignore-line
-        self::assertNull($v->js(true, $js)); // @phpstan-ignore-line
-        self::assertNull($v->on('click', $js)); // @phpstan-ignore-line
+        self::assertNotNull($v->js(true, null)); // @phpstan-ignore staticMethod.alreadyNarrowedType
+        self::assertNull($v->js(true, $js)); // @phpstan-ignore staticMethod.alreadyNarrowedType
+        self::assertNull($v->on('click', $js)); // @phpstan-ignore staticMethod.impossibleType
     }
 
     public function testChainUnsupportedTypeException(): void

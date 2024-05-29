@@ -59,7 +59,7 @@ $planeTemplate->set('num', (string) random_int(100, 999));
 $plane = View::addTo($app, ['template' => $planeTemplate]);
 
 Header::addTo($app, ['Can be rendered into HTML']);
-View::addTo($app, ['ui' => 'segment', 'class.raised' => true, 'element' => 'pre'])->set($plane->render());
+View::addTo($app, ['ui' => 'segment', 'class.raised' => true, 'element' => 'pre'])->set($plane->renderToHtml());
 
 Header::addTo($app, ['Has a unique global identifier']);
 Label::addTo($app, ['Plane ID:', 'detail' => $plane->name]);
