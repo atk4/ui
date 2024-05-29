@@ -111,7 +111,9 @@ class Ui extends Persistence
                 $value = $value ? $this->yes : $this->no;
 
                 break;
+            case 'smallint':
             case 'integer':
+            case 'bigint':
             case 'float':
                 $value = parent::_typecastLoadField($field, $value);
                 $value = is_int($value)
@@ -170,7 +172,7 @@ class Ui extends Persistence
         }
 
         if (is_int($value)) {
-            $value = $this->_typecastSaveField(new Field(['type' => 'integer']), $value);
+            $value = $this->_typecastSaveField(new Field(['type' => 'bigint']), $value);
         }
 
         if (is_float($value)) {
@@ -195,7 +197,9 @@ class Ui extends Persistence
                 }
 
                 break;
+            case 'smallint':
             case 'integer':
+            case 'bigint':
             case 'float':
             case 'atk4_money':
                 if (is_string($value)) {

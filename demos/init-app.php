@@ -47,7 +47,7 @@ $app = new App([
             if ($field->type === WrappedIdType::NAME) {
                 return $value === null
                     ? null
-                    : $this->typecastAttributeSaveField(new Field(['type' => 'integer']), $value->getId() + 218_000_000);
+                    : $this->typecastAttributeSaveField(new Field(['type' => 'bigint']), $value->getId() + 218_000_000);
             }
 
             return parent::typecastAttributeSaveField($field, $value);
@@ -57,7 +57,7 @@ $app = new App([
         public function typecastAttributeLoadField(Field $field, ?string $value)
         {
             if ($field->type === WrappedIdType::NAME) {
-                $value = $this->typecastAttributeLoadField(new Field(['type' => 'integer']), $value);
+                $value = $this->typecastAttributeLoadField(new Field(['type' => 'bigint']), $value);
 
                 return $value === null
                     ? null

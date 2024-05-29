@@ -65,7 +65,7 @@ class WrappedIdType extends DbalType
     #[\Override]
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
-        return DbalType::getType('integer')->getSQLDeclaration($fieldDeclaration, $platform);
+        return DbalType::getType('bigint')->getSQLDeclaration($fieldDeclaration, $platform);
     }
 
     #[\Override]
@@ -75,7 +75,7 @@ class WrappedIdType extends DbalType
             return null;
         }
 
-        return DbalType::getType('integer')->convertToDatabaseValue($value->getId(), $platform);
+        return DbalType::getType('bigint')->convertToDatabaseValue($value->getId(), $platform);
     }
 
     #[\Override]
@@ -85,7 +85,7 @@ class WrappedIdType extends DbalType
             return null;
         }
 
-        return new WrappedId(DbalType::getType('integer')->convertToPHPValue($value, $platform));
+        return new WrappedId((int) DbalType::getType('bigint')->convertToPHPValue($value, $platform)); // once DBAL 3.x support is dropped, the explicit cast should no longer be needed
     }
 
     #[\Override]
@@ -675,13 +675,13 @@ class MultilineItem extends ModelWithPrefixedFields
             'expr' => function (Model /* TODO self is not working because of clone in Multiline */ $row) {
                 return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore method.notFound
             },
-            'type' => 'integer',
+            'type' => 'bigint',
         ]);
         $this->addCalculatedField($this->fieldName()->total_php, [
             'expr' => static function (self $row) {
                 return $row->qty * $row->box;
             },
-            'type' => 'integer',
+            'type' => 'bigint',
         ]);
     }
 }

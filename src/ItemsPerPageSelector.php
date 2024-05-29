@@ -30,7 +30,7 @@ class ItemsPerPageSelector extends View
 
     private function formatInteger(int $value): string
     {
-        return $this->getApp()->uiPersistence->typecastSaveField(new Field(['type' => 'integer']), $value);
+        return $this->getApp()->uiPersistence->typecastSaveField(new Field(['type' => 'bigint']), $value);
     }
 
     #[\Override]

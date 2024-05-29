@@ -358,7 +358,7 @@ $model = new ImportModelWithPrefixedFields($db, ['table' => 'file']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('type', ['type' => 'string']);
 $model->addField('is_folder', ['type' => 'boolean']);
-$model->addField('parent_folder_id', ['type' => 'integer']);
+$model->addField('parent_folder_id', ['type' => 'bigint']);
 (new Migrator($model))->create();
 (new Migrator($model))->createForeignKey([$model->getField('atk_fp_file__parent_folder_id'), $model->getField('atk_fp_file__id')]);
 $model->import([
@@ -1125,7 +1125,7 @@ $model->import([
 
 $model = new ImportModelWithPrefixedFields($db, ['table' => 'product_sub_category']);
 $model->addField('name', ['type' => 'string']);
-$model->addField('product_category_id', ['type' => 'integer']);
+$model->addField('product_category_id', ['type' => 'bigint']);
 $productSubcategoryIdField = $model->getField('atk_fp_6f3c91cf51e02fd5__id');
 (new Migrator($model))->create();
 (new Migrator($model))->createForeignKey([$model->getField('atk_fp_6f3c91cf51e02fd5__product_category_id'), $productCategoryIdField]);
@@ -1144,8 +1144,8 @@ $model->import([
 $model = new ImportModelWithPrefixedFields($db, ['table' => 'product']);
 $model->addField('name', ['type' => 'string']);
 $model->addField('brand', ['type' => 'string']);
-$model->addField('product_category_id', ['type' => 'integer']);
-$model->addField('product_sub_category_id', ['type' => 'integer']);
+$model->addField('product_category_id', ['type' => 'bigint']);
+$model->addField('product_sub_category_id', ['type' => 'bigint']);
 (new Migrator($model))->create();
 (new Migrator($model))->createForeignKey([$model->getField('atk_fp_product__product_category_id'), $productCategoryIdField]);
 (new Migrator($model))->createForeignKey([$model->getField('atk_fp_product__6f3c91cf51e02fd5_id'), $productSubcategoryIdField]);
@@ -1163,7 +1163,7 @@ $model = new ImportModelWithPrefixedFields($db, ['table' => 'multiline_item']);
 $model->addField('item', ['type' => 'string']);
 $model->addField('inv_date', ['type' => 'date']);
 $model->addField('inv_time', ['type' => 'time']);
-$model->addField('country_id', ['type' => 'integer']);
+$model->addField('country_id', ['type' => 'bigint']);
 $model->addField('qty', ['type' => 'integer']);
 $model->addField('box', ['type' => 'integer']);
 (new Migrator($model))->create();
