@@ -204,7 +204,7 @@ class Dropdown extends Input
             $this->template->dangerouslySetHtml('multipleClass', 'multiple');
         }
 
-        if ($this->readOnly || $this->disabled) {
+        if ($this->disabled || $this->readOnly) {
             if ($this->multiple) {
                 $this->jsDropdown(true)->find('a i.delete.icon')->attr('class', 'disabled');
             }

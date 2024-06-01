@@ -444,7 +444,7 @@ class Form extends View
         $errors = [];
         foreach ($this->controls as $k => $control) {
             // save field value only if field was editable in form at all
-            if (!$control->readOnly && !$control->disabled) {
+            if (!$control->disabled && !$control->readOnly) {
                 $postRawValue = $postRawData[$k] ?? null;
                 if ($postRawValue === null) {
                     throw (new Exception('Form POST param does not exist'))
