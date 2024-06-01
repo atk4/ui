@@ -7,9 +7,7 @@ namespace Atk4\Ui\Form\Control;
 use Atk4\Data\Model;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Js\Jquery;
-use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
-use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\View\ModelTrait;
 
 class Dropdown extends Input
@@ -216,8 +214,6 @@ class Dropdown extends Input
         } elseif ($this->readOnly) {
             $this->template->set('disabledClass', 'read-only');
             $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
-
-            $this->setDropdownOption('onShow', new JsFunction([], [new JsExpression('return false')]));
         }
 
         $this->template->set('DefaultText', $this->empty);
