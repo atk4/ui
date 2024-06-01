@@ -379,7 +379,9 @@ class Lookup extends Input
         } elseif ($this->readOnly) {
             $this->template->set('disabledClass', 'read-only');
             $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
+        }
 
+        if ($this->disabled || $this->readOnly) {
             $this->settings['apiSettings'] = null;
         }
 
