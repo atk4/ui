@@ -70,7 +70,7 @@ abstract class FilterModel extends Model
             Types::JSON => FilterModel\TypeString::class,
 
             'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
-        ][$field->type];
+        ][$field->type] ?? null;
 
         // you can set your own filter model class
         if (isset($field->ui['filterModel'])) {
