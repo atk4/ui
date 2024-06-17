@@ -54,6 +54,7 @@ abstract class FilterModel extends Model
             Types::TEXT => FilterModel\TypeString::class,
 
             Types::BOOLEAN => FilterModel\TypeBoolean::class,
+            Types::SMALLINT => FilterModel\TypeNumber::class,
             Types::INTEGER => FilterModel\TypeNumber::class,
             Types::BIGINT => FilterModel\TypeNumber::class,
             Types::FLOAT => FilterModel\TypeNumber::class,
