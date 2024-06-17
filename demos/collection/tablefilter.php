@@ -22,7 +22,7 @@ $model->addExpression('is_uk', [
 ]);
 
 $model->addExpression('bigint', [
-    'expr' => $model->expr('['.$model->getIdField()->shortName.']'),
+    'expr' => $model->expr('[' . $model->getIdField()->shortName . ']'),
     'type' => 'bigint',
 ]);
 
