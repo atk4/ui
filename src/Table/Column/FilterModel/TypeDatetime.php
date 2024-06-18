@@ -145,6 +145,8 @@ class TypeDatetime extends Column\FilterModel
                 $date = new \DateTime('+' . $this->get('number_days') . ' days');
 
                 break;
+            default:
+                $date = null;
         }
 
         return $date;
