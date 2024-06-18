@@ -24,11 +24,6 @@ $model->addExpression('is_uk', [
     'type' => 'boolean',
 ]);
 
-$model->addExpression('bigint', [
-    'expr' => $model->expr('[' . $model->getIdField()->shortName . ']'),
-    'type' => 'bigint',
-]);
-
 $grid->setModel($model);
 $grid->addFilterColumn();
 
