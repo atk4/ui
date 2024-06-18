@@ -28,7 +28,7 @@ class TypeBoolean extends Column\FilterModel
     {
         $filter = $this->recallData();
         if ($filter !== null) {
-            $model->addCondition($filter['name'], $filter['op'] === 'true');
+            $model->addCondition($this->lookupField, $filter['op'] === 'true');
         }
     }
 }

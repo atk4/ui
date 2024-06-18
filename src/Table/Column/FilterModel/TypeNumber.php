@@ -39,15 +39,15 @@ class TypeNumber extends Column\FilterModel
                 case 'between':
                     $model->addCondition(
                         $model->expr('[field] between [value] and [value2]', [
-                            'field' => $model->getField($filter['name']),
-                            'value' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $filter['value']),
-                            'value2' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $filter['range']),
+                            'field' => $this->lookupField,
+                            'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $filter['value']),
+                            'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $filter['range']),
                         ])
                     );
 
                     break;
                 default:
-                    $model->addCondition($filter['name'], $filter['op'], $filter['value']);
+                    $model->addCondition($this->lookupField, $filter['op'], $filter['value']);
             }
         }
     }

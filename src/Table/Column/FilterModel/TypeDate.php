@@ -71,11 +71,11 @@ class TypeDate extends Column\FilterModel
         if ($filter !== null) {
             switch ($filter['op']) {
                 case 'empty':
-                    $model->addCondition($filter['name'], '=', null);
+                    $model->addCondition($this->lookupField, '=', null);
 
                     break;
                 case 'not empty':
-                    $model->addCondition($filter['name'], '!=', null);
+                    $model->addCondition($this->lookupField, '!=', null);
 
                     break;
                 case 'within':
@@ -85,14 +85,14 @@ class TypeDate extends Column\FilterModel
                         [$d1, $d2] = [$d2, $d1];
                     }
                     $model->addCondition($model->expr('[field] between [value] and [value2]', [
-                        'field' => $model->getField($filter['name']),
-                        'value' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1),
-                        'value2' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2),
+                        'field' => $this->lookupField,
+                        'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $d1),
+                        'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $d2),
                     ]));
 
                     break;
                 default:
-                    $model->addCondition($filter['name'], $filter['op'], $this->getDate($filter['value']));
+                    $model->addCondition($this->lookupField, $filter['op'], $this->getDate($filter['value']));
             }
         }
     }
