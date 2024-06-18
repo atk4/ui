@@ -102,10 +102,8 @@ class TypeDate extends Column\FilterModel
      * Will construct and return a date object base on constructor string.
      *
      * @param string $dateModifier the string to pass to generated a date from
-     *
-     * @return \DateTime
      */
-    public function getDate($dateModifier)
+    public function getDate(string $dateModifier): ?\DateTime
     {
         switch ($dateModifier) {
             case 'exact':
