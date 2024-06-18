@@ -38,10 +38,10 @@ class TypeNumber extends Column\FilterModel
             switch ($filter['op']) {
                 case 'between':
                     $model->addCondition(
-                        $model->expr('[field] between [value] and [range]', [
+                        $model->expr('[field] between [value] and [value2]', [
                             'field' => $model->getField($filter['name']),
-                            'value' => $filter['value'],
-                            'range' => $filter['range'],
+                            'value' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $filter['value']),
+                            'value2' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $filter['range']),
                         ])
                     );
 
