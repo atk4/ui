@@ -78,7 +78,7 @@ class ViewTest extends TestCase
 
     public function testAddDelayedAbstractViewInit(): void
     {
-        $v = new class() extends AbstractView {};
+        $v = new class extends AbstractView {};
         $vInner = new View();
 
         $v->add($vInner);

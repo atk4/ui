@@ -246,7 +246,7 @@ class FormTest extends TestCase
         try {
             $this->assertFormSubmit(static function (App $app) {
                 $m = new Model();
-                $m->addField('foo', new class() extends Field {
+                $m->addField('foo', new class extends Field {
                     #[\Override]
                     public function normalize($value)
                     {
@@ -279,7 +279,7 @@ class FormTest extends TestCase
         $form->setApp($this->createApp());
         $form->invokeInit();
 
-        $controlClass = get_class(new class() extends Form\Control {
+        $controlClass = get_class(new class extends Form\Control {
             public static bool $firstCreate = true;
 
             public function __construct() // @phpstan-ignore constructor.missingParentCall
@@ -314,7 +314,7 @@ class FormTest extends TestCase
         $form->setApp($this->createApp());
         $form->invokeInit();
 
-        $controlClass = get_class(new class() extends Form\Control {
+        $controlClass = get_class(new class extends Form\Control {
             public static bool $firstCreate = true;
 
             public function __construct() // @phpstan-ignore constructor.missingParentCall

@@ -156,7 +156,7 @@ class JsIntegrationTest extends TestCase
         $v->invokeInit();
         $b = Button::addTo($v);
 
-        $jsCallback = new class() extends JsCallback {
+        $jsCallback = new class extends JsCallback {
             public int $counter = 0;
 
             #[\Override]
