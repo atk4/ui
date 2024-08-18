@@ -16,7 +16,8 @@ class Password extends Line
      */
     public $eye;
 
-    protected function init(): void {
+    protected function init(): void
+    {
         parent::init();
 
         if($this->eye)
@@ -25,12 +26,12 @@ class Password extends Line
                 'class.grey' => true,
                 'iconRight' => 'eye slash',
             ]);
-            
+
             $this->action = $button;
-            
+
             $button->on('click', [
                 $jsExpression = new JsExpression("
-var input_element = document.querySelector(`[id$='form_layout_" . $this->shortName ."_input']`);
+var input_element = document.querySelector(`[id$='form_layout_" . $this->shortName . "_input']`);
 var icon_element = document.querySelector(`[id$='" . $this->shortName . "_button_icon']`);
 
 if(input_element.getAttribute('type') == 'password') {
