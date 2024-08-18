@@ -11,25 +11,23 @@ class Password extends Line
 {
     public string $inputType = 'password';
 
-    /**
-     * @var bool by setting this variable to true you get an Eye-button on the right side which can toggle the visibility of the entered password
-     */
-    public $eye;
-
+    /** By setting this variable to true you get an Eye-button on the right side which can toggle the visibility of the entered password */
+    public bool $eye;
+    
     protected function init(): void
     {
         parent::init();
-
+        
         if ($this->eye) {
             $button = new Button([
                 'class.grey' => true,
                 'iconRight' => 'eye slash',
             ]);
-
+            
             $this->action = $button;
 
             $button->on('click', [
-                $jsExpression = new JsExpression("
+                new JsExpression("
 var input_element = document.querySelector(`[id$='form_layout_" . $this->shortName . "_input']`);
 var icon_element = document.querySelector(`[id$='" . $this->shortName . "_button_icon']`);
 
