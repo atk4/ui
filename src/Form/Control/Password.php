@@ -29,9 +29,9 @@ class Password extends Line
 
             $button->on(
                 'click',
-                new JsExpression("
-var input_element = document.querySelector(`[id$='form_layout_" . $this->shortName . "_input']`);
-var icon_element = document.querySelector(`[id$='" . $this->shortName . "_button_icon']`);
+                new JsExpression(<<<EOF
+var input_element = document.querySelector(`[id$='form_layout_{$this->shortName}_input']`);
+var icon_element = document.querySelector(`[id$='{$this->shortName}_button_icon']`);
 
 if(input_element.getAttribute('type') == 'password') {
   input_element.setAttribute('type', 'text');
@@ -40,7 +40,8 @@ if(input_element.getAttribute('type') == 'password') {
   input_element.setAttribute('type', 'password');
   icon_element.classList.add(['slash']);
 }
-")
+EOF
+                )
             );
         }
     }
