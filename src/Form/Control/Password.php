@@ -27,8 +27,9 @@ class Password extends Line
 
             $this->action = $button;
 
-            $button->on('click',
-                        new JsExpression("
+            $button->on(
+                'click',
+                new JsExpression("
 var input_element = document.querySelector(`[id$='form_layout_" . $this->shortName . "_input']`);
 var icon_element = document.querySelector(`[id$='" . $this->shortName . "_button_icon']`);
 
