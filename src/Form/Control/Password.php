@@ -39,7 +39,8 @@ if(input_element.getAttribute('type') == 'password') {
   input_element.setAttribute('type', 'password');
   icon_element.classList.add(['slash']);
 }
-"));
+")
+            );
         }
     }
 }
