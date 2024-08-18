@@ -13,17 +13,18 @@ class Password extends Line
 
     /** By setting this variable to true you get an Eye-button on the right side which can toggle the visibility of the entered password */
     public bool $eye;
-    
+
+    #[\Override]
     protected function init(): void
     {
         parent::init();
-        
+
         if ($this->eye) {
             $button = new Button([
                 'class.grey' => true,
                 'iconRight' => 'eye slash',
             ]);
-            
+
             $this->action = $button;
 
             $button->on('click', [
