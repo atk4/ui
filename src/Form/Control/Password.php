@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
-use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Button;
+use Atk4\Ui\Js\JsExpression;
 
 class Password extends Line
 {
