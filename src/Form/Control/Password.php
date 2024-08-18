@@ -20,8 +20,7 @@ class Password extends Line
     {
         parent::init();
 
-        if($this->eye)
-        {
+        if($this->eye) {
             $button = new Button([
                 'class.grey' => true,
                 'iconRight' => 'eye slash',
