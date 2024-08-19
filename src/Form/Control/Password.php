@@ -31,15 +31,15 @@ class Password extends Line
                 'click',
                 new JsExpression(
                     <<<"EOF"
-                        let input_element = document.getElementById([] + '_input');
-                        let icon_element = document.querySelector('[id$="' + [] + '_button_icon"]');
+                        let inputElem = document.getElementById([] + '_input');
+                        let iconElem = document.querySelector('[id$="' + [] + '_button_icon"]');
 
-                        if (input_element.getAttribute('type') === 'password') {
-                            input_element.setAttribute('type', 'text');
-                            icon_element.classList.remove(['slash']);
+                        if (inputElem.getAttribute('type') === 'password') {
+                            inputElem.setAttribute('type', 'text');
+                            iconElem.classList.remove(['slash']);
                         } else {
-                            input_element.setAttribute('type', 'password');
-                            icon_element.classList.add(['slash']);
+                            inputElem.setAttribute('type', 'password');
+                            iconElem.classList.add(['slash']);
                         }
                         EOF, [$this->name, $this->shortName]
                 )
