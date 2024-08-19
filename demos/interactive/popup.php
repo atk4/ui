@@ -250,7 +250,7 @@ $signup->set(static function (View $pop) {
     } else {
         $form = Form::addTo($pop);
         $form->addControl('email', [], ['required' => true]);
-        $form->addControl('password', [Form\Control\Password::class], ['required' => true]);
+        $form->addControl('password', [Form\Control\Password::class, 'revealEye' => true], ['required' => true]);
         $form->buttonSave->set('Login');
 
         // popup handles callbacks properly, so dynamic element such as form works
