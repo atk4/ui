@@ -27,9 +27,14 @@ $group->addControl('line_read', ['readOnly' => true])->set('read only');
 $group->addControl('line_disb', ['disabled' => true])->set('disabled');
 
 $group = $form->addGroup('Password');
-$group->addControl('password_norm'[Form\Control\Password::class, 'revealEye' = true], ['type' => 'text'])->set('editable');
-$group->addControl('password_read', [Form\Control\Password::class, 'revealEye' = true, 'readOnly' => true])->set('read only');
-$group->addControl('password_disb', [Form\Control\Password::class, 'revealEye' = true, 'disabled' => true])->set('disabled');
+$group->addControl('password_norm', [Form\Control\Password::class], ['type' => 'text'])->set('editable');
+$group->addControl('password_read', [Form\Control\Password::class, 'readOnly' => true])->set('read only');
+$group->addControl('password_disb', [Form\Control\Password::class, 'disabled' => true])->set('disabled');
+
+$group = $form->addGroup('Password with revealEye');
+$group->addControl('password_re_norm', [Form\Control\Password::class, 'revealEye' => true], ['type' => 'text'])->set('editable');
+$group->addControl('password_re_read', [Form\Control\Password::class, 'revealEye' => true, 'readOnly' => true])->set('read only');
+$group->addControl('password_re_disb', [Form\Control\Password::class, 'revealEye' => true, 'disabled' => true])->set('disabled');
 
 $group = $form->addGroup('Textarea');
 $group->addControl('text_norm', [Form\Control\Textarea::class], ['type' => 'text'])->set("editable\nline2");
