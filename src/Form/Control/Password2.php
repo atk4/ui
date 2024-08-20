@@ -52,11 +52,10 @@ class Password2 extends Line
                         EOF,
                     [
                         $this->getHtmlId() . '_input',
-                        View::assertInstanceOf($this->elements['icon'])->getHtmlId()
+                        View::assertInstanceOf($this->elements['icon'])->getHtmlId(),
                     ]
                 )
             );
         }
     }
 }
-                    
