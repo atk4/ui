@@ -33,7 +33,7 @@ class Password extends Line
     {
         parent::recursiveRender();
 
-        if ($this->revealEye) {
+        if ($this->revealEye && !$this->disabled) {
             $this->on( // TODO $this->action->on() call is too late here and must throw
                 'click',
                 $this->action,
