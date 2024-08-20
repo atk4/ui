@@ -11,7 +11,7 @@ class Password extends Line
 {
     public string $inputType = 'password';
 
-    /** By setting this variable to true you get an Eye-button on the right side which can toggle the visibility of the entered password */
+    /** Enable password reveal */
     public bool $revealEye = false;
 
     #[\Override]
