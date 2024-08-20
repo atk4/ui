@@ -6,6 +6,7 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\View;
 
 class Password extends Line
 {
@@ -27,7 +28,6 @@ class Password extends Line
         }
     }
 
-
     #[\Override]
     protected function recursiveRender(): void
     {
@@ -36,7 +36,7 @@ class Password extends Line
         if ($this->revealEye && !$this->disabled) {
             $this->on( // TODO $this->action->on() call is too late here and must throw
                 'click',
-                $this->action,
+                $this->action, // @phpstan-ignore argument.type
                 new JsExpression(
                     <<<'EOF'
                         let inputElem = document.getElementById([]);
@@ -52,7 +52,7 @@ class Password extends Line
                         EOF,
                     [
                         $this->getHtmlId() . '_input',
-                        $this->action->elements['icon']->getHtmlId(),
+                        View::assertInstanceOf($this->action->elements['icon'])->getHtmlId(),
                     ]
                 )
             );
