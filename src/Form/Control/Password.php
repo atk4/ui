@@ -20,10 +20,10 @@ class Password extends Line
         parent::init();
 
         if ($this->revealEye) {
-            $button = new Button([
+            $button = Button::addTo($this, [
                 'class.grey' => true,
                 'iconRight' => 'eye slash',
-            ]);
+            ], ['AfterInput']);
 
             $this->action = $button;
 
