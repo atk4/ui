@@ -20,20 +20,27 @@ class Password extends Line
         parent::init();
 
         if ($this->revealEye) {
-            $button = Button::addTo($this, [
+            $this->action = Button::addTo($this, [
                 'class.grey' => true,
                 'iconRight' => 'eye slash',
             ], ['AfterInput']);
+        }
+    }
 
-            $this->action = $button;
 
-            $button->on(
+    #[\Override]
+    protected function recursiveRender(): void
+    {
+        parent::recursiveRender();
+
+        if ($this->revealEye) {
+            $this->on( // TODO $this->action->on() call is too late here and must throw
                 'click',
+                $this->action,
                 new JsExpression(
                     <<<'EOF'
-                        let inputElem = document.getElementById([] + '_input');
-                        let buttonElem = document.getElementById([]);
-                        let iconElem = buttonElem.childNodes[ 0 ];
+                        let inputElem = document.getElementById([]);
+                        let iconElem = document.getElementById([]);
 
                         if (inputElem.getAttribute('type') === 'password') {
                             inputElem.setAttribute('type', 'text');
@@ -43,7 +50,10 @@ class Password extends Line
                             iconElem.classList.add(['slash']);
                         }
                         EOF,
-                    [$this->name, $button->name]
+                    [
+                        $this->getHtmlId() . '_input',
+                        $this->action->elements['icon']->getHtmlId(),
+                    ]
                 )
             );
         }
