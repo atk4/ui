@@ -25,20 +25,14 @@ class Password extends Line
                 'iconRight' => 'eye slash',
             ]);
 
-            // Add button as an action to the input-field
             $this->action = $button;
 
-            // Force creation of the rendertree
-            $this->renderView();
-
-            // On click on the revealEye button do
             $button->on(
                 'click',
                 new JsExpression(
                     <<<'EOF'
                         let inputElem = document.getElementById([] + '_input');
-                        let iconElemName = document.getElementById([]).childNodes[[]].id;
-                        let iconElem = document.getElementById(iconElemName);
+                        let iconElem = document.querySelector('[id$="' + [] + '_button_icon"]');
 
                         if (inputElem.getAttribute('type') === 'password') {
                             inputElem.setAttribute('type', 'text');
@@ -48,7 +42,7 @@ class Password extends Line
                             iconElem.classList.add(['slash']);
                         }
                         EOF,
-                    [$this->name, $button->name, 0]
+                    [$this->name, $this->shortName]
                 )
             );
         }
