@@ -32,7 +32,8 @@ class Password extends Line
                 new JsExpression(
                     <<<'EOF'
                         let inputElem = document.getElementById([] + '_input');
-                        let iconElem = document.querySelector('[id$="' + [] + '_button_icon"]');
+                        let buttonElem = document.getElementById([]);
+                        let iconElem = buttonElem.childNodes[ 0 ];
 
                         if (inputElem.getAttribute('type') === 'password') {
                             inputElem.setAttribute('type', 'text');
@@ -42,7 +43,7 @@ class Password extends Line
                             iconElem.classList.add(['slash']);
                         }
                         EOF,
-                    [$this->name, $this->shortName]
+                    [$this->name, $button->name]
                 )
             );
         }
