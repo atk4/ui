@@ -15,9 +15,6 @@ class Password2 extends Line
     /** Enable password reveal */
     public bool $revealEye = false;
 
-    /** Reveal button */
-    private $revealEyeButton;
-
     #[\Override]
     protected function init(): void
     {
