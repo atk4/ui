@@ -22,7 +22,7 @@ class Password extends Line
 
         if ($this->revealEye) {
             $this->action = Button::addTo($this, [
-                'class.grey' => true,
+                'class.inverted tertiary' => true,
                 'iconRight' => 'eye slash',
             ], ['AfterInput']);
         }
