@@ -6,6 +6,8 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\View;
 
 class Password extends Line
@@ -15,16 +17,22 @@ class Password extends Line
     /** Enable password reveal */
     public bool $revealEye = false;
 
+    private $revealEyeButton;
+    
     #[\Override]
     protected function init(): void
     {
         parent::init();
 
         if ($this->revealEye) {
-            $this->action = Button::addTo($this, [
-                'class.inverted tertiary' => true,
-                'iconRight' => 'eye slash',
-            ], ['AfterInput']);
+            $this->revealEyeButton = Button::addTo($this, [
+                    'class.tertiary event' => true,
+                    'iconRight' => 'eye slash event',
+                ],
+                [
+		    'AfterInput',
+                ]
+	    );
         }
     }
 
@@ -34,13 +42,13 @@ class Password extends Line
         parent::recursiveRender();
 
         if ($this->revealEye && !$this->disabled) {
-            $this->on( // TODO $this->action->on() call is too late here and must throw
-                'click',
-                $this->action, // @phpstan-ignore argument.type
+	    $this->js('click', 
                 new JsExpression(
-                    <<<'EOF'
+		    <<<'EOF'
                         let inputElem = document.getElementById([]);
                         let iconElem = document.getElementById([]);
+                        console.log(inputElem);
+                        console.log(iconElem);
 
                         if (inputElem.getAttribute('type') === 'password') {
                             inputElem.setAttribute('type', 'text');
@@ -52,9 +60,9 @@ class Password extends Line
                         EOF,
                     [
                         $this->getHtmlId() . '_input',
-                        View::assertInstanceOf($this->action->elements['icon'])->getHtmlId(),
+		        $this->revealEyeButton->elements['icon']->getHtmlId(),
                     ]
-                )
+                ),
             );
         }
     }
