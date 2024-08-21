@@ -26,14 +26,16 @@ class Password extends Line
         parent::init();
 
         if ($this->revealEye) {
-            $this->revealEyeButton = Button::addTo($this, [
+            $this->revealEyeButton = Button::addTo(
+                $this,
+                [
                     'class.tertiary event' => true,
                     'iconRight' => 'eye slash event',
                 ],
                 [
-		    'AfterInput',
+                    'AfterInput',
                 ]
-	    );
+            );
         }
     }
 
@@ -43,9 +45,9 @@ class Password extends Line
         parent::recursiveRender();
 
         if ($this->revealEye && !$this->disabled) {
-	    $this->js('click', 
+            $this->on('click', 
                 new JsExpression(
-		    <<<'EOF'
+                    <<<'EOF'
                         let inputElem = document.getElementById([]);
                         let iconElem = document.getElementById([]);
                         console.log(inputElem);
@@ -61,7 +63,7 @@ class Password extends Line
                         EOF,
                     [
                         $this->getHtmlId() . '_input',
-		        $this->revealEyeButton->elements['icon']->getHtmlId(),
+		                $this->revealEyeButton->elements['icon']->getHtmlId(),
                     ]
                 ),
             );
