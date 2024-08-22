@@ -19,7 +19,7 @@ class Password extends Line
 
     /** Storage for the added button */
     private $revealEyeButton;
-    
+
     #[\Override]
     protected function init(): void
     {
@@ -45,7 +45,8 @@ class Password extends Line
         parent::recursiveRender();
 
         if ($this->revealEye && !$this->disabled) {
-            $this->on('click', 
+            $this->on(
+                'click', 
                 new JsExpression(
                     <<<'EOF'
                         let inputElem = document.getElementById([]);
@@ -63,7 +64,7 @@ class Password extends Line
                         EOF,
                     [
                         $this->getHtmlId() . '_input',
-		                $this->revealEyeButton->elements['icon']->getHtmlId(),
+                        $this->revealEyeButton->elements['icon']->getHtmlId(),
                     ]
                 ),
             );
