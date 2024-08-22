@@ -46,8 +46,6 @@ class Password extends Line
                     <<<'EOF'
                         let inputElem = document.getElementById([]);
                         let iconElem = document.getElementById([]);
-                        console.log(inputElem);
-                        console.log(iconElem);
 
                         if (inputElem.getAttribute('type') === 'password') {
                             inputElem.setAttribute('type', 'text');
