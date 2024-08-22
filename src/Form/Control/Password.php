@@ -17,39 +17,33 @@ class Password extends Line
     /** Enable password reveal */
     public bool $revealEye = false;
 
-    /** Storage for the added button */
+    /** @var Button|array|UserAction|null */
     private $revealEyeButton;
 
     #[\Override]
     protected function init(): void
     {
         parent::init();
+    }
 
+    #[\Override]
+    protected function recursiveRender(): void
+    {
         if ($this->revealEye) {
-            print_r(get_object_vars($this));
-            print_r(get_class_methods($this));
-            print_r(get_class_vars($this));
-            
             $this->revealEyeButton = Button::addTo(
                 $this,
                 [
-                    'class.tertiary event' => true,
-                    'iconRight' => 'eye slash event',
+                    'class.tertiary' => true,
+                    'iconRight' => 'eye slash',
                 ],
                 [
                     'AfterInput',
                 ]
             );
         }
-    }
-
-    #[\Override]
-    protected function recursiveRender(): void
-    {
-        parent::recursiveRender();
 
         if ($this->revealEye && !$this->disabled) {
-            $this->on(
+            $this->revealEyeButton->on(
                 'click', 
                 new JsExpression(
                     <<<'EOF'
@@ -68,10 +62,16 @@ class Password extends Line
                         EOF,
                     [
                         $this->getHtmlId() . '_input',
-                        $this->revealEyeButton->elements['icon']->getHtmlId(),
+                        //$this->getHtmlId() . '_input',
+                        $this->revealEyeButton->getHtmlId(),
                     ]
                 ),
             );
+            //print_r(get_object_vars($this->revealEyeButton));
+            //print_r(get_class_methods($this->revealEyeButton));
+            //print_r(get_class_vars($this->revealEyeButton));
         }
+
+        parent::recursiveRender();
     }
 }
