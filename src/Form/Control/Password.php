@@ -44,7 +44,7 @@ class Password extends Line
 
         if ($this->revealEye && !$this->disabled) {
             $this->revealEyeButton->on(
-                'click', 
+                'click',
                 new JsExpression(
                     <<<'EOF'
                         let inputElem = document.getElementById([]);
@@ -62,14 +62,10 @@ class Password extends Line
                         EOF,
                     [
                         $this->getHtmlId() . '_input',
-                        //$this->getHtmlId() . '_input',
                         $this->revealEyeButton->getHtmlId(),
                     ]
                 ),
             );
-            //print_r(get_object_vars($this->revealEyeButton));
-            //print_r(get_class_methods($this->revealEyeButton));
-            //print_r(get_class_vars($this->revealEyeButton));
         }
 
         parent::recursiveRender();
