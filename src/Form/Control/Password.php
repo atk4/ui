@@ -26,6 +26,10 @@ class Password extends Line
         parent::init();
 
         if ($this->revealEye) {
+            print_r(get_object_vars($this));
+            print_r(get_class_methods($this));
+            print_r(get_class_vars($this));
+            
             $this->revealEyeButton = Button::addTo(
                 $this,
                 [
