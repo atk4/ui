@@ -6,9 +6,6 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Js\JsExpression;
-use Atk4\Ui\Js\JsBlock;
-use Atk4\Ui\Js\JsReload;
-use Atk4\Ui\View;
 
 class Password extends Line
 {
