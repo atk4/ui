@@ -14,7 +14,7 @@ class Password extends Line
     /** Enable password reveal */
     public bool $revealEye = false;
 
-    /** @var Button|array|UserAction|null */
+    /** @var Button|array|null */
     private $revealEyeButton;
 
     #[\Override]
