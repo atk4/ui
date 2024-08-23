@@ -42,7 +42,6 @@ class Password2 extends Line
                     'AfterInput',
                 ]
             );
-            
         }
 
         if ($this->revealEye && !$this->disabled) {
