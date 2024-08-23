@@ -23,7 +23,9 @@ class Password2 extends Line
         parent::init();
         
         if ($this->revealEye) {
-            $this->icon = true;
+            if(! $this->icon) {
+                $this->icon = "true";
+            }
         }
 
     }
