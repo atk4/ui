@@ -21,10 +21,10 @@ class Password2 extends Line
     protected function init(): void
     {
         parent::init();
-        
+
         if ($this->revealEye) {
-            if(! $this->icon) {
-                $this->icon = "true";
+            if(!$this->icon) {
+                $this->icon = 'true';
             }
         }
     }
