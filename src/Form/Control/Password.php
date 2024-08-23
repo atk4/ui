@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
-use Atk4\Ui\Button;
+use Atk4\Ui\Icon;
 use Atk4\Ui\Js\JsExpression;
 
 class Password extends Line
@@ -14,24 +14,29 @@ class Password extends Line
     /** Enable password reveal */
     public bool $revealEye = false;
 
-    /** @var Button|array|null */
-    private $revealEyeButton;
+    /** @var Icon|array|null */
+    private $revealEyeIcon;
 
     #[\Override]
     protected function init(): void
     {
         parent::init();
+
+        if ($this->revealEye) {
+            if (!$this->icon) {
+                $this->icon = 'true';
+            }
+        }
     }
 
     #[\Override]
     protected function recursiveRender(): void
     {
         if ($this->revealEye) {
-            $this->revealEyeButton = Button::addTo(
+            $this->revealEyeIcon = Icon::addTo(
                 $this,
                 [
-                    'class.tertiary' => true,
-                    'iconRight' => 'eye slash',
+                    'grey eye slash link',
                 ],
                 [
                     'AfterInput',
@@ -40,7 +45,7 @@ class Password extends Line
         }
 
         if ($this->revealEye && !$this->disabled) {
-            $this->revealEyeButton->on(
+            $this->revealEyeIcon->on(
                 'click',
                 new JsExpression(
                     <<<'EOF'
@@ -57,9 +62,9 @@ class Password extends Line
                         EOF,
                     [
                         $this->getHtmlId() . '_input',
-                        $this->revealEyeButton->getHtmlId(),
+                        $this->revealEyeIcon->getHtmlId(),
                     ]
-                ),
+                )
             );
         }
 
