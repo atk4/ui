@@ -21,6 +21,11 @@ class Password2 extends Line
     protected function init(): void
     {
         parent::init();
+        
+        if ($this->revealEye) {
+            $this->icon = true;
+        }
+
     }
 
     #[\Override]
@@ -29,7 +34,6 @@ class Password2 extends Line
 
 
         if ($this->revealEye) {
-            //$this->addClass('icon'); Does not work at the moment.
             $this->revealEyeIcon = Icon::addTo(
                 $this,
                 [
@@ -43,7 +47,7 @@ class Password2 extends Line
         }
 
         if ($this->revealEye && !$this->disabled) {
-            $this->revealEyeIcon->on( // TODO $this->action->on() call is too late here and must throw
+            $this->revealEyeIcon->on(
                 'click',
                 new JsExpression(
                     <<<'EOF'
@@ -67,5 +71,6 @@ class Password2 extends Line
         }
 
         parent::recursiveRender();
+
     }
 }
