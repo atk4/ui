@@ -27,14 +27,11 @@ class Password2 extends Line
                 $this->icon = "true";
             }
         }
-
     }
 
     #[\Override]
     protected function recursiveRender(): void
     {
-
-
         if ($this->revealEye) {
             $this->revealEyeIcon = Icon::addTo(
                 $this,
@@ -73,6 +70,5 @@ class Password2 extends Line
         }
 
         parent::recursiveRender();
-
     }
 }
