@@ -32,7 +32,7 @@ class Password extends Line
 
     protected function delArrValues(array $arr, array $remove)
     {
-        return array_filter($arr, static fn($e) => !in_array($e, $remove, true));
+        return array_filter($arr, static fn ($e) => !in_array($e, $remove, true));
     }
 
     #[\Override]
