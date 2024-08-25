@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Icon;
-use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsReload;
 
 class Password extends Line
@@ -74,18 +73,15 @@ class Password extends Line
                         $this->inputType = 'password';
                     }
                     if (in_array('slash', $this->revealEyeIcon->class, true)) {
-                        $reIcon = $this->revealEyeIcon->js(true)->removeClass('slash');
+                        $this->revealEyeIcon->js(true)->removeClass('slash');
                         $this->revealEyeIcon->class = $this->delArrValues($this->revealEyeIcon->class, ['slash']);
                     } else {
-                        $reIcon = $this->revealEyeIcon->js()->addClass('slash');
+                        $this->revealEyeIcon->js()->addClass('slash');
                         $this->revealEyeIcon->class[] = 'slash';
                     }
                     $iconInit = implode(' ', $this->revealEyeIcon->class);
 
-                    return new JsBlock([
-                        $reIcon,
-                        new JsReload($this, ['iconInit' => $iconInit, 'inputType' => $this->inputType]),
-                    ]);
+                    return  new JsReload($this, ['iconInit' => $iconInit, 'inputType' => $this->inputType]);
                 }
             );
         }
