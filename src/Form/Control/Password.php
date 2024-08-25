@@ -30,7 +30,7 @@ class Password extends Line
     }
 
     /**
-     * Remove selected value/values from array
+     * Remove selected value/values from array.
      *
      * @return array
      */
@@ -81,7 +81,7 @@ class Password extends Line
                     }
                     $iconInit = implode(' ', $this->revealEyeIcon->class);
 
-                    return  new JsReload($this, ['iconInit' => $iconInit, 'inputType' => $this->inputType]);
+                    return new JsReload($this, ['iconInit' => $iconInit, 'inputType' => $this->inputType]);
                 }
             );
         }
