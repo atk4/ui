@@ -5,12 +5,8 @@ declare(strict_types=1);
 namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Icon;
-use Atk4\Ui\Js\JsExpression;
-use Atk4\Ui\JsCallback;
-use Atk4\Ui\Js\Jquery;
-use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Js\JsBlock;
-
+use Atk4\Ui\Js\JsReload;
 
 class Password extends Line
 {
@@ -34,15 +30,16 @@ class Password extends Line
         }
     }
 
-    protected function delArrValues(array $arr, array $remove) {
-        return array_filter($arr, fn($e) => !in_array($e, $remove));
+    protected function delArrValues(array $arr, array $remove)
+    {
+        return array_filter($arr, static fn($e) => !in_array($e, $remove));
     }
     
     #[\Override]
     protected function recursiveRender(): void
     {
         if ($this->revealEye) {
-            if($this->stickyGet('iconInit')) {
+            if ($this->stickyGet('iconInit')) {
                 $iconInit = $this->stickyGet('iconInit');
                 $this->inputType = $this->stickyGet('inputType');
                 $this->renderView();
@@ -71,12 +68,12 @@ class Password extends Line
                     } else {
                         $this->inputType = 'password';
                     }
-                    if (in_array('slash', $this->revealEyeIcon->class)) {
+                    if (in_array('slash', $this->revealEyeIcon->class, true)) {
                         $reIcon = $this->revealEyeIcon->js(true)->removeClass('slash');
                         $this->revealEyeIcon->class = $this->delArrValues($this->revealEyeIcon->class, ['slash']);
                     } else {
                         $reIcon = $this->revealEyeIcon->js()->addClass('slash');
-                        array_push($this->revealEyeIcon->class, 'slash');
+                        $this->revealEyeIcon->class[] = 'slash';
                     }
                     $iconInit = implode(' ', $this->revealEyeIcon->class);
                     
@@ -84,9 +81,10 @@ class Password extends Line
                         $reIcon,
                         new JsReload($this, ['iconInit' => $iconInit, 'inputType' => $this->inputType]),
                     ]);
-                });
+                }
+            );
         }
-
+        
         parent::recursiveRender();
     }
 }
