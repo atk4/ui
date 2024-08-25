@@ -30,6 +30,11 @@ class Password extends Line
         }
     }
 
+    /**
+     * Remove selected value/values from array
+     *
+     * @return array
+     */
     protected function delArrValues(array $arr, array $remove)
     {
         return array_filter($arr, static fn ($e) => !in_array($e, $remove, true));
