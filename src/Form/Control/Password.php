@@ -32,9 +32,9 @@ class Password extends Line
 
     protected function delArrValues(array $arr, array $remove)
     {
-        return array_filter($arr, static fn($e) => !in_array($e, $remove));
+        return array_filter($arr, static fn($e) => !in_array($e, $remove, true));
     }
-    
+
     #[\Override]
     protected function recursiveRender(): void
     {
@@ -76,7 +76,7 @@ class Password extends Line
                         $this->revealEyeIcon->class[] = 'slash';
                     }
                     $iconInit = implode(' ', $this->revealEyeIcon->class);
-                    
+
                     return new JsBlock([
                         $reIcon,
                         new JsReload($this, ['iconInit' => $iconInit, 'inputType' => $this->inputType]),
@@ -84,7 +84,7 @@ class Password extends Line
                 }
             );
         }
-        
+
         parent::recursiveRender();
     }
 }
