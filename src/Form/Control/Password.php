@@ -43,12 +43,12 @@ class Password extends Line
     protected function recursiveRender(): void
     {
         if ($this->revealEye) {
-            if ($this->stickyGet('iconInit')) {
-                $iconInit = $this->stickyGet('iconInit');
-                $this->inputType = $this->stickyGet('inputType');
-                $this->renderView();
-            } else {
-                $iconInit = 'grey eye slash link';
+            $iconInit = 'grey eye link';
+
+            $this->inputType = $this->stickyGet('inputType') ?? 'password';
+            $this->renderView();
+            if($this->inputType === 'password') {
+                $iconInit .= ' slash';
             }
 
             $this->revealEyeIcon = Icon::addTo(
@@ -68,20 +68,14 @@ class Password extends Line
                 function () {
                     parent::recursiveRender();
                     if ($this->inputType === 'password') {
+                        $this->revealEyeIcon->js(true)->removeClass('slash');
                         $this->inputType = 'text';
                     } else {
+                        $this->revealEyeIcon->js()->addClass('slash');
                         $this->inputType = 'password';
                     }
-                    if (in_array('slash', $this->revealEyeIcon->class, true)) {
-                        $this->revealEyeIcon->js(true)->removeClass('slash');
-                        $this->revealEyeIcon->class = $this->delArrValues($this->revealEyeIcon->class, ['slash']);
-                    } else {
-                        $this->revealEyeIcon->js()->addClass('slash');
-                        $this->revealEyeIcon->class[] = 'slash';
-                    }
-                    $iconInit = implode(' ', $this->revealEyeIcon->class);
 
-                    return new JsReload($this, ['iconInit' => $iconInit, 'inputType' => $this->inputType]);
+                    return new JsReload($this, ['inputType' => $this->inputType]);
                 }
             );
         }

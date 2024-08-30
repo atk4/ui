@@ -32,7 +32,7 @@ $group->addControl('password_read', [Form\Control\Password::class, 'readOnly' =>
 $group->addControl('password_disb', [Form\Control\Password::class, 'disabled' => true])->set('disabled');
 
 $group = $form->addGroup('Password with reveal eye');
-$group->addControl('password_re_norm', [Form\Control\Password::class, 'revealEye' => true], ['type' => 'text'])->set('editable');
+$group->addControl('password_re_norm', [Form\Control\Password::class, 'revealEye' => true])->set('editable');
 $group->addControl('password_re_read', [Form\Control\Password::class, 'revealEye' => true, 'readOnly' => true])->set('read only');
 $group->addControl('password_re_disb', [Form\Control\Password::class, 'revealEye' => true, 'disabled' => true])->set('disabled');
 
