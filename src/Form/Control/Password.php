@@ -29,16 +29,6 @@ class Password extends Line
         }
     }
 
-    /**
-     * Remove selected value/values from array.
-     *
-     * @return array
-     */
-    protected function delArrValues(array $arr, array $remove)
-    {
-        return array_filter($arr, static fn ($e) => !in_array($e, $remove, true));
-    }
-
     #[\Override]
     protected function recursiveRender(): void
     {
@@ -47,7 +37,7 @@ class Password extends Line
 
             $this->inputType = $this->stickyGet('inputType') ?? 'password';
             $this->renderView();
-            if($this->inputType === 'password') {
+            if ($this->inputType === 'password') {
                 $iconInit .= ' slash';
             }
 
