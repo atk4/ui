@@ -10,8 +10,8 @@ class Password extends Line
 {
     public string $inputType = 'password';
 
-    /** Enable password reveal button */
-    public bool $revealEye = false;
+    /** Enable reveal button */
+    public bool $revealEye = true;
 
     #[\Override]
     protected function init(): void
