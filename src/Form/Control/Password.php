@@ -19,9 +19,9 @@ class Password extends Line
         parent::init();
 
         if ($this->revealEye) {
-            $this->icon = 'grey eye link slash';
+            $this->icon = 'eye link slash';
             if ($this->disabled) {
-                $this->icon .= ' disabled';
+                $this->icon .= ' grey disabled';
             }
         }
     }
@@ -40,11 +40,9 @@ class Password extends Line
                         if (inputElem.getAttribute('type') === 'password') {
                             inputElem.setAttribute('type', 'text');
                             iconElem.classList.remove('slash');
-                            iconElem.classList.remove('grey');
                         } else {
                             inputElem.setAttribute('type', 'password');
                             iconElem.classList.add('slash');
-                            iconElem.classList.add('grey');
                         }
                         EOF,
                     [$this->name . '_input', $this->icon->name]
