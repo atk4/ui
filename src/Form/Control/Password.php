@@ -6,6 +6,8 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Icon;
 use Atk4\Ui\Js\JsReload;
+use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\Js\JsBlock;
 
 class Password extends Line
 {
@@ -33,18 +35,10 @@ class Password extends Line
     protected function recursiveRender(): void
     {
         if ($this->revealEye) {
-            $iconInit = 'grey eye link';
-
-            $this->inputType = $this->stickyGet('inputType') ?? 'password';
-            $this->renderView();
-            if ($this->inputType === 'password') {
-                $iconInit .= ' slash';
-            }
-
             $this->revealEyeIcon = Icon::addTo(
                 $this,
                 [
-                    $iconInit,
+                     'grey eye link slash',
                 ],
                 [
                     'AfterInput',
@@ -55,21 +49,24 @@ class Password extends Line
         if ($this->revealEye && !$this->disabled) {
             $this->revealEyeIcon->on(
                 'click',
-                function () {
-                    parent::recursiveRender();
-                    if ($this->inputType === 'password') {
-                        $this->revealEyeIcon->js(true)->removeClass('slash');
-                        $this->inputType = 'text';
-                    } else {
-                        $this->revealEyeIcon->js()->addClass('slash');
-                        $this->inputType = 'password';
-                    }
+                new JsExpression(
+                    <<<'EOF'
+                        let inputElem = document.getElementById([] + '_input');
+                        let iconElem = document.getElementById([]);
+                        //let iconElem = document.getElementById(iconElemName);
 
-                    return new JsReload($this, ['inputType' => $this->inputType]);
-                }
+                        if (inputElem.getAttribute('type') === 'password') {
+                            inputElem.setAttribute('type', 'text');
+                            iconElem.classList.remove(['slash']);
+                        } else {
+                            inputElem.setAttribute('type', 'password');
+                            iconElem.classList.add(['slash']);
+                        }
+                        EOF,
+                    [$this->name, $this->revealEyeIcon->name]
+                )
             );
         }
-
         parent::recursiveRender();
     }
 }
