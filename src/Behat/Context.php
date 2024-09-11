@@ -247,7 +247,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @return array<NodeElement>
+     * @return list<NodeElement>
      */
     protected function findElements(?NodeElement $context, string $selector): array
     {

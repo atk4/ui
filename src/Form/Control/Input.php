@@ -163,7 +163,7 @@ class Input extends Form\Control
                 $button->on('click', $executor);
             }
         }
-        if (!$button->isInitialized()) {
+        if (!$button->isInitialized()) { // TODO if should be replaced with new method like View::addOrAssertRegion() which will add the element and otherwise assert the owner and region
             $this->add($button, $spot);
         }
 
