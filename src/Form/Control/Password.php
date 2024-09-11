@@ -31,7 +31,7 @@ class Password extends Line
     {
         if ($this->revealEye && !$this->disabled) {
             $this->icon->on(
-                'click',
+                'mousedown', // do not use 'click' to keep focus/selection
                 new JsExpression(
                     <<<'EOF'
                         let inputElem = document.getElementById([]);
@@ -44,8 +44,6 @@ class Password extends Line
                             inputElem.setAttribute('type', 'password');
                             iconElem.classList.add('slash');
                         }
-
-                        inputElem.focus();
                         EOF,
                     [$this->name . '_input', $this->icon->name]
                 )
