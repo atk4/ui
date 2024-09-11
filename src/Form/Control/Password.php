@@ -44,6 +44,7 @@ class Password extends Line
                             inputElem.setAttribute('type', 'password');
                             iconElem.classList.add('slash');
                         }
+
                         inputElem.focus();
                         EOF,
                     [$this->name . '_input', $this->icon->name]
