@@ -91,6 +91,8 @@ class Paginator extends View
      *
      * Array will contain '[', ']', denoting "first", "last" items, '...' for the spacer and any
      * other integer value for a regular page link.
+     *
+     * @return list<int|string>
      */
     public function getPaginatorItems(): array
     {

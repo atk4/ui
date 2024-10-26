@@ -37,7 +37,7 @@ abstract class AbstractView
      * initialized by calling init() or adding into App or another initialized View,
      * then add() will be re-invoked with the contents of this array.
      *
-     * @var array<int, array{self, array}>|null
+     * @var list<array{self, array}>|null
      */
     protected ?array $_addLater = [];
 

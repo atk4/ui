@@ -200,6 +200,8 @@ class ExecutorFactory
 
     /**
      * Return executor default trigger seed based on type.
+     *
+     * @return array<mixed>
      */
     protected function getDefaultTrigger(UserAction $action, ?string $type = null): array
     {
@@ -253,6 +255,8 @@ class ExecutorFactory
 
     /**
      * Return Add action seed for menu item.
+     *
+     * @return array<mixed>
      */
     protected function getAddMenuItem(UserAction $action): array
     {

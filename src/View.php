@@ -26,7 +26,7 @@ class View extends AbstractView
     /**
      * When you call renderAll() this will be populated with JavaScript chains.
      *
-     * @var array<1|string, array<int, JsExpressionable>>
+     * @var array<1|string, list<JsExpressionable>>
      *
      * @internal
      */
@@ -49,7 +49,7 @@ class View extends AbstractView
      */
     public $ui = false;
 
-    /** @var array<int, string> List of element CSS classes. */
+    /** @var list<string> List of element CSS classes. */
     public array $class = [];
 
     /** @var array<string, string> Map of element CSS styles. */
@@ -371,7 +371,7 @@ class View extends AbstractView
      * Multiple CSS classes can also be added if passed as space separated
      * string or array of class names.
      *
-     * @param string|array<int, string> $class
+     * @param string|list<string> $class
      *
      * @return $this
      */
@@ -388,14 +388,14 @@ class View extends AbstractView
     /**
      * Remove one or several CSS classes from the element.
      *
-     * @param string|array<int, string> $class
+     * @param string|list<string> $class
      *
      * @return $this
      */
     public function removeClass($class)
     {
         $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
-        $this->class = array_diff($this->class, $classArr);
+        $this->class = array_values(array_diff($this->class, $classArr));
 
         return $this;
     }
@@ -460,7 +460,7 @@ class View extends AbstractView
     /**
      * Remove attribute.
      *
-     * @param string|array<int, string> $name
+     * @param string|list<string> $name
      *
      * @return $this
      */
@@ -481,7 +481,7 @@ class View extends AbstractView
 
     // {{{ Sticky URLs
 
-    /** @var array<string, string> stickyGet arguments */
+    /** @var array<string, string|null> stickyGet arguments */
     public $stickyArgs = [];
 
     /**
@@ -506,6 +506,8 @@ class View extends AbstractView
 
     /**
      * Get sticky arguments defined by the view and parents (including API).
+     *
+     * @return array<string, string|null>
      */
     protected function _getStickyArgs(): array
     {
@@ -680,6 +682,8 @@ class View extends AbstractView
 
     /**
      * Render View using JSON format.
+     *
+     * @return array<string, mixed>
      */
     public function renderToJsonArr(): array
     {
@@ -842,16 +846,19 @@ class View extends AbstractView
     /**
      * Get Local and Session web storage associated with this view.
      * Web storage can be retrieved using a $view->jsReload() request.
+     *
+     * @return array{local: mixed, session: mixed}
      */
     public function jsGetStoreData(): array
     {
-        $data = [];
-        $data['local'] = $this->getApp()->decodeJson(
-            $this->getApp()->tryGetRequestQueryParam($this->name . '_local_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_local_store') ?? 'null'
-        );
-        $data['session'] = $this->getApp()->decodeJson(
-            $this->getApp()->tryGetRequestQueryParam($this->name . '_session_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_session_store') ?? 'null'
-        );
+        $data = [
+            'local' => $this->getApp()->decodeJson(
+                $this->getApp()->tryGetRequestQueryParam($this->name . '_local_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_local_store') ?? 'null'
+            ),
+            'session' => $this->getApp()->decodeJson(
+                $this->getApp()->tryGetRequestQueryParam($this->name . '_session_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_session_store') ?? 'null'
+            ),
+        ];
 
         return $data;
     }

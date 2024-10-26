@@ -212,7 +212,7 @@ class Column
      * This method return a callback where you can detect
      * menu item change via $cb->onMenuItem($item) function.
      *
-     * @param array<int, array> $items
+     * @param list<array> $items
      *
      * @return Column\JsHeaderDropdownCallback
      */
@@ -292,6 +292,8 @@ class Column
 
     /**
      * @param array<string, string|list<string>> ...$attributesArr
+     *
+     * @return array<string, string|list<string>>
      */
     protected function mergeTagAttributes(array ...$attributesArr): array
     {
@@ -311,6 +313,8 @@ class Column
 
     /**
      * @param 'head'|'body'|'foot' $position
+     *
+     * @return array<string, string|list<string>>
      */
     public function getTagAttributes(string $position, array $attr = []): array
     {
@@ -325,9 +329,9 @@ class Column
      * Returns a suitable cell tag with the supplied value. Applies modifiers
      * added through addClass and setAttr.
      *
-     * @param 'head'|'body'|'foot'                                                                                     $position
-     * @param array<string, string|bool|array<string>>                                                                 $attr
-     * @param string|array<int, array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
+     * @param 'head'|'body'|'foot'                                                                               $position
+     * @param array<string, string|bool|list<string>>                                                            $attr
+     * @param string|list<array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
      */
     public function getTag(string $position, $attr, $value): string
     {

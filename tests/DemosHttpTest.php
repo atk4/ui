@@ -175,6 +175,9 @@ class DemosHttpTest extends DemosTest
         self::assertSame($expectedOutput, $response->getBody()->getContents());
     }
 
+    /**
+     * @return iterable<list<mixed>>
+     */
     public static function provideDemoLateOutputErrorCases(): iterable
     {
         $hOutput = "\n" . '!! FATAL UI ERROR: Headers already sent, more headers cannot be set at this stage !!' . "\n";

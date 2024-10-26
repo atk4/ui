@@ -11,7 +11,7 @@ parameters:
         - js
 
     ignoreErrors:
-        - '~^(Property .+ has|Method .+\(\) (has parameter \$.+ with|return type has)) no value type specified in iterable type .+\.$~'
+        - '~^(Property .+ has|Method .+\(\) has parameter \$.+ with) no value type specified in iterable type .+\.$~'
 
         # relax strict rules
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.$~'
@@ -606,7 +606,7 @@ parameters:
         -
             path: 'src/Wizard.php'
             identifier: assign.propertyType
-            message: '~^Property Atk4\\Ui\\Wizard::\$steps \(array<int, Atk4\\Ui\\WizardStep>\) does not accept array<int, Atk4\\Ui\\AbstractView>\.$~'
+            message: '~^Property Atk4\\Ui\\Wizard::\$steps \(list<Atk4\\Ui\\WizardStep>\) does not accept non-empty-list<Atk4\\Ui\\AbstractView>\.$~'
             count: 1
 
         # TODO these rules are generated, this ignores should be fixed in the code

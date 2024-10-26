@@ -350,6 +350,8 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Set property for AtkLookup component.
+     *
+     * @return array<string, mixed>
      */
     protected function getLookupProps(Field $field): array
     {
@@ -373,6 +375,8 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Set property for AtkDatePicker component.
+     *
+     * @return array<string, mixed>
      */
     protected function getDatePickerProps(Field $field): array
     {
@@ -422,6 +426,9 @@ class ScopeBuilder extends Form\Control
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getRule(string $type, array $defaults = [], ?Field $field = null): array
     {
         $rule = static::$ruleTypes[$type] ?? static::$ruleTypes['default'];
@@ -449,6 +456,8 @@ class ScopeBuilder extends Form\Control
     /**
      * Return an array of items ID and name for a field.
      * Return field enum, values or reference values.
+     *
+     * @return array<mixed, mixed>
      */
     protected function getFieldItems(Field $field, ?int $limit = 250): array
     {
@@ -473,6 +482,8 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Returns the choices array for Select field rule.
+     *
+     * @return list<array{label: mixed, value: mixed}>
      */
     protected function getChoices(Field $field, array $options = []): array
     {
@@ -580,6 +591,8 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Converts Scope or Condition to VueQueryBuilder query array.
+     *
+     * @return array{type: string, query: array<string, mixed>}
      */
     public function scopeToQuery(Scope\AbstractScope $scope, array $inputsMap = []): array
     {
@@ -612,7 +625,7 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts a Condition to VueQueryBuilder query array.
      *
-     * @return array{rule: string, operator: string, value: string|null, option: array|null}
+     * @return array{rule: string, operator: string, value: string|null, option: array<string, mixed>|null}
      */
     public function conditionToQuery(Condition $condition, array $inputsMap = []): array
     {
@@ -683,6 +696,8 @@ class ScopeBuilder extends Form\Control
      * Return extra value option associate with certain inputType or null otherwise.
      *
      * @param mixed $value
+     *
+     * @return array<string, mixed>
      */
     protected function getConditionOption(string $type, $value, Condition $condition): ?array
     {

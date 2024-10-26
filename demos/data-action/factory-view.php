@@ -43,7 +43,7 @@ $myFactory = AnonymousClassNameCache::get_class(fn () => new class extends Execu
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     protected function getCardButton(Model\UserAction $action)
     {

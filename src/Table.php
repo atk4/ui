@@ -29,7 +29,7 @@ class Table extends Lister
      */
     public $reload;
 
-    /** @var array<int|string, Table\Column|array<int, Table\Column>> Contains list of declared columns. Value will always be a column object. */
+    /** @var array<int|string, Table\Column|list<Table\Column>> Contains list of declared columns. Value will always be a column object. */
     public $columns = [];
 
     /**
@@ -246,12 +246,14 @@ class Table extends Lister
 
     /**
      * Return array of column decorators for particular column.
+     *
+     * @return list<Table\Column>
      */
     public function getColumnDecorators(string $name): array
     {
-        $dec = $this->columns[$name];
+        $decorator = $this->columns[$name];
 
-        return is_array($dec) ? $dec : [$dec];
+        return is_array($decorator) ? $decorator : [$decorator];
     }
 
     /**
@@ -303,7 +305,7 @@ class Table extends Lister
      * name and size.
      *
      * @param \Closure(Jquery, mixed): (JsExpressionable|View|string|void) $fx             a callback function with columns widths as parameter
-     * @param array<int, int>                                              $widths         ex: [100, 200, 300, 100]
+     * @param list<int>                                                    $widths         ex: [100, 200, 300, 100]
      * @param array                                                        $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
      *
      * @return $this
@@ -354,7 +356,7 @@ class Table extends Lister
     }
 
     /**
-     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
+     * @param list<string>|null $fields if null, then all "editable" fields will be added
      */
     #[\Override]
     public function setModel(Model $model, ?array $fields = null): void

@@ -508,7 +508,7 @@ class App
      * directly, instead call it from Callback, JsCallback or similar
      * other classes.
      *
-     * @param string|StreamInterface|array $output Array type is supported only for JSON response
+     * @param string|StreamInterface|array<mixed> $output Array type is supported only for JSON response
      *
      * @return never
      */
@@ -972,8 +972,8 @@ class App
      * ])
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
-     * @param array<0|string, string|bool>                                                                             $attr
-     * @param string|array<int, array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
+     * @param array<0|string, string|bool>                                                                       $attr
+     * @param string|list<array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
      */
     public function getTag(string $tag, array $attr = [], $value = null): string
     {

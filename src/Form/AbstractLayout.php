@@ -99,7 +99,7 @@ abstract class AbstractLayout extends View
      * Returns array of names of fields to automatically include them in form.
      * This includes all editable or visible fields of the model.
      *
-     * @return array
+     * @return list<string>
      */
     protected function getModelFields(Model $model)
     {
@@ -109,7 +109,7 @@ abstract class AbstractLayout extends View
     /**
      * Sets form model and adds form controls.
      *
-     * @param array<int, string>|null $fields
+     * @param list<string>|null $fields
      */
     #[\Override]
     public function setModel(Model $entity, ?array $fields = null): void

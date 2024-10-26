@@ -69,6 +69,11 @@ class HtmlTemplate
         return $this->tagTrees[$tag];
     }
 
+    /**
+     * @param array<string, TagTree> $tagTrees
+     *
+     * @return array<string, TagTree>
+     */
     private function cloneTagTrees(array $tagTrees): array
     {
         $res = [];

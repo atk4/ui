@@ -114,6 +114,9 @@ abstract class FilterModel extends Model
         });
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function recallData(): ?array
     {
         return $this->recall('data');
@@ -129,6 +132,8 @@ abstract class FilterModel extends Model
      * Method that will set Field display condition in a form.
      * If form filter need to have a field display at certain condition, then
      * override this method in your FilterModel\TypeModel.
+     *
+     * @return array<string, array<mixed>>
      */
     public function getFormDisplayRules(): array
     {

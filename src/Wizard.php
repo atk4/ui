@@ -16,10 +16,10 @@ class Wizard extends View
     /** @var string Get argument for this wizard. */
     public $urlTrigger;
 
-    /** @var array<int, WizardStep> List of steps. */
+    /** @var list<WizardStep> */
     public array $steps = [];
 
-    /** @var int Current step. */
+    /** @var int */
     public $currentStep;
 
     /** @var Button Button for going to previous step. */

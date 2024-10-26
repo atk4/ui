@@ -31,6 +31,7 @@ class DemosTest extends TestCase
     protected const ROOT_DIR = __DIR__ . '/..';
     protected const DEMOS_DIR = self::ROOT_DIR . '/demos';
 
+    /** @var array<string, mixed> */
     private static array $_serverSuperglobalBackup;
 
     private static ?Persistence $_db = null;
@@ -244,6 +245,9 @@ class DemosTest extends TestCase
         return 'demos/' . $path;
     }
 
+    /**
+     * @return iterable<list<mixed>>
+     */
     public static function provideDemosStatusAndHtmlResponseCases(): iterable
     {
         $excludeDirs = ['_demo-data', '_includes'];
@@ -314,6 +318,9 @@ class DemosTest extends TestCase
         self::assertStringContainsString('Property for specified object is not defined', $response->getBody()->getContents());
     }
 
+    /**
+     * @return iterable<list<mixed>>
+     */
     public static function provideDemoGetCases(): iterable
     {
         yield ['others/sticky.php?xx=YEY'];
@@ -385,6 +392,9 @@ class DemosTest extends TestCase
         self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
     }
 
+    /**
+     * @return iterable<list<mixed>>
+     */
     public static function provideDemoJsonResponseCases(): iterable
     {
         // simple reload
@@ -427,6 +437,9 @@ class DemosTest extends TestCase
         }
     }
 
+    /**
+     * @return iterable<list<mixed>>
+     */
     public static function provideDemoSseResponseCases(): iterable
     {
         yield ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
@@ -455,6 +468,9 @@ class DemosTest extends TestCase
         self::assertMatchesRegularExpression(self::$regexSse, $response->getBody()->getContents());
     }
 
+    /**
+     * @return iterable<list<mixed>>
+     */
     public static function provideDemoJsonResponsePostCases(): iterable
     {
         yield [
@@ -497,6 +513,9 @@ class DemosTest extends TestCase
         self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
     }
 
+    /**
+     * @return iterable<list<mixed>>
+     */
     public static function provideDemoCallbackErrorCases(): iterable
     {
         yield [

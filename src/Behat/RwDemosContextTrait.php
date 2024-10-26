@@ -30,7 +30,7 @@ trait RwDemosContextTrait
     /** @var array<string, Model>|null */
     protected ?array $databaseBackupModels = null;
 
-    /** @var array<string, array<int, array<string, mixed>>>|null */
+    /** @var array<string, array<positive-int, array<string, mixed>>>|null */
     protected ?array $databaseBackupData = null;
 
     protected function getDemosDb(): Persistence\Sql

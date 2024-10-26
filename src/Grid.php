@@ -613,7 +613,7 @@ class Grid extends View
     }
 
     /**
-     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
+     * @param list<string>|null $fields if null, then all "editable" fields will be added
      */
     #[\Override]
     public function setModel(Model $model, ?array $fields = null): void

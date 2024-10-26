@@ -61,10 +61,10 @@ class CardDeck extends View
     /** @var array Default notifier to perform when model action is successful * */
     public $notifyDefault = [JsToast::class];
 
-    /** Model single scope action to include in table action column. Will include all single scope actions if empty. */
+    /** @var list<string> Model single scope action to include in table action column. Will include all single scope actions if empty. */
     public array $singleScopeActions = [];
 
-    /** Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
+    /** @var list<string> Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
     public array $noRecordScopeActions = [];
 
     /** @var string Message to display when record is add or edit successfully. */
@@ -131,7 +131,7 @@ class CardDeck extends View
     }
 
     /**
-     * @param array<int, string>|null $fields
+     * @param list<string>|null $fields
      */
     #[\Override]
     public function setModel(Model $model, ?array $fields = null, ?array $extra = null): void
@@ -276,13 +276,21 @@ class CardDeck extends View
 
     /**
      * Return proper action need to setup menu or action column.
+     *
+     * @return array<string, Model\UserAction>
      */
     private function getModelActions(string $appliesTo): array
     {
         if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
-            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions);
+            $actions = array_combine(
+                $this->singleScopeActions,
+                array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions)
+            );
         } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
-            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions);
+            $actions = array_combine(
+                $this->noRecordScopeActions,
+                array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions)
+            );
         } else {
             $actions = $this->model->getUserActions($appliesTo);
         }

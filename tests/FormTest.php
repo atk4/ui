@@ -421,7 +421,7 @@ class FormTest extends TestCase
 
 class AppFormTestMock extends App
 {
-    /** @var string|array */
+    /** @var string|array<mixed> */
     public $output;
 
     #[\Override]

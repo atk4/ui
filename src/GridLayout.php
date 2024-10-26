@@ -16,7 +16,7 @@ class GridLayout extends View
     /** @var int<1, 16> Number of columns */
     protected $columns = 2;
 
-    /** @var array<int, string> */
+    /** @var array<positive-int, string> */
     protected $cssWideClasses = [
         1 => 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
         'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',

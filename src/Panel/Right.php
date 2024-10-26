@@ -177,6 +177,9 @@ class Right extends View implements Loadable
         return (new Jquery('#' . $this->name . ' ' . $this->warningSelector))->toggleClass($this->warningTrigger);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getPanelOptions(): array
     {
         $res = [

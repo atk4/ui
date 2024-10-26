@@ -22,6 +22,9 @@ class FakerPersistence extends Persistence
         $this->faker = FakerFactory::create();
     }
 
+    /**
+     * @return \Traversable<array<string, mixed>>
+     */
     public function prepareIterator(Model $model): \Traversable
     {
         foreach ($this->export($model) as $row) {
@@ -29,6 +32,9 @@ class FakerPersistence extends Persistence
         }
     }
 
+    /**
+     * @return list<array<string, mixed>>
+     */
     private function export(Model $model, array $fields = []): array
     {
         if (!$fields) {

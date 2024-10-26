@@ -100,11 +100,11 @@ class Multiline extends Form\Control
      * For example setting 'SuiDropdown' property globally.
      *  $componentProps = [Multiline::SELECT => ['floating' => true]].
      *
-     * @var array
+     * @var array<string, array<string, mixed>>
      */
     public $componentProps = [];
 
-    /** @var array SuiTable component props */
+    /** @var array<string, mixed> SuiTable component props */
     public $tableProps = [];
 
     /** @var array<string, array<string, mixed>> Set Vue component to use per field type. */
@@ -243,6 +243,11 @@ class Multiline extends Form\Control
         });
     }
 
+    /**
+     * @param array<mixed, array<string, string|null>> $values
+     *
+     * @return array<mixed, array<string, mixed>>
+     */
     protected function typeCastLoadValues(array $values): array
     {
         $dataRows = [];
@@ -304,6 +309,8 @@ class Multiline extends Form\Control
 
     /**
      * Validate each row and return errors if found.
+     *
+     * @return array<string, list<array{name: string, msg: string}>>
      */
     public function validate(array $rows): array
     {
@@ -371,6 +378,10 @@ class Multiline extends Form\Control
 
     /**
      * Check for model validate error.
+     *
+     * @param array<string, list<array{name: string, msg: string}>> $errors
+     *
+     * @return array<string, list<array{name: string, msg: string}>>
      */
     protected function addModelValidateErrors(array $errors, string $rowId, Model $entity): array
     {
@@ -402,7 +413,7 @@ class Multiline extends Form\Control
     }
 
     /**
-     * @param array<int, string>|null $fields
+     * @param list<string>|null $fields
      */
     #[\Override]
     public function setModel(Model $model, ?array $fields = null): void
@@ -440,6 +451,8 @@ class Multiline extends Form\Control
      *
      * Multiline uses Vue components in order to manage input type based on field type.
      * Component name and props are determine via the getComponentDefinition function.
+     *
+     * @return array<string, mixed>
      */
     public function getFieldDef(Field $field): array
     {
@@ -460,6 +473,8 @@ class Multiline extends Form\Control
     /**
      * Each field input, represent by a Vue component, is place within a table cell.
      * Cell properties can be customized via $field->ui['multiline'][Form\Control\Multiline::TABLE_CELL].
+     *
+     * @return array<string, mixed>
      */
     protected function getSuiTableCellProps(Field $field): array
     {
@@ -474,6 +489,8 @@ class Multiline extends Form\Control
 
     /**
      * Return props for input component.
+     *
+     * @return array<string, mixed>
      */
     protected function getSuiInputProps(Field $field): array
     {
@@ -484,6 +501,8 @@ class Multiline extends Form\Control
 
     /**
      * Return props for AtkDatePicker component.
+     *
+     * @return array<string, mixed>
      */
     protected function getDatePickerProps(Field $field): array
     {
@@ -508,6 +527,8 @@ class Multiline extends Form\Control
 
     /**
      * Return props for Dropdown components.
+     *
+     * @return array<string, mixed>
      */
     protected function getDropdownProps(Field $field): array
     {
@@ -526,6 +547,8 @@ class Multiline extends Form\Control
 
     /**
      * Set property for AtkLookup component.
+     *
+     * @return array<string, mixed>
      */
     protected function getLookupProps(Field $field): array
     {
@@ -569,6 +592,8 @@ class Multiline extends Form\Control
 
     /**
      * Component definition require at least a name and a props array.
+     *
+     * @return array<string, mixed>
      */
     protected function getComponentDefinition(Field $field): array
     {
@@ -599,6 +624,9 @@ class Multiline extends Form\Control
         return $component;
     }
 
+    /**
+     * @return array<mixed, mixed>
+     */
     protected function getFieldItems(Field $field, ?int $limit = 10): array
     {
         $items = [];
@@ -693,6 +721,8 @@ class Multiline extends Form\Control
 
     /**
      * Return values associated with callback field.
+     *
+     * @return array<string, string|null>
      */
     private function getCallbackValues(Model $entity): array
     {
@@ -763,6 +793,8 @@ class Multiline extends Form\Control
 
     /**
      * Return values associated to field expression.
+     *
+     * @return array<string, string|null>
      */
     private function getExpressionValues(Model $entity): array
     {

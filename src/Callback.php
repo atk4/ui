@@ -146,6 +146,8 @@ class Callback extends AbstractView
 
     /**
      * Return proper URL argument for this callback.
+     *
+     * @return array<string, string>
      */
     private function getUrlArguments(?string $value = null): array
     {

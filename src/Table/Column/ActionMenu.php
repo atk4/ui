@@ -22,7 +22,7 @@ use Atk4\Ui\View;
  */
 class ActionMenu extends Table\Column
 {
-    /** @var array<int, View> Menu items collections. */
+    /** @var list<View> Menu items collections. */
     protected $items = [];
 
     /** @var array<string, \Closure<T of Model>(T): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
@@ -115,7 +115,7 @@ class ActionMenu extends Table\Column
     #[\Override]
     public function getDataCellTemplate(?Field $field = null): string
     {
-        if (!$this->items) {
+        if ($this->items === []) {
             return '';
         }
 

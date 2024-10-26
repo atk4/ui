@@ -281,7 +281,7 @@ class Console extends View implements LoggerInterface
         stream_set_blocking($pipes[1], false);
         stream_set_blocking($pipes[2], false);
         // $pipes contain streams that are still open and not EOF
-        while ($pipes) {
+        while ($pipes) { // @TODO this condition is always true
             $read = $pipes;
             $j1 = null;
             $j2 = null;
@@ -319,7 +319,7 @@ class Console extends View implements LoggerInterface
     }
 
     /**
-     * @return array{resource, non-empty-array}
+     * @return array{resource, non-empty-array<int, resource>}
      */
     protected function execRaw(string $command, array $args = [])
     {

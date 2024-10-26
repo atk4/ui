@@ -19,7 +19,7 @@ class CardSection extends View
     /** @var string */
     public $glue = ': ';
 
-    /** @var array<int, string> */
+    /** @var list<string> */
     public $tableClass = ['fixed', 'small'];
 
     #[\Override]
