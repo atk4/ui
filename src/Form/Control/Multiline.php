@@ -138,7 +138,7 @@ class Multiline extends Form\Control
     /** @var bool Add row when tabbing out of last column in last row. */
     public $addOnTab = false;
 
-    /** @var array The definition of each field used in every multiline row. */
+    /** @var list<array<string, mixed>> The definition of each field used in every multiline row. */
     private $fieldDefs;
 
     /** @var JsCallback */
@@ -147,13 +147,13 @@ class Multiline extends Form\Control
     /** @var \Closure(mixed, Form): (JsExpressionable|View|string|void)|null Function to execute when field change or row is delete. */
     protected $onChangeFunction;
 
-    /** @var array Set fields that will trigger onChange function. */
+    /** @var list<string> Set fields that will trigger onChange function. */
     protected $eventFields;
 
-    /** @var array Collection of field errors. */
+    /** @var array<string, list<array{name: string, msg: string}>> Collection of field errors. */
     private $rowErrors;
 
-    /** @var array The fields names used in each row. */
+    /** @var list<string> The fields names used in each row. */
     public $rowFields;
 
     /** @var list<array<string, mixed>> The data sent for each row. */
@@ -271,6 +271,7 @@ class Multiline extends Form\Control
      * that will trigger the callback when changed.
      *
      * @param \Closure(mixed, Form): (JsExpressionable|View|string|void) $fx
+     * @param list<string>                                               $fields
      */
     public function onLineChange(\Closure $fx, array $fields): void
     {

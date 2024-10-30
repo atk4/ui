@@ -17,6 +17,7 @@ class ScopeBuilder extends Form\Control
 {
     public $renderLabel = false;
 
+    /** @var array<string, array<string, mixed>|bool> */
     public array $options = [
         'enum' => [
             'limit' => 250,
@@ -30,21 +31,21 @@ class ScopeBuilder extends Form\Control
      */
     public int $maxDepth = 5;
 
-    /** Fields to use for creating the rules. */
+    /** @var list<string> Fields to use for creating the rules. */
     public array $fields = [];
 
     /** @var HtmlTemplate|null The template needed for the ScopeBuilder view. */
     public $scopeBuilderTemplate;
 
-    /** List of delimiters for auto-detection in order of priority. */
+    /** @var list<non-empty-string> List of delimiters for auto-detection in order of priority. */
     public static array $listDelimiters = [';', ','];
 
-    /** The date, time or datetime options. */
+    /** @var array<string, mixed> The date, time or datetime options. */
     public array $atkdDateOptions = [
         'flatpickr' => [],
     ];
 
-    /** AtkLookup and Fomantic-UI dropdown options. */
+    /** @var array<string, mixed> AtkLookup and Fomantic-UI dropdown options. */
     public array $atkLookupOptions = [
         'ui' => 'small basic button',
     ];
@@ -52,16 +53,18 @@ class ScopeBuilder extends Form\Control
     /** @var View The scopebuilder View. Assigned in init(). */
     protected $scopeBuilderView;
 
-    /** Definition of VueQueryBuilder rules. */
+    /** @var list<array<string, mixed>> Definition of VueQueryBuilder rules. */
     protected array $rules = [];
 
     /**
      * Set Labels for Vue-Query-Builder
      * see https://dabernathy89.github.io/vue-query-builder/configuration.html#labels.
+     *
+     * @var array<mixed, mixed>
      */
     public array $labels = [];
 
-    /** Default VueQueryBuilder query. */
+    /** @var array<string, mixed> Default VueQueryBuilder query. */
     protected array $query = [];
 
     protected const OPERATOR_TEXT_EQUALS = 'equals';

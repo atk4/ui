@@ -34,7 +34,7 @@ class ActionMenu extends Table\Column
     /** @var string Dropdown module CSS class name as per Formantic-UI. */
     public $ui = 'small dropdown button';
 
-    /** @var array The dropdown module option setting as per Fomantic-UI. */
+    /** @var array<string, mixed> The dropdown module option setting as per Fomantic-UI. */
     public $options = ['action' => 'hide'];
 
     /** @var string Button icon to use for display dropdown. */

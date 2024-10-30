@@ -22,13 +22,13 @@ class Grid extends View
 {
     use HookTrait;
 
-    /** @var Menu|array|false Will be initialized to Menu object, however you can set this to false to disable menu. */
+    /** @var Menu|array<mixed>|false Will be initialized to Menu object, however you can set this to false to disable menu. */
     public $menu;
 
     /** @var JsSearch|null */
     public $quickSearch;
 
-    /** @var array Field names to search for in Model. It will automatically add quicksearch component to grid if set. */
+    /** @var list<string> Field names to search for in Model. It will automatically add quicksearch component to grid if set. */
     public $searchFieldNames = [];
 
     /**
@@ -86,10 +86,10 @@ class Grid extends View
 
     public $defaultTemplate = 'grid.html';
 
-    /** @var array Table\Column seed to use for ActionButtons. */
+    /** @var array<mixed> Table\Column seed to use for ActionButtons. */
     protected $actionButtonsSeed = [Table\Column\ActionButtons::class];
 
-    /** @var array Table\Column seed to use for ActionMenu. */
+    /** @var array<mixed> Table\Column seed to use for ActionMenu. */
     protected $actionMenuSeed = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
 
     #[\Override]
@@ -299,8 +299,8 @@ class Grid extends View
      * By default, will query server when using Enter key on input search field.
      * You can change it to query server on each keystroke by passing $autoQuery true,.
      *
-     * @param array $fields       the list of fields to search for
-     * @param bool  $hasAutoQuery will query server on each key pressed
+     * @param list<string> $fields       the list of fields to search for
+     * @param bool         $hasAutoQuery will query server on each key pressed
      */
     public function addQuickSearch($fields = [], $hasAutoQuery = false): void
     {

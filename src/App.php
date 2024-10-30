@@ -49,8 +49,8 @@ class App
     private static ?string $shutdownReservedMemory; // @phpstan-ignore property.onlyRead
     private static ?int $errorReportingLevel = null;
 
-    /** @var array|false Location where to load JS/CSS files */
-    public $cdn = [
+    /** @var array<string, string> Location where to load JS/CSS files */
+    public array $cdn = [
         'atk' => '/public',
         'jquery' => '/public/external/jquery/dist',
         'fomantic-ui' => '/public/external/fomantic-ui/dist',
@@ -75,7 +75,7 @@ class App
     /** @var Layout the top-most view object */
     public $layout;
 
-    /** @var string|array Set one or more directories where templates should reside. */
+    /** @var string|list<string> Set one or more directories where templates should reside. */
     public $templateDir;
 
     /** @var bool Will replace an exception handler with our own, that will output errors nicely. */

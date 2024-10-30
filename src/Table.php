@@ -51,7 +51,7 @@ class Table extends Lister
     /** @var bool Setting this to false will hide header row. */
     public $header = true;
 
-    /** @var array Contains list of totals accumulated during the render process. */
+    /** @var array<string, int|float> Contains list of totals accumulated during the render process. */
     public $totals = [];
 
     /** @var HtmlTemplate|null Contain the template for the "Head" type row. */
@@ -270,7 +270,7 @@ class Table extends Lister
     }
 
     /**
-     * @var array<string, array>
+     * @var array<string, array<mixed>>
      */
     protected array $typeToDecorator = [
         'atk4_money' => [Table\Column\Money::class],

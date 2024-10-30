@@ -10,7 +10,7 @@ class Breadcrumb extends Lister
 
     public $defaultTemplate = 'breadcrumb.html';
 
-    /** @var array */
+    /** @var list<array{section: string, link: string|array<0|string, string|int|false>}> */
     public $path = [];
 
     /** @var string */
@@ -51,8 +51,8 @@ class Breadcrumb extends Lister
     /**
      * Adds a new link that will appear on the left.
      *
-     * @param string       $section Title of link
-     * @param string|array $link    Link itself
+     * @param string                                   $section Title of link
+     * @param string|array<0|string, string|int|false> $link    Link itself
      *
      * @return $this
      */

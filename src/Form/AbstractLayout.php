@@ -150,7 +150,7 @@ abstract class AbstractLayout extends View
     /**
      * Adds Button into form layout.
      *
-     * @param Button|array $seed
+     * @param Button|array<mixed> $seed
      *
      * @return Button
      */

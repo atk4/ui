@@ -18,7 +18,7 @@ class Dropdown extends Lister
     /** @var JsCallback|null Callback when a new value is selected in Dropdown. */
     public $cb;
 
-    /** @var array As per Fomantic-UI dropdown options. */
+    /** @var array<string, mixed> As per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
 
     #[\Override]

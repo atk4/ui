@@ -17,19 +17,19 @@ use Atk4\Ui\UserAction\ExecutorInterface;
 
 class Crud extends Grid
 {
-    /** @var array of fields to display in Grid */
+    /** @var list<string> Fields to display in Grid */
     public $displayFields;
 
-    /** @var array|null of fields to edit in Form for Model edit action */
+    /** @var list<string>|null Fields to edit in Form for Model edit action */
     public $editFields;
 
-    /** @var array|null of fields to edit in Form for Model add action */
+    /** @var list<string>|null Fields to edit in Form for Model add action */
     public $addFields;
 
-    /** @var array Default notifier to perform when adding or editing is successful * */
+    /** @var array<mixed> Default notifier to perform when adding or editing is successful * */
     public $notifyDefault = [JsToast::class];
 
-    /** @var bool|null should we use table column drop-down menu to display user actions? */
+    /** @var bool|null Should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
 
     /** @var array<string, array{item: MenuItem, executor: AbstractView&ExecutorInterface}> Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
@@ -53,7 +53,7 @@ class Crud extends Grid
     /** @var list<array<string, \Closure(Form, UserAction\ModalExecutor): void>> Callback containers for model action. */
     public $onActions = [];
 
-    /** @var mixed recently deleted record ID. */
+    /** @var mixed Recently deleted record ID. */
     private $deletedId;
 
     #[\Override]

@@ -15,7 +15,7 @@ use Atk4\Ui\View;
  */
 class Accordion extends UiAccordion
 {
-    /** @var array */
+    /** @var array<mixed> */
     public $formLayoutSeed = [Form\Layout::class];
 
     public Form $form;

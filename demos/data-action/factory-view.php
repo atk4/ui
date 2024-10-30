@@ -23,6 +23,7 @@ View::addTo($app, ['ui' => 'clearing divider']);
 $myFactory = AnonymousClassNameCache::get_class(fn () => new class extends ExecutorFactory {
     public $buttonPrimaryColor = 'green';
 
+    /** @var array<string, string> */
     protected array $actionIcon = [
         'callback' => 'sync',
         'preview' => 'eye',

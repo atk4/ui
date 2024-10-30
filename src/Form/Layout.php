@@ -39,7 +39,7 @@ class Layout extends AbstractLayout
     /** @var HtmlTemplate|null Template holding input HTML. */
     public $inputTemplate;
 
-    /** @var array Seed for creating input hint View used in this layout. */
+    /** @var array<mixed> Seed for creating input hint View used in this layout. */
     public $defaultHintSeed = [Label::class, 'class' => ['pointing']];
 
     #[\Override]

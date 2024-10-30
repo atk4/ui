@@ -42,7 +42,7 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
     /** @var array<string, string> */
     public $stepListItems = ['args' => 'Fill argument(s)', 'fields' => 'Edit Record(s)', 'preview' => 'Preview', 'final' => 'Complete'];
 
-    /** @var array */
+    /** @var array<mixed> */
     public $cancelButtonSeed = [Button::class, ['Cancel', 'class.small left floated basic blue' => true, 'icon' => 'left arrow']];
 
     #[\Override]

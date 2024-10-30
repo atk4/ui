@@ -63,7 +63,7 @@ class TreeItemSelector extends Form\Control
      *
      * When adding nodes array into an item, it will automatically be treated as a group unless empty.
      *
-     * @var array
+     * @var list<array{name: string, id: mixed, nodes?: list<array<string, mixed>>}>
      */
     public $treeItems = [];
 

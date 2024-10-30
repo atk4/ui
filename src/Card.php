@@ -48,7 +48,7 @@ class Card extends View
     /** @var CardSection|null The main card section of this card */
     public $section;
 
-    /** @var array The CardSection default seed. */
+    /** @var array<mixed> The CardSection default seed. */
     public $cardSectionSeed = [CardSection::class];
 
     /** @var View|null The extra content view container for the card. */
@@ -57,7 +57,7 @@ class Card extends View
     /** @var string|View|null A description inside the Card content. */
     public $description;
 
-    /** @var array|Button|null */
+    /** @var array<mixed>|Button|null */
     public $buttons;
 
     /** @var bool How buttons are display inside button container */
@@ -320,7 +320,7 @@ class Card extends View
     /**
      * Add button to card.
      *
-     * @param Button|array $seed
+     * @param Button|array<mixed> $seed
      *
      * @return View
      */

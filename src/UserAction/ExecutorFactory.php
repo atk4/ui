@@ -36,7 +36,7 @@ class ExecutorFactory
      * Basic type can be changed or added globally via the registerTypeExecutor method.
      * A specific model/action executor may be set via the registerExecutor method.
      *
-     * @var array<string, array>
+     * @var array<string, array<mixed>>
      */
     protected $executorSeed = [
         self::JS_EXECUTOR => [JsCallbackExecutor::class],
@@ -67,7 +67,7 @@ class ExecutorFactory
      * They can be store per either view type or
      * model/action name.
      *
-     * @var array<string, array|View>
+     * @var array<string, array<string, array<mixed>|View>>
      */
     protected $triggerSeed = [
         self::TABLE_BUTTON => [

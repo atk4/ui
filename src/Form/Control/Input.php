@@ -47,10 +47,10 @@ class Input extends Form\Control
     /** @var string|Label Set label that will appear to the right of the input field. */
     public $labelRight;
 
-    /** @var Button|array|UserAction|null */
+    /** @var Button|array<mixed>|UserAction|null */
     public $action;
 
-    /** @var Button|array|UserAction|null */
+    /** @var Button|array<mixed>|UserAction|null */
     public $actionLeft;
 
     /**

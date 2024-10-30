@@ -55,7 +55,7 @@ class Control extends View
      * Placed as a pointing label below the field. This only works when Form\Control appears in a form. You can also
      * set this to object, such as \Atk4\Ui\Text otherwise HTML characters are escaped.
      *
-     * @var string|View|array
+     * @var string|View|array<mixed>
      */
     public $hint;
 

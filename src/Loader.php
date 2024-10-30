@@ -39,7 +39,7 @@ class Loader extends View
     /** @var Callback for triggering */
     public $cb;
 
-    /** @var array URL arguments. */
+    /** @var array<string, string|int> URL arguments. */
     public $urlArgs = [];
 
     #[\Override]

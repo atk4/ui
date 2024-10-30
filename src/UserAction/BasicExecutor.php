@@ -33,7 +33,7 @@ class BasicExecutor extends View implements ExecutorInterface
     /** @var string display message when action is disabled */
     public $disableMsg = 'Action is disabled and cannot be executed';
 
-    /** @var Button|array Button that trigger the action. Either as an array seed or object */
+    /** @var Button|array<mixed> Button that trigger the action. Either as an array seed or object */
     public $executorButton;
 
     /** @var array<string, mixed> */
@@ -41,9 +41,6 @@ class BasicExecutor extends View implements ExecutorInterface
 
     /** @var string display message when missing arguments */
     public $missingArgsMsg = 'Insufficient arguments';
-
-    /** @var array list of validated arguments */
-    protected $validArguments = [];
 
     /** @var JsExpressionable|\Closure<T of Model>($this, T): ?JsBlock JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     protected $jsSuccess;

@@ -54,7 +54,7 @@ class Column
     /** @var bool Include header action tag in rendering or not. */
     public $hasHeaderAction = false;
 
-    /** @var array|null The tag value required for getTag when using an header action. */
+    /** @var array<0|1|2, mixed>|null The tag value required for getTag when using an header action. */
     public $headerActionTag;
 
     private string $nameInTableCache;
@@ -402,7 +402,7 @@ class Column
     /**
      * Return HTML for a total value of a specific field.
      *
-     * @param mixed $value
+     * @param int|float $value
      */
     public function getTotalsCellHtml(Field $field, $value): string
     {

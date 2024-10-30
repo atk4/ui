@@ -47,7 +47,7 @@ trait StepExecutorTrait
     /** @var JsExpressionable|\Closure<T of Model>($this, T, mixed, mixed): ?JsBlock JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
-    /** @var array A seed for creating form in order to edit arguments/fields user entry. */
+    /** @var array<mixed> A seed for creating form in order to edit arguments/fields user entry. */
     public $formSeed = [Form::class];
 
     /** @var string can be "console", "text", or "html". Determine how preview step will display information. */

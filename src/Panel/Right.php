@@ -27,7 +27,7 @@ class Right extends View implements Loadable
 
     /** @var Modal|null */
     public $closeModal;
-    /** @var array Confirmation Modal default */
+    /** @var array<mixed> Confirmation Modal default */
     public $defaultModal = [Modal::class, 'class' => ['mini']];
 
     /** @var View|null The content to display inside flyout */
@@ -39,7 +39,7 @@ class Right extends View implements Loadable
     /** @var bool can be closed via esc key. */
     protected $hasEscAway = true;
 
-    /** @var array The default content seed. */
+    /** @var array<mixed> The default content seed. */
     public $dynamic = [Content::class];
 
     /** @var string The CSS selector on where to add close panel event triggering for closing it. */
