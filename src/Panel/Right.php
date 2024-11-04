@@ -91,7 +91,7 @@ class Right extends View implements Loadable
      * Return JS expression need to open panel via JS panelService.
      *
      * @param array<string, string> $urlArgs       the argument to include when dynamic content panel open
-     * @param array                 $dataAttribute the data attribute name to include in reload from the triggering element
+     * @param list<string>          $dataAttribute the data attribute name to include in reload from the triggering element
      * @param string|null           $activeCss     the CSS class name to apply on triggering element when panel is open
      * @param JsExpressionable      $jsTrigger     JS expression that trigger panel to open. Default = $(this).
      */
@@ -108,6 +108,8 @@ class Right extends View implements Loadable
 
     /**
      * Will reload panel passing args as Get param via JS flyoutService.
+     *
+     * @param array<string, string> $args
      */
     public function jsPanelReload(array $args = []): JsExpressionable
     {

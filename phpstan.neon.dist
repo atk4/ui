@@ -11,8 +11,6 @@ parameters:
         - js
 
     ignoreErrors:
-        - '~^Method .+\(\) has parameter \$.+ with no value type specified in iterable type .+\.$~'
-
         # relax strict rules
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.$~'
         - '~^Variable (static )?(property access|method call) on .+\.$~'
@@ -394,6 +392,11 @@ parameters:
             path: 'src/JsCallback.php'
             identifier: method.childParameterType
             message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): \(Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void\)\) of method Atk4\\Ui\\JsCallback::set\(\) should be contravariant with parameter \$fx \(Closure\(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): mixed\) of method Atk4\\Ui\\Callback::set\(\)$~'
+            count: 1
+        -
+            path: 'src/JsCallback.php'
+            identifier: method.childParameterType
+            message: '~^Parameter #2 \$args \(array<int\|string, Atk4\\Ui\\Js\\JsExpressionable\|string>\) of method Atk4\\Ui\\JsCallback::set\(\) should be contravariant with parameter \$fxArgs \(list<mixed>\) of method Atk4\\Ui\\Callback::set\(\)$~'
             count: 1
         -
             path: 'src/Loader.php'

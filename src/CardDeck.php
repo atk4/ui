@@ -131,7 +131,8 @@ class CardDeck extends View
     }
 
     /**
-     * @param list<string>|null $fields
+     * @param list<string> $fields
+     * @param list<string> $extra
      */
     #[\Override]
     public function setModel(Model $model, ?array $fields = null, ?array $extra = null): void

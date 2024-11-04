@@ -330,7 +330,7 @@ class Form extends View
     /**
      * Add header into the form, which appears as a separator.
      *
-     * @param string|array $title
+     * @param string|array<0|string, mixed> $title
      */
     public function addHeader($title = null): void
     {
@@ -340,7 +340,7 @@ class Form extends View
     /**
      * Creates a group of fields and returns layout.
      *
-     * @param string|array $title
+     * @param string|array<0|string, mixed> $title
      *
      * @return Form\Layout
      */

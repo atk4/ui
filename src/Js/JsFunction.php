@@ -25,6 +25,7 @@ class JsFunction implements JsExpressionable
     public string $indent = '';
 
     /**
+     * @param list<string>                                             $args
      * @param JsBlock|list<JsExpressionable|null>|array<string, mixed> $statements
      */
     public function __construct(array $args, $statements)

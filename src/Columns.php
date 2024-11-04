@@ -31,7 +31,7 @@ class Columns extends View
     /**
      * Add new vertical column.
      *
-     * @param int|array $defaults specify width (1..16) or relative to $width
+     * @param int|array<mixed> $defaults specify width (1..16) or relative to $width
      *
      * @return View
      */

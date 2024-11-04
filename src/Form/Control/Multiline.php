@@ -311,6 +311,8 @@ class Multiline extends Form\Control
     /**
      * Validate each row and return errors if found.
      *
+     * @param list<array<string, mixed>> $rows
+     *
      * @return array<string, list<array{name: string, msg: string}>>
      */
     public function validate(array $rows): array
@@ -398,6 +400,8 @@ class Multiline extends Form\Control
 
     /**
      * Finds and returns Multiline row ID.
+     *
+     * @param array<string, string> $row
      */
     private function getMlRowId(array $row): ?string
     {
@@ -437,6 +441,8 @@ class Multiline extends Form\Control
      * Note: When using setReferenceModel you might need to set this corresponding field to neverPersist to true.
      * Otherwise, form will try to save 'multiline' field value as an array when form is save.
      * $multiline = $form->addControl('multiline', [Multiline::class], ['neverPersist' => true])
+     *
+     * @param list<string> $fieldNames
      */
     public function setReferenceModel(string $refModelName, ?Model $entity = null, array $fieldNames = []): void
     {

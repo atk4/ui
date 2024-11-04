@@ -64,6 +64,8 @@ class BasicExecutor extends View implements ExecutorInterface
 
     /**
      * Provide values for named arguments.
+     *
+     * @param array<string, mixed> $arguments
      */
     public function setArguments(array $arguments): void
     {

@@ -200,6 +200,9 @@ class DemosTest extends TestCase
         return new Client(['base_uri' => 'http://localhost/', 'handler' => $handler]);
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
     {
         try {
@@ -223,6 +226,9 @@ class DemosTest extends TestCase
         }
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
     protected function getResponseFromRequest5xx(string $path, array $options = []): ResponseInterface
     {
         try {
@@ -480,6 +486,8 @@ class DemosTest extends TestCase
     }
 
     /**
+     * @param array<string, string> $postData
+     *
      * @dataProvider provideDemoJsonResponsePostCases
      */
     #[DataProvider('provideDemoJsonResponsePostCases')]
@@ -491,6 +499,8 @@ class DemosTest extends TestCase
     }
 
     /**
+     * @param array<string, mixed> $options
+     *
      * @dataProvider provideDemoCallbackErrorCases
      *
      * @slowThreshold 1500

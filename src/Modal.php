@@ -106,7 +106,7 @@ class Modal extends View
     /**
      * Add CSS classes to "content" div.
      *
-     * @param string|array $class
+     * @param string|list<string> $class
      */
     public function addContentClass($class): void
     {
@@ -117,6 +117,8 @@ class Modal extends View
      * Show modal on page.
      *
      * Example: $button->on('click', $modal->jsShow());
+     *
+     * @param array<string, string> $args
      *
      * @return JsChain
      */

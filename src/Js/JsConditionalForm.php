@@ -32,6 +32,8 @@ class JsConditionalForm implements JsExpressionable
 
     /**
      * Set field rules for the form.
+     *
+     * @param array<string, mixed> $rules
      */
     public function setRules(array $rules): void
     {

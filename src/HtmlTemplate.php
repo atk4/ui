@@ -432,6 +432,9 @@ class HtmlTemplate
         return $this;
     }
 
+    /**
+     * @param list<string> $inputReversed
+     */
     protected function parseTemplateTree(array &$inputReversed, ?string $openedTag = null): TagTree
     {
         $tagTree = new TagTree($this, $openedTag ?? self::TOP_TAG);

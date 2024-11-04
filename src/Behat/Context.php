@@ -101,6 +101,8 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * Wait till jQuery AJAX request finished and no animation is perform.
+     *
+     * @param list<mixed> $args
      */
     protected function jqueryWait(string $extraWaitCondition = 'true', array $args = [], int $maxWaitdurationMs = 5000): void
     {

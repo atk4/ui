@@ -130,9 +130,9 @@ class Table extends Lister
      * If you don't want table column to be associated with model field, then
      * pass $name parameter as null.
      *
-     * @param string|null                             $name            Data model field name
-     * @param array|Table\Column                      $columnDecorator
-     * @param ($name is null ? array{} : array|Field) $field
+     * @param string|null                                    $name            Data model field name
+     * @param array<mixed>|Table\Column                      $columnDecorator
+     * @param ($name is null ? array{} : array<mixed>|Field) $field
      *
      * @return Table\Column
      */
@@ -190,7 +190,7 @@ class Table extends Lister
     /**
      * Set Popup action for columns filtering.
      *
-     * @param array $cols an array with columns name that need filtering
+     * @param list<string> $cols an array with columns name that need filtering
      */
     public function setFilterColumn($cols = null): void
     {
@@ -223,7 +223,7 @@ class Table extends Lister
     /**
      * Add column Decorator.
      *
-     * @param array|Table\Column $seed
+     * @param array<mixed>|Table\Column $seed
      *
      * @return Table\Column
      */
@@ -282,7 +282,7 @@ class Table extends Lister
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
      *
-     * @param array|Table\Column $seed
+     * @param array<mixed>|Table\Column $seed
      *
      * @return Table\Column
      */
@@ -306,11 +306,11 @@ class Table extends Lister
      *
      * @param \Closure(Jquery, mixed): (JsExpressionable|View|string|void) $fx             a callback function with columns widths as parameter
      * @param list<int>                                                    $widths         ex: [100, 200, 300, 100]
-     * @param array                                                        $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
+     * @param array<string, mixed>                                         $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
      *
      * @return $this
      */
-    public function resizableColumn($fx = null, $widths = null, $resizerOptions = [])
+    public function resizableColumn($fx = null, $widths = null, array $resizerOptions = [])
     {
         $options = [];
         if ($fx !== null) {
@@ -333,7 +333,7 @@ class Table extends Lister
     }
 
     #[\Override]
-    public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+    public function addJsPaginator($ipp, array $options = [], $container = null, $scrollRegion = 'Body')
     {
         $options = array_merge($options, ['appendTo' => 'tbody']);
 

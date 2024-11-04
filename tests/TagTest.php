@@ -11,7 +11,7 @@ use Atk4\Ui\Exception;
 class TagTest extends TestCase
 {
     /**
-     * @param array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null} $args
+     * @param array{0: string, 1?: array<0|string, string|bool>, 2?: string|list<mixed>|null} $args
      */
     public static function assertTagRender(string $expectedHtml, array $args): void
     {

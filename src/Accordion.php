@@ -116,8 +116,9 @@ class Accordion extends View
      * Ex: toggle an accordion from it's index value.
      * $accordion->jsBehavior('toggle', 1).
      *
-     * @param string $behavior the name of the behavior for the module
-     * @param bool   $when
+     * @param string      $behavior the name of the behavior for the module
+     * @param list<mixed> $args
+     * @param bool        $when
      *
      * @return JsChain
      */

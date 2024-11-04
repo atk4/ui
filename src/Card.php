@@ -188,6 +188,8 @@ class Card extends View
     /**
      * Add a CardSection to this card.
      *
+     * @param list<string> $fields
+     *
      * @return View
      */
     public function addSection(?string $title = null, ?Model $entity = null, ?array $fields = null, bool $useTable = false, bool $useLabel = false)
@@ -207,6 +209,8 @@ class Card extends View
 
     /**
      * Execute Model user action via button in Card.
+     *
+     * @param array<int|string, mixed> $args
      *
      * @return $this
      */
@@ -258,6 +262,8 @@ class Card extends View
 
     /**
      * Set extra content using model field.
+     *
+     * @param list<string> $fields
      */
     public function addExtraFields(Model $entity, array $fields, ?string $glue = null): void
     {

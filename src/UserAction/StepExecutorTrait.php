@@ -84,6 +84,8 @@ trait StepExecutorTrait
 
     /**
      * Will add field into form based on $fields array.
+     *
+     * @param array<string, mixed> $fields
      */
     protected function setFormField(Form $form, array $fields, string $step): Form
     {

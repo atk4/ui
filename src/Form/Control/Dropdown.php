@@ -140,7 +140,7 @@ class Dropdown extends Input
     /**
      * Set JS dropdown() options.
      *
-     * @param array $options
+     * @param array<string, mixed> $options
      */
     public function setDropdownOptions($options): void
     {

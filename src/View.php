@@ -144,7 +144,8 @@ class View extends AbstractView
     /**
      * Sets source of the View.
      *
-     * @param array $fields Limit model to particular fields
+     * @param array<int|string, mixed> $data
+     * @param list<string>             $fields Limit model to particular fields
      *
      * @phpstan-assert !null $this->model
      */
@@ -276,8 +277,8 @@ class View extends AbstractView
      * In addition to adding a child object, sets up it's template
      * and associate it's output with the region in our template.
      *
-     * @param AbstractView      $object
-     * @param string|array|null $region
+     * @param AbstractView             $object
+     * @param string|array<mixed>|null $region
      */
     #[\Override]
     public function add($object, $region = null): AbstractView
@@ -800,7 +801,7 @@ class View extends AbstractView
      * as Vue.component() method.
      *
      * @param string                $component           The component name
-     * @param array                 $initData            The component properties passed as the initData prop.
+     * @param array<string, mixed>  $initData            The component properties passed as the initData prop.
      *                                                   This is the initial data pass to your main component via the initData bind property
      *                                                   of the vue component instance created via the vueService.
      * @param JsExpressionable|null $componentDefinition component definition object
@@ -837,6 +838,8 @@ class View extends AbstractView
      * Note: In order to make sure your event is unique within atk, you can
      * use the view name in it.
      *    $this->jsEmitEvent($this->name . '-my-event', $data)
+     *
+     * @param array<string, mixed> $eventData
      */
     public function jsEmitEvent(string $eventName, array $eventData = []): JsChain
     {
@@ -883,6 +886,8 @@ class View extends AbstractView
      *  $v->jsAddStoreData(['args' => ['path' => '/'], 'fields' => ['name' => 'test']]]);
      *
      *  Final store value will be: ['args' => ['path' => '/'], 'fields' => ['name' => 'test']];
+     *
+     * @param array<string, mixed> $data
      */
     public function jsAddStoreData(array $data, bool $useSession = false): JsExpressionable
     {
@@ -894,9 +899,9 @@ class View extends AbstractView
     /**
      * Returns JS for reloading View.
      *
-     * @param array                 $args
-     * @param JsExpressionable|null $afterSuccess
-     * @param array<string, mixed>  $apiConfig
+     * @param array<string, string|int|JsExpressionable> $args
+     * @param JsExpressionable|null                      $afterSuccess
+     * @param array<string, mixed>                       $apiConfig
      *
      * @return JsReload
      */
@@ -931,9 +936,10 @@ class View extends AbstractView
      *   return $js->parent()->hide();
      * });
      *
-     * @param string                                                                                                                                                                                       $event    JavaScript event
-     * @param ($action is object ? string : ($action is null ? string : never)|JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction) $selector Optional jQuery-style selector
-     * @param ($selector is string|null ? JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction : array)                              $action   code to execute
+     * @param string                                                                                                                                                                                           $event    JavaScript event
+     * @param ($action is object ? string : ($action is null ? string : never)|JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction)     $selector Optional jQuery-style selector
+     * @param ($selector is string|null ? JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction : array<int|string, mixed>)               $action   code to execute
+     * @param array<int|string, mixed>                                                                                                                                                                         $defaults
      *
      * @return ($selector is string|null ? ($action is null ? Jquery : null) : ($action is array|null ? Jquery : null))
      */

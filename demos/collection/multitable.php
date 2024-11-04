@@ -34,6 +34,9 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class extends Col
         return $res;
     }
 
+    /**
+     * @param list<string> $route
+     */
     #[\Override]
     public function setModel(Model $model, array $route = []): void
     {

@@ -65,7 +65,7 @@ class Layout extends AbstractLayout
     }
 
     /**
-     * @param string|array $label
+     * @param string|array<0|string, mixed> $label
      *
      * @return $this
      */
@@ -79,7 +79,7 @@ class Layout extends AbstractLayout
     /**
      * Adds field group in form layout.
      *
-     * @param string|array $label
+     * @param string|array<0|string, mixed> $label
      *
      * @return static
      */

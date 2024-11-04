@@ -33,6 +33,8 @@ class FakerPersistence extends Persistence
     }
 
     /**
+     * @param list<string> $fields
+     *
      * @return list<array<string, mixed>>
      */
     private function export(Model $model, array $fields = []): array

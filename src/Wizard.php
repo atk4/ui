@@ -76,8 +76,8 @@ class Wizard extends View
     /**
      * Adds step to the wizard.
      *
-     * @param string|array|WizardStep $name
-     * @param \Closure($this): void   $fx
+     * @param string|array<mixed>|WizardStep $name
+     * @param \Closure($this): void          $fx
      *
      * @return WizardStep
      */

@@ -140,6 +140,9 @@ class App
     /** @var class-string */
     public $templateClass = HtmlTemplate::class;
 
+    /**
+     * @param array<string, mixed> $defaults
+     */
     public function __construct(array $defaults = [])
     {
         if (isset($defaults['request'])) {
@@ -539,7 +542,7 @@ class App
     }
 
     /**
-     * @param string|array|View|HtmlTemplate $output
+     * @param string|array<mixed>|View|HtmlTemplate $output
      *
      * @return never
      */
@@ -556,7 +559,7 @@ class App
     }
 
     /**
-     * @param string|array|View $output
+     * @param string|array<mixed>|View $output
      *
      * @return never
      */
@@ -573,7 +576,7 @@ class App
     /**
      * Initializes layout.
      *
-     * @param Layout|array $seed
+     * @param Layout|array<mixed> $seed
      *
      * @return $this
      */
@@ -643,8 +646,8 @@ class App
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
-     * @param AbstractView      $object
-     * @param string|array|null $region
+     * @param AbstractView             $object
+     * @param string|array<mixed>|null $region
      *
      * @return ($object is View ? View : AbstractView)
      */
@@ -972,8 +975,8 @@ class App
      * ])
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
-     * @param array<0|string, string|bool>                                                                       $attr
-     * @param string|list<array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
+     * @param array<0|string, string|bool>                                                                             $attr
+     * @param string|list<array{0: string, 1?: array<0|string, string|bool>, 2?: string|list<mixed>|null}|string>|null $value
      */
     public function getTag(string $tag, array $attr = [], $value = null): string
     {
@@ -1247,7 +1250,7 @@ class App
     }
 
     /**
-     * @param string|array $data
+     * @param string|array<mixed> $data
      */
     private function outputResponseJson($data): void
     {

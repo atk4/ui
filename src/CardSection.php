@@ -31,7 +31,7 @@ class CardSection extends View
     }
 
     #[\Override]
-    public function setModel(Model $entity, ?array $fields = null): void
+    public function setModel(Model $entity): void
     {
         $entity->assertIsEntity();
 
@@ -60,6 +60,8 @@ class CardSection extends View
 
     /**
      * Add Model fields to a card section.
+     *
+     * @param list<string> $fields
      */
     public function addFields(Model $entity, array $fields, bool $useLabel = false, bool $useTable = false): void
     {
@@ -74,6 +76,8 @@ class CardSection extends View
 
     /**
      * Add fields label and value to section.
+     *
+     * @param list<string> $fields
      */
     private function addSectionFields(Model $entity, array $fields, bool $useLabel = false): void
     {
@@ -96,6 +100,8 @@ class CardSection extends View
 
     /**
      * Add field into section using a CardTable View.
+     *
+     * @param list<string> $fields
      */
     private function addTableSection(Model $entity, array $fields): void
     {

@@ -12,7 +12,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class PersistenceUiTest extends TestCase
 {
     /**
-     * @param mixed $phpValue
+     * @param array<string, mixed> $persistenceSeed
+     * @param array<string, mixed> $fieldSeed
+     * @param mixed                $phpValue
      *
      * @dataProvider provideTypecastBidirectionalCases
      * @dataProvider provideTypecastLoadOnlyCases
@@ -212,7 +214,8 @@ class PersistenceUiTest extends TestCase
     }
 
     /**
-     * @param mixed $phpValue
+     * @param array<string, mixed> $fieldSeed
+     * @param mixed                $phpValue
      *
      * @dataProvider provideAttributeTypecastCases
      */

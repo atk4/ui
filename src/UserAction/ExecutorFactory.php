@@ -81,6 +81,8 @@ class ExecutorFactory
 
     /**
      * Register an executor for a basic type.
+     *
+     * @param array<mixed> $seed
      */
     public function registerTypeExecutor(string $type, array $seed): void
     {
@@ -89,6 +91,8 @@ class ExecutorFactory
 
     /**
      * Register an executor instance for a specific model User action.
+     *
+     * @param array<mixed> $seed
      */
     public function registerExecutor(UserAction $action, array $seed): void
     {
@@ -99,7 +103,7 @@ class ExecutorFactory
      * Register a trigger for a specific View type.
      * Trigger can be specify per action or per model/action.
      *
-     * @param array|View $seed
+     * @param array<mixed>|View $seed
      */
     public function registerTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false): void
     {

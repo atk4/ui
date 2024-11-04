@@ -67,7 +67,7 @@ class Callback extends AbstractView
      * @template T
      *
      * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): T $fx
-     * @param array                                                                             $fxArgs
+     * @param list<mixed>                                                                       $fxArgs
      *
      * @return T|null
      */

@@ -142,8 +142,8 @@ class Input extends Form\Control
     /**
      * Used only from renderView().
      *
-     * @param string|array|Button|UserAction|(AbstractView&ExecutorInterface) $button Button class or object
-     * @param string                                                          $spot   Template spot
+     * @param string|array<mixed>|Button|UserAction|(AbstractView&ExecutorInterface) $button Button class or object
+     * @param string                                                                 $spot   Template spot
      *
      * @return Button
      */
@@ -238,6 +238,8 @@ class Input extends Form\Control
 
     /**
      * Adds new action button.
+     *
+     * @param array<mixed> $defaults
      *
      * @return Button
      */

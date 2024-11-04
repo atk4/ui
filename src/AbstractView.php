@@ -65,6 +65,8 @@ abstract class AbstractView
     }
 
     /**
+     * @param array<mixed> $args
+     *
      * @return ($object is View ? View : self)
      */
     public function add(self $object, array $args = []): self

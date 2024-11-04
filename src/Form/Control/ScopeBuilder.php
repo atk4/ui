@@ -430,6 +430,8 @@ class ScopeBuilder extends Form\Control
     }
 
     /**
+     * @param array<string, mixed> $defaults
+     *
      * @return array<string, mixed>
      */
     protected function getRule(string $type, array $defaults = [], ?Field $field = null): array
@@ -486,6 +488,8 @@ class ScopeBuilder extends Form\Control
     /**
      * Returns the choices array for Select field rule.
      *
+     * @param array<string, mixed> $options
+     *
      * @return list<array{label: mixed, value: mixed}>
      */
     protected function getChoices(Field $field, array $options = []): array
@@ -522,6 +526,8 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Converts an VueQueryBuilder query array to Condition or Scope.
+     *
+     * @param array<string, mixed> $query
      */
     public function queryToScope(array $query): Scope\AbstractScope
     {
@@ -546,6 +552,8 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Converts an VueQueryBuilder rule array to Condition or Scope.
+     *
+     * @param array<string, mixed> $query
      */
     public function queryToCondition(array $query): Condition
     {
@@ -595,6 +603,8 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts Scope or Condition to VueQueryBuilder query array.
      *
+     * @param array<string, string|null> $inputsMap
+     *
      * @return array{type: string, query: array<string, mixed>}
      */
     public function scopeToQuery(Scope\AbstractScope $scope, array $inputsMap = []): array
@@ -627,6 +637,8 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Converts a Condition to VueQueryBuilder query array.
+     *
+     * @param array<string, string|null> $inputsMap
      *
      * @return array{rule: string, operator: string, value: string|null, option: array<string, mixed>|null}
      */

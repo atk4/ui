@@ -36,6 +36,8 @@ class PaginatorTest extends TestCase
     }
 
     /**
+     * @param list<int|'['|'...'|']'> $expected
+     *
      * @dataProvider providePaginatorCases
      */
     #[DataProvider('providePaginatorCases')]
