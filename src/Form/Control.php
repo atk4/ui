@@ -130,7 +130,7 @@ class Control extends View
      * $control->onChange(new JsExpression('$(this).parents(\'.form\').form(\'submit\')'));
      *
      * @param JsExpressionable|JsCallbackSetClosure|array{JsCallbackSetClosure} $expr
-     * @param array<int|string, mixed> |bool                                    $defaults
+     * @param array<int|string, mixed>|bool                                     $defaults
      */
     public function onChange($expr, $defaults = []): void
     {
