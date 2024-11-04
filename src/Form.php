@@ -61,7 +61,7 @@ class Form extends View
      * Will point to the Save button. If you don't want to have save button, then set this to false
      * or destroy it. Initialized by initLayout().
      *
-     * @var Button|array|false Button object, seed or false to not show button at all
+     * @var Button|array<mixed>|false Button object, seed or false to not show button at all
      */
     public $buttonSave = [Button::class, 'Save', 'class.primary' => true];
 
@@ -96,6 +96,8 @@ class Form extends View
      *  Show "target' if 'source1' is not empty AND is a number
      *      OR
      *  Show 'target' if 'source1' is exactly 5.
+     *
+     * @var array<string, mixed>
      */
     public array $controlDisplayRules = [];
 
@@ -159,6 +161,8 @@ class Form extends View
     /**
      * Setter for control display rules.
      *
+     * @param array<string, mixed> $rules
+     *
      * @return $this
      */
     public function setControlsDisplayRules(array $rules = [])
@@ -171,7 +175,8 @@ class Form extends View
     /**
      * Set display rule for a group collection.
      *
-     * @param string|View $selector
+     * @param array<string, mixed> $rules
+     * @param string|View          $selector
      *
      * @return $this
      */
@@ -188,7 +193,7 @@ class Form extends View
     }
 
     /**
-     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
+     * @param list<string>|null $fields if null, then all "editable" fields will be added
      */
     #[\Override]
     public function setModel(Model $entity, ?array $fields = null): void
@@ -325,7 +330,7 @@ class Form extends View
     /**
      * Add header into the form, which appears as a separator.
      *
-     * @param string|array $title
+     * @param string|array<0|string, mixed> $title
      */
     public function addHeader($title = null): void
     {
@@ -335,7 +340,7 @@ class Form extends View
     /**
      * Creates a group of fields and returns layout.
      *
-     * @param string|array $title
+     * @param string|array<0|string, mixed> $title
      *
      * @return Form\Layout
      */
@@ -405,7 +410,7 @@ class Form extends View
     }
 
     /**
-     * @var array<string, array>
+     * @var array<string, array<mixed>>
      */
     protected array $typeToControl = [
         'boolean' => [Control\Checkbox::class],

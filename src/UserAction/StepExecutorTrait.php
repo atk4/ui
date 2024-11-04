@@ -17,7 +17,7 @@ use Atk4\Ui\View;
 
 trait StepExecutorTrait
 {
-    /** @var array<int, string> The steps need to complete the action. */
+    /** @var list<string> The steps need to complete the action. */
     protected array $steps;
 
     /** @var string current step. */
@@ -38,7 +38,7 @@ trait StepExecutorTrait
     /** @var UserAction The action to execute. */
     public $action;
 
-    /** @var array will collect data while doing action step. */
+    /** @var array<string, array<string, mixed>> will collect data while doing action step. */
     private $actionData = [];
 
     /** @var bool */
@@ -47,7 +47,7 @@ trait StepExecutorTrait
     /** @var JsExpressionable|\Closure<T of Model>($this, T, mixed, mixed): ?JsBlock JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
-    /** @var array A seed for creating form in order to edit arguments/fields user entry. */
+    /** @var array<mixed> A seed for creating form in order to edit arguments/fields user entry. */
     public $formSeed = [Form::class];
 
     /** @var string can be "console", "text", or "html". Determine how preview step will display information. */
@@ -84,6 +84,8 @@ trait StepExecutorTrait
 
     /**
      * Will add field into form based on $fields array.
+     *
+     * @param array<string, mixed> $fields
      */
     protected function setFormField(Form $form, array $fields, string $step): Form
     {
@@ -246,6 +248,8 @@ trait StepExecutorTrait
 
     /**
      * Get how many steps is required for this action.
+     *
+     * @return list<string>
      */
     protected function getSteps(): array
     {
@@ -275,16 +279,12 @@ trait StepExecutorTrait
 
     protected function getPreviousStep(string $step): string
     {
-        $steps = array_values($this->steps);
-
-        return $steps[array_search($step, $steps, true) - 1];
+        return $this->steps[array_search($step, $this->steps, true) - 1];
     }
 
     protected function getNextStep(string $step): string
     {
-        $steps = array_values($this->steps);
-
-        return $steps[array_search($step, $steps, true) + 1];
+        return $this->steps[array_search($step, $this->steps, true) + 1];
     }
 
     protected function getStep(): string
@@ -412,13 +412,16 @@ trait StepExecutorTrait
         return $js;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getActionData(string $step): array
     {
         return $this->actionData[$step] ?? [];
     }
 
     /**
-     * @param array<string> $fields
+     * @param list<string> $fields
      */
     private function setActionDataFromEntity(string $step, Model $entity, array $fields): void
     {
@@ -446,6 +449,10 @@ trait StepExecutorTrait
 
     /**
      * Utility for retrieving Argument.
+     *
+     * @param array<string, mixed> $data
+     *
+     * @return list<mixed>
      */
     protected function getActionArgs(array $data): array
     {

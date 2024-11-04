@@ -54,11 +54,14 @@ class Column
     /** @var bool Include header action tag in rendering or not. */
     public $hasHeaderAction = false;
 
-    /** @var array|null The tag value required for getTag when using an header action. */
+    /** @var array<0|1|2, mixed>|null The tag value required for getTag when using an header action. */
     public $headerActionTag;
 
     private string $nameInTableCache;
 
+    /**
+     * @param array<string, mixed> $defaults
+     */
     public function __construct(array $defaults = [])
     {
         $this->setDefaults($defaults);
@@ -189,6 +192,7 @@ class Column
     /**
      * Add a dropdown header menu.
      *
+     * @param array<int|string, string>                                     $items
      * @param \Closure(string, string): (JsExpressionable|View|string|void) $fx
      * @param string                                                        $icon
      * @param string|null                                                   $menuId the menu name
@@ -212,11 +216,11 @@ class Column
      * This method return a callback where you can detect
      * menu item change via $cb->onMenuItem($item) function.
      *
-     * @param array<int, array> $items
+     * @param list<array{name: string, value: string}> $items
      *
      * @return Column\JsHeaderDropdownCallback
      */
-    public function setHeaderDropdown($items, string $icon = 'caret square down', ?string $menuId = null): JsCallback
+    public function setHeaderDropdown(array $items, string $icon = 'caret square down', ?string $menuId = null): JsCallback
     {
         $this->hasHeaderAction = true;
         $id = $this->name . '_ac';
@@ -292,6 +296,8 @@ class Column
 
     /**
      * @param array<string, string|list<string>> ...$attributesArr
+     *
+     * @return array<string, string|list<string>>
      */
     protected function mergeTagAttributes(array ...$attributesArr): array
     {
@@ -310,7 +316,10 @@ class Column
     }
 
     /**
-     * @param 'head'|'body'|'foot' $position
+     * @param 'head'|'body'|'foot'               $position
+     * @param array<string, string|list<string>> $attr
+     *
+     * @return array<string, string|list<string>>
      */
     public function getTagAttributes(string $position, array $attr = []): array
     {
@@ -326,8 +335,8 @@ class Column
      * added through addClass and setAttr.
      *
      * @param 'head'|'body'|'foot'                                                                                     $position
-     * @param array<string, string|bool|array<string>>                                                                 $attr
-     * @param string|array<int, array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
+     * @param array<string, string|bool|list<string>>                                                                  $attr
+     * @param string|list<array{0: string, 1?: array<0|string, string|bool>, 2?: string|list<mixed>|null}|string>|null $value
      */
     public function getTag(string $position, $attr, $value): string
     {
@@ -398,7 +407,7 @@ class Column
     /**
      * Return HTML for a total value of a specific field.
      *
-     * @param mixed $value
+     * @param int|float $value
      */
     public function getTotalsCellHtml(Field $field, $value): string
     {
@@ -415,6 +424,8 @@ class Column
      * will also be formatted before inserting, see UI Persistence formatting in the documentation.
      *
      * If you need to format data manually, you can use $this->table->onHook(Lister::HOOK_BEFORE_ROW or Lister::HOOK_AFTER_ROW, ...);
+     *
+     * @param array<string, string|list<string>> $attr
      */
     public function getDataCellHtml(?Field $field = null, array $attr = []): string
     {

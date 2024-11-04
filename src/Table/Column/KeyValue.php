@@ -39,6 +39,7 @@ use Atk4\Ui\Table;
  */
 class KeyValue extends Table\Column
 {
+    /** @var array<mixed, string> */
     public array $values;
 
     #[\Override]

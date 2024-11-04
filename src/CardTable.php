@@ -19,7 +19,7 @@ class CardTable extends Table
     protected bool $_bypass = false;
 
     /**
-     * @param array<int, string>|null $fields
+     * @param list<string>|null $fields
      */
     #[\Override]
     public function setModel(Model $entity, ?array $fields = null): void

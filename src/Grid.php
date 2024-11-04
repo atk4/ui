@@ -22,13 +22,13 @@ class Grid extends View
 {
     use HookTrait;
 
-    /** @var Menu|array|false Will be initialized to Menu object, however you can set this to false to disable menu. */
+    /** @var Menu|array<mixed>|false Will be initialized to Menu object, however you can set this to false to disable menu. */
     public $menu;
 
     /** @var JsSearch|null */
     public $quickSearch;
 
-    /** @var array Field names to search for in Model. It will automatically add quicksearch component to grid if set. */
+    /** @var list<string> Field names to search for in Model. It will automatically add quicksearch component to grid if set. */
     public $searchFieldNames = [];
 
     /**
@@ -86,10 +86,10 @@ class Grid extends View
 
     public $defaultTemplate = 'grid.html';
 
-    /** @var array Table\Column seed to use for ActionButtons. */
+    /** @var array<mixed> Table\Column seed to use for ActionButtons. */
     protected $actionButtonsSeed = [Table\Column\ActionButtons::class];
 
-    /** @var array Table\Column seed to use for ActionMenu. */
+    /** @var array<mixed> Table\Column seed to use for ActionMenu. */
     protected $actionMenuSeed = [Table\Column\ActionMenu::class, 'label' => 'Actions...'];
 
     #[\Override]
@@ -145,9 +145,9 @@ class Grid extends View
      * Add new column to grid. If column with this name already exists,
      * an. Simply calls Table::addColumn(), so check that method out.
      *
-     * @param string|null                             $name            Data model field name
-     * @param array|Table\Column                      $columnDecorator
-     * @param ($name is null ? array{} : array|Field) $field
+     * @param string|null                                    $name            Data model field name
+     * @param array<mixed>|Table\Column                      $columnDecorator
+     * @param ($name is null ? array{} : array<mixed>|Field) $field
      *
      * @return Table\Column
      */
@@ -159,7 +159,7 @@ class Grid extends View
     /**
      * Add additional decorator for existing column.
      *
-     * @param array|Table\Column $seed
+     * @param array<mixed>|Table\Column $seed
      *
      * @return Table\Column
      */
@@ -243,14 +243,14 @@ class Grid extends View
     /**
      * Add dynamic scrolling paginator.
      *
-     * @param int    $ipp          number of item per page to start with
-     * @param array  $options      an array with JS Scroll plugin options
-     * @param View   $container    the container holding the lister for scrolling purpose
-     * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
+     * @param int                  $ipp          number of item per page to start with
+     * @param array<string, mixed> $options      an array with JS Scroll plugin options
+     * @param View                 $container    the container holding the lister for scrolling purpose
+     * @param string               $scrollRegion A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
      */
-    public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+    public function addJsPaginator($ipp, array $options = [], $container = null, $scrollRegion = 'Body')
     {
         if ($this->paginator) {
             $this->paginator->destroy();
@@ -273,15 +273,15 @@ class Grid extends View
      * Add dynamic scrolling paginator in container.
      * Use this to make table headers fixed.
      *
-     * @param int    $ipp             number of item per page to start with
-     * @param int    $containerHeight number of pixel the table container should be
-     * @param array  $options         an array with JS Scroll plugin options
-     * @param View   $container       the container holding the lister for scrolling purpose
-     * @param string $scrollRegion    A specific template region to render. Render output is append to container HTML element.
+     * @param int                  $ipp             number of item per page to start with
+     * @param int                  $containerHeight number of pixel the table container should be
+     * @param array<string, mixed> $options         an array with JS Scroll plugin options
+     * @param View                 $container       the container holding the lister for scrolling purpose
+     * @param string               $scrollRegion    A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
      */
-    public function addJsPaginatorInContainer($ipp, $containerHeight, $options = [], $container = null, $scrollRegion = 'Body')
+    public function addJsPaginatorInContainer($ipp, $containerHeight, array $options = [], $container = null, $scrollRegion = 'Body')
     {
         $this->table->hasCollapsingCssActionColumn = false;
         $options = array_merge($options, [
@@ -299,8 +299,8 @@ class Grid extends View
      * By default, will query server when using Enter key on input search field.
      * You can change it to query server on each keystroke by passing $autoQuery true,.
      *
-     * @param array $fields       the list of fields to search for
-     * @param bool  $hasAutoQuery will query server on each key pressed
+     * @param list<string> $fields       the list of fields to search for
+     * @param bool         $hasAutoQuery will query server on each key pressed
      */
     public function addQuickSearch($fields = [], $hasAutoQuery = false): void
     {
@@ -345,7 +345,7 @@ class Grid extends View
      * Adds a new button into the action column on the right. For Crud this
      * column will already contain "delete" and "edit" buttons.
      *
-     * @param string|array|View                     $button     Label text, object or seed for the Button
+     * @param string|array<mixed>|View              $button     Label text, object or seed for the Button
      * @param JsExpressionable|JsCallbackSetClosure $action
      * @param bool|\Closure<T of Model>(T): bool    $isDisabled
      *
@@ -439,7 +439,7 @@ class Grid extends View
      * An array of column name where filter is needed.
      * Leave empty to include all column in grid.
      *
-     * @param array|null $names an array with the name of column
+     * @param list<string> $names an array with the name of column
      *
      * @return $this
      */
@@ -458,12 +458,12 @@ class Grid extends View
      * Add a dropdown menu to header column.
      *
      * @param string                                                $columnName the name of column where to add dropdown
-     * @param array                                                 $items      the menu items to add
+     * @param array<int|string, string>                             $items      the menu items to add
      * @param \Closure(string): (JsExpressionable|View|string|void) $fx         the callback function to execute when an item is selected
      * @param string                                                $icon       the icon
      * @param string                                                $menuId     the menu ID return by callback
      */
-    public function addDropdown(string $columnName, $items, \Closure $fx, $icon = 'caret square down', $menuId = null): void
+    public function addDropdown(string $columnName, array $items, \Closure $fx, $icon = 'caret square down', $menuId = null): void
     {
         $column = $this->table->columns[$columnName];
 
@@ -496,10 +496,10 @@ class Grid extends View
      * Similar to addActionButton but when button is clicked, modal is displayed
      * with the $title and $callback is executed.
      *
-     * @param string|array|View                  $button
+     * @param string|array<mixed>|View           $button
      * @param string                             $title
      * @param \Closure(View, mixed): void        $callback
-     * @param array                              $args       extra URL argument for callback
+     * @param array<string, string>              $args       extra URL argument for callback
      * @param bool|\Closure<T of Model>(T): bool $isDisabled
      *
      * @return View
@@ -526,9 +526,9 @@ class Grid extends View
      * Similar to addActionButton but apply to a multiple records selection and display in menu.
      * When menu item is clicked, $callback is executed.
      *
-     * @param string|array|MenuItem                           $item
+     * @param string|array<mixed>|MenuItem                    $item
      * @param \Closure(Jquery, list<mixed>): JsExpressionable $callback
-     * @param array                                           $args     extra URL argument for callback
+     * @param array<string, string>                           $args     extra URL argument for callback
      *
      * @return View
      */
@@ -546,10 +546,10 @@ class Grid extends View
      * Similar to addModalAction but apply to a multiple records selection and display in menu.
      * When menu item is clicked, modal is displayed with the $title and $callback is executed.
      *
-     * @param string|array|MenuItem             $item
+     * @param string|array<mixed>|MenuItem      $item
      * @param string                            $title
      * @param \Closure(View, list<mixed>): void $callback
-     * @param array                             $args     extra URL argument for callback
+     * @param array<string, string>             $args     extra URL argument for callback
      *
      * @return View
      */
@@ -613,7 +613,7 @@ class Grid extends View
     }
 
     /**
-     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
+     * @param list<string>|null $fields if null, then all "editable" fields will be added
      */
     #[\Override]
     public function setModel(Model $model, ?array $fields = null): void

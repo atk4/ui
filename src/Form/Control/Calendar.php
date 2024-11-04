@@ -23,6 +23,8 @@ class Calendar extends Input
     /**
      * Any other options you'd like to pass to Flatpickr JS.
      * See https://flatpickr.js.org/options/ for all possible options.
+     *
+     * @var array<string, mixed>
      */
     public array $options = [];
 

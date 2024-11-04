@@ -17,6 +17,7 @@ class ScopeBuilder extends Form\Control
 {
     public $renderLabel = false;
 
+    /** @var array<string, array<string, mixed>|bool> */
     public array $options = [
         'enum' => [
             'limit' => 250,
@@ -30,21 +31,21 @@ class ScopeBuilder extends Form\Control
      */
     public int $maxDepth = 5;
 
-    /** Fields to use for creating the rules. */
+    /** @var list<string> Fields to use for creating the rules. */
     public array $fields = [];
 
     /** @var HtmlTemplate|null The template needed for the ScopeBuilder view. */
     public $scopeBuilderTemplate;
 
-    /** List of delimiters for auto-detection in order of priority. */
+    /** @var list<non-empty-string> List of delimiters for auto-detection in order of priority. */
     public static array $listDelimiters = [';', ','];
 
-    /** The date, time or datetime options. */
+    /** @var array<string, mixed> The date, time or datetime options. */
     public array $atkdDateOptions = [
         'flatpickr' => [],
     ];
 
-    /** AtkLookup and Fomantic-UI dropdown options. */
+    /** @var array<string, mixed> AtkLookup and Fomantic-UI dropdown options. */
     public array $atkLookupOptions = [
         'ui' => 'small basic button',
     ];
@@ -52,16 +53,18 @@ class ScopeBuilder extends Form\Control
     /** @var View The scopebuilder View. Assigned in init(). */
     protected $scopeBuilderView;
 
-    /** Definition of VueQueryBuilder rules. */
+    /** @var list<array<string, mixed>> Definition of VueQueryBuilder rules. */
     protected array $rules = [];
 
     /**
      * Set Labels for Vue-Query-Builder
      * see https://dabernathy89.github.io/vue-query-builder/configuration.html#labels.
+     *
+     * @var array<mixed, mixed>
      */
     public array $labels = [];
 
-    /** Default VueQueryBuilder query. */
+    /** @var array<string, mixed> Default VueQueryBuilder query. */
     protected array $query = [];
 
     protected const OPERATOR_TEXT_EQUALS = 'equals';
@@ -350,6 +353,8 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Set property for AtkLookup component.
+     *
+     * @return array<string, mixed>
      */
     protected function getLookupProps(Field $field): array
     {
@@ -373,6 +378,8 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Set property for AtkDatePicker component.
+     *
+     * @return array<string, mixed>
      */
     protected function getDatePickerProps(Field $field): array
     {
@@ -422,6 +429,11 @@ class ScopeBuilder extends Form\Control
         }
     }
 
+    /**
+     * @param array<string, mixed> $defaults
+     *
+     * @return array<string, mixed>
+     */
     protected function getRule(string $type, array $defaults = [], ?Field $field = null): array
     {
         $rule = static::$ruleTypes[$type] ?? static::$ruleTypes['default'];
@@ -449,6 +461,8 @@ class ScopeBuilder extends Form\Control
     /**
      * Return an array of items ID and name for a field.
      * Return field enum, values or reference values.
+     *
+     * @return array<mixed, mixed>
      */
     protected function getFieldItems(Field $field, ?int $limit = 250): array
     {
@@ -473,6 +487,10 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Returns the choices array for Select field rule.
+     *
+     * @param array<string, mixed> $options
+     *
+     * @return list<array{label: mixed, value: mixed}>
      */
     protected function getChoices(Field $field, array $options = []): array
     {
@@ -508,6 +526,8 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Converts an VueQueryBuilder query array to Condition or Scope.
+     *
+     * @param array<string, mixed> $query
      */
     public function queryToScope(array $query): Scope\AbstractScope
     {
@@ -532,6 +552,8 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Converts an VueQueryBuilder rule array to Condition or Scope.
+     *
+     * @param array<string, mixed> $query
      */
     public function queryToCondition(array $query): Condition
     {
@@ -580,6 +602,10 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Converts Scope or Condition to VueQueryBuilder query array.
+     *
+     * @param array<string, string|null> $inputsMap
+     *
+     * @return array{type: string, query: array<string, mixed>}
      */
     public function scopeToQuery(Scope\AbstractScope $scope, array $inputsMap = []): array
     {
@@ -612,7 +638,9 @@ class ScopeBuilder extends Form\Control
     /**
      * Converts a Condition to VueQueryBuilder query array.
      *
-     * @return array{rule: string, operator: string, value: string|null, option: array|null}
+     * @param array<string, string|null> $inputsMap
+     *
+     * @return array{rule: string, operator: string, value: string|null, option: array<string, mixed>|null}
      */
     public function conditionToQuery(Condition $condition, array $inputsMap = []): array
     {
@@ -683,6 +711,8 @@ class ScopeBuilder extends Form\Control
      * Return extra value option associate with certain inputType or null otherwise.
      *
      * @param mixed $value
+     *
+     * @return array<string, mixed>
      */
     protected function getConditionOption(string $type, $value, Condition $condition): ?array
     {

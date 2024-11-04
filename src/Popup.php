@@ -45,7 +45,7 @@ class Popup extends View
      */
     public $target = false;
 
-    /** @var array Popup options as defined in Fomantic-UI popup module. */
+    /** @var array<string, mixed> Popup options as defined in Fomantic-UI popup module. */
     public $popOptions = [];
 
     /** @var Callback|null The callback use to generate dynamic content. */
@@ -55,7 +55,7 @@ class Popup extends View
      * The dynamic View to load inside the popup
      * when dynamic content is use.
      *
-     * @var View|array
+     * @var View|array<mixed>
      */
     public $dynamicContent = [View::class];
 

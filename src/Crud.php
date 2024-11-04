@@ -17,28 +17,28 @@ use Atk4\Ui\UserAction\ExecutorInterface;
 
 class Crud extends Grid
 {
-    /** @var array of fields to display in Grid */
+    /** @var list<string> Fields to display in Grid */
     public $displayFields;
 
-    /** @var array|null of fields to edit in Form for Model edit action */
+    /** @var list<string>|null Fields to edit in Form for Model edit action */
     public $editFields;
 
-    /** @var array|null of fields to edit in Form for Model add action */
+    /** @var list<string>|null Fields to edit in Form for Model add action */
     public $addFields;
 
-    /** @var array Default notifier to perform when adding or editing is successful * */
+    /** @var array<mixed> Default notifier to perform when adding or editing is successful * */
     public $notifyDefault = [JsToast::class];
 
-    /** @var bool|null should we use table column drop-down menu to display user actions? */
+    /** @var bool|null Should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
 
     /** @var array<string, array{item: MenuItem, executor: AbstractView&ExecutorInterface}> Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
     private array $menuItems = [];
 
-    /** Model single scope action to include in table action column. Will include all single scope actions if empty. */
+    /** @var list<string> Model single scope action to include in table action column. Will include all single scope actions if empty. */
     public array $singleScopeActions = [];
 
-    /** Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
+    /** @var list<string> Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
     public array $noRecordScopeActions = [];
 
     /** @var string Message to display when record is add or edit successfully. */
@@ -50,10 +50,10 @@ class Crud extends Grid
     /** @var string Generic display message for no record scope action where model is not loaded. */
     public $defaultMsg = 'Done!';
 
-    /** @var array<int, array<string, \Closure(Form, UserAction\ModalExecutor): void>> Callback containers for model action. */
+    /** @var list<array<string, \Closure(Form, UserAction\ModalExecutor): void>> Callback containers for model action. */
     public $onActions = [];
 
-    /** @var mixed recently deleted record ID. */
+    /** @var mixed Recently deleted record ID. */
     private $deletedId;
 
     #[\Override]
@@ -282,13 +282,21 @@ class Crud extends Grid
 
     /**
      * Return proper action need to setup menu or action column.
+     *
+     * @return array<string, Model\UserAction>
      */
     private function _getModelActions(string $appliesTo): array
     {
         if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
-            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions);
+            $actions = array_combine(
+                $this->singleScopeActions,
+                array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions)
+            );
         } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
-            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions);
+            $actions = array_combine(
+                $this->noRecordScopeActions,
+                array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions)
+            );
         } else {
             $actions = $this->model->getUserActions($appliesTo);
         }

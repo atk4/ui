@@ -83,6 +83,8 @@ class Link extends Table\Column
 
     /**
      * @param string|array<0|string, string|int|false> $page
+     * @param array<int|string, string>                $args
+     * @param array<string, mixed>                     $defaults
      */
     public function __construct($page = [], array $args = [], array $defaults = [])
     {

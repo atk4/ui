@@ -55,7 +55,7 @@ class Control extends View
      * Placed as a pointing label below the field. This only works when Form\Control appears in a form. You can also
      * set this to object, such as \Atk4\Ui\Text otherwise HTML characters are escaped.
      *
-     * @var string|View|array
+     * @var string|View|array<mixed>
      */
     public $hint;
 
@@ -130,7 +130,7 @@ class Control extends View
      * $control->onChange(new JsExpression('$(this).parents(\'.form\').form(\'submit\')'));
      *
      * @param JsExpressionable|JsCallbackSetClosure|array{JsCallbackSetClosure} $expr
-     * @param array|bool                                                        $defaults
+     * @param array<int|string, mixed>|bool                                     $defaults
      */
     public function onChange($expr, $defaults = []): void
     {

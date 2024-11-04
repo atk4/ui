@@ -58,6 +58,7 @@ class JsCallback extends Callback
 
     /**
      * @param \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void) $fx
+     * @param array<int|string, string|JsExpressionable>                                                                                  $args
      *
      * @return $this
      */

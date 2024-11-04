@@ -47,6 +47,9 @@ class FormTest extends TestCase
         $form->addControl('foo');
     }
 
+    /**
+     * @param array<string, string> $postData
+     */
     protected function triggerFormSubmit(ServerRequestInterface $request, Form $form, array $postData): ServerRequestInterface
     {
         $request = $this->triggerCallback($request, $form->cb);
@@ -62,6 +65,7 @@ class FormTest extends TestCase
 
     /**
      * @param \Closure(App): Form    $createFormFx
+     * @param array<string, string>  $postData
      * @param \Closure(Model): void  $submitFx
      * @param \Closure(string): void $checkExpectedErrorsFx
      */
@@ -421,7 +425,7 @@ class FormTest extends TestCase
 
 class AppFormTestMock extends App
 {
-    /** @var string|array */
+    /** @var string|array<mixed> */
     public $output;
 
     #[\Override]

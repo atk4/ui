@@ -22,7 +22,7 @@ class CardDeck extends View
 
     public $defaultTemplate = 'card-deck.html';
 
-    /** @var array Seed of Card inside this deck. */
+    /** @var array<mixed> Seed of Card inside this deck. */
     public $cardSeed = [Card::class];
 
     /** @var bool Whether card should use table display or not. */
@@ -52,19 +52,19 @@ class CardDeck extends View
     /** @var int The number of cards to be displayed per page. */
     public $ipp = 9;
 
-    /** @var Menu|array|false Will be initialized to Menu object, however you can set this to false to disable menu. */
+    /** @var Menu|array<mixed>|false Will be initialized to Menu object, however you can set this to false to disable menu. */
     public $menu;
 
-    /** @var array|VueComponent\ItemSearch|false */
+    /** @var array<mixed>|VueComponent\ItemSearch|false */
     public $search = [VueComponent\ItemSearch::class];
 
-    /** @var array Default notifier to perform when model action is successful * */
+    /** @var array<mixed> Default notifier to perform when model action is successful * */
     public $notifyDefault = [JsToast::class];
 
-    /** Model single scope action to include in table action column. Will include all single scope actions if empty. */
+    /** @var list<string> Model single scope action to include in table action column. Will include all single scope actions if empty. */
     public array $singleScopeActions = [];
 
-    /** Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
+    /** @var list<string> Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
     public array $noRecordScopeActions = [];
 
     /** @var string Message to display when record is add or edit successfully. */
@@ -76,7 +76,7 @@ class CardDeck extends View
     /** @var string Generic display message for no record scope action where model is not loaded. */
     public $defaultMsg = 'Done!';
 
-    /** @var array seed to create View for displaying when search result is empty. */
+    /** @var array<mixed> seed to create View for displaying when search result is empty. */
     public $noRecordDisplay = [
         Message::class,
         'content' => 'Result empty!',
@@ -84,7 +84,7 @@ class CardDeck extends View
         'text' => 'Your search did not return any record or there is no record available.',
     ];
 
-    /** @var array A collection of menu button added in Menu. */
+    /** @var array<string, array{button: MenuItem, executor: ExecutorInterface}> A collection of menu button added in Menu. */
     private $menuActions = [];
 
     /** @var string|null The current search query string. */
@@ -131,7 +131,8 @@ class CardDeck extends View
     }
 
     /**
-     * @param array<int, string>|null $fields
+     * @param list<string> $fields
+     * @param list<string> $extra
      */
     #[\Override]
     public function setModel(Model $model, ?array $fields = null, ?array $extra = null): void
@@ -276,13 +277,21 @@ class CardDeck extends View
 
     /**
      * Return proper action need to setup menu or action column.
+     *
+     * @return array<string, Model\UserAction>
      */
     private function getModelActions(string $appliesTo): array
     {
         if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
-            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions);
+            $actions = array_combine(
+                $this->singleScopeActions,
+                array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions)
+            );
         } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
-            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions);
+            $actions = array_combine(
+                $this->noRecordScopeActions,
+                array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions)
+            );
         } else {
             $actions = $this->model->getUserActions($appliesTo);
         }

@@ -45,15 +45,15 @@ class Modal extends View
     public $cb;
     /** @var View|null */
     public $cbView;
-    /** @var array */
+    /** @var array<string, mixed> */
     public $args = [];
-    /** @var array */
+    /** @var array<string, mixed> */
     public $options = [];
 
     /** @var string Currently only "json" response type is supported. */
     public $type = 'json';
 
-    /** @var array Add ability to add CSS classes to "content" div. */
+    /** @var list<string> Add ability to add CSS classes to "content" div. */
     public $contentClass = ['img', 'content', 'atk-dialog-content'];
 
     /**
@@ -106,7 +106,7 @@ class Modal extends View
     /**
      * Add CSS classes to "content" div.
      *
-     * @param string|array $class
+     * @param string|list<string> $class
      */
     public function addContentClass($class): void
     {
@@ -117,6 +117,8 @@ class Modal extends View
      * Show modal on page.
      *
      * Example: $button->on('click', $modal->jsShow());
+     *
+     * @param array<string, string> $args
      *
      * @return JsChain
      */

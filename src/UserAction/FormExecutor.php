@@ -38,7 +38,7 @@ class FormExecutor extends BasicExecutor
      * Returns array of names of fields.
      * This includes all editable or visible fields of the model.
      *
-     * @return array
+     * @return list<string>
      */
     protected function getModelFields(Model $model)
     {

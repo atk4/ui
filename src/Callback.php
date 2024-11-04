@@ -67,7 +67,7 @@ class Callback extends AbstractView
      * @template T
      *
      * @param \Closure(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): T $fx
-     * @param array                                                                             $fxArgs
+     * @param list<mixed>                                                                       $fxArgs
      *
      * @return T|null
      */
@@ -146,6 +146,8 @@ class Callback extends AbstractView
 
     /**
      * Return proper URL argument for this callback.
+     *
+     * @return array<string, string>
      */
     private function getUrlArguments(?string $value = null): array
     {

@@ -47,10 +47,10 @@ class Input extends Form\Control
     /** @var string|Label Set label that will appear to the right of the input field. */
     public $labelRight;
 
-    /** @var Button|array|UserAction|null */
+    /** @var Button|array<mixed>|UserAction|null */
     public $action;
 
-    /** @var Button|array|UserAction|null */
+    /** @var Button|array<mixed>|UserAction|null */
     public $actionLeft;
 
     /**
@@ -142,8 +142,8 @@ class Input extends Form\Control
     /**
      * Used only from renderView().
      *
-     * @param string|array|Button|UserAction|(AbstractView&ExecutorInterface) $button Button class or object
-     * @param string                                                          $spot   Template spot
+     * @param string|array<mixed>|Button|UserAction|(AbstractView&ExecutorInterface) $button Button class or object
+     * @param string                                                                 $spot   Template spot
      *
      * @return Button
      */
@@ -238,6 +238,8 @@ class Input extends Form\Control
 
     /**
      * Adds new action button.
+     *
+     * @param array<mixed> $defaults
      *
      * @return Button
      */

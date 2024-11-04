@@ -158,7 +158,7 @@ class ViewTest extends TestCase
     }
 
     /**
-     * @return iterable<list{class-string<View|Callback>}>
+     * @return iterable<list<mixed>>
      */
     public static function provideSetNotClosureErrorCases(): iterable
     {

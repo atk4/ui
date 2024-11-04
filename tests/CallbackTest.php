@@ -33,6 +33,9 @@ class CallbackTest extends TestCase
 
     protected static string $regexHtml = '~^<!DOCTYPE html>\s*<html.*</html>$~s';
 
+    /**
+     * @param array<0|string, mixed> $seed
+     */
     protected function createApp(array $seed = []): App
     {
         if (!isset($seed[0])) {

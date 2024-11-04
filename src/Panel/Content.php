@@ -58,6 +58,8 @@ class Content extends View implements LoadableContent
     /**
      * Return an array of CSS selector where content will be
      * cleared on reload.
+     *
+     * @return list<string>
      */
     public function getClearSelector(): array
     {

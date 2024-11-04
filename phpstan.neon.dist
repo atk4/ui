@@ -11,8 +11,6 @@ parameters:
         - js
 
     ignoreErrors:
-        - '~^(Property .+ has|Method .+\(\) (has parameter \$.+ with|return type has)) no value type specified in iterable type .+\.$~'
-
         # relax strict rules
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.$~'
         - '~^Variable (static )?(property access|method call) on .+\.$~'
@@ -374,6 +372,13 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::addJsonData\(\)\.$~'
             count: 1
 
+        # TODO fix once PHP 7.4 support is dropped
+        -
+            path: 'src/Console.php'
+            identifier: missingType.parameter
+            message: '~^Method Atk4\\Ui\\Console::\w+\(\) has parameter \$message with no type specified\.$~'
+            count: 9
+
         # TODO fix contravariance for View::set() method
         -
             path: 'src/Console.php'
@@ -394,6 +399,11 @@ parameters:
             path: 'src/JsCallback.php'
             identifier: method.childParameterType
             message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\Js\\Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): \(Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void\)\) of method Atk4\\Ui\\JsCallback::set\(\) should be contravariant with parameter \$fx \(Closure\(mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): mixed\) of method Atk4\\Ui\\Callback::set\(\)$~'
+            count: 1
+        -
+            path: 'src/JsCallback.php'
+            identifier: method.childParameterType
+            message: '~^Parameter #2 \$args \(array<int\|string, Atk4\\Ui\\Js\\JsExpressionable\|string>\) of method Atk4\\Ui\\JsCallback::set\(\) should be contravariant with parameter \$fxArgs \(list<mixed>\) of method Atk4\\Ui\\Callback::set\(\)$~'
             count: 1
         -
             path: 'src/Loader.php'
@@ -606,7 +616,7 @@ parameters:
         -
             path: 'src/Wizard.php'
             identifier: assign.propertyType
-            message: '~^Property Atk4\\Ui\\Wizard::\$steps \(array<int, Atk4\\Ui\\WizardStep>\) does not accept array<int, Atk4\\Ui\\AbstractView>\.$~'
+            message: '~^Property Atk4\\Ui\\Wizard::\$steps \(list<Atk4\\Ui\\WizardStep>\) does not accept non-empty-list<Atk4\\Ui\\AbstractView>\.$~'
             count: 1
 
         # TODO these rules are generated, this ignores should be fixed in the code

@@ -109,6 +109,8 @@ class DropdownCascade extends Dropdown
      *
      * @param list<array{value: string, text: mixed, name: mixed}> $values
      * @param mixed                                                $value  the current field value
+     *
+     * @return list<array{value: string, text: mixed, name: mixed, selected: true}>
      */
     private function getJsValues(array $values, $value): array
     {
