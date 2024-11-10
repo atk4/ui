@@ -372,13 +372,6 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\Js\\JsChain::addJsonData\(\)\.$~'
             count: 1
 
-        # TODO fix once PHP 7.4 support is dropped
-        -
-            path: 'src/Console.php'
-            identifier: missingType.parameter
-            message: '~^Method Atk4\\Ui\\Console::\w+\(\) has parameter \$message with no type specified\.$~'
-            count: 9
-
         # TODO fix contravariance for View::set() method
         -
             path: 'src/Console.php'
