@@ -627,7 +627,7 @@ parameters:
         -
             path: 'src/Menu.php'
             identifier: argument.type
-            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, array<int, string>\|string> given\.$~'
+            message: '~^Parameter #1 \$object of method Atk4\\Ui\\View::add\(\) expects Atk4\\Ui\\AbstractView, array<int\|string, list<string>\|string> given\.$~'
             count: 1
         -
             path: 'src/Panel/Right.php'
