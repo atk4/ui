@@ -535,9 +535,13 @@ class Grid extends View
     public function addBulkAction($item, \Closure $callback, $args = [])
     {
         $menuItem = $this->menu->addItem($item);
-        $menuItem->on('click', function (Jquery $j, string $value) use ($callback) {
-            return $callback($j, $this->explodeSelectionValue($value));
-        }, [$this->selection->jsChecked()]);
+        $menuItem->on('click', function (Jquery $j, array $ids) use ($callback) {
+            return $callback($j, $ids);
+        }, [
+            new JsCallbackLoadableValue($this->selection->jsChecked(), function ($v) {
+                return $this->explodeSelectionValue($v);
+            }),
+        ]);
 
         return $menuItem;
     }
