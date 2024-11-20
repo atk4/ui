@@ -396,7 +396,7 @@ parameters:
         -
             path: 'src/JsCallback.php'
             identifier: method.childParameterType
-            message: '~^Parameter #2 \$args \(array<int\|string, Atk4\\Ui\\Js\\JsExpressionable\|string>\) of method Atk4\\Ui\\JsCallback::set\(\) should be contravariant with parameter \$fxArgs \(list<mixed>\) of method Atk4\\Ui\\Callback::set\(\)$~'
+            message: '~^Parameter #2 \$args \(array<int\|string, Atk4\\Ui\\Js\\JsCallbackLoadableValue>\) of method Atk4\\Ui\\JsCallback::set\(\) should be contravariant with parameter \$fxArgs \(list<mixed>\) of method Atk4\\Ui\\Callback::set\(\)$~'
             count: 1
         -
             path: 'src/Loader.php'

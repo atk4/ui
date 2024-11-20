@@ -40,6 +40,9 @@ class JsSse extends JsCallback
         return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)]);
     }
 
+    /**
+     * @param array<int|string, mixed> $args
+     */
     #[\Override]
     public function set($fx = null, $args = null)
     {
