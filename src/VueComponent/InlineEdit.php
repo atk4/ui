@@ -6,6 +6,8 @@ namespace Atk4\Ui\VueComponent;
 
 use Atk4\Data\Model;
 use Atk4\Data\ValidationException;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
@@ -129,13 +131,14 @@ class InlineEdit extends View
     public function onChange(\Closure $fx): void
     {
         if (!$this->autoSave) {
-            $value = $this->getApp()->uiPersistence->typecastLoadField(
-                $this->entity->getField($this->fieldName),
-                $this->getApp()->tryGetRequestPostParam('value')
-            );
-            $this->cb->set(static function () use ($fx, $value) {
+            $this->cb->set(static function (Jquery $j, $value) use ($fx) {
                 return $fx($value);
-            });
+            }, ['value' => new JsCallbackLoadableValue(null, function ($v) {
+                return $this->getApp()->uiPersistence->typecastLoadField(
+                    $this->entity->getField($this->fieldName),
+                    $v
+                );
+            })]);
         }
     }
 

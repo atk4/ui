@@ -6,6 +6,7 @@ namespace Atk4\Ui;
 
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 
@@ -81,8 +82,13 @@ class JsCallback extends Callback
             $chain = new Jquery();
 
             $values = [];
-            foreach (array_keys($this->args) as $key) {
-                $values[] = $this->getApp()->getRequestPostParam($key);
+            foreach ($this->args as $k => $jsValue) {
+                $v = $this->getApp()->getRequestPostParam($k);
+                if ($jsValue instanceof JsCallbackLoadableValue) {
+                    $v = $jsValue->typecastLoadValue($v);
+                }
+
+                $values[] = $v;
             }
 
             $response = $fx($chain, ...$values);
