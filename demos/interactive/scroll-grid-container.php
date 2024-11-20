@@ -35,8 +35,8 @@ $g1->addQuickSearch([Country::hinting()->fieldName()->name, Country::hinting()->
 $g1->addModalAction(['icon' => 'cogs'], 'Details', static function (View $p, $id) use ($g1) {
     Card::addTo($p)->setModel($g1->model->load($id));
 });
-$g1->addActionButton('red', static function (Jquery $js) {
-    return $js->closest('tr')->css('color', 'red');
+$g1->addActionButton('red', static function (Jquery $js, $id) {
+    return $js->find('tr[data-id=' . $id . ']')->css('color', 'red');
 });
 // THIS SHOULD GO AFTER YOU CALL Grid::addActionButton()
 $g1->addJsPaginatorInContainer(30, 350);
