@@ -81,28 +81,38 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         }, $urlArgs);
     }
 
+    private function executeModelActionLoad(Model\UserAction $action): Model\UserAction
+    {
+        $model = $action->getModel();
+
+        $id = $this->getApp()->uiPersistence->typecastAttributeLoadField(
+            $model->getIdField(),
+            $this->getApp()->tryGetRequestPostParam($this->name)
+        );
+
+        if ($id && $action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
+            if ($action->isOwnerEntity() && $action->getEntity()->getId()) {
+                $action->getEntity()->setId($id); // assert ID is the same
+            } else {
+                $action = $action->getActionForEntity($model->load($id));
+            }
+        } elseif (!$action->isOwnerEntity() && in_array($action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)) {
+            $action = $action->getActionForEntity($model->createEntity());
+        }
+
+        return $action;
+    }
+
     #[\Override]
     public function executeModelAction(): void
     {
         $this->invokeFxWithUrlArgs(function () { // backup/restore $this->args mutated in https://github.com/atk4/ui/blob/8926412a31/src/JsCallback.php#L71
             $this->set(function (Jquery $j, ...$values) {
-                $id = $this->getApp()->uiPersistence->typecastAttributeLoadField(
-                    $this->action->getModel()->getIdField(),
-                    $this->getApp()->tryGetRequestPostParam($this->name)
-                );
-                if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-                    if ($this->action->isOwnerEntity() && $this->action->getEntity()->getId()) {
-                        $this->action->getEntity()->setId($id); // assert ID is the same
-                    } else {
-                        $this->action = $this->action->getActionForEntity($this->action->getModel()->load($id));
-                    }
-                } elseif (!$this->action->isOwnerEntity()
-                    && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)
-                ) {
-                    $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
-                }
+                $this->action = $this->executeModelActionLoad($this->action);
 
                 $return = $this->action->execute(...$values);
+
+                $id = $this->action->getEntity()->getId();
 
                 $success = $this->jsSuccess instanceof \Closure
                     ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $return)
