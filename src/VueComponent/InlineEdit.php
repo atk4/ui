@@ -70,7 +70,7 @@ class InlineEdit extends View
      * A default one is supply if this is null.
      * It receive the error ($e) as parameter.
      *
-     * @var \Closure(ValidationException, string): string|null
+     * @var \Closure(ValidationException, mixed): string|null
      */
     public $formatErrorMsg;
 
@@ -82,11 +82,12 @@ class InlineEdit extends View
         $this->cb = JsCallback::addTo($this);
 
         // set default validation error handler
-        if (!$this->formatErrorMsg) {
-            $this->formatErrorMsg = function (ValidationException $e, string $value) {
+        if ($this->formatErrorMsg === null) {
+            $this->formatErrorMsg = function (ValidationException $e, $value) {
                 $caption = $this->entity->getField($this->fieldName)->getCaption();
 
-                return $caption . ' - ' . $e->getMessage() . '. <br>Trying to set this value: "' . $value . '"';
+                return $this->getApp()->encodeHtml($caption) . ' - ' . $this->getApp()->encodeHtml($e->getMessage())
+                    . '. <br>Trying to set this value: "' . $this->getApp()->encodeHtml($value) . '"';
             };
         }
     }
@@ -103,10 +104,9 @@ class InlineEdit extends View
         }
 
         if ($this->autoSave && $this->entity->isLoaded()) {
-            $this->cb->set(function () {
-                $postValue = $this->getApp()->getRequestPostParam('value');
+            $this->cb->set(function (Jquery $j, $value) {
                 try {
-                    $this->entity->set($this->fieldName, $this->getApp()->uiPersistence->typecastLoadField($this->entity->getField($this->fieldName), $postValue));
+                    $this->entity->set($this->fieldName, $value);
                     $this->entity->save();
 
                     return $this->jsSuccess('Update saved');
@@ -114,10 +114,15 @@ class InlineEdit extends View
                     $this->getApp()->terminateJson([
                         'success' => true,
                         'hasValidationError' => true,
-                        'atkjs' => $this->jsError(($this->formatErrorMsg)($e, $postValue))->jsRender(),
+                        'atkjs' => $this->jsError(($this->formatErrorMsg)($e, $value))->jsRender(),
                     ]);
                 }
-            });
+            }, ['value' => new JsCallbackLoadableValue(null, function ($v) {
+                return $this->getApp()->uiPersistence->typecastLoadField(
+                    $this->entity->getField($this->fieldName),
+                    $v
+                );
+            })]);
         }
     }
 
