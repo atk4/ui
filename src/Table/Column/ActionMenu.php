@@ -18,7 +18,7 @@ use Atk4\Ui\View;
  * Table column action menu.
  * Will create a dropdown menu within table column.
  *
- * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
+ * @phpstan-type JsCallbackSetWithRowIdClosure \Closure(Jquery, mixed): (JsExpressionable|View|string|void)
  */
 class ActionMenu extends Table\Column
 {
@@ -53,9 +53,9 @@ class ActionMenu extends Table\Column
     /**
      * Add a menu item in Dropdown.
      *
-     * @param View|string                                             $item
-     * @param JsExpressionable|JsCallbackSetClosure|ExecutorInterface $action
-     * @param bool|\Closure<T of Model>(T): bool                      $isDisabled
+     * @param View|string                                                      $item
+     * @param JsExpressionable|JsCallbackSetWithRowIdClosure|ExecutorInterface $action
+     * @param bool|\Closure<T of Model>(T): bool                               $isDisabled
      *
      * @return View
      */

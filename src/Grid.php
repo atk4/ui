@@ -16,7 +16,7 @@ use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 
 /**
- * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
+ * @phpstan-type JsCallbackSetWithRowIdClosure \Closure(Jquery, mixed): (JsExpressionable|View|string|void)
  */
 class Grid extends View
 {
@@ -345,9 +345,9 @@ class Grid extends View
      * Adds a new button into the action column on the right. For Crud this
      * column will already contain "delete" and "edit" buttons.
      *
-     * @param string|array<mixed>|View              $button     Label text, object or seed for the Button
-     * @param JsExpressionable|JsCallbackSetClosure $action
-     * @param bool|\Closure<T of Model>(T): bool    $isDisabled
+     * @param string|array<mixed>|View                       $button     Label text, object or seed for the Button
+     * @param JsExpressionable|JsCallbackSetWithRowIdClosure $action
+     * @param bool|\Closure<T of Model>(T): bool             $isDisabled
      *
      * @return View
      */
@@ -393,9 +393,9 @@ class Grid extends View
      * Similar to addActionButton. Will add Button that when click will display
      * a Dropdown menu.
      *
-     * @param View|string                           $view
-     * @param JsExpressionable|JsCallbackSetClosure $action
-     * @param bool|\Closure<T of Model>(T): bool    $isDisabled
+     * @param View|string                                    $view
+     * @param JsExpressionable|JsCallbackSetWithRowIdClosure $action
+     * @param bool|\Closure<T of Model>(T): bool             $isDisabled
      *
      * @return View
      */
