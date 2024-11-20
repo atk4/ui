@@ -58,7 +58,7 @@ $grid->addActionButton('Say HI', static function (Jquery $j, $id) use ($grid) {
 
     $id = $grid->getApp()->uiPersistence->typecastAttributeLoadField($grid->model->getIdField(), $id); // TODO fix asap, this line must not be needed!
 
-    return 'Loaded "' . $model->load($id)->name . '" from ID=' . $id->getId();
+    return new JsToast('Loaded "' . $model->load($id)->name . '" from ID=' . $id->getId());
 });
 
 $grid->addModalAction(['icon' => 'external'], 'Modal Test', static function (View $p, $id) {

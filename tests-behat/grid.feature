@@ -80,6 +80,14 @@ Feature: Grid
     Then I should see "China"
     Then I should see "Zambia"
 
+  Scenario: Row remote action
+    Given I am on "collection/grid.php"
+    Then I should not see "Bahamas"
+    Then I click paginator page "2"
+    Then I should see "Bahamas"
+    When I click using selector "//tr[td[text()='Bahamas']]//div.ui.button[text()='Say HI']"
+    Then Toast display should contain text "Loaded \"Bahamas\" from ID=16"
+
   Scenario: Bulk action
     Given I am on "collection/grid.php"
     Then I press button "Show selected"

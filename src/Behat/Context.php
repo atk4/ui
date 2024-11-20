@@ -763,10 +763,12 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Toast display should contain text :arg1
+     * @Then ~^Toast display should contain text "((?:[^"]|\\")*)"$~
      */
     public function toastDisplayShouldContainText(string $text): void
     {
+        $text = $this->unquoteStepArgument($text);
+
         $toastContainer = $this->findElement(null, '.ui.toast-container');
         $toastText = $this->findElement($toastContainer, '.content')->getText();
         if (!str_contains($toastText, $text)) {
