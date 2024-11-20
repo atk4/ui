@@ -53,14 +53,14 @@ $grid->addColumn(null, [Table\Column\Template::class, 'hello<b>world</b>']);
 // creating a button for executing model test user action
 $grid->addExecutorButton($grid->getExecutorFactory()->createExecutor($model->getUserAction('test'), $grid));
 
-$grid->addActionButton('Say HI', static function (Jquery $j, $id) use ($grid) {
+$grid->addActionButton('Say HI', static function (Jquery $j, WrappedId $id) use ($grid) {
     $model = Country::assertInstanceOf($grid->model);
 
     return new JsToast('Loaded "' . $model->load($id)->name . '" from ID=' . $id->getId());
 });
 
-$grid->addModalAction(['icon' => 'external'], 'Modal Test', static function (View $p, $id) {
-    Message::addTo($p, ['Clicked on ID=' . $id]);
+$grid->addModalAction(['icon' => 'external'], 'Modal Test', static function (View $p, WrappedId $id) {
+    Message::addTo($p, ['Clicked on ID=' . $id->getId()]);
 });
 
 // creating an executor for delete action

@@ -9,6 +9,7 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Table;
@@ -69,7 +70,15 @@ class ActionButtons extends Table\Column
 
         $this->buttons[$name] = $button->addClass('{$_' . $name . '_disabled} compact b_' . $name);
 
-        $this->table->on('click', '.b_' . $name, $action, [$this->table->jsRow()->data('id'), 'confirm' => $confirmMsg]);
+        $this->table->on('click', '.b_' . $name, $action, [
+            new JsCallbackLoadableValue($this->table->jsRow()->data('id'), function ($v) {
+                return $this->getApp()->uiPersistence->typecastAttributeLoadField(
+                    $this->table->model->getIdField(),
+                    $v
+                );
+            }),
+            'confirm' => $confirmMsg,
+        ]);
 
         return $button;
     }
