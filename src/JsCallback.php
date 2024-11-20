@@ -12,7 +12,7 @@ use Atk4\Ui\Js\JsExpressionable;
 class JsCallback extends Callback
 {
     /** @var array<string, string|JsExpressionable> Holds information about arguments passed in to the callback. */
-    public $args = [];
+    public array $args = [];
 
     /** @var string Text to display as a confirmation. Set with setConfirm(..). */
     public $confirm;
