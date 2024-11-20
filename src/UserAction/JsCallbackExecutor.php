@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\HookTrait;
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
@@ -123,7 +124,17 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
                     ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
 
                 return $js;
-            }, array_map(static fn () => new JsCallbackLoadableValue(null, static fn ($v) => $v), $this->action->args));
+            }, array_map(function (string $actionArgName) {
+                $actionArg = $this->action->args[$actionArgName];
+                $actionArgType = $actionArg['type'];
+
+                return new JsCallbackLoadableValue(null, function ($v) use ($actionArgType) {
+                    return $this->getApp()->uiPersistence->typecastLoadField(
+                        new Field(['type' => $actionArgType]),
+                        $v
+                    );
+                });
+            }, array_combine(array_keys($this->action->args), array_keys($this->action->args))));
         });
     }
 }
