@@ -6,6 +6,8 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
@@ -190,16 +192,14 @@ class Upload extends Input
     {
         $this->hasDeleteCb = true;
         if ($this->getApp()->tryGetRequestPostParam('fUploadAction') === self::DELETE_ACTION) {
-            $this->cb->set(function () use ($fx) {
-                $fileId = $this->getApp()->getRequestPostParam('fUploadId');
-
+            $this->cb->set(function (Jquery $j, string $fileId) use ($fx) {
                 $jsRes = $fx($fileId);
                 if ($jsRes !== null) { // @phpstan-ignore notIdentical.alwaysTrue (https://github.com/phpstan/phpstan/issues/9388)
                     $this->addJsAction($jsRes);
                 }
 
                 return new JsBlock($this->jsActions);
-            });
+            }, ['fUploadId' => new JsCallbackLoadableValue(null, static fn ($v) => $v)]);
         }
     }
 
