@@ -8,6 +8,7 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
@@ -122,7 +123,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
                     ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
 
                 return $js;
-            }, array_map(static fn () => true, $this->action->args)); // @phpstan-ignore argument.type
+            }, array_map(static fn () => new JsCallbackLoadableValue(null, static fn ($v) => $v), $this->action->args));
         });
     }
 }
