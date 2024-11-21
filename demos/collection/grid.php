@@ -56,8 +56,6 @@ $grid->addExecutorButton($grid->getExecutorFactory()->createExecutor($model->get
 $grid->addActionButton('Say HI', static function (Jquery $j, $id) use ($grid) {
     $model = Country::assertInstanceOf($grid->model);
 
-    $id = $grid->getApp()->uiPersistence->typecastAttributeLoadField($grid->model->getIdField(), $id); // TODO fix asap, this line must not be needed!
-
     return new JsToast('Loaded "' . $model->load($id)->name . '" from ID=' . $id->getId());
 });
 
