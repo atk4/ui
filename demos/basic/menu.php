@@ -8,6 +8,7 @@ use Atk4\Ui\App;
 use Atk4\Ui\Dropdown as UiDropdown;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Menu;
 use Atk4\Ui\View;
 
@@ -21,7 +22,7 @@ $menu->addItem('baz');
 $dropdown = UiDropdown::addTo($menu, ['With Callback', 'dropdownOptions' => ['on' => 'hover']]);
 $dropdown->setSource(['a', 'b', 'c']);
 $dropdown->onChange(static function (string $itemId) {
-    return 'New selected item ID: ' . $itemId;
+    return new JsToast('New selected item ID: ' . $itemId);
 });
 
 $submenu = $menu->addMenu('Sub-menu');
