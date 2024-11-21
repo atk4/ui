@@ -128,10 +128,6 @@ trait StepExecutorTrait
 
         $form = $this->addFormTo($page);
         foreach ($this->action->args as $key => $val) {
-            if ($val instanceof Model) {
-                $val = ['model' => $val];
-            }
-
             if (isset($val['model'])) {
                 $val['model'] = Factory::factory($val['model']);
                 $form->addControl($key, [Form\Control\Lookup::class])->setModel($val['model']);
