@@ -33,8 +33,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 {
     use HookTrait;
 
-    /** @var Model\UserAction The model user action */
-    public $action;
+    public Model\UserAction $action;
 
     /** @var JsExpressionable|\Closure<T of Model>($this, T, mixed, mixed): ?JsBlock JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;

@@ -7,7 +7,6 @@ namespace Atk4\Ui\UserAction;
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
@@ -21,8 +20,7 @@ class BasicExecutor extends View implements ExecutorInterface
 
     public const HOOK_AFTER_EXECUTE = self::class . '@afterExecute';
 
-    /** @var Model\UserAction|null */
-    public $action;
+    public Model\UserAction $action;
 
     /** @var bool display header or not */
     public $hasHeader = true;
@@ -37,7 +35,7 @@ class BasicExecutor extends View implements ExecutorInterface
     public $executorButton;
 
     /** @var array<string, mixed> */
-    protected $arguments = [];
+    protected array $arguments = [];
 
     /** @var string display message when missing arguments */
     public $missingArgsMsg = 'Insufficient arguments';
@@ -77,9 +75,7 @@ class BasicExecutor extends View implements ExecutorInterface
     #[\Override]
     protected function recursiveRender(): void
     {
-        if (!$this->action) {
-            throw new Exception('Action is not set. Use setAction()');
-        }
+        $this->action; // assert action is set @phpstan-ignore expr.resultUnused
 
         // check action can be called
         if ($this->action->enabled) {
