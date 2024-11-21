@@ -381,7 +381,7 @@ jobs:
       - name: "Run tests: SQLite"
         run: |
           php demos/_demo-data/create-db.php
-          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat --strict -vv --config behat.yml.dist
 
       - name: "Run tests: MySQL (only for cron)"
         if: (success() || failure()) && github.event_name == 'schedule'
@@ -392,7 +392,7 @@ jobs:
         run: |
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
-          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat --strict -vv --config behat.yml.dist
 
       - name: "Run tests: MariaDB (only for coverage or cron)"
         if: (success() || failure()) && (env.LOG_COVERAGE || github.event_name == 'schedule')
@@ -403,7 +403,7 @@ jobs:
         run: |
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
-          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat --strict -vv --config behat.yml.dist
 
       - name: "Run tests: PostgreSQL (only for cron)"
         if: (success() || failure()) && github.event_name == 'schedule'
@@ -414,7 +414,7 @@ jobs:
         run: |
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
-          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat --strict -vv --config behat.yml.dist
 
       - name: "Run tests: MSSQL (only for cron)"
         if: (success() || failure()) && github.event_name == 'schedule'
@@ -425,7 +425,7 @@ jobs:
         run: |
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
-          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat --strict -vv --config behat.yml.dist
 
       - name: "Run tests: Oracle (only for cron)"
         if: (success() || failure()) && github.event_name == 'schedule'
@@ -437,7 +437,7 @@ jobs:
         run: |
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
-          vendor/bin/behat -vv --config behat.yml.dist
+          vendor/bin/behat --strict -vv --config behat.yml.dist
 
       - name: Upload coverage logs 1/2 (only for coverage)
         if: env.LOG_COVERAGE

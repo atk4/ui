@@ -28,7 +28,7 @@ $c = Columns::addTo($app);
 $c1 = $c->addColumn();
 $g1 = Crud::addTo($c1);
 $m1 = new Country($app->db);
-$g1->setModel($m1);
+$g1->setModel($m1, [$m1->fieldName()->name, $m1->fieldName()->iso]); // fields are filtered to fit into table for Behat, TODO remove filtering after https://github.com/atk4/ui/issues/1988
 $g1->addQuickSearch([Country::hinting()->fieldName()->name, Country::hinting()->fieldName()->iso]);
 
 // demo for additional action buttons in Crud + JsPaginator
