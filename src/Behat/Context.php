@@ -763,7 +763,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then ~^Toast display should contain text "((?:[^"]|\\")*)"$~
+     * @Then Toast display should contain text :arg1
      */
     public function toastDisplayShouldContainText(string $text): void
     {
