@@ -8,6 +8,7 @@ use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
@@ -1037,7 +1038,10 @@ class View extends AbstractView
 
                 if (isset($arguments[$ex->name]) && !$arguments[$ex->name] instanceof JsExpressionable) {
                     $exModel = $ex->getAction()->getModel();
-                    $arguments[$ex->name] = $this->getApp()->uiPersistence->typecastAttributeSaveField($exModel->getIdField(), $arguments[$ex->name]);
+                    $arguments[$ex->name] = new JsCallbackLoadableValue(
+                        new JsExpression('[]', [$this->getApp()->uiPersistence->typecastAttributeSaveField($exModel->getIdField(), $arguments[$ex->name])]),
+                        fn ($v) => $this->getApp()->uiPersistence->typecastAttributeLoadField($exModel->getIdField(), $v)
+                    );
                 }
 
                 if ($ex instanceof UserAction\JsCallbackExecutor) {
