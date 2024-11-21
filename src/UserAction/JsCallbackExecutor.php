@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\HookTrait;
-use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
-use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
-use Atk4\Ui\View;
 
 /**
  * Javascript Action executor.
@@ -108,6 +106,13 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     public function executeModelAction(): void
     {
         $this->invokeFxWithUrlArgs(function () { // backup/restore $this->args mutated in https://github.com/atk4/ui/blob/8926412a31/src/JsCallback.php#L71
+            $actionUrlArgs = array_intersect_key($this->args, $this->action->args);
+            if (array_keys($actionUrlArgs) !== array_keys($this->action->args)) {
+                throw (new Exception('URL arguments does not match user action arguments'))
+                    ->addMoreInfo('actionArgs', array_keys($this->action->args))
+                    ->addMoreInfo('urlArgs', array_keys($actionUrlArgs));
+            }
+
             $this->set(function (Jquery $j, ...$values) {
                 $this->action = $this->executeModelActionLoad($this->action);
 
@@ -123,17 +128,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
                     ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
 
                 return $js;
-            }, array_map(function (string $actionArgName) {
-                $actionArg = $this->action->args[$actionArgName];
-                $actionArgType = $actionArg['type'];
-
-                return new JsCallbackLoadableValue(null, function ($v) use ($actionArgType) {
-                    return $this->getApp()->uiPersistence->typecastLoadField(
-                        new Field(['type' => $actionArgType]),
-                        $v
-                    );
-                });
-            }, array_combine(array_keys($this->action->args), array_keys($this->action->args))));
+            }, $actionUrlArgs);
         });
     }
 }

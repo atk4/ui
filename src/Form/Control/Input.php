@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Data\Field;
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\AbstractView;
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Icon;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Label;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
@@ -162,8 +164,16 @@ class Input extends Form\Control
             if (count($executor->getAction()->args) === 0) {
                 $button->on('click', $executor);
             } elseif (count($executor->getAction()->args) === 1) {
+                $actionArgName = array_key_first($executor->getAction()->args);
+                $actionArgType = $executor->getAction()->args[$actionArgName]['type'];
+
                 $button->on('click', $executor, ['args' => [
-                    array_key_first($executor->getAction()->args) => $this->jsInput()->val(),
+                    $actionArgName => new JsCallbackLoadableValue($this->jsInput()->val(), function ($v) use ($actionArgType) {
+                        return $this->getApp()->uiPersistence->typecastLoadField(
+                            new Field(['type' => $actionArgType]),
+                            $v
+                        );
+                    }),
                 ]]);
             } else {
                 throw (new Exception('Input form control supports user action with zero or one argument only'))
