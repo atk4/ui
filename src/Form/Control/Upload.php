@@ -23,7 +23,6 @@ class Upload extends Input
      * The uploaded file ID.
      * This ID is return on form submit.
      * If not set, will default to file name.
-     * file ID is also sent with onDelete Callback.
      *
      * @var string|null
      */

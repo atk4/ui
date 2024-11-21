@@ -56,7 +56,9 @@ $grid->addExecutorButton($grid->getExecutorFactory()->createExecutor($model->get
 $grid->addActionButton('Say HI', static function (Jquery $j, $id) use ($grid) {
     $model = Country::assertInstanceOf($grid->model);
 
-    return 'Loaded "' . $model->load($id)->name . '" from ID=' . $id;
+    $id = $grid->getApp()->uiPersistence->typecastAttributeLoadField($grid->model->getIdField(), $id); // TODO fix asap, this line must not be needed!
+
+    return new JsToast('Loaded "' . $model->load($id)->name . '" from ID=' . $id->getId());
 });
 
 $grid->addModalAction(['icon' => 'external'], 'Modal Test', static function (View $p, $id) {

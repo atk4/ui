@@ -18,7 +18,7 @@ use Atk4\Ui\View;
 /**
  * Formatting action buttons column.
  *
- * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
+ * @phpstan-type JsCallbackSetWithRowIdClosure \Closure(Jquery, mixed): (JsExpressionable|View|string|void)
  */
 class ActionButtons extends Table\Column
 {
@@ -39,9 +39,9 @@ class ActionButtons extends Table\Column
     /**
      * Adds a new button which will execute $action when clicked.
      *
-     * @param string|array<mixed>|View                                $button
-     * @param JsExpressionable|JsCallbackSetClosure|ExecutorInterface $action
-     * @param bool|\Closure<T of Model>(T): bool                      $isDisabled
+     * @param string|array<mixed>|View                                         $button
+     * @param JsExpressionable|JsCallbackSetWithRowIdClosure|ExecutorInterface $action
+     * @param bool|\Closure<T of Model>(T): bool                               $isDisabled
      *
      * @return View
      */

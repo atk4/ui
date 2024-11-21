@@ -158,7 +158,9 @@ class Input extends Form\Control
                 : $button;
             $button = $this->add($this->getExecutorFactory()->createTrigger($executor->getAction()), $spot);
             if ($executor->getAction()->args) {
-                $button->on('click', $executor, ['args' => [array_key_first($executor->getAction()->args) => $this->jsInput()->val()]]);
+                $button->on('click', $executor, ['args' => [
+                    array_key_first($executor->getAction()->args) => $this->jsInput()->val(),
+                ]]);
             } else {
                 $button->on('click', $executor);
             }

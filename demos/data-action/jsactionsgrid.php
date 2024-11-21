@@ -58,7 +58,8 @@ foreach ($country->getUserActions(UserAction::APPLIES_TO_SINGLE_RECORD) as $acti
     if (in_array($action->shortName, ['add', 'edit', 'delete'], true)) {
         continue;
     }
-    $grid->addExecutorMenuItem($executor = $app->getExecutorFactory()->createExecutor($action, $grid));
+
+    $grid->addExecutorMenuItem($app->getExecutorFactory()->createExecutor($action, $grid));
 }
 
 $grid->ipp = 10;
