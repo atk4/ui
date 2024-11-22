@@ -53,7 +53,11 @@ trait StepExecutorTrait
     public $previewType = 'html';
 
     /** @var array<string, array<mixed>> View seed for displaying title for each step. */
-    protected $stepTitle = ['args' => [], 'fields' => [], 'preview' => []];
+    protected array $stepTitle = [
+        'args' => [],
+        'fields' => [],
+        'preview' => [],
+    ];
 
     /** @var string */
     public $finalMsg = 'Complete!';
