@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Js\Jquery;
@@ -1036,12 +1037,24 @@ class View extends AbstractView
                     unset($arguments[0]);
                 }
 
-                if (isset($arguments[$ex->name]) && !$arguments[$ex->name] instanceof JsExpressionable) {
-                    $exModel = $ex->getAction()->getModel();
-                    $arguments[$ex->name] = new JsCallbackLoadableValue(
-                        new JsExpression('[]', [$this->getApp()->uiPersistence->typecastAttributeSaveField($exModel->getIdField(), $arguments[$ex->name])]),
-                        fn ($v) => $this->getApp()->uiPersistence->typecastAttributeLoadField($exModel->getIdField(), $v)
-                    );
+                // implicitly typecast all user action arguments
+                foreach ($arguments as $k => $v) {
+                    if (!$v instanceof JsExpressionable) {
+                        if ($k !== $ex->name && !isset($ex->getAction()->args[$k])) {
+                            continue;
+                        }
+
+                        $actionArgType = $k === $ex->name
+                            ? $ex->getAction()->getModel()->getIdField()->type
+                            : $ex->getAction()->args[$k]['type'];
+
+                        $arguments[$k] = new JsCallbackLoadableValue(
+                            new JsExpression('[]', [$this->getApp()->uiPersistence->typecastAttributeSaveField(new Field(['type' => $actionArgType]), $v)]),
+                            function ($v) use ($actionArgType) {
+                                return $this->getApp()->uiPersistence->typecastAttributeLoadField(new Field(['type' => $actionArgType]), $v);
+                            }
+                        );
+                    }
                 }
 
                 if ($ex instanceof UserAction\JsCallbackExecutor) {
