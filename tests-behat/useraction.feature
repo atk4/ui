@@ -72,7 +72,7 @@ Feature: UserAction executor and UserConfirmation modal
     When I fill field using "//input[../div[text()='Greet']]" with "Laura"
     When I press button "Greet"
     Then Toast display should contain text "Hello Laura"
-    Given I am on "_unit-test/useraction-line.php"
+    Given I am on "_unit-test/useraction-input-callback.php"
     When I fill field using "//input[../div[text()='Greet Integer']]" with "2_3"
     When I press button "Greet Integer"
     Then Toast display should contain text "Hello II 23"
