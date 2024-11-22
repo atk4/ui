@@ -58,7 +58,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
      *
      * @return T
      */
-    protected function invokeFxWithUrlArgs(\Closure $fx, array $urlArgs = [])
+    public function invokeFxWithUrlArgs(\Closure $fx, array $urlArgs = [])
     {
         $argsOrig = $this->args;
         $this->args = array_merge($this->args, $urlArgs);
