@@ -1079,7 +1079,7 @@ class View extends AbstractView
                 $actions = [$ex->jsExecute($arguments)];
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
                 $setupNonSharedExecutorFx($ex);
-                $ex->invokeFxWithUrlArgs(static fn () => $ex->executeModelAction(), $arguments);
+                $ex->executeModelAction($arguments);
                 $actions = [$lazyJsRenderFx(static fn () => $ex->jsExecute($arguments))];
             } else {
                 throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or UserAction\JsExecutorInterface');

@@ -9,6 +9,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
@@ -53,12 +54,12 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /**
      * @template T
      *
-     * @param \Closure(): T         $fx
-     * @param array<string, string> $urlArgs
+     * @param \Closure(): T                                 $fx
+     * @param array<string, JsCallbackLoadableValue|string> $urlArgs
      *
      * @return T
      */
-    public function invokeFxWithUrlArgs(\Closure $fx, array $urlArgs = [])
+    protected function invokeFxWithUrlArgs(\Closure $fx, array $urlArgs = [])
     {
         $argsOrig = $this->args;
         $this->args = array_merge($this->args, $urlArgs);
@@ -70,7 +71,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     }
 
     /**
-     * @param array<string, string> $urlArgs
+     * @param array<string, JsCallbackLoadableValue|string> $urlArgs
      */
     #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
@@ -102,8 +103,11 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         return $action;
     }
 
+    /**
+     * @param array<string, JsCallbackLoadableValue|string> $urlArgs
+     */
     #[\Override]
-    public function executeModelAction(): void
+    public function executeModelAction(array $urlArgs = []): void
     {
         $this->invokeFxWithUrlArgs(function () { // backup/restore $this->args mutated in https://github.com/atk4/ui/blob/8926412a31/src/JsCallback.php#L71
             $actionUrlArgs = array_intersect_key($this->args, $this->action->args);
@@ -129,6 +133,6 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 
                 return $js;
             }, $actionUrlArgs);
-        });
+        }, $urlArgs);
     }
 }
