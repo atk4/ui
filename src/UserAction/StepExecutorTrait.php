@@ -101,6 +101,8 @@ trait StepExecutorTrait
     protected function runSteps(): void
     {
         $this->loader->set(function (Loader $p) {
+            $this->action->validateBeforeExecute();
+
             switch ($this->step) {
                 case 'args':
                     $this->doArgs($p);

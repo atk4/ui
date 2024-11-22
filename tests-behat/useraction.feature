@@ -79,3 +79,34 @@ Feature: UserAction executor and UserConfirmation modal
     Then No toast should be displayed
     When I click using selector "//tr[td[text()='Argentina']]//div.ui.dropdown[div[text()='Actions...']]//div.menu/div[text()='Callback']"
     Then Toast display should contain text "Success: callback execute using country Argentina"
+
+  Scenario: validate user action earlier than before execute, exception is displayed
+    Given I am on "_unit-test/useraction-no-id-arg.php"
+    When I press button "Disabled"
+    Then Modal is open with text "Atk4\Data\Exception: User action is disabled"
+    Then I hide js modal
+    When I press button "Add"
+    Then Modal is open with text "Add Country"
+    Then I hide js modal
+    When I press button "Edit"
+    Then Modal is open with text "Atk4\Data\Exception: User action can be executed on loaded entity only"
+    Then I hide js modal
+    When I press button "Delete"
+    Then I press Modal button "Ok"
+    Then Modal is open with text "Atk4\Data\Exception: User action can be executed on loaded entity only"
+    Then I hide js modal
+    When I press button "Callback"
+    Then Modal is open with text "Atk4\Data\Exception: User action can be executed on loaded entity only"
+    Then I hide js modal
+    When I press button "Preview"
+    Then Modal is open with text "Atk4\Data\Exception: User action can be executed on loaded entity only"
+    Then I hide js modal
+    When I press button "Argument"
+    Then Modal is open with text "Atk4\Data\Exception: User action can be executed on loaded entity only"
+    Then I hide js modal
+    When I press button "User Confirmation"
+    Then Modal is open with text "Atk4\Data\Exception: User action can be executed on loaded entity only"
+    Then I hide js modal
+    When I press button "Multi Step"
+    Then Modal is open with text "Atk4\Data\Exception: User action can be executed on loaded entity only"
+    Then I hide js modal
