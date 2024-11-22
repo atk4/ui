@@ -117,6 +117,8 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->action = $this->executeModelActionLoad($this->action);
 
         $this->loader->set(function (Loader $p) {
+            $this->action->validateBeforeExecute();
+
             if ($this->step === 'execute') {
                 $this->doFinal($p);
             } else {
