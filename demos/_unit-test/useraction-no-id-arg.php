@@ -18,5 +18,5 @@ $buttons = View::addTo($app, ['ui' => 'vertical basic buttons']);
 
 foreach ($country->getUserActions() as $action) {
     $b = Button::addTo($buttons, [$action->getCaption()]);
-    $b->on('click', $action);
+    $b->on('click', $action); // action is intentionally not bound to entity nor ID arg is passed to executor
 }
