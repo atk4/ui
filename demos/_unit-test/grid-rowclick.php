@@ -6,7 +6,6 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\App;
 use Atk4\Ui\Grid;
-use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsToast;
@@ -18,7 +17,7 @@ use Atk4\Ui\View;
 require_once __DIR__ . '/../init-app.php';
 
 $model = new Country($app->db);
-$grid = Grid::addTo($app, ['name' => 'grid', 'ipp' => 5]);
+$grid = Grid::addTo($app, ['name' => 'grid']);
 $grid->setModel($model);
 
 $grid->addDecorator($model->fieldName()->name, [Table\Column\Link::class, 'url' => 'xxx']);
@@ -40,10 +39,6 @@ $grid->table->onRowClick(static function () {
 });
 
 $grid->addSelection();
-
-$grid->addBulkAction('Show selected', static function (Jquery $j, array $ids) use ($grid) {
-    return new JsToast('Selected: ' . implode(', ', array_map(static fn ($id) => $grid->getApp()->uiPersistence->typecastSaveField($grid->model->getIdField(), $id), $ids)) . '#');
-});
 
 // emulate navigate for <a> for Behat
 // TODO emulate for all tests automatically in our Atk4\Ui\Behat\Context
