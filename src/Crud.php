@@ -197,22 +197,16 @@ class Crud extends Grid
      */
     protected function getJsGridAction(Model\UserAction $action): ?JsExpressionable
     {
-        switch ($action->modifier) {
-            case Model\UserAction::MODIFIER_UPDATE:
-            case Model\UserAction::MODIFIER_CREATE:
-                $js = $this->container->jsReload($this->_getReloadArgs());
-
-                break;
-            case Model\UserAction::MODIFIER_DELETE:
-                // use deleted record ID to remove row, fallback to closest tr if ID is not available
-                $js = $this->deletedId
-                    ? $this->js(false, null, 'tr[data-id="' . $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $this->deletedId) . '"]')
-                    : (new Jquery())->closest('tr');
-                $js = $js->transition('fade left', new JsFunction([], [new JsExpression('this.remove()')]));
-
-                break;
-            default:
-                $js = null;
+        if ($action->modifier === Model\UserAction::MODIFIER_CREATE || $action->modifier === Model\UserAction::MODIFIER_UPDATE) {
+            $js = $this->container->jsReload($this->_getReloadArgs());
+        } elseif ($action->modifier === Model\UserAction::MODIFIER_DELETE) {
+            // use deleted record ID to remove row, fallback to closest tr if ID is not available
+            $js = $this->deletedId
+                ? $this->js(false, null, 'tr[data-id="' . $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $this->deletedId) . '"]')
+                : (new Jquery())->closest('tr');
+            $js = $js->transition('fade left', new JsFunction([], [new JsExpression('this.remove()')]));
+        } else {
+            $js = null;
         }
 
         return $js;
