@@ -106,6 +106,7 @@ class Crud extends Grid
             $this->updatedId = $entity->getId();
         });
         $this->model->onHook(Model::HOOK_AFTER_DELETE, function (Model $entity) {
+            $this->updatedId = null;
             $this->deletedId = $entity->getId();
         });
 
