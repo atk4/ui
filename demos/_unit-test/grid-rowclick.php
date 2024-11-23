@@ -39,7 +39,7 @@ $grid->table->onRowClick(static function () {
     return new JsToast(['message' => 'Clicked on row']);
 });
 
-$sel = $grid->addSelection();
+$grid->addSelection();
 
 $grid->addBulkAction('Show selected', static function (Jquery $j, array $ids) use ($grid) {
     return new JsToast('Selected: ' . implode(', ', array_map(static fn ($id) => $grid->getApp()->uiPersistence->typecastSaveField($grid->model->getIdField(), $id), $ids)) . '#');

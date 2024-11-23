@@ -9,13 +9,14 @@ export default {
      */
     masterCheckbox: function () {
         $('.table .master.checkbox').checkbox({
-            // check all children
             onChecked: function () {
+                // check all children
                 const $childCheckbox = $(this).closest('.table').find('.child.checkbox');
                 $childCheckbox.checkbox('check');
             },
-            // uncheck all children
+
             onUnchecked: function () {
+                // uncheck all children
                 const $childCheckbox = $(this).closest('.table').find('.child.checkbox');
                 $childCheckbox.checkbox('uncheck');
             },
@@ -24,18 +25,18 @@ export default {
 
     childCheckbox: function () {
         $('.table .child.checkbox').checkbox({
-            // Fire on load to set parent value
+            // fire on load to set parent value
             fireOnInit: false,
 
-            // Change parent state on each child checkbox change
+            // change parent state on each child checkbox change
             onChange: function () {
                 const $listGroup = $(this).closest('.table');
                 const $parentCheckbox = $listGroup.find('.master.checkbox');
                 const $checkbox = $listGroup.find('.child.checkbox');
-                let allChecked = true;
-                let allUnchecked = true;
 
                 // check to see if all other siblings are checked or unchecked
+                let allChecked = true;
+                let allUnchecked = true;
                 $checkbox.each(function () {
                     if ($(this).checkbox('is checked')) {
                         allUnchecked = false;
@@ -43,6 +44,7 @@ export default {
                         allChecked = false;
                     }
                 });
+
                 // set parent checkbox state, but don't trigger its onChange callback
                 if (allChecked) {
                     $parentCheckbox.checkbox('set checked');

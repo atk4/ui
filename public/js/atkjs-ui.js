@@ -43,13 +43,13 @@ __webpack_require__.r(__webpack_exports__);
    */
   masterCheckbox: function () {
     external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('.table .master.checkbox').checkbox({
-      // check all children
       onChecked: function () {
+        // check all children
         const $childCheckbox = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table').find('.child.checkbox');
         $childCheckbox.checkbox('check');
       },
-      // uncheck all children
       onUnchecked: function () {
+        // uncheck all children
         const $childCheckbox = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table').find('.child.checkbox');
         $childCheckbox.checkbox('uncheck');
       }
@@ -57,17 +57,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   childCheckbox: function () {
     external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('.table .child.checkbox').checkbox({
-      // Fire on load to set parent value
+      // fire on load to set parent value
       fireOnInit: false,
-      // Change parent state on each child checkbox change
+      // change parent state on each child checkbox change
       onChange: function () {
         const $listGroup = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table');
         const $parentCheckbox = $listGroup.find('.master.checkbox');
         const $checkbox = $listGroup.find('.child.checkbox');
-        let allChecked = true;
-        let allUnchecked = true;
 
         // check to see if all other siblings are checked or unchecked
+        let allChecked = true;
+        let allUnchecked = true;
         $checkbox.each(function () {
           if (external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).checkbox('is checked')) {
             allUnchecked = false;
@@ -75,6 +75,7 @@ __webpack_require__.r(__webpack_exports__);
             allChecked = false;
           }
         });
+
         // set parent checkbox state, but don't trigger its onChange callback
         if (allChecked) {
           $parentCheckbox.checkbox('set checked');

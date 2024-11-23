@@ -7,6 +7,7 @@ namespace Atk4\Ui\Table\Column;
 use Atk4\Data\Field;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
@@ -48,8 +49,10 @@ class Checkbox extends Table\Column
                 ->addMoreInfo('field', $field);
         }
         $this->table->js(true)->find('.' . $this->class)->checkbox();
-        $this->table->js(true, new JsExpression('atk.gridCheckboxHelper.masterCheckbox();'));
-        $this->table->js(true, new JsExpression('atk.gridCheckboxHelper.childCheckbox();'));
+        $this->table->js(true, new JsBlock([
+            new JsExpression('atk.gridCheckboxHelper.masterCheckbox();'),
+            new JsExpression('atk.gridCheckboxHelper.childCheckbox();'),
+        ]));
 
         return $this->getTag('head', [], [['div', ['class' => 'ui master fitted checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]]]);
     }
