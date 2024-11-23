@@ -41,7 +41,7 @@ Feature: Grid
     Then PATCH MINK the url should match "~_unit-test/grid-rowclick.php#test~"
 
   Scenario: master checkbox
-    Given I am on "_unit-test/grid-rowclick.php"
+    Given I am on "_unit-test/grid-master-checkbox.php"
     When I press button "Show selected"
     Then Toast display should contain text "Selected: #"
     When I click using selector "//tr[1]//div.ui.child.checkbox"
