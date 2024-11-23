@@ -13,11 +13,11 @@ import AtkPlugin from './atk.plugin';
  * source => the element being reorder.
  * pos => the final position of the element being reorder.
  *
- * Defaut container is set to table boddy (tbody), using table row(tr) as reoderable element.
+ * Default container is set to table body (tbody), using table row(tr) as reoderable element.
  * To use other container, simply set container and draggable accordingly.
  * $sortable = JsSortable::addTo($lister, ['container' => 'ul', 'draggable' => 'li', 'dataLabel' => 'name']);
  *
- * Element containing specific css class can be used as the handle for dragging element, if null
+ * Element containing specific CSS class can be used as the handle for dragging element, if null
  * is pass, than the entire element is used.
  */
 export default class AtkJsSortablePlugin extends AtkPlugin {
@@ -25,9 +25,9 @@ export default class AtkJsSortablePlugin extends AtkPlugin {
         this.ids = [];
         // the data label attribute value of the source element being drag. ex: data-id
         this.sourceId = null;
-        // the new index value of the dragged element after sorting.
+        // the new index value of the dragged element after sorting
         this.newIndex = null;
-        // the original index value of the dragged element.
+        // the original index value of the dragged element
         this.origIndex = null;
 
         // fix screen reader announcement container added more than once

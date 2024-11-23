@@ -14,6 +14,14 @@ Feature: Form
     When I fill in "email1" with "foo@bar"
     When I press button "Save1"
     Then I should see "some error action"
+    When I press button "Save1"
+    Then I should see "some error action"
+    When I fill in "email1" with "foo@bar2"
+    Then I should not see "some error action"
+    When I fill in "email1" with "pass@bar"
+    Then I should not see "some error action"
+    When I press button "Save1"
+    Then I should not see "some error action"
 
     When I fill in "email2" with "foo@bar"
     When I press button "Save2"
@@ -53,3 +61,31 @@ Feature: Form
     Then I hide js modal
     When I press Modal button "Save"
     Then Modal is open with text "Atk4\Core\Exception: Test exception II."
+
+  Scenario: test conditional form
+    Given I am on "form/jscondform.php"
+    Then I should not see "Phone 2"
+    Then I should not see "Phone 3"
+    When I fill in "phone1" with "1234"
+    Then I should not see "Phone 2"
+    When I fill in "phone1" with "12345"
+    Then I should see "Phone 2"
+    When I fill in "phone2" with "12345"
+    Then I should see "Phone 3"
+    When I fill in "phone1" with "12345x"
+    Then I should not see "Phone 2"
+    Then I should not see "Phone 3"
+
+    Then I should not see "Check all language that apply"
+    Then I should not see "Css"
+    When I click using selector "//label[text()='I am a developer']"
+    Then I should see "Check all language that apply"
+    Then I should see "Css"
+    When I click using selector "//label[text()='I am a developer']"
+    Then I should not see "Check all language that apply"
+    Then I should not see "Css"
+
+  Scenario: empty POST
+    Given I am on "_unit-test/form-empty.php"
+    When I press button "Save"
+    Then Toast display should contain text "Post ok"

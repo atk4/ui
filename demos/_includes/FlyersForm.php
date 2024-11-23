@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\JsToast;
 
 class FlyersForm extends Form
 {
+    /** @var array<positive-int, array<string, mixed>> */
     public array $flyers = [];
 
+    /** @var list<array<string, mixed>> */
     public array $cards = [
         ['name' => 'Frequent Flyer Program', 'id' => 1, 'nodes' => []],
         ['name' => 'World Class', 'id' => 2, 'nodes' => []],
         ['name' => 'Around the world', 'id' => 3, 'nodes' => []],
     ];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -39,9 +41,9 @@ class FlyersForm extends Form
         $this->addControl('country', [
             Form\Control\Lookup::class,
             'model' => new Country($this->getApp()->db),
-            'dependency' => function (Model $model, $data) {
+            'dependency' => static function (Country $model, $data) {
                 if (isset($data['contains'])) {
-                    $model->addCondition(Country::hinting()->fieldName()->name, 'like', '%' . $data['contains'] . '%');
+                    $model->addCondition($model->fieldName()->name, 'like', '%' . $data['contains'] . '%');
                 }
             },
             'search' => [
@@ -59,7 +61,7 @@ class FlyersForm extends Form
         $cards = $this->addControl('cards', [Form\Control\TreeItemSelector::class, 'treeItems' => $this->cards, 'caption' => 'Flyers program:'], ['type' => 'json']);
         $cards->set([]);
 
-        $this->onSubmit(function (Form $form) {
+        $this->onSubmit(static function (Form $form) {
             return new JsToast('Thank you!');
         });
     }

@@ -38,23 +38,23 @@ class Modal extends View
     /** @var string */
     public $loadingLabel = 'Loading...';
     /** @var string */
-    public $headerCss = 'header';
+    public $headerClass = 'header';
     /** @var \Closure(View): void|null */
     public $fx;
     /** @var CallbackLater|null */
     public $cb;
     /** @var View|null */
     public $cbView;
-    /** @var array */
+    /** @var array<string, mixed> */
     public $args = [];
-    /** @var array */
+    /** @var array<string, mixed> */
     public $options = [];
 
     /** @var string Currently only "json" response type is supported. */
     public $type = 'json';
 
-    /** @var array Add ability to add css classes to "content" div. */
-    public $contentCss = ['img', 'content', 'atk-dialog-content'];
+    /** @var list<string> Add ability to add CSS classes to "content" div. */
+    public $contentClass = ['img', 'content', 'atk-dialog-content'];
 
     /**
      * If true, the <div class="actions"> at the bottom of the modal is
@@ -64,29 +64,16 @@ class Modal extends View
      */
     public $showActions = false;
 
-    protected function init(): void
-    {
-        parent::init();
-
-        $this->getApp()->registerPortals($this);
-    }
-
     /**
      * Set callback function for this modal.
-     * $fx is set as an array in order to comply with View::set().
-     * TODO Rename this function and break BC?
      *
      * @param \Closure(View): void $fx
-     * @param never                $ignore
-     *
-     * @return $this
      */
-    public function set($fx = null, $ignore = null)
+    #[\Override]
+    public function set($fx = null)
     {
         if (!$fx instanceof \Closure) {
             throw new \TypeError('$fx must be of type Closure');
-        } elseif (func_num_args() > 1) {
-            throw new Exception('Only one argument is needed by Modal::set()');
         }
 
         $this->fx = $fx;
@@ -111,24 +98,27 @@ class Modal extends View
 
         $this->cb->set(function () {
             ($this->fx)($this->cbView);
-            $this->cb->terminateJson($this->cbView);
+
+            $this->cb->terminateJsonIfCanTerminate($this->cbView);
         });
     }
 
     /**
      * Add CSS classes to "content" div.
      *
-     * @param string|array $class
+     * @param string|list<string> $class
      */
-    public function addContentCss($class): void
+    public function addContentClass($class): void
     {
-        $this->contentCss = array_merge($this->contentCss, is_string($class) ? [$class] : $class);
+        $this->contentClass = array_merge($this->contentClass, is_string($class) ? [$class] : $class);
     }
 
     /**
      * Show modal on page.
      *
      * Example: $button->on('click', $modal->jsShow());
+     *
+     * @param array<string, string> $args
      *
      * @return JsChain
      */
@@ -174,7 +164,7 @@ class Modal extends View
      */
     public function addScrolling()
     {
-        $this->addContentCss('scrolling');
+        $this->addContentClass('scrolling');
 
         return $this;
     }
@@ -242,6 +232,7 @@ class Modal extends View
         return $this;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $data = [];
@@ -250,16 +241,14 @@ class Modal extends View
 
         if ($this->title) {
             $this->template->trySet('title', $this->title);
-            $this->template->trySet('headerCss', $this->headerCss);
+            $this->template->trySet('headerClass', $this->headerClass);
         } else {
             // fix top modal corner rounding, first div must not be empty (must not be lower than 5px)
             // https://github.com/fomantic/Fomantic-UI/blob/2.9.0/src/definitions/modules/modal.less#L43
-            $this->template->loadFromString(preg_replace('~<div class="\{\$headerCss\}">\{\$title\}</div>\s*~', '', $this->template->toLoadableString(), 1));
+            $this->template->loadFromString(preg_replace('~<div class="\{\$headerClass\}">\{\$title\}</div>\s*~', '', $this->template->toLoadableString(), 1));
         }
 
-        if ($this->contentCss) {
-            $this->template->trySet('contentCss', implode(' ', $this->contentCss));
-        }
+        $this->template->trySet('contentClass', implode(' ', $this->contentClass));
 
         if ($this->fx !== null) {
             $data['url'] = $this->cb->getJsUrl();

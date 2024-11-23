@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Grid;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsToast;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $model = new Country($app->db);
 $grid = Grid::addTo($app);
 $grid->setModel($model);
 
-$makeClickJsToastFx = function (string $source) use ($grid) {
-    return new JsToast(['message' => new JsExpression('[] + [] + []', [$source, ' clicked: ', $grid->table->jsRow()->data('id')])]);
+$makeClickJsToastFx = static function (string $source) use ($grid) {
+    return new JsToast(['message' => new JsExpression('[] + [] + []', [$source, ' clicked: ', $grid->jsRow()->data('id')])]);
 };
 
 $grid->addActionButton(['icon' => 'bell'], $makeClickJsToastFx('action'));

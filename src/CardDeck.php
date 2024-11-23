@@ -22,8 +22,8 @@ class CardDeck extends View
 
     public $defaultTemplate = 'card-deck.html';
 
-    /** @var class-string<View> Card type inside this deck. */
-    public $card = Card::class;
+    /** @var array<mixed> Seed of Card inside this deck. */
+    public $cardSeed = [Card::class];
 
     /** @var bool Whether card should use table display or not. */
     public $useTable = false;
@@ -52,19 +52,19 @@ class CardDeck extends View
     /** @var int The number of cards to be displayed per page. */
     public $ipp = 9;
 
-    /** @var Menu|array|false Will be initialized to Menu object, however you can set this to false to disable menu. */
+    /** @var Menu|array<mixed>|false Will be initialized to Menu object, however you can set this to false to disable menu. */
     public $menu;
 
-    /** @var array|VueComponent\ItemSearch|false */
+    /** @var array<mixed>|VueComponent\ItemSearch|false */
     public $search = [VueComponent\ItemSearch::class];
 
-    /** @var array Default notifier to perform when model action is successful * */
+    /** @var array<mixed> Default notifier to perform when model action is successful * */
     public $notifyDefault = [JsToast::class];
 
-    /** Model single scope action to include in table action column. Will include all single scope actions if empty. */
+    /** @var list<string> Model single scope action to include in table action column. Will include all single scope actions if empty. */
     public array $singleScopeActions = [];
 
-    /** Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
+    /** @var list<string> Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
     public array $noRecordScopeActions = [];
 
     /** @var string Message to display when record is add or edit successfully. */
@@ -76,7 +76,7 @@ class CardDeck extends View
     /** @var string Generic display message for no record scope action where model is not loaded. */
     public $defaultMsg = 'Done!';
 
-    /** @var array seed to create View for displaying when search result is empty. */
+    /** @var array<mixed> seed to create View for displaying when search result is empty. */
     public $noRecordDisplay = [
         Message::class,
         'content' => 'Result empty!',
@@ -84,12 +84,13 @@ class CardDeck extends View
         'text' => 'Your search did not return any record or there is no record available.',
     ];
 
-    /** @var array A collection of menu button added in Menu. */
+    /** @var array<string, array{button: MenuItem, executor: ExecutorInterface}> A collection of menu button added in Menu. */
     private $menuActions = [];
 
     /** @var string|null The current search query string. */
     private $query;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -102,7 +103,7 @@ class CardDeck extends View
             $this->menu = $this->add(Factory::factory([Menu::class, 'activateOnClick' => false], $this->menu), 'Menu');
 
             if ($this->search !== false) {
-                $this->addMenuBarSeach();
+                $this->addMenuBarSearch();
             }
         }
 
@@ -114,18 +115,15 @@ class CardDeck extends View
         }
     }
 
-    protected function addMenuBarSeach(): void
+    protected function addMenuBarSearch(): void
     {
-        $view = View::addTo($this->menu->addMenuRight()->addItem()->setElement('div'));
+        $view = View::addTo($this->menu->addMenuRight()->addItem());
 
         $this->search = $view->add(Factory::factory($this->search, ['context' => $this->container]));
         $this->search->reload = $this->container;
         $this->query = $this->stickyGet($this->search->queryArg);
     }
 
-    /**
-     * Add Paginator view to card deck.
-     */
     protected function addPaginator(): void
     {
         $seg = View::addTo($this->container, ['ui' => 'basic segment'])->setStyle('text-align', 'center');
@@ -133,9 +131,11 @@ class CardDeck extends View
     }
 
     /**
-     * @param array<int, string>|null $fields
+     * @param list<string> $fields
+     * @param list<string> $extra
      */
-    public function setModel(Model $model, array $fields = null, array $extra = null): void
+    #[\Override]
+    public function setModel(Model $model, ?array $fields = null, ?array $extra = null): void
     {
         parent::setModel($model);
 
@@ -145,12 +145,12 @@ class CardDeck extends View
 
         $count = $this->initPaginator();
         if ($count) {
-            foreach ($this->model as $m) {
+            foreach ($this->model as $entity) {
                 /** @var Card */
-                $c = $this->cardHolder->add(Factory::factory([$this->card], ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]));
-                $c->setModel($m, $fields);
+                $c = $this->cardHolder->add(Factory::factory($this->cardSeed, ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]));
+                $c->setModel($entity, $fields);
                 if ($extra) {
-                    $c->addExtraFields($m, $extra, $this->extraGlue);
+                    $c->addExtraFields($entity, $extra, $this->extraGlue);
                 }
                 if ($this->useAction) {
                     foreach ($this->getModelActions(Model\UserAction::APPLIES_TO_SINGLE_RECORD) as $action) {
@@ -166,7 +166,7 @@ class CardDeck extends View
         if ($this->useAction && $this->menu) {
             foreach ($this->getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
                 $executor = $this->initActionExecutor($action);
-                $this->menuActions[$k]['btn'] = $this->menu->addItem(
+                $this->menuActions[$k]['button'] = $this->menu->addItem(
                     $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MENU_ITEM)
                 );
                 $this->menuActions[$k]['executor'] = $executor;
@@ -177,14 +177,14 @@ class CardDeck extends View
     }
 
     /**
-     * Setup js for firing menu action - copied from Crud - TODO deduplicate.
+     * Setup JS for firing menu action - copied from Crud - TODO deduplicate.
      */
     protected function setItemsAction(): void
     {
         foreach ($this->menuActions as $item) {
             // hack - render executor action via MenuItem::on() into container
-            $item['btn']->on('click.atk_crud_item', $item['executor']);
-            $jsAction = array_pop($item['btn']->_jsActions['click.atk_crud_item']);
+            $item['button']->on('click.atk_crud_item', $item['executor']);
+            $jsAction = array_pop($item['button']->_jsActions['click.atk_crud_item']);
             $this->container->js(true, $jsAction);
         }
     }
@@ -215,7 +215,7 @@ class CardDeck extends View
     }
 
     /**
-     * Return proper js statement for afterExecute hook on action executor
+     * Return proper JS statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      *
      * @param string|JsExpressionable|Model|null $return
@@ -247,7 +247,7 @@ class CardDeck extends View
     /**
      * Override this method for setting notifier based on action or model value.
      */
-    protected function jsCreateNotifier(Model\UserAction $action, string $msg = null): JsBlock
+    protected function jsCreateNotifier(Model\UserAction $action, ?string $msg = null): JsBlock
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {
@@ -277,13 +277,21 @@ class CardDeck extends View
 
     /**
      * Return proper action need to setup menu or action column.
+     *
+     * @return array<string, Model\UserAction>
      */
     private function getModelActions(string $appliesTo): array
     {
         if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
-            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions);
+            $actions = array_combine(
+                $this->singleScopeActions,
+                array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions)
+            );
         } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
-            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions);
+            $actions = array_combine(
+                $this->noRecordScopeActions,
+                array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions)
+            );
         } else {
             $actions = $this->model->getUserActions($appliesTo);
         }

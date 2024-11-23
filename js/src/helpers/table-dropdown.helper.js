@@ -1,15 +1,15 @@
 import $ from 'external/jquery';
-import throttle from 'lodash/throttle';
+import lodashThrottle from 'lodash/throttle';
 
 /**
  * Simple helper to help displaying Fomantic-UI Dropdown within an atk table.
  * Because atk table use overflow: scroll, Dropdown is not
  * display on top of table.
  *
- * This utility will properly set css style for dropdown menu to be displayed correctly.
+ * This utility will properly set CSS style for dropdown menu to be displayed correctly.
  */
 function showTableDropdown() {
-    // getting element composing dropdown.
+    // getting element composing dropdown
     const $that = $(this);
     const $menu = $(this).find('.menu');
     const position = $that.offset();
@@ -31,7 +31,7 @@ function showTableDropdown() {
         // console.log(position.top, $that.scrollTop());
         let top = 0;
         let left = 0;
-        // check if we need to place menu above or down button.
+        // check if we need to place menu above or down button
         if (canFitBelow()) {
             top = position.top + $that.outerHeight();
             top = hasFloating ? top + 5 : top;
@@ -48,17 +48,17 @@ function showTableDropdown() {
     }
 
     setCssPosition();
-    $(window).on('scroll.atktable', throttle(setCssPosition, 10));
+    $(window).on('scroll.atktable', lodashThrottle(setCssPosition, 10));
     $(window).on('resize.atktable', () => {
         $that.dropdown('hide');
     });
 }
 
 /**
- * Reset css and handler when hiding dropdown.
+ * Reset CSS and handler when hiding dropdown.
  */
 function hideTableDropdown() {
-    // reset positioning.
+    // reset positioning
     const $menu = $(this).find('.menu');
     $menu.css('cssText', '');
     $(window).off('scroll.atktable');

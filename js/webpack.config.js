@@ -5,7 +5,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const VueFomanticUi = require('vue-fomantic-ui'); // eslint-disable-line import/no-unresolved
 
 module.exports = (env) => {
-    const isProduction = env === undefined ? false /* for eslint-import-resolver-webpack */ : env.production;
+    const isProduction = env === null ? false /* for eslint-import-resolver-webpack */ : env.production;
     const srcDir = path.resolve(__dirname, './src');
     const publicDir = path.resolve(__dirname, '../public');
     const libraryName = 'atk';

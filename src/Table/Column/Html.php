@@ -13,11 +13,13 @@ use Atk4\Ui\Table;
  */
 class Html extends Table\Column
 {
-    public function getDataCellHtml(Field $field = null, array $attr = []): string
+    #[\Override]
+    public function getDataCellHtml(?Field $field = null, array $attr = []): string
     {
         return '{$_' . $field->shortName . '}';
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         return ['_' . $field->shortName => '<td>' . $row->get($field->shortName) . '</td>'];

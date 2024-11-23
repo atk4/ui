@@ -17,28 +17,28 @@ use Atk4\Ui\UserAction\ExecutorInterface;
 
 class Crud extends Grid
 {
-    /** @var array of fields to display in Grid */
+    /** @var list<string> Fields to display in Grid */
     public $displayFields;
 
-    /** @var array|null of fields to edit in Form for Model edit action */
+    /** @var list<string>|null Fields to edit in Form for Model edit action */
     public $editFields;
 
-    /** @var array|null of fields to edit in Form for Model add action */
+    /** @var list<string>|null Fields to edit in Form for Model add action */
     public $addFields;
 
-    /** @var array Default notifier to perform when adding or editing is successful * */
+    /** @var array<mixed> Default notifier to perform when adding or editing is successful * */
     public $notifyDefault = [JsToast::class];
 
-    /** @var bool|null should we use table column drop-down menu to display user actions? */
+    /** @var bool|null Should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
 
-    /** @var array<string, array{item: MenuItem, executor: object}> Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
+    /** @var array<string, array{item: MenuItem, executor: AbstractView&ExecutorInterface}> Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
     private array $menuItems = [];
 
-    /** Model single scope action to include in table action column. Will include all single scope actions if empty. */
+    /** @var list<string> Model single scope action to include in table action column. Will include all single scope actions if empty. */
     public array $singleScopeActions = [];
 
-    /** Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
+    /** @var list<string> Model no_record scope action to include in menu. Will include all no record scope actions if empty. */
     public array $noRecordScopeActions = [];
 
     /** @var string Message to display when record is add or edit successfully. */
@@ -50,12 +50,13 @@ class Crud extends Grid
     /** @var string Generic display message for no record scope action where model is not loaded. */
     public $defaultMsg = 'Done!';
 
-    /** @var array<int, array<string, \Closure(Form, UserAction\ModalExecutor): void>> Callback containers for model action. */
+    /** @var list<array<string, \Closure(Form, UserAction\ModalExecutor): void>> Callback containers for model action. */
     public $onActions = [];
 
-    /** @var mixed recently deleted record id. */
+    /** @var mixed Recently deleted record ID. */
     private $deletedId;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -66,6 +67,7 @@ class Crud extends Grid
         }
     }
 
+    #[\Override]
     public function applySort(): void
     {
         parent::applySort();
@@ -83,7 +85,8 @@ class Crud extends Grid
         }
     }
 
-    public function setModel(Model $model, array $fields = null): void
+    #[\Override]
+    public function setModel(Model $model, ?array $fields = null): void
     {
         $model->assertIsModel();
 
@@ -93,9 +96,10 @@ class Crud extends Grid
 
         parent::setModel($model, $this->displayFields);
 
-        // Grab model id when using delete. Must be set before delete action execute.
-        $this->model->onHook(Model::HOOK_AFTER_DELETE, function (Model $model) {
-            $this->deletedId = $model->getId();
+        // grab model ID when using delete
+        // must be set before delete action execute
+        $this->model->onHook(Model::HOOK_AFTER_DELETE, function (Model $entity) {
+            $this->deletedId = $entity->getId();
         });
 
         if ($this->useMenuActions === null) {
@@ -135,7 +139,7 @@ class Crud extends Grid
      * can setup Input field via javascript prior to display form or change form submit event
      * handler.
      *
-     * @return object
+     * @return AbstractView&ExecutorInterface
      */
     protected function initActionExecutor(Model\UserAction $action)
     {
@@ -146,7 +150,7 @@ class Crud extends Grid
 
         if ($executor instanceof UserAction\ModalExecutor) {
             foreach ($this->onActions as $onAction) {
-                $executor->onHook(UserAction\ModalExecutor::HOOK_STEP, function (UserAction\ModalExecutor $ex, string $step, Form $form) use ($onAction, $action) {
+                $executor->onHook(UserAction\ModalExecutor::HOOK_STEP, static function (UserAction\ModalExecutor $ex, string $step, Form $form) use ($onAction, $action) {
                     $key = array_key_first($onAction);
                     if ($key === $action->shortName && $step === 'fields') {
                         $onAction[$key]($form, $ex);
@@ -159,7 +163,7 @@ class Crud extends Grid
     }
 
     /**
-     * Return proper js statement for afterExecute hook on action executor
+     * Return proper JS statement for afterExecute hook on action executor
      * depending on return type, model loaded and action scope.
      *
      * @param string|null $return
@@ -172,7 +176,7 @@ class Crud extends Grid
             $res->addStatement($jsAction);
         }
 
-        // display msg return by action or depending on action modifier.
+        // display msg return by action or depending on action modifier
         if (is_string($return)) {
             $res->addStatement($this->jsCreateNotifier($return));
         } else {
@@ -189,7 +193,7 @@ class Crud extends Grid
     }
 
     /**
-     * Return proper js actions depending on action modifier type.
+     * Return proper JS actions depending on action modifier type.
      */
     protected function getJsGridAction(Model\UserAction $action): ?JsExpressionable
     {
@@ -200,9 +204,9 @@ class Crud extends Grid
 
                 break;
             case Model\UserAction::MODIFIER_DELETE:
-                // use deleted record id to remove row, fallback to closest tr if id is not available.
+                // use deleted record ID to remove row, fallback to closest tr if ID is not available
                 $js = $this->deletedId
-                    ? $this->js(false, null, 'tr[data-id="' . $this->deletedId . '"]')
+                    ? $this->js(false, null, 'tr[data-id="' . $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $this->deletedId) . '"]')
                     : (new Jquery())->closest('tr');
                 $js = $js->transition('fade left', new JsFunction([], [new JsExpression('this.remove()')]));
 
@@ -217,7 +221,7 @@ class Crud extends Grid
     /**
      * Override this method for setting notifier based on action or model value.
      */
-    protected function jsCreateNotifier(string $msg = null): JsExpressionable
+    protected function jsCreateNotifier(?string $msg = null): JsExpressionable
     {
         $notifier = Factory::factory($this->notifyDefault);
         if ($msg) {
@@ -228,7 +232,7 @@ class Crud extends Grid
     }
 
     /**
-     * Setup js for firing menu action.
+     * Setup JS for firing menu action.
      */
     protected function setItemsAction(): void
     {
@@ -243,16 +247,16 @@ class Crud extends Grid
     /**
      * Return proper action executor base on model action.
      *
-     * @return object
+     * @return AbstractView&ExecutorInterface
      */
     protected function getExecutor(Model\UserAction $action)
     {
-        // prioritize Crud addFields over action->fields for Model add action.
+        // prioritize Crud addFields over action->fields for Model add action
         if ($action->shortName === 'add' && $this->addFields) {
             $action->fields = $this->addFields;
         }
 
-        // prioritize Crud editFields over action->fields for Model edit action.
+        // prioritize Crud editFields over action->fields for Model edit action
         if ($action->shortName === 'edit' && $this->editFields) {
             $action->fields = $this->editFields;
         }
@@ -278,29 +282,26 @@ class Crud extends Grid
 
     /**
      * Return proper action need to setup menu or action column.
+     *
+     * @return array<string, Model\UserAction>
      */
     private function _getModelActions(string $appliesTo): array
     {
         if ($appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD && $this->singleScopeActions !== []) {
-            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions);
+            $actions = array_combine(
+                $this->singleScopeActions,
+                array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions)
+            );
         } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
-            $actions = array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions);
+            $actions = array_combine(
+                $this->noRecordScopeActions,
+                array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions)
+            );
         } else {
             $actions = $this->model->getUserActions($appliesTo);
         }
 
         return $actions;
-    }
-
-    /**
-     * Set callback for edit action in Crud.
-     * Callback function will receive the Edit Form and Executor as param.
-     *
-     * @param \Closure(Form, UserAction\ModalExecutor): void $fx
-     */
-    public function onFormEdit(\Closure $fx): void
-    {
-        $this->setOnActions('edit', $fx);
     }
 
     /**
@@ -315,6 +316,17 @@ class Crud extends Grid
     }
 
     /**
+     * Set callback for edit action in Crud.
+     * Callback function will receive the Edit Form and Executor as param.
+     *
+     * @param \Closure(Form, UserAction\ModalExecutor): void $fx
+     */
+    public function onFormEdit(\Closure $fx): void
+    {
+        $this->setOnActions('edit', $fx);
+    }
+
+    /**
      * Set callback for both edit and add action form.
      * Callback function will receive Forms and Executor as param.
      *
@@ -322,8 +334,8 @@ class Crud extends Grid
      */
     public function onFormAddEdit(\Closure $fx): void
     {
-        $this->onFormEdit($fx);
         $this->onFormAdd($fx);
+        $this->onFormEdit($fx);
     }
 
     /**

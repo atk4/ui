@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Form;
 use Atk4\Ui\Grid;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $q = [
@@ -33,9 +34,14 @@ $q = [
         ],
     ],
 ];
-$scope = (new Form\Control\ScopeBuilder())->queryToScope($q);
 
 $product = new Product($app->db);
+
+$scopeBuilder = new Form\Control\ScopeBuilder();
+$scopeBuilder->setApp($app);
+$scopeBuilder->model = $product;
+
+$scope = $scopeBuilder->queryToScope($q);
 
 $g = Grid::addTo($app);
 $g->setModel($product->addCondition($scope));

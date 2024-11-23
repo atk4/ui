@@ -13,34 +13,18 @@ class JsSse extends JsCallback
 {
     use HookTrait;
 
-    /** Executed when user aborted, or disconnect browser, when using this SSE. */
-    public const HOOK_ABORTED = self::class . '@connectionAborted';
+    private string $lastSentId = '';
 
-    /** @var bool Allows us to fall-back to standard functionality of JsCallback if browser does not support SSE. */
-    public $browserSupport = false;
-
-    /** @var bool Show Loader when doing sse. */
+    /** @var bool Show Loader when doing SSE. */
     public $showLoader = false;
 
-    /** @var bool add window.beforeunload listener for closing js EventSource. Off by default. */
+    /** @var bool Add window.beforeunload listener for closing js EventSource. Off by default. */
     public $closeBeforeUnload = false;
 
-    /** @var bool Keep execution alive or not if connection is close by user. False mean that execution will stop on user aborted. */
-    public $keepAlive = false;
-
-    /** @var \Closure|null custom function for outputting (instead of echo) */
+    /** @var \Closure(string): void|null Custom function for outputting (instead of echo). */
     public $echoFunction;
 
-    protected function init(): void
-    {
-        parent::init();
-
-        if ($_GET['__atk_sse'] ?? null) {
-            $this->browserSupport = true;
-            $this->initSse();
-        }
-    }
-
+    #[\Override]
     public function jsExecute(): JsBlock
     {
         $this->assertIsInitialized();
@@ -56,127 +40,125 @@ class JsSse extends JsCallback
         return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)]);
     }
 
+    #[\Override]
+    public function set($fx = null, $args = null)
+    {
+        if (!$fx instanceof \Closure) {
+            throw new \TypeError('$fx must be of type Closure');
+        }
+
+        return parent::set(function (Jquery $chain) use ($fx, $args) {
+            $this->initSse();
+
+            // TODO replace EventSource to support POST
+            // https://github.com/Yaffle/EventSource
+            // https://github.com/mpetazzoni/sse.js
+            // https://github.com/EventSource/eventsource
+            // https://github.com/byjg/jquery-sse
+
+            return $fx($chain, ...array_values($args ?? []));
+        });
+    }
+
+    protected function initSse(): void
+    {
+        $this->getApp()->setResponseHeader('content-type', 'text/event-stream');
+
+        // disable buffering for nginx
+        // https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
+        $this->getApp()->setResponseHeader('x-accel-buffering', 'no');
+
+        // prevent buffering
+        while (ob_get_level() > 0) {
+            // workaround flush() called by ob_end_flush() when zlib.output_compression is enabled
+            // https://github.com/php/php-src/issues/13798
+            if (ob_get_length() === 0) {
+                ob_end_clean();
+            } else {
+                ob_end_flush();
+            }
+        }
+    }
+
     /**
      * Sending an SSE action.
      */
-    public function send(JsExpressionable $action, bool $success = true): void
+    public function send(JsExpressionable $action): void
     {
-        if ($this->browserSupport) {
-            $ajaxec = $this->getAjaxec($action);
-            $this->sendEvent('js', $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec]), 'atkSseAction');
-        }
+        $ajaxec = $this->getAjaxec($action);
+        $this->sendEvent(
+            '',
+            $this->getApp()->encodeJson([
+                'success' => true,
+                'atkjs' => $ajaxec->jsRender(),
+            ]),
+            'atkSseAction'
+        );
     }
 
     /**
      * @return never
      */
-    public function terminateAjax($ajaxec, $msg = null, bool $success = true): void
+    #[\Override]
+    protected function terminateAjaxIfCanTerminate(JsBlock $ajaxec): void
     {
-        if ($this->browserSupport) {
-            if ($ajaxec) {
-                $this->sendEvent(
-                    'js',
-                    $this->getApp()->encodeJson(['success' => $success, 'atkjs' => $ajaxec]),
-                    'atkSseAction'
-                );
-            }
-
-            // no further output please
-            $this->getApp()->terminate();
+        $ajaxecStr = $ajaxec->jsRender();
+        if ($ajaxecStr !== '') {
+            $this->sendEvent(
+                '',
+                $this->getApp()->encodeJson([
+                    'success' => true,
+                    'atkjs' => $ajaxecStr,
+                ]),
+                'atkSseAction'
+            );
         }
 
-        $this->getApp()->terminateJson(['success' => $success, 'atkjs' => $ajaxec]);
+        $this->getApp()->terminate();
     }
 
-    /**
-     * Output a SSE Event.
-     */
-    public function sendEvent(string $id, string $data, string $eventName = null): void
-    {
-        $this->sendBlock($id, $data, $eventName);
-    }
-
-    /**
-     * Send Data in buffer to client.
-     */
-    public function flush(): void
+    protected function flush(): void
     {
         flush();
     }
 
-    /**
-     * Send Data.
-     */
-    private function output(string $content): void
+    private function outputEventResponse(string $content): void
     {
+        // workaround flush() ignored by Apache mod_proxy_fcgi
+        // https://stackoverflow.com/questions/30707792/how-to-disable-buffering-with-apache2-and-mod-proxy-fcgi#36298336
+        // https://bz.apache.org/bugzilla/show_bug.cgi?id=68827
+        $content .= ': ' . str_repeat('x', 4_096) . "\n\n";
+
         if ($this->echoFunction) {
             ($this->echoFunction)($content);
 
             return;
         }
 
-        // output headers and content
         $app = $this->getApp();
         \Closure::bind(static function () use ($app, $content): void {
             $app->outputResponse($content);
         }, null, $app)();
-    }
 
-    /**
-     * Send a SSE data block.
-     */
-    public function sendBlock(string $id, string $data, string $eventName = null): void
-    {
-        if (connection_aborted()) {
-            $this->hook(self::HOOK_ABORTED);
-
-            // stop execution when aborted if not keepAlive.
-            if (!$this->keepAlive) {
-                $this->getApp()->callExit();
-            }
-        }
-
-        $this->output('id: ' . $id . "\n");
-        if ($eventName !== null) {
-            $this->output('event: ' . $eventName . "\n");
-        }
-        $this->output($this->wrapData($data) . "\n");
         $this->flush();
     }
 
-    /**
-     * Create SSE data string.
-     */
-    private function wrapData(string $string): string
+    protected function sendEvent(string $id, string $data, ?string $name = null): void
     {
-        return implode('', array_map(function (string $v): string {
+        $content = '';
+        if ($id !== '' || $this->lastSentId !== '') {
+            $content = 'id: ' . $id . "\n";
+        }
+        if ($name !== null) {
+            $content .= 'event: ' . $name . "\n";
+        }
+        $content .= implode('', array_map(static function (string $v): string {
             return 'data: ' . $v . "\n";
-        }, preg_split('~\r?\n|\r~', $string)));
-    }
+        }, preg_split('~\r?\n|\r~', $data)));
+        $content .= "\n";
 
-    /**
-     * Initialise this sse.
-     * It will ignore user abort by default.
-     */
-    protected function initSse(): void
-    {
-        @set_time_limit(0); // disable time limit
-        ignore_user_abort(true);
+        $this->outputEventResponse($content);
 
-        $this->getApp()->setResponseHeader('content-type', 'text/event-stream');
-
-        // disable buffering for nginx, see http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_buffers
-        $this->getApp()->setResponseHeader('x-accel-buffering', 'no');
-
-        // disable compression
-        @ini_set('zlib.output_compression', '0');
-        if (function_exists('apache_setenv')) {
-            @apache_setenv('no-gzip', '1');
-        }
-
-        // prevent buffering
-        if (ob_get_level()) {
-            ob_end_flush();
-        }
+        $this->lastSentId = $id;
     }
 }

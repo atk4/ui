@@ -52,7 +52,7 @@
                                     <div class="ui small input atk-qb">
                                         <input
                                             v-model="query.value"
-                                            :type="rule.inputType"
+                                            :type="rule.inputType === 'number' ? 'text' : rule.inputType"
                                             :placeholder="labels.textInputPlaceholder"
                                         >
                                     </div>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\JsReload;
@@ -12,7 +13,7 @@ use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Menu;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 $img = $app->cdn['atk'] . '/logo.png';
@@ -29,7 +30,7 @@ Header::addTo($app, ['Combinations and Interraction']);
 $del = Label::addTo($app, ['Zoe', 'image' => 'https://fomantic-ui.com/images/avatar/small/ade.jpg', 'iconRight' => 'delete']);
 $del->on('click', '.delete', $del->js()->fadeOut());
 
-$val = isset($_GET['toggle']) && $_GET['toggle'];
+$val = $app->hasRequestQueryParam('toggle') && $app->getRequestQueryParam('toggle');
 $toggle = Label::addTo($app, ['icon' => 'toggle ' . ($val ? 'on' : 'off')])->set('Value: ' . $val);
 $toggle->on('click', new JsReload($toggle, ['toggle' => $val ? null : 1]));
 

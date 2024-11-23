@@ -10,6 +10,7 @@ use Atk4\Ui\Table\Column;
 
 class TypeDate extends Column\FilterModel
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -27,7 +28,7 @@ class TypeDate extends Column\FilterModel
         ];
         $this->op->default = '=';
 
-        // the date value to operate on.
+        // the date value to operate on
         $this->value->values = [
             'today' => 'Today',
             'tomorrow' => 'Tomorrow',
@@ -41,7 +42,7 @@ class TypeDate extends Column\FilterModel
             'exact' => 'Exact date',
         ];
 
-        // The range value field use when within is select.
+        // the range value field use when within is select
         $this->addField('range', [
             'ui' => ['caption' => ''],
             'values' => [
@@ -56,45 +57,44 @@ class TypeDate extends Column\FilterModel
             ],
         ]);
 
-        // The exact date field input when exact is select as input value.
+        // the exact date field input when exact is select as input value
         $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);
 
-        // The integer field to generate a date when x day selector is used.
-        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class, 'inputType' => 'number']]]);
+        // the integer field to generate a date when x day selector is used
+        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
     }
 
-    public function setConditionForModel(Model $model)
+    #[\Override]
+    public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
         if ($filter !== null) {
             switch ($filter['op']) {
                 case 'empty':
-                    $model->addCondition($filter['name'], '=', null);
+                    $model->addCondition($this->lookupField, '=', null);
 
                     break;
                 case 'not empty':
-                    $model->addCondition($filter['name'], '!=', null);
+                    $model->addCondition($this->lookupField, '!=', null);
 
                     break;
                 case 'within':
                     $d1 = $this->getDate($filter['value']);
                     $d2 = $this->getDate($filter['range']);
-                    if ($d2 >= $d1) {
-                        $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
-                        $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
-                    } else {
-                        $value = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2);
-                        $value2 = $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1);
+                    if ($d1 > $d2) {
+                        [$d1, $d2] = [$d2, $d1];
                     }
-                    $model->addCondition($model->expr('[field] between [value] and [value2]', ['field' => $model->getField($filter['name']), 'value' => $value, 'value2' => $value2]));
+                    $model->addCondition($model->expr('[field] between [value] and [value2]', [
+                        'field' => $this->lookupField,
+                        'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $d1),
+                        'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $d2),
+                    ]));
 
                     break;
                 default:
-                    $model->addCondition($filter['name'], $filter['op'], $this->getDate($filter['value']));
+                    $model->addCondition($this->lookupField, $filter['op'], $this->getDate($filter['value']));
             }
         }
-
-        return $model;
     }
 
     /**
@@ -102,10 +102,8 @@ class TypeDate extends Column\FilterModel
      * Will construct and return a date object base on constructor string.
      *
      * @param string $dateModifier the string to pass to generated a date from
-     *
-     * @return \DateTime
      */
-    public function getDate($dateModifier)
+    public function getDate(string $dateModifier): ?\DateTime
     {
         switch ($dateModifier) {
             case 'exact':
@@ -123,12 +121,13 @@ class TypeDate extends Column\FilterModel
 
                 break;
             default:
-                $date = $dateModifier ? new \DateTime($dateModifier) : null;
+                $date = null;
         }
 
         return $date;
     }
 
+    #[\Override]
     public function getFormDisplayRules(): array
     {
         return [

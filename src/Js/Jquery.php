@@ -18,6 +18,7 @@ namespace Atk4\Ui\Js;
  * @method Jquery  closest(...$args)
  * @method JsChain css(...$args)
  * @method JsChain data(...$args)
+ * @method Jquery  each(...$args)
  * @method Jquery  fadeOut(...$args)
  * @method Jquery  find(...$args)
  * @method Jquery  first(...$args)

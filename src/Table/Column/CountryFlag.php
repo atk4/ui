@@ -16,6 +16,7 @@ class CountryFlag extends Table\Column
     /** Optional name of model field which contains full country name. */
     public ?string $nameField = null;
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $countryCode = $row->get($this->codeField ?? $field->shortName);

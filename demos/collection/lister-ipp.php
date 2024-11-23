@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\ItemsPerPageSelector;
 use Atk4\Ui\Lister;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php'; // default lister
 
 Header::addTo($app)->set('Default lister');
@@ -28,7 +29,7 @@ $view = View::addTo($app, ['template' => new HtmlTemplate('<div>
 </div>')]);
 
 $lister = Lister::addTo($view, [], ['List']);
-$lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
+$lister->onHook(Lister::HOOK_BEFORE_ROW, static function (Lister $lister) {
     $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 });
@@ -50,12 +51,12 @@ $view = View::addTo($app, ['template' => new HtmlTemplate('<div>
 </div>')]);
 
 $lister = Lister::addTo($view, [], ['List']);
-$lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
+$lister->onHook(Lister::HOOK_BEFORE_ROW, static function (Lister $lister) {
     $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 });
 $model = new Country($app->db);
-$model->addCondition(Country::hinting()->fieldName()->id, -1); // no such records so model will be empty
+$model->addCondition(Country::hinting()->fieldName()->id, null); // no such records so model will be empty
 $lister->setModel($model);
 
 View::addTo($app, ['ui' => 'clearing divider']);
@@ -69,7 +70,7 @@ $view = View::addTo($container, ['template' => new HtmlTemplate('<div>
 </ul>{$Content}</div>')]);
 
 $lister = Lister::addTo($view, [], ['List']);
-$lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
+$lister->onHook(Lister::HOOK_BEFORE_ROW, static function (Lister $lister) {
     $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 });
@@ -80,7 +81,7 @@ $lister->setModel($model);
 
 $ipp = ItemsPerPageSelector::addTo($view, ['label' => 'Select how many countries:', 'pageLengthItems' => [12, 24, 36]], ['Content']);
 
-$ipp->onPageLengthSelect(function (int $ipp) use ($model, $container) {
+$ipp->onPageLengthSelect(static function (int $ipp) use ($model, $container) {
     $model->setLimit($ipp);
 
     return $container;

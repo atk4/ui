@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Dropdown as UiDropdown;
@@ -22,23 +23,24 @@ use Atk4\Ui\Popup;
 use Atk4\Ui\SessionTrait;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-/*
+/**
  * Example implementation of a dynamic view which support session.
  *
  * Cart will memorize and restore its items into session. Cart will also
  * render the items.
  */
-
-$cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lister {
+$cartClass = AnonymousClassNameCache::get_class(fn () => new class extends Lister {
     use SessionTrait;
 
+    /** @var array<int, string> */
     public array $items = [];
 
     public $defaultTemplate = 'lister.html';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -53,8 +55,8 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
         $this->tRow->set('descr', 'click on link to remove item');
 
         // We link to ourselves with this special GET argument to indicate that item must be removed.
-        if (isset($_GET[$this->name . '_remove'])) {
-            $this->removeItem($_GET['id']);
+        if ($this->getApp()->hasRequestQueryParam($this->name . '_remove')) {
+            $this->removeItem($this->getApp()->getRequestQueryParam('id'));
 
             // redirect again, since we don't want this to stay in the URL
             $this->getApp()->redirect([$this->name . '_remove' => false]);
@@ -83,29 +85,25 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
         $this->memorize('items', $this->items);
     }
 
-    /**
-     * Renders as a regular lister, but source is the items.
-     */
+    #[\Override]
     protected function renderView(): void
     {
-        // memorize items
-
         $this->setSource($this->items);
 
         parent::renderView();
     }
 });
 
-/*
+/**
  * Implementation of a generic item shelf. Shows selection of products and allow to bind click event.
  *
  * Method linkCart allow you to link ItemShelf with Cart. Clicking on a shelf item will place that
  * item inside a cart reloading it afterwards.
  */
-
-$itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
+$itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class extends View {
     public $ui = 'green segment';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -141,9 +139,9 @@ $itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extend
      * Associate your shelf with cart, so that when item is clicked, the content of a
      * cart is updated.
      */
-    public function linkCart(View $cart, JsExpressionable $jsAction = null): void
+    public function linkCart(View $cart, ?JsExpressionable $jsAction = null): void
     {
-        $this->on('click', '.item', function (Jquery $a, string $b) use ($cart, $jsAction) {
+        $this->on('click', '.item', static function (Jquery $a, string $b) use ($cart, $jsAction) {
             $cart->addItem($b);
 
             return $jsAction;
@@ -163,18 +161,18 @@ $browse = UiDropdown::addTo($menu, ['Browse']);
 $cartItem = $menu->addItem([$cartClass, 'icon' => 'cart'])->set('Cart');
 
 $cartPopup = Popup::addTo($app, [$cartItem, 'position' => 'bottom left']);
-// Popup won't dissapear as you hover over it.
+// Popup won't disappear as you hover over it.
 $cartPopup->setHoverable();
 
 $shelf = $itemShelfClass::addTo($app);
 
 // Here we are facing a pretty interesting problem. If you attempt to put "Cart" object inside a popup directly,
 // it won't work, because it will be located inside the menu item's DOM tree and, although hidden, will be
-// impacted by some css rules of the menu.
+// impacted by some CSS rules of the menu.
 //
 // This can happen when your popup content is non-trivial. So we are moving Popup into the app and linking up
 // the triggers. Now, since it's outside, we can't use a single jsAction to reload menu item (along with label)
-// and the contens. We could use 2 requests for reloading, but that's not good.
+// and the content. We could use 2 requests for reloading, but that's not good.
 //
 // The next idea is to make cart dynamic, so it loads when you move mouse over the menu. This probably is good,
 // as it will always be accurate, even if you added items form multiple browser tabs.
@@ -196,15 +194,15 @@ $cart->setApp($app);
 
 // Label now can be added referencing Cart's items. Init() was colled when I added it into app, so the
 // item property is populated.
-$cartOutterLabel = Label::addTo($cartItem, [(string) count($cart->items), 'class.floating red' => true]);
+$cartOuterLabel = Label::addTo($cartItem, [(string) count($cart->items), 'class.floating red' => true]);
 if (!$cart->items) {
-    $cartOutterLabel->setStyle('display', 'none');
+    $cartOuterLabel->setStyle('display', 'none');
 }
 
-$cartPopup->set(function (View $popup) use ($cart) {
+$cartPopup->set(static function (View $popup) use ($cart) {
     $cartInnerLabel = Label::addTo($popup, ['Number of items:']);
 
-    // cart is already initialized, so init() is not called again. However, cart will be rendered
+    // Cart is already initialized, so init() is not called again. However, cart will be rendered
     // as a child of a pop-up now.
     $popup->add($cart);
 
@@ -215,8 +213,8 @@ $cartPopup->set(function (View $popup) use ($cart) {
 
 // Add item shelf below menu and link it with the cart
 $shelf->linkCart($cart, new JsBlock([
-    // array is a valid js action. Will relad cart item (along with drop-down and label)
-    $cartOutterLabel->jsReload(),
+    // array is a valid JS action. Will relad cart item (along with drop-down and label)
+    $cartOuterLabel->jsReload(),
 
     // also will hide current item from the shelf
     (new Jquery())->hide(),
@@ -242,10 +240,10 @@ $signup = Popup::addTo($app, [$rightMenu, 'position' => 'bottom right'])->setHov
 
 // This popup will be dynamically loaded.
 $signup->stickyGet('logged');
-$signup->set(function (View $pop) {
-    // contetn of the popup will be different depending on this condition.
-    if (isset($_GET['logged'])) {
-        Message::addTo($pop, ['You are already logged in as ' . $_GET['logged']]);
+$signup->set(static function (View $pop) {
+    // content of the popup will be different depending on this condition.
+    if ($pop->getApp()->hasRequestQueryParam('logged')) {
+        Message::addTo($pop, ['You are already logged in as ' . $pop->getApp()->getRequestQueryParam('logged')]);
         Button::addTo($pop, ['Logout', 'class.primary' => true, 'icon' => 'sign out'])
             ->link($pop->getApp()->url());
     } else {
@@ -256,14 +254,14 @@ $signup->set(function (View $pop) {
 
         // popup handles callbacks properly, so dynamic element such as form works
         // perfectly inside a popup.
-        $form->onSubmit(function (Form $form) {
-            if ($form->model->get('password') !== '123') {
+        $form->onSubmit(static function (Form $form) {
+            if ($form->entity->get('password') !== '123') {
                 return $form->jsError('password', 'Please use password "123"');
             }
 
             // refreshes entire page
-            return $form->getApp()->jsRedirect(['logged' => $form->model->get('email')]);
-            // return new JsExpression('alert([])', ['Thank you ' . $form->model->get('email')]);
+            return $form->getApp()->jsRedirect(['logged' => $form->entity->get('email')]);
+            // return new JsExpression('alert([])', ['Thank you ' . $form->entity->get('email')]);
         });
     }
 });
@@ -287,4 +285,5 @@ View::addTo($inputPopup)->set('You can use this field to search data.');
 $button = Button::addTo($app, [null, 'icon' => 'volume down']);
 $buttonPopup = Popup::addTo($app, [$button, 'triggerOn' => 'hover'])->setHoverable();
 
-Form\Control\Checkbox::addTo($buttonPopup, ['Just On/Off', 'class.slider' => true])->on('change', $button->js()->find('.icon')->toggleClass('up down'));
+Form\Control\Checkbox::addTo($buttonPopup, ['Just On/Off', 'class.slider' => true])
+    ->on('change', $button->js()->find('.icon')->toggleClass('up down'));

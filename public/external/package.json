@@ -2,10 +2,11 @@
     "name": "atk-external",
     "private": true,
     "dependencies": {
-        "@shopify/draggable": "^1.0.0-beta.12",
+        "@highlightjs/cdn-assets": "^11.8.0",
+        "@shopify/draggable": "^1.1.1",
         "chart.js": "^3.9.1",
-        "flatpickr": "^4.6.11",
-        "fomantic-ui": "^2.9.3-beta",
+        "flatpickr": "github:atk4/flatpickr#94d289f198",
+        "fomantic-ui": "^2.9.4-beta || ^2.9.4",
         "jquery": "^3.6.0",
         "twemoji": "https://github.com/twitter/twemoji/archive/refs/tags/v14.0.2.tar.gz"
     },

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
@@ -11,7 +12,7 @@ use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 // Test 1 - Basic reloading
@@ -42,15 +43,15 @@ Counter::addTo($seg);
 Counter::addTo($seg, ['40']);
 Counter::addTo($seg, ['-20']);
 
-// Add button to reload all counters
+// add button to reload all counters
 $bar = View::addTo($app, ['ui' => 'buttons']);
 $b = Button::addTo($bar, ['Reload counter'])
     ->on('click', new JsReload($seg));
 
-// Relading with argument
+// reloading with argument
 Header::addTo($app, ['We can pass argument to reloader']);
 
-$v = View::addTo($app, ['ui' => 'segment'])->set($_GET['val'] ?? 'No value');
+$v = View::addTo($app, ['ui' => 'segment'])->set($app->tryGetRequestQueryParam('val') ?? 'No value');
 
 Button::addTo($app, ['Set value to "hello"'])
     ->on('click', new JsReload($v, ['val' => 'hello']));

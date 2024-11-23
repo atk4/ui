@@ -1,5 +1,5 @@
 div(id="{$_id}" class="atk-layout")
-  div(class="ui left vertical menu inverted labeled sidebar atk-sidenav {CssVisibility}visible{/}")
+  div(class="ui left vertical menu inverted labeled sidebar atk-sidenav {ClassVisibility}visible{/}")
     | {$LeftMenu}
   main.atk-mainContainer.atk-admin-layout
     | {$TopMenu}
@@ -7,7 +7,7 @@ div(id="{$_id}" class="atk-layout")
       | {$Content}
   footer.atk-footer
     .ui.divider
-    .ui.center.aligned.basic.segment {Footer}Made with #[a(href="http://agiletoolkit.org/" target="_blank") Agile Toolkit] v{$version}{/}
+    .ui.center.aligned.basic.segment {Footer}Made with #[a(href="https://atk4.org/" target="_blank") Agile Toolkit] v{$version}{/}
   .atk-overlay.pushable
     .pusher
 = "\n"

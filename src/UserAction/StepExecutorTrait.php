@@ -8,58 +8,47 @@ use Atk4\Core\Factory;
 use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
 use Atk4\Data\Persistence\Array_;
-use Atk4\Data\ValidationException;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Loader;
-use Atk4\Ui\Message;
 use Atk4\Ui\View;
 
 trait StepExecutorTrait
 {
-    /** @var array<int, string> The steps need to complete the action. */
-    protected $steps;
+    /** @var list<string> The steps need to complete the action. */
+    protected array $steps;
 
     /** @var string current step. */
     protected $step;
 
-    /** @var Loader The Loader that will execute all action step. */
-    protected $loader;
-
-    /** @var string */
-    public $loaderUi = 'basic segment';
-
-    /** @var array */
-    public $loaderShim = [];
-
-    /** @var Button The action step prev button. */
-    protected $prevStepBtn;
+    /** @var Button The action step previous button. */
+    protected $previousStepButton;
 
     /** @var Button The action next step button. */
-    protected $nextStepBtn;
+    protected $nextStepButton;
 
     /** @var Button The execute action button. */
-    protected $execActionBtn;
+    protected $executeActionButton;
 
-    /** @var View View holding buttons. */
-    protected $btns;
+    /** @var View */
+    protected $buttonsView;
 
     /** @var UserAction The action to execute. */
     public $action;
 
-    /** @var array will collect data while doing action step. */
+    /** @var array<string, array<string, mixed>> will collect data while doing action step. */
     private $actionData = [];
 
     /** @var bool */
     protected $actionInitialized = false;
 
-    /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure<T of Model>($this, T, mixed, mixed): ?JsBlock JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
 
-    /** @var array A seed for creating form in order to edit arguments/fields user entry. */
+    /** @var array<mixed> A seed for creating form in order to edit arguments/fields user entry. */
     public $formSeed = [Form::class];
 
     /** @var string can be "console", "text", or "html". Determine how preview step will display information. */
@@ -99,6 +88,8 @@ trait StepExecutorTrait
 
     /**
      * Will add field into form based on $fields array.
+     *
+     * @param array<string, mixed> $fields
      */
     protected function setFormField(Form $form, array $fields, string $step): Form
     {
@@ -149,6 +140,8 @@ trait StepExecutorTrait
         $argModel = $this->initActionArguments();
 
         $this->loader->set(function (Loader $p) use ($argModel) {
+            $this->action->validateBeforeExecute();
+
             switch ($this->step) {
                 case 'args':
                     $this->doArgs($p, $argModel);
@@ -181,14 +174,14 @@ trait StepExecutorTrait
         // set args value if available
         $this->setFormField($form, $this->getActionData('args'), $this->step);
 
-        // setup exec, next and prev button handler for this step
-        $this->jsSetSubmitBtn($page, $form, $this->step);
-        $this->jsSetPrevHandler($page, $this->step);
+        // setup execute, next and previous button handler for this step
+        $this->jsSetSubmitButton($page, $form, $this->step);
+        $this->jsSetPreviousHandler($page, $this->step);
 
         $form->onSubmit(function (Form $form) {
             $form->model->save();
             // collect arguments
-            $this->setActionDataFromModel('args', $form->model, array_keys($form->model->getFields('editable')));
+            $this->setActionDataFromEntity('args', $form->entity, array_keys($form->entity->getFields('editable')));
 
             return $this->jsStepSubmit($this->step);
         });
@@ -203,18 +196,16 @@ trait StepExecutorTrait
         // set Fields value if set from another step
         $this->setFormField($form, $this->getActionData('fields'), $this->step);
 
-        // setup exec, next and prev button handler for this step
-        $this->jsSetSubmitBtn($page, $form, $this->step);
-        $this->jsSetPrevHandler($page, $this->step);
+        // setup execute, next and previous button handler for this step
+        $this->jsSetSubmitButton($page, $form, $this->step);
+        $this->jsSetPreviousHandler($page, $this->step);
 
-        if (!$form->hookHasCallbacks(Form::HOOK_SUBMIT)) {
-            $form->onSubmit(function (Form $form) {
-                // collect fields defined in Model\UserAction
-                $this->setActionDataFromModel('fields', $form->model, $this->action->fields);
+        $form->onSubmit(function (Form $form) {
+            // collect fields defined in Model\UserAction
+            $this->setActionDataFromEntity('fields', $form->entity, $this->action->fields);
 
-                return $this->jsStepSubmit($this->step);
-            });
-        }
+            return $this->jsStepSubmit($this->step);
+        });
     }
 
     protected function doPreview(View $page): void
@@ -226,26 +217,29 @@ trait StepExecutorTrait
             $this->action->getEntity()->setMulti($fields);
         }
 
-        $prev = $this->getPreviousStep($this->step);
-        if ($prev) {
-            $chain = $this->loader->jsLoad([
-                'step' => $prev,
-                $this->name => $this->action->getEntity()->getId(),
-            ], ['method' => 'post'], $this->loader->name);
+        if (!$this->isFirstStep($this->step)) {
+            $chain = $this->loader->jsLoad(
+                [
+                    'step' => $this->getPreviousStep($this->step),
+                    $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getIdField(), $this->action->getEntity()->getId()),
+                ],
+                ['method' => 'POST'],
+                $this->loader->name
+            );
 
-            $page->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([], [$chain])));
+            $page->js(true, $this->previousStepButton->js()->on('click', new JsFunction([], [$chain])));
         }
 
         // setup executor button to perform action
         $page->js(
             true,
-            $this->execActionBtn->js()->on('click', new JsFunction([], [
+            $this->executeActionButton->js()->on('click', new JsFunction([], [
                 $this->loader->jsLoad(
                     [
                         'step' => 'final',
-                        $this->name => $this->action->getEntity()->getId(),
+                        $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getIdField(), $this->action->getEntity()->getId()),
                     ],
-                    ['method' => 'post'],
+                    ['method' => 'POST'],
                     $this->loader->name
                 ),
             ]))
@@ -286,74 +280,43 @@ trait StepExecutorTrait
 
     /**
      * Get how many steps is required for this action.
+     *
+     * @return list<string>
      */
-    protected function getSteps(UserAction $action): array
+    protected function getSteps(): array
     {
         $steps = [];
-        if ($action->args) {
+        if ($this->action->args) {
             $steps[] = 'args';
         }
-        if ($action->fields) {
+        if ($this->action->fields) {
             $steps[] = 'fields';
         }
-        if ($action->preview) {
+        if ($this->action->preview) {
             $steps[] = 'preview';
         }
 
         return $steps;
     }
 
-    protected function getNextStep(string $step): ?string
+    protected function isFirstStep(string $step): bool
     {
-        $next = null;
-        if (!$this->isLastStep($step)) {
-            foreach ($this->steps as $k => $s) {
-                if ($step === $s) {
-                    $next = $this->steps[$k + 1];
-
-                    break;
-                }
-            }
-        }
-
-        return $next;
-    }
-
-    protected function getPreviousStep(string $step): ?string
-    {
-        $prev = null;
-
-        if (!$this->isFirstStep($step)) {
-            foreach ($this->steps as $k => $s) {
-                if ($s === $step) {
-                    $prev = $this->steps[$k - 1];
-
-                    break;
-                }
-            }
-        }
-
-        return $prev;
+        return $this->steps[array_key_first($this->steps)] === $step;
     }
 
     protected function isLastStep(string $step): bool
     {
-        $isLast = false;
-        $step_count = count($this->steps);
-        foreach ($this->steps as $k => $s) {
-            if ($s === $step) {
-                $isLast = $k === $step_count - 1;
-
-                break;
-            }
-        }
-
-        return $isLast;
+        return $this->steps[array_key_last($this->steps)] === $step;
     }
 
-    protected function isFirstStep(string $step): bool
+    protected function getPreviousStep(string $step): string
     {
-        return $step === $this->steps[0];
+        return $this->steps[array_search($step, $this->steps, true) - 1];
+    }
+
+    protected function getNextStep(string $step): string
+    {
+        return $this->steps[array_search($step, $this->steps, true) + 1];
     }
 
     protected function getStep(): string
@@ -361,153 +324,142 @@ trait StepExecutorTrait
         return $this->step;
     }
 
-    protected function createButtonBar(Model\UserAction $action): View
+    protected function createButtonBar(): View
     {
-        $this->btns = (new View())->setStyle(['min-height' => '24px']);
-        $this->prevStepBtn = Button::addTo($this->btns, ['Prev'])->setStyle(['float' => 'left !important']);
-        $this->nextStepBtn = Button::addTo($this->btns, ['Next', 'class.blue' => true]);
-        $this->execActionBtn = $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MODAL_BUTTON);
-        $this->btns->add($this->execActionBtn);
+        $this->buttonsView = (new View())->setStyle(['min-height' => '24px']);
+        $this->previousStepButton = Button::addTo($this->buttonsView, ['Previous'])->setStyle(['float' => 'left !important']);
+        $this->nextStepButton = Button::addTo($this->buttonsView, ['Next', 'class.blue' => true]);
+        $this->executeActionButton = $this->getExecutorFactory()->createTrigger($this->action, ExecutorFactory::MODAL_BUTTON);
+        $this->buttonsView->add($this->executeActionButton);
 
-        return $this->btns;
+        return $this->buttonsView;
     }
 
     /**
-     * Generate js for setting Buttons state based on current step.
+     * Generate JS for setting Buttons state based on current step.
      */
-    protected function jsSetBtnState(View $view, string $step): void
+    protected function jsSetButtonsState(View $view, string $step): void
     {
         if (count($this->steps) === 1) {
-            $view->js(true, $this->prevStepBtn->js()->hide());
-            $view->js(true, $this->nextStepBtn->js()->hide());
+            $view->js(true, $this->previousStepButton->js()->hide());
+            $view->js(true, $this->nextStepButton->js()->hide());
         } else {
-            $view->js(true, $this->jsSetPrevState($step));
+            $view->js(true, $this->jsSetPreviousState($step));
             $view->js(true, $this->jsSetNextState($step));
-            $view->js(true, $this->jsSetExecState($step));
+            $view->js(true, $this->jsSetExecuteState($step));
         }
-
-        // reset button handler
-        $view->js(true, $this->execActionBtn->js()->off());
-        $view->js(true, $this->nextStepBtn->js()->off());
-        $view->js(true, $this->prevStepBtn->js()->off());
-        $view->js(true, $this->nextStepBtn->js()->removeClass('disabled'));
-        $view->js(true, $this->execActionBtn->js()->removeClass('disabled'));
     }
 
     /**
-     * Generate js for Next btn state.
+     * Generate JS for Next button state.
      */
     protected function jsSetNextState(string $step): JsExpressionable
     {
         if ($this->isLastStep($step)) {
-            return $this->nextStepBtn->js()->hide();
+            return $this->nextStepButton->js()->hide();
         }
 
-        return $this->nextStepBtn->js()->show();
+        return $this->nextStepButton->js()->show();
     }
 
     /**
-     * Generated js for Prev btn state.
+     * Generated JS for Previous button state.
      */
-    protected function jsSetPrevState(string $step): JsExpressionable
+    protected function jsSetPreviousState(string $step): JsExpressionable
     {
         if ($this->isFirstStep($step)) {
-            return $this->prevStepBtn->js()->hide();
+            return $this->previousStepButton->js()->hide();
         }
 
-        return $this->prevStepBtn->js()->show();
+        return $this->previousStepButton->js()->show();
     }
 
     /**
-     * Generate js for Exec button state.
+     * Generate JS for Execute button state.
      */
-    protected function jsSetExecState(string $step): JsExpressionable
+    protected function jsSetExecuteState(string $step): JsExpressionable
     {
         if ($this->isLastStep($step)) {
-            return $this->execActionBtn->js()->show();
+            return $this->executeActionButton->js()->show();
         }
 
-        return $this->execActionBtn->js()->hide();
+        return $this->executeActionButton->js()->hide();
     }
 
     /**
-     * Generate js function for Previous button.
+     * Generate JS function for Previous button.
      */
-    protected function jsSetPrevHandler(View $view, string $step): void
+    protected function jsSetPreviousHandler(View $view, string $step): void
     {
-        $prev = $this->getPreviousStep($step);
-        if ($prev) {
-            $chain = $this->loader->jsLoad([
-                'step' => $prev,
-                $this->name => $this->action->getEntity()->getId(),
-            ], ['method' => 'post'], $this->loader->name);
+        if (!$this->isFirstStep($step)) {
+            $chain = $this->loader->jsLoad(
+                [
+                    'step' => $this->getPreviousStep($step),
+                    $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getIdField(), $this->action->getEntity()->getId()),
+                ],
+                ['method' => 'POST'],
+                $this->loader->name
+            );
 
-            $view->js(true, $this->prevStepBtn->js()->on('click', new JsFunction([], [$chain])));
+            $view->js(true, $this->previousStepButton->js()->on('click', new JsFunction([], [$chain])));
         }
     }
 
     /**
      * Determine which button is responsible for submitting form on a specific step.
      */
-    protected function jsSetSubmitBtn(View $view, Form $form, string $step): void
+    protected function jsSetSubmitButton(View $view, Form $form, string $step): void
     {
-        if ($this->isLastStep($step)) {
-            $view->js(true, $this->execActionBtn->js()->on('click', new JsFunction([], [$form->js(false, null, $form->formElement)->form('submit')])));
-        } else {
-            // submit on next
-            $view->js(true, $this->nextStepBtn->js()->on('click', new JsFunction([], [$form->js(false, null, $form->formElement)->form('submit')])));
-        }
+        $button = $this->isLastStep($step)
+            ? $this->executeActionButton
+            : $this->nextStepButton; // submit on next
+
+        $view->js(true, $button->js()->on('click', new JsFunction([], [$form->js()->form('submit')])));
     }
 
     /**
-     * Get proper js after submitting a form in a step.
-     *
-     * @return JsBlock|View
+     * Get proper JS after submitting a form in a step.
      */
-    protected function jsStepSubmit(string $step)
+    protected function jsStepSubmit(string $step): JsBlock
     {
-        try {
-            if ($this->isLastStep($step)) {
-                // collect argument and execute action
-                $return = $this->action->execute(...$this->getActionArgs($this->getActionData('args')));
-                $js = $this->jsGetExecute($return, $this->action->getEntity()->getId());
-            } else {
-                // store data and setup reload
-                $js = new JsBlock([
-                    $this->loader->jsAddStoreData($this->actionData, true),
-                    $this->loader->jsLoad([
-                        'step' => $this->getNextStep($step),
-                        $this->name => $this->action->getEntity()->getId(),
-                    ], ['method' => 'post'], $this->loader->name),
-                ]);
-            }
-
-            return $js;
-        } catch (ValidationException $e) {
-            throw $e;
-        } catch (\Throwable $e) {
-            $msg = new Message(['Error executing ' . $this->action->caption, 'type' => 'error', 'class.red' => true]);
-            $msg->setApp($this->getApp());
-            $msg->invokeInit();
-            $msg->text->content = $this->getApp()->renderExceptionHtml($e);
-
-            return $msg;
+        if (count($this->steps) === 1) {
+            // collect argument and execute action
+            $return = $this->action->execute(...$this->getActionArgs($this->getActionData('args')));
+            $js = $this->jsGetExecute($return, $this->action->getEntity()->getId());
+        } else {
+            // store data and setup reload
+            $js = new JsBlock([
+                $this->loader->jsAddStoreData($this->actionData, true),
+                $this->loader->jsLoad(
+                    [
+                        'step' => $this->isLastStep($step) ? 'final' : $this->getNextStep($step),
+                        $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getIdField(), $this->action->getEntity()->getId()),
+                    ],
+                    ['method' => 'POST'],
+                    $this->loader->name
+                ),
+            ]);
         }
+
+        return $js;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function getActionData(string $step): array
     {
         return $this->actionData[$step] ?? [];
     }
 
     /**
-     * @param array<string> $fields
+     * @param list<string> $fields
      */
-    private function setActionDataFromModel(string $step, Model $model, array $fields): void
+    private function setActionDataFromEntity(string $step, Model $entity, array $fields): void
     {
         $data = [];
         foreach ($fields as $k) {
-            $data[$k] = $model->get($k);
+            $data[$k] = $entity->get($k);
         }
         $this->actionData[$step] = $data;
     }
@@ -520,7 +472,6 @@ trait StepExecutorTrait
     protected function getActionPreview()
     {
         $args = [];
-
         foreach ($this->cloneArgs as $key => $val) {
             $args[] = $this->getActionData('args')[$key];
         }
@@ -530,11 +481,14 @@ trait StepExecutorTrait
 
     /**
      * Utility for retrieving Argument.
+     *
+     * @param array<string, mixed> $data
+     *
+     * @return list<mixed>
      */
     protected function getActionArgs(array $data): array
     {
         $args = [];
-
         foreach ($this->cloneArgs as $key => $val) {
             $args[] = $data[$key];
         }

@@ -32,6 +32,7 @@ class WizardStep extends View
         parent::__construct(['title' => $title]);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->template->set('title', $this->title);

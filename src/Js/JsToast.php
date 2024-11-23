@@ -15,14 +15,14 @@ class JsToast implements JsExpressionable
 {
     use DiContainerTrait;
 
-    /** @var array Various setting options as per Fomantic-UI toast module. */
+    /** @var array<string, mixed> Various setting options as per Fomantic-UI toast module. */
     public array $settings = [];
 
-    /** @var string default css class for toast */
+    /** @var string default CSS class for toast */
     public $defaultCss = 'success';
 
     /**
-     * @param array|string $settings
+     * @param array<string, mixed>|string $settings
      */
     public function __construct($settings = null)
     {
@@ -32,7 +32,7 @@ class JsToast implements JsExpressionable
             $this->settings['message'] = $settings;
         }
 
-        // set default css class
+        // set default CSS class
         if (!array_key_exists('class', $this->settings)) {
             $this->settings['class'] = $this->defaultCss;
         }
@@ -52,6 +52,7 @@ class JsToast implements JsExpressionable
         return $this;
     }
 
+    #[\Override]
     public function jsRender(): string
     {
         return (new Jquery('body'))->toast($this->settings)->jsRender();

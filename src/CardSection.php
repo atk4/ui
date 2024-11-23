@@ -8,6 +8,8 @@ use Atk4\Data\Model;
 
 /**
  * Display a card section within a Card View.
+ *
+ * @property false $model use $entity property instead
  */
 class CardSection extends View
 {
@@ -17,14 +19,23 @@ class CardSection extends View
     /** @var string */
     public $glue = ': ';
 
-    /** @var array<int, string> */
+    /** @var list<string> */
     public $tableClass = ['fixed', 'small'];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
 
         $this->addClass('content');
+    }
+
+    #[\Override]
+    public function setModel(Model $entity): void
+    {
+        $entity->assertIsEntity();
+
+        parent::setModel($entity);
     }
 
     /**
@@ -49,31 +60,35 @@ class CardSection extends View
 
     /**
      * Add Model fields to a card section.
+     *
+     * @param list<string> $fields
      */
-    public function addFields(Model $model, array $fields, bool $useLabel = false, bool $useTable = false): void
+    public function addFields(Model $entity, array $fields, bool $useLabel = false, bool $useTable = false): void
     {
-        $model->assertIsLoaded();
+        $entity->assertIsLoaded();
 
         if ($useTable) {
-            $this->addTableSection($model, $fields);
+            $this->addTableSection($entity, $fields);
         } else {
-            $this->addSectionFields($model, $fields, $useLabel);
+            $this->addSectionFields($entity, $fields, $useLabel);
         }
     }
 
     /**
      * Add fields label and value to section.
+     *
+     * @param list<string> $fields
      */
-    private function addSectionFields(Model $model, array $fields, bool $useLabel = false): void
+    private function addSectionFields(Model $entity, array $fields, bool $useLabel = false): void
     {
         foreach ($fields as $field) {
-            if ($model->titleField === $field) {
+            if ($entity->titleField === $field) {
                 continue;
             }
 
-            $value = $this->getApp()->uiPersistence->typecastSaveField($model->getField($field), $model->get($field));
+            $value = $this->getApp()->uiPersistence->typecastSaveField($entity->getField($field), $entity->get($field));
             if ($useLabel) {
-                $label = $model->getField($field)->getCaption();
+                $label = $entity->getField($field)->getCaption();
                 $value = $label . $this->glue . $value;
             }
 
@@ -85,10 +100,12 @@ class CardSection extends View
 
     /**
      * Add field into section using a CardTable View.
+     *
+     * @param list<string> $fields
      */
-    private function addTableSection(Model $model, array $fields): void
+    private function addTableSection(Model $entity, array $fields): void
     {
         $cardTable = CardTable::addTo($this, ['class' => $this->tableClass]);
-        $cardTable->setModel($model, $fields);
+        $cardTable->setModel($entity, $fields);
     }
 }

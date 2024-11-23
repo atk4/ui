@@ -6,12 +6,22 @@
 !/*/
 /*/*
 
+!/@highlightjs/cdn-assets/
+/@highlightjs/cdn-assets/*
+!/@highlightjs/cdn-assets/LICENS*
+!/@highlightjs/cdn-assets/*.js
+!/@highlightjs/cdn-assets/styles/
+/@highlightjs/cdn-assets/styles/*
+!/@highlightjs/cdn-assets/styles/github-dark-dimmed*.css
+
 !/@shopify/draggable/
 /@shopify/draggable/*
 !/@shopify/draggable/LICENS*
-!/@shopify/draggable/lib/
-/@shopify/draggable/lib/*
-!/@shopify/draggable/lib/*.bundle.js
+!/@shopify/draggable/build/
+/@shopify/draggable/build/*
+!/@shopify/draggable/build/umd/
+/@shopify/draggable/build/umd/*
+!/@shopify/draggable/build/umd/*.js
 
 !/chart.js/LICENS*
 !/chart.js/dist/

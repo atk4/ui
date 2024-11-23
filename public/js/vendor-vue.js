@@ -1,258 +1,201 @@
 "use strict";
 (self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["vendor-vue"],{
 
-/***/ "./node_modules/vue-fomantic-ui/dist/vue-fomantic-ui.es.js":
-/*!*****************************************************************!*\
-  !*** ./node_modules/vue-fomantic-ui/dist/vue-fomantic-ui.es.js ***!
-  \*****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ "./node_modules/vue-loader/dist/exportHelper.js":
+/*!******************************************************!*\
+  !*** ./node_modules/vue-loader/dist/exportHelper.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+// runtime helper for setting properties on components
+// in a tree-shakable way
+exports["default"] = (sfc, props) => {
+    const target = sfc.__vccOpts || sfc;
+    for (const [key, val] of props) {
+        target[key] = val;
+    }
+    return target;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-fomantic-ui/dist/vue-fomantic-ui.mjs":
+/*!***************************************************************!*\
+  !*** ./node_modules/vue-fomantic-ui/dist/vue-fomantic-ui.mjs ***!
+  \***************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "SuiAccordion": () => (/* binding */ Accordion),
-/* harmony export */   "SuiAccordionAccordion": () => (/* binding */ AccordionAccordion),
-/* harmony export */   "SuiAccordionContent": () => (/* binding */ AccordionContent),
-/* harmony export */   "SuiAccordionTab": () => (/* binding */ AccordionTab),
-/* harmony export */   "SuiAccordionTitle": () => (/* binding */ AccordionTitle),
-/* harmony export */   "SuiAdvertisement": () => (/* binding */ Advertisement),
-/* harmony export */   "SuiBreadcrumb": () => (/* binding */ Breadcrumb),
-/* harmony export */   "SuiBreadcrumbDivider": () => (/* binding */ BreadcrumbDivider),
-/* harmony export */   "SuiBreadcrumbSection": () => (/* binding */ BreadcrumbSection),
-/* harmony export */   "SuiButton": () => (/* binding */ Button),
-/* harmony export */   "SuiButtonContent": () => (/* binding */ ButtonContent),
-/* harmony export */   "SuiButtonGroup": () => (/* binding */ ButtonGroup),
-/* harmony export */   "SuiCalendar": () => (/* binding */ Calendar),
-/* harmony export */   "SuiCard": () => (/* binding */ Card),
-/* harmony export */   "SuiCardContent": () => (/* binding */ CardContent),
-/* harmony export */   "SuiCardDescription": () => (/* binding */ CardDescription),
-/* harmony export */   "SuiCardGroup": () => (/* binding */ CardGroup),
-/* harmony export */   "SuiCardHeader": () => (/* binding */ CardHeader),
-/* harmony export */   "SuiCardMeta": () => (/* binding */ CardMeta),
-/* harmony export */   "SuiCheckbox": () => (/* binding */ Checkbox),
-/* harmony export */   "SuiComment": () => (/* binding */ Comment),
-/* harmony export */   "SuiCommentAction": () => (/* binding */ CommentAction),
-/* harmony export */   "SuiCommentActions": () => (/* binding */ CommentActions),
-/* harmony export */   "SuiCommentAuthor": () => (/* binding */ CommentAuthor),
-/* harmony export */   "SuiCommentAvatar": () => (/* binding */ CommentAvatar),
-/* harmony export */   "SuiCommentContent": () => (/* binding */ CommentContent),
-/* harmony export */   "SuiCommentGroup": () => (/* binding */ CommentGroup),
-/* harmony export */   "SuiCommentMetadata": () => (/* binding */ CommentMetadata),
-/* harmony export */   "SuiCommentText": () => (/* binding */ CommentText),
-/* harmony export */   "SuiContainer": () => (/* binding */ Container),
-/* harmony export */   "SuiDimmer": () => (/* binding */ Dimmer),
-/* harmony export */   "SuiDimmerDimmable": () => (/* binding */ DimmerDimmable),
-/* harmony export */   "SuiDivider": () => (/* binding */ Divider),
-/* harmony export */   "SuiDropdown": () => (/* binding */ Dropdown),
-/* harmony export */   "SuiDropdownItem": () => (/* binding */ DropdownItem),
-/* harmony export */   "SuiDropdownMenu": () => (/* binding */ DropdownMenu),
-/* harmony export */   "SuiEmbed": () => (/* binding */ Embed),
-/* harmony export */   "SuiEmoji": () => (/* binding */ Emoji),
-/* harmony export */   "SuiFeed": () => (/* binding */ Feed),
-/* harmony export */   "SuiFeedContent": () => (/* binding */ FeedContent),
-/* harmony export */   "SuiFeedDate": () => (/* binding */ FeedDate),
-/* harmony export */   "SuiFeedEvent": () => (/* binding */ FeedEvent),
-/* harmony export */   "SuiFeedExtra": () => (/* binding */ FeedExtra),
-/* harmony export */   "SuiFeedLabel": () => (/* binding */ FeedLabel),
-/* harmony export */   "SuiFeedLike": () => (/* binding */ FeedLike),
-/* harmony export */   "SuiFeedMeta": () => (/* binding */ FeedMeta),
-/* harmony export */   "SuiFeedSummary": () => (/* binding */ FeedSummary),
-/* harmony export */   "SuiFeedUser": () => (/* binding */ FeedUser),
-/* harmony export */   "SuiFlag": () => (/* binding */ Flag),
-/* harmony export */   "SuiForm": () => (/* binding */ Form),
-/* harmony export */   "SuiFormField": () => (/* binding */ FormField),
-/* harmony export */   "SuiFormGroup": () => (/* binding */ FormGroup),
-/* harmony export */   "SuiFormTextarea": () => (/* binding */ FormTextarea),
-/* harmony export */   "SuiGrid": () => (/* binding */ Grid),
-/* harmony export */   "SuiGridColumn": () => (/* binding */ GridColumn),
-/* harmony export */   "SuiGridRow": () => (/* binding */ GridRow),
-/* harmony export */   "SuiHeader": () => (/* binding */ Header),
-/* harmony export */   "SuiHeaderContent": () => (/* binding */ HeaderContent),
-/* harmony export */   "SuiHeaderSubheader": () => (/* binding */ HeaderSubheader),
-/* harmony export */   "SuiIcon": () => (/* binding */ Icon),
-/* harmony export */   "SuiIconGroup": () => (/* binding */ IconGroup),
-/* harmony export */   "SuiImage": () => (/* binding */ Image),
-/* harmony export */   "SuiImageGroup": () => (/* binding */ ImageGroup),
-/* harmony export */   "SuiInput": () => (/* binding */ Input),
-/* harmony export */   "SuiItem": () => (/* binding */ Item),
-/* harmony export */   "SuiItemContent": () => (/* binding */ ItemContent),
-/* harmony export */   "SuiItemDescription": () => (/* binding */ ItemDescription),
-/* harmony export */   "SuiItemExtra": () => (/* binding */ ItemExtra),
-/* harmony export */   "SuiItemGroup": () => (/* binding */ ItemGroup),
-/* harmony export */   "SuiItemHeader": () => (/* binding */ ItemHeader),
-/* harmony export */   "SuiItemImage": () => (/* binding */ ItemImage),
-/* harmony export */   "SuiItemMeta": () => (/* binding */ ItemMeta),
-/* harmony export */   "SuiLabel": () => (/* binding */ Label),
-/* harmony export */   "SuiLabelDetail": () => (/* binding */ LabelDetail),
-/* harmony export */   "SuiLabelGroup": () => (/* binding */ LabelGroup),
-/* harmony export */   "SuiList": () => (/* binding */ List),
-/* harmony export */   "SuiListContent": () => (/* binding */ ListContent),
-/* harmony export */   "SuiListDescription": () => (/* binding */ ListDescription),
-/* harmony export */   "SuiListHeader": () => (/* binding */ ListHeader),
-/* harmony export */   "SuiListIcon": () => (/* binding */ ListIcon),
-/* harmony export */   "SuiListItem": () => (/* binding */ ListItem),
-/* harmony export */   "SuiListList": () => (/* binding */ ListList),
-/* harmony export */   "SuiLoader": () => (/* binding */ Loader),
-/* harmony export */   "SuiMenu": () => (/* binding */ Menu),
-/* harmony export */   "SuiMenuHeader": () => (/* binding */ MenuHeader),
-/* harmony export */   "SuiMenuItem": () => (/* binding */ MenuItem),
-/* harmony export */   "SuiMenuMenu": () => (/* binding */ MenuMenu),
-/* harmony export */   "SuiMessage": () => (/* binding */ Message),
-/* harmony export */   "SuiMessageContent": () => (/* binding */ MessageContent),
-/* harmony export */   "SuiMessageHeader": () => (/* binding */ MessageHeader),
-/* harmony export */   "SuiMessageItem": () => (/* binding */ MessageItem),
-/* harmony export */   "SuiMessageList": () => (/* binding */ MessageList),
-/* harmony export */   "SuiModal": () => (/* binding */ Modal),
-/* harmony export */   "SuiModalActions": () => (/* binding */ ModalActions),
-/* harmony export */   "SuiModalContent": () => (/* binding */ ModalContent),
-/* harmony export */   "SuiModalDescription": () => (/* binding */ ModalDescription),
-/* harmony export */   "SuiModalHeader": () => (/* binding */ ModalHeader),
-/* harmony export */   "SuiPopup": () => (/* binding */ Popup),
-/* harmony export */   "SuiProgress": () => (/* binding */ Progress),
-/* harmony export */   "SuiRail": () => (/* binding */ Rail),
-/* harmony export */   "SuiRating": () => (/* binding */ Rating),
-/* harmony export */   "SuiReveal": () => (/* binding */ Reveal),
-/* harmony export */   "SuiRevealContent": () => (/* binding */ RevealContent),
-/* harmony export */   "SuiSegment": () => (/* binding */ Segment),
-/* harmony export */   "SuiSegmentGroup": () => (/* binding */ SegmentGroup),
-/* harmony export */   "SuiSegmentInline": () => (/* binding */ SegmentInline),
-/* harmony export */   "SuiSidebar": () => (/* binding */ Sidebar),
-/* harmony export */   "SuiSlider": () => (/* binding */ Slider),
-/* harmony export */   "SuiStatistic": () => (/* binding */ Statistic),
-/* harmony export */   "SuiStatisticGroup": () => (/* binding */ StatisticGroup),
-/* harmony export */   "SuiStatisticLabel": () => (/* binding */ StatisticLabel),
-/* harmony export */   "SuiStatisticValue": () => (/* binding */ StatisticValue),
-/* harmony export */   "SuiStep": () => (/* binding */ Step),
-/* harmony export */   "SuiStepContent": () => (/* binding */ StepContent),
-/* harmony export */   "SuiStepDescription": () => (/* binding */ StepDescription),
-/* harmony export */   "SuiStepGroup": () => (/* binding */ StepGroup),
-/* harmony export */   "SuiStepTitle": () => (/* binding */ StepTitle),
-/* harmony export */   "SuiTab": () => (/* binding */ Tab),
-/* harmony export */   "SuiTabPanel": () => (/* binding */ TabPanel),
-/* harmony export */   "SuiTable": () => (/* binding */ Table),
-/* harmony export */   "SuiTableBody": () => (/* binding */ TableBody),
-/* harmony export */   "SuiTableCell": () => (/* binding */ TableCell),
-/* harmony export */   "SuiTableFooter": () => (/* binding */ TableFooter),
-/* harmony export */   "SuiTableHeader": () => (/* binding */ TableHeader),
-/* harmony export */   "SuiTableHeaderCell": () => (/* binding */ TableHeaderCell),
-/* harmony export */   "SuiTableRow": () => (/* binding */ TableRow),
-/* harmony export */   "default": () => (/* binding */ index)
+/* harmony export */   SuiAccordion: () => (/* binding */ hn),
+/* harmony export */   SuiAccordionAccordion: () => (/* binding */ vn),
+/* harmony export */   SuiAccordionContent: () => (/* binding */ be),
+/* harmony export */   SuiAccordionTab: () => (/* binding */ gn),
+/* harmony export */   SuiAccordionTitle: () => (/* binding */ fn),
+/* harmony export */   SuiAdvertisement: () => (/* binding */ It),
+/* harmony export */   SuiBreadcrumb: () => (/* binding */ rt),
+/* harmony export */   SuiBreadcrumbDivider: () => (/* binding */ ge),
+/* harmony export */   SuiBreadcrumbSection: () => (/* binding */ fe),
+/* harmony export */   SuiButton: () => (/* binding */ ve),
+/* harmony export */   SuiButtonContent: () => (/* binding */ Le),
+/* harmony export */   SuiButtonGroup: () => (/* binding */ Ve),
+/* harmony export */   SuiCalendar: () => (/* binding */ Sn),
+/* harmony export */   SuiCard: () => (/* binding */ Lt),
+/* harmony export */   SuiCardContent: () => (/* binding */ Vt),
+/* harmony export */   SuiCardDescription: () => (/* binding */ Yt),
+/* harmony export */   SuiCardGroup: () => (/* binding */ zt),
+/* harmony export */   SuiCardHeader: () => (/* binding */ Ft),
+/* harmony export */   SuiCardMeta: () => (/* binding */ Pt),
+/* harmony export */   SuiCheckbox: () => (/* binding */ Cn),
+/* harmony export */   SuiComment: () => (/* binding */ Ht),
+/* harmony export */   SuiCommentAction: () => (/* binding */ Rt),
+/* harmony export */   SuiCommentActions: () => (/* binding */ Et),
+/* harmony export */   SuiCommentAuthor: () => (/* binding */ jt),
+/* harmony export */   SuiCommentAvatar: () => (/* binding */ Gt),
+/* harmony export */   SuiCommentContent: () => (/* binding */ Ot),
+/* harmony export */   SuiCommentGroup: () => (/* binding */ _t),
+/* harmony export */   SuiCommentMetadata: () => (/* binding */ Nt),
+/* harmony export */   SuiCommentText: () => (/* binding */ Wt),
+/* harmony export */   SuiContainer: () => (/* binding */ Ye),
+/* harmony export */   SuiDimmer: () => (/* binding */ bn),
+/* harmony export */   SuiDimmerDimmable: () => (/* binding */ Bn),
+/* harmony export */   SuiDivider: () => (/* binding */ ze),
+/* harmony export */   SuiDropdown: () => (/* binding */ yn),
+/* harmony export */   SuiDropdownItem: () => (/* binding */ Be),
+/* harmony export */   SuiDropdownMenu: () => (/* binding */ ye),
+/* harmony export */   SuiEmbed: () => (/* binding */ kn),
+/* harmony export */   SuiEmoji: () => (/* binding */ Fe),
+/* harmony export */   SuiFeed: () => (/* binding */ Kt),
+/* harmony export */   SuiFeedContent: () => (/* binding */ qt),
+/* harmony export */   SuiFeedDate: () => (/* binding */ Jt),
+/* harmony export */   SuiFeedEvent: () => (/* binding */ Ut),
+/* harmony export */   SuiFeedExtra: () => (/* binding */ Xt),
+/* harmony export */   SuiFeedLabel: () => (/* binding */ Qt),
+/* harmony export */   SuiFeedLike: () => (/* binding */ Zt),
+/* harmony export */   SuiFeedMeta: () => (/* binding */ pt),
+/* harmony export */   SuiFeedSummary: () => (/* binding */ en),
+/* harmony export */   SuiFeedUser: () => (/* binding */ tn),
+/* harmony export */   SuiFlag: () => (/* binding */ Pe),
+/* harmony export */   SuiForm: () => (/* binding */ ct),
+/* harmony export */   SuiFormField: () => (/* binding */ ut),
+/* harmony export */   SuiFormGroup: () => (/* binding */ dt),
+/* harmony export */   SuiFormTextarea: () => (/* binding */ mt),
+/* harmony export */   SuiGrid: () => (/* binding */ ht),
+/* harmony export */   SuiGridColumn: () => (/* binding */ vt),
+/* harmony export */   SuiGridRow: () => (/* binding */ gt),
+/* harmony export */   SuiHeader: () => (/* binding */ He),
+/* harmony export */   SuiHeaderContent: () => (/* binding */ Re),
+/* harmony export */   SuiHeaderSubheader: () => (/* binding */ ie),
+/* harmony export */   SuiIcon: () => (/* binding */ U),
+/* harmony export */   SuiIconGroup: () => (/* binding */ Ee),
+/* harmony export */   SuiImage: () => (/* binding */ se),
+/* harmony export */   SuiImageGroup: () => (/* binding */ Oe),
+/* harmony export */   SuiInput: () => (/* binding */ _e),
+/* harmony export */   SuiItem: () => (/* binding */ nn),
+/* harmony export */   SuiItemContent: () => (/* binding */ an),
+/* harmony export */   SuiItemDescription: () => (/* binding */ ln),
+/* harmony export */   SuiItemExtra: () => (/* binding */ sn),
+/* harmony export */   SuiItemGroup: () => (/* binding */ on),
+/* harmony export */   SuiItemHeader: () => (/* binding */ rn),
+/* harmony export */   SuiItemImage: () => (/* binding */ cn),
+/* harmony export */   SuiItemMeta: () => (/* binding */ un),
+/* harmony export */   SuiLabel: () => (/* binding */ Z),
+/* harmony export */   SuiLabelDetail: () => (/* binding */ je),
+/* harmony export */   SuiLabelGroup: () => (/* binding */ Ge),
+/* harmony export */   SuiList: () => (/* binding */ Ne),
+/* harmony export */   SuiListContent: () => (/* binding */ qe),
+/* harmony export */   SuiListDescription: () => (/* binding */ Ue),
+/* harmony export */   SuiListHeader: () => (/* binding */ Je),
+/* harmony export */   SuiListIcon: () => (/* binding */ Ke),
+/* harmony export */   SuiListItem: () => (/* binding */ We),
+/* harmony export */   SuiListList: () => (/* binding */ Xe),
+/* harmony export */   SuiLoader: () => (/* binding */ Qe),
+/* harmony export */   SuiMenu: () => (/* binding */ ft),
+/* harmony export */   SuiMenuHeader: () => (/* binding */ St),
+/* harmony export */   SuiMenuItem: () => (/* binding */ Ct),
+/* harmony export */   SuiMenuMenu: () => (/* binding */ bt),
+/* harmony export */   SuiMessage: () => (/* binding */ Bt),
+/* harmony export */   SuiMessageContent: () => (/* binding */ Se),
+/* harmony export */   SuiMessageHeader: () => (/* binding */ Ce),
+/* harmony export */   SuiMessageItem: () => (/* binding */ yt),
+/* harmony export */   SuiMessageList: () => (/* binding */ kt),
+/* harmony export */   SuiModal: () => (/* binding */ xn),
+/* harmony export */   SuiModalActions: () => (/* binding */ $n),
+/* harmony export */   SuiModalContent: () => (/* binding */ An),
+/* harmony export */   SuiModalDescription: () => (/* binding */ Mn),
+/* harmony export */   SuiModalHeader: () => (/* binding */ wn),
+/* harmony export */   SuiPopup: () => (/* binding */ Tn),
+/* harmony export */   SuiProgress: () => (/* binding */ Dn),
+/* harmony export */   SuiRail: () => (/* binding */ Ze),
+/* harmony export */   SuiRating: () => (/* binding */ In),
+/* harmony export */   SuiReveal: () => (/* binding */ pe),
+/* harmony export */   SuiRevealContent: () => (/* binding */ et),
+/* harmony export */   SuiSegment: () => (/* binding */ oe),
+/* harmony export */   SuiSegmentGroup: () => (/* binding */ tt),
+/* harmony export */   SuiSegmentInline: () => (/* binding */ nt),
+/* harmony export */   SuiSidebar: () => (/* binding */ Vn),
+/* harmony export */   SuiSlider: () => (/* binding */ Yn),
+/* harmony export */   SuiStatistic: () => (/* binding */ dn),
+/* harmony export */   SuiStatisticGroup: () => (/* binding */ mn),
+/* harmony export */   SuiStatisticLabel: () => (/* binding */ re),
+/* harmony export */   SuiStatisticValue: () => (/* binding */ ce),
+/* harmony export */   SuiStep: () => (/* binding */ at),
+/* harmony export */   SuiStepContent: () => (/* binding */ it),
+/* harmony export */   SuiStepDescription: () => (/* binding */ ot),
+/* harmony export */   SuiStepGroup: () => (/* binding */ lt),
+/* harmony export */   SuiStepTitle: () => (/* binding */ st),
+/* harmony export */   SuiTab: () => (/* binding */ zn),
+/* harmony export */   SuiTabPanel: () => (/* binding */ ke),
+/* harmony export */   SuiTable: () => (/* binding */ xt),
+/* harmony export */   SuiTableBody: () => (/* binding */ $t),
+/* harmony export */   SuiTableCell: () => (/* binding */ At),
+/* harmony export */   SuiTableFooter: () => (/* binding */ Mt),
+/* harmony export */   SuiTableHeader: () => (/* binding */ wt),
+/* harmony export */   SuiTableHeaderCell: () => (/* binding */ Tt),
+/* harmony export */   SuiTableRow: () => (/* binding */ Dt),
+/* harmony export */   "default": () => (/* binding */ cl)
 /* harmony export */ });
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
-var __defProp = Object.defineProperty;
-var __getOwnPropSymbols = Object.getOwnPropertySymbols;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __propIsEnum = Object.prototype.propertyIsEnumerable;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __spreadValues = (a, b) => {
-  for (var prop in b || (b = {}))
-    if (__hasOwnProp.call(b, prop))
-      __defNormalProp(a, prop, b[prop]);
-  if (__getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(b)) {
-      if (__propIsEnum.call(b, prop))
-        __defNormalProp(a, prop, b[prop]);
-    }
-  return a;
-};
 
-function toVal(mix) {
-  var k, y, str = "";
-  if (typeof mix === "string" || typeof mix === "number") {
-    str += mix;
-  } else if (typeof mix === "object") {
-    if (Array.isArray(mix)) {
-      for (k = 0; k < mix.length; k++) {
-        if (mix[k]) {
-          if (y = toVal(mix[k])) {
-            str && (str += " ");
-            str += y;
-          }
-        }
-      }
-    } else {
-      for (k in mix) {
-        if (mix[k]) {
-          str && (str += " ");
-          str += k;
-        }
-      }
-    }
-  }
-  return str;
+function Hn(e) {
+  var t, l, i = "";
+  if (typeof e == "string" || typeof e == "number")
+    i += e;
+  else if (typeof e == "object")
+    if (Array.isArray(e))
+      for (t = 0; t < e.length; t++)
+        e[t] && (l = Hn(e[t])) && (i && (i += " "), i += l);
+    else
+      for (t in e)
+        e[t] && (i && (i += " "), i += t);
+  return i;
 }
-function clsx() {
-  var i = 0, tmp, x, str = "";
-  while (i < arguments.length) {
-    if (tmp = arguments[i++]) {
-      if (x = toVal(tmp)) {
-        str && (str += " ");
-        str += x;
-      }
-    }
-  }
-  return str;
+function m() {
+  for (var e, t, l = 0, i = ""; l < arguments.length; )
+    (e = arguments[l++]) && (t = Hn(e)) && (i && (i += " "), i += t);
+  return i;
 }
-const computeKeyOnly = (value, className) => {
-  return value ? className : "";
-};
-const computeKeyValue = (value, className) => {
-  if (typeof value === "string")
-    return `${value} ${className}`;
-  return "";
-};
-const computeKeyOrKeyValue = (value, className) => {
-  if (value === true)
-    return className;
-  if (value === "below")
-    return `${className} ${value}`;
-  if (typeof value === "string")
-    return `${value} ${className}`;
-  return "";
-};
-const computeTextAlignProp = (value) => {
-  if (value === "justified")
-    return "justified";
-  return computeKeyValue(value, "aligned");
-};
-const computeWidthProp = (value, className) => {
-  if (typeof value === "number" && className) {
-    return `${numberToEnglish(value)} ${className}`;
-  }
-  if (typeof value === "number" && !className) {
-    return numberToEnglish(value);
-  }
-  if (typeof value === "string" && value === "equal") {
-    return `${value} width`;
-  }
-  return "";
-};
-const computeResponsiveProp = (value, className) => {
-  if (!value)
-    return "";
-  return `${numberToEnglish(value)} wide ${className}`;
-};
-const numberToEnglish = (value) => {
-  const englishWords = [
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-    "ten",
-    "eleven",
-    "twelve",
-    "thirteen",
-    "fourteen",
-    "fifteen",
-    "sixteen"
-  ];
-  return englishWords[value - 1];
-};
-var Button = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+const n = (e, t) => e ? t : "", T = (e, t) => typeof e == "string" ? `${e} ${t}` : "", w = (e, t) => e === !0 ? t : e === "below" ? `${t} ${e}` : typeof e == "string" ? `${e} ${t}` : "", p = (e) => e === "justified" ? "justified" : T(e, "aligned"), _ = (e, t) => typeof e == "number" && t ? `${he(e)} ${t}` : typeof e == "number" && !t ? he(e) : typeof e == "string" && e === "equal" ? `${e} width` : "", te = (e, t) => e ? `${he(e)} wide ${t}` : "", he = (e) => [
+  "one",
+  "two",
+  "three",
+  "four",
+  "five",
+  "six",
+  "seven",
+  "eight",
+  "nine",
+  "ten",
+  "eleven",
+  "twelve",
+  "thirteen",
+  "fourteen",
+  "fifteen",
+  "sixteen"
+][e - 1], ve = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiButton",
   props: {
     active: Boolean,
@@ -291,49 +234,41 @@ var Button = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     whatsapp: Boolean,
     youtube: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.color, props.size, computeKeyOnly(props.active, "active"), computeKeyOnly(props.basic, "basic"), computeKeyOnly(props.circular, "circular"), computeKeyOnly(props.compact, "compact"), computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.facebook, "facebook"), computeKeyOnly(props.fluid, "fluid"), computeKeyOnly(props.google, "google"), computeKeyOnly(props.icon, "icon"), computeKeyOnly(props.linkedin, "linkedin"), computeKeyOnly(props.instagram, "instagram"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.loading, "loading"), computeKeyOnly(props.negative, "negative"), computeKeyOnly(props.positive, "positive"), computeKeyOnly(props.primary, "primary"), computeKeyOnly(props.secondary, "secondary"), computeKeyOnly(props.telegram, "telegram"), computeKeyOnly(props.tertiary, "tertiary"), computeKeyOnly(props.toggle, "toggle"), computeKeyOnly(props.twitter, "twitter"), computeKeyOnly(props.vk, "vk"), computeKeyOnly(props.whatsapp, "whatsapp"), computeKeyOnly(props.youtube, "youtube"), computeKeyValue(props.attached, "attached"), computeKeyValue(props.floated, "floated"), computeKeyValue(props.labelPosition, "labeled"), computeKeyOrKeyValue(props.animated, "animated"), computeKeyOrKeyValue(props.labeled, "labeled"), "button");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.color, e.size, n(e.active, "active"), n(e.basic, "basic"), n(e.circular, "circular"), n(e.compact, "compact"), n(e.disabled, "disabled"), n(e.facebook, "facebook"), n(e.fluid, "fluid"), n(e.google, "google"), n(e.icon, "icon"), n(e.linkedin, "linkedin"), n(e.instagram, "instagram"), n(e.inverted, "inverted"), n(e.loading, "loading"), n(e.negative, "negative"), n(e.positive, "positive"), n(e.primary, "primary"), n(e.secondary, "secondary"), n(e.telegram, "telegram"), n(e.tertiary, "tertiary"), n(e.toggle, "toggle"), n(e.twitter, "twitter"), n(e.vk, "vk"), n(e.whatsapp, "whatsapp"), n(e.youtube, "youtube"), T(e.attached, "attached"), T(e.floated, "floated"), T(e.labelPosition, "labeled"), w(e.animated, "animated"), w(e.labeled, "labeled"), "button"))
     };
   },
   render() {
-    let elementType = this.as || "div";
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(elementType, {
-      "class": this.computedClass,
-      "role": "button"
+    let e = this.as || "div";
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(e, {
+      class: this.computedClass,
+      role: "button"
     }, {
       default: () => {
-        var _a, _b;
-        return [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)];
+        var t, l;
+        return [(l = (t = this.$slots).default) == null ? void 0 : l.call(t)];
       }
     });
   }
-});
-var ButtonContent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Le = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiButtonContent",
   props: {
     hidden: Boolean,
     visible: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.hidden, "hidden"), computeKeyOnly(props.visible, "visible"), "content");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(n(e.hidden, "hidden"), n(e.visible, "visible"), "content"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var ButtonGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Ve = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiButtonGroup",
   props: {
     attached: String,
@@ -345,52 +280,46 @@ var ButtonGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     vertical: Boolean,
     widths: Number
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.color, props.size, computeKeyOnly(props.basic, "basic"), computeKeyOnly(props.icon, "icon"), computeKeyOnly(props.labeled, "labeled"), computeKeyOnly(props.vertical, "vertical"), computeKeyValue(props.attached, "attached"), computeWidthProp(props.widths, ""), "buttons");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.color, e.size, n(e.basic, "basic"), n(e.icon, "icon"), n(e.labeled, "labeled"), n(e.vertical, "vertical"), T(e.attached, "attached"), _(e.widths, ""), "buttons"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var index$G = {
-  install(app) {
-    app.component(Button.name, Button);
-    app.component(ButtonContent.name, ButtonContent);
-    app.component(ButtonGroup.name, ButtonGroup);
+}), _n = {
+  install(e) {
+    e.component(ve.name, ve), e.component(Le.name, Le), e.component(Ve.name, Ve);
   }
-};
-var Container = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Ye = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiContainer",
   props: {
     fluid: Boolean,
     text: Boolean,
     textAlign: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", computeKeyOnly(props.fluid, "fluid"), computeKeyOnly(props.text, "text"), computeTextAlignProp(props.textAlign), "container");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      "ui",
+      n(e.fluid, "fluid"),
+      n(e.text, "text"),
+      p(e.textAlign),
+      "container"
+    )) };
   },
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var index$F = {
-  install(app) {
-    app.component(Container.name, Container);
+}), Nn = {
+  install(e) {
+    e.component(Ye.name, Ye);
   }
-};
-var Divider = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, ze = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiDivider",
   props: {
     clearing: Boolean,
@@ -402,23 +331,33 @@ var Divider = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     textAlign: String,
     vertical: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", computeKeyOnly(props.clearing, "clearing"), computeKeyOnly(props.fitted, "fitted"), computeKeyOnly(props.hidden, "hidden"), computeKeyOnly(props.horizontal, "horizontal"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.section, "section"), computeKeyOnly(props.vertical, "vertical"), computeKeyValue(props.textAlign, "aligned"), "divider");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      "ui",
+      n(e.clearing, "clearing"),
+      n(e.fitted, "fitted"),
+      n(e.hidden, "hidden"),
+      n(e.horizontal, "horizontal"),
+      n(e.inverted, "inverted"),
+      n(e.section, "section"),
+      n(e.vertical, "vertical"),
+      T(e.textAlign, "aligned"),
+      "divider"
+    )) };
   },
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      "div",
+      { class: this.computedClass },
+      (t = (e = this.$slots).default) == null ? void 0 : t.call(e)
+    );
   }
-});
-var index$E = {
-  install(app) {
-    app.component(Divider.name, Divider);
+}), Wn = {
+  install(e) {
+    e.component(ze.name, ze);
   }
-};
-var Emoji = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Fe = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiEmoji",
   props: {
     disabled: Boolean,
@@ -427,64 +366,61 @@ var Emoji = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     name: String,
     size: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(props.size, computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.link, "link"), computeKeyOnly(props.loading, "loading"));
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      e.size,
+      n(e.disabled, "disabled"),
+      n(e.link, "link"),
+      n(e.loading, "loading")
+    )) };
   },
   render() {
-    if (this.computedClass) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("em", {
+    return this.computedClass ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      "em",
+      {
         class: this.computedClass,
         "data-emoji": this.$props.name
-      });
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("em", { "data-emoji": this.$props.name });
+      }
+    ) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("em", { "data-emoji": this.$props.name });
   }
-});
-var index$D = {
-  install(app) {
-    app.component(Emoji.name, Emoji);
+}), Kn = {
+  install(e) {
+    e.component(Fe.name, Fe);
   }
-};
-var Flag = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Pe = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiFlag",
   props: {
     name: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(props.name, "flag");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(e.name, "flag")) };
   },
   render() {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("i", { class: this.computedClass });
   }
-});
-var index$C = {
-  install(app) {
-    app.component(Flag.name, Flag);
+}), qn = {
+  install(e) {
+    e.component(Pe.name, Pe);
   }
-};
-var HeaderSubheader = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, ie = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiHeaderSubheader",
   props: {
     as: String
   },
-  setup(props) {
-    const elementType = props.as || "div";
-    return { elementType };
+  setup(e) {
+    return { elementType: e.as || "div" };
   },
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(this.elementType, { class: "sub header" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      this.elementType,
+      { class: "sub header" },
+      (t = (e = this.$slots).default) == null ? void 0 : t.call(e)
+    );
   }
-});
-var Header = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), He = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiHeader",
-  components: { HeaderSubheader },
+  components: { HeaderSubheader: ie },
   props: {
     as: String,
     attached: [Boolean, String],
@@ -502,42 +438,51 @@ var Header = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     subheader: String,
     textAlign: String
   },
-  setup(props) {
-    const elementType = props.as || "div";
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.color, props.size, computeKeyOnly(props.block, "block"), computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.dividing, "dividing"), computeKeyOnly(props.icon, "icon"), computeKeyOnly(props.image, "image"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.sub, "sub"), computeKeyValue(props.floated, "floated"), computeKeyOrKeyValue(props.attached, "attached"), computeTextAlignProp(props.textAlign), "header");
-    });
-    return { elementType, computedClass };
+  setup(e) {
+    const t = e.as || "div", l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      "ui",
+      e.color,
+      e.size,
+      n(e.block, "block"),
+      n(e.disabled, "disabled"),
+      n(e.dividing, "dividing"),
+      n(e.icon, "icon"),
+      n(e.image, "image"),
+      n(e.inverted, "inverted"),
+      n(e.sub, "sub"),
+      T(e.floated, "floated"),
+      w(e.attached, "attached"),
+      p(e.textAlign),
+      "header"
+    ));
+    return { elementType: t, computedClass: l };
   },
   render() {
-    var _a, _b;
-    let children = [];
-    if (this.content)
-      children.push(this.content);
-    if (this.subheader) {
-      children.push((0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(HeaderSubheader, {}, this.subheader));
-    }
-    if (children.length > 0) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(this.elementType, { class: this.computedClass }, children);
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(this.elementType, { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var t, l;
+    let e = [];
+    return this.content && e.push(this.content), this.subheader && e.push(
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(ie, {}, this.subheader)
+    ), e.length > 0 ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      this.elementType,
+      { class: this.computedClass },
+      e
+    ) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      this.elementType,
+      { class: this.computedClass },
+      (l = (t = this.$slots).default) == null ? void 0 : l.call(t)
+    );
   }
-});
-var HeaderContent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Re = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiHeaderContent",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "content" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "content" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var index$B = {
-  install(app) {
-    app.component(Header.name, Header);
-    app.component(HeaderContent.name, HeaderContent);
-    app.component(HeaderSubheader.name, HeaderSubheader);
+}), Jn = {
+  install(e) {
+    e.component(He.name, He), e.component(Re.name, Re), e.component(ie.name, ie);
   }
-};
-var Icon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, U = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiIcon",
   props: {
     as: String,
@@ -555,83 +500,78 @@ var Icon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     rotated: String,
     size: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(props.color, props.name, props.size, computeKeyOnly(props.bordered, "bordered"), computeKeyOnly(props.circular, "circular"), computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.fitted, "fitted"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.link, "link"), computeKeyOnly(props.loading, "loading"), computeKeyValue(props.flipped, "flipped"), computeKeyValue(props.rotated, "rotated"), computeKeyOrKeyValue(props.corner, "corner"), "icon");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      e.color,
+      e.name,
+      e.size,
+      n(e.bordered, "bordered"),
+      n(e.circular, "circular"),
+      n(e.disabled, "disabled"),
+      n(e.fitted, "fitted"),
+      n(e.inverted, "inverted"),
+      n(e.link, "link"),
+      n(e.loading, "loading"),
+      T(e.flipped, "flipped"),
+      T(e.rotated, "rotated"),
+      w(e.corner, "corner"),
+      "icon"
+    )) };
   },
   render() {
-    let elementType = this.$props.as || "i";
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(elementType, {
-      "aria-hidden": true,
-      class: this.computedClass
-    });
+    let e = this.$props.as || "i";
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      e,
+      {
+        "aria-hidden": !0,
+        class: this.computedClass
+      }
+    );
   }
-});
-var IconGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Ee = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiIconGroup",
   props: {
     as: String,
     size: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(props.size, "icons");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      e.size,
+      "icons"
+    )) };
   },
   render() {
-    var _a, _b;
-    let elementType = this.$props.as || "i";
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(elementType, { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var t, l;
+    let e = this.$props.as || "i";
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      e,
+      { class: this.computedClass },
+      (l = (t = this.$slots).default) == null ? void 0 : l.call(t)
+    );
   }
-});
-var index$A = {
-  install(app) {
-    app.component(Icon.name, Icon);
-    app.component(IconGroup.name, IconGroup);
+}), Un = {
+  install(e) {
+    e.component(U.name, U), e.component(Ee.name, Ee);
   }
-};
-const alignments = ["top", "middle", "bottom"];
-const useVerticalAlignProps = {
+}, Rn = ["top", "middle", "bottom"], Xn = {
   verticalAlign: {
     type: String,
-    validator: (value) => alignments.includes(value)
+    validator: (e) => Rn.includes(e)
   }
 };
-function useVerticalAlignClass(props) {
-  const verticalAlignClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-    if (!props.verticalAlign)
-      return null;
-    if (alignments.includes(props.verticalAlign)) {
-      return `${props.verticalAlign} aligned`;
-    } else {
-      return null;
-    }
-  });
-  return { verticalAlignClass };
+function Qn(e) {
+  return { verticalAlignClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => e.verticalAlign && Rn.includes(e.verticalAlign) ? `${e.verticalAlign} aligned` : null) };
 }
-const floated = ["left", "right"];
-const useFloatedProps = {
+const Zn = ["left", "right"], pn = {
   floated: {
     type: String,
-    validator: (value) => floated.includes(value)
+    validator: (e) => Zn.includes(e)
   }
 };
-function useFloatedClass(props) {
-  const floatedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-    if (!props.floated)
-      return null;
-    if (props.floated === "left" || props.floated === "right") {
-      return `${props.floated} floated`;
-    } else {
-      return null;
-    }
-  });
-  return { floatedClass };
+function ea(e) {
+  return { floatedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => e.floated && (e.floated === "left" || e.floated === "right") ? `${e.floated} floated` : null) };
 }
-var Label = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+const Z = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiLabel",
   props: {
     as: String,
@@ -652,34 +592,45 @@ var Label = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     size: String,
     tag: Boolean
   },
-  setup(props, { slots }) {
-    const labelClasses = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.size, props.color, computeKeyOnly(props.basic, "basic"), computeKeyOnly(props.circular, "circular"), computeKeyOnly(props.empty, "empty"), computeKeyOnly(props.floating, "floating"), computeKeyOnly(props.horizontal, "horizontal"), computeKeyOnly(props.image, "image"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.prompt, "prompt"), computeKeyOnly(props.tag, "tag"), computeKeyValue(props.attached, "attached"), computeKeyValue(props.corner, "corner"), computeKeyOrKeyValue(props.pointing, "pointing"), computeKeyOrKeyValue(props.ribbon, "ribbon"), "label");
-    });
-    let elementType = props.as || "div";
-    if (props.icon) {
-      return () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(elementType, {
-        class: labelClasses.value
-      }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(Icon, { name: props.icon }));
-    }
-    return () => {
-      var _a;
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(elementType, {
-        class: labelClasses.value
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+  setup(e, { slots: t }) {
+    const l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      "ui",
+      e.size,
+      e.color,
+      n(e.basic, "basic"),
+      n(e.circular, "circular"),
+      n(e.empty, "empty"),
+      n(e.floating, "floating"),
+      n(e.horizontal, "horizontal"),
+      n(e.image, "image"),
+      n(e.inverted, "inverted"),
+      n(e.prompt, "prompt"),
+      n(e.tag, "tag"),
+      T(e.attached, "attached"),
+      T(e.corner, "corner"),
+      w(e.pointing, "pointing"),
+      w(e.ribbon, "ribbon"),
+      "label"
+    ));
+    let i = e.as || "div";
+    return e.icon ? () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(i, {
+      class: l.value
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(U, { name: e.icon })) : () => {
+      var o;
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(i, {
+        class: l.value
+      }, (o = t.default) == null ? void 0 : o.call(t));
     };
   }
-});
-var LabelDetail = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), je = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiLabelDetail",
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "detail"
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: "detail"
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var LabelGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Ge = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiLabelGroup",
   props: {
     basic: Boolean,
@@ -688,28 +639,30 @@ var LabelGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     size: String,
     tag: Boolean
   },
-  setup(props, { slots }) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.color, props.size, computeKeyOnly(props.basic, "basic"), computeKeyOnly(props.circular, "circular"), computeKeyOnly(props.tag, "tag"), "labels");
-    });
+  setup(e, { slots: t }) {
+    const l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      "ui",
+      e.color,
+      e.size,
+      n(e.basic, "basic"),
+      n(e.circular, "circular"),
+      n(e.tag, "tag"),
+      "labels"
+    ));
     return () => {
-      var _a;
+      var i;
       return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", {
-        class: computedClass.value
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+        class: l.value
+      }, (i = t.default) == null ? void 0 : i.call(t));
     };
   }
-});
-var index$z = {
-  install(app) {
-    app.component(Label.name, Label);
-    app.component(LabelDetail.name, LabelDetail);
-    app.component(LabelGroup.name, LabelGroup);
+}), ta = {
+  install(e) {
+    e.component(Z.name, Z), e.component(je.name, je), e.component(Ge.name, Ge);
   }
-};
-var Image = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, se = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiImage",
-  props: __spreadValues(__spreadValues({
+  props: {
     as: String,
     avatar: Boolean,
     bordered: Boolean,
@@ -726,83 +679,72 @@ var Image = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     rounded: Boolean,
     size: String,
     spaced: [Boolean, String],
-    src: String
-  }, useVerticalAlignProps), useFloatedProps),
-  setup(props, {
-    slots
+    src: String,
+    ...Xn,
+    ...pn
+  },
+  setup(e, {
+    slots: t
   }) {
     const {
-      verticalAlignClass
-    } = useVerticalAlignClass(props);
-    const {
-      floatedClass
-    } = useFloatedClass(props);
-    const imageClasses = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.size, verticalAlignClass.value, floatedClass.value, computeKeyOnly(props.avatar, "avatar"), computeKeyOnly(props.bordered, "bordered"), computeKeyOnly(props.centered, "centered"), computeKeyOnly(props.circular, "circular"), computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.fluid, "fluid"), computeKeyOnly(props.hidden, "hidden"), computeKeyOnly(props.inline, "inline"), computeKeyOnly(props.rounded, "rounded"), computeKeyOrKeyValue(props.spaced, "spaced"), "image");
-    });
-    if (props.as === "a" || props.as === "router-link") {
-      let elementType = props.as;
-      if (props.as === "router-link") {
-        elementType = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)(props.as);
-      }
-      return () => {
-        var _a;
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(elementType, {
-          class: imageClasses.value,
-          href: props.href,
-          target: props.target && props.target
+      verticalAlignClass: l
+    } = Qn(e), {
+      floatedClass: i
+    } = ea(e), o = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.size, l.value, i.value, n(e.avatar, "avatar"), n(e.bordered, "bordered"), n(e.centered, "centered"), n(e.circular, "circular"), n(e.disabled, "disabled"), n(e.fluid, "fluid"), n(e.hidden, "hidden"), n(e.inline, "inline"), n(e.rounded, "rounded"), w(e.spaced, "spaced"), "image"));
+    if (e.as === "a" || e.as === "router-link") {
+      let u = e.as;
+      return e.as === "router-link" && (u = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)(e.as)), () => {
+        var r;
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(u, {
+          class: o.value,
+          href: e.href,
+          target: e.target && e.target
         }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("img", {
-          src: props.src
-        }, (_a = slots.default) == null ? void 0 : _a.call(slots)));
+          src: e.src
+        }, (r = t.default) == null ? void 0 : r.call(t)));
       };
     }
-    if (props.wrapped) {
-      return () => {
-        var _a;
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", {
-          class: imageClasses.value
-        }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("img", {
-          src: props.src
-        }, (_a = slots.default) == null ? void 0 : _a.call(slots)));
-      };
-    }
-    if (props.label) {
-      return () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", {
-        class: imageClasses.value
-      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("img", {
-        src: props.src
-      }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(Label, __spreadValues({}, props.label))]);
-    }
-    return () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
-      "class": imageClasses.value,
-      "src": props.src
+    return e.wrapped ? () => {
+      var u;
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", {
+        class: o.value
+      }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("img", {
+        src: e.src
+      }, (u = t.default) == null ? void 0 : u.call(t)));
+    } : e.label ? () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", {
+      class: o.value
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("img", {
+      src: e.src
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(Z, {
+      ...e.label
+    })]) : () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("img", {
+      class: o.value,
+      src: e.src
     }, null);
   }
-});
-var ImageGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Oe = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiImageGroup",
   props: {
     size: String
   },
-  setup(props, { slots }) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.size, "images");
-    });
+  setup(e, { slots: t }) {
+    const l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      "ui",
+      e.size,
+      "images"
+    ));
     return () => {
-      var _a;
+      var i;
       return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", {
-        class: computedClass.value
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+        class: l.value
+      }, (i = t.default) == null ? void 0 : i.call(t));
     };
   }
-});
-var index$y = {
-  install(app) {
-    app.component(Image.name, Image);
-    app.component(ImageGroup.name, ImageGroup);
+}), na = {
+  install(e) {
+    e.component(se.name, se), e.component(Oe.name, Oe);
   }
-};
-var Input = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, _e = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiInput",
   emits: ["update:modelValue"],
   props: {
@@ -823,41 +765,30 @@ var Input = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     transparent: Boolean,
     type: String
   },
-  setup(props, {
-    emit
+  setup(e, {
+    emit: t
   }) {
-    const hasIcon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return typeof props.icon === "string" || props.loading;
-    });
-    const hasLabel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return !!props.label || props.labeled;
-    });
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.size, props.action && "action", computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.error, "error"), computeKeyOnly(props.fluid, "fluid"), computeKeyOnly(props.focus, "focus"), props.iconPosition, computeKeyOnly(hasIcon.value, "icon"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.loading, "loading"), computeKeyOnly(props.transparent, "transparent"), computeKeyOnly(hasLabel.value, "labeled"), "input");
-    });
-    const onInput = (event) => emit("update:modelValue", event.target.value);
+    const l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => typeof e.icon == "string" || e.loading), i = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => !!e.label || e.labeled), o = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.size, e.action && "action", n(e.disabled, "disabled"), n(e.error, "error"), n(e.fluid, "fluid"), n(e.focus, "focus"), e.iconPosition, n(l.value, "icon"), n(e.inverted, "inverted"), n(e.loading, "loading"), n(e.transparent, "transparent"), n(i.value, "labeled"), "input")), u = (r) => t("update:modelValue", r.target.value);
     return () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": computedClass.value
-    }, [props.label && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Label, null, {
-      default: () => [props.label]
+      class: o.value
+    }, [e.label && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Z, null, {
+      default: () => [e.label]
     }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-      "type": props.type || "text",
-      "placeholder": props.placeholder,
-      "value": props.modelValue,
-      "onInput": (event) => onInput(event)
-    }, null), hasIcon.value && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Icon, {
-      "name": props.icon || "spinner"
-    }, null), props.action && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Button, null, {
-      default: () => [props.action]
+      type: e.type || "text",
+      placeholder: e.placeholder,
+      value: e.modelValue,
+      onInput: (r) => u(r)
+    }, null), l.value && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(U, {
+      name: e.icon || "spinner"
+    }, null), e.action && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(ve, null, {
+      default: () => [e.action]
     })]);
   }
-});
-var index$x = {
-  install(app) {
-    app.component(Input.name, Input);
+}), aa = {
+  install(e) {
+    e.component(_e.name, _e);
   }
-};
-var List = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Ne = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiList",
   props: {
     animated: Boolean,
@@ -874,126 +805,124 @@ var List = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     selection: Boolean,
     verticalAlign: String
   },
-  setup(props, { slots }) {
-    const listClasses = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", computeKeyOnly(props.animated, "animated"), computeKeyOnly(props.bulleted, "bulleted"), computeKeyOnly(props.celled, "celled"), computeKeyOnly(props.divided, "divided"), computeKeyOnly(props.horizontal, "horizontal"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.link, "link"), computeKeyOnly(props.ordered, "ordered"), computeKeyOnly(props.relaxed, "relaxed"), computeKeyOnly(props.selection, "selection"), computeKeyValue(props.verticalAlign, "aligned"), computeKeyValue(props.floated, "floated"), "list");
-    });
-    let elementType = props.as || "div";
+  setup(e, { slots: t }) {
+    const l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      "ui",
+      n(e.animated, "animated"),
+      n(e.bulleted, "bulleted"),
+      n(e.celled, "celled"),
+      n(e.divided, "divided"),
+      n(e.horizontal, "horizontal"),
+      n(e.inverted, "inverted"),
+      n(e.link, "link"),
+      n(e.ordered, "ordered"),
+      n(e.relaxed, "relaxed"),
+      n(e.selection, "selection"),
+      T(e.verticalAlign, "aligned"),
+      T(e.floated, "floated"),
+      "list"
+    ));
+    let i = e.as || "div";
     return () => {
-      var _a;
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(elementType, {
-        class: listClasses.value
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+      var o;
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(i, {
+        class: l.value
+      }, (o = t.default) == null ? void 0 : o.call(t));
     };
   }
-});
-var ListItem = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), We = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiListItem",
   props: {
     active: Boolean,
     as: String,
     disabled: Boolean
   },
-  setup(props, { slots }) {
-    let elementType = props.as || "div";
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.active, "active"), computeKeyOnly(props.disabled, "disabled"), "item");
-    });
+  setup(e, { slots: t }) {
+    let l = e.as || "div";
+    const i = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      n(e.active, "active"),
+      n(e.disabled, "disabled"),
+      "item"
+    ));
     return () => {
-      var _a;
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(elementType, {
-        class: computedClass.value
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+      var o;
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(l, {
+        class: i.value
+      }, (o = t.default) == null ? void 0 : o.call(t));
     };
   }
-});
-var ListIcon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Ke = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiListIcon",
-  components: { Icon },
-  setup(props, { slots }) {
+  components: { Icon: U },
+  setup(e, { slots: t }) {
     return () => {
-      var _a;
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)((0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)(Icon.name), __spreadValues({}, props), (_a = slots.default) == null ? void 0 : _a.call(slots));
+      var l;
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)((0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)(U.name), { ...e }, (l = t.default) == null ? void 0 : l.call(t));
     };
   }
-});
-var ListContent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), qe = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiListContent",
   props: {
     verticalAlign: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyValue(props.verticalAlign, "aligned"), "content");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(T(e.verticalAlign, "aligned"), "content"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var ListHeader = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Je = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiListHeader",
   props: {
     as: {
       type: String,
       default: "div",
-      validator: (value) => ["div", "a"].includes(value)
+      validator: (e) => ["div", "a"].includes(e)
     }
   },
-  setup(props, { slots }) {
+  setup(e, { slots: t }) {
     return () => {
-      var _a;
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(props.as, {
+      var l;
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(e.as, {
         class: "header"
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+      }, (l = t.default) == null ? void 0 : l.call(t));
     };
   }
-});
-var ListDescription = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Ue = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiListDescription",
   props: {
     as: {
       type: String,
       default: "div",
-      validator: (value) => ["div", "a"].includes(value)
+      validator: (e) => ["div", "a"].includes(e)
     }
   },
-  setup(props, { slots }) {
+  setup(e, { slots: t }) {
     return () => {
-      var _a;
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(props.as, {
+      var l;
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(e.as, {
         class: "description"
-      }, (_a = slots.default) == null ? void 0 : _a.call(slots));
+      }, (l = t.default) == null ? void 0 : l.call(t));
     };
   }
-});
-var ListList = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Xe = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiListList",
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "list"
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: "list"
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var index$w = {
-  install(app) {
-    app.component(List.name, List);
-    app.component(ListItem.name, ListItem);
-    app.component(ListIcon.name, ListIcon);
-    app.component(ListContent.name, ListContent);
-    app.component(ListHeader.name, ListHeader);
-    app.component(ListDescription.name, ListDescription);
-    app.component(ListList.name, ListList);
+}), la = {
+  install(e) {
+    e.component(Ne.name, Ne), e.component(We.name, We), e.component(Ke.name, Ke), e.component(qe.name, qe), e.component(Je.name, Je), e.component(Ue.name, Ue), e.component(Xe.name, Xe);
   }
-};
-var Loader = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Qe = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiLoader",
   props: {
     active: Boolean,
@@ -1007,30 +936,27 @@ var Loader = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     slow: Boolean,
     text: Boolean
   },
-  setup(props, {
-    slots
+  setup(e, {
+    slots: t
   }) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      var _a;
-      return clsx("ui", props.color, props.size, computeKeyOnly(props.active, "active"), computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.fast, "fast"), computeKeyOnly(props.indeterminate, "indeterminate"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.slow, "slow"), computeKeyOnly(props.text || !!((_a = slots.default) == null ? void 0 : _a.call(slots)), "text"), computeKeyOrKeyValue(props.inline, "inline"), "loader");
-    });
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+        var i;
+        return m("ui", e.color, e.size, n(e.active, "active"), n(e.disabled, "disabled"), n(e.fast, "fast"), n(e.indeterminate, "indeterminate"), n(e.inverted, "inverted"), n(e.slow, "slow"), n(e.text || !!((i = t.default) != null && i.call(t)), "text"), w(e.inline, "inline"), "loader");
+      })
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var index$v = {
-  install(app) {
-    app.component(Loader.name, Loader);
+}), ia = {
+  install(e) {
+    e.component(Qe.name, Qe);
   }
-};
-var Rail = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Ze = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiRail",
   props: {
     attached: Boolean,
@@ -1040,27 +966,22 @@ var Rail = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     position: String,
     size: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.position, props.size, computeKeyOnly(props.attached, "attached"), computeKeyOnly(props.dividing, "dividing"), computeKeyOnly(props.internal, "internal"), computeKeyOrKeyValue(props.close, "close"), "rail");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.position, e.size, n(e.attached, "attached"), n(e.dividing, "dividing"), n(e.internal, "internal"), w(e.close, "close"), "rail"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var index$u = {
-  install(app) {
-    app.component(Rail.name, Rail);
+}), sa = {
+  install(e) {
+    e.component(Ze.name, Ze);
   }
-};
-var Reveal = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, pe = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiReveal",
   props: {
     active: Boolean,
@@ -1068,49 +989,39 @@ var Reveal = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     disabled: Boolean,
     instant: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.animated, computeKeyOnly(props.active, "active"), computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.instant, "instant"), "reveal");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.animated, n(e.active, "active"), n(e.disabled, "disabled"), n(e.instant, "instant"), "reveal"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var RevealContent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), et = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiRevealContent",
   props: {
     visible: Boolean,
     hidden: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", computeKeyOnly(props.visible, "visible"), computeKeyOnly(props.hidden, "hidden"), "content");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", n(e.visible, "visible"), n(e.hidden, "hidden"), "content"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var index$t = {
-  install(app) {
-    app.component(Reveal.name, Reveal);
-    app.component(RevealContent.name, RevealContent);
+}), oa = {
+  install(e) {
+    e.component(pe.name, pe), e.component(et.name, et);
   }
-};
-var Segment = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, oe = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiSegment",
   props: {
     attached: [Boolean, String],
@@ -1135,22 +1046,18 @@ var Segment = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     textAlign: String,
     vertical: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.color, props.size, computeKeyOnly(props.basic, "basic"), computeKeyOnly(props.circular, "circular"), computeKeyOnly(props.clearing, "clearing"), computeKeyOnly(props.compact, "compact"), computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.loading, "loading"), computeKeyOnly(props.piled, "piled"), computeKeyOnly(props.placeholder, "placeholder"), computeKeyOnly(props.raised, "raised"), computeKeyOnly(props.secondary, "secondary"), computeKeyOnly(props.stacked, "stacked"), computeKeyOnly(props.tertiary, "tertiary"), computeKeyOnly(props.vertical, "vertical"), computeKeyValue(props.floated, "floated"), computeKeyValue(props.textAlign, "aligned"), computeKeyOrKeyValue(props.attached, "attached"), computeKeyOrKeyValue(props.fitted, "fitted"), computeKeyOrKeyValue(props.padded, "padded"), "segment");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.color, e.size, n(e.basic, "basic"), n(e.circular, "circular"), n(e.clearing, "clearing"), n(e.compact, "compact"), n(e.disabled, "disabled"), n(e.inverted, "inverted"), n(e.loading, "loading"), n(e.piled, "piled"), n(e.placeholder, "placeholder"), n(e.raised, "raised"), n(e.secondary, "secondary"), n(e.stacked, "stacked"), n(e.tertiary, "tertiary"), n(e.vertical, "vertical"), T(e.floated, "floated"), T(e.textAlign, "aligned"), w(e.attached, "attached"), w(e.fitted, "fitted"), w(e.padded, "padded"), "segment"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var SegmentGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), tt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiSegmentGroup",
   props: {
     compact: Boolean,
@@ -1160,38 +1067,30 @@ var SegmentGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     size: String,
     stacked: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.size, computeKeyOnly(props.compact, "compact"), computeKeyOnly(props.horizontal, "horizontal"), computeKeyOnly(props.piled, "piled"), computeKeyOnly(props.raised, "raised"), computeKeyOnly(props.stacked, "stacked"), "segments");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.size, n(e.compact, "compact"), n(e.horizontal, "horizontal"), n(e.piled, "piled"), n(e.raised, "raised"), n(e.stacked, "stacked"), "segments"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var SegmentInline = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), nt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiSegmentInline",
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "inline"
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: "inline"
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var index$s = {
-  install(app) {
-    app.component(Segment.name, Segment);
-    app.component(SegmentGroup.name, SegmentGroup);
-    app.component(SegmentInline.name, SegmentInline);
+}), ra = {
+  install(e) {
+    e.component(oe.name, oe), e.component(tt.name, tt), e.component(nt.name, nt);
   }
-};
-var Step = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, at = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiStep",
   props: {
     active: Boolean,
@@ -1202,29 +1101,21 @@ var Step = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     link: Boolean,
     vertical: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.active, "active"), computeKeyOnly(props.completed, "completed"), computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.fluid, "fluid"), computeKeyOnly(props.link, "link"), computeKeyOnly(props.vertical, "vertical"), "step");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(n(e.active, "active"), n(e.completed, "completed"), n(e.disabled, "disabled"), n(e.fluid, "fluid"), n(e.link, "link"), n(e.vertical, "vertical"), "step"))
     };
   },
   render() {
-    var _a, _b, _c, _d;
-    if (this.href) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("a", {
-        "class": this.computedClass,
-        "href": this.href
-      }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_d = (_c = this.$slots).default) == null ? void 0 : _d.call(_c)]);
+    var e, t, l, i;
+    return this.href ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("a", {
+      class: this.computedClass,
+      href: this.href
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      class: this.computedClass
+    }, [(i = (l = this.$slots).default) == null ? void 0 : i.call(l)]);
   }
-});
-const numbers = ["one", "two", "three", "four", "five", "six", "seven", "eight"];
-var StepGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), ca = ["one", "two", "three", "four", "five", "six", "seven", "eight"], lt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiStepGroup",
   props: {
     attached: String,
@@ -1237,107 +1128,86 @@ var StepGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     vertical: Boolean,
     widths: Number
   },
-  setup(props) {
+  setup(e) {
     const {
-      widths
-    } = props;
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", widths && numbers[widths - 1], props.size, computeKeyOnly(props.fluid, "fluid"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.ordered, "ordered"), computeKeyOnly(props.unstackable, "unstackable"), computeKeyOnly(props.vertical, "vertical"), computeKeyValue(props.attached, "attached"), computeKeyValue(props.stackable, "stackable"), "steps");
-    });
+      widths: t
+    } = e;
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", t && ca[t - 1], e.size, n(e.fluid, "fluid"), n(e.inverted, "inverted"), n(e.ordered, "ordered"), n(e.unstackable, "unstackable"), n(e.vertical, "vertical"), T(e.attached, "attached"), T(e.stackable, "stackable"), "steps"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var StepContent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), it = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiStepContent",
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "content"
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: "content"
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var StepTitle = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), st = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiStepTitle",
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "title"
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: "title"
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var StepDescription = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), ot = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiStepDescription",
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "description"
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: "description"
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var index$r = {
-  install(app) {
-    app.component(Step.name, Step);
-    app.component(StepGroup.name, StepGroup);
-    app.component(StepContent.name, StepContent);
-    app.component(StepTitle.name, StepTitle);
-    app.component(StepDescription.name, StepDescription);
+}), ua = {
+  install(e) {
+    e.component(at.name, at), e.component(lt.name, lt), e.component(it.name, it), e.component(st.name, st), e.component(ot.name, ot);
   }
-};
-var elements = /* @__PURE__ */ Object.freeze({
+}, da = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  Button: index$G,
-  Container: index$F,
-  Divider: index$E,
-  Emoji: index$D,
-  Flag: index$C,
-  Header: index$B,
-  Icon: index$A,
-  Image: index$y,
-  Input: index$x,
-  Label: index$z,
-  List: index$w,
-  Loader: index$v,
-  Rail: index$u,
-  Reveal: index$t,
-  Segment: index$s,
-  Step: index$r
-});
-var BreadcrumbDivider = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  Button: _n,
+  Container: Nn,
+  Divider: Wn,
+  Emoji: Kn,
+  Flag: qn,
+  Header: Jn,
+  Icon: Un,
+  Image: na,
+  Input: aa,
+  Label: ta,
+  List: la,
+  Loader: ia,
+  Rail: sa,
+  Reveal: oa,
+  Segment: ra,
+  Step: ua
+}, Symbol.toStringTag, { value: "Module" })), ge = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiBreadcrumbDivider",
   props: {
     icon: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(props.icon, "icon", "divider");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(e.icon, "icon", "divider"))
     };
   },
   render() {
-    var _a, _b;
-    if (this.icon) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-        "aria-hidden": "true",
-        "class": this.computedClass
-      }, null);
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "divider"
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+    var e, t;
+    return this.icon ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
+      "aria-hidden": "true",
+      class: this.computedClass
+    }, null) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      class: "divider"
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var BreadcrumbSection = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), fe = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiBreadcrumbSection",
   props: {
     active: Boolean,
@@ -1345,37 +1215,30 @@ var BreadcrumbSection = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     link: Boolean,
     to: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.active, "active"), "section");
-    });
-    const isLink = props.link || !!props.href;
+  setup(e) {
+    const t = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(n(e.active, "active"), "section")), l = e.link || !!e.href;
     return {
-      computedClass,
-      isLink
+      computedClass: t,
+      isLink: l
     };
   },
   render() {
-    let elementType = "div";
-    if (this.isLink)
-      elementType = "a";
-    else if (this.to)
-      elementType = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link");
-    const props = {
+    let e = "div";
+    this.isLink ? e = "a" : this.to && (e = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("router-link"));
+    const t = {
       href: this.href,
       to: this.to
     };
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(elementType, (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)({
-      "class": this.computedClass
-    }, props), {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(e, (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)({
+      class: this.computedClass
+    }, t), {
       default: () => {
-        var _a, _b;
-        return [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)];
+        var l, i;
+        return [(i = (l = this.$slots).default) == null ? void 0 : i.call(l)];
       }
     });
   }
-});
-var Breadcrumb = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), rt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiBreadcrumb",
   props: {
     icon: String,
@@ -1386,47 +1249,40 @@ var Breadcrumb = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     },
     size: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.size, computeKeyOnly(props.inverted, "inverted"), "breadcrumb");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.size, n(e.inverted, "inverted"), "breadcrumb"))
     };
   },
   render() {
-    var _a, _b;
-    const renderSections = () => {
-      var _a2;
-      return (_a2 = this.sections) == null ? void 0 : _a2.map((sec, i) => {
-        const sectionProps = {
-          active: sec.active,
-          href: sec.href,
-          link: sec.link,
-          to: sec.to
+    var t, l;
+    const e = () => {
+      var i;
+      return (i = this.sections) == null ? void 0 : i.map((o, u) => {
+        const r = {
+          active: o.active,
+          href: o.href,
+          link: o.link,
+          to: o.to
         };
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(BreadcrumbSection, sectionProps, {
-          default: () => [sec.content]
-        }), this.sections.length !== i + 1 && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(BreadcrumbDivider, {
-          "icon": this.icon
+        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(fe, r, {
+          default: () => [o.content]
+        }), this.sections.length !== u + 1 && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(ge, {
+          icon: this.icon
         }, {
           default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" / ")]
         })]);
       });
     };
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [((_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)) || renderSections()]);
+      class: this.computedClass
+    }, [((l = (t = this.$slots).default) == null ? void 0 : l.call(t)) || e()]);
   }
-});
-var index$q = {
-  install(app) {
-    app.component(Breadcrumb.name, Breadcrumb);
-    app.component(BreadcrumbDivider.name, BreadcrumbDivider);
-    app.component(BreadcrumbSection.name, BreadcrumbSection);
+}), ma = {
+  install(e) {
+    e.component(rt.name, rt), e.component(ge.name, ge), e.component(fe.name, fe);
   }
-};
-var Form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, ct = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiForm",
   props: {
     error: Boolean,
@@ -1438,22 +1294,18 @@ var Form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     warning: Boolean,
     size: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.size, computeKeyOnly(props.error, "error"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.loading, "loading"), computeKeyOnly(props.reply, "reply"), computeKeyOnly(props.success, "success"), computeKeyOnly(props.unstackable, "unstackable"), computeKeyOnly(props.warning, "warning"), "form");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.size, n(e.error, "error"), n(e.inverted, "inverted"), n(e.loading, "loading"), n(e.reply, "reply"), n(e.success, "success"), n(e.unstackable, "unstackable"), n(e.warning, "warning"), "form"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("form", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var FormField = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), ut = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiFormField",
   props: {
     error: Boolean,
@@ -1463,81 +1315,62 @@ var FormField = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     required: Boolean,
     type: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.error, "error"), computeKeyOnly(props.inline, "inline"), computeKeyOnly(props.required, "required"), "field");
-    });
-    const inputType = props.type || "text";
+  setup(e) {
+    const t = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(n(e.error, "error"), n(e.inline, "inline"), n(e.required, "required"), "field")), l = e.type || "text";
     return {
-      computedClass,
-      inputType
+      computedClass: t,
+      inputType: l
     };
   },
   render() {
-    var _a, _b;
-    if (this.label) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-        "class": this.computedClass
-      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", null, [this.label]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-        "type": this.inputType,
-        "placeholder": this.placeholder
-      }, null)]);
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+    var e, t;
+    return this.label ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      class: this.computedClass
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", null, [this.label]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+      type: this.inputType,
+      placeholder: this.placeholder
+    }, null)]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var FormGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), dt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiFormGroup",
   props: {
     widths: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyValue(props.widths, "width"), "fields");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(T(e.widths, "width"), "fields"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var FormTextarea = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), mt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiFormTextarea",
   props: {
     label: String,
     placeholder: String
   },
   render() {
-    if (this.label) {
-      (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-        "class": "field"
-      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", null, [this.label]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("textarea", {
-        "placeholder": this.placeholder
-      }, null)]);
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "field"
+    return this.label && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      class: "field"
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", null, [this.label]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("textarea", {
+      placeholder: this.placeholder
+    }, null)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      class: "field"
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("textarea", {
-      "placeholder": this.placeholder
+      placeholder: this.placeholder
     }, null)]);
   }
-});
-var index$p = {
-  install(app) {
-    app.component(Form.name, Form);
-    app.component(FormField.name, FormField);
-    app.component(FormGroup.name, FormGroup);
-    app.component(FormTextarea.name, FormTextarea);
+}), ha = {
+  install(e) {
+    e.component(ct.name, ct), e.component(ut.name, ut), e.component(dt.name, dt), e.component(mt.name, mt);
   }
-};
-var Grid = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, ht = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiGrid",
   props: {
     celled: [Boolean, String],
@@ -1555,22 +1388,18 @@ var Grid = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     textAlign: String,
     verticalAlign: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.container && "container", computeKeyOnly(props.centered, "centered"), computeKeyOnly(props.compact, "compact"), computeKeyOnly(props.doubling, "doubling"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.stackable, "stackable"), computeKeyValue(props.reversed, "reversed"), computeKeyValue(props.verticalAlign, "aligned"), computeKeyOrKeyValue(props.celled, "celled"), computeKeyOrKeyValue(props.divided, "divided"), computeKeyOrKeyValue(props.padded, "padded"), computeKeyOrKeyValue(props.relaxed, "relaxed"), computeTextAlignProp(props.textAlign), computeWidthProp(props.columns, "column"), "grid");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.container && "container", n(e.centered, "centered"), n(e.compact, "compact"), n(e.doubling, "doubling"), n(e.inverted, "inverted"), n(e.stackable, "stackable"), T(e.reversed, "reversed"), T(e.verticalAlign, "aligned"), w(e.celled, "celled"), w(e.divided, "divided"), w(e.padded, "padded"), w(e.relaxed, "relaxed"), p(e.textAlign), _(e.columns, "column"), "grid"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var GridColumn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), vt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiGridColumn",
   props: {
     color: String,
@@ -1584,22 +1413,18 @@ var GridColumn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     width: Number,
     widescreen: Number
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(props.color, computeKeyValue(props.floated, "floated"), computeKeyValue(props.only, "only"), computeTextAlignProp(props.textAlign), computeWidthProp(props.width, "wide"), computeResponsiveProp(props.mobile, "mobile"), computeResponsiveProp(props.tablet, "tablet"), computeResponsiveProp(props.computer, "computer"), computeResponsiveProp(props.largeScreen, "large screen"), computeResponsiveProp(props.widescreen, "widescreen"), "column");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(e.color, T(e.floated, "floated"), T(e.only, "only"), p(e.textAlign), _(e.width, "wide"), te(e.mobile, "mobile"), te(e.tablet, "tablet"), te(e.computer, "computer"), te(e.largeScreen, "large screen"), te(e.widescreen, "widescreen"), "column"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var GridRow = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), gt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiGridRow",
   props: {
     centered: Boolean,
@@ -1609,29 +1434,22 @@ var GridRow = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     stretched: Boolean,
     textAlign: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(props.color, computeKeyOnly(props.centered, "centered"), computeKeyOnly(props.stretched, "stretched"), computeKeyValue(props.only, "only"), computeWidthProp(props.columns, "column"), computeTextAlignProp(props.textAlign), "row");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(e.color, n(e.centered, "centered"), n(e.stretched, "stretched"), T(e.only, "only"), _(e.columns, "column"), p(e.textAlign), "row"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var index$o = {
-  install(app) {
-    app.component(Grid.name, Grid);
-    app.component(GridColumn.name, GridColumn);
-    app.component(GridRow.name, GridRow);
+}), va = {
+  install(e) {
+    e.component(ht.name, ht), e.component(vt.name, vt), e.component(gt.name, gt);
   }
-};
-var Menu = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, ft = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiMenu",
   props: {
     attached: [Boolean, String],
@@ -1653,42 +1471,37 @@ var Menu = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     vertical: Boolean,
     widths: Number
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.color, props.size, computeKeyOnly(props.borderless, "borderless"), computeKeyOnly(props.compact, "compact"), computeKeyOnly(props.fixed, "fixed"), computeKeyOnly(props.fluid, "fluid"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.pagination, "pagination"), computeKeyOnly(props.pointing, "pointing"), computeKeyOnly(props.secondary, "secondary"), computeKeyOnly(props.stackable, "stackable"), computeKeyOnly(props.text, "text"), computeKeyOnly(props.vertical, "vertical"), computeKeyOrKeyValue(props.attached, "attached"), computeKeyOrKeyValue(props.floated, "floated"), computeKeyOrKeyValue(props.icon, "icon"), computeKeyOrKeyValue(props.tabular, "tabular"), computeWidthProp(props.widths, "item"), "menu");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.color, e.size, n(e.borderless, "borderless"), n(e.compact, "compact"), n(e.fixed, "fixed"), n(e.fluid, "fluid"), n(e.inverted, "inverted"), n(e.pagination, "pagination"), n(e.pointing, "pointing"), n(e.secondary, "secondary"), n(e.stackable, "stackable"), n(e.text, "text"), n(e.vertical, "vertical"), w(e.attached, "attached"), w(e.floated, "floated"), w(e.icon, "icon"), w(e.tabular, "tabular"), _(e.widths, "item"), "menu"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var MenuHeader = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), St = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiMenuHeader",
   props: {
     as: String,
     content: String
   },
-  setup(props, {
-    slots
+  setup(e, {
+    slots: t
   }) {
-    let elementType = props.as || "div";
-    return () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(elementType, {
-      "class": "header"
+    let l = e.as || "div";
+    return () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(l, {
+      class: "header"
     }, {
       default: () => {
-        var _a;
-        return [props.content || ((_a = slots.default) == null ? void 0 : _a.call(slots))];
+        var i;
+        return [e.content || ((i = t.default) == null ? void 0 : i.call(t))];
       }
     });
   }
-});
-var MenuItem = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Ct = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiMenuItem",
   props: {
     action: Boolean,
@@ -1706,55 +1519,39 @@ var MenuItem = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     position: String,
     stackable: Boolean
   },
-  setup(props, {
-    slots
+  setup(e, {
+    slots: t
   }) {
-    let elementType = props.as || "a";
-    if (props.header) {
-      elementType = "div";
-    }
-    if (props.as === "router-link") {
-      elementType = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)(props.as);
-    }
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(props.color, props.position, computeKeyOnly(props.action, "action"), computeKeyOnly(props.active, "active"), computeKeyOnly(props.browse, "browse"), computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.header, "header"), computeKeyOnly(props.link, "link"), computeKeyOrKeyValue(props.fitted, "fitted"), "item");
-    });
-    return () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(elementType, {
-      "class": computedClass.value
+    let l = e.as || "a";
+    e.header && (l = "div"), e.as === "router-link" && (l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)(e.as));
+    const i = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(e.color, e.position, n(e.action, "action"), n(e.active, "active"), n(e.browse, "browse"), n(e.disabled, "disabled"), n(e.header, "header"), n(e.link, "link"), w(e.fitted, "fitted"), "item"));
+    return () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(l, {
+      class: i.value
     }, {
       default: () => {
-        var _a;
-        return [props.name || ((_a = slots.default) == null ? void 0 : _a.call(slots))];
+        var o;
+        return [e.name || ((o = t.default) == null ? void 0 : o.call(t))];
       }
     });
   }
-});
-var MenuMenu = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), bt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiMenuMenu",
   props: {
     position: String
   },
-  setup(props) {
-    const { position } = props;
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(position, "menu");
-    });
-    return { computedClass };
+  setup(e) {
+    const { position: t } = e;
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(t, "menu")) };
   },
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var index$n = {
-  install(app) {
-    app.component(Menu.name, Menu);
-    app.component(MenuHeader.name, MenuHeader);
-    app.component(MenuItem.name, MenuItem);
-    app.component(MenuMenu.name, MenuMenu);
+}), ga = {
+  install(e) {
+    e.component(ft.name, ft), e.component(St.name, St), e.component(Ct.name, Ct), e.component(bt.name, bt);
   }
-};
-var Message = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Bt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiMessage",
   props: {
     attached: [Boolean, String],
@@ -1774,63 +1571,50 @@ var Message = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     visible: Boolean,
     warning: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.color, props.size, computeKeyOnly(props.compact, "compact"), computeKeyOnly(props.error, "error"), computeKeyOnly(props.floating, "floating"), computeKeyOnly(props.hidden, "hidden"), computeKeyOnly(props.icon, "icon"), computeKeyOnly(props.info, "info"), computeKeyOnly(props.negative, "negative"), computeKeyOnly(props.positive, "positive"), computeKeyOnly(props.success, "success"), computeKeyOnly(props.visible, "visible"), computeKeyOnly(props.warning, "warning"), computeKeyOrKeyValue(props.attached, "attached"), "message");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.color, e.size, n(e.compact, "compact"), n(e.error, "error"), n(e.floating, "floating"), n(e.hidden, "hidden"), n(e.icon, "icon"), n(e.info, "info"), n(e.negative, "negative"), n(e.positive, "positive"), n(e.success, "success"), n(e.visible, "visible"), n(e.warning, "warning"), w(e.attached, "attached"), "message"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(this.header || this.content) && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(MessageContent, null, {
-      default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(MessageHeader, null, {
+      class: this.computedClass
+    }, [(this.header || this.content) && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Se, null, {
+      default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Ce, null, {
         default: () => [this.header]
       }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", null, [this.content])]
-    }), (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+    }), (t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var MessageContent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Se = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiMessageContent",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "content" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "content" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var MessageHeader = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Ce = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiMessageHeader",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "header" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "header" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var MessageItem = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), yt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiMessageItem",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("li", { class: "content" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("li", { class: "content" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var MessageList = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), kt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiMessageList",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("ul", { class: "list" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("ul", { class: "list" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var index$m = {
-  install(app) {
-    app.component(Message.name, Message);
-    app.component(MessageContent.name, MessageContent);
-    app.component(MessageHeader.name, MessageHeader);
-    app.component(MessageItem.name, MessageItem);
-    app.component(MessageList.name, MessageList);
+}), fa = {
+  install(e) {
+    e.component(Bt.name, Bt), e.component(Se.name, Se), e.component(Ce.name, Ce), e.component(yt.name, yt), e.component(kt.name, kt);
   }
-};
-var Table = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, xt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiTable",
   props: {
     attached: [Boolean, String],
@@ -1852,29 +1636,24 @@ var Table = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     structured: Boolean,
     unstackable: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.color, props.size, computeKeyOnly(props.celled, "celled"), computeKeyOnly(props.collapsing, "collapsing"), computeKeyOnly(props.definition, "definition"), computeKeyOnly(props.fixed, "fixed"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.selectable, "selectable"), computeKeyOnly(props.singleLine, "single line"), computeKeyOnly(props.stackable, "stackable"), computeKeyOnly(props.striped, "striped"), computeKeyOnly(props.structured, "structured"), computeKeyOnly(props.unstackable, "unstackable"), computeKeyOrKeyValue(props.attached, "attached"), computeKeyOrKeyValue(props.basic, "basic"), computeKeyOrKeyValue(props.compact, "compact"), computeKeyOrKeyValue(props.padded, "padded"), computeWidthProp(props.columns, "column"), "table");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.color, e.size, n(e.celled, "celled"), n(e.collapsing, "collapsing"), n(e.definition, "definition"), n(e.fixed, "fixed"), n(e.inverted, "inverted"), n(e.selectable, "selectable"), n(e.singleLine, "single line"), n(e.stackable, "stackable"), n(e.striped, "striped"), n(e.structured, "structured"), n(e.unstackable, "unstackable"), w(e.attached, "attached"), w(e.basic, "basic"), w(e.compact, "compact"), w(e.padded, "padded"), _(e.columns, "column"), "table"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("table", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var TableBody = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), $t = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiTableBody",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("tbody", {}, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("tbody", {}, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var TableCell = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), At = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiTableCell",
   props: {
     active: Boolean,
@@ -1891,87 +1670,69 @@ var TableCell = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     verticalAlign: String,
     warning: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(props.color, computeKeyOnly(props.active, "active"), computeKeyOnly(props.collapsing, "collapsing"), computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.error, "error"), computeKeyOnly(props.negative, "negative"), computeKeyOnly(props.positive, "positive"), computeKeyOnly(props.selectable, "selectable"), computeKeyOnly(props.singleLine, "single line"), computeKeyOnly(props.warning, "warning"), computeKeyValue(props.verticalAlign, "aligned"), computeKeyValue(props.marked, "marked"), computeTextAlignProp(props.textAlign));
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(e.color, n(e.active, "active"), n(e.collapsing, "collapsing"), n(e.disabled, "disabled"), n(e.error, "error"), n(e.negative, "negative"), n(e.positive, "positive"), n(e.selectable, "selectable"), n(e.singleLine, "single line"), n(e.warning, "warning"), T(e.verticalAlign, "aligned"), T(e.marked, "marked"), p(e.textAlign)))
     };
   },
   render() {
-    var _a, _b, _c, _d;
-    if (this.computedClass) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", {
-        "class": this.computedClass
-      }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", null, [(_d = (_c = this.$slots).default) == null ? void 0 : _d.call(_c)]);
+    var e, t, l, i;
+    return this.computedClass ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", {
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", null, [(i = (l = this.$slots).default) == null ? void 0 : i.call(l)]);
   }
-});
-var TableFooter = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Mt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiTableFooter",
   props: {
     fullWidth: Boolean
   },
-  setup(props) {
-    const { fullWidth } = props;
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => clsx(computeKeyOnly(fullWidth, "full-width")));
-    return { computedClass };
+  setup(e) {
+    const { fullWidth: t } = e;
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(n(t, "full-width"))) };
   },
   render() {
-    var _a, _b, _c, _d;
-    if (this.computedClass) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("tfoot", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("tfoot", {}, (_d = (_c = this.$slots).default) == null ? void 0 : _d.call(_c));
+    var e, t, l, i;
+    return this.computedClass ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      "tfoot",
+      { class: this.computedClass },
+      (t = (e = this.$slots).default) == null ? void 0 : t.call(e)
+    ) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("tfoot", {}, (i = (l = this.$slots).default) == null ? void 0 : i.call(l));
   }
-});
-var TableHeader = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), wt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiTableHeader",
   props: {
     fullWidth: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.fullWidth, "full-width"));
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(n(e.fullWidth, "full-width"))) };
   },
   render() {
-    var _a, _b, _c, _d;
-    if (this.computedClass) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("thead", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("thead", {}, (_d = (_c = this.$slots).default) == null ? void 0 : _d.call(_c));
+    var e, t, l, i;
+    return this.computedClass ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      "thead",
+      { class: this.computedClass },
+      (t = (e = this.$slots).default) == null ? void 0 : t.call(e)
+    ) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("thead", {}, (i = (l = this.$slots).default) == null ? void 0 : i.call(l));
   }
-});
-var TableHeaderCell = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Tt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiTableHeaderCell",
   props: {
     singleLine: Boolean,
     textAlign: String,
     width: Number
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.singleLine, "single line"), computeKeyValue(props.textAlign, "aligned"), computeWidthProp(props.width, "wide"));
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(n(e.singleLine, "single line"), T(e.textAlign, "aligned"), _(e.width, "wide")))
     };
   },
   render() {
-    var _a, _b, _c, _d;
-    if (this.computedClass) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", {
-        "class": this.computedClass
-      }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(_d = (_c = this.$slots).default) == null ? void 0 : _d.call(_c)]);
+    var e, t, l, i;
+    return this.computedClass ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", {
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(i = (l = this.$slots).default) == null ? void 0 : i.call(l)]);
   }
-});
-var TableRow = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Dt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiTableRow",
   props: {
     active: Boolean,
@@ -1984,75 +1745,61 @@ var TableRow = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     verticalAlign: String,
     warning: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(props.color, computeKeyOnly(props.active, "active"), computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.error, "error"), computeKeyOnly(props.negative, "negative"), computeKeyOnly(props.positive, "positive"), computeKeyOnly(props.warning, "warning"), computeKeyValue(props.textAlign, "aligned"), computeKeyValue(props.verticalAlign, "aligned"));
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(e.color, n(e.active, "active"), n(e.disabled, "disabled"), n(e.error, "error"), n(e.negative, "negative"), n(e.positive, "positive"), n(e.warning, "warning"), T(e.textAlign, "aligned"), T(e.verticalAlign, "aligned")))
     };
   },
   render() {
-    var _a, _b, _c, _d;
-    if (this.computedClass) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", {
-        "class": this.computedClass
-      }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(_d = (_c = this.$slots).default) == null ? void 0 : _d.call(_c)]);
+    var e, t, l, i;
+    return this.computedClass ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", {
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(i = (l = this.$slots).default) == null ? void 0 : i.call(l)]);
   }
-});
-var index$l = {
-  install(app) {
-    app.component(Table.name, Table);
-    app.component(TableBody.name, TableBody);
-    app.component(TableCell.name, TableCell);
-    app.component(TableFooter.name, TableFooter);
-    app.component(TableHeader.name, TableHeader);
-    app.component(TableHeaderCell.name, TableHeaderCell);
-    app.component(TableRow.name, TableRow);
+}), Sa = {
+  install(e) {
+    e.component(xt.name, xt), e.component($t.name, $t), e.component(At.name, At), e.component(Mt.name, Mt), e.component(wt.name, wt), e.component(Tt.name, Tt), e.component(Dt.name, Dt);
   }
-};
-var collections = /* @__PURE__ */ Object.freeze({
+}, Ca = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  Breadcrumb: index$q,
-  Form: index$p,
-  Grid: index$o,
-  Menu: index$n,
-  Message: index$m,
-  Table: index$l
-});
-var Advertisement = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  Breadcrumb: ma,
+  Form: ha,
+  Grid: va,
+  Menu: ga,
+  Message: fa,
+  Table: Sa
+}, Symbol.toStringTag, { value: "Module" })), It = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiAdvertisement",
   props: {
     centered: Boolean,
     test: String,
     unit: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.unit, computeKeyOnly(props.centered, "centered"), computeKeyOnly(!!props.test, "test"), "ad");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      "ui",
+      e.unit,
+      n(e.centered, "centered"),
+      n(!!e.test, "test"),
+      "ad"
+    )) };
   },
   render() {
-    var _a, _b, _c, _d;
-    if (this.$props.test) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", {
+    var e, t, l, i;
+    return this.$props.test ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      "div",
+      {
         class: this.computedClass,
         "data-text": this.$props.test
-      }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_d = (_c = this.$slots).default) == null ? void 0 : _d.call(_c));
+      },
+      (t = (e = this.$slots).default) == null ? void 0 : t.call(e)
+    ) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (i = (l = this.$slots).default) == null ? void 0 : i.call(l));
   }
-});
-var index$k = {
-  install(app) {
-    app.component(Advertisement.name, Advertisement);
+}), ba = {
+  install(e) {
+    e.component(It.name, It);
   }
-};
-var Card = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Lt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCard",
   props: {
     centered: Boolean,
@@ -2063,64 +1810,62 @@ var Card = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     link: Boolean,
     raised: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.color, computeKeyOnly(props.centered, "centered"), computeKeyOnly(props.fluid, "fluid"), computeKeyOnly(props.horizontal, "horizontal"), computeKeyOnly(props.link, "link"), computeKeyOnly(props.raised, "raised"), "card");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      "ui",
+      e.color,
+      n(e.centered, "centered"),
+      n(e.fluid, "fluid"),
+      n(e.horizontal, "horizontal"),
+      n(e.link, "link"),
+      n(e.raised, "raised"),
+      "card"
+    )) };
   },
   render() {
-    var _a, _b, _c, _d;
-    if (this.$props.href || this.$props.link) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("a", {
+    var e, t, l, i;
+    return this.$props.href || this.$props.link ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      "a",
+      {
         class: this.computedClass,
         href: this.$slots.href
-      }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_d = (_c = this.$slots).default) == null ? void 0 : _d.call(_c));
+      },
+      (t = (e = this.$slots).default) == null ? void 0 : t.call(e)
+    ) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (i = (l = this.$slots).default) == null ? void 0 : i.call(l));
   }
-});
-var CardContent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Vt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCardContent",
   props: {
     extra: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.extra, "extra"), "content");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(n(e.extra, "extra"), "content"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var CardDescription = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Yt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCardDescription",
   props: {
     textAlign: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyValue(props.textAlign, "aligned"), "description");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(T(e.textAlign, "aligned"), "description"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var CardGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), zt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCardGroup",
   props: {
     centered: Boolean,
@@ -2129,122 +1874,99 @@ var CardGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     itemsPerRow: Number,
     stackable: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", computeKeyOnly(props.centered, "centered"), computeKeyOnly(props.doubling, "doubling"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.stackable, "stackable"), computeWidthProp(props.itemsPerRow, ""), "cards");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", n(e.centered, "centered"), n(e.doubling, "doubling"), n(e.inverted, "inverted"), n(e.stackable, "stackable"), _(e.itemsPerRow, ""), "cards"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var CardHeader = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Ft = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCardHeader",
   props: {
     textAlign: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyValue(props.textAlign, "aligned"), "header");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(T(e.textAlign, "aligned"), "header"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var CardMeta = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Pt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCardMeta",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "meta" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "meta" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var index$j = {
-  install(app) {
-    app.component(Card.name, Card);
-    app.component(CardContent.name, CardContent);
-    app.component(CardDescription.name, CardDescription);
-    app.component(CardGroup.name, CardGroup);
-    app.component(CardHeader.name, CardHeader);
-    app.component(CardMeta.name, CardMeta);
+}), Ba = {
+  install(e) {
+    e.component(Lt.name, Lt), e.component(Vt.name, Vt), e.component(Yt.name, Yt), e.component(zt.name, zt), e.component(Ft.name, Ft), e.component(Pt.name, Pt);
   }
-};
-var Comment = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Ht = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiComment",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "comment" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "comment" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var CommentAction = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Rt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCommentAction",
   props: {
     active: Boolean
   },
-  setup(props) {
-    const { active } = props;
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(active, "active"));
-    });
-    return { computedClass };
+  setup(e) {
+    const { active: t } = e;
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(n(t, "active"))) };
   },
   render() {
-    var _a, _b, _c, _d;
-    if (this.computedClass) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("a", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("a", {}, (_d = (_c = this.$slots).default) == null ? void 0 : _d.call(_c));
+    var e, t, l, i;
+    return this.computedClass ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("a", { class: this.computedClass }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e)) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("a", {}, (i = (l = this.$slots).default) == null ? void 0 : i.call(l));
   }
-});
-var CommentActions = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Et = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCommentActions",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "actions" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "actions" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var CommentAuthor = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), jt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCommentAuthor",
   props: {
     as: String
   },
   render() {
-    var _a, _b;
-    let elementType = this.$props.as || "div";
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(elementType, { class: "author" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var t, l;
+    let e = this.$props.as || "div";
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(e, { class: "author" }, (l = (t = this.$slots).default) == null ? void 0 : l.call(t));
   }
-});
-var CommentAvatar = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Gt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCommentAvatar",
   props: {
     as: String,
     src: String
   },
   render() {
-    let elementType = this.$props.as || "div";
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(elementType, { class: "avatar" }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("img", { src: this.$props.src }));
+    let e = this.$props.as || "div";
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      e,
+      { class: "avatar" },
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("img", { src: this.$props.src })
+    );
   }
-});
-var CommentContent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Ot = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCommentContent",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "content" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "content" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var CommentGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), _t = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCommentGroup",
   props: {
     collapsed: Boolean,
@@ -2253,192 +1975,156 @@ var CommentGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     size: String,
     threaded: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.size, computeKeyOnly(props.collapsed, "collapsed"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.minimal, "minimal"), computeKeyOnly(props.threaded, "threaded"), "comments");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.size, n(e.collapsed, "collapsed"), n(e.inverted, "inverted"), n(e.minimal, "minimal"), n(e.threaded, "threaded"), "comments"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var CommentMetadata = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Nt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCommentMetadata",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "metadata" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "metadata" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var CommentText = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Wt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCommentText",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "text" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "text" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var index$i = {
-  install(app) {
-    app.component(Comment.name, Comment);
-    app.component(CommentAction.name, CommentAction);
-    app.component(CommentActions.name, CommentActions);
-    app.component(CommentAuthor.name, CommentAuthor);
-    app.component(CommentAvatar.name, CommentAvatar);
-    app.component(CommentContent.name, CommentContent);
-    app.component(CommentGroup.name, CommentGroup);
-    app.component(CommentMetadata.name, CommentMetadata);
-    app.component(CommentText.name, CommentText);
+}), ya = {
+  install(e) {
+    e.component(Ht.name, Ht), e.component(Rt.name, Rt), e.component(Et.name, Et), e.component(jt.name, jt), e.component(Gt.name, Gt), e.component(Ot.name, Ot), e.component(_t.name, _t), e.component(Nt.name, Nt), e.component(Wt.name, Wt);
   }
-};
-var Feed = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Kt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiFeed",
   props: {
     inverted: Boolean,
     size: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.size, computeKeyOnly(props.inverted, "inverted"), "feed");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      "ui",
+      e.size,
+      n(e.inverted, "inverted"),
+      "feed"
+    )) };
   },
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var FeedContent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), qt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiFeedContent",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "content" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "content" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var FeedDate = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Jt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiFeedDate",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "date" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "date" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var FeedEvent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Ut = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiFeedEvent",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "event" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "event" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var FeedExtra = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Xt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiFeedExtra",
   props: {
     images: Boolean,
     text: Boolean
   },
-  setup(props) {
-    const { images, text } = props;
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(images, "images"), computeKeyOnly(text, "text"), "extra");
-    });
-    return { computedClass };
+  setup(e) {
+    const { images: t, text: l } = e;
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      n(t, "images"),
+      n(l, "text"),
+      "extra"
+    )) };
   },
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var FeedLabel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Qt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiFeedLabel",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "label" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "label" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var FeedLike = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Zt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiFeedLike",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("a", { class: "like" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("a", { class: "like" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var FeedMeta = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), pt = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiFeedMeta",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "meta" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "meta" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var FeedSummary = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), en = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiFeedSummary",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "summary" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "summary" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var FeedUser = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), tn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiFeedUser",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("a", { class: "user" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("a", { class: "user" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var index$h = {
-  install(app) {
-    app.component(Feed.name, Feed);
-    app.component(FeedContent.name, FeedContent);
-    app.component(FeedDate.name, FeedDate);
-    app.component(FeedEvent.name, FeedEvent);
-    app.component(FeedExtra.name, FeedExtra);
-    app.component(FeedLabel.name, FeedLabel);
-    app.component(FeedLike.name, FeedLike);
-    app.component(FeedMeta.name, FeedMeta);
-    app.component(FeedSummary.name, FeedSummary);
-    app.component(FeedUser.name, FeedUser);
+}), ka = {
+  install(e) {
+    e.component(Kt.name, Kt), e.component(qt.name, qt), e.component(Jt.name, Jt), e.component(Ut.name, Ut), e.component(Xt.name, Xt), e.component(Qt.name, Qt), e.component(Zt.name, Zt), e.component(pt.name, pt), e.component(en.name, en), e.component(tn.name, tn);
   }
-};
-var Item = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, nn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiItem",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "item" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "item" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var ItemContent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), an = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiItemContent",
   props: {
     verticalAlign: String
   },
-  setup(props) {
-    const { verticalAlign } = props;
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyValue(verticalAlign, "aligned"), "content");
-    });
-    return { computedClass };
+  setup(e) {
+    const { verticalAlign: t } = e;
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      T(t, "aligned"),
+      "content"
+    )) };
   },
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var ItemDescription = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), ln = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiItemDescription",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "description" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "description" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var ItemExtra = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), sn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiItemExtra",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "extra" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "extra" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var ItemGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), on = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiItemGroup",
   props: {
     divided: Boolean,
@@ -2447,99 +2133,88 @@ var ItemGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     relaxed: [Boolean, String],
     unstackable: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", computeKeyOnly(props.divided, "divided"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.link, "link"), computeKeyOnly(props.unstackable, "unstackable"), computeKeyOrKeyValue(props.relaxed, "relaxed"), "items");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      "ui",
+      n(e.divided, "divided"),
+      n(e.inverted, "inverted"),
+      n(e.link, "link"),
+      n(e.unstackable, "unstackable"),
+      w(e.relaxed, "relaxed"),
+      "items"
+    )) };
   },
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var ItemHeader = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), rn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiItemHeader",
   props: {
     as: String
   },
   render() {
-    var _a, _b;
-    let elementType = this.$props.as || "div";
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(elementType, { class: "header" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var t, l;
+    let e = this.$props.as || "div";
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(e, { class: "header" }, (l = (t = this.$slots).default) == null ? void 0 : l.call(t));
   }
-});
-var ItemImage = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), cn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiItemImage",
   props: {
     size: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(props.size, "image");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      e.size,
+      "image"
+    )) };
   },
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var ItemMeta = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), un = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiItemMeta",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "meta" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "meta" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var index$g = {
-  install(app) {
-    app.component(Item.name, Item);
-    app.component(ItemContent.name, ItemContent);
-    app.component(ItemDescription.name, ItemDescription);
-    app.component(ItemExtra.name, ItemExtra);
-    app.component(ItemGroup.name, ItemGroup);
-    app.component(ItemHeader.name, ItemHeader);
-    app.component(ItemImage.name, ItemImage);
-    app.component(ItemMeta.name, ItemMeta);
+}), xa = {
+  install(e) {
+    e.component(nn.name, nn), e.component(an.name, an), e.component(ln.name, ln), e.component(sn.name, sn), e.component(on.name, on), e.component(rn.name, rn), e.component(cn.name, cn), e.component(un.name, un);
   }
-};
-var StatisticLabel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, re = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiStatisticLabel",
   props: {
     content: String
   },
   render() {
-    var _a, _b;
-    if (this.$props.content) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "label" }, this.$props.content);
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "label" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return this.$props.content ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "label" }, this.$props.content) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "label" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var StatisticValue = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), ce = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiStatisticValue",
   props: {
     content: String,
     text: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.text, "text"), "value");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      n(e.text, "text"),
+      "value"
+    )) };
   },
   render() {
-    var _a, _b;
-    if (this.$props.content) {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, this.$props.content);
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return this.$props.content ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      "div",
+      { class: this.computedClass },
+      this.$props.content
+    ) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var Statistic = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), dn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiStatistic",
-  components: { StatisticLabel, StatisticValue },
+  components: { StatisticLabel: re, StatisticValue: ce },
   props: {
     color: String,
     floated: [Boolean, String],
@@ -2550,26 +2225,29 @@ var Statistic = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     text: Boolean,
     value: String
   },
-  setup(props) {
-    const ui = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("ui", true);
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(ui && "ui", props.color, props.size, computeKeyOnly(props.horizontal, "horizontal"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.text, "text"), computeKeyOrKeyValue(props.floated, "floated"), "statistic");
-    });
-    return { computedClass };
+  setup(e) {
+    const t = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("ui", !0);
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      t && "ui",
+      e.color,
+      e.size,
+      n(e.horizontal, "horizontal"),
+      n(e.inverted, "inverted"),
+      n(e.text, "text"),
+      w(e.floated, "floated"),
+      "statistic"
+    )) };
   },
   render() {
-    var _a, _b, _c, _d, _e, _f;
-    let children = [];
-    if (this.$props.value) {
-      children.push((0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(StatisticValue, { content: this.$props.value }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)));
-    }
-    if (this.$props.label) {
-      children.push((0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(StatisticLabel, { content: this.$props.label }, (_d = (_c = this.$slots).default) == null ? void 0 : _d.call(_c)));
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, children.length > 0 ? children : (_f = (_e = this.$slots).default) == null ? void 0 : _f.call(_e));
+    var t, l, i, o, u, r;
+    let e = [];
+    return this.$props.value && e.push((0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(ce, { content: this.$props.value }, (l = (t = this.$slots).default) == null ? void 0 : l.call(t))), this.$props.label && e.push((0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(re, { content: this.$props.label }, (o = (i = this.$slots).default) == null ? void 0 : o.call(i))), (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      "div",
+      { class: this.computedClass },
+      e.length > 0 ? e : (r = (u = this.$slots).default) == null ? void 0 : r.call(u)
+    );
   }
-});
-var StatisticGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), mn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiStatisticGroup",
   props: {
     color: String,
@@ -2578,37 +2256,38 @@ var StatisticGroup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     size: String,
     widths: Number
   },
-  setup(props) {
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("ui", false);
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.color, props.size, computeKeyOnly(props.horizontal, "horizontal"), computeKeyOnly(props.inverted, "inverted"), computeWidthProp(props.widths, ""), "statistics");
-    });
-    return { computedClass };
+  setup(e) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("ui", !1), { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      "ui",
+      e.color,
+      e.size,
+      n(e.horizontal, "horizontal"),
+      n(e.inverted, "inverted"),
+      _(e.widths, ""),
+      "statistics"
+    )) };
   },
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      "div",
+      { class: this.computedClass },
+      (t = (e = this.$slots).default) == null ? void 0 : t.call(e)
+    );
   }
-});
-var index$f = {
-  install(app) {
-    app.component(Statistic.name, Statistic);
-    app.component(StatisticGroup.name, StatisticGroup);
-    app.component(StatisticLabel.name, StatisticLabel);
-    app.component(StatisticValue.name, StatisticValue);
+}), $a = {
+  install(e) {
+    e.component(dn.name, dn), e.component(mn.name, mn), e.component(re.name, re), e.component(ce.name, ce);
   }
-};
-var views = /* @__PURE__ */ Object.freeze({
+}, Aa = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  Advertisement: index$k,
-  Card: index$j,
-  Comment: index$i,
-  Feed: index$h,
-  Item: index$g,
-  Statistic: index$f
-});
-var Accordion = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+  Advertisement: ba,
+  Card: Ba,
+  Comment: ya,
+  Feed: ka,
+  Item: xa,
+  Statistic: $a
+}, Symbol.toStringTag, { value: "Module" })), hn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiAccordion",
   props: {
     fluid: Boolean,
@@ -2616,178 +2295,139 @@ var Accordion = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     multiple: Boolean,
     styled: Boolean
   },
-  setup(props) {
-    const activeIndex = props.multiple ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)([]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(-1);
-    const isTabActive = (index2) => {
-      if (props.multiple) {
-        return activeIndex.value.includes(index2);
-      }
-      return activeIndex.value === index2;
+  setup(e) {
+    const t = e.multiple ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)([]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(-1), l = (u) => e.multiple ? t.value.includes(u) : t.value === u, i = (u) => {
+      const r = l(u);
+      e.multiple ? r ? t.value = t.value.filter((S) => S !== u) : t.value.push(u) : t.value = r ? -1 : u;
     };
-    const updateActiveIndex = (value) => {
-      const active = isTabActive(value);
-      if (props.multiple) {
-        if (active) {
-          activeIndex.value = activeIndex.value.filter((i) => i !== value);
-        } else {
-          activeIndex.value.push(value);
-        }
-      } else {
-        activeIndex.value = active ? -1 : value;
-      }
-    };
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("isTabActive", isTabActive);
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("updateActiveIndex", updateActiveIndex);
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", computeKeyOnly(props.fluid, "fluid"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.styled, "styled"), "accordion");
-    });
-    return {
-      computedClass
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("isTabActive", l), (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("updateActiveIndex", i), {
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", n(e.fluid, "fluid"), n(e.inverted, "inverted"), n(e.styled, "styled"), "accordion"))
     };
   },
   render() {
-    var _a, _b;
-    const renderTabs = (tabs) => {
-      tabs.forEach((tab, i) => {
-        tab.props.index = i;
-      });
-      return tabs;
-    };
+    var t, l;
+    const e = (i) => (i.forEach((o, u) => {
+      o.props.index = u;
+    }), i);
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [renderTabs((_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a))]);
+      class: this.computedClass
+    }, [e((l = (t = this.$slots).default) == null ? void 0 : l.call(t))]);
   }
-});
-var AccordionAccordion = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), vn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiAccordionAccordion",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "accordion" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "accordion" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var AccordionContent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), be = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiAccordionContent",
   props: {
     active: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.active, "active"), "content");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      n(e.active, "active"),
+      "content"
+    )) };
   },
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      "div",
+      { class: this.computedClass },
+      (t = (e = this.$slots).default) == null ? void 0 : t.call(e)
+    );
   }
-});
-var AccordionTab = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), gn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiAccordionTab",
   props: {
     index: Number,
     title: String
   },
-  setup(props) {
-    const isTabActive = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("isTabActive");
-    const updateActiveIndex = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("updateActiveIndex");
-    const titleClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(isTabActive(props.index), "active"), "title");
-    });
+  setup(e) {
+    const t = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("isTabActive"), l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("updateActiveIndex"), i = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(n(t(e.index), "active"), "title"));
     return {
-      isTabActive,
-      updateActiveIndex,
-      titleClass
+      isTabActive: t,
+      updateActiveIndex: l,
+      titleClass: i
     };
   },
   render() {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.titleClass,
-      "onClick": () => this.updateActiveIndex(this.index)
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Icon, {
-      "name": "dropdown"
-    }, null), this.title]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(AccordionContent, {
-      "active": this.isTabActive(this.index)
+      class: this.titleClass,
+      onClick: () => this.updateActiveIndex(this.index)
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(U, {
+      name: "dropdown"
+    }, null), this.title]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(be, {
+      active: this.isTabActive(this.index)
     }, {
       default: () => {
-        var _a, _b;
-        return [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)];
+        var e, t;
+        return [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)];
       }
     })]);
   }
-});
-var AccordionTitle = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), fn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiAccordionTitle",
   props: {
     active: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.active, "active"), "title");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      n(e.active, "active"),
+      "title"
+    )) };
   },
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      "div",
+      { class: this.computedClass },
+      (t = (e = this.$slots).default) == null ? void 0 : t.call(e)
+    );
   }
-});
-var index$e = {
-  install(app) {
-    app.component(Accordion.name, Accordion);
-    app.component(AccordionAccordion.name, AccordionAccordion);
-    app.component(AccordionContent.name, AccordionContent);
-    app.component(AccordionTab.name, AccordionTab);
-    app.component(AccordionTitle.name, AccordionTitle);
+}), Ma = {
+  install(e) {
+    e.component(hn.name, hn), e.component(vn.name, vn), e.component(be.name, be), e.component(gn.name, gn), e.component(fn.name, fn);
   }
+}, wa = (e, t, l) => {
+  e.clickOutside = (i) => {
+    e === i.target || e.contains(i.target) || t.value(i, e);
+  }, document.body.addEventListener("click", e.clickOutside);
+}, Ta = (e, t, l) => {
+  document.body.removeEventListener("click", e.clickOutside);
+}, De = {
+  mounted: wa,
+  unmounted: Ta
 };
-const mounted = (el, binding, vnode) => {
-  el.clickOutside = (event) => {
-    if (!(el === event.target || el.contains(event.target))) {
-      binding.value(event, el);
-    }
-  };
-  document.body.addEventListener("click", el.clickOutside);
-};
-const unmounted = (el, binding, vnode) => {
-  document.body.removeEventListener("click", el.clickOutside);
-};
-var clickOutside = {
-  mounted,
-  unmounted
-};
-function useAnimation(show, options = {}) {
-  const visualState = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(show.value ? "open" : "closed");
-  const updateVisualState = () => visualState.value = show.value ? "open" : "closed";
-  (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(show, (newValue) => {
-    visualState.value = newValue ? "opening" : "closing";
+function Da(e, t = {}) {
+  const l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(e.value ? "open" : "closed"), i = () => l.value = e.value ? "open" : "closed";
+  (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(e, (S) => {
+    l.value = S ? "opening" : "closing";
   });
-  const setupAnimation = (el) => {
-    el.addEventListener("animationend", updateVisualState, true);
-  };
-  const removeAnimation = (el) => {
-    if (!el)
-      return;
-    el.removeEventListener("animationend", updateVisualState);
-  };
-  const computeAnimationClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)((animationType = "scale") => {
-    switch (visualState.value) {
+  const o = (S) => {
+    S.addEventListener("animationend", i, !0);
+  }, u = (S) => {
+    S && S.removeEventListener("animationend", i);
+  }, r = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)((S = "scale") => {
+    switch (l.value) {
       case "opening":
-        return `animating ${animationType} in`;
+        return `animating ${S} in`;
       case "open":
         return "visible active";
       case "closing":
-        return `visible active animating ${animationType} out`;
+        return `visible active animating ${S} out`;
       case "closed":
         return "hidden";
     }
   });
   return {
-    setupAnimation,
-    removeAnimation,
-    computeAnimationClass
+    setupAnimation: o,
+    removeAnimation: u,
+    computeAnimationClass: r
   };
 }
-var CalendarDay = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+const Ia = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCalendarDay",
   emits: ["select-day"],
   props: {
@@ -2796,123 +2436,99 @@ var CalendarDay = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     disabled: Boolean,
     onSelectDay: Function
   },
-  setup(props, {
-    emit
+  setup(e, {
+    emit: t
   }) {
-    const focus = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
-    const onMouseEnter = () => {
-      if (!props.disabled)
-        focus.value = true;
-    };
-    const onMouseLeave = () => focus.value = false;
-    const onClick = () => {
-      if (props.disabled)
-        return;
-      emit("select-day", props.date);
-    };
-    const isToday = () => {
-      let today = new Date();
-      return today.getFullYear() === props.date.year && today.getMonth() === props.date.month && today.getDate() === props.date.day;
-    };
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("link", computeKeyOnly(focus.value, "focus"), computeKeyOnly(props.active && !props.disabled, "active"), computeKeyOnly(props.disabled, "adjacent disabled"), computeKeyOnly(isToday(), "today"));
-    });
+    const l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(!1), i = () => {
+      e.disabled || (l.value = !0);
+    }, o = () => l.value = !1, u = () => {
+      e.disabled || t("select-day", e.date);
+    }, r = () => {
+      let b = /* @__PURE__ */ new Date();
+      return b.getFullYear() === e.date.year && b.getMonth() === e.date.month && b.getDate() === e.date.day;
+    }, S = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("link", n(l.value, "focus"), n(e.active && !e.disabled, "active"), n(e.disabled, "adjacent disabled"), n(r(), "today")));
     return {
-      onMouseEnter,
-      onMouseLeave,
-      onClick,
-      computedClass
+      onMouseEnter: i,
+      onMouseLeave: o,
+      onClick: u,
+      computedClass: S
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", {
-      "class": this.computedClass,
-      "onMouseenter": this.onMouseEnter,
-      "onMouseleave": this.onMouseLeave,
-      "onClick": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(this.onClick, ["stop"])
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass,
+      onMouseenter: this.onMouseEnter,
+      onMouseleave: this.onMouseLeave,
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(this.onClick, ["stop"])
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var CalendarDateTable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), La = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCalendarDateTable",
   setup() {
     const {
-      calendarDays,
-      updateSelectMode,
-      set,
-      add,
-      subtract,
-      selectedDate,
-      setSelectedDate,
-      selectType,
-      updateVisible,
-      formatDate
-    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(CalendarKey);
-    const isEqualDay = (date) => {
-      if (!selectedDate.value)
-        return false;
-      const target = selectedDate.value;
-      return target.getFullYear() === date.year && target.getMonth() === date.month && target.getDate() === date.day;
-    };
-    const onSelectDay = (event) => {
-      set(event.year, "years");
-      set(event.month, "months");
-      set(event.day, "days");
-      if (selectType.value === "date") {
-        let newDate = new Date(event.year, event.month, event.day);
-        setSelectedDate(newDate);
-        updateVisible(false);
-        return;
-      }
-      updateSelectMode("hour");
-    };
+      calendarDays: e,
+      updateSelectMode: t,
+      set: l,
+      add: i,
+      subtract: o,
+      selectedDate: u,
+      setSelectedDate: r,
+      selectType: S,
+      updateVisible: b,
+      formatDate: v
+    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(J);
     return {
-      calendarDays,
-      isEqualDay,
-      onSelectDay,
-      updateSelectMode,
-      formatDate,
-      add,
-      subtract
+      calendarDays: e,
+      isEqualDay: (g) => {
+        if (!u.value)
+          return !1;
+        const x = u.value;
+        return x.getFullYear() === g.year && x.getMonth() === g.month && x.getDate() === g.day;
+      },
+      onSelectDay: (g) => {
+        if (l(g.year, "years"), l(g.month, "months"), l(g.day, "days"), S.value === "date") {
+          let x = new Date(g.year, g.month, g.day);
+          r(x), b(!1);
+          return;
+        }
+        t("hour");
+      },
+      updateSelectMode: t,
+      formatDate: v,
+      add: i,
+      subtract: o
     };
   },
   render() {
-    const renderCalendarDays = () => {
-      return this.calendarDays.map((week, i) => {
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [week.map((date) => {
-          return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarDay, {
-            "active": this.isEqualDay(date),
-            "date": date,
-            "disabled": !date.currentMonth,
-            "onSelectDay": this.onSelectDay
-          }, {
-            default: () => [date.day]
-          });
-        })]);
-      });
-    };
+    const e = () => this.calendarDays.map((t, l) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [t.map((i) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Ia, {
+      active: this.isEqualDay(i),
+      date: i,
+      disabled: !i.currentMonth,
+      onSelectDay: this.onSelectDay
+    }, {
+      default: () => [i.day]
+    }))]));
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("table", {
-      "class": "ui celled center aligned unstackable table day seven column"
+      class: "ui celled center aligned unstackable table day seven column"
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", {
-      "colspan": 7
+      colspan: 7
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "link",
-      "onClick": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.updateSelectMode("month"), ["stop"])
+      class: "link",
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.updateSelectMode("month"), ["stop"])
     }, [this.formatDate("date")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "prev link",
-      "onClick": () => this.subtract(1, "months")
+      class: "prev link",
+      onClick: () => this.subtract(1, "months")
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": "chevron left icon"
+      class: "chevron left icon"
     }, null)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "next link",
-      "onClick": () => this.add(1, "months")
+      class: "next link",
+      onClick: () => this.add(1, "months")
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": "chevron right icon"
-    }, null)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("S")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("M")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("T")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("W")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("T")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("F")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("S")])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tbody", null, [renderCalendarDays()])]);
+      class: "chevron right icon"
+    }, null)])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("S")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("M")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("T")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("W")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("T")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("F")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("S")])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tbody", null, [e()])]);
   }
-});
-var CalendarTableCell = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), B = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCalendarTableCell",
   emits: ["click-cell"],
   props: {
@@ -2921,926 +2537,789 @@ var CalendarTableCell = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     value: null,
     onClickCell: Function
   },
-  setup(props) {
-    const focus = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
-    const onMouseEnter = () => focus.value = true;
-    const onMouseLeave = () => focus.value = false;
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("link", computeKeyOnly(props.active, "active"), computeKeyOnly(props.today, "today"), computeKeyOnly(focus.value, "focus"));
-    });
+  setup(e) {
+    const t = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(!1), l = () => t.value = !0, i = () => t.value = !1, o = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("link", n(e.active, "active"), n(e.today, "today"), n(t.value, "focus")));
     return {
-      onMouseEnter,
-      onMouseLeave,
-      computedClass
+      onMouseEnter: l,
+      onMouseLeave: i,
+      computedClass: o
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("td", {
-      "class": this.computedClass,
-      "onMouseenter": this.onMouseEnter,
-      "onMouseleave": this.onMouseLeave,
-      "onClick": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.$emit("click-cell", this.value), ["stop"])
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass,
+      onMouseenter: this.onMouseEnter,
+      onMouseleave: this.onMouseLeave,
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.$emit("click-cell", this.value), ["stop"])
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var CalendarMonthTable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Va = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCalendarMonthTable",
   setup() {
     const {
-      state,
-      set,
-      add,
-      subtract,
-      selectedDate,
-      updateSelectMode
-    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(CalendarKey);
-    const isActive = (month) => {
-      if (!selectedDate.value)
-        return false;
-      return state.year === selectedDate.value.getFullYear() && state.month === month;
-    };
-    const isThisMonth = (month) => {
-      let today = new Date();
-      return month === today.getMonth() && state.year === today.getFullYear();
-    };
-    const onClickCell = (value) => {
-      set(value, "months");
-      updateSelectMode("day");
-    };
+      state: e,
+      set: t,
+      add: l,
+      subtract: i,
+      selectedDate: o,
+      updateSelectMode: u
+    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(J);
     return {
-      state,
-      add,
-      subtract,
-      updateSelectMode,
-      isActive,
-      isThisMonth,
-      onClickCell
+      state: e,
+      add: l,
+      subtract: i,
+      updateSelectMode: u,
+      isActive: (v) => o.value ? e.year === o.value.getFullYear() && e.month === v : !1,
+      isThisMonth: (v) => {
+        let f = /* @__PURE__ */ new Date();
+        return v === f.getMonth() && e.year === f.getFullYear();
+      },
+      onClickCell: (v) => {
+        t(v, "months"), u("day");
+      }
     };
   },
   render() {
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const renderMonths = () => {
-      return Array(4).fill(0).map((_, i) => {
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-          "value": i * 3,
-          "active": this.isActive(i * 3),
-          "today": this.isThisMonth(i * 3),
-          "onClickCell": this.onClickCell
-        }, {
-          default: () => [months[i * 3]]
-        }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-          "value": i * 3 + 1,
-          "active": this.isActive(i * 3 + 1),
-          "today": this.isThisMonth(i * 3 + 1),
-          "onClickCell": this.onClickCell
-        }, {
-          default: () => [months[i * 3 + 1]]
-        }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-          "value": i * 3 + 2,
-          "active": this.isActive(i * 3 + 2),
-          "today": this.isThisMonth(i * 3 + 2),
-          "onClickCell": this.onClickCell
-        }, {
-          default: () => [months[i * 3 + 2]]
-        })]);
-      });
-    };
+    const e = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], t = () => Array(4).fill(0).map((l, i) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: i * 3,
+      active: this.isActive(i * 3),
+      today: this.isThisMonth(i * 3),
+      onClickCell: this.onClickCell
+    }, {
+      default: () => [e[i * 3]]
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: i * 3 + 1,
+      active: this.isActive(i * 3 + 1),
+      today: this.isThisMonth(i * 3 + 1),
+      onClickCell: this.onClickCell
+    }, {
+      default: () => [e[i * 3 + 1]]
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: i * 3 + 2,
+      active: this.isActive(i * 3 + 2),
+      today: this.isThisMonth(i * 3 + 2),
+      onClickCell: this.onClickCell
+    }, {
+      default: () => [e[i * 3 + 2]]
+    })]));
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("table", {
-      "class": "ui celled center aligned unstackable table month three column"
+      class: "ui celled center aligned unstackable table month three column"
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", {
-      "colspan": 3
+      colspan: 3
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "link",
-      "onClick": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.updateSelectMode("year"), ["stop"])
+      class: "link",
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.updateSelectMode("year"), ["stop"])
     }, [this.state.year]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "prev link",
-      "onClick": () => this.subtract(1, "years")
+      class: "prev link",
+      onClick: () => this.subtract(1, "years")
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": "chevron left icon"
+      class: "chevron left icon"
     }, null)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "next link",
-      "onClick": () => this.add(1, "years")
+      class: "next link",
+      onClick: () => this.add(1, "years")
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": "chevron right icon"
-    }, null)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tbody", null, [renderMonths()])]);
+      class: "chevron right icon"
+    }, null)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tbody", null, [t()])]);
   }
-});
-var CalendarYearTable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Ya = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCalendarYearTable",
-  setup(p) {
+  setup(e) {
     const {
-      state,
-      set,
-      add,
-      subtract,
-      selectedDate,
-      updateSelectMode
-    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(CalendarKey);
-    const moveNextTwelveYears = () => add(10, "years");
-    const movePrevTwelveYears = () => subtract(10, "years");
-    const headerStartYear = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return Math.round(state.year / 10) * 10 + 1;
-    });
-    const isActive = (year) => {
-      if (!selectedDate.value)
-        return false;
-      return year === selectedDate.value.getFullYear();
-    };
-    const isThisYear = (year) => {
-      let today = new Date();
-      return year === today.getFullYear();
-    };
-    const onClickCell = (value) => {
-      set(value, "years");
-      updateSelectMode("day");
-    };
+      state: t,
+      set: l,
+      add: i,
+      subtract: o,
+      selectedDate: u,
+      updateSelectMode: r
+    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(J), S = () => i(10, "years"), b = () => o(10, "years"), v = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => Math.round(t.year / 10) * 10 + 1);
     return {
-      updateSelectMode,
-      moveNextTwelveYears,
-      movePrevTwelveYears,
-      headerStartYear,
-      isActive,
-      isThisYear,
-      onClickCell
+      updateSelectMode: r,
+      moveNextTwelveYears: S,
+      movePrevTwelveYears: b,
+      headerStartYear: v,
+      isActive: (x) => u.value ? x === u.value.getFullYear() : !1,
+      isThisYear: (x) => x === (/* @__PURE__ */ new Date()).getFullYear(),
+      onClickCell: (x) => {
+        l(x, "years"), r("day");
+      }
     };
   },
   render() {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("table", {
-      "class": "ui celled center aligned unstackable table year three column"
+      class: "ui celled center aligned unstackable table year three column"
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", {
-      "colspan": 3
+      colspan: 3
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "link",
-      "onClick": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.updateSelectMode("day"), ["stop"])
+      class: "link",
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.updateSelectMode("day"), ["stop"])
     }, [this.headerStartYear, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" - "), this.headerStartYear + 11]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "prev link",
-      "onClick": this.movePrevTwelveYears
+      class: "prev link",
+      onClick: this.movePrevTwelveYears
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": "chevron left icon"
+      class: "chevron left icon"
     }, null)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "next link",
-      "onClick": this.moveNextTwelveYears
+      class: "next link",
+      onClick: this.moveNextTwelveYears
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": "chevron right icon"
-    }, null)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tbody", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "value": this.headerStartYear,
-      "active": this.isActive(this.headerStartYear),
-      "today": this.isThisYear(this.headerStartYear),
-      "onClickCell": this.onClickCell
+      class: "chevron right icon"
+    }, null)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tbody", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: this.headerStartYear,
+      active: this.isActive(this.headerStartYear),
+      today: this.isThisYear(this.headerStartYear),
+      onClickCell: this.onClickCell
     }, {
       default: () => [this.headerStartYear]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "value": this.headerStartYear + 1,
-      "active": this.isActive(this.headerStartYear + 1),
-      "today": this.isThisYear(this.headerStartYear + 1),
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: this.headerStartYear + 1,
+      active: this.isActive(this.headerStartYear + 1),
+      today: this.isThisYear(this.headerStartYear + 1),
+      onClickCell: this.onClickCell
     }, {
       default: () => [this.headerStartYear + 1]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "value": this.headerStartYear + 2,
-      "active": this.isActive(this.headerStartYear + 2),
-      "today": this.isThisYear(this.headerStartYear + 2),
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: this.headerStartYear + 2,
+      active: this.isActive(this.headerStartYear + 2),
+      today: this.isThisYear(this.headerStartYear + 2),
+      onClickCell: this.onClickCell
     }, {
       default: () => [this.headerStartYear + 2]
-    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "value": this.headerStartYear + 3,
-      "active": this.isActive(this.headerStartYear + 3),
-      "today": this.isThisYear(this.headerStartYear + 3),
-      "onClickCell": this.onClickCell
+    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: this.headerStartYear + 3,
+      active: this.isActive(this.headerStartYear + 3),
+      today: this.isThisYear(this.headerStartYear + 3),
+      onClickCell: this.onClickCell
     }, {
       default: () => [this.headerStartYear + 3]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "value": this.headerStartYear + 4,
-      "active": this.isActive(this.headerStartYear + 4),
-      "today": this.isThisYear(this.headerStartYear + 4),
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: this.headerStartYear + 4,
+      active: this.isActive(this.headerStartYear + 4),
+      today: this.isThisYear(this.headerStartYear + 4),
+      onClickCell: this.onClickCell
     }, {
       default: () => [this.headerStartYear + 4]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "value": this.headerStartYear + 5,
-      "active": this.isActive(this.headerStartYear + 5),
-      "today": this.isThisYear(this.headerStartYear + 5),
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: this.headerStartYear + 5,
+      active: this.isActive(this.headerStartYear + 5),
+      today: this.isThisYear(this.headerStartYear + 5),
+      onClickCell: this.onClickCell
     }, {
       default: () => [this.headerStartYear + 5]
-    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "value": this.headerStartYear + 6,
-      "active": this.isActive(this.headerStartYear + 6),
-      "today": this.isThisYear(this.headerStartYear + 6),
-      "onClickCell": this.onClickCell
+    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: this.headerStartYear + 6,
+      active: this.isActive(this.headerStartYear + 6),
+      today: this.isThisYear(this.headerStartYear + 6),
+      onClickCell: this.onClickCell
     }, {
       default: () => [this.headerStartYear + 6]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "value": this.headerStartYear + 7,
-      "active": this.isActive(this.headerStartYear + 7),
-      "today": this.isThisYear(this.headerStartYear + 7),
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: this.headerStartYear + 7,
+      active: this.isActive(this.headerStartYear + 7),
+      today: this.isThisYear(this.headerStartYear + 7),
+      onClickCell: this.onClickCell
     }, {
       default: () => [this.headerStartYear + 7]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "value": this.headerStartYear + 8,
-      "active": this.isActive(this.headerStartYear + 8),
-      "today": this.isThisYear(this.headerStartYear + 8),
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: this.headerStartYear + 8,
+      active: this.isActive(this.headerStartYear + 8),
+      today: this.isThisYear(this.headerStartYear + 8),
+      onClickCell: this.onClickCell
     }, {
       default: () => [this.headerStartYear + 8]
-    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "value": this.headerStartYear + 9,
-      "active": this.isActive(this.headerStartYear + 9),
-      "today": this.isThisYear(this.headerStartYear + 9),
-      "onClickCell": this.onClickCell
+    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: this.headerStartYear + 9,
+      active: this.isActive(this.headerStartYear + 9),
+      today: this.isThisYear(this.headerStartYear + 9),
+      onClickCell: this.onClickCell
     }, {
       default: () => [this.headerStartYear + 9]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "value": this.headerStartYear + 10,
-      "active": this.isActive(this.headerStartYear + 10),
-      "today": this.isThisYear(this.headerStartYear + 10),
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: this.headerStartYear + 10,
+      active: this.isActive(this.headerStartYear + 10),
+      today: this.isThisYear(this.headerStartYear + 10),
+      onClickCell: this.onClickCell
     }, {
       default: () => [this.headerStartYear + 10]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "value": this.headerStartYear + 11,
-      "active": this.isActive(this.headerStartYear + 11),
-      "today": this.isThisYear(this.headerStartYear + 11),
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      value: this.headerStartYear + 11,
+      active: this.isActive(this.headerStartYear + 11),
+      today: this.isThisYear(this.headerStartYear + 11),
+      onClickCell: this.onClickCell
     }, {
       default: () => [this.headerStartYear + 11]
     })])])]);
   }
-});
-var CalendarHourTable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), za = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCalendarHourTable",
   setup() {
     const {
-      updateSelectMode,
-      state,
-      set,
-      add,
-      subtract,
-      formatDate,
-      selectedDate
-    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(CalendarKey);
-    const onPrevClick = () => subtract(1, "days");
-    const onNextClick = () => add(1, "days");
-    const onClickCell = (value) => {
-      set(value, "hours");
-      updateSelectMode("minute");
-    };
-    const isActive = (hourValue) => {
-      if (!selectedDate.value)
-        return false;
-      let year = selectedDate.value.getFullYear();
-      let month = selectedDate.value.getMonth();
-      let day = selectedDate.value.getDate();
-      let hour = selectedDate.value.getHours();
-      return state.year === year && state.month === month && state.day === day && hourValue === hour;
-    };
+      updateSelectMode: e,
+      state: t,
+      set: l,
+      add: i,
+      subtract: o,
+      formatDate: u,
+      selectedDate: r
+    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(J);
     return {
-      updateSelectMode,
-      formatDate,
-      onPrevClick,
-      onNextClick,
-      onClickCell,
-      isActive
+      updateSelectMode: e,
+      formatDate: u,
+      onPrevClick: () => o(1, "days"),
+      onNextClick: () => i(1, "days"),
+      onClickCell: (k) => {
+        l(k, "hours"), e("minute");
+      },
+      isActive: (k) => {
+        if (!r.value)
+          return !1;
+        let g = r.value.getFullYear(), x = r.value.getMonth(), I = r.value.getDate(), C = r.value.getHours();
+        return t.year === g && t.month === x && t.day === I && k === C;
+      }
     };
   },
   render() {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("table", {
-      "class": "ui celled center aligned unstackable table hour four column"
+      class: "ui celled center aligned unstackable table hour four column"
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", {
-      "colspan": 4
+      colspan: 4
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "link",
-      "onClick": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.updateSelectMode("day"), ["stop"])
+      class: "link",
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.updateSelectMode("day"), ["stop"])
     }, [this.formatDate()]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "prev link",
-      "onClick": this.onPrevClick
+      class: "prev link",
+      onClick: this.onPrevClick
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": "chevron left icon"
+      class: "chevron left icon"
     }, null)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "next link",
-      "onClick": this.onNextClick
+      class: "next link",
+      onClick: this.onNextClick
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": "chevron right icon"
-    }, null)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tbody", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(0),
-      "value": 0,
-      "onClickCell": this.onClickCell
+      class: "chevron right icon"
+    }, null)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tbody", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(0),
+      value: 0,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("12:00 AM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(1),
-      "value": 1,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(1),
+      value: 1,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("1:00 AM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(2),
-      "value": 2,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(2),
+      value: 2,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("2:00 AM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(3),
-      "value": 3,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(3),
+      value: 3,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("3:00 AM")]
-    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(4),
-      "value": 4,
-      "onClickCell": this.onClickCell
+    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(4),
+      value: 4,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("4:00 AM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(5),
-      "value": 5,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(5),
+      value: 5,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("5:00 AM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(6),
-      "value": 6,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(6),
+      value: 6,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("6:00 AM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(7),
-      "value": 7,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(7),
+      value: 7,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("7:00 AM")]
-    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(8),
-      "value": 8,
-      "onClickCell": this.onClickCell
+    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(8),
+      value: 8,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("8:00 AM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(9),
-      "value": 9,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(9),
+      value: 9,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("9:00 AM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(10),
-      "value": 10,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(10),
+      value: 10,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("10:00 AM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(11),
-      "value": 11,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(11),
+      value: 11,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("11:00 AM")]
-    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(12),
-      "value": 12,
-      "onClickCell": this.onClickCell
+    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(12),
+      value: 12,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("12:00 PM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(13),
-      "value": 13,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(13),
+      value: 13,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("1:00 PM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(14),
-      "value": 14,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(14),
+      value: 14,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("2:00 PM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(15),
-      "value": 15,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(15),
+      value: 15,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("3:00 PM")]
-    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(16),
-      "value": 16,
-      "onClickCell": this.onClickCell
+    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(16),
+      value: 16,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("4:00 PM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(17),
-      "value": 17,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(17),
+      value: 17,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("5:00 PM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(18),
-      "value": 18,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(18),
+      value: 18,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("6:00 PM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(19),
-      "value": 19,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(19),
+      value: 19,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("7:00 PM")]
-    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(20),
-      "value": 20,
-      "onClickCell": this.onClickCell
+    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(20),
+      value: 20,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("8:00 PM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(21),
-      "value": 21,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(21),
+      value: 21,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("9:00 PM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(22),
-      "value": 22,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(22),
+      value: 22,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("10:00 PM")]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(23),
-      "value": 23,
-      "onClickCell": this.onClickCell
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(23),
+      value: 23,
+      onClickCell: this.onClickCell
     }, {
       default: () => [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("11:00 PM")]
     })])])]);
   }
 });
-function _isSlot$1(s) {
-  return typeof s === "function" || Object.prototype.toString.call(s) === "[object Object]" && !(0,vue__WEBPACK_IMPORTED_MODULE_0__.isVNode)(s);
+function R(e) {
+  return typeof e == "function" || Object.prototype.toString.call(e) === "[object Object]" && !(0,vue__WEBPACK_IMPORTED_MODULE_0__.isVNode)(e);
 }
-var CalendarMinuteTable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+const Fa = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCalendarMinuteTable",
   setup() {
     const {
-      state,
-      set,
-      add,
-      subtract,
-      formatDate,
-      updateSelectMode,
-      updateVisible,
-      selectedDate
-    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(CalendarKey);
-    const getTimeLabel = (minute) => {
-      let hour = state.hour % 12;
-      let hourStr = state.hour > 12 ? "PM" : "AM";
-      let minuteStr = minute.toString().padStart(2, "0");
-      if (state.hour === 0)
-        return `12:${minuteStr} AM`;
-      if (state.hour === 12)
-        return `12:${minuteStr} PM`;
-      return `${hour}:${minuteStr} ${hourStr}`;
-    };
-    const onClickCell = (value) => {
-      set(value, "minutes");
-      selectedDate.value = new Date(state.year, state.month, state.day, state.hour, state.minute);
-      updateVisible(false);
-    };
-    const isActive = (minValue) => {
-      if (!selectedDate.value)
-        return false;
-      let year = selectedDate.value.getFullYear();
-      let month = selectedDate.value.getMonth();
-      let day = selectedDate.value.getDate();
-      let hour = selectedDate.value.getHours();
-      let min = selectedDate.value.getMinutes();
-      return state.year === year && state.month === month && state.day === day && state.hour === hour && minValue === min;
-    };
+      state: e,
+      set: t,
+      add: l,
+      subtract: i,
+      formatDate: o,
+      updateSelectMode: u,
+      updateVisible: r,
+      selectedDate: S
+    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(J);
     return {
-      add,
-      subtract,
-      formatDate,
-      updateSelectMode,
-      getTimeLabel,
-      onClickCell,
-      isActive
+      add: l,
+      subtract: i,
+      formatDate: o,
+      updateSelectMode: u,
+      getTimeLabel: (k) => {
+        let g = e.hour % 12, x = e.hour > 12 ? "PM" : "AM", I = k.toString().padStart(2, "0");
+        return e.hour === 0 ? `12:${I} AM` : e.hour === 12 ? `12:${I} PM` : `${g}:${I} ${x}`;
+      },
+      onClickCell: (k) => {
+        t(k, "minutes"), S.value = new Date(e.year, e.month, e.day, e.hour, e.minute), r(!1);
+      },
+      isActive: (k) => {
+        if (!S.value)
+          return !1;
+        let g = S.value.getFullYear(), x = S.value.getMonth(), I = S.value.getDate(), C = S.value.getHours(), y = S.value.getMinutes();
+        return e.year === g && e.month === x && e.day === I && e.hour === C && k === y;
+      }
     };
   },
   render() {
-    let _slot, _slot2, _slot3, _slot4, _slot5, _slot6, _slot7, _slot8, _slot9, _slot10, _slot11, _slot12;
+    let e, t, l, i, o, u, r, S, b, v, f, k;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("table", {
-      "class": "ui celled center aligned unstackable table minute three column"
+      class: "ui celled center aligned unstackable table minute three column"
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("thead", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("th", {
-      "colspan": 3
+      colspan: 3
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "link",
-      "onClick": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.updateSelectMode("day"), ["stop"])
+      class: "link",
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.updateSelectMode("day"), ["stop"])
     }, [this.formatDate()]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "prev link",
-      "onClick": () => this.subtract(1, "days")
+      class: "prev link",
+      onClick: () => this.subtract(1, "days")
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": "chevron left icon"
+      class: "chevron left icon"
     }, null)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "next link",
-      "onClick": () => this.add(1, "days")
+      class: "next link",
+      onClick: () => this.add(1, "days")
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": "chevron right icon"
-    }, null)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tbody", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(0),
-      "value": 0,
-      "onClickCell": this.onClickCell
-    }, _isSlot$1(_slot = this.getTimeLabel(0)) ? _slot : {
-      default: () => [_slot]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(5),
-      "value": 5,
-      "onClickCell": this.onClickCell
-    }, _isSlot$1(_slot2 = this.getTimeLabel(5)) ? _slot2 : {
-      default: () => [_slot2]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(10),
-      "value": 10,
-      "onClickCell": this.onClickCell
-    }, _isSlot$1(_slot3 = this.getTimeLabel(10)) ? _slot3 : {
-      default: () => [_slot3]
-    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(15),
-      "value": 15,
-      "onClickCell": this.onClickCell
-    }, _isSlot$1(_slot4 = this.getTimeLabel(15)) ? _slot4 : {
-      default: () => [_slot4]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(20),
-      "value": 20,
-      "onClickCell": this.onClickCell
-    }, _isSlot$1(_slot5 = this.getTimeLabel(20)) ? _slot5 : {
-      default: () => [_slot5]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(25),
-      "value": 25,
-      "onClickCell": this.onClickCell
-    }, _isSlot$1(_slot6 = this.getTimeLabel(25)) ? _slot6 : {
-      default: () => [_slot6]
-    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(30),
-      "value": 30,
-      "onClickCell": this.onClickCell
-    }, _isSlot$1(_slot7 = this.getTimeLabel(30)) ? _slot7 : {
-      default: () => [_slot7]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(35),
-      "value": 35,
-      "onClickCell": this.onClickCell
-    }, _isSlot$1(_slot8 = this.getTimeLabel(35)) ? _slot8 : {
-      default: () => [_slot8]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(40),
-      "value": 40,
-      "onClickCell": this.onClickCell
-    }, _isSlot$1(_slot9 = this.getTimeLabel(40)) ? _slot9 : {
-      default: () => [_slot9]
-    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(45),
-      "value": 45,
-      "onClickCell": this.onClickCell
-    }, _isSlot$1(_slot10 = this.getTimeLabel(45)) ? _slot10 : {
-      default: () => [_slot10]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(50),
-      "value": 50,
-      "onClickCell": this.onClickCell
-    }, _isSlot$1(_slot11 = this.getTimeLabel(50)) ? _slot11 : {
-      default: () => [_slot11]
-    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarTableCell, {
-      "active": this.isActive(55),
-      "value": 55,
-      "onClickCell": this.onClickCell
-    }, _isSlot$1(_slot12 = this.getTimeLabel(55)) ? _slot12 : {
-      default: () => [_slot12]
+      class: "chevron right icon"
+    }, null)])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tbody", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(0),
+      value: 0,
+      onClickCell: this.onClickCell
+    }, R(e = this.getTimeLabel(0)) ? e : {
+      default: () => [e]
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(5),
+      value: 5,
+      onClickCell: this.onClickCell
+    }, R(t = this.getTimeLabel(5)) ? t : {
+      default: () => [t]
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(10),
+      value: 10,
+      onClickCell: this.onClickCell
+    }, R(l = this.getTimeLabel(10)) ? l : {
+      default: () => [l]
+    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(15),
+      value: 15,
+      onClickCell: this.onClickCell
+    }, R(i = this.getTimeLabel(15)) ? i : {
+      default: () => [i]
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(20),
+      value: 20,
+      onClickCell: this.onClickCell
+    }, R(o = this.getTimeLabel(20)) ? o : {
+      default: () => [o]
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(25),
+      value: 25,
+      onClickCell: this.onClickCell
+    }, R(u = this.getTimeLabel(25)) ? u : {
+      default: () => [u]
+    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(30),
+      value: 30,
+      onClickCell: this.onClickCell
+    }, R(r = this.getTimeLabel(30)) ? r : {
+      default: () => [r]
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(35),
+      value: 35,
+      onClickCell: this.onClickCell
+    }, R(S = this.getTimeLabel(35)) ? S : {
+      default: () => [S]
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(40),
+      value: 40,
+      onClickCell: this.onClickCell
+    }, R(b = this.getTimeLabel(40)) ? b : {
+      default: () => [b]
+    })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(45),
+      value: 45,
+      onClickCell: this.onClickCell
+    }, R(v = this.getTimeLabel(45)) ? v : {
+      default: () => [v]
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(50),
+      value: 50,
+      onClickCell: this.onClickCell
+    }, R(f = this.getTimeLabel(50)) ? f : {
+      default: () => [f]
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(B, {
+      active: this.isActive(55),
+      value: 55,
+      onClickCell: this.onClickCell
+    }, R(k = this.getTimeLabel(55)) ? k : {
+      default: () => [k]
     })])])]);
   }
-});
-var CalendarBody = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Pa = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCalendarBody",
   setup() {
-    const rootRef = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null);
-    const {
-      visible,
-      selectMode
-    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(CalendarKey);
-    const {
-      setupAnimation,
-      removeAnimation,
-      computeAnimationClass
-    } = useAnimation(visible);
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.onMounted)(() => setupAnimation(rootRef.value));
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.onUnmounted)(() => removeAnimation(rootRef.value));
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui popup calendar", "bottom left", "transition", computeAnimationClass.value);
-    });
+    const e = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null), {
+      visible: t,
+      selectMode: l
+    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(J), {
+      setupAnimation: i,
+      removeAnimation: o,
+      computeAnimationClass: u
+    } = Da(t);
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.onMounted)(() => i(e.value)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.onUnmounted)(() => o(e.value));
+    const r = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui popup calendar", "bottom left", "transition", u.value));
     return {
-      rootRef,
-      computedClass,
-      selectMode
+      rootRef: e,
+      computedClass: r,
+      selectMode: l
     };
   },
   render() {
-    const renderCalendarTable = () => {
+    const e = () => {
       switch (this.selectMode) {
         case "day":
-          return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarDateTable, null, null);
+          return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(La, null, null);
         case "month":
-          return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarMonthTable, null, null);
+          return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Va, null, null);
         case "year":
-          return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarYearTable, null, null);
+          return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Ya, null, null);
         case "hour":
-          return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarHourTable, null, null);
+          return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(za, null, null);
         case "minute":
-          return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarMinuteTable, null, null);
+          return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Fa, null, null);
       }
     };
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "ref": (ref2) => this.rootRef = ref2,
-      "class": this.computedClass,
-      "style": "inset: 38px auto auto 0px;"
-    }, [renderCalendarTable()]);
+      ref: (t) => this.rootRef = t,
+      class: this.computedClass,
+      style: "inset: 38px auto auto 0px;"
+    }, [e()]);
   }
-});
-var CalendarInput = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Ha = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCalendarInput",
   props: {
     placeholder: String,
     value: null
   },
-  setup(props) {
+  setup(e) {
     const {
-      visible,
-      updateVisible,
-      updateSelectMode,
-      set,
-      state,
-      formatCalendarDate
-    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(CalendarKey);
-    const onClick = () => {
-      if (!visible.value) {
-        updateSelectMode("day");
-        if (props.value) {
-          set(props.value.getFullYear(), "years");
-          set(props.value.getMonth(), "months");
-        }
-      }
-      updateVisible(!visible.value);
-    };
+      visible: t,
+      updateVisible: l,
+      updateSelectMode: i,
+      set: o,
+      state: u,
+      formatCalendarDate: r
+    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)(J);
     return {
-      visible,
-      formatCalendarDate,
-      onClick
+      visible: t,
+      formatCalendarDate: r,
+      onClick: () => {
+        t.value || (i("day"), e.value && (o(e.value.getFullYear(), "years"), o(e.value.getMonth(), "months"))), l(!t.value);
+      }
     };
   },
   render() {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-      "type": "text",
-      "placeholder": this.placeholder,
-      "value": this.formatCalendarDate(this.value),
-      "onClick": () => this.onClick()
+      type: "text",
+      placeholder: this.placeholder,
+      value: this.formatCalendarDate(this.value),
+      onClick: () => this.onClick()
     }, null);
   }
-});
-const getFirstDayOfMonthIndex = (year, month) => {
-  let day = new Date();
-  day.setDate(1);
-  day.setMonth(month);
-  day.setFullYear(year);
-  let dayIndex = day.getDay();
-  return dayIndex >= 7 ? dayIndex - 7 : dayIndex;
-};
-const getDaysCountInPrevMonth = (year, month) => {
-  let prevMonth;
-  let prevYear;
-  if (month === 0) {
-    prevMonth = 11;
-    prevYear = year - 1;
-  } else {
-    prevMonth = month - 1;
-    prevYear = year;
-  }
-  return 32 - new Date(prevYear, prevMonth, 32).getDate();
-};
-const getMonthText = (i) => {
-  return ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][i];
-};
-function useCalendar() {
-  const visible = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
-  const updateVisible = (bool = false) => visible.value = bool;
-  const date = new Date();
-  function formatCalendarDate(date2) {
-    if (!date2)
+}), Ra = (e, t) => {
+  let l = /* @__PURE__ */ new Date();
+  l.setDate(1), l.setMonth(t), l.setFullYear(e);
+  let i = l.getDay();
+  return i >= 7 ? i - 7 : i;
+}, Ea = (e, t) => {
+  let l, i;
+  return t === 0 ? (l = 11, i = e - 1) : (l = t - 1, i = e), 32 - new Date(i, l, 32).getDate();
+}, de = (e) => ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][e];
+function ja() {
+  const e = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(!1), t = (C = !1) => e.value = C, l = /* @__PURE__ */ new Date();
+  function i(C) {
+    if (!C)
       return;
-    let year = date2.getFullYear();
-    let monthText = getMonthText(date2.getMonth());
-    let day = date2.getDate();
-    let hour = date2.getHours();
-    let minute = date2.getMinutes();
-    let hourStr = hour > 11 ? "PM" : "AM";
-    hour = hour % 12;
-    if (hour === 0) {
-      hour = 12;
-      hourStr = "AM";
-    }
-    let minuteStr = minute.toString().padStart(2, "0");
-    return `${monthText} ${day}, ${year} ${hour}:${minuteStr} ${hourStr}`;
+    let y = C.getFullYear(), $ = de(C.getMonth()), V = C.getDate(), z = C.getHours(), N = C.getMinutes(), H = z > 11 ? "PM" : "AM";
+    z = z % 12, z === 0 && (z = 12);
+    let W = N.toString().padStart(2, "0");
+    return `${$} ${V}, ${y} ${z}:${W} ${H}`;
   }
-  const selectType = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)("default");
-  const selectMode = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)("day");
-  function updateSelectMode(mode) {
-    selectMode.value = mode;
+  const o = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)("default"), u = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)("day");
+  function r(C) {
+    u.value = C;
   }
-  const selectedDate = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null);
-  const setSelectedDate = (newDate) => {
-    selectedDate.value = newDate;
-  };
-  const state = (0,vue__WEBPACK_IMPORTED_MODULE_0__.reactive)({
-    year: date.getFullYear(),
-    month: date.getMonth(),
-    day: date.getDate(),
-    hour: date.getHours(),
-    minute: date.getMinutes()
-  });
-  const set = (value, key) => {
-    switch (key) {
+  const S = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null), b = (C) => {
+    S.value = C;
+  }, v = (0,vue__WEBPACK_IMPORTED_MODULE_0__.reactive)({
+    year: l.getFullYear(),
+    month: l.getMonth(),
+    day: l.getDate(),
+    hour: l.getHours(),
+    minute: l.getMinutes()
+  }), f = (C, y) => {
+    switch (y) {
       case "years":
-        state.year = value;
+        v.year = C;
         break;
       case "months":
-        state.month = value;
+        v.month = C;
         break;
       case "days":
-        state.day = value;
+        v.day = C;
         break;
       case "hours":
-        state.hour = value;
+        v.hour = C;
         break;
       case "minutes":
-        state.minute = value;
+        v.minute = C;
     }
-  };
-  const add = (value, key) => {
-    let newDate = new Date(state.year, state.month, state.day, state.hour);
-    switch (key) {
+  }, k = (C, y) => {
+    let $ = new Date(v.year, v.month, v.day, v.hour);
+    switch (y) {
       case "years":
-        newDate.setFullYear(newDate.getFullYear() + value);
+        $.setFullYear($.getFullYear() + C);
         break;
       case "months":
-        newDate.setMonth(newDate.getMonth() + value);
+        $.setMonth($.getMonth() + C);
         break;
       case "days":
-        newDate.setDate(newDate.getDate() + value);
+        $.setDate($.getDate() + C);
         break;
       case "hours":
-        newDate.setHours(newDate.getHours() + value);
+        $.setHours($.getHours() + C);
         break;
     }
-    state.year = newDate.getFullYear();
-    state.month = newDate.getMonth();
-    state.day = newDate.getDate();
-    state.hour = newDate.getHours();
-  };
-  const subtract = (value, key) => {
-    let newDate = new Date(state.year, state.month, state.day, state.hour);
-    switch (key) {
+    v.year = $.getFullYear(), v.month = $.getMonth(), v.day = $.getDate(), v.hour = $.getHours();
+  }, g = (C, y) => {
+    let $ = new Date(v.year, v.month, v.day, v.hour);
+    switch (y) {
       case "years":
-        newDate.setFullYear(newDate.getFullYear() - value);
+        $.setFullYear($.getFullYear() - C);
         break;
       case "months":
-        newDate.setMonth(newDate.getMonth() - value);
+        $.setMonth($.getMonth() - C);
         break;
       case "days":
-        newDate.setDate(newDate.getDate() - value);
+        $.setDate($.getDate() - C);
         break;
       case "hours":
-        newDate.setHours(newDate.getHours() - value);
+        $.setHours($.getHours() - C);
         break;
     }
-    state.year = newDate.getFullYear();
-    state.month = newDate.getMonth();
-    state.day = newDate.getDate();
-    state.hour = newDate.getHours();
-  };
-  const formatDate = (format = "default") => {
-    if (format === "date")
-      return `${getMonthText(state.month)} ${state.year}`;
-    return `${getMonthText(state.month)} ${state.day}, ${state.year}`;
-  };
-  const calendarDays = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-    let month = state.month;
-    let year = state.year;
-    if (month > 11) {
-      month = month % 11 - 1;
-      year += 1;
-    }
-    let dates = [];
-    let firstDay = getFirstDayOfMonthIndex(year, month);
-    let daysLength = 32 - new Date(year, month, 32).getDate();
-    let prevMonthDaysLength = getDaysCountInPrevMonth(year, month);
-    let dayNumber = 1;
-    for (let i = 0; i < 6; i++) {
-      let week = [];
-      if (i === 0) {
-        for (let j = prevMonthDaysLength - firstDay + 1; j <= prevMonthDaysLength; j++) {
-          let prevMonth = month === 0 ? 11 : month - 1;
-          let prevMonthYear = month === 0 ? year - 1 : year;
-          week.push({
-            day: j,
-            month: prevMonth,
-            year: prevMonthYear,
-            currentMonth: false
+    v.year = $.getFullYear(), v.month = $.getMonth(), v.day = $.getDate(), v.hour = $.getHours();
+  }, x = (C = "default") => C === "date" ? `${de(v.month)} ${v.year}` : `${de(v.month)} ${v.day}, ${v.year}`, I = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+    let C = v.month, y = v.year;
+    C > 11 && (C = C % 11 - 1, y += 1);
+    let $ = [], V = Ra(y, C), z = 32 - new Date(y, C, 32).getDate(), N = Ea(y, C), H = 1;
+    for (let W = 0; W < 6; W++) {
+      let O = [];
+      if (W === 0) {
+        for (let P = N - V + 1; P <= N; P++) {
+          let X = C === 0 ? 11 : C - 1, ne = C === 0 ? y - 1 : y;
+          O.push({
+            day: P,
+            month: X,
+            year: ne,
+            currentMonth: !1
           });
         }
-        let remainingDaysLength = 7 - week.length;
-        for (let j = 0; j < remainingDaysLength; j++) {
-          week.push({ day: dayNumber, month, year, currentMonth: true });
-          dayNumber++;
-        }
-      } else {
-        for (let j = 0; j < 7; j++) {
-          if (dayNumber > daysLength) {
-            let nextMonth = month === 11 ? 0 : month + 1;
-            let nextMonthYear = month === 11 ? year + 1 : year;
-            week.push({
-              day: dayNumber - daysLength,
-              month: nextMonth,
-              year: nextMonthYear,
-              currentMonth: false
+        let K = 7 - O.length;
+        for (let P = 0; P < K; P++)
+          O.push({ day: H, month: C, year: y, currentMonth: !0 }), H++;
+      } else
+        for (let K = 0; K < 7; K++) {
+          if (H > z) {
+            let P = C === 11 ? 0 : C + 1, X = C === 11 ? y + 1 : y;
+            O.push({
+              day: H - z,
+              month: P,
+              year: X,
+              currentMonth: !1
             });
-          } else {
-            week.push({ day: dayNumber, month, year, currentMonth: true });
-          }
-          dayNumber++;
+          } else
+            O.push({ day: H, month: C, year: y, currentMonth: !0 });
+          H++;
         }
-      }
-      dates.push(week);
+      $.push(O);
     }
-    return dates;
+    return $;
   });
   return {
-    visible,
-    updateVisible,
-    calendarDays,
-    formatCalendarDate,
-    selectMode,
-    updateSelectMode,
-    selectType,
-    selectedDate,
-    setSelectedDate,
-    state,
-    set,
-    add,
-    subtract,
-    formatDate
+    visible: e,
+    updateVisible: t,
+    calendarDays: I,
+    formatCalendarDate: i,
+    selectMode: u,
+    updateSelectMode: r,
+    selectType: o,
+    selectedDate: S,
+    setSelectedDate: b,
+    state: v,
+    set: f,
+    add: k,
+    subtract: g,
+    formatDate: x
   };
 }
-const CalendarKey = Symbol("useCalendar");
-var Calendar = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+const J = Symbol("useCalendar"), Sn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCalendar",
   directives: {
-    clickoutside: clickOutside
+    clickoutside: De
   },
   emits: ["update:modelValue"],
   props: {
     modelValue: null,
     placeholder: String
   },
-  setup(_, {
-    emit
+  setup(e, {
+    emit: t
   }) {
-    const calendar = useCalendar();
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)(CalendarKey, calendar);
+    const l = ja();
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)(J, l);
     const {
-      updateVisible,
-      selectedDate
-    } = calendar;
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(selectedDate, (newValue) => {
-      emit("update:modelValue", newValue);
-    });
-    return {
-      updateVisible
+      updateVisible: i,
+      selectedDate: o
+    } = l;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(o, (u) => {
+      t("update:modelValue", u);
+    }), {
+      updateVisible: i
     };
   },
   render() {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "ui calendar"
+      class: "ui calendar"
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "ui input left icon"
-    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarBody, null, null), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": "calendar icon"
-    }, null), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(CalendarInput, {
-      "placeholder": this.placeholder,
-      "value": this.modelValue
-    }, null)])]), [[(0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDirective)("clickoutside"), () => this.updateVisible(false)]]);
+      class: "ui input left icon"
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Pa, null, null), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
+      class: "calendar icon"
+    }, null), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Ha, {
+      placeholder: this.placeholder,
+      value: this.modelValue
+    }, null)])]), [[(0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDirective)("clickoutside"), () => this.updateVisible(!1)]]);
   }
-});
-var index$d = {
-  install: (app) => {
-    app.component(Calendar.name, Calendar);
+}), Ga = {
+  install: (e) => {
+    e.component(Sn.name, Sn);
   }
-};
-var Checkbox = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Cn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiCheckbox",
   emits: ["update:modelValue", "change", "click"],
   props: {
@@ -3853,55 +3332,37 @@ var Checkbox = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     toggle: Boolean,
     value: null
   },
-  setup(props, {
-    emit
+  setup(e, {
+    emit: t
   }) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", !props.label && "fitted", computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.indeterminate, "indeterminate"), computeKeyOnly(props.readOnly, "read-only"), computeKeyOnly(props.slider, "slider"), computeKeyOnly(props.toggle, "toggle"), "checkbox");
-    });
-    const checked = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return Array.isArray(props.modelValue) ? props.modelValue.includes(props.value) : props.modelValue;
-    });
-    const onClick = (event) => {
-      if (props.disabled || props.readOnly)
-        return;
-      let newValue;
-      if (!props.value)
-        newValue = !props.modelValue;
-      else {
-        if (checked.value)
-          newValue = props.modelValue.filter((val) => props.value !== val);
-        else
-          newValue = props.modelValue ? [...props.modelValue, props.value] : [props.value];
-      }
-      emit("change", event);
-      emit("click", event);
-      emit("update:modelValue", newValue);
-    };
+    const l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", !e.label && "fitted", n(e.disabled, "disabled"), n(e.indeterminate, "indeterminate"), n(e.readOnly, "read-only"), n(e.slider, "slider"), n(e.toggle, "toggle"), "checkbox")), i = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => Array.isArray(e.modelValue) ? e.modelValue.includes(e.value) : e.modelValue);
     return {
-      computedClass,
-      checked,
-      onClick
+      computedClass: l,
+      checked: i,
+      onClick: (u) => {
+        if (e.disabled || e.readOnly)
+          return;
+        let r;
+        e.value ? i.value ? r = e.modelValue.filter((S) => e.value !== S) : r = e.modelValue ? [...e.modelValue, e.value] : [e.value] : r = !e.modelValue, t("change", u), t("click", u), t("update:modelValue", r);
+      }
     };
   },
   render() {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass,
-      "onClick": this.onClick
+      class: this.computedClass,
+      onClick: this.onClick
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-      "type": "checkbox",
-      "class": "hidden",
-      "checked": this.checked,
-      "readonly": true
+      type: "checkbox",
+      class: "hidden",
+      checked: this.checked,
+      readonly: !0
     }, null), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", null, [this.label])]);
   }
-});
-var index$c = {
-  install(app) {
-    app.component(Checkbox.name, Checkbox);
+}), Oa = {
+  install(e) {
+    e.component(Cn.name, Cn);
   }
-};
-var Dimmer = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, bn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiDimmer",
   props: {
     active: Boolean,
@@ -3910,44 +3371,42 @@ var Dimmer = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     simple: Boolean,
     verticalAlign: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", computeKeyOnly(props.active, "active"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.page, "page"), computeKeyOnly(props.simple, "simple"), computeKeyValue(props.verticalAlign, "aligned"), "dimmer");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      "ui",
+      n(e.active, "active"),
+      n(e.inverted, "inverted"),
+      n(e.page, "page"),
+      n(e.simple, "simple"),
+      T(e.verticalAlign, "aligned"),
+      "dimmer"
+    )) };
   },
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: this.computedClass }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var DimmerDimmable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Bn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiDimmerDimmable",
-  components: { Segment },
+  components: { Segment: oe },
   props: {
     blurring: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.blurring, "blurring"), "dimmable");
-    });
-    return { computedClass };
+  setup(e) {
+    return { computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      n(e.blurring, "blurring"),
+      "dimmable"
+    )) };
   },
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(Segment, { class: this.computedClass }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(oe, { class: this.computedClass }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var index$b = {
-  install(app) {
-    app.component(Dimmer.name, Dimmer);
-    app.component(DimmerDimmable.name, DimmerDimmable);
+}), _a = {
+  install(e) {
+    e.component(bn.name, bn), e.component(Bn.name, Bn);
   }
-};
-const pluck = (array, key) => {
-  return array.map((obj) => obj[key]);
-};
-var DropdownText = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Na = (e, t) => e.map((l) => l[t]), Wa = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiDropdownText",
   emits: ["remove"],
   props: {
@@ -3962,73 +3421,62 @@ var DropdownText = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     text: String,
     onRemove: Function
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.filtered, "filtered"), computeKeyOnly(!props.text && !props.item || Array.isArray(props.item) && props.item.length === 0, "default"), "text");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(n(e.filtered, "filtered"), n(!e.text && !e.item || Array.isArray(e.item) && e.item.length === 0, "default"), "text"))
     };
   },
   render() {
-    var _a, _b;
-    let content;
-    if (this.item && !Array.isArray(this.item)) {
-      if (typeof this.item === "object") {
+    var i, o;
+    let e;
+    if (this.item && !Array.isArray(this.item))
+      if (typeof this.item == "object") {
         const {
-          flag,
-          text
+          flag: u,
+          text: r
         } = this.item;
-        content = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [flag && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-          "class": `${flag} flag`
-        }, null), text]);
-      } else {
-        content = this.item;
-      }
-    } else {
-      content = this.text || this.placeholder;
-    }
-    const image = typeof this.item === "object" ? (_a = this.item) == null ? void 0 : _a.image : null;
-    const label = typeof this.item === "object" ? (_b = this.item) == null ? void 0 : _b.label : null;
+        e = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [u && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
+          class: `${u} flag`
+        }, null), r]);
+      } else
+        e = this.item;
+    else
+      e = this.text || this.placeholder;
+    const t = typeof this.item == "object" ? (i = this.item) == null ? void 0 : i.image : null, l = typeof this.item == "object" ? (o = this.item) == null ? void 0 : o.label : null;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [image && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Image, image, null), label && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Label, label, null), content]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": `${this.icon} icon`
+      class: this.computedClass
+    }, [t && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(se, t, null), l && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Z, l, null), e]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
+      class: `${this.icon} icon`
     }, null), this.$props.clearable && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": "remove icon",
-      "onClick": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.$emit("remove"), ["stop"])
+      class: "remove icon",
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.$emit("remove"), ["stop"])
     }, null)]);
   }
-});
-const useDropdown = (props) => {
+}), Ka = (e) => {
   (0,vue__WEBPACK_IMPORTED_MODULE_0__.getCurrentInstance)();
-  const state = (0,vue__WEBPACK_IMPORTED_MODULE_0__.reactive)({
-    visible: false,
-    animating: false,
+  const t = (0,vue__WEBPACK_IMPORTED_MODULE_0__.reactive)({
+    visible: !1,
+    animating: !1,
     direction: "down",
-    multiple: props.multiple
+    multiple: e.multiple
   });
-  (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(() => state.visible, () => {
-    state.animating = true;
-    setTimeout(() => state.animating = false, 200);
-  });
-  return {
-    state,
-    show: () => !state.animating && (state.visible = true),
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(() => t.visible, () => {
+    t.animating = !0, setTimeout(() => t.animating = !1, 200);
+  }), {
+    state: t,
+    show: () => !t.animating && (t.visible = !0),
     hide: () => {
-      if (state.animating)
-        return;
-      state.visible = false;
+      t.animating || (t.visible = !1);
     }
   };
 };
-function _isSlot(s) {
-  return typeof s === "function" || Object.prototype.toString.call(s) === "[object Object]" && !(0,vue__WEBPACK_IMPORTED_MODULE_0__.isVNode)(s);
+function qa(e) {
+  return typeof e == "function" || Object.prototype.toString.call(e) === "[object Object]" && !(0,vue__WEBPACK_IMPORTED_MODULE_0__.isVNode)(e);
 }
-var Dropdown = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+const yn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiDropdown",
   directives: {
-    clickoutside: clickOutside
+    clickoutside: De
   },
   emits: ["update:modelValue"],
   props: {
@@ -4053,117 +3501,73 @@ var Dropdown = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     simple: Boolean,
     text: String
   },
-  setup(props, {
-    emit
+  setup(e, {
+    emit: t
   }) {
-    const api = useDropdown(props);
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("useDropdown", api);
+    const l = Ka(e);
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("useDropdown", l);
     const {
-      state,
-      show,
-      hide
-    } = api;
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", computeKeyOnly(props.button, "button"), computeKeyOnly(props.clearable, "clearable"), computeKeyOnly(props.compact, "compact"), computeKeyOnly(props.floating, "floating"), computeKeyOnly(props.fluid, "fluid"), computeKeyOnly(!!props.icon, "icon"), computeKeyOnly(props.inline, "inline"), computeKeyOnly(props.item, "item"), computeKeyOnly(props.labeled, "labeled"), computeKeyOnly(props.multiple, "multiple"), computeKeyOnly(props.scrolling, "scrolling"), computeKeyOnly(props.selection, "selection"), computeKeyOnly(props.search, "search"), computeKeyOnly(props.simple, "simple"), computeKeyOrKeyValue(props.pointing, "pointing"), "dropdown", computeKeyOnly(state.visible, "active visible"), computeKeyOnly(state.direction === "up", "upward"));
-    });
-    const onClick = () => state.visible ? hide() : show();
-    const openMenu = () => {
-      if (props.search && inputRef.value)
-        inputRef.value.focus();
-      show();
-    };
-    const closeMenu = () => hide();
-    const filteredText = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)("");
-    const filteredOptions = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return props.options.filter((option) => {
-        if (typeof option === "string")
-          return option.toLowerCase().includes(filteredText.value.toLowerCase());
-        if (props.multiple && Array.isArray(props.modelValue)) {
-          if (typeof option === "object")
-            return !pluck(props.modelValue, "text").includes(option.text);
-          return props.modelValue.includes(option);
-        }
-        return option.text.toLowerCase().includes(filteredText.value.toLowerCase());
-      });
-    });
-    const inputRef = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null);
-    const onInput = (event) => filteredText.value = event.target.value;
-    const onSelect = (event) => {
-      filteredText.value = "";
-      if (props.multiple) {
-        let result = Array.isArray(props.modelValue) ? [...props.modelValue, event] : [event];
-        return emit("update:modelValue", result);
+      state: i,
+      show: o,
+      hide: u
+    } = l, r = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", n(e.button, "button"), n(e.clearable, "clearable"), n(e.compact, "compact"), n(e.floating, "floating"), n(e.fluid, "fluid"), n(!!e.icon, "icon"), n(e.inline, "inline"), n(e.item, "item"), n(e.labeled, "labeled"), n(e.multiple, "multiple"), n(e.scrolling, "scrolling"), n(e.selection, "selection"), n(e.search, "search"), n(e.simple, "simple"), w(e.pointing, "pointing"), "dropdown", n(i.visible, "active visible"), n(i.direction === "up", "upward"))), S = () => i.visible ? u() : o(), b = () => {
+      e.search && g.value && g.value.focus(), o();
+    }, v = () => u(), f = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(""), k = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => e.options.filter((y) => typeof y == "string" ? y.toLowerCase().includes(f.value.toLowerCase()) : e.multiple && Array.isArray(e.modelValue) ? typeof y == "object" ? !Na(e.modelValue, "text").includes(y.text) : e.modelValue.includes(y) : y.text.toLowerCase().includes(f.value.toLowerCase()))), g = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null), x = (y) => f.value = y.target.value, I = (y) => {
+      if (f.value = "", e.multiple) {
+        let $ = Array.isArray(e.modelValue) ? [...e.modelValue, y] : [y];
+        return t("update:modelValue", $);
       }
-      return emit("update:modelValue", event);
-    };
-    const removeItem = (value) => {
-      if (Array.isArray(props.modelValue)) {
-        const index2 = props.modelValue.findIndex((selected) => selected === value);
-        if (index2 > -1) {
-          let copy = Object.assign(props.modelValue);
-          copy.splice(index2, 1);
-          emit("update:modelValue", copy);
+      return t("update:modelValue", y);
+    }, C = (y) => {
+      if (Array.isArray(e.modelValue)) {
+        const $ = e.modelValue.findIndex((V) => V === y);
+        if ($ > -1) {
+          let V = Object.assign(e.modelValue);
+          V.splice($, 1), t("update:modelValue", V);
         }
       }
     };
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("selection", props.selection);
-    return {
-      computedClass,
-      onClick,
-      openMenu,
-      closeMenu,
-      filteredText,
-      filteredOptions,
-      inputRef,
-      onInput,
-      onSelect,
-      removeItem
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("selection", e.selection), {
+      computedClass: r,
+      onClick: S,
+      openMenu: b,
+      closeMenu: v,
+      filteredText: f,
+      filteredOptions: k,
+      inputRef: g,
+      onInput: x,
+      onSelect: I,
+      removeItem: C
     };
   },
   render() {
-    var _a, _b;
-    const renderMultipleSelect = () => {
-      if (Array.isArray(this.$props.modelValue)) {
-        return this.$props.modelValue.map((selected) => {
-          if (typeof selected === "object") {
-            return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("a", {
-              "class": "ui label"
-            }, [selected.flag && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-              "class": `${selected.flag} flag`
-            }, null), selected.text, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-              "class": "delete icon",
-              "onClick": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.removeItem(selected), ["stop"])
-            }, null)]);
-          }
-          return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("a", {
-            "class": "ui label"
-          }, [selected, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-            "class": "delete icon",
-            "onClick": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.removeItem(selected), ["stop"])
-          }, null)]);
-        });
-      }
-    };
-    const renderOptions = () => {
-      return this.filteredOptions.filter((option) => {
-        if (this.$props.multiple && Array.isArray(this.$props.modelValue)) {
-          return !this.$props.modelValue.includes(option);
-        }
-        return true;
-      }).map((option) => {
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(DropdownItem, {
-          "item": option,
-          "active": this.$props.modelValue && typeof option === "object" ? option.text === this.$props.modelValue.text : option === this.$props.modelValue,
-          "text": typeof option === "object" ? option.text : option,
-          "flag": typeof option === "object" ? Object.keys(option).includes("flag") ? option.flag : "" : "",
-          "image": option.image,
-          "label": option.label,
-          "onSelect": this.onSelect
-        }, null);
-      });
-    };
-    const renderText = () => {
-      let textProps = {
+    var o, u;
+    const e = () => {
+      if (Array.isArray(this.$props.modelValue))
+        return this.$props.modelValue.map((r) => typeof r == "object" ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("a", {
+          class: "ui label"
+        }, [r.flag && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
+          class: `${r.flag} flag`
+        }, null), r.text, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
+          class: "delete icon",
+          onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.removeItem(r), ["stop"])
+        }, null)]) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("a", {
+          class: "ui label"
+        }, [r, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
+          class: "delete icon",
+          onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => this.removeItem(r), ["stop"])
+        }, null)]));
+    }, t = () => this.filteredOptions.filter((r) => this.$props.multiple && Array.isArray(this.$props.modelValue) ? !this.$props.modelValue.includes(r) : !0).map((r) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Be, {
+      item: r,
+      active: this.$props.modelValue && typeof r == "object" ? r.text === this.$props.modelValue.text : r === this.$props.modelValue,
+      text: typeof r == "object" ? r.text : r,
+      flag: typeof r == "object" && Object.keys(r).includes("flag") ? r.flag : "",
+      image: r.image,
+      label: r.label,
+      disabled: r.disabled,
+      onSelect: this.onSelect
+    }, null)), l = () => {
+      let r = {
         clearable: this.clearable,
         filtered: this.filteredText.length > 0,
         icon: this.icon,
@@ -4171,36 +3575,34 @@ var Dropdown = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
         placeholder: this.placeholder,
         text: this.text
       };
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(DropdownText, (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)(textProps, {
-        "onRemove": () => this.$emit("update:modelValue", null)
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Wa, (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)(r, {
+        onRemove: () => this.$emit("update:modelValue", null)
       }), null);
-    };
-    const renderMenu = () => {
-      let _slot;
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(DropdownMenu, {
-        "search": this.$props.searchInMenu,
-        "onSearch": this.onInput
-      }, _isSlot(_slot = renderOptions()) ? _slot : {
-        default: () => [_slot]
+    }, i = () => {
+      let r;
+      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(ye, {
+        search: this.$props.searchInMenu,
+        onSearch: this.onInput
+      }, qa(r = t()) ? r : {
+        default: () => [r]
       });
     };
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass,
-      "onClick": this.onClick
-    }, [this.$props.multiple && renderMultipleSelect(), this.search && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-      "ref": (ref2) => this.inputRef = ref2,
-      "type": "text",
-      "class": "search",
-      "autocomplete": "off",
-      "tabindex": 0,
-      "value": this.filteredText,
-      "onInput": (event) => this.onInput(event)
+      class: this.computedClass,
+      onClick: this.onClick
+    }, [this.$props.multiple && e(), this.search && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+      ref: (r) => this.inputRef = r,
+      type: "text",
+      class: "search",
+      autocomplete: "off",
+      tabindex: 0,
+      value: this.filteredText,
+      onInput: (r) => this.onInput(r)
     }, null), this.search && this.multiple && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "sizer"
-    }, null), renderText(), ((_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)) || renderMenu()]), [[(0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDirective)("clickoutside"), this.closeMenu]]);
+      class: "sizer"
+    }, null), l(), ((u = (o = this.$slots).default) == null ? void 0 : u.call(o)) || i()]), [[(0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDirective)("clickoutside"), this.closeMenu]]);
   }
-});
-var DropdownItem = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Be = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiDropdownItem",
   emits: ["select"],
   props: {
@@ -4212,128 +3614,101 @@ var DropdownItem = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     item: [Object, String],
     label: Object,
     text: String,
+    disabled: Boolean,
     onSelect: Function
   },
-  setup(props, {
-    emit
+  setup(e, {
+    emit: t
   }) {
     const {
-      state,
-      hide
+      state: l,
+      hide: i
     } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("useDropdown");
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.active, "active"), "item");
-    });
-    const onClick = () => {
-      if (!state.multiple)
-        hide();
-      emit("select", props.item ? props.item : props.text);
-    };
     return {
-      computedClass,
-      onClick
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(n(e.active, "active"), n(e.disabled, "disabled"), "item")),
+      onClick: () => {
+        l.multiple || i(), t("select", e.item ? e.item : e.text);
+      }
     };
   },
   render() {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass,
-      "onClick": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(this.onClick, ["stop"])
+      class: this.computedClass,
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(this.onClick, ["stop"])
     }, [this.flag && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": `${this.flag} flag`
+      class: `${this.flag} flag`
     }, null), this.icon && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": `${this.icon} icon`
-    }, null), this.image && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Image, this.image, null), this.label && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Label, this.label, null), this.description && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
-      "class": "description"
+      class: `${this.icon} icon`
+    }, null), this.image && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(se, this.image, null), this.label && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(Z, this.label, null), this.description && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", {
+      class: "description"
     }, [this.description]), this.text]);
   }
-});
-var DropdownMenu = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), ye = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiDropdownMenu",
   emits: ["search"],
   props: {
     search: Boolean,
     onSearch: Function
   },
-  setup(_, {
-    emit,
-    slots
+  setup(e, {
+    emit: t,
+    slots: l
   }) {
     const {
-      state
-    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("useDropdown");
-    const container = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null);
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      let animationClass = () => {
-        if (state.visible)
-          return `animating slide ${state.direction} in visible`;
-        else
-          return `animating slide ${state.direction} out visible`;
-      };
-      return clsx("menu", "transition", computeKeyOnly(state.visible, "visible"), computeKeyOnly(!state.visible && !state.animating, "hidden"), computeKeyOnly(state.animating, animationClass()));
+      state: i
+    } = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("useDropdown"), o = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null), u = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+      let b = () => i.visible ? `animating slide ${i.direction} in visible` : `animating slide ${i.direction} out visible`;
+      return m("menu", "transition", n(i.visible, "visible"), n(!i.visible && !i.animating, "hidden"), n(i.animating, b()));
     });
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(() => state.visible, (newValue) => {
-      if (!newValue || !container.value)
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(() => i.visible, (b) => {
+      if (!b || !o.value)
         return;
-      let parent = container.value.parentElement;
+      let v = o.value.parentElement;
       const {
-        top,
-        height
-      } = parent == null ? void 0 : parent.getBoundingClientRect();
-      const spaceAtTop = top - items.value.length * 37;
-      const spaceAtBottom = document.documentElement.clientHeight - top - height - items.value.length * 37;
-      state.direction = spaceAtTop > spaceAtBottom ? "up" : "down";
+        top: f,
+        height: k
+      } = v == null ? void 0 : v.getBoundingClientRect(), g = f - r.value.length * 37, x = document.documentElement.clientHeight - f - k - r.value.length * 37;
+      i.direction = g > x ? "up" : "down";
     });
-    const items = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      var _a;
-      let items2 = [];
-      let defaultSlot = (_a = slots.default) == null ? void 0 : _a.call(slots);
-      if (defaultSlot) {
-        defaultSlot.forEach((child) => {
-          if (child.type.name === "SuiSelectItem")
-            items2.push(child);
-        });
-      }
-      return items2;
+    const r = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+      var f;
+      let b = [], v = (f = l.default) == null ? void 0 : f.call(l);
+      return v && v.forEach((k) => {
+        k.type.name === "SuiSelectItem" && b.push(k);
+      }), b;
     });
-    const onSearchInput = (event) => emit("search", event);
     return {
-      container,
-      computedClass,
-      onSearchInput
+      container: o,
+      computedClass: u,
+      onSearchInput: (b) => t("search", b)
     };
   },
   render() {
-    var _a, _b, _c, _d;
-    const renderSearchInMenu = () => {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-        "class": "ui left icon input",
-        "onClick": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => {
-        }, ["stop"])
-      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-        "type": "text",
-        "onInput": (event) => this.onSearchInput(event)
-      }, null), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-        "class": "search icon"
-      }, null)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-        "class": "ui divider"
-      }, null)]);
-    };
+    var t, l, i, o;
+    const e = () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      class: "ui left icon input",
+      onClick: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withModifiers)(() => {
+      }, ["stop"])
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
+      type: "text",
+      onInput: (u) => this.onSearchInput(u)
+    }, null), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
+      class: "search icon"
+    }, null)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      class: "ui divider"
+    }, null)]);
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "ref": (ref2) => this.container = ref2,
-      "class": this.computedClass
+      ref: (u) => this.container = u,
+      class: this.computedClass
     }, [this.$slots.header && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "header"
-    }, [(_b = (_a = this.$slots).header) == null ? void 0 : _b.call(_a)]), this.$props.search && renderSearchInMenu(), (_d = (_c = this.$slots).default) == null ? void 0 : _d.call(_c)]);
+      class: "header"
+    }, [(l = (t = this.$slots).header) == null ? void 0 : l.call(t)]), this.$props.search && e(), (o = (i = this.$slots).default) == null ? void 0 : o.call(i)]);
   }
-});
-var index$a = {
-  install(app) {
-    app.component(Dropdown.name, Dropdown);
-    app.component(DropdownItem.name, DropdownItem);
-    app.component(DropdownMenu.name, DropdownMenu);
+}), Ja = {
+  install(e) {
+    e.component(yn.name, yn), e.component(Be.name, Be), e.component(ye.name, ye);
   }
-};
-var Embed = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, kn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiEmbed",
   props: {
     active: Boolean,
@@ -4344,259 +3719,209 @@ var Embed = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     source: String,
     url: String
   },
-  setup(props) {
-    const active = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(props.active);
-    const clickHandler = () => {
-      active.value = !active.value;
-    };
-    const getSrc = () => {
-      if (props.source === "youtube") {
-        return [
-          `//www.youtube.com/embed/${props.id}`,
-          "?autohide=true",
-          `&amp;autoplay=${props.autoplay}`,
-          "&amp;jsapi=false"
-        ].join("");
-      }
-      return props.url;
-    };
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.aspectRatio, computeKeyOnly(active.value, "active"), "embed");
-    });
+  setup(e) {
+    const t = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(e.active), l = () => {
+      t.value = !t.value;
+    }, i = () => e.source === "youtube" ? [
+      `//www.youtube.com/embed/${e.id}`,
+      "?autohide=true",
+      `&amp;autoplay=${e.autoplay}`,
+      "&amp;jsapi=false"
+    ].join("") : e.url, o = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(
+      "ui",
+      e.aspectRatio,
+      n(t.value, "active"),
+      "embed"
+    ));
     return {
-      active,
-      getSrc,
-      clickHandler,
-      computedClass
+      active: t,
+      getSrc: i,
+      clickHandler: l,
+      computedClass: o
     };
   },
   render() {
-    let children = [
+    let e = [
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("i", { class: "video play icon" }),
       (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("img", {
         class: "placeholder",
         src: this.placeholder
       })
     ];
-    if (this.active) {
-      children.push((0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "embed" }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("iframe", { src: this.getSrc() })));
-    }
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", {
-      class: this.computedClass,
-      onClick: this.clickHandler
-    }, children);
+    return this.active && e.push(
+      (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+        "div",
+        { class: "embed" },
+        (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("iframe", { src: this.getSrc() })
+      )
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)(
+      "div",
+      {
+        class: this.computedClass,
+        onClick: this.clickHandler
+      },
+      e
+    );
   }
-});
-var index$9 = {
-  install(app) {
-    app.component(Embed.name, Embed);
+}), Ua = {
+  install(e) {
+    e.component(kn.name, kn);
   }
-};
-var Modal = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, xn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiModal",
   props: {
     basic: Boolean,
     closeIcon: Boolean,
     modelValue: Boolean,
-    size: String
+    size: String,
+    closable: {
+      type: Boolean,
+      default: !0
+    },
+    overlay: Boolean,
+    fullscreen: Boolean
   },
-  setup(props, {
-    emit
+  setup(e, {
+    emit: t
   }) {
-    const visualState = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(props.modelValue ? "open" : "closed");
-    const root = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null);
-    const isVisible = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => visualState.value !== "closed");
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(() => props.modelValue, (newValue) => {
-      visualState.value = newValue ? "opening" : "closing";
+    const l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(e.modelValue ? "open" : "closed"), i = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null), o = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => l.value !== "closed");
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(() => e.modelValue, (g) => {
+      l.value = g ? "opening" : "closing";
     });
-    const computeAnimationClass = (visualState2, animationType = "scale") => {
-      switch (visualState2) {
+    const u = (g, x = "scale") => {
+      switch (g) {
         case "opening":
-          return `animating ${animationType} in`;
+          return `animating ${x} in`;
         case "open":
           return "visible active";
         case "closing":
-          return `visible active animating ${animationType} out`;
+          return `visible active animating ${x} out`;
         case "closed":
           return "hidden";
       }
-    };
-    const updateVisualState = () => visualState.value = props.modelValue ? "open" : "closed";
+    }, r = () => l.value = e.modelValue ? "open" : "closed";
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.onMounted)(() => {
-      var _a;
-      (_a = root.value) == null ? void 0 : _a.addEventListener("animationend", updateVisualState, true);
+      var g;
+      (g = i.value) == null || g.addEventListener("animationend", r, !0);
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.onUnmounted)(() => {
+      var g;
+      (g = i.value) == null || g.removeEventListener("animationend", r);
     });
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.onUnmounted)(() => {
-      var _a;
-      (_a = root.value) == null ? void 0 : _a.removeEventListener("animationend", updateVisualState);
-    });
-    const dimmerClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", "page modals dimmer transition", computeAnimationClass(visualState.value, "fade"));
-    });
-    const dimmerStyle = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return {
-        display: isVisible.value ? "flex !important" : "none !important",
-        animationDuration: "500ms"
-      };
-    });
-    const modalStyle = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return {
-        display: isVisible.value ? "block !important" : "none !important",
-        animationDuration: "500ms"
-      };
-    });
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.size, computeKeyOnly(props.basic, "basic"), "modal", "transition", computeAnimationClass(visualState.value));
-    });
-    const close = () => {
-      emit("update:modelValue", false);
-    };
+    const S = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", "page modals dimmer transition", u(l.value, "fade"))), b = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => ({
+      display: o.value ? "flex !important" : "none !important",
+      animationDuration: "500ms"
+    })), v = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => ({
+      display: o.value ? "block !important" : "none !important",
+      animationDuration: "500ms"
+    })), f = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.size, n(e.basic, "basic"), n(e.overlay, "overlay"), n(e.fullscreen, "fullscreen"), "modal", "transition", u(l.value)));
     return {
-      dimmerClass,
-      dimmerStyle,
-      modalStyle,
-      computedClass,
-      close,
-      root
+      dimmerClass: S,
+      dimmerStyle: b,
+      modalStyle: v,
+      computedClass: f,
+      close: () => {
+        t("update:modelValue", !1);
+      },
+      root: i
     };
   },
   render() {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Teleport, {
-      "to": "body"
+      to: "body"
     }, {
       default: () => {
-        var _a, _b;
+        var e, t;
         return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-          "class": this.dimmerClass,
-          "style": this.dimmerStyle,
-          "onClick": this.close,
-          "ref": (ref2) => this.root = ref2
+          class: this.dimmerClass,
+          style: this.dimmerStyle,
+          onClick: () => {
+            this.closable && this.close;
+          },
+          ref: (l) => this.root = l
         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-          "class": this.computedClass,
-          "style": this.modalStyle,
-          "onClick": (e) => e.stopPropagation()
+          class: this.computedClass,
+          style: this.modalStyle,
+          onClick: (l) => l.stopPropagation()
         }, [this.closeIcon && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
           "aria-hidden": "true",
-          "class": "close icon",
-          "onClick": this.close
-        }, null), (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)])])];
+          class: "close icon",
+          onClick: this.close
+        }, null), (t = (e = this.$slots).default) == null ? void 0 : t.call(e)])])];
       }
     });
   }
-});
-var ModalActions = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), $n = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiModalActions",
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "actions"
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: "actions"
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var ModalContent = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), An = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiModalContent",
   props: {
     image: Boolean,
     scrolling: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOnly(props.image, "image"), computeKeyOnly(props.scrolling, "scrolling"), "content");
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(n(e.image, "image"), n(e.scrolling, "scrolling"), "content"))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var ModalDescription = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), Mn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiModalDescription",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "description" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "description" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var ModalHeader = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), wn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiModalHeader",
   render() {
-    var _a, _b;
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "header" }, (_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a));
+    var e, t;
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.h)("div", { class: "header" }, (t = (e = this.$slots).default) == null ? void 0 : t.call(e));
   }
-});
-var index$8 = {
-  install(app) {
-    app.component(Modal.name, Modal);
-    app.component(ModalActions.name, ModalActions);
-    app.component(ModalContent.name, ModalContent);
-    app.component(ModalDescription.name, ModalDescription);
-    app.component(ModalHeader.name, ModalHeader);
+}), Xa = {
+  install(e) {
+    e.component(xn.name, xn), e.component($n.name, $n), e.component(An.name, An), e.component(Mn.name, Mn), e.component(wn.name, wn);
   }
-};
-var usePopup = (props) => {
-  const show = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
-  const placement = (0,vue__WEBPACK_IMPORTED_MODULE_0__.toRef)(props, "position");
-  const popupRef = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null);
-  const triggerRef = (0,vue__WEBPACK_IMPORTED_MODULE_0__.toRef)(props, "trigger");
-  const showPopup = () => {
-    show.value = true;
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.nextTick)(() => setPopupPosition());
-  };
-  const hidePopup = () => {
-    show.value = false;
-  };
-  const setPopupPosition = () => {
-    if (!popupRef.value || !triggerRef.value)
+}, Qa = (e) => {
+  const t = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(!1), l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.toRef)(e, "position"), i = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null), o = (0,vue__WEBPACK_IMPORTED_MODULE_0__.toRef)(e, "trigger"), u = () => {
+    t.value = !0, (0,vue__WEBPACK_IMPORTED_MODULE_0__.nextTick)(() => S());
+  }, r = () => {
+    t.value = !1;
+  }, S = () => {
+    if (!i.value || !o.value)
       return;
-    let x = 0;
-    let y = 0;
-    const popupEl = popupRef.value;
-    const triggerEl = triggerRef.value.$el;
-    popupEl.style.transform = `translate(${x}px, ${y}px)`;
-    const { top, left, width, height } = triggerEl.getBoundingClientRect();
-    const popupRect = popupEl.getBoundingClientRect();
-    const { pageXOffset, pageYOffset } = window;
-    if (placement.value.includes("top")) {
-      x = pageXOffset + left;
-      y = pageYOffset + top - popupEl.offsetTop - popupEl.offsetHeight;
-    } else {
-      x = left;
-      y = top + height - popupRect.top;
+    let b = 0, v = 0;
+    const f = i.value, k = o.value.$el;
+    f.style.transform = `translate(${b}px, ${v}px)`;
+    const { top: g, left: x, width: I, height: C } = k.getBoundingClientRect(), y = f.getBoundingClientRect(), { pageXOffset: $, pageYOffset: V } = window;
+    if (l.value.includes("top") ? (b = $ + x, v = V + g - f.offsetTop - f.offsetHeight) : (b = x, v = g + C - y.top), l.value.includes("right")) {
+      const z = I - y.width;
+      b = x + z;
     }
-    if (placement.value.includes("right")) {
-      const xOffset = width - popupRect.width;
-      x = left + xOffset;
+    if (l.value.includes("center")) {
+      const z = I / 2 - y.width / 2;
+      b = x + z;
     }
-    if (placement.value.includes("center")) {
-      const xOffset = width / 2 - popupRect.width / 2;
-      x = left + xOffset;
-    }
-    if (placement.value === "right center") {
-      x = left + width;
-      y = top + height / 2 - popupRect.top - popupRect.height / 2;
-    }
-    if (placement.value === "left center") {
-      x = left - popupRect.width;
-      y = top + height / 2 - popupRect.top - popupRect.height / 2;
-    }
-    popupEl.style.display = "flex";
-    popupEl.style.position = "absolute";
-    popupEl.style.transform = `translate(${x}px, ${y}px)`;
+    l.value === "right center" && (b = x + I, v = g + C / 2 - y.top - y.height / 2), l.value === "left center" && (b = x - y.width, v = g + C / 2 - y.top - y.height / 2), f.style.display = "flex", f.style.position = "absolute", f.style.transform = `translate(${b}px, ${v}px)`;
   };
   return {
-    show,
-    showPopup,
-    hidePopup,
-    placement,
-    popupRef,
-    triggerRef
+    show: t,
+    showPopup: u,
+    hidePopup: r,
+    placement: l,
+    popupRef: i,
+    triggerRef: o
   };
-};
-var Popup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Tn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiPopup",
   props: {
     basic: Boolean,
@@ -4612,82 +3937,71 @@ var Popup = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     trigger: Object,
     wide: [Boolean, String]
   },
-  setup(props, {
-    slots
+  setup(e, {
+    slots: t
   }) {
     const {
-      show,
-      showPopup,
-      hidePopup,
-      popupRef,
-      triggerRef
-    } = usePopup(props);
+      show: l,
+      showPopup: i,
+      hidePopup: o,
+      popupRef: u,
+      triggerRef: r
+    } = Qa(e);
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.watchEffect)(() => {
-      var _a, _b, _c;
-      if (!((_a = triggerRef.value) == null ? void 0 : _a.$el))
-        return;
-      (_b = triggerRef.value) == null ? void 0 : _b.$el.addEventListener("mouseenter", showPopup);
-      (_c = triggerRef.value) == null ? void 0 : _c.$el.addEventListener("mouseleave", hidePopup);
+      var g, x, I;
+      (g = r.value) != null && g.$el && ((x = r.value) == null || x.$el.addEventListener("mouseenter", i), (I = r.value) == null || I.$el.addEventListener("mouseleave", o));
     });
-    const visualState = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(show.value ? "open" : "close");
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => visualState.value !== "closed");
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(() => show.value, (newValue) => {
-      visualState.value = newValue ? "opening" : "closing";
+    const S = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(l.value ? "open" : "close");
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => S.value !== "closed"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(() => l.value, (g) => {
+      S.value = g ? "opening" : "closing";
     });
-    const computeAnimationClass = (visualState2, animationType = "scale") => {
-      switch (visualState2) {
+    const b = (g, x = "scale") => {
+      switch (g) {
         case "opening":
-          return `animating ${animationType} in`;
+          return `animating ${x} in`;
         case "open":
           return "visible active";
         case "closing":
-          return `visible active animating ${animationType} out`;
+          return `visible active animating ${x} out`;
         case "closed":
           return "hidden";
       }
-    };
-    const updateVisualState = () => visualState.value = show.value ? "open" : "closed";
+    }, v = () => S.value = l.value ? "open" : "closed";
     (0,vue__WEBPACK_IMPORTED_MODULE_0__.onMounted)(() => {
-      var _a;
-      (_a = popupRef.value) == null ? void 0 : _a.addEventListener("animationend", updateVisualState, true);
+      var g;
+      (g = u.value) == null || g.addEventListener("animationend", v, !0);
+    }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.onUnmounted)(() => {
+      var g;
+      (g = u.value) == null || g.removeEventListener("animationend", v);
     });
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.onUnmounted)(() => {
-      var _a;
-      (_a = popupRef.value) == null ? void 0 : _a.removeEventListener("animationend", updateVisualState);
-    });
-    const popupStyle = {
+    const f = {
       position: "initial",
       animationDuration: "200ms"
-    };
-    const classes = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ignored ui", props.position, props.size, computeKeyOnly(props.basic, "basic"), computeKeyOnly(props.flowing, "flowing"), computeKeyOnly(props.inverted, "inverted"), computeKeyOrKeyValue(props.wide, "wide"), "popup transition", computeAnimationClass(visualState.value, "scale"));
-    });
+    }, k = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ignored ui", e.position, e.size, n(e.basic, "basic"), n(e.flowing, "flowing"), n(e.inverted, "inverted"), w(e.wide, "wide"), "popup transition", b(S.value, "scale")));
     return () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Teleport, {
-      "to": "body"
+      to: "body"
     }, {
       default: () => {
-        var _a;
+        var g;
         return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-          "ref": popupRef,
-          "style": "display: flex; position: absolute; transform: translate(0px, 0px);"
+          ref: u,
+          style: "display: flex; position: absolute; transform: translate(0px, 0px);"
         }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-          "class": classes.value,
-          "style": popupStyle
-        }, [props.header && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-          "class": "header"
-        }, [props.header]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-          "class": "content"
-        }, [props.content ? props.content : (_a = slots.default) == null ? void 0 : _a.call(slots)])])])];
+          class: k.value,
+          style: f
+        }, [e.header && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+          class: "header"
+        }, [e.header]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+          class: "content"
+        }, [e.content ? e.content : (g = t.default) == null ? void 0 : g.call(t)])])])];
       }
     });
   }
-});
-var index$7 = {
-  install(app) {
-    app.component(Popup.name, Popup);
+}), Za = {
+  install(e) {
+    e.component(Tn.name, Tn);
   }
-};
-var Progress = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Dn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiProgress",
   props: {
     active: Boolean,
@@ -4704,32 +4018,25 @@ var Progress = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     success: Boolean,
     warning: Boolean
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.color, props.size, computeKeyOnly(props.active, "active"), computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.error, "error"), computeKeyOnly(props.indicating, "indicating"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.success, "success"), computeKeyOnly(props.warning, "warning"), computeKeyValue(props.attached, "attached"), "progress");
-    });
-    const barClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(computeKeyOrKeyValue(props.progress, "progress"));
-    });
+  setup(e) {
+    const t = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.color, e.size, n(e.active, "active"), n(e.disabled, "disabled"), n(e.error, "error"), n(e.indicating, "indicating"), n(e.inverted, "inverted"), n(e.success, "success"), n(e.warning, "warning"), T(e.attached, "attached"), "progress")), l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(w(e.progress, "progress")));
     return () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": computedClass.value,
-      "data-percent": props.percent
+      class: t.value,
+      "data-percent": e.percent
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "bar",
-      "style": `width: ${props.percent}%; transition-duration: 300ms;`
-    }, [props.progress && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": barClass.value
-    }, [props.percent, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("%")])]), props.label && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "label"
-    }, [props.label])]);
+      class: "bar",
+      style: `width: ${e.percent}%; transition-duration: 300ms;`
+    }, [e.progress && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      class: l.value
+    }, [e.percent, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)("%")])]), e.label && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      class: "label"
+    }, [e.label])]);
   }
-});
-var index$6 = {
-  install(app) {
-    app.component(Progress.name, Progress);
+}), pa = {
+  install(e) {
+    e.component(Dn.name, Dn);
   }
-};
-var RatingIcon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, el = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiRatingIcon",
   props: {
     icon: String,
@@ -4738,45 +4045,25 @@ var RatingIcon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
       default: 0
     }
   },
-  setup(props) {
-    const rating = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("rating", (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0));
-    const updateRating = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("updateRating");
-    const selectedIndex = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("selectedIndex", (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0));
-    const updateSelectedIndex = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("updateSelectedIndex");
-    const clearable = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("clearable", false);
-    const disabled = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("disabled", false);
-    const handleClick = () => {
-      if (disabled)
-        return;
-      if (clearable && props.index === rating.value) {
-        updateRating(0);
-        updateSelectedIndex(0);
-        return;
+  setup(e) {
+    const t = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("rating", (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0)), l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("updateRating"), i = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("selectedIndex", (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0)), o = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("updateSelectedIndex"), u = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("clearable", !1), r = (0,vue__WEBPACK_IMPORTED_MODULE_0__.inject)("disabled", !1), S = () => {
+      if (!r) {
+        if (u && e.index === t.value) {
+          l(0), o(0);
+          return;
+        }
+        l(e.index);
       }
-      updateRating(props.index);
-    };
-    const handleMouseEnter = () => {
-      if (disabled)
-        return;
-      updateSelectedIndex(props.index);
-    };
-    const isActive = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return props.index <= rating.value;
-    });
-    const isSelected = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return props.index <= selectedIndex.value;
-    });
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx(props.icon, computeKeyOnly(isActive.value, "active"), computeKeyOnly(isSelected.value, "selected"), "icon");
-    });
+    }, b = () => {
+      r || o(e.index);
+    }, v = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => e.index <= t.value), f = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => e.index <= i.value), k = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m(e.icon, n(v.value, "active"), n(f.value, "selected"), "icon"));
     return () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": computedClass.value,
-      "onClick": () => handleClick(),
-      "onMouseenter": () => handleMouseEnter()
+      class: k.value,
+      onClick: () => S(),
+      onMouseenter: () => b()
     }, null);
   }
-});
-var Rating = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), In = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiRating",
   props: {
     clearable: Boolean,
@@ -4797,86 +4084,58 @@ var Rating = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     modelValue: Number,
     size: String
   },
-  setup(props, {
-    emit
+  setup(e, {
+    emit: t
   }) {
-    const rating = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(props.modelValue || props.defaultRating);
-    const selected = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
-    const selectedIndex = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0);
-    const updateRating = (value) => {
-      rating.value = value;
-      emit("update:modelValue", value);
-      emit("change", value);
-    };
-    const updateSelectedIndex = (value) => selectedIndex.value = value;
-    const handleMouseEnter = () => {
-      if (props.disabled)
-        return;
-      selected.value = true;
-    };
-    const handleMouseLeave = () => {
-      if (props.disabled)
-        return;
-      selected.value = false;
-      updateSelectedIndex(0);
-    };
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.color, props.icon, props.size, computeKeyOnly(props.disabled, "disabled"), "rating", computeKeyOnly(selected.value, "selected"));
-    });
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("rating", rating);
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("updateRating", updateRating);
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("selectedIndex", selectedIndex);
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("updateSelectedIndex", updateSelectedIndex);
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("clearable", props.clearable);
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("disabled", props.disabled);
-    return () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": computedClass.value,
-      "onMouseenter": () => handleMouseEnter(),
-      "onMouseleave": () => handleMouseLeave()
-    }, [[...Array(props.maxRating)].map((_, i) => {
-      return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(RatingIcon, {
-        "icon": props.icon,
-        "index": i + 1
-      }, null);
-    })]);
+    const l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(e.modelValue || e.defaultRating), i = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(!1), o = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0), u = (f) => {
+      l.value = f, t("update:modelValue", f), t("change", f);
+    }, r = (f) => o.value = f, S = () => {
+      e.disabled || (i.value = !0);
+    }, b = () => {
+      e.disabled || (i.value = !1, r(0));
+    }, v = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.color, e.icon, e.size, n(e.disabled, "disabled"), "rating", n(i.value, "selected")));
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("rating", l), (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("updateRating", u), (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("selectedIndex", o), (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("updateSelectedIndex", r), (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("clearable", e.clearable), (0,vue__WEBPACK_IMPORTED_MODULE_0__.provide)("disabled", e.disabled), () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      class: v.value,
+      onMouseenter: () => S(),
+      onMouseleave: () => b()
+    }, [[...Array(e.maxRating)].map((f, k) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(el, {
+      icon: e.icon,
+      index: k + 1
+    }, null))]);
   }
-});
-var index$5 = {
-  install(app) {
-    app.component(Rating.name, Rating);
+}), tl = {
+  install(e) {
+    e.component(In.name, In);
   }
-};
-var Search = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Ln = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiSearch",
   props: {
     icon: String,
     placeholder: String
   },
-  setup(props) {
+  setup(e) {
     return () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "ui search"
+      class: "ui search"
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "ui icon input"
+      class: "ui icon input"
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("input", {
-      "type": "text",
-      "class": "prompt",
-      "placeholder": props.placeholder
+      type: "text",
+      class: "prompt",
+      placeholder: e.placeholder
     }, null), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("i", {
-      "class": "search icon"
+      class: "search icon"
     }, null)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "results"
+      class: "results"
     }, null)]);
   }
-});
-var index$4 = {
-  install(app) {
-    app.component(Search.name, Search);
+}), nl = {
+  install(e) {
+    e.component(Ln.name, Ln);
   }
-};
-var Sidebar = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, Vn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiSidebar",
   directives: {
-    clickoutside: clickOutside
+    clickoutside: De
   },
   emits: ["update:visible", "show", "hide"],
   props: {
@@ -4893,66 +4152,55 @@ var Sidebar = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     inverted: Boolean,
     visible: Boolean
   },
-  setup(props, {
-    emit
+  setup(e, {
+    emit: t
   }) {
-    const state = (0,vue__WEBPACK_IMPORTED_MODULE_0__.reactive)({
-      animating: false
+    const l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.reactive)({
+      animating: !1
+    }), i = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+      const u = e.direction === "right" || e.direction === "left";
+      return m("ui", "sidebar", e.direction, e.animation, n(e.inverted, "inverted"), n(e.visible, "visible"), n(l.animating, "animating"), n(u, "vertical"), w(e.icon, "icon"), "menu");
     });
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      const isVertical = props.direction === "right" || props.direction === "left";
-      return clsx("ui", "sidebar", props.direction, props.animation, computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.visible, "visible"), computeKeyOnly(state.animating, "animating"), computeKeyOnly(isVertical, "vertical"), computeKeyOrKeyValue(props.icon, "icon"), "menu");
-    });
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(() => props.visible, () => {
-      state.animating = true;
-      setTimeout(() => state.animating = false, 500);
-      if (props.dimmed) {
-        const pusher = document.querySelector(".pusher");
-        pusher && pusher.classList.toggle("dimmed");
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(() => e.visible, () => {
+      if (l.animating = !0, setTimeout(() => l.animating = !1, 500), e.dimmed) {
+        const u = document.querySelector(".pusher");
+        u && u.classList.toggle("dimmed");
       }
-    });
-    const onClickPusher = (event) => {
-      const path = event.path || event.composedPath && event.composedPath();
-      if (!path)
-        return;
-      const pusher = path.find((el) => {
-        return el.classList && el.classList.contains("pusher");
-      });
-      if (pusher) {
-        props.visible && emit("update:visible", false);
+    }), {
+      computedClass: i,
+      onClickPusher: (u) => {
+        const r = u.path || u.composedPath && u.composedPath();
+        if (!r)
+          return;
+        r.find((b) => b.classList && b.classList.contains("pusher")) && e.visible && t("update:visible", !1);
       }
-    };
-    return {
-      computedClass,
-      onClickPusher
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.withDirectives)((0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]), [[(0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDirective)("clickoutside"), this.onClickPusher]]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]), [[(0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveDirective)("clickoutside"), this.onClickPusher]]);
   }
-});
-var index$3 = {
-  install: (app) => {
-    app.component(Sidebar.name, Sidebar);
+}), al = {
+  install: (e) => {
+    e.component(Vn.name, Vn);
   }
 };
-class DomHandler {
+class me {
   static getWindowScrollTop() {
-    let { documentElement } = document;
-    return (window.pageYOffset || documentElement.scrollTop) - (documentElement.clientTop || 0);
+    let { documentElement: t } = document;
+    return (window.pageYOffset || t.scrollTop) - (t.clientTop || 0);
   }
   static getWindowScrollLeft() {
-    let { documentElement } = document;
-    return (window.pageXOffset || documentElement.scrollLeft) - (documentElement.clientLeft || 0);
+    let { documentElement: t } = document;
+    return (window.pageXOffset || t.scrollLeft) - (t.clientLeft || 0);
   }
-  static hasClass(element, selector) {
-    return element.classList.contains(selector);
+  static hasClass(t, l) {
+    return t.classList.contains(l);
   }
 }
-var Slider = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+const Yn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiSlider",
   emits: ["change", "slideend", "update:modelValue"],
   props: {
@@ -4986,367 +4234,209 @@ var Slider = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
       default: 200
     }
   },
-  setup(props, {
-    emit
+  setup(e, {
+    emit: t
   }) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui", props.color, props.size, computeKeyOnly(props.disabled, "disabled"), computeKeyOnly(props.inverted, "inverted"), computeKeyOnly(props.reversed, "reversed"), computeKeyOnly(props.vertical, "vertical"), computeKeyOrKeyValue(props.labeled, "labeled"), "slider");
-    });
-    const trackStartPosPercent = () => 100 * (props.modelValue[0] - props.min) / (props.max - props.min);
-    const trackEndPosPercent = () => 100 * (props.modelValue[1] - props.min) / (props.max - props.min);
-    const trackFillStyle = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      if (props.range) {
-        if (props.reversed && !props.vertical) {
-          return {
-            right: trackStartPosPercent() + "%",
-            width: trackEndPosPercent() - trackStartPosPercent() + "%"
-          };
-        }
-        if (props.vertical) {
-          if (props.reversed) {
-            return {
-              bottom: trackStartPosPercent() + "%",
-              height: trackEndPosPercent() - trackStartPosPercent() + "%"
-            };
-          }
-          return {
-            top: trackStartPosPercent() + "%",
-            height: trackEndPosPercent() - trackStartPosPercent() + "%"
-          };
-        }
-        return {
-          left: trackStartPosPercent() + "%",
-          width: trackEndPosPercent() - trackStartPosPercent() + "%"
+    const l = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui", e.color, e.size, n(e.disabled, "disabled"), n(e.inverted, "inverted"), n(e.reversed, "reversed"), n(e.vertical, "vertical"), w(e.labeled, "labeled"), "slider")), i = () => 100 * (e.modelValue[0] - e.min) / (e.max - e.min), o = () => 100 * (e.modelValue[1] - e.min) / (e.max - e.min), u = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+      if (e.range)
+        return e.reversed && !e.vertical ? {
+          right: i() + "%",
+          width: o() - i() + "%"
+        } : e.vertical ? e.reversed ? {
+          bottom: i() + "%",
+          height: o() - i() + "%"
+        } : {
+          top: i() + "%",
+          height: o() - i() + "%"
+        } : {
+          left: i() + "%",
+          width: o() - i() + "%"
         };
-      }
-      let value = props.modelValue > props.max ? props.max : props.modelValue;
-      if (props.reversed) {
-        if (props.vertical) {
-          return {
-            bottom: "0%",
-            top: `${100 - (value - props.min) / (props.max - props.min) * 100}%`
-          };
-        }
-        return {
-          right: "0%",
-          left: `${100 - (value - props.min) / (props.max - props.min) * 100}%`
-        };
-      }
-      if (props.vertical) {
-        return {
-          top: "0%",
-          bottom: `${100 - (value - props.min) / (props.max - props.min) * 100}%`
-        };
-      }
-      return {
+      let h = e.modelValue > e.max ? e.max : e.modelValue;
+      return e.reversed ? e.vertical ? {
+        bottom: "0%",
+        top: `${100 - (h - e.min) / (e.max - e.min) * 100}%`
+      } : {
+        right: "0%",
+        left: `${100 - (h - e.min) / (e.max - e.min) * 100}%`
+      } : e.vertical ? {
+        top: "0%",
+        bottom: `${100 - (h - e.min) / (e.max - e.min) * 100}%`
+      } : {
         left: "0%",
-        right: `${100 - (value - props.min) / (props.max - props.min) * 100}%`
+        right: `${100 - (h - e.min) / (e.max - e.min) * 100}%`
       };
-    });
-    const thumbStyle = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      let value = props.range ? props.modelValue[0] : props.modelValue > props.max ? props.max : props.modelValue;
-      if (!props.reversed && props.vertical) {
-        return {
-          top: `calc(${(value - props.min) * 100 / (props.max - props.min)}% - 10.5px)`,
-          bottom: "auto"
-        };
-      }
-      if (props.reversed && props.vertical) {
-        return {
-          top: "auto",
-          bottom: `calc(${(value - props.min) * 100 / (props.max - props.min)}% - 10.5px)`
-        };
-      }
-      if (props.reversed && !props.vertical) {
-        return {
-          left: "auto",
-          right: `calc(${(value - props.min) * 100 / (props.max - props.min)}% - 10.5px)`
-        };
-      }
-      return {
-        left: `calc(${(value - props.min) * 100 / (props.max - props.min)}% - 10.5px)`,
+    }), r = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+      let h = e.range ? e.modelValue[0] : e.modelValue > e.max ? e.max : e.modelValue;
+      return !e.reversed && e.vertical ? {
+        top: `calc(${(h - e.min) * 100 / (e.max - e.min)}% - 10.5px)`,
+        bottom: "auto"
+      } : e.reversed && e.vertical ? {
+        top: "auto",
+        bottom: `calc(${(h - e.min) * 100 / (e.max - e.min)}% - 10.5px)`
+      } : e.reversed && !e.vertical ? {
+        left: "auto",
+        right: `calc(${(h - e.min) * 100 / (e.max - e.min)}% - 10.5px)`
+      } : {
+        left: `calc(${(h - e.min) * 100 / (e.max - e.min)}% - 10.5px)`,
         right: "auto"
       };
-    });
-    const thumbSecondStyle = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      let value = props.modelValue[1] > props.max ? props.max : props.modelValue[1];
-      if (props.reversed && !props.vertical) {
-        return {
-          left: "auto",
-          right: `calc(${(value - props.min) * 100 / (props.max - props.min)}% - 10.5px)`
-        };
-      } else if (props.vertical) {
-        if (props.reversed) {
-          return {
-            top: "auto",
-            bottom: `calc(${(value - props.min) * 100 / (props.max - props.min)}% - 10.5px)`
-          };
-        }
-        return {
-          top: `calc(${(value - props.min) * 100 / (props.max - props.min)}% - 10.5px)`,
-          bottom: "auto"
-        };
-      }
-      return {
-        left: `calc(${(value - props.min) * 100 / (props.max - props.min)}% - 10.5px)`,
+    }), S = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+      let h = e.modelValue[1] > e.max ? e.max : e.modelValue[1];
+      return e.reversed && !e.vertical ? {
+        left: "auto",
+        right: `calc(${(h - e.min) * 100 / (e.max - e.min)}% - 10.5px)`
+      } : e.vertical ? e.reversed ? {
+        top: "auto",
+        bottom: `calc(${(h - e.min) * 100 / (e.max - e.min)}% - 10.5px)`
+      } : {
+        top: `calc(${(h - e.min) * 100 / (e.max - e.min)}% - 10.5px)`,
+        bottom: "auto"
+      } : {
+        left: `calc(${(h - e.min) * 100 / (e.max - e.min)}% - 10.5px)`,
         right: "auto"
       };
-    });
-    const labels = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      if (!props.labels) {
-        return [...Array(props.max - props.min + 1)].map((_, i) => i * props.step + props.min);
-      }
-      return props.labels;
-    });
-    const gapRatio = () => {
-      var _a, _b;
-      let gapRatio2 = 1;
-      let numLabels = getNumLabels();
-      let trackLength = (props.vertical ? (_a = trackRef.value) == null ? void 0 : _a.clientHeight : (_b = trackRef.value) == null ? void 0 : _b.clientWidth) || 0;
-      let gapCounter = 1;
-      if (trackLength > 0) {
-        while (trackLength / numLabels * gapCounter < 100) {
-          if (!(numLabels % gapCounter))
-            gapRatio2 = gapCounter;
-          gapCounter += 1;
-        }
-      }
-      return gapRatio2;
-    };
-    const getNumLabels = () => Math.round((props.max - props.min) / props.step);
-    const rootRef = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null);
-    const trackRef = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null);
-    const initX = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0);
-    const initY = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0);
-    const barWidth = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0);
-    const barHeight = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0);
-    const updateDomData = () => {
-      if (!rootRef.value)
+    }), b = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => e.labels ? e.labels : [...Array(e.max - e.min + 1)].map((h, A) => A * e.step + e.min)), v = () => {
+      var G, ee;
+      let h = 1, A = f(), L = (e.vertical ? (G = g.value) == null ? void 0 : G.clientHeight : (ee = g.value) == null ? void 0 : ee.clientWidth) || 0, F = 1;
+      if (L > 0)
+        for (; L / A * F < 100; )
+          A % F || (h = F), F += 1;
+      return h;
+    }, f = () => Math.round((e.max - e.min) / e.step), k = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null), g = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(null), x = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0), I = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0), C = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0), y = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0), $ = () => {
+      if (!k.value)
         return;
-      let rect = rootRef.value.getBoundingClientRect();
-      initX.value = rect.left + DomHandler.getWindowScrollLeft();
-      initY.value = rect.top + DomHandler.getWindowScrollTop();
-      barWidth.value = rootRef.value.offsetWidth;
-      barHeight.value = rootRef.value.offsetHeight;
-    };
-    const rangeIndex = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0);
-    const setValue = (event) => {
+      let h = k.value.getBoundingClientRect();
+      x.value = h.left + me.getWindowScrollLeft(), I.value = h.top + me.getWindowScrollTop(), C.value = k.value.offsetWidth, y.value = k.value.offsetHeight;
+    }, V = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(0), z = (h) => {
       let {
-        pageX,
-        pageY
-      } = event.touches ? event.touches[0] : event;
-      let handleValue;
-      let newValue;
-      if (props.vertical) {
-        handleValue = (initY.value + barHeight.value - pageY) * 100 / barHeight.value;
-      } else {
-        handleValue = (pageX - initX.value) * 100 / barWidth.value;
-      }
-      newValue = (props.max - props.min) * (handleValue / 100) + props.min;
-      const oldValue = props.range ? props.modelValue[rangeIndex.value] : props.modelValue || 0;
-      newValue = oldValue + Math.round(newValue / props.step - oldValue / props.step) * props.step;
-      if (props.reversed)
-        newValue = props.max - newValue + props.min;
-      if (props.vertical)
-        newValue = props.max - newValue + props.min;
-      updateModel(newValue);
-    };
-    const updateModel = (value) => {
-      let newValue = value;
-      let modelValue;
-      if (props.range) {
-        modelValue = props.modelValue ? [...props.modelValue] : [];
-        if (rangeIndex.value === 0) {
-          let maxValue = props.modelValue ? props.modelValue[1] : props.max;
-          if (newValue < props.min)
-            newValue = props.min;
-          else if (newValue > maxValue)
-            newValue = maxValue;
-          modelValue[0] = newValue;
-          modelValue[1] = modelValue[1] || props.max;
+        pageX: A,
+        pageY: L
+      } = h.touches ? h.touches[0] : h, F, G;
+      e.vertical ? F = (I.value + y.value - L) * 100 / y.value : F = (A - x.value) * 100 / C.value, G = (e.max - e.min) * (F / 100) + e.min;
+      const ee = e.range ? e.modelValue[V.value] : e.modelValue || 0;
+      G = ee + Math.round(G / e.step - ee / e.step) * e.step, e.reversed && (G = e.max - G + e.min), e.vertical && (G = e.max - G + e.min), N(G);
+    }, N = (h) => {
+      let A = h, L;
+      if (e.range)
+        if (L = e.modelValue ? [...e.modelValue] : [], V.value === 0) {
+          let F = e.modelValue ? e.modelValue[1] : e.max;
+          A < e.min ? A = e.min : A > F && (A = F), L[0] = A, L[1] = L[1] || e.max;
         } else {
-          let minValue = props.modelValue ? props.modelValue[0] : props.min;
-          if (newValue > props.max)
-            newValue = props.max;
-          else if (newValue < minValue)
-            newValue = minValue;
-          modelValue[0] = modelValue[0] || props.min;
-          modelValue[1] = newValue;
+          let F = e.modelValue ? e.modelValue[0] : e.min;
+          A > e.max ? A = e.max : A < F && (A = F), L[0] = L[0] || e.min, L[1] = A;
         }
-      } else {
-        if (newValue < props.min)
-          newValue = props.min;
-        if (newValue > props.max)
-          newValue = props.max;
-        modelValue = newValue;
-      }
-      emit("update:modelValue", modelValue);
-      emit("change", modelValue);
-    };
-    const dragging = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
-    const updateDragging = (bool) => dragging.value = bool;
-    const onDragStart = (event, index2 = 0) => {
-      updateDragging(true);
-      updateDomData();
-      rangeIndex.value = index2;
-      event.preventDefault();
-    };
-    const onDragEnd = (event) => {
-      if (dragging.value) {
-        updateDragging(false);
-        document.removeEventListener("mousemove", onDrag);
-        emit("slideend", {
-          event,
-          value: props.modelValue
-        });
-      }
-    };
-    const onDrag = (event) => {
-      if (dragging.value) {
-        setValue(event);
-        event == null ? void 0 : event.preventDefault();
-      }
-    };
-    const onMouseDown = (event, index2 = 0) => {
-      if (props.disabled)
-        return;
-      onDragStart(event, index2);
-      document.addEventListener("mousemove", onDrag);
-      document.addEventListener("mouseup", onDragEnd);
-      event.preventDefault();
-    };
-    const onKeyDown = (event, index2 = 0) => {
-      rangeIndex.value = index2;
-      switch (event.code) {
+      else
+        A < e.min && (A = e.min), A > e.max && (A = e.max), L = A;
+      t("update:modelValue", L), t("change", L);
+    }, H = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(!1), W = (h) => H.value = h, O = (h, A = 0) => {
+      W(!0), $(), V.value = A, h.preventDefault();
+    }, K = (h) => {
+      H.value && (W(!1), document.removeEventListener("mousemove", P), t("slideend", {
+        event: h,
+        value: e.modelValue
+      }));
+    }, P = (h) => {
+      H.value && (z(h), h == null || h.preventDefault());
+    }, X = (h, A = 0) => {
+      e.disabled || (O(h, A), document.addEventListener("mousemove", P), document.addEventListener("mouseup", K), h.preventDefault());
+    }, ne = (h, A = 0) => {
+      switch (V.value = A, h.code) {
         case "ArrowUp":
-          if (props.vertical)
-            props.reversed ? increment() : decrement();
-          event.preventDefault();
+          e.vertical && (e.reversed ? ae() : le()), h.preventDefault();
           break;
         case "ArrowDown":
-          if (props.vertical)
-            props.reversed ? decrement() : increment();
-          event.preventDefault();
+          e.vertical && (e.reversed ? le() : ae()), h.preventDefault();
           break;
         case "ArrowRight":
-          props.reversed ? decrement() : increment();
-          event.preventDefault();
+          e.reversed ? le() : ae(), h.preventDefault();
           break;
         case "ArrowLeft":
-          props.reversed ? increment() : decrement();
-          event.preventDefault();
+          e.reversed ? ae() : le(), h.preventDefault();
           break;
       }
-    };
-    const increment = () => {
-      let newValue = 0;
-      if (props.range)
-        newValue = props.modelValue[rangeIndex.value] + props.step;
-      else
-        newValue = props.modelValue + props.step;
-      updateModel(newValue);
-    };
-    const decrement = () => {
-      let newValue = 0;
-      if (props.range)
-        newValue = props.modelValue[rangeIndex.value] - props.step;
-      else
-        newValue = props.modelValue - props.step;
-      updateModel(newValue);
-    };
-    const onClick = (event) => {
-      if (props.disabled)
-        return;
-      if (!DomHandler.hasClass(event.target, "thumb")) {
-        if (props.range) {
-          let clickPosition = (props.vertical ? event.offsetY / event.target.clientHeight : event.offsetX / event.target.clientWidth) * 100;
-          let centerPosition = (trackStartPosPercent() + trackEndPosPercent()) / 2;
-          if (clickPosition < centerPosition)
-            rangeIndex.value = props.reversed ? 1 : 0;
-          else
-            rangeIndex.value = props.reversed ? 0 : 1;
+    }, ae = () => {
+      let h = 0;
+      e.range ? h = e.modelValue[V.value] + e.step : h = e.modelValue + e.step, N(h);
+    }, le = () => {
+      let h = 0;
+      e.range ? h = e.modelValue[V.value] - e.step : h = e.modelValue - e.step, N(h);
+    }, En = (h) => {
+      if (!e.disabled && !me.hasClass(h.target, "thumb")) {
+        if (e.range) {
+          let A = (e.vertical ? h.offsetY / h.target.clientHeight : h.offsetX / h.target.clientWidth) * 100, L = (i() + o()) / 2;
+          A < L ? V.value = e.reversed ? 1 : 0 : V.value = e.reversed ? 0 : 1;
         }
-        updateDomData();
-        setValue(event);
+        $(), z(h);
       }
     };
     return () => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "ref": (ref2) => rootRef.value = ref2,
-      "class": computedClass.value,
-      "style": props.vertical ? `height: ${props.verticalHeight}px;` : ""
+      ref: (h) => k.value = h,
+      class: l.value,
+      style: e.vertical ? `height: ${e.verticalHeight}px;` : ""
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "inner",
-      "onClick": onClick
+      class: "inner",
+      onClick: En
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "track",
-      "ref": (ref2) => trackRef.value = ref2
+      class: "track",
+      ref: (h) => g.value = h
     }, null), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "track-fill",
-      "style": trackFillStyle.value
+      class: "track-fill",
+      style: u.value
     }, null), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "thumb",
-      "style": thumbStyle.value,
-      "onMousedown": (event) => onMouseDown(event),
-      "onTouchstart": (event) => onDragStart(event),
-      "onTouchmove": (event) => onDrag(event),
-      "onTouchend": (event) => onDragEnd(event),
-      "onKeydown": (event) => onKeyDown(event),
-      "tabindex": 0
-    }, null), props.range && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": "thumb second",
-      "style": thumbSecondStyle.value,
-      "onMousedown": (event) => onMouseDown(event, 1),
-      "onTouchstart": (event) => onDragStart(event, 1),
-      "onTouchmove": (event) => onDrag(event),
-      "onTouchend": (event) => onDragEnd(event),
-      "onKeydown": (event) => onKeyDown(event, 1),
-      "tabindex": 0
-    }, null)]), props.labeled && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("ul", {
-      "class": "auto labels"
-    }, [[...Array(getNumLabels() + 1)].map((_, i) => {
-      let ratio = i / getNumLabels();
-      if (!(i % gapRatio())) {
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("li", {
-          "class": "label",
-          "style": `${props.vertical ? props.reversed ? "bottom" : "top" : "left"}: calc(((100% - 7px) - 7px) * ${ratio} + 7px);`
-        }, [props.reversed && !props.vertical ? props.labels ? props.labels[getNumLabels() - i] : labels.value[getNumLabels() - i] : props.labels ? props.labels[i] : labels.value[i]]);
-      } else {
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("li", {
-          "class": "halftick label",
-          "style": `${props.vertical ? props.reversed ? "bottom" : "top" : "left"}: calc(((100% - 7px) - 7px) * ${ratio} + 7px);`
-        }, null);
-      }
+      class: "thumb",
+      style: r.value,
+      onMousedown: (h) => X(h),
+      onTouchstart: (h) => O(h),
+      onTouchmove: (h) => P(h),
+      onTouchend: (h) => K(h),
+      onKeydown: (h) => ne(h),
+      tabindex: 0
+    }, null), e.range && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      class: "thumb second",
+      style: S.value,
+      onMousedown: (h) => X(h, 1),
+      onTouchstart: (h) => O(h, 1),
+      onTouchmove: (h) => P(h),
+      onTouchend: (h) => K(h),
+      onKeydown: (h) => ne(h, 1),
+      tabindex: 0
+    }, null)]), e.labeled && (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("ul", {
+      class: "auto labels"
+    }, [[...Array(f() + 1)].map((h, A) => {
+      let L = A / f();
+      return A % v() ? (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("li", {
+        class: "halftick label",
+        style: `${e.vertical ? e.reversed ? "bottom" : "top" : "left"}: calc(((100% - 7px) - 7px) * ${L} + 7px);`
+      }, null) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("li", {
+        class: "label",
+        style: `${e.vertical ? e.reversed ? "bottom" : "top" : "left"}: calc(((100% - 7px) - 7px) * ${L} + 7px);`
+      }, [e.reversed && !e.vertical ? e.labels ? e.labels[f() - A] : b.value[f() - A] : e.labels ? e.labels[A] : b.value[A]]);
     })])]);
   }
-});
-var index$2 = {
-  install(app) {
-    app.component(Slider.name, Slider);
+}), ll = {
+  install(e) {
+    e.component(Yn.name, Yn);
   }
-};
-var TabPanel = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}, ke = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiTabPanel",
   props: {
     active: Boolean,
     attached: [Boolean, String],
     header: String
   },
-  setup(props) {
-    const computedClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui tab segment", computeKeyOnly(props.active, "active"), computeKeyOrKeyValue(props.attached, "attached"));
-    });
+  setup(e) {
     return {
-      computedClass
+      computedClass: (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui tab segment", n(e.active, "active"), w(e.attached, "attached")))
     };
   },
   render() {
-    var _a, _b;
+    var e, t;
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.computedClass
-    }, [(_b = (_a = this.$slots).default) == null ? void 0 : _b.call(_a)]);
+      class: this.computedClass
+    }, [(t = (e = this.$slots).default) == null ? void 0 : t.call(e)]);
   }
-});
-var Tab = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
+}), zn = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
   name: "SuiTab",
   emits: ["update:activeIndex", "tab-change", "tab-click"],
   props: {
@@ -5358,136 +4448,90 @@ var Tab = (0,vue__WEBPACK_IMPORTED_MODULE_0__.defineComponent)({
     secondary: Boolean,
     text: Boolean
   },
-  setup(props, {
-    emit,
-    slots
+  setup(e, {
+    emit: t,
+    slots: l
   }) {
-    const tabIndex = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(props.activeIndex);
-    (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(() => props.activeIndex, (newValue) => {
-      tabIndex.value = newValue;
+    const i = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(e.activeIndex);
+    (0,vue__WEBPACK_IMPORTED_MODULE_0__.watch)(() => e.activeIndex, (v) => {
+      i.value = v;
     });
-    const onClick = (event, i) => {
-      if (tabIndex.value !== i) {
-        tabIndex.value = i;
-        emit("update:activeIndex", i);
-        emit("tab-change", {
-          event,
-          index: i
-        });
-      }
-      emit("tab-click", {
-        event,
-        index: i
+    const o = (v, f) => {
+      i.value !== f && (i.value = f, t("update:activeIndex", f), t("tab-change", {
+        event: v,
+        index: f
+      })), t("tab-click", {
+        event: v,
+        index: f
       });
-    };
-    const onKeyDown = (event, i) => {
-      if (event.key === "Enter") {
-        onClick(event, i);
-      }
-    };
-    const tabs = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      var _a, _b;
-      let tabs2 = [];
-      if ((_a = slots.default) == null ? void 0 : _a.call(slots)) {
-        (_b = slots.default) == null ? void 0 : _b.call(slots).forEach((child) => {
-          if (child.type.name === "SuiTabPanel")
-            tabs2.push(child);
-        });
-      }
-      return tabs2;
-    });
-    const isDefaultMenu = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => !props.secondary && !props.pointing && !props.text);
-    const tabMenuClass = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
-      return clsx("ui menu", computeKeyOnly(isDefaultMenu.value, "tabular attached"), computeKeyOnly(props.pointing, "pointing"), computeKeyOnly(props.secondary, "secondary"), computeKeyOnly(props.text, "text"));
-    });
+    }, u = (v, f) => {
+      v.key === "Enter" && o(v, f);
+    }, r = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => {
+      var f, k;
+      let v = [];
+      return (f = l.default) != null && f.call(l) && ((k = l.default) == null || k.call(l).forEach((g) => {
+        g.type.name === "SuiTabPanel" && v.push(g);
+      })), v;
+    }), S = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => !e.secondary && !e.pointing && !e.text), b = (0,vue__WEBPACK_IMPORTED_MODULE_0__.computed)(() => m("ui menu", n(S.value, "tabular attached"), n(e.pointing, "pointing"), n(e.secondary, "secondary"), n(e.text, "text")));
     return {
-      onClick,
-      onKeyDown,
-      tabIndex,
-      tabs,
-      tabMenuClass,
-      isDefaultMenu
+      onClick: o,
+      onKeyDown: u,
+      tabIndex: i,
+      tabs: r,
+      tabMenuClass: b,
+      isDefaultMenu: S
     };
   },
   render() {
-    const renderMenuItems = () => {
-      return this.tabs.map((tab, i) => {
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("a", {
-          "class": `item ${this.tabIndex === i && "active"}`,
-          "onClick": (event) => this.onClick(event, i),
-          "onKeydown": (event) => this.onKeyDown(event, i),
-          "tabindex": 0
-        }, [tab.props.header]);
-      });
-    };
-    const renderTabPanels = () => {
-      return this.tabs.map((tab, i) => {
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(TabPanel, (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)(tab.props, {
-          "active": this.tabIndex === i,
-          "attached": this.isDefaultMenu ? "bottom" : false
-        }), {
-          default: () => {
-            var _a, _b;
-            return [(_b = (_a = tab.children).default) == null ? void 0 : _b.call(_a)];
-          }
-        });
-      });
-    };
+    const e = () => this.tabs.map((l, i) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("a", {
+      class: `item ${this.tabIndex === i && "active"}`,
+      onClick: (o) => this.onClick(o, i),
+      onKeydown: (o) => this.onKeyDown(o, i),
+      tabindex: 0
+    }, [l.props.header])), t = () => this.tabs.map((l, i) => (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(ke, (0,vue__WEBPACK_IMPORTED_MODULE_0__.mergeProps)(l.props, {
+      active: this.tabIndex === i,
+      attached: this.isDefaultMenu ? "bottom" : !1
+    }), {
+      default: () => {
+        var o, u;
+        return [(u = (o = l.children).default) == null ? void 0 : u.call(o)];
+      }
+    }));
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-      "class": this.tabMenuClass
-    }, [renderMenuItems()]), renderTabPanels()]);
+      class: this.tabMenuClass
+    }, [e()]), t()]);
   }
-});
-var index$1 = {
-  install(app) {
-    app.component(Tab.name, Tab);
-    app.component(TabPanel.name, TabPanel);
+}), il = {
+  install(e) {
+    e.component(zn.name, zn), e.component(ke.name, ke);
   }
-};
-var modules = /* @__PURE__ */ Object.freeze({
+}, sl = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  [Symbol.toStringTag]: "Module",
-  Accordion: index$e,
-  Calendar: index$d,
-  Checkbox: index$c,
-  Dimmer: index$b,
-  Dropdown: index$a,
-  Embed: index$9,
-  Modal: index$8,
-  Popup: index$7,
-  Progress: index$6,
-  Rating: index$5,
-  Search: index$4,
-  Sidebar: index$3,
-  Slider: index$2,
-  Tab: index$1
-});
-function install(app) {
-  Object.values(__spreadValues(__spreadValues(__spreadValues(__spreadValues({}, elements), collections), views), modules)).map((component) => app.use(component));
+  Accordion: Ma,
+  Calendar: Ga,
+  Checkbox: Oa,
+  Dimmer: _a,
+  Dropdown: Ja,
+  Embed: Ua,
+  Modal: Xa,
+  Popup: Za,
+  Progress: pa,
+  Rating: tl,
+  Search: nl,
+  Sidebar: al,
+  Slider: ll,
+  Tab: il
+}, Symbol.toStringTag, { value: "Module" }));
+function ol(e) {
+  Object.values({
+    ...da,
+    ...Ca,
+    ...Aa,
+    ...sl
+  }).map((t) => e.use(t));
 }
-var index = { install };
+const cl = { install: ol };
 
-
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/dist/exportHelper.js":
-/*!******************************************************!*\
-  !*** ./node_modules/vue-loader/dist/exportHelper.js ***!
-  \******************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-// runtime helper for setting properties on components
-// in a tree-shakable way
-exports["default"] = (sfc, props) => {
-    const target = sfc.__vccOpts || sfc;
-    for (const [key, val] of props) {
-        target[key] = val;
-    }
-    return target;
-};
 
 
 /***/ })

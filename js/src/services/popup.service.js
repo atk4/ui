@@ -34,7 +34,7 @@ class PopupService {
                         if (result.length === 0) {
                             response.success = false;
                             response.isServiceError = true;
-                            response.message = 'Popup service error: Empty html, unable to replace popup content from server response';
+                            response.message = 'Popup service error: Empty HTML, unable to replace popup content from server response';
                         } else {
                             response.id = null;
                             $popup.data('hascontent', true);

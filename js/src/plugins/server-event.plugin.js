@@ -6,7 +6,7 @@ export default class AtkServerEventPlugin extends AtkPlugin {
         const element = this.$el;
         const hasLoader = this.settings.showLoader;
 
-        this.source = new EventSource(this.settings.url + '&__atk_sse=1');
+        this.source = new EventSource(this.settings.url);
         if (hasLoader) {
             element.addClass('loading');
         }

@@ -13,12 +13,13 @@ class Button extends View
 
     public $ui = 'button';
 
-    /** @var string|array|Icon Icon that will appear on the button (left). */
+    /** @var string|array<0|string, mixed>|Icon Icon that will appear on the button (left). */
     public $icon;
 
-    /** @var string|array|Icon Additional icon that can appear on the right of the button. */
+    /** @var string|array<0|string, mixed>|Icon Additional icon that can appear on the right of the button. */
     public $iconRight;
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->icon) {
@@ -37,7 +38,7 @@ class Button extends View
 
         if ($this->iconRight) {
             if ($this->icon) {
-                throw (new Exception('Cannot use icon and iconRight simultaniously'))
+                throw (new Exception('Cannot use icon and iconRight simultaneously'))
                     ->addMoreInfo('icon', $this->icon)
                     ->addMoreInfo('iconRight', $this->iconRight);
             }

@@ -43,4 +43,5 @@ RUN echo "<?php header('Location: /demos/');" > index.php
 RUN sed -E "s/(\\\$minified = )true;/\\1false;/g" -i src/App.php
 
 RUN php demos/_demo-data/create-db.php
+RUN chown -R www-data:www-data demos/_demo-data
 RUN sed -E "s/\(('sqlite:.+)\);/(\$_ENV['DB_DSN'] ?? \\1, \$_ENV['DB_USER'] ?? null, \$_ENV['DB_PASSWORD'] ?? null);/g" -i demos/db.default.php

@@ -28,7 +28,7 @@ class ColorRating extends Table\Column
     /** @var float Maximum value of the gradient. */
     public $max;
 
-    /** @var array Hex colors. */
+    /** @var list<string> Hex colors. */
     public $colors = ['#FF0000', '#00FF00'];
 
     /** @var bool Define if values lesser than min have no color. */
@@ -37,6 +37,7 @@ class ColorRating extends Table\Column
     /** @var bool Define if values greater than max have no color. */
     public $moreThanMaxNoColor = false;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -50,6 +51,7 @@ class ColorRating extends Table\Column
         }
     }
 
+    #[\Override]
     public function getTagAttributes(string $position, array $attr = []): array
     {
         $attr['style'] ??= '';
@@ -58,15 +60,17 @@ class ColorRating extends Table\Column
         return parent::getTagAttributes($position, $attr);
     }
 
-    public function getDataCellHtml(Field $field = null, array $attr = []): string
+    #[\Override]
+    public function getDataCellHtml(?Field $field = null, array $attr = []): string
     {
         if ($field === null) {
             throw new Exception('ColorRating can be used only with model field');
         }
 
-        return $this->getTag('body', '{$' . $field->shortName . '}', $attr);
+        return $this->getTag('body', $attr, '{$' . $field->shortName . '}');
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $value = $field->get($row);
@@ -103,8 +107,8 @@ class ColorRating extends Table\Column
         $colorIndex = (count($this->colors) - 1) * ($value - $this->min) / ($this->max - $this->min);
 
         $color = $this->interpolateColor(
-            $this->colors[floor($colorIndex)],
-            $this->colors[ceil($colorIndex)],
+            $this->colors[(int) floor($colorIndex)],
+            $this->colors[(int) ceil($colorIndex)],
             $colorIndex - floor($colorIndex)
         );
 

@@ -13,7 +13,7 @@ interface NavigableInterface
     /**
      * Add a group to left menu.
      *
-     * @param array $seed
+     * @param array<mixed> $seed
      */
     public function addMenuGroup($seed): Menu;
 
@@ -22,9 +22,9 @@ interface NavigableInterface
      *
      * Will place item in a group if supply.
      *
-     * @param string|array                  $name
-     * @param string|array|JsExpressionable $action
-     * @param Menu                          $group
+     * @param string|array<mixed>                                       $name
+     * @param string|array<0|string, string|int|false>|JsExpressionable $action
+     * @param Menu                                                      $group
      */
     public function addMenuItem($name, $action = null, $group = null): MenuItem;
 }

@@ -10,6 +10,7 @@ use Atk4\Ui\Table\Column;
 
 class TypeNumber extends Column\FilterModel
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -25,29 +26,34 @@ class TypeNumber extends Column\FilterModel
         ];
         $this->op->default = '=';
 
-        $this->value->ui['form'] = [Form\Control\Line::class, 'inputType' => 'number'];
-        $this->addField('range', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class, 'inputType' => 'number']]]);
+        $this->value->type = $this->lookupField->type;
+        $this->value->ui['form'] = [Form\Control\Line::class];
+        $this->addField('range', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
     }
 
-    public function setConditionForModel(Model $model)
+    #[\Override]
+    public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
         if ($filter !== null) {
             switch ($filter['op']) {
                 case 'between':
                     $model->addCondition(
-                        $model->expr('[field] between [value] and [range]', ['field' => $model->getField($filter['name']), 'value' => $filter['value'], 'range' => $filter['range']])
+                        $model->expr('[field] between [value] and [value2]', [
+                            'field' => $this->lookupField,
+                            'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $filter['value']),
+                            'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $filter['range']),
+                        ])
                     );
 
                     break;
                 default:
-                    $model->addCondition($filter['name'], $filter['op'], $filter['value']);
+                    $model->addCondition($this->lookupField, $filter['op'], $filter['value']);
             }
         }
-
-        return $model;
     }
 
+    #[\Override]
     public function getFormDisplayRules(): array
     {
         return [

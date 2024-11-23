@@ -33,26 +33,25 @@ class BasicExecutor extends View implements ExecutorInterface
     /** @var string display message when action is disabled */
     public $disableMsg = 'Action is disabled and cannot be executed';
 
-    /** @var Button|array Button that trigger the action. Either as an array seed or object */
+    /** @var Button|array<mixed> Button that trigger the action. Either as an array seed or object */
     public $executorButton;
 
-    /** @var array */
+    /** @var array<string, mixed> */
     protected $arguments = [];
 
     /** @var string display message when missing arguments */
     public $missingArgsMsg = 'Insufficient arguments';
 
-    /** @var array list of validated arguments */
-    protected $validArguments = [];
-
-    /** @var JsExpressionable|\Closure JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
+    /** @var JsExpressionable|\Closure<T of Model>($this, T): ?JsBlock JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     protected $jsSuccess;
 
+    #[\Override]
     public function getAction(): Model\UserAction
     {
         return $this->action;
     }
 
+    #[\Override]
     public function setAction(Model\UserAction $action)
     {
         $this->action = $action;
@@ -65,6 +64,8 @@ class BasicExecutor extends View implements ExecutorInterface
 
     /**
      * Provide values for named arguments.
+     *
+     * @param array<string, mixed> $arguments
      */
     public function setArguments(array $arguments): void
     {
@@ -73,6 +74,7 @@ class BasicExecutor extends View implements ExecutorInterface
         $this->arguments = array_merge($this->arguments, $arguments);
     }
 
+    #[\Override]
     protected function recursiveRender(): void
     {
         if (!$this->action) {
@@ -124,10 +126,10 @@ class BasicExecutor extends View implements ExecutorInterface
     /**
      * Will call $action->execute() with the correct arguments.
      */
+    #[\Override]
     public function executeModelAction(): JsBlock
     {
         $args = [];
-
         foreach ($this->action->args as $key => $val) {
             $args[] = $this->arguments[$key];
         }
@@ -138,13 +140,10 @@ class BasicExecutor extends View implements ExecutorInterface
             ? ($this->jsSuccess)($this, $this->action->getModel())
             : $this->jsSuccess;
 
-        return JsBlock::fromHookResult($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) // @phpstan-ignore-line
+        return JsBlock::fromHookResult($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) // @phpstan-ignore ternary.shortNotAllowed
             ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
     }
 
-    /**
-     * Will add header if set.
-     */
     public function addHeader(): void
     {
         if ($this->hasHeader) {

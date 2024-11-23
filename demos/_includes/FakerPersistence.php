@@ -6,10 +6,12 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Faker\Factory as FakerFactory;
+use Faker\Generator as FakerGenerator;
 
 class FakerPersistence extends Persistence
 {
-    /** @var \Faker\Generator */
+    /** @var FakerGenerator */
     public $faker;
 
     /** @var int */
@@ -17,9 +19,12 @@ class FakerPersistence extends Persistence
 
     public function __construct()
     {
-        $this->faker = \Faker\Factory::create();
+        $this->faker = FakerFactory::create();
     }
 
+    /**
+     * @return \Traversable<array<string, mixed>>
+     */
     public function prepareIterator(Model $model): \Traversable
     {
         foreach ($this->export($model) as $row) {
@@ -27,6 +32,11 @@ class FakerPersistence extends Persistence
         }
     }
 
+    /**
+     * @param list<string> $fields
+     *
+     * @return list<array<string, mixed>>
+     */
     private function export(Model $model, array $fields = []): array
     {
         if (!$fields) {

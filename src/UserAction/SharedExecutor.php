@@ -31,10 +31,13 @@ class SharedExecutor
         return $this->executor;
     }
 
+    /**
+     * @param array<string, string> $urlArgs
+     */
     public function jsExecute(array $urlArgs): JsBlock
     {
         // TODO executor::jsExecute() should be called only once, registered as a custom jQuery event and then
         // call the event from JS with arguments to improve performance, ie. render (possibly large) JS only once
-        return $this->getExecutor()->jsExecute($urlArgs); // @phpstan-ignore-line
+        return $this->getExecutor()->jsExecute($urlArgs); // @phpstan-ignore method.notFound
     }
 }

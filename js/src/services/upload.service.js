@@ -1,7 +1,7 @@
 import $ from 'external/jquery';
 
 /**
- * Allow to upload files to server via Fomantic-UI API.
+ * Allow to upload files to server.
  */
 class UploadService {
     /**
@@ -23,7 +23,9 @@ class UploadService {
         data,
         uploadUrl,
         completeCb = function (r, c) {},
-        xhrCb = function () { return new window.XMLHttpRequest(); }
+        xhrCb = function () {
+            return new window.XMLHttpRequest();
+        }
     ) {
         const formData = new FormData();
 

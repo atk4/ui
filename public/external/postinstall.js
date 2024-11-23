@@ -18,14 +18,20 @@ const updateFileSync = function (f, callback) {
 };
 
 // move node_modules/ files to parent directory
-if (fs.existsSync(path.join(__dirname, 'node_modules/jquery'))) {
-    for (const f2 of fs.readdirSync(path.join(__dirname, 'node_modules'))) {
-        fs.renameSync(
-            path.join(path.join(__dirname, 'node_modules'), f2),
-            path.join(__dirname, f2),
-        );
-    }
-    fs.rmdirSync(path.join(__dirname, 'node_modules'));
+for (const f of [
+    '@highlightjs',
+    '@shopify',
+    'chart.js',
+    'flatpickr',
+    'fomantic-ui',
+    'jquery',
+    'twemoji',
+]) {
+    fs.cpSync(
+        path.join(path.join(__dirname, 'node_modules'), f),
+        path.join(__dirname, f),
+        { recursive: true }
+    );
 }
 
 const cssUrlPattern = '((?<!\\w)url\\([\'"]?(?!data:))((?:[^(){}\\\\\'"]|\\\\.)*)([\'"]?\\))';
@@ -38,7 +44,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
             return;
         }
 
-        data = data.replace(new RegExp('\\s*@font-face\\s*\\{[^{}]*' + cssUrlPattern + '[^{}]+\\}', 'g'), (m, m1, m2, m3) => {
+        data = data.replaceAll(new RegExp('\\s*@font-face\\s*\\{[^{}]*' + cssUrlPattern + '[^{}]+\\}', 'g'), (m, m1, m2, m3) => {
             if (m2.includes('/assets/fonts/Lato')) {
                 return '';
             }
@@ -46,7 +52,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
             return m;
         });
 
-        data = data.replace(/(font-family: *)([^;{}]*)(;?)/g, (m, m1, m2, m3) => {
+        data = data.replaceAll(/(font-family: *)([^;{}]*)(;?)/g, (m, m1, m2, m3) => {
             // based on https://github.com/twbs/bootstrap/blob/v5.1.3/scss/_variables.scss#L577
             const fontFamilySansSerif = [
                 'system-ui',
@@ -89,7 +95,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
 
         // change bold (700) font weight to 600 to match the original Lato font weight better
         // see https://github.com/fomantic/Fomantic-UI/pull/2359#discussion_r867457881 discussion
-        data = data.replace(/(font-weight: *)([^;{}]*)(;?)/g, (m, m1, m2, m3) => {
+        data = data.replaceAll(/(font-weight: *)([^;{}]*)(;?)/g, (m, m1, m2, m3) => {
             if (m2 === 'bold' || m2 === '700') {
                 return m1 + '600' + m3;
             }
@@ -108,7 +114,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
             return;
         }
 
-        data = data.replace(new RegExp('(src:\\s*(?!\\s))[^{};]*((?=[^{};,]+\\.woff2(?!\\w))' + cssUrlPattern + ')[^{};]*(;)', 'g'), '$1$2 format(\'woff2\')$6');
+        data = data.replaceAll(new RegExp('(src:\\s*(?!\\s))[^{};]*((?=[^{};,]+\\.woff2(?!\\w))' + cssUrlPattern + ')[^{};]*(;)', 'g'), '$1$2 format(\'woff2\')$6');
 
         return data;
     });
@@ -122,7 +128,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
             return;
         }
 
-        data = data.replace(/\s*((?<!\w)em\[data-emoji=[^[\\\]{}]+]::before,?\s*)+{[^{}]*background-image:[^{}]+}/g, '');
+        data = data.replaceAll(/\s*((?<!\w)em\[data-emoji=[^[\\\]{}]+]::before,?\s*)+{[^{}]*background-image:[^{}]+}/g, '');
 
         return data;
     });
@@ -131,16 +137,14 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
 // replace absolute URLs with relative paths
 walkFilesSync(__dirname, (f) => {
     updateFileSync(f, (data) => {
-        if (!f.endsWith('.css')
+        if (f.startsWith(path.join(__dirname, 'node_modules/'))
+            || !f.endsWith('.css')
             || f.startsWith(path.join(__dirname, 'chart.js/dist/docs/'))
-            || f.startsWith(path.join(__dirname, 'gulp-concat-css/'))
-            || f.startsWith(path.join(__dirname, 'less/'))
-            || f.startsWith(path.join(__dirname, 'rtlcss/'))
         ) {
             return;
         }
 
-        data = data.replace(new RegExp(cssUrlPattern, 'g'), (m, m1, m2, m3) => {
+        data = data.replaceAll(new RegExp(cssUrlPattern, 'g'), (m, m1, m2, m3) => {
             let pathRel = null;
             if (m2.startsWith('http://') || m2.startsWith('https://') || m2.startsWith('//')) {
                 const pathMap = {
@@ -189,7 +193,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
             return;
         }
 
-        data = data.replace(/(?<!^)\/\*!(?:(?!\/\*).)*# Fomantic-UI \d+\.\d+\.(?:(?!\/\*).)*MIT license(?:(?!\/\*).)*\*\/\n?/gs, '');
+        data = data.replaceAll(/(?<!^)\/\*!(?:(?!\/\*).)*# Fomantic-UI \d+\.\d+\.(?:(?!\/\*).)*MIT license(?:(?!\/\*).)*\*\/\n?/gs, '');
 
         return data;
     });
@@ -203,7 +207,32 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
             return;
         }
 
-        data = data.replace(/(!\w+\.hide)All(\(\))/gs, '$1$2');
+        data = data.replaceAll(/(!\w+\.hide)All(\(\))/gs, '$1$2');
+
+        return data;
+    });
+});
+
+const cssTokenSelectorPattern = '(?:(?:[^(){}\'",+>~;/\\s]|\'[^\'\\\\{};]*\'|"[^"\\\\{};]*")+)';
+const cssSimpleSelectorPattern = '(?:' + cssTokenSelectorPattern + '(?:\\(\\s*' + cssTokenSelectorPattern + '\\s*\\)' + cssTokenSelectorPattern + '?)*)';
+const cssSingleSelectorPattern = '(?:' + cssSimpleSelectorPattern + '(?:\\s*[ +>~]\\s*' + cssSimpleSelectorPattern + ')*)';
+
+// update Fomantic-UI ":first-child" selectors to work with immediately closed form tag
+// https://github.com/atk4/ui/issues/1970
+walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
+    updateFileSync(f, (data) => {
+        if (!f.endsWith('.css')) {
+            return;
+        }
+
+        data = data.replaceAll(new RegExp(cssSingleSelectorPattern + '(?=\\s*(,\\s*' + cssSingleSelectorPattern + '\\s*)*\\{)', 'g'), (mSingle) => (mSingle.includes(':first-child')
+            ? mSingle.replaceAll(new RegExp('^(.*?)(' + cssSimpleSelectorPattern + '):first-child(' + cssSimpleSelectorPattern + '?)(.*)$', 'g'), (m, m1, m2, m3, m4) => (m1 === '' || /\.form(?!\w|.*[ +>~])/g.test(m1.trimEnd())
+                ? m + ', '
+                    + m1.trimEnd() + (m1 !== '' ? ' ' : '')
+                    + 'form:first-child + ' + m2 + m3
+                    + (m4 !== '' ? ' ' : '') + m4.trimStart()
+                : m))
+            : mSingle));
 
         return data;
     });
@@ -212,11 +241,11 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
 // normalize EOL of text files
 walkFilesSync(__dirname, (f) => {
     updateFileSync(f, (data) => {
-        if (data.includes('\0') || /\.min\./.test(f)) {
+        if (data.includes('\0') || /\.min\./i.test(f)) {
             return;
         }
 
-        data = data.replace(/\r?\n|\r/g, '\n');
+        data = data.replaceAll(/\r?\n|\r/g, '\n');
         if (data.slice(-1) !== '\n') {
             data += '\n';
         }

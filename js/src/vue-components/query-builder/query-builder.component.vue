@@ -86,8 +86,8 @@ export default {
                 addGroup: 'Add Group',
                 removeGroupClass: 'small icon times',
                 textInputPlaceholder: 'value',
-                spaceRule: 'fitted', // can be fitted, compact or padded.
-                hiddenOperator: ['is empty', 'is not empty'], // a list of operators that when select, will hide user input.
+                spaceRule: 'fitted', // can be fitted, compact or padded
+                hiddenOperator: ['is empty', 'is not empty'], // a list of operators that when select, will hide user input
                 ...labels,
             };
         },

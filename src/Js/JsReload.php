@@ -17,7 +17,7 @@ class JsReload implements JsExpressionable
     /** Specifies which view to reload. Use constructor to set. */
     public View $view;
 
-    /** @var JsExpressionable|null A Js function to execute after reload is complete and onSuccess is execute. */
+    /** @var JsExpressionable|null A JS function to execute after reload is complete and onSuccess is execute. */
     public $afterSuccess;
 
     /** @var array<string, string|int|JsExpressionable> Added at the end of your URL. */
@@ -26,6 +26,8 @@ class JsReload implements JsExpressionable
     /**
      * Fomantic-UI api settings.
      * ex: ['loadingDuration' => 1000].
+     *
+     * @var array<string, mixed>
      */
     public array $apiConfig = [];
 
@@ -34,8 +36,9 @@ class JsReload implements JsExpressionable
 
     /**
      * @param array<string, string|int|JsExpressionable> $args
+     * @param array<string, mixed>                       $apiConfig
      */
-    public function __construct(View $view, array $args = [], JsExpressionable $afterSuccess = null, array $apiConfig = [], bool $includeStorage = false)
+    public function __construct(View $view, array $args = [], ?JsExpressionable $afterSuccess = null, array $apiConfig = [], bool $includeStorage = false)
     {
         $this->view = $view;
         $this->args = $args;
@@ -44,6 +47,7 @@ class JsReload implements JsExpressionable
         $this->includeStorage = $includeStorage;
     }
 
+    #[\Override]
     public function jsRender(): string
     {
         $final = (new Jquery($this->view))

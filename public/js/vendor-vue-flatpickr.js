@@ -1,3 +1,4 @@
+"use strict";
 (self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["vendor-vue-flatpickr"],{
 
 /***/ "./node_modules/flatpickr/dist/esm/index.js":
@@ -6,7 +7,6 @@
   \**************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -2075,11 +2075,10 @@ if (typeof window !== "undefined") {
   \*********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   "english": () => (/* binding */ english)
+/* harmony export */   english: () => (/* binding */ english)
 /* harmony export */ });
 var english = {
     weekdays: {
@@ -2163,11 +2162,10 @@ var english = {
   \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "HOOKS": () => (/* binding */ HOOKS),
-/* harmony export */   "defaults": () => (/* binding */ defaults)
+/* harmony export */   HOOKS: () => (/* binding */ HOOKS),
+/* harmony export */   defaults: () => (/* binding */ defaults)
 /* harmony export */ });
 var HOOKS = [
     "onChange",
@@ -2262,18 +2260,17 @@ var defaults = {
   \********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "calculateSecondsSinceMidnight": () => (/* binding */ calculateSecondsSinceMidnight),
-/* harmony export */   "compareDates": () => (/* binding */ compareDates),
-/* harmony export */   "compareTimes": () => (/* binding */ compareTimes),
-/* harmony export */   "createDateFormatter": () => (/* binding */ createDateFormatter),
-/* harmony export */   "createDateParser": () => (/* binding */ createDateParser),
-/* harmony export */   "duration": () => (/* binding */ duration),
-/* harmony export */   "getDefaultHours": () => (/* binding */ getDefaultHours),
-/* harmony export */   "isBetween": () => (/* binding */ isBetween),
-/* harmony export */   "parseSeconds": () => (/* binding */ parseSeconds)
+/* harmony export */   calculateSecondsSinceMidnight: () => (/* binding */ calculateSecondsSinceMidnight),
+/* harmony export */   compareDates: () => (/* binding */ compareDates),
+/* harmony export */   compareTimes: () => (/* binding */ compareTimes),
+/* harmony export */   createDateFormatter: () => (/* binding */ createDateFormatter),
+/* harmony export */   createDateParser: () => (/* binding */ createDateParser),
+/* harmony export */   duration: () => (/* binding */ duration),
+/* harmony export */   getDefaultHours: () => (/* binding */ getDefaultHours),
+/* harmony export */   isBetween: () => (/* binding */ isBetween),
+/* harmony export */   parseSeconds: () => (/* binding */ parseSeconds)
 /* harmony export */ });
 /* harmony import */ var _formatting__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./formatting */ "./node_modules/flatpickr/dist/esm/utils/formatting.js");
 /* harmony import */ var _types_options__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../types/options */ "./node_modules/flatpickr/dist/esm/types/options.js");
@@ -2431,15 +2428,14 @@ function getDefaultHours(config) {
   \******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "clearNode": () => (/* binding */ clearNode),
-/* harmony export */   "createElement": () => (/* binding */ createElement),
-/* harmony export */   "createNumberInput": () => (/* binding */ createNumberInput),
-/* harmony export */   "findParent": () => (/* binding */ findParent),
-/* harmony export */   "getEventTarget": () => (/* binding */ getEventTarget),
-/* harmony export */   "toggleClass": () => (/* binding */ toggleClass)
+/* harmony export */   clearNode: () => (/* binding */ clearNode),
+/* harmony export */   createElement: () => (/* binding */ createElement),
+/* harmony export */   createNumberInput: () => (/* binding */ createNumberInput),
+/* harmony export */   findParent: () => (/* binding */ findParent),
+/* harmony export */   getEventTarget: () => (/* binding */ getEventTarget),
+/* harmony export */   toggleClass: () => (/* binding */ toggleClass)
 /* harmony export */ });
 function toggleClass(elem, className, bool) {
     if (bool === true)
@@ -2505,13 +2501,12 @@ function getEventTarget(event) {
   \*************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "formats": () => (/* binding */ formats),
-/* harmony export */   "monthToStr": () => (/* binding */ monthToStr),
-/* harmony export */   "revFormat": () => (/* binding */ revFormat),
-/* harmony export */   "tokenRegex": () => (/* binding */ tokenRegex)
+/* harmony export */   formats: () => (/* binding */ formats),
+/* harmony export */   monthToStr: () => (/* binding */ monthToStr),
+/* harmony export */   revFormat: () => (/* binding */ revFormat),
+/* harmony export */   tokenRegex: () => (/* binding */ tokenRegex)
 /* harmony export */ });
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils */ "./node_modules/flatpickr/dist/esm/utils/index.js");
 
@@ -2658,13 +2653,12 @@ var formats = {
   \********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "arrayify": () => (/* binding */ arrayify),
-/* harmony export */   "debounce": () => (/* binding */ debounce),
-/* harmony export */   "int": () => (/* binding */ int),
-/* harmony export */   "pad": () => (/* binding */ pad)
+/* harmony export */   arrayify: () => (/* binding */ arrayify),
+/* harmony export */   debounce: () => (/* binding */ debounce),
+/* harmony export */   int: () => (/* binding */ int),
+/* harmony export */   pad: () => (/* binding */ pad)
 /* harmony export */ });
 var pad = function (number, length) {
     if (length === void 0) { length = 2; }
@@ -2693,7 +2687,6 @@ var arrayify = function (obj) {
   \************************************************************/
 /***/ (() => {
 
-"use strict";
 
 if (typeof Object.assign !== "function") {
     Object.assign = function (target) {
@@ -2720,351 +2713,280 @@ if (typeof Object.assign !== "function") {
 
 /***/ }),
 
-/***/ "./node_modules/vue-flatpickr-component/dist/index.js":
-/*!************************************************************!*\
-  !*** ./node_modules/vue-flatpickr-component/dist/index.js ***!
-  \************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ "./node_modules/vue-flatpickr-component/dist/esm/component.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/vue-flatpickr-component/dist/esm/component.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(true)
-		module.exports = factory(__webpack_require__(/*! flatpickr */ "./node_modules/flatpickr/dist/esm/index.js"), __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js"));
-	else {}
-})(self, (__WEBPACK_EXTERNAL_MODULE__311__, __WEBPACK_EXTERNAL_MODULE__976__) => {
-return /******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ({
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var flatpickr__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! flatpickr */ "./node_modules/flatpickr/dist/esm/index.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _events__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./events */ "./node_modules/vue-flatpickr-component/dist/esm/events.js");
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./util */ "./node_modules/vue-flatpickr-component/dist/esm/util.js");
 
-/***/ 311:
-/***/ ((module) => {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__311__;
+
+
+// Keep a copy of all events for later use
+const allEvents = [..._events__WEBPACK_IMPORTED_MODULE_2__.includedEvents, ..._events__WEBPACK_IMPORTED_MODULE_2__.excludedEvents];
+// Passing these properties in `fp.set()` method will cause flatpickr to trigger some callbacks
+const configCallbacks = ['locale', 'showMonths'];
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,vue__WEBPACK_IMPORTED_MODULE_1__.defineComponent)({
+    name: 'FlatPickr',
+    compatConfig: {
+        MODE: 3,
+    },
+    render() {
+        return (0,vue__WEBPACK_IMPORTED_MODULE_1__.h)('input', {
+            type: 'text',
+            'data-input': true,
+            disabled: this.disabled,
+            onInput: this.onInput,
+        });
+    },
+    emits: [
+        'blur',
+        'update:modelValue',
+        ...allEvents.map(_util__WEBPACK_IMPORTED_MODULE_3__.camelToKebab)
+    ],
+    props: {
+        modelValue: {
+            type: [String, Number, Date, Array, null],
+            required: true,
+        },
+        // https://flatpickr.js.org/options/
+        config: {
+            type: Object,
+            default: () => ({
+                defaultDate: null,
+                wrap: false,
+            })
+        },
+        events: {
+            type: Array,
+            default: () => _events__WEBPACK_IMPORTED_MODULE_2__.includedEvents
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+    },
+    data() {
+        return {
+            fp: null, //todo make it non-reactive
+        };
+    },
+    mounted() {
+        // Return early if flatpickr is already loaded
+        /* istanbul ignore if */
+        if (this.fp)
+            return;
+        // Init flatpickr
+        this.fp = (0,flatpickr__WEBPACK_IMPORTED_MODULE_0__["default"])(this.getElem(), this.prepareConfig());
+        // Attach blur event
+        this.fpInput().addEventListener('blur', this.onBlur);
+        // Immediate watch will fail before fp is set,
+        // so we need to start watching after mount
+        this.$watch('disabled', this.watchDisabled, {
+            immediate: true
+        });
+    },
+    methods: {
+        prepareConfig() {
+            // Don't mutate original object on parent component
+            let safeConfig = Object.assign({}, this.config);
+            this.events.forEach((hook) => {
+                // Respect global callbacks registered via setDefault() method
+                let globalCallbacks = flatpickr__WEBPACK_IMPORTED_MODULE_0__["default"].defaultConfig[hook] || [];
+                // Inject our own method along with user's callbacks
+                let localCallback = (...args) => {
+                    this.$emit((0,_util__WEBPACK_IMPORTED_MODULE_3__.camelToKebab)(hook), ...args);
+                };
+                // Overwrite with merged array
+                safeConfig[hook] = (0,_util__WEBPACK_IMPORTED_MODULE_3__.arrayify)(safeConfig[hook] || []).concat(globalCallbacks, localCallback);
+            });
+            const onCloseCb = this.onClose.bind(this);
+            safeConfig['onClose'] = (0,_util__WEBPACK_IMPORTED_MODULE_3__.arrayify)(safeConfig['onClose'] || []).concat(onCloseCb);
+            // Set initial date without emitting any event
+            safeConfig.defaultDate = this.modelValue || safeConfig.defaultDate;
+            return safeConfig;
+        },
+        /**
+         * Get the HTML node where flatpickr to be attached
+         * Bind on parent element if wrap is true
+         */
+        getElem() {
+            return this.config.wrap ? this.$el.parentNode : this.$el;
+        },
+        /**
+         * Watch for value changed by date-picker itself and notify parent component
+         */
+        onInput(event) {
+            const input = event.target;
+            // Let's wait for DOM to be updated
+            (0,vue__WEBPACK_IMPORTED_MODULE_1__.nextTick)().then(() => {
+                this.$emit('update:modelValue', (0,_util__WEBPACK_IMPORTED_MODULE_3__.nullify)(input.value));
+            });
+        },
+        fpInput() {
+            return this.fp.altInput || this.fp.input;
+        },
+        /**
+         * Blur event is required by many validation libraries
+         */
+        onBlur(event) {
+            this.$emit('blur', (0,_util__WEBPACK_IMPORTED_MODULE_3__.nullify)(event.target.value));
+        },
+        /**
+         * Flatpickr does not emit input event in some cases
+         */
+        onClose(selectedDates, dateStr) {
+            this.$emit('update:modelValue', dateStr);
+        },
+        /**
+         * Watch for the disabled property and sets the value to the real input.
+         */
+        watchDisabled(newState) {
+            if (newState) {
+                this.fpInput().setAttribute('disabled', '');
+            }
+            else {
+                this.fpInput().removeAttribute('disabled');
+            }
+        }
+    },
+    watch: {
+        /**
+         * Watch for any config changes and redraw date-picker
+         */
+        config: {
+            deep: true,
+            handler(newConfig) {
+                if (!this.fp)
+                    return;
+                let safeConfig = Object.assign({}, newConfig);
+                // Workaround: Don't pass hooks to configs again otherwise
+                // previously registered hooks will stop working
+                // Notice: we are looping through all events
+                // This also means that new callbacks can not be passed once component has been initialized
+                allEvents.forEach((hook) => {
+                    delete safeConfig[hook];
+                });
+                this.fp.set(safeConfig);
+                // Workaround: Allow to change locale dynamically
+                configCallbacks.forEach((name) => {
+                    if (typeof safeConfig[name] !== 'undefined') {
+                        this.fp.set(name, safeConfig[name]);
+                    }
+                });
+            }
+        },
+        /**
+         * Watch for changes from parent component and update DOM
+         */
+        modelValue(newValue) {
+            var _a;
+            // Prevent updates if v-model value is same as input's current value
+            if (!this.$el || newValue === (0,_util__WEBPACK_IMPORTED_MODULE_3__.nullify)(this.$el.value))
+                return;
+            // Notify flatpickr instance that there is a change in value
+            (_a = this.fp) === null || _a === void 0 ? void 0 : _a.setDate(newValue, true);
+        }
+    },
+    beforeUnmount() {
+        /* istanbul ignore else */
+        if (!this.fp)
+            return;
+        this.fpInput().removeEventListener('blur', this.onBlur);
+        this.fp.destroy();
+        this.fp = null;
+    }
+}));
+
 
 /***/ }),
 
-/***/ 976:
-/***/ ((module) => {
+/***/ "./node_modules/vue-flatpickr-component/dist/esm/events.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/vue-flatpickr-component/dist/esm/events.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE__976__;
-
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __nested_webpack_require_1086__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __nested_webpack_require_1086__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__nested_webpack_require_1086__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__nested_webpack_require_1086__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__nested_webpack_require_1086__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__nested_webpack_require_1086__.o(definition, key) && !__nested_webpack_require_1086__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__nested_webpack_require_1086__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__nested_webpack_require_1086__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/************************************************************************/
-var __nested_webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
-// ESM COMPAT FLAG
-__nested_webpack_require_1086__.r(__nested_webpack_exports__);
-
-// EXPORTS
-__nested_webpack_require_1086__.d(__nested_webpack_exports__, {
-  "default": () => (/* binding */ src)
-});
-
-// EXTERNAL MODULE: external "flatpickr"
-var external_flatpickr_ = __nested_webpack_require_1086__(311);
-var external_flatpickr_default = /*#__PURE__*/__nested_webpack_require_1086__.n(external_flatpickr_);
-// EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","amd":"vue","root":"Vue"}
-var external_commonjs_vue_commonjs2_vue_amd_vue_root_Vue_ = __nested_webpack_require_1086__(976);
-;// CONCATENATED MODULE: ./src/events.js
-// Events to emit, copied from flatpickr source
-const includedEvents = ['onChange', 'onClose', 'onDestroy', 'onMonthChange', 'onOpen', 'onYearChange']; // Let's not emit these events by default
-
-const excludedEvents = ['onValueUpdate', 'onDayCreate', 'onParseConfig', 'onReady', 'onPreCalendarPosition', 'onKeyDown'];
-
-;// CONCATENATED MODULE: ./src/util.js
-const camelToKebab = string => {
-  return string.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-};
-
-const arrayify = obj => {
-  return obj instanceof Array ? obj : [obj];
-};
-
-const nullify = value => {
-  return value && value.length ? value : null;
-};
-
-
-;// CONCATENATED MODULE: ./src/component.js
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   excludedEvents: () => (/* binding */ excludedEvents),
+/* harmony export */   includedEvents: () => (/* binding */ includedEvents)
+/* harmony export */ });
+const includedEvents = [
+    'onChange',
+    'onClose',
+    'onDestroy',
+    'onMonthChange',
+    'onOpen',
+    'onYearChange',
+];
+// Let's not emit these events by default
+const excludedEvents = [
+    'onValueUpdate',
+    'onDayCreate',
+    'onParseConfig',
+    'onReady',
+    'onPreCalendarPosition',
+    'onKeyDown',
+];
 
 
 
- // Keep a copy of all events for later use
+/***/ }),
 
-const allEvents = includedEvents.concat(excludedEvents); // Passing these properties in `fp.set()` method will cause flatpickr to trigger some callbacks
+/***/ "./node_modules/vue-flatpickr-component/dist/esm/index.js":
+/*!****************************************************************!*\
+  !*** ./node_modules/vue-flatpickr-component/dist/esm/index.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-const configCallbacks = ['locale', 'showMonths'];
-/* harmony default export */ const component = ((0,external_commonjs_vue_commonjs2_vue_amd_vue_root_Vue_.defineComponent)({
-  name: 'FlatPickr',
-  compatConfig: {
-    MODE: 3
-  },
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./component */ "./node_modules/vue-flatpickr-component/dist/esm/component.js");
 
-  render() {
-    return (0,external_commonjs_vue_commonjs2_vue_amd_vue_root_Vue_.h)('input', {
-      type: 'text',
-      'data-input': true,
-      disabled: this.disabled,
-      onInput: this.onInput
-    });
-  },
-
-  emits: ['blur', 'update:modelValue'].concat(allEvents.map(camelToKebab)),
-  props: {
-    modelValue: {
-      default: null,
-      required: true,
-
-      validator(value) {
-        return value === null || value instanceof Date || typeof value === 'string' || value instanceof String || value instanceof Array || typeof value === 'number';
-      }
-
-    },
-    // https://flatpickr.js.org/options/
-    config: {
-      type: Object,
-      default: () => ({
-        defaultDate: null,
-        wrap: false
-      })
-    },
-    events: {
-      type: Array,
-      default: () => includedEvents
-    },
-    disabled: {
-      type: Boolean,
-      default: false
-    }
-  },
-  fp: null,
-
-  // non-reactive
-  mounted() {
-    // Return early if flatpickr is already loaded
-
-    /* istanbul ignore if */
-    if (this.fp) return; // Init flatpickr
-
-    this.fp = external_flatpickr_default()(this.getElem(), this.prepareConfig()); // Attach blur event
-
-    this.fpInput().addEventListener('blur', this.onBlur); // Immediate watch will fail before fp is set,
-    // so we need to start watching after mount
-
-    this.$watch('disabled', this.watchDisabled, {
-      immediate: true
-    });
-  },
-
-  methods: {
-    prepareConfig() {
-      var _this = this;
-
-      // Don't mutate original object on parent component
-      let safeConfig = { ...this.config
-      };
-      this.events.forEach(hook => {
-        // Respect global callbacks registered via setDefault() method
-        let globalCallbacks = (external_flatpickr_default()).defaultConfig[hook] || []; // Inject our own method along with user's callbacks
-
-        let localCallback = function () {
-          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
-
-          _this.$emit(camelToKebab(hook), ...args);
-        }; // Overwrite with merged array
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_component__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
 
-        safeConfig[hook] = arrayify(safeConfig[hook] || []).concat(globalCallbacks, localCallback);
-      });
-      const onCloseCb = this.onClose.bind(this);
-      safeConfig['onClose'] = arrayify(safeConfig['onClose'] || []).concat(onCloseCb); // Set initial date without emitting any event
+/***/ }),
 
-      safeConfig.defaultDate = this.modelValue || safeConfig.defaultDate;
-      return safeConfig;
-    },
+/***/ "./node_modules/vue-flatpickr-component/dist/esm/util.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/vue-flatpickr-component/dist/esm/util.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-    /**
-     * Get the HTML node where flatpickr to be attached
-     * Bind on parent element if wrap is true
-     */
-    getElem() {
-      return this.config.wrap ? this.$el.parentNode : this.$el;
-    },
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   arrayify: () => (/* binding */ arrayify),
+/* harmony export */   camelToKebab: () => (/* binding */ camelToKebab),
+/* harmony export */   nullify: () => (/* binding */ nullify)
+/* harmony export */ });
+function camelToKebab(string) {
+    return string.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+}
+function arrayify(obj) {
+    return obj instanceof Array
+        ? obj
+        : [obj];
+}
+function nullify(value) {
+    return (value && value.length)
+        ? value
+        : null;
+}
 
-    /**
-     * Watch for value changed by date-picker itself and notify parent component
-     */
-    onInput(event) {
-      const input = event.target; // Let's wait for DOM to be updated
 
-      this.$nextTick(() => {
-        this.$emit('update:modelValue', nullify(input.value));
-      });
-    },
-
-    /**
-     * @return HTMLElement
-     */
-    fpInput() {
-      return this.fp.altInput || this.fp.input;
-    },
-
-    /**
-     * Blur event is required by many validation libraries
-     */
-    onBlur(event) {
-      this.$emit('blur', nullify(event.target.value));
-    },
-
-    /**
-     * Flatpickr does not emit input event in some cases
-     */
-    onClose(selectedDates, dateStr) {
-      this.$emit('update:modelValue', dateStr);
-    },
-
-    /**
-     * Watch for the disabled property and sets the value to the real input.
-     */
-    watchDisabled(newState) {
-      if (newState) {
-        this.fpInput().setAttribute('disabled', newState);
-      } else {
-        this.fpInput().removeAttribute('disabled');
-      }
-    }
-
-  },
-  watch: {
-    /**
-     * Watch for any config changes and redraw date-picker
-     */
-    config: {
-      deep: true,
-
-      handler(newConfig) {
-        if (!this.fp) return;
-        let safeConfig = { ...newConfig
-        }; // Workaround: Don't pass hooks to configs again otherwise
-        // previously registered hooks will stop working
-        // Notice: we are looping through all events
-        // This also means that new callbacks can not be passed once component has been initialized
-
-        allEvents.forEach(hook => {
-          delete safeConfig[hook];
-        });
-        this.fp.set(safeConfig); // Workaround: Allow to change locale dynamically
-
-        configCallbacks.forEach(name => {
-          if (typeof safeConfig[name] !== 'undefined') {
-            this.fp.set(name, safeConfig[name]);
-          }
-        });
-      }
-
-    },
-
-    /**
-     * Watch for changes from parent component and update DOM
-     */
-    modelValue(newValue) {
-      // Prevent updates if v-model value is same as input's current value
-      if (!this.$el || newValue === nullify(this.$el.value)) return; // Make sure we have a flatpickr instance
-
-      this.fp && // Notify flatpickr instance that there is a change in value
-      this.fp.setDate(newValue, true);
-    }
-
-  },
-
-  beforeUnmount() {
-    /* istanbul ignore else */
-    if (!this.fp) return;
-    this.fpInput().removeEventListener('blur', this.onBlur);
-    this.fp.destroy();
-    this.fp = null;
-  }
-
-}));
-;// CONCATENATED MODULE: ./src/index.js
-
-/* harmony default export */ const src = (component);
-})();
-
-/******/ 	return __nested_webpack_exports__;
-/******/ })()
-;
-});
 
 /***/ })
 

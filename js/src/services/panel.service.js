@@ -7,10 +7,10 @@ import atk from 'atk';
  */
 class PanelService {
     constructor() {
-        this.service = {
-            panels: [], // a collection of panels.
-            currentVisibleId: null, // the current panel id that is in a visible state.
-            currentParams: null, // URL argument of the current panel.
+        this.panels = [];
+        this.service = { // needed because of Object.freeze
+            currentVisibleId: null, // the current panel id that is in a visible state
+            currentParams: null, // URL argument of the current panel
         };
     }
 
@@ -19,9 +19,10 @@ class PanelService {
      */
     removePanel(id) {
         // remove from dom
-        this.getPropertyValue(id, '$panel').remove();
-        const temp = this.service.panels.filter((panel) => !panel[id]);
-        this.service.panels.splice(0, this.service.panels.length, ...temp);
+        // TODO uncomment once "/demos/data-action/jsactions-panel.php" demo does not close itself immediately
+        // this.getPropertyValue(id, '$panel').remove();
+        const temp = this.panels.filter((panel) => !panel[id]);
+        this.panels.splice(0, this.panels.length, ...temp);
     }
 
     /**
@@ -32,7 +33,8 @@ class PanelService {
      * we need to make sure it is not add multiple time.
      */
     addPanel(params) {
-        // Remove existing one. Can be added by a reload.
+        // remove existing one
+        // can be added by a reload
         if (this.getPropertyValue(params.id, 'id')) {
             this.removePanel(params.id);
         }
@@ -56,38 +58,38 @@ class PanelService {
             },
         };
 
-        // add click handler for closing panel.
+        // add click handler for closing panel
         newPanel[params.id].$panel.on('click', params.closeSelector, () => {
             this.closePanel(params.id);
         });
 
         newPanel[params.id].$panel.appendTo($('.atk-side-panels'));
 
-        this.service.panels.push(newPanel);
+        this.panels.push(newPanel);
     }
 
     /**
      * Open the panel.
      * Params expected the following arguments:
      * triggered: A string or jQuery object that will triggered panel to open.
-     * activeCss: Either an object containing a jQuery selector with a css class or css class.
+     * activeCss: Either an object containing a jQuery selector with a CSS class or CSS class.
      * - As an Object: element: the jQuery selector within the triggered element;
      * -               css:     the css class to applying to the triggered element when panel is open.
      *
-     * As a css class: the css class to applied to the triggered element when panel open.
+     * As a CSS class: the CSS class to applied to the triggered element when panel open.
      *
      * @param {object} params
      */
     openPanel(params) {
-        // if no id is provide, then get the first one.
-        // no id mean the first panel in list.
-        const panelId = params.openId ?? Object.keys(this.service.panels[0])[0];
-        // save our open param.
+        // if no id is provide, then get the first one
+        // no id mean the first panel in list
+        const panelId = params.openId ?? Object.keys(this.panels[0])[0];
+        // save our open param
         this.service.currentParams = params;
         if (this.isSameElement(panelId, params.triggered)) {
             return;
         }
-        // first check if current panel can be click away.
+        // first check if current panel can be click away
         if (this.service.currentVisibleId && !this.getPropertyValue(this.service.currentVisibleId, 'hasClickAway')) {
             return;
         }
@@ -99,7 +101,7 @@ class PanelService {
      */
     initOpen(id) {
         if (this.service.currentVisibleId && id !== this.service.currentVisibleId) {
-            // trying to open a different panel so close current one if allowed.
+            // trying to open a different panel so close current one if allowed
             if (this.needConfirmation(this.service.currentVisibleId)) {
                 // need to ask user
                 const $modal = $(this.getPropertyValue(this.service.currentVisibleId, 'modal'));
@@ -138,10 +140,10 @@ class PanelService {
      */
     initPanelReload(id) {
         const params = this.service.currentParams;
-        // do we need to load anything in this panel.
+        // do we need to load anything in this panel
         if (this.getPropertyValue(id, 'url')) {
-            // Convert our array of args to object.
-            // Args must be defined as data-attributeName in the triggered element.
+            // convert our array of args to object
+            // args must be defined as data-attributeName in the triggered element
             const args = {};
             for (const k of params.reloadArgs) {
                 args[k] = params.triggered.data(k);
@@ -166,7 +168,7 @@ class PanelService {
             triggerElement = $(triggerElement);
         }
 
-        // will apply css class to triggering element if provide.
+        // will apply css class to triggering element if provide
         if (triggerElement.length > 0) {
             this.setTriggerElement(panelId, triggerElement, params);
         }
@@ -200,11 +202,11 @@ class PanelService {
      * Close panel and cleanup.
      */
     doClosePanel(id) {
-        // remove document event.
+        // remove document event
         this.removeClickAwayEvent();
         this.removeWarning(id);
 
-        // do the actual closing.
+        // do the actual closing
         this.getPropertyValue(id, '$panel').removeClass(this.getPropertyValue(id, 'visible'));
         this.service.currentVisibleId = null;
 
@@ -227,7 +229,7 @@ class PanelService {
         const $panel = this.getPropertyValue(id, '$panel');
         const url = this.getPropertyValue(id, 'url');
 
-        // do some cleanup.
+        // do some cleanup
         this.removeWarning(id);
         this.clearPanelContent(id);
 
@@ -246,14 +248,14 @@ class PanelService {
 
     /**
      * Set triggering element that fire the panel to open.
-     * If panel is open by html element, you can specified class on these
+     * If panel is open by HTML element, you can specified class on these
      * elements that will be add or remove, depending on the panel state.
-     * Thus, creating a visual onto which html element has fire the event.
+     * Thus, creating a visual onto which HTML element has fire the event.
      */
     setTriggerElement(id, trigger, params) {
         this.setPropertyValue(id, 'triggerElement', trigger);
 
-        // Do we need to setup css class on triggering element.
+        // setup CSS class on triggering element
         if (params.activeCSS) {
             let element;
             let css;
@@ -278,7 +280,7 @@ class PanelService {
      * Add click away closing event handler.
      */
     addClickAwayEvent(id) {
-        // clicking anywhere in main tag will close panel.
+        // clicking anywhere in main tag will close panel
         $('main').on('click.atkPanel', atk.createDebouncedFx((evt) => {
             this.closePanel(id);
         }, 250));
@@ -288,7 +290,7 @@ class PanelService {
      * Add esc away closing event handler.
      */
     addEscAwayEvent(id) {
-        // pressing esc key will close panel.
+        // pressing esc key will close panel
         $(document).on('keyup.atkPanel', atk.createDebouncedFx((evt) => {
             if (evt.keyCode === 27) {
                 this.closePanel(id);
@@ -320,7 +322,7 @@ class PanelService {
     }
 
     /**
-     * Removed a css class to a jQuery element.
+     * Removed a CSS class to a jQuery element.
      * This should normally be your triggering panel element.
      */
     deActivated(element, css) {
@@ -330,7 +332,7 @@ class PanelService {
     }
 
     /**
-     * Add a css class name to a jQuery element.
+     * Add a CSS class name to a jQuery element.
      * This should normally be your triggering panel element.
      */
     activated(element, css) {
@@ -387,7 +389,7 @@ class PanelService {
      * @param {*}      value the value.
      */
     setPropertyValue(id, prop, value) {
-        for (const panel of this.service.panels) {
+        for (const panel of this.panels) {
             if (panel[id]) {
                 panel[id][prop] = value;
             }
@@ -402,7 +404,7 @@ class PanelService {
      */
     getPropertyValue(id, prop = null) {
         let value = null;
-        for (const panel of this.service.panels) {
+        for (const panel of this.panels) {
             if (panel[id]) {
                 value = prop ? panel[id][prop] : panel[id];
             }

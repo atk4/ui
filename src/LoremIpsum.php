@@ -19,14 +19,12 @@ class LoremIpsum extends Text
     public int $words = 50;
 
     /**
-     * @param array|int $defaults
+     * @param array<string, mixed>|int $defaults
      */
     public function __construct($defaults = [])
     {
         if (is_scalar($defaults)) {
-            $this->size = $defaults;
-
-            return;
+            $defaults = ['size' => $defaults];
         }
 
         parent::__construct($defaults);
@@ -70,25 +68,26 @@ class LoremIpsum extends Text
             'utrum', 'uxor', 'valde', 'valetudo', 'validus', 'vel', 'velit',
             'veniam', 'venio', 'vereor', 'vero', 'verto', 'vicis', 'vindico',
             'virtus', 'voco', 'volutpat', 'vulpes', 'vulputate', 'wisi', 'ymo',
-            'zelus', ];
+            'zelus'];
 
         $lorem = '';
 
         while ($words > 0) {
-            $sentence_length = random_int(3, 10);
+            $sentenceLength = random_int(3, 10);
 
             $lorem .= ucfirst($dictionary[array_rand($dictionary)]);
-            for ($i = 1; $i < $sentence_length; ++$i) {
+            for ($i = 1; $i < $sentenceLength; ++$i) {
                 $lorem .= ' ' . $dictionary[array_rand($dictionary)];
             }
 
             $lorem .= $punctuation[array_rand($punctuation)];
-            $words -= $sentence_length;
+            $words -= $sentenceLength;
         }
 
         return $lorem;
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

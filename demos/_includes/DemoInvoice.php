@@ -13,6 +13,7 @@ class DemoInvoice extends Model
 {
     public ?string $titleField = 'reference';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

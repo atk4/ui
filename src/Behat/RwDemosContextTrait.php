@@ -6,6 +6,7 @@ namespace Atk4\Ui\Behat;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Data\Schema\Migrator;
 
 trait RwDemosContextTrait
 {
@@ -29,7 +30,7 @@ trait RwDemosContextTrait
     /** @var array<string, Model>|null */
     protected ?array $databaseBackupModels = null;
 
-    /** @var array<string, array<int, array<string, mixed>>>|null */
+    /** @var array<string, array<positive-int, array<string, mixed>>>|null */
     protected ?array $databaseBackupData = null;
 
     protected function getDemosDb(): Persistence\Sql
@@ -38,7 +39,7 @@ trait RwDemosContextTrait
         if ($db === null) {
             try {
                 /** @var Persistence\Sql $db */
-                require_once $this->demosDir . '/init-db.php'; // @phpstan-ignore-line
+                require_once $this->demosDir . '/init-db.php'; // @phpstan-ignore varTag.nativeType
             } catch (\Throwable $e) {
                 throw new \Exception('Database error: ' . $e->getMessage());
             }
@@ -47,30 +48,12 @@ trait RwDemosContextTrait
         return $db;
     }
 
-    protected function createDatabaseModelFromTable(string $table): Model
-    {
-        $db = $this->getDemosDb();
-        $schemaManager = $db->getConnection()->createSchemaManager();
-        $tableColumns = $schemaManager->listTableColumns($table);
-
-        $model = new Model($db, ['table' => $table]);
-        $model->removeField('id');
-        foreach ($tableColumns as $tableColumn) {
-            $model->addField($tableColumn->getName(), [
-                'type' => $tableColumn->getType()->getName(), // @phpstan-ignore-line Type::getName() is deprecated in DBAL 4.0
-                'nullable' => !$tableColumn->getNotnull(),
-            ]);
-        }
-        $model->idField = array_key_first($model->getFields());
-
-        return $model;
-    }
-
     protected function createDatabaseModels(): void
     {
         $modelByTable = [];
         foreach ($this->databaseBackupTables as $table) {
-            $modelByTable[$table] = $this->createDatabaseModelFromTable($table);
+            $modelByTable[$table] = (new Migrator($this->getDemosDb()))
+                ->introspectTableToModel($table);
         }
 
         $this->databaseBackupModels = $modelByTable;
@@ -94,7 +77,7 @@ trait RwDemosContextTrait
     }
 
     /**
-     * @return array<string, \stdClass&object{ addedIds: list<int>, changedIds: list<int>, deletedIds: list<int> }>
+     * @return array<string, \stdClass&object{ addedIds: list<int>, updatedIds: list<int>, deletedIds: list<int> }>
      */
     protected function discoverDatabaseChanges(): array
     {
@@ -105,7 +88,7 @@ trait RwDemosContextTrait
 
             $changes = new \stdClass();
             $changes->addedIds = [];
-            $changes->changedIds = [];
+            $changes->updatedIds = [];
             $changes->deletedIds = array_fill_keys(array_keys($data), true);
             foreach ($model as $entity) {
                 $id = $entity->getId();
@@ -122,7 +105,7 @@ trait RwDemosContextTrait
                     }
 
                     if ($isChanged) {
-                        $changes->changedIds[] = $id;
+                        $changes->updatedIds[] = $id;
                     }
 
                     unset($changes->deletedIds[$id]);
@@ -130,12 +113,12 @@ trait RwDemosContextTrait
             }
             $changes->deletedIds = array_keys($changes->deletedIds);
 
-            if (count($changes->addedIds) > 0 || count($changes->changedIds) > 0 || count($changes->deletedIds) > 0) {
+            if (count($changes->addedIds) > 0 || count($changes->updatedIds) > 0 || count($changes->deletedIds) > 0) {
                 $changesByTable[$table] = $changes;
             }
         }
 
-        return $changesByTable; // @phpstan-ignore-line https://github.com/phpstan/phpstan/issues/9252
+        return $changesByTable;
     }
 
     protected function restoreDatabaseBackup(): void
@@ -155,8 +138,10 @@ trait RwDemosContextTrait
                             $model->delete($id);
                         }
 
-                        foreach ([...$changes->changedIds, ...$changes->deletedIds] as $id) {
-                            $entity = in_array($id, $changes->changedIds, true) ? $model->load($id) : $model->createEntity();
+                        foreach ([...$changes->updatedIds, ...$changes->deletedIds] as $id) {
+                            $entity = in_array($id, $changes->updatedIds, true)
+                                ? $model->load($id)
+                                : $model->createEntity();
                             $entity->setMulti($data[$id]);
                             $entity->save();
                         }

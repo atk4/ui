@@ -25,7 +25,8 @@ class JsFunction implements JsExpressionable
     public string $indent = '';
 
     /**
-     * @param JsBlock|array<int, JsExpressionable|null>|array<string, mixed> $statements
+     * @param list<string>                                             $args
+     * @param JsBlock|list<JsExpressionable|null>|array<string, mixed> $statements
      */
     public function __construct(array $args, $statements)
     {
@@ -47,6 +48,7 @@ class JsFunction implements JsExpressionable
         }
     }
 
+    #[\Override]
     public function jsRender(): string
     {
         $pre = '';
@@ -59,10 +61,15 @@ class JsFunction implements JsExpressionable
             $pre .= $this->indent . '    event.stopPropagation();' . "\n";
         }
 
-        $output = $this->indent . 'function (' . implode(', ', $this->args) . ') {' . "\n"
-            . $pre
-            . preg_replace('~^~m', $this->indent . '    ', $this->body->jsRender()) . "\n" // TODO IMPORTANT indentation must ignore multiline strings/comments!
-            . $this->indent . '}';
+        $body = $this->body->jsRender();
+
+        $output = $this->indent . 'function (' . implode(', ', $this->args) . ') {';
+        if ($body !== '') {
+            $output .= "\n" . $pre
+                . preg_replace('~^(?!$)~m', $this->indent . '    ', $body) . "\n" // TODO IMPORTANT indentation must ignore multiline strings/comments!
+                . $this->indent;
+        }
+        $output .= '}';
 
         return $output;
     }

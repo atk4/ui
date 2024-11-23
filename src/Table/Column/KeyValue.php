@@ -17,9 +17,9 @@ use Atk4\Ui\Table;
  *  3 => resetting
  *  4 => error.
  *
- * we don't need a table to define this, cause are defined in project
+ * We don't need a table to define this, cause are defined in project.
  *
- * using KeyValue Column you can show this values without using DB Relations
+ * Using KeyValue Column you can show this values without using DB Relations
  * need to be defined in field like this:
  *
  * $this->addField('course_payment_status', [
@@ -39,8 +39,10 @@ use Atk4\Ui\Table;
  */
 class KeyValue extends Table\Column
 {
+    /** @var array<mixed, string> */
     public array $values;
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $key = $field->get($row);

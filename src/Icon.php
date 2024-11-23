@@ -10,6 +10,7 @@ class Icon extends View
 
     public $content = 'circle help';
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->addClass($this->content . ' icon');

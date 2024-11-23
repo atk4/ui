@@ -16,6 +16,7 @@ class PreviewExecutor extends BasicExecutor
     /** @var string can be "console", "text", or "html" */
     public $previewType = 'console';
 
+    #[\Override]
     public function initPreview(): void
     {
         if (!$this->hasAllArguments()) {
@@ -55,7 +56,6 @@ class PreviewExecutor extends BasicExecutor
     public function executePreview()
     {
         $args = [];
-
         foreach ($this->action->args as $key => $val) {
             $args[] = $this->arguments[$key];
         }

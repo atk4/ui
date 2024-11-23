@@ -8,12 +8,14 @@ use Atk4\Core\DebugTrait;
 use Atk4\Core\TraitUtil;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 
 /**
  * Console is a black square component resembling terminal window. It can be programmed
  * to run a job and output results to the user.
  */
-class Console extends View implements \Psr\Log\LoggerInterface
+class Console extends View implements LoggerInterface
 {
     public $ui = 'inverted black segment';
 
@@ -72,10 +74,9 @@ class Console extends View implements \Psr\Log\LoggerInterface
      *
      * @param \Closure($this): void $fx    callback which will be executed while displaying output inside console
      * @param bool|string           $event "true" would mean to execute on page load, string would indicate
-     *                                     js event. See first argument for View::js()
-     *
-     * @return $this
+     *                                     JS event. See first argument for View::js()
      */
+    #[\Override]
     public function set($fx = null, $event = null)
     {
         if (!$fx instanceof \Closure) {
@@ -101,7 +102,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
                     }
 
                     $output = '';
-                    $this->sse->echoFunction = function (string $str) use (&$output) {
+                    $this->sse->echoFunction = static function (string $str) use (&$output) {
                         $output .= $str;
                     };
                     $this->output($content);
@@ -113,7 +114,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 try {
                     $fx($this);
                 } catch (\Throwable $e) {
-                    $this->outputHtmlWithoutPre('<div class="ui segment">{0}</div>', [$this->getApp()->renderExceptionHtml($e)]);
+                    $this->outputHtmlWithoutPre('<div class="ui segment">{ex}</div>', ['ex' => $this->getApp()->renderExceptionHtml($e)]);
                 }
             } finally {
                 $this->sseInProgress = false;
@@ -173,6 +174,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
     /**
      * Output a single line to the console.
      *
+     * @param array<string, string> $context
+     *
      * @return $this
      */
     public function output(string $message, array $context = [])
@@ -184,6 +187,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
 
     /**
      * Output unescaped HTML to the console.
+     *
+     * @param array<string, string> $context
      *
      * @return $this
      */
@@ -197,11 +202,13 @@ class Console extends View implements \Psr\Log\LoggerInterface
     /**
      * Output unescaped HTML to the console without wrapping in <pre>.
      *
+     * @param array<string, string> $context
+     *
      * @return $this
      */
     protected function outputHtmlWithoutPre(string $messageHtml, array $context = [])
     {
-        $messageHtml = preg_replace_callback('~{([\w]+)}~', function ($matches) use ($context) {
+        $messageHtml = preg_replace_callback('~{([\w]+)}~', static function ($matches) use ($context) {
             if (isset($context[$matches[1]])) {
                 return $context[$matches[1]];
             }
@@ -219,6 +226,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
         return $this;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         $this->setStyle('overflow-x', 'auto');
@@ -255,6 +263,8 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * Example: $console->exec('ping', ['-c', '5', '8.8.8.8']);
      *
      * All arguments are escaped.
+     *
+     * @param list<string|int> $args
      */
     public function exec(string $command, array $args = []): ?bool
     {
@@ -262,7 +272,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
             $this->set(function () use ($command, $args) {
                 $this->output(
                     '--[ Executing ' . $command
-                    . ($args ? ' with ' . count($args) . ' arguments' : '')
+                    . ($args !== [] ? ' with ' . count($args) . ' arguments' : '')
                     . ' ]--------------'
                 );
 
@@ -279,9 +289,10 @@ class Console extends View implements \Psr\Log\LoggerInterface
         stream_set_blocking($pipes[1], false);
         stream_set_blocking($pipes[2], false);
         // $pipes contain streams that are still open and not EOF
-        while ($pipes) {
+        while ($pipes) { // @TODO this condition is always true
             $read = $pipes;
-            $j1 = $j2 = null;
+            $j1 = null;
+            $j2 = null;
             if (stream_select($read, $j1, $j2, 2) === false) {
                 throw new Exception('Unexpected stream_select() result');
             }
@@ -316,12 +327,13 @@ class Console extends View implements \Psr\Log\LoggerInterface
     }
 
     /**
-     * @return array{resource, non-empty-array}
+     * @param list<string|int> $args
+     *
+     * @return array{resource, non-empty-array<int, resource>}
      */
     protected function execRaw(string $command, array $args = [])
     {
-        $command = escapeshellcmd($command);
-        $args = array_map(fn ($v) => escapeshellarg($v), $args);
+        $args = array_map(static fn ($v) => escapeshellarg($v), $args);
 
         $spec = [1 => ['pipe', 'w'], 2 => ['pipe', 'w']]; // we want stdout and stderr
         $pipes = null;
@@ -343,20 +355,21 @@ class Console extends View implements \Psr\Log\LoggerInterface
      * capturing all debug/info/log messages generated by your code and displaying
      * it inside console.
      *
-     * // Runs $user_model->generateReport('pdf')
-     * Console::addTo($app)->runMethod($user_model, 'generateReports', ['pdf']);
+     * // runs $userController->generateReport('pdf')
+     * Console::addTo($app)->runMethod($userController, 'generateReports', ['pdf']);
      *
-     * // Runs PainFactory::lastStaticMethod()
+     * // runs PainFactory::lastStaticMethod()
      * Console::addTo($app)->runMethod('PainFactory', 'lastStaticMethod');
      *
      * To produce output:
      *  - use $this->debug() or $this->info() (see documentation on DebugTrait)
      *
      * NOTE: debug() method will only output if you set debug=true. That is done
-     * for the $user_model automatically, but for any nested objects you would have
+     * for the $userController automatically, but for any nested objects you would have
      * to pass on the property.
      *
      * @param object|class-string $object
+     * @param list<mixed>         $args
      *
      * @return $this
      */
@@ -387,7 +400,7 @@ class Console extends View implements \Psr\Log\LoggerInterface
                 $result = $object->{$method}(...$args);
             } finally {
                 if (TraitUtil::hasAppScopeTrait($object) && $object->issetApp()) {
-                    $object->getApp()->logger = $loggerBak; // @phpstan-ignore-line
+                    $object->getApp()->logger = $loggerBak; // @phpstan-ignore variable.undefined
                 }
                 if (TraitUtil::hasTrait($object, DebugTrait::class)) {
                     $object->debug = $debugBak;
@@ -403,53 +416,58 @@ class Console extends View implements \Psr\Log\LoggerInterface
         return $this;
     }
 
-    // methods below implements \Psr\Log\LoggerInterface
-
+    #[\Override]
     public function emergency($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    #[\Override]
     public function alert($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    #[\Override]
     public function critical($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    #[\Override]
     public function error($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    #[\Override]
     public function warning($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    #[\Override]
     public function notice($message, array $context = []): void
     {
         $this->outputHtml('<font color="yellow">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    #[\Override]
     public function info($message, array $context = []): void
     {
         $this->outputHtml('<font color="gray">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    #[\Override]
     public function debug($message, array $context = []): void
     {
         $this->outputHtml('<font color="cyan">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
     /**
-     * @param 'emergency'|'alert'|'critical'|'error'|'warning'|'notice'|'info'|'debug' $level
-     *
-     * @phpstan-ignore-next-line
+     * @param LogLevel::* $level
      */
+    #[\Override]
     public function log($level, $message, array $context = []): void
     {
         $this->{$level}($message, $context);

@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsToast;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Multiline form control', 'icon' => 'database', 'subHeader' => 'Collect/Edit multiple rows of table record.']);
@@ -27,12 +28,12 @@ $inventory->getField($inventory->fieldName()->total_php)->ui['multiline'] = [For
 
 $form = Form::addTo($app);
 
-// Add multiline field and set model.
+// add multiline field and set model
 /** @var Form\Control\Multiline */
 $multiline = $form->addControl('items', [Form\Control\Multiline::class, 'tableProps' => ['color' => 'blue'], 'itemLimit' => 10, 'addOnTab' => true]);
 $multiline->setModel($inventory);
 
-// Add total field.
+// add total field
 $total = 0;
 foreach ($inventory as $item) {
     $total += $item->qty * $item->box;
@@ -42,8 +43,8 @@ $sublayout->addColumn(12);
 $column = $sublayout->addColumn(4);
 $controlTotal = $column->addControl('total', ['readOnly' => true])->set($total);
 
-// Update total when qty and box value in any row has changed.
-$multiline->onLineChange(function (array $rows, Form $form) use ($controlTotal) {
+// update total when qty and box value in any row has changed
+$multiline->onLineChange(static function (array $rows, Form $form) use ($controlTotal) {
     $total = 0;
     foreach ($rows as $row => $cols) {
         $total += $cols[MultilineItem::hinting()->fieldName()->qty] * $cols[MultilineItem::hinting()->fieldName()->box];
@@ -55,19 +56,12 @@ $multiline->onLineChange(function (array $rows, Form $form) use ($controlTotal) 
 $multiline->jsAfterAdd = new JsFunction(['value'], [new JsExpression('console.log(value)')]);
 $multiline->jsAfterDelete = new JsFunction(['value'], [new JsExpression('console.log(value)')]);
 
-$form->onSubmit(function (Form $form) use ($multiline) {
-    $rows = $multiline->model->atomic(function () use ($multiline) {
+$form->onSubmit(static function (Form $form) use ($multiline) {
+    $rows = $multiline->model->atomic(static function () use ($multiline) {
         return $multiline->saveRows()->model->export();
     });
 
-    // TODO typecast using https://github.com/atk4/ui/pull/1991 once merged
-    foreach ($rows as $kRow => $row) {
-        foreach ($row as $kV => $v) {
-            if ($v instanceof \DateTime) {
-                $rows[$kRow][$kV] = $form->getApp()->uiPersistence->typecastSaveField($multiline->model->getField($kV), $row[$kV]);
-            }
-        }
-    }
+    $rows = array_map(static fn ($row) => $form->getApp()->uiPersistence->typecastSaveRow($multiline->model, $row), $rows);
 
     return new JsToast($form->getApp()->encodeJson($rows));
 });

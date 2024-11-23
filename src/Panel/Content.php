@@ -19,6 +19,7 @@ class Content extends View implements LoadableContent
     /** @var Callback */
     public $cb;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -27,20 +28,16 @@ class Content extends View implements LoadableContent
         $this->setCb(new Callback());
     }
 
-    /**
-     * Return callback url for panel options.
-     */
+    #[\Override]
     public function getCallbackUrl(): string
     {
         return $this->cb->getJsUrl();
     }
 
-    /**
-     * Set callback for panel.
-     */
+    #[\Override]
     public function setCb(Callback $cb): void
     {
-        $this->cb = $this->add($cb); // @phpstan-ignore-line
+        $this->cb = $this->add($cb); // @phpstan-ignore assign.propertyType
     }
 
     /**
@@ -48,17 +45,21 @@ class Content extends View implements LoadableContent
      *
      * @param \Closure($this): void $fx
      */
+    #[\Override]
     public function onLoad(\Closure $fx): void
     {
         $this->cb->set(function () use ($fx) {
             $fx($this);
-            $this->cb->terminateJson($this);
+
+            $this->cb->terminateJsonIfCanTerminate($this);
         });
     }
 
     /**
-     * Return an array of css selector where content will be
+     * Return an array of CSS selector where content will be
      * cleared on reload.
+     *
+     * @return list<string>
      */
     public function getClearSelector(): array
     {

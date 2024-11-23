@@ -36,7 +36,7 @@ class ExecutorFactory
      * Basic type can be changed or added globally via the registerTypeExecutor method.
      * A specific model/action executor may be set via the registerExecutor method.
      *
-     * @var array<string, array>
+     * @var array<string, array<mixed>>
      */
     protected $executorSeed = [
         self::JS_EXECUTOR => [JsCallbackExecutor::class],
@@ -67,7 +67,7 @@ class ExecutorFactory
      * They can be store per either view type or
      * model/action name.
      *
-     * @var array<string, array|View>
+     * @var array<string, array<string, array<mixed>|View>>
      */
     protected $triggerSeed = [
         self::TABLE_BUTTON => [
@@ -80,7 +80,9 @@ class ExecutorFactory
     ];
 
     /**
-     * Register an executor for basic type.
+     * Register an executor for a basic type.
+     *
+     * @param array<mixed> $seed
      */
     public function registerTypeExecutor(string $type, array $seed): void
     {
@@ -89,6 +91,8 @@ class ExecutorFactory
 
     /**
      * Register an executor instance for a specific model User action.
+     *
+     * @param array<mixed> $seed
      */
     public function registerExecutor(UserAction $action, array $seed): void
     {
@@ -99,7 +103,7 @@ class ExecutorFactory
      * Register a trigger for a specific View type.
      * Trigger can be specify per action or per model/action.
      *
-     * @param array|View $seed
+     * @param array<mixed>|View $seed
      */
     public function registerTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false): void
     {
@@ -121,7 +125,7 @@ class ExecutorFactory
     /**
      * Register a trigger caption.
      */
-    public function registerCaption(UserAction $action, string $caption, bool $isSpecific = false, string $type = null): void
+    public function registerCaption(UserAction $action, string $caption, bool $isSpecific = false, ?string $type = null): void
     {
         if ($isSpecific) {
             $this->triggerCaption[$this->getModelKey($action)][$action->shortName] = $caption;
@@ -133,14 +137,14 @@ class ExecutorFactory
     }
 
     /**
-     * @return ($type is self::MENU_ITEM ? MenuItem : ($type is self::TABLE_MENU_ITEM ? MenuItem : Button))
+     * @return ($type is self::MENU_ITEM|self::TABLE_MENU_ITEM ? MenuItem : Button)
      */
-    public function createTrigger(UserAction $action, string $type = null): View
+    public function createTrigger(UserAction $action, ?string $type = null): View
     {
-        return $this->createActionTrigger($action, $type); // @phpstan-ignore-line
+        return $this->createActionTrigger($action, $type); // @phpstan-ignore return.type
     }
 
-    public function getCaption(UserAction $action, string $type = null): string
+    public function getCaption(UserAction $action, ?string $type = null): string
     {
         return $this->getActionCaption($action, $type);
     }
@@ -148,7 +152,7 @@ class ExecutorFactory
     /**
      * @return AbstractView&ExecutorInterface
      */
-    public function createExecutor(UserAction $action, View $owner, string $requiredType = null): ExecutorInterface
+    public function createExecutor(UserAction $action, View $owner, ?string $requiredType = null): ExecutorInterface
     {
         if ($requiredType !== null) {
             if (!($this->executorSeed[$requiredType] ?? null)) {
@@ -157,7 +161,7 @@ class ExecutorFactory
             }
             $seed = $this->executorSeed[$requiredType];
         } else {
-            $seed = $seed = $this->executorSeed[$this->getModelKey($action)][$action->shortName] ?? null;
+            $seed = $this->executorSeed[$this->getModelKey($action)][$action->shortName] ?? null;
             if ($seed === null) {
                 // if no type is register, determine executor to use base on action properties
                 if ($action->confirmation instanceof \Closure) {
@@ -180,7 +184,7 @@ class ExecutorFactory
     /**
      * Create executor View for firing model user action.
      */
-    protected function createActionTrigger(UserAction $action, string $type = null): View
+    protected function createActionTrigger(UserAction $action, ?string $type = null): View
     {
         $viewType = array_merge(['default' => [$this, 'getDefaultTrigger']], $this->triggerSeed[$type] ?? []);
         $seed = $viewType[$this->getModelKey($action)][$action->shortName] ?? null;
@@ -191,15 +195,19 @@ class ExecutorFactory
             }
         }
 
-        $seed = is_array($seed) && is_callable($seed) ? call_user_func($seed, $action, $type) : $seed;
+        if (is_array($seed) && is_callable($seed)) {
+            $seed = call_user_func($seed, $action, $type);
+        }
 
         return Factory::factory($seed);
     }
 
     /**
      * Return executor default trigger seed based on type.
+     *
+     * @return array<mixed>
      */
-    protected function getDefaultTrigger(UserAction $action, string $type = null): array
+    protected function getDefaultTrigger(UserAction $action, ?string $type = null): array
     {
         switch ($type) {
             case self::CARD_BUTTON:
@@ -216,7 +224,7 @@ class ExecutorFactory
 
                 break;
             case self::TABLE_MENU_ITEM:
-                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'name' => false, 'class.item' => true];
+                $seed = [MenuItem::class, $this->getActionCaption($action, $type), 'class.item' => true];
 
                 break;
             default:
@@ -229,7 +237,7 @@ class ExecutorFactory
     /**
      * Return action caption set in actionLabel or default.
      */
-    protected function getActionCaption(UserAction $action, string $type = null): string
+    protected function getActionCaption(UserAction $action, ?string $type = null): string
     {
         $caption = $this->triggerCaption[$type][$action->shortName] ?? null;
         if ($caption === null) {
@@ -242,11 +250,17 @@ class ExecutorFactory
             }
         }
 
-        return is_array($caption) && is_callable($caption) ? call_user_func($caption, $action) : $caption;
+        if (is_array($caption) && is_callable($caption)) {
+            $caption = call_user_func($caption, $action);
+        }
+
+        return $caption;
     }
 
     /**
      * Return Add action seed for menu item.
+     *
+     * @return array<mixed>
      */
     protected function getAddMenuItem(UserAction $action): array
     {

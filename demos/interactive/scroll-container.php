@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Lister;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Dynamic scroll in Table', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
@@ -32,7 +33,7 @@ $listerTemplate = '<div {$attributes}>{List}<div id="{$_id}" class="ui segment" 
 $listerContainer = View::addTo($scrollContainer, ['template' => new HtmlTemplate($listerTemplate)]);
 
 $lister = Lister::addTo($listerContainer, [], ['List']);
-$lister->onHook(Lister::HOOK_BEFORE_ROW, function (Lister $lister) {
+$lister->onHook(Lister::HOOK_BEFORE_ROW, static function (Lister $lister) {
     $row = Country::assertInstanceOf($lister->currentRow);
     $row->iso = mb_strtolower($row->iso);
 });

@@ -19,16 +19,13 @@ class ArgumentFormExecutor extends BasicExecutor
     /** @var Form */
     public $form;
 
+    #[\Override]
     public function initPreview(): void
     {
         Header::addTo($this, [$this->action->getCaption(), 'subHeader' => $this->description ?? $this->action->getDescription()]);
         $this->form = Form::addTo($this, ['buttonSave' => $this->executorButton]);
 
         foreach ($this->action->args as $key => $val) {
-            if ($val instanceof Model) {
-                $val = ['model' => $val];
-            }
-
             if (isset($val['model'])) {
                 $val['model'] = Factory::factory($val['model']);
                 $this->form->addControl($key, [Form\Control\Lookup::class])->setModel($val['model']);
@@ -39,7 +36,7 @@ class ArgumentFormExecutor extends BasicExecutor
 
         $this->form->onSubmit(function (Form $form) {
             // set arguments from the model
-            $this->setArguments($form->model->get());
+            $this->setArguments($form->entity->get());
 
             return $this->executeModelAction();
         });

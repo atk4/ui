@@ -1,8 +1,8 @@
 
 <div {$attributes}>
 {Radio}{rows}{row}
-<div class="field"><div class="ui radio checkbox">
-<input id="{$_id}_input" type="radio" name="{$_name}" value="{$id}" {$checked} {$disabled}>
+<div class="field"><div class="ui checkbox radio {$disabledClass}">
+<input id="{$_id}_input" type="radio" name="{$_name}" value="{$value}" {$checked} {$disabled}>
 <label for="{$_id}_input">{$name}</label>
 </div></div>
 {/row}{/rows}{/}

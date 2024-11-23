@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Layout;
 
+use Atk4\Core\DebugTrait;
 use Atk4\Ui\Layout;
 
 /**
  * Implements a fixed-width single-column bevel in the middle of the page, centered
- * horizontally and vertically. Icon / Title will apear above the bevel.
+ * horizontally and vertically. Icon / Title will appear above the bevel.
  *
  * Bevel will use some padding and will contain your Content.
  * This layout is handy for a simple and single-purpose applications.
  */
 class Centered extends Layout
 {
-    use \Atk4\Core\DebugTrait;
+    use DebugTrait;
 
     public $defaultTemplate = 'layout/centered.html';
 
@@ -24,6 +25,7 @@ class Centered extends Layout
     /** @var string */
     public $imageAlt = 'Logo';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -37,6 +39,7 @@ class Centered extends Layout
         $this->template->trySet('title', $this->getApp()->title);
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->image) {

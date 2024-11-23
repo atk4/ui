@@ -39,6 +39,7 @@ class FilterPopup extends Popup
      */
     public $colTrigger;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -46,65 +47,60 @@ class FilterPopup extends Popup
         $this->setOption('delay', ['hide' => 1500]);
         $this->setHoverable();
 
-        $model = FilterModel::factoryType($this->getApp(), $this->field);
-        $model = $model->createEntity();
+        $entity = FilterModel::factoryType($this->getApp(), $this->field)
+            ->createEntity();
 
         $this->form = Form::addTo($this)->addClass('');
         $this->form->buttonSave->addClass('');
-        $this->form->addGroup('Where ' . $this->field->getCaption() . ' :');
+        $this->form->addGroup('Where ' . $this->field->getCaption() . ':');
 
         $this->form->buttonSave->set('Set');
 
-        $this->form->setControlsDisplayRules($model->getFormDisplayRules());
+        $this->form->setControlsDisplayRules($entity->getFormDisplayRules());
 
-        // load data associated with this popup.
-        $filter = $model->recallData();
+        // load data associated with this popup
+        $filter = $entity->recallData();
         if ($filter !== null) {
-            $model->setMulti($filter);
+            $entity->setMulti($filter);
         }
-        $this->form->setModel($model);
+        $this->form->setModel($entity);
 
         $this->form->onSubmit(function (Form $form) {
-            $form->model->save();
+            $form->entity->save();
 
-            return new jsReload($this->reload);
+            return new JsReload($this->reload);
         });
 
         Button::addTo($this->form, ['Clear', 'class.clear' => true])
-            ->on('click', function (Jquery $j) use ($model) {
-                $model->clearData();
+            ->on('click', function (Jquery $j) use ($entity) {
+                $entity->clearData();
 
                 return new JsBlock([
-                    $this->form->js(false, null, $this->form->formElement)->form('reset'),
+                    $this->form->js()->form('reset'),
                     new JsReload($this->reload),
-                    (new Jquery($this->colTrigger))->trigger('click'),
+                    (new Jquery($this->colTrigger))->click(),
                 ]);
             });
     }
 
-    /**
-     * Check if filter is on.
-     */
     public function isFilterOn(): bool
     {
         return $this->recallData() !== null;
     }
 
     /**
-     * Recall model data.
+     * @return array<string, mixed>|null
      */
     public function recallData(): ?array
     {
-        return $this->form->model->recallData();
+        return $this->form->entity->recallData();
     }
 
     /**
      * Set filter condition base on the field Type model use in this FilterPopup.
-     *
-     * @return Model
      */
-    public function setFilterCondition(Model $tableModel)
+    public function setFilterCondition(Model $tableModel): void
     {
-        return $this->form->model->setConditionForModel($tableModel);
+        $this->form->entity->setConditionForModel($tableModel);
     }
 }

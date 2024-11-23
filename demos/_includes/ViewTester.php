@@ -15,6 +15,7 @@ use Atk4\Ui\View;
  */
 class ViewTester extends View
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -22,7 +23,7 @@ class ViewTester extends View
         $label = Label::addTo($this, ['CallBack', 'detail' => 'fail', 'class.red' => true]);
         $reload = new JsReload($this, [$this->name => 'ok']);
 
-        if (isset($_GET[$this->name])) {
+        if ($this->getApp()->hasRequestQueryParam($this->name)) {
             $label->class[] = 'green';
             $label->detail = 'success';
         } else {

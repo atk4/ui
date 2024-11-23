@@ -54,6 +54,7 @@ class JsBlock implements JsExpressionable
         return new static(is_array($statements) ? $statements : [$statements]);
     }
 
+    #[\Override]
     public function jsRender(): string
     {
         $output = '';

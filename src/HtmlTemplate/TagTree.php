@@ -19,7 +19,7 @@ class TagTree
 
     private string $tag;
 
-    /** @var array<int, Value|string|HtmlTemplate> */
+    /** @var list<Value|string|HtmlTemplate> */
     private array $children = [];
 
     public function __construct(HtmlTemplate $parentTemplate, string $tag)
@@ -30,7 +30,7 @@ class TagTree
 
     private function __clone()
     {
-        // prevent clonning
+        // prevent cloning
     }
 
     /**
@@ -57,7 +57,7 @@ class TagTree
     }
 
     /**
-     * @return array<int, Value|self|HtmlTemplate>
+     * @return list<Value|self|HtmlTemplate>
      */
     public function getChildren(): array
     {
@@ -77,8 +77,8 @@ class TagTree
      */
     public function add(object $value): self
     {
-        if (!$value instanceof Value && !$value instanceof HtmlTemplate) { // @phpstan-ignore-line
-            if ($value instanceof self) { // @phpstan-ignore-line
+        if (!$value instanceof Value && !$value instanceof HtmlTemplate) { // @phpstan-ignore instanceof.alwaysTrue, booleanAnd.alwaysFalse
+            if ($value instanceof self) { // @phpstan-ignore instanceof.alwaysFalse
                 throw new Exception('Tag tree cannot be added directly');
             }
 

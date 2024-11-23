@@ -22,6 +22,7 @@ class AccordionSection extends View
     /** @var string */
     public $icon = 'dropdown';
 
+    #[\Override]
     protected function renderView(): void
     {
         parent::renderView();

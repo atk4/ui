@@ -10,7 +10,11 @@ use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Table;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
+use Doctrine\DBAL\Types\Type as DbalType;
 use Mvorisek\Atk4\Hintable\Data\HintablePropertyDef;
+use SebastianBergmann\CodeCoverage\CodeCoverage;
 
 try {
     require_once file_exists(__DIR__ . '/db.php')
@@ -22,7 +26,76 @@ try {
         ->addMoreInfo('PDO error', $e->getMessage());
 }
 
-// a very basic file that sets up Agile Data to be used in some demonstrations
+/**
+ * Improve testing by using non-scalar ID with custom DBAL type.
+ */
+class WrappedId
+{
+    private const MIN_VALUE = 1;
+    private const MAX_VALUE = 100_000;
+
+    private int $id;
+
+    public function __construct(int $id)
+    {
+        if ($id < self::MIN_VALUE || $id > self::MAX_VALUE) {
+            throw (new Exception('ID value is outside supported range'))
+                ->addMoreInfo('value', $id);
+        }
+
+        $this->id = $id;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+}
+
+class WrappedIdType extends DbalType
+{
+    public const NAME = 'atk4_ui_demos_id';
+
+    #[\Override]
+    public function getName(): string
+    {
+        return self::NAME;
+    }
+
+    #[\Override]
+    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
+    {
+        return DbalType::getType('bigint')->getSQLDeclaration($fieldDeclaration, $platform);
+    }
+
+    #[\Override]
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?int
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return DbalType::getType('bigint')->convertToDatabaseValue($value->getId(), $platform);
+    }
+
+    #[\Override]
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?object
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        return new WrappedId((int) DbalType::getType('bigint')->convertToPHPValue($value, $platform)); // once DBAL 3.x support is dropped, the explicit cast should no longer be needed
+    }
+
+    #[\Override]
+    public function requiresSQLCommentHint(AbstractPlatform $platform): bool
+    {
+        return true;
+    }
+}
+
+DbalType::addType(WrappedIdType::NAME, WrappedIdType::class);
 
 trait ModelPreventModificationTrait
 {
@@ -36,15 +109,30 @@ trait ModelPreventModificationTrait
         return $rw;
     }
 
+    #[\Override]
     public function atomic(\Closure $fx)
     {
-        $eRollback = new \Exception('Prevent modification');
+        $eRollback = true;
+        foreach (array_slice(debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS | \DEBUG_BACKTRACE_PROVIDE_OBJECT), 1) as $frame) {
+            if ($frame['function'] === 'atomic'
+                && ($frame['class'] ?? null) === self::class
+                && $frame['object']->getModel(true)->getPersistence() === $this->getModel(true)->getPersistence()
+            ) {
+                $eRollback = null;
+
+                break;
+            }
+        }
+        if ($eRollback === true) {
+            $eRollback = new \Exception('Prevent modification');
+        }
+
         $res = null;
         try {
             parent::atomic(function () use ($fx, $eRollback, &$res) {
                 $res = $fx();
 
-                if (!$this->isAllowDbModifications()) {
+                if ($eRollback !== null && !$this->isAllowDbModifications()) {
                     throw $eRollback;
                 }
             });
@@ -58,7 +146,7 @@ trait ModelPreventModificationTrait
     }
 
     /**
-     * @param \Closure(Model): string $outputCallback
+     * @param \Closure(static): string $outputCallback
      */
     protected function wrapUserActionCallbackPreventModification(Model\UserAction $action, \Closure $outputCallback): void
     {
@@ -81,32 +169,41 @@ trait ModelPreventModificationTrait
                 $action->callback = $callbackBackup;
             }
 
-            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedEntity : $model, ...$args);
+            return $outputCallback($model->isEntity() && !$model->isLoaded() ? $loadedEntity : $model, ...$args); // @phpstan-ignore argument.type
         };
     }
 
     protected function initPreventModification(): void
     {
-        $makeMessageFx = function (string $actionName, Model $model) {
-            return $model->getModelCaption() . ' action "' . $actionName . '" with "' . $model->getTitle() . '" entity '
-                . ' was executed. In demo mode all changes are reverved.';
+        $makeMessageFx = static function (string $actionName, Model $entity) {
+            return $entity->getModel()->getModelCaption() . ' action "' . $actionName . '" with "' . $entity->getTitle() . '" entity '
+                . ' was executed. In demo mode all changes are reversed.';
         };
 
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), function (Model $model) use ($makeMessageFx) {
-            return $makeMessageFx('add', $model);
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('add'), static function (Model $entity) use ($makeMessageFx) {
+            return $makeMessageFx('add', $entity);
         });
 
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), function (Model $model) use ($makeMessageFx) {
-            return $makeMessageFx('edit', $model);
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('edit'), static function (Model $entity) use ($makeMessageFx) {
+            return $makeMessageFx('edit', $entity);
         });
 
         $this->getUserAction('delete')->confirmation = 'Please go ahead. Demo mode does not really delete data.';
-        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), function (Model $model) use ($makeMessageFx) {
-            return $makeMessageFx('delete', $model);
+        $this->wrapUserActionCallbackPreventModification($this->getUserAction('delete'), static function (Model $entity) use ($makeMessageFx) {
+            return $makeMessageFx('delete', $entity);
         });
     }
 }
 
+/**
+ * Improve testing by using prefixed real field and SQL names.
+ *
+ * @method static|null                     tryLoad(WrappedId $id = null)
+ * @method static                          load(WrappedId $id)
+ * @method \Traversable<WrappedId, static> getIterator()
+ * @method WrappedId                       insert(array<string, mixed> $row)
+ * @method static                          delete(WrappedId $id = null)
+ */
 class ModelWithPrefixedFields extends Model
 {
     use ModelPreventModificationTrait;
@@ -158,6 +255,7 @@ class ModelWithPrefixedFields extends Model
         return self::$prefixedFieldNames[$name];
     }
 
+    #[\Override]
     protected function createHintablePropsFromClassDoc(string $className): array
     {
         return array_map(function (HintablePropertyDef $hintableProp) {
@@ -167,6 +265,7 @@ class ModelWithPrefixedFields extends Model
         }, parent::createHintablePropsFromClassDoc($className));
     }
 
+    #[\Override]
     protected function init(): void
     {
         if ($this->idField === 'id') {
@@ -179,9 +278,16 @@ class ModelWithPrefixedFields extends Model
 
         parent::init();
 
+        $this->getIdField()->type = WrappedIdType::NAME;
+
         $this->initPreventModification();
+
+        if ($this->getPersistence()->getDatabasePlatform() instanceof PostgreSQLPlatform || class_exists(CodeCoverage::class, false)) {
+            $this->setOrder($this->idField);
+        }
     }
 
+    #[\Override]
     public function addField(string $name, $seed = []): Field
     {
         $seed = Factory::mergeSeeds($seed, [
@@ -191,6 +297,30 @@ class ModelWithPrefixedFields extends Model
 
         return parent::addField($name, $seed);
     }
+
+    #[\Override]
+    public function getId(): ?WrappedId
+    {
+        return parent::getId();
+    }
+
+    /**
+     * @param WrappedId|($allowNull is true ? null : never) $value
+     */
+    #[\Override] // @phpstan-ignore method.childParameterType
+    public function setId($value, bool $allowNull = true)
+    {
+        return parent::setId($value, $allowNull);
+    }
+
+    /**
+     * @return \Traversable<WrappedId, static>
+     */
+    #[\Override]
+    public function createIteratorBy($field, $operator = null, $value = null): \Traversable
+    {
+        return parent::createIteratorBy(...'func_get_args'());
+    }
 }
 
 /**
@@ -198,14 +328,15 @@ class ModelWithPrefixedFields extends Model
  * @property string $sys_name  @Atk4\Field()
  * @property string $iso       @Atk4\Field()
  * @property string $iso3      @Atk4\Field()
- * @property string $numcode   @Atk4\Field()
- * @property string $phonecode @Atk4\Field()
+ * @property int    $numcode   @Atk4\Field()
+ * @property int    $phonecode @Atk4\Field()
  */
 class Country extends ModelWithPrefixedFields
 {
     public $table = 'country';
     public $caption = 'Country';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -218,14 +349,15 @@ class Country extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->numcode, ['caption' => 'ISO Numeric Code', 'type' => 'integer', 'required' => true]);
         $this->addField($this->fieldName()->phonecode, ['caption' => 'Phone Prefix', 'type' => 'integer', 'required' => true]);
 
-        $this->onHook(Model::HOOK_BEFORE_SAVE, function (self $model) {
-            if (!$model->sys_name) {
-                $model->sys_name = mb_strtoupper($model->name);
+        $this->onHook(Model::HOOK_BEFORE_SAVE, static function (self $entity) {
+            if (!$entity->sys_name) {
+                $entity->sys_name = mb_strtoupper($entity->name);
             }
         });
     }
 
-    public function validate(string $intent = null): array
+    #[\Override]
+    public function validate(?string $intent = null): array
     {
         $errors = parent::validate($intent);
 
@@ -278,6 +410,7 @@ class Stat extends ModelWithPrefixedFields
 {
     public $table = 'stat';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -292,7 +425,6 @@ class Stat extends ModelWithPrefixedFields
         $this->hasOne($this->fieldName()->client_country_iso, [
             'model' => [Country::class],
             'theirField' => Country::hinting()->fieldName()->iso,
-            'type' => 'string',
             'ui' => [
                 'form' => [Form\Control\Line::class],
                 'table' => [Table\Column\CountryFlag::class],
@@ -303,15 +435,9 @@ class Stat extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->is_commercial, ['type' => 'boolean']);
         $this->addField($this->fieldName()->currency, ['values' => ['EUR' => 'Euro', 'USD' => 'US Dollar', 'GBP' => 'Pound Sterling']]);
         $this->addField($this->fieldName()->currency_symbol, ['neverPersist' => true]);
-        $this->onHook(Model::HOOK_AFTER_LOAD, function (self $model) {
-            /* implementation for "intl"
-            $locale = 'en-UK';
-            $fmt = new \NumberFormatter($locale . '@currency=' . $model->currency, NumberFormatter::CURRENCY);
-            $model->currency_symbol = $fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
-             */
-
+        $this->onHook(Model::HOOK_AFTER_LOAD, static function (self $entity) {
             $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
-            $model->currency_symbol = $map[$model->currency] ?? '?';
+            $entity->currency_symbol = $map[$entity->currency] ?? '?';
         });
 
         $this->addField($this->fieldName()->project_budget, ['type' => 'atk4_money']);
@@ -345,15 +471,16 @@ class Percent extends Field
  * @property string $name             @Atk4\Field()
  * @property string $type             @Atk4\Field()
  * @property bool   $is_folder        @Atk4\Field()
- * @property File   $SubFolder        @Atk4\RefMany()
- * @property int    $count            @Atk4\Field()
  * @property Folder $parent_folder_id @Atk4\RefOne()
+ * @property File   $subFolder        @Atk4\RefMany()
+ * @property int    $subCount         @Atk4\Field()
  */
 class File extends ModelWithPrefixedFields
 {
     public $table = 'file';
     public $caption = 'File';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -363,22 +490,19 @@ class File extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->type, ['caption' => 'MIME Type']);
         $this->addField($this->fieldName()->is_folder, ['type' => 'boolean']);
 
-        $this->hasMany($this->fieldName()->SubFolder, [
-            'model' => [self::class],
-            'theirField' => self::hinting()->fieldName()->parent_folder_id,
-        ])
-            ->addField($this->fieldName()->count, ['aggregate' => 'count', 'field' => $this->getPersistence()->expr($this, '*')]);
-
         $this->hasOne($this->fieldName()->parent_folder_id, [
             'model' => [Folder::class],
         ])
             ->addTitle();
+
+        $this->hasMany($this->fieldName()->subFolder, [
+            'model' => [self::class],
+            'theirField' => self::hinting()->fieldName()->parent_folder_id,
+        ])
+            ->addField($this->fieldName()->subCount, ['aggregate' => 'count', 'field' => $this->getPersistence()->expr($this, '*')]);
     }
 
-    /**
-     * Perform import from filesystem.
-     */
-    public function importFromFilesystem(string $path, bool $isSub = null): void
+    public function importFromFilesystem(string $path, ?bool $isSub = null): void
     {
         if ($isSub === null) {
             if ($this->isEntity()) { // TODO should be not needed once UserAction is for non-entity only
@@ -388,9 +512,13 @@ class File extends ModelWithPrefixedFields
             }
 
             $this->atomic(function () use ($path) {
-                foreach ($this as $entity) {
-                    $entity->delete();
-                }
+                do {
+                    $empty = true;
+                    foreach ($this->createIteratorBy($this->fieldName()->subFolder . '/#', 0) as $entity) {
+                        $entity->delete();
+                        $empty = false;
+                    }
+                } while (!$empty);
 
                 $path = __DIR__ . '/../' . $path;
 
@@ -414,7 +542,7 @@ class File extends ModelWithPrefixedFields
             ]);
 
             if ($fileinfo->isDir()) {
-                $entity->SubFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
+                $entity->subFolder->importFromFilesystem($fileinfo->getPath() . '/' . $fileinfo->getFilename(), true);
             }
 
             // skip full/slow import for Behat CI testing
@@ -427,6 +555,7 @@ class File extends ModelWithPrefixedFields
 
 class Folder extends File
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -437,24 +566,25 @@ class Folder extends File
 
 /**
  * @property string      $name          @Atk4\Field()
- * @property SubCategory $SubCategories @Atk4\RefMany()
- * @property Product     $Products      @Atk4\RefMany()
+ * @property SubCategory $subCategories @Atk4\RefMany()
+ * @property Product     $products      @Atk4\RefMany()
  */
 class Category extends ModelWithPrefixedFields
 {
     public $table = 'product_category';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
 
         $this->addField($this->fieldName()->name);
 
-        $this->hasMany($this->fieldName()->SubCategories, [
+        $this->hasMany($this->fieldName()->subCategories, [
             'model' => [SubCategory::class],
             'theirField' => SubCategory::hinting()->fieldName()->product_category_id,
         ]);
-        $this->hasMany($this->fieldName()->Products, [
+        $this->hasMany($this->fieldName()->products, [
             'model' => [Product::class],
             'theirField' => Product::hinting()->fieldName()->product_category_id,
         ]);
@@ -464,12 +594,13 @@ class Category extends ModelWithPrefixedFields
 /**
  * @property string   $name                @Atk4\Field()
  * @property Category $product_category_id @Atk4\RefOne()
- * @property Product  $Products            @Atk4\RefMany()
+ * @property Product  $products            @Atk4\RefMany()
  */
 class SubCategory extends ModelWithPrefixedFields
 {
     public $table = 'product_sub_category';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -479,7 +610,7 @@ class SubCategory extends ModelWithPrefixedFields
         $this->hasOne($this->fieldName()->product_category_id, [
             'model' => [Category::class],
         ]);
-        $this->hasMany($this->fieldName()->Products, [
+        $this->hasMany($this->fieldName()->products, [
             'model' => [Product::class],
             'theirField' => Product::hinting()->fieldName()->product_sub_category_id,
         ]);
@@ -497,6 +628,7 @@ class Product extends ModelWithPrefixedFields
     public $table = 'product';
     public $caption = 'Product';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -526,6 +658,7 @@ class MultilineItem extends ModelWithPrefixedFields
 {
     public $table = 'multiline_item';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -539,16 +672,16 @@ class MultilineItem extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->qty, ['type' => 'integer', 'required' => true]);
         $this->addField($this->fieldName()->box, ['type' => 'integer', 'required' => true]);
         $this->addExpression($this->fieldName()->total_sql, [
-            'expr' => function (Model /* TODO self is not working bacause of clone in Multiline */ $row) {
-                return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore-line
+            'expr' => function (Model /* TODO self is not working because of clone in Multiline */ $row) {
+                return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore method.notFound
             },
-            'type' => 'integer',
+            'type' => 'bigint',
         ]);
         $this->addCalculatedField($this->fieldName()->total_php, [
-            'expr' => function (self $row) {
+            'expr' => static function (self $row) {
                 return $row->qty * $row->box;
             },
-            'type' => 'integer',
+            'type' => 'bigint',
         ]);
     }
 }
@@ -562,6 +695,7 @@ class MultilineDelivery extends ModelWithPrefixedFields
 {
     public $table = 'multiline_delivery';
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

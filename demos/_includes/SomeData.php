@@ -15,6 +15,7 @@ class SomeData extends Model
         parent::__construct($fakerPersistence);
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();

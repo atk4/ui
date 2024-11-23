@@ -16,8 +16,8 @@ class JsPaginator extends JsCallback
     public $view;
 
     /**
-     * The js scroll plugin options
-     *  - appendTo: the html selector where new content should be appendTo.
+     * The JS scroll plugin options
+     *  - appendTo: the HTML selector where new content should be appendTo.
      *              Ex: For a table, the selector would be 'tbody'.
      *  - padding: Bottom padding need prior to perform a page request.
      *             Page request will be ask when container is scroll down and reach padding value.
@@ -27,10 +27,11 @@ class JsPaginator extends JsCallback
      *  - tableContainerHeight: int Fixed height of table container in pixels.
      *  - tableHeaderColor: int|string HTML color for header.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public $options = [];
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -61,7 +62,7 @@ class JsPaginator extends JsCallback
      */
     public function getPage(): int
     {
-        return (int) ($_GET['page'] ?? 0);
+        return (int) ($this->getApp()->tryGetRequestQueryParam('page') ?? 0);
     }
 
     /**
@@ -72,7 +73,7 @@ class JsPaginator extends JsCallback
     public function onScroll(\Closure $fx): void
     {
         $page = $this->getPage();
-        $this->set(function () use ($fx, $page) {
+        $this->set(static function () use ($fx, $page) {
             return $fx($page);
         });
     }

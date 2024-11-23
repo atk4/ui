@@ -12,6 +12,7 @@ use Atk4\Ui\View;
 
 class PromotionText extends View
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();

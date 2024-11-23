@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Atk4\Ui\Demos;
 
 use Atk4\Data\Model;
+use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Card;
 use Atk4\Ui\Header;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\View;
 
-/** @var \Atk4\Ui\App $app */
+/** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
 Button::addTo($app, ['Executor Factory in App instance', 'class.small left floated basic blue' => true, 'icon' => 'left arrow'])
@@ -19,14 +20,15 @@ Button::addTo($app, ['Executor Factory in App instance', 'class.small left float
 View::addTo($app, ['ui' => 'clearing divider']);
 
 // overriding basic ExecutorFactory in order to change Card button
-$myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends ExecutorFactory {
+$myFactory = AnonymousClassNameCache::get_class(fn () => new class extends ExecutorFactory {
     public $buttonPrimaryColor = 'green';
 
+    /** @var array<string, string> */
     protected array $actionIcon = [
         'callback' => 'sync',
         'preview' => 'eye',
         'edit_argument' => 'user edit',
-        'edit_argument_prev' => 'pen square',
+        'edit_argument_preview' => 'pen square',
         'edit_iso' => 'pencil',
         'confirm' => 'check circle',
         'multi_step' => 'window maximize outline',
@@ -34,7 +36,7 @@ $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends Exe
 
     public function __construct()
     {
-        // registering card button default with our own method handler.
+        // registering card button default with our own method handler
         $this->triggerSeed = array_merge(
             $this->triggerSeed,
             [self::CARD_BUTTON => ['default' => [$this, 'getCardButton']]]
@@ -42,7 +44,7 @@ $myFactory = AnonymousClassNameCache::get_class(fn () => new class() extends Exe
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     protected function getCardButton(Model\UserAction $action)
     {
@@ -57,13 +59,13 @@ DemoActionsUtil::setupDemoActions($country);
 $country = $country->loadBy($country->fieldName()->iso, 'fr');
 $country->name .= ' NO RELOAD';
 // suppress dirty field exception
-// https://github.com/atk4/data/blob/35dd7b7d95909cfe574b15e32b7cc57c39a16a58/src/Model/UserAction.php#L164
+// https://github.com/atk4/data/blob/35dd7b7d95/src/Model/UserAction.php#L164
 unset($country->getDirtyRef()[$country->fieldName()->name]);
 
 $cardActions = Card::addTo($app, ['useLabel' => true, 'executorFactory' => new $myFactory()]);
 $cardActions->setModel($country);
 foreach ($country->getModel()->getUserActions() as $action) {
-    $showActions = ['callback', 'preview', 'edit_argument', 'edit_argument_prev', 'edit_iso', 'confirm', 'multi_step'];
+    $showActions = ['callback', 'preview', 'edit_argument', 'edit_argument_preview', 'edit_iso', 'confirm', 'multi_step'];
     if (in_array($action->shortName, $showActions, true)) {
         $cardActions->addClickAction($action);
     }

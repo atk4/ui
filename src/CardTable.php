@@ -11,15 +11,18 @@ use Atk4\Data\Model;
  *
  * IMPORTANT: Although the purpose of the "Card" component will remain the same, we do plan to
  * improve implementation of a card to to use https://fomantic-ui.com/views/card.html .
+ *
+ * @property false $model use $entity property instead
  */
 class CardTable extends Table
 {
     protected bool $_bypass = false;
 
     /**
-     * @param array<int, string>|null $columns
+     * @param list<string>|null $fields
      */
-    public function setModel(Model $entity, array $columns = null): void
+    #[\Override]
+    public function setModel(Model $entity, ?array $fields = null): void
     {
         if ($this->_bypass) {
             parent::setModel($entity);
@@ -29,13 +32,13 @@ class CardTable extends Table
 
         $entity->assertIsLoaded();
 
-        if ($columns === null) {
-            $columns = array_keys($entity->getFields('visible'));
+        if ($fields === null) {
+            $fields = array_keys($entity->getFields('visible'));
         }
 
         $data = [];
         foreach ($entity->get() as $key => $value) {
-            if (in_array($key, $columns, true)) {
+            if (in_array($key, $fields, true)) {
                 $data[] = [
                     'id' => $key,
                     'field' => $entity->getField($key)->getCaption(),

@@ -54,7 +54,9 @@ abstract class FilterModel extends Model
             Types::TEXT => FilterModel\TypeString::class,
 
             Types::BOOLEAN => FilterModel\TypeBoolean::class,
+            Types::SMALLINT => FilterModel\TypeNumber::class,
             Types::INTEGER => FilterModel\TypeNumber::class,
+            Types::BIGINT => FilterModel\TypeNumber::class,
             Types::FLOAT => FilterModel\TypeNumber::class,
             CustomTypes::MONEY => FilterModel\TypeNumber::class,
 
@@ -68,9 +70,9 @@ abstract class FilterModel extends Model
             Types::JSON => FilterModel\TypeString::class,
 
             'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
-        ][$field->type];
+        ][$field->type] ?? null;
 
-        // You can set your own filter model class.
+        // you can set your own filter model class
         if (isset($field->ui['filterModel'])) {
             if ($field->ui['filterModel'] instanceof self) {
                 return $field->ui['filterModel'];
@@ -83,6 +85,7 @@ abstract class FilterModel extends Model
         return $filterModel;
     }
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -96,28 +99,23 @@ abstract class FilterModel extends Model
         $this->afterInit();
     }
 
-    /**
-     * Perform further initialization.
-     */
     public function afterInit(): void
     {
-        $this->addField('name', ['default' => $this->lookupField->shortName, 'system' => true]);
-
-        // create a name for our filter model to save as session data.
+        // create a name for our filter model to save as session data
         $this->name = 'filter_model_' . $this->lookupField->shortName;
 
-        if ($_GET['atk_clear_filter'] ?? false) {
+        if ($this->getApp()->tryGetRequestQueryParam('atk_clear_filter') ?? false) {
             $this->forget();
         }
 
-        // Add hook in order to persist data in session.
-        $this->onHook(self::HOOK_AFTER_SAVE, function (Model $model) {
-            $this->memorize('data', $model->get());
+        // add hook in order to persist data in session
+        $this->onHook(self::HOOK_AFTER_SAVE, function (Model $entity) {
+            $this->memorize('data', $entity->get());
         });
     }
 
     /**
-     * Recall filter model data.
+     * @return array<string, mixed>|null
      */
     public function recallData(): ?array
     {
@@ -127,24 +125,21 @@ abstract class FilterModel extends Model
     /**
      * Method that will set conditions on a model base on $op and $value value.
      * Each FilterModel\TypeModel should override this method.
-     *
-     * @return Model
      */
-    abstract public function setConditionForModel(Model $model);
+    abstract public function setConditionForModel(Model $model): void;
 
     /**
      * Method that will set Field display condition in a form.
      * If form filter need to have a field display at certain condition, then
      * override this method in your FilterModel\TypeModel.
+     *
+     * @return array<string, array<mixed>>
      */
     public function getFormDisplayRules(): array
     {
         return [];
     }
 
-    /**
-     * Check if this model is using session or not.
-     */
     public function clearData(): void
     {
         $this->forget();

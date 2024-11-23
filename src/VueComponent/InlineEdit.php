@@ -6,7 +6,6 @@ namespace Atk4\Ui\VueComponent;
 
 use Atk4\Data\Model;
 use Atk4\Data\ValidationException;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
@@ -14,6 +13,8 @@ use Atk4\Ui\View;
 
 /**
  * A Simple inline editable text Vue component.
+ *
+ * @property false $model use $entity property instead
  */
 class InlineEdit extends View
 {
@@ -55,7 +56,7 @@ class InlineEdit extends View
      */
     public $saveOnBlur = true;
 
-    /** @var string Default css for the input div. */
+    /** @var string Default CSS for the input div. */
     public $inputCss = 'ui right icon input';
 
     /**
@@ -67,47 +68,51 @@ class InlineEdit extends View
      * A default one is supply if this is null.
      * It receive the error ($e) as parameter.
      *
-     * @var \Closure|null
+     * @var \Closure(ValidationException, string): string|null
      */
     public $formatErrorMsg;
 
+    #[\Override]
     protected function init(): void
     {
         parent::init();
 
         $this->cb = JsCallback::addTo($this);
 
-        // Set default validation error handler.
+        // set default validation error handler
         if (!$this->formatErrorMsg) {
             $this->formatErrorMsg = function (ValidationException $e, string $value) {
-                $caption = $this->model->getField($this->fieldName)->getCaption();
+                $caption = $this->entity->getField($this->fieldName)->getCaption();
 
                 return $caption . ' - ' . $e->getMessage() . '. <br>Trying to set this value: "' . $value . '"';
             };
         }
     }
 
+    #[\Override]
     public function setModel(Model $entity): void
     {
+        $entity->assertIsEntity();
+
         parent::setModel($entity);
 
         if ($this->fieldName === null) {
-            $this->fieldName = $this->model->titleField;
+            $this->fieldName = $this->entity->titleField;
         }
 
-        if ($this->autoSave && $this->model->isLoaded()) {
-            $value = $_POST['value'] ?? null;
-            $this->cb->set(function () use ($value) {
+        if ($this->autoSave && $this->entity->isLoaded()) {
+            $this->cb->set(function () {
+                $postValue = $this->getApp()->getRequestPostParam('value');
                 try {
-                    $this->model->set($this->fieldName, $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($this->fieldName), $value));
-                    $this->model->save();
+                    $this->entity->set($this->fieldName, $this->getApp()->uiPersistence->typecastLoadField($this->entity->getField($this->fieldName), $postValue));
+                    $this->entity->save();
 
-                    return $this->jsSuccess('Update successfully');
+                    return $this->jsSuccess('Update saved');
                 } catch (ValidationException $e) {
                     $this->getApp()->terminateJson([
                         'success' => true,
                         'hasValidationError' => true,
-                        'atkjs' => $this->jsError(($this->formatErrorMsg)($e, $value))->jsRender(),
+                        'atkjs' => $this->jsError(($this->formatErrorMsg)($e, $postValue))->jsRender(),
                     ]);
                 }
             });
@@ -124,18 +129,16 @@ class InlineEdit extends View
     public function onChange(\Closure $fx): void
     {
         if (!$this->autoSave) {
-            $value = $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($this->fieldName), $_POST['value'] ?? null);
-            $this->cb->set(function () use ($fx, $value) {
+            $value = $this->getApp()->uiPersistence->typecastLoadField(
+                $this->entity->getField($this->fieldName),
+                $this->getApp()->tryGetRequestPostParam('value')
+            );
+            $this->cb->set(static function () use ($fx, $value) {
                 return $fx($value);
             });
         }
     }
 
-    /**
-     * On success notifier.
-     *
-     * @return JsToast
-     */
     public function jsSuccess(string $message): JsExpressionable
     {
         return new JsToast([
@@ -146,11 +149,7 @@ class InlineEdit extends View
     }
 
     /**
-     * On validation error notifier.
-     *
      * @param string $message
-     *
-     * @return JsToast
      */
     public function jsError($message): JsExpressionable
     {
@@ -163,22 +162,13 @@ class InlineEdit extends View
         ]);
     }
 
-    /**
-     * Renders View.
-     */
+    #[\Override]
     protected function renderView(): void
     {
         parent::renderView();
 
-        $type = $this->model && $this->fieldName ? $this->model->getField($this->fieldName)->type : 'string';
-        $type = $type === 'string' ? 'text' : $type;
-
-        if ($type !== 'text' && $type !== 'integer') {
-            throw new Exception('Only string or number field can be edited inline. Field Type = ' . $type);
-        }
-
-        if ($this->model && $this->model->isLoaded()) {
-            $initValue = $this->model->get($this->fieldName);
+        if ($this->entity !== null && $this->entity->isLoaded()) {
+            $initValue = $this->entity->get($this->fieldName);
         } else {
             $initValue = $this->initValue;
         }
@@ -189,7 +179,7 @@ class InlineEdit extends View
             'initValue' => $initValue,
             'url' => $this->cb->getJsUrl(),
             'saveOnBlur' => $this->saveOnBlur,
-            'options' => ['fieldName' => $fieldName, 'fieldType' => $type, 'inputCss' => $this->inputCss],
+            'options' => ['fieldName' => $fieldName, 'inputCss' => $this->inputCss],
         ]);
     }
 }

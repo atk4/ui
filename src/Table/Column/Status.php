@@ -14,42 +14,44 @@ use Atk4\Ui\Table;
  */
 class Status extends Table\Column
 {
-    /** @var array Describes list of highlited statuses for this Field. */
-    public $states = [];
+    /** @var array<string, list<string>> Describes list of highlighted statuses for this Field. */
+    public array $states = [];
 
     /**
      * Pass argument with possible states like this:.
      *
      *  ['positive' => ['Paid', 'Archived'], 'negative' => ['Overdue']]
      *
-     * @param array $states List of status => [value, value, value]
+     * @param array<string, list<string>> $states List of status => [value, value, value]
      */
-    public function __construct($states)
+    public function __construct(array $states)
     {
         parent::__construct();
 
         $this->states = $states;
     }
 
-    public function getDataCellHtml(Field $field = null, array $attr = []): string
+    #[\Override]
+    public function getDataCellHtml(?Field $field = null, array $attr = []): string
     {
         if ($field === null) {
             throw new Exception('Status can be used only with model field');
         }
 
-        $bodyAttr = $this->getTagAttributes('body');
-
-        $attr = array_merge_recursive($bodyAttr, $attr, ['class' => '{$_' . $field->shortName . '_status}']);
-
-        if (is_array($attr['class'] ?? null)) {
-            $attr['class'] = implode(' ', $attr['class']);
-        }
+        $attr = $this->mergeTagAttributes(
+            $this->getTagAttributes('body'),
+            $attr,
+            ['class' => ['{$_' . $field->shortName . '_status}']],
+        );
+        $attr['class'] = implode(' ', $attr['class']);
 
         return $this->getApp()->getTag('td', $attr, [
-            $this->getApp()->getTag('i', ['class' => 'icon {$_' . $field->shortName . '_icon}'], '') . ' {$' . $field->shortName . '}',
+            ['i', ['class' => 'icon {$_' . $field->shortName . '_icon}'], ''],
+            ' {$' . $field->shortName . '}',
         ]);
     }
 
+    #[\Override]
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         $cl = '';

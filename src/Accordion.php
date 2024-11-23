@@ -19,13 +19,13 @@ class Accordion extends View
 
     public $ui = 'accordion';
 
-    /** @var array|string|null The CSS class for Fomantic-UI accordion type. */
+    /** @var list<string>|string|null The CSS class for Fomantic-UI accordion type. */
     public $type;
 
-    /** @var array Settings as per Fomantic-UI accordion settings. */
+    /** @var array<string, mixed> Settings as per Fomantic-UI accordion settings. */
     public $settings = [];
 
-    /** @var array A collection of AccordionSection in this Accordion. */
+    /** @var list<AccordionSection> A collection of AccordionSection in this Accordion. */
     public $sections = [];
 
     /** @var int The AccordionSection index number to activate on load. */
@@ -42,7 +42,7 @@ class Accordion extends View
      *
      * @return AccordionSection
      */
-    public function addSection($title, \Closure $callback = null, $icon = 'dropdown')
+    public function addSection($title, ?\Closure $callback = null, $icon = 'dropdown')
     {
         $section = AccordionSection::addTo($this, ['title' => $title, 'icon' => $icon]);
 
@@ -111,13 +111,14 @@ class Accordion extends View
     }
 
     /**
-     * Return an accordion js behavior command
+     * Return an accordion JS behavior command
      * as in Fomantic-UI behavior for Accordion module.
      * Ex: toggle an accordion from it's index value.
      * $accordion->jsBehavior('toggle', 1).
      *
-     * @param string $behavior the name of the behavior for the module
-     * @param bool   $when
+     * @param string      $behavior the name of the behavior for the module
+     * @param list<mixed> $args
+     * @param bool        $when
      *
      * @return JsChain
      */
@@ -134,9 +135,9 @@ class Accordion extends View
     public function getSectionIdx(AccordionSection $section)
     {
         $idx = -1;
-        foreach ($this->sections as $key => $accordion_section) {
-            if ($accordion_section->name === $section->name) {
-                $idx = $key;
+        foreach ($this->sections as $k => $v) {
+            if ($v->name === $section->name) {
+                $idx = $k;
 
                 break;
             }
@@ -145,6 +146,7 @@ class Accordion extends View
         return $idx;
     }
 
+    #[\Override]
     protected function renderView(): void
     {
         if ($this->type) {
