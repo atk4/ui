@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
+use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
 use Atk4\Data\Persistence\Array_;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 
 /**
- *  @property string $age    @Atk4\Field()
- *  @property string $city   @Atk4\Field()
- *  @property string $gender @Atk4\Field()
+ * @property string $age    @Atk4\Field()
+ * @property string $city   @Atk4\Field()
+ * @property string $gender @Atk4\Field()
  */
 class ArgModel extends Model
 {
@@ -29,7 +30,7 @@ class ArgModel extends Model
         ]);
     }
 
-    public function validate(string $intent = null): array
+    public function validate(?string $intent = null): array
     {
         $error = [];
         if ($this->get(self::hinting()->fieldName()->age) < 21) {
@@ -175,12 +176,12 @@ class DemoActionsUtil
                 'extra' => ['type' => 'string'],
             ],
             'fields' => [$country->fieldName()->iso3],
-            'callback' => function (Country $model, int $age, string $city, string $gender) {
+            'callback' => static function (Country $model, int $age, string $city, string $gender) {
                 $n = $gender === 'm' ? 'Mr.' : 'Mrs.';
 
                 return 'Thank you ' . $n . ' at age ' . $age;
             },
-            'preview' => function (Country $model, int $age, string $city, string $gender) {
+            'preview' => static function (Country $model, int $age, string $city, string $gender) {
                 return 'Gender = ' . $gender . ' / Age = ' . $age;
             },
         ]);

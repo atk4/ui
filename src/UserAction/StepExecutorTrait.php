@@ -60,8 +60,8 @@ trait StepExecutorTrait
     /** @var string */
     public $finalMsg = 'Complete!';
 
-    /** @var array An extended copy of UserAction arguments. It contains original action arguments and arguments set by '__atk_model'. */
-    private $cloneArgs;
+    /** @var array<string, string> An extended copy of UserAction arguments. It contains original action arguments and arguments set by '__atk_model'. */
+    private array $cloneArgs;
 
     /**
      * Utility for setting Title for each step.
@@ -179,7 +179,7 @@ trait StepExecutorTrait
         $this->jsSetPreviousHandler($page, $this->step);
 
         $form->onSubmit(function (Form $form) {
-            $form->model->save();
+            $form->entity->save();
             // collect arguments
             $this->setActionDataFromEntity('args', $form->entity, array_keys($form->entity->getFields('editable')));
 
