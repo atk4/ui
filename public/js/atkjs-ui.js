@@ -44,8 +44,8 @@ function recomputeMasterCheckbox($table) {
   const $masterCheckbox = $table.find('.master.checkbox');
   const $childCheckbox = $table.find('.child.checkbox');
   const checkedCount = $childCheckbox.filter('.checked').length;
-  let allChecked = checkedCount === $childCheckbox.length;
-  let allUnchecked = checkedCount === 0;
+  const allChecked = checkedCount === $childCheckbox.length;
+  const allUnchecked = checkedCount === 0;
   if (allChecked) {
     $masterCheckbox.checkbox('set checked');
   } else if (allUnchecked) {
@@ -54,7 +54,6 @@ function recomputeMasterCheckbox($table) {
     $masterCheckbox.checkbox('set indeterminate');
   }
 }
-;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   /**
    * Simple helper to help displaying Fomantic-UI checkbox within an atk grid.
@@ -63,7 +62,7 @@ function recomputeMasterCheckbox($table) {
    * is displayed if appopriate.
    */
   setupMasterCheckbox: function (tableSelector) {
-    let $table = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(tableSelector);
+    const $table = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(tableSelector);
     let skipRecomputeMasterCheckbox = false;
     $table.find('.master.checkbox').checkbox({
       onChecked: function () {

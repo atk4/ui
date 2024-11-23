@@ -5,8 +5,8 @@ function recomputeMasterCheckbox($table) {
     const $childCheckbox = $table.find('.child.checkbox');
 
     const checkedCount = $childCheckbox.filter('.checked').length;
-    let allChecked = checkedCount === $childCheckbox.length;
-    let allUnchecked = checkedCount === 0;
+    const allChecked = checkedCount === $childCheckbox.length;
+    const allUnchecked = checkedCount === 0;
 
     if (allChecked) {
         $masterCheckbox.checkbox('set checked');
@@ -15,7 +15,7 @@ function recomputeMasterCheckbox($table) {
     } else {
         $masterCheckbox.checkbox('set indeterminate');
     }
-};
+}
 
 export default {
     /**
@@ -25,7 +25,7 @@ export default {
      * is displayed if appopriate.
      */
     setupMasterCheckbox: function (tableSelector) {
-        let $table = $(tableSelector);
+        const $table = $(tableSelector);
         let skipRecomputeMasterCheckbox = false;
 
         $table.find('.master.checkbox').checkbox({
