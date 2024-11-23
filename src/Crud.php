@@ -53,6 +53,9 @@ class Crud extends Grid
     /** @var list<array<string, \Closure(Form, UserAction\ModalExecutor): void>> Callback containers for model action. */
     public $onActions = [];
 
+    /** @var mixed Recently created/updated record ID. */
+    private $updatedId;
+
     /** @var mixed Recently deleted record ID. */
     private $deletedId;
 
@@ -96,8 +99,12 @@ class Crud extends Grid
 
         parent::setModel($model, $this->displayFields);
 
-        // grab model ID when using delete
-        // must be set before delete action execute
+        $this->model->onHook(Model::HOOK_BEFORE_SAVE, function (Model $entity) {
+            $this->updatedId = $entity->getId();
+        });
+        $this->model->onHook(Model::HOOK_AFTER_SAVE, function (Model $entity) {
+            $this->updatedId = $entity->getId();
+        });
         $this->model->onHook(Model::HOOK_AFTER_DELETE, function (Model $entity) {
             $this->deletedId = $entity->getId();
         });
@@ -176,13 +183,13 @@ class Crud extends Grid
             $res->addStatement($jsAction);
         }
 
-        // display msg return by action or depending on action modifier
+        // display msg return by action or depending on action behavior
         if (is_string($return)) {
             $res->addStatement($this->jsCreateNotifier($return));
         } else {
-            if ($action->modifier === Model\UserAction::MODIFIER_CREATE || $action->modifier === Model\UserAction::MODIFIER_UPDATE) {
+            if ($this->updatedId !== null) {
                 $res->addStatement($this->jsCreateNotifier($this->saveMsg));
-            } elseif ($action->modifier === Model\UserAction::MODIFIER_DELETE) {
+            } elseif ($this->deletedId !== null) {
                 $res->addStatement($this->jsCreateNotifier($this->deleteMsg));
             } else {
                 $res->addStatement($this->jsCreateNotifier($this->defaultMsg));
@@ -193,13 +200,13 @@ class Crud extends Grid
     }
 
     /**
-     * Return proper JS actions depending on action modifier type.
+     * Return proper JS actions depending on action behavior.
      */
     protected function getJsGridAction(Model\UserAction $action): ?JsExpressionable
     {
-        if ($action->modifier === Model\UserAction::MODIFIER_CREATE || $action->modifier === Model\UserAction::MODIFIER_UPDATE) {
+        if ($this->updatedId !== null) {
             $js = $this->container->jsReload($this->_getReloadArgs());
-        } elseif ($action->modifier === Model\UserAction::MODIFIER_DELETE) {
+        } elseif ($this->deletedId !== null) {
             // use deleted record ID to remove row, fallback to closest tr if ID is not available
             $js = $this->deletedId
                 ? $this->js(false, null, 'tr[data-id="' . $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $this->deletedId) . '"]')
