@@ -19,10 +19,7 @@ function recomputeMasterCheckbox($table) {
 
 export default {
     /**
-     * Simple helper to help displaying Fomantic-UI checkbox within an atk grid.
-     * The master checkbox in the header of the column enable to toggle all
-     * content checkboxes to check or uncheck. A partially checked master checkbox
-     * is displayed if appopriate.
+     * Simple helper for master and child checkboxes connection.
      */
     setupMasterCheckbox: function (tableSelector) {
         const $table = $(tableSelector);

@@ -851,6 +851,30 @@ class Context extends RawMinkContext implements BehatContext
         }
     }
 
+    /**
+     * @Then Element :arg1 should contain class :arg3
+     */
+    public function elementShouldContainClass(string $selector, string $class): void
+    {
+        $element = $this->findElement(null, $selector);
+        $classes = explode(' ', $element->getAttribute('class'));
+        if (!in_array($class, $classes)) {
+            throw new \Exception('Element "' . $selector . '" does not contain "' . $class . '" class');
+        }
+    }
+
+    /**
+     * @Then Element :arg1 should not contain class :arg3
+     */
+    public function elementShouldNotContainClass(string $selector, string $class): void
+    {
+        $element = $this->findElement(null, $selector);
+        $classes = explode(' ', $element->getAttribute('class'));
+        if (in_array($class, $classes)) {
+            throw new \Exception('Element "' . $selector . '" contains "' . $class . '" class');
+        }
+    }
+
     // }}}
 
     /**
