@@ -858,7 +858,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $element = $this->findElement(null, $selector);
         $classes = explode(' ', $element->getAttribute('class'));
-        if (!in_array($class, $classes)) {
+        if (!in_array($class, $classes, true)) {
             throw new \Exception('Element "' . $selector . '" does not contain "' . $class . '" class');
         }
     }
@@ -870,7 +870,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $element = $this->findElement(null, $selector);
         $classes = explode(' ', $element->getAttribute('class'));
-        if (in_array($class, $classes)) {
+        if (in_array($class, $classes, true)) {
             throw new \Exception('Element "' . $selector . '" contains "' . $class . '" class');
         }
     }
