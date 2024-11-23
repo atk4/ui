@@ -14,7 +14,7 @@ require_once __DIR__ . '/../init-app.php';
 $country = new Country($app->db);
 
 $country->addUserAction('greetInteger', [
-    'appliesTo' => UserAction::APPLIES_TO_NO_RECORDS,
+    'appliesTo' => UserAction::APPLIES_TO_NO_RECORD,
     'args' => [
         'foo' => [
             'type' => 'integer',
@@ -29,7 +29,7 @@ $country->addUserAction('greetInteger', [
 Form\Control\Line::addTo($app, ['action' => $country->getUserAction('greetInteger')]);
 
 $country->addUserAction('greetWrappedId', [
-    'appliesTo' => UserAction::APPLIES_TO_NO_RECORDS,
+    'appliesTo' => UserAction::APPLIES_TO_NO_RECORD,
     'args' => [
         'foo' => [
             'type' => WrappedIdType::NAME,

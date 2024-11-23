@@ -53,7 +53,7 @@ class MinkSeleniumDriver extends Selenium2Driver
     {
         // move the element into the viewport
         // needed at least for Firefox as Selenium moveto does move the mouse cursor only
-        $this->executeScript('arguments[0].scrollIntoView({ behaviour: \'instant\', block: \'center\', inline: \'center\' })', [$element]);
+        $this->executeScript('arguments[0].scrollIntoView({ behavior: \'instant\', block: \'center\', inline: \'center\' })', [$element]);
 
         $this->getWebDriverSession()->moveto(['element' => $element->getID()]);
     }

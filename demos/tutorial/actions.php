@@ -118,7 +118,7 @@ $wizard->addStep('Arguments', static function (Wizard $page) {
         $model = new Model($owner->getApp()->db, ['table' => 'test']);
 
         $model->addUserAction('greet', [
-            'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORDS,
+            'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORD,
             'args' => [
                 'name' => [
                     'type' => 'string',
@@ -130,7 +130,7 @@ $wizard->addStep('Arguments', static function (Wizard $page) {
         ]);
 
         $model->addUserAction('ask_age', [
-            'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORDS,
+            'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORD,
             'args' => [
                 'age' => [
                     'type' => 'integer',

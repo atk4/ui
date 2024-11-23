@@ -388,7 +388,7 @@ View::addTo($app, ['defaultTemplate' => __DIR__ . '/../templates/mytpl.httml']);
 
 Agile UI does not currently provide advanced search path for templates, by default the
 template is loaded from folder `vendor/atk4/ui/template`. To change this
-behaviour, see {php:meth}`App::loadTemplate()`.
+behavior, see {php:meth}`App::loadTemplate()`.
 
 :::{php:attr} region
 :::
