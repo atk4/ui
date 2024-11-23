@@ -49,10 +49,7 @@ class Checkbox extends Table\Column
                 ->addMoreInfo('field', $field);
         }
         $this->table->js(true)->find('.' . $this->class)->checkbox();
-        $this->table->js(true, new JsBlock([
-            new JsExpression('atk.gridCheckboxHelper.masterCheckbox();'),
-            new JsExpression('atk.gridCheckboxHelper.childCheckbox();'),
-        ]));
+        $this->table->js(true, new JsExpression('atk.gridCheckboxHelper.setupMasterCheckbox([]);', [$this->table]));
 
         return $this->getTag('head', [], [['div', ['class' => 'ui master fitted checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]]]);
     }

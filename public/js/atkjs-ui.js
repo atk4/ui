@@ -22,18 +22,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
-/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
+/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_5__);
 
 
 
 
+
+
+function recomputeMasterCheckbox($table) {
+  const $masterCheckbox = $table.find('.master.checkbox');
+  const $childCheckbox = $table.find('.child.checkbox');
+  const checkedCount = $childCheckbox.filter('.checked').length;
+  let allChecked = checkedCount === $childCheckbox.length;
+  let allUnchecked = checkedCount === 0;
+  if (allChecked) {
+    $masterCheckbox.checkbox('set checked');
+  } else if (allUnchecked) {
+    $masterCheckbox.checkbox('set unchecked');
+  } else {
+    $masterCheckbox.checkbox('set indeterminate');
+  }
+}
+;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   /**
    * Simple helper to help displaying Fomantic-UI checkbox within an atk grid.
@@ -41,49 +62,35 @@ __webpack_require__.r(__webpack_exports__);
    * content checkboxes to check or uncheck. A partially checked master checkbox
    * is displayed if appopriate.
    */
-  masterCheckbox: function () {
-    external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('.table .master.checkbox').checkbox({
+  setupMasterCheckbox: function (tableSelector) {
+    let $table = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(tableSelector);
+    let skipRecomputeMasterCheckbox = false;
+    $table.find('.master.checkbox').checkbox({
       onChecked: function () {
-        // check all children
-        const $childCheckbox = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table').find('.child.checkbox');
-        $childCheckbox.checkbox('check');
+        const $childCheckbox = $table.find('.child.checkbox');
+        skipRecomputeMasterCheckbox = true;
+        try {
+          $childCheckbox.checkbox('check');
+        } finally {
+          skipRecomputeMasterCheckbox = false;
+        }
       },
       onUnchecked: function () {
-        // uncheck all children
-        const $childCheckbox = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table').find('.child.checkbox');
-        $childCheckbox.checkbox('uncheck');
+        const $childCheckbox = $table.find('.child.checkbox');
+        skipRecomputeMasterCheckbox = true;
+        try {
+          $childCheckbox.checkbox('uncheck');
+        } finally {
+          skipRecomputeMasterCheckbox = false;
+        }
       }
     });
-  },
-  childCheckbox: function () {
-    external_jquery__WEBPACK_IMPORTED_MODULE_3___default()('.table .child.checkbox').checkbox({
-      // fire on load to set parent value
-      fireOnInit: false,
-      // change parent state on each child checkbox change
+    $table.find('.child.checkbox').checkbox({
       onChange: function () {
-        const $listGroup = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).closest('.table');
-        const $parentCheckbox = $listGroup.find('.master.checkbox');
-        const $checkbox = $listGroup.find('.child.checkbox');
-
-        // check to see if all other siblings are checked or unchecked
-        let allChecked = true;
-        let allUnchecked = true;
-        $checkbox.each(function () {
-          if (external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this).checkbox('is checked')) {
-            allUnchecked = false;
-          } else {
-            allChecked = false;
-          }
-        });
-
-        // set parent checkbox state, but don't trigger its onChange callback
-        if (allChecked) {
-          $parentCheckbox.checkbox('set checked');
-        } else if (allUnchecked) {
-          $parentCheckbox.checkbox('set unchecked');
-        } else {
-          $parentCheckbox.checkbox('set indeterminate');
+        if (skipRecomputeMasterCheckbox) {
+          return;
         }
+        recomputeMasterCheckbox($table);
       }
     });
   }

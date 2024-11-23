@@ -1,5 +1,22 @@
 import $ from 'external/jquery';
 
+function recomputeMasterCheckbox($table) {
+    const $masterCheckbox = $table.find('.master.checkbox');
+    const $childCheckbox = $table.find('.child.checkbox');
+
+    const checkedCount = $childCheckbox.filter('.checked').length;
+    let allChecked = checkedCount === $childCheckbox.length;
+    let allUnchecked = checkedCount === 0;
+
+    if (allChecked) {
+        $masterCheckbox.checkbox('set checked');
+    } else if (allUnchecked) {
+        $masterCheckbox.checkbox('set unchecked');
+    } else {
+        $masterCheckbox.checkbox('set indeterminate');
+    }
+};
+
 export default {
     /**
      * Simple helper to help displaying Fomantic-UI checkbox within an atk grid.
@@ -7,52 +24,41 @@ export default {
      * content checkboxes to check or uncheck. A partially checked master checkbox
      * is displayed if appopriate.
      */
-    masterCheckbox: function () {
-        $('.table .master.checkbox').checkbox({
+    setupMasterCheckbox: function (tableSelector) {
+        let $table = $(tableSelector);
+        let skipRecomputeMasterCheckbox = false;
+
+        $table.find('.master.checkbox').checkbox({
             onChecked: function () {
-                // check all children
-                const $childCheckbox = $(this).closest('.table').find('.child.checkbox');
-                $childCheckbox.checkbox('check');
+                const $childCheckbox = $table.find('.child.checkbox');
+
+                skipRecomputeMasterCheckbox = true;
+                try {
+                    $childCheckbox.checkbox('check');
+                } finally {
+                    skipRecomputeMasterCheckbox = false;
+                }
             },
 
             onUnchecked: function () {
-                // uncheck all children
-                const $childCheckbox = $(this).closest('.table').find('.child.checkbox');
-                $childCheckbox.checkbox('uncheck');
+                const $childCheckbox = $table.find('.child.checkbox');
+
+                skipRecomputeMasterCheckbox = true;
+                try {
+                    $childCheckbox.checkbox('uncheck');
+                } finally {
+                    skipRecomputeMasterCheckbox = false;
+                }
             },
         });
-    },
 
-    childCheckbox: function () {
-        $('.table .child.checkbox').checkbox({
-            // fire on load to set parent value
-            fireOnInit: false,
-
-            // change parent state on each child checkbox change
+        $table.find('.child.checkbox').checkbox({
             onChange: function () {
-                const $listGroup = $(this).closest('.table');
-                const $parentCheckbox = $listGroup.find('.master.checkbox');
-                const $checkbox = $listGroup.find('.child.checkbox');
-
-                // check to see if all other siblings are checked or unchecked
-                let allChecked = true;
-                let allUnchecked = true;
-                $checkbox.each(function () {
-                    if ($(this).checkbox('is checked')) {
-                        allUnchecked = false;
-                    } else {
-                        allChecked = false;
-                    }
-                });
-
-                // set parent checkbox state, but don't trigger its onChange callback
-                if (allChecked) {
-                    $parentCheckbox.checkbox('set checked');
-                } else if (allUnchecked) {
-                    $parentCheckbox.checkbox('set unchecked');
-                } else {
-                    $parentCheckbox.checkbox('set indeterminate');
+                if (skipRecomputeMasterCheckbox) {
+                    return;
                 }
+
+                recomputeMasterCheckbox($table);
             },
         });
     },
