@@ -13,7 +13,7 @@ use Atk4\Ui\View;
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$testRunClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
+$testRunClass = AnonymousClassNameCache::get_class(fn () => new class extends View {
     use DebugTrait;
 
     public function test(): int

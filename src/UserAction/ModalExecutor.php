@@ -65,7 +65,7 @@ class ModalExecutor extends Modal implements JsExecutorInterface
     protected function afterActionInit(): void
     {
         $this->loader = Loader::addTo($this, ['shim' => $this, 'loadEvent' => false]);
-        $this->actionData = $this->loader->jsGetStoreData()['session'];
+        $this->actionData = $this->loader->jsGetStoreData()['session'] ?? [];
     }
 
     #[\Override]

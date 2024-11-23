@@ -114,7 +114,7 @@ class Console extends View implements LoggerInterface
                 try {
                     $fx($this);
                 } catch (\Throwable $e) {
-                    $this->outputHtmlWithoutPre('<div class="ui segment">{0}</div>', [$this->getApp()->renderExceptionHtml($e)]);
+                    $this->outputHtmlWithoutPre('<div class="ui segment">{ex}</div>', ['ex' => $this->getApp()->renderExceptionHtml($e)]);
                 }
             } finally {
                 $this->sseInProgress = false;
@@ -174,6 +174,8 @@ class Console extends View implements LoggerInterface
     /**
      * Output a single line to the console.
      *
+     * @param array<string, string> $context
+     *
      * @return $this
      */
     public function output(string $message, array $context = [])
@@ -186,6 +188,8 @@ class Console extends View implements LoggerInterface
     /**
      * Output unescaped HTML to the console.
      *
+     * @param array<string, string> $context
+     *
      * @return $this
      */
     public function outputHtml(string $messageHtml, array $context = [])
@@ -197,6 +201,8 @@ class Console extends View implements LoggerInterface
 
     /**
      * Output unescaped HTML to the console without wrapping in <pre>.
+     *
+     * @param array<string, string> $context
      *
      * @return $this
      */
@@ -257,6 +263,8 @@ class Console extends View implements LoggerInterface
      * Example: $console->exec('ping', ['-c', '5', '8.8.8.8']);
      *
      * All arguments are escaped.
+     *
+     * @param list<string|int> $args
      */
     public function exec(string $command, array $args = []): ?bool
     {
@@ -264,7 +272,7 @@ class Console extends View implements LoggerInterface
             $this->set(function () use ($command, $args) {
                 $this->output(
                     '--[ Executing ' . $command
-                    . ($args ? ' with ' . count($args) . ' arguments' : '')
+                    . ($args !== [] ? ' with ' . count($args) . ' arguments' : '')
                     . ' ]--------------'
                 );
 
@@ -281,7 +289,7 @@ class Console extends View implements LoggerInterface
         stream_set_blocking($pipes[1], false);
         stream_set_blocking($pipes[2], false);
         // $pipes contain streams that are still open and not EOF
-        while ($pipes) {
+        while ($pipes) { // @TODO this condition is always true
             $read = $pipes;
             $j1 = null;
             $j2 = null;
@@ -319,7 +327,9 @@ class Console extends View implements LoggerInterface
     }
 
     /**
-     * @return array{resource, non-empty-array}
+     * @param list<string|int> $args
+     *
+     * @return array{resource, non-empty-array<int, resource>}
      */
     protected function execRaw(string $command, array $args = [])
     {
@@ -359,6 +369,7 @@ class Console extends View implements LoggerInterface
      * to pass on the property.
      *
      * @param object|class-string $object
+     * @param list<mixed>         $args
      *
      * @return $this
      */

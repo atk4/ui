@@ -112,10 +112,10 @@ class ExecutorFactoryTest extends TestCase
         $editAction = $this->model->getUserAction('edit');
 
         $p = new Persistence\Array_();
-        $otherModelClass = get_class(new class() extends Model {});
+        $otherModelClass = get_class(new class extends Model {});
         $secondEditAction = (new $otherModelClass($p))->getUserAction('edit');
 
-        $specialClass = get_class(new class() extends Model {
+        $specialClass = get_class(new class extends Model {
             public $caption = 'Special Test';
         });
         $specialEditAction = (new $specialClass($p))->getUserAction('edit');

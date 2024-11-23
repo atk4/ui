@@ -101,6 +101,8 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * Wait till jQuery AJAX request finished and no animation is perform.
+     *
+     * @param list<mixed> $args
      */
     protected function jqueryWait(string $extraWaitCondition = 'true', array $args = [], int $maxWaitdurationMs = 5000): void
     {
@@ -247,7 +249,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @return array<NodeElement>
+     * @return list<NodeElement>
      */
     protected function findElements(?NodeElement $context, string $selector): array
     {
@@ -765,6 +767,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function toastDisplayShouldContainText(string $text): void
     {
+        $text = $this->unquoteStepArgument($text);
+
         $toastContainer = $this->findElement(null, '.ui.toast-container');
         $toastText = $this->findElement($toastContainer, '.content')->getText();
         if (!str_contains($toastText, $text)) {
@@ -787,7 +791,7 @@ class Context extends RawMinkContext implements BehatContext
      * Remove once https://github.com/Behat/MinkExtension/pull/386 and
      * https://github.com/minkphp/Mink/issues/656 are fixed and released.
      *
-     * @Then ~^PATCH MINK the (?i)url(?-i) should match "(?P<pattern>(?:[^"]|\\")*)"$~
+     * @Then ~^PATCH MINK the (?i)url(?-i) should match "((?:[^"]|\\")*)"$~
      */
     public function assertUrlRegExp(string $pattern): void
     {
@@ -843,7 +847,7 @@ class Context extends RawMinkContext implements BehatContext
         $element = $this->findElement(null, $selector);
         $attr = $element->getAttribute($attribute);
         if (!str_contains($attr, $text)) {
-            throw new \Exception('Element " . $selector . " attribute "' . $attribute . '" does not contain "' . $text . '"');
+            throw new \Exception('Element "' . $selector . '" attribute "' . $attribute . '" does not contain "' . $text . '"');
         }
     }
 

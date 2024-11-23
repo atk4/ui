@@ -52,7 +52,9 @@ class DropdownCascade extends Dropdown
             $this->jsDropdown()->addClass('loading'),
         ];
 
-        $this->cascadeFrom->onChange($expr, ['args' => [$this->cascadeFrom->name => $this->cascadeFrom->jsInput()->val()]]);
+        $this->cascadeFrom->onChange($expr, ['args' => [
+            $this->cascadeFrom->name => $this->cascadeFrom->jsInput()->val(),
+        ]]);
     }
 
     #[\Override]
@@ -109,6 +111,8 @@ class DropdownCascade extends Dropdown
      *
      * @param list<array{value: string, text: mixed, name: mixed}> $values
      * @param mixed                                                $value  the current field value
+     *
+     * @return list<array{value: string, text: mixed, name: mixed, selected: true}>
      */
     private function getJsValues(array $values, $value): array
     {

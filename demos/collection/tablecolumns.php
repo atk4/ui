@@ -13,7 +13,7 @@ use Atk4\Ui\Table;
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$modelColorClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
+$modelColorClass = AnonymousClassNameCache::get_class(fn () => new class extends Model {
     #[\Override]
     protected function init(): void
     {

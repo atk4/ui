@@ -12,7 +12,7 @@ use Atk4\Ui\View;
  */
 class Section extends View
 {
-    /** @var array */
+    /** @var array<mixed> */
     public $formLayoutSeed = [Form\Layout::class];
 
     public Form $form;

@@ -34,7 +34,7 @@ class Dropdown extends Input
     /** @var string The string to set as an empty values. */
     public $empty = "\u{00a0}"; // Unicode NBSP
 
-    /** @var array Dropdown options as per Fomantic-UI dropdown options. */
+    /** @var array<string, mixed> Dropdown options as per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
 
     /**
@@ -140,7 +140,7 @@ class Dropdown extends Input
     /**
      * Set JS dropdown() options.
      *
-     * @param array $options
+     * @param array<string, mixed> $options
      */
     public function setDropdownOptions($options): void
     {

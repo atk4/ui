@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
@@ -18,7 +19,7 @@ class Dropdown extends Lister
     /** @var JsCallback|null Callback when a new value is selected in Dropdown. */
     public $cb;
 
-    /** @var array As per Fomantic-UI dropdown options. */
+    /** @var array<string, mixed> As per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
 
     #[\Override]
@@ -55,7 +56,12 @@ class Dropdown extends Lister
 
         $this->cb->set(static function (Jquery $j, string $value) use ($fx) {
             return $fx($value);
-        }, ['item' => 'value']);
+        }, ['item' => new JsCallbackLoadableValue(null, function ($v) {
+            return $this->getApp()->uiPersistence->typecastLoadField(
+                $this->model->getField('id'),
+                $v
+            );
+        })]);
     }
 
     #[\Override]

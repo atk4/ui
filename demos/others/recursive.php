@@ -14,7 +14,7 @@ use Atk4\Ui\View;
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$mySwitcherClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
+$mySwitcherClass = AnonymousClassNameCache::get_class(fn () => new class extends View {
     #[\Override]
     protected function init(): void
     {

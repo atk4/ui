@@ -88,6 +88,9 @@ class FilterPopup extends Popup
         return $this->recallData() !== null;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function recallData(): ?array
     {
         return $this->form->entity->recallData();

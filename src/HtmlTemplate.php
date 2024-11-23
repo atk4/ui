@@ -69,6 +69,11 @@ class HtmlTemplate
         return $this->tagTrees[$tag];
     }
 
+    /**
+     * @param array<string, TagTree> $tagTrees
+     *
+     * @return array<string, TagTree>
+     */
     private function cloneTagTrees(array $tagTrees): array
     {
         $res = [];
@@ -427,6 +432,9 @@ class HtmlTemplate
         return $this;
     }
 
+    /**
+     * @param list<string> $inputReversed
+     */
     protected function parseTemplateTree(array &$inputReversed, ?string $openedTag = null): TagTree
     {
         $tagTree = new TagTree($this, $openedTag ?? self::TOP_TAG);

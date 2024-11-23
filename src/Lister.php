@@ -77,14 +77,14 @@ class Lister extends View
      * Will output x item in lister set per IPP until user scroll content to the end of page.
      * When this happen, content will be reload x number of items.
      *
-     * @param int    $ipp          Number of item per page
-     * @param array  $options      an array with JS Scroll plugin options
-     * @param View   $container    the container holding the lister for scrolling purpose
-     * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
+     * @param int                  $ipp          Number of item per page
+     * @param array<string, mixed> $options      an array with JS Scroll plugin options
+     * @param View                 $container    the container holding the lister for scrolling purpose
+     * @param string               $scrollRegion A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
      */
-    public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = null)
+    public function addJsPaginator($ipp, array $options = [], $container = null, $scrollRegion = null)
     {
         $this->ipp = $ipp;
         $this->jsPaginator = JsPaginator::addTo($this, ['view' => $container, 'options' => $options]);

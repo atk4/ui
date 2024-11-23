@@ -71,7 +71,7 @@ class AppTest extends TestCase
 
     public function testTemplateClassCustom(): void
     {
-        $anotherTemplateClass = get_class(new class() extends HtmlTemplate {});
+        $anotherTemplateClass = get_class(new class extends HtmlTemplate {});
 
         $app = $this->createApp([
             'templateClass' => $anotherTemplateClass,
@@ -123,6 +123,9 @@ class AppTest extends TestCase
         $this->createApp(['request' => $request]);
     }
 
+    /**
+     * @return iterable<list<mixed>>
+     */
     public static function provideUrlCases(): iterable
     {
         foreach (['/', '/page.html', '/d/', '/0/index.php'] as $requestPage) {

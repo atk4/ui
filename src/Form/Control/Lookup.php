@@ -64,7 +64,7 @@ class Lookup extends Input
      * true = will use "Add new" label
      * string = will use your string
      *
-     * @var bool|string|array|null
+     * @var bool|string|array<'button'|'fields'|'caption', mixed>|null
      */
     public $plus = false;
 
@@ -105,7 +105,7 @@ class Lookup extends Input
      *     }'),
      * ]]);
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public $settings = [];
 

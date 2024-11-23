@@ -41,7 +41,7 @@ class TypeEnum extends Column\FilterModel
                 }
             }
             if ($values !== []) {
-                $model->addCondition($filter['name'], 'in', $values);
+                $model->addCondition($this->lookupField, 'in', $values);
             }
         }
     }

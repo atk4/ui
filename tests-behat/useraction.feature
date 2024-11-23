@@ -72,6 +72,24 @@ Feature: UserAction executor and UserConfirmation modal
     When I fill field using "//input[../div[text()='Greet']]" with "Laura"
     When I press button "Greet"
     Then Toast display should contain text "Hello Laura"
+    Given I am on "_unit-test/useraction-input-callback.php"
+    When I fill field using "//input[../div[text()='Greet Integer']]" with "2_3"
+    When I press button "Greet Integer"
+    Then Toast display should contain text "Hello II 23"
+    When I fill field using "//input[../div[text()='Greet Wrapped ID']]" with "24"
+    When I press button "Greet Wrapped ID"
+    Then Toast display should contain text "Hello III 24"
+
+  Scenario: testing JsCallbackExecutor with form input argument - validation, exception is displayed
+    When I fill field using "//input[../div[text()='Greet Integer']]" with "x"
+    When I press button "Greet Integer"
+    # TODO https://github.com/atk4/data/blob/5.2.0/src/Persistence.php#L496 should be unrolled
+    # like in https://github.com/atk4/ui/blob/5.2.0/src/Form.php#L448
+    Then Modal is open with text "Atk4\Data\Exception: Must be numeric"
+    Then I hide js modal
+    When I fill field using "//input[../div[text()='Greet Integer']]" with ""
+    When I press button "Greet Integer"
+    # TODO "required" must be honored
 
   Scenario: testing JsCallbackExecutor in grid menu
     Given I am on "data-action/jsactionsgrid.php"
@@ -79,3 +97,34 @@ Feature: UserAction executor and UserConfirmation modal
     Then No toast should be displayed
     When I click using selector "//tr[td[text()='Argentina']]//div.ui.dropdown[div[text()='Actions...']]//div.menu/div[text()='Callback']"
     Then Toast display should contain text "Success: callback execute using country Argentina"
+
+  Scenario: validate user action earlier than before execute, exception is displayed
+    Given I am on "_unit-test/useraction-no-id-arg.php"
+    When I press button "Disabled"
+    Then Modal is open with text "Atk4\Data\Exception: User action is disabled"
+    Then I hide js modal
+    When I press button "Add"
+    Then Modal is open with text "Add Country"
+    Then I hide js modal
+    When I press button "Edit"
+    Then Modal is open with text "Atk4\Data\Exception: User action can be executed on loaded entity only"
+    Then I hide js modal
+    When I press button "Delete"
+    Then I press Modal button "Ok"
+    Then Modal is open with text "Atk4\Data\Exception: User action can be executed on loaded entity only"
+    Then I hide js modal
+    When I press button "Callback"
+    Then Modal is open with text "Atk4\Data\Exception: User action can be executed on loaded entity only"
+    Then I hide js modal
+    When I press button "Preview"
+    Then Modal is open with text "Atk4\Data\Exception: User action can be executed on loaded entity only"
+    Then I hide js modal
+    When I press button "Argument"
+    Then Modal is open with text "Atk4\Data\Exception: User action can be executed on loaded entity only"
+    Then I hide js modal
+    When I press button "User Confirmation"
+    Then Modal is open with text "Atk4\Data\Exception: User action can be executed on loaded entity only"
+    Then I hide js modal
+    When I press button "Multi Step"
+    Then Modal is open with text "Atk4\Data\Exception: User action can be executed on loaded entity only"
+    Then I hide js modal

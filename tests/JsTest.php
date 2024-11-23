@@ -221,7 +221,7 @@ class JsTest extends TestCase
             new JsExpression('let fx = () => { a(); b(); }'),
             new JsExpression(''),
             new JsBlock(),
-            new class() extends JsBlock {
+            new class extends JsBlock {
                 #[\Override]
                 public function jsRender(): string
                 {

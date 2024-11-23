@@ -49,8 +49,8 @@ class App
     private static ?string $shutdownReservedMemory; // @phpstan-ignore property.onlyRead
     private static ?int $errorReportingLevel = null;
 
-    /** @var array|false Location where to load JS/CSS files */
-    public $cdn = [
+    /** @var array<string, string> Location where to load JS/CSS files */
+    public array $cdn = [
         'atk' => '/public',
         'jquery' => '/public/external/jquery/dist',
         'fomantic-ui' => '/public/external/fomantic-ui/dist',
@@ -67,7 +67,7 @@ class App
      *
      * @TODO remove, no longer needed for CDN versioning as we bundle all resources
      */
-    public $version = '5.2-dev';
+    public $version = '5.3-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -75,7 +75,7 @@ class App
     /** @var Layout the top-most view object */
     public $layout;
 
-    /** @var string|array Set one or more directories where templates should reside. */
+    /** @var string|list<string> Set one or more directories where templates should reside. */
     public $templateDir;
 
     /** @var bool Will replace an exception handler with our own, that will output errors nicely. */
@@ -140,6 +140,9 @@ class App
     /** @var class-string */
     public $templateClass = HtmlTemplate::class;
 
+    /**
+     * @param array<string, mixed> $defaults
+     */
     public function __construct(array $defaults = [])
     {
         if (isset($defaults['request'])) {
@@ -508,7 +511,7 @@ class App
      * directly, instead call it from Callback, JsCallback or similar
      * other classes.
      *
-     * @param string|StreamInterface|array $output Array type is supported only for JSON response
+     * @param string|StreamInterface|array<mixed> $output Array type is supported only for JSON response
      *
      * @return never
      */
@@ -539,7 +542,7 @@ class App
     }
 
     /**
-     * @param string|array|View|HtmlTemplate $output
+     * @param string|array<mixed>|View|HtmlTemplate $output
      *
      * @return never
      */
@@ -556,7 +559,7 @@ class App
     }
 
     /**
-     * @param string|array|View $output
+     * @param string|array<mixed>|View $output
      *
      * @return never
      */
@@ -573,7 +576,7 @@ class App
     /**
      * Initializes layout.
      *
-     * @param Layout|array $seed
+     * @param Layout|array<mixed> $seed
      *
      * @return $this
      */
@@ -643,8 +646,8 @@ class App
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
-     * @param AbstractView      $object
-     * @param string|array|null $region
+     * @param AbstractView             $object
+     * @param string|array<mixed>|null $region
      *
      * @return ($object is View ? View : AbstractView)
      */
@@ -973,7 +976,7 @@ class App
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
      * @param array<0|string, string|bool>                                                                             $attr
-     * @param string|array<int, array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
+     * @param string|list<array{0: string, 1?: array<0|string, string|bool>, 2?: string|list<mixed>|null}|string>|null $value
      */
     public function getTag(string $tag, array $attr = [], $value = null): string
     {
@@ -1027,7 +1030,7 @@ class App
                     }
                     // see https://mathiasbynens.be/notes/etago
                     $result[] = preg_replace('~(?<=<)(?=/\s*' . preg_quote($tag, '~') . '|!--)~', '\\\\', $v);
-                } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behaviour, only directly passed strings were escaped
+                } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behavior, only directly passed strings were escaped
                     $result[] = $v;
                 } else {
                     $result[] = $this->encodeHtml($v);
@@ -1247,7 +1250,7 @@ class App
     }
 
     /**
-     * @param string|array $data
+     * @param string|array<mixed> $data
      */
     private function outputResponseJson($data): void
     {

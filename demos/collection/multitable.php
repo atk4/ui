@@ -20,9 +20,7 @@ require_once __DIR__ . '/../init-app.php';
 
 // re-usable component implementing counter
 
-$finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends Columns {
-    public array $route = [];
-
+$finderClass = AnonymousClassNameCache::get_class(fn () => new class extends Columns {
     /**
      * @return list<mixed>
      */
@@ -36,6 +34,9 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class() extends C
         return $res;
     }
 
+    /**
+     * @param list<string> $route
+     */
     #[\Override]
     public function setModel(Model $model, array $route = []): void
     {

@@ -18,7 +18,7 @@ use Atk4\Ui\Wizard;
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$wizardClass = AnonymousClassNameCache::get_class(static fn () => new class() extends Wizard {
+$wizardClass = AnonymousClassNameCache::get_class(static fn () => new class extends Wizard {
     use SessionTrait;
 });
 

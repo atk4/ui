@@ -71,11 +71,11 @@ class TypeDatetime extends Column\FilterModel
         if ($filter !== null) {
             switch ($filter['op']) {
                 case 'empty':
-                    $model->addCondition($filter['name'], '=', null);
+                    $model->addCondition($this->lookupField, '=', null);
 
                     break;
                 case 'not empty':
-                    $model->addCondition($filter['name'], '!=', null);
+                    $model->addCondition($this->lookupField, '!=', null);
 
                     break;
                 case 'within':
@@ -85,9 +85,9 @@ class TypeDatetime extends Column\FilterModel
                         [$d1, $d2] = [$d2, $d1];
                     }
                     $model->addCondition($model->expr('[field] between [value] and [value2]', [
-                        'field' => $model->getField($filter['name']),
-                        'value' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1),
-                        'value2' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2),
+                        'field' => $this->lookupField,
+                        'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $d1),
+                        'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $d2),
                     ]));
 
                     break;
@@ -100,24 +100,24 @@ class TypeDatetime extends Column\FilterModel
                     }
                     $betweenOperator = $filter['op'] === '!=' ? 'not between' : 'between';
                     $model->addCondition($model->expr('[field] ' . $betweenOperator . ' [value] and [value2]', [
-                        'field' => $model->getField($filter['name']),
-                        'value' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d1),
-                        'value2' => $model->getPersistence()->typecastSaveField($model->getField($filter['name']), $d2),
+                        'field' => $this->lookupField,
+                        'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $d1),
+                        'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $d2),
                     ]));
 
                     break;
                 case '>':
                 case '<=':
-                    $model->addCondition($filter['name'], $filter['op'], $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999_999));
+                    $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999_999));
 
                     break;
                 case '<':
                 case '>=':
-                    $model->addCondition($filter['name'], $filter['op'], $this->getDatetime($filter['value'])->setTime(0, 0, 0));
+                    $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value'])->setTime(0, 0, 0));
 
                     break;
                 default:
-                    $model->addCondition($filter['name'], $filter['op'], $this->getDatetime($filter['value']));
+                    $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value']));
             }
         }
     }
@@ -127,10 +127,8 @@ class TypeDatetime extends Column\FilterModel
      * Will construct and return a date object base on constructor string.
      *
      * @param string $dateModifier the string to pass to generated a date from
-     *
-     * @return \DateTime
      */
-    public function getDatetime($dateModifier)
+    public function getDatetime(string $dateModifier): ?\DateTime
     {
         switch ($dateModifier) {
             case 'exact':
@@ -148,7 +146,7 @@ class TypeDatetime extends Column\FilterModel
 
                 break;
             default:
-                $date = $dateModifier ? new \DateTime($dateModifier) : null;
+                $date = null;
         }
 
         return $date;

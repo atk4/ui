@@ -16,11 +16,12 @@ class TypeBoolean extends Column\FilterModel
     {
         parent::init();
 
+        $this->op->type = 'smallint';
         $this->op->values = [
-            'true' => 'Is Yes',
-            'false' => 'Is No',
+            0 => 'Is No',
+            1 => 'Is Yes',
         ];
-        $this->op->default = 'true';
+        $this->op->default = 1;
     }
 
     #[\Override]
@@ -28,7 +29,7 @@ class TypeBoolean extends Column\FilterModel
     {
         $filter = $this->recallData();
         if ($filter !== null) {
-            $model->addCondition($filter['name'], $filter['op'] === 'true');
+            $model->addCondition($this->lookupField, $filter['op'] === 1);
         }
     }
 }

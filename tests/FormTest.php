@@ -47,6 +47,9 @@ class FormTest extends TestCase
         $form->addControl('foo');
     }
 
+    /**
+     * @param array<string, string> $postData
+     */
     protected function triggerFormSubmit(ServerRequestInterface $request, Form $form, array $postData): ServerRequestInterface
     {
         $request = $this->triggerCallback($request, $form->cb);
@@ -62,6 +65,7 @@ class FormTest extends TestCase
 
     /**
      * @param \Closure(App): Form    $createFormFx
+     * @param array<string, string>  $postData
      * @param \Closure(Model): void  $submitFx
      * @param \Closure(string): void $checkExpectedErrorsFx
      */
@@ -246,7 +250,7 @@ class FormTest extends TestCase
         try {
             $this->assertFormSubmit(static function (App $app) {
                 $m = new Model();
-                $m->addField('foo', new class() extends Field {
+                $m->addField('foo', new class extends Field {
                     #[\Override]
                     public function normalize($value)
                     {
@@ -279,7 +283,7 @@ class FormTest extends TestCase
         $form->setApp($this->createApp());
         $form->invokeInit();
 
-        $controlClass = get_class(new class() extends Form\Control {
+        $controlClass = get_class(new class extends Form\Control {
             public static bool $firstCreate = true;
 
             public function __construct() // @phpstan-ignore constructor.missingParentCall
@@ -314,7 +318,7 @@ class FormTest extends TestCase
         $form->setApp($this->createApp());
         $form->invokeInit();
 
-        $controlClass = get_class(new class() extends Form\Control {
+        $controlClass = get_class(new class extends Form\Control {
             public static bool $firstCreate = true;
 
             public function __construct() // @phpstan-ignore constructor.missingParentCall
@@ -421,7 +425,7 @@ class FormTest extends TestCase
 
 class AppFormTestMock extends App
 {
-    /** @var string|array */
+    /** @var string|array<mixed> */
     public $output;
 
     #[\Override]

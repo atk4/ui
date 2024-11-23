@@ -40,7 +40,7 @@ $infoAction = $countries->addUserAction('request_info', [
     'callback' => static function (Country $country, $email) {
         return 'Your request for information was sent to email: ' . $email;
     },
-    'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORDS,
+    'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORD,
 ]);
 
 $infoAction->args = [

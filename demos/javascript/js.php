@@ -10,6 +10,7 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Label;
 
@@ -75,6 +76,8 @@ Header::addTo($app, ['Callbacks on HTML element', 'subHeader' => 'Click on label
 
 $label = Label::addTo($app->layout, ['Test']);
 
-$label->on('click', null, static function (Jquery $j, $arg1) {
-    return 'width is ' . $arg1;
-}, [new JsExpression('$(window).width()')]);
+$label->on('click', null, static function (Jquery $j, int $windowWidth) {
+    return 'width is ' . $windowWidth;
+}, [
+    new JsCallbackLoadableValue(new JsExpression('$(window).width()'), static fn ($v) => (int) $v),
+]);

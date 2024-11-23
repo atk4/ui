@@ -6,12 +6,13 @@ namespace Atk4\Ui\UserAction;
 
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
-use Atk4\Ui\View;
 
 /**
  * Javascript Action executor.
@@ -31,8 +32,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 {
     use HookTrait;
 
-    /** @var Model\UserAction The model user action */
-    public $action;
+    public Model\UserAction $action;
 
     /** @var JsExpressionable|\Closure<T of Model>($this, T, mixed, mixed): ?JsBlock JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
@@ -54,8 +54,8 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     /**
      * @template T
      *
-     * @param \Closure(): T         $fx
-     * @param array<string, string> $urlArgs
+     * @param \Closure(): T                                 $fx
+     * @param array<string, JsCallbackLoadableValue|string> $urlArgs
      *
      * @return T
      */
@@ -71,7 +71,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
     }
 
     /**
-     * @param array<string, string> $urlArgs
+     * @param array<string, JsCallbackLoadableValue|string> $urlArgs
      */
     #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
@@ -81,28 +81,48 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
         }, $urlArgs);
     }
 
+    private function executeModelActionLoad(Model\UserAction $action): Model\UserAction
+    {
+        $model = $action->getModel();
+
+        $id = $this->getApp()->uiPersistence->typecastAttributeLoadField(
+            $model->getIdField(),
+            $this->getApp()->tryGetRequestPostParam($this->name)
+        );
+
+        if ($id && $action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
+            if ($action->isOwnerEntity() && $action->getEntity()->getId()) {
+                $action->getEntity()->setId($id); // assert ID is the same
+            } else {
+                $action = $action->getActionForEntity($model->load($id));
+            }
+        } elseif (!$action->isOwnerEntity() && in_array($action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORD, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)) {
+            $action = $action->getActionForEntity($model->createEntity());
+        }
+
+        return $action;
+    }
+
+    /**
+     * @param array<string, JsCallbackLoadableValue|string> $urlArgs
+     */
     #[\Override]
-    public function executeModelAction(): void
+    public function executeModelAction(array $urlArgs = []): void
     {
         $this->invokeFxWithUrlArgs(function () { // backup/restore $this->args mutated in https://github.com/atk4/ui/blob/8926412a31/src/JsCallback.php#L71
+            $actionUrlArgs = array_intersect_key($this->args, $this->action->args);
+            if (array_keys($actionUrlArgs) !== array_keys($this->action->args)) {
+                throw (new Exception('URL arguments does not match user action arguments'))
+                    ->addMoreInfo('actionArgs', array_keys($this->action->args))
+                    ->addMoreInfo('urlArgs', array_keys($actionUrlArgs));
+            }
+
             $this->set(function (Jquery $j, ...$values) {
-                $id = $this->getApp()->uiPersistence->typecastAttributeLoadField(
-                    $this->action->getModel()->getIdField(),
-                    $this->getApp()->tryGetRequestPostParam($this->name)
-                );
-                if ($id && $this->action->appliesTo === Model\UserAction::APPLIES_TO_SINGLE_RECORD) {
-                    if ($this->action->isOwnerEntity() && $this->action->getEntity()->getId()) {
-                        $this->action->getEntity()->setId($id); // assert ID is the same
-                    } else {
-                        $this->action = $this->action->getActionForEntity($this->action->getModel()->load($id));
-                    }
-                } elseif (!$this->action->isOwnerEntity()
-                    && in_array($this->action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)
-                ) {
-                    $this->action = $this->action->getActionForEntity($this->action->getModel()->createEntity());
-                }
+                $this->action = $this->executeModelActionLoad($this->action);
 
                 $return = $this->action->execute(...$values);
+
+                $id = $this->action->getEntity()->getId();
 
                 $success = $this->jsSuccess instanceof \Closure
                     ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $return)
@@ -112,7 +132,7 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
                     ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
 
                 return $js;
-            }, array_map(static fn () => true, $this->action->args));
-        });
+            }, $actionUrlArgs);
+        }, $urlArgs);
     }
 }

@@ -68,13 +68,13 @@ $crud->setModel($model);
 // because Crud inherits Grid, you can also define custom actions
 $crud->addModalAction(['icon' => 'cogs'], 'Details', static function (View $p, $id) use ($crud) {
     $model = Country::assertInstanceOf($crud->model);
-    Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $id . ')']);
+    Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $p->getApp()->uiPersistence->typecastSaveField($crud->model->getIdField(), $id) . ')']);
 });
 
 $column = $columns->addColumn();
 Header::addTo($column, ['Customizations']);
 
-$myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class() extends ModalExecutor {
+$myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class extends ModalExecutor {
     #[\Override]
     public function addFormTo(View $view): Form
     {

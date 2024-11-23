@@ -22,7 +22,7 @@ class Columns extends View
     /** @var int|false Sum of all column widths added so far. */
     protected $calculatedWidth = 0;
 
-    /** @var array<int, string> */
+    /** @var array<positive-int, string> */
     protected $cssWideClasses = [
         1 => 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
         'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
@@ -31,7 +31,7 @@ class Columns extends View
     /**
      * Add new vertical column.
      *
-     * @param int|array $defaults specify width (1..16) or relative to $width
+     * @param int|array<mixed> $defaults specify width (1..16) or relative to $width
      *
      * @return View
      */

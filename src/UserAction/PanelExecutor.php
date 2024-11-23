@@ -26,7 +26,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
 
     public const HOOK_STEP = self::class . '@onStep';
 
-    /** @var array No need for dynamic content. It is manage with step loader. */
+    /** No need for dynamic content. It is managed with step loader. */
     public $dynamic = [];
     public $hasClickAway = false;
 
@@ -71,7 +71,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
     protected function afterActionInit(): void
     {
         $this->loader = Loader::addTo($this, ['shim' => $this, 'loadEvent' => false]);
-        $this->actionData = $this->loader->jsGetStoreData()['session'];
+        $this->actionData = $this->loader->jsGetStoreData()['session'] ?? [];
     }
 
     #[\Override]

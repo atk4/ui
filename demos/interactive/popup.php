@@ -32,9 +32,10 @@ require_once __DIR__ . '/../init-app.php';
  * Cart will memorize and restore its items into session. Cart will also
  * render the items.
  */
-$cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lister {
+$cartClass = AnonymousClassNameCache::get_class(fn () => new class extends Lister {
     use SessionTrait;
 
+    /** @var array<int, string> */
     public array $items = [];
 
     public $defaultTemplate = 'lister.html';
@@ -87,8 +88,6 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
     #[\Override]
     protected function renderView(): void
     {
-        // memorize items
-
         $this->setSource($this->items);
 
         parent::renderView();
@@ -101,7 +100,7 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class() extends Lis
  * Method linkCart allow you to link ItemShelf with Cart. Clicking on a shelf item will place that
  * item inside a cart reloading it afterwards.
  */
-$itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class() extends View {
+$itemShelfClass = AnonymousClassNameCache::get_class(fn () => new class extends View {
     public $ui = 'green segment';
 
     #[\Override]

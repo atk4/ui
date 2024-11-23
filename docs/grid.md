@@ -193,7 +193,7 @@ $grid->menu->addItem('show selection')
 :::
 
 When grid is associated with a model that supports order, it will automatically make itself sortable. You can
-override this behaviour by setting $sortable property to `true` or `false`.
+override this behavior by setting $sortable property to `true` or `false`.
 
 You can also set $sortable property for each table column decorator. That way you can enable/disable sorting
 of particular columns.

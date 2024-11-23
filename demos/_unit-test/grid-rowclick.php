@@ -31,7 +31,7 @@ $grid->addActionMenuItem('Action MenuItem', static function () {
     return new JsToast(['message' => 'Clicked Action MenuItem']);
 });
 
-$grid->addModalAction('Action Modal', 'Details', static function (View $p, $id) use ($model) {
+$grid->addModalAction('Action Modal', 'Details', static function (View $p, WrappedId $id) use ($model) {
     Message::addTo($p, ['Clicked Action Modal: ' . $model->load($id)->name]);
 });
 

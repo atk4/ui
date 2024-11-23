@@ -26,6 +26,7 @@ class TypeNumber extends Column\FilterModel
         ];
         $this->op->default = '=';
 
+        $this->value->type = $this->lookupField->type;
         $this->value->ui['form'] = [Form\Control\Line::class];
         $this->addField('range', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
     }
@@ -38,16 +39,16 @@ class TypeNumber extends Column\FilterModel
             switch ($filter['op']) {
                 case 'between':
                     $model->addCondition(
-                        $model->expr('[field] between [value] and [range]', [
-                            'field' => $model->getField($filter['name']),
-                            'value' => $filter['value'],
-                            'range' => $filter['range'],
+                        $model->expr('[field] between [value] and [value2]', [
+                            'field' => $this->lookupField,
+                            'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $filter['value']),
+                            'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $filter['range']),
                         ])
                     );
 
                     break;
                 default:
-                    $model->addCondition($filter['name'], $filter['op'], $filter['value']);
+                    $model->addCondition($this->lookupField, $filter['op'], $filter['value']);
             }
         }
     }

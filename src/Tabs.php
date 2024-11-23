@@ -17,6 +17,7 @@ class Tabs extends View
     /**
      * @param string|TabsTab                                                                                    $name
      * @param \Closure(VirtualPage, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $callback
+     * @param array<string, mixed>                                                                              $settings
      *
      * @return View
      */
@@ -41,7 +42,8 @@ class Tabs extends View
      * page/url when activated.
      *
      * @param string|TabsTab                           $name
-     * @param string|array<0|string, string|int|false> $page URL to open inside a tab
+     * @param string|array<0|string, string|int|false> $page     URL to open inside a tab
+     * @param array<string, mixed>                     $settings
      */
     public function addTabUrl($name, $page, array $settings = []): void
     {
@@ -54,7 +56,8 @@ class Tabs extends View
     /**
      * Add a tab menu item.
      *
-     * @param string|TabsTab $name
+     * @param string|TabsTab       $name
+     * @param array<string, mixed> $settings
      *
      * @return TabsTab|View tab menu item view
      */

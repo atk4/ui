@@ -30,7 +30,7 @@ $app = new App([
     'callExit' => (bool) ($_GET['APP_CALL_EXIT'] ?? true),
     'catchExceptions' => (bool) ($_GET['APP_CATCH_EXCEPTIONS'] ?? true),
     'alwaysRun' => (bool) ($_GET['APP_ALWAYS_RUN'] ?? true),
-    'uiPersistence' => new class() extends UiPersistence {
+    'uiPersistence' => new class extends UiPersistence {
         #[\Override]
         protected function _typecastLoadField(Field $field, $value)
         {

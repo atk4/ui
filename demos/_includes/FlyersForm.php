@@ -10,8 +10,10 @@ use Atk4\Ui\Js\JsToast;
 
 class FlyersForm extends Form
 {
+    /** @var array<positive-int, array<string, mixed>> */
     public array $flyers = [];
 
+    /** @var list<array<string, mixed>> */
     public array $cards = [
         ['name' => 'Frequent Flyer Program', 'id' => 1, 'nodes' => []],
         ['name' => 'World Class', 'id' => 2, 'nodes' => []],

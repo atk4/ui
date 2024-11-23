@@ -78,7 +78,7 @@ class ViewTest extends TestCase
 
     public function testAddDelayedAbstractViewInit(): void
     {
-        $v = new class() extends AbstractView {};
+        $v = new class extends AbstractView {};
         $vInner = new View();
 
         $v->add($vInner);
@@ -158,7 +158,7 @@ class ViewTest extends TestCase
     }
 
     /**
-     * @return iterable<list{class-string<View|Callback>}>
+     * @return iterable<list<mixed>>
      */
     public static function provideSetNotClosureErrorCases(): iterable
     {

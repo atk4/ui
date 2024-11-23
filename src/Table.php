@@ -8,6 +8,7 @@ use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Misc\ProxyModel;
@@ -29,7 +30,7 @@ class Table extends Lister
      */
     public $reload;
 
-    /** @var array<int|string, Table\Column|array<int, Table\Column>> Contains list of declared columns. Value will always be a column object. */
+    /** @var array<int|string, Table\Column|list<Table\Column>> Contains list of declared columns. Value will always be a column object. */
     public $columns = [];
 
     /**
@@ -51,7 +52,7 @@ class Table extends Lister
     /** @var bool Setting this to false will hide header row. */
     public $header = true;
 
-    /** @var array Contains list of totals accumulated during the render process. */
+    /** @var array<string, int|float> Contains list of totals accumulated during the render process. */
     public $totals = [];
 
     /** @var HtmlTemplate|null Contain the template for the "Head" type row. */
@@ -130,9 +131,9 @@ class Table extends Lister
      * If you don't want table column to be associated with model field, then
      * pass $name parameter as null.
      *
-     * @param string|null                             $name            Data model field name
-     * @param array|Table\Column                      $columnDecorator
-     * @param ($name is null ? array{} : array|Field) $field
+     * @param string|null                                    $name            Data model field name
+     * @param array<mixed>|Table\Column                      $columnDecorator
+     * @param ($name is null ? array{} : array<mixed>|Field) $field
      *
      * @return Table\Column
      */
@@ -190,7 +191,7 @@ class Table extends Lister
     /**
      * Set Popup action for columns filtering.
      *
-     * @param array $cols an array with columns name that need filtering
+     * @param list<string> $cols an array with columns name that need filtering
      */
     public function setFilterColumn($cols = null): void
     {
@@ -223,7 +224,7 @@ class Table extends Lister
     /**
      * Add column Decorator.
      *
-     * @param array|Table\Column $seed
+     * @param array<mixed>|Table\Column $seed
      *
      * @return Table\Column
      */
@@ -246,12 +247,14 @@ class Table extends Lister
 
     /**
      * Return array of column decorators for particular column.
+     *
+     * @return list<Table\Column>
      */
     public function getColumnDecorators(string $name): array
     {
-        $dec = $this->columns[$name];
+        $decorator = $this->columns[$name];
 
-        return is_array($dec) ? $dec : [$dec];
+        return is_array($decorator) ? $decorator : [$decorator];
     }
 
     /**
@@ -268,7 +271,7 @@ class Table extends Lister
     }
 
     /**
-     * @var array<string, array>
+     * @var array<string, array<mixed>>
      */
     protected array $typeToDecorator = [
         'atk4_money' => [Table\Column\Money::class],
@@ -280,7 +283,7 @@ class Table extends Lister
      * Will come up with a column object based on the field object supplied.
      * By default will use default column.
      *
-     * @param array|Table\Column $seed
+     * @param array<mixed>|Table\Column $seed
      *
      * @return Table\Column
      */
@@ -303,19 +306,21 @@ class Table extends Lister
      * name and size.
      *
      * @param \Closure(Jquery, mixed): (JsExpressionable|View|string|void) $fx             a callback function with columns widths as parameter
-     * @param array<int, int>                                              $widths         ex: [100, 200, 300, 100]
-     * @param array                                                        $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
+     * @param list<int>                                                    $widths         ex: [100, 200, 300, 100]
+     * @param array<string, mixed>                                         $resizerOptions column-resizer module options, see https://www.npmjs.com/package/column-resizer
      *
      * @return $this
      */
-    public function resizableColumn($fx = null, $widths = null, $resizerOptions = [])
+    public function resizableColumn($fx = null, $widths = null, array $resizerOptions = [])
     {
         $options = [];
         if ($fx !== null) {
             $cb = JsCallback::addTo($this);
-            $cb->set(function (Jquery $chain, string $data) use ($fx) {
-                return $fx($chain, $this->getApp()->decodeJson($data));
-            }, ['widths' => 'widths']);
+            $cb->set(static function (Jquery $chain, $data) use ($fx) {
+                return $fx($chain, $data);
+            }, ['widths' => new JsCallbackLoadableValue(null, function ($v) {
+                return $this->getApp()->decodeJson($v);
+            })]);
             $options['url'] = $cb->getJsUrl();
         }
 
@@ -331,7 +336,7 @@ class Table extends Lister
     }
 
     #[\Override]
-    public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = 'Body')
+    public function addJsPaginator($ipp, array $options = [], $container = null, $scrollRegion = 'Body')
     {
         $options = array_merge($options, ['appendTo' => 'tbody']);
 
@@ -354,7 +359,7 @@ class Table extends Lister
     }
 
     /**
-     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
+     * @param list<string>|null $fields if null, then all "editable" fields will be added
      */
     #[\Override]
     public function setModel(Model $model, ?array $fields = null): void

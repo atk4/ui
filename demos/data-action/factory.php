@@ -30,7 +30,7 @@ $msg->text->addParagraph('In this example, Crud and Card button was changed and 
 
 // overriding basic ExecutorFactory in order to change Table and Modal button
 // and also changing default add action label
-$myFactory = AnonymousClassNameCache::get_class(static fn () => new class() extends ExecutorFactory {
+$myFactory = AnonymousClassNameCache::get_class(static fn () => new class extends ExecutorFactory {
     public $buttonPrimaryColor = 'green';
 
     protected $triggerSeed = [

@@ -10,6 +10,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 class PaginatorTest extends TestCase
 {
+    /**
+     * @return iterable<list<mixed>>
+     */
     public static function providePaginatorCases(): iterable
     {
         yield [1, 1, 1, [1]];
@@ -33,6 +36,8 @@ class PaginatorTest extends TestCase
     }
 
     /**
+     * @param list<int|'['|'...'|']'> $expected
+     *
      * @dataProvider providePaginatorCases
      */
     #[DataProvider('providePaginatorCases')]

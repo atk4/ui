@@ -54,7 +54,9 @@ abstract class FilterModel extends Model
             Types::TEXT => FilterModel\TypeString::class,
 
             Types::BOOLEAN => FilterModel\TypeBoolean::class,
+            Types::SMALLINT => FilterModel\TypeNumber::class,
             Types::INTEGER => FilterModel\TypeNumber::class,
+            Types::BIGINT => FilterModel\TypeNumber::class,
             Types::FLOAT => FilterModel\TypeNumber::class,
             CustomTypes::MONEY => FilterModel\TypeNumber::class,
 
@@ -68,7 +70,7 @@ abstract class FilterModel extends Model
             Types::JSON => FilterModel\TypeString::class,
 
             'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
-        ][$field->type];
+        ][$field->type] ?? null;
 
         // you can set your own filter model class
         if (isset($field->ui['filterModel'])) {
@@ -99,8 +101,6 @@ abstract class FilterModel extends Model
 
     public function afterInit(): void
     {
-        $this->addField('name', ['default' => $this->lookupField->shortName, 'system' => true]);
-
         // create a name for our filter model to save as session data
         $this->name = 'filter_model_' . $this->lookupField->shortName;
 
@@ -114,6 +114,9 @@ abstract class FilterModel extends Model
         });
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function recallData(): ?array
     {
         return $this->recall('data');
@@ -129,6 +132,8 @@ abstract class FilterModel extends Model
      * Method that will set Field display condition in a form.
      * If form filter need to have a field display at certain condition, then
      * override this method in your FilterModel\TypeModel.
+     *
+     * @return array<string, array<mixed>>
      */
     public function getFormDisplayRules(): array
     {

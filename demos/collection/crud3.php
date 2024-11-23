@@ -13,7 +13,7 @@ use Atk4\Ui\Header;
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$modelClass = AnonymousClassNameCache::get_class(fn () => new class() extends Model {
+$modelClass = AnonymousClassNameCache::get_class(fn () => new class extends Model {
     public $table = 'test';
 
     public $caption = 'Country';

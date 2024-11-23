@@ -89,7 +89,7 @@ another request to the server:
 - the {php:meth}`Callback::set()` will notice this argument and execute "terminate()"
 - terminate() will exit app execution and output 'in callback' back to user.
 
-Calling {php:meth}`App::terminate()` will prevent the default behaviour (of rendering UI) and will
+Calling {php:meth}`App::terminate()` will prevent the default behavior (of rendering UI) and will
 output specified string instead, stopping further execution of your application.
 
 # Return value of set()
@@ -312,24 +312,28 @@ will send browser screen width back to the callback:
 $label = \Atk4\Ui\Label::addTo($app);
 $cb = \Atk4\Ui\JsCallback::addTo($label);
 
-$cb->set(function (\Atk4\Ui\Js\Jquery $j, $arg1) {
-    return 'width is ' . $arg1;
-}, [new \Atk4\Ui\Js\JsExpression('$(window).width()')]);
+$cb->set(function (\Atk4\Ui\Js\Jquery $j, int $windowWidth) {
+    return 'width is ' . $windowWidth;
+}, [
+    new \Atk4\Ui\Js\JsCallbackLoadableValue('$(window).width()', static fn ($v) => (int) $v),
+]);
 
 $label->detail = $cb->getUrl();
 $label->on('click', $cb);
 ```
 
 In here you see that I'm using a 2nd argument to $cb->set() to specify arguments, which, I'd like to fetch from the
-browser. Those arguments are passed to the callback and eventually arrive as $arg1 inside my callback. The {php:meth}`View::on()`
-also supports argument passing:
+browser. Those arguments are passed to the callback and eventually arrive as $windowWidth inside my callback.
+The {php:meth}`View::on()` also supports argument passing:
 
 ```
 $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 
-$label->on('click', function (Jquery $j, $arg1) {
-    return 'width is ' . $arg1;
-}, ['confirm' => 'sure?', 'args' => [new \Atk4\Ui\Js\JsExpression('$(window).width()')]]);
+$label->on('click', function (Jquery $j, int $windowWidth) {
+    return 'width is ' . $windowWidth;
+}, ['confirm' => 'sure?', 'args' => [
+    new \Atk4\Ui\Js\JsCallbackLoadableValue('$(window).width()', static fn ($v) => (int) $v),
+]]);
 ```
 
 If you do not need to specify confirm, you can actually pass arguments in a key-less array too:
@@ -337,9 +341,11 @@ If you do not need to specify confirm, you can actually pass arguments in a key-
 ```
 $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 
-$label->on('click', function (Jquery $j, $arg1) {
-    return 'width is ' . $arg1;
-}, [new \Atk4\Ui\Js\JsExpression('$(window).width()')]);
+$label->on('click', function (Jquery $j, int $windowWidth) {
+    return 'width is ' . $windowWidth;
+}, [
+    new \Atk4\Ui\Js\JsCallbackLoadableValue('$(window).width()', static fn ($v) => (int) $v),
+]);
 ```
 
 ## Referring to event origin
@@ -348,7 +354,7 @@ You might have noticed that JsCallback now passes first argument ($j) which so f
 jQuery chain for the element which received the event. We can change the response to do something with this element like:
 
 ```
-return $j->text('width is ' . $arg1);
+return $j->text('width is ' . $windowWidth);
 ```
 
 Now instead of showing an alert box, label content will be changed to display window width.

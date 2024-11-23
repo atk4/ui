@@ -21,9 +21,7 @@ class Checkbox extends Table\Column
     public $class;
 
     /**
-     * Return action which will calculate and return array of all Checkbox IDs, e.g.
-     *
-     * [3, 5, 20]
+     * Return action which will calculate and return array of all checkbox IDs, e.g. [3, 5, 20].
      */
     public function jsChecked(): JsExpressionable
     {

@@ -12,7 +12,7 @@ class TabsTab extends MenuItem
     /** @var string */
     public $path;
 
-    /** @var array Tab settings */
+    /** @var array<string, mixed> Tab settings */
     public $settings = [];
 
     /**
