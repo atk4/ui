@@ -203,7 +203,7 @@ Returns JS action which will trigger loading. The action will be carried out in 
 :::
 
 If you have NOT invoked jsLoad in your code, Loader will automatically assign it do DOM Ready(). If the automatic
-behaviour does not work, you should set value for $loadEvent:
+behavior does not work, you should set value for $loadEvent:
 
 - null = load on DOM ready unless you have invoked jsLoad() in the code.
 - true = load on DOM ready

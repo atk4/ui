@@ -200,7 +200,7 @@ You will find a list of Vue component associated with each field type within the
 :::{php:attr} fieldMapToComponent
 :::
 
-Each control being a Vue component means that they accept 'Props' that may change their look or behaviour.
+Each control being a Vue component means that they accept 'Props' that may change their look or behavior.
 Props on each component may be applied globally, i.e. to all control within Multiline that use that control, or
 per component.
 
