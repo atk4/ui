@@ -32,7 +32,7 @@ class Crud extends Grid
     /** @var bool|null Should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
 
-    /** @var array<string, array{item: MenuItem, executor: AbstractView&ExecutorInterface}> Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
+    /** @var array<string, array{item: MenuItem, executor: AbstractView&ExecutorInterface}> Collection of APPLIES_TO_NO_RECORD Scope Model action menu item */
     private array $menuItems = [];
 
     /** @var list<string> Model single scope action to include in table action column. Will include all single scope actions if empty. */
@@ -116,7 +116,7 @@ class Crud extends Grid
         }
 
         if ($this->menu) {
-            foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
+            foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORD) as $k => $action) {
                 if ($action->enabled) {
                     $executor = $this->initActionExecutor($action);
                     $this->menuItems[$k]['item'] = $this->menu->addItem(
@@ -286,7 +286,7 @@ class Crud extends Grid
                 $this->singleScopeActions,
                 array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions)
             );
-        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
+        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORD && $this->noRecordScopeActions !== []) {
             $actions = array_combine(
                 $this->noRecordScopeActions,
                 array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions)

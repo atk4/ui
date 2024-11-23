@@ -164,7 +164,7 @@ class CardDeck extends View
 
         // add no record scope action to menu
         if ($this->useAction && $this->menu) {
-            foreach ($this->getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
+            foreach ($this->getModelActions(Model\UserAction::APPLIES_TO_NO_RECORD) as $k => $action) {
                 $executor = $this->initActionExecutor($action);
                 $this->menuActions[$k]['button'] = $this->menu->addItem(
                     $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MENU_ITEM)
@@ -287,7 +287,7 @@ class CardDeck extends View
                 $this->singleScopeActions,
                 array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions)
             );
-        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
+        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORD && $this->noRecordScopeActions !== []) {
             $actions = array_combine(
                 $this->noRecordScopeActions,
                 array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions)

@@ -42,7 +42,7 @@ Header::addTo($app, [
 
 // note here that we explicitly required a JsCallbackExecutor for the greet action
 $country->addUserAction('greet', [
-    'appliesTo' => UserAction::APPLIES_TO_NO_RECORDS,
+    'appliesTo' => UserAction::APPLIES_TO_NO_RECORD,
     'args' => [
         'name' => [
             'type' => 'string',
