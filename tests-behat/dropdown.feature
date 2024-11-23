@@ -15,3 +15,9 @@ Feature: Dropdown
     Then I should not see "No results found."
     When I click using selector "//div.field[label[text()='Product ID']]//div.ui.dropdown"
     Then I should see "No results found."
+
+  Scenario: dropdown menu
+    Given I am on "basic/menu.php"
+    When I click using selector "//div.ui.dropdown[div[text()='With Callback']]"
+    When I click using selector "//div.ui.dropdown[div[text()='With Callback']]//div.item[text()='c']"
+    Then Toast display should contain text "New selected item ID: 1000000002"

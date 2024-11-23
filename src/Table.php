@@ -8,6 +8,7 @@ use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Misc\ProxyModel;
@@ -315,9 +316,11 @@ class Table extends Lister
         $options = [];
         if ($fx !== null) {
             $cb = JsCallback::addTo($this);
-            $cb->set(function (Jquery $chain, string $data) use ($fx) {
-                return $fx($chain, $this->getApp()->decodeJson($data));
-            }, ['widths' => 'widths']);
+            $cb->set(static function (Jquery $chain, $data) use ($fx) {
+                return $fx($chain, $data);
+            }, ['widths' => new JsCallbackLoadableValue(null, function ($v) {
+                return $this->getApp()->decodeJson($v);
+            })]);
             $options['url'] = $cb->getJsUrl();
         }
 

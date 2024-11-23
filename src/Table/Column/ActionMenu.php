@@ -8,6 +8,7 @@ use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Table;
@@ -85,7 +86,12 @@ class ActionMenu extends Table\Column
             $context = (new Jquery())->closest('.ui.button');
 
             $this->table->on('click', '.i_' . $name, $action, [
-                $this->table->jsRow()->data('id'),
+                new JsCallbackLoadableValue($this->table->jsRow()->data('id'), function ($v) {
+                    return $this->getApp()->uiPersistence->typecastAttributeLoadField(
+                        $this->table->model->getIdField(),
+                        $v
+                    );
+                }),
                 'confirm' => $confirmMsg,
                 'apiConfig' => ['stateContext' => $context],
             ]);

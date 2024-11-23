@@ -72,6 +72,24 @@ Feature: UserAction executor and UserConfirmation modal
     When I fill field using "//input[../div[text()='Greet']]" with "Laura"
     When I press button "Greet"
     Then Toast display should contain text "Hello Laura"
+    Given I am on "_unit-test/useraction-input-callback.php"
+    When I fill field using "//input[../div[text()='Greet Integer']]" with "2_3"
+    When I press button "Greet Integer"
+    Then Toast display should contain text "Hello II 23"
+    When I fill field using "//input[../div[text()='Greet Wrapped ID']]" with "24"
+    When I press button "Greet Wrapped ID"
+    Then Toast display should contain text "Hello III 24"
+
+  Scenario: testing JsCallbackExecutor with form input argument - validation, exception is displayed
+    When I fill field using "//input[../div[text()='Greet Integer']]" with "x"
+    When I press button "Greet Integer"
+    # TODO https://github.com/atk4/data/blob/5.2.0/src/Persistence.php#L496 should be unrolled
+    # like in https://github.com/atk4/ui/blob/5.2.0/src/Form.php#L448
+    Then Modal is open with text "Atk4\Data\Exception: Must be numeric"
+    Then I hide js modal
+    When I fill field using "//input[../div[text()='Greet Integer']]" with ""
+    When I press button "Greet Integer"
+    # TODO "required" must be honored
 
   Scenario: testing JsCallbackExecutor in grid menu
     Given I am on "data-action/jsactionsgrid.php"

@@ -35,11 +35,10 @@ trait StepExecutorTrait
     /** @var View */
     protected $buttonsView;
 
-    /** @var UserAction The action to execute. */
-    public $action;
+    public UserAction $action;
 
     /** @var array<string, array<string, mixed>> will collect data while doing action step. */
-    private $actionData = [];
+    private array $actionData = [];
 
     /** @var bool */
     protected $actionInitialized = false;

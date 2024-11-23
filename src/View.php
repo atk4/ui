@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
@@ -1035,9 +1037,24 @@ class View extends AbstractView
                     unset($arguments[0]);
                 }
 
-                if (isset($arguments[$ex->name]) && !$arguments[$ex->name] instanceof JsExpressionable) {
-                    $exModel = $ex->getAction()->getModel();
-                    $arguments[$ex->name] = $this->getApp()->uiPersistence->typecastAttributeSaveField($exModel->getIdField(), $arguments[$ex->name]);
+                // implicitly typecast all user action arguments
+                foreach ($arguments as $k => $v) {
+                    if (!$v instanceof JsExpressionable) {
+                        if ($k !== $ex->name && !isset($ex->getAction()->args[$k])) {
+                            continue;
+                        }
+
+                        $actionArgType = $k === $ex->name
+                            ? $ex->getAction()->getModel()->getIdField()->type
+                            : $ex->getAction()->args[$k]['type'];
+
+                        $arguments[$k] = new JsCallbackLoadableValue(
+                            new JsExpression('[]', [$this->getApp()->uiPersistence->typecastAttributeSaveField(new Field(['type' => $actionArgType]), $v)]),
+                            function ($v) use ($actionArgType) {
+                                return $this->getApp()->uiPersistence->typecastAttributeLoadField(new Field(['type' => $actionArgType]), $v);
+                            }
+                        );
+                    }
                 }
 
                 if ($ex instanceof UserAction\JsCallbackExecutor) {
@@ -1062,7 +1079,7 @@ class View extends AbstractView
                 $actions = [$ex->jsExecute($arguments)];
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
                 $setupNonSharedExecutorFx($ex);
-                $ex->executeModelAction();
+                $ex->executeModelAction($arguments);
                 $actions = [$lazyJsRenderFx(static fn () => $ex->jsExecute($arguments))];
             } else {
                 throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or UserAction\JsExecutorInterface');

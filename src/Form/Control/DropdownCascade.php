@@ -52,7 +52,9 @@ class DropdownCascade extends Dropdown
             $this->jsDropdown()->addClass('loading'),
         ];
 
-        $this->cascadeFrom->onChange($expr, ['args' => [$this->cascadeFrom->name => $this->cascadeFrom->jsInput()->val()]]);
+        $this->cascadeFrom->onChange($expr, ['args' => [
+            $this->cascadeFrom->name => $this->cascadeFrom->jsInput()->val(),
+        ]]);
     }
 
     #[\Override]

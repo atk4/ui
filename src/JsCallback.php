@@ -6,12 +6,13 @@ namespace Atk4\Ui;
 
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 
 class JsCallback extends Callback
 {
-    /** @var array<string, string|JsExpressionable> Holds information about arguments passed in to the callback. */
+    /** @var array<string, JsCallbackLoadableValue> */
     public array $args = [];
 
     /** @var string Text to display as a confirmation. Set with setConfirm(..). */
@@ -58,7 +59,7 @@ class JsCallback extends Callback
 
     /**
      * @param \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void) $fx
-     * @param array<int|string, string|JsExpressionable>                                                                                  $args
+     * @param array<int|string, JsCallbackLoadableValue>                                                                                  $args
      *
      * @return $this
      */
@@ -81,8 +82,9 @@ class JsCallback extends Callback
             $chain = new Jquery();
 
             $values = [];
-            foreach (array_keys($this->args) as $key) {
-                $values[] = $this->getApp()->getRequestPostParam($key);
+            foreach ($this->args as $k => $jsValue) {
+                $rawValue = $this->getApp()->getRequestPostParam($k);
+                $values[] = $jsValue->typecastLoadValue($rawValue);
             }
 
             $response = $fx($chain, ...$values);

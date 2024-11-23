@@ -32,11 +32,11 @@ $g1->setModel($m1, [$m1->fieldName()->name, $m1->fieldName()->iso]); // fields a
 $g1->addQuickSearch([Country::hinting()->fieldName()->name, Country::hinting()->fieldName()->iso]);
 
 // demo for additional action buttons in Crud + JsPaginator
-$g1->addModalAction(['icon' => 'cogs'], 'Details', static function (View $p, $id) use ($g1) {
+$g1->addModalAction(['icon' => 'cogs'], 'Details', static function (View $p, WrappedId $id) use ($g1) {
     Card::addTo($p)->setModel($g1->model->load($id));
 });
-$g1->addActionButton('red', static function (Jquery $js, $id) {
-    return $js->find('tr[data-id=' . $id . ']')->css('color', 'red');
+$g1->addActionButton('red', static function (Jquery $js, WrappedId $id) use ($app, $m1) {
+    return $js->find('tr[data-id=' . $app->uiPersistence->typecastAttributeSaveField($m1->getIdField(), $id) . ']')->css('color', 'red');
 });
 // THIS SHOULD GO AFTER YOU CALL Grid::addActionButton()
 $g1->addJsPaginatorInContainer(30, 350);
