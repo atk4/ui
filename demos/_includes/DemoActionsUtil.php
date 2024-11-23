@@ -17,6 +17,7 @@ use Atk4\Ui\Form;
  */
 class ArgModel extends Model
 {
+    #[\Override]
     protected function init(): void
     {
         parent::init();
@@ -30,6 +31,7 @@ class ArgModel extends Model
         ]);
     }
 
+    #[\Override]
     public function validate(?string $intent = null): array
     {
         $error = [];
