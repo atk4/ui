@@ -32,7 +32,7 @@ class Crud extends Grid
     /** @var bool|null Should we use table column drop-down menu to display user actions? */
     public $useMenuActions;
 
-    /** @var array<string, array{item: MenuItem, executor: AbstractView&ExecutorInterface}> Collection of APPLIES_TO_NO_RECORDS Scope Model action menu item */
+    /** @var array<string, array{item: MenuItem, executor: AbstractView&ExecutorInterface}> Collection of APPLIES_TO_NO_RECORD Scope Model action menu item */
     private array $menuItems = [];
 
     /** @var list<string> Model single scope action to include in table action column. Will include all single scope actions if empty. */
@@ -51,7 +51,10 @@ class Crud extends Grid
     public $defaultMsg = 'Done!';
 
     /** @var list<array<string, \Closure(Form, UserAction\ModalExecutor): void>> Callback containers for model action. */
-    public $onActions = [];
+    public array $onActions = [];
+
+    /** @var mixed Recently created/updated record ID. */
+    private $updatedId;
 
     /** @var mixed Recently deleted record ID. */
     private $deletedId;
@@ -96,9 +99,14 @@ class Crud extends Grid
 
         parent::setModel($model, $this->displayFields);
 
-        // grab model ID when using delete
-        // must be set before delete action execute
+        $this->model->onHook(Model::HOOK_BEFORE_SAVE, function (Model $entity) {
+            $this->updatedId = $entity->getId();
+        });
+        $this->model->onHook(Model::HOOK_AFTER_SAVE, function (Model $entity) {
+            $this->updatedId = $entity->getId();
+        });
         $this->model->onHook(Model::HOOK_AFTER_DELETE, function (Model $entity) {
+            $this->updatedId = null;
             $this->deletedId = $entity->getId();
         });
 
@@ -116,7 +124,7 @@ class Crud extends Grid
         }
 
         if ($this->menu) {
-            foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORDS) as $k => $action) {
+            foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORD) as $k => $action) {
                 if ($action->enabled) {
                     $executor = $this->initActionExecutor($action);
                     $this->menuItems[$k]['item'] = $this->menu->addItem(
@@ -176,13 +184,13 @@ class Crud extends Grid
             $res->addStatement($jsAction);
         }
 
-        // display msg return by action or depending on action modifier
+        // display msg return by action or depending on action behavior
         if (is_string($return)) {
             $res->addStatement($this->jsCreateNotifier($return));
         } else {
-            if ($action->modifier === Model\UserAction::MODIFIER_CREATE || $action->modifier === Model\UserAction::MODIFIER_UPDATE) {
+            if ($this->updatedId !== null) {
                 $res->addStatement($this->jsCreateNotifier($this->saveMsg));
-            } elseif ($action->modifier === Model\UserAction::MODIFIER_DELETE) {
+            } elseif ($this->deletedId !== null) {
                 $res->addStatement($this->jsCreateNotifier($this->deleteMsg));
             } else {
                 $res->addStatement($this->jsCreateNotifier($this->defaultMsg));
@@ -193,26 +201,20 @@ class Crud extends Grid
     }
 
     /**
-     * Return proper JS actions depending on action modifier type.
+     * Return proper JS actions depending on action behavior.
      */
     protected function getJsGridAction(Model\UserAction $action): ?JsExpressionable
     {
-        switch ($action->modifier) {
-            case Model\UserAction::MODIFIER_UPDATE:
-            case Model\UserAction::MODIFIER_CREATE:
-                $js = $this->container->jsReload($this->_getReloadArgs());
-
-                break;
-            case Model\UserAction::MODIFIER_DELETE:
-                // use deleted record ID to remove row, fallback to closest tr if ID is not available
-                $js = $this->deletedId
-                    ? $this->js(false, null, 'tr[data-id="' . $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $this->deletedId) . '"]')
-                    : (new Jquery())->closest('tr');
-                $js = $js->transition('fade left', new JsFunction([], [new JsExpression('this.remove()')]));
-
-                break;
-            default:
-                $js = null;
+        if ($this->updatedId !== null) {
+            $js = $this->container->jsReload($this->_getReloadArgs());
+        } elseif ($this->deletedId !== null) {
+            // use deleted record ID to remove row, fallback to closest tr if ID is not available
+            $js = $this->deletedId
+                ? $this->js(false, null, 'tr[data-id="' . $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $this->deletedId) . '"]')
+                : (new Jquery())->closest('tr');
+            $js = $js->transition('fade left', new JsFunction([], [new JsExpression('this.remove()')]));
+        } else {
+            $js = null;
         }
 
         return $js;
@@ -292,7 +294,7 @@ class Crud extends Grid
                 $this->singleScopeActions,
                 array_map(fn ($v) => $this->model->getUserAction($v), $this->singleScopeActions)
             );
-        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORDS && $this->noRecordScopeActions !== []) {
+        } elseif ($appliesTo === Model\UserAction::APPLIES_TO_NO_RECORD && $this->noRecordScopeActions !== []) {
             $actions = array_combine(
                 $this->noRecordScopeActions,
                 array_map(fn ($v) => $this->model->getUserAction($v), $this->noRecordScopeActions)

@@ -471,7 +471,7 @@ function (string $value, $key) {
 
 ### Dropdown Settings
 
-There's a bunch of settings to influence Dropdown behaviour.
+There's a bunch of settings to influence Dropdown behavior.
 
 :::{php:attr} empty
 :::

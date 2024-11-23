@@ -89,7 +89,7 @@ another request to the server:
 - the {php:meth}`Callback::set()` will notice this argument and execute "terminate()"
 - terminate() will exit app execution and output 'in callback' back to user.
 
-Calling {php:meth}`App::terminate()` will prevent the default behaviour (of rendering UI) and will
+Calling {php:meth}`App::terminate()` will prevent the default behavior (of rendering UI) and will
 output specified string instead, stopping further execution of your application.
 
 # Return value of set()

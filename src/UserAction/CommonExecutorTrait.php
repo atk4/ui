@@ -23,7 +23,7 @@ trait CommonExecutorTrait
             } else {
                 $action = $action->getActionForEntity($model->load($id));
             }
-        } elseif (!$action->isOwnerEntity() && in_array($action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORDS, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)) {
+        } elseif (!$action->isOwnerEntity() && in_array($action->appliesTo, [Model\UserAction::APPLIES_TO_NO_RECORD, Model\UserAction::APPLIES_TO_SINGLE_RECORD], true)) {
             $action = $action->getActionForEntity($model->createEntity());
         }
 

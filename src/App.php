@@ -1030,7 +1030,7 @@ class App
                     }
                     // see https://mathiasbynens.be/notes/etago
                     $result[] = preg_replace('~(?<=<)(?=/\s*' . preg_quote($tag, '~') . '|!--)~', '\\\\', $v);
-                } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behaviour, only directly passed strings were escaped
+                } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behavior, only directly passed strings were escaped
                     $result[] = $v;
                 } else {
                     $result[] = $this->encodeHtml($v);
