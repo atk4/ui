@@ -51,7 +51,7 @@ class Crud extends Grid
     public $defaultMsg = 'Done!';
 
     /** @var list<array<string, \Closure(Form, UserAction\ModalExecutor): void>> Callback containers for model action. */
-    public $onActions = [];
+    public array $onActions = [];
 
     /** @var mixed Recently created/updated record ID. */
     private $updatedId;
