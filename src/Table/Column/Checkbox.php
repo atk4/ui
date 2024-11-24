@@ -20,16 +20,6 @@ class Checkbox extends Table\Column
     /** @var string */
     public $class;
 
-    /**
-     * Return action which will calculate and return array of all checkbox IDs, e.g. [3, 5, 20].
-     */
-    public function jsChecked(): JsExpressionable
-    {
-        return (new Jquery($this->table))->find('.checked.' . $this->class)->closest('tr')
-            ->map(new JsFunction([], [new JsExpression('return $(this).data(\'id\')')]))
-            ->get()->join(',');
-    }
-
     #[\Override]
     protected function init(): void
     {
@@ -57,5 +47,15 @@ class Checkbox extends Table\Column
     public function getDataCellTemplate(?Field $field = null): string
     {
         return $this->getApp()->getTag('div', ['class' => 'ui child fitted checkbox ' . $this->class], [['input/', ['type' => 'checkbox']]]);
+    }
+
+    /**
+     * Return action which will calculate and return array of all checkbox IDs, e.g. [3, 5, 20].
+     */
+    public function jsChecked(): JsExpressionable
+    {
+        return (new Jquery($this->table))->find('.checked.' . $this->class)->closest('tr')
+            ->map(new JsFunction([], [new JsExpression('return $(this).data(\'id\')')]))
+            ->get()->join(',');
     }
 }
