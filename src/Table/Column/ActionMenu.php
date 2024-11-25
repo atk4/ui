@@ -56,11 +56,11 @@ class ActionMenu extends Table\Column
      *
      * @param View|string                                                      $item
      * @param JsExpressionable|JsCallbackSetWithRowIdClosure|ExecutorInterface $action
-     * @param bool|\Closure<T of Model>(T): bool                               $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool                               $isEnabled
      *
      * @return View
      */
-    public function addActionMenuItem($item, $action = null, string $confirmMsg = '', $isDisabled = false)
+    public function addActionMenuItem($item, $action = null, string $confirmMsg = '', $isEnabled = true)
     {
         $name = $this->name . '_action_' . (count($this->items) + 1);
 
@@ -75,10 +75,10 @@ class ActionMenu extends Table\Column
 
         $item->addClass('{$_' . $name . '_disabled} i_' . $name);
 
-        if ($isDisabled === true) {
+        if ($isEnabled === false) {
             $item->addClass('disabled');
-        } elseif ($isDisabled !== false) {
-            $this->isEnabledFxs[$name] = $isDisabled;
+        } elseif ($isEnabled !== true) {
+            $this->isEnabledFxs[$name] = $isEnabled;
         }
 
         if ($action !== null) {

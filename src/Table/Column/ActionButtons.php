@@ -42,11 +42,11 @@ class ActionButtons extends Table\Column
      *
      * @param string|array<mixed>|View                                         $button
      * @param JsExpressionable|JsCallbackSetWithRowIdClosure|ExecutorInterface $action
-     * @param bool|\Closure<T of Model>(T): bool                               $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool                               $isEnabled
      *
      * @return View
      */
-    public function addButton($button, $action = null, string $confirmMsg = '', $isDisabled = false)
+    public function addButton($button, $action = null, string $confirmMsg = '', $isEnabled = true)
     {
         $name = $this->name . '_button_' . (count($this->buttons) + 1);
 
@@ -60,10 +60,10 @@ class ActionButtons extends Table\Column
 
         $this->assertColumnViewNotInitialized($button);
 
-        if ($isDisabled === true) {
+        if ($isEnabled === false) {
             $button->addClass('disabled');
-        } elseif ($isDisabled !== false) {
-            $this->isEnabledFxs[$name] = $isDisabled;
+        } elseif ($isEnabled !== true) {
+            $this->isEnabledFxs[$name] = $isEnabled;
         }
 
         $button->setApp($this->table->getApp());
@@ -88,15 +88,15 @@ class ActionButtons extends Table\Column
      * load contents through $callback. Will pass a virtual page.
      *
      * @param string|array<mixed>|View           $button
-     * @param string|array<mixed>                $defaults   modal title or modal defaults array
+     * @param string|array<mixed>                $defaults  modal title or modal defaults array
      * @param \Closure(View, mixed): void        $callback
      * @param View                               $owner
      * @param array<string, string>              $args
-     * @param bool|\Closure<T of Model>(T): bool $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool $isEnabled
      *
      * @return View
      */
-    public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [], $isDisabled = false)
+    public function addModal($button, $defaults, \Closure $callback, $owner = null, $args = [], $isEnabled = true)
     {
         if ($owner === null) { // TODO explicit owner should not be needed
             $owner = $this->getOwner()->getOwner();
@@ -113,7 +113,7 @@ class ActionButtons extends Table\Column
             $callback($t, $id);
         });
 
-        return $this->addButton($button, $modal->jsShow(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)), '', $isDisabled);
+        return $this->addButton($button, $modal->jsShow(array_merge([$this->name => $this->getOwner()->jsRow()->data('id')], $args)), '', $isEnabled);
     }
 
     #[\Override]
