@@ -346,15 +346,15 @@ class Grid extends View
      * Adds a new button into the action column on the right. For Crud this
      * column will already contain "delete" and "edit" buttons.
      *
-     * @param string|array<mixed>|View                       $button     Label text, object or seed for the Button
+     * @param string|array<mixed>|View                       $button    Label text, object or seed for the Button
      * @param JsExpressionable|JsCallbackSetWithRowIdClosure $action
-     * @param bool|\Closure<T of Model>(T): bool             $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool             $isEnabled
      *
      * @return View
      */
-    public function addActionButton($button, $action = null, string $confirmMsg = '', $isDisabled = false)
+    public function addActionButton($button, $action = null, string $confirmMsg = '', $isEnabled = true)
     {
-        return $this->getActionButtons()->addButton($button, $action, $confirmMsg, $isDisabled);
+        return $this->getActionButtons()->addButton($button, $action, $confirmMsg, $isEnabled);
     }
 
     /**
@@ -374,11 +374,8 @@ class Grid extends View
         if (!$confirmation) {
             $confirmation = '';
         }
-        $disabled = is_bool($executor->getAction()->enabled)
-            ? !$executor->getAction()->enabled
-            : $executor->getAction()->enabled;
 
-        return $this->getActionButtons()->addButton($button, $executor, $confirmation, $disabled);
+        return $this->getActionButtons()->addButton($button, $executor, $confirmation, $executor->getAction()->enabled);
     }
 
     private function getActionButtons(): Table\Column\ActionButtons
@@ -396,13 +393,13 @@ class Grid extends View
      *
      * @param View|string                                    $view
      * @param JsExpressionable|JsCallbackSetWithRowIdClosure $action
-     * @param bool|\Closure<T of Model>(T): bool             $isDisabled
+     * @param bool|\Closure<T of Model>(T): bool             $isEnabled
      *
      * @return View
      */
-    public function addActionMenuItem($view, $action = null, string $confirmMsg = '', $isDisabled = false)
+    public function addActionMenuItem($view, $action = null, string $confirmMsg = '', $isEnabled = true)
     {
-        return $this->getActionMenu()->addActionMenuItem($view, $action, $confirmMsg, $isDisabled);
+        return $this->getActionMenu()->addActionMenuItem($view, $action, $confirmMsg, $isEnabled);
     }
 
     /**
@@ -417,11 +414,8 @@ class Grid extends View
         if (!$confirmation) {
             $confirmation = '';
         }
-        $disabled = is_bool($executor->getAction()->enabled)
-            ? !$executor->getAction()->enabled
-            : $executor->getAction()->enabled;
 
-        return $this->getActionMenu()->addActionMenuItem($item, $executor, $confirmation, $disabled);
+        return $this->getActionMenu()->addActionMenuItem($item, $executor, $confirmation, $executor->getAction()->enabled);
     }
 
     /**
@@ -500,14 +494,14 @@ class Grid extends View
      * @param string|array<mixed>|View           $button
      * @param string                             $title
      * @param \Closure(View, mixed): void        $callback
-     * @param array<string, string>              $args       extra URL argument for callback
-     * @param bool|\Closure<T of Model>(T): bool $isDisabled
+     * @param array<string, string>              $args      extra URL argument for callback
+     * @param bool|\Closure<T of Model>(T): bool $isEnabled
      *
      * @return View
      */
-    public function addModalAction($button, $title, \Closure $callback, $args = [], $isDisabled = false)
+    public function addModalAction($button, $title, \Closure $callback, $args = [], $isEnabled = true)
     {
-        return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args, $isDisabled);
+        return $this->getActionButtons()->addModal($button, $title, $callback, $this, $args, $isEnabled);
     }
 
     /**
