@@ -165,12 +165,17 @@ class CardDeck extends View
         // add no record scope action to menu
         if ($this->useAction && $this->menu) {
             foreach ($this->getModelActions(Model\UserAction::APPLIES_TO_NO_RECORD) as $k => $action) {
-                $executor = $this->initActionExecutor($action);
+                $item = $this->menu->addItem(
+                    $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MENU_ITEM)
+                );
+
+                if ($action->enabled === false) {
+                    $item->addClass('disabled');
+                }
+
                 $this->menuActions[$k] = [
-                    'button' => $this->menu->addItem(
-                        $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MENU_ITEM)
-                    ),
-                    'executor' => $executor,
+                    'button' => $item,
+                    'executor' => $this->initActionExecutor($action),
                 ];
             }
         }
