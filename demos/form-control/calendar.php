@@ -37,19 +37,6 @@ $control->addAction(['Select...', 'icon' => 'calendar'])
 $control->addAction(['Clear', 'icon' => 'times red'])
     ->on('click', $control->getJsInstance()->clear());
 
-// TODO "date" type does not support ranges
-// $form->addControl('date_range', [
-//    Form\Control\Calendar::class,
-//    'type' => 'date',
-//    'options' => ['mode' => 'range'],
-// ])->set(date('Y-m-d') . ' to ' . date('Y-m-d', strtotime('+1 week')));
-//
-// $form->addControl('date_multiple', [
-//    Form\Control\Calendar::class,
-//    'type' => 'date',
-//    'options' => ['mode' => 'multiple'],
-// ])->set(date('Y-m-d') . ', ' . date('Y-m-d', strtotime('+1 Day')) . ', ' . date('Y-m-d', strtotime('+2 Day')));
-
 $form->onSubmit(static function (Form $form) use ($app) {
     $data = [];
     foreach ($form->entity->get() as $k => $v) {

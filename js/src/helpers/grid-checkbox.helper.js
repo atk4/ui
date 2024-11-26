@@ -59,4 +59,17 @@ export default {
             },
         });
     },
+
+    /**
+     * Invoke callback on checked and indeterminate change.
+     */
+    onMasterCheckboxChange: function (tableSelector, fx) {
+        const $table = $(tableSelector);
+        const $masterCheckbox = $table.find('.master.checkbox');
+
+        new MutationObserver(() => fx($masterCheckbox.first())).observe($masterCheckbox[0], {
+            attributes: true,
+            attributeFilter: ['class'],
+        });
+    },
 };

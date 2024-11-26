@@ -10,6 +10,7 @@ use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\LoremIpsum;
 use Atk4\Ui\Menu;
@@ -219,7 +220,7 @@ $stepModal->set(static function (View $p) use ($session, $previousAction, $nextA
             $js[] = $form->jsSuccess('Thank you, ' . $form->entity->get('name') . ' you can go on!');
             $js[] = $nextAction->js()->removeClass('disabled');
 
-            return $js;
+            return new JsBlock($js);
         });
         $p->js(true, $previousAction->js()->removeClass('disabled'));
         $p->js(true, $nextAction->js()->addClass('disabled'));

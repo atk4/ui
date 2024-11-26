@@ -89,6 +89,17 @@ function recomputeMasterCheckbox($table) {
         recomputeMasterCheckbox($table);
       }
     });
+  },
+  /**
+   * Invoke callback on checked and indeterminate change.
+   */
+  onMasterCheckboxChange: function (tableSelector, fx) {
+    const $table = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(tableSelector);
+    const $masterCheckbox = $table.find('.master.checkbox');
+    new MutationObserver(() => fx($masterCheckbox.first())).observe($masterCheckbox[0], {
+      attributes: true,
+      attributeFilter: ['class']
+    });
   }
 });
 

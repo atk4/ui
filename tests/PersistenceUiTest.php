@@ -137,9 +137,12 @@ class PersistenceUiTest extends TestCase
         yield [['currencyDecimals' => 1], ['type' => 'atk4_money'], 1.1, $fixSpaceToNbspFx('€ 1.1')];
         yield [['currencyDecimals' => 4], ['type' => 'atk4_money'], 1.102, $fixSpaceToNbspFx('€ 1.1020')];
         yield [[], ['type' => 'atk4_money'], 1_234_056_789.1, $fixSpaceToNbspFx('€ 1 234 056 789.10')];
+        yield [[], ['type' => 'atk4_money'], -1_234_056_789.1, $fixSpaceToNbspFx('€ -1 234 056 789.10')];
         yield [[], ['type' => 'atk4_money'], 234_056_789.101, $fixSpaceToNbspFx('€ 234 056 789.101')];
+        yield [[], ['type' => 'atk4_money'], -234_056_789.101, $fixSpaceToNbspFx('€ -234 056 789.101')];
         yield [['decimalSeparator' => ','], ['type' => 'atk4_money'], 1.0, $fixSpaceToNbspFx('€ 1,00')];
         yield [[], ['type' => 'atk4_money'], 12_345_678.3, $fixSpaceToNbspFx('€ 12 345 678.30')];
+        yield [[], ['type' => 'atk4_money'], -12_345_678.3, $fixSpaceToNbspFx('€ -12 345 678.30')];
         yield [['decimalSeparator' => ','], ['type' => 'atk4_money'], 12_345_678.3, $fixSpaceToNbspFx('€ 12 345 678,30')];
         yield [['thousandsSeparator' => ''], ['type' => 'atk4_money'], 12_345_678.3, $fixSpaceToNbspFx('€ 12345678.30')];
         yield [['thousandsSeparator' => ','], ['type' => 'atk4_money'], 12_345_678.3, $fixSpaceToNbspFx('€ 12,345,678.30')];

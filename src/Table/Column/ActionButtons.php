@@ -26,7 +26,7 @@ class ActionButtons extends Table\Column
     /** @var array<string, View> Stores all the buttons that have been added. */
     public $buttons = [];
 
-    /** @var array<string, \Closure<T of Model>(T): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
+    /** @var array<string, false|\Closure<T of Model>(T): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
     protected $isEnabledFxs = [];
 
     #[\Override]
@@ -60,9 +60,7 @@ class ActionButtons extends Table\Column
 
         $this->assertColumnViewNotInitialized($button);
 
-        if ($isEnabled === false) {
-            $button->addClass('disabled');
-        } elseif ($isEnabled !== true) {
+        if ($isEnabled !== true) {
             $this->isEnabledFxs[$name] = $isEnabled;
         }
 
@@ -148,7 +146,7 @@ class ActionButtons extends Table\Column
     {
         $tags = [];
         foreach ($this->isEnabledFxs as $name => $isEnabledFx) {
-            if (!$isEnabledFx($row)) {
+            if ($isEnabledFx === false || !$isEnabledFx($row)) {
                 $tags['_' . $name . '_disabled'] = 'disabled';
             }
         }

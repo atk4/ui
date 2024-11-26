@@ -125,13 +125,18 @@ class Crud extends Grid
 
         if ($this->menu) {
             foreach ($this->_getModelActions(Model\UserAction::APPLIES_TO_NO_RECORD) as $k => $action) {
-                if ($action->enabled) {
-                    $executor = $this->initActionExecutor($action);
-                    $this->menuItems[$k]['item'] = $this->menu->addItem(
-                        $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MENU_ITEM)
-                    );
-                    $this->menuItems[$k]['executor'] = $executor;
+                $item = $this->menu->addItem(
+                    $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MENU_ITEM)
+                );
+
+                if ($action->enabled === false) {
+                    $item->addClass('disabled');
                 }
+
+                $this->menuItems[$k] = [
+                    'item' => $item,
+                    'executor' => $this->initActionExecutor($action),
+                ];
             }
             $this->setItemsAction();
         }
