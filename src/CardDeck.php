@@ -166,10 +166,12 @@ class CardDeck extends View
         if ($this->useAction && $this->menu) {
             foreach ($this->getModelActions(Model\UserAction::APPLIES_TO_NO_RECORD) as $k => $action) {
                 $executor = $this->initActionExecutor($action);
-                $this->menuActions[$k]['button'] = $this->menu->addItem(
-                    $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MENU_ITEM)
-                );
-                $this->menuActions[$k]['executor'] = $executor;
+                $this->menuActions[$k] = [
+                    'button' => $this->menu->addItem(
+                        $this->getExecutorFactory()->createTrigger($action, ExecutorFactory::MENU_ITEM)
+                    ),
+                    'executor' => $executor,
+                ];
             }
         }
 
