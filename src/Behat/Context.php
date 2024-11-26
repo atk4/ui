@@ -852,7 +852,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Element :arg1 should contain class :arg3
+     * @Then Element :arg1 should contain class :arg2
      */
     public function elementShouldContainClass(string $selector, string $class): void
     {
@@ -864,7 +864,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Element :arg1 should not contain class :arg3
+     * @Then Element :arg1 should not contain class :arg2
      */
     public function elementShouldNotContainClass(string $selector, string $class): void
     {
