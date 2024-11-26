@@ -10,7 +10,9 @@ use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsCallbackLoadableValue;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\ExecutorFactory;
@@ -517,19 +519,30 @@ class Grid extends View
         return $res;
     }
 
+    private function setupOnMasterCheckboxChangeDisabled(View $item): void
+    {
+        $item->addClass('disabled');
+
+        $this->table->js(true, new JsExpression('atk.gridCheckboxHelper.onMasterCheckboxChange([], []);', [
+            $this->table,
+            new JsFunction(['$el'], [new JsExpression('$([]).toggleClass(\'disabled\', !$el.hasClass(\'checked\') && !$el.hasClass(\'indeterminate\'))', [$item])]),
+        ]));
+    }
+
     /**
      * Similar to addActionButton but apply to a multiple records selection and display in menu.
      * When menu item is clicked, $callback is executed.
      *
-     * @param string|array<mixed>|MenuItem                    $item
-     * @param \Closure(Jquery, list<mixed>): JsExpressionable $callback
-     * @param array<string, string>                           $args     extra URL argument for callback
+     * @param string|array<mixed>|MenuItem                              $item
+     * @param \Closure(Jquery, non-empty-list<mixed>): JsExpressionable $callback
+     * @param array<string, string>                                     $args     extra URL argument for callback
      *
      * @return View
      */
     public function addBulkAction($item, \Closure $callback, $args = [])
     {
         $menuItem = $this->menu->addItem($item);
+        $this->setupOnMasterCheckboxChangeDisabled($menuItem);
         $menuItem->on('click', static function (Jquery $j, array $ids) use ($callback) {
             return $callback($j, $ids);
         }, [
@@ -545,10 +558,10 @@ class Grid extends View
      * Similar to addModalAction but apply to a multiple records selection and display in menu.
      * When menu item is clicked, modal is displayed with the $title and $callback is executed.
      *
-     * @param string|array<mixed>|MenuItem      $item
-     * @param string                            $title
-     * @param \Closure(View, list<mixed>): void $callback
-     * @param array<string, string>             $args     extra URL argument for callback
+     * @param string|array<mixed>|MenuItem                $item
+     * @param string                                      $title
+     * @param \Closure(View, non-empty-list<mixed>): void $callback
+     * @param array<string, string>                       $args     extra URL argument for callback
      *
      * @return View
      */
@@ -562,6 +575,7 @@ class Grid extends View
         });
 
         $menuItem = $this->menu->addItem($item);
+        $this->setupOnMasterCheckboxChangeDisabled($menuItem);
         $menuItem->on('click', $modal->jsShow(array_merge([$this->name => $this->selection->jsChecked()], $args)));
 
         return $menuItem;
