@@ -255,6 +255,10 @@ class Card extends View
             }
         }
 
+        if ($action->enabled === false) {
+            $button->addClass('disabled');
+        }
+
         $button->on('click', $cardDeck !== null ? $cardDeck->sharedExecutorsContainer->getExecutor($action) : $action, $defaults);
 
         return $this;
