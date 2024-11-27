@@ -14,7 +14,7 @@ use Atk4\Ui\Js\JsExpressionable;
  * $modal->jsShow() is the triggered needed to actually display the modal.
  *
  * Modal can be use as a regular view, simply by adding other view to it.
- *  Message::addTo($modal, ['title' => 'Welcome to Agile Toolkit'])->text('Your text here');
+ *  Message::addTo($modal, ['title' => 'Welcome to Agile Toolkit'])->text->set('Your text here');
  *
  * Modal can add content dynamically via CallbackLater.
  *  $modal->set(function (View $p) {

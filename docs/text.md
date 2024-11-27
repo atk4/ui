@@ -31,7 +31,7 @@ $text = Text::addTo($app)
 
 ## HTML escaping
 
-By default Text will not escape HTML so this will render as a bold text:
+By default Text will escape HTML so this won't render as a bold text:
 
 ```
 $text = Text::addTo($app, ['here goes <b>some bold text</b>']);
@@ -42,7 +42,7 @@ If you are using Text for output HTML then you are doing it wrong. You should
 use a generic View and specify your HTML as a template.
 :::
 
-When you use paragraphs, escaping is performed by default:
+When you use paragraphs, escaping is performed by default too:
 
 ```
 $text = Text::addTo($app)

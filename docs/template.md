@@ -349,9 +349,9 @@ Ultimately we want to convert template into something useful. Rendering
 will return contents of the template without tags:
 
 ```
-$result = $template->renderToHtml();
+$html = $template->renderToHtml();
 
-\Atk4\Ui\Text::addTo($this)->set($result);
+\Atk4\Ui\Text::addTo($this)->dangerouslyAddHtml($html);
 // will output "Hello, World"
 ```
 
