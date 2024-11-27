@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Ui\HtmlTemplate\Value as HtmlValue;
+
 /**
  * Simple text block view.
  */
@@ -11,24 +13,38 @@ class Text extends View
 {
     public $defaultTemplate;
 
-    public $content = '';
+    /** @var list<HtmlValue> */
+    public $content = []; // @phpstan-ignore property.phpDocType
+
+    public function __construct($label = [])
+    {
+        $defaults = is_array($label) ? $label : [$label];
+
+        if (array_key_exists(0, $defaults)) {
+            $defaults[0] = [(new HtmlValue())->set($defaults[0])];
+        }
+
+        parent::__construct($defaults);
+    }
 
     #[\Override]
     public function renderToHtml(): string
     {
-        return $this->content;
+        return $this->getHtml();
     }
 
     #[\Override]
     public function getHtml(): string
     {
-        return $this->content;
+        return implode('', array_map(static fn ($v) => $v->getHtml(), $this->content));
     }
 
     #[\Override]
     public function set($text)
     {
-        return parent::set($this->getApp()->encodeHtml($text));
+        $this->content = [(new HtmlValue())->set($text)];
+
+        return $this;
     }
 
     /**
@@ -40,7 +56,9 @@ class Text extends View
      */
     public function addParagraph($text)
     {
-        $this->content .= $this->getApp()->getTag('p', [], $text);
+        $this->content[] = (new HtmlValue())->dangerouslySetHtml('<p>');
+        $this->content[] = (new HtmlValue())->set($text);
+        $this->content[] = (new HtmlValue())->dangerouslySetHtml('</p>');
 
         return $this;
     }
@@ -52,7 +70,7 @@ class Text extends View
      */
     public function dangerouslyAddHtml(string $html)
     {
-        $this->content .= $html;
+        $this->content[] = (new HtmlValue())->dangerouslySetHtml($html);
 
         return $this;
     }
