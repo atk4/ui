@@ -36,8 +36,8 @@ Next add as many steps as you need specifying title and a PHP callback code for 
 $wizard->addStep('Welcome', function (Wizard $wizard) {
     Message::addTo($wizard, ['Welcome to wizard demonstration'])->text
         ->addParagraph('Use button "Next" to advance')
-        ->addParagraph('You can specify your existing database connection string which will be used
-        to create a table for model of your choice');
+        ->addParagraph('You can specify your existing database connection string which will be used'
+            . ' to create a table for model of your choice');
 });
 ```
 

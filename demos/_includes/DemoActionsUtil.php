@@ -100,7 +100,7 @@ class DemoActionsUtil
             'confirmation' => static function (UserAction $action) {
                 $iso3 = Country::assertInstanceOf($action->getEntity())->iso3;
 
-                return 'Are you sure you want to perform this action on: <b>' . $action->getEntity()->getTitle() . ' (' . $iso3 . ')</b>';
+                return 'Are you sure you want to perform this action on: ' . $action->getEntity()->getTitle() . ' (' . $iso3 . ')';
             },
             'callback' => static function (Country $entity) {
                 return 'Confirm country ' . $entity->getTitle();
