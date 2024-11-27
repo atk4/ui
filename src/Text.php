@@ -56,9 +56,9 @@ class Text extends View
      */
     public function addParagraph($text)
     {
-        $this->content[] = (new HtmlValue())->dangerouslySetHtml('<p>');
+        $this->dangerouslyAddHtml('<p>');
         $this->content[] = (new HtmlValue())->set($text);
-        $this->content[] = (new HtmlValue())->dangerouslySetHtml('</p>');
+        $this->dangerouslyAddHtml('</p>');
 
         return $this;
     }
