@@ -13,17 +13,6 @@ class Text extends View
 
     public $content = '';
 
-    public function __construct($label = [])
-    {
-        $defaults = is_array($label) ? $label : [$label];
-
-        if (array_key_exists(0, $defaults)) {
-            $defaults[0] = $this->getApp()->encodeHtml($defaults[0]);
-        }
-
-        parent::__construct($defaults);
-    }
-
     #[\Override]
     public function renderToHtml(): string
     {
