@@ -18,11 +18,10 @@ class Text extends View
         $defaults = is_array($label) ? $label : [$label];
 
         if (array_key_exists(0, $defaults)) {
-            $defaults['content'] = $this->getApp()->encodeHtml($defaults[0]);
-            unset($defaults[0]);
+            $defaults[0] = $this->getApp()->encodeHtml($defaults[0]);
         }
 
-        $this->setDefaults($defaults);
+        parent::__construct($defaults);
     }
 
     #[\Override]
@@ -40,7 +39,7 @@ class Text extends View
     #[\Override]
     public function set($text)
     {
-        $this->content = $this->getApp()->encodeHtml($text);
+        return parent::set($this->getApp()->encodeHtml($text));
     }
 
     /**
