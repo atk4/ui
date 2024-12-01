@@ -416,48 +416,72 @@ class Console extends View implements LoggerInterface
         return $this;
     }
 
+    /**
+     * @param string|\Stringable $message
+     */
     #[\Override]
     public function emergency($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    /**
+     * @param string|\Stringable $message
+     */
     #[\Override]
     public function alert($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    /**
+     * @param string|\Stringable $message
+     */
     #[\Override]
     public function critical($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    /**
+     * @param string|\Stringable $message
+     */
     #[\Override]
     public function error($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    /**
+     * @param string|\Stringable $message
+     */
     #[\Override]
     public function warning($message, array $context = []): void
     {
         $this->outputHtml('<font color="pink">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    /**
+     * @param string|\Stringable $message
+     */
     #[\Override]
     public function notice($message, array $context = []): void
     {
         $this->outputHtml('<font color="yellow">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    /**
+     * @param string|\Stringable $message
+     */
     #[\Override]
     public function info($message, array $context = []): void
     {
         $this->outputHtml('<font color="gray">' . $this->escapeOutputHtml($message) . '</font>', $context);
     }
 
+    /**
+     * @param string|\Stringable $message
+     */
     #[\Override]
     public function debug($message, array $context = []): void
     {
@@ -465,7 +489,8 @@ class Console extends View implements LoggerInterface
     }
 
     /**
-     * @param LogLevel::* $level
+     * @param LogLevel::*        $level
+     * @param string|\Stringable $message
      */
     #[\Override]
     public function log($level, $message, array $context = []): void
