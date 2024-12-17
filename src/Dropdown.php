@@ -38,7 +38,7 @@ class Dropdown extends Lister
      * ex:
      *      $dropdown = Dropdown::addTo($menu, ['menu', 'dropdownOptions' => ['on' => 'hover']]);
      *      $dropdown->setModel($menuItems);
-     *      $dropdown->onChange(function (string $item) {
+     *      $dropdown->onChange(function ($item) {
      *          return 'New selected item: ' . $item;
      *      });.
      *
@@ -54,11 +54,11 @@ class Dropdown extends Lister
             ),
         ]);
 
-        $this->cb->set(static function (Jquery $j, string $value) use ($fx) {
+        $this->cb->set(static function (Jquery $j, $value) use ($fx) {
             return $fx($value);
         }, ['item' => new JsCallbackLoadableValue(null, function ($v) {
             return $this->getApp()->uiPersistence->typecastLoadField(
-                $this->model->getField('id'),
+                $this->model->getIdField(),
                 $v
             );
         })]);
