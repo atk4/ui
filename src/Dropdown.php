@@ -42,7 +42,7 @@ class Dropdown extends Lister
      *          return 'New selected item: ' . $id;
      *      });.
      *
-     * @param \Closure(string): (JsExpressionable|View|string|void) $fx handler where new selected Item value is passed too
+     * @param \Closure(mixed): (JsExpressionable|View|string|void) $fx handler where new selected Item value is passed to
      */
     public function onChange(\Closure $fx): void
     {
