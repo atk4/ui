@@ -72,6 +72,7 @@ class Dropdown extends Lister
         parent::renderView();
     }
 
+    #[\Override]
     protected function renderTRow(): void
     {
         $this->tRow->set('id', $this->getApp()->uiPersistence->typecastSaveField($this->model->getIdField(), $this->currentRow->getId()));
