@@ -120,7 +120,7 @@ class Lister extends View
             throw new Exception('Lister requires you to specify template explicitly');
         }
 
-        // if no model is set, don't show anything (even warning)
+        // if no model is set, don't show anything
         if ($this->model === null) {
             parent::renderView();
 
