@@ -153,6 +153,8 @@ class View extends AbstractView
      */
     public function setSource(array $data, $fields = null): void
     {
+        $model = new Model();
+
         // ID with zero value is not supported (at least in MySQL replaces it with next AI value)
         if (isset($data[0])) {
             if (array_is_list($data)) {
@@ -164,10 +166,10 @@ class View extends AbstractView
             } else {
                 throw new Exception('Source data contains unsupported zero key');
             }
+        } else {
+            $model->addField('id', ['type' => 'string']); // TODO probably unwanted
         }
 
-        $model = new Model();
-        $model->addField('id', ['type' => 'string']); // TODO probably unwanted
         $model->setPersistence(new Persistence\Static_($data));
 
         $this->setModel($model, $fields); // @phpstan-ignore arguments.count
