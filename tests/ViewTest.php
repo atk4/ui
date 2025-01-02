@@ -47,6 +47,23 @@ class ViewTest extends TestCase
         self::assertSame(['c'], $v->class);
     }
 
+    public function testSetStyle(): void
+    {
+        $v = new View();
+
+        $v->setStyle('color', 'red');
+        self::assertSame(['color' => 'red'], $v->style);
+
+        $v->setStyle('margin', '0');
+        self::assertSame(['color' => 'red', 'margin' => '0'], $v->style);
+
+        $v->setStyle(['color' => 'green', 'padding' => '1px']);
+        self::assertSame(['color' => 'green', 'margin' => '0', 'padding' => '1px'], $v->style);
+
+        $v->removeStyle('color');
+        self::assertSame(['margin' => '0', 'padding' => '1px'], $v->style);
+    }
+
     public function testMultipleTimesRender(): void
     {
         $v = new View();
