@@ -21,15 +21,15 @@ $menu->addItem('bar');
 $menu->addItem('baz');
 $dropdown = UiDropdown::addTo($menu, ['With Callback', 'dropdownOptions' => ['on' => 'hover']]);
 $dropdown->setSource(['a', 'b', 'c']);
-$dropdown->onChange(static function (string $itemId) {
-    return new JsToast('New selected item ID: ' . $itemId);
+$dropdown->onChange(static function (string $id) {
+    return new JsToast('New selected item ID: ' . $id);
 });
 
 $model = new Category($app->db);
 $dropdown2 = UiDropdown::addTo($menu, ['From Model', 'dropdownOptions' => ['on' => 'hover']]);
 $dropdown2->setModel($model);
-$dropdown2->onChange(static function ($itemId) use ($app, $model) {
-    return new JsToast('New selected item ID: ' . $app->uiPersistence->typecastSaveField($model->getIdField(), $itemId));
+$dropdown2->onChange(static function ($id) use ($app, $model) {
+    return new JsToast('New selected item ID: ' . $app->uiPersistence->typecastSaveField($model->getIdField(), $id));
 });
 
 $submenu = $menu->addMenu('Sub-menu');
