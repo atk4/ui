@@ -151,7 +151,7 @@ class View extends AbstractView
      *
      * @phpstan-assert !null $this->model
      */
-    public function setSource(array $data, $fields = null): Model
+    public function setSource(array $data, $fields = null): void
     {
         // ID with zero value is not supported (at least in MySQL replaces it with next AI value)
         if (isset($data[0])) {
@@ -171,8 +171,6 @@ class View extends AbstractView
         $model->setPersistence(new Persistence\Static_($data));
 
         $this->setModel($model, $fields); // @phpstan-ignore arguments.count
-
-        return $this->model;
     }
 
     #[\Override]
