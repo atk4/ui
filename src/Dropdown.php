@@ -58,7 +58,7 @@ class Dropdown extends Lister
             return $fx($value);
         }, ['item' => new JsCallbackLoadableValue(null, function ($v) {
             return $this->getApp()->uiPersistence->typecastLoadField(
-                $this->model->getField('id'),
+                $this->model->getIdField(),
                 $v
             );
         })]);
@@ -70,5 +70,11 @@ class Dropdown extends Lister
         $this->js(true)->dropdown($this->dropdownOptions);
 
         parent::renderView();
+    }
+
+    protected function renderTRow(): void
+    {
+        $this->tRow->set('id', $this->getApp()->uiPersistence->typecastSaveField($this->model->getIdField(), $this->currentRow->getId()));
+        $this->tRow->set('name', $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($this->model->titleField), $this->currentRow->getTitle()));
     }
 }

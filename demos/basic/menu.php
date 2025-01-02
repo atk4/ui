@@ -25,6 +25,13 @@ $dropdown->onChange(static function (string $itemId) {
     return new JsToast('New selected item ID: ' . $itemId);
 });
 
+$model = new Category($app->db);
+$dropdown2 = UiDropdown::addTo($menu, ['With Model', 'dropdownOptions' => ['on' => 'hover']]);
+$dropdown2->setModel($model);
+$dropdown2->onChange(static function ($itemId) use ($app, $model) {
+    return new JsToast('New selected item ID: ' . $app->uiPersistence->typecastSaveField($model->getIdField(), $itemId));
+});
+
 $submenu = $menu->addMenu('Sub-menu');
 $submenu->addItem('one', 'one.php');
 $submenu->addItem(['two', 'label' => 'VIP', 'class.disabled' => true]);
