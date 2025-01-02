@@ -21,3 +21,8 @@ Feature: Dropdown
     When I click using selector "//div.ui.dropdown[div[text()='With Callback']]"
     When I click using selector "//div.ui.dropdown[div[text()='With Callback']]//div.item[text()='c']"
     Then Toast display should contain text "New selected item ID: 1000000002"
+
+  Scenario: dropdown menu from model
+    When I click using selector "//div.ui.dropdown[div[text()='From Model']]"
+    When I click using selector "//div.ui.dropdown[div[text()='From Model']]//div.item[text()='Beverages']"
+    Then Toast display should contain text "New selected item ID: 2"
