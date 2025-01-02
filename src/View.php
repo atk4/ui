@@ -422,7 +422,7 @@ class View extends AbstractView
                 $this->setStyle($k, $v);
             }
         } else {
-            \assert(is_string($property)); // @phstan-ignore function.alreadyNarrowedType
+            \assert(is_string($property)); // @phpstan-ignore function.alreadyNarrowedType
             \assert(is_string($value));
 
             $this->style[$property] = $value;
@@ -448,7 +448,7 @@ class View extends AbstractView
     /**
      * Set HTML attribute.
      *
-     * @param string|array<string, string>          $name
+     * @param string|array<string, string|int>      $name
      * @param ($name is array ? never : string|int) $value
      *
      * @return $this
@@ -460,7 +460,7 @@ class View extends AbstractView
                 $this->setAttr($k, $v);
             }
         } else {
-            \assert(is_string($name)); // @phstan-ignore function.alreadyNarrowedType
+            \assert(is_string($name)); // @phpstan-ignore function.alreadyNarrowedType
             \assert(is_string($value) || is_int($value));
 
             $this->attr[$name] = $value;
