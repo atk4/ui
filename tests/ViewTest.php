@@ -64,6 +64,23 @@ class ViewTest extends TestCase
         self::assertSame(['margin' => '0', 'padding' => '1px'], $v->style);
     }
 
+    public function testSetAttr(): void
+    {
+        $v = new View();
+
+        $v->setAttr('foo', 'x');
+        self::assertSame(['foo' => 'x'], $v->attr);
+
+        $v->setAttr('bar', '0');
+        self::assertSame(['foo' => 'x', 'bar' => '0'], $v->attr);
+
+        $v->setAttr(['foo' => 'y', 'baz' => 'z']);
+        self::assertSame(['foo' => 'y', 'bar' => '0', 'baz' => 'z'], $v->attr);
+
+        $v->removeAttr('foo');
+        self::assertSame(['bar' => '0', 'baz' => 'z'], $v->attr);
+    }
+
     public function testMultipleTimesRender(): void
     {
         $v = new View();
