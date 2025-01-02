@@ -25,4 +25,4 @@ Feature: Dropdown
   Scenario: dropdown menu from model
     When I click using selector "//div.ui.dropdown[div[text()='From Model']]"
     When I click using selector "//div.ui.dropdown[div[text()='From Model']]//div.item[text()='Beverages']"
-    Then Toast display should contain text "New selected item ID: 2"
+    Then Toast display should contain text "New selected item: Beverages"

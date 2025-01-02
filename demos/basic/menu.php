@@ -29,7 +29,9 @@ $model = new Category($app->db);
 $dropdown2 = UiDropdown::addTo($menu, ['From Model', 'dropdownOptions' => ['on' => 'hover']]);
 $dropdown2->setModel($model);
 $dropdown2->onChange(static function ($id) use ($app, $model) {
-    return new JsToast('New selected item ID: ' . $app->uiPersistence->typecastSaveField($model->getIdField(), $id));
+    $entity = $model->load($id);
+
+    return new JsToast('New selected item: ' . $app->uiPersistence->typecastSaveField($model->getField($model->fieldName()->name), $entity->name));
 });
 
 $submenu = $menu->addMenu('Sub-menu');
