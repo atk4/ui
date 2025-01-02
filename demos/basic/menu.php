@@ -21,8 +21,11 @@ $menu->addItem('bar');
 $menu->addItem('baz');
 $dropdown = UiDropdown::addTo($menu, ['With Callback', 'dropdownOptions' => ['on' => 'hover']]);
 $dropdown->setSource(['a', 'b', 'c']);
-$dropdown->onChange(static function (string $id) {
-    return new JsToast('New selected item ID: ' . $id);
+$dropdown->onChange(static function (string $id) use ($dropdown) {
+    $id = (int) $id; // TODO this typecast must be not needed
+    $entity = $dropdown->model->load($id);
+
+    return new JsToast('New selected item: ' . $dropdown->getApp()->uiPersistence->typecastSaveField($dropdown->model->getField('name'), $entity->get('name')));
 });
 
 $model = new Category($app->db);
