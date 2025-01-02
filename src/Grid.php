@@ -440,7 +440,7 @@ class Grid extends View
      *
      * @return $this
      */
-    public function addFilterColumn($names = null)
+    public function addFilterColumn(?array $names = null)
     {
         if (!$this->menu) {
             throw new Exception('Unable to add Filter Column without Menu');

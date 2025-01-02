@@ -193,7 +193,7 @@ class Table extends Lister
      *
      * @param list<string> $cols an array with columns name that need filtering
      */
-    public function setFilterColumn($cols = null): void
+    public function setFilterColumn(?array $cols = null): void
     {
         if ($this->model === null) {
             throw new Exception('Model need to be defined in order to use column filtering');

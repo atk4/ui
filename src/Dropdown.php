@@ -38,11 +38,11 @@ class Dropdown extends Lister
      * ex:
      *      $dropdown = Dropdown::addTo($menu, ['menu', 'dropdownOptions' => ['on' => 'hover']]);
      *      $dropdown->setModel($menuItems);
-     *      $dropdown->onChange(function (string $item) {
-     *          return 'New selected item: ' . $item;
+     *      $dropdown->onChange(function ($id) {
+     *          return 'New selected item: ' . $id;
      *      });.
      *
-     * @param \Closure(string): (JsExpressionable|View|string|void) $fx handler where new selected Item value is passed too
+     * @param \Closure(mixed): (JsExpressionable|View|string|void) $fx handler where new selected Item value is passed to
      */
     public function onChange(\Closure $fx): void
     {
@@ -54,11 +54,11 @@ class Dropdown extends Lister
             ),
         ]);
 
-        $this->cb->set(static function (Jquery $j, string $value) use ($fx) {
+        $this->cb->set(static function (Jquery $j, $value) use ($fx) {
             return $fx($value);
         }, ['item' => new JsCallbackLoadableValue(null, function ($v) {
-            return $this->getApp()->uiPersistence->typecastLoadField(
-                $this->model->getField('id'),
+            return $this->getApp()->uiPersistence->typecastAttributeLoadField(
+                $this->model->getIdField(),
                 $v
             );
         })]);
@@ -70,5 +70,12 @@ class Dropdown extends Lister
         $this->js(true)->dropdown($this->dropdownOptions);
 
         parent::renderView();
+    }
+
+    #[\Override]
+    protected function renderTRow(): void
+    {
+        $this->tRow->set('id', $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $this->currentRow->getId()));
+        $this->tRow->set('name', $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($this->model->titleField), $this->currentRow->getTitle()));
     }
 }

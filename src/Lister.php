@@ -120,7 +120,7 @@ class Lister extends View
             throw new Exception('Lister requires you to specify template explicitly');
         }
 
-        // if no model is set, don't show anything (even warning)
+        // if no model is set, don't show anything
         if ($this->model === null) {
             parent::renderView();
 
@@ -170,11 +170,7 @@ class Lister extends View
         parent::renderView();
     }
 
-    /**
-     * Render individual row. Override this method if you want to do more
-     * decoration.
-     */
-    public function renderRow(): void
+    protected function renderTRow(): void
     {
         $this->tRow->trySet($this->getApp()->uiPersistence->typecastSaveRow($this->currentRow, $this->currentRow->get()));
 
@@ -186,6 +182,15 @@ class Lister extends View
             $this->tRow->set('_href', $this->url(['id' => $idStr]));
         }
         $this->tRow->trySet('_id', $this->name . '-' . $idStr);
+    }
+
+    /**
+     * Render individual row. Override this method if you want to do more
+     * decoration.
+     */
+    public function renderRow(): void
+    {
+        $this->renderTRow();
 
         $html = $this->tRow->renderToHtml();
         if ($this->template->hasTag('rows')) {

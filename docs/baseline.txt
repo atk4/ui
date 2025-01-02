@@ -5,9 +5,10 @@ components.md: WARNING: toctree contains reference to nonexisting document 'drop
 core.md: WARNING: toctree contains reference to nonexisting document 'init'
 core.md: WARNING: toctree contains reference to nonexisting document 'callback'
 core.md: WARNING: toctree contains reference to nonexisting document 'stickyget'
+lookup.md: WARNING: duplicate object description of Atk4\Ui\Form\Control\Lookup, other instance in /__w/ui/ui/docs/form-control.md
 tablecolumn.md: WARNING: duplicate object description of Atk4\Ui\Table\Column, other instance in /__w/ui/ui/docs/table.md
-autocomplete.md: WARNING: document isn't included in any toctree
 form-control.md: WARNING: document isn't included in any toctree
+lookup.md: WARNING: document isn't included in any toctree
 menu.md: WARNING: document isn't included in any toctree
 multiline.md: WARNING: document isn't included in any toctree
 session.md: WARNING: document isn't included in any toctree

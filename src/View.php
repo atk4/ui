@@ -151,7 +151,7 @@ class View extends AbstractView
      *
      * @phpstan-assert !null $this->model
      */
-    public function setSource(array $data, $fields = null): Model
+    public function setSource(array $data, $fields = null): void
     {
         // ID with zero value is not supported (at least in MySQL replaces it with next AI value)
         if (isset($data[0])) {
@@ -166,10 +166,11 @@ class View extends AbstractView
             }
         }
 
-        $this->setModel(new Model(new Persistence\Static_($data)), $fields); // @phpstan-ignore arguments.count
-        $this->model->getIdField()->type = 'string'; // TODO probably unwanted
+        $model = new Model();
+        $model->addField('id', ['type' => 'string']); // TODO probably unwanted
+        $model->setPersistence(new Persistence\Static_($data));
 
-        return $this->model;
+        $this->setModel($model, $fields); // @phpstan-ignore arguments.count
     }
 
     #[\Override]
@@ -380,9 +381,11 @@ class View extends AbstractView
      */
     public function addClass($class)
     {
-        if ($class !== []) {
-            $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
-            $this->class = array_merge($this->class, $classArr);
+        $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
+        foreach ($classArr as $v) {
+            if (!in_array($v, $this->class, true)) {
+                $this->class[] = $v;
+            }
         }
 
         return $this;
@@ -419,6 +422,9 @@ class View extends AbstractView
                 $this->setStyle($k, $v);
             }
         } else {
+            \assert(is_string($property)); // @phpstan-ignore function.alreadyNarrowedType, function.alreadyNarrowedType
+            \assert(is_string($value));
+
             $this->style[$property] = $value;
         }
 
@@ -440,9 +446,9 @@ class View extends AbstractView
     }
 
     /**
-     * Set attribute.
+     * Set HTML attribute.
      *
-     * @param string|int|array<string, string|int>  $name
+     * @param string|array<string, string|int>      $name
      * @param ($name is array ? never : string|int) $value
      *
      * @return $this
@@ -454,6 +460,9 @@ class View extends AbstractView
                 $this->setAttr($k, $v);
             }
         } else {
+            \assert(is_string($name)); // @phpstan-ignore function.alreadyNarrowedType, function.alreadyNarrowedType
+            \assert(is_string($value) || is_int($value));
+
             $this->attr[$name] = $value;
         }
 
@@ -461,7 +470,7 @@ class View extends AbstractView
     }
 
     /**
-     * Remove attribute.
+     * Remove HTML attribute.
      *
      * @param string|list<string> $name
      *

@@ -24,6 +24,66 @@ class ViewTest extends TestCase
 {
     use CreateAppTrait;
 
+    public function testAddClass(): void
+    {
+        $v = new View();
+
+        $v->addClass('a');
+        self::assertSame(['a'], $v->class);
+
+        $v->addClass('a b');
+        self::assertSame(['a', 'b'], $v->class);
+
+        $v->addClass(['a', 'c']);
+        self::assertSame(['a', 'b', 'c'], $v->class);
+
+        $v->removeClass('a');
+        self::assertSame(['b', 'c'], $v->class);
+
+        $v->removeClass('a b');
+        self::assertSame(['c'], $v->class);
+
+        $v->removeClass(['a']);
+        self::assertSame(['c'], $v->class);
+    }
+
+    public function testSetStyle(): void
+    {
+        $v = new View();
+
+        $v->setStyle('color', 'red');
+        self::assertSame(['color' => 'red'], $v->style);
+
+        $v->setStyle('margin', '0');
+        self::assertSame(['color' => 'red', 'margin' => '0'], $v->style);
+
+        $v->setStyle(['color' => 'green', 'padding' => '1px']);
+        self::assertSame(['color' => 'green', 'margin' => '0', 'padding' => '1px'], $v->style);
+
+        $v->removeStyle('color');
+        self::assertSame(['margin' => '0', 'padding' => '1px'], $v->style);
+    }
+
+    public function testSetAttr(): void
+    {
+        $v = new View();
+
+        $v->setAttr('foo', 'x');
+        self::assertSame(['foo' => 'x'], $v->attr);
+
+        $v->setAttr('bar', '0');
+        self::assertSame(['foo' => 'x', 'bar' => '0'], $v->attr);
+
+        $v->setAttr(['foo' => 'y', 'baz' => 'z']);
+        self::assertSame(['foo' => 'y', 'bar' => '0', 'baz' => 'z'], $v->attr);
+
+        $v->removeAttr('foo');
+        self::assertSame(['bar' => '0', 'baz' => 'z'], $v->attr);
+
+        $v->removeAttr('bar');
+        self::assertSame(['baz' => 'z'], $v->attr);
+    }
+
     public function testMultipleTimesRender(): void
     {
         $v = new View();
