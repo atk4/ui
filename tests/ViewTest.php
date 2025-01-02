@@ -79,6 +79,9 @@ class ViewTest extends TestCase
 
         $v->removeAttr('foo');
         self::assertSame(['bar' => '0', 'baz' => 'z'], $v->attr);
+
+        $v->removeAttr('bar');
+        self::assertSame(['baz' => 'z'], $v->attr);
     }
 
     public function testMultipleTimesRender(): void
