@@ -381,9 +381,11 @@ class View extends AbstractView
      */
     public function addClass($class)
     {
-        if ($class !== []) {
-            $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
-            $this->class = array_merge($this->class, $classArr);
+        $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
+        foreach ($classArr as $v) {
+            if (!in_array($v, $this->class, true)) {
+                $this->class[] = $v;
+            }
         }
 
         return $this;

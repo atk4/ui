@@ -24,6 +24,29 @@ class ViewTest extends TestCase
 {
     use CreateAppTrait;
 
+    public function testAddClass(): void
+    {
+        $v = new View();
+
+        $v->addClass('a');
+        self::assertSame(['a'], $v->class);
+
+        $v->addClass('a b');
+        self::assertSame(['a', 'b'], $v->class);
+
+        $v->addClass(['a', 'c']);
+        self::assertSame(['a', 'b', 'c'], $v->class);
+
+        $v->removeClass('a');
+        self::assertSame(['b', 'c'], $v->class);
+
+        $v->removeClass('a b');
+        self::assertSame(['c'], $v->class);
+
+        $v->removeClass(['a']);
+        self::assertSame(['c'], $v->class);
+    }
+
     public function testMultipleTimesRender(): void
     {
         $v = new View();
