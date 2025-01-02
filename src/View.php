@@ -166,8 +166,11 @@ class View extends AbstractView
             }
         }
 
-        $this->setModel(new Model(new Persistence\Static_($data)), $fields); // @phpstan-ignore arguments.count
-        $this->model->getIdField()->type = 'string'; // TODO probably unwanted
+        $model = new Model();
+        $model->addField('id', ['type' => 'string']); // TODO probably unwanted
+        $model->setPersistence(new Persistence\Static_($data));
+
+        $this->setModel($model, $fields); // @phpstan-ignore arguments.count
 
         return $this->model;
     }
