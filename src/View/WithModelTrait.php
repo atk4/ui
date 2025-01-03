@@ -6,6 +6,7 @@ namespace Atk4\Ui\View;
 
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Ui\CardTable;
 use Atk4\Ui\Exception;
 
 trait WithModelTrait
@@ -23,7 +24,7 @@ trait WithModelTrait
     public function setModel(Model $model): void
     {
         // TODO remove in atk4/ui 6.0
-        if (property_exists($this, 'entity')) { // @phpstan-ignore function.impossibleType
+        if (property_exists($this, 'entity') && !$this instanceof CardTable) { // @phpstan-ignore function.impossibleType, instanceof.alwaysFalse
             throw new Exception('Use View::setEntity() method instead for entity set');
         }
 

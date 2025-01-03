@@ -17,6 +17,7 @@ use Atk4\Ui\Loader;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Popup;
 use Atk4\Ui\View;
+use Atk4\Ui\View\WithEntityTrait;
 use Atk4\Ui\View\WithModelTrait;
 use Atk4\Ui\VirtualPage;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -168,13 +169,13 @@ class ViewTest extends TestCase
         $v->setModel($m2);
     }
 
-    public function testSetModelEntity(): void
+    public function testSetEntityModelException(): void
     {
-        $v = new View();
-        $v->setApp($this->createApp());
-        $v->invokeInit();
+        $v = new class extends View {
+            use WithEntityTrait;
+        };
         $entity = (new Model())->createEntity();
-        $v->setModel($entity);
+        $v->setEntity($entity);
 
         self::assertSame($entity, $v->entity);
         self::assertFalse((new \ReflectionProperty(Form::class, 'model'))->isInitialized($v));

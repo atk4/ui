@@ -15,7 +15,7 @@ trait WithEntityTrait
     public function &__get(string $name)
     {
         // TODO remove in atk4/ui 6.0
-        if ($name === 'model' && !(new \ReflectionProperty(self::class, 'model'))->isInitialized($this) && $this->entity !== null) {
+        if ($name === 'model') {
             throw new Exception('Use View::$entity property instead for entity access');
         }
 
@@ -42,6 +42,7 @@ trait WithEntityTrait
             throw new Exception('Different entity is already set');
         }
 
+        unset($this->{'model'});
         $this->entity = $entity;
     }
 }
