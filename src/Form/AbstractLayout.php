@@ -12,6 +12,7 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Misc\ProxyModel;
 use Atk4\Ui\View;
+use Atk4\Ui\View\WithEntityTrait;
 
 /**
  * Custom Layout for a form.
@@ -21,6 +22,7 @@ use Atk4\Ui\View;
 abstract class AbstractLayout extends View
 {
     use WarnDynamicPropertyTrait;
+    use WithEntityTrait;
 
     /** Links layout to owner Form. */
     public Form $form;

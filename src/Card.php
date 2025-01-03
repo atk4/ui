@@ -9,6 +9,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\UserAction\SharedExecutor;
+use Atk4\Ui\View\WithEntityTrait;
 
 /**
  * Card can contain arbitrary information.
@@ -32,6 +33,8 @@ use Atk4\Ui\UserAction\SharedExecutor;
  */
 class Card extends View
 {
+    use WithEntityTrait;
+
     public $ui = 'card atk-card';
 
     public $defaultTemplate = 'card.html';

@@ -12,6 +12,7 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
+use Atk4\Ui\View\WithEntityTrait;
 
 /**
  * A Simple inline editable text Vue component.
@@ -20,6 +21,8 @@ use Atk4\Ui\View;
  */
 class InlineEdit extends View
 {
+    use WithEntityTrait;
+
     public $defaultTemplate = 'inline-edit.html';
 
     /** @var JsCallback JsCallback for saving data. */

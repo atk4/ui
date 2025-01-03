@@ -16,7 +16,6 @@ use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Js\JsVueService;
 use Atk4\Ui\UserAction\ExecutorFactory;
-use Atk4\Ui\View\WithEntityTrait;
 use Atk4\Ui\View\WithModelTrait;
 
 /**
@@ -26,7 +25,6 @@ use Atk4\Ui\View\WithModelTrait;
  */
 class View extends AbstractView
 {
-    use WithEntityTrait;
     use WithModelTrait;
 
     /**

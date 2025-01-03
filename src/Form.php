@@ -19,6 +19,7 @@ use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsConditionalForm;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\View\WithEntityTrait;
 
 /**
  * @property false|null $model use $entity property instead
@@ -26,6 +27,7 @@ use Atk4\Ui\Js\JsExpressionable;
 class Form extends View
 {
     use HookTrait;
+    use WithEntityTrait;
 
     /** Executed when form is submitted */
     public const HOOK_SUBMIT = self::class . '@submit';

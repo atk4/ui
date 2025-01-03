@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Data\Model;
+use Atk4\Ui\View\WithEntityTrait;
 
 /**
  * Card class displays a single record data.
@@ -16,6 +17,8 @@ use Atk4\Data\Model;
  */
 class CardTable extends Table
 {
+    use WithEntityTrait;
+
     protected bool $_bypass = false;
 
     /**
