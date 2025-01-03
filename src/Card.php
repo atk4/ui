@@ -28,7 +28,7 @@ use Atk4\Ui\UserAction\SharedExecutor;
  * will have it's idField set as data-id HTML attribute for the card. Thus making
  * the ID available via javascript (new Jquery())->data('id')
  *
- * @property false $model use $entity property instead
+ * @property false|null $model use $entity property instead
  */
 class Card extends View
 {

@@ -21,7 +21,7 @@ use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 
 /**
- * @property false $model use $entity property instead
+ * @property false|null $model use $entity property instead
  */
 class Form extends View
 {

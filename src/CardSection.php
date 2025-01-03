@@ -9,7 +9,7 @@ use Atk4\Data\Model;
 /**
  * Display a card section within a Card View.
  *
- * @property false $model use $entity property instead
+ * @property false|null $model use $entity property instead
  */
 class CardSection extends View
 {

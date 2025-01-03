@@ -26,8 +26,8 @@ use Atk4\Ui\View\WithModelTrait;
  */
 class View extends AbstractView
 {
-    use WithModelTrait;
     use WithEntityTrait;
+    use WithModelTrait;
 
     /**
      * When you call renderAll() this will be populated with JavaScript chains.
