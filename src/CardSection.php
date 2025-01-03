@@ -33,14 +33,6 @@ class CardSection extends View
         $this->addClass('content');
     }
 
-    #[\Override]
-    public function setModel(Model $entity): void
-    {
-        $entity->assertIsEntity();
-
-        parent::setModel($entity);
-    }
-
     /**
      * Add Description to card section.
      *

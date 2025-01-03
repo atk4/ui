@@ -27,7 +27,9 @@ use Atk4\Ui\View\WithEntityTrait;
 class Form extends View
 {
     use HookTrait;
-    use WithEntityTrait;
+    use WithEntityTrait {
+        setEntity as private _setEntity;
+    }
 
     /** Executed when form is submitted */
     public const HOOK_SUBMIT = self::class . '@submit';
@@ -209,11 +211,9 @@ class Form extends View
      */
     public function setEntity(Model $entity, ?array $fields = null): void
     {
-        $entity->assertIsEntity();
-
         // set model for the form and also for the current layout
         try {
-            parent::setModel($entity);
+            $this->_setEntity($entity);
 
             $this->layout->setEntity($entity, $fields);
         } catch (Exception $e) {

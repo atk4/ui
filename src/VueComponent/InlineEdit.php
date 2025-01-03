@@ -21,7 +21,9 @@ use Atk4\Ui\View\WithEntityTrait;
  */
 class InlineEdit extends View
 {
-    use WithEntityTrait;
+    use WithEntityTrait {
+        setEntity as private _setEntity;
+    }
 
     public $defaultTemplate = 'inline-edit.html';
 
@@ -95,12 +97,9 @@ class InlineEdit extends View
         }
     }
 
-    #[\Override]
-    public function setModel(Model $entity): void
+    public function setEntity(Model $entity): void
     {
-        $entity->assertIsEntity();
-
-        parent::setModel($entity);
+        $this->_setEntity($entity);
 
         if ($this->fieldName === null) {
             $this->fieldName = $this->entity->titleField;

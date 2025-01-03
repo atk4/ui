@@ -20,7 +20,9 @@ use Atk4\Ui\View\WithEntityTrait;
  */
 abstract class AbstractLayout extends View
 {
-    use WithEntityTrait;
+    use WithEntityTrait {
+        setEntity as private _setEntity;
+    }
 
     /** Links layout to owner Form. */
     public Form $form;
@@ -123,9 +125,7 @@ abstract class AbstractLayout extends View
      */
     public function setEntity(Model $entity, ?array $fields = null): void
     {
-        $entity->assertIsEntity();
-
-        parent::setModel($entity);
+        $this->_setEntity($entity);
 
         if ($fields === null) {
             $fields = $this->getModelFields($entity);

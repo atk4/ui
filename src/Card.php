@@ -33,7 +33,9 @@ use Atk4\Ui\View\WithEntityTrait;
  */
 class Card extends View
 {
-    use WithEntityTrait;
+    use WithEntityTrait {
+        setEntity as private _setEntity;
+    }
 
     public $ui = 'card atk-card';
 
@@ -171,12 +173,11 @@ class Card extends View
     /**
      * @param list<string>|null $fields
      */
-    #[\Override]
-    public function setModel(Model $entity, ?array $fields = null): void
+    public function setEntity(Model $entity, ?array $fields = null): void
     {
         $entity->assertIsLoaded();
 
-        parent::setModel($entity);
+        $this->_setEntity($entity);
 
         if ($fields === null) {
             $fields = array_keys($this->entity->getFields(['editable', 'visible']));
