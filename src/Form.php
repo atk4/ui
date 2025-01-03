@@ -193,10 +193,18 @@ class Form extends View
     }
 
     /**
-     * @param list<string>|null $fields if null, then all "editable" fields will be added
+     * @param never $model
      */
     #[\Override]
-    public function setModel(Model $entity, ?array $fields = null): void
+    public function setModel(Model $model): void
+    {
+        throw new Exception('Use Form::setEntity() method instead for entity set');
+    }
+
+    /**
+     * @param list<string>|null $fields if null, then all "editable" fields will be added
+     */
+    public function setEntity(Model $entity, ?array $fields = null): void
     {
         $entity->assertIsEntity();
 
