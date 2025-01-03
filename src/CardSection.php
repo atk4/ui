@@ -109,6 +109,6 @@ class CardSection extends View
     private function addTableSection(Model $entity, array $fields): void
     {
         $cardTable = CardTable::addTo($this, ['class' => $this->tableClass]);
-        $cardTable->setModel($entity, $fields);
+        $cardTable->setEntity($entity, $fields);
     }
 }
