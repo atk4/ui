@@ -174,7 +174,7 @@ $wizard->addStep('Business Model', static function (Wizard $page) {
         </ul>
         EOF);
     $t->addParagraph(<<<'EOF'
-        All three are combined by "setModel()" function and that is consistent throughout all the views.
+        All three are combined by "setEntity()" method and that is consistent throughout all the views.
         EOF);
 });
 

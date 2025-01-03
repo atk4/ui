@@ -226,7 +226,7 @@ $form->onSubmit(function (Form $form) use ($colReload) {
 - `Columns` class provides `addColumn()` method to equally divide layout vertically. We call
   this method twice in our example, so two columns will be visible. Method returns a `View` where
   we can add a Form component.
-- `setModel` provides a way to bind Component with Data Model and Data Persistence.
+- `setModel`/`setEntity` provides a way to bind Component with Data Model and Data Persistence.
 - `Form` relies on a special Callback feature of Agile UI to automatically handle onSubmit
   callback, pre-load form values into the model, so that you could simply
 - Save the record into that session data. Form automatically captures validation errors.

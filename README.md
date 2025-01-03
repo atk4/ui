@@ -163,7 +163,7 @@ $tabs->addTab('Settings', function (\Atk4\Ui\VirtualPage $p) use ($app) {
     $m = new Settings($app->db);
     $m = $m->load(2);
     \Atk4\Ui\Form::addTo($p)
-        ->setModel($m);
+        ->setEntity($m);
 });
 ```
 

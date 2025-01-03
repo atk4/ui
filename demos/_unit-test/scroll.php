@@ -23,6 +23,6 @@ $makeClickJsToastFx = static function (string $source) use ($grid) {
 $grid->addActionButton(['icon' => 'bell'], $makeClickJsToastFx('action'));
 $grid->table->onRowClick($makeClickJsToastFx('row'));
 
-// TODO JsPaginator should be possible to be added no later than setModel call
+// TODO JsPaginator should be possible to be added no later than Grid::setModel() call
 // https://github.com/atk4/ui/issues/1934
 $grid->addJsPaginator(30);
