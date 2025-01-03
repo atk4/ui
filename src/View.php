@@ -6,7 +6,6 @@ namespace Atk4\Ui;
 
 use Atk4\Data\Field;
 use Atk4\Data\Model;
-use Atk4\Data\Persistence;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsCallbackLoadableValue;
@@ -17,6 +16,8 @@ use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Js\JsVueService;
 use Atk4\Ui\UserAction\ExecutorFactory;
+use Atk4\Ui\View\WithEntityTrait;
+use Atk4\Ui\View\WithModelTrait;
 
 /**
  * Base view of all UI components.
@@ -25,6 +26,9 @@ use Atk4\Ui\UserAction\ExecutorFactory;
  */
 class View extends AbstractView
 {
+    use WithModelTrait;
+    use WithEntityTrait;
+
     /**
      * When you call renderAll() this will be populated with JavaScript chains.
      *
@@ -33,9 +37,6 @@ class View extends AbstractView
      * @internal
      */
     protected array $_jsActions = [];
-
-    public ?Model $model = null;
-    public ?Model $entity = null;
 
     /**
      * Name of the region in the parent's template where this object will output itself.
@@ -104,75 +105,6 @@ class View extends AbstractView
         }
 
         $this->setDefaults($defaults);
-    }
-
-    #[\Override]
-    public function &__get(string $name)
-    {
-        // TODO remove in atk4/ui 6.0
-        if ($name === 'model' && !(new \ReflectionProperty(self::class, 'model'))->isInitialized($this) && $this->entity !== null) {
-            throw new Exception('Use View::$entity property instead for entity access');
-        }
-
-        return parent::__get($name);
-    }
-
-    /**
-     * Associate this view with a model. Do not place any logic in this class, instead take it
-     * to renderView().
-     *
-     * Do not try to create your own "Model" implementation, instead you must be looking for
-     * your own "Persistence" implementation.
-     */
-    public function setModel(Model $model): void
-    {
-        if (((new \ReflectionProperty(self::class, 'model'))->isInitialized($this) ? $this->model : $this->entity) !== null) {
-            if (((new \ReflectionProperty(self::class, 'model'))->isInitialized($this) ? $this->model : $this->entity) === $model) {
-                return;
-            }
-
-            throw new Exception('Different model is already set');
-        }
-
-        if ($model->isEntity()) {
-            unset($this->{'model'});
-            $this->entity = $model;
-        } else {
-            unset($this->{'entity'});
-            $this->model = $model;
-        }
-    }
-
-    /**
-     * Sets source of the View.
-     *
-     * @param array<int|string, mixed> $data
-     * @param list<string>             $fields Limit model to particular fields
-     *
-     * @phpstan-assert !null $this->model
-     */
-    public function setSource(array $data, $fields = null): void
-    {
-        $model = new Model();
-
-        // ID with zero value is not supported (at least in MySQL replaces it with next AI value)
-        if (isset($data[0])) {
-            if (array_is_list($data)) {
-                $oldData = $data;
-                $data = [];
-                foreach ($oldData as $k => $row) {
-                    $data[$k + 1_000_000_000] = $row; // large offset to prevent accessing wrong data by old key
-                }
-            } else {
-                throw new Exception('Source data contains unsupported zero key');
-            }
-        } else {
-            $model->addField('id', ['type' => 'string']); // TODO probably unwanted
-        }
-
-        $model->setPersistence(new Persistence\Static_($data));
-
-        $this->setModel($model, $fields); // @phpstan-ignore arguments.count
     }
 
     #[\Override]
