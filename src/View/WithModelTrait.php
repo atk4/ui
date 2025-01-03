@@ -23,7 +23,7 @@ trait WithModelTrait
     public function setModel(Model $model): void
     {
         // TODO remove in atk4/ui 6.0
-        if (property_exists($this, 'entity')) {
+        if (property_exists($this, 'entity')) { // @phpstan-ignore function.impossibleType
             throw new Exception('Use View::setEntity() method instead for entity set');
         }
 
