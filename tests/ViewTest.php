@@ -167,18 +167,18 @@ class ViewTest extends TestCase
 
     public function testSetModelEntity(): void
     {
-        $form = new Form();
-        $form->setApp($this->createApp());
-        $form->invokeInit();
+        $v = new View();
+        $v->setApp($this->createApp());
+        $v->invokeInit();
         $entity = (new Model())->createEntity();
-        $form->setEntity($entity);
+        $v->setModel($entity);
 
-        self::assertSame($entity, $form->entity);
-        self::assertFalse((new \ReflectionProperty(Form::class, 'model'))->isInitialized($form));
+        self::assertSame($entity, $v->entity);
+        self::assertFalse((new \ReflectionProperty(Form::class, 'model'))->isInitialized($v));
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Use View::$entity property instead for entity access');
-        $form->model; // @phpstan-ignore expr.resultUnused
+        $v->model; // @phpstan-ignore expr.resultUnused
     }
 
     public function testSetSourceZeroKeyException(): void

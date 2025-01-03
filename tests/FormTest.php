@@ -47,6 +47,26 @@ class FormTest extends TestCase
         $form->addControl('foo');
     }
 
+    public function testSetModelException(): void
+    {
+        $form = new Form();
+        $entity = (new Model())->createEntity();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Use Form::setEntity() method instead for entity set');
+        $form->setModel($entity); // @phpstan-ignore argument.type
+    }
+
+    public function testLayoutSetModelException(): void
+    {
+        $form = new Form\Layout();
+        $entity = (new Model())->createEntity();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Use Form\AbstractLayout::setEntity() method instead for entity set');
+        $form->setModel($entity); // @phpstan-ignore argument.type
+    }
+
     /**
      * @param array<string, string> $postData
      */
