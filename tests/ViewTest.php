@@ -17,6 +17,7 @@ use Atk4\Ui\Loader;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Popup;
 use Atk4\Ui\View;
+use Atk4\Ui\View\WithModelTrait;
 use Atk4\Ui\VirtualPage;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -155,7 +156,9 @@ class ViewTest extends TestCase
 
     public function testSetModelTwiceException(): void
     {
-        $v = new View();
+        $v = new class {
+            use WithModelTrait;
+        };
         $m1 = new Model();
         $m2 = new Model();
         $v->setModel($m1);
@@ -183,10 +186,13 @@ class ViewTest extends TestCase
 
     public function testSetSourceZeroKeyException(): void
     {
-        $v = new View();
+        $v = new class {
+            use WithModelTrait;
+        };
         $v->setSource(['a', 'b']);
 
-        $v = new View();
+        $vClass = get_class($v);
+        $v = new $vClass();
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Source data contains unsupported zero key');
