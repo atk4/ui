@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form;
 
-use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
@@ -21,7 +20,6 @@ use Atk4\Ui\View\WithEntityTrait;
  */
 abstract class AbstractLayout extends View
 {
-    use WarnDynamicPropertyTrait;
     use WithEntityTrait;
 
     /** Links layout to owner Form. */
