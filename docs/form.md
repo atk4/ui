@@ -366,7 +366,7 @@ date1 = DateTime Object(
 ### Seeding Form Control from Model
 
 In large projects you most likely won't be setting individual form controls for each Form. Instead
-you can simply use `setModel()` to populate all form controls from fields defined inside a model. Form does
+you can simply use `setEntity()` to populate all form controls from fields defined inside a model. Form does
 have a pretty good guess about form control decorator based on the data field type, but what if you want to
 use a custom decorator?
 
@@ -401,15 +401,15 @@ $this->addField('birth_year', ['ui' => [\Atk4\Ui\Form\Control\Calendar::class, '
 
 Without the data 'type' property, now the calendar selection will be stored as text.
 
-### Using setModel()
+### Using setEntity()
 
-Although there were many examples above for the use of setModel() this method
+Although there were many examples above for the use of setEntity() this method
 needs a bit more info:
 
 :::{php:attr} model
 :::
 
-:::{php:method} setModel($model, [$fields])
+:::{php:method} setEntity($model, [$fields])
 :::
 
 Associate form controls with existing model object and import all editable fields
@@ -422,11 +422,11 @@ Specifying "false" or empty array as a second argument will import no model fiel
 so you can then use {php:meth}`Form::addControl` to import form controls from model fields individually.
 
 Note that {php:meth}`Form::setEntity` also delegates adding form control to the form layout
-by using `Form->layout->setModel()` internally.
+by using `Form->layout->setEntity()` internally.
 
 See also: https://atk4-data.readthedocs.io/en/develop/fields.html#Field::isEditable
 
-### Using setModel() on a sub layout
+### Using setEntity() on a sub layout
 
 You may add form controls to sub layout directly using setEntity method on the sub layout itself.:
 
@@ -435,10 +435,10 @@ $form = Form::addTo($app);
 $form->setEntity($model, []);
 
 $subLayout = $form->layout->addSubLayout();
-$subLayout->setModel($model, ['first_name', 'last_name']);
+$subLayout->setEntity($model, ['first_name', 'last_name']);
 ```
 
-When using setModel() on a sub layout to add controls per sub layout instead of entire layout,
+When using setEntity() on a sub layout to add controls per sub layout instead of entire layout,
 make sure you pass false as second argument when setting the model on the Form itself, like above.
 Otherwise all model fields will be automatically added in Forms main layout and you will not be
 able to add them again in sub-layouts.
@@ -540,7 +540,7 @@ We can now populate form controls based around the data fields defined in the mo
 
 ```
 Form::addTo($app)
-    ->setModel(new Person($db));
+    ->setEntity(new Person($db));
 ```
 
 This should display a following form:
@@ -738,15 +738,15 @@ $form->setEntity($model, []);
 $subLayout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section::class]);
 
 Header::addTo($subLayout, ['Accordion Section in Form']);
-$subLayout->setModel($model, ['name']);
+$subLayout->setEntity($model, ['name']);
 
 $accordionLayout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section\Accordion::class]);
 
 $a1 = $accordionLayout->addSection('Section 1');
-$a1->setModel($model, ['iso', 'iso3']);
+$a1->setEntity($model, ['iso', 'iso3']);
 
 $a2 = $accordionLayout->addSection('Section 2');
-$a2->setModel($model, ['numcode', 'phonecode']);
+$a2->setEntity($model, ['numcode', 'phonecode']);
 ```
 
 In the example above, we first add a Generic sub layout to the existing layout of the form where one form
@@ -756,8 +756,8 @@ Then we add another layout to the form layout. In this case it's specific Accord
 is further separated in two accordion sections and form controls are added to each section:
 
 ```
-$a1->setModel($model, ['iso', 'iso3']);
-$a2->setModel($model, ['numcode', 'phonecode']);
+$a1->setEntity($model, ['iso', 'iso3']);
+$a2->setEntity($model, ['numcode', 'phonecode']);
 ```
 
 Sub layout gives you greater control on how to display form controls within your form. For more examples on

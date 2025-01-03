@@ -213,7 +213,7 @@ class Form extends View
         try {
             parent::setModel($entity);
 
-            $this->layout->setModel($entity, $fields);
+            $this->layout->setEntity($entity, $fields);
         } catch (Exception $e) {
             throw $e->addMoreInfo('model', $entity);
         }

@@ -107,12 +107,21 @@ abstract class AbstractLayout extends View
     }
 
     /**
-     * Sets form model and adds form controls.
-     *
+     * @param never             $entity
      * @param list<string>|null $fields
      */
     #[\Override]
     public function setModel(Model $entity, ?array $fields = null): void
+    {
+        throw new Exception('Use Form\AbstractLayout::setEntity() method instead for entity set');
+    }
+
+    /**
+     * Sets form entity and adds form controls.
+     *
+     * @param list<string>|null $fields
+     */
+    public function setEntity(Model $entity, ?array $fields = null): void
     {
         $entity->assertIsEntity();
 

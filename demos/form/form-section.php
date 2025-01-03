@@ -40,7 +40,7 @@ $form->setEntity($model, []);
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
 Header::addTo($sublayout, ['Column Section in Form']);
-$sublayout->setModel($model, [$model->fieldName()->name]);
+$sublayout->setEntity($model, [$model->fieldName()->name]);
 
 $colsLayout = $form->layout->addSubLayout([Form\Layout\Section\Columns::class]);
 
@@ -64,7 +64,7 @@ $form->setEntity($model, []);
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
 Header::addTo($sublayout, ['Accordion Section in Form']);
-$sublayout->setModel($model, [$model->fieldName()->name]);
+$sublayout->setEntity($model, [$model->fieldName()->name]);
 
 $accordionLayout = $form->layout->addSubLayout([Form\Layout\Section\Accordion::class]);
 
@@ -86,7 +86,7 @@ $form->setEntity($model, []);
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
 Header::addTo($sublayout, ['Tabs in Form']);
-$sublayout->setModel($model, [$model->fieldName()->name]);
+$sublayout->setEntity($model, [$model->fieldName()->name]);
 
 $tabsLayout = $form->layout->addSubLayout([Form\Layout\Section\Tabs::class]);
 
@@ -110,7 +110,7 @@ $form->setEntity($model, []);
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment red inverted'], false);
 
 Header::addTo($sublayout, ['This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
-$sublayout->setModel($model, [$model->fieldName()->name]);
+$sublayout->setEntity($model, [$model->fieldName()->name]);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment teal inverted']);
 $colsLayout = $sublayout->addSubLayout([Form\Layout\Section\Columns::class]);
