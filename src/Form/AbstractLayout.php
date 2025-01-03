@@ -110,7 +110,7 @@ abstract class AbstractLayout extends View
      * @param never             $entity
      * @param list<string>|null $fields
      */
-    #[\Override]
+    #[\Override] // @phpstan-ignore method.childParameterType
     public function setModel(Model $entity, ?array $fields = null): void
     {
         throw new Exception('Use Form\AbstractLayout::setEntity() method instead for entity set');
