@@ -22,10 +22,10 @@ class Columns extends Form\Layout
     public $size = '';
 
     #[\Override]
-    public function setModel(Model $entity, ?array $fields = null): void
+    public function setEntity(Model $entity, ?array $fields = null): void
     {
         // dont add any fields automatically
-        parent::setModel($entity, []);
+        parent::setEntity($entity, []);
 
         if ($fields === null) {
             $fields = $this->getModelFields($entity);
@@ -63,7 +63,7 @@ class Columns extends Form\Layout
         foreach ($chunks as $chunk) {
             $cc = $c->addColumn();
             Form\Layout::addTo($cc, ['form' => $this->form])
-                ->setModel($entity, $chunk);
+                ->setEntity($entity, $chunk);
         }
 
         View::addTo($this, ['ui' => 'clearing hidden divider']);

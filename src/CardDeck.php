@@ -148,7 +148,7 @@ class CardDeck extends View
             foreach ($this->model as $entity) {
                 /** @var Card */
                 $c = $this->cardHolder->add(Factory::factory($this->cardSeed, ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]));
-                $c->setModel($entity, $fields);
+                $c->setEntity($entity, $fields);
                 if ($extra) {
                     $c->addExtraFields($entity, $extra, $this->extraGlue);
                 }

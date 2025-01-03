@@ -35,7 +35,7 @@ View::addTo($app, ['ui' => 'clearing divider']);
 $gl = GridLayout::addTo($app, ['rows' => 1, 'columns' => 2]);
 $c = Card::addTo($gl, ['useLabel' => true], ['r1c1']);
 $c->addContent(new Header(['Using country:']));
-$c->setModel($entity, [$country->fieldName()->iso, $country->fieldName()->iso3, $country->fieldName()->phonecode]);
+$c->setEntity($entity, [$country->fieldName()->iso, $country->fieldName()->iso3, $country->fieldName()->phonecode]);
 
 $buttons = View::addTo($gl, ['ui' => 'vertical basic buttons'], ['r1c2']);
 

@@ -204,7 +204,7 @@ class Card extends View
         }
 
         if ($entity !== null && $fields) {
-            $section->setModel($entity);
+            $section->setEntity($entity);
             $section->addFields($entity, $fields, $useTable, $useLabel);
         }
 
