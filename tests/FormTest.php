@@ -116,7 +116,7 @@ class FormTest extends TestCase
             $m->addField('email', ['required' => true]);
             $m->addField('is_admin', ['default' => false]);
 
-            $form->setModel($m->createEntity(), ['name', 'email']);
+            $form->setEntity($m->createEntity(), ['name', 'email']);
 
             self::assertSame('John', $form->entity->get('name'));
 
@@ -186,7 +186,7 @@ class FormTest extends TestCase
             $m->addField('int', ['type' => 'integer']);
 
             $form = Form::addTo($app);
-            $form->setModel($m->createEntity());
+            $form->setEntity($m->createEntity());
 
             return $form;
         }, [
@@ -223,7 +223,7 @@ class FormTest extends TestCase
                 $m->addField('bar', ['nullable' => false]);
 
                 $form = Form::addTo($app);
-                $form->setModel($m->createEntity(), ['foo']);
+                $form->setEntity($m->createEntity(), ['foo']);
 
                 return $form;
             }, ['foo' => 'x'], static function (Model $entity) use (&$submitReached) {
@@ -261,7 +261,7 @@ class FormTest extends TestCase
                 });
 
                 $form = Form::addTo($app);
-                $form->setModel($m->createEntity());
+                $form->setEntity($m->createEntity());
 
                 return $form;
             }, ['foo' => 'x']);

@@ -195,7 +195,7 @@ class Form extends View
     /**
      * @param never $model
      */
-    #[\Override]
+    #[\Override] // @phpstan-ignore method.childParameterType
     public function setModel(Model $model): void
     {
         throw new Exception('Use Form::setEntity() method instead for entity set');

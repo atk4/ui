@@ -171,7 +171,7 @@ class ViewTest extends TestCase
         $form->setApp($this->createApp());
         $form->invokeInit();
         $entity = (new Model())->createEntity();
-        $form->setModel($entity);
+        $form->setEntity($entity);
 
         self::assertSame($entity, $form->entity);
         self::assertFalse((new \ReflectionProperty(Form::class, 'model'))->isInitialized($form));

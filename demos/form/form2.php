@@ -27,7 +27,7 @@ $form = Form::addTo($app, ['class.segment' => true]);
 // $form = Form::addTo($app, ['class.segment' => true, 'buttonSave' => [null, 'Import', 'class.secondary' => true, 'iconRight' => 'list']]);
 Label::addTo($form, ['Input new country information here', 'class.top attached' => true], ['AboveControls']);
 
-$form->setModel((new Country($app->db))->createEntity(), []);
+$form->setEntity((new Country($app->db))->createEntity(), []);
 
 // form basic field group
 $formAddress = $form->addGroup('Basic Country Information');
@@ -114,7 +114,7 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class extends Mod
 });
 
 $form = Form::addTo($app)->addClass('segment');
-$form->setModel((new $personClass($app->db))->createEntity());
+$form->setEntity((new $personClass($app->db))->createEntity());
 
 $form->onSubmit(static function (Form $form) {
     return new JsToast('Form saved!');

@@ -35,7 +35,7 @@ if ($id !== null) {
     // here we can check for additional criteria and display a deeper level on the crumb
 
     $form = Form::addTo($app);
-    $form->setModel($model);
+    $form->setEntity($model);
     $form->onSubmit(static function (Form $form) {
         return new JsToast('Form Submitted! Data saving is not possible in demo!');
     });

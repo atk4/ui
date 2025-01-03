@@ -191,7 +191,7 @@ $modelRegister->addField('is_accept_terms', ['type' => 'boolean', 'nullable' => 
 $modelRegister = $modelRegister->createEntity();
 
 $form = Form::addTo($tab, ['class.segment' => true]);
-$form->setModel($modelRegister);
+$form->setEntity($modelRegister);
 
 $form->onSubmit(static function (Form $form) {
     if ($form->entity->get('name') !== 'John') {
@@ -211,7 +211,7 @@ $tab = $tabs->addTab('Layout Control');
 Header::addTo($tab, ['Shows example of grouping and multiple errors']);
 
 $form = Form::addTo($tab, ['class.segment' => true]);
-$form->setModel((new Model())->createEntity());
+$form->setEntity((new Model())->createEntity());
 
 $form->addHeader('Example fields added one-by-one');
 $form->addControl('name');

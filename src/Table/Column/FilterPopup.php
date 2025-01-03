@@ -63,7 +63,7 @@ class FilterPopup extends Popup
         if ($filter !== null) {
             $entity->setMulti($filter);
         }
-        $this->form->setModel($entity);
+        $this->form->setEntity($entity);
 
         $this->form->onSubmit(function (Form $form) {
             $form->entity->save();

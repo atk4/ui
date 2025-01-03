@@ -206,7 +206,7 @@ $stepModal->set(static function (View $p) use ($session, $previousAction, $nextA
         $modelRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
         $form = Form::addTo($p, ['class.segment' => true]);
-        $form->setModel($modelRegister->createEntity());
+        $form->setEntity($modelRegister->createEntity());
 
         $form->onSubmit(static function (Form $form) use ($nextAction, $session) {
             if ($form->entity->get('name') !== 'John') {

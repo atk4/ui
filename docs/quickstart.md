@@ -204,7 +204,7 @@ $col = \Atk4\Ui\Columns::addTo($app, ['divided']);
 $colReload = new \Atk4\Ui\Js\JsReload($col);
 
 $form = \Atk4\Ui\Form::addTo($col->addColumn());
-$form->setModel(new ToDoItem($s));
+$form->setEntity(new ToDoItem($s));
 $form->onSubmit(function (Form $form) use ($colReload) {
     $form->entity->save();
 

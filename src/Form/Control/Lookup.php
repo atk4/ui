@@ -267,7 +267,7 @@ class Lookup extends Input
             $form = Form::addTo($p);
 
             $entity = $this->model->createEntity();
-            $form->setModel($entity, $this->plus['fields'] ?? null);
+            $form->setEntity($entity, $this->plus['fields'] ?? null);
 
             $form->onSubmit(function (Form $form) {
                 $msg = $form->entity->getUserAction('add')->execute();

@@ -32,5 +32,5 @@ $grid->table->onRowClick($countryLoader->jsLoad(['id' => $grid->jsRow()->data('i
 $countryLoader->set(static function (Loader $p) {
     $country = new Country($p->getApp()->db);
     $id = $p->getApp()->uiPersistence->typecastAttributeLoadField($country->getIdField(), $p->getApp()->getRequestQueryParam('id'));
-    Form::addTo($p)->setModel($country->load($id));
+    Form::addTo($p)->setEntity($country->load($id));
 });

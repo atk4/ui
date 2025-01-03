@@ -36,7 +36,7 @@ $model->hasOne('country1', ['model' => [Country::class]]);
 // lookup with plus button
 $model->hasOne('country2', ['model' => [Country::class], 'ui' => ['form' => ['plus' => true]]]);
 
-$form->setModel($model->createEntity());
+$form->setEntity($model->createEntity());
 
 $form->addControl('country3', [
     Form\Control\Lookup::class,

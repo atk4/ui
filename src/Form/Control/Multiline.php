@@ -25,7 +25,7 @@ use Atk4\Ui\View;
  * Using hasMany reference will required to save reference data using Multiline::saveRows() method.
  *
  * $form = Form::addTo($app);
- * $form->setModel($invoice, []);
+ * $form->setEntity($invoice, []);
  *
  * // add Multiline form control and set model for Invoice items
  * $ml = $form->addControl('ml', [Multiline::class]);

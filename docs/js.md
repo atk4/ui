@@ -535,7 +535,7 @@ $bookModel = new Book($db);
 $form = \Atk4\Ui\Form::addTo($app);
 $table = \Atk4\Ui\Table::addTo($app);
 
-$form->setModel($bookModel);
+$form->setEntity($bookModel);
 
 $form->onSubmit(function (Form $form) use ($table) {
     $form->entity->save();
@@ -572,7 +572,7 @@ $model = new MyModel();
 // JsModal requires its contents to be put into a VirtualPage
 $vp = \Atk4\Ui\VirtualPage::addTo($app);
 $form = \Atk4\Ui\Form::addTo($vp);
-$form->setModel($model);
+$form->setEntity($model);
 
 $table = \Atk4\Ui\Table::addTo($app);
 $table->setModel($model));
@@ -602,7 +602,7 @@ $table->setModel($model));
 
 $vp = \Atk4\Ui\VirtualPage::addTo($app);
 $form = \Atk4\Ui\Form::addTo($vp);
-$form->setModel($model);
+$form->setEntity($model);
 
 $button = \Atk4\Ui\Button::addTo($app, ['Add Item', 'icon' => 'plus']);
 $button->on('click', new \Atk4\Ui\Js\JsModal('JSModal Title', $vp));
@@ -629,7 +629,7 @@ $table->setModel($model);
 $vp = \Atk4\Ui\VirtualPage::addTo($app);
 $vp->set(function (\Atk4\Ui\VirtualPage $p) use ($table, $model) {
     $form = \Atk4\Ui\Form::addTo($p);
-    $form->setModel($model);
+    $form->setEntity($model);
     $form->onSubmit(function (Form $form) use ($table) {
         $form->entity->save();
 

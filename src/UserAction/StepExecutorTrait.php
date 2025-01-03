@@ -161,7 +161,7 @@ trait StepExecutorTrait
         $this->addStepTitle($page, $this->step);
         $form = $this->addFormTo($page);
 
-        $form->setModel($this->action->getEntity(), $this->action->fields);
+        $form->setEntity($this->action->getEntity(), $this->action->fields);
         // set Fields value if set from another step
         $this->setFormField($form, $this->getActionData('fields'), $this->step);
 

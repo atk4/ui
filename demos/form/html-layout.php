@@ -37,7 +37,7 @@ $right = View::addTo($gridLayout, [], ['r1c1']);
 Header::addTo($right, ['Button on right']);
 
 $form = Form::addTo($right, ['layout' => [Form\Layout::class, 'defaultTemplate' => __DIR__ . '/templates/form-button-right.html']]);
-$form->setModel((new Flyers(new Persistence\Array_()))->createEntity());
+$form->setEntity((new Flyers(new Persistence\Array_()))->createEntity());
 $form->getControl('last_name')->hint = 'Please enter your last name.';
 
 $left = View::addTo($gridLayout, [], ['r1c2']);
@@ -52,7 +52,7 @@ $form = Form::addTo($left, [
         ],
     ],
 ]);
-$form->setModel((new Flyers(new Persistence\Array_()))->createEntity());
+$form->setEntity((new Flyers(new Persistence\Array_()))->createEntity());
 $form->getControl('last_name')->hint = 'Please enter your last name.';
 
 // -----------------------------------------------------------------------------
@@ -60,7 +60,7 @@ $form->getControl('last_name')->hint = 'Please enter your last name.';
 $tab = $tabs->addTab('Custom layout class');
 
 $form = Form::addTo($tab, ['layout' => [Form\Layout\Custom::class, 'defaultTemplate' => __DIR__ . '/templates/form-custom-layout.html']]);
-$form->setModel((new Country($app->db))->loadAny());
+$form->setEntity((new Country($app->db))->loadAny());
 
 $form->onSubmit(static function (Form $form) {
     return new JsToast('Saving is disabled');

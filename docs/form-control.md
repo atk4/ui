@@ -185,11 +185,11 @@ To create a form, the following is sufficient:
 
 ```
 $form = \Atk4\Ui\Form::addTo($app);
-$form->setModel(new Country($db);
+$form->setEntity(new Country($db);
 ```
 
 The above will populate fields from model into the form automatically. You can use second
-argument to {php:meth}`Form::setModel()` to indicate which fields to display
+argument to {php:meth}`Form::setEntity()` to indicate which fields to display
 or rely on {ref}`field_visibility`.
 
 When Form controls are populated, then {php:meth}`Form::controlFactory` is

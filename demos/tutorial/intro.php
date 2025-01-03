@@ -151,7 +151,7 @@ $wizard->addStep('Business Model', static function (Wizard $page) {
             ]);
             $entity->save();
         }
-        $form->setModel($entity);
+        $form->setEntity($entity);
 
         $form->onSubmit(static function (Form $form) {
             $form->entity->save();

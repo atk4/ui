@@ -44,7 +44,7 @@ $layout->template->set('Footer', 'ATK is awesome');
 Header::addTo($layout, ['Basic Form Example']);
 
 $form = Form::addTo($layout, ['class.segment' => true]);
-$form->setModel((new Model())->createEntity());
+$form->setEntity((new Model())->createEntity());
 
 $formGroup = $form->addGroup('Name');
 $formGroup->addControl('first_name', ['width' => 'eight']);

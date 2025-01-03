@@ -35,7 +35,7 @@ $saveAndDumpValues = static function (Form $form) {
 // -----------------------------------------------------------------------------
 
 $form = Form::addTo($app);
-$form->setModel($model, []);
+$form->setEntity($model, []);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
@@ -59,7 +59,7 @@ View::addTo($app, ['ui' => 'divider']);
 // -----------------------------------------------------------------------------
 
 $form = Form::addTo($app);
-$form->setModel($model, []);
+$form->setEntity($model, []);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
@@ -81,7 +81,7 @@ View::addTo($app, ['ui' => 'divider']);
 // -----------------------------------------------------------------------------
 
 $form = Form::addTo($app);
-$form->setModel($model, []);
+$form->setEntity($model, []);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
@@ -105,7 +105,7 @@ View::addTo($app, ['ui' => 'divider']);
 Header::addTo($app, ['Color in form']);
 
 $form = Form::addTo($app);
-$form->setModel($model, []);
+$form->setEntity($model, []);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment red inverted'], false);
 
