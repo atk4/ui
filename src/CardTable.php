@@ -20,16 +20,27 @@ class CardTable extends Table
     protected bool $_bypass = false;
 
     /**
-     * @param list<string>|null $fields
+     * @deprecated
+     *
+     * @param never $model
      */
-    public function setEntity(Model $entity, ?array $fields = null): void
+    #[\Override] // @phpstan-ignore method.childParameterType
+    public function setModel(Model $model, ?array $fields = null): void
     {
         if ($this->_bypass) {
-            parent::setModel($entity);
+            parent::setModel($model);
 
             return;
         }
 
+        throw new Exception('Use CardTable::setEntity() method instead for entity set');
+    }
+
+    /**
+     * @param list<string>|null $fields
+     */
+    public function setEntity(Model $entity, ?array $fields = null): void
+    {
         $entity->assertIsLoaded();
 
         if ($fields === null) {

@@ -194,6 +194,8 @@ class Form extends View
     }
 
     /**
+     * @deprecated
+     *
      * @param never             $entity
      * @param list<string>|null $fields
      */

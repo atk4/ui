@@ -107,6 +107,8 @@ abstract class AbstractLayout extends View
     }
 
     /**
+     * @deprecated
+     *
      * @param never             $entity
      * @param list<string>|null $fields
      */

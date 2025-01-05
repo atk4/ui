@@ -54,7 +54,7 @@ class FormTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Use Form::setEntity() method instead for entity set');
-        $form->setModel($entity); // @phpstan-ignore argument.type
+        $form->setModel($entity); // @phpstan-ignore argument.type, method.deprecated
     }
 
     public function testLayoutSetModelException(): void
@@ -64,7 +64,7 @@ class FormTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Use Form\AbstractLayout::setEntity() method instead for entity set');
-        $form->setModel($entity); // @phpstan-ignore argument.type
+        $form->setModel($entity); // @phpstan-ignore argument.type, method.deprecated
     }
 
     /**
