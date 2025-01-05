@@ -61,7 +61,7 @@ abstract class AbstractLayout extends View
                     $fieldSeed['type'] = $cascadeFromControl->entityField->getField()->type;
                 }
             } else {
-                $dropdownModel = $control instanceof Control ? $control->model : ($control['model'] ?? null);
+                $dropdownModel = $control instanceof Control && property_exists($control, 'model') ? $control->model : ($control['model'] ?? null);
                 if ($dropdownModel !== null) {
                     $fieldSeed['type'] = $dropdownModel->getIdField()->type;
                 }

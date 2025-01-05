@@ -29,6 +29,23 @@ parameters:
             message: '~^Property Atk4\\Data\\Model\\UserAction::\$(callback|enabled) .*Closure<.+ does not accept .*Closure\(.+\.$~'
             count: 2
 
+        # TODO template return type of Form::addControl() method
+        -
+            path: 'demos/_includes/FlyersForm.php'
+            identifier: method.notFound
+            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::setModel\(\)\.$~'
+            count: 1
+        -
+            path: 'src/UserAction/ArgumentFormExecutor.php'
+            identifier: method.notFound
+            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::setModel\(\)\.$~'
+            count: 1
+        -
+            path: 'src/UserAction/StepExecutorTrait.php'
+            identifier: method.notFound
+            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::setModel\(\)\.$~'
+            count: 3
+
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
         -
@@ -241,6 +258,16 @@ parameters:
             identifier: property.notFound
             message: '~^Access to an undefined property Atk4\\Ui\\Js\\JsChain::\$checked\.$~'
             count: 1
+        -
+            path: 'src/Form/Control/DropdownCascade.php'
+            identifier: property.notFound
+            message: '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$model\.$~'
+            count: 1
+        -
+            path: 'src/Form/Control/DropdownCascade.php'
+            identifier: property.nonObject
+            message: '~^Cannot access property \$model on Atk4\\Ui\\Form\\Control\|string\.$~'
+            count: 2
         -
             path: 'src/Form/Control/Multiline.php'
             identifier: method.notFound
