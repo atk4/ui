@@ -16,7 +16,6 @@ use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Js\JsVueService;
 use Atk4\Ui\UserAction\ExecutorFactory;
-use Atk4\Ui\View\WithModelTrait;
 
 /**
  * Base view of all UI components.
@@ -25,8 +24,6 @@ use Atk4\Ui\View\WithModelTrait;
  */
 class View extends AbstractView
 {
-    use WithModelTrait;
-
     /**
      * When you call renderAll() this will be populated with JavaScript chains.
      *
@@ -198,8 +195,8 @@ class View extends AbstractView
         }
 
         // allow for injecting the model with a seed
-        if ($this->model !== null) {
-            $this->setModel($this->model);
+        if (property_exists($this, 'model') && $this->model !== null) {
+            $this->setModel($this->model); // @phpstan-ignore method.notFound
         }
     }
 

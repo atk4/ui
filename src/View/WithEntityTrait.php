@@ -11,17 +11,6 @@ trait WithEntityTrait
 {
     public ?Model $entity = null;
 
-    #[\Override]
-    public function &__get(string $name)
-    {
-        // TODO remove in atk4/ui 6.0
-        if ($name === 'model') {
-            throw new Exception('Use View::$entity property instead for entity access');
-        }
-
-        return parent::__get($name);
-    }
-
     /**
      * Associate this view with an entity. Do not place any logic in this method, instead take it to renderView().
      *
@@ -42,7 +31,6 @@ trait WithEntityTrait
             throw new Exception('Different entity is already set');
         }
 
-        unset($this->{'model'});
         $this->entity = $entity;
     }
 }

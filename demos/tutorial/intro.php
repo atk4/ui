@@ -196,7 +196,7 @@ $wizard->addStep('Persistence', static function (Wizard $page) {
         $model = $model->tryLoad(1);
         if ($model !== null) {
             Card::addTo($owner, ['useLabel' => true])
-                ->setModel($model);
+                ->setEntity($model);
         } else {
             Message::addTo($owner, ['Empty record.']);
         }

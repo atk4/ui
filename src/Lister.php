@@ -6,10 +6,12 @@ namespace Atk4\Ui;
 
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
+use Atk4\Ui\View\WithModelTrait;
 
 class Lister extends View
 {
     use HookTrait;
+    use WithModelTrait;
 
     public const HOOK_BEFORE_ROW = self::class . '@beforeRow';
     public const HOOK_AFTER_ROW = self::class . '@afterRow';

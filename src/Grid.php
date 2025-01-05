@@ -17,6 +17,7 @@ use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
+use Atk4\Ui\View\WithModelTrait;
 
 /**
  * @phpstan-type JsCallbackSetWithRowIdClosure \Closure(Jquery, mixed): (JsExpressionable|View|string|void)
@@ -24,6 +25,9 @@ use Atk4\Ui\UserAction\ExecutorInterface;
 class Grid extends View
 {
     use HookTrait;
+    use WithModelTrait {
+        setModel as private _setModel;
+    }
 
     /** @var Menu|array<mixed>|false Will be initialized to Menu object, however you can set this to false to disable menu. */
     public $menu;
@@ -628,12 +632,11 @@ class Grid extends View
     /**
      * @param list<string>|null $fields if null, then all "editable" fields will be added
      */
-    #[\Override]
     public function setModel(Model $model, ?array $fields = null): void
     {
         $this->table->setModel($model, $fields);
 
-        parent::setModel($model);
+        $this->_setModel($model);
 
         if ($this->searchFieldNames) {
             $this->addQuickSearch($this->searchFieldNames, true);

@@ -13,6 +13,7 @@ use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsModal;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Table;
+use Atk4\Ui\View\WithModelTrait;
 use Atk4\Ui\VirtualPage;
 
 /** @var App $app */
@@ -21,6 +22,10 @@ require_once __DIR__ . '/../init-app.php';
 // re-usable component implementing counter
 
 $finderClass = AnonymousClassNameCache::get_class(fn () => new class extends Columns {
+    use WithModelTrait {
+        setModel as private _setModel;
+    }
+
     /**
      * @return list<mixed>
      */
@@ -37,10 +42,9 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class extends Col
     /**
      * @param list<string> $route
      */
-    #[\Override]
     public function setModel(Model $model, array $route = []): void
     {
-        parent::setModel($model);
+        $this->_setModel($model);
 
         $this->addClass('internally celled');
 

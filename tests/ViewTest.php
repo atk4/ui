@@ -10,7 +10,6 @@ use Atk4\Ui\AbstractView;
 use Atk4\Ui\Callback;
 use Atk4\Ui\Console;
 use Atk4\Ui\Exception;
-use Atk4\Ui\Form;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\JsSse;
 use Atk4\Ui\Loader;
@@ -155,7 +154,7 @@ class ViewTest extends TestCase
         self::assertTrue($vInner->isInitialized());
     }
 
-    public function testSetModelTwiceException(): void
+    public function testSetModelDifferentException(): void
     {
         $v = new class {
             use WithModelTrait;
@@ -163,26 +162,26 @@ class ViewTest extends TestCase
         $m1 = new Model();
         $m2 = new Model();
         $v->setModel($m1);
+        $v->setModel($m1);
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Different model is already set');
         $v->setModel($m2);
     }
 
-    public function testSetEntityModelException(): void
+    public function testSetEntityDifferentException(): void
     {
         $v = new class extends View {
             use WithEntityTrait;
         };
-        $entity = (new Model())->createEntity();
-        $v->setEntity($entity);
-
-        self::assertSame($entity, $v->entity);
-        self::assertFalse((new \ReflectionProperty(Form::class, 'model'))->isInitialized($v));
+        $entity1 = (new Model())->createEntity();
+        $entity2 = (new Model())->createEntity();
+        $v->setEntity($entity1);
+        $v->setEntity($entity1);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Use View::$entity property instead for entity access');
-        $v->model; // @phpstan-ignore expr.resultUnused
+        $this->expectExceptionMessage('Different entity is already set');
+        $v->setEntity($entity2);
     }
 
     public function testSetSourceZeroKeyException(): void
