@@ -15,8 +15,6 @@ use Atk4\Ui\View\WithEntityTrait;
 
 /**
  * Custom Layout for a form.
- *
- * @property false|null $model use $entity property instead
  */
 abstract class AbstractLayout extends View
 {

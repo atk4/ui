@@ -12,8 +12,6 @@ use Atk4\Ui\View\WithEntityTrait;
  *
  * IMPORTANT: Although the purpose of the "Card" component will remain the same, we do plan to
  * improve implementation of a card to to use https://fomantic-ui.com/views/card.html .
- *
- * @property false|null $model use $entity property instead
  */
 class CardTable extends Table
 {

@@ -16,8 +16,6 @@ use Atk4\Ui\View\WithEntityTrait;
 
 /**
  * A Simple inline editable text Vue component.
- *
- * @property false|null $model use $entity property instead
  */
 class InlineEdit extends View
 {

@@ -21,9 +21,6 @@ use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\View\WithEntityTrait;
 
-/**
- * @property false|null $model use $entity property instead
- */
 class Form extends View
 {
     use HookTrait;

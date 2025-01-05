@@ -9,8 +9,6 @@ use Atk4\Ui\View\WithEntityTrait;
 
 /**
  * Display a card section within a Card View.
- *
- * @property false|null $model use $entity property instead
  */
 class CardSection extends View
 {
