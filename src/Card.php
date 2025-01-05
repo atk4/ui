@@ -25,7 +25,7 @@ use Atk4\Ui\View\WithEntityTrait;
  * model field display.
  *
  * Multiple model can be used to display various content on each card section.
- * When using model or models, the first model that get set via setModel method
+ * When using model or models, the first model that get set via setEntity method
  * will have it's idField set as data-id HTML attribute for the card. Thus making
  * the ID available via javascript (new Jquery())->data('id')
  *

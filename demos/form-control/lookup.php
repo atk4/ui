@@ -89,8 +89,8 @@ Form\Control\Lookup::addTo($app, [
 Header::addTo($app, ['Lookup input inside modal']);
 
 $modal = Modal::addTo($app)->set(static function (View $p) {
-    $a = Form\Control\Lookup::addTo($p, ['placeholder' => 'Search country', 'label' => 'Country:']);
-    $a->setModel(new Country($p->getApp()->db));
+    $c = Form\Control\Lookup::addTo($p, ['placeholder' => 'Search country', 'label' => 'Country:']);
+    $c->setModel(new Country($p->getApp()->db));
 });
 Button::addTo($app, ['Open Lookup on a Modal window'])
     ->on('click', $modal->jsShow());

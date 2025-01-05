@@ -543,7 +543,7 @@ $form->onSubmit(function (Form $form) use ($table) {
     return new \Atk4\Ui\Js\JsReload($table);
 });
 
-$t->setModel($bookModel);
+$table->setModel($bookModel);
 ```
 
 In this example, filling out and submitting the form will result in table contents being refreshed using AJAX.
