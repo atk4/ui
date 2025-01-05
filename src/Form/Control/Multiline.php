@@ -676,8 +676,6 @@ class Multiline extends Form\Control
     #[\Override]
     protected function renderView(): void
     {
-        $this->model->assertIsModel();
-
         $this->renderCallback->set(function () {
             $this->outputJson();
         });
