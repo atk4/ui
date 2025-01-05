@@ -408,6 +408,9 @@ class Form extends View
             $this->typeToControl[$field->type] ?? null,
             $fallbackSeed
         );
+        if (!is_object($controlSeed) && !property_exists($controlSeed[0], 'model')) {
+            unset($controlSeed['model']);
+        }
 
         $defaults = [
             'form' => $this,

@@ -6,9 +6,12 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Form;
 use Atk4\Ui\Lister;
+use Atk4\Ui\View\WithModelTrait;
 
 class Radio extends Form\Control
 {
+    use WithModelTrait;
+
     public $ui = false;
     public array $class = ['grouped', 'fields'];
 

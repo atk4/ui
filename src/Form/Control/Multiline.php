@@ -17,6 +17,7 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
+use Atk4\Ui\View\WithModelTrait;
 
 /**
  * Creates a Multiline field within a table, which allows adding/editing multiple
@@ -79,6 +80,10 @@ use Atk4\Ui\View;
  */
 class Multiline extends Form\Control
 {
+    use WithModelTrait {
+        setModel as private _setModel;
+    }
+
     /** @var HtmlTemplate|null The template needed for the multiline view. */
     public $multiLineTemplate;
 
@@ -420,10 +425,9 @@ class Multiline extends Form\Control
     /**
      * @param list<string>|null $fields
      */
-    #[\Override]
     public function setModel(Model $model, ?array $fields = null): void
     {
-        parent::setModel($model);
+        $this->_setModel($model);
 
         if ($fields === null) {
             $fields = array_keys($model->getFields('not system'));

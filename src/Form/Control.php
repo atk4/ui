@@ -13,7 +13,6 @@ use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\View;
-use Atk4\Ui\View\WithModelTrait;
 
 /**
  * Provides generic functionality for a form control.
@@ -22,8 +21,6 @@ use Atk4\Ui\View\WithModelTrait;
  */
 class Control extends View
 {
-    use WithModelTrait;
-
     /** @var Form|null to which this field belongs */
     public ?View $form = null;
 

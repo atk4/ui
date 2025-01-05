@@ -10,9 +10,12 @@ use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
+use Atk4\Ui\View\WithModelTrait;
 
 class Dropdown extends Input
 {
+    use WithModelTrait;
+
     public $defaultTemplate = 'form/control/dropdown.html';
 
     public string $inputType = 'hidden';
