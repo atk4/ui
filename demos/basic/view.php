@@ -16,6 +16,7 @@ use Atk4\Ui\Message;
 use Atk4\Ui\Paginator;
 use Atk4\Ui\Table;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 use Atk4\Ui\VirtualPage;
 
 /** @var App $app */
@@ -24,10 +25,10 @@ require_once __DIR__ . '/../init-app.php';
 $img = $app->cdn['atk'] . '/logo.png';
 
 Header::addTo($app, ['Default view has no styling']);
-View::addTo($app)->set('just a <div> element');
+ViewWithContent::addTo($app)->set('just a <div> element');
 
 Header::addTo($app, ['View can specify CSS class']);
-View::addTo($app, ['ui' => 'segment', 'class.raised' => true])->set('Segment');
+ViewWithContent::addTo($app, ['ui' => 'segment', 'class.raised' => true])->set('Segment');
 
 Header::addTo($app, ['View can contain stuff']);
 Header::addTo(View::addTo($app, ['ui' => 'segment'])
@@ -59,7 +60,7 @@ $planeTemplate->set('num', (string) random_int(100, 999));
 $plane = View::addTo($app, ['template' => $planeTemplate]);
 
 Header::addTo($app, ['Can be rendered into HTML']);
-View::addTo($app, ['ui' => 'segment', 'class.raised' => true, 'element' => 'pre'])->set($plane->renderToHtml());
+ViewWithContent::addTo($app, ['ui' => 'segment', 'class.raised' => true, 'element' => 'pre'])->set($plane->renderToHtml());
 
 Header::addTo($app, ['Has a unique global identifier']);
 Label::addTo($app, ['Plane ID:', 'detail' => $plane->name]);

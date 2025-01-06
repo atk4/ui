@@ -11,6 +11,7 @@ use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\JsSse;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -21,7 +22,7 @@ $reloadUrlArgs = ['i' => new JsExpression('++atk.i')];
 $logInput = View::addTo($app, ['element' => 'input', 'name' => 'log']);
 $logInput->setStyle('width', '100%');
 
-$setBoxTextAndStyleFx = static function (View $view, string $text) {
+$setBoxTextAndStyleFx = static function (ViewWithContent $view, string $text) {
     $view->set($text);
     $view->setStyle('width', 'fit-content');
     $view->setStyle('padding', '5px');
@@ -30,7 +31,7 @@ $setBoxTextAndStyleFx = static function (View $view, string $text) {
 };
 
 $addBoxFx = static function ($owner, string $name) use ($setBoxTextAndStyleFx, $logInput) {
-    $box = View::addTo($owner);
+    $box = ViewWithContent::addTo($owner);
     $setBoxTextAndStyleFx($box, $name . (int) $box->getApp()->tryGetRequestQueryParam('i'));
 
     $box->js(true, new JsExpression(<<<'JS'
@@ -84,7 +85,7 @@ Button::addTo($app, ['Readd U'])->on('click', new JsExpression(<<<'JS'
 
 Header::addTo($app, ['API']);
 
-$apiContext = View::addTo($app);
+$apiContext = ViewWithContent::addTo($app);
 $setBoxTextAndStyleFx($apiContext, 'stateContext');
 $apiButton = Button::addTo($app, ['Run slow API']);
 $apiButton->on('click', static function () use ($apiButton) {
@@ -99,7 +100,7 @@ Button::addTo($app, ['Run slow API & remove'])->on('click', new JsBlock([
 
 Header::addTo($app, ['SSE']);
 
-$sseContext = View::addTo($app);
+$sseContext = ViewWithContent::addTo($app);
 $sse = JsSse::addTo($app, ['stateContext' => $sseContext]);
 $setBoxTextAndStyleFx($sseContext, 'stateContext');
 $sseButton = Button::addTo($app, ['Run slow SSE']);

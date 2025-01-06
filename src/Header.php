@@ -55,7 +55,7 @@ class Header extends ViewWithContent
         }
 
         if ($this->subHeader) {
-            $this->subHeader = View::addTo($this, [$this->subHeader], ['SubHeader'])->addClass('sub header');
+            $this->subHeader = ViewWithContent::addTo($this, [$this->subHeader], ['SubHeader'])->addClass('sub header');
         }
 
         if ($this->aligned) {
