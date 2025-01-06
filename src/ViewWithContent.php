@@ -45,6 +45,7 @@ class ViewWithContent extends View
         return $this;
     }
 
+    #[\Override]
     protected function recursiveRender(): void
     {
         parent::recursiveRender();
