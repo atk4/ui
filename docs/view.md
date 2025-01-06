@@ -430,7 +430,7 @@ will automatically clone region of a parent.
 
 ```
 $profile = View::addTo($app, ['template' => 'myview.html']);
-$profile->setModel($user);
+$profile->setEntity($user);
 Lister::addTo($profile, [], ['Tags'])->setModel($user->ref('Tags'));
 ```
 

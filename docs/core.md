@@ -146,7 +146,7 @@ $user = new User($db);
 $user = $user->load(1);
 
 $view = View::addTo($app, ['template' => 'Hello, {$name}, your balance is {$balance}']);
-$view->setModel($user);
+$view->setEntity($user);
 ```
 
 Next section will explain you how the Agile UI interacts with the data layer and how it outputs or
