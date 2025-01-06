@@ -7,7 +7,7 @@ namespace Atk4\Ui\View;
 use Atk4\Data\Model;
 use Atk4\Ui\Exception;
 
-trait WithEntityTrait
+trait EntityTrait
 {
     public ?Model $entity = null;
 

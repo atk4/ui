@@ -17,7 +17,7 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
-use Atk4\Ui\View\WithModelTrait;
+use Atk4\Ui\View\ModelTrait;
 
 /**
  * Creates a Multiline field within a table, which allows adding/editing multiple
@@ -80,7 +80,7 @@ use Atk4\Ui\View\WithModelTrait;
  */
 class Multiline extends Form\Control
 {
-    use WithModelTrait {
+    use ModelTrait {
         setModel as private _setModel;
     }
 

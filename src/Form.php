@@ -19,14 +19,14 @@ use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsConditionalForm;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
-use Atk4\Ui\View\WithEntityTrait;
+use Atk4\Ui\View\EntityTrait;
 
 class Form extends View
 {
-    use HookTrait;
-    use WithEntityTrait {
+    use EntityTrait {
         setEntity as private _setEntity;
     }
+    use HookTrait;
 
     /** Executed when form is submitted */
     public const HOOK_SUBMIT = self::class . '@submit';

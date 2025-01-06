@@ -16,8 +16,8 @@ use Atk4\Ui\Loader;
 use Atk4\Ui\Modal;
 use Atk4\Ui\Popup;
 use Atk4\Ui\View;
-use Atk4\Ui\View\WithEntityTrait;
-use Atk4\Ui\View\WithModelTrait;
+use Atk4\Ui\View\EntityTrait;
+use Atk4\Ui\View\ModelTrait;
 use Atk4\Ui\VirtualPage;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -157,7 +157,7 @@ class ViewTest extends TestCase
     public function testSetModelDifferentException(): void
     {
         $v = new class {
-            use WithModelTrait;
+            use ModelTrait;
         };
         $m1 = new Model();
         $m2 = new Model();
@@ -172,7 +172,7 @@ class ViewTest extends TestCase
     public function testSetEntityDifferentException(): void
     {
         $v = new class extends View {
-            use WithEntityTrait;
+            use EntityTrait;
         };
         $entity1 = (new Model())->createEntity();
         $entity2 = (new Model())->createEntity();
@@ -187,7 +187,7 @@ class ViewTest extends TestCase
     public function testSetSourceZeroKeyException(): void
     {
         $v = new class {
-            use WithModelTrait;
+            use ModelTrait;
         };
         $v->setSource(['a', 'b']);
 

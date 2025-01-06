@@ -11,14 +11,14 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Misc\ProxyModel;
 use Atk4\Ui\View;
-use Atk4\Ui\View\WithEntityTrait;
+use Atk4\Ui\View\EntityTrait;
 
 /**
  * Custom Layout for a form.
  */
 abstract class AbstractLayout extends View
 {
-    use WithEntityTrait {
+    use EntityTrait {
         setEntity as private _setEntity;
     }
 

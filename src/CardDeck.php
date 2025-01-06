@@ -12,14 +12,14 @@ use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\UserAction\SharedExecutorsContainer;
-use Atk4\Ui\View\WithModelTrait;
+use Atk4\Ui\View\ModelTrait;
 
 /**
  * A collection of Card set from a model.
  */
 class CardDeck extends View
 {
-    use WithModelTrait {
+    use ModelTrait {
         setModel as private _setModel;
     }
 

@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Data\Model;
-use Atk4\Ui\View\WithEntityTrait;
+use Atk4\Ui\View\EntityTrait;
 
 /**
  * Display a card section within a Card View.
  */
 class CardSection extends View
 {
-    use WithEntityTrait;
+    use EntityTrait;
 
     /** @var Card */
     public $card;

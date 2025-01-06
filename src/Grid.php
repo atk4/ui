@@ -17,7 +17,7 @@ use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\UserAction\ConfirmationExecutor;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
-use Atk4\Ui\View\WithModelTrait;
+use Atk4\Ui\View\ModelTrait;
 
 /**
  * @phpstan-type JsCallbackSetWithRowIdClosure \Closure(Jquery, mixed): (JsExpressionable|View|string|void)
@@ -25,7 +25,7 @@ use Atk4\Ui\View\WithModelTrait;
 class Grid extends View
 {
     use HookTrait;
-    use WithModelTrait {
+    use ModelTrait {
         setModel as private _setModel;
     }
 

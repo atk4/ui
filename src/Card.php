@@ -9,7 +9,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\UserAction\SharedExecutor;
-use Atk4\Ui\View\WithEntityTrait;
+use Atk4\Ui\View\EntityTrait;
 
 /**
  * Card can contain arbitrary information.
@@ -31,7 +31,7 @@ use Atk4\Ui\View\WithEntityTrait;
  */
 class Card extends View
 {
-    use WithEntityTrait {
+    use EntityTrait {
         setEntity as private _setEntity;
     }
 

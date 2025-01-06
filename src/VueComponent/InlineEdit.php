@@ -12,14 +12,14 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
-use Atk4\Ui\View\WithEntityTrait;
+use Atk4\Ui\View\EntityTrait;
 
 /**
  * A Simple inline editable text Vue component.
  */
 class InlineEdit extends View
 {
-    use WithEntityTrait {
+    use EntityTrait {
         setEntity as private _setEntity;
     }
 

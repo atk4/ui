@@ -17,13 +17,13 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsModal;
 use Atk4\Ui\Js\JsToast;
-use Atk4\Ui\View\WithModelTrait;
+use Atk4\Ui\View\ModelTrait;
 use Atk4\Ui\VirtualPage;
 
 class Lookup extends Input
 {
     use HookTrait;
-    use WithModelTrait;
+    use ModelTrait;
 
     public $defaultTemplate = 'form/control/lookup.html';
 

@@ -8,7 +8,7 @@ use Atk4\Data\Model;
 use Atk4\Data\Persistence;
 use Atk4\Ui\Exception;
 
-trait WithModelTrait
+trait ModelTrait
 {
     public ?Model $model = null;
 

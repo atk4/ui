@@ -12,11 +12,11 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\View;
-use Atk4\Ui\View\WithModelTrait;
+use Atk4\Ui\View\ModelTrait;
 
 class ScopeBuilder extends Form\Control
 {
-    use WithModelTrait {
+    use ModelTrait {
         setModel as private _setModel;
     }
 
