@@ -63,7 +63,7 @@ $country->name .= ' NO RELOAD';
 unset($country->getDirtyRef()[$country->fieldName()->name]);
 
 $cardActions = Card::addTo($app, ['useLabel' => true, 'executorFactory' => new $myFactory()]);
-$cardActions->setModel($country);
+$cardActions->setEntity($country);
 foreach ($country->getModel()->getUserActions() as $action) {
     $showActions = ['callback', 'preview', 'edit_argument', 'edit_argument_preview', 'edit_iso', 'confirm', 'multi_step'];
     if (in_array($action->shortName, $showActions, true)) {
@@ -80,6 +80,6 @@ $country = $country->loadBy($country->fieldName()->iso, 'cz');
 $country->name .= ' NO RELOAD';
 
 $card = Card::addTo($app, ['useLabel' => true]);
-$card->setModel($country);
+$card->setEntity($country);
 $card->addClickAction($country->getUserAction('edit'));
 $card->addClickAction($country->getUserAction('delete'));

@@ -12,12 +12,17 @@ use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\UserAction\SharedExecutorsContainer;
+use Atk4\Ui\View\ModelTrait;
 
 /**
  * A collection of Card set from a model.
  */
 class CardDeck extends View
 {
+    use ModelTrait {
+        setModel as private _setModel;
+    }
+
     public $ui = 'basic segment atk-card-deck';
 
     public $defaultTemplate = 'card-deck.html';
@@ -134,10 +139,9 @@ class CardDeck extends View
      * @param list<string> $fields
      * @param list<string> $extra
      */
-    #[\Override]
     public function setModel(Model $model, ?array $fields = null, ?array $extra = null): void
     {
-        parent::setModel($model);
+        $this->_setModel($model);
 
         if ($this->search !== false) {
             $this->search->setModelCondition($this->model);
@@ -148,7 +152,7 @@ class CardDeck extends View
             foreach ($this->model as $entity) {
                 /** @var Card */
                 $c = $this->cardHolder->add(Factory::factory($this->cardSeed, ['useLabel' => $this->useLabel, 'useTable' => $this->useTable]));
-                $c->setModel($entity, $fields);
+                $c->setEntity($entity, $fields);
                 if ($extra) {
                     $c->addExtraFields($entity, $extra, $this->extraGlue);
                 }

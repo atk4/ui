@@ -161,7 +161,7 @@ Once you have a model, you can associate it with a View such as Form or Grid
 so that those Views would be able to interact with your persistence directly:
 
 ```
-$form->setModel($client);
+$form->setEntity($client);
 ```
 
 In most environments, however, your application will rely on a primary Database, which
@@ -172,7 +172,7 @@ $app->db = new \Atk4\Data\Persistence\Sql($dsn);
 
 // next, anywhere in a view
 $client = new Client($this->getApp()->db);
-$form->setModel($client);
+$form->setEntity($client);
 ```
 
 Or if you prefer a more consise code:
@@ -181,7 +181,7 @@ Or if you prefer a more consise code:
 $app->db = new \Atk4\Data\Persistence\Sql($dsn);
 
 // next, anywhere in a view
-$form->setModel('Client');
+$form->setEntity('Client');
 ```
 
 Again, this will use `Factory` feature of your application to let you determine how
@@ -430,7 +430,7 @@ will automatically clone region of a parent.
 
 ```
 $profile = View::addTo($app, ['template' => 'myview.html']);
-$profile->setModel($user);
+$profile->setEntity($user);
 Lister::addTo($profile, [], ['Tags'])->setModel($user->ref('Tags'));
 ```
 

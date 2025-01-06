@@ -69,7 +69,7 @@ $tabs->addTab('Dynamic Form', function (VirtualPage $vp) {
     $mRegister->addField('name', ['caption' => 'Please enter your name (John)']);
 
     $form = Form::addTo($vp, ['class.segment' => true]);
-    $form->setModel($mRegister);
+    $form->setEntity($mRegister);
     $form->onSubmit(function (Form $form) {
         if ($form->entity->get('name') !== 'John') {
             return $form->jsError('name', 'Your name is not John! It is "' . $form->entity->get('name') . '". It should be John. Pleeease!');

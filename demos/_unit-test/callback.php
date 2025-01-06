@@ -23,7 +23,7 @@ $vp = VirtualPage::addTo($app);
 $vp->cb->triggerOnReload = false;
 
 $form = Form::addTo($vp);
-$form->setModel($m->loadAny(), [$m->fieldName()->name]);
+$form->setEntity($m->loadAny(), [$m->fieldName()->name]);
 $form->getControl($m->fieldName()->name)->caption = 'TestName';
 
 $table = Table::addTo($app);

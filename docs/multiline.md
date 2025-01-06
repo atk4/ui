@@ -114,7 +114,7 @@ If you want to edit them along with the user, Multiline need to be set up accord
 ```
 // add a form to UI in order to edit User record
 $userForm = \Atk4\Ui\Form::addTo($app);
-$userForm->setModel($user->load($userId));
+$userForm->setEntity($user->load($userId));
 
 $ml = $userForm->addControl('emails', [\Atk4\Ui\Form\Control\Multiline::class]);
 $ml->setReferenceModel('Emails');

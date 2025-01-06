@@ -17,11 +17,13 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsModal;
 use Atk4\Ui\Js\JsToast;
+use Atk4\Ui\View\ModelTrait;
 use Atk4\Ui\VirtualPage;
 
 class Lookup extends Input
 {
     use HookTrait;
+    use ModelTrait;
 
     public $defaultTemplate = 'form/control/lookup.html';
 
@@ -267,7 +269,7 @@ class Lookup extends Input
             $form = Form::addTo($p);
 
             $entity = $this->model->createEntity();
-            $form->setModel($entity, $this->plus['fields'] ?? null);
+            $form->setEntity($entity, $this->plus['fields'] ?? null);
 
             $form->onSubmit(function (Form $form) {
                 $msg = $form->entity->getUserAction('add')->execute();

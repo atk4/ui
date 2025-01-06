@@ -220,7 +220,7 @@ To render a component individually and get the HTML and JavaScript use this form
 $form = new Form();
 $form->setApp($app);
 $form->invokeInit();
-$form->setModel(new User($db));
+$form->setEntity(new User($db));
 
 $html = $form->renderToHtml();
 ```

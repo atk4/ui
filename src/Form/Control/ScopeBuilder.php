@@ -12,9 +12,14 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\View;
+use Atk4\Ui\View\ModelTrait;
 
 class ScopeBuilder extends Form\Control
 {
+    use ModelTrait {
+        setModel as private _setModel;
+    }
+
     public $renderLabel = false;
 
     /** @var array<string, array<string, mixed>|bool> */
@@ -288,10 +293,9 @@ class ScopeBuilder extends Form\Control
     /**
      * Set the model to build scope for.
      */
-    #[\Override]
     public function setModel(Model $model): void
     {
-        parent::setModel($model);
+        $this->_setModel($model);
 
         $this->buildQuery($model);
     }

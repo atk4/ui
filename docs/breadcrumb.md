@@ -70,7 +70,7 @@ if ($id) {
 
     // here we can check for additional criteria and display a deeper level on the crumb
 
-    Form::addTo($app)->setModel($entity);
+    Form::addTo($app)->setEntity($entity);
 } else {
     // display list of users
     $table = Table::addTo($app);

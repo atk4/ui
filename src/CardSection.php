@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Data\Model;
+use Atk4\Ui\View\EntityTrait;
 
 /**
  * Display a card section within a Card View.
- *
- * @property false $model use $entity property instead
  */
 class CardSection extends View
 {
+    use EntityTrait;
+
     /** @var Card */
     public $card;
 
@@ -28,14 +29,6 @@ class CardSection extends View
         parent::init();
 
         $this->addClass('content');
-    }
-
-    #[\Override]
-    public function setModel(Model $entity): void
-    {
-        $entity->assertIsEntity();
-
-        parent::setModel($entity);
     }
 
     /**
@@ -106,6 +99,6 @@ class CardSection extends View
     private function addTableSection(Model $entity, array $fields): void
     {
         $cardTable = CardTable::addTo($this, ['class' => $this->tableClass]);
-        $cardTable->setModel($entity, $fields);
+        $cardTable->setEntity($entity, $fields);
     }
 }

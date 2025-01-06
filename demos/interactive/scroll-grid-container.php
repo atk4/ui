@@ -33,7 +33,7 @@ $g1->addQuickSearch([Country::hinting()->fieldName()->name, Country::hinting()->
 
 // demo for additional action buttons in Crud + JsPaginator
 $g1->addModalAction(['icon' => 'cogs'], 'Details', static function (View $p, WrappedId $id) use ($g1) {
-    Card::addTo($p)->setModel($g1->model->load($id));
+    Card::addTo($p)->setEntity($g1->model->load($id));
 });
 $g1->addActionButton('red', static function (Jquery $js, WrappedId $id) use ($app, $m1) {
     return $js->find('tr[data-id=' . $app->uiPersistence->typecastAttributeSaveField($m1->getIdField(), $id) . ']')->css('color', 'red');

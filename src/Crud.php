@@ -91,8 +91,6 @@ class Crud extends Grid
     #[\Override]
     public function setModel(Model $model, ?array $fields = null): void
     {
-        $model->assertIsModel();
-
         if ($fields !== null) {
             $this->displayFields = $fields;
         }

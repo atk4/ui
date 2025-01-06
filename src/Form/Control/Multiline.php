@@ -17,6 +17,7 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
+use Atk4\Ui\View\ModelTrait;
 
 /**
  * Creates a Multiline field within a table, which allows adding/editing multiple
@@ -25,7 +26,7 @@ use Atk4\Ui\View;
  * Using hasMany reference will required to save reference data using Multiline::saveRows() method.
  *
  * $form = Form::addTo($app);
- * $form->setModel($invoice, []);
+ * $form->setEntity($invoice, []);
  *
  * // add Multiline form control and set model for Invoice items
  * $ml = $form->addControl('ml', [Multiline::class]);
@@ -79,6 +80,10 @@ use Atk4\Ui\View;
  */
 class Multiline extends Form\Control
 {
+    use ModelTrait {
+        setModel as private _setModel;
+    }
+
     /** @var HtmlTemplate|null The template needed for the multiline view. */
     public $multiLineTemplate;
 
@@ -420,10 +425,9 @@ class Multiline extends Form\Control
     /**
      * @param list<string>|null $fields
      */
-    #[\Override]
     public function setModel(Model $model, ?array $fields = null): void
     {
-        parent::setModel($model);
+        $this->_setModel($model);
 
         if ($fields === null) {
             $fields = array_keys($model->getFields('not system'));
@@ -676,8 +680,6 @@ class Multiline extends Form\Control
     #[\Override]
     protected function renderView(): void
     {
-        $this->model->assertIsModel();
-
         $this->renderCallback->set(function () {
             $this->outputJson();
         });

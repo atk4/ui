@@ -12,14 +12,17 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
+use Atk4\Ui\View\EntityTrait;
 
 /**
  * A Simple inline editable text Vue component.
- *
- * @property false $model use $entity property instead
  */
 class InlineEdit extends View
 {
+    use EntityTrait {
+        setEntity as private _setEntity;
+    }
+
     public $defaultTemplate = 'inline-edit.html';
 
     /** @var JsCallback JsCallback for saving data. */
@@ -92,12 +95,9 @@ class InlineEdit extends View
         }
     }
 
-    #[\Override]
-    public function setModel(Model $entity): void
+    public function setEntity(Model $entity): void
     {
-        $entity->assertIsEntity();
-
-        parent::setModel($entity);
+        $this->_setEntity($entity);
 
         if ($this->fieldName === null) {
             $this->fieldName = $this->entity->titleField;

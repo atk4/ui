@@ -69,7 +69,7 @@ $wizard->addStep('Define User Action', static function (Wizard $page) {
         $country = $country->loadAny();
 
         $card = Card::addTo($owner);
-        $card->setModel($country, [$country->fieldName()->iso]);
+        $card->setEntity($country, [$country->fieldName()->iso]);
         $card->addClickAction($country->getModel()->getUserAction('send_message'));
     });
 });

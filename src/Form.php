@@ -19,12 +19,13 @@ use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsConditionalForm;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\View\EntityTrait;
 
-/**
- * @property false $model use $entity property instead
- */
 class Form extends View
 {
+    use EntityTrait {
+        setEntity as private _setEntity;
+    }
     use HookTrait;
 
     /** Executed when form is submitted */
@@ -193,18 +194,26 @@ class Form extends View
     }
 
     /**
-     * @param list<string>|null $fields if null, then all "editable" fields will be added
+     * @deprecated
+     *
+     * @param never             $entity
+     * @param list<string>|null $fields
      */
-    #[\Override]
     public function setModel(Model $entity, ?array $fields = null): void
     {
-        $entity->assertIsEntity();
+        throw new Exception('Use Form::setEntity() method instead for entity set');
+    }
 
+    /**
+     * @param list<string>|null $fields if null, then all "editable" fields will be added
+     */
+    public function setEntity(Model $entity, ?array $fields = null): void
+    {
         // set model for the form and also for the current layout
         try {
-            parent::setModel($entity);
+            $this->_setEntity($entity);
 
-            $this->layout->setModel($entity, $fields);
+            $this->layout->setEntity($entity, $fields);
         } catch (Exception $e) {
             throw $e->addMoreInfo('model', $entity);
         }
@@ -399,6 +408,9 @@ class Form extends View
             $this->typeToControl[$field->type] ?? null,
             $fallbackSeed
         );
+        if (!is_object($controlSeed) && !property_exists($controlSeed[0], 'model')) {
+            unset($controlSeed['model']);
+        }
 
         $defaults = [
             'form' => $this,

@@ -149,7 +149,6 @@ class Table extends Lister
         if ($this->model === null) {
             $this->setModel(new ProxyModel());
         }
-        $this->model->assertIsModel();
 
         // should be vaguely consistent with Form\AbstractLayout::addControl()
 
@@ -364,8 +363,6 @@ class Table extends Lister
     #[\Override]
     public function setModel(Model $model, ?array $fields = null): void
     {
-        $model->assertIsModel();
-
         parent::setModel($model);
 
         if ($fields === null) {

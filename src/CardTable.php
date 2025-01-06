@@ -5,31 +5,42 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Data\Model;
+use Atk4\Ui\View\EntityTrait;
 
 /**
  * Card class displays a single record data.
  *
  * IMPORTANT: Although the purpose of the "Card" component will remain the same, we do plan to
  * improve implementation of a card to to use https://fomantic-ui.com/views/card.html .
- *
- * @property false $model use $entity property instead
  */
 class CardTable extends Table
 {
+    use EntityTrait;
+
     protected bool $_bypass = false;
 
     /**
-     * @param list<string>|null $fields
+     * @deprecated
+     *
+     * @param never $model
      */
-    #[\Override]
-    public function setModel(Model $entity, ?array $fields = null): void
+    #[\Override] // @phpstan-ignore method.childParameterType
+    public function setModel(Model $model, ?array $fields = null): void
     {
         if ($this->_bypass) {
-            parent::setModel($entity);
+            parent::setModel($model);
 
             return;
         }
 
+        throw new Exception('Use CardTable::setEntity() method instead for entity set');
+    }
+
+    /**
+     * @param list<string>|null $fields
+     */
+    public function setEntity(Model $entity, ?array $fields = null): void
+    {
         $entity->assertIsLoaded();
 
         if ($fields === null) {

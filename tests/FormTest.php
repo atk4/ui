@@ -47,6 +47,26 @@ class FormTest extends TestCase
         $form->addControl('foo');
     }
 
+    public function testSetModelException(): void
+    {
+        $form = new Form();
+        $entity = (new Model())->createEntity();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Use Form::setEntity() method instead for entity set');
+        $form->setModel($entity); // @phpstan-ignore argument.type, method.deprecated
+    }
+
+    public function testLayoutSetModelException(): void
+    {
+        $form = new Form\Layout();
+        $entity = (new Model())->createEntity();
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Use Form\AbstractLayout::setEntity() method instead for entity set');
+        $form->setModel($entity); // @phpstan-ignore argument.type, method.deprecated
+    }
+
     /**
      * @param array<string, string> $postData
      */
@@ -116,7 +136,7 @@ class FormTest extends TestCase
             $m->addField('email', ['required' => true]);
             $m->addField('is_admin', ['default' => false]);
 
-            $form->setModel($m->createEntity(), ['name', 'email']);
+            $form->setEntity($m->createEntity(), ['name', 'email']);
 
             self::assertSame('John', $form->entity->get('name'));
 
@@ -186,7 +206,7 @@ class FormTest extends TestCase
             $m->addField('int', ['type' => 'integer']);
 
             $form = Form::addTo($app);
-            $form->setModel($m->createEntity());
+            $form->setEntity($m->createEntity());
 
             return $form;
         }, [
@@ -223,7 +243,7 @@ class FormTest extends TestCase
                 $m->addField('bar', ['nullable' => false]);
 
                 $form = Form::addTo($app);
-                $form->setModel($m->createEntity(), ['foo']);
+                $form->setEntity($m->createEntity(), ['foo']);
 
                 return $form;
             }, ['foo' => 'x'], static function (Model $entity) use (&$submitReached) {
@@ -261,7 +281,7 @@ class FormTest extends TestCase
                 });
 
                 $form = Form::addTo($app);
-                $form->setModel($m->createEntity());
+                $form->setEntity($m->createEntity());
 
                 return $form;
             }, ['foo' => 'x']);

@@ -52,7 +52,7 @@ class FormFieldUiTest extends TestCase
         $form = new Form();
         $form->setApp($this->createApp());
         $form->invokeInit();
-        $form->setModel($this->m->createEntity());
+        $form->setEntity($this->m->createEntity());
         self::assertFalse($form->getControl('regular_field')->readOnly);
     }
 
@@ -61,7 +61,7 @@ class FormFieldUiTest extends TestCase
         $form = new Form();
         $form->setApp($this->createApp());
         $form->invokeInit();
-        $form->setModel($this->m->createEntity(), ['just_for_data']);
+        $form->setEntity($this->m->createEntity(), ['just_for_data']);
         self::assertTrue($form->getControl('just_for_data')->readOnly);
     }
 
@@ -70,7 +70,7 @@ class FormFieldUiTest extends TestCase
         $form = new Form();
         $form->setApp($this->createApp());
         $form->invokeInit();
-        $form->setModel($this->m->createEntity());
+        $form->setEntity($this->m->createEntity());
         self::assertFalse($form->getControl('no_persist_but_show_in_ui')->readOnly);
     }
 }

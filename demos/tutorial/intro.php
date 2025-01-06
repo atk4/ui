@@ -151,7 +151,7 @@ $wizard->addStep('Business Model', static function (Wizard $page) {
             ]);
             $entity->save();
         }
-        $form->setModel($entity);
+        $form->setEntity($entity);
 
         $form->onSubmit(static function (Form $form) {
             $form->entity->save();
@@ -174,7 +174,7 @@ $wizard->addStep('Business Model', static function (Wizard $page) {
         </ul>
         EOF);
     $t->addParagraph(<<<'EOF'
-        All three are combined by "setModel()" function and that is consistent throughout all the views.
+        All three are combined by "setEntity()" method and that is consistent throughout all the views.
         EOF);
 });
 
@@ -196,7 +196,7 @@ $wizard->addStep('Persistence', static function (Wizard $page) {
         $model = $model->tryLoad(1);
         if ($model !== null) {
             Card::addTo($owner, ['useLabel' => true])
-                ->setModel($model);
+                ->setEntity($model);
         } else {
             Message::addTo($owner, ['Empty record.']);
         }
