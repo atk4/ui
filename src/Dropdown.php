@@ -19,8 +19,26 @@ class Dropdown extends Lister
     /** @var JsCallback|null Callback when a new value is selected in Dropdown. */
     public $cb;
 
+    /** @var string|null Set static contents of this view. */
+    public $content;
+
     /** @var array<string, mixed> As per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
+
+    /**
+     * @param array<0|string, mixed>|string $label
+     */
+    public function __construct($label = [])
+    {
+        $defaults = is_array($label) ? $label : [$label];
+
+        if (array_key_exists(0, $defaults)) {
+            $defaults['content'] = $defaults[0];
+            unset($defaults[0]);
+        }
+
+        parent::__construct($defaults);
+    }
 
     #[\Override]
     protected function init(): void
@@ -70,6 +88,10 @@ class Dropdown extends Lister
         $this->js(true)->dropdown($this->dropdownOptions);
 
         parent::renderView();
+
+        if ($this->content !== null) {
+            $this->template->append('Content', $this->content);
+        }
     }
 
     #[\Override]
