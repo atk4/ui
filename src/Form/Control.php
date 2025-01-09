@@ -130,14 +130,10 @@ class Control extends View
      * $control->onChange(new JsExpression('$(this).parents(\'.form\').form(\'submit\')'));
      *
      * @param JsExpressionable|JsCallbackSetWithValueClosure|array{JsCallbackSetWithValueClosure} $expr
-     * @param array<int|string, mixed>|bool                                                       $defaults
+     * @param array<int|string, mixed>                                                            $defaults
      */
-    public function onChange($expr, $defaults = []): void
+    public function onChange($expr, array $defaults = []): void
     {
-        if (is_bool($defaults)) {
-            $defaults = $defaults ? [] : ['preventDefault' => false, 'stopPropagation' => false];
-        }
-
         $this->on('change', '#' . $this->name . '_input', $expr, $defaults);
     }
 
