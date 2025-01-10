@@ -51,7 +51,9 @@ class Radio extends Form\Control
             $this->model->idField = 'k';
         }
 
-        $value = $this->entityField ? $this->entityField->get() : $this->content;
+        $value = $this->entityField !== null
+            ? $this->entityField->get()
+            : $this->content;
 
         $this->lister->setModel($this->model);
 
@@ -66,23 +68,24 @@ class Radio extends Form\Control
 
             $lister->tRow->set('value', $this->getApp()->uiPersistence->typecastAttributeSaveField($this->entityField->getField(), $lister->currentRow->getId()));
 
-            $lister->tRow->dangerouslySetHtml('checked', $lister->currentRow->compare($lister->model->idField, $value) ? 'checked="checked"' : '');
+            $lister->tRow->dangerouslySetHtml(
+                'checked',
+                $lister->currentRow->compare($lister->model->idField, $value)
+                    ? 'checked="checked"'
+                    : ''
+            );
         });
 
         $this->js(true, null, '.ui.checkbox.radio')->checkbox([
-            'uncheckable' => !$this->entityField || ($this->entityField->getField()->nullable || !$this->entityField->getField()->required),
+            'uncheckable' => $this->entityField === null || ($this->entityField->getField()->nullable || !$this->entityField->getField()->required),
         ]);
 
         parent::renderView();
     }
 
     #[\Override]
-    public function onChange($expr, $defaults = []): void
+    public function onChange($expr, array $defaults = []): void
     {
-        if (is_bool($defaults)) {
-            $defaults = $defaults ? [] : ['preventDefault' => false, 'stopPropagation' => false];
-        }
-
         $this->on('change', 'input', $expr, $defaults);
     }
 }
