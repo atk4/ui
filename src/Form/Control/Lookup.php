@@ -357,6 +357,10 @@ class Lookup extends Input
             'apiSettings' => array_merge(['url' => $this->getCallbackUrl() . '&q={query}'], $this->apiConfig),
         ], $this->settings);
 
+        if ($this->entityField === null || ($this->entityField->getField()->nullable || !$this->entityField->getField()->required)) {
+            $settings['clearable'] = true;
+        }
+
         $chain->dropdown($settings);
     }
 
