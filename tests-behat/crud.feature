@@ -4,13 +4,13 @@ Feature: Crud
     Given I am on "_unit-test/crud.php"
 
   Scenario: add
-    Then I press button "Add Country"
-    Then I fill in "atk_fp_country__name" with "Test"
-    Then I fill in "atk_fp_country__iso" with "XT"
-    Then I fill in "atk_fp_country__iso3" with "XTT"
-    Then I fill in "atk_fp_country__numcode" with "123"
-    Then I fill in "atk_fp_country__phonecode" with "1"
-    Then I press Modal button "Save"
+    When I press button "Add Country"
+    When I fill in "atk_fp_country__name" with "Test"
+    When I fill in "atk_fp_country__iso" with "XT"
+    When I fill in "atk_fp_country__iso3" with "XTT"
+    When I fill in "atk_fp_country__numcode" with "123"
+    When I fill in "atk_fp_country__phonecode" with "1"
+    When I press Modal button "Save"
     Then Toast display should contain text 'Country action "add" with "Test" entity was executed.'
 
   Scenario: search
@@ -23,22 +23,22 @@ Feature: Crud
     # TODO generalize JS reload with component reload
     When I click using selector "//th.sortable[//div[text()='Name']]"
     Then I should see "United Kingdom"
-    Then I press button "Add Country"
-    Then I fill in "atk_fp_country__name" with "Test 2"
-    Then I fill in "atk_fp_country__iso" with "XT"
-    Then I fill in "atk_fp_country__iso3" with "XTT"
-    Then I fill in "atk_fp_country__numcode" with "123"
-    Then I fill in "atk_fp_country__phonecode" with "1"
-    Then I press Modal button "Save"
+    When I press button "Add Country"
+    When I fill in "atk_fp_country__name" with "Test 2"
+    When I fill in "atk_fp_country__iso" with "XT"
+    When I fill in "atk_fp_country__iso3" with "XTT"
+    When I fill in "atk_fp_country__numcode" with "123"
+    When I fill in "atk_fp_country__phonecode" with "1"
+    When I press Modal button "Save"
     Then Toast display should contain text 'Country action "add" with "Test 2" entity was executed.'
     # TODO add should keep search
     # related with https://github.com/atk4/ui/issues/526 (list newly added record first)
     Then I search grid for "united kingdo"
 
   Scenario: edit
-    Then I press button "Edit"
+    When I press button "Edit"
     Then Modal is open with text "Edit Country"
-    Then I press Modal button "Save"
+    When I press Modal button "Save"
     Then Toast display should contain text 'Country action "edit" with "United Kingdom" entity was executed.'
     # make sure search query stick
     Then I should see "United Kingdom"
@@ -52,16 +52,16 @@ Feature: Crud
 
     Then I should not see "My United Kingdom"
     When I persist DB changes across requests
-    Then I press button "Edit"
+    When I press button "Edit"
     Then Modal is open with text "Edit Country"
-    Then I fill in "atk_fp_country__name" with "My United Kingdom"
-    Then I press Modal button "Save"
+    When I fill in "atk_fp_country__name" with "My United Kingdom"
+    When I press Modal button "Save"
     Then Toast display should contain text 'Record has been saved!'
     Then I should see "My United Kingdom"
 
   Scenario: delete
-    Then I press button "Delete"
-    Then I press Modal button "Ok"
+    When I press button "Delete"
+    When I press Modal button "Ok"
     Then Toast display should contain text 'Country action "delete" with "United Kingdom" entity was executed.'
     Then I should not see "United Kingdom"
 
@@ -105,7 +105,7 @@ Feature: Crud
     Given I am on "collection/crud3.php"
     Then I click using selector "//table//tr[3]//i.icon.edit"
     Then Modal is open with text "Edit Country"
-    Then I press Modal button "Save"
+    When I press Modal button "Save"
     Then Toast display should contain text "Record has been saved!"
 
   Scenario: delete /w array persistence (strict comparison)

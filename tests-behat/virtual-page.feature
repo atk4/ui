@@ -4,12 +4,12 @@ Feature: VirtualPage
     Given I am on "interactive/virtual.php"
     Then I click link 'More info on Car'
     Then I check if text in ".__atk-behat-test-car" match text "Car"
-    Then I press button "Open Lorem Ipsum"
+    When I press button "Open Lorem Ipsum"
     Then Modal is open with text 'This is yet another modal'
 
   Scenario:
     Given I am on "interactive/virtual.php"
-    Then I press button 'Load in Modal'
+    When I press button 'Load in Modal'
     Then Modal is open with text 'Contents of your pop-up here'
     Then I click close modal
 
@@ -30,6 +30,6 @@ Feature: VirtualPage
     Then I check if text in ".__atk-behat-test-second" match text "Second Level Page"
     Then I click link 'Open Third'
     Then I check if text in ".__atk-behat-test-third" match text "Third Level Page"
-    Then I select value "Beverages" in lookup "category"
-    Then I press button "Save"
+    When I select value "Beverages" in lookup "category"
+    When I press button "Save"
     Then Toast display should contain text 'Beverages'

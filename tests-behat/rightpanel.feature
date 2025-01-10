@@ -4,8 +4,8 @@ Feature: RightPanel
     Given I am on "layout/layout-panel.php"
     When I press button "Button 1"
     Then I should see "button #1"
-    Then I press button "Reload Myself"
-    Then I press button "Complete"
+    When I press button "Reload Myself"
+    When I press button "Complete"
     Then I should see "Completed using button #1"
 
   Scenario: PanelModelAction

@@ -5,7 +5,7 @@ Feature: Card
     Then I click using selector "i.eye.icon"
     Then Modal is open with text "Display Preview prior to run the action"
     Then Modal is open with text "Previewing country France NO RELOAD"
-    Then I press Modal button "Preview"
+    When I press Modal button "Preview"
     Then Toast display should contain text "Success: Done previewing France"
 
   Scenario: Card with entity action, entity must not reload - ModalExecutor
@@ -25,5 +25,5 @@ Feature: Card
     When I press button "Send Note"
     Then Modal is open with text "Note" in selector "label"
     When I fill in "note" with "This is a test note"
-    Then I press Modal button "Notify"
+    When I press Modal button "Notify"
     Then Toast display should contain text "This is a test note"
