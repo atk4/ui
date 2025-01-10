@@ -680,7 +680,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then ~^I check if input value for "([^"]*)" match text in "([^"]*)"~
+     * @Then ~^I check if input value for "([^"]*)" match text in "([^"]*)"$~
      */
     public function compareInputValueText(string $compareSelector, string $compareToSelector): void
     {
@@ -693,7 +693,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then ~^I check if input value for "([^"]*)" match text "([^"]*)"~
+     * @Then ~^I check if input value for "([^"]*)" match text "([^"]*)"$~
      */
     public function compareInputValueToText(string $selector, string $text): void
     {
@@ -801,7 +801,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then ~^I check if text in "([^"]*)" match text in "([^"]*)"~
+     * @Then ~^I check if text in "([^"]*)" match text in "([^"]*)"$~
      */
     public function compareElementText(string $compareSelector, string $compareToSelector): void
     {
@@ -814,7 +814,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then ~^I check if text in "([^"]*)" match text "([^"]*)"~
+     * @Then ~^I check if text in "([^"]*)" match text "([^"]*)"$~
      */
     public function textInContainerShouldMatch(string $selector, string $text): void
     {
@@ -827,7 +827,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then ~^I check if text in "([^"]*)" match regex "([^"]*)"~
+     * @Then ~^I check if text in "([^"]*)" match regex "([^"]*)"$~
      */
     public function textInContainerShouldMatchRegex(string $selector, string $regex): void
     {
