@@ -280,7 +280,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Sleep for a certain time in ms.
      *
-     * @Then I wait :arg1 ms
+     * @When I wait :arg1 ms
      */
     public function iWait(int $ms): void
     {
@@ -501,7 +501,7 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ tab
 
     /**
-     * @Given I click tab with title :arg1
+     * @When I click tab with title :arg1
      */
     public function iClickTabWithTitle(string $tabTitle): void
     {
