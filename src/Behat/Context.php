@@ -693,21 +693,6 @@ class Context extends RawMinkContext implements BehatContext
         }
     }
 
-    /**
-     * @Then ~^I check if input value for "([^"]*)" match text in "([^"]*)"$~
-     */
-    public function compareInputValueToElementText(string $inputName, string $selector): void
-    {
-        $inputName = $this->unquoteStepArgument($inputName);
-        $selector = $this->unquoteStepArgument($selector);
-
-        $expectedText = $this->findElement(null, $selector)->getText();
-        $input = $this->findElement(null, 'input[name="' . $inputName . '"]');
-        if ($expectedText !== $input->getValue()) {
-            throw new \Exception('Input value does not match: ' . $input->getValue() . ', expected: ' . $expectedText);
-        }
-    }
-
     // }}}
 
     // {{{ misc
