@@ -32,9 +32,6 @@ class Dropdown extends Input
      */
     public array $values;
 
-    /** @var string The string to set as an empty values. */
-    public $empty = "\u{00a0}"; // Unicode NBSP
-
     /** @var array<string, mixed> Dropdown options as per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
 
@@ -166,13 +163,6 @@ class Dropdown extends Input
 
     protected function htmlRenderValue(): void
     {
-        // add selection only if no value is required and Dropdown has no multiple selections enabled
-        if ($this->entityField !== null && !$this->entityField->getField()->required && !$this->multiple) {
-            $this->_tItem->set('value', '');
-            $this->_tItem->set('title', $this->empty);
-            $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
-        }
-
         // model set? use this, else values property
         if ($this->model !== null) {
             if ($this->renderRowFunction) {

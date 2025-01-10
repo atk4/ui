@@ -67,7 +67,6 @@ class DropdownCascade extends Dropdown
 
     /**
      * Generate new dropdown values based on cascadeInput model selected ID.
-     * Return an empty value set if ID is null.
      *
      * @param mixed $id
      *
@@ -76,11 +75,7 @@ class DropdownCascade extends Dropdown
     public function getNewValues($id): array
     {
         if ($id === null) {
-            return [[
-                'value' => '',
-                'text' => $this->empty,
-                'name' => $this->empty,
-            ]];
+            return [];
         }
 
         $model = $this->cascadeFrom->model->load($id)->ref($this->reference);
