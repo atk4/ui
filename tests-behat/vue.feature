@@ -30,7 +30,7 @@ Feature: Vue
   Scenario: testing ItemSearch
     When I fill in "atk-vue-search" with "united kingdom"
     Then I should see "United Kingdom"
-    Then I click using selector "//div.atk-item-search//i.remove.icon"
+    When I click using selector "//div.atk-item-search//i.remove.icon"
     Then I should not see "United Kingdom"
     When I fill in "atk-vue-search" with "united kingdom"
     Then I should see "United Kingdom"

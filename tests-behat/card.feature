@@ -2,7 +2,7 @@ Feature: Card
 
   Scenario: Card with entity, entity must not reload
     Given I am on "data-action/factory-view.php"
-    Then I click using selector "i.eye.icon"
+    When I click using selector "i.eye.icon"
     Then Modal is open with text "Display Preview prior to run the action"
     Then Modal is open with text "Previewing country France NO RELOAD"
     When I press Modal button "Preview"

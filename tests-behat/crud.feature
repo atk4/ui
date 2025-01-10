@@ -77,37 +77,37 @@ Feature: Crud
   Scenario: Modal in modal
     Given I am on "_unit-test/crud-nested.php"
 
-    Then I click using selector "(//div.ui.button[i.icon.book])[1]"
+    When I click using selector "(//div.ui.button[i.icon.book])[1]"
     Then Modal is open with text "Edit product category"
-    Then I click using selector "(//div.modal.active//div.ui.button[i.icon.edit])[1]"
+    When I click using selector "(//div.modal.active//div.ui.button[i.icon.edit])[1]"
     Then Modal is open with text "Edit Product"
     Then input "atk_fp_product__name" value should start with "Mustard"
     When I press Modal button "Save"
-    Then I click close modal
+    When I click close modal
 
-    Then I click using selector "(//div.ui.button[i.icon.book])[1]"
+    When I click using selector "(//div.ui.button[i.icon.book])[1]"
     Then Modal is open with text "Edit product category"
-    Then I click using selector "(//div.modal.active//div.ui.button[i.icon.edit])[2]"
+    When I click using selector "(//div.modal.active//div.ui.button[i.icon.edit])[2]"
     Then Modal is open with text "Edit Product"
     Then input "atk_fp_product__name" value should start with "Ketchup"
     When I press Modal button "Save"
-    Then I click close modal
+    When I click close modal
 
-    Then I click using selector "(//div.ui.button[i.icon.book])[2]"
+    When I click using selector "(//div.ui.button[i.icon.book])[2]"
     Then Modal is open with text "Edit product category"
-    Then I click using selector "(//div.modal.active//div.ui.button[i.icon.edit])[1]"
+    When I click using selector "(//div.modal.active//div.ui.button[i.icon.edit])[1]"
     Then Modal is open with text "Edit Product"
     Then input "atk_fp_product__name" value should start with "Cola"
     When I press Modal button "Save"
-    Then I click close modal
+    When I click close modal
 
   Scenario: edit /w array persistence (strict comparison)
     Given I am on "collection/crud3.php"
-    Then I click using selector "//table//tr[3]//i.icon.edit"
+    When I click using selector "//table//tr[3]//i.icon.edit"
     Then Modal is open with text "Edit Country"
     When I press Modal button "Save"
     Then Toast display should contain text "Record has been saved!"
 
   Scenario: delete /w array persistence (strict comparison)
-    Then I click using selector "//table//tr[3]//i.icon.trash"
+    When I click using selector "//table//tr[3]//i.icon.trash"
     Then Toast display should contain text "Record has been deleted!"

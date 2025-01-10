@@ -6,7 +6,7 @@ Feature: Grid
     Then I should see "United Kingdom"
     When I press button "Test"
     Then Toast display should contain text "United Kingdom"
-    Then I click using selector "i.atk-remove-icon"
+    When I click using selector "i.atk-remove-icon"
     Then I should not see "United Kingdom"
     When I search grid for "kingdom"
     Then I should see "United Kingdom"
@@ -61,7 +61,7 @@ Feature: Grid
     Then Element "//div.ui.master.checkbox" should not contain class "checked"
     Then Element "//div.ui.master.checkbox" should not contain class "indeterminate"
     Then Element "//div.ui.menu/div.item[text()='Show selected']" should contain class "disabled"
-    Then I click paginator page "2"
+    When I click paginator page "2"
     When I click using selector "//tr[2]//div.ui.child.checkbox"
     When I click using selector "//tr[4]//div.ui.child.checkbox"
     Then Element "//div.ui.master.checkbox" should not contain class "checked"
@@ -113,7 +113,7 @@ Feature: Grid
   Scenario: Row remote action - load record
     Given I am on "collection/grid.php"
     Then I should not see "Bahamas"
-    Then I click paginator page "2"
+    When I click paginator page "2"
     Then I should see "Bahamas"
     When I click using selector "//tr[td[text()='Bahamas']]//div.ui.button[text()='Say HI']"
     Then Toast display should contain text 'Loaded "Bahamas" from ID=16'
