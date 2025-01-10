@@ -16,8 +16,15 @@ Feature: Lookup
     Then I press Modal button "Save"
     Then Toast display should contain text "Beverages"
 
-  Scenario: Testing lookup add
+  Scenario: Testing lookup clear
     Given I am on "form-control/lookup.php"
+    Then I check if text in "//div.text[../input[@name='country1']]" match text ""
+    Then I select value "Hong Kong" in lookup "//div.text[../input[@name='country1']]"
+    Then I check if text in "//div.text[../input[@name='country1']]" match text "Hong Kong"
+    Then I select value "" in lookup "//div.text[../input[@name='country1']]"
+    Then I check if text in "//div.text[../input[@name='country1']]" match text ""
+
+  Scenario: Testing lookup add
     Then I check if text in "//div.text[../input[@name='country2']]" match text ""
     Then I press button "Add New"
     When I fill in "atk_fp_country__name" with "Plusia"
