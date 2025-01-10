@@ -554,19 +554,21 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSelectValueInLookup(string $value, string $inputName): void
     {
-        $isSelectorXpath = $this->parseSelector($inputName)[0] === 'xpath';
-
         // get dropdown item from Fomantic-UI which is direct parent of input HTML element
+        $isSelectorXpath = $this->parseSelector($inputName)[0] === 'xpath';
         $lookupElem = $this->findElement(null, ($isSelectorXpath ? $inputName : '//input[@name="' . $inputName . '"]') . '/parent::div');
+
+        if ($value === '') {
+            $this->findElement($lookupElem, 'i.remove.icon')->click();
+
+            return;
+        }
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
         $this->getSession()->executeScript('$(arguments[0]).dropdown(\'show\')', [$lookupElem]);
         $this->jqueryWait('$(arguments[0]).hasClass(\'visible\')', [$lookupElem]);
 
         // select value
-        if ($value === '') { // TODO impl. native clearable - https://github.com/atk4/ui/issues/572
-            $value = "\u{00a0}";
-        }
         $valueElem = $this->findElement($lookupElem, '//div[text()="' . $value . '"]');
         $this->getSession()->executeScript('$(arguments[0]).dropdown(\'set selected\', arguments[1]);', [$lookupElem, $valueElem->getAttribute('data-value')]);
         $this->jqueryWait();
