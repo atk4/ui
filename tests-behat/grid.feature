@@ -2,20 +2,20 @@ Feature: Grid
 
   Scenario: search
     Given I am on "collection/grid.php"
-    Then I search grid for "kingdom"
+    When I search grid for "kingdom"
     Then I should see "United Kingdom"
     When I press button "Test"
     Then Toast display should contain text "United Kingdom"
     Then I click using selector "i.atk-remove-icon"
     Then I should not see "United Kingdom"
-    Then I search grid for "kingdom"
+    When I search grid for "kingdom"
     Then I should see "United Kingdom"
     When I write "[escape]" into selector "input.atk-grid-search"
     Then I should not see "United Kingdom"
 
   Scenario: search no ajax
     Given I am on "collection/grid.php?no-ajax=1"
-    Then I search grid for "kingdom"
+    When I search grid for "kingdom"
     Then PATCH MINK the url should match "~_q=kingdom~"
     Then I should see "United Kingdom"
 
@@ -30,7 +30,7 @@ Feature: Grid
     When I click using selector "//div[@id='grid']//tr[2]//div.ui.button[text()='Action Modal']"
     Then No toast should be displayed
     Then I should see "Clicked Action Modal: Albania"
-    Then I hide js modal
+    When I hide js modal
     When I click using selector "//div[@id='grid']//tr[2]//div.ui.dropdown[div[text()='Actions...']]"
     Then No toast should be displayed
     When I click using selector "//div[@id='grid']//tr[2]//div.ui.dropdown[div[text()='Actions...']]//div.menu/div[text()='Action MenuItem']"

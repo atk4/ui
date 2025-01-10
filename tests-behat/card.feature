@@ -12,7 +12,7 @@ Feature: Card
     When I press button "Edit"
     Then Modal is open with text "Edit Country"
     Then I check if input value for ".modal.front input" match text "Czech Republic NO RELOAD"
-    Then I hide js modal
+    When I hide js modal
 
   Scenario: Card with entity action, entity must not reload - JsCallbackExecutor, exception is displayed
     When I press button "Delete"

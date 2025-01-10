@@ -14,7 +14,7 @@ Feature: Crud
     Then Toast display should contain text 'Country action "add" with "Test" entity was executed.'
 
   Scenario: search
-    Then I search grid for "united kingdom"
+    When I search grid for "united kingdom"
     Then I should see "United Kingdom"
     Then I should not see "No records"
 
@@ -33,7 +33,7 @@ Feature: Crud
     Then Toast display should contain text 'Country action "add" with "Test 2" entity was executed.'
     # TODO add should keep search
     # related with https://github.com/atk4/ui/issues/526 (list newly added record first)
-    Then I search grid for "united kingdo"
+    When I search grid for "united kingdo"
 
   Scenario: edit
     When I press button "Edit"
@@ -48,7 +48,7 @@ Feature: Crud
     # TODO modal should be always fully (re)loaded on open and fully destroyed once it is closed
     # https://github.com/atk4/ui/issues/1928
     Given I am on "_unit-test/crud.php"
-    Then I search grid for "united kingdom"
+    When I search grid for "united kingdom"
 
     Then I should not see "My United Kingdom"
     When I persist DB changes across requests
@@ -66,11 +66,11 @@ Feature: Crud
     Then I should not see "United Kingdom"
 
   Scenario: search across multiple columns
-    Then I search grid for "420 zech"
+    When I search grid for "420 zech"
     Then I should see "Czech Republic"
 
   Scenario: search no match
-    Then I search grid for "420X zech"
+    When I search grid for "420X zech"
     Then I should see "No records"
     Then I should not see "Czech Republic"
 

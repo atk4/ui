@@ -25,7 +25,7 @@ Feature: Vue
   Scenario: testing InlineEdit - /w onChange callback
     When I fill field using "(//input[@name='atk_fp_country__name'])[2]" with "test callback"
     Then I should see "new value: test callback"
-    Then I hide js modal
+    When I hide js modal
 
   Scenario: testing ItemSearch
     When I fill in "atk-vue-search" with "united kingdom"

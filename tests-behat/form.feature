@@ -8,7 +8,7 @@ Feature: Form
 
     When I press button "Compare Date"
     Then I should see "Date field vs control:"
-    Then I hide js modal
+    When I hide js modal
 
     When I click tab with title "Handler Output"
     When I fill in "email1" with "foo@bar"
@@ -31,7 +31,7 @@ Feature: Form
     When I press button "Save3"
     Then I should see "some header"
     Then I should see "some text"
-    Then I hide js modal
+    When I hide js modal
 
     When I fill in "email5" with "foo@bar"
     When I press button "Save5"
@@ -41,24 +41,24 @@ Feature: Form
     When I click tab with title "Handler Safety"
     When I press button "SaveE1"
     Then Modal is open with text "Error: Cannot use object of type stdClass as array"
-    Then I hide js modal
+    When I hide js modal
     When I press button "SaveE2"
     Then Modal is open with text "Atk4\Core\Exception: Test exception I."
-    Then I hide js modal
+    When I hide js modal
     When I press button "Modal Test"
     Then I check if input value for "#mf input[name='email']" match text ""
     When I fill Modal field "email" with "ee"
     Then I check if input value for "#mf input[name='email']" match text "ee"
     When I press Modal button "Save"
     Then Modal is open with text "Atk4\Core\Exception: Test exception II."
-    Then I hide js modal
+    When I hide js modal
     Then I check if input value for "#mf input[name='email']" match text "ee"
-    Then I hide js modal
+    When I hide js modal
     When I press button "Modal Test"
     Then I check if input value for "#mf input[name='email']" match text ""
     When I press Modal button "Save"
     Then Modal is open with text "Atk4\Core\Exception: Test exception II."
-    Then I hide js modal
+    When I hide js modal
     When I press Modal button "Save"
     Then Modal is open with text "Atk4\Core\Exception: Test exception II."
 

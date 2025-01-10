@@ -349,7 +349,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I click using selector :selector
+     * @When I click using selector :selector
      */
     public function iClickUsingSelector(string $selector): void
     {
@@ -362,7 +362,7 @@ class Context extends RawMinkContext implements BehatContext
      *
      * One solution can be waiting for AJAX after each \WebDriver\AbstractWebDriver::curl() call.
      *
-     * @Then PATCH DRIVER I click using selector :selector
+     * @When PATCH DRIVER I click using selector :selector
      */
     public function iClickPatchedUsingSelector(string $selector): void
     {
@@ -378,7 +378,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I click paginator page :arg1
+     * @When I click paginator page :arg1
      */
     public function iClickPaginatorPage(string $pageNumber): void
     {
@@ -400,7 +400,7 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ modal
 
     /**
-     * @Then I press Modal button :arg
+     * @When I press Modal button :arg
      */
     public function iPressModalButton(string $buttonLabel): void
     {
@@ -436,7 +436,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I click close modal
+     * @When I click close modal
      */
     public function iClickCloseModal(): void
     {
@@ -446,7 +446,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I hide js modal
+     * @When I hide js modal
      */
     public function iHideJsModal(): void
     {
@@ -487,7 +487,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I press Panel button :arg
+     * @When I press Panel button :arg
      */
     public function iPressPanelButton(string $buttonLabel): void
     {
@@ -541,7 +541,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I search grid for :arg1
+     * @When I search grid for :arg1
      */
     public function iSearchGridFor(string $text): void
     {
@@ -550,7 +550,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I select value :arg1 in lookup :arg2
+     * @When I select value :arg1 in lookup :arg2
      */
     public function iSelectValueInLookup(string $value, string $inputName): void
     {
@@ -720,7 +720,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I click filter column name :arg1
+     * @When I click filter column name :arg1
      */
     public function iClickFilterColumnName(string $columnName): void
     {
@@ -747,7 +747,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I scroll to top
+     * @When I scroll to top
      */
     public function iScrollToTop(): void
     {
@@ -755,7 +755,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I scroll to bottom
+     * @When I scroll to bottom
      */
     public function iScrollToBottom(): void
     {
