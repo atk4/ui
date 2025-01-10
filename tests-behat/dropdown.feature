@@ -16,6 +16,15 @@ Feature: Dropdown
     When I click using selector "//div.field[label[text()='Product ID']]//div.ui.dropdown"
     Then I should see "No results found."
 
+  Scenario: dropdown multiple
+    Given I am on "form-control/dropdown-plus.php"
+    Then I check if input value for "input[name='multi']" match text ""
+    Then I select value "Option 2" in lookup "multi"
+    Then I select value "Option 1" in lookup "multi"
+    Then I check if input value for "input[name='multi']" match text "option2,option1"
+    Then I select value "" in lookup "multi"
+    Then I check if input value for "input[name='multi']" match text ""
+
   Scenario: dropdown menu
     Given I am on "basic/menu.php"
     When I click using selector "//div.ui.dropdown[div[text()='With Callback']]"
