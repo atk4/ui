@@ -80,14 +80,14 @@ $form->addControl('enum', [
 $form->addControl('values', [
     Form\Control\Dropdown::class,
     'caption' => 'Using values with default text',
-    'empty' => 'Choose an option',
+    'placeholder' => 'Choose an option',
     'values' => ['default' => 'Default', 'option1' => 'Option 1', 'option2' => 'Option 2', 'option3' => 'Option 3'],
 ]);
 
 $form->addControl('icon', [
     Form\Control\Dropdown::class,
     'caption' => 'Using icon',
-    'empty' => 'Choose an icon',
+    'placeholder' => 'Choose an icon',
     'values' => [
         'tag' => ['Tag', 'icon' => 'tag'],
         'globe' => ['Globe', 'icon' => 'globe'],
@@ -99,7 +99,7 @@ $form->addControl('icon', [
 $form->addControl('multi', [
     Form\Control\Dropdown::class,
     'caption' => 'Multiple selection',
-    'empty' => 'Choose has many options needed',
+    'placeholder' => 'Choose has many options needed',
     'multiple' => true,
     'values' => ['default' => 'Default', 'option1' => 'Option 1', 'option2' => 'Option 2'],
 ]);

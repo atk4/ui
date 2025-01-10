@@ -210,7 +210,7 @@ class Dropdown extends Input
             $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
         }
 
-        $this->template->set('DefaultText', $this->empty);
+        $this->template->set('DefaultText', $this->placeholder);
 
         $this->htmlRenderValue();
         $this->jsRenderDropdown();
