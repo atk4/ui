@@ -112,8 +112,9 @@ class Lookup extends Input
     public $settings = [];
 
     /**
-     * Define callback for generating the row data
-     * If left empty default callback Lookup::defaultRenderRow is used.
+     * Define callback for generating the row data.
+     *
+     * When null default callback Lookup::defaultRenderRow is used.
      *
      * @var \Closure<T of Model>($this, T): array{title: mixed}
      */
