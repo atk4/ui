@@ -280,7 +280,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Sleep for a certain time in ms.
      *
-     * @Then I wait :arg1 ms
+     * @When I wait :arg1 ms
      */
     public function iWait(int $ms): void
     {
@@ -349,7 +349,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I click using selector :selector
+     * @When I click using selector :selector
      */
     public function iClickUsingSelector(string $selector): void
     {
@@ -362,7 +362,7 @@ class Context extends RawMinkContext implements BehatContext
      *
      * One solution can be waiting for AJAX after each \WebDriver\AbstractWebDriver::curl() call.
      *
-     * @Then PATCH DRIVER I click using selector :selector
+     * @When PATCH DRIVER I click using selector :selector
      */
     public function iClickPatchedUsingSelector(string $selector): void
     {
@@ -378,7 +378,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I click paginator page :arg1
+     * @When I click paginator page :arg1
      */
     public function iClickPaginatorPage(string $pageNumber): void
     {
@@ -400,7 +400,7 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ modal
 
     /**
-     * @Then I press Modal button :arg
+     * @When I press Modal button :arg
      */
     public function iPressModalButton(string $buttonLabel): void
     {
@@ -436,7 +436,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I click close modal
+     * @When I click close modal
      */
     public function iClickCloseModal(): void
     {
@@ -446,7 +446,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I hide js modal
+     * @When I hide js modal
      */
     public function iHideJsModal(): void
     {
@@ -487,7 +487,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I press Panel button :arg
+     * @When I press Panel button :arg
      */
     public function iPressPanelButton(string $buttonLabel): void
     {
@@ -501,7 +501,7 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ tab
 
     /**
-     * @Given I click tab with title :arg1
+     * @When I click tab with title :arg1
      */
     public function iClickTabWithTitle(string $tabTitle): void
     {
@@ -541,7 +541,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I search grid for :arg1
+     * @When I search grid for :arg1
      */
     public function iSearchGridFor(string $text): void
     {
@@ -550,23 +550,25 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I select value :arg1 in lookup :arg2
+     * @When I select value :arg1 in lookup :arg2
      */
     public function iSelectValueInLookup(string $value, string $inputName): void
     {
-        $isSelectorXpath = $this->parseSelector($inputName)[0] === 'xpath';
-
         // get dropdown item from Fomantic-UI which is direct parent of input HTML element
+        $isSelectorXpath = $this->parseSelector($inputName)[0] === 'xpath';
         $lookupElem = $this->findElement(null, ($isSelectorXpath ? $inputName : '//input[@name="' . $inputName . '"]') . '/parent::div');
+
+        if ($value === '') {
+            $this->findElement($lookupElem, 'i.remove.icon')->click();
+
+            return;
+        }
 
         // open dropdown and wait till fully opened (just a click is not triggering it)
         $this->getSession()->executeScript('$(arguments[0]).dropdown(\'show\')', [$lookupElem]);
         $this->jqueryWait('$(arguments[0]).hasClass(\'visible\')', [$lookupElem]);
 
         // select value
-        if ($value === '') { // TODO impl. native clearable - https://github.com/atk4/ui/issues/572
-            $value = "\u{00a0}";
-        }
         $valueElem = $this->findElement($lookupElem, '//div[text()="' . $value . '"]');
         $this->getSession()->executeScript('$(arguments[0]).dropdown(\'set selected\', arguments[1]);', [$lookupElem, $valueElem->getAttribute('data-value')]);
         $this->jqueryWait();
@@ -678,7 +680,20 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then ~^I check if input value for "([^"]*)" match text "([^"]*)"~
+     * @Then ~^I check if input value for "([^"]*)" match text in "([^"]*)"$~
+     */
+    public function compareInputValueText(string $compareSelector, string $compareToSelector): void
+    {
+        $compareSelector = $this->unquoteStepArgument($compareSelector);
+        $compareToSelector = $this->unquoteStepArgument($compareToSelector);
+
+        if ($this->findElement(null, $compareSelector)->getValue() !== $this->findElement(null, $compareToSelector)->getText()) {
+            throw new \Exception('Input value does not match between: ' . $compareSelector . ' and ' . $compareToSelector);
+        }
+    }
+
+    /**
+     * @Then ~^I check if input value for "([^"]*)" match text "([^"]*)"$~
      */
     public function compareInputValueToText(string $selector, string $text): void
     {
@@ -688,21 +703,6 @@ class Context extends RawMinkContext implements BehatContext
         $inputValue = $this->findElement(null, $selector)->getValue();
         if ($inputValue !== $text) {
             throw new \Exception('Input value does not match: ' . $inputValue . ', expected: ' . $text);
-        }
-    }
-
-    /**
-     * @Then ~^I check if input value for "([^"]*)" match text in "([^"]*)"$~
-     */
-    public function compareInputValueToElementText(string $inputName, string $selector): void
-    {
-        $inputName = $this->unquoteStepArgument($inputName);
-        $selector = $this->unquoteStepArgument($selector);
-
-        $expectedText = $this->findElement(null, $selector)->getText();
-        $input = $this->findElement(null, 'input[name="' . $inputName . '"]');
-        if ($expectedText !== $input->getValue()) {
-            throw new \Exception('Input value does not match: ' . $input->getValue() . ', expected: ' . $expectedText);
         }
     }
 
@@ -720,7 +720,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I click filter column name :arg1
+     * @When I click filter column name :arg1
      */
     public function iClickFilterColumnName(string $columnName): void
     {
@@ -747,7 +747,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I scroll to top
+     * @When I scroll to top
      */
     public function iScrollToTop(): void
     {
@@ -755,7 +755,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I scroll to bottom
+     * @When I scroll to bottom
      */
     public function iScrollToBottom(): void
     {
@@ -801,7 +801,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then ~^I check if text in "([^"]*)" match text in "([^"]*)"~
+     * @Then ~^I check if text in "([^"]*)" match text in "([^"]*)"$~
      */
     public function compareElementText(string $compareSelector, string $compareToSelector): void
     {
@@ -814,7 +814,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then ~^I check if text in "([^"]*)" match text "([^"]*)"~
+     * @Then ~^I check if text in "([^"]*)" match text "([^"]*)"$~
      */
     public function textInContainerShouldMatch(string $selector, string $text): void
     {
@@ -827,7 +827,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then ~^I check if text in "([^"]*)" match regex "([^"]*)"~
+     * @Then ~^I check if text in "([^"]*)" match regex "([^"]*)"$~
      */
     public function textInContainerShouldMatchRegex(string $selector, string $regex): void
     {

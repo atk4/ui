@@ -45,5 +45,5 @@ $grid->addSelection();
 // this emulation is not perfect, as it works even with event.preventDefault() called
 $grid->table->js(true)->find('a')->on(
     'click',
-    new JsFunction(['event'], [new JsExpression('window.location.href = \'#test\'; event.preventDefault();')])
+    new JsFunction([], [new JsExpression('window.location.href = \'#test\''), 'preventDefault' => true])
 );

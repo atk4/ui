@@ -35,9 +35,6 @@ class Lookup extends Input
     /** @var CallbackLater Object used to capture requests from the browser. */
     public $callback;
 
-    /** @var string Set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value. */
-    public $empty = "\u{00a0}"; // Unicode NBSP
-
     /**
      * Either set this to array of fields which must be searched (e.g. "name", "surname"), or define this
      * as a callback to be executed callback($model, $query);.
@@ -112,8 +109,9 @@ class Lookup extends Input
     public $settings = [];
 
     /**
-     * Define callback for generating the row data
-     * If left empty default callback Lookup::defaultRenderRow is used.
+     * Define callback for generating the row data.
+     *
+     * When null default callback Lookup::defaultRenderRow is used.
      *
      * @var \Closure<T of Model>($this, T): array{title: mixed}
      */
@@ -195,10 +193,6 @@ class Lookup extends Input
         $data = [];
         foreach ($this->model as $row) {
             $data[] = $this->renderRow($row);
-        }
-
-        if (!$this->multiple && $this->empty) {
-            array_unshift($data, ['value' => '', 'title' => $this->empty]);
         }
 
         return $data;
@@ -362,6 +356,10 @@ class Lookup extends Input
             'fields' => ['name' => 'title'],
             'apiSettings' => array_merge(['url' => $this->getCallbackUrl() . '&q={query}'], $this->apiConfig),
         ], $this->settings);
+
+        if ($this->entityField === null || ($this->entityField->getField()->nullable || !$this->entityField->getField()->required)) {
+            $settings['clearable'] = true;
+        }
 
         $chain->dropdown($settings);
     }
