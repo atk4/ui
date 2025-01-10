@@ -10,7 +10,7 @@ Feature: ScopeBuilder
     Then date rule "atk_fp_stat__start_date" operator is "is on" and value is "Oct 22, 2020"
     Then date rule "atk_fp_stat__finish_time" operator is "is not on" and value is "22:22:00"
     Then bool rule "atk_fp_stat__is_commercial" has value "No"
-    Then I check if input value for "qb" match text in "p.atk-expected-input-result"
+    Then I check if input value for "//input[@name='qb']" match text in "p.atk-expected-input-result"
     When I press button "Save"
     Then Modal is open with text "TypeError: Unexpected non-scalar value"
     # TODO uncomment once "Object serialization is not supported" is fixed
