@@ -86,7 +86,7 @@ $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class extends
 
         if (File::assertInstanceOf($this->action->getEntity())->is_folder) {
             Grid::addTo($right, ['menu' => false, 'ipp' => 5])
-                ->setModel(File::assertInstanceOf($this->getAction()->getModel())->subFolder);
+                ->setModel(File::assertInstanceOf($this->getAction()->getEntity())->subFolder);
         } else {
             Message::addTo($right, ['Not a folder', 'type' => 'warning']);
         }
