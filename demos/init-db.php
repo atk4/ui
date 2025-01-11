@@ -248,8 +248,8 @@ class ModelWithPrefixedFields extends Model
             return $name;
         }
 
-        if (isset(self::$prefixedFieldNames[$name . '_id'])) {
-            return self::$prefixedFieldNames[$name . '_id'];
+        if (str_ends_with(self::$prefixedFieldNames[$name . '_id'] ?? '', '_id')) {
+            return substr(self::$prefixedFieldNames[$name . '_id'], 0, -3);
         }
 
         return self::$prefixedFieldNames[$name];
