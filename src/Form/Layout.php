@@ -169,7 +169,13 @@ class Layout extends AbstractLayout
             }
 
             $template = $element->renderLabel ? $labeledControl : $noLabelControl;
-            $label = $element->caption ?? $element->entityField->getField()->getCaption();
+            $label = $element->caption;
+            if ($label === null) {
+                $label = $element->entityField->getField()->getCaption();
+                if (property_exists($element, 'model')) {
+                    $label = preg_replace('~^ID | ID$~', '', $label);
+                }
+            }
 
             // anything but form controls gets inserted directly
             if ($element instanceof Control\Checkbox) {
