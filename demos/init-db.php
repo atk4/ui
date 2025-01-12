@@ -441,6 +441,10 @@ class Stat extends ModelWithPrefixedFields
         $this->onHook(Model::HOOK_AFTER_LOAD, static function (self $entity) {
             $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
             $entity->currency_symbol = $map[$entity->currency] ?? '?';
+
+            // fix too dirty field for user action
+            $dirtyRef = &$entity->getDirtyRef();
+            unset($dirtyRef[$entity->fieldName()->currency_symbol]);
         });
 
         $this->addField($this->fieldName()->project_budget, ['type' => 'atk4_money']);
