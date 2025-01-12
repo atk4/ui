@@ -6,6 +6,7 @@ namespace Atk4\Ui\Form;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
+use Atk4\Data\Reference\HasOneSql;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
@@ -121,6 +122,23 @@ class Layout extends AbstractLayout
         return $v;
     }
 
+    private function getEntityFieldCaptionWithoutReferenceSuffix(Control $control): string
+    {
+        $field = $control->entityField->getField();
+        $caption = $field->getCaption();
+
+        if ($field->hasReference()) {
+            $ref = $field->getReference();
+            if ($ref instanceof HasOneSql) {
+                $analysingTheirModel = $ref->createAnalysingTheirModel();
+
+                return \Closure::bind(static fn () => $ref->getOurFieldCaptionWithoutReferenceSuffix($analysingTheirModel), null, HasOneSql::class)();
+            }
+        }
+
+        return preg_replace('~ ID$~i', '', $caption);
+    }
+
     #[\Override]
     protected function recursiveRender(): void
     {
@@ -171,10 +189,9 @@ class Layout extends AbstractLayout
             $template = $element->renderLabel ? $labeledControl : $noLabelControl;
             $label = $element->caption;
             if ($label === null) {
-                $label = $element->entityField->getField()->getCaption();
-                if (property_exists($element, 'model')) {
-                    $label = preg_replace('~ ID$~i', '', $label);
-                }
+                $label = property_exists($element, 'model')
+                    ? $this->getEntityFieldCaptionWithoutReferenceSuffix($element)
+                    : $element->entityField->getField()->getCaption();
             }
 
             // anything but form controls gets inserted directly
