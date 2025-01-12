@@ -173,7 +173,7 @@ class Layout extends AbstractLayout
             if ($label === null) {
                 $label = $element->entityField->getField()->getCaption();
                 if (property_exists($element, 'model')) {
-                    $label = preg_replace('~^(?:.*\K ID$|ID )~s', '', $label);
+                    $label = preg_replace('~ ID$~i', '', $label);
                 }
             }
 
