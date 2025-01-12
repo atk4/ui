@@ -165,7 +165,7 @@ $wizard->addStep('Crud integration', static function (Wizard $page) {
         $country = new Country($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
         $country->getUserAction('delete')->enabled = static function (Country $entity) {
-            return $entity->id % 2 === 0;
+            return $entity->id->getId() % 2 === 0;
         };
         $country->addUserAction('mail', [
             'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,

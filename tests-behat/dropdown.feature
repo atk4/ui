@@ -13,7 +13,7 @@ Feature: Dropdown
     Then I should not see "Soda"
     Then I should not see "Cola"
     Then I should not see "No results found."
-    When I click using selector "//div.field[label[text()='Product ID']]//div.ui.dropdown"
+    When I click using selector "//div.field[label[text()='Product']]//div.ui.dropdown"
     Then I should see "No results found."
 
   Scenario: dropdown multiple

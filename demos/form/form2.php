@@ -96,8 +96,8 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class extends Mod
         $this->addField('name', ['required' => true]);
         $this->addField('surname', ['ui' => ['placeholder' => 'e.g. Smith']]);
         $this->addField('gender', ['enum' => ['M', 'F']]);
-        $this->hasOne('country_lookup_id', ['model' => [Country::class]]); // this works fast
-        $this->hasOne('country_dropdown_id', ['model' => [Country::class], 'ui' => ['form' => new Form\Control\Dropdown()]]); // this works slow
+        $this->hasOne('country_lookup_id', ['model' => [Country::class]]); // this renders faster
+        $this->hasOne('country_dropdown_id', ['model' => [Country::class], 'ui' => ['form' => new Form\Control\Dropdown()]]); // this renders slower
     }
 
     #[\Override]

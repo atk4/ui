@@ -68,7 +68,7 @@ $crud->setModel($model);
 // because Crud inherits Grid, you can also define custom actions
 $crud->addModalAction(['icon' => 'cogs'], 'Details', static function (View $p, $id) use ($crud) {
     $model = Country::assertInstanceOf($crud->model);
-    Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (id: ' . $p->getApp()->uiPersistence->typecastSaveField($crud->model->getIdField(), $id) . ')']);
+    Message::addTo($p, ['Details for: ' . $model->load($id)->name . ' (ID: ' . $p->getApp()->uiPersistence->typecastSaveField($crud->model->getIdField(), $id) . ')']);
 });
 
 $column = $columns->addColumn();
@@ -86,7 +86,7 @@ $myExecutorClass = AnonymousClassNameCache::get_class(fn () => new class extends
 
         if (File::assertInstanceOf($this->action->getEntity())->is_folder) {
             Grid::addTo($right, ['menu' => false, 'ipp' => 5])
-                ->setModel(File::assertInstanceOf($this->getAction()->getModel())->subFolder);
+                ->setModel(File::assertInstanceOf($this->getAction()->getEntity())->subFolder);
         } else {
             Message::addTo($right, ['Not a folder', 'type' => 'warning']);
         }
