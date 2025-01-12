@@ -198,6 +198,9 @@ trait ModelPreventModificationTrait
 /**
  * Improve testing by using prefixed real field and SQL names.
  *
+ * @property WrappedId $id @Atk4\Field()
+ *
+ * @method WrappedId|null                  getId()
  * @method static|null                     tryLoad(WrappedId $id = null)
  * @method static                          load(WrappedId $id)
  * @method \Traversable<WrappedId, static> getIterator()
