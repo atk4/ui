@@ -8,7 +8,7 @@
 FROM php:apache
 
 RUN apt-get update && apt-get install -y \
-        libicu-dev git jq unzip npm \
+        libicu-dev git unzip npm \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
     && docker-php-ext-install pdo pdo_mysql
@@ -30,9 +30,8 @@ RUN cd js && npm ci && npm run build
 RUN cd public/css && lessc agileui.less agileui.css
 
 ADD composer.json .
-RUN jq 'del(."require-release")|del(."require-dev")' < composer.json > tmp && mv tmp composer.json \
-    && composer require --no-update fzaninotto/faker:^1.6 \
-    && composer install --no-dev
+RUN composer require --no-update --no-interaction fzaninotto/faker:^1.6 \
+    && composer install --no-dev --ignore-platform-req=php
 
 RUN echo 'disable_functions = pcntl_exec,exec,passthru,proc_open,shell_exec,system,popen/g' >> "$PHP_INI_DIR/php.ini"
 
