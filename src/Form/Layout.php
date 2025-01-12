@@ -6,7 +6,6 @@ namespace Atk4\Ui\Form;
 
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
-use Atk4\Data\Reference\HasOneSql;
 use Atk4\Ui\Button;
 use Atk4\Ui\Header;
 use Atk4\Ui\HtmlTemplate;
@@ -122,21 +121,11 @@ class Layout extends AbstractLayout
         return $v;
     }
 
-    private function getEntityFieldCaptionWithoutReferenceSuffix(Control $control): string
+    private function getEntityFieldCaptionWithoutIdSuffix(Control $control): string
     {
         $field = $control->entityField->getField();
-        $caption = $field->getCaption();
 
-        if ($field->hasReference()) {
-            $ref = $field->getReference();
-            if ($ref instanceof HasOneSql) {
-                $analysingTheirModel = $ref->createAnalysingTheirModel();
-
-                return \Closure::bind(static fn () => $ref->getOurFieldCaptionWithoutReferenceSuffix($analysingTheirModel), null, HasOneSql::class)();
-            }
-        }
-
-        return preg_replace('~ ID$~i', '', $caption);
+        return preg_replace('~ (' . preg_quote($field->getOwner()->getIdField()->getCaption(), '~') . '|ID)$~i', '', $field->getCaption());
     }
 
     #[\Override]
@@ -190,7 +179,7 @@ class Layout extends AbstractLayout
             $label = $element->caption;
             if ($label === null) {
                 $label = property_exists($element, 'model')
-                    ? $this->getEntityFieldCaptionWithoutReferenceSuffix($element)
+                    ? $this->getEntityFieldCaptionWithoutIdSuffix($element)
                     : $element->entityField->getField()->getCaption();
             }
 
