@@ -125,12 +125,7 @@ class Layout extends AbstractLayout
     {
         $field = $control->entityField->getField();
 
-        $idSuffixes = ['ID'];
-        if ($field->getOwner()->idField && $field->getOwner()->hasField($field->getOwner()->idField)) {
-            $idSuffixes = $field->getOwner()->getIdField()->getCaption();
-        }
-
-        return preg_replace('~ (' . implode('|', array_map(fn ($v) => preg_quote($v, '~'), $idSuffixes)) . ')$~i', '', $field->getCaption());
+        return preg_replace('~ ID$~i', '', $field->getCaption());
     }
 
     #[\Override]
