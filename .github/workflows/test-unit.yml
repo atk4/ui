@@ -486,3 +486,14 @@ jobs:
       - name: Diff build baseline
         run: |
           diff -u docs/baseline.orig.txt docs/baseline.txt
+
+  demos-dockerfile-test:
+    name: Demos Dockerfile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build
+        run: |
+          (cd demos && docker build -f Dockerfile ..)
