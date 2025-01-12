@@ -121,13 +121,6 @@ class Layout extends AbstractLayout
         return $v;
     }
 
-    private function getEntityFieldCaptionWithoutIdSuffix(Control $control): string
-    {
-        $field = $control->entityField->getField();
-
-        return preg_replace('~ ID$~i', '', $field->getCaption());
-    }
-
     #[\Override]
     protected function recursiveRender(): void
     {
@@ -178,9 +171,10 @@ class Layout extends AbstractLayout
             $template = $element->renderLabel ? $labeledControl : $noLabelControl;
             $label = $element->caption;
             if ($label === null) {
-                $label = property_exists($element, 'model')
-                    ? $this->getEntityFieldCaptionWithoutIdSuffix($element)
-                    : $element->entityField->getField()->getCaption();
+                $label = $element->entityField->getField()->getCaption();
+                if (property_exists($element, 'model')) {
+                    $label = preg_replace('~ ID$~i', '', $label);
+                }
             }
 
             // anything but form controls gets inserted directly
