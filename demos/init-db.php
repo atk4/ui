@@ -196,7 +196,7 @@ trait ModelPreventModificationTrait
 }
 
 /**
- * Improve testing by using prefixed real field and SQL names.
+ * Improve testing by using non-scalar ID and prefixed field/SQL names.
  *
  * @property WrappedId $id @Atk4\Field()
  *
