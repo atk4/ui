@@ -62,7 +62,7 @@ class Tooltip extends Table\Column
     public function getHtmlTags(Model $row, ?Field $field): array
     {
         // @TODO remove popup tooltip when null
-        $tooltip = $row->get($this->tooltipField);
+        $tooltip = $this->getApp()->uiPersistence->typecastSaveField($row->getField($this->tooltipField), $row->get($this->tooltipField));
 
         if ($tooltip === null || $tooltip === '') {
             return [

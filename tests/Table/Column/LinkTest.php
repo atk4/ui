@@ -16,6 +16,8 @@ class LinkTest extends TestCase
     use CreateAppTrait;
     use TableTestTrait;
 
+    private const NBSP = "\u{00a0}";
+
     /** @var Table */
     protected $table;
 
@@ -26,14 +28,14 @@ class LinkTest extends TestCase
 
         $arr = [
             'table' => [
-                1 => ['id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'salary' => -123],
+                1 => ['id' => 1, 'name' => 'bar', 'ref' => 'ref123', 'salary' => -1234],
             ],
         ];
         $db = new Persistence\Array_($arr);
         $m = new Model($db, ['table' => 'table']);
         $m->addField('name');
         $m->addField('ref');
-        $m->addField('salary');
+        $m->addField('salary', ['type' => 'integer']);
         $this->table = new Table();
         $this->table->setApp($this->createApp());
         $this->table->invokeInit();
@@ -72,7 +74,7 @@ class LinkTest extends TestCase
         );
 
         self::assertSame(
-            '<tr data-id="1"><td>bar</td><td>ref123</td><td class="right aligned single line negative">-123</td></tr>',
+            '<tr data-id="1"><td>bar</td><td>ref123</td><td class="right aligned single line negative">-1' . self::NBSP . '234</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -88,7 +90,7 @@ class LinkTest extends TestCase
         );
 
         self::assertSame(
-            '<tr data-id="1"><td>bar</td><td>ref123</td><td class="right aligned single line negative"><b>-123</b></td></tr>',
+            '<tr data-id="1"><td>bar</td><td>ref123</td><td class="right aligned single line negative"><b>-1' . self::NBSP . '234</b></td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -105,7 +107,7 @@ class LinkTest extends TestCase
         );
 
         self::assertSame(
-            '<tr data-id="1"><td class="right aligned single line ">bar</td><td>ref123</td><td class="right aligned single line negative"><b>-123</b></td></tr>',
+            '<tr data-id="1"><td class="right aligned single line ">bar</td><td>ref123</td><td class="right aligned single line negative"><b>-1' . self::NBSP . '234</b></td></tr>',
             $this->extractTableRow($this->table)
         );
     }
@@ -278,10 +280,10 @@ class LinkTest extends TestCase
 
     public function testTooltip(): void
     {
-        $this->table->addDecorator('name', [Table\Column\Tooltip::class, ['tooltipField' => 'ref']]);
+        $this->table->addDecorator('name', [Table\Column\Tooltip::class, ['tooltipField' => 'salary']]);
 
         self::assertSame(
-            '<tr data-id="1"><td class=""> bar<span class="ui icon link " data-tooltip="ref123"><i class="ui icon info circle"></span></td><td>ref123</td></tr>',
+            '<tr data-id="1"><td class=""> bar<span class="ui icon link " data-tooltip="-1' . self::NBSP . '234"><i class="ui icon info circle"></span></td><td>ref123</td></tr>',
             $this->extractTableRow($this->table)
         );
     }
