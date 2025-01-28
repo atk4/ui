@@ -1,7 +1,7 @@
 import $ from 'external/jquery';
 
 class AccordionService {
-    getDefaultFomanticSettings() {
+    getDefaultFomanticUiSettings() {
         return [
             {},
             {

@@ -1,31 +1,12 @@
 import $ from 'external/jquery';
 import atk from 'atk';
-import accordionService from './Service/accordionService';
-import apiService from './Service/apiService';
-import dataService from './Service/dataService';
-import formService from './Service/formService';
-import modalService from './Service/modalService';
-import panelService from './Service/panelService';
-import popupService from './Service/popupService';
-import uploadService from './Service/uploadService';
-import vueService from './Service/vueService';
 
-atk.accordionService = accordionService;
-atk.apiService = apiService;
-atk.dataService = dataService;
-atk.formService = formService;
-atk.modalService = modalService;
-atk.panelService = panelService;
-atk.popupService = popupService;
-atk.uploadService = uploadService;
-atk.vueService = vueService;
-
-const fomanticServicesMap = {
-    api: apiService,
-    form: formService,
-    modal: modalService,
-    popup: popupService,
-    accordion: accordionService,
+const fomanticUiServicesMap = {
+    api: atk.apiService,
+    form: atk.formService,
+    modal: atk.modalService,
+    popup: atk.popupService,
+    accordion: atk.accordionService,
 };
 
 // setup Fomantic-UI global overrides
@@ -40,13 +21,13 @@ $.extend = $.fn.extend = new Proxy($.fn.extend, { // eslint-disable-line no-mult
             && $.isPlainObject(args[secondIndex])
         ) {
             let name = null;
-            for (const n of Object.keys(fomanticServicesMap)) {
+            for (const n of Object.keys(fomanticUiServicesMap)) {
                 if (args[secondIndex] === $.fn[n].settings) {
                     name = n;
                 }
             }
             if (name !== null) {
-                const [customSettings, forcedSettings] = fomanticServicesMap[name].getDefaultFomanticSettings();
+                const [customSettings, forcedSettings] = fomanticUiServicesMap[name].getDefaultFomanticUiSettings();
 
                 const newSettings = new Proxy($.extend(true, {}, {}, args[secondIndex], forcedSettings), {
                     set: (obj, prop, value) => {

@@ -4,7 +4,7 @@ import atk from 'atk';
  * This is default setup for Fomantic-UI popup.
  */
 class PopupService {
-    getDefaultFomanticSettings() {
+    getDefaultFomanticUiSettings() {
         return [
             {},
             {

@@ -12,7 +12,7 @@ class ModalService {
         this.modals = [];
     }
 
-    getDefaultFomanticSettings() {
+    getDefaultFomanticUiSettings() {
         return [
             {
                 duration: 100,

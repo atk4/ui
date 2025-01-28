@@ -20,7 +20,7 @@ class FormService {
         });
     }
 
-    getDefaultFomanticSettings() {
+    getDefaultFomanticUiSettings() {
         return [
             {
                 rules: $.extend(true, {}, $.fn.form.settings.rules, {

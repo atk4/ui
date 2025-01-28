@@ -1,7 +1,8 @@
 import 'core-js/stable';
 import atk from './setupAtk'; // must be the first non-vendor import
-import './setupPlugins';
 import './setupUtils';
+import './setupJqueryPlugins';
+import './setupServices';
 import './setupFomanticUi';
 
 __webpack_public_path__ = window.__atkBundlePublicPath + '/'; // eslint-disable-line no-undef, camelcase

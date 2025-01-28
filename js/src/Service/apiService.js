@@ -10,7 +10,7 @@ class ApiService {
         this.afterSuccessCallbacks = [];
     }
 
-    getDefaultFomanticSettings() {
+    getDefaultFomanticUiSettings() {
         return [
             {},
             {

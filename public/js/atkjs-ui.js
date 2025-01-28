@@ -1982,7 +1982,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 class AccordionService {
-  getDefaultFomanticSettings() {
+  getDefaultFomanticUiSettings() {
     return [{}, {
       onOpening: this.onOpening
     }];
@@ -2043,7 +2043,7 @@ class ApiService {
   constructor() {
     this.afterSuccessCallbacks = [];
   }
-  getDefaultFomanticSettings() {
+  getDefaultFomanticUiSettings() {
     return [{}, {
       // override supported via "../setupFomanticUi.js", both callbacks are always evaluated
       successTest: this.successTest,
@@ -2463,7 +2463,7 @@ class FormService {
       }
     });
   }
-  getDefaultFomanticSettings() {
+  getDefaultFomanticUiSettings() {
     return [{
       rules: external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(true, {}, (external_jquery__WEBPACK_IMPORTED_MODULE_5___default().fn).form.settings.rules, {
         rules: {
@@ -2632,7 +2632,7 @@ class ModalService {
   constructor() {
     this.modals = [];
   }
-  getDefaultFomanticSettings() {
+  getDefaultFomanticUiSettings() {
     return [{
       duration: 100
     }, {
@@ -3233,7 +3233,7 @@ __webpack_require__.r(__webpack_exports__);
  * This is default setup for Fomantic-UI popup.
  */
 class PopupService {
-  getDefaultFomanticSettings() {
+  getDefaultFomanticUiSettings() {
     return [{}, {
       onShow: this.onShow
     }];
@@ -3636,41 +3636,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _Service_accordionService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Service/accordionService */ "./src/Service/accordionService.js");
-/* harmony import */ var _Service_apiService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Service/apiService */ "./src/Service/apiService.js");
-/* harmony import */ var _Service_dataService__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Service/dataService */ "./src/Service/dataService.js");
-/* harmony import */ var _Service_formService__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Service/formService */ "./src/Service/formService.js");
-/* harmony import */ var _Service_modalService__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Service/modalService */ "./src/Service/modalService.js");
-/* harmony import */ var _Service_panelService__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Service/panelService */ "./src/Service/panelService.js");
-/* harmony import */ var _Service_popupService__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Service/popupService */ "./src/Service/popupService.js");
-/* harmony import */ var _Service_uploadService__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Service/uploadService */ "./src/Service/uploadService.js");
-/* harmony import */ var _Service_vueService__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./Service/vueService */ "./src/Service/vueService.js");
 
 
-
-
-
-
-
-
-
-
-
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].accordionService = _Service_accordionService__WEBPACK_IMPORTED_MODULE_2__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService = _Service_apiService__WEBPACK_IMPORTED_MODULE_3__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].dataService = _Service_dataService__WEBPACK_IMPORTED_MODULE_4__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].formService = _Service_formService__WEBPACK_IMPORTED_MODULE_5__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].modalService = _Service_modalService__WEBPACK_IMPORTED_MODULE_6__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].panelService = _Service_panelService__WEBPACK_IMPORTED_MODULE_7__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].popupService = _Service_popupService__WEBPACK_IMPORTED_MODULE_8__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].uploadService = _Service_uploadService__WEBPACK_IMPORTED_MODULE_9__["default"];
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].vueService = _Service_vueService__WEBPACK_IMPORTED_MODULE_10__["default"];
-const fomanticServicesMap = {
-  api: _Service_apiService__WEBPACK_IMPORTED_MODULE_3__["default"],
-  form: _Service_formService__WEBPACK_IMPORTED_MODULE_5__["default"],
-  modal: _Service_modalService__WEBPACK_IMPORTED_MODULE_6__["default"],
-  popup: _Service_popupService__WEBPACK_IMPORTED_MODULE_8__["default"],
-  accordion: _Service_accordionService__WEBPACK_IMPORTED_MODULE_2__["default"]
+const fomanticUiServicesMap = {
+  api: atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService,
+  form: atk__WEBPACK_IMPORTED_MODULE_1__["default"].formService,
+  modal: atk__WEBPACK_IMPORTED_MODULE_1__["default"].modalService,
+  popup: atk__WEBPACK_IMPORTED_MODULE_1__["default"].popupService,
+  accordion: atk__WEBPACK_IMPORTED_MODULE_1__["default"].accordionService
 };
 
 // setup Fomantic-UI global overrides
@@ -3683,13 +3656,13 @@ const fomanticServicesMap = {
     const secondIndex = args[0] === true ? 2 : 1;
     if (args.length >= (args[0] === true ? 3 : 2) && external_jquery__WEBPACK_IMPORTED_MODULE_0___default().isPlainObject(args[firstIndex]) && external_jquery__WEBPACK_IMPORTED_MODULE_0___default().isEmptyObject(args[firstIndex]) && external_jquery__WEBPACK_IMPORTED_MODULE_0___default().isPlainObject(args[secondIndex])) {
       let name = null;
-      for (const n of Object.keys(fomanticServicesMap)) {
+      for (const n of Object.keys(fomanticUiServicesMap)) {
         if (args[secondIndex] === (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().fn)[n].settings) {
           name = n;
         }
       }
       if (name !== null) {
-        const [customSettings, forcedSettings] = fomanticServicesMap[name].getDefaultFomanticSettings();
+        const [customSettings, forcedSettings] = fomanticUiServicesMap[name].getDefaultFomanticUiSettings();
         const newSettings = new Proxy(external_jquery__WEBPACK_IMPORTED_MODULE_0___default().extend(true, {}, {}, args[secondIndex], forcedSettings), {
           set: (obj, prop, value) => {
             const origValue = obj[prop];
@@ -3748,10 +3721,10 @@ const fomanticServicesMap = {
 
 /***/ }),
 
-/***/ "./src/setupPlugins.js":
-/*!*****************************!*\
-  !*** ./src/setupPlugins.js ***!
-  \*****************************/
+/***/ "./src/setupJqueryPlugins.js":
+/*!***********************************!*\
+  !*** ./src/setupJqueryPlugins.js ***!
+  \***********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -3835,6 +3808,46 @@ atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkScroll', _JqueryP
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkServerEvent', _JqueryPlugin_ServerEventPlugin__WEBPACK_IMPORTED_MODULE_12__["default"]);
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkSidenav', _JqueryPlugin_SidenavPlugin__WEBPACK_IMPORTED_MODULE_13__["default"]);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
+
+/***/ }),
+
+/***/ "./src/setupServices.js":
+/*!******************************!*\
+  !*** ./src/setupServices.js ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
+/* harmony import */ var _Service_accordionService__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Service/accordionService */ "./src/Service/accordionService.js");
+/* harmony import */ var _Service_apiService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Service/apiService */ "./src/Service/apiService.js");
+/* harmony import */ var _Service_dataService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Service/dataService */ "./src/Service/dataService.js");
+/* harmony import */ var _Service_formService__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Service/formService */ "./src/Service/formService.js");
+/* harmony import */ var _Service_modalService__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Service/modalService */ "./src/Service/modalService.js");
+/* harmony import */ var _Service_panelService__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Service/panelService */ "./src/Service/panelService.js");
+/* harmony import */ var _Service_popupService__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Service/popupService */ "./src/Service/popupService.js");
+/* harmony import */ var _Service_uploadService__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Service/uploadService */ "./src/Service/uploadService.js");
+/* harmony import */ var _Service_vueService__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./Service/vueService */ "./src/Service/vueService.js");
+
+
+
+
+
+
+
+
+
+
+atk__WEBPACK_IMPORTED_MODULE_0__["default"].accordionService = _Service_accordionService__WEBPACK_IMPORTED_MODULE_1__["default"];
+atk__WEBPACK_IMPORTED_MODULE_0__["default"].apiService = _Service_apiService__WEBPACK_IMPORTED_MODULE_2__["default"];
+atk__WEBPACK_IMPORTED_MODULE_0__["default"].dataService = _Service_dataService__WEBPACK_IMPORTED_MODULE_3__["default"];
+atk__WEBPACK_IMPORTED_MODULE_0__["default"].formService = _Service_formService__WEBPACK_IMPORTED_MODULE_4__["default"];
+atk__WEBPACK_IMPORTED_MODULE_0__["default"].modalService = _Service_modalService__WEBPACK_IMPORTED_MODULE_5__["default"];
+atk__WEBPACK_IMPORTED_MODULE_0__["default"].panelService = _Service_panelService__WEBPACK_IMPORTED_MODULE_6__["default"];
+atk__WEBPACK_IMPORTED_MODULE_0__["default"].popupService = _Service_popupService__WEBPACK_IMPORTED_MODULE_7__["default"];
+atk__WEBPACK_IMPORTED_MODULE_0__["default"].uploadService = _Service_uploadService__WEBPACK_IMPORTED_MODULE_8__["default"];
+atk__WEBPACK_IMPORTED_MODULE_0__["default"].vueService = _Service_vueService__WEBPACK_IMPORTED_MODULE_9__["default"];
 
 /***/ }),
 
@@ -46807,11 +46820,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_stable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/stable */ "./node_modules/core-js/stable/index.js");
 /* harmony import */ var core_js_stable__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_stable__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _setupAtk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./setupAtk */ "./src/setupAtk.js");
-/* harmony import */ var _setupPlugins__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./setupPlugins */ "./src/setupPlugins.js");
-/* harmony import */ var _setupUtils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./setupUtils */ "./src/setupUtils.js");
-/* harmony import */ var _setupFomanticUi__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./setupFomanticUi */ "./src/setupFomanticUi.js");
+/* harmony import */ var _setupUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./setupUtils */ "./src/setupUtils.js");
+/* harmony import */ var _setupJqueryPlugins__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./setupJqueryPlugins */ "./src/setupJqueryPlugins.js");
+/* harmony import */ var _setupServices__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./setupServices */ "./src/setupServices.js");
+/* harmony import */ var _setupFomanticUi__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./setupFomanticUi */ "./src/setupFomanticUi.js");
 
  // must be the first non-vendor import
+
 
 
 
