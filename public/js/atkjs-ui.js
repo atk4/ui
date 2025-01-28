@@ -283,6 +283,55 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/JqueryPlugin/AbstractPlugin.js":
+/*!********************************************!*\
+  !*** ./src/JqueryPlugin/AbstractPlugin.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ AbstractPlugin)
+/* harmony export */ });
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
+
+
+/**
+ * Base implementation of jQuery plugin in Agile Toolkit.
+ */
+class AbstractPlugin {
+  constructor(element, options) {
+    this.$el = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(element);
+    this.settings = options;
+    this.main();
+  }
+
+  /**
+   * The main plugin method. This is the method call by default
+   * when invoking the plugin on a jQuery element.
+   * $(selector).pluginName({});
+   * The plugin should normally override this class.
+   */
+  main() {}
+
+  /**
+   * Call a plugin method via the initializer function.
+   * Simply call the method like: $(selector).pluginName('method', [arg1, arg2])
+   *
+   * @param   {string}    fn   string representing the method name to execute.
+   * @param   {Array.<*>} args array of arguments need for the method to execute.
+   *
+   * @returns {*}
+   */
+  call(fn, args) {
+    return this[fn](...args);
+  }
+}
+
+/***/ }),
+
 /***/ "./src/JqueryPlugin/AjaxecPlugin.js":
 /*!******************************************!*\
   !*** ./src/JqueryPlugin/AjaxecPlugin.js ***!
@@ -297,11 +346,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _AtkPlugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AtkPlugin */ "./src/JqueryPlugin/AtkPlugin.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
 
-class AtkAjaxecPlugin extends _AtkPlugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
+class AtkAjaxecPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
   main() {
     if (!this.settings.url) {
       console.error('Trying to execute callback without URL');
@@ -357,60 +406,6 @@ AtkAjaxecPlugin.DEFAULTS = {
 
 /***/ }),
 
-/***/ "./src/JqueryPlugin/AtkPlugin.js":
-/*!***************************************!*\
-  !*** ./src/JqueryPlugin/AtkPlugin.js ***!
-  \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ AtkPlugin)
-/* harmony export */ });
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
-
-
-/**
- * Base implementation of jQuery plugin in Agile Toolkit.
- */
-class AtkPlugin {
-  /**
-   * Default plugin constructor
-   *
-   * @returns {AtkPlugin}
-   */
-  constructor(element, options) {
-    this.$el = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(element);
-    this.settings = options;
-    this.main();
-  }
-
-  /**
-   * The main plugin method. This is the method call by default
-   * when invoking the plugin on a jQuery element.
-   * $(selector).pluginName({});
-   * The plugin should normally override this class.
-   */
-  main() {}
-
-  /**
-   * Call a plugin method via the initializer function.
-   * Simply call the method like: $(selector).pluginName('method', [arg1, arg2])
-   *
-   * @param   {string}    fn   string representing the method name to execute.
-   * @param   {Array.<*>} args array of arguments need for the method to execute.
-   *
-   * @returns {*}
-   */
-  call(fn, args) {
-    return this[fn](...args);
-  }
-}
-
-/***/ }),
-
 /***/ "./src/JqueryPlugin/ColumnResizerPlugin.js":
 /*!*************************************************!*\
   !*** ./src/JqueryPlugin/ColumnResizerPlugin.js ***!
@@ -434,7 +429,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var column_resizer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! column-resizer */ "./node_modules/column-resizer/dist/column-resizer.js");
 /* harmony import */ var column_resizer__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(column_resizer__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _AtkPlugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AtkPlugin */ "./src/JqueryPlugin/AtkPlugin.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
 
@@ -446,7 +441,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Enable table column to be resizable using drag.
  */
-class AtkColumnResizerPlugin extends _AtkPlugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
+class AtkColumnResizerPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
   main() {
     this.settings.onResize = this.onResize.bind(this);
     this.resizable = new (column_resizer__WEBPACK_IMPORTED_MODULE_5___default())(this.$el[0], {
@@ -523,7 +518,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_map_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/esnext.iterator.map.js */ "./node_modules/core-js/modules/esnext.iterator.map.js");
 /* harmony import */ var core_js_modules_esnext_iterator_map_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_map_js__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _AtkPlugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./AtkPlugin */ "./src/JqueryPlugin/AtkPlugin.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
 
@@ -578,7 +573,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * See Fomantic-UI validation rule for more details: https://fomantic-ui.com/behaviors/form.html#validation-rules
  */
-class AtkConditionalFormPlugin extends _AtkPlugin__WEBPACK_IMPORTED_MODULE_7__["default"] {
+class AtkConditionalFormPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["default"] {
   main() {
     this.inputs = [];
     this.selector = this.settings.selector;
@@ -711,7 +706,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AtkPlugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AtkPlugin */ "./src/JqueryPlugin/AtkPlugin.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
 
@@ -725,7 +720,7 @@ __webpack_require__.r(__webpack_exports__);
  * Setting onApprove and onDeny function within modalOptions object will override
  * onApprove and onDeny current setting.
  */
-class AtkConfirmPlugin extends _AtkPlugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class AtkConfirmPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
     const $m = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()('<div class="ui modal" />').appendTo('body').html(this.getDialogHtml(this.settings.message));
     $m.addClass(this.settings.size);
@@ -791,10 +786,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _AtkPlugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AtkPlugin */ "./src/JqueryPlugin/AtkPlugin.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
-class AtkCreateModalPlugin extends _AtkPlugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
+class AtkCreateModalPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_1__["default"] {
   main() {
     const options = this.settings;
     // make sure we have an object when no option is passed
@@ -858,14 +853,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _AtkPlugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./AtkPlugin */ "./src/JqueryPlugin/AtkPlugin.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
 
 
 
 
-class AtkFileUploadPlugin extends _AtkPlugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
+class AtkFileUploadPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
     this.textInput = this.$el.find('input[type="text"]');
     this.hiddenInput = this.$el.find('input[type="hidden"]');
@@ -1080,7 +1075,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _AtkPlugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./AtkPlugin */ "./src/JqueryPlugin/AtkPlugin.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
 
@@ -1089,7 +1084,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class AtkJsSearchPlugin extends _AtkPlugin__WEBPACK_IMPORTED_MODULE_7__["default"] {
+class AtkJsSearchPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["default"] {
   main() {
     this.urlArgs = {};
     this.state = {
@@ -1321,7 +1316,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _AtkPlugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AtkPlugin */ "./src/JqueryPlugin/AtkPlugin.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
 
@@ -1348,7 +1343,7 @@ __webpack_require__.r(__webpack_exports__);
  * Element containing specific CSS class can be used as the handle for dragging element, if null
  * is pass, than the entire element is used.
  */
-class AtkJsSortablePlugin extends _AtkPlugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
+class AtkJsSortablePlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
   main() {
     this.ids = [];
     // the data label attribute value of the source element being drag. ex: data-id
@@ -1461,7 +1456,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _AtkPlugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AtkPlugin */ "./src/JqueryPlugin/AtkPlugin.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
 
@@ -1475,7 +1470,7 @@ __webpack_require__.r(__webpack_exports__);
  * to the urlParameter for GET method but will be included in formData
  * for POST method.
  */
-class AtkReloadViewPlugin extends _AtkPlugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
+class AtkReloadViewPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
   main() {
     if (!this.settings.url) {
       console.error('Trying to reload view without URL');
@@ -1566,7 +1561,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _AtkPlugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./AtkPlugin */ "./src/JqueryPlugin/AtkPlugin.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
 
@@ -1582,7 +1577,7 @@ __webpack_require__.r(__webpack_exports__);
  * appendTo: null      The HTML element where new content should be append to.
  * stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call. if null, then a default loader will be apply to the bottom of the $inner element.
  */
-class AtkScrollPlugin extends _AtkPlugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
+class AtkScrollPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_4__["default"] {
   main() {
     // check if we are initialized already because loading content
     // can recall this plugin and screw up page number
@@ -1763,11 +1758,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.json.parse.js */ "./node_modules/core-js/modules/esnext.json.parse.js");
 /* harmony import */ var core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _AtkPlugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AtkPlugin */ "./src/JqueryPlugin/AtkPlugin.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
 
-class AtkServerEventPlugin extends _AtkPlugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
+class AtkServerEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
   main() {
     const element = this.$el;
     const hasLoader = this.settings.showLoader;
@@ -1836,7 +1831,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_web_url_search_params_size_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_url_search_params_size_js__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _AtkPlugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./AtkPlugin */ "./src/JqueryPlugin/AtkPlugin.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
 
@@ -1854,7 +1849,7 @@ __webpack_require__.r(__webpack_exports__);
  *
  * Default value are set for Maestro admin layout.
  */
-class AtkSidenavPlugin extends _AtkPlugin__WEBPACK_IMPORTED_MODULE_7__["default"] {
+class AtkSidenavPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["default"] {
   main() {
     // menu items container
     this.menu = this.$el.find(this.settings.menuItemsSelector);

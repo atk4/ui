@@ -1,7 +1,7 @@
 import $ from 'external/jquery';
 /* global Draggable */ // loaded after main JS
 import atk from 'atk';
-import AtkPlugin from './AtkPlugin';
+import AbstractPlugin from './AbstractPlugin';
 
 /**
  * Make elements inside a container draggable and sortable.
@@ -20,7 +20,7 @@ import AtkPlugin from './AtkPlugin';
  * Element containing specific CSS class can be used as the handle for dragging element, if null
  * is pass, than the entire element is used.
  */
-export default class AtkJsSortablePlugin extends AtkPlugin {
+export default class AtkJsSortablePlugin extends AbstractPlugin {
     main() {
         this.ids = [];
         // the data label attribute value of the source element being drag. ex: data-id

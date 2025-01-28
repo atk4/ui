@@ -1,5 +1,5 @@
 import $ from 'external/jquery';
-import AtkPlugin from './AtkPlugin';
+import AbstractPlugin from './AbstractPlugin';
 
 /**
  * Add dynamic scrolling to a View that can accept page argument in URL.
@@ -10,7 +10,7 @@ import AtkPlugin from './AtkPlugin';
  * appendTo: null      The HTML element where new content should be append to.
  * stateContext: null  A jQuery selector, where you would like Fomantic-UI, to apply the stateContext to during the api call. if null, then a default loader will be apply to the bottom of the $inner element.
  */
-export default class AtkScrollPlugin extends AtkPlugin {
+export default class AtkScrollPlugin extends AbstractPlugin {
     main() {
         // check if we are initialized already because loading content
         // can recall this plugin and screw up page number

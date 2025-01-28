@@ -1,7 +1,7 @@
 import $ from 'external/jquery';
-import AtkPlugin from './AtkPlugin';
+import AbstractPlugin from './AbstractPlugin';
 
-export default class AtkCreateModalPlugin extends AtkPlugin {
+export default class AtkCreateModalPlugin extends AbstractPlugin {
     main() {
         const options = this.settings;
         // make sure we have an object when no option is passed

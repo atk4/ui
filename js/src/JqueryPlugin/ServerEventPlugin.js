@@ -1,7 +1,7 @@
 import atk from 'atk';
-import AtkPlugin from './AtkPlugin';
+import AbstractPlugin from './AbstractPlugin';
 
-export default class AtkServerEventPlugin extends AtkPlugin {
+export default class AtkServerEventPlugin extends AbstractPlugin {
     main() {
         const element = this.$el;
         const hasLoader = this.settings.showLoader;

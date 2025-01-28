@@ -1,8 +1,8 @@
 import $ from 'external/jquery';
 import atk from 'atk';
-import AtkPlugin from './AtkPlugin';
+import AbstractPlugin from './AbstractPlugin';
 
-export default class AtkAjaxecPlugin extends AtkPlugin {
+export default class AtkAjaxecPlugin extends AbstractPlugin {
     main() {
         if (!this.settings.url) {
             console.error('Trying to execute callback without URL');

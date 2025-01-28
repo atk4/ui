@@ -1,11 +1,11 @@
 import $ from 'external/jquery';
 import Resizer from 'column-resizer';
-import AtkPlugin from './AtkPlugin';
+import AbstractPlugin from './AbstractPlugin';
 
 /**
  * Enable table column to be resizable using drag.
  */
-export default class AtkColumnResizerPlugin extends AtkPlugin {
+export default class AtkColumnResizerPlugin extends AbstractPlugin {
     main() {
         this.settings.onResize = this.onResize.bind(this);
         this.resizable = new Resizer(this.$el[0], { ...this.settings.atkDefaults, ...this.settings });

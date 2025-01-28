@@ -1,8 +1,8 @@
 import $ from 'external/jquery';
 import atk from 'atk';
-import AtkPlugin from './AtkPlugin';
+import AbstractPlugin from './AbstractPlugin';
 
-export default class AtkFileUploadPlugin extends AtkPlugin {
+export default class AtkFileUploadPlugin extends AbstractPlugin {
     main() {
         this.textInput = this.$el.find('input[type="text"]');
         this.hiddenInput = this.$el.find('input[type="hidden"]');

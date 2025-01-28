@@ -1,5 +1,5 @@
 import $ from 'external/jquery';
-import AtkPlugin from './AtkPlugin';
+import AbstractPlugin from './AbstractPlugin';
 
 /**
  * Will expand or collapse menu items for side navigation.
@@ -9,7 +9,7 @@ import AtkPlugin from './AtkPlugin';
  *
  * Default value are set for Maestro admin layout.
  */
-export default class AtkSidenavPlugin extends AtkPlugin {
+export default class AtkSidenavPlugin extends AbstractPlugin {
     main() {
         // menu items container
         this.menu = this.$el.find(this.settings.menuItemsSelector);

@@ -1,8 +1,8 @@
 import $ from 'external/jquery';
 import atk from 'atk';
-import AtkPlugin from './AtkPlugin';
+import AbstractPlugin from './AbstractPlugin';
 
-export default class AtkJsSearchPlugin extends AtkPlugin {
+export default class AtkJsSearchPlugin extends AbstractPlugin {
     main() {
         this.urlArgs = {};
         this.state = { button: false, filter: false };

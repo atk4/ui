@@ -1,5 +1,5 @@
 import atk from 'atk';
-import AtkPlugin from './AtkPlugin';
+import AbstractPlugin from './AbstractPlugin';
 
 /**
  * Show or hide input field base on other input field condition.
@@ -46,7 +46,7 @@ import AtkPlugin from './AtkPlugin';
  *
  * See Fomantic-UI validation rule for more details: https://fomantic-ui.com/behaviors/form.html#validation-rules
  */
-export default class AtkConditionalFormPlugin extends AtkPlugin {
+export default class AtkConditionalFormPlugin extends AbstractPlugin {
     main() {
         this.inputs = [];
         this.selector = this.settings.selector;

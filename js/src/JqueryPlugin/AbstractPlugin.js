@@ -3,12 +3,7 @@ import $ from 'external/jquery';
 /**
  * Base implementation of jQuery plugin in Agile Toolkit.
  */
-export default class AtkPlugin {
-    /**
-     * Default plugin constructor
-     *
-     * @returns {AtkPlugin}
-     */
+export default class AbstractPlugin {
     constructor(element, options) {
         this.$el = $(element);
         this.settings = options;

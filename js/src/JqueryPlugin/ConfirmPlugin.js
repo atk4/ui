@@ -1,5 +1,5 @@
 import $ from 'external/jquery';
-import AtkPlugin from './AtkPlugin';
+import AbstractPlugin from './AbstractPlugin';
 
 /**
  * A Fomantic-UI Modal dialog for confirming an action.
@@ -11,7 +11,7 @@ import AtkPlugin from './AtkPlugin';
  * Setting onApprove and onDeny function within modalOptions object will override
  * onApprove and onDeny current setting.
  */
-export default class AtkConfirmPlugin extends AtkPlugin {
+export default class AtkConfirmPlugin extends AbstractPlugin {
     main() {
         const $m = $('<div class="ui modal" />')
             .appendTo('body')

@@ -1,6 +1,6 @@
 import $ from 'external/jquery';
 import atk from 'atk';
-import AtkPlugin from './AtkPlugin';
+import AbstractPlugin from './AbstractPlugin';
 
 /**
  * Reload a view from server. Default request method is GET.
@@ -11,7 +11,7 @@ import AtkPlugin from './AtkPlugin';
  * to the urlParameter for GET method but will be included in formData
  * for POST method.
  */
-export default class AtkReloadViewPlugin extends AtkPlugin {
+export default class AtkReloadViewPlugin extends AbstractPlugin {
     main() {
         if (!this.settings.url) {
             console.error('Trying to reload view without URL');
