@@ -88,6 +88,14 @@ module.exports = {
             },
         }],
         'unicorn/catch-error-name': 'off',
+        'unicorn/filename-case': ['error', {
+            cases: {
+                camelCase: true,
+                kebabCase: false,
+                pascalCase: true,
+                snakeCase: false,
+            },
+        }],
         'unicorn/no-array-callback-reference': 'off',
         'unicorn/no-lonely-if': 'off',
         'unicorn/no-negated-condition': 'off',
