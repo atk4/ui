@@ -1,17 +1,17 @@
 "use strict";
 (self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["atk-vue-multiline"],{
 
-/***/ "./src/vue-components/multiline/multiline-body.component.js":
-/*!******************************************************************!*\
-  !*** ./src/vue-components/multiline/multiline-body.component.js ***!
-  \******************************************************************/
+/***/ "./src/VueComponent/Multiline/MultilineBodyComponent.js":
+/*!**************************************************************!*\
+  !*** ./src/VueComponent/Multiline/MultilineBodyComponent.js ***!
+  \**************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _multiline_row_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./multiline-row.component */ "./src/vue-components/multiline/multiline-row.component.js");
+/* harmony import */ var _MultilineRowComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MultilineRowComponent */ "./src/VueComponent/Multiline/MultilineRowComponent.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'AtkMultilineBody',
@@ -35,7 +35,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   created: function () {},
   components: {
-    AtkMultilineRow: _multiline_row_component__WEBPACK_IMPORTED_MODULE_0__["default"]
+    AtkMultilineRow: _MultilineRowComponent__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   computed: {
     rows: function () {
@@ -60,20 +60,20 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/vue-components/multiline/multiline-cell.component.js":
-/*!******************************************************************!*\
-  !*** ./src/vue-components/multiline/multiline-cell.component.js ***!
-  \******************************************************************/
+/***/ "./src/VueComponent/Multiline/MultilineCellComponent.js":
+/*!**************************************************************!*\
+  !*** ./src/VueComponent/Multiline/MultilineCellComponent.js ***!
+  \**************************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _multiline_readonly_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./multiline-readonly.component */ "./src/vue-components/multiline/multiline-readonly.component.js");
-/* harmony import */ var _multiline_textarea_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./multiline-textarea.component */ "./src/vue-components/multiline/multiline-textarea.component.js");
-/* harmony import */ var _share_atk_date_picker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../share/atk-date-picker */ "./src/vue-components/share/atk-date-picker.js");
-/* harmony import */ var _share_atk_lookup__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../share/atk-lookup */ "./src/vue-components/share/atk-lookup.js");
+/* harmony import */ var _MultilineReadonlyComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MultilineReadonlyComponent */ "./src/VueComponent/Multiline/MultilineReadonlyComponent.js");
+/* harmony import */ var _MultilineTextareaComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MultilineTextareaComponent */ "./src/VueComponent/Multiline/MultilineTextareaComponent.js");
+/* harmony import */ var _Share_AtkDatePickerComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Share/AtkDatePickerComponent */ "./src/VueComponent/Share/AtkDatePickerComponent.js");
+/* harmony import */ var _Share_AtkLookupComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Share/AtkLookupComponent */ "./src/VueComponent/Share/AtkLookupComponent.js");
 
 
 
@@ -92,10 +92,10 @@ __webpack_require__.r(__webpack_exports__);
             @update:modelValue="onInput"
         ></component>`,
   components: {
-    AtkMultilineReadonly: _multiline_readonly_component__WEBPACK_IMPORTED_MODULE_0__["default"],
-    AtkMultilineTextarea: _multiline_textarea_component__WEBPACK_IMPORTED_MODULE_1__["default"],
-    AtkDatePicker: _share_atk_date_picker__WEBPACK_IMPORTED_MODULE_2__["default"],
-    AtkLookup: _share_atk_lookup__WEBPACK_IMPORTED_MODULE_3__["default"]
+    AtkMultilineReadonly: _MultilineReadonlyComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
+    AtkMultilineTextarea: _MultilineTextareaComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
+    AtkDatePicker: _Share_AtkDatePickerComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
+    AtkLookup: _Share_AtkLookupComponent__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   props: ['cellData', 'fieldValue'],
   data: function () {
@@ -128,299 +128,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/vue-components/multiline/multiline-header.component.js":
-/*!********************************************************************!*\
-  !*** ./src/vue-components/multiline/multiline-header.component.js ***!
-  \********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-
-
-
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'AtkMultilineHeader',
-  template: `
-        <SuiTableHeader>
-            <SuiTableRow v-if="hasError()">
-                <SuiTableCell :style="{ background: 'none' }" />
-                <SuiTableCell :style="{ background: 'none' }"
-                    error="true"
-                    v-for="column in filterVisibleColumns(columns)"
-                    :textAlign="getTextAlign(column)"
-                >
-                    <SuiIcon v-if="getErrorMsg(column)" name="attention" />
-                    {{getErrorMsg(column)}}
-                </SuiTableCell>
-            </SuiTableRow>
-            <SuiTableRow v-if="hasCaption()">
-                <SuiTableHeaderCell :colspan="getVisibleColumns()">{{caption}}</SuiTableHeaderCell>
-            </SuiTableRow>
-            <SuiTableRow :verticalAlign="'top'">
-                <SuiTableHeaderCell :width=1 textAlign="center">
-                    <input ref="check" type="checkbox" :checked="isChecked" :indeterminate="isIndeterminate" @input="onToggleDeleteAll" />
-                </SuiTableHeaderCell>
-                <SuiTableHeaderCell
-                    v-for="column in filterVisibleColumns(columns)"
-                    :width=column.cellProps.width
-                    :textAlign="getTextAlign(column)"
-                >
-                    <div>{{column.caption}}</div>
-                    <div v-if="false" :style="{ position: 'absolute', top: '-22px' }">
-                        <SuiLabel v-if="getErrorMsg(column)" pointing="below" basic color="red">{{getErrorMsg(column)}}</SuiLabel>
-                    </div>
-                </SuiTableHeaderCell>
-            </SuiTableRow>
-        </SuiTableHeader>`,
-  props: ['fields', 'selectionState', 'errors', 'caption'],
-  data: function () {
-    return {
-      columns: this.fields,
-      isDeleteAll: false
-    };
-  },
-  methods: {
-    filterVisibleColumns: function (columns) {
-      return columns.filter(v => v.isVisible);
-    },
-    onToggleDeleteAll: function () {
-      this.$nextTick(() => {
-        atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete-all', {
-          isOn: this.$refs.check.checked
-        });
-      });
-    },
-    getTextAlign: function (column) {
-      let align = 'left';
-      if (!column.isEditable) {
-        switch (column.type) {
-          case 'smallint':
-          case 'integer':
-          case 'bigint':
-          case 'float':
-          case 'atk4_money':
-            {
-              align = 'right';
-              break;
-            }
-        }
-      }
-      return align;
-    },
-    getVisibleColumns: function () {
-      let count = 1; // add deletable column;
-      for (const field of this.columns) {
-        count = field.isVisible ? count + 1 : count;
-      }
-      return count;
-    },
-    hasError: function () {
-      return Object.keys(this.errors).length > 0;
-    },
-    hasCaption: function () {
-      return this.caption;
-    },
-    getErrorMsg: function (column) {
-      if (this.hasError()) {
-        const rows = Object.keys(this.errors);
-        for (const row of rows) {
-          const error = this.errors[row].filter(col => col.name === column.name);
-          if (error.length > 0) {
-            return error[0].msg;
-          }
-        }
-      }
-      return null;
-    }
-  },
-  computed: {
-    isIndeterminate: function () {
-      return this.selectionState === 'indeterminate';
-    },
-    isChecked: function () {
-      return this.selectionState === 'on';
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./src/vue-components/multiline/multiline-readonly.component.js":
-/*!**********************************************************************!*\
-  !*** ./src/vue-components/multiline/multiline-readonly.component.js ***!
-  \**********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/**
- * Simply display a readonly value.
- */
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'AtkMultilineReadonly',
-  template: '<div>{{readOnlyValue}}</div>',
-  props: ['readOnlyValue']
-});
-
-/***/ }),
-
-/***/ "./src/vue-components/multiline/multiline-row.component.js":
-/*!*****************************************************************!*\
-  !*** ./src/vue-components/multiline/multiline-row.component.js ***!
-  \*****************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.some.js */ "./node_modules/core-js/modules/esnext.async-iterator.some.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
-/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.some.js */ "./node_modules/core-js/modules/esnext.iterator.some.js");
-/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-/* harmony import */ var _multiline_cell_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./multiline-cell.component */ "./src/vue-components/multiline/multiline-cell.component.js");
-
-
-
-
-
-
-
-
-/**
- * This will create a table td element using SuiTableCell.
- * The td element is created only if column as set isVisible = true;
- * The td element will add a multiline cell element.
- * the multiline cell will set it's own template component depending on the fieldType.
- * getValue
- */
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'AtkMultilineRow',
-  template: `
-        <SuiTableRow :verticalAlign="'middle'">
-            <SuiTableCell textAlign="center">
-                <input type="checkbox" v-model="toDelete" @input="onToggleDelete" />
-            </SuiTableCell>
-            <SuiTableCell
-                v-for="(column, i) in filterVisibleColumns(columns)"
-                v-bind="column.cellProps"
-                :width=null
-                :error="hasColumnError(column)"
-                :style="{ overflow: 'visible' }"
-                @keydown.tab="onTab(i)"
-            >
-                <AtkMultilineCell
-                    :cellData="column"
-                    :fieldValue="getValue(column)"
-                    @updateValue="onUpdateValue"
-                ></AtkMultilineCell>
-            </SuiTableCell>
-        </SuiTableRow>`,
-  props: ['fields', 'rowId', 'isDeletable', 'rowValues', 'errors'],
-  data: function () {
-    return {
-      columns: this.fields
-    };
-  },
-  components: {
-    AtkMultilineCell: _multiline_cell_component__WEBPACK_IMPORTED_MODULE_6__["default"]
-  },
-  computed: {
-    /**
-     * toDelete is bind by v-model, thus we need a setter for
-     * computed property to work.
-     * When isDeletable is pass, will set checkbox according to it's value.
-     */
-    toDelete: {
-      get: function () {
-        return this.isDeletable;
-      },
-      set: function (v) {
-        return v;
-      }
-    }
-  },
-  emits: ['onTabLastColumn'],
-  methods: {
-    filterVisibleColumns: function (columns) {
-      return columns.filter(v => v.isVisible);
-    },
-    onTab: function (columnIndex) {
-      if (columnIndex === this.columns.filter(column => column.isEditable).length - 1) {
-        this.$emit('onTabLastColumn');
-      }
-    },
-    hasColumnError: function (column) {
-      return this.errors.some(v => column.name === v.name);
-    },
-    onToggleDelete: function (e) {
-      atk__WEBPACK_IMPORTED_MODULE_5__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete', {
-        rowId: this.rowId
-      });
-    },
-    onUpdateValue: function (fieldName, value) {
-      atk__WEBPACK_IMPORTED_MODULE_5__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-update-row', {
-        rowId: this.rowId,
-        fieldName: fieldName,
-        value: value
-      });
-    },
-    getValue: function (column) {
-      return this.rowValues[column.name] || column.default;
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./src/vue-components/multiline/multiline-textarea.component.js":
-/*!**********************************************************************!*\
-  !*** ./src/vue-components/multiline/multiline-textarea.component.js ***!
-  \**********************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  name: 'AtkMultilineTextarea',
-  template: '<textarea v-model="modelValue" @input="onInput" />',
-  props: ['modelValue'],
-  emits: ['update:modelValue'],
-  methods: {
-    onInput: function (event) {
-      this.$emit('update:modelValue', event.target.value);
-    }
-  }
-});
-
-/***/ }),
-
-/***/ "./src/vue-components/multiline/multiline.component.js":
-/*!*************************************************************!*\
-  !*** ./src/vue-components/multiline/multiline.component.js ***!
-  \*************************************************************/
+/***/ "./src/VueComponent/Multiline/MultilineComponent.js":
+/*!**********************************************************!*\
+  !*** ./src/VueComponent/Multiline/MultilineComponent.js ***!
+  \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -447,9 +158,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! atk */ "./src/setup-atk.js");
-/* harmony import */ var _multiline_body_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./multiline-body.component */ "./src/vue-components/multiline/multiline-body.component.js");
-/* harmony import */ var _multiline_header_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./multiline-header.component */ "./src/vue-components/multiline/multiline-header.component.js");
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
+/* harmony import */ var _MultilineBodyComponent__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./MultilineBodyComponent */ "./src/VueComponent/Multiline/MultilineBodyComponent.js");
+/* harmony import */ var _MultilineHeaderComponent__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./MultilineHeaderComponent */ "./src/VueComponent/Multiline/MultilineHeaderComponent.js");
 
 
 
@@ -530,8 +241,8 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   components: {
-    AtkMultilineHeader: _multiline_header_component__WEBPACK_IMPORTED_MODULE_12__["default"],
-    AtkMultilineBody: _multiline_body_component__WEBPACK_IMPORTED_MODULE_11__["default"]
+    AtkMultilineHeader: _MultilineHeaderComponent__WEBPACK_IMPORTED_MODULE_12__["default"],
+    AtkMultilineBody: _MultilineBodyComponent__WEBPACK_IMPORTED_MODULE_11__["default"]
   },
   mounted: function () {
     this.rowData = this.buildRowData(this.valueJson ?? '[]');
@@ -761,10 +472,299 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/vue-components/share/atk-date-picker.js":
-/*!*****************************************************!*\
-  !*** ./src/vue-components/share/atk-date-picker.js ***!
-  \*****************************************************/
+/***/ "./src/VueComponent/Multiline/MultilineHeaderComponent.js":
+/*!****************************************************************!*\
+  !*** ./src/VueComponent/Multiline/MultilineHeaderComponent.js ***!
+  \****************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
+
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'AtkMultilineHeader',
+  template: `
+        <SuiTableHeader>
+            <SuiTableRow v-if="hasError()">
+                <SuiTableCell :style="{ background: 'none' }" />
+                <SuiTableCell :style="{ background: 'none' }"
+                    error="true"
+                    v-for="column in filterVisibleColumns(columns)"
+                    :textAlign="getTextAlign(column)"
+                >
+                    <SuiIcon v-if="getErrorMsg(column)" name="attention" />
+                    {{getErrorMsg(column)}}
+                </SuiTableCell>
+            </SuiTableRow>
+            <SuiTableRow v-if="hasCaption()">
+                <SuiTableHeaderCell :colspan="getVisibleColumns()">{{caption}}</SuiTableHeaderCell>
+            </SuiTableRow>
+            <SuiTableRow :verticalAlign="'top'">
+                <SuiTableHeaderCell :width=1 textAlign="center">
+                    <input ref="check" type="checkbox" :checked="isChecked" :indeterminate="isIndeterminate" @input="onToggleDeleteAll" />
+                </SuiTableHeaderCell>
+                <SuiTableHeaderCell
+                    v-for="column in filterVisibleColumns(columns)"
+                    :width=column.cellProps.width
+                    :textAlign="getTextAlign(column)"
+                >
+                    <div>{{column.caption}}</div>
+                    <div v-if="false" :style="{ position: 'absolute', top: '-22px' }">
+                        <SuiLabel v-if="getErrorMsg(column)" pointing="below" basic color="red">{{getErrorMsg(column)}}</SuiLabel>
+                    </div>
+                </SuiTableHeaderCell>
+            </SuiTableRow>
+        </SuiTableHeader>`,
+  props: ['fields', 'selectionState', 'errors', 'caption'],
+  data: function () {
+    return {
+      columns: this.fields,
+      isDeleteAll: false
+    };
+  },
+  methods: {
+    filterVisibleColumns: function (columns) {
+      return columns.filter(v => v.isVisible);
+    },
+    onToggleDeleteAll: function () {
+      this.$nextTick(() => {
+        atk__WEBPACK_IMPORTED_MODULE_3__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete-all', {
+          isOn: this.$refs.check.checked
+        });
+      });
+    },
+    getTextAlign: function (column) {
+      let align = 'left';
+      if (!column.isEditable) {
+        switch (column.type) {
+          case 'smallint':
+          case 'integer':
+          case 'bigint':
+          case 'float':
+          case 'atk4_money':
+            {
+              align = 'right';
+              break;
+            }
+        }
+      }
+      return align;
+    },
+    getVisibleColumns: function () {
+      let count = 1; // add deletable column;
+      for (const field of this.columns) {
+        count = field.isVisible ? count + 1 : count;
+      }
+      return count;
+    },
+    hasError: function () {
+      return Object.keys(this.errors).length > 0;
+    },
+    hasCaption: function () {
+      return this.caption;
+    },
+    getErrorMsg: function (column) {
+      if (this.hasError()) {
+        const rows = Object.keys(this.errors);
+        for (const row of rows) {
+          const error = this.errors[row].filter(col => col.name === column.name);
+          if (error.length > 0) {
+            return error[0].msg;
+          }
+        }
+      }
+      return null;
+    }
+  },
+  computed: {
+    isIndeterminate: function () {
+      return this.selectionState === 'indeterminate';
+    },
+    isChecked: function () {
+      return this.selectionState === 'on';
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./src/VueComponent/Multiline/MultilineReadonlyComponent.js":
+/*!******************************************************************!*\
+  !*** ./src/VueComponent/Multiline/MultilineReadonlyComponent.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Simply display a readonly value.
+ */
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'AtkMultilineReadonly',
+  template: '<div>{{readOnlyValue}}</div>',
+  props: ['readOnlyValue']
+});
+
+/***/ }),
+
+/***/ "./src/VueComponent/Multiline/MultilineRowComponent.js":
+/*!*************************************************************!*\
+  !*** ./src/VueComponent/Multiline/MultilineRowComponent.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.filter.js */ "./node_modules/core-js/modules/esnext.async-iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_filter_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.some.js */ "./node_modules/core-js/modules/esnext.async-iterator.some.js");
+/* harmony import */ var core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_some_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
+/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.iterator.filter.js */ "./node_modules/core-js/modules/esnext.iterator.filter.js");
+/* harmony import */ var core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_filter_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.iterator.some.js */ "./node_modules/core-js/modules/esnext.iterator.some.js");
+/* harmony import */ var core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_some_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
+/* harmony import */ var _MultilineCellComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./MultilineCellComponent */ "./src/VueComponent/Multiline/MultilineCellComponent.js");
+
+
+
+
+
+
+
+
+/**
+ * This will create a table td element using SuiTableCell.
+ * The td element is created only if column as set isVisible = true;
+ * The td element will add a multiline cell element.
+ * the multiline cell will set it's own template component depending on the fieldType.
+ * getValue
+ */
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'AtkMultilineRow',
+  template: `
+        <SuiTableRow :verticalAlign="'middle'">
+            <SuiTableCell textAlign="center">
+                <input type="checkbox" v-model="toDelete" @input="onToggleDelete" />
+            </SuiTableCell>
+            <SuiTableCell
+                v-for="(column, i) in filterVisibleColumns(columns)"
+                v-bind="column.cellProps"
+                :width=null
+                :error="hasColumnError(column)"
+                :style="{ overflow: 'visible' }"
+                @keydown.tab="onTab(i)"
+            >
+                <AtkMultilineCell
+                    :cellData="column"
+                    :fieldValue="getValue(column)"
+                    @updateValue="onUpdateValue"
+                ></AtkMultilineCell>
+            </SuiTableCell>
+        </SuiTableRow>`,
+  props: ['fields', 'rowId', 'isDeletable', 'rowValues', 'errors'],
+  data: function () {
+    return {
+      columns: this.fields
+    };
+  },
+  components: {
+    AtkMultilineCell: _MultilineCellComponent__WEBPACK_IMPORTED_MODULE_6__["default"]
+  },
+  computed: {
+    /**
+     * toDelete is bind by v-model, thus we need a setter for
+     * computed property to work.
+     * When isDeletable is pass, will set checkbox according to it's value.
+     */
+    toDelete: {
+      get: function () {
+        return this.isDeletable;
+      },
+      set: function (v) {
+        return v;
+      }
+    }
+  },
+  emits: ['onTabLastColumn'],
+  methods: {
+    filterVisibleColumns: function (columns) {
+      return columns.filter(v => v.isVisible);
+    },
+    onTab: function (columnIndex) {
+      if (columnIndex === this.columns.filter(column => column.isEditable).length - 1) {
+        this.$emit('onTabLastColumn');
+      }
+    },
+    hasColumnError: function (column) {
+      return this.errors.some(v => column.name === v.name);
+    },
+    onToggleDelete: function (e) {
+      atk__WEBPACK_IMPORTED_MODULE_5__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-toggle-delete', {
+        rowId: this.rowId
+      });
+    },
+    onUpdateValue: function (fieldName, value) {
+      atk__WEBPACK_IMPORTED_MODULE_5__["default"].eventBus.emit(this.$root.$el.parentElement.id + '-update-row', {
+        rowId: this.rowId,
+        fieldName: fieldName,
+        value: value
+      });
+    },
+    getValue: function (column) {
+      return this.rowValues[column.name] || column.default;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./src/VueComponent/Multiline/MultilineTextareaComponent.js":
+/*!******************************************************************!*\
+  !*** ./src/VueComponent/Multiline/MultilineTextareaComponent.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'AtkMultilineTextarea',
+  template: '<textarea v-model="modelValue" @input="onInput" />',
+  props: ['modelValue'],
+  emits: ['update:modelValue'],
+  methods: {
+    onInput: function (event) {
+      this.$emit('update:modelValue', event.target.value);
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./src/VueComponent/Share/AtkDatePickerComponent.js":
+/*!**********************************************************!*\
+  !*** ./src/VueComponent/Share/AtkDatePickerComponent.js ***!
+  \**********************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
@@ -825,10 +825,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/vue-components/share/atk-lookup.js":
-/*!************************************************!*\
-  !*** ./src/vue-components/share/atk-lookup.js ***!
-  \************************************************/
+/***/ "./src/VueComponent/Share/AtkLookupComponent.js":
+/*!******************************************************!*\
+  !*** ./src/VueComponent/Share/AtkLookupComponent.js ***!
+  \******************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);

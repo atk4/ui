@@ -87,7 +87,7 @@ module.exports = (env) => {
         externals: { 'external/jquery': 'jQuery' },
         resolve: {
             alias: {
-                atk$: srcDir + '/setup-atk.js',
+                atk$: srcDir + '/setupAtk.js',
                 vue$: 'vue/dist/vue.esm-bundler.js',
             },
             modules: [
