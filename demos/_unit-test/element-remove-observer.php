@@ -51,7 +51,9 @@ $makeAddHandlerJsFx = static function (View $view) use ($log) {
 
 Button::addTo($app, ['Add A handler'])->on('click', $makeAddHandlerJsFx($viewA));
 Button::addTo($app, ['Add I handler'])->on('click', $makeAddHandlerJsFx($viewI));
+Button::addTo($app, ['Add U handler'])->on('click', $makeAddHandlerJsFx($viewU));
 Button::addTo($app, ['Add V handler'])->on('click', $makeAddHandlerJsFx($viewV));
 
 Button::addTo($app, ['Reload I'])->on('click', $viewI->jsReload($reloadUrlArgs));
+Button::addTo($app, ['Reload U'])->on('click', $viewU->jsReload($reloadUrlArgs));
 Button::addTo($app, ['Reload V'])->on('click', $viewV->jsReload($reloadUrlArgs));
