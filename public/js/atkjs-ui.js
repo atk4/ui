@@ -998,7 +998,7 @@ class AtkFileUploadPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__["
           const percentComplete = event.loaded / event.total;
           this.bar.progress('set percent', Number.parseInt(percentComplete * 100, 10));
         }
-      }, false);
+      });
       return xhr;
     };
     this.bar.show();
@@ -1783,7 +1783,7 @@ class AtkServerEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__[
     });
     this.source.addEventListener('atkSseAction', e => {
       atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
-    }, false);
+    });
     if (this.settings.closeBeforeUnload) {
       window.addEventListener('beforeunload', event => {
         this.source.close();

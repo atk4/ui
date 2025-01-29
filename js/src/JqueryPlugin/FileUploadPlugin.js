@@ -145,7 +145,7 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
                     const percentComplete = event.loaded / event.total;
                     this.bar.progress('set percent', Number.parseInt(percentComplete * 100, 10));
                 }
-            }, false);
+            });
 
             return xhr;
         };

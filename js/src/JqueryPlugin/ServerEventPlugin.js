@@ -26,7 +26,7 @@ export default class AtkServerEventPlugin extends AbstractPlugin {
 
         this.source.addEventListener('atkSseAction', (e) => {
             atk.apiService.atkProcessExternalResponse(JSON.parse(e.data));
-        }, false);
+        });
 
         if (this.settings.closeBeforeUnload) {
             window.addEventListener('beforeunload', (event) => {
