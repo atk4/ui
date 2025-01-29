@@ -17,7 +17,7 @@ function removeObserverIfUnused(elem) {
     }
 
     const parentElem = elementByObservedChild.get(elem);
-    if (parentElem === null || !observerByElement.has(parentElem)) {
+    if (parentElem === undefined || !observerByElement.has(parentElem)) {
         return;
     }
 
@@ -54,6 +54,17 @@ function handleElementRemove(elem) {
     }
 }
 
+function handleObserverRecords(elem, mutationRecords) {
+    for (const mutationRecord of mutationRecords) {
+        if (mutationRecord.removedNodes.length > 0) {
+            const removedNodes = observedChildrenByElement.get(elem).intersection(mutationRecord.removedNodes);
+            for (const removedNode of removedNodes) {
+                handleElementRemove(removedNode);
+            }
+        }
+    }
+}
+
 function addObserverToParentElement(elem) {
     const parentElem = elem.parentElement;
     if (parentElem === null) {
@@ -63,16 +74,7 @@ function addObserverToParentElement(elem) {
     if (!observerByElement.has(parentElem)) {
         addObserverToParentElement(parentElem);
 
-        const observer = new MutationObserver((mutationRecords) => {
-            for (const mutationRecord of mutationRecords) {
-                if (mutationRecord.removedNodes.length > 0) {
-                    const removedNodes = observedChildrenByElement.get(parentElem).intersection(mutationRecord.removedNodes);
-                    for (const removedNode of removedNodes) {
-                        handleElementRemove(removedNode);
-                    }
-                }
-            }
-        });
+        const observer = new MutationObserver((mutationRecords) => handleObserverRecords(parentElem, mutationRecords));
         observer.observe(parentElem, { childList: true, characterData: false });
 
         observerByElement.set(parentElem, observer);
@@ -106,5 +108,17 @@ export default {
         removeHandlersByElement.get(element).delete(handler);
 
         removeObserverIfUnused(element);
+    },
+
+    /**
+     * @param {HTMLElement} element
+     */
+    handleMutationQueueImmediately: function (element) { // TODO remove this method once evalJsCode() in apiService is called at least thru microtask
+        const parentElem = elementByObservedChild.get(element);
+        if (parentElem === undefined) {
+            return;
+        }
+
+        handleObserverRecords(parentElem, observerByElement.get(parentElem).takeRecords());
     },
 };
