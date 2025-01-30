@@ -129,7 +129,7 @@ export default {
     /**
      * @param {HTMLElement} element
      */
-    handleMutationQueueImmediately: function (element) { // TODO remove this method once evalJsCode() in apiService is called at least thru microtask
+    handleMutationQueueImmediately: function (element) { // TODO remove this method once evalJsCode() in apiService is called at least thru JS microtask
         const parentElem = elementByObservedChild.get(element);
         if (parentElem === undefined) {
             return;
