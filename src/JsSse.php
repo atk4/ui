@@ -18,9 +18,6 @@ class JsSse extends JsCallback
     /** @var bool Show Loader when doing SSE. */
     public $showLoader = false;
 
-    /** @var bool Add window.beforeunload listener for closing js EventSource. Off by default. */
-    public $closeBeforeUnload = false;
-
     /** @var \Closure(string): void|null Custom function for outputting (instead of echo). */
     public $echoFunction;
 
@@ -32,9 +29,6 @@ class JsSse extends JsCallback
         $options = ['url' => $this->getJsUrl()];
         if ($this->showLoader) {
             $options['showLoader'] = $this->showLoader;
-        }
-        if ($this->closeBeforeUnload) {
-            $options['closeBeforeUnload'] = $this->closeBeforeUnload;
         }
 
         return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)]);
