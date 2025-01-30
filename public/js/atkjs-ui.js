@@ -2074,11 +2074,11 @@ class ApiService {
     }
     return false;
   }
-  onAbort(message) {
-    console.warn(message);
+  onAbort() {
+    console.warn('API service - request aborted');
   }
   onError(message) {
-    console.warn(message);
+    console.warn('API service - request errored: ' + message);
   }
 
   /**
