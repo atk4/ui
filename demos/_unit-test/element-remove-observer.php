@@ -6,7 +6,10 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\App;
 use Atk4\Ui\Button;
+use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpression;
+use Atk4\Ui\JsSse;
 use Atk4\Ui\View;
 
 /** @var App $app */
@@ -57,3 +60,31 @@ Button::addTo($app, ['Add V handler'])->on('click', $makeAddHandlerJsFx($viewV))
 Button::addTo($app, ['Reload I'])->on('click', $viewI->jsReload($reloadUrlArgs));
 Button::addTo($app, ['Reload U'])->on('click', $viewU->jsReload($reloadUrlArgs));
 Button::addTo($app, ['Reload V'])->on('click', $viewV->jsReload($reloadUrlArgs));
+
+Header::addTo($app, ['API']);
+
+$apiView = View::addTo($app);
+$apiButton = Button::addTo($apiView, ['Run slow API']);
+$apiButton->on('click', static function () use ($apiButton) {
+    sleep(1);
+
+    return $apiButton->js()->text('Abort failed');
+});
+Button::addTo($apiView, ['Run slow API & reload'])->on('click', new JsBlock([
+    $apiButton->js()->click(),
+    $apiView->jsReload(),
+]));
+
+Header::addTo($app, ['SSE']);
+
+$sseView = View::addTo($app);
+$sse = JsSse::addTo($sseView);
+$sseButton = Button::addTo($sseView, ['Run slow SSE']);
+$sseButton->on('click', $sse->set(static function () use ($sse, $sseButton) {
+    sleep(1);
+    $sse->send($sseButton->js()->text('Abort failed'));
+}));
+Button::addTo($sseView, ['Run slow SSE & reload'])->on('click', new JsBlock([
+    $sseButton->js()->click(),
+    $sseView->jsReload(),
+]));

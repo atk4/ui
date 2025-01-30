@@ -43,3 +43,21 @@ Feature: Element remove observer
     When I press button "Add I handler"
     When I press button "Reload I"
     Then I check if input value for "#log" match text "A0 I0 U0 V0 J0 hV0 hI0 I1 U1 V1"
+
+  Scenario: abort API when owner is reloaded
+    Given I am on "_unit-test/element-remove-observer.php"
+    When I press button "Run slow API"
+    Then I should see "Abort failed"
+    Given I am on "_unit-test/element-remove-observer.php"
+    When I press button "Run slow API & reload"
+    Then I should not see "Abort failed"
+
+  Scenario: abort SSE when owner is reloaded
+    Given I am on "_unit-test/element-remove-observer.php"
+    When I press button "Run slow SSE"
+    When I wait 2000 ms
+    Then I should see "Abort failed"
+    Given I am on "_unit-test/element-remove-observer.php"
+    When I press button "Run slow SSE & reload"
+    When I wait 2000 ms
+    Then I should not see "Abort failed"
