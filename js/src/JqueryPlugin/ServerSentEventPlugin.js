@@ -30,6 +30,9 @@ export default class AtkServerSentEventPlugin extends AbstractPlugin {
             atk.apiService.atkProcessExternalResponse(JSON.parse(e.data));
         });
 
+        // fix https://github.com/atk4/ui/issues/393
+        atk.elementRemoveObserver.addHandler(element[0], () => this.source.close());
+
         // prevent "The connection to http://xxx was interrupted while the page was loading." browser console warning
         window.addEventListener('beforeunload', () => this.source.close());
     }
