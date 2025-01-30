@@ -15,6 +15,7 @@ class ApiService {
             {},
             {
                 // override supported via "../setupFomanticUi.js", both callbacks are always evaluated
+                onRequest: this.onRequest,
                 successTest: this.successTest,
                 onFailure: this.onFailure,
                 onSuccess: this.onSuccess,
@@ -34,6 +35,11 @@ class ApiService {
         (function () {
             eval('\'use strict\'; (() => {' + code + '})()'); // eslint-disable-line no-eval
         }).call(thisObject);
+    }
+
+    onRequest(promise, xhr) {
+        // fix https://github.com/atk4/ui/issues/393
+        atk.elementRemoveObserver.addHandler(this, () => xhr.abort());
     }
 
     /**
