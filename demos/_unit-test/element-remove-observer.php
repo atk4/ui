@@ -58,8 +58,22 @@ Button::addTo($app, ['Add U handler'])->on('click', $makeAddHandlerJsFx($viewU))
 Button::addTo($app, ['Add V handler'])->on('click', $makeAddHandlerJsFx($viewV));
 
 Button::addTo($app, ['Reload I'])->on('click', $viewI->jsReload($reloadUrlArgs));
+Button::addTo($app, ['Reload J'])->on('click', $viewJ->jsReload($reloadUrlArgs));
 Button::addTo($app, ['Reload U'])->on('click', $viewU->jsReload($reloadUrlArgs));
 Button::addTo($app, ['Reload V'])->on('click', $viewV->jsReload($reloadUrlArgs));
+
+Button::addTo($app, ['Move U to J'])->on('click', new JsExpression(<<<'JS'
+    const elem = document.querySelector([elem]);
+    const newParent = document.querySelector([newParent]);
+    elem.remove();
+    newParent.prepend(elem);
+    JS, ['elem' => $viewU, 'newParent' => $viewJ]));
+Button::addTo($app, ['Readd U'])->on('click', new JsExpression(<<<'JS'
+    const elem = document.querySelector([elem]);
+    const parentElem = elem.parentElement;
+    elem.remove();
+    parentElem.prepend(elem);
+    JS, ['elem' => $viewU]));
 
 Header::addTo($app, ['API']);
 

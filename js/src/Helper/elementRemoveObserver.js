@@ -55,13 +55,29 @@ function handleElementRemove(elem) {
 }
 
 function handleObserverRecords(elem, mutationRecords) {
+    const observedChildren = observedChildrenByElement.get(elem);
+
+    const removedElems = new Set();
     for (const mutationRecord of mutationRecords) {
-        if (mutationRecord.removedNodes.length > 0) {
-            const removedNodes = observedChildrenByElement.get(elem).intersection(mutationRecord.removedNodes);
-            for (const removedNode of removedNodes) {
-                handleElementRemove(removedNode);
+        for (const removedElem of observedChildren.intersection(mutationRecord.removedNodes)) {
+            removedElems.add(removedElem);
+        }
+    }
+
+    for (const removedElem of removedElems) {
+        const parentElem = removedElem.parentElement;
+        if (parentElem !== null) {
+            const parentElemOrig = elementByObservedChild.get(removedElem);
+            if (parentElem === parentElemOrig) {
+                console.warn('Element remove observer - node was readded');
+
+                continue;
+            } else {
+                console.warn('Element remove observer - node was moved');
             }
         }
+
+        handleElementRemove(removedElem);
     }
 }
 
