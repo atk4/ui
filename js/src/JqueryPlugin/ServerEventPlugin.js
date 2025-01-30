@@ -7,6 +7,7 @@ export default class AtkServerEventPlugin extends AbstractPlugin {
         const hasLoader = this.settings.showLoader;
 
         this.source = new EventSource(this.settings.url);
+
         if (hasLoader) {
             element.addClass('loading');
         }
@@ -17,22 +18,20 @@ export default class AtkServerEventPlugin extends AbstractPlugin {
 
         this.source.addEventListener('error', (e) => {
             if (e.eventPhase === EventSource.CLOSED) {
+                this.source.close();
+
                 if (hasLoader) {
                     element.removeClass('loading');
                 }
-                this.source.close();
             }
         });
 
         this.source.addEventListener('atkSseAction', (e) => {
             atk.apiService.atkProcessExternalResponse(JSON.parse(e.data));
-        }, false);
+        });
 
-        if (this.settings.closeBeforeUnload) {
-            window.addEventListener('beforeunload', (event) => {
-                this.source.close();
-            });
-        }
+        // prevent "The connection to http://xxx was interrupted while the page was loading." browser console warning
+        window.addEventListener('beforeunload', () => this.source.close());
     }
 
     stop() {
@@ -48,5 +47,4 @@ AtkServerEventPlugin.DEFAULTS = {
     url: null,
     urlOptions: {},
     showLoader: false,
-    closeBeforeUnload: false,
 };

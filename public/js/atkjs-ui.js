@@ -998,7 +998,7 @@ class AtkFileUploadPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__["
           const percentComplete = event.loaded / event.total;
           this.bar.progress('set percent', Number.parseInt(percentComplete * 100, 10));
         }
-      }, false);
+      });
       return xhr;
     };
     this.bar.show();
@@ -1775,20 +1775,18 @@ class AtkServerEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__[
     });
     this.source.addEventListener('error', e => {
       if (e.eventPhase === EventSource.CLOSED) {
+        this.source.close();
         if (hasLoader) {
           element.removeClass('loading');
         }
-        this.source.close();
       }
     });
     this.source.addEventListener('atkSseAction', e => {
       atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
-    }, false);
-    if (this.settings.closeBeforeUnload) {
-      window.addEventListener('beforeunload', event => {
-        this.source.close();
-      });
-    }
+    });
+
+    // prevent "The connection to http://xxx was interrupted while the page was loading." browser console warning
+    window.addEventListener('beforeunload', () => this.source.close());
   }
   stop() {
     this.source.close();
@@ -1800,8 +1798,7 @@ class AtkServerEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__[
 AtkServerEventPlugin.DEFAULTS = {
   url: null,
   urlOptions: {},
-  showLoader: false,
-  closeBeforeUnload: false
+  showLoader: false
 };
 
 /***/ }),
@@ -2077,11 +2074,11 @@ class ApiService {
     }
     return false;
   }
-  onAbort(message) {
-    console.warn(message);
+  onAbort() {
+    console.warn('API service - request aborted');
   }
   onError(message) {
-    console.warn(message);
+    console.warn('API service - request errored: ' + message);
   }
 
   /**
