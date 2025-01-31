@@ -44,6 +44,19 @@ Feature: Remove observer
     When I press button "Reload I"
     Then I check if input value for "#log" match text "A0 I0 U0 V0 J0 hV0 hI0 I1 U1 V1"
 
+  Scenario: remove handler
+    Given I am on "_unit-test/remove-observer.php"
+    When I press button "Add U handler"
+    When I press button "Add V handler"
+    When I press button "Reload I"
+    Then I check if input value for "#log" match text "A0 I0 U0 V0 J0 hU0 hV0 I1 U1 V1"
+    Given I am on "_unit-test/remove-observer.php"
+    When I press button "Add U handler"
+    When I press button "Add V handler"
+    When I press button "Remove last handler"
+    When I press button "Reload I"
+    Then I check if input value for "#log" match text "A0 I0 U0 V0 J0 hU0 I1 U1 V1"
+
   Scenario: handler must be called for moved element
     Given I am on "_unit-test/remove-observer.php"
     When I press button "Add U handler"

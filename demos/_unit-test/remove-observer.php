@@ -48,7 +48,9 @@ $makeAddHandlerJsFx = static function (View $view) use ($log) {
     return new JsExpression(<<<'JS'
         const target = document.querySelector([target]);
         const logInput = document.querySelector([log]);
-        atk.elementRemoveObserver.addHandler(target, () => logInput.value = (logInput.value + ' ').trimStart() + 'h' + target.lastChild.textContent);
+        atk.lastTarget = target;
+        atk.lastHandler = () => logInput.value = (logInput.value + ' ').trimStart() + 'h' + target.lastChild.textContent;
+        atk.elementRemoveObserver.addHandler(atk.lastTarget, atk.lastHandler);
         JS, ['target' => $view, 'log' => $log]);
 };
 
@@ -56,6 +58,7 @@ Button::addTo($app, ['Add A handler'])->on('click', $makeAddHandlerJsFx($viewA))
 Button::addTo($app, ['Add I handler'])->on('click', $makeAddHandlerJsFx($viewI));
 Button::addTo($app, ['Add U handler'])->on('click', $makeAddHandlerJsFx($viewU));
 Button::addTo($app, ['Add V handler'])->on('click', $makeAddHandlerJsFx($viewV));
+Button::addTo($app, ['Remove last handler'])->on('click', new JsExpression('atk.elementRemoveObserver.removeHandler(atk.lastTarget, atk.lastHandler)'));
 
 Button::addTo($app, ['Reload I'])->on('click', $viewI->jsReload($reloadUrlArgs));
 Button::addTo($app, ['Reload J'])->on('click', $viewJ->jsReload($reloadUrlArgs));
