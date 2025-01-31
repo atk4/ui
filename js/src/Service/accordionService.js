@@ -11,8 +11,8 @@ class AccordionService {
     }
 
     onOpening() {
-        if ($(this).data('path')) {
-            $(this).atkReloadView({ url: $(this).data('path'), urlOptions: { __atk_json: 1 } });
+        if ($(this).data('url')) {
+            $(this).atkReloadView({ url: $(this).data('url'), urlOptions: { __atk_json: 1 } });
         }
     }
 }

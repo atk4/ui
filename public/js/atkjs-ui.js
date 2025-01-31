@@ -1985,9 +1985,9 @@ class AccordionService {
     }];
   }
   onOpening() {
-    if (external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('path')) {
+    if (external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('url')) {
       external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).atkReloadView({
-        url: external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('path'),
+        url: external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('url'),
         urlOptions: {
           __atk_json: 1
         }
