@@ -35,7 +35,7 @@ class AccordionSection extends View
 
         if ($this->virtualPage) {
             $this->template->set('itemId', $this->virtualPage->name);
-            $this->template->set('path', $this->virtualPage->getJsUrl('cut'));
+            $this->template->set('url', $this->virtualPage->getJsUrl('cut'));
         } else {
             // TODO hack to prevent rendering 'id=""'
             $this->template->set('itemId', $this->name . '-vp-unused');
