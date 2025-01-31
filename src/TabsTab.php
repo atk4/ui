@@ -22,7 +22,7 @@ class TabsTab extends MenuItem
      */
     public function setPath($page)
     {
-        $this->path = $this->getApp()->url($page) . '#';
+        $this->path = $this->getApp()->url($page);
 
         return $this;
     }
@@ -34,8 +34,7 @@ class TabsTab extends MenuItem
 
         if ($this->path) {
             $this->settings['cache'] = false;
-            $this->settings['auto'] = true;
-            $this->settings['path'] = $this->path;
+            $this->settings['apiSettings']['url'] = $this->path;
             $this->settings['apiSettings']['data']['__atk_tab'] = 1;
         }
 
