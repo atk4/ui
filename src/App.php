@@ -343,8 +343,7 @@ class App
 
         $this->setResponseHeader('Cache-Control', 'no-store');
 
-        if (($this->isJsUrlRequest() || $this->getRequest()->getHeaderLine('X-Requested-With') === 'XMLHttpRequest')
-                && !$this->hasRequestQueryParam('__atk_tab')) {
+        if ($this->isJsUrlRequest() || $this->getRequest()->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
             $this->outputResponseJson([
                 'success' => false,
                 'message' => $this->layout->getHtml(),
