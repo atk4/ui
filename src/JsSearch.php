@@ -86,7 +86,9 @@ class JsSearch extends View
         $this->template->set('ButtonRemoveIcon', $this->buttonRemoveIcon);
 
         $this->js(true)->atkJsSearch([
-            'url' => $this->reload->jsUrl(),
+            'url' => $this->useAjax
+                ? $this->reload->jsUrl()
+                : $this->reload->url(),
             'urlOptions' => array_merge(['__atk_reload' => $this->reload->name], $this->args),
             'urlQueryKey' => $this->name . '_q',
             'autoQuery' => $this->autoQuery,
