@@ -37,7 +37,7 @@ $tabs->addTab('Default Active Tab', static function (VirtualPage $vp) {
 $tabs->addTab('Dynamic Lorem Ipsum', static function (VirtualPage $vp) {
     Message::addTo($vp, ['Every time you come to this tab, you will see a different text']);
     LoremIpsum::addTo($vp, ['size' => (int) ($vp->getApp()->tryGetRequestQueryParam('size') ?? 1)]);
-}, ['apiSettings' => ['data' => ['size' => random_int(1, 4)]]]);
+}, ['cache' => false, 'apiSettings' => ['data' => ['size' => random_int(1, 4)]]]);
 
 // modal tab
 $tabs->addTab('Modal popup', static function (VirtualPage $vp) {

@@ -42,6 +42,12 @@ class Tabs extends View
 
             $item->settings['onFirstLoad'] = new JsFunction([], [$vp->js()->atkReloadView($reloadViewArgs)]);
 
+            if (($item->settings['cache'] ?? null) === false) {
+                $item->settings['onLoad'] = $item->settings['onFirstLoad'];
+                unset($item->settings['onFirstLoad']);
+            }
+            unset($item->settings['cache']);
+
             $vp->set($callback);
         }
 
