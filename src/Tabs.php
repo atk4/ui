@@ -29,7 +29,7 @@ class Tabs extends View
         // if there is callback action, then use VirtualPage
         if ($callback) {
             $vp = VirtualPage::addTo($sub, ['ui' => '']);
-            $item->setUrl($vp->getJsUrl('cut'));
+            $item->setUrl($vp->getUrl('cut'));
 
             $vp->set($callback);
         }

@@ -107,7 +107,7 @@ class VirtualPage extends View
             }
 
             // render and terminate
-            if ($this->getApp()->hasRequestQueryParam('__atk_json')) {
+            if ($this->getApp()->isJsUrlRequest()) {
                 $this->getApp()->terminateJson($this);
             }
 

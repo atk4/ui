@@ -86,11 +86,6 @@ class ModalService {
             args = data.args;
         }
 
-        // check for data type, usually JSON or HTML
-        if (data.type === 'json') {
-            args = $.extend(true, args, { __atk_json: 1 });
-        }
-
         // does modal content need to be loaded dynamically
         if (data.url) {
             $modal.data('closeOnLoadingError', true);

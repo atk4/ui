@@ -170,6 +170,7 @@ class AppTest extends TestCase
         yield ['/?v=V', ['v' => false], ['x'], [], 'x.php'];
         yield ['/', ['v' => false], ['x', 'v' => 'page'], [], 'x.php?v=page'];
         yield ['/', ['v' => false], ['x'], ['v' => 'extra'], 'x.php'];
+        yield ['/', ['__atk_json' => false], ['x'], [], 'x.php'];
 
         // /wo page path
         yield ['/x', [], [], [], '/x.php'];
@@ -202,7 +203,7 @@ class AppTest extends TestCase
         self::assertSame($expectedUrl, $app->url($page, $extraRequestUrlArgs));
         $pageAssocOnly = array_diff_key($page, [true]);
         self::assertSame($expectedUrl, $app->url(($page[0] ?? '') . (count($pageAssocOnly) > 0 ? '?' . implode('&', array_map(static fn ($k) => $k . '=' . $pageAssocOnly[$k], array_keys($pageAssocOnly))) : ''), $extraRequestUrlArgs));
-        self::assertSame($expectedUrl, $app->jsUrl($page, array_merge(['__atk_json' => null], $extraRequestUrlArgs)));
+        self::assertSame($expectedUrl . (str_contains($expectedUrl, '?') ? '&' : '?') . '__atk_json=1', $app->jsUrl($page, $extraRequestUrlArgs));
 
         $makeExpectedUrlFx = static function (string $indexPage, string $ext) use ($page, $expectedUrl) {
             return preg_replace_callback('~^[^?]*?\K([^/?]*)(\.php)(?=\?|$)~', static function ($matches) use ($page, $indexPage, $ext) {
