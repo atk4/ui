@@ -63,4 +63,6 @@ $tabs->addTab('Dynamic Form', static function (VirtualPage $vp) {
     });
 });
 
-$tabs->addTabUrl('Any other page', './');
+$tabs->addTabUrl('Any URL', './.'); // "./." instead of "/" to prevent appending "index.php"
+
+$tabs->addTabUrl('URL 404', './404');
