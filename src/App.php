@@ -779,6 +779,22 @@ class App
     }
 
     /**
+     * @return array<0|string, string>
+     */
+    private function explodeUrlPage(string $page): array
+    {
+        $pageExploded = explode('?', $page, 2);
+
+        $pagePath = $pageExploded[0] !== ''
+            ? $pageExploded[0]
+            : null;
+
+        parse_str($pageExploded[1] ?? '', $pageArgs);
+
+        return [$pagePath] + $pageArgs;
+    }
+
+    /**
      * Build a URL that application can use for loading HTML data.
      *
      * @param string|array<0|string, string|int|false> $page                URL as string or array with page path as first element and other GET arguments
@@ -787,13 +803,11 @@ class App
     public function url($page = [], array $extraRequestUrlArgs = []): string
     {
         if (is_string($page)) {
-            $pageExploded = explode('?', $page, 2);
-            parse_str($pageExploded[1] ?? '', $page);
-            $pagePath = $pageExploded[0] !== '' ? $pageExploded[0] : null;
-        } else {
-            $pagePath = $page[0] ?? null;
-            unset($page[0]);
+            $page = $this->explodeUrlPage($page);
         }
+
+        $pagePath = $page[0] ?? null;
+        unset($page[0]);
 
         $request = $this->getRequest();
 
@@ -842,8 +856,13 @@ class App
      */
     public function jsUrl($page = [], array $extraRequestUrlArgs = []): string
     {
-        // append to the end but allow override
-        $extraRequestUrlArgs = array_merge($extraRequestUrlArgs, ['__atk_json' => 1], $extraRequestUrlArgs);
+        if (is_string($page)) {
+            $page = $this->explodeUrlPage($page);
+        }
+
+        if (($page['__atk_json'] ?? null) !== false) {
+            $page['__atk_json'] = 1;
+        }
 
         return $this->url($page, $extraRequestUrlArgs);
     }
