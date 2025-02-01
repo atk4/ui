@@ -1987,10 +1987,7 @@ class AccordionService {
   onOpening() {
     if (external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('url')) {
       external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).atkReloadView({
-        url: external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('url'),
-        urlOptions: {
-          __atk_json: 1
-        }
+        url: external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).data('url')
       });
     }
   }
@@ -2687,13 +2684,6 @@ class ModalService {
     let args = {};
     if (data.args) {
       args = data.args;
-    }
-
-    // check for data type, usually JSON or HTML
-    if (data.type === 'json') {
-      args = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend(true, args, {
-        __atk_json: 1
-      });
     }
 
     // does modal content need to be loaded dynamically
