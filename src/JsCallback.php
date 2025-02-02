@@ -94,7 +94,7 @@ class JsCallback extends Callback
                 throw new Exception('Jquery JsCallback chain was mutated but not returned');
             }
 
-            $ajaxExecute = $this->getAjaxExecute($response);
+            $ajaxExecute = $this->jsAjaxExecute($response);
 
             $this->terminateAjaxIfCanTerminate($ajaxExecute);
         });
@@ -123,7 +123,7 @@ class JsCallback extends Callback
      *
      * @param JsExpressionable|View|string|null $response
      */
-    public function getAjaxExecute($response): JsBlock
+    public function jsAjaxExecute($response): JsBlock
     {
         $jsBlock = new JsBlock();
         if ($response) {

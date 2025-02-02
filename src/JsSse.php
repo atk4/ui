@@ -82,7 +82,7 @@ class JsSse extends JsCallback
      */
     public function send(JsExpressionable $action): void
     {
-        $ajaxExecute = $this->getAjaxExecute($action);
+        $ajaxExecute = $this->jsAjaxExecute($action);
         $this->sendEvent(
             '',
             $this->getApp()->encodeJson([
