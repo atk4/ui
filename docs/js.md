@@ -674,7 +674,7 @@ comes into play.
 
 (sse)=
 
-### Server Sent Event (JsSse)
+### Server-Sent Events (JsSse)
 
 :::{php:class} JsSse
 :::
