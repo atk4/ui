@@ -21,13 +21,17 @@ $reloadUrlArgs = ['i' => new JsExpression('++atk.i')];
 $log = View::addTo($app, ['element' => 'input', 'name' => 'log']);
 $log->setStyle('width', '100%');
 
-$addBoxFx = static function ($owner, string $name) use ($log) {
-    $box = View::addTo($owner);
-    $box->setStyle('padding', '5px');
-    $box->setStyle('margin', '5px');
-    $box->setStyle('border', '1px solid black');
+$setBoxTextAndStyleFx = static function (View $view, string $text) {
+    $view->set($text);
+    $view->setStyle('width', 'fit-content');
+    $view->setStyle('padding', '5px');
+    $view->setStyle('margin', '5px');
+    $view->setStyle('border', '1px solid black');
+};
 
-    $box->set($name . (int) $box->getApp()->tryGetRequestQueryParam('i'));
+$addBoxFx = static function ($owner, string $name) use ($setBoxTextAndStyleFx, $log) {
+    $box = View::addTo($owner);
+    $setBoxTextAndStyleFx($box, $name . (int) $box->getApp()->tryGetRequestQueryParam('i'));
 
     $box->js(true, new JsExpression(<<<'JS'
         var target = document.querySelector([target]);
@@ -80,28 +84,30 @@ Button::addTo($app, ['Readd U'])->on('click', new JsExpression(<<<'JS'
 
 Header::addTo($app, ['API']);
 
-$apiView = View::addTo($app);
-$apiButton = Button::addTo($apiView, ['Run slow API']);
+$apiContext = View::addTo($app);
+$setBoxTextAndStyleFx($apiContext, 'stateContext');
+$apiButton = Button::addTo($app, ['Run slow API']);
 $apiButton->on('click', static function () use ($apiButton) {
     sleep(1);
 
     return $apiButton->js()->text('Abort failed');
-});
-Button::addTo($apiView, ['Run slow API & reload'])->on('click', new JsBlock([
+}, ['apiConfig' => ['stateContext' => $apiContext]]);
+Button::addTo($app, ['Run slow API & remove'])->on('click', new JsBlock([
     $apiButton->js()->click(),
-    $apiView->jsReload(),
+    new JsExpression('document.querySelector([elem]).remove()', ['elem' => $apiContext]),
 ]));
 
 Header::addTo($app, ['SSE']);
 
-$sseView = View::addTo($app);
-$sse = JsSse::addTo($sseView);
-$sseButton = Button::addTo($sseView, ['Run slow SSE']);
+$sse = JsSse::addTo($app);
+$sseContext = View::addTo($app);
+$setBoxTextAndStyleFx($sseContext, 'stateContext');
+$sseButton = Button::addTo($app, ['Run slow SSE']);
 $sseButton->on('click', $sse->set(static function () use ($sse, $sseButton) {
     sleep(1);
     $sse->send($sseButton->js()->text('Abort failed'));
-}));
-Button::addTo($sseView, ['Run slow SSE & reload'])->on('click', new JsBlock([
+}), ['apiConfig' => ['stateContext' => $sseContext]]);
+Button::addTo($app, ['Run slow SSE & remove'])->on('click', new JsBlock([
     $sseButton->js()->click(),
-    $sseView->jsReload(),
+    new JsExpression('document.querySelector([elem]).remove()', ['elem' => $sseContext]),
 ]));

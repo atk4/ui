@@ -79,7 +79,7 @@ Feature: Remove observer
     When I press button "Run slow API"
     Then I should see "Abort failed"
     Given I am on "_unit-test/remove-observer.php"
-    When I press button "Run slow API & reload"
+    When I press button "Run slow API & remove"
     Then I should not see "Abort failed"
 
   Scenario: abort SSE when owner is reloaded
@@ -88,6 +88,6 @@ Feature: Remove observer
     When I wait 2000 ms
     Then I should see "Abort failed"
     Given I am on "_unit-test/remove-observer.php"
-    When I press button "Run slow SSE & reload"
+    When I press button "Run slow SSE & remove"
     When I wait 2000 ms
     Then I should not see "Abort failed"
