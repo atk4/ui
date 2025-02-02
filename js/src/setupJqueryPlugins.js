@@ -1,6 +1,6 @@
 import $ from 'external/jquery';
 import atk from 'atk';
-import AjaxecPlugin from './JqueryPlugin/AjaxecPlugin';
+import AjaxExecutePlugin from './JqueryPlugin/AjaxExecutePlugin';
 import ColumnResizerPlugin from './JqueryPlugin/ColumnResizerPlugin';
 import ConditionalFormPlugin from './JqueryPlugin/ConditionalFormPlugin';
 import ConfirmPlugin from './JqueryPlugin/ConfirmPlugin';
@@ -46,7 +46,7 @@ atk.registerPlugin = function (name, cl, shorthand = false) {
     }
 };
 
-atk.registerPlugin('atkAjaxec', AjaxecPlugin);
+atk.registerPlugin('atkAjaxExecute', AjaxExecutePlugin);
 atk.registerPlugin('atkColumnResizer', ColumnResizerPlugin);
 atk.registerPlugin('atkConditionalForm', ConditionalFormPlugin);
 atk.registerPlugin('atkConfirm', ConfirmPlugin, true);

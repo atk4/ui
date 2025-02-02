@@ -38,7 +38,7 @@ class JsCallback extends Callback
     {
         $this->assertIsInitialized();
 
-        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkAjaxec([
+        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkAjaxExecute([
             'url' => $this->getJsUrl(),
             'urlOptions' => $this->args,
             'confirm' => $this->confirm,
@@ -94,9 +94,9 @@ class JsCallback extends Callback
                 throw new Exception('Jquery JsCallback chain was mutated but not returned');
             }
 
-            $ajaxec = $this->getAjaxec($response);
+            $ajaxExecute = $this->getAjaxExecute($response);
 
-            $this->terminateAjaxIfCanTerminate($ajaxec);
+            $this->terminateAjaxIfCanTerminate($ajaxExecute);
         });
 
         return $this;
@@ -106,11 +106,11 @@ class JsCallback extends Callback
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
      */
-    protected function terminateAjaxIfCanTerminate(JsBlock $ajaxec): void
+    protected function terminateAjaxIfCanTerminate(JsBlock $ajaxExecute): void
     {
         $data = [
             'success' => true,
-            'atkjs' => $ajaxec->jsRender(),
+            'atkjs' => $ajaxExecute->jsRender(),
         ];
 
         if ($this->canTerminate()) {
@@ -123,7 +123,7 @@ class JsCallback extends Callback
      *
      * @param JsExpressionable|View|string|null $response
      */
-    public function getAjaxec($response): JsBlock
+    public function getAjaxExecute($response): JsBlock
     {
         $jsBlock = new JsBlock();
         if ($response) {

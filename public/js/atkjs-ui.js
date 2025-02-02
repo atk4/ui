@@ -332,16 +332,16 @@ class AbstractPlugin {
 
 /***/ }),
 
-/***/ "./src/JqueryPlugin/AjaxecPlugin.js":
-/*!******************************************!*\
-  !*** ./src/JqueryPlugin/AjaxecPlugin.js ***!
-  \******************************************/
+/***/ "./src/JqueryPlugin/AjaxExecutePlugin.js":
+/*!***********************************************!*\
+  !*** ./src/JqueryPlugin/AjaxExecutePlugin.js ***!
+  \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ AtkAjaxecPlugin)
+/* harmony export */   "default": () => (/* binding */ AtkAjaxExecutePlugin)
 /* harmony export */ });
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
@@ -350,7 +350,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class AtkAjaxecPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
+class AtkAjaxExecutePlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
   main() {
     if (!this.settings.url) {
       console.error('Trying to execute callback without URL');
@@ -396,7 +396,7 @@ class AtkAjaxecPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["defa
     this.$el.api(settings);
   }
 }
-AtkAjaxecPlugin.DEFAULTS = {
+AtkAjaxExecutePlugin.DEFAULTS = {
   url: null,
   urlOptions: {},
   confirm: null,
@@ -3722,7 +3722,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _JqueryPlugin_AjaxecPlugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./JqueryPlugin/AjaxecPlugin */ "./src/JqueryPlugin/AjaxecPlugin.js");
+/* harmony import */ var _JqueryPlugin_AjaxExecutePlugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./JqueryPlugin/AjaxExecutePlugin */ "./src/JqueryPlugin/AjaxExecutePlugin.js");
 /* harmony import */ var _JqueryPlugin_ColumnResizerPlugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./JqueryPlugin/ColumnResizerPlugin */ "./src/JqueryPlugin/ColumnResizerPlugin.js");
 /* harmony import */ var _JqueryPlugin_ConditionalFormPlugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./JqueryPlugin/ConditionalFormPlugin */ "./src/JqueryPlugin/ConditionalFormPlugin.js");
 /* harmony import */ var _JqueryPlugin_ConfirmPlugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./JqueryPlugin/ConfirmPlugin */ "./src/JqueryPlugin/ConfirmPlugin.js");
@@ -3782,7 +3782,7 @@ atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin = function (name, cl)
     (external_jquery__WEBPACK_IMPORTED_MODULE_0___default())[name] = options => external_jquery__WEBPACK_IMPORTED_MODULE_0___default()({})[name](options);
   }
 };
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkAjaxec', _JqueryPlugin_AjaxecPlugin__WEBPACK_IMPORTED_MODULE_2__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkAjaxExecute', _JqueryPlugin_AjaxExecutePlugin__WEBPACK_IMPORTED_MODULE_2__["default"]);
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkColumnResizer', _JqueryPlugin_ColumnResizerPlugin__WEBPACK_IMPORTED_MODULE_3__["default"]);
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkConditionalForm', _JqueryPlugin_ConditionalFormPlugin__WEBPACK_IMPORTED_MODULE_4__["default"]);
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkConfirm', _JqueryPlugin_ConfirmPlugin__WEBPACK_IMPORTED_MODULE_5__["default"], true);

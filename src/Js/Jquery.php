@@ -64,7 +64,7 @@ namespace Atk4\Ui\Js;
  * @method Jquery visibility(...$args)
  *
  * For atk4/ui JS (defined in js/src/plugin.js):
- * @method Jquery atkAjaxec(...$args)
+ * @method Jquery atkAjaxExecute(...$args)
  * @method Jquery atkColumnResizer(...$args)
  * @method Jquery atkConditionalForm(...$args)
  * @method Jquery atkConfirm(...$args)
