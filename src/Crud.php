@@ -182,7 +182,7 @@ class Crud extends Grid
     protected function jsExecute($return, Model\UserAction $action): JsBlock
     {
         $res = new JsBlock();
-        $jsAction = $this->getJsGridAction($action);
+        $jsAction = $this->jsGridAction($action);
         if ($jsAction) {
             $res->addStatement($jsAction);
         }
@@ -206,7 +206,7 @@ class Crud extends Grid
     /**
      * Return proper JS actions depending on action behavior.
      */
-    protected function getJsGridAction(Model\UserAction $action): ?JsExpressionable
+    protected function jsGridAction(Model\UserAction $action): ?JsExpressionable
     {
         if ($this->updatedId !== null) {
             $js = $this->container->jsReload($this->_getReloadArgs());

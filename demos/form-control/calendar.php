@@ -31,11 +31,11 @@ $control = $form->addControl('date_action', [
     'options' => ['clickOpens' => false],
 ])->set(new \DateTime());
 $control->addAction(['Today', 'icon' => 'calendar day'])
-    ->on('click', $control->getJsInstance()->setDate($app->uiPersistence->typecastSaveField($control->entityField->getField(), new \DateTime())));
+    ->on('click', $control->jsFlatpickr()->setDate($app->uiPersistence->typecastSaveField($control->entityField->getField(), new \DateTime())));
 $control->addAction(['Select...', 'icon' => 'calendar'])
-    ->on('click', $control->getJsInstance()->open());
+    ->on('click', $control->jsFlatpickr()->open());
 $control->addAction(['Clear', 'icon' => 'times red'])
-    ->on('click', $control->getJsInstance()->clear());
+    ->on('click', $control->jsFlatpickr()->clear());
 
 $form->onSubmit(static function (Form $form) use ($app) {
     $data = [];
