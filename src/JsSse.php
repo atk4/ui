@@ -31,7 +31,7 @@ class JsSse extends JsCallback
             $options['showLoader'] = $this->showLoader;
         }
 
-        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)]);
+        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerSentEvent($options)]);
     }
 
     /**

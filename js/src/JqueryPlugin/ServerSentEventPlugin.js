@@ -1,7 +1,7 @@
 import atk from 'atk';
 import AbstractPlugin from './AbstractPlugin';
 
-export default class AtkServerEventPlugin extends AbstractPlugin {
+export default class AtkServerSentEventPlugin extends AbstractPlugin {
     main() {
         const element = this.$el;
         const hasLoader = this.settings.showLoader;
@@ -43,7 +43,7 @@ export default class AtkServerEventPlugin extends AbstractPlugin {
     }
 }
 
-AtkServerEventPlugin.DEFAULTS = {
+AtkServerSentEventPlugin.DEFAULTS = {
     url: null,
     urlOptions: {},
     showLoader: false,

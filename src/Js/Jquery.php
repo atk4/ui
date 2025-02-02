@@ -74,7 +74,7 @@ namespace Atk4\Ui\Js;
  * @method Jquery atkJsSortable(...$args)
  * @method Jquery atkReloadView(...$args)
  * @method Jquery atkScroll(...$args)
- * @method Jquery atkServerEvent(...$args)
+ * @method Jquery atkServerSentEvent(...$args)
  * @method Jquery atkSidenav(...$args)
  *
  * For other:
