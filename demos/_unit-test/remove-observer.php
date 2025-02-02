@@ -99,8 +99,8 @@ Button::addTo($app, ['Run slow API & remove'])->on('click', new JsBlock([
 
 Header::addTo($app, ['SSE']);
 
-$sse = JsSse::addTo($app);
 $sseContext = View::addTo($app);
+$sse = JsSse::addTo($app, ['stateContext' => $sseContext]);
 $setBoxTextAndStyleFx($sseContext, 'stateContext');
 $sseButton = Button::addTo($app, ['Run slow SSE']);
 $sseButton->on('click', $sse->set(static function () use ($sse, $sseButton) {

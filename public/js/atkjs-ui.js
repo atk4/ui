@@ -1995,42 +1995,50 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.json.parse.js */ "./node_modules/core-js/modules/esnext.json.parse.js");
 /* harmony import */ var core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
 
-class AtkServerSentEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
+
+class AtkServerSentEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_3__["default"] {
   main() {
     const element = this.$el;
     const hasLoader = this.settings.showLoader;
+    const stateContext = external_jquery__WEBPACK_IMPORTED_MODULE_1___default()(this.settings.stateContext ?? element);
     this.source = new EventSource(this.settings.url);
     if (hasLoader) {
-      element.addClass('loading');
+      stateContext.addClass('loading');
     }
     this.source.addEventListener('message', e => {
-      atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
+      atk__WEBPACK_IMPORTED_MODULE_2__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
     });
     this.source.addEventListener('error', e => {
       if (e.eventPhase === EventSource.CLOSED) {
         this.source.close();
         if (hasLoader) {
-          element.removeClass('loading');
+          stateContext.removeClass('loading');
         }
       }
     });
     this.source.addEventListener('atkSseAction', e => {
-      atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
+      atk__WEBPACK_IMPORTED_MODULE_2__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
     });
 
     // fix https://github.com/atk4/ui/issues/393
-    atk__WEBPACK_IMPORTED_MODULE_1__["default"].elementRemoveObserver.addHandler(element[0], () => this.source.close());
+    atk__WEBPACK_IMPORTED_MODULE_2__["default"].elementRemoveObserver.addHandler(stateContext[0], () => this.stop());
 
     // prevent "The connection to http://xxx was interrupted while the page was loading." browser console warning
     window.addEventListener('beforeunload', () => this.source.close());
   }
   stop() {
+    const wasActive = this.source.readyState !== EventSource.CLOSED;
     this.source.close();
+    if (wasActive) {
+      console.warn('SSE plugin - request aborted');
+    }
     if (this.settings.showLoader) {
       this.$el.removeClass('loading');
     }
@@ -2038,7 +2046,7 @@ class AtkServerSentEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_
 }
 AtkServerSentEventPlugin.DEFAULTS = {
   url: null,
-  urlOptions: {},
+  stateContext: null,
   showLoader: false
 };
 
