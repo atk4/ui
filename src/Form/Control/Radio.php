@@ -84,8 +84,8 @@ class Radio extends Form\Control
     }
 
     #[\Override]
-    public function onChange($expr, array $defaults = []): void
+    public function onChange($action, array $defaults = []): void
     {
-        $this->on('change', 'input', $expr, $defaults);
+        $this->on('change', 'input', $action, $defaults);
     }
 }

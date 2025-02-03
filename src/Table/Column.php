@@ -244,17 +244,17 @@ class Column
             });
         }');
 
-        $chain = new Jquery('#' . $id);
-        $chain->dropdown([
+        $jsChain = new Jquery('#' . $id);
+        $jsChain->dropdown([
             'action' => 'hide',
             'values' => $items,
             'onChange' => $function,
         ]);
 
         // will stop grid column from being sorted
-        $chain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));
+        $jsChain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));
 
-        $this->table->js(true, $chain);
+        $this->table->js(true, $jsChain);
 
         return $cb;
     }

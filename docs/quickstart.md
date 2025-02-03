@@ -201,14 +201,14 @@ Next we need to add Components that are capable of manipulating the data:
 
 ```
 $col = \Atk4\Ui\Columns::addTo($app, ['divided']);
-$colReload = new \Atk4\Ui\Js\JsReload($col);
+$jsColReload = new \Atk4\Ui\Js\JsReload($col);
 
 $form = \Atk4\Ui\Form::addTo($col->addColumn());
 $form->setEntity(new ToDoItem($s));
-$form->onSubmit(function (Form $form) use ($colReload) {
+$form->onSubmit(function (Form $form) use ($jsColReload) {
     $form->entity->save();
 
-    return $colReload;
+    return $jsColReload;
 });
 
 \Atk4\Ui\Table::addTo($col->addColumn())
@@ -220,7 +220,7 @@ $form->onSubmit(function (Form $form) use ($colReload) {
 
 - We wish to position Form and Table side-by-side, so we use `\Atk4\Ui\Columns` component and
   inject a Fomantic-UI CSS class "divided" that will appear as a vertical separation line.
-- $colReload is a special object which we call {ref}`js_action`. It represents a Browser-event
+- $jsColReload is a special object which we call {ref}`js_action`. It represents a Browser-event
   that will cause both columns to be reloaded from the server. To use this action we still have
   to bind it.
 - `Columns` class provides `addColumn()` method to equally divide layout vertically. We call
@@ -230,7 +230,7 @@ $form->onSubmit(function (Form $form) use ($colReload) {
 - `Form` relies on a special Callback feature of Agile UI to automatically handle onSubmit
   callback, pre-load form values into the model, so that you could simply
 - Save the record into that session data. Form automatically captures validation errors.
-- We use `$colReload` which we defined earlier to instruct client browser on what it needs to
+- We use `$jsColReload` which we defined earlier to instruct client browser on what it needs to
   do when form is successfully saved.
 - Very similar syntax to what we used with a form, but using with a Table for listing records.
 

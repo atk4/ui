@@ -21,13 +21,13 @@ class ViewTester extends View
         parent::init();
 
         $label = Label::addTo($this, ['CallBack', 'detail' => 'fail', 'class.red' => true]);
-        $reload = new JsReload($this, [$this->name => 'ok']);
+        $jsReload = new JsReload($this, [$this->name => 'ok']);
 
         if ($this->getApp()->hasRequestQueryParam($this->name)) {
             $label->class[] = 'green';
             $label->detail = 'success';
         } else {
-            $this->js(true, $reload);
+            $this->js(true, $jsReload);
             $this->js(true, new JsExpression('var s = Date.now(); var i = setInterval(function () { var p = Date.now() - s; var el = $([]); el.find(\'.detail\').text(p + \'ms\'); if (el.is(\'.green\')) { clearInterval(i); }}, 100)', [$label]));
         }
     }

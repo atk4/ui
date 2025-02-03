@@ -602,18 +602,18 @@ with a message about failure to accept of terms and conditions:
 
 ```
 $form->onSubmit(function (Form $form) {
-    $errors = [];
+    $jsErrors = [];
 
     if (!$form->entity->get('name')) {
-        $errors[] = $form->jsError('name', 'Name must be specified');
+        $jsErrors[] = $form->jsError('name', 'Name must be specified');
     }
 
     if (!$form->entity->get('surname')) {
-        $errors[] = $form->jsError('surname', 'Surname must be specified');
+        $jsErrors[] = $form->jsError('surname', 'Surname must be specified');
     }
 
-    if ($errors) {
-        return new \Atk4\Ui\Js\JsBlock($errors);
+    if ($jsErrors) {
+        return new \Atk4\Ui\Js\JsBlock($jsErrors);
     }
 
     if (!$form->entity->get('terms')) {

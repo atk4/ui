@@ -132,12 +132,12 @@ class BasicExecutor extends View implements ExecutorInterface
 
         $return = $this->action->execute(...$args);
 
-        $success = $this->jsSuccess instanceof \Closure
+        $jsSuccess = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel())
             : $this->jsSuccess;
 
         return JsBlock::fromHookResult($this->hook(self::HOOK_AFTER_EXECUTE, [$return]) // @phpstan-ignore ternary.shortNotAllowed
-            ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
+            ?: ($jsSuccess ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
     }
 
     public function addHeader(): void

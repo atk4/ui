@@ -242,13 +242,13 @@ class CardDeck extends View
         }
 
         if (is_string($return)) {
-            $msg = $this->jsCreateNotifier($action, $return);
+            $jsMsg = $this->jsCreateNotifier($action, $return);
         } elseif ($return instanceof JsExpressionable) {
-            $msg = $return;
+            $jsMsg = $return;
         } else {
-            $msg = $this->jsCreateNotifier($action, $this->defaultMsg);
+            $jsMsg = $this->jsCreateNotifier($action, $this->defaultMsg);
         }
-        $res->addStatement($msg);
+        $res->addStatement($jsMsg);
 
         $res->addStatement($this->container->jsReload($this->getReloadArgs()));
 
@@ -260,12 +260,12 @@ class CardDeck extends View
      */
     protected function jsCreateNotifier(Model\UserAction $action, ?string $msg = null): JsBlock
     {
-        $notifier = Factory::factory($this->notifyDefault);
+        $jsNotifier = Factory::factory($this->notifyDefault);
         if ($msg) {
-            $notifier->setMessage($msg);
+            $jsNotifier->setMessage($msg);
         }
 
-        return new JsBlock([$notifier]);
+        return new JsBlock([$jsNotifier]);
     }
 
     /**

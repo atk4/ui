@@ -164,9 +164,9 @@ class Right extends View implements Loadable
      */
     public function jsDisplayWarning(bool $state = true): JsExpressionable
     {
-        $chain = new Jquery('#' . $this->name . ' ' . $this->warningSelector);
+        $jsChain = new Jquery('#' . $this->name . ' ' . $this->warningSelector);
 
-        return $state ? $chain->addClass($this->warningTrigger) : $chain->removeClass($this->warningTrigger);
+        return $state ? $jsChain->addClass($this->warningTrigger) : $jsChain->removeClass($this->warningTrigger);
     }
 
     /**
@@ -196,7 +196,7 @@ class Right extends View implements Loadable
         ];
 
         if ($this->dynamicContent) {
-            $res['url'] = $this->getDynamicContent()->getCallbackUrl();
+            $res['url'] = $this->getDynamicContent()->getCallbackJsUrl();
             $res['clearable'] = $this->getDynamicContent()->getClearSelector();
         }
 

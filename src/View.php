@@ -676,10 +676,10 @@ class View extends AbstractView
      *
      * 1. Calling with arguments:
      * $view->js(); // technically does nothing
-     * $a = $view->js()->hide(); // creates chain for hiding $view but does not bind to event yet
+     * $jsHide = $view->js()->hide(); // creates chain for hiding $view but does not bind to event yet
      *
      * 2. Binding existing chains
-     * $img->on('mouseenter', $a); // binds previously defined chain to event on event of $img
+     * $img->on('mouseenter', $jsHide); // binds previously defined chain to event on event of $img
      *
      * Produced code: $('#img_id').on('mouseenter', function (event) {
      *     event.preventDefault();
@@ -756,12 +756,12 @@ class View extends AbstractView
         }
 
         if ($componentDefinition) {
-            $chain = (new JsVueService())->createVue($selector, $component, $componentDefinition, $initData);
+            $jsChain = (new JsVueService())->createVue($selector, $component, $componentDefinition, $initData);
         } else {
-            $chain = (new JsVueService())->createAtkVue($selector, $component, $initData);
+            $jsChain = (new JsVueService())->createAtkVue($selector, $component, $initData);
         }
 
-        $this->js(true, $chain);
+        $this->js(true, $jsChain);
 
         return $this;
     }
@@ -792,7 +792,7 @@ class View extends AbstractView
      *
      * @return array{local: mixed, session: mixed}
      */
-    public function jsGetStoreData(): array
+    public function getJsStoreData(): array
     {
         $data = [
             'local' => $this->getApp()->decodeJson(
@@ -883,7 +883,7 @@ class View extends AbstractView
      *
      * @return ($selector is string|null ? ($action is null ? Jquery : null) : ($action is array|null ? Jquery : null))
      */
-    public function on(string $event, $selector = null, $action = null, array $defaults = [])
+    public function on(string $event, $selector = null, $action = null, array $defaults = []): ?JsExpressionable
     {
         // second argument may be omitted
         if ($selector !== null && !is_string($selector) && ($action === null || is_array($action)) && $defaults === []) {
@@ -912,9 +912,9 @@ class View extends AbstractView
         }
 
         // set preventDefault and stopPropagation by default
-        $eventStatements = [];
-        $eventStatements['preventDefault'] = $defaults['preventDefault'] ?? true;
-        $eventStatements['stopPropagation'] = $defaults['stopPropagation'] ?? true;
+        $jsEventStatements = [];
+        $jsEventStatements['preventDefault'] = $defaults['preventDefault'] ?? true;
+        $jsEventStatements['stopPropagation'] = $defaults['stopPropagation'] ?? true;
 
         $lazyJsRenderFx = function (\Closure $fx): JsExpressionable {
             return new class($fx) implements JsExpressionable {
@@ -938,12 +938,12 @@ class View extends AbstractView
 
         // dealing with callback action
         if ($action instanceof \Closure || (is_array($action) && ($action[0] ?? null) instanceof \Closure)) {
-            $actions = [];
+            $jsActions = [];
             if (is_array($action)) {
                 $urlData = $action;
                 unset($urlData[0]);
-                foreach ($urlData as $a) {
-                    $actions[] = $a;
+                foreach ($urlData as $v) {
+                    $jsActions[] = $v;
                 }
                 $action = $action[0];
             }
@@ -958,9 +958,11 @@ class View extends AbstractView
                 return $action($chain, ...$args);
             }, $arguments);
 
-            $actions[] = $lazyJsRenderFx(static fn () => $cb->jsExecute());
+            $jsActions[] = $lazyJsRenderFx(static fn () => $cb->jsExecute());
         } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof UserAction\SharedExecutor || $action instanceof Model\UserAction) {
-            $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->createExecutor($action, $this) : $action;
+            $ex = $action instanceof Model\UserAction
+                ? $this->getExecutorFactory()->createExecutor($action, $this)
+                : $action;
 
             $setupNonSharedExecutorFx = function (UserAction\ExecutorInterface $ex) use (&$defaults, &$arguments): void {
                 /** @var AbstractView&UserAction\ExecutorInterface $ex https://github.com/phpstan/phpstan/issues/3770 */
@@ -1008,46 +1010,46 @@ class View extends AbstractView
 
             if ($ex instanceof UserAction\SharedExecutor) {
                 $setupNonSharedExecutorFx($ex->getExecutor());
-                $actions = [$ex->getExecutor() instanceof UserAction\JsCallbackExecutor
+                $jsActions = [$ex->getExecutor() instanceof UserAction\JsCallbackExecutor
                     ? $lazyJsRenderFx(static fn () => $ex->jsExecute($arguments))
                     : $ex->jsExecute($arguments)];
             } elseif ($ex instanceof UserAction\JsExecutorInterface && $ex instanceof self) {
                 $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction();
-                $actions = [$ex->jsExecute($arguments)];
+                $jsActions = [$ex->jsExecute($arguments)];
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
                 $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction($arguments);
-                $actions = [$lazyJsRenderFx(static fn () => $ex->jsExecute($arguments))];
+                $jsActions = [$lazyJsRenderFx(static fn () => $ex->jsExecute($arguments))];
             } else {
                 throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or UserAction\JsExecutorInterface');
             }
         } elseif ($action instanceof JsCallback) {
-            $actions = [$lazyJsRenderFx(static fn () => $action->jsExecute())];
+            $jsActions = [$lazyJsRenderFx(static fn () => $action->jsExecute())];
         } else {
-            $actions = [$action];
+            $jsActions = [$action];
         }
 
         if ($defaults['confirm'] ?? null) {
-            array_unshift($eventStatements, new JsExpression('$.atkConfirm({ message: [confirm], onApprove: [action], options: { button: { ok: [ok], cancel: [cancel] } }, context: this })', [
+            array_unshift($jsEventStatements, new JsExpression('$.atkConfirm({ message: [confirm], onApprove: [action], options: { button: { ok: [ok], cancel: [cancel] } }, context: this })', [
                 'confirm' => $defaults['confirm'],
-                'action' => new JsFunction([], $actions),
+                'action' => new JsFunction([], $jsActions),
                 'ok' => $defaults['ok'] ?? 'Ok',
                 'cancel' => $defaults['cancel'] ?? 'Cancel',
             ]));
         } else {
-            $eventStatements = array_merge($eventStatements, $actions);
+            $jsEventStatements = array_merge($jsEventStatements, $jsActions);
         }
 
-        $eventFunction = new JsFunction([], $eventStatements);
-        $eventChain = new Jquery($this);
+        $jsEventFunction = new JsFunction([], $jsEventStatements);
+        $jsEventChain = new Jquery($this);
         if ($selector) {
-            $eventChain->on($event, $selector, $eventFunction);
+            $jsEventChain->on($event, $selector, $jsEventFunction);
         } else {
-            $eventChain->on($event, $eventFunction);
+            $jsEventChain->on($event, $jsEventFunction);
         }
 
-        $this->_jsActions[$event][] = $eventChain;
+        $this->_jsActions[$event][] = $jsEventChain;
 
         return $res;
     }
@@ -1057,14 +1059,14 @@ class View extends AbstractView
      */
     public function getJs(): JsBlock
     {
-        $actions = [];
+        $jsActions = [];
         foreach ($this->_jsActions as $eventActions) {
             foreach ($eventActions as $action) {
-                $actions[] = $action;
+                $jsActions[] = $action;
             }
         }
 
-        return new JsBlock($actions);
+        return new JsBlock($jsActions);
     }
 
     // }}}

@@ -187,7 +187,7 @@ trait StepExecutorTrait
         }
 
         if (!$this->isFirstStep($this->step)) {
-            $chain = $this->loader->jsLoad(
+            $jsChain = $this->loader->jsLoad(
                 [
                     'step' => $this->getPreviousStep($this->step),
                     $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getIdField(), $this->action->getEntity()->getId()),
@@ -196,7 +196,7 @@ trait StepExecutorTrait
                 $this->loader->name
             );
 
-            $page->js(true, $this->previousStepButton->js()->on('click', new JsFunction([], [$chain])));
+            $page->js(true, $this->previousStepButton->js()->on('click', new JsFunction([], [$jsChain])));
         }
 
         // setup executor button to perform action
@@ -361,7 +361,7 @@ trait StepExecutorTrait
     protected function jsSetPreviousHandler(View $view, string $step): void
     {
         if (!$this->isFirstStep($step)) {
-            $chain = $this->loader->jsLoad(
+            $jsChain = $this->loader->jsLoad(
                 [
                     'step' => $this->getPreviousStep($step),
                     $this->name => $this->getApp()->uiPersistence->typecastAttributeSaveField($this->action->getModel()->getIdField(), $this->action->getEntity()->getId()),
@@ -370,7 +370,7 @@ trait StepExecutorTrait
                 $this->loader->name
             );
 
-            $view->js(true, $this->previousStepButton->js()->on('click', new JsFunction([], [$chain])));
+            $view->js(true, $this->previousStepButton->js()->on('click', new JsFunction([], [$jsChain])));
         }
     }
 

@@ -82,12 +82,12 @@ class JsSse extends JsCallback
      */
     public function send(JsExpressionable $action): void
     {
-        $ajaxExecute = $this->jsAjaxExecute($action);
+        $jsAjaxExecute = $this->jsAjaxExecute($action);
         $this->sendEvent(
             '',
             $this->getApp()->encodeJson([
                 'success' => true,
-                'atkjs' => $ajaxExecute->jsRender(),
+                'atkjs' => $jsAjaxExecute->jsRender(),
             ]),
             'atkSseAction'
         );
@@ -99,13 +99,13 @@ class JsSse extends JsCallback
     #[\Override]
     protected function terminateAjaxIfCanTerminate(JsBlock $ajaxExecute): void
     {
-        $ajaxExecuteStr = $ajaxExecute->jsRender();
-        if ($ajaxExecuteStr !== '') {
+        $jsAjaxExecuteStr = $ajaxExecute->jsRender();
+        if ($jsAjaxExecuteStr !== '') {
             $this->sendEvent(
                 '',
                 $this->getApp()->encodeJson([
                     'success' => true,
-                    'atkjs' => $ajaxExecuteStr,
+                    'atkjs' => $jsAjaxExecuteStr,
                 ]),
                 'atkSseAction'
             );

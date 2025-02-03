@@ -122,19 +122,19 @@ class Control extends View
      * Shorthand method for on('change') event.
      * Some input fields, like Calendar, could call this differently.
      *
-     * If $expr is JsExpressionable, then it will execute it instantly.
-     * If $expr is callback method, then it'll make additional request to webserver.
+     * If $action is JsExpressionable, then it will execute it instantly.
+     * If $action is callback, then it'll make additional request to webserver.
      *
      * Examples:
      * $control->onChange(new JsExpression('console.log(\'changed\')'));
      * $control->onChange(new JsExpression('$(this).parents(\'.form\').form(\'submit\')'));
      *
-     * @param JsExpressionable|JsCallbackSetWithValueClosure|array{JsCallbackSetWithValueClosure} $expr
+     * @param JsExpressionable|JsCallbackSetWithValueClosure|array{JsCallbackSetWithValueClosure} $action
      * @param array<int|string, mixed>                                                            $defaults
      */
-    public function onChange($expr, array $defaults = []): void
+    public function onChange($action, array $defaults = []): void
     {
-        $this->on('change', '#' . $this->name . '_input', $expr, $defaults);
+        $this->on('change', '#' . $this->name . '_input', $action, $defaults);
     }
 
     /**

@@ -232,16 +232,18 @@ $group->addControl('middle_name', ['width' => 'three', 'disabled' => true]);
 $group->addControl('last_name', ['width' => 'five']);
 
 $form->onSubmit(static function (Form $form) {
-    $errors = [];
+    $jsErrors = [];
     foreach ($form->entity->getFields() as $name => $ff) {
         if ($name === 'id') {
             continue;
         }
 
         if ($form->entity->get($name) !== 'a') {
-            $errors[] = $form->jsError($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $form->entity->get($name));
+            $jsErrors[] = $form->jsError($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $form->entity->get($name));
         }
     }
 
-    return $errors !== [] ? new JsBlock($errors) : $form->jsSuccess('No more errors', 'so we have saved everything into the database');
+    return $jsErrors !== []
+        ? new JsBlock($jsErrors)
+        : $form->jsSuccess('No more errors', 'so we have saved everything into the database');
 });

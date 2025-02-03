@@ -29,7 +29,7 @@ class Content extends View implements LoadableContent
     }
 
     #[\Override]
-    public function getCallbackUrl(): string
+    public function getCallbackJsUrl(): string
     {
         return $this->cb->getJsUrl();
     }
