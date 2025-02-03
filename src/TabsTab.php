@@ -36,6 +36,11 @@ class TabsTab extends MenuItem
             $this->settings['cache'] = false;
             $this->settings['apiSettings']['url'] = $this->url;
             $this->settings['apiSettings']['data']['__atk_tab'] = 1;
+
+            // prevent adding timestamp to URL by jQuery
+            // https://github.com/jquery/jquery/blob/3.7.1/src/ajax.js#L612
+            // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/modules/tab.js#L473
+            $this->settings['alwaysRefresh'] = null;
         }
 
         $this->js(true)->tab($this->settings);
