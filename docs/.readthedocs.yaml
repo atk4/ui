@@ -12,6 +12,10 @@ python:
     # https://github.com/readthedocs/readthedocs.org/issues/10806
     - requirements: docs/requirements.txt
 
+sphinx:
+  # https://github.com/readthedocs/readthedocs.org/issues/10806
+  configuration: docs/conf.py
+
 formats:
   - pdf
   - epub
