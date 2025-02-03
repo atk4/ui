@@ -16,13 +16,13 @@ class ReloadTest extends View
         parent::init();
 
         $label = Label::addTo($this, ['Testing...', 'detail' => '', 'class.red' => true]);
-        $reload = new JsReload($this, [$this->name => 'ok']);
+        $jsReload = new JsReload($this, [$this->name => 'ok']);
 
         if ($this->getApp()->hasRequestQueryParam($this->name)) {
             $label->class[] = 'green';
             $label->content = 'Reload success';
         } else {
-            $this->js(true, $reload);
+            $this->js(true, $jsReload);
         }
     }
 }

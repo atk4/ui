@@ -124,12 +124,12 @@ class Modal extends View
      */
     public function jsShow(array $args = []): JsExpressionable
     {
-        $chain = $this->js();
+        $jsChain = $this->js();
         if ($args !== []) {
-            $chain->data(['args' => $args]);
+            $jsChain->data(['args' => $args]);
         }
 
-        return $chain->modal('show');
+        return $jsChain->modal('show');
     }
 
     /**

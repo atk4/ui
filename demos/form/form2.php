@@ -65,21 +65,21 @@ $form->onSubmit(static function (Form $form) {
     }
 
     // in-form validation
-    $errors = [];
+    $jsErrors = [];
     if (mb_strlen($form->entity->get('first_name')) < 3) {
-        $errors[] = $form->jsError('first_name', 'too short, ' . $form->entity->get('first_name'));
+        $jsErrors[] = $form->jsError('first_name', 'too short, ' . $form->entity->get('first_name'));
     }
     if (mb_strlen($form->entity->get('last_name')) < 5) {
-        $errors[] = $form->jsError('last_name', 'too short');
+        $jsErrors[] = $form->jsError('last_name', 'too short');
     }
 
     // Model validation. We do it manually because we are not using Model::save() method in demo mode.
     foreach ($countryEntity->validate('save') as $k => $error) {
-        $errors[] = $form->jsError($k, $error);
+        $jsErrors[] = $form->jsError($k, $error);
     }
 
-    if ($errors) {
-        return new JsBlock($errors);
+    if ($jsErrors) {
+        return new JsBlock($jsErrors);
     }
 
     return new JsToast($countryEntity->getUserAction('add')->execute());

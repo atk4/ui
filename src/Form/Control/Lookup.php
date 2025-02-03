@@ -275,9 +275,9 @@ class Lookup extends Input
                 $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
 
                 $row = $this->renderRow($form->entity);
-                $chain = $this->jsDropdown();
-                $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-                $res->addStatement($chain);
+                $jsChain = $this->jsDropdown();
+                $jsChain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
+                $res->addStatement($jsChain);
 
                 return $res;
             });
@@ -348,9 +348,9 @@ class Lookup extends Input
     /**
      * Override this method if you want to add more logic to the initialization of the auto-complete field.
      *
-     * @param Jquery $chain
+     * @param Jquery $jsChain
      */
-    protected function initDropdown($chain): void
+    protected function initDropdown($jsChain): void
     {
         $settings = array_merge([
             'fields' => ['name' => 'title'],
@@ -361,7 +361,7 @@ class Lookup extends Input
             $settings['clearable'] = true;
         }
 
-        $chain->dropdown($settings);
+        $jsChain->dropdown($settings);
     }
 
     #[\Override]
@@ -389,9 +389,9 @@ class Lookup extends Input
             ], $this->apiConfig['data'] ?? []);
         }
 
-        $chain = $this->jsDropdown();
+        $jsChain = $this->jsDropdown();
 
-        $this->initDropdown($chain);
+        $this->initDropdown($jsChain);
 
         if ($this->entityField !== null && $this->entityField->get() !== null) {
             $idField = $this->idField
@@ -400,10 +400,10 @@ class Lookup extends Input
             $this->model = $this->model->loadBy($idField, $this->entityField->get());
 
             $row = $this->renderRow($this->model);
-            $chain->dropdown('set value', $row['value'], true)->dropdown('set text', $row['title'], true);
+            $jsChain->dropdown('set value', $row['value'], true)->dropdown('set text', $row['title'], true);
         }
 
-        $this->js(true, $chain);
+        $this->js(true, $jsChain);
 
         parent::renderView();
     }

@@ -56,12 +56,14 @@ $formGroup->addControl('address', ['width' => 'twelve']);
 $formGroup->addControl('zip', ['width' => 'four']);
 
 $form->onSubmit(static function (Form $form) {
-    $errors = [];
+    $jsErrors = [];
     foreach (['first_name', 'last_name', 'address'] as $field) {
         if (!$form->entity->get($field)) {
-            $errors[] = $form->jsError($field, 'Field ' . $field . ' is mandatory');
+            $jsErrors[] = $form->jsError($field, 'Field ' . $field . ' is mandatory');
         }
     }
 
-    return $errors !== [] ? new JsBlock($errors) : $form->jsSuccess('No more errors', 'so we have saved everything into the database');
+    return $jsErrors !== []
+        ? new JsBlock($jsErrors)
+        : $form->jsSuccess('No more errors', 'so we have saved everything into the database');
 });

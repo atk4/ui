@@ -79,7 +79,7 @@ class JsCallback extends Callback
         }
 
         parent::set(function () use ($fx) {
-            $chain = new Jquery();
+            $jsChain = new Jquery();
 
             $values = [];
             foreach ($this->args as $k => $jsValue) {
@@ -87,16 +87,16 @@ class JsCallback extends Callback
                 $values[] = $jsValue->typecastLoadValue($rawValue);
             }
 
-            $response = $fx($chain, ...$values);
+            $response = $fx($jsChain, ...$values);
 
             // TODO should we create/pass $chain to $fx at all?
-            if (count($chain->_chain) !== 0 && !$response instanceof JsExpressionable) {
+            if (count($jsChain->_chain) !== 0 && !$response instanceof JsExpressionable) {
                 throw new Exception('Jquery JsCallback chain was mutated but not returned');
             }
 
-            $ajaxExecute = $this->jsAjaxExecute($response);
+            $jsAjaxExecute = $this->jsAjaxExecute($response);
 
-            $this->terminateAjaxIfCanTerminate($ajaxExecute);
+            $this->terminateAjaxIfCanTerminate($jsAjaxExecute);
         });
 
         return $this;

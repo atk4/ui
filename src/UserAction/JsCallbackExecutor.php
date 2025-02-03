@@ -124,12 +124,12 @@ class JsCallbackExecutor extends JsCallback implements ExecutorInterface
 
                 $id = $this->action->getEntity()->getId();
 
-                $success = $this->jsSuccess instanceof \Closure
+                $jsSuccess = $this->jsSuccess instanceof \Closure
                     ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $return)
                     : $this->jsSuccess;
 
                 $js = JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$return, $id]) // @phpstan-ignore ternary.shortNotAllowed
-                    ?: ($success ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
+                    ?: ($jsSuccess ?? new JsToast('Success' . (is_string($return) ? (': ' . $return) : ''))));
 
                 return $js;
             }, $actionUrlArgs);

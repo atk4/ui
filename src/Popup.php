@@ -223,13 +223,13 @@ class Popup extends View
         if ($this->triggerBy instanceof Form\Control) {
             $selector = '#' . $this->triggerBy->name . '_input';
         }
-        $chain = new Jquery($selector);
-        $chain->popup($this->popOptions);
+        $jsChain = new Jquery($selector);
+        $jsChain->popup($this->popOptions);
         if ($this->stopClickEvent) {
-            $chain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));
+            $jsChain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));
         }
 
-        return $chain;
+        return $jsChain;
     }
 
     #[\Override]

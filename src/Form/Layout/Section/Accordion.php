@@ -28,15 +28,15 @@ class Accordion extends UiAccordion
         // add hook which in case of field error expands respective accordion sections
         $this->form->onHook(Form::HOOK_DISPLAY_ERROR, static function (Form $form, $fieldName, $str) {
             // default behavior
-            $jsError = [$form->js()->form('add prompt', $fieldName, $str)];
+            $jsErrors = [$form->js()->form('add prompt', $fieldName, $str)];
 
             // if a form control is part of an accordion section, it will open that section
             $section = $form->getControl($fieldName)->getClosestOwner(AccordionSection::class);
             if ($section) {
-                $jsError[] = $section->getOwner()->jsOpen($section);
+                $jsErrors[] = $section->getOwner()->jsOpen($section);
             }
 
-            return new JsBlock($jsError);
+            return new JsBlock($jsErrors);
         });
     }
 

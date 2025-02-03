@@ -71,7 +71,7 @@ class PanelExecutor extends Right implements JsExecutorInterface
     protected function afterActionInit(): void
     {
         $this->loader = Loader::addTo($this, ['shim' => $this, 'loadEvent' => false]);
-        $this->actionData = $this->loader->jsGetStoreData()['session'] ?? [];
+        $this->actionData = $this->loader->getJsStoreData()['session'] ?? [];
     }
 
     #[\Override]
@@ -155,14 +155,14 @@ class PanelExecutor extends Right implements JsExecutorInterface
      */
     protected function jsGetExecute($obj, $id): JsBlock
     {
-        $success = $this->jsSuccess instanceof \Closure
+        $jsSuccess = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
 
         return new JsBlock([
             $this->jsClose(),
             JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore ternary.shortNotAllowed
-                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
+                ?: ($jsSuccess ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
             $this->loader->jsClearStoreData(true),
         ]);
     }

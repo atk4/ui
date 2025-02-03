@@ -81,7 +81,7 @@ class ActionMenu extends Table\Column
 
         if ($action !== null) {
             // set executor context
-            $context = (new Jquery())->closest('.ui.button');
+            $jsContext = (new Jquery())->closest('.ui.button');
 
             $this->table->on('click', '.i_' . $name, $action, [
                 new JsCallbackLoadableValue($this->table->jsRow()->data('id'), function ($v) {
@@ -91,7 +91,7 @@ class ActionMenu extends Table\Column
                     );
                 }),
                 'confirm' => $confirmMsg,
-                'apiConfig' => ['stateContext' => $context],
+                'apiConfig' => ['stateContext' => $jsContext],
             ]);
         }
 

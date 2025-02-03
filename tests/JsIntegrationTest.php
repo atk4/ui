@@ -40,17 +40,17 @@ class JsIntegrationTest extends TestCase
     public function testChainFalse(): void
     {
         $v = new Button(['name' => 'b']);
-        $j = $v->js()->hide();
+        $js = $v->js()->hide();
         $v->setApp($this->createApp());
         $v->renderAll();
 
-        self::assertSame('$(\'#b\').hide()', $j->jsRender());
+        self::assertSame('$(\'#b\').hide()', $js->jsRender());
     }
 
     public function testChainTrue(): void
     {
         $v = new Button(['name' => 'b']);
-        $j = $v->js(true)->hide();
+        $js = $v->js(true)->hide();
         $v->setApp($this->createApp());
         $v->renderAll();
 

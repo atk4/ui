@@ -82,16 +82,16 @@ class Calendar extends Input
     }
 
     /**
-     * @param JsExpressionable $expr
+     * @param JsExpressionable $js
      */
     #[\Override]
-    public function onChange($expr, $default = []): void
+    public function onChange($js, $default = []): void
     {
-        if (!$expr instanceof JsBlock) {
-            $expr = [$expr];
+        if (!$js instanceof JsBlock) {
+            $js = [$js];
         }
 
-        $this->options['onChange'] = new JsFunction(['date', 'text', 'mode'], $expr);
+        $this->options['onChange'] = new JsFunction(['date', 'text', 'mode'], $js);
     }
 
     /**
