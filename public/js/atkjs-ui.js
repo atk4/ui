@@ -332,16 +332,16 @@ class AbstractPlugin {
 
 /***/ }),
 
-/***/ "./src/JqueryPlugin/AjaxecPlugin.js":
-/*!******************************************!*\
-  !*** ./src/JqueryPlugin/AjaxecPlugin.js ***!
-  \******************************************/
+/***/ "./src/JqueryPlugin/AjaxExecutePlugin.js":
+/*!***********************************************!*\
+  !*** ./src/JqueryPlugin/AjaxExecutePlugin.js ***!
+  \***********************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ AtkAjaxecPlugin)
+/* harmony export */   "default": () => (/* binding */ AtkAjaxExecutePlugin)
 /* harmony export */ });
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
@@ -350,7 +350,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class AtkAjaxecPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
+class AtkAjaxExecutePlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
   main() {
     if (!this.settings.url) {
       console.error('Trying to execute callback without URL');
@@ -396,7 +396,7 @@ class AtkAjaxecPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["defa
     this.$el.api(settings);
   }
 }
-AtkAjaxecPlugin.DEFAULTS = {
+AtkAjaxExecutePlugin.DEFAULTS = {
   url: null,
   urlOptions: {},
   confirm: null,
@@ -1744,16 +1744,16 @@ AtkScrollPlugin.DEFAULTS = {
 
 /***/ }),
 
-/***/ "./src/JqueryPlugin/ServerEventPlugin.js":
-/*!***********************************************!*\
-  !*** ./src/JqueryPlugin/ServerEventPlugin.js ***!
-  \***********************************************/
+/***/ "./src/JqueryPlugin/ServerSentEventPlugin.js":
+/*!***************************************************!*\
+  !*** ./src/JqueryPlugin/ServerSentEventPlugin.js ***!
+  \***************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ AtkServerEventPlugin)
+/* harmony export */   "default": () => (/* binding */ AtkServerSentEventPlugin)
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.json.parse.js */ "./node_modules/core-js/modules/esnext.json.parse.js");
 /* harmony import */ var core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_0__);
@@ -1762,7 +1762,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-class AtkServerEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
+class AtkServerSentEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
   main() {
     const element = this.$el;
     const hasLoader = this.settings.showLoader;
@@ -1795,7 +1795,7 @@ class AtkServerEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__[
     }
   }
 }
-AtkServerEventPlugin.DEFAULTS = {
+AtkServerSentEventPlugin.DEFAULTS = {
   url: null,
   urlOptions: {},
   showLoader: false
@@ -3722,7 +3722,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _JqueryPlugin_AjaxecPlugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./JqueryPlugin/AjaxecPlugin */ "./src/JqueryPlugin/AjaxecPlugin.js");
+/* harmony import */ var _JqueryPlugin_AjaxExecutePlugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./JqueryPlugin/AjaxExecutePlugin */ "./src/JqueryPlugin/AjaxExecutePlugin.js");
 /* harmony import */ var _JqueryPlugin_ColumnResizerPlugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./JqueryPlugin/ColumnResizerPlugin */ "./src/JqueryPlugin/ColumnResizerPlugin.js");
 /* harmony import */ var _JqueryPlugin_ConditionalFormPlugin__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./JqueryPlugin/ConditionalFormPlugin */ "./src/JqueryPlugin/ConditionalFormPlugin.js");
 /* harmony import */ var _JqueryPlugin_ConfirmPlugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./JqueryPlugin/ConfirmPlugin */ "./src/JqueryPlugin/ConfirmPlugin.js");
@@ -3732,7 +3732,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _JqueryPlugin_JsSortablePlugin__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./JqueryPlugin/JsSortablePlugin */ "./src/JqueryPlugin/JsSortablePlugin.js");
 /* harmony import */ var _JqueryPlugin_ReloadViewPlugin__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./JqueryPlugin/ReloadViewPlugin */ "./src/JqueryPlugin/ReloadViewPlugin.js");
 /* harmony import */ var _JqueryPlugin_ScrollPlugin__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./JqueryPlugin/ScrollPlugin */ "./src/JqueryPlugin/ScrollPlugin.js");
-/* harmony import */ var _JqueryPlugin_ServerEventPlugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./JqueryPlugin/ServerEventPlugin */ "./src/JqueryPlugin/ServerEventPlugin.js");
+/* harmony import */ var _JqueryPlugin_ServerSentEventPlugin__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./JqueryPlugin/ServerSentEventPlugin */ "./src/JqueryPlugin/ServerSentEventPlugin.js");
 /* harmony import */ var _JqueryPlugin_SidenavPlugin__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./JqueryPlugin/SidenavPlugin */ "./src/JqueryPlugin/SidenavPlugin.js");
 
 
@@ -3782,7 +3782,7 @@ atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin = function (name, cl)
     (external_jquery__WEBPACK_IMPORTED_MODULE_0___default())[name] = options => external_jquery__WEBPACK_IMPORTED_MODULE_0___default()({})[name](options);
   }
 };
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkAjaxec', _JqueryPlugin_AjaxecPlugin__WEBPACK_IMPORTED_MODULE_2__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkAjaxExecute', _JqueryPlugin_AjaxExecutePlugin__WEBPACK_IMPORTED_MODULE_2__["default"]);
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkColumnResizer', _JqueryPlugin_ColumnResizerPlugin__WEBPACK_IMPORTED_MODULE_3__["default"]);
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkConditionalForm', _JqueryPlugin_ConditionalFormPlugin__WEBPACK_IMPORTED_MODULE_4__["default"]);
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkConfirm', _JqueryPlugin_ConfirmPlugin__WEBPACK_IMPORTED_MODULE_5__["default"], true);
@@ -3792,7 +3792,7 @@ atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkJsSearch', _Jquer
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkJsSortable', _JqueryPlugin_JsSortablePlugin__WEBPACK_IMPORTED_MODULE_9__["default"]);
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkReloadView', _JqueryPlugin_ReloadViewPlugin__WEBPACK_IMPORTED_MODULE_10__["default"]);
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkScroll', _JqueryPlugin_ScrollPlugin__WEBPACK_IMPORTED_MODULE_11__["default"]);
-atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkServerEvent', _JqueryPlugin_ServerEventPlugin__WEBPACK_IMPORTED_MODULE_12__["default"]);
+atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkServerSentEvent', _JqueryPlugin_ServerSentEventPlugin__WEBPACK_IMPORTED_MODULE_12__["default"]);
 atk__WEBPACK_IMPORTED_MODULE_1__["default"].registerPlugin('atkSidenav', _JqueryPlugin_SidenavPlugin__WEBPACK_IMPORTED_MODULE_13__["default"]);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
 

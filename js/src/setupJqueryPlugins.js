@@ -1,6 +1,6 @@
 import $ from 'external/jquery';
 import atk from 'atk';
-import AjaxecPlugin from './JqueryPlugin/AjaxecPlugin';
+import AjaxExecutePlugin from './JqueryPlugin/AjaxExecutePlugin';
 import ColumnResizerPlugin from './JqueryPlugin/ColumnResizerPlugin';
 import ConditionalFormPlugin from './JqueryPlugin/ConditionalFormPlugin';
 import ConfirmPlugin from './JqueryPlugin/ConfirmPlugin';
@@ -10,7 +10,7 @@ import JsSearchPlugin from './JqueryPlugin/JsSearchPlugin';
 import JsSortablePlugin from './JqueryPlugin/JsSortablePlugin';
 import ReloadViewPlugin from './JqueryPlugin/ReloadViewPlugin';
 import ScrollPlugin from './JqueryPlugin/ScrollPlugin';
-import ServerEventPlugin from './JqueryPlugin/ServerEventPlugin';
+import ServerSentEventPlugin from './JqueryPlugin/ServerSentEventPlugin';
 import SidenavPlugin from './JqueryPlugin/SidenavPlugin';
 
 /**
@@ -46,7 +46,7 @@ atk.registerPlugin = function (name, cl, shorthand = false) {
     }
 };
 
-atk.registerPlugin('atkAjaxec', AjaxecPlugin);
+atk.registerPlugin('atkAjaxExecute', AjaxExecutePlugin);
 atk.registerPlugin('atkColumnResizer', ColumnResizerPlugin);
 atk.registerPlugin('atkConditionalForm', ConditionalFormPlugin);
 atk.registerPlugin('atkConfirm', ConfirmPlugin, true);
@@ -56,7 +56,7 @@ atk.registerPlugin('atkJsSearch', JsSearchPlugin);
 atk.registerPlugin('atkJsSortable', JsSortablePlugin);
 atk.registerPlugin('atkReloadView', ReloadViewPlugin);
 atk.registerPlugin('atkScroll', ScrollPlugin);
-atk.registerPlugin('atkServerEvent', ServerEventPlugin);
+atk.registerPlugin('atkServerSentEvent', ServerSentEventPlugin);
 atk.registerPlugin('atkSidenav', SidenavPlugin);
 
 export default null;

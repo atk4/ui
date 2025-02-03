@@ -76,7 +76,7 @@ parameters:
         -
             path: 'demos/form-control/calendar.php'
             identifier: method.notFound
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::getJsInstance\(\)\.$~'
+            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::jsFlatpickr\(\)\.$~'
             count: 3
         -
             path: 'demos/form-control/input2.php'

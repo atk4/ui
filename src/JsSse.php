@@ -31,7 +31,7 @@ class JsSse extends JsCallback
             $options['showLoader'] = $this->showLoader;
         }
 
-        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)]);
+        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerSentEvent($options)]);
     }
 
     /**
@@ -82,12 +82,12 @@ class JsSse extends JsCallback
      */
     public function send(JsExpressionable $action): void
     {
-        $ajaxec = $this->getAjaxec($action);
+        $ajaxExecute = $this->jsAjaxExecute($action);
         $this->sendEvent(
             '',
             $this->getApp()->encodeJson([
                 'success' => true,
-                'atkjs' => $ajaxec->jsRender(),
+                'atkjs' => $ajaxExecute->jsRender(),
             ]),
             'atkSseAction'
         );
@@ -97,15 +97,15 @@ class JsSse extends JsCallback
      * @return never
      */
     #[\Override]
-    protected function terminateAjaxIfCanTerminate(JsBlock $ajaxec): void
+    protected function terminateAjaxIfCanTerminate(JsBlock $ajaxExecute): void
     {
-        $ajaxecStr = $ajaxec->jsRender();
-        if ($ajaxecStr !== '') {
+        $ajaxExecuteStr = $ajaxExecute->jsRender();
+        if ($ajaxExecuteStr !== '') {
             $this->sendEvent(
                 '',
                 $this->getApp()->encodeJson([
                     'success' => true,
-                    'atkjs' => $ajaxecStr,
+                    'atkjs' => $ajaxExecuteStr,
                 ]),
                 'atkSseAction'
             );

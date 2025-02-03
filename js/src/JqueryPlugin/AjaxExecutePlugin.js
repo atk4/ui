@@ -2,7 +2,7 @@ import $ from 'external/jquery';
 import atk from 'atk';
 import AbstractPlugin from './AbstractPlugin';
 
-export default class AtkAjaxecPlugin extends AbstractPlugin {
+export default class AtkAjaxExecutePlugin extends AbstractPlugin {
     main() {
         if (!this.settings.url) {
             console.error('Trying to execute callback without URL');
@@ -53,7 +53,7 @@ export default class AtkAjaxecPlugin extends AbstractPlugin {
     }
 }
 
-AtkAjaxecPlugin.DEFAULTS = {
+AtkAjaxExecutePlugin.DEFAULTS = {
     url: null,
     urlOptions: {},
     confirm: null,
