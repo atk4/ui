@@ -196,7 +196,7 @@ class Right extends View implements Loadable
         ];
 
         if ($this->dynamicContent) {
-            $res['url'] = $this->getDynamicContent()->getCallbackUrl();
+            $res['url'] = $this->getDynamicContent()->getCallbackJsUrl();
             $res['clearable'] = $this->getDynamicContent()->getClearSelector();
         }
 

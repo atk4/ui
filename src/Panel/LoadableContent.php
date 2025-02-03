@@ -16,7 +16,7 @@ interface LoadableContent
     /**
      * Return JS callback URL string.
      */
-    public function getCallbackUrl(): string;
+    public function getCallbackJsUrl(): string;
 
     /**
      * The callback for loading content.
