@@ -325,11 +325,11 @@ $control->jsInput(true)->val(123);
 
 ### onChange event
 
-:::{php:method} onChange($expression)
+:::{php:method} onChange($action)
 :::
 
-It's preferable to use this short-hand version of on('change', 'input', $expression) method.
-$expression argument can be JS expression or PHP callback function.
+It's preferable to use this short-hand version of on('change', 'input', $action) method.
+$action argument can be JS expression or PHP callback function.
 
 ```
 // simple string
