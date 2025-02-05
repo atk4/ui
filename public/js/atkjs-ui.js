@@ -2016,22 +2016,27 @@ class AtkServerSentEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_
       atk__WEBPACK_IMPORTED_MODULE_2__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
     });
     this.source.addEventListener('error', e => {
-      if (e.eventPhase === EventSource.CLOSED) {
-        this.source.close();
-        if (hasLoader) {
-          stateContext.removeClass('loading');
-        }
-      }
+      this.stop();
     });
     this.source.addEventListener('atkSseAction', e => {
       atk__WEBPACK_IMPORTED_MODULE_2__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
     });
 
     // fix https://github.com/atk4/ui/issues/393
-    atk__WEBPACK_IMPORTED_MODULE_2__["default"].elementRemoveObserver.addHandler(stateContext[0], () => this.stop());
+    const ownerElem = stateContext[0];
+    const ownerRemoveHandler = () => this.stop();
+    atk__WEBPACK_IMPORTED_MODULE_2__["default"].elementRemoveObserver.addHandler(ownerElem, ownerRemoveHandler);
 
     // prevent "The connection to http://xxx was interrupted while the page was loading." browser console warning
-    window.addEventListener('beforeunload', () => this.source.close());
+    const windowUnloadHandler = () => this.source.close();
+    window.addEventListener('beforeunload', windowUnloadHandler);
+    const intervalId = setInterval(() => {
+      if (this.source.readyState === EventSource.CLOSED) {
+        clearInterval(intervalId);
+        atk__WEBPACK_IMPORTED_MODULE_2__["default"].elementRemoveObserver.removeHandler(ownerElem, ownerRemoveHandler);
+        window.removeEventListener('beforeunload', windowUnloadHandler);
+      }
+    }, 250);
   }
   stop() {
     const wasActive = this.source.readyState !== EventSource.CLOSED;

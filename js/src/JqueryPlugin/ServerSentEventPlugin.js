@@ -19,13 +19,7 @@ export default class AtkServerSentEventPlugin extends AbstractPlugin {
         });
 
         this.source.addEventListener('error', (e) => {
-            if (e.eventPhase === EventSource.CLOSED) {
-                this.source.close();
-
-                if (hasLoader) {
-                    stateContext.removeClass('loading');
-                }
-            }
+            this.stop();
         });
 
         this.source.addEventListener('atkSseAction', (e) => {
