@@ -18,8 +18,8 @@ require_once __DIR__ . '/../init-app.php';
 $app->layout->js(true, new JsExpression('atk.i = 0'));
 $reloadUrlArgs = ['i' => new JsExpression('++atk.i')];
 
-$log = View::addTo($app, ['element' => 'input', 'name' => 'log']);
-$log->setStyle('width', '100%');
+$logInput = View::addTo($app, ['element' => 'input', 'name' => 'log']);
+$logInput->setStyle('width', '100%');
 
 $setBoxTextAndStyleFx = static function (View $view, string $text) {
     $view->set($text);
@@ -29,15 +29,15 @@ $setBoxTextAndStyleFx = static function (View $view, string $text) {
     $view->setStyle('border', '1px solid black');
 };
 
-$addBoxFx = static function ($owner, string $name) use ($setBoxTextAndStyleFx, $log) {
+$addBoxFx = static function ($owner, string $name) use ($setBoxTextAndStyleFx, $logInput) {
     $box = View::addTo($owner);
     $setBoxTextAndStyleFx($box, $name . (int) $box->getApp()->tryGetRequestQueryParam('i'));
 
     $box->js(true, new JsExpression(<<<'JS'
         var target = document.querySelector([target]);
-        var logInput = document.querySelector([log]);
+        var logInput = document.querySelector([logInput]);
         logInput.value = (logInput.value + ' ').trimStart() + target.lastChild.textContent;
-        JS, ['target' => $box, 'log' => $log]));
+        JS, ['target' => $box, 'logInput' => $logInput]));
 
     return $box;
 };
@@ -48,14 +48,14 @@ $viewJ = $addBoxFx($viewA, 'J');
 $viewU = $addBoxFx($viewI, 'U');
 $viewV = $addBoxFx($viewI, 'V');
 
-$makeAddHandlerJsFx = static function (View $view) use ($log) {
+$makeAddHandlerJsFx = static function (View $view) use ($logInput) {
     return new JsExpression(<<<'JS'
         const target = document.querySelector([target]);
-        const logInput = document.querySelector([log]);
+        const logInput = document.querySelector([logInput]);
         atk.lastTarget = target;
         atk.lastHandler = () => logInput.value = (logInput.value + ' ').trimStart() + 'h' + target.lastChild.textContent;
         atk.elementRemoveObserver.addHandler(atk.lastTarget, atk.lastHandler);
-        JS, ['target' => $view, 'log' => $log]);
+        JS, ['target' => $view, 'logInput' => $logInput]);
 };
 
 Button::addTo($app, ['Add A handler'])->on('click', $makeAddHandlerJsFx($viewA));
