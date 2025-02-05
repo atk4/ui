@@ -231,6 +231,9 @@ function addObserverToParentElement(elem) {
    * @param {HTMLElement} element
    */
   removeHandler: function (element, handler) {
+    if (!removeHandlersByElement.has(element)) {
+      return;
+    }
     removeHandlersByElement.get(element).delete(handler);
     removeObserverIfUnused(element);
   },
