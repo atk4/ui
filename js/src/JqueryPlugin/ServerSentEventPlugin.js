@@ -33,10 +33,21 @@ export default class AtkServerSentEventPlugin extends AbstractPlugin {
         });
 
         // fix https://github.com/atk4/ui/issues/393
-        atk.elementRemoveObserver.addHandler(stateContext[0], () => this.stop());
+        const ownerElem = stateContext[0];
+        const ownerRemoveHandler = () => this.stop();
+        atk.elementRemoveObserver.addHandler(ownerElem, ownerRemoveHandler);
 
         // prevent "The connection to http://xxx was interrupted while the page was loading." browser console warning
-        window.addEventListener('beforeunload', () => this.source.close());
+        const windowUnloadHandler = () => this.source.close();
+        window.addEventListener('beforeunload', windowUnloadHandler);
+
+        const intervalId = setInterval(() => {
+            if (this.source.readyState === EventSource.CLOSED) {
+                clearInterval(intervalId);
+                atk.elementRemoveObserver.removeHandler(ownerElem, ownerRemoveHandler);
+                window.removeEventListener('beforeunload', windowUnloadHandler);
+            }
+        }, 250);
     }
 
     stop() {
