@@ -25,7 +25,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Agile UI'
-copyright = u'2016-2019, Agile Toolkit'
+copyright = u'2016-2025, Agile Toolkit'
 
 exclude_patterns = ['_build']
 
