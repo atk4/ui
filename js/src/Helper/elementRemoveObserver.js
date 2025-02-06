@@ -73,7 +73,7 @@ function handleObserverRecords(elem, mutationRecords) {
 
                 continue;
             } else {
-                console.warn('Element remove observer - node was moved');
+                console.warn('Element remove observer - node was moved'); // TODO consider supporting "move"
             }
         }
 
@@ -105,7 +105,8 @@ function addObserverToParentElement(elem) {
 
 export default {
     /**
-     * @param {HTMLElement} element
+     * @param {HTMLElement}      element
+     * @param {function(): void} handler
      */
     addHandler: function (element, handler) {
         addObserverToParentElement(element);
@@ -118,7 +119,8 @@ export default {
     },
 
     /**
-     * @param {HTMLElement} element
+     * @param {HTMLElement}      element
+     * @param {function(): void} handler
      */
     removeHandler: function (element, handler) {
         if (!removeHandlersByElement.has(element)) {

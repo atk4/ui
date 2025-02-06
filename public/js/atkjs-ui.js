@@ -190,7 +190,7 @@ function handleObserverRecords(elem, mutationRecords) {
         console.warn('Element remove observer - node was readded');
         continue;
       } else {
-        console.warn('Element remove observer - node was moved');
+        console.warn('Element remove observer - node was moved'); // TODO consider supporting "move"
       }
     }
     handleElementRemove(removedElem);
@@ -218,7 +218,8 @@ function addObserverToParentElement(elem) {
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   /**
-   * @param {HTMLElement} element
+   * @param {HTMLElement}      element
+   * @param {function(): void} handler
    */
   addHandler: function (element, handler) {
     addObserverToParentElement(element);
@@ -228,7 +229,8 @@ function addObserverToParentElement(elem) {
     removeHandlersByElement.get(element).add(handler);
   },
   /**
-   * @param {HTMLElement} element
+   * @param {HTMLElement}      element
+   * @param {function(): void} handler
    */
   removeHandler: function (element, handler) {
     if (!removeHandlersByElement.has(element)) {
