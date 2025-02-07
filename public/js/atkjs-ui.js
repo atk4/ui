@@ -3772,7 +3772,7 @@ class VueService {
         return obj[prop];
       }
     });
-    app.component('FlatpickrPicker', asyncComponentFactory('FlatpickrPicker', () => __webpack_require__.e(/*! import() */ "vendor-vue-flatpickr").then(__webpack_require__.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/esm/index.js")))); // eslint-disable-line import/no-unresolved https://github.com/ankurk91/vue-flatpickr-component/issues/295
+    app.component('FlatpickrPicker', asyncComponentFactory('FlatpickrPicker', () => __webpack_require__.e(/*! import() */ "vendor-vue-flatpickr").then(__webpack_require__.bind(__webpack_require__, /*! vue-flatpickr-component */ "./node_modules/vue-flatpickr-component/dist/esm/index.js")))); // eslint-disable-line import/no-unresolved -- https://github.com/ankurk91/vue-flatpickr-component/issues/295
 
     app.component('AtkInlineEdit', asyncComponentFactory('AtkInlineEdit', () => __webpack_require__.e(/*! import() | atk-vue-inline-edit */ "atk-vue-inline-edit").then(__webpack_require__.bind(__webpack_require__, /*! ../VueComponent/InlineEditComponent */ "./src/VueComponent/InlineEditComponent.js"))));
     app.component('AtkItemSearch', asyncComponentFactory('AtkItemSearch', () => __webpack_require__.e(/*! import() | atk-vue-item-search */ "atk-vue-item-search").then(__webpack_require__.bind(__webpack_require__, /*! ../VueComponent/ItemSearchComponent */ "./src/VueComponent/ItemSearchComponent.js"))));
