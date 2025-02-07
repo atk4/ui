@@ -1,6 +1,6 @@
 /*!
-  Highlight.js v11.9.0 (git: f47103d4f1)
-  (c) 2006-2023 undefined and other contributors
+  Highlight.js v11.11.1 (git: 08cb242e7d)
+  (c) 2006-2024 Josh Goebel <hello@joshgoebel.com> and other contributors
   License: BSD-3-Clause
  */
 var hljs = (function () {
@@ -1558,7 +1558,7 @@ var hljs = (function () {
     return mode;
   }
 
-  var version = "11.9.0";
+  var version = "11.11.1";
 
   class HTMLInjectionError extends Error {
     constructor(reason, html) {
@@ -2085,6 +2085,7 @@ var hljs = (function () {
         // first handler (when ignoreIllegals is true)
         if (match.type === "illegal" && lexeme === "") {
           // advance so we aren't stuck in an infinite loop
+          modeBuffer += "\n";
           return 1;
         }
 
@@ -2378,24 +2379,23 @@ var hljs = (function () {
      * auto-highlights all pre>code elements on the page
      */
     function highlightAll() {
+      function boot() {
+        // if a highlight was requested before DOM was loaded, do now
+        highlightAll();
+      }
+
       // if we are called too early in the loading process
       if (document.readyState === "loading") {
+        // make sure the event listener is only added once
+        if (!wantsHighlight) {
+          window.addEventListener('DOMContentLoaded', boot, false);
+        }
         wantsHighlight = true;
         return;
       }
 
       const blocks = document.querySelectorAll(options.cssSelector);
       blocks.forEach(highlightElement);
-    }
-
-    function boot() {
-      // if a highlight was requested before DOM was loaded, do now
-      if (wantsHighlight) highlightAll();
-    }
-
-    // make sure we are in the browser environment
-    if (typeof window !== 'undefined' && window.addEventListener) {
-      window.addEventListener('DOMContentLoaded', boot, false);
     }
 
     /**
@@ -2600,15 +2600,12 @@ var hljs = (function () {
   // check https://github.com/wooorm/lowlight/issues/47
   highlight.newInstance = () => HLJS({});
 
-  // export an "instance" of the highlighter
-  var HighlightJS = highlight;
-
   /*
   Language: Bash
   Author: vah <vahtenberg@gmail.com>
   Contributrors: Benjamin Pannell <contact@sierrasoftworks.com>
   Website: https://www.gnu.org/software/bash/
-  Category: common
+  Category: common, scripting
   */
 
   /** @type LanguageFn */
@@ -2643,6 +2640,18 @@ var hljs = (function () {
       end: /\)/,
       contains: [ hljs.BACKSLASH_ESCAPE ]
     };
+    const COMMENT = hljs.inherit(
+      hljs.COMMENT(),
+      {
+        match: [
+          /(^|\s)/,
+          /#.*$/
+        ],
+        scope: {
+          2: 'comment'
+        }
+      }
+    );
     const HERE_DOC = {
       begin: /<<-?\s*(?=\w+)/,
       starts: { contains: [
@@ -2716,6 +2725,7 @@ var hljs = (function () {
       "else",
       "elif",
       "fi",
+      "time",
       "for",
       "while",
       "until",
@@ -2724,6 +2734,7 @@ var hljs = (function () {
       "done",
       "case",
       "esac",
+      "coproc",
       "function",
       "select"
     ];
@@ -2776,6 +2787,7 @@ var hljs = (function () {
       "read",
       "readarray",
       "source",
+      "sudo",
       "type",
       "typeset",
       "ulimit",
@@ -2961,7 +2973,10 @@ var hljs = (function () {
 
     return {
       name: 'Bash',
-      aliases: [ 'sh' ],
+      aliases: [
+        'sh',
+        'zsh'
+      ],
       keywords: {
         $pattern: /\b[a-z][a-z0-9._-]+\b/,
         keyword: KEYWORDS,
@@ -2981,7 +2996,7 @@ var hljs = (function () {
         hljs.SHEBANG(), // to catch unknown shells but still highlight the shebang
         FUNCTION,
         ARITHMETIC,
-        hljs.HASH_COMMENT_MODE,
+        COMMENT,
         HERE_DOC,
         PATH_MODE,
         QUOTE_STRING,
@@ -3052,20 +3067,21 @@ var hljs = (function () {
     const NUMBERS = {
       className: 'number',
       variants: [
-        { begin: '\\b(0b[01\']+)' },
-        { begin: '(-?)\\b([\\d\']+(\\.[\\d\']*)?|\\.[\\d\']+)((ll|LL|l|L)(u|U)?|(u|U)(ll|LL|l|L)?|f|F|b|B)' },
-        { begin: '(-?)(\\b0[xX][a-fA-F0-9\']+|(\\b[\\d\']+(\\.[\\d\']*)?|\\.[\\d\']+)([eE][-+]?[\\d\']+)?)' }
-      ],
+        { match: /\b(0b[01']+)/ },  
+        { match: /(-?)\b([\d']+(\.[\d']*)?|\.[\d']+)((ll|LL|l|L)(u|U)?|(u|U)(ll|LL|l|L)?|f|F|b|B)/ },  
+        { match: /(-?)\b(0[xX][a-fA-F0-9]+(?:'[a-fA-F0-9]+)*(?:\.[a-fA-F0-9]*(?:'[a-fA-F0-9]*)*)?(?:[pP][-+]?[0-9]+)?(l|L)?(u|U)?)/ },  
+        { match: /(-?)\b\d+(?:'\d+)*(?:\.\d*(?:'\d*)*)?(?:[eE][-+]?\d+)?/ }  
+    ],
       relevance: 0
-    };
-
+    };  
+    
     const PREPROCESSOR = {
       className: 'meta',
       begin: /#\s*[a-z]+\b/,
       end: /$/,
       keywords: { keyword:
           'if else elif endif define undef warning error line '
-          + 'pragma _Pragma ifdef ifndef include' },
+          + 'pragma _Pragma ifdef ifndef elifdef elifndef include' },
       contains: [
         {
           begin: /\\\n/,
@@ -3109,6 +3125,8 @@ var hljs = (function () {
       "restrict",
       "return",
       "sizeof",
+      "typeof",
+      "typeof_unqual",
       "struct",
       "switch",
       "typedef",
@@ -3143,14 +3161,26 @@ var hljs = (function () {
       "char",
       "void",
       "_Bool",
+      "_BitInt",
       "_Complex",
       "_Imaginary",
       "_Decimal32",
       "_Decimal64",
+      "_Decimal96",
       "_Decimal128",
+      "_Decimal64x",
+      "_Decimal128x",
+      "_Float16",
+      "_Float32",
+      "_Float64",
+      "_Float128",
+      "_Float32x",
+      "_Float64x",
+      "_Float128x",
       // modifiers
       "const",
       "static",
+      "constexpr",
       // aliases
       "complex",
       "bool",
@@ -3364,9 +3394,44 @@ var hljs = (function () {
     const NUMBERS = {
       className: 'number',
       variants: [
-        { begin: '\\b(0b[01\']+)' },
-        { begin: '(-?)\\b([\\d\']+(\\.[\\d\']*)?|\\.[\\d\']+)((ll|LL|l|L)(u|U)?|(u|U)(ll|LL|l|L)?|f|F|b|B)' },
-        { begin: '(-?)(\\b0[xX][a-fA-F0-9\']+|(\\b[\\d\']+(\\.[\\d\']*)?|\\.[\\d\']+)([eE][-+]?[\\d\']+)?)' }
+        // Floating-point literal.
+        { begin:
+          "[+-]?(?:" // Leading sign.
+            // Decimal.
+            + "(?:"
+              +"[0-9](?:'?[0-9])*\\.(?:[0-9](?:'?[0-9])*)?"
+              + "|\\.[0-9](?:'?[0-9])*"
+            + ")(?:[Ee][+-]?[0-9](?:'?[0-9])*)?"
+            + "|[0-9](?:'?[0-9])*[Ee][+-]?[0-9](?:'?[0-9])*"
+            // Hexadecimal.
+            + "|0[Xx](?:"
+              +"[0-9A-Fa-f](?:'?[0-9A-Fa-f])*(?:\\.(?:[0-9A-Fa-f](?:'?[0-9A-Fa-f])*)?)?"
+              + "|\\.[0-9A-Fa-f](?:'?[0-9A-Fa-f])*"
+            + ")[Pp][+-]?[0-9](?:'?[0-9])*"
+          + ")(?:" // Literal suffixes.
+            + "[Ff](?:16|32|64|128)?"
+            + "|(BF|bf)16"
+            + "|[Ll]"
+            + "|" // Literal suffix is optional.
+          + ")"
+        },
+        // Integer literal.
+        { begin:
+          "[+-]?\\b(?:" // Leading sign.
+            + "0[Bb][01](?:'?[01])*" // Binary.
+            + "|0[Xx][0-9A-Fa-f](?:'?[0-9A-Fa-f])*" // Hexadecimal.
+            + "|0(?:'?[0-7])*" // Octal or just a lone zero.
+            + "|[1-9](?:'?[0-9])*" // Decimal.
+          + ")(?:" // Literal suffixes.
+            + "[Uu](?:LL?|ll?)"
+            + "|[Uu][Zz]?"
+            + "|(?:LL?|ll?)[Uu]?"
+            + "|[Zz][Uu]"
+            + "|" // Literal suffix is optional.
+          + ")"
+          // Note: there are user-defined literal suffixes too, but perhaps having the custom suffix not part of the
+          // literal highlight actually makes it stand out more.
+        }
       ],
       relevance: 0
     };
@@ -3524,6 +3589,8 @@ var hljs = (function () {
       'counting_semaphore',
       'deque',
       'false_type',
+      'flat_map',
+      'flat_set',
       'future',
       'imaginary',
       'initializer_list',
@@ -3849,7 +3916,7 @@ var hljs = (function () {
         [
           PREPROCESSOR,
           { // containers: ie, `vector <int> rooms (9);`
-            begin: '\\b(deque|list|queue|priority_queue|pair|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array|tuple|optional|variant|function)\\s*<(?!<)',
+            begin: '\\b(deque|list|queue|priority_queue|pair|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array|tuple|optional|variant|function|flat_map|flat_set)\\s*<(?!<)',
             end: '>',
             keywords: CPP_KEYWORDS,
             contains: [
@@ -3996,11 +4063,14 @@ var hljs = (function () {
       'alias',
       'and',
       'ascending',
+      'args',
       'async',
       'await',
       'by',
       'descending',
+      'dynamic',
       'equals',
+      'file',
       'from',
       'get',
       'global',
@@ -4016,7 +4086,10 @@ var hljs = (function () {
       'or',
       'orderby',
       'partial',
+      'record',
       'remove',
+      'required',
+      'scoped',
       'select',
       'set',
       'unmanaged',
@@ -4042,6 +4115,11 @@ var hljs = (function () {
         { begin: '(-?)(\\b0[xX][a-fA-F0-9\']+|(\\b[\\d\']+(\\.[\\d\']*)?|\\.[\\d\']+)([eE][-+]?[\\d\']+)?)' }
       ],
       relevance: 0
+    };
+    const RAW_STRING = {
+      className: 'string',
+      begin: /"""("*)(?!")(.|\n)*?"""\1/,
+      relevance: 1
     };
     const VERBATIM_STRING = {
       className: 'string',
@@ -4108,6 +4186,7 @@ var hljs = (function () {
       hljs.inherit(hljs.C_BLOCK_COMMENT_MODE, { illegal: /\n/ })
     ];
     const STRING = { variants: [
+      RAW_STRING,
       INTERPOLATED_VERBATIM_STRING,
       INTERPOLATED_STRING,
       VERBATIM_STRING,
@@ -4321,7 +4400,7 @@ var hljs = (function () {
     };
   };
 
-  const TAGS = [
+  const HTML_TAGS = [
     'a',
     'abbr',
     'address',
@@ -4373,11 +4452,16 @@ var hljs = (function () {
     'nav',
     'object',
     'ol',
+    'optgroup',
+    'option',
     'p',
+    'picture',
     'q',
     'quote',
     'samp',
     'section',
+    'select',
+    'source',
     'span',
     'strong',
     'summary',
@@ -4395,6 +4479,58 @@ var hljs = (function () {
     'var',
     'video'
   ];
+
+  const SVG_TAGS = [
+    'defs',
+    'g',
+    'marker',
+    'mask',
+    'pattern',
+    'svg',
+    'switch',
+    'symbol',
+    'feBlend',
+    'feColorMatrix',
+    'feComponentTransfer',
+    'feComposite',
+    'feConvolveMatrix',
+    'feDiffuseLighting',
+    'feDisplacementMap',
+    'feFlood',
+    'feGaussianBlur',
+    'feImage',
+    'feMerge',
+    'feMorphology',
+    'feOffset',
+    'feSpecularLighting',
+    'feTile',
+    'feTurbulence',
+    'linearGradient',
+    'radialGradient',
+    'stop',
+    'circle',
+    'ellipse',
+    'image',
+    'line',
+    'path',
+    'polygon',
+    'polyline',
+    'rect',
+    'text',
+    'use',
+    'textPath',
+    'tspan',
+    'foreignObject',
+    'clipPath'
+  ];
+
+  const TAGS = [
+    ...HTML_TAGS,
+    ...SVG_TAGS,
+  ];
+
+  // Sorting, then reversing makes sure longer attributes/elements like
+  // `font-weight` are matched fully instead of getting false positives on say `font`
 
   const MEDIA_FEATURES = [
     'any-hover',
@@ -4431,7 +4567,7 @@ var hljs = (function () {
     'max-width',
     'min-height',
     'max-height'
-  ];
+  ].sort().reverse();
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes
   const PSEUDO_CLASSES = [
@@ -4494,7 +4630,7 @@ var hljs = (function () {
     'valid',
     'visited',
     'where' // where()
-  ];
+  ].sort().reverse();
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements
   const PSEUDO_ELEMENTS = [
@@ -4512,14 +4648,18 @@ var hljs = (function () {
     'selection',
     'slotted',
     'spelling-error'
-  ];
+  ].sort().reverse();
 
   const ATTRIBUTES = [
+    'accent-color',
     'align-content',
     'align-items',
     'align-self',
+    'alignment-baseline',
     'all',
+    'anchor-name',
     'animation',
+    'animation-composition',
     'animation-delay',
     'animation-direction',
     'animation-duration',
@@ -4527,7 +4667,14 @@ var hljs = (function () {
     'animation-iteration-count',
     'animation-name',
     'animation-play-state',
+    'animation-range',
+    'animation-range-end',
+    'animation-range-start',
+    'animation-timeline',
     'animation-timing-function',
+    'appearance',
+    'aspect-ratio',
+    'backdrop-filter',
     'backface-visibility',
     'background',
     'background-attachment',
@@ -4537,8 +4684,11 @@ var hljs = (function () {
     'background-image',
     'background-origin',
     'background-position',
+    'background-position-x',
+    'background-position-y',
     'background-repeat',
     'background-size',
+    'baseline-shift',
     'block-size',
     'border',
     'border-block',
@@ -4561,6 +4711,8 @@ var hljs = (function () {
     'border-bottom-width',
     'border-collapse',
     'border-color',
+    'border-end-end-radius',
+    'border-end-start-radius',
     'border-image',
     'border-image-outset',
     'border-image-repeat',
@@ -4589,6 +4741,8 @@ var hljs = (function () {
     'border-right-style',
     'border-right-width',
     'border-spacing',
+    'border-start-end-radius',
+    'border-start-start-radius',
     'border-style',
     'border-top',
     'border-top-color',
@@ -4598,7 +4752,15 @@ var hljs = (function () {
     'border-top-width',
     'border-width',
     'bottom',
+    'box-align',
     'box-decoration-break',
+    'box-direction',
+    'box-flex',
+    'box-flex-group',
+    'box-lines',
+    'box-ordinal-group',
+    'box-orient',
+    'box-pack',
     'box-shadow',
     'box-sizing',
     'break-after',
@@ -4611,6 +4773,11 @@ var hljs = (function () {
     'clip-path',
     'clip-rule',
     'color',
+    'color-interpolation',
+    'color-interpolation-filters',
+    'color-profile',
+    'color-rendering',
+    'color-scheme',
     'column-count',
     'column-fill',
     'column-gap',
@@ -4622,17 +4789,34 @@ var hljs = (function () {
     'column-width',
     'columns',
     'contain',
+    'contain-intrinsic-block-size',
+    'contain-intrinsic-height',
+    'contain-intrinsic-inline-size',
+    'contain-intrinsic-size',
+    'contain-intrinsic-width',
+    'container',
+    'container-name',
+    'container-type',
     'content',
     'content-visibility',
     'counter-increment',
     'counter-reset',
+    'counter-set',
     'cue',
     'cue-after',
     'cue-before',
     'cursor',
+    'cx',
+    'cy',
     'direction',
     'display',
+    'dominant-baseline',
     'empty-cells',
+    'enable-background',
+    'field-sizing',
+    'fill',
+    'fill-opacity',
+    'fill-rule',
     'filter',
     'flex',
     'flex-basis',
@@ -4642,6 +4826,8 @@ var hljs = (function () {
     'flex-shrink',
     'flex-wrap',
     'float',
+    'flood-color',
+    'flood-opacity',
     'flow',
     'font',
     'font-display',
@@ -4649,21 +4835,32 @@ var hljs = (function () {
     'font-feature-settings',
     'font-kerning',
     'font-language-override',
+    'font-optical-sizing',
+    'font-palette',
     'font-size',
     'font-size-adjust',
+    'font-smooth',
     'font-smoothing',
     'font-stretch',
     'font-style',
     'font-synthesis',
+    'font-synthesis-position',
+    'font-synthesis-small-caps',
+    'font-synthesis-style',
+    'font-synthesis-weight',
     'font-variant',
+    'font-variant-alternates',
     'font-variant-caps',
     'font-variant-east-asian',
+    'font-variant-emoji',
     'font-variant-ligatures',
     'font-variant-numeric',
     'font-variant-position',
     'font-variation-settings',
     'font-weight',
+    'forced-color-adjust',
     'gap',
+    'glyph-orientation-horizontal',
     'glyph-orientation-vertical',
     'grid',
     'grid-area',
@@ -4683,19 +4880,36 @@ var hljs = (function () {
     'grid-template-rows',
     'hanging-punctuation',
     'height',
+    'hyphenate-character',
+    'hyphenate-limit-chars',
     'hyphens',
     'icon',
     'image-orientation',
     'image-rendering',
     'image-resolution',
     'ime-mode',
+    'initial-letter',
+    'initial-letter-align',
     'inline-size',
+    'inset',
+    'inset-area',
+    'inset-block',
+    'inset-block-end',
+    'inset-block-start',
+    'inset-inline',
+    'inset-inline-end',
+    'inset-inline-start',
     'isolation',
     'justify-content',
+    'justify-items',
+    'justify-self',
+    'kerning',
     'left',
     'letter-spacing',
+    'lighting-color',
     'line-break',
     'line-height',
+    'line-height-step',
     'list-style',
     'list-style-image',
     'list-style-position',
@@ -4711,6 +4925,11 @@ var hljs = (function () {
     'margin-left',
     'margin-right',
     'margin-top',
+    'margin-trim',
+    'marker',
+    'marker-end',
+    'marker-mid',
+    'marker-start',
     'marks',
     'mask',
     'mask-border',
@@ -4729,6 +4948,10 @@ var hljs = (function () {
     'mask-repeat',
     'mask-size',
     'mask-type',
+    'masonry-auto-flow',
+    'math-depth',
+    'math-shift',
+    'math-style',
     'max-block-size',
     'max-height',
     'max-inline-size',
@@ -4747,6 +4970,12 @@ var hljs = (function () {
     'normal',
     'object-fit',
     'object-position',
+    'offset',
+    'offset-anchor',
+    'offset-distance',
+    'offset-path',
+    'offset-position',
+    'offset-rotate',
     'opacity',
     'order',
     'orphans',
@@ -4756,9 +4985,19 @@ var hljs = (function () {
     'outline-style',
     'outline-width',
     'overflow',
+    'overflow-anchor',
+    'overflow-block',
+    'overflow-clip-margin',
+    'overflow-inline',
     'overflow-wrap',
     'overflow-x',
     'overflow-y',
+    'overlay',
+    'overscroll-behavior',
+    'overscroll-behavior-block',
+    'overscroll-behavior-inline',
+    'overscroll-behavior-x',
+    'overscroll-behavior-y',
     'padding',
     'padding-block',
     'padding-block-end',
@@ -4770,23 +5009,37 @@ var hljs = (function () {
     'padding-left',
     'padding-right',
     'padding-top',
+    'page',
     'page-break-after',
     'page-break-before',
     'page-break-inside',
+    'paint-order',
     'pause',
     'pause-after',
     'pause-before',
     'perspective',
     'perspective-origin',
+    'place-content',
+    'place-items',
+    'place-self',
     'pointer-events',
     'position',
+    'position-anchor',
+    'position-visibility',
+    'print-color-adjust',
     'quotes',
+    'r',
     'resize',
     'rest',
     'rest-after',
     'rest-before',
     'right',
+    'rotate',
     'row-gap',
+    'ruby-align',
+    'ruby-position',
+    'scale',
+    'scroll-behavior',
     'scroll-margin',
     'scroll-margin-block',
     'scroll-margin-block-end',
@@ -4812,25 +5065,43 @@ var hljs = (function () {
     'scroll-snap-align',
     'scroll-snap-stop',
     'scroll-snap-type',
+    'scroll-timeline',
+    'scroll-timeline-axis',
+    'scroll-timeline-name',
     'scrollbar-color',
     'scrollbar-gutter',
     'scrollbar-width',
     'shape-image-threshold',
     'shape-margin',
     'shape-outside',
+    'shape-rendering',
     'speak',
     'speak-as',
     'src', // @font-face
+    'stop-color',
+    'stop-opacity',
+    'stroke',
+    'stroke-dasharray',
+    'stroke-dashoffset',
+    'stroke-linecap',
+    'stroke-linejoin',
+    'stroke-miterlimit',
+    'stroke-opacity',
+    'stroke-width',
     'tab-size',
     'table-layout',
     'text-align',
     'text-align-all',
     'text-align-last',
+    'text-anchor',
     'text-combine-upright',
     'text-decoration',
     'text-decoration-color',
     'text-decoration-line',
+    'text-decoration-skip',
+    'text-decoration-skip-ink',
     'text-decoration-style',
+    'text-decoration-thickness',
     'text-emphasis',
     'text-emphasis-color',
     'text-emphasis-position',
@@ -4841,20 +5112,37 @@ var hljs = (function () {
     'text-overflow',
     'text-rendering',
     'text-shadow',
+    'text-size-adjust',
     'text-transform',
+    'text-underline-offset',
     'text-underline-position',
+    'text-wrap',
+    'text-wrap-mode',
+    'text-wrap-style',
+    'timeline-scope',
     'top',
+    'touch-action',
     'transform',
     'transform-box',
     'transform-origin',
     'transform-style',
     'transition',
+    'transition-behavior',
     'transition-delay',
     'transition-duration',
     'transition-property',
     'transition-timing-function',
+    'translate',
     'unicode-bidi',
+    'user-modify',
+    'user-select',
+    'vector-effect',
     'vertical-align',
+    'view-timeline',
+    'view-timeline-axis',
+    'view-timeline-inset',
+    'view-timeline-name',
+    'view-transition-name',
     'visibility',
     'voice-balance',
     'voice-duration',
@@ -4865,6 +5153,7 @@ var hljs = (function () {
     'voice-stress',
     'voice-volume',
     'white-space',
+    'white-space-collapse',
     'widows',
     'width',
     'will-change',
@@ -4872,13 +5161,14 @@ var hljs = (function () {
     'word-spacing',
     'word-wrap',
     'writing-mode',
-    'z-index'
-    // reverse makes sure longer attributes `font-weight` are matched fully
-    // instead of getting false positives on say `font`
-  ].reverse();
+    'x',
+    'y',
+    'z-index',
+    'zoom'
+  ].sort().reverse();
 
   // some grammars use them all as a single group
-  const PSEUDO_SELECTORS = PSEUDO_CLASSES.concat(PSEUDO_ELEMENTS);
+  const PSEUDO_SELECTORS = PSEUDO_CLASSES.concat(PSEUDO_ELEMENTS).sort().reverse();
 
   /*
   Language: CSS
@@ -5188,10 +5478,25 @@ var hljs = (function () {
           className: 'number',
           variants: [
             {
-              begin: hljs.C_NUMBER_RE + '[i]',
-              relevance: 1
+              match: /-?\b0[xX]\.[a-fA-F0-9](_?[a-fA-F0-9])*[pP][+-]?\d(_?\d)*i?/, // hex without a present digit before . (making a digit afterwards required)
+              relevance: 0
             },
-            hljs.C_NUMBER_MODE
+            {
+              match: /-?\b0[xX](_?[a-fA-F0-9])+((\.([a-fA-F0-9](_?[a-fA-F0-9])*)?)?[pP][+-]?\d(_?\d)*)?i?/, // hex with a present digit before . (making a digit afterwards optional)
+              relevance: 0
+            },
+            {
+              match: /-?\b0[oO](_?[0-7])*i?/, // leading 0o octal
+              relevance: 0
+            },
+            {
+              match: /-?\.\d(_?\d)*([eE][+-]?\d(_?\d)*)?i?/, // decimal without a present digit before . (making a digit afterwards required)
+              relevance: 0
+            },
+            {
+              match: /-?\b\d(_?\d)*(\.(\d(_?\d)*)?)?([eE][+-]?\d(_?\d)*)?i?/, // decimal with a present digit before . (making a digit afterwards optional)
+              relevance: 0
+            }
           ]
         },
         { begin: /:=/ // relevance booster
@@ -5524,7 +5829,9 @@ var hljs = (function () {
       'do',
       'sealed',
       'yield',
-      'permits'
+      'permits',
+      'goto',
+      'when'
     ];
 
     const BUILT_INS = [
@@ -5744,7 +6051,9 @@ var hljs = (function () {
     "import",
     "from",
     "export",
-    "extends"
+    "extends",
+    // It's reached stage 3, which is "recommended for implementation":
+    "using"
   ];
   const LITERALS = [
     "true",
@@ -5994,7 +6303,7 @@ var hljs = (function () {
       contains: [] // defined later
     };
     const HTML_TEMPLATE = {
-      begin: 'html`',
+      begin: '\.?html`',
       end: '',
       starts: {
         end: '`',
@@ -6007,7 +6316,7 @@ var hljs = (function () {
       }
     };
     const CSS_TEMPLATE = {
-      begin: 'css`',
+      begin: '\.?css`',
       end: '',
       starts: {
         end: '`',
@@ -6020,7 +6329,7 @@ var hljs = (function () {
       }
     };
     const GRAPHQL_TEMPLATE = {
-      begin: 'gql`',
+      begin: '\.?gql`',
       end: '',
       starts: {
         end: '`',
@@ -6117,7 +6426,7 @@ var hljs = (function () {
     const PARAMS_CONTAINS = SUBST_AND_COMMENTS.concat([
       // eat recursive parens in sub expressions
       {
-        begin: /\(/,
+        begin: /(\s*)\(/,
         end: /\)/,
         keywords: KEYWORDS$1,
         contains: ["self"].concat(SUBST_AND_COMMENTS)
@@ -6125,7 +6434,8 @@ var hljs = (function () {
     ]);
     const PARAMS = {
       className: 'params',
-      begin: /\(/,
+      // convert this to negative lookbehind in v12
+      begin: /(\s*)\(/, // to match the parms with
       end: /\)/,
       excludeBegin: true,
       excludeEnd: true,
@@ -6248,8 +6558,8 @@ var hljs = (function () {
           ...BUILT_IN_GLOBALS,
           "super",
           "import"
-        ]),
-        IDENT_RE$1, regex.lookahead(/\(/)),
+        ].map(x => `${x}\\s*\\(`)),
+        IDENT_RE$1, regex.lookahead(/\s*\(/)),
       className: "title.function",
       relevance: 0
     };
@@ -6336,8 +6646,8 @@ var hljs = (function () {
         NUMBER,
         CLASS_REFERENCE,
         {
-          className: 'attr',
-          begin: IDENT_RE$1 + regex.lookahead(':'),
+          scope: 'attr',
+          match: IDENT_RE$1 + regex.lookahead(':'),
           relevance: 0
         },
         FUNCTION_VARIABLE,
@@ -6370,7 +6680,7 @@ var hljs = (function () {
                       skip: true
                     },
                     {
-                      begin: /\(/,
+                      begin: /(\s*)\(/,
                       end: /\)/,
                       excludeBegin: true,
                       excludeEnd: true,
@@ -6503,6 +6813,7 @@ var hljs = (function () {
 
     return {
       name: 'JSON',
+      aliases: ['jsonc'],
       keywords:{
         literal: LITERALS,
       },
@@ -7007,7 +7318,7 @@ var hljs = (function () {
   Language: Lua
   Description: Lua is a powerful, efficient, lightweight, embeddable scripting language.
   Author: Andrew Fedorov <dmmdrs@mail.ru>
-  Category: common, scripting
+  Category: common, gaming, scripting
   Website: https://www.lua.org
   */
 
@@ -7032,6 +7343,7 @@ var hljs = (function () {
     ];
     return {
       name: 'Lua',
+      aliases: ['pluto'],
       keywords: {
         $pattern: hljs.UNDERSCORE_IDENT_RE,
         literal: "true false nil",
@@ -7087,7 +7399,7 @@ var hljs = (function () {
   Author: Ivan Sagalaev <maniac@softwaremaniacs.org>
   Contributors: Joël Porquet <joel@porquet.org>
   Website: https://www.gnu.org/software/make/manual/html_node/Introduction.html
-  Category: common
+  Category: common, build-system
   */
 
   function makefile(hljs) {
@@ -7122,7 +7434,10 @@ var hljs = (function () {
           + 'word wordlist firstword lastword dir notdir suffix basename '
           + 'addsuffix addprefix join wildcard realpath abspath error warning '
           + 'shell origin flavor foreach if or and call eval file value' },
-      contains: [ VARIABLE ]
+      contains: [ 
+        VARIABLE,
+        QUOTE_STRING // Added QUOTE_STRING as they can be a part of functions
+      ]
     };
     /* Variable assignment */
     const ASSIGNMENT = { begin: '^' + hljs.UNDERSCORE_IDENT_RE + '\\s*(?=[:+?]?=)' };
@@ -7625,6 +7940,12 @@ var hljs = (function () {
       end: '$'
     };
 
+    const ENTITY = {
+      //https://spec.commonmark.org/0.31.2/#entity-references
+      scope: 'literal',
+      match: /&([a-zA-Z0-9]+|#[0-9]{1,7}|#[Xx][0-9a-fA-F]{1,6});/
+    };
+
     return {
       name: 'Markdown',
       aliases: [
@@ -7642,7 +7963,8 @@ var hljs = (function () {
         CODE,
         HORIZONTAL_RULE,
         LINK,
-        LINK_REFERENCE
+        LINK_REFERENCE,
+        ENTITY
       ]
     };
   }
@@ -7927,6 +8249,7 @@ var hljs = (function () {
       'chown',
       'chr',
       'chroot',
+      'class',
       'close',
       'closedir',
       'connect',
@@ -7956,6 +8279,7 @@ var hljs = (function () {
       'exit',
       'exp',
       'fcntl',
+      'field',
       'fileno',
       'flock',
       'for',
@@ -8015,6 +8339,7 @@ var hljs = (function () {
       'lt',
       'ma',
       'map',
+      'method',
       'mkdir',
       'msgctl',
       'msgget',
@@ -8159,19 +8484,45 @@ var hljs = (function () {
       end: /\}/
       // contains defined later
     };
-    const VAR = { variants: [
-      { begin: /\$\d/ },
-      { begin: regex.concat(
-        /[$%@](\^\w\b|#\w+(::\w+)*|\{\w+\}|\w+(::\w*)*)/,
-        // negative look-ahead tries to avoid matching patterns that are not
-        // Perl at all like $ident$, @ident@, etc.
-        `(?![A-Za-z])(?![@$%])`
-      ) },
-      {
-        begin: /[$%@][^\s\w{]/,
-        relevance: 0
-      }
-    ] };
+    const ATTR = {
+      scope: 'attr',
+      match: /\s+:\s*\w+(\s*\(.*?\))?/,
+    };
+    const VAR = {
+      scope: 'variable',
+      variants: [
+        { begin: /\$\d/ },
+        { begin: regex.concat(
+          /[$%@](?!")(\^\w\b|#\w+(::\w+)*|\{\w+\}|\w+(::\w*)*)/,
+          // negative look-ahead tries to avoid matching patterns that are not
+          // Perl at all like $ident$, @ident@, etc.
+          `(?![A-Za-z])(?![@$%])`
+          )
+        },
+        {
+          // Only $= is a special Perl variable and one can't declare @= or %=.
+          begin: /[$%@](?!")[^\s\w{=]|\$=/,
+          relevance: 0
+        }
+      ],
+      contains: [ ATTR ],
+    };
+    const NUMBER = {
+      className: 'number',
+      variants: [
+        // decimal numbers:
+        // include the case where a number starts with a dot (eg. .9), and
+        // the leading 0? avoids mixing the first and second match on 0.x cases
+        { match: /0?\.[0-9][0-9_]+\b/ },
+        // include the special versioned number (eg. v5.38)
+        { match: /\bv?(0|[1-9][0-9_]*(\.[0-9_]+)?|[1-9][0-9_]*)\b/ },
+        // non-decimal numbers:
+        { match: /\b0[0-7][0-7_]*\b/ },
+        { match: /\b0x[0-9a-fA-F][0-9a-fA-F_]*\b/ },
+        { match: /\b0b[0-1][0-1_]*\b/ },
+      ],
+      relevance: 0
+    };
     const STRING_CONTAINS = [
       hljs.BACKSLASH_ESCAPE,
       SUBST,
@@ -8286,11 +8637,7 @@ var hljs = (function () {
           }
         ]
       },
-      {
-        className: 'number',
-        begin: '(\\b0[0-7_]+)|(\\b0x[0-9a-fA-F_]+)|(\\b[1-9][0-9_]*(\\.[0-9_]+)?)|[0_]\\b',
-        relevance: 0
-      },
+      NUMBER,
       { // regexp container
         begin: '(\\/\\/|' + hljs.RE_STARTERS_RE + '|\\b(split|return|print|reverse|grep)\\b)\\s*',
         keywords: 'split return print reverse grep',
@@ -8332,11 +8679,19 @@ var hljs = (function () {
       },
       {
         className: 'function',
-        beginKeywords: 'sub',
+        beginKeywords: 'sub method',
         end: '(\\s*\\(.*?\\))?[;{]',
         excludeEnd: true,
         relevance: 5,
-        contains: [ hljs.TITLE_MODE ]
+        contains: [ hljs.TITLE_MODE, ATTR ]
+      },
+      {
+        className: 'class',
+        beginKeywords: 'class',
+        end: '[;{]',
+        excludeEnd: true,
+        relevance: 5,
+        contains: [ hljs.TITLE_MODE, ATTR, NUMBER ]
       },
       {
         begin: '-\\w\\b',
@@ -8393,12 +8748,15 @@ var hljs = (function () {
     const PASCAL_CASE_CLASS_NAME_RE = regex.concat(
       /(\\?[A-Z][a-z0-9_\x7f-\xff]+|\\?[A-Z]+(?=[A-Z][a-z0-9_\x7f-\xff])){1,}/,
       NOT_PERL_ETC);
+    const UPCASE_NAME_RE = regex.concat(
+      /[A-Z]+/,
+      NOT_PERL_ETC);
     const VARIABLE = {
       scope: 'variable',
       match: '\\$+' + IDENT_RE,
     };
     const PREPROCESSOR = {
-      scope: 'meta',
+      scope: "meta",
       variants: [
         { begin: /<\?php/, relevance: 10 }, // boost for obvious PHP
         { begin: /<\?=/ },
@@ -8812,7 +9170,12 @@ var hljs = (function () {
     ];
 
     const ATTRIBUTES = {
-      begin: regex.concat(/#\[\s*/, PASCAL_CASE_CLASS_NAME_RE),
+      begin: regex.concat(/#\[\s*\\?/,
+        regex.either(
+          PASCAL_CASE_CLASS_NAME_RE,
+          UPCASE_NAME_RE
+        )
+      ),
       beginScope: "meta",
       end: /]/,
       endScope: "meta",
@@ -8842,7 +9205,10 @@ var hljs = (function () {
         ...ATTRIBUTE_CONTAINS,
         {
           scope: 'meta',
-          match: PASCAL_CASE_CLASS_NAME_RE
+          variants: [
+            { match: PASCAL_CASE_CLASS_NAME_RE },
+            { match: UPCASE_NAME_RE }
+          ]
         }
       ]
     };
@@ -8922,6 +9288,7 @@ var hljs = (function () {
               keywords: KEYWORDS,
               contains: [
                 'self',
+                ATTRIBUTES,
                 VARIABLE,
                 LEFT_AND_RIGHT_SIDE_OF_DOUBLE_COLON,
                 hljs.C_BLOCK_COMMENT_MODE,
@@ -9427,7 +9794,8 @@ var hljs = (function () {
         NUMBER,
         {
           // very common convention
-          begin: /\bself\b/
+          scope: 'variable.language',
+          match: /\bself\b/
         },
         {
           // eat "if" prior to string so that it won't accidentally be
@@ -9435,6 +9803,7 @@ var hljs = (function () {
           beginKeywords: "if",
           relevance: 0
         },
+        { match: /\bor\b/, scope: "keyword" },
         STRING,
         COMMENT_TYPE,
         hljs.HASH_COMMENT_MODE,
@@ -9778,7 +10147,7 @@ var hljs = (function () {
   Website: https://www.ruby-lang.org/
   Author: Anton Kovalyov <anton@kovalyov.net>
   Contributors: Peter Leonov <gojpeg@yandex.ru>, Vasily Polovnyov <vast@whiteants.net>, Loren Segal <lsegal@soen.ca>, Pascal Hurni <phi@ruby-reactive.org>, Cedric Sohrauer <sohrauer@googlemail.com>
-  Category: common
+  Category: common, scripting
   */
 
   function ruby(hljs) {
@@ -10124,7 +10493,7 @@ var hljs = (function () {
       },
       {
         className: 'params',
-        begin: /\|/,
+        begin: /\|(?!=)/,
         end: /\|/,
         excludeBegin: true,
         excludeEnd: true,
@@ -10228,15 +10597,22 @@ var hljs = (function () {
   */
 
   /** @type LanguageFn */
+
   function rust(hljs) {
     const regex = hljs.regex;
+    // ============================================
+    // Added to support the r# keyword, which is a raw identifier in Rust.
+    const RAW_IDENTIFIER = /(r#)?/;
+    const UNDERSCORE_IDENT_RE = regex.concat(RAW_IDENTIFIER, hljs.UNDERSCORE_IDENT_RE);
+    const IDENT_RE = regex.concat(RAW_IDENTIFIER, hljs.IDENT_RE);
+    // ============================================
     const FUNCTION_INVOKE = {
       className: "title.function.invoke",
       relevance: 0,
       begin: regex.concat(
         /\b/,
         /(?!let|for|while|if|else|match\b)/,
-        hljs.IDENT_RE,
+        IDENT_RE,
         regex.lookahead(/\s*\(/))
     };
     const NUMBER_SUFFIX = '([ui](8|16|32|64|128|size)|f(32|64))\?';
@@ -10285,6 +10661,7 @@ var hljs = (function () {
       "try",
       "type",
       "typeof",
+      "union",
       "unsafe",
       "unsized",
       "use",
@@ -10412,15 +10789,25 @@ var hljs = (function () {
           illegal: null
         }),
         {
-          className: 'string',
-          variants: [
-            { begin: /b?r(#*)"(.|\n)*?"\1(?!#)/ },
-            { begin: /b?'\\?(x\w{2}|u\w{4}|U\w{8}|.)'/ }
-          ]
+          className: 'symbol',
+          // negative lookahead to avoid matching `'`
+          begin: /'[a-zA-Z_][a-zA-Z0-9_]*(?!')/
         },
         {
-          className: 'symbol',
-          begin: /'[a-zA-Z_][a-zA-Z0-9_]*/
+          scope: 'string',
+          variants: [
+            { begin: /b?r(#*)"(.|\n)*?"\1(?!#)/ },
+            {
+              begin: /b?'/,
+              end: /'/,
+              contains: [
+                {
+                  scope: "char.escape",
+                  match: /\\('|\w|x\w{2}|u\w{4}|U\w{8})/
+                }
+              ]
+            }
+          ]
         },
         {
           className: 'number',
@@ -10437,7 +10824,7 @@ var hljs = (function () {
           begin: [
             /fn/,
             /\s+/,
-            hljs.UNDERSCORE_IDENT_RE
+            UNDERSCORE_IDENT_RE
           ],
           className: {
             1: "keyword",
@@ -10452,7 +10839,10 @@ var hljs = (function () {
             {
               className: 'string',
               begin: /"/,
-              end: /"/
+              end: /"/,
+              contains: [
+                hljs.BACKSLASH_ESCAPE
+              ]
             }
           ]
         },
@@ -10461,7 +10851,7 @@ var hljs = (function () {
             /let/,
             /\s+/,
             /(?:mut\s+)?/,
-            hljs.UNDERSCORE_IDENT_RE
+            UNDERSCORE_IDENT_RE
           ],
           className: {
             1: "keyword",
@@ -10474,7 +10864,7 @@ var hljs = (function () {
           begin: [
             /for/,
             /\s+/,
-            hljs.UNDERSCORE_IDENT_RE,
+            UNDERSCORE_IDENT_RE,
             /\s+/,
             /in/
           ],
@@ -10488,7 +10878,7 @@ var hljs = (function () {
           begin: [
             /type/,
             /\s+/,
-            hljs.UNDERSCORE_IDENT_RE
+            UNDERSCORE_IDENT_RE
           ],
           className: {
             1: "keyword",
@@ -10499,7 +10889,7 @@ var hljs = (function () {
           begin: [
             /(?:trait|enum|struct|union|impl|for)/,
             /\s+/,
-            hljs.UNDERSCORE_IDENT_RE
+            UNDERSCORE_IDENT_RE
           ],
           className: {
             1: "keyword",
@@ -10707,19 +11097,19 @@ var hljs = (function () {
     const regex = hljs.regex;
     const COMMENT_MODE = hljs.COMMENT('--', '$');
     const STRING = {
-      className: 'string',
+      scope: 'string',
       variants: [
         {
           begin: /'/,
           end: /'/,
-          contains: [ { begin: /''/ } ]
+          contains: [ { match: /''/ } ]
         }
       ]
     };
     const QUOTED_IDENTIFIER = {
       begin: /"/,
       end: /"/,
-      contains: [ { begin: /""/ } ]
+      contains: [ { match: /""/ } ]
     };
 
     const LITERALS = [
@@ -11289,20 +11679,40 @@ var hljs = (function () {
     });
 
     const VARIABLE = {
-      className: "variable",
-      begin: /@[a-z0-9][a-z0-9_]*/,
+      scope: "variable",
+      match: /@[a-z0-9][a-z0-9_]*/,
     };
 
     const OPERATOR = {
-      className: "operator",
-      begin: /[-+*/=%^~]|&&?|\|\|?|!=?|<(?:=>?|<|>)?|>[>=]?/,
+      scope: "operator",
+      match: /[-+*/=%^~]|&&?|\|\|?|!=?|<(?:=>?|<|>)?|>[>=]?/,
       relevance: 0,
     };
 
     const FUNCTION_CALL = {
-      begin: regex.concat(/\b/, regex.either(...FUNCTIONS), /\s*\(/),
+      match: regex.concat(/\b/, regex.either(...FUNCTIONS), /\s*\(/),
       relevance: 0,
       keywords: { built_in: FUNCTIONS }
+    };
+
+    // turns a multi-word keyword combo into a regex that doesn't
+    // care about extra whitespace etc.
+    // input: "START QUERY"
+    // output: /\bSTART\s+QUERY\b/
+    function kws_to_regex(list) {
+      return regex.concat(
+        /\b/,
+        regex.either(...list.map((kw) => {
+          return kw.replace(/\s+/, "\\s+")
+        })),
+        /\b/
+      )
+    }
+
+    const MULTI_WORD_KEYWORDS = {
+      scope: "keyword",
+      match: kws_to_regex(COMBOS),
+      relevance: 0,
     };
 
     // keywords with less than 3 letters are reduced in relevancy
@@ -11337,19 +11747,10 @@ var hljs = (function () {
       },
       contains: [
         {
-          begin: regex.either(...COMBOS),
-          relevance: 0,
-          keywords: {
-            $pattern: /[\w\.]+/,
-            keyword: KEYWORDS.concat(COMBOS),
-            literal: LITERALS,
-            type: TYPES
-          },
+          scope: "type",
+          match: kws_to_regex(MULTI_WORD_TYPES)
         },
-        {
-          className: "type",
-          begin: regex.either(...MULTI_WORD_TYPES)
-        },
+        MULTI_WORD_KEYWORDS,
         FUNCTION_CALL,
         VARIABLE,
         STRING,
@@ -11451,6 +11852,7 @@ var hljs = (function () {
     'operator',
     'optional', // contextual
     'override', // contextual
+    'package',
     'postfix', // contextual
     'precedencegroup',
     'prefix', // contextual
@@ -11947,14 +12349,17 @@ var hljs = (function () {
         }
       ] }
     };
+
     const KEYWORD_ATTRIBUTE = {
       scope: 'keyword',
-      match: concat(/@/, either(...keywordAttributes))
+      match: concat(/@/, either(...keywordAttributes), lookahead(either(/\(/, /\s+/))),
     };
+
     const USER_DEFINED_ATTRIBUTE = {
       scope: 'meta',
       match: concat(/@/, identifier)
     };
+
     const ATTRIBUTES = [
       AVAILABLE_ATTRIBUTE,
       KEYWORD_ATTRIBUTE,
@@ -12147,6 +12552,64 @@ var hljs = (function () {
       end: /}/
     };
 
+    const CLASS_FUNC_DECLARATION = {
+      match: [
+        /class\b/,          
+        /\s+/,
+        /func\b/,
+        /\s+/,
+        /\b[A-Za-z_][A-Za-z0-9_]*\b/ 
+      ],
+      scope: {
+        1: "keyword",
+        3: "keyword",
+        5: "title.function"
+      }
+    };
+
+    const CLASS_VAR_DECLARATION = {
+      match: [
+        /class\b/,
+        /\s+/,          
+        /var\b/, 
+      ],
+      scope: {
+        1: "keyword",
+        3: "keyword"
+      }
+    };
+
+    const TYPE_DECLARATION = {
+      begin: [
+        /(struct|protocol|class|extension|enum|actor)/,
+        /\s+/,
+        identifier,
+        /\s*/,
+      ],
+      beginScope: {
+        1: "keyword",
+        3: "title.class"
+      },
+      keywords: KEYWORDS,
+      contains: [
+        GENERIC_PARAMETERS,
+        ...KEYWORD_MODES,
+        {
+          begin: /:/,
+          end: /\{/,
+          keywords: KEYWORDS,
+          contains: [
+            {
+              scope: "title.class.inherited",
+              match: typeIdentifier,
+            },
+            ...KEYWORD_MODES,
+          ],
+          relevance: 0,
+        },
+      ]
+    };
+
     // Add supported submodes to string interpolation.
     for (const variant of STRING.variants) {
       const interpolation = variant.contains.find(mode => mode.label === "interpol");
@@ -12180,19 +12643,9 @@ var hljs = (function () {
         ...COMMENTS,
         FUNCTION_OR_MACRO,
         INIT_SUBSCRIPT,
-        {
-          beginKeywords: 'struct protocol class extension enum actor',
-          end: '\\{',
-          excludeEnd: true,
-          keywords: KEYWORDS,
-          contains: [
-            hljs.inherit(hljs.TITLE_MODE, {
-              className: "title.class",
-              begin: /[A-Za-z$_][\u00C0-\u02B80-9A-Za-z$_]*/
-            }),
-            ...KEYWORD_MODES
-          ]
-        },
+        CLASS_FUNC_DECLARATION,
+        CLASS_VAR_DECLARATION,
+        TYPE_DECLARATION,
         OPERATOR_DECLARATION,
         PRECEDENCEGROUP,
         {
@@ -12227,6 +12680,7 @@ var hljs = (function () {
 
   /** @type LanguageFn */
   function typescript(hljs) {
+    const regex = hljs.regex;
     const tsLanguage = javascript(hljs);
 
     const IDENT_RE$1 = IDENT_RE;
@@ -12243,10 +12697,15 @@ var hljs = (function () {
       "unknown"
     ];
     const NAMESPACE = {
-      beginKeywords: 'namespace',
-      end: /\{/,
-      excludeEnd: true,
-      contains: [ tsLanguage.exports.CLASS_REFERENCE ]
+      begin: [
+        /namespace/,
+        /\s+/,
+        hljs.IDENT_RE
+      ],
+      beginScope: {
+        1: "keyword",
+        3: "title.class"
+      }
     };
     const INTERFACE = {
       beginKeywords: 'interface',
@@ -12265,7 +12724,7 @@ var hljs = (function () {
     };
     const TS_SPECIFIC_KEYWORDS = [
       "type",
-      "namespace",
+      // "namespace",
       "interface",
       "public",
       "private",
@@ -12275,8 +12734,14 @@ var hljs = (function () {
       "abstract",
       "readonly",
       "enum",
-      "override"
+      "override",
+      "satisfies"
     ];
+    /*
+      namespace is a TS keyword but it's fine to use it as a variable name too.
+      const message = 'foo';
+      const namespace = 'bar';
+    */
     const KEYWORDS$1 = {
       $pattern: IDENT_RE,
       keyword: KEYWORDS.concat(TS_SPECIFIC_KEYWORDS),
@@ -12284,6 +12749,7 @@ var hljs = (function () {
       built_in: BUILT_INS.concat(TYPES),
       "variable.language": BUILT_IN_VARIABLES
     };
+
     const DECORATOR = {
       className: 'meta',
       begin: '@' + IDENT_RE$1,
@@ -12302,10 +12768,27 @@ var hljs = (function () {
     Object.assign(tsLanguage.keywords, KEYWORDS$1);
 
     tsLanguage.exports.PARAMS_CONTAINS.push(DECORATOR);
+
+    // highlight the function params
+    const ATTRIBUTE_HIGHLIGHT = tsLanguage.contains.find(c => c.scope === "attr");
+
+    // take default attr rule and extend it to support optionals
+    const OPTIONAL_KEY_OR_ARGUMENT = Object.assign({},
+      ATTRIBUTE_HIGHLIGHT,
+      { match: regex.concat(IDENT_RE$1, regex.lookahead(/\s*\?:/)) }
+    );
+    tsLanguage.exports.PARAMS_CONTAINS.push([
+      tsLanguage.exports.CLASS_REFERENCE, // class reference for highlighting the params types
+      ATTRIBUTE_HIGHLIGHT, // highlight the params key
+      OPTIONAL_KEY_OR_ARGUMENT, // Added for optional property assignment highlighting
+    ]);
+
+    // Add the optional property assignment highlighting for objects or classes
     tsLanguage.contains = tsLanguage.contains.concat([
       DECORATOR,
       NAMESPACE,
       INTERFACE,
+      OPTIONAL_KEY_OR_ARGUMENT, // Added for optional property assignment highlighting
     ]);
 
     // TS gets a simpler shebang rule than JS
@@ -12645,14 +13128,15 @@ var hljs = (function () {
     const KEY = {
       className: 'attr',
       variants: [
-        { begin: '\\w[\\w :\\/.-]*:(?=[ \t]|$)' },
-        { // double quoted keys
-          begin: '"\\w[\\w :\\/.-]*":(?=[ \t]|$)' },
-        { // single quoted keys
-          begin: '\'\\w[\\w :\\/.-]*\':(?=[ \t]|$)' }
+        // added brackets support and special char support
+        { begin: /[\w*@][\w*@ :()\./-]*:(?=[ \t]|$)/ },
+        { // double quoted keys - with brackets and special char support
+          begin: /"[\w*@][\w*@ :()\./-]*":(?=[ \t]|$)/ },
+        { // single quoted keys - with brackets and special char support
+          begin: /'[\w*@][\w*@ :()\./-]*':(?=[ \t]|$)/ },
       ]
     };
-
+    
     const TEMPLATE_VARIABLES = {
       className: 'template-variable',
       variants: [
@@ -12666,14 +13150,25 @@ var hljs = (function () {
         }
       ]
     };
+
+    const SINGLE_QUOTE_STRING = {
+      className: 'string',
+      relevance: 0,
+      begin: /'/,
+      end: /'/,
+      contains: [
+        {
+          match: /''/,
+          scope: 'char.escape',
+          relevance: 0
+        }
+      ]
+    };
+
     const STRING = {
       className: 'string',
       relevance: 0,
       variants: [
-        {
-          begin: /'/,
-          end: /'/
-        },
         {
           begin: /"/,
           end: /"/
@@ -12691,7 +13186,13 @@ var hljs = (function () {
     const CONTAINER_STRING = hljs.inherit(STRING, { variants: [
       {
         begin: /'/,
-        end: /'/
+        end: /'/,
+        contains: [
+          {
+            begin: /''/,
+            relevance: 0
+          }
+        ]
       },
       {
         begin: /"/,
@@ -12800,6 +13301,7 @@ var hljs = (function () {
       },
       OBJECT,
       ARRAY,
+      SINGLE_QUOTE_STRING,
       STRING
     ];
 
@@ -12856,7 +13358,7 @@ var hljs = (function () {
     grmr_yaml: yaml
   });
 
-  const hljs = HighlightJS;
+  const hljs = highlight;
 
   for (const key of Object.keys(builtIns)) {
     // our builtInLanguages Rollup plugin has to use `_` to allow identifiers to be
