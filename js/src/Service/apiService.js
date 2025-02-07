@@ -15,6 +15,7 @@ class ApiService {
             {},
             {
                 // override supported via "../setupFomanticUi.js", both callbacks are always evaluated
+                onRequest: this.onRequest,
                 successTest: this.successTest,
                 onFailure: this.onFailure,
                 onSuccess: this.onSuccess,
@@ -35,6 +36,22 @@ class ApiService {
             eval('\'use strict\'; (() => {' + code + '})()'); // eslint-disable-line no-eval
         }).call(thisObject);
     }
+
+    onRequest(promise, xhr) {
+        // fix https://github.com/atk4/ui/issues/393
+        const ownerRemoveHandler = () => xhr.abort();
+        atk.elementRemoveObserver.addHandler(this, ownerRemoveHandler);
+
+        // Fomantic-UI API onComplete callback is executed last, register custom handler to be executed first
+        // relies on https://github.com/jquery/jquery/blob/3.6.4/src/ajax.js#L805-L809
+        const deferredFilter = () => {
+            atk.elementRemoveObserver.removeHandler(this, ownerRemoveHandler);
+            atk.apiService.onCompleteBefore.apply(this, xhr);
+        };
+        xhr.then(deferredFilter, deferredFilter);
+    }
+
+    onCompleteBefore(xhr) {}
 
     /**
      * Check server response.
@@ -110,6 +127,8 @@ class ApiService {
                     } else {
                         $target.replaceWith(response.html);
                     }
+
+                    atk.elementRemoveObserver.handleMutationQueueImmediately($target[0]);
                 }
 
                 if (response.atkjs) {

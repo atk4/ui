@@ -57,6 +57,7 @@ module.exports = {
         }],
         'linebreak-style': ['error', 'unix'],
         'max-len': 'off',
+        'no-continue': 'off',
         'no-console': ['error', {
             allow: ['warn', 'error'],
         }],

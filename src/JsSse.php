@@ -15,6 +15,9 @@ class JsSse extends JsCallback
 
     private string $lastSentId = '';
 
+    /** @var string|View */
+    public $stateContext;
+
     /** @var bool Show Loader when doing SSE. */
     public $showLoader = false;
 
@@ -27,6 +30,9 @@ class JsSse extends JsCallback
         $this->assertIsInitialized();
 
         $options = ['url' => $this->getJsUrl()];
+        if ($this->stateContext) {
+            $options['stateContext'] = $this->stateContext;
+        }
         if ($this->showLoader) {
             $options['showLoader'] = $this->showLoader;
         }

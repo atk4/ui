@@ -35,6 +35,12 @@ $.extend = $.fn.extend = new Proxy($.fn.extend, { // eslint-disable-line no-mult
 
                         if (forcedSettings[prop] === undefined) {
                             obj[prop] = value;
+                        } else if (name === 'api' && prop === 'onRequest') {
+                            obj[prop] = function (promise, xhr) {
+                                origValue(promise, xhr);
+
+                                return value.call(this, promise, xhr);
+                            };
                         } else if (name === 'api' && prop === 'successTest') {
                             obj[prop] = function (response) {
                                 const resOrig = origValue(response);

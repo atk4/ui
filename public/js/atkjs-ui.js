@@ -11,6 +11,249 @@
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/Helper/elementRemoveObserver.js":
+/*!*********************************************!*\
+  !*** ./src/Helper/elementRemoveObserver.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var core_js_modules_esnext_map_delete_all_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.map.delete-all.js */ "./node_modules/core-js/modules/esnext.map.delete-all.js");
+/* harmony import */ var core_js_modules_esnext_map_delete_all_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_delete_all_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_esnext_map_emplace_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.map.emplace.js */ "./node_modules/core-js/modules/esnext.map.emplace.js");
+/* harmony import */ var core_js_modules_esnext_map_emplace_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_emplace_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_esnext_map_every_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.map.every.js */ "./node_modules/core-js/modules/esnext.map.every.js");
+/* harmony import */ var core_js_modules_esnext_map_every_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_every_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_esnext_map_filter_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.map.filter.js */ "./node_modules/core-js/modules/esnext.map.filter.js");
+/* harmony import */ var core_js_modules_esnext_map_filter_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_filter_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_esnext_map_find_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.map.find.js */ "./node_modules/core-js/modules/esnext.map.find.js");
+/* harmony import */ var core_js_modules_esnext_map_find_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_find_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_esnext_map_find_key_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/esnext.map.find-key.js */ "./node_modules/core-js/modules/esnext.map.find-key.js");
+/* harmony import */ var core_js_modules_esnext_map_find_key_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_find_key_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_esnext_map_includes_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/esnext.map.includes.js */ "./node_modules/core-js/modules/esnext.map.includes.js");
+/* harmony import */ var core_js_modules_esnext_map_includes_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_includes_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_esnext_map_key_of_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/esnext.map.key-of.js */ "./node_modules/core-js/modules/esnext.map.key-of.js");
+/* harmony import */ var core_js_modules_esnext_map_key_of_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_key_of_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_esnext_map_map_keys_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/esnext.map.map-keys.js */ "./node_modules/core-js/modules/esnext.map.map-keys.js");
+/* harmony import */ var core_js_modules_esnext_map_map_keys_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_map_keys_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_esnext_map_map_values_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/esnext.map.map-values.js */ "./node_modules/core-js/modules/esnext.map.map-values.js");
+/* harmony import */ var core_js_modules_esnext_map_map_values_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_map_values_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_esnext_map_merge_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/esnext.map.merge.js */ "./node_modules/core-js/modules/esnext.map.merge.js");
+/* harmony import */ var core_js_modules_esnext_map_merge_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_merge_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_esnext_map_reduce_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/esnext.map.reduce.js */ "./node_modules/core-js/modules/esnext.map.reduce.js");
+/* harmony import */ var core_js_modules_esnext_map_reduce_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_reduce_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_esnext_map_some_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/esnext.map.some.js */ "./node_modules/core-js/modules/esnext.map.some.js");
+/* harmony import */ var core_js_modules_esnext_map_some_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_some_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var core_js_modules_esnext_map_update_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/esnext.map.update.js */ "./node_modules/core-js/modules/esnext.map.update.js");
+/* harmony import */ var core_js_modules_esnext_map_update_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_update_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var core_js_modules_esnext_set_add_all_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/esnext.set.add-all.js */ "./node_modules/core-js/modules/esnext.set.add-all.js");
+/* harmony import */ var core_js_modules_esnext_set_add_all_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_add_all_js__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var core_js_modules_esnext_set_delete_all_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/esnext.set.delete-all.js */ "./node_modules/core-js/modules/esnext.set.delete-all.js");
+/* harmony import */ var core_js_modules_esnext_set_delete_all_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_delete_all_js__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var core_js_modules_esnext_set_difference_v2_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core-js/modules/esnext.set.difference.v2.js */ "./node_modules/core-js/modules/esnext.set.difference.v2.js");
+/* harmony import */ var core_js_modules_esnext_set_difference_v2_js__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_difference_v2_js__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var core_js_modules_esnext_set_difference_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core-js/modules/esnext.set.difference.js */ "./node_modules/core-js/modules/esnext.set.difference.js");
+/* harmony import */ var core_js_modules_esnext_set_difference_js__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_difference_js__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var core_js_modules_esnext_set_every_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! core-js/modules/esnext.set.every.js */ "./node_modules/core-js/modules/esnext.set.every.js");
+/* harmony import */ var core_js_modules_esnext_set_every_js__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_every_js__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var core_js_modules_esnext_set_filter_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! core-js/modules/esnext.set.filter.js */ "./node_modules/core-js/modules/esnext.set.filter.js");
+/* harmony import */ var core_js_modules_esnext_set_filter_js__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_filter_js__WEBPACK_IMPORTED_MODULE_19__);
+/* harmony import */ var core_js_modules_esnext_set_find_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! core-js/modules/esnext.set.find.js */ "./node_modules/core-js/modules/esnext.set.find.js");
+/* harmony import */ var core_js_modules_esnext_set_find_js__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_find_js__WEBPACK_IMPORTED_MODULE_20__);
+/* harmony import */ var core_js_modules_esnext_set_intersection_v2_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! core-js/modules/esnext.set.intersection.v2.js */ "./node_modules/core-js/modules/esnext.set.intersection.v2.js");
+/* harmony import */ var core_js_modules_esnext_set_intersection_v2_js__WEBPACK_IMPORTED_MODULE_21___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_intersection_v2_js__WEBPACK_IMPORTED_MODULE_21__);
+/* harmony import */ var core_js_modules_esnext_set_intersection_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! core-js/modules/esnext.set.intersection.js */ "./node_modules/core-js/modules/esnext.set.intersection.js");
+/* harmony import */ var core_js_modules_esnext_set_intersection_js__WEBPACK_IMPORTED_MODULE_22___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_intersection_js__WEBPACK_IMPORTED_MODULE_22__);
+/* harmony import */ var core_js_modules_esnext_set_is_disjoint_from_v2_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! core-js/modules/esnext.set.is-disjoint-from.v2.js */ "./node_modules/core-js/modules/esnext.set.is-disjoint-from.v2.js");
+/* harmony import */ var core_js_modules_esnext_set_is_disjoint_from_v2_js__WEBPACK_IMPORTED_MODULE_23___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_is_disjoint_from_v2_js__WEBPACK_IMPORTED_MODULE_23__);
+/* harmony import */ var core_js_modules_esnext_set_is_disjoint_from_js__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! core-js/modules/esnext.set.is-disjoint-from.js */ "./node_modules/core-js/modules/esnext.set.is-disjoint-from.js");
+/* harmony import */ var core_js_modules_esnext_set_is_disjoint_from_js__WEBPACK_IMPORTED_MODULE_24___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_is_disjoint_from_js__WEBPACK_IMPORTED_MODULE_24__);
+/* harmony import */ var core_js_modules_esnext_set_is_subset_of_v2_js__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! core-js/modules/esnext.set.is-subset-of.v2.js */ "./node_modules/core-js/modules/esnext.set.is-subset-of.v2.js");
+/* harmony import */ var core_js_modules_esnext_set_is_subset_of_v2_js__WEBPACK_IMPORTED_MODULE_25___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_is_subset_of_v2_js__WEBPACK_IMPORTED_MODULE_25__);
+/* harmony import */ var core_js_modules_esnext_set_is_subset_of_js__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! core-js/modules/esnext.set.is-subset-of.js */ "./node_modules/core-js/modules/esnext.set.is-subset-of.js");
+/* harmony import */ var core_js_modules_esnext_set_is_subset_of_js__WEBPACK_IMPORTED_MODULE_26___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_is_subset_of_js__WEBPACK_IMPORTED_MODULE_26__);
+/* harmony import */ var core_js_modules_esnext_set_is_superset_of_v2_js__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! core-js/modules/esnext.set.is-superset-of.v2.js */ "./node_modules/core-js/modules/esnext.set.is-superset-of.v2.js");
+/* harmony import */ var core_js_modules_esnext_set_is_superset_of_v2_js__WEBPACK_IMPORTED_MODULE_27___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_is_superset_of_v2_js__WEBPACK_IMPORTED_MODULE_27__);
+/* harmony import */ var core_js_modules_esnext_set_is_superset_of_js__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! core-js/modules/esnext.set.is-superset-of.js */ "./node_modules/core-js/modules/esnext.set.is-superset-of.js");
+/* harmony import */ var core_js_modules_esnext_set_is_superset_of_js__WEBPACK_IMPORTED_MODULE_28___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_is_superset_of_js__WEBPACK_IMPORTED_MODULE_28__);
+/* harmony import */ var core_js_modules_esnext_set_join_js__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! core-js/modules/esnext.set.join.js */ "./node_modules/core-js/modules/esnext.set.join.js");
+/* harmony import */ var core_js_modules_esnext_set_join_js__WEBPACK_IMPORTED_MODULE_29___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_join_js__WEBPACK_IMPORTED_MODULE_29__);
+/* harmony import */ var core_js_modules_esnext_set_map_js__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! core-js/modules/esnext.set.map.js */ "./node_modules/core-js/modules/esnext.set.map.js");
+/* harmony import */ var core_js_modules_esnext_set_map_js__WEBPACK_IMPORTED_MODULE_30___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_map_js__WEBPACK_IMPORTED_MODULE_30__);
+/* harmony import */ var core_js_modules_esnext_set_reduce_js__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! core-js/modules/esnext.set.reduce.js */ "./node_modules/core-js/modules/esnext.set.reduce.js");
+/* harmony import */ var core_js_modules_esnext_set_reduce_js__WEBPACK_IMPORTED_MODULE_31___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_reduce_js__WEBPACK_IMPORTED_MODULE_31__);
+/* harmony import */ var core_js_modules_esnext_set_some_js__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! core-js/modules/esnext.set.some.js */ "./node_modules/core-js/modules/esnext.set.some.js");
+/* harmony import */ var core_js_modules_esnext_set_some_js__WEBPACK_IMPORTED_MODULE_32___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_some_js__WEBPACK_IMPORTED_MODULE_32__);
+/* harmony import */ var core_js_modules_esnext_set_symmetric_difference_v2_js__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! core-js/modules/esnext.set.symmetric-difference.v2.js */ "./node_modules/core-js/modules/esnext.set.symmetric-difference.v2.js");
+/* harmony import */ var core_js_modules_esnext_set_symmetric_difference_v2_js__WEBPACK_IMPORTED_MODULE_33___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_symmetric_difference_v2_js__WEBPACK_IMPORTED_MODULE_33__);
+/* harmony import */ var core_js_modules_esnext_set_symmetric_difference_js__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! core-js/modules/esnext.set.symmetric-difference.js */ "./node_modules/core-js/modules/esnext.set.symmetric-difference.js");
+/* harmony import */ var core_js_modules_esnext_set_symmetric_difference_js__WEBPACK_IMPORTED_MODULE_34___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_symmetric_difference_js__WEBPACK_IMPORTED_MODULE_34__);
+/* harmony import */ var core_js_modules_esnext_set_union_v2_js__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! core-js/modules/esnext.set.union.v2.js */ "./node_modules/core-js/modules/esnext.set.union.v2.js");
+/* harmony import */ var core_js_modules_esnext_set_union_v2_js__WEBPACK_IMPORTED_MODULE_35___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_union_v2_js__WEBPACK_IMPORTED_MODULE_35__);
+/* harmony import */ var core_js_modules_esnext_set_union_js__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! core-js/modules/esnext.set.union.js */ "./node_modules/core-js/modules/esnext.set.union.js");
+/* harmony import */ var core_js_modules_esnext_set_union_js__WEBPACK_IMPORTED_MODULE_36___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_union_js__WEBPACK_IMPORTED_MODULE_36__);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const observerByElement = new Map();
+const observedChildrenByElement = new Map();
+const elementByObservedChild = new Map();
+const removeHandlersByElement = new Map();
+function removeObserverIfUnused(elem) {
+  if (removeHandlersByElement.has(elem)) {
+    if (removeHandlersByElement.get(elem).size > 0) {
+      return;
+    }
+    removeHandlersByElement.delete(elem);
+  }
+  if (observerByElement.has(elem)) {
+    return;
+  }
+  const parentElem = elementByObservedChild.get(elem);
+  if (parentElem === undefined || !observerByElement.has(parentElem)) {
+    return;
+  }
+  observedChildrenByElement.get(parentElem).delete(elem);
+  elementByObservedChild.delete(elem);
+  if (observedChildrenByElement.get(parentElem).size > 0) {
+    return;
+  }
+  const observer = observerByElement.get(parentElem);
+  observer.disconnect();
+  observerByElement.delete(parentElem);
+  observedChildrenByElement.delete(parentElem);
+  removeObserverIfUnused(parentElem);
+}
+function handleElementRemove(elem) {
+  const observedChildren = observedChildrenByElement.get(elem) ?? [];
+  const removeHandlers = removeHandlersByElement.get(elem) ?? [];
+  removeHandlersByElement.delete(elem);
+  removeObserverIfUnused(elem);
+  for (const child of observedChildren) {
+    handleElementRemove(child);
+  }
+  for (const handler of removeHandlers) {
+    handler();
+  }
+}
+function handleObserverRecords(elem, mutationRecords) {
+  const observedChildren = observedChildrenByElement.get(elem);
+  const removedElems = new Set();
+  for (const mutationRecord of mutationRecords) {
+    for (const removedElem of observedChildren.intersection(mutationRecord.removedNodes)) {
+      removedElems.add(removedElem);
+    }
+  }
+  for (const removedElem of removedElems) {
+    const parentElem = removedElem.parentElement;
+    if (parentElem !== null) {
+      const parentElemOrig = elementByObservedChild.get(removedElem);
+      if (parentElem === parentElemOrig) {
+        console.warn('Element remove observer - node was readded');
+        continue;
+      } else {
+        console.warn('Element remove observer - node was moved'); // TODO consider supporting "move"
+      }
+    }
+    handleElementRemove(removedElem);
+  }
+}
+function addObserverToParentElement(elem) {
+  const parentElem = elem.parentElement;
+  if (parentElem === null) {
+    return;
+  }
+  if (!observerByElement.has(parentElem)) {
+    addObserverToParentElement(parentElem);
+    const observer = new MutationObserver(mutationRecords => handleObserverRecords(parentElem, mutationRecords));
+    observer.observe(parentElem, {
+      childList: true,
+      characterData: false
+    });
+    observerByElement.set(parentElem, observer);
+    observedChildrenByElement.set(parentElem, new Set());
+  }
+  if (!observedChildrenByElement.get(parentElem).has(elem)) {
+    observedChildrenByElement.get(parentElem).add(elem);
+    elementByObservedChild.set(elem, parentElem);
+  }
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  /**
+   * @param {HTMLElement}      element
+   * @param {function(): void} handler
+   */
+  addHandler: function (element, handler) {
+    addObserverToParentElement(element);
+    if (!removeHandlersByElement.has(element)) {
+      removeHandlersByElement.set(element, new Set());
+    }
+    removeHandlersByElement.get(element).add(handler);
+  },
+  /**
+   * @param {HTMLElement}      element
+   * @param {function(): void} handler
+   */
+  removeHandler: function (element, handler) {
+    if (!removeHandlersByElement.has(element)) {
+      return;
+    }
+    removeHandlersByElement.get(element).delete(handler);
+    removeObserverIfUnused(element);
+  },
+  /**
+   * @param {HTMLElement} element
+   */
+  handleMutationQueueImmediately: function (element) {
+    // TODO remove this method once evalJsCode() in apiService is called at least thru JS microtask
+    const parentElem = elementByObservedChild.get(element);
+    if (parentElem === undefined) {
+      return;
+    }
+    handleObserverRecords(parentElem, observerByElement.get(parentElem).takeRecords());
+  }
+});
+
+/***/ }),
+
 /***/ "./src/Helper/gridCheckboxHelper.js":
 /*!******************************************!*\
   !*** ./src/Helper/gridCheckboxHelper.js ***!
@@ -1757,39 +2000,55 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/esnext.json.parse.js */ "./node_modules/core-js/modules/esnext.json.parse.js");
 /* harmony import */ var core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_json_parse_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
 
-class AtkServerSentEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["default"] {
+
+class AtkServerSentEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_3__["default"] {
   main() {
     const element = this.$el;
     const hasLoader = this.settings.showLoader;
+    const stateContext = external_jquery__WEBPACK_IMPORTED_MODULE_1___default()(this.settings.stateContext ?? element);
     this.source = new EventSource(this.settings.url);
     if (hasLoader) {
-      element.addClass('loading');
+      stateContext.addClass('loading');
     }
     this.source.addEventListener('message', e => {
-      atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
+      atk__WEBPACK_IMPORTED_MODULE_2__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
     });
     this.source.addEventListener('error', e => {
-      if (e.eventPhase === EventSource.CLOSED) {
-        this.source.close();
-        if (hasLoader) {
-          element.removeClass('loading');
-        }
-      }
+      this.stop();
     });
     this.source.addEventListener('atkSseAction', e => {
-      atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
+      atk__WEBPACK_IMPORTED_MODULE_2__["default"].apiService.atkProcessExternalResponse(JSON.parse(e.data));
     });
 
+    // fix https://github.com/atk4/ui/issues/393
+    const ownerElem = stateContext[0];
+    const ownerRemoveHandler = () => this.stop();
+    atk__WEBPACK_IMPORTED_MODULE_2__["default"].elementRemoveObserver.addHandler(ownerElem, ownerRemoveHandler);
+
     // prevent "The connection to http://xxx was interrupted while the page was loading." browser console warning
-    window.addEventListener('beforeunload', () => this.source.close());
+    const windowUnloadHandler = () => this.source.close();
+    window.addEventListener('beforeunload', windowUnloadHandler);
+    const intervalId = setInterval(() => {
+      if (this.source.readyState === EventSource.CLOSED) {
+        clearInterval(intervalId);
+        atk__WEBPACK_IMPORTED_MODULE_2__["default"].elementRemoveObserver.removeHandler(ownerElem, ownerRemoveHandler);
+        window.removeEventListener('beforeunload', windowUnloadHandler);
+      }
+    }, 250);
   }
   stop() {
+    const wasActive = this.source.readyState !== EventSource.CLOSED;
     this.source.close();
+    if (wasActive) {
+      console.warn('SSE plugin - request aborted');
+    }
     if (this.settings.showLoader) {
       this.$el.removeClass('loading');
     }
@@ -1797,7 +2056,7 @@ class AtkServerSentEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_
 }
 AtkServerSentEventPlugin.DEFAULTS = {
   url: null,
-  urlOptions: {},
+  stateContext: null,
   showLoader: false
 };
 
@@ -2040,6 +2299,7 @@ class ApiService {
   getDefaultFomanticUiSettings() {
     return [{}, {
       // override supported via "../setupFomanticUi.js", both callbacks are always evaluated
+      onRequest: this.onRequest,
       successTest: this.successTest,
       onFailure: this.onFailure,
       onSuccess: this.onSuccess,
@@ -2059,6 +2319,20 @@ class ApiService {
       eval('\'use strict\'; (() => {' + code + '})()'); // eslint-disable-line no-eval
     }).call(thisObject);
   }
+  onRequest(promise, xhr) {
+    // fix https://github.com/atk4/ui/issues/393
+    const ownerRemoveHandler = () => xhr.abort();
+    atk__WEBPACK_IMPORTED_MODULE_6__["default"].elementRemoveObserver.addHandler(this, ownerRemoveHandler);
+
+    // Fomantic-UI API onComplete callback is executed last, register custom handler to be executed first
+    // relies on https://github.com/jquery/jquery/blob/3.6.4/src/ajax.js#L805-L809
+    const deferredFilter = () => {
+      atk__WEBPACK_IMPORTED_MODULE_6__["default"].elementRemoveObserver.removeHandler(this, ownerRemoveHandler);
+      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.onCompleteBefore.apply(this, xhr);
+    };
+    xhr.then(deferredFilter, deferredFilter);
+  }
+  onCompleteBefore(xhr) {}
 
   /**
    * Check server response.
@@ -2127,6 +2401,7 @@ class ApiService {
           } else {
             $target.replaceWith(response.html);
           }
+          atk__WEBPACK_IMPORTED_MODULE_6__["default"].elementRemoveObserver.handleMutationQueueImmediately($target[0]);
         }
         if (response.atkjs) {
           atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalJsCode(this, response.atkjs);
@@ -3655,6 +3930,11 @@ const fomanticUiServicesMap = {
             const origValue = obj[prop];
             if (forcedSettings[prop] === undefined) {
               obj[prop] = value;
+            } else if (name === 'api' && prop === 'onRequest') {
+              obj[prop] = function (promise, xhr) {
+                origValue(promise, xhr);
+                return value.call(this, promise, xhr);
+              };
             } else if (name === 'api' && prop === 'successTest') {
               obj[prop] = function (response) {
                 const resOrig = origValue(response);
@@ -3852,11 +4132,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var mitt__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mitt */ "./node_modules/mitt/dist/mitt.mjs");
-/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _Helper_gridCheckboxHelper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Helper/gridCheckboxHelper */ "./src/Helper/gridCheckboxHelper.js");
-/* harmony import */ var _Helper_tableDropdownHelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Helper/tableDropdownHelper */ "./src/Helper/tableDropdownHelper.js");
-/* harmony import */ var _Helper_urlHelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Helper/urlHelper */ "./src/Helper/urlHelper.js");
+/* harmony import */ var _Helper_elementRemoveObserver__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Helper/elementRemoveObserver */ "./src/Helper/elementRemoveObserver.js");
+/* harmony import */ var _Helper_gridCheckboxHelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Helper/gridCheckboxHelper */ "./src/Helper/gridCheckboxHelper.js");
+/* harmony import */ var _Helper_tableDropdownHelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Helper/tableDropdownHelper */ "./src/Helper/tableDropdownHelper.js");
+/* harmony import */ var _Helper_urlHelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Helper/urlHelper */ "./src/Helper/urlHelper.js");
+
 
 
 
@@ -3911,7 +4193,7 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].createDebouncedFx = function (func, 
     }, 25);
     (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().active)++;
   }
-  lodashDebouncedFx = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_6__["default"])(func, wait, options);
+  lodashDebouncedFx = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_7__["default"])(func, wait, options);
   function debouncedFx() {
     if (timerId === null) {
       createTimer();
@@ -3933,9 +4215,10 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].utils = {
     window.location = atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper.appendParams(url, params);
   }
 };
-atk__WEBPACK_IMPORTED_MODULE_2__["default"].gridCheckboxHelper = _Helper_gridCheckboxHelper__WEBPACK_IMPORTED_MODULE_3__["default"];
-atk__WEBPACK_IMPORTED_MODULE_2__["default"].tableDropdownHelper = _Helper_tableDropdownHelper__WEBPACK_IMPORTED_MODULE_4__["default"];
-atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper = _Helper_urlHelper__WEBPACK_IMPORTED_MODULE_5__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].elementRemoveObserver = _Helper_elementRemoveObserver__WEBPACK_IMPORTED_MODULE_3__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].gridCheckboxHelper = _Helper_gridCheckboxHelper__WEBPACK_IMPORTED_MODULE_4__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].tableDropdownHelper = _Helper_tableDropdownHelper__WEBPACK_IMPORTED_MODULE_5__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper = _Helper_urlHelper__WEBPACK_IMPORTED_MODULE_6__["default"];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
 
 /***/ }),
@@ -23109,6 +23392,25 @@ module.exports = function (argument) {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/a-map.js":
+/*!*************************************************!*\
+  !*** ./node_modules/core-js/internals/a-map.js ***!
+  \*************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var has = (__webpack_require__(/*! ../internals/map-helpers */ "./node_modules/core-js/internals/map-helpers.js").has);
+
+// Perform ? RequireInternalSlot(M, [[MapData]])
+module.exports = function (it) {
+  has(it);
+  return it;
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/a-possible-prototype.js":
 /*!****************************************************************!*\
   !*** ./node_modules/core-js/internals/a-possible-prototype.js ***!
@@ -28654,6 +28956,33 @@ module.exports = {
 
 /***/ }),
 
+/***/ "./node_modules/core-js/internals/map-iterate.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/core-js/internals/map-iterate.js ***!
+  \*******************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "./node_modules/core-js/internals/function-uncurry-this.js");
+var iterateSimple = __webpack_require__(/*! ../internals/iterate-simple */ "./node_modules/core-js/internals/iterate-simple.js");
+var MapHelpers = __webpack_require__(/*! ../internals/map-helpers */ "./node_modules/core-js/internals/map-helpers.js");
+
+var Map = MapHelpers.Map;
+var MapPrototype = MapHelpers.proto;
+var forEach = uncurryThis(MapPrototype.forEach);
+var entries = uncurryThis(MapPrototype.entries);
+var next = entries(new Map()).next;
+
+module.exports = function (map, fn, interruptible) {
+  return interruptible ? iterateSimple({ iterator: entries(map), next: next }, function (entry) {
+    return fn(entry[1], entry[0]);
+  }) : forEach(map, fn);
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/core-js/internals/math-expm1.js":
 /*!******************************************************!*\
   !*** ./node_modules/core-js/internals/math-expm1.js ***!
@@ -30397,6 +30726,24 @@ module.exports = function (name) {
   if (!DESCRIPTORS) return global[name];
   var descriptor = getOwnPropertyDescriptor(global, name);
   return descriptor && descriptor.value;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/internals/same-value-zero.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/core-js/internals/same-value-zero.js ***!
+  \***********************************************************/
+/***/ ((module) => {
+
+"use strict";
+
+// `SameValueZero` abstract operation
+// https://tc39.es/ecma262/#sec-samevaluezero
+module.exports = function (x, y) {
+  // eslint-disable-next-line no-self-compare -- NaN check
+  return x === y || x !== x && y !== y;
 };
 
 
@@ -42659,6 +43006,451 @@ var PROPER_BASE_PARSE = NATIVE_SYMBOL && !fails(function () {
 $({ target: 'JSON', stat: true, forced: NO_SOURCE_SUPPORT }, {
   parse: function parse(text, reviver) {
     return PROPER_BASE_PARSE && !isCallable(reviver) ? nativeParse(text) : $parse(text, reviver);
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.map.delete-all.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.map.delete-all.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var aMap = __webpack_require__(/*! ../internals/a-map */ "./node_modules/core-js/internals/a-map.js");
+var remove = (__webpack_require__(/*! ../internals/map-helpers */ "./node_modules/core-js/internals/map-helpers.js").remove);
+
+// `Map.prototype.deleteAll` method
+// https://github.com/tc39/proposal-collection-methods
+$({ target: 'Map', proto: true, real: true, forced: true }, {
+  deleteAll: function deleteAll(/* ...elements */) {
+    var collection = aMap(this);
+    var allDeleted = true;
+    var wasDeleted;
+    for (var k = 0, len = arguments.length; k < len; k++) {
+      wasDeleted = remove(collection, arguments[k]);
+      allDeleted = allDeleted && wasDeleted;
+    } return !!allDeleted;
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.map.emplace.js":
+/*!************************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.map.emplace.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var aMap = __webpack_require__(/*! ../internals/a-map */ "./node_modules/core-js/internals/a-map.js");
+var MapHelpers = __webpack_require__(/*! ../internals/map-helpers */ "./node_modules/core-js/internals/map-helpers.js");
+
+var get = MapHelpers.get;
+var has = MapHelpers.has;
+var set = MapHelpers.set;
+
+// `Map.prototype.emplace` method
+// https://github.com/tc39/proposal-upsert
+$({ target: 'Map', proto: true, real: true, forced: true }, {
+  emplace: function emplace(key, handler) {
+    var map = aMap(this);
+    var value, inserted;
+    if (has(map, key)) {
+      value = get(map, key);
+      if ('update' in handler) {
+        value = handler.update(value, key, map);
+        set(map, key, value);
+      } return value;
+    }
+    inserted = handler.insert(key, map);
+    set(map, key, inserted);
+    return inserted;
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.map.every.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.map.every.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var bind = __webpack_require__(/*! ../internals/function-bind-context */ "./node_modules/core-js/internals/function-bind-context.js");
+var aMap = __webpack_require__(/*! ../internals/a-map */ "./node_modules/core-js/internals/a-map.js");
+var iterate = __webpack_require__(/*! ../internals/map-iterate */ "./node_modules/core-js/internals/map-iterate.js");
+
+// `Map.prototype.every` method
+// https://github.com/tc39/proposal-collection-methods
+$({ target: 'Map', proto: true, real: true, forced: true }, {
+  every: function every(callbackfn /* , thisArg */) {
+    var map = aMap(this);
+    var boundFunction = bind(callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+    return iterate(map, function (value, key) {
+      if (!boundFunction(value, key, map)) return false;
+    }, true) !== false;
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.map.filter.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.map.filter.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var bind = __webpack_require__(/*! ../internals/function-bind-context */ "./node_modules/core-js/internals/function-bind-context.js");
+var aMap = __webpack_require__(/*! ../internals/a-map */ "./node_modules/core-js/internals/a-map.js");
+var MapHelpers = __webpack_require__(/*! ../internals/map-helpers */ "./node_modules/core-js/internals/map-helpers.js");
+var iterate = __webpack_require__(/*! ../internals/map-iterate */ "./node_modules/core-js/internals/map-iterate.js");
+
+var Map = MapHelpers.Map;
+var set = MapHelpers.set;
+
+// `Map.prototype.filter` method
+// https://github.com/tc39/proposal-collection-methods
+$({ target: 'Map', proto: true, real: true, forced: true }, {
+  filter: function filter(callbackfn /* , thisArg */) {
+    var map = aMap(this);
+    var boundFunction = bind(callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+    var newMap = new Map();
+    iterate(map, function (value, key) {
+      if (boundFunction(value, key, map)) set(newMap, key, value);
+    });
+    return newMap;
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.map.find-key.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.map.find-key.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var bind = __webpack_require__(/*! ../internals/function-bind-context */ "./node_modules/core-js/internals/function-bind-context.js");
+var aMap = __webpack_require__(/*! ../internals/a-map */ "./node_modules/core-js/internals/a-map.js");
+var iterate = __webpack_require__(/*! ../internals/map-iterate */ "./node_modules/core-js/internals/map-iterate.js");
+
+// `Map.prototype.findKey` method
+// https://github.com/tc39/proposal-collection-methods
+$({ target: 'Map', proto: true, real: true, forced: true }, {
+  findKey: function findKey(callbackfn /* , thisArg */) {
+    var map = aMap(this);
+    var boundFunction = bind(callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+    var result = iterate(map, function (value, key) {
+      if (boundFunction(value, key, map)) return { key: key };
+    }, true);
+    return result && result.key;
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.map.find.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.map.find.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var bind = __webpack_require__(/*! ../internals/function-bind-context */ "./node_modules/core-js/internals/function-bind-context.js");
+var aMap = __webpack_require__(/*! ../internals/a-map */ "./node_modules/core-js/internals/a-map.js");
+var iterate = __webpack_require__(/*! ../internals/map-iterate */ "./node_modules/core-js/internals/map-iterate.js");
+
+// `Map.prototype.find` method
+// https://github.com/tc39/proposal-collection-methods
+$({ target: 'Map', proto: true, real: true, forced: true }, {
+  find: function find(callbackfn /* , thisArg */) {
+    var map = aMap(this);
+    var boundFunction = bind(callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+    var result = iterate(map, function (value, key) {
+      if (boundFunction(value, key, map)) return { value: value };
+    }, true);
+    return result && result.value;
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.map.includes.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.map.includes.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var sameValueZero = __webpack_require__(/*! ../internals/same-value-zero */ "./node_modules/core-js/internals/same-value-zero.js");
+var aMap = __webpack_require__(/*! ../internals/a-map */ "./node_modules/core-js/internals/a-map.js");
+var iterate = __webpack_require__(/*! ../internals/map-iterate */ "./node_modules/core-js/internals/map-iterate.js");
+
+// `Map.prototype.includes` method
+// https://github.com/tc39/proposal-collection-methods
+$({ target: 'Map', proto: true, real: true, forced: true }, {
+  includes: function includes(searchElement) {
+    return iterate(aMap(this), function (value) {
+      if (sameValueZero(value, searchElement)) return true;
+    }, true) === true;
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.map.key-of.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.map.key-of.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var aMap = __webpack_require__(/*! ../internals/a-map */ "./node_modules/core-js/internals/a-map.js");
+var iterate = __webpack_require__(/*! ../internals/map-iterate */ "./node_modules/core-js/internals/map-iterate.js");
+
+// `Map.prototype.keyOf` method
+// https://github.com/tc39/proposal-collection-methods
+$({ target: 'Map', proto: true, real: true, forced: true }, {
+  keyOf: function keyOf(searchElement) {
+    var result = iterate(aMap(this), function (value, key) {
+      if (value === searchElement) return { key: key };
+    }, true);
+    return result && result.key;
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.map.map-keys.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.map.map-keys.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var bind = __webpack_require__(/*! ../internals/function-bind-context */ "./node_modules/core-js/internals/function-bind-context.js");
+var aMap = __webpack_require__(/*! ../internals/a-map */ "./node_modules/core-js/internals/a-map.js");
+var MapHelpers = __webpack_require__(/*! ../internals/map-helpers */ "./node_modules/core-js/internals/map-helpers.js");
+var iterate = __webpack_require__(/*! ../internals/map-iterate */ "./node_modules/core-js/internals/map-iterate.js");
+
+var Map = MapHelpers.Map;
+var set = MapHelpers.set;
+
+// `Map.prototype.mapKeys` method
+// https://github.com/tc39/proposal-collection-methods
+$({ target: 'Map', proto: true, real: true, forced: true }, {
+  mapKeys: function mapKeys(callbackfn /* , thisArg */) {
+    var map = aMap(this);
+    var boundFunction = bind(callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+    var newMap = new Map();
+    iterate(map, function (value, key) {
+      set(newMap, boundFunction(value, key, map), value);
+    });
+    return newMap;
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.map.map-values.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.map.map-values.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var bind = __webpack_require__(/*! ../internals/function-bind-context */ "./node_modules/core-js/internals/function-bind-context.js");
+var aMap = __webpack_require__(/*! ../internals/a-map */ "./node_modules/core-js/internals/a-map.js");
+var MapHelpers = __webpack_require__(/*! ../internals/map-helpers */ "./node_modules/core-js/internals/map-helpers.js");
+var iterate = __webpack_require__(/*! ../internals/map-iterate */ "./node_modules/core-js/internals/map-iterate.js");
+
+var Map = MapHelpers.Map;
+var set = MapHelpers.set;
+
+// `Map.prototype.mapValues` method
+// https://github.com/tc39/proposal-collection-methods
+$({ target: 'Map', proto: true, real: true, forced: true }, {
+  mapValues: function mapValues(callbackfn /* , thisArg */) {
+    var map = aMap(this);
+    var boundFunction = bind(callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+    var newMap = new Map();
+    iterate(map, function (value, key) {
+      set(newMap, key, boundFunction(value, key, map));
+    });
+    return newMap;
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.map.merge.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.map.merge.js ***!
+  \**********************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var aMap = __webpack_require__(/*! ../internals/a-map */ "./node_modules/core-js/internals/a-map.js");
+var iterate = __webpack_require__(/*! ../internals/iterate */ "./node_modules/core-js/internals/iterate.js");
+var set = (__webpack_require__(/*! ../internals/map-helpers */ "./node_modules/core-js/internals/map-helpers.js").set);
+
+// `Map.prototype.merge` method
+// https://github.com/tc39/proposal-collection-methods
+$({ target: 'Map', proto: true, real: true, arity: 1, forced: true }, {
+  // eslint-disable-next-line no-unused-vars -- required for `.length`
+  merge: function merge(iterable /* ...iterables */) {
+    var map = aMap(this);
+    var argumentsLength = arguments.length;
+    var i = 0;
+    while (i < argumentsLength) {
+      iterate(arguments[i++], function (key, value) {
+        set(map, key, value);
+      }, { AS_ENTRIES: true });
+    }
+    return map;
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.map.reduce.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.map.reduce.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var aCallable = __webpack_require__(/*! ../internals/a-callable */ "./node_modules/core-js/internals/a-callable.js");
+var aMap = __webpack_require__(/*! ../internals/a-map */ "./node_modules/core-js/internals/a-map.js");
+var iterate = __webpack_require__(/*! ../internals/map-iterate */ "./node_modules/core-js/internals/map-iterate.js");
+
+var $TypeError = TypeError;
+
+// `Map.prototype.reduce` method
+// https://github.com/tc39/proposal-collection-methods
+$({ target: 'Map', proto: true, real: true, forced: true }, {
+  reduce: function reduce(callbackfn /* , initialValue */) {
+    var map = aMap(this);
+    var noInitial = arguments.length < 2;
+    var accumulator = noInitial ? undefined : arguments[1];
+    aCallable(callbackfn);
+    iterate(map, function (value, key) {
+      if (noInitial) {
+        noInitial = false;
+        accumulator = value;
+      } else {
+        accumulator = callbackfn(accumulator, value, key, map);
+      }
+    });
+    if (noInitial) throw new $TypeError('Reduce of empty map with no initial value');
+    return accumulator;
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.map.some.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.map.some.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var bind = __webpack_require__(/*! ../internals/function-bind-context */ "./node_modules/core-js/internals/function-bind-context.js");
+var aMap = __webpack_require__(/*! ../internals/a-map */ "./node_modules/core-js/internals/a-map.js");
+var iterate = __webpack_require__(/*! ../internals/map-iterate */ "./node_modules/core-js/internals/map-iterate.js");
+
+// `Map.prototype.some` method
+// https://github.com/tc39/proposal-collection-methods
+$({ target: 'Map', proto: true, real: true, forced: true }, {
+  some: function some(callbackfn /* , thisArg */) {
+    var map = aMap(this);
+    var boundFunction = bind(callbackfn, arguments.length > 1 ? arguments[1] : undefined);
+    return iterate(map, function (value, key) {
+      if (boundFunction(value, key, map)) return true;
+    }, true) === true;
+  }
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/core-js/modules/esnext.map.update.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/core-js/modules/esnext.map.update.js ***!
+  \***********************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var $ = __webpack_require__(/*! ../internals/export */ "./node_modules/core-js/internals/export.js");
+var aCallable = __webpack_require__(/*! ../internals/a-callable */ "./node_modules/core-js/internals/a-callable.js");
+var aMap = __webpack_require__(/*! ../internals/a-map */ "./node_modules/core-js/internals/a-map.js");
+var MapHelpers = __webpack_require__(/*! ../internals/map-helpers */ "./node_modules/core-js/internals/map-helpers.js");
+
+var $TypeError = TypeError;
+var get = MapHelpers.get;
+var has = MapHelpers.has;
+var set = MapHelpers.set;
+
+// `Map.prototype.update` method
+// https://github.com/tc39/proposal-collection-methods
+$({ target: 'Map', proto: true, real: true, forced: true }, {
+  update: function update(key, callback /* , thunk */) {
+    var map = aMap(this);
+    var length = arguments.length;
+    aCallable(callback);
+    var isPresentInMap = has(map, key);
+    if (!isPresentInMap && length < 3) {
+      throw new $TypeError('Updating absent value');
+    }
+    var value = isPresentInMap ? get(map, key) : aCallable(length > 2 ? arguments[2] : undefined)(key, map);
+    set(map, key, callback(value, key, map));
+    return map;
   }
 });
 
