@@ -148,8 +148,7 @@ walkFilesSync(__dirname, (f) => {
             let pathRel = null;
             if (m2.startsWith('http://') || m2.startsWith('https://') || m2.startsWith('//')) {
                 const pathMap = {
-                    // TODO https://github.com/fomantic/Fomantic-UI/pull/3169
-                    'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/': path.join(__dirname, '@twemoji/api/assets/svg/'),
+                    'https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/svg/': path.join(__dirname, '@twemoji/api/assets/svg/'),
                 };
 
                 const pathMapKeys = Object.keys(pathMap);
