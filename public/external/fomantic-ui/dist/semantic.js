@@ -1,9 +1,9 @@
 /*
- * # Fomantic UI - 2.9.4-beta.35+d05c619
+ * # Fomantic UI - 2.9.4-beta.101+96ed453
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
- * Copyright 2024 Contributors
+ * Copyright 2025 Contributors
  * Released under the MIT license
  * https://opensource.org/licenses/MIT
  *
@@ -486,6 +486,7 @@
                 element     = this,
 
                 formErrors  = [],
+                formErrorsTracker = {},
                 keyHeldDown = false,
 
                 // set at run-time
@@ -1396,7 +1397,7 @@
                                     $prompt.css('display', 'none');
                                 }
                                 $prompt
-                                    .appendTo($fieldGroup)
+                                    .appendTo($fieldGroup.filter('.' + className.error))
                                 ;
                             }
                             $prompt
@@ -1733,6 +1734,7 @@
                         $module.removeClass(className.initial);
                         // reset errors
                         formErrors = [];
+                        formErrorsTracker = {};
                         if (module.determine.isValid()) {
                             module.debug('Form has no validation errors, submitting');
                             module.set.success();
@@ -1798,12 +1800,13 @@
                         var
                             identifier    = field.identifier || fieldName,
                             $field        = module.get.field(identifier),
+                            $fieldGroup = $field.closest($group),
                             $dependsField = field.depends
                                 ? module.get.field(field.depends)
                                 : false,
                             fieldValid  = true,
                             fieldErrors = [],
-                            isDisabled = $field.filter(':not(:disabled)').length === 0,
+                            isDisabled = $field.filter(':not(:disabled)').length === 0 || $fieldGroup.hasClass(className.disabled) || $fieldGroup.parent().hasClass(className.disabled),
                             validationMessage = $field[0].validationMessage,
                             noNativeValidation = field.noNativeValidation || settings.noNativeValidation || $field.filter('[formnovalidate],[novalidate]').length > 0 || $module.filter('[novalidate]').length > 0,
                             errorLimit
@@ -1812,15 +1815,15 @@
                             module.debug('Using field name as identifier', identifier);
                             field.identifier = identifier;
                         }
-                        if (validationMessage && !noNativeValidation) {
+                        if (validationMessage && !noNativeValidation && !isDisabled) {
                             module.debug('Field is natively invalid', identifier);
                             fieldErrors.push(validationMessage);
                             fieldValid = false;
                             if (showErrors) {
-                                $field.closest($group).addClass(className.error);
+                                $fieldGroup.addClass(className.error);
                             }
                         } else if (showErrors) {
-                            $field.closest($group).removeClass(className.error);
+                            $fieldGroup.removeClass(className.error);
                         }
                         if (isDisabled) {
                             module.debug('Field is disabled. Skipping', identifier);
@@ -1835,7 +1838,22 @@
                                     var invalidFields = module.validate.rule(field, rule, true) || [];
                                     if (invalidFields.length > 0) {
                                         module.debug('Field is invalid', identifier, rule.type);
-                                        fieldErrors.push(module.get.prompt(rule, field));
+                                        var fieldError = module.get.prompt(rule, field);
+                                        if (!settings.inline) {
+                                            if (
+                                                // Always allow the first error prompt for new field identifiers
+                                                (!(identifier in formErrorsTracker)
+                                                // Also allow multiple error prompts per field identifier but make sure each prompt is unique
+                                                || formErrorsTracker[identifier].indexOf(fieldError) === -1)
+                                                // Limit the number of unique error prompts for every field identifier if specified
+                                                && (!errorLimit || (formErrorsTracker[identifier] || []).length < errorLimit)
+                                            ) {
+                                                fieldErrors.push(fieldError);
+                                                (formErrorsTracker[identifier] = formErrorsTracker[identifier] || []).push(fieldError);
+                                            }
+                                        } else {
+                                            fieldErrors.push(fieldError);
+                                        }
                                         fieldValid = false;
                                         if (showErrors) {
                                             $(invalidFields).closest($group).addClass(className.error);
@@ -1850,7 +1868,7 @@
                                 settings.onValid.call($field);
                             }
                         } else {
-                            if (showErrors) {
+                            if (showErrors && fieldErrors.length > 0) {
                                 formErrors = formErrors.concat(fieldErrors);
                                 module.add.prompt(identifier, fieldErrors, true);
                                 settings.onInvalid.call($field, fieldErrors);
@@ -3310,7 +3328,17 @@
 
                 destroy: function () {
                     module.verbose('Destroying previous calendar for', element);
-                    $module.removeData(moduleNamespace);
+                    $module.removeData([
+                        metadata.date,
+                        metadata.focusDate,
+                        metadata.startDate,
+                        metadata.endDate,
+                        metadata.minDate,
+                        metadata.maxDate,
+                        metadata.mode,
+                        metadata.monthOffset,
+                        moduleNamespace,
+                    ]);
                     module.unbind.events();
                     module.disconnect.classObserver();
                 },
@@ -4000,24 +4028,32 @@
                     formattedDate: function (format, date) {
                         return module.helper.dateFormat(format || formatter[settings.type], date || module.get.date());
                     },
-                    date: function () {
-                        return module.helper.sanitiseDate($module.data(metadata.date)) || null;
+                    date: function (format) {
+                        return module.helper.dateObjectOrFormatted(format, $module.data(metadata.date));
                     },
                     inputDate: function () {
                         return $input.val();
                     },
-                    focusDate: function () {
-                        return $module.data(metadata.focusDate) || null;
+                    focusDate: function (format) {
+                        return module.helper.dateObjectOrFormatted(format, $module.data(metadata.focusDate));
                     },
-                    startDate: function () {
+                    startDate: function (format) {
                         var startModule = module.get.calendarModule(settings.startCalendar);
 
-                        return (startModule ? startModule.get.date() : $module.data(metadata.startDate)) || null;
+                        if (startModule) {
+                            return startModule.get.date(format);
+                        }
+
+                        return module.helper.dateObjectOrFormatted(format, $module.data(metadata.startDate));
                     },
-                    endDate: function () {
+                    endDate: function (format) {
                         var endModule = module.get.calendarModule(settings.endCalendar);
 
-                        return (endModule ? endModule.get.date() : $module.data(metadata.endDate)) || null;
+                        if (endModule) {
+                            return endModule.get.date(format);
+                        }
+
+                        return module.helper.dateObjectOrFormatted(format, $module.data(metadata.endDate));
                     },
                     minDate: function () {
                         return $module.data(metadata.minDate) || null;
@@ -4332,6 +4368,20 @@
 
                             return match.slice(1, -1);
                         });
+                    },
+                    dateObjectOrFormatted: function (format, date) {
+                        format = format || '';
+                        date = module.helper.sanitiseDate(date) || null;
+
+                        if (!date) {
+                            return null;
+                        }
+
+                        if (format === '') {
+                            return date;
+                        }
+
+                        return module.helper.dateFormat(format, date);
                     },
                     isDisabled: function (date, mode) {
                         return (mode === 'day' || mode === 'month' || mode === 'year' || mode === 'hour') && (((mode === 'day' && settings.disabledDaysOfWeek.indexOf(date.getDay()) !== -1) || settings.disabledDates.some(function (d) {
@@ -4897,7 +4947,8 @@
                 text = settings.monthFirst || !/^\d{1,2}[./-]/.test(text) ? text : text.replace(/[./-]/g, '/').replace(/(\d+)\/(\d+)/, '$2/$1');
                 var textDate = new Date(text);
                 var numberOnly = text.match(/^\d+$/) !== null;
-                if (!numberOnly && !isNaN(textDate.getDate())) {
+                var isShortYear = text.match(/^(?:\d{1,2}[./-]){2}\d{1,2}$/) !== null;
+                if (!isShortYear && !numberOnly && !isNaN(textDate.getDate())) {
                     return textDate;
                 }
                 text = text.toLowerCase();
@@ -6943,6 +6994,9 @@
                             module.change.values(settings.values);
                             module.remove.initialLoad();
                         }
+                        if (module.get.placeholderText() !== '') {
+                            module.set.placeholderText();
+                        }
 
                         module.refreshData();
 
@@ -7609,7 +7663,7 @@
                                 }
                                 if (module.is.multiple()) {
                                     $.each(preSelected, function (index, value) {
-                                        $item.filter('[data-value="' + value + '"]')
+                                        $item.filter('[data-' + metadata.value + '="' + value + '"]')
                                             .addClass(className.filtered)
                                         ;
                                     });
@@ -8044,7 +8098,9 @@
                             if (module.is.searchSelection()) {
                                 module.remove.searchTerm();
                             }
-                            module.hide();
+                            if (settings.collapseOnClearable) {
+                                module.hide();
+                            }
                             event.stopPropagation();
                         },
                     },
@@ -8431,7 +8487,7 @@
                                     module.verbose('Selecting item from keyboard shortcut', $selectedItem);
                                     module.event.item.click.call($selectedItem, event);
                                 }
-                                if (module.is.searchSelection()) {
+                                if (module.is.searchSelection() && !settings.keepSearchTerm) {
                                     module.remove.searchTerm();
                                 }
                                 if (module.is.multiple()) {
@@ -9493,7 +9549,7 @@
                             module.set.scrollPosition($nextValue);
                             $selectedItem.removeClass(className.selected);
                             $nextValue.addClass(className.selected);
-                            if (settings.selectOnKeydown && module.is.single() && !$nextItem.hasClass(className.actionable)) {
+                            if (settings.selectOnKeydown && module.is.single() && (!$nextItem || !$nextItem.hasClass(className.actionable))) {
                                 module.set.selectedItem($nextValue);
                             }
                         }
@@ -9614,19 +9670,27 @@
                         $selectedItem = settings.allowAdditions
                             ? $selectedItem || module.get.itemWithAdditions(value)
                             : $selectedItem || module.get.item(value);
+                        if (!$selectedItem && value !== undefined) {
+                            return false;
+                        }
+                        if (isMultiple) {
+                            if (!keepSearchTerm) {
+                                module.remove.searchWidth();
+                            }
+                            if (settings.useLabels) {
+                                module.remove.selectedItem();
+                                if (value === undefined) {
+                                    module.remove.labels($module.find(selector.label), true);
+                                }
+                            }
+                        } else {
+                            module.remove.activeItem();
+                            module.remove.selectedItem();
+                        }
                         if (!$selectedItem) {
                             return false;
                         }
                         module.debug('Setting selected menu item to', $selectedItem);
-                        if (module.is.multiple() && !keepSearchTerm) {
-                            module.remove.searchWidth();
-                        }
-                        if (module.is.single()) {
-                            module.remove.activeItem();
-                            module.remove.selectedItem();
-                        } else if (settings.useLabels) {
-                            module.remove.selectedItem();
-                        }
                         // select each item
                         $selectedItem
                             .each(function () {
@@ -10276,7 +10340,12 @@
                         return $selectedMenu.hasClass(className.leftward);
                     },
                     clearable: function () {
-                        return $module.hasClass(className.clearable) || settings.clearable;
+                        var hasClearableClass = $module.hasClass(className.clearable);
+                        if (!hasClearableClass && settings.clearable) {
+                            $module.addClass(className.clearable);
+                        }
+
+                        return hasClearableClass || settings.clearable;
                     },
                     disabled: function () {
                         return $module.hasClass(className.disabled);
@@ -10897,6 +10966,7 @@
         headerDivider: true, // whether option headers should have an additional divider line underneath when converted from <select> <optgroup>
 
         collapseOnActionable: true, // whether the dropdown should collapse upon selection of an actionable item
+        collapseOnClearable: false, // whether the dropdown should collapse upon clicking the clearable icon
 
         // label settings on multi-select
         label: {
@@ -10979,9 +11049,11 @@
             descriptionVertical: 'descriptionVertical', // whether description should be vertical
             value: 'value', // actual dropdown value
             text: 'text', // displayed text when selected
+            data: 'data', // custom data attributes
             type: 'type', // type of dropdown element
             image: 'image', // optional image path
             imageClass: 'imageClass', // optional individual class for image
+            alt: 'alt', // optional alt text for image
             icon: 'icon', // optional icon name
             iconClass: 'iconClass', // optional individual class for icon (for example to use flag instead)
             class: 'class', // optional individual class for item/header
@@ -11123,9 +11195,21 @@
             $.each(values, function (index, option) {
                 var
                     itemType = option[fields.type] || 'item',
-                    isMenu = itemType.indexOf('menu') !== -1
+                    isMenu = itemType.indexOf('menu') !== -1,
+                    maybeData = '',
+                    dataObject = option[fields.data]
                 ;
-
+                if (dataObject) {
+                    var dataKey,
+                        dataKeyEscaped
+                    ;
+                    for (dataKey in dataObject) {
+                        dataKeyEscaped = String(dataKey).replace(/\W/g, '');
+                        if (Object.prototype.hasOwnProperty.call(dataObject, dataKey) && ['text', 'value'].indexOf(dataKeyEscaped.toLowerCase()) === -1) {
+                            maybeData += ' data-' + dataKeyEscaped + '="' + deQuote(String(dataObject[dataKey])) + '"';
+                        }
+                    }
+                }
                 if (itemType === 'item' || isMenu) {
                     var
                         maybeText = option[fields.text]
@@ -11142,12 +11226,12 @@
                             : '',
                         hasDescription = escape(option[fields.description] || '', preserveHTML) !== ''
                     ;
-                    html += '<div class="' + deQuote(maybeActionable + maybeDisabled + maybeDescriptionVertical + (option[fields.class] || className.item)) + '" data-value="' + deQuote(option[fields.value], true) + '"' + maybeText + '>';
+                    html += '<div class="' + deQuote(maybeActionable + maybeDisabled + maybeDescriptionVertical + (option[fields.class] || className.item)) + '" data-value="' + deQuote(option[fields.value], true) + '"' + maybeText + maybeData + '>';
                     if (isMenu) {
                         html += '<i class="' + (itemType.indexOf('left') !== -1 ? 'left' : '') + ' dropdown icon"></i>';
                     }
                     if (option[fields.image]) {
-                        html += '<img class="' + deQuote(option[fields.imageClass] || className.image) + '" src="' + deQuote(option[fields.image]) + '">';
+                        html += '<img class="' + deQuote(option[fields.imageClass] || className.image) + '" src="' + deQuote(option[fields.image]) + (option[fields.alt] ? '" alt="' + deQuote(option[fields.alt]) : '') + '">';
                     }
                     if (option[fields.icon]) {
                         html += '<i class="' + deQuote(option[fields.icon] + ' ' + (option[fields.iconClass] || className.icon)) + '"></i>';
@@ -11326,11 +11410,12 @@
 
                 createPlaceholder: function (placeholder) {
                     var
-                        icon  = module.get.icon()
+                        icon  = module.get.icon(),
+                        alt   = module.get.alt()
                     ;
                     placeholder = placeholder || module.get.placeholder();
-                    $module.html(templates.placeholder(placeholder, icon));
-                    module.debug('Creating placeholder for embed', placeholder, icon);
+                    $module.html(templates.placeholder(placeholder, icon, alt));
+                    module.debug('Creating placeholder for embed', placeholder, icon, alt);
                 },
 
                 createEmbed: function (url) {
@@ -11409,6 +11494,9 @@
                     },
                     placeholder: function () {
                         return settings.placeholder || $module.data(metadata.placeholder);
+                    },
+                    alt: function () {
+                        return settings.alt || $module.data(metadata.alt);
                     },
                     icon: function () {
                         return settings.icon || ($module.data(metadata.icon) !== undefined
@@ -11495,6 +11583,7 @@
                             .removeData(metadata.id)
                             .removeData(metadata.icon)
                             .removeData(metadata.placeholder)
+                            .removeData(metadata.alt)
                             .removeData(metadata.source)
                             .removeData(metadata.url)
                         ;
@@ -11764,6 +11853,8 @@
         source: false,
         url: false,
         id: false,
+        placeholder: false,
+        alt: false,
 
         // standard video settings
         autoplay: 'auto',
@@ -11786,6 +11877,7 @@
             id: 'id',
             icon: 'icon',
             placeholder: 'placeholder',
+            alt: 'alt',
             source: 'source',
             url: 'url',
         },
@@ -11861,7 +11953,7 @@
                     + ' width="100%" height="100%"'
                     + ' msallowFullScreen allowFullScreen></iframe>';
             },
-            placeholder: function (image, icon) {
+            placeholder: function (image, icon, alt) {
                 var
                     html = '',
                     deQuote = $.fn.embed.settings.templates.deQuote
@@ -11870,7 +11962,7 @@
                     html += '<i class="' + deQuote(icon) + ' icon"></i>';
                 }
                 if (image) {
-                    html += '<img class="placeholder" src="' + deQuote(image) + '">';
+                    html += '<img class="placeholder" src="' + deQuote(image) + (alt ? '" alt="' + deQuote(alt) : '') + '">';
                 }
 
                 return html;
@@ -18165,8 +18257,6 @@
             methodInvoked  = typeof query === 'string',
             queryArguments = [].slice.call(arguments, 1),
 
-            alphabet       = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
-
             SINGLE_STEP     = 1,
             BIG_STEP        = 2,
             NO_STEP         = 0,
@@ -18215,7 +18305,6 @@
                 position,
                 secondPos,
                 offset,
-                precision,
                 gapRatio = 1,
                 previousValue,
 
@@ -18258,6 +18347,7 @@
                     clearInterval(instance.interval);
                     module.unbind.events();
                     module.unbind.slidingEvents();
+                    delete module.cache;
                     $module.removeData(moduleNamespace);
                     instance = undefined;
                 },
@@ -18274,7 +18364,7 @@
                                 + '<div class="thumb"></div>'
                                 + '</div>');
                         }
-                        precision = module.get.precision();
+                        module.clear.cache();
                         $thumb = $module.find('.thumb:not(.second)');
                         if (settings.showThumbTooltip) {
                             $thumb
@@ -18308,8 +18398,14 @@
                                 module.setup.autoLabel();
                             }
 
+                            if (settings.highlightRange) {
+                                $labels.addClass(className.active);
+                            }
+
                             if (settings.showLabelTicks) {
                                 $module.addClass(className.ticked);
+                            } else if ($module.hasClass(className.ticked)) {
+                                settings.showLabelTicks = 'always';
                             }
                         }
                     },
@@ -18344,14 +18440,20 @@
                         } else {
                             $labels = $module.append('<ul class="auto labels"></ul>').find('.labels');
                         }
-                        for (var i = 0, len = module.get.numLabels(); i <= len; i++) {
+                        var step = module.get.step(),
+                            precision = module.get.precision(),
+                            len = module.get.numLabels(),
+                            ignoreLabels = len - (settings.autoAdjustLabels !== 'fixed' ? 0 : module.get.max().toString().length + 4)
+                        ;
+                        for (var i = 0; i <= len; i++) {
                             var
-                                labelText = module.get.label(i),
+                                stepValue =  Math.round(((i * (step === 0 ? 1 : step)) + module.get.min()) * precision) / precision,
+                                labelText = module.get.label(i, stepValue),
                                 showLabel = settings.restrictedLabels.length === 0 || settings.restrictedLabels.indexOf(labelText) >= 0,
                                 $label = labelText !== '' && (showLabel || settings.showLabelTicks === 'always')
-                                    ? (!(i % module.get.gapRatio())
-                                        ? $('<li class="label">' + (showLabel ? labelText : '') + '</li>')
-                                        : $('<li class="halftick label"></li>'))
+                                    ? ((!(i % module.get.gapRatio()) && i < ignoreLabels) || i === len
+                                        ? $('<li/>', { class: className.label, 'data-value': stepValue, html: showLabel ? labelText : '' })
+                                        : $('<li/>', { class: 'halftick label', 'data-value': stepValue }))
                                     : null,
                                 ratio  = i / len
                             ;
@@ -18622,6 +18724,12 @@
                     },
                 },
 
+                clear: {
+                    cache: function () {
+                        module.cache = {};
+                    },
+                },
+
                 resync: function () {
                     module.verbose('Resyncing thumb position based on value');
                     if (module.is.range()) {
@@ -18671,6 +18779,25 @@
                 },
 
                 is: {
+                    prime: function (n) {
+                        if (module.cache['prime' + n] === undefined) {
+                            var p = true;
+                            for (var i = 2, s = Math.sqrt(n); i <= s; i++) {
+                                if (n % i === 0) {
+                                    p = false;
+
+                                    break;
+                                }
+                            }
+                            if (p) {
+                                p = n > 1;
+                            }
+
+                            module.cache['prime' + n] = p;
+                        }
+
+                        return module.cache['prime' + n];
+                    },
                     range: function () {
                         var isRange = $module.hasClass(className.range);
                         if (!isRange && (settings.minRange || settings.maxRange)) {
@@ -18785,62 +18912,87 @@
                         return margin || '0px';
                     },
                     precision: function () {
-                        var
-                            decimalPlaces,
-                            step = module.get.step()
-                        ;
-                        if (step !== 0) {
-                            var split = String(step).split('.');
-                            decimalPlaces = split.length === 2 ? split[1].length : 0;
-                        } else {
-                            decimalPlaces = settings.decimalPlaces;
+                        if (module.cache.precision === undefined) {
+                            var
+                                decimalPlaces,
+                                step = module.get.step()
+                            ;
+                            if (step !== 0) {
+                                var split = String(step).split('.');
+                                decimalPlaces = split.length === 2 ? split[1].length : 0;
+                            } else {
+                                decimalPlaces = settings.decimalPlaces;
+                            }
+                            var precision = Math.pow(10, decimalPlaces);
+                            module.debug('Precision determined', precision);
+                            module.cache.precision = precision;
                         }
-                        var precision = Math.pow(10, decimalPlaces);
-                        module.debug('Precision determined', precision);
 
-                        return precision;
+                        return module.cache.precision;
                     },
                     min: function () {
                         return settings.min;
                     },
                     max: function () {
-                        var
-                            step = module.get.step(),
-                            min = module.get.min(),
-                            precision = module.get.precision(),
-                            quotient = step === 0 ? 0 : Math.floor(Math.round(((settings.max - min) / step) * precision) / precision),
-                            remainder = step === 0 ? 0 : (settings.max - min) % step
-                        ;
+                        if (module.cache.max === undefined) {
+                            var
+                                step = module.get.step(),
+                                min = module.get.min(),
+                                precision = module.get.precision(),
+                                quotient = step === 0 ? 0 : Math.floor(Math.round(((settings.max - min) / step) * precision) / precision),
+                                remainder = step === 0 ? 0 : (settings.max - min) % step
+                            ;
+                            if (remainder > 0) {
+                                module.debug('Max value not divisible by given step. Increasing max value.', settings.max, step);
+                            }
+                            module.cache.max = remainder === 0 ? settings.max : min + quotient * step;
+                        }
 
-                        return remainder === 0 ? settings.max : min + quotient * step;
+                        return module.cache.max;
                     },
                     step: function () {
                         return settings.step;
                     },
                     numLabels: function () {
-                        var step = module.get.step(),
-                            precision = module.get.precision(),
-                            value = Math.round(((module.get.max() - module.get.min()) / (step === 0 ? 1 : step)) * precision) / precision;
-                        module.debug('Determined that there should be ' + value + ' labels');
+                        if (module.cache.numLabels === undefined) {
+                            var step = module.get.step(),
+                                precision = module.get.precision(),
+                                value = Math.round(((module.get.max() - module.get.min()) / (step === 0 ? 1 : step)) * precision) / precision;
+                            module.debug('Determined that there should be ' + value + ' labels');
+                            module.cache.numLabels = value;
+                        }
 
-                        return value;
+                        return module.cache.numLabels;
                     },
                     labelType: function () {
                         return settings.labelType;
                     },
-                    label: function (value) {
-                        if (interpretLabel) {
-                            return interpretLabel(value);
+                    label: function (value, stepValue) {
+                        if (isFunction(interpretLabel)) {
+                            return interpretLabel(value, stepValue, module);
                         }
 
                         switch (settings.labelType) {
                             case settings.labelTypes.number: {
-                                var step = module.get.step();
-
-                                return Math.round(((value * (step === 0 ? 1 : step)) + module.get.min()) * precision) / precision;
+                                return stepValue;
                             }
                             case settings.labelTypes.letter: {
-                                return alphabet[value % 26];
+                                if (value < 0 || module.get.precision() > 1) {
+                                    module.error(error.invalidLetterNumber, value);
+
+                                    return value;
+                                }
+                                var letterLabel = '',
+                                    letters = Array.isArray(settings.letters) ? settings.letters : String(settings.letters).split(''),
+                                    lettersLen = letters.length
+                                ;
+
+                                while (stepValue >= 0) {
+                                    letterLabel = letters[stepValue % lettersLen] + letterLabel;
+                                    stepValue = Math.floor(stepValue / lettersLen) - 1;
+                                }
+
+                                return letterLabel;
                             }
                             default: {
                                 return value;
@@ -18849,6 +19001,9 @@
                     },
                     value: function () {
                         return value;
+                    },
+                    settings: function () {
+                        return settings;
                     },
                     currentThumbValue: function () {
                         return $currThumb !== undefined && $currThumb.hasClass('second') ? module.secondThumbVal : module.thumbVal;
@@ -18894,6 +19049,7 @@
                         if (settings.autoAdjustLabels) {
                             var
                                 numLabels = module.get.numLabels(),
+                                primePlus = module.is.prime(numLabels) ? 1 : 0,
                                 trackLength = module.get.trackLength(),
                                 gapCounter = 1
                             ;
@@ -18903,7 +19059,7 @@
                             // and apply only if the modulo of the operation is an odd number.
                             if (trackLength > 0) {
                                 while ((trackLength / numLabels) * gapCounter < settings.labelDistance) {
-                                    if (!(numLabels % gapCounter)) {
+                                    if (!((numLabels + primePlus) % gapCounter) || settings.autoAdjustLabels === 'fixed') {
                                         gapRatio = gapCounter;
                                     }
                                     gapCounter += 1;
@@ -19041,6 +19197,7 @@
                     },
                     value: function (position) {
                         var
+                            precision = module.get.precision(),
                             startPos = module.is.reversed() ? module.get.trackEndPos() : module.get.trackStartPos(),
                             endPos = module.is.reversed() ? module.get.trackStartPos() : module.get.trackEndPos(),
                             ratio = (position - startPos) / (endPos - startPos),
@@ -19109,6 +19266,30 @@
                 },
 
                 set: {
+                    active: function (thumbVal, secondThumbVal) {
+                        if (settings.highlightRange) {
+                            if (secondThumbVal < thumbVal) {
+                                var tempVal = secondThumbVal;
+                                secondThumbVal = thumbVal;
+                                thumbVal = tempVal;
+                            }
+                            var $children = $labels.find('.label');
+                            $children.each(function (index) {
+                                var
+                                    $child = $(this),
+                                    attrValue = $child.attr('data-value')
+                                ;
+                                if (attrValue) {
+                                    attrValue = parseInt(attrValue, 10);
+                                    if (attrValue >= thumbVal && attrValue <= secondThumbVal) {
+                                        $child.addClass(className.active);
+                                    } else {
+                                        $child.removeClass(className.active);
+                                    }
+                                }
+                            });
+                        }
+                    },
                     value: function (newValue, fireChange) {
                         fireChange = fireChange !== false;
                         var toReset = previousValue === undefined;
@@ -19236,6 +19417,7 @@
                             position = newPos;
                             thumbVal = newValue;
                         }
+                        module.set.active(thumbVal, secondThumbVal);
                         var
                             trackPosValue,
                             thumbPosValue,
@@ -19343,6 +19525,7 @@
                     } else {
                         return settings[name];
                     }
+                    module.clear.cache();
                 },
                 internal: function (name, value) {
                     if ($.isPlainObject(name)) {
@@ -19515,6 +19698,7 @@
             method: 'The method you called is not defined.',
             notrange: 'This slider is not a range slider',
             invalidRanges: 'Invalid range settings (start/end/minRange/maxRange)',
+            invalidLetterNumber: 'Negative values or decimal places for labelType: "letter" are not supported',
         },
 
         metadata: {
@@ -19537,6 +19721,7 @@
         preventCrossover: true,
         fireOnInit: false,
         interpretLabel: false,
+        letters: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
 
         // the decimal place to round to if step is undefined
         decimalPlaces: 2,
@@ -19554,6 +19739,8 @@
             vertical: 'vertical',
             range: 'range',
             smooth: 'smooth',
+            label: 'label',
+            active: 'active',
         },
 
         keys: {
@@ -19566,6 +19753,7 @@
         },
 
         restrictedLabels: [],
+        highlightRange: false,
         showThumbTooltip: false,
         tooltipConfig: {
             position: 'top center',
@@ -20233,6 +20421,7 @@
                             .on('mousedown' + eventNamespace, selector.results, module.event.result.mousedown)
                             .on('mouseup' + eventNamespace, selector.results, module.event.result.mouseup)
                             .on('click' + eventNamespace, selector.result, module.event.result.click)
+                            .on('click' + eventNamespace, selector.remove, module.event.remove.click)
                         ;
                     },
                 },
@@ -20307,6 +20496,12 @@
                             module.debug('Input blurred without user action, closing results');
                             callback();
                         }
+                    },
+                    remove: {
+                        click: function () {
+                            module.clear.value();
+                            $prompt.trigger('focus');
+                        },
                     },
                     result: {
                         mousedown: function () {
@@ -20944,6 +21139,9 @@
                             $module.data(metadata.cache, cache);
                         }
                     },
+                    value: function () {
+                        module.set.value('');
+                    },
                 },
 
                 read: {
@@ -21551,6 +21749,7 @@
             categoryResults: 'results', // array of results (category view)
             description: 'description', // result description
             image: 'image', // result image
+            alt: 'alt', // result alt text for image
             price: 'price', // result price
             results: 'results', // array of results (standard)
             title: 'title', // result title
@@ -21562,6 +21761,7 @@
 
         selector: {
             prompt: '.prompt',
+            remove: '> .icon.input > .remove.icon',
             searchButton: '.search.button',
             results: '.results',
             message: '.results > .message',
@@ -21638,7 +21838,7 @@
                                 if (result[fields.image] !== undefined) {
                                     html += ''
                                         + '<div class="image">'
-                                        + ' <img src="' + result[fields.image].replace(/"/g, '') + '">'
+                                        + ' <img src="' + result[fields.image].replace(/"/g, '') + (result[fields.alt] ? '" alt="' + result[fields.alt].replace(/"/g, '') : '') + '">'
                                         + '</div>';
                                 }
                                 html += '<div class="content">';
@@ -21691,7 +21891,7 @@
                         if (result[fields.image] !== undefined) {
                             html += ''
                                 + '<div class="image">'
-                                + ' <img src="' + result[fields.image].replace(/"/g, '') + '">'
+                                + ' <img src="' + result[fields.image].replace(/"/g, '') + (result[fields.alt] ? '" alt="' + result[fields.alt].replace(/"/g, '') : '') + '">'
                                 + '</div>';
                         }
                         html += '<div class="content">';
@@ -21913,7 +22113,7 @@
                 set: {
 
                     defaultSide: function () {
-                        $activeSide = $side.filter('.' + settings.className.active);
+                        $activeSide = $side.filter('.' + className.active);
                         $nextSide = $activeSide.next(selector.side).length > 0
                             ? $activeSide.next(selector.side)
                             : $side.first();
@@ -21939,7 +22139,7 @@
 
                     currentStageSize: function () {
                         var
-                            $activeSide = $side.filter('.' + settings.className.active),
+                            $activeSide = $side.filter('.' + className.active),
                             width       = $activeSide.outerWidth(true),
                             height      = $activeSide.outerHeight(true)
                         ;
@@ -21955,7 +22155,7 @@
                         var
                             $clone      = $module.clone().addClass(className.loading),
                             $side       = $clone.find('>' + selector.sides + '>' + selector.side),
-                            $activeSide = $side.filter('.' + settings.className.active),
+                            $activeSide = $side.filter('.' + className.active),
                             $nextSide   = nextIndex
                                 ? $side.eq(nextIndex)
                                 : ($activeSide.next(selector.side).length > 0
@@ -25614,6 +25814,7 @@
                                 $toast.append($('<img>', {
                                     class: className.image + ' ' + settings.classImage,
                                     src: settings.showImage,
+                                    alt: settings.alt || '',
                                 }));
                             }
                             if (settings.title !== '') {
@@ -25659,7 +25860,7 @@
                                 $toast.find(selector.icon).attr('class', iconClass + ' ' + className.icon);
                             }
                             if (settings.showImage) {
-                                $toast.find(selector.image).attr('src', settings.showImage);
+                                $toast.find(selector.image).attr('src', settings.showImage).attr('alt', settings.alt || '');
                             }
                             if (settings.title !== '') {
                                 $toast.find(selector.title).html(module.helpers.escape(settings.title, settings.preserveHTML));
@@ -26272,6 +26473,7 @@
         actions: false,
         preserveHTML: true,
         showImage: false,
+        alt: false,
 
         // transition settings
         transition: {

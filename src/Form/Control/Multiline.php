@@ -592,8 +592,7 @@ class Multiline extends Form\Control
             $option = ['key' => $value, 'text' => $entity->get($model->titleField), 'value' => $value];
             foreach ($this->fieldDefs as $key => $component) {
                 if ($component['name'] === $field->shortName) {
-                    $this->fieldDefs[$key]['definition']['componentProps']['optionalValue'] =
-                        isset($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'])
+                    $this->fieldDefs[$key]['definition']['componentProps']['optionalValue'] = isset($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'])
                         ? array_merge($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'], [$option])
                         : [$option];
                 }
