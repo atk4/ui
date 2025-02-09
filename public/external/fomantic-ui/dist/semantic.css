@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.4-beta.100+7f5f82a
+ * # Fomantic UI - 2.9.4-beta.101+96ed453
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -47380,7 +47380,7 @@ select.ui.dropdown {
   transition: opacity 0.1s ease;
 }
 
-.ui.selection.dropdown:not(.pointing):not(.floating) .menu {
+.ui.selection.dropdown:not(.pointing):not(.floating) > .menu {
   border-top-width: 0;
   border-radius: 0 0 0.28571429rem 0.28571429rem;
 }
@@ -48394,7 +48394,7 @@ select.ui.dropdown {
 
 /* Selection */
 
-.ui.ui.upward.selection.dropdown:not(.pointing):not(.floating) .menu {
+.ui.ui.upward.selection.dropdown:not(.pointing):not(.floating) > .menu {
   border-top-width: 1px;
   border-bottom-width: 0;
   box-shadow: 0 -2px 3px 0 rgba(0, 0, 0, 0.08);

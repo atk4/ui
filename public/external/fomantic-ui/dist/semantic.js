@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.4-beta.100+7f5f82a
+ * # Fomantic UI - 2.9.4-beta.101+96ed453
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -8487,7 +8487,7 @@
                                     module.verbose('Selecting item from keyboard shortcut', $selectedItem);
                                     module.event.item.click.call($selectedItem, event);
                                 }
-                                if (module.is.searchSelection()) {
+                                if (module.is.searchSelection() && !settings.keepSearchTerm) {
                                     module.remove.searchTerm();
                                 }
                                 if (module.is.multiple()) {
