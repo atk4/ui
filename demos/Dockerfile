@@ -5,7 +5,7 @@
 ## docker run --rm -p 80:80 -it atk4_ui_demo     ##
 ###################################################
 
-FROM php:apache
+FROM php:8.3-apache
 
 RUN apt-get update && apt-get install -y \
         libicu-dev git unzip npm \
@@ -31,7 +31,7 @@ RUN cd public/css && lessc agileui.less agileui.css
 
 ADD composer.json .
 RUN composer require --no-update --no-interaction fzaninotto/faker:^1.6 \
-    && composer install --no-dev --ignore-platform-req=php
+    && composer install --no-dev
 
 RUN echo 'disable_functions = pcntl_exec,exec,passthru,proc_open,shell_exec,system,popen/g' >> "$PHP_INI_DIR/php.ini"
 
