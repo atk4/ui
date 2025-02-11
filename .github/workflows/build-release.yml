@@ -34,6 +34,9 @@ jobs:
           file_put_contents($f, $str);
           '
 
+      - name: Remove "-dev" suffix from version in src/App.php
+        run: sed -E "s~(public.*\\$version = '.*)-dev(';)~\1\2~" -i src/App.php
+
       - name: Commit
         run: |
           git config --global user.name "$(git show -s --format='%an')"
