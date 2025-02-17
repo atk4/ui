@@ -15,5 +15,5 @@ Feature: Tab
   Scenario: URL exception is displayed
     When I click tab with title "URL 404"
     Then Modal is open with text "API Server Error"
-    Then Modal is open with text "<head><title>404 Not Found</title></head>"
+    Then Modal is open with text "<title>404 Not Found</title>"
     When I hide js modal
