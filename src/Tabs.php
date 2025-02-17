@@ -76,7 +76,7 @@ class Tabs extends View
      * @param string|TabsTab       $name
      * @param array<string, mixed> $settings
      *
-     * @return TabsTab|View tab menu item view
+     * @return TabsTab
      */
     protected function addTabMenuItem($name, array $settings)
     {
