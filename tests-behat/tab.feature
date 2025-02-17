@@ -9,7 +9,7 @@ Feature: Tab
 
   Scenario: API exception is displayed
     When I click tab with title "Server exception"
-    Then Modal is open with text "AssertionError: assert(false)"
+    Then Modal is open with text "AssertionError [code: 1]: assert(false)"
     When I hide js modal
 
   Scenario: URL exception is displayed
