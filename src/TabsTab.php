@@ -35,7 +35,6 @@ class TabsTab extends MenuItem
         if ($this->url) {
             $this->settings['cache'] = false;
             $this->settings['apiSettings']['url'] = $this->url;
-            $this->settings['apiSettings']['data']['__atk_tab'] = 1;
 
             // prevent adding timestamp to URL by jQuery
             // https://github.com/jquery/jquery/blob/3.7.1/src/ajax.js#L612

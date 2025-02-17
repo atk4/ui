@@ -6,3 +6,15 @@ Feature: Tab
     Then I should see "This is the active tab by default"
     When I click tab with title "Dynamic Lorem Ipsum"
     Then I should see "you will see a different text"
+
+  Scenario: API exception is displayed
+    When I click tab with title "Server exception"
+    Then Modal is open with text "AssertionError [code: 1]: assert(false)"
+    When I hide js modal
+
+  Scenario: URL exception is displayed
+    When I click tab with title "URL 404"
+    Then Modal is open with text "API Server Error"
+    # TODO text() xpath contains support
+    # Then Modal is open with text "<title>404 Not Found</title>"
+    When I hide js modal

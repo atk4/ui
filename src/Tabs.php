@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
+use Atk4\Ui\Js\JsFunction;
 
 class Tabs extends View
 {
@@ -29,7 +30,23 @@ class Tabs extends View
         // if there is callback action, then use VirtualPage
         if ($callback) {
             $vp = VirtualPage::addTo($sub, ['ui' => '']);
-            $item->setUrl($vp->getUrl('cut'));
+
+            // TODO hack like https://github.com/atk4/ui/blob/5.2.0/src/AccordionSection.php#L37
+            View::addTo($sub, ['name' => $vp->name]);
+
+            $reloadViewArgs = ['url' => $vp->getJsUrl('cut')];
+            if (isset($item->settings['apiSettings'])) {
+                $reloadViewArgs['apiConfig'] = $item->settings['apiSettings'];
+            }
+            unset($item->settings['apiSettings']);
+
+            $item->settings['onFirstLoad'] = new JsFunction([], [$vp->js()->atkReloadView($reloadViewArgs)]);
+
+            if (($item->settings['cache'] ?? null) === false) {
+                $item->settings['onLoad'] = $item->settings['onFirstLoad'];
+                unset($item->settings['onFirstLoad']);
+            }
+            unset($item->settings['cache']);
 
             $vp->set($callback);
         }
@@ -59,7 +76,7 @@ class Tabs extends View
      * @param string|TabsTab       $name
      * @param array<string, mixed> $settings
      *
-     * @return TabsTab|View tab menu item view
+     * @return TabsTab
      */
     protected function addTabMenuItem($name, array $settings)
     {
