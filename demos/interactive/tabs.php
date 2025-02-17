@@ -63,6 +63,11 @@ $tabs->addTab('Dynamic Form', static function (VirtualPage $vp) {
     });
 });
 
+// on load server exception
+$tabs->addTab('Server exception', static function (VirtualPage $vp) {
+    \assert(false); // @phpstan-ignore function.impossibleType
+});
+
 $tabs->addTabUrl('Any URL', './.'); // "./." instead of "/" to prevent appending "index.php"
 
 $tabs->addTabUrl('URL 404', './404');
