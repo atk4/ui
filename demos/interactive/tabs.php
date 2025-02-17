@@ -33,7 +33,7 @@ $tabs->addTab('Default Active Tab', static function (VirtualPage $vp) {
     Message::addTo($vp, ['This is the active tab by default']);
 })->setActive();
 
-// dynamic tab
+// dynamic tab /wo cache
 $tabs->addTab('Dynamic Lorem Ipsum', static function (VirtualPage $vp) {
     Message::addTo($vp, ['Every time you come to this tab, you will see a different text']);
     LoremIpsum::addTo($vp, ['size' => (int) ($vp->getApp()->tryGetRequestQueryParam('size') ?? 1)]);
@@ -47,7 +47,7 @@ $tabs->addTab('Modal popup', static function (VirtualPage $vp) {
         })->jsShow());
 });
 
-// dynamic tab
+// dynamic tab /w cache
 $tabs->addTab('Dynamic Form', static function (VirtualPage $vp) {
     Message::addTo($vp, ['It takes 2 seconds for this tab to load', 'type' => 'warning']);
     sleep(2);
