@@ -117,7 +117,7 @@ __webpack_require__.r(__webpack_exports__);
         url: this.url,
         data: options,
         method: 'GET',
-        stateContext: external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.context ? this.context : this.$el),
+        stateContext: external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.context ?? this.$el),
         onComplete: function (e, r) {
           that.isActive = false;
         }
