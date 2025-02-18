@@ -381,7 +381,7 @@ const attributeToName = 'data-atk4-teleport-to';
 const attributeFromIdName = 'data-atk4-teleport-from-id';
 
 /**
- * @param {Set<HTMLElement>} elems
+ * @param {Iterable.<HTMLElement>} elems
  */
 function handleElementsTeleport(elems) {
   const teleportTargets = new Map();
@@ -438,7 +438,7 @@ observer.observe(window.document, {
   childList: true,
   attributeFilter: [attributeToName]
 });
-handleElementsTeleport(new Set(window.document.querySelectorAll('*[' + attributeToName + ']')));
+handleElementsTeleport(window.document.querySelectorAll('*[' + attributeToName + ']'));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   handleMutationQueueImmediately: function () {
     // TODO remove this method once evalJsCode() in apiService is called at least thru JS microtask
@@ -2375,8 +2375,7 @@ class AtkSidenavPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["def
   }
 
   /**
-   * Add click handler for menu group
-   * and toggler element.
+   * Add click handler for menu group and toggler element.
    */
   addClickHandler() {
     this.$el.find(this.settings.menuGroupTitleSelector).on('click', e => {

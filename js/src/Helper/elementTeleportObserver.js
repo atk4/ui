@@ -2,7 +2,7 @@ const attributeToName = 'data-atk4-teleport-to';
 const attributeFromIdName = 'data-atk4-teleport-from-id';
 
 /**
- * @param {Set<HTMLElement>} elems
+ * @param {Iterable.<HTMLElement>} elems
  */
 function handleElementsTeleport(elems) {
     const teleportTargets = new Map();
@@ -67,7 +67,7 @@ function handleObserverRecords(mutationRecords) {
 const observer = new MutationObserver((mutationRecords) => handleObserverRecords(mutationRecords));
 observer.observe(window.document, { subtree: true, childList: true, attributeFilter: [attributeToName] });
 
-handleElementsTeleport(new Set(window.document.querySelectorAll('*[' + attributeToName + ']')));
+handleElementsTeleport(window.document.querySelectorAll('*[' + attributeToName + ']'));
 
 export default {
     handleMutationQueueImmediately: function () { // TODO remove this method once evalJsCode() in apiService is called at least thru JS microtask

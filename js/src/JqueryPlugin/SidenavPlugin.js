@@ -89,8 +89,7 @@ export default class AtkSidenavPlugin extends AbstractPlugin {
     }
 
     /**
-     * Add click handler for menu group
-     * and toggler element.
+     * Add click handler for menu group and toggler element.
      */
     addClickHandler() {
         this.$el.find(this.settings.menuGroupTitleSelector).on('click', (e) => {
