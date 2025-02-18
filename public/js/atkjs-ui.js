@@ -267,8 +267,176 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-function handleObserverRecords(mutationRecords) {}
+/* harmony import */ var core_js_modules_es_set_difference_v2_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.set.difference.v2.js */ "./node_modules/core-js/modules/es.set.difference.v2.js");
+/* harmony import */ var core_js_modules_es_set_difference_v2_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_set_difference_v2_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_set_intersection_v2_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.set.intersection.v2.js */ "./node_modules/core-js/modules/es.set.intersection.v2.js");
+/* harmony import */ var core_js_modules_es_set_intersection_v2_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_set_intersection_v2_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_set_is_disjoint_from_v2_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.set.is-disjoint-from.v2.js */ "./node_modules/core-js/modules/es.set.is-disjoint-from.v2.js");
+/* harmony import */ var core_js_modules_es_set_is_disjoint_from_v2_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_set_is_disjoint_from_v2_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var core_js_modules_es_set_is_subset_of_v2_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.set.is-subset-of.v2.js */ "./node_modules/core-js/modules/es.set.is-subset-of.v2.js");
+/* harmony import */ var core_js_modules_es_set_is_subset_of_v2_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_set_is_subset_of_v2_js__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var core_js_modules_es_set_is_superset_of_v2_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/es.set.is-superset-of.v2.js */ "./node_modules/core-js/modules/es.set.is-superset-of.v2.js");
+/* harmony import */ var core_js_modules_es_set_is_superset_of_v2_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_set_is_superset_of_v2_js__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var core_js_modules_es_set_symmetric_difference_v2_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/es.set.symmetric-difference.v2.js */ "./node_modules/core-js/modules/es.set.symmetric-difference.v2.js");
+/* harmony import */ var core_js_modules_es_set_symmetric_difference_v2_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_set_symmetric_difference_v2_js__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var core_js_modules_es_set_union_v2_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! core-js/modules/es.set.union.v2.js */ "./node_modules/core-js/modules/es.set.union.v2.js");
+/* harmony import */ var core_js_modules_es_set_union_v2_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_set_union_v2_js__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var core_js_modules_esnext_map_delete_all_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! core-js/modules/esnext.map.delete-all.js */ "./node_modules/core-js/modules/esnext.map.delete-all.js");
+/* harmony import */ var core_js_modules_esnext_map_delete_all_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_delete_all_js__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var core_js_modules_esnext_map_emplace_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! core-js/modules/esnext.map.emplace.js */ "./node_modules/core-js/modules/esnext.map.emplace.js");
+/* harmony import */ var core_js_modules_esnext_map_emplace_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_emplace_js__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var core_js_modules_esnext_map_every_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! core-js/modules/esnext.map.every.js */ "./node_modules/core-js/modules/esnext.map.every.js");
+/* harmony import */ var core_js_modules_esnext_map_every_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_every_js__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var core_js_modules_esnext_map_filter_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! core-js/modules/esnext.map.filter.js */ "./node_modules/core-js/modules/esnext.map.filter.js");
+/* harmony import */ var core_js_modules_esnext_map_filter_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_filter_js__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var core_js_modules_esnext_map_find_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! core-js/modules/esnext.map.find.js */ "./node_modules/core-js/modules/esnext.map.find.js");
+/* harmony import */ var core_js_modules_esnext_map_find_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_find_js__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var core_js_modules_esnext_map_find_key_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! core-js/modules/esnext.map.find-key.js */ "./node_modules/core-js/modules/esnext.map.find-key.js");
+/* harmony import */ var core_js_modules_esnext_map_find_key_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_find_key_js__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var core_js_modules_esnext_map_includes_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! core-js/modules/esnext.map.includes.js */ "./node_modules/core-js/modules/esnext.map.includes.js");
+/* harmony import */ var core_js_modules_esnext_map_includes_js__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_includes_js__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var core_js_modules_esnext_map_key_of_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! core-js/modules/esnext.map.key-of.js */ "./node_modules/core-js/modules/esnext.map.key-of.js");
+/* harmony import */ var core_js_modules_esnext_map_key_of_js__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_key_of_js__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var core_js_modules_esnext_map_map_keys_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! core-js/modules/esnext.map.map-keys.js */ "./node_modules/core-js/modules/esnext.map.map-keys.js");
+/* harmony import */ var core_js_modules_esnext_map_map_keys_js__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_map_keys_js__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var core_js_modules_esnext_map_map_values_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! core-js/modules/esnext.map.map-values.js */ "./node_modules/core-js/modules/esnext.map.map-values.js");
+/* harmony import */ var core_js_modules_esnext_map_map_values_js__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_map_values_js__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var core_js_modules_esnext_map_merge_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! core-js/modules/esnext.map.merge.js */ "./node_modules/core-js/modules/esnext.map.merge.js");
+/* harmony import */ var core_js_modules_esnext_map_merge_js__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_merge_js__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var core_js_modules_esnext_map_reduce_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! core-js/modules/esnext.map.reduce.js */ "./node_modules/core-js/modules/esnext.map.reduce.js");
+/* harmony import */ var core_js_modules_esnext_map_reduce_js__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_reduce_js__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var core_js_modules_esnext_map_some_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! core-js/modules/esnext.map.some.js */ "./node_modules/core-js/modules/esnext.map.some.js");
+/* harmony import */ var core_js_modules_esnext_map_some_js__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_some_js__WEBPACK_IMPORTED_MODULE_19__);
+/* harmony import */ var core_js_modules_esnext_map_update_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! core-js/modules/esnext.map.update.js */ "./node_modules/core-js/modules/esnext.map.update.js");
+/* harmony import */ var core_js_modules_esnext_map_update_js__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_map_update_js__WEBPACK_IMPORTED_MODULE_20__);
+/* harmony import */ var core_js_modules_esnext_set_add_all_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! core-js/modules/esnext.set.add-all.js */ "./node_modules/core-js/modules/esnext.set.add-all.js");
+/* harmony import */ var core_js_modules_esnext_set_add_all_js__WEBPACK_IMPORTED_MODULE_21___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_add_all_js__WEBPACK_IMPORTED_MODULE_21__);
+/* harmony import */ var core_js_modules_esnext_set_delete_all_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! core-js/modules/esnext.set.delete-all.js */ "./node_modules/core-js/modules/esnext.set.delete-all.js");
+/* harmony import */ var core_js_modules_esnext_set_delete_all_js__WEBPACK_IMPORTED_MODULE_22___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_delete_all_js__WEBPACK_IMPORTED_MODULE_22__);
+/* harmony import */ var core_js_modules_esnext_set_difference_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! core-js/modules/esnext.set.difference.js */ "./node_modules/core-js/modules/esnext.set.difference.js");
+/* harmony import */ var core_js_modules_esnext_set_difference_js__WEBPACK_IMPORTED_MODULE_23___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_difference_js__WEBPACK_IMPORTED_MODULE_23__);
+/* harmony import */ var core_js_modules_esnext_set_every_js__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! core-js/modules/esnext.set.every.js */ "./node_modules/core-js/modules/esnext.set.every.js");
+/* harmony import */ var core_js_modules_esnext_set_every_js__WEBPACK_IMPORTED_MODULE_24___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_every_js__WEBPACK_IMPORTED_MODULE_24__);
+/* harmony import */ var core_js_modules_esnext_set_filter_js__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! core-js/modules/esnext.set.filter.js */ "./node_modules/core-js/modules/esnext.set.filter.js");
+/* harmony import */ var core_js_modules_esnext_set_filter_js__WEBPACK_IMPORTED_MODULE_25___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_filter_js__WEBPACK_IMPORTED_MODULE_25__);
+/* harmony import */ var core_js_modules_esnext_set_find_js__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! core-js/modules/esnext.set.find.js */ "./node_modules/core-js/modules/esnext.set.find.js");
+/* harmony import */ var core_js_modules_esnext_set_find_js__WEBPACK_IMPORTED_MODULE_26___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_find_js__WEBPACK_IMPORTED_MODULE_26__);
+/* harmony import */ var core_js_modules_esnext_set_intersection_js__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! core-js/modules/esnext.set.intersection.js */ "./node_modules/core-js/modules/esnext.set.intersection.js");
+/* harmony import */ var core_js_modules_esnext_set_intersection_js__WEBPACK_IMPORTED_MODULE_27___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_intersection_js__WEBPACK_IMPORTED_MODULE_27__);
+/* harmony import */ var core_js_modules_esnext_set_is_disjoint_from_js__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! core-js/modules/esnext.set.is-disjoint-from.js */ "./node_modules/core-js/modules/esnext.set.is-disjoint-from.js");
+/* harmony import */ var core_js_modules_esnext_set_is_disjoint_from_js__WEBPACK_IMPORTED_MODULE_28___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_is_disjoint_from_js__WEBPACK_IMPORTED_MODULE_28__);
+/* harmony import */ var core_js_modules_esnext_set_is_subset_of_js__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! core-js/modules/esnext.set.is-subset-of.js */ "./node_modules/core-js/modules/esnext.set.is-subset-of.js");
+/* harmony import */ var core_js_modules_esnext_set_is_subset_of_js__WEBPACK_IMPORTED_MODULE_29___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_is_subset_of_js__WEBPACK_IMPORTED_MODULE_29__);
+/* harmony import */ var core_js_modules_esnext_set_is_superset_of_js__WEBPACK_IMPORTED_MODULE_30__ = __webpack_require__(/*! core-js/modules/esnext.set.is-superset-of.js */ "./node_modules/core-js/modules/esnext.set.is-superset-of.js");
+/* harmony import */ var core_js_modules_esnext_set_is_superset_of_js__WEBPACK_IMPORTED_MODULE_30___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_is_superset_of_js__WEBPACK_IMPORTED_MODULE_30__);
+/* harmony import */ var core_js_modules_esnext_set_join_js__WEBPACK_IMPORTED_MODULE_31__ = __webpack_require__(/*! core-js/modules/esnext.set.join.js */ "./node_modules/core-js/modules/esnext.set.join.js");
+/* harmony import */ var core_js_modules_esnext_set_join_js__WEBPACK_IMPORTED_MODULE_31___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_join_js__WEBPACK_IMPORTED_MODULE_31__);
+/* harmony import */ var core_js_modules_esnext_set_map_js__WEBPACK_IMPORTED_MODULE_32__ = __webpack_require__(/*! core-js/modules/esnext.set.map.js */ "./node_modules/core-js/modules/esnext.set.map.js");
+/* harmony import */ var core_js_modules_esnext_set_map_js__WEBPACK_IMPORTED_MODULE_32___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_map_js__WEBPACK_IMPORTED_MODULE_32__);
+/* harmony import */ var core_js_modules_esnext_set_reduce_js__WEBPACK_IMPORTED_MODULE_33__ = __webpack_require__(/*! core-js/modules/esnext.set.reduce.js */ "./node_modules/core-js/modules/esnext.set.reduce.js");
+/* harmony import */ var core_js_modules_esnext_set_reduce_js__WEBPACK_IMPORTED_MODULE_33___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_reduce_js__WEBPACK_IMPORTED_MODULE_33__);
+/* harmony import */ var core_js_modules_esnext_set_some_js__WEBPACK_IMPORTED_MODULE_34__ = __webpack_require__(/*! core-js/modules/esnext.set.some.js */ "./node_modules/core-js/modules/esnext.set.some.js");
+/* harmony import */ var core_js_modules_esnext_set_some_js__WEBPACK_IMPORTED_MODULE_34___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_some_js__WEBPACK_IMPORTED_MODULE_34__);
+/* harmony import */ var core_js_modules_esnext_set_symmetric_difference_js__WEBPACK_IMPORTED_MODULE_35__ = __webpack_require__(/*! core-js/modules/esnext.set.symmetric-difference.js */ "./node_modules/core-js/modules/esnext.set.symmetric-difference.js");
+/* harmony import */ var core_js_modules_esnext_set_symmetric_difference_js__WEBPACK_IMPORTED_MODULE_35___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_symmetric_difference_js__WEBPACK_IMPORTED_MODULE_35__);
+/* harmony import */ var core_js_modules_esnext_set_union_js__WEBPACK_IMPORTED_MODULE_36__ = __webpack_require__(/*! core-js/modules/esnext.set.union.js */ "./node_modules/core-js/modules/esnext.set.union.js");
+/* harmony import */ var core_js_modules_esnext_set_union_js__WEBPACK_IMPORTED_MODULE_36___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_set_union_js__WEBPACK_IMPORTED_MODULE_36__);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const attributeName = 'data-atk4-teleport-to';
+
+/**
+ * @param {Set<HTMLElement>} elems
+ */
+function handleElementsTeleport(elems) {
+  const teleportTargets = new Map();
+  for (const elem of elems) {
+    const teleportTo = elem.getAttribute(attributeName);
+    if (!teleportTo) {
+      continue;
+    }
+    if (!teleportTargets.has(teleportTo)) {
+      const targets = window.document.querySelectorAll(teleportTo);
+      if (targets.length !== 1) {
+        throw new Error('Target DOM element not found');
+      }
+      teleportTargets.set(teleportTo, targets[0]);
+    }
+    const target = teleportTargets.get(teleportTo);
+    if (elem.parentElement === target) {
+      continue;
+    }
+    const elemId = elem.id;
+    if (!elemId) {
+      throw new Error('DOM element ID is required');
+    }
+    for (const elemOrig of target.querySelectorAll(':scope > *[id="' + CSS.escape(elemId) + '"]')) {
+      elemOrig.remove();
+    }
+    target.append(elem);
+  }
+}
+function handleObserverRecords(mutationRecords) {
+  const elems = new Set();
+  for (const mutationRecord of mutationRecords) {
+    for (const addedNode of mutationRecord.addedNodes) {
+      if (addedNode instanceof Element) {
+        if (addedNode.matches('*[' + attributeName + ']')) {
+          elems.add(addedNode);
+        }
+        for (const elem of addedNode.querySelectorAll('*[' + attributeName + ']')) {
+          elems.add(elem);
+        }
+      }
+    }
+    if (mutationRecord.type === 'attributes') {
+      elems.add(mutationRecord.target);
+    }
+  }
+  handleElementsTeleport(elems);
+}
 const observer = new MutationObserver(mutationRecords => handleObserverRecords(mutationRecords));
+observer.observe(window.document, {
+  subtree: true,
+  childList: true,
+  attributeFilter: [attributeName]
+});
+handleElementsTeleport(new Set(window.document.querySelectorAll('*[' + attributeName + ']')));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   handleMutationQueueImmediately: function () {
     // TODO remove this method once evalJsCode() in apiService is called at least thru JS microtask
@@ -2292,21 +2460,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "./node_modules/core-js/modules/es.array.push.js");
 /* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.async-iterator.find.js */ "./node_modules/core-js/modules/esnext.async-iterator.find.js");
-/* harmony import */ var core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_async_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/esnext.iterator.constructor.js */ "./node_modules/core-js/modules/esnext.iterator.constructor.js");
-/* harmony import */ var core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/esnext.iterator.find.js */ "./node_modules/core-js/modules/esnext.iterator.find.js");
-/* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_esnext_string_at_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! core-js/modules/esnext.string.at.js */ "./node_modules/core-js/modules/esnext.string.at.js");
-/* harmony import */ var core_js_modules_esnext_string_at_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_string_at_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var lodash_escape__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash/escape */ "./node_modules/lodash/escape.js");
-
-
-
+/* harmony import */ var core_js_modules_esnext_string_at_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/esnext.string.at.js */ "./node_modules/core-js/modules/esnext.string.at.js");
+/* harmony import */ var core_js_modules_esnext_string_at_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_string_at_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
+/* harmony import */ var lodash_escape__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! lodash/escape */ "./node_modules/lodash/escape.js");
 
 
 
@@ -2346,13 +2505,13 @@ class ApiService {
   onRequest(promise, xhr) {
     // fix https://github.com/atk4/ui/issues/393
     const ownerRemoveHandler = () => xhr.abort();
-    atk__WEBPACK_IMPORTED_MODULE_6__["default"].elementRemoveObserver.addHandler(this, ownerRemoveHandler);
+    atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementRemoveObserver.addHandler(this, ownerRemoveHandler);
 
     // Fomantic-UI API onComplete callback is executed last, register custom handler to be executed first
     // relies on https://github.com/jquery/jquery/blob/3.6.4/src/ajax.js#L805-L809
     const deferredFilter = () => {
-      atk__WEBPACK_IMPORTED_MODULE_6__["default"].elementRemoveObserver.removeHandler(this, ownerRemoveHandler);
-      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.onCompleteBefore.apply(this, xhr);
+      atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementRemoveObserver.removeHandler(this, ownerRemoveHandler);
+      atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.onCompleteBefore.apply(this, xhr);
     };
     xhr.then(deferredFilter, deferredFilter);
   }
@@ -2393,7 +2552,7 @@ class ApiService {
     try {
       if (response.success) {
         if (response.html && response.id) {
-          const $target = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('#' + response.id);
+          const $target = external_jquery__WEBPACK_IMPORTED_MODULE_2___default()('#' + response.id);
           if ($target.length !== 1) {
             throw new Error('Target DOM element not found');
           }
@@ -2403,20 +2562,14 @@ class ApiService {
             throw new Error('Unexpected HTML response');
           }
           responseBody = null;
-
-          // prevent modal duplication
-          const $modalsContainers = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('body > .ui.dimmer.modals.page, body > .atk-side-panels');
-          external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(responseElement).find('.ui.modal[id], .atk-right-panel[id]').each((i, e) => {
-            $modalsContainers.find('#' + e.id).remove();
-          });
           if ($target.hasClass('ui modal') || $target.hasClass('atk-right-panel')) {
-            external_jquery__WEBPACK_IMPORTED_MODULE_5___default().each([...$target[0].childNodes], (i, node) => {
+            external_jquery__WEBPACK_IMPORTED_MODULE_2___default().each([...$target[0].childNodes], (i, node) => {
               if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
                 return;
               }
-              external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(node).remove();
+              external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(node).remove();
             });
-            external_jquery__WEBPACK_IMPORTED_MODULE_5___default().each([...responseElement.childNodes], (i, node) => {
+            external_jquery__WEBPACK_IMPORTED_MODULE_2___default().each([...responseElement.childNodes], (i, node) => {
               if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
                 return;
               }
@@ -2425,24 +2578,24 @@ class ApiService {
           } else {
             $target.replaceWith(response.html);
           }
-          atk__WEBPACK_IMPORTED_MODULE_6__["default"].elementRemoveObserver.handleMutationQueueImmediately($target[0]);
-          atk__WEBPACK_IMPORTED_MODULE_6__["default"].elementTeleportObserver.handleMutationQueueImmediately();
+          atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementRemoveObserver.handleMutationQueueImmediately($target[0]);
+          atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementTeleportObserver.handleMutationQueueImmediately();
         }
         if (response.atkjs) {
-          atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalJsCode(this, response.atkjs);
+          atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.evalJsCode(this, response.atkjs);
         }
-        if (atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks.length > 0) {
-          const callbacks = atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks;
+        if (atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.afterSuccessCallbacks.length > 0) {
+          const callbacks = atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.afterSuccessCallbacks;
           for (const callback of callbacks) {
-            atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalJsCode(this, callback);
+            atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.evalJsCode(this, callback);
           }
-          atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.afterSuccessCallbacks.splice(0);
+          atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.afterSuccessCallbacks.splice(0);
         }
       } else if (response.isServiceError) {
         throw new Error(response.message);
       }
     } catch (e) {
-      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.getErrorHtml('API JavaScript Error', e.message));
+      atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.getErrorHtml('API JavaScript Error', e.message));
     }
   }
 
@@ -2460,9 +2613,9 @@ class ApiService {
   onFailure(response) {
     // if JSON is returned, it should contain the HTML error in message property
     if (Object.prototype.hasOwnProperty.call(response, 'success') && !response.success) {
-      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(response.message);
+      atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.showErrorModal(response.message);
     } else {
-      atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.getErrorHtml('API Server Error', '') + '<div><pre style="margin-bottom: 0px;"><code style="display: block; padding: 1em; color: #adbac7; background: #22272e;">' + (0,lodash_escape__WEBPACK_IMPORTED_MODULE_7__["default"])(response) + '</code></pre></div>');
+      atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.getErrorHtml('API Server Error', '') + '<div><pre style="margin-bottom: 0px;"><code style="display: block; padding: 1em; color: #adbac7; background: #22272e;">' + (0,lodash_escape__WEBPACK_IMPORTED_MODULE_4__["default"])(response) + '</code></pre></div>');
     }
   }
 
@@ -2500,7 +2653,7 @@ class ApiService {
   suiFetch(url) {
     let settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
     let el = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'body';
-    const $el = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(el);
+    const $el = external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(el);
     const apiSettings = Object.assign(settings);
     if (!('on' in apiSettings)) {
       apiSettings.on = 'now';
@@ -2511,7 +2664,7 @@ class ApiService {
     apiSettings.url = url;
     return new Promise((resolve, reject) => {
       apiSettings.onFailure = function (r) {
-        atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.onFailure(r);
+        atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.onFailure(r);
         reject(r);
       };
       apiSettings.onSuccess = function (r, e) {
@@ -2525,15 +2678,15 @@ class ApiService {
    * Display App error in a Fomantic-UI modal.
    */
   showErrorModal(contentHtml) {
-    if (atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.modals.length > 0) {
-      const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService.modals.at(-1));
+    if (atk__WEBPACK_IMPORTED_MODULE_3__["default"].modalService.modals.length > 0) {
+      const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(atk__WEBPACK_IMPORTED_MODULE_3__["default"].modalService.modals.at(-1));
       if ($modal.data('closeOnLoadingError')) {
         $modal.removeData('closeOnLoadingError').modal('hide');
       }
     }
 
     // catch application error and display them in a new modal window
-    const m = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(contentHtml);
+    const m = external_jquery__WEBPACK_IMPORTED_MODULE_2___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(contentHtml);
     m.data('needRemove', true).modal().modal('show');
   }
   getErrorHtml(titleHtml, messageHtml) {
@@ -2998,15 +3151,6 @@ class ModalService {
         method: 'GET',
         obj: $content,
         onComplete: function (response, content) {
-          // prevent modal duplication
-          // TODO deduplicate in favor of apiService.js code only
-          if (response.html) {
-            const responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
-            const $modalsContainers = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()('body > .ui.dimmer.modals.page, body > .atk-side-panels');
-            external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(responseBody.childNodes[0]).find('.ui.modal[id], .atk-right-panel[id]').each((i, e) => {
-              $modalsContainers.find('#' + e.id).remove();
-            });
-          }
           const result = content.html(response.html);
           if (result.length === 0) {
             // TODO this if should be removed

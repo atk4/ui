@@ -103,12 +103,6 @@ class ApiService {
                     }
                     responseBody = null;
 
-                    // prevent modal duplication
-                    const $modalsContainers = $('body > .ui.dimmer.modals.page, body > .atk-side-panels');
-                    $(responseElement).find('.ui.modal[id], .atk-right-panel[id]').each((i, e) => {
-                        $modalsContainers.find('#' + e.id).remove();
-                    });
-
                     if ($target.hasClass('ui modal') || $target.hasClass('atk-right-panel')) {
                         $.each([...$target[0].childNodes], (i, node) => {
                             if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
