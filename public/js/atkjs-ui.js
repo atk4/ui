@@ -379,10 +379,6 @@ __webpack_require__.r(__webpack_exports__);
 
 const attributeToName = 'data-atk4-teleport-to';
 const attributeFromIdName = 'data-atk4-teleport-from-id';
-
-/**
- * @param {Iterable.<HTMLElement>} elems // eslint-disable-line jsdoc/no-undefined-types
- */
 function handleElementsTeleport(elems) {
   const teleportTargets = new Map();
   for (const elem of elems) {
