@@ -377,7 +377,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const attributeName = 'data-atk4-teleport-to';
+const attributeToName = 'data-atk4-teleport-to';
+const attributeFromIdName = 'data-atk4-teleport-from-id';
 
 /**
  * @param {Set<HTMLElement>} elems
@@ -385,7 +386,7 @@ const attributeName = 'data-atk4-teleport-to';
 function handleElementsTeleport(elems) {
   const teleportTargets = new Map();
   for (const elem of elems) {
-    const teleportTo = elem.getAttribute(attributeName);
+    const teleportTo = elem.getAttribute(attributeToName);
     if (!teleportTo) {
       continue;
     }
@@ -404,6 +405,7 @@ function handleElementsTeleport(elems) {
     if (!elemId) {
       throw new Error('DOM element ID is required');
     }
+    elem.setAttribute(attributeFromIdName, elem.parentElement.id);
     for (const elemOrig of target.querySelectorAll(':scope > *[id="' + CSS.escape(elemId) + '"]')) {
       elemOrig.remove();
     }
@@ -415,10 +417,10 @@ function handleObserverRecords(mutationRecords) {
   for (const mutationRecord of mutationRecords) {
     for (const addedNode of mutationRecord.addedNodes) {
       if (addedNode instanceof Element) {
-        if (addedNode.matches('*[' + attributeName + ']')) {
+        if (addedNode.matches('*[' + attributeToName + ']')) {
           elems.add(addedNode);
         }
-        for (const elem of addedNode.querySelectorAll('*[' + attributeName + ']')) {
+        for (const elem of addedNode.querySelectorAll('*[' + attributeToName + ']')) {
           elems.add(elem);
         }
       }
@@ -433,9 +435,9 @@ const observer = new MutationObserver(mutationRecords => handleObserverRecords(m
 observer.observe(window.document, {
   subtree: true,
   childList: true,
-  attributeFilter: [attributeName]
+  attributeFilter: [attributeToName]
 });
-handleElementsTeleport(new Set(window.document.querySelectorAll('*[' + attributeName + ']')));
+handleElementsTeleport(new Set(window.document.querySelectorAll('*[' + attributeToName + ']')));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   handleMutationQueueImmediately: function () {
     // TODO remove this method once evalJsCode() in apiService is called at least thru JS microtask
