@@ -30,10 +30,10 @@ export default class AtkColumnResizerPlugin extends AbstractPlugin {
 
     onResize(event) {
         if (this.settings.url) {
-            const columns = $(this.el).find('th');
+            const $columns = $(this.el).find('th');
 
             const widths = [];
-            columns.each((i, item) => {
+            $columns.each((i, item) => {
                 widths.push({ column: $(item).data('column'), size: $(item).outerWidth() });
             });
 

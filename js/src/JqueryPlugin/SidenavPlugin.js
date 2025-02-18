@@ -12,8 +12,8 @@ import AbstractPlugin from './AbstractPlugin';
 export default class AtkSidenavPlugin extends AbstractPlugin {
     main() {
         // menu items container
-        this.menu = $(this.el).find(this.settings.menuItemsSelector);
-        if (this.menu.length === 0) {
+        this.$menu = $(this.el).find(this.settings.menuItemsSelector);
+        if (this.$menu.length === 0) {
             // this $el is our single item
             if (this.urlMatchLocation(this.el.href)) {
                 $(this.el).addClass(this.settings.menuItemActiveClass);
@@ -22,14 +22,14 @@ export default class AtkSidenavPlugin extends AbstractPlugin {
             return;
         }
         // HTML element for display or hiding menu items. Usually a div containning an icon.
-        this.toggler = $(this.el).find(this.settings.toggleSelector);
+        this.$toggler = $(this.el).find(this.settings.toggleSelector);
 
         this.addClickHandler();
         if (this.hasBase()) {
             // make menu group active
             $(this.el).addClass(this.settings.menuGroupActiveClass);
             // make menu group visible
-            this.menu.toggleClass(this.settings.visibleCssClass);
+            this.$menu.toggleClass(this.settings.visibleCssClass);
         }
         this.setTogglerIcon(this.settings.icon.selector);
     }
@@ -42,7 +42,7 @@ export default class AtkSidenavPlugin extends AbstractPlugin {
      */
     hasBase() {
         let hasBase = false;
-        this.menu.find('a').each((i, el) => {
+        this.$menu.find('a').each((i, el) => {
             if (this.urlMatchLocation(el.href)) {
                 hasBase = true;
                 // set active class for this specific menu item
@@ -78,14 +78,14 @@ export default class AtkSidenavPlugin extends AbstractPlugin {
      * @returns {*}
      */
     isMenuOn() {
-        return this.menu.hasClass(this.settings.visibleCssClass);
+        return this.$menu.hasClass(this.settings.visibleCssClass);
     }
 
     /**
      * Set class icon for the toggler element.
      */
     setTogglerIcon(selector) {
-        this.toggler.find(selector).attr('class', (this.isMenuOn() ? this.settings.icon.off : this.settings.icon.on) + ' icon');
+        this.$toggler.find(selector).attr('class', (this.isMenuOn() ? this.settings.icon.off : this.settings.icon.on) + ' icon');
     }
 
     /**
@@ -95,12 +95,12 @@ export default class AtkSidenavPlugin extends AbstractPlugin {
         $(this.el).find(this.settings.menuGroupTitleSelector).on('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            window.open(this.menu.find(this.settings.firstItemSelector).first().attr('href'), e.metaKey ? '_blank' : '_self');
+            window.open(this.$menu.find(this.settings.firstItemSelector).first().attr('href'), e.metaKey ? '_blank' : '_self');
         });
-        this.toggler.on('click', (e) => {
+        this.$toggler.on('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            this.menu.toggleClass(this.settings.visibleCssClass);
+            this.$menu.toggleClass(this.settings.visibleCssClass);
             this.setTogglerIcon(this.settings.icon.selector);
         });
     }

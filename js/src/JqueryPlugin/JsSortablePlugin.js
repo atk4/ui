@@ -37,9 +37,9 @@ export default class AtkJsSortablePlugin extends AbstractPlugin {
         }
 
         this.injectStyles(this.settings.mirrorCss + this.settings.overCss);
-        this.dragContainer = $(this.el).find(this.settings.container);
+        this.$dragContainer = $(this.el).find(this.settings.container);
         const sortable = new Draggable.Sortable(
-            this.dragContainer[0],
+            this.$dragContainer[0],
             {
                 draggable: this.settings.draggable,
                 handle: this.settings.handleClass ? '.' + this.settings.handleClass : null,
@@ -56,7 +56,7 @@ export default class AtkJsSortablePlugin extends AbstractPlugin {
             this.newIndex = e.data.newIndex;
             this.origIndex = e.data.oldIndex;
             this.sourceId = $(e.data.dragEvent.data.originalSource).data(this.settings.dataLabel);
-            this.dragContainer.children().each((i, el) => {
+            this.$dragContainer.children().each((i, el) => {
                 if (!$(el).hasClass('draggable--original') && !$(el).hasClass('draggable-mirror')) {
                     this.ids.push($(el).data(this.settings.dataLabel));
                 }
@@ -68,7 +68,7 @@ export default class AtkJsSortablePlugin extends AbstractPlugin {
     }
 
     initialize() {
-        this.dragContainer.children().each((i, el) => {
+        this.$dragContainer.children().each((i, el) => {
             this.ids.push($(el).data(this.settings.dataLabel));
         });
     }
@@ -81,14 +81,14 @@ export default class AtkJsSortablePlugin extends AbstractPlugin {
     sendSortOrders(params) {
         const url = this.buildUrl(params);
         if (url) {
-            this.dragContainer.api({
+            this.$dragContainer.api({
                 on: 'now',
                 url: url,
                 data: {
                     order: this.ids.toString(), origIndex: this.origIndex, newIndex: this.newIndex, source: this.sourceId,
                 },
                 method: 'POST',
-                obj: this.dragContainer,
+                obj: this.$dragContainer,
             });
         }
     }

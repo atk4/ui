@@ -4,14 +4,14 @@ import AbstractPlugin from './AbstractPlugin';
 
 export default class AtkFileUploadPlugin extends AbstractPlugin {
     main() {
-        this.textInput = $(this.el).find('input[type="text"]');
-        this.hiddenInput = $(this.el).find('input[type="hidden"]');
+        this.$textInput = $(this.el).find('input[type="text"]');
+        this.$hiddenInput = $(this.el).find('input[type="hidden"]');
 
-        this.fileInput = $(this.el).find('input[type="file"]');
-        this.action = $(this.el).find('#' + this.settings.action);
-        this.actionContent = this.action.html();
+        this.$fileInput = $(this.el).find('input[type="file"]');
+        this.$action = $(this.el).find('#' + this.settings.action);
+        this.$actionContent = this.$action.html();
 
-        this.bar = $(this.el).find('.progress');
+        this.$bar = $(this.el).find('.progress');
         this.setEventHandler();
         this.setInitialState();
     }
@@ -21,7 +21,7 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
      */
     setInitialState() {
         // set progress bar
-        this.bar.progress({
+        this.$bar.progress({
             text: {
                 percent: '{percent}%',
                 active: '{percent}%',
@@ -29,9 +29,9 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
         }).hide();
 
         $(this.el).data().fileId = this.settings.file.id;
-        this.hiddenInput.val(this.settings.file.id);
-        this.textInput.val(this.settings.file.name);
-        this.textInput.data('isTouch', false);
+        this.$hiddenInput.val(this.settings.file.id);
+        this.$textInput.val(this.settings.file.name);
+        this.$textInput.data('isTouch', false);
         if (this.settings.file.id) {
             this.setState('delete');
         }
@@ -42,12 +42,12 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
      */
     updateField(fileId, fileName) {
         $(this.el).data().fileId = fileId;
-        this.hiddenInput.val(fileId);
+        this.$hiddenInput.val(fileId);
 
         if (fileName === '' || fileName === undefined || fileName === null) {
-            this.textInput.val(fileId);
+            this.$textInput.val(fileId);
         } else {
-            this.textInput.val(fileName);
+            this.$textInput.val(fileName);
         }
     }
 
@@ -55,16 +55,16 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
      * Add event handler to input element.
      */
     setEventHandler() {
-        this.textInput.on('click', (e) => {
+        this.$textInput.on('click', (e) => {
             if (!e.target.value) {
-                this.fileInput.click();
+                this.$fileInput.click();
             }
         });
 
         // add event handler to action button
-        this.action.on('click', (e) => {
-            if (!this.textInput.val()) {
-                this.fileInput.click();
+        this.$action.on('click', (e) => {
+            if (!this.$textInput.val()) {
+                this.$fileInput.click();
             } else {
                 // When upload is complete a JS action can be send to set an ID
                 // to the uploaded file via the jQuery data property.
@@ -72,16 +72,16 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
                 // delete callback, If not, default to file name.
                 let id = $(this.el).data().fileId;
                 if (id === '' || id === undefined || id === null) {
-                    id = this.textInput.val();
+                    id = this.$textInput.val();
                 }
                 this.doFileDelete(id);
             }
         });
 
         // add event handler to file input
-        this.fileInput.on('change', (e) => {
+        this.$fileInput.on('change', (e) => {
             if (e.target.files.length > 0) {
-                this.textInput.val(e.target.files[0].name);
+                this.$textInput.val(e.target.files[0].name);
                 this.doFileUpload(e.target.files);
             }
         });
@@ -94,19 +94,19 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
     setState(mode) {
         switch (mode) {
             case 'delete': {
-                this.action.html(this.getEraseContent);
+                this.$action.html(this.getEraseContent);
                 setTimeout(() => {
-                    this.bar.progress('reset');
-                    this.bar.hide('fade');
+                    this.$bar.progress('reset');
+                    this.$bar.hide('fade');
                 }, 1000);
 
                 break;
             }
             case 'upload': {
-                this.action.html(this.actionContent);
-                this.textInput.val('');
-                this.fileInput.val('');
-                this.hiddenInput.val('');
+                this.$action.html(this.$actionContent);
+                this.$textInput.val('');
+                this.$fileInput.val('');
+                this.$hiddenInput.val('');
                 $(this.el).data().fileId = null;
 
                 break;
@@ -128,7 +128,7 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
         // setup task on upload completion
         const completeCb = (response, content) => {
             if (response.success) {
-                this.bar.progress('set label', this.settings.completeLabel);
+                this.$bar.progress('set label', this.settings.completeLabel);
                 this.setState('delete');
             }
 
@@ -143,14 +143,14 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
             xhr.upload.addEventListener('progress', (event) => {
                 if (event.lengthComputable) {
                     const percentComplete = event.loaded / event.total;
-                    this.bar.progress('set percent', Number.parseInt(percentComplete * 100, 10));
+                    this.$bar.progress('set percent', Number.parseInt(percentComplete * 100, 10));
                 }
             });
 
             return xhr;
         };
 
-        this.bar.show();
+        this.$bar.show();
         atk.uploadService.uploadFiles(
             files,
             $(this.el),
