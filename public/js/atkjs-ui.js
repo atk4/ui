@@ -2583,8 +2583,8 @@ class ApiService {
           } else {
             $target.replaceWith(response.html);
           }
-          atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementRemoveObserver.handleMutationQueueImmediately($target[0]);
           atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementTeleportObserver.handleMutationQueueImmediately();
+          atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementRemoveObserver.handleMutationQueueImmediately($target[0]);
         }
         if (response.atkjs) {
           atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.evalJsCode(this, response.atkjs);
