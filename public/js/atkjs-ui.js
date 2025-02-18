@@ -3769,7 +3769,7 @@ class UploadService {
       contentType: false,
       data: formData,
       method: 'POST',
-      obj: this.$el,
+      obj: element,
       xhr: xhrCb,
       onComplete: completeCb
     });
