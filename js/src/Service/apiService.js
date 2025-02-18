@@ -104,9 +104,9 @@ class ApiService {
                     responseBody = null;
 
                     if ($target.hasClass('ui modal') || $target.hasClass('atk-right-panel')) {
-                        // https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
+                        // introduced in https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
                         // TODO move into teleport observer
-                        // TODO how to reproduce?
+                        // can be reproduced using /demos/data-action/jsactions2.php "Argument/Preview" action
 
                         $.each([...$target[0].childNodes], (i, node) => {
                             if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {

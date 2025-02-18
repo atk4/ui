@@ -410,6 +410,7 @@ function handleElementsTeleport(elems) {
       elemOrig.remove();
     }
     target.append(elem);
+    elem.removeAttribute(attributeToName);
   }
 }
 function handleObserverRecords(mutationRecords) {
@@ -728,7 +729,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ AbstractPlugin)
+/* harmony export */   "default": () => (/* binding */ AtkAbstractPlugin)
 /* harmony export */ });
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
@@ -737,7 +738,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Base implementation of jQuery plugin in Agile Toolkit.
  */
-class AbstractPlugin {
+class AtkAbstractPlugin {
   constructor(element, options) {
     this.$el = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(element);
     this.settings = options;
@@ -2564,9 +2565,9 @@ class ApiService {
           }
           responseBody = null;
           if ($target.hasClass('ui modal') || $target.hasClass('atk-right-panel')) {
-            // https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
+            // introduced in https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
             // TODO move into teleport observer
-            // TODO how to reproduce?
+            // can be reproduced using /demos/data-action/jsactions2.php "Argument/Preview" action
 
             external_jquery__WEBPACK_IMPORTED_MODULE_2___default().each([...$target[0].childNodes], (i, node) => {
               if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {

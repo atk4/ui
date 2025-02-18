@@ -38,6 +38,8 @@ function handleElementsTeleport(elems) {
         }
 
         target.append(elem);
+
+        elem.removeAttribute(attributeToName);
     }
 }
 
