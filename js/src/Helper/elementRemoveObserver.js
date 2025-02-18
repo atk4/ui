@@ -59,8 +59,10 @@ function handleObserverRecords(elem, mutationRecords) {
 
     const removedElems = new Set();
     for (const mutationRecord of mutationRecords) {
-        for (const removedElem of observedChildren.intersection(mutationRecord.removedNodes)) {
-            removedElems.add(removedElem);
+        for (const removedNode of mutationRecord.removedNodes) {
+            if (observedChildren.has(removedNode)) {
+                removedElems.add(removedNode);
+            }
         }
     }
 
