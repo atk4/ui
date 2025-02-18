@@ -189,7 +189,6 @@ function handleObserverRecords(elem, mutationRecords) {
     if (parentElem !== null) {
       const parentElemOrig = elementByObservedChild.get(removedElem);
       if (parentElem === parentElemOrig) {
-        console.warn('Element remove observer - node was readded');
         continue;
       } else {
         console.warn('Element remove observer - node was moved'); // TODO consider supporting "move"
