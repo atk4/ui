@@ -98,7 +98,7 @@ export default {
                 url: this.url,
                 data: options,
                 method: 'GET',
-                stateContext: this.context ? $(this.context) : $(this.$el),
+                stateContext: $(this.context ? this.context : this.$el),
                 onComplete: function (e, r) {
                     that.isActive = false;
                 },
