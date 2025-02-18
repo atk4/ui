@@ -3,7 +3,7 @@
  */
 export default class AtkAbstractPlugin {
     constructor(element, options) {
-        this.element = element;
+        this.el = element;
         this.settings = options;
         this.main();
     }

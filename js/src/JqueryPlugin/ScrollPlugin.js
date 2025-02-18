@@ -14,7 +14,7 @@ export default class AtkScrollPlugin extends AbstractPlugin {
     main() {
         // check if we are initialized already because loading content
         // can recall this plugin and screw up page number
-        if ($(this.element).data('__atkScroll')) {
+        if ($(this.el).data('__atkScroll')) {
             return false;
         }
 
@@ -35,15 +35,15 @@ export default class AtkScrollPlugin extends AbstractPlugin {
 
         if (this.settings.options.hasFixTableHeader) {
             this.isWindow = false;
-            this.$scroll = $(this.element).parent();
-            this.$inner = $(this.element);
+            this.$scroll = $(this.el).parent();
+            this.$inner = $(this.el);
             this.setTableHeader();
         } else {
             // check if scroll apply vs Window or inside our element
-            this.isWindow = $(this.element).css('overflow-y') === 'visible';
-            this.$scroll = this.isWindow ? $(window) : $(this.element);
+            this.isWindow = $(this.el).css('overflow-y') === 'visible';
+            this.$scroll = this.isWindow ? $(window) : $(this.el);
             // is Inner the element itself or it's children
-            this.$inner = this.isWindow ? $(this.element) : $(this.element).children();
+            this.$inner = this.isWindow ? $(this.el) : $(this.el).children();
         }
 
         // the target element within container where new content is appendTo
@@ -61,22 +61,22 @@ export default class AtkScrollPlugin extends AbstractPlugin {
      * Add fix table header.
      */
     setTableHeader() {
-        if ($(this.element).parent().length > 0) {
+        if ($(this.el).parent().length > 0) {
             let $tableCopy = null;
-            $(this.element).parent().height(this.settings.options.tableContainerHeight);
-            $(this.element).addClass('fixed');
-            $tableCopy = $(this.element).clone(true, true);
+            $(this.el).parent().height(this.settings.options.tableContainerHeight);
+            $(this.el).addClass('fixed');
+            $tableCopy = $(this.el).clone(true, true);
             $tableCopy.attr('id', $tableCopy.attr('id') + '_');
             $tableCopy.find('tbody, tfoot').remove();
             $tableCopy.css({
                 position: 'absolute',
                 'background-color': this.settings.options.tableHeaderColor,
-                border: $(this.element).find('th').eq(1).css('border-left'),
+                border: $(this.el).find('th').eq(1).css('border-left'),
                 'z-index': 1,
             });
             this.$scroll.prepend($tableCopy);
-            $(this.element).find('thead').hide();
-            $(this.element).css('margin-top', $tableCopy.find('thead').height());
+            $(this.el).find('thead').hide();
+            $(this.el).css('margin-top', $tableCopy.find('thead').height());
         }
     }
 
@@ -84,10 +84,10 @@ export default class AtkScrollPlugin extends AbstractPlugin {
      * Check if scrolling require adding content.
      */
     onScroll(event) {
-        const borderTopWidth = Number.parseInt($(this.element).css('borderTopWidth'), 10);
+        const borderTopWidth = Number.parseInt($(this.el).css('borderTopWidth'), 10);
         const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth;
-        // $(this.element) padding top value
-        const paddingTop = Number.parseInt($(this.element).css('paddingTop'), 10) + borderTopWidthInt;
+        // $(this.el) padding top value
+        const paddingTop = Number.parseInt($(this.el).css('paddingTop'), 10) + borderTopWidthInt;
         // either the scroll bar position using window or the container element top position otherwise
         const topHeight = this.isWindow ? $(window).scrollTop() : this.$scroll.offset().top;
         // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
@@ -106,7 +106,7 @@ export default class AtkScrollPlugin extends AbstractPlugin {
      * @returns {boolean}
      */
     hasScrollbar() {
-        const innerHeight = this.isWindow ? Math.ceil($(this.element).height()) : Math.ceil(this.$inner.height());
+        const innerHeight = this.isWindow ? Math.ceil($(this.el).height()) : Math.ceil(this.$inner.height());
         const scrollHeight = Math.ceil(this.$scroll.height());
 
         return innerHeight > scrollHeight;

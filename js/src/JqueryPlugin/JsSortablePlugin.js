@@ -37,7 +37,7 @@ export default class AtkJsSortablePlugin extends AbstractPlugin {
         }
 
         this.injectStyles(this.settings.mirrorCss + this.settings.overCss);
-        this.dragContainer = $(this.element).find(this.settings.container);
+        this.dragContainer = $(this.el).find(this.settings.container);
         const sortable = new Draggable.Sortable(
             this.dragContainer[0],
             {

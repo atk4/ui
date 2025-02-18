@@ -4,14 +4,14 @@ import AbstractPlugin from './AbstractPlugin';
 
 export default class AtkFileUploadPlugin extends AbstractPlugin {
     main() {
-        this.textInput = $(this.element).find('input[type="text"]');
-        this.hiddenInput = $(this.element).find('input[type="hidden"]');
+        this.textInput = $(this.el).find('input[type="text"]');
+        this.hiddenInput = $(this.el).find('input[type="hidden"]');
 
-        this.fileInput = $(this.element).find('input[type="file"]');
-        this.action = $(this.element).find('#' + this.settings.action);
+        this.fileInput = $(this.el).find('input[type="file"]');
+        this.action = $(this.el).find('#' + this.settings.action);
         this.actionContent = this.action.html();
 
-        this.bar = $(this.element).find('.progress');
+        this.bar = $(this.el).find('.progress');
         this.setEventHandler();
         this.setInitialState();
     }
@@ -28,7 +28,7 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
             },
         }).hide();
 
-        $(this.element).data().fileId = this.settings.file.id;
+        $(this.el).data().fileId = this.settings.file.id;
         this.hiddenInput.val(this.settings.file.id);
         this.textInput.val(this.settings.file.name);
         this.textInput.data('isTouch', false);
@@ -41,7 +41,7 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
      * Update input value.
      */
     updateField(fileId, fileName) {
-        $(this.element).data().fileId = fileId;
+        $(this.el).data().fileId = fileId;
         this.hiddenInput.val(fileId);
 
         if (fileName === '' || fileName === undefined || fileName === null) {
@@ -70,7 +70,7 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
                 // to the uploaded file via the jQuery data property.
                 // Check if that ID exist and send it with
                 // delete callback, If not, default to file name.
-                let id = $(this.element).data().fileId;
+                let id = $(this.el).data().fileId;
                 if (id === '' || id === undefined || id === null) {
                     id = this.textInput.val();
                 }
@@ -107,7 +107,7 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
                 this.textInput.val('');
                 this.fileInput.val('');
                 this.hiddenInput.val('');
-                $(this.element).data().fileId = null;
+                $(this.el).data().fileId = null;
 
                 break;
             }
@@ -153,7 +153,7 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
         this.bar.show();
         atk.uploadService.uploadFiles(
             files,
-            $(this.element),
+            $(this.el),
             { fUploadAction: 'upload' },
             this.settings.url,
             completeCb,
@@ -165,12 +165,12 @@ export default class AtkFileUploadPlugin extends AbstractPlugin {
      * Callback server for file delete.
      */
     doFileDelete(fileId) {
-        $(this.element).api({
+        $(this.el).api({
             on: 'now',
             url: this.settings.url,
             data: { fUploadAction: 'delete', fUploadId: fileId },
             method: 'POST',
-            obj: $(this.element),
+            obj: $(this.el),
             onComplete: (response, content) => {
                 if (response.success) {
                     this.setState('upload');
