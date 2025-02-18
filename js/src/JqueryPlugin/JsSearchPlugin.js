@@ -6,12 +6,12 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
     main() {
         this.urlArgs = {};
         this.state = { button: false, filter: false };
-        this.textInput = this.$el.find('input[type="text"]');
-        this.leftIcon = this.$el.find('.atk-filter-icon').hide();
-        this.searchAction = this.$el.find('.atk-search-button');
+        this.textInput = $(this.element).find('input[type="text"]');
+        this.leftIcon = $(this.element).find('.atk-filter-icon').hide();
+        this.searchAction = $(this.element).find('.atk-search-button');
         this.searchIcon = this.searchAction.find('i.atk-search-icon');
         this.removeIcon = this.searchAction.find('i.atk-remove-icon').hide();
-        this.$el.data('previousValue', '');
+        $(this.element).data('previousValue', '');
 
         this.setInputAction();
         this.setSearchAction();
@@ -46,13 +46,13 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
                     this.setFilterState(false);
                     this.textInput.val('');
                 });
-            } else if (e.target.value !== this.$el.data('previousValue')) {
+            } else if (e.target.value !== $(this.element).data('previousValue')) {
                 this.doSearch(this.settings.url, e.target.value, options, () => {
                     this.setButtonState(true);
                     this.setFilterState(true);
                 });
             }
-            this.$el.data('previousValue', e.target.value);
+            $(this.element).data('previousValue', e.target.value);
         }, this.settings.timeOut));
     }
 
@@ -67,15 +67,15 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
                     this.setButtonState(true);
                     this.setFilterState(true);
                 });
-                this.$el.data('previousValue', e.target.value);
+                $(this.element).data('previousValue', e.target.value);
             } else if ((e.keyCode === 27 && e.target.value) || (e.keyCode === 13 && e.target.value === '')) {
                 this.doSearch(this.settings.url, null, options, () => {
                     this.setButtonState(false);
                     this.setFilterState(false);
                 });
-                this.$el.data('previousValue', '');
+                $(this.element).data('previousValue', '');
                 this.textInput.val('');
-            } else if (this.$el.data('previousValue') !== e.target.value) {
+            } else if ($(this.element).data('previousValue') !== e.target.value) {
                 this.setButtonState(false);
             }
         });
@@ -109,7 +109,7 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
                     this.setFilterState(false);
                 });
                 this.textInput.val('');
-                this.$el.data('previousValue', '');
+                $(this.element).data('previousValue', '');
             }
 
             if (!this.state.button && this.textInput.val()) {
@@ -131,7 +131,7 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
         this.textInput.val(text);
         this.setButtonState(true);
         this.setFilterState(true);
-        this.$el.data('previousValue', text);
+        $(this.element).data('previousValue', text);
     }
 
     /**
@@ -178,12 +178,12 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
         }
 
         if (this.settings.useAjax) {
-            this.$el.api({
+            $(this.element).api({
                 on: 'now',
                 url: url,
                 data: options,
                 method: 'GET',
-                obj: this.$el,
+                obj: $(this.element),
                 stateContext: this.searchAction,
                 onComplete: cb,
             });

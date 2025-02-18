@@ -8,10 +8,10 @@ import AbstractPlugin from './AbstractPlugin';
 export default class AtkColumnResizerPlugin extends AbstractPlugin {
     main() {
         this.settings.onResize = this.onResize.bind(this);
-        this.resizable = new Resizer(this.$el[0], { ...this.settings.atkDefaults, ...this.settings });
+        this.resizable = new Resizer($(this.element)[0], { ...this.settings.atkDefaults, ...this.settings });
 
         // reset padding class
-        this.$el.removeClass('grip-padding');
+        $(this.element).removeClass('grip-padding');
     }
 
     /**
@@ -20,7 +20,7 @@ export default class AtkColumnResizerPlugin extends AbstractPlugin {
      * @param {Array.<object>} widths example: [{ column: 'name', size: 135 }]
      */
     sendWidths(widths) {
-        this.$el.api({
+        $(this.element).api({
             on: 'now',
             url: this.settings.url,
             method: 'POST',
@@ -30,7 +30,7 @@ export default class AtkColumnResizerPlugin extends AbstractPlugin {
 
     onResize(event) {
         if (this.settings.url) {
-            const columns = this.$el.find('th');
+            const columns = $(this.element).find('th');
 
             const widths = [];
             columns.each((i, item) => {

@@ -5,7 +5,7 @@ import $ from 'external/jquery';
  */
 export default class AtkAbstractPlugin {
     constructor(element, options) {
-        this.$el = $(element);
+        $(this.element) = $(element);
         this.settings = options;
         this.main();
     }

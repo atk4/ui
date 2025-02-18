@@ -54,15 +54,15 @@ export default class AtkConditionalFormPlugin extends AbstractPlugin {
             this.selector = atk.formService.getDefaultSelector();
         }
         // add change listener to inputs according to selector
-        this.$el.find(':checkbox')
+        $(this.element).find(':checkbox')
             .on('change', this, atk.createDebouncedFx(this.onInputChange, 100, true));
-        this.$el.find(':radio')
+        $(this.element).find(':radio')
             .on('change', this, atk.createDebouncedFx(this.onInputChange, 100, true));
-        this.$el.find('input[type="hidden"]')
+        $(this.element).find('input[type="hidden"]')
             .on('change', this, atk.createDebouncedFx(this.onInputChange, 100, true));
-        this.$el.find('input')
+        $(this.element).find('input')
             .on(this.settings.validateEvent, this, atk.createDebouncedFx(this.onInputChange, 250));
-        this.$el.find('select')
+        $(this.element).find('select')
             .on('change', this, atk.createDebouncedFx(this.onInputChange, 100));
 
         this.initialize();
@@ -116,10 +116,10 @@ export default class AtkConditionalFormPlugin extends AbstractPlugin {
                     const validationRule = rules[inputName];
                     if (Array.isArray(validationRule)) {
                         for (const rule of validationRule) {
-                            isAndValid = isAndValid && atk.formService.validateField(this.$el, inputName, rule);
+                            isAndValid = isAndValid && atk.formService.validateField($(this.element), inputName, rule);
                         }
                     } else {
-                        isAndValid = isAndValid && atk.formService.validateField(this.$el, inputName, validationRule);
+                        isAndValid = isAndValid && atk.formService.validateField($(this.element), inputName, validationRule);
                     }
                 }
                 // apply OR condition between rules
@@ -142,7 +142,7 @@ export default class AtkConditionalFormPlugin extends AbstractPlugin {
      */
     setInputsState() {
         for (const input of this.inputs) {
-            const $input = atk.formService.getField(this.$el, input.inputName);
+            const $input = atk.formService.getField($(this.element), input.inputName);
             if ($input) {
                 const $container = atk.formService.getContainer($input, this.selector);
                 if ($container) {

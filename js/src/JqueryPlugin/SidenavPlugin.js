@@ -12,22 +12,22 @@ import AbstractPlugin from './AbstractPlugin';
 export default class AtkSidenavPlugin extends AbstractPlugin {
     main() {
         // menu items container
-        this.menu = this.$el.find(this.settings.menuItemsSelector);
+        this.menu = $(this.element).find(this.settings.menuItemsSelector);
         if (this.menu.length === 0) {
             // this $el is our single item
-            if (this.urlMatchLocation(this.$el[0].href)) {
-                this.$el.addClass(this.settings.menuItemActiveClass);
+            if (this.urlMatchLocation($(this.element)[0].href)) {
+                $(this.element).addClass(this.settings.menuItemActiveClass);
             }
 
             return;
         }
         // HTML element for display or hiding menu items. Usually a div containning an icon.
-        this.toggler = this.$el.find(this.settings.toggleSelector);
+        this.toggler = $(this.element).find(this.settings.toggleSelector);
 
         this.addClickHandler();
         if (this.hasBase()) {
             // make menu group active
-            this.$el.addClass(this.settings.menuGroupActiveClass);
+            $(this.element).addClass(this.settings.menuGroupActiveClass);
             // make menu group visible
             this.menu.toggleClass(this.settings.visibleCssClass);
         }
@@ -92,7 +92,7 @@ export default class AtkSidenavPlugin extends AbstractPlugin {
      * Add click handler for menu group and toggler element.
      */
     addClickHandler() {
-        this.$el.find(this.settings.menuGroupTitleSelector).on('click', (e) => {
+        $(this.element).find(this.settings.menuGroupTitleSelector).on('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             window.open(this.menu.find(this.settings.firstItemSelector).first().attr('href'), e.metaKey ? '_blank' : '_self');
