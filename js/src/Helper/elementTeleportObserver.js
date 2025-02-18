@@ -10,7 +10,7 @@ function handleElementsTeleport(elems) {
         }
 
         if (!teleportTargets.has(teleportTo)) {
-            const targets = window.document.querySelectorAll(teleportTo);
+            const targets = document.querySelectorAll(teleportTo);
             if (targets.length !== 1) {
                 throw new Error('Target DOM element not found');
             }
@@ -62,9 +62,9 @@ function handleObserverRecords(mutationRecords) {
 }
 
 const observer = new MutationObserver((mutationRecords) => handleObserverRecords(mutationRecords));
-observer.observe(window.document, { subtree: true, childList: true, attributeFilter: [attributeToName] });
+observer.observe(document, { subtree: true, childList: true, attributeFilter: [attributeToName] });
 
-handleElementsTeleport(window.document.querySelectorAll('*[' + attributeToName + ']'));
+handleElementsTeleport(document.querySelectorAll('*[' + attributeToName + ']'));
 
 export default {
     handleMutationQueueImmediately: function () { // TODO remove this method once evalJsCode() in apiService is called at least thru JS microtask

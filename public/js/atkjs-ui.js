@@ -387,7 +387,7 @@ function handleElementsTeleport(elems) {
       continue;
     }
     if (!teleportTargets.has(teleportTo)) {
-      const targets = window.document.querySelectorAll(teleportTo);
+      const targets = document.querySelectorAll(teleportTo);
       if (targets.length !== 1) {
         throw new Error('Target DOM element not found');
       }
@@ -429,12 +429,12 @@ function handleObserverRecords(mutationRecords) {
   handleElementsTeleport(elems);
 }
 const observer = new MutationObserver(mutationRecords => handleObserverRecords(mutationRecords));
-observer.observe(window.document, {
+observer.observe(document, {
   subtree: true,
   childList: true,
   attributeFilter: [attributeToName]
 });
-handleElementsTeleport(window.document.querySelectorAll('*[' + attributeToName + ']'));
+handleElementsTeleport(document.querySelectorAll('*[' + attributeToName + ']'));
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   handleMutationQueueImmediately: function () {
     // TODO remove this method once evalJsCode() in apiService is called at least thru JS microtask
@@ -727,16 +727,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ AtkAbstractPlugin)
 /* harmony export */ });
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
-
-
 /**
  * Base implementation of jQuery plugin in Agile Toolkit.
  */
 class AtkAbstractPlugin {
   constructor(element, options) {
-    this.$el = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(element);
+    this.el = element;
     this.settings = options;
     this.main();
   }
@@ -796,7 +792,7 @@ class AtkAjaxExecutePlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__[
         // eslint-disable-line no-alert
         this.doExecute();
       }
-    } else if (!this.$el.hasClass('loading')) {
+    } else if (!external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.el).hasClass('loading')) {
       this.doExecute();
     }
   }
@@ -826,7 +822,7 @@ class AtkAjaxExecutePlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__[
       settings.data = Object.assign(data, store);
     }
     settings.url = url + '?' + external_jquery__WEBPACK_IMPORTED_MODULE_0___default().param(urlParams);
-    this.$el.api(settings);
+    external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.el).api(settings);
   }
 }
 AtkAjaxExecutePlugin.DEFAULTS = {
@@ -877,13 +873,13 @@ __webpack_require__.r(__webpack_exports__);
 class AtkColumnResizerPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
   main() {
     this.settings.onResize = this.onResize.bind(this);
-    this.resizable = new (column_resizer__WEBPACK_IMPORTED_MODULE_5___default())(this.$el[0], {
+    this.resizable = new (column_resizer__WEBPACK_IMPORTED_MODULE_5___default())(this.el, {
       ...this.settings.atkDefaults,
       ...this.settings
     });
 
     // reset padding class
-    this.$el.removeClass('grip-padding');
+    external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(this.el).removeClass('grip-padding');
   }
 
   /**
@@ -892,7 +888,7 @@ class AtkColumnResizerPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6_
    * @param {Array.<object>} widths example: [{ column: 'name', size: 135 }]
    */
   sendWidths(widths) {
-    this.$el.api({
+    external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(this.el).api({
       on: 'now',
       url: this.settings.url,
       method: 'POST',
@@ -903,9 +899,9 @@ class AtkColumnResizerPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6_
   }
   onResize(event) {
     if (this.settings.url) {
-      const columns = this.$el.find('th');
+      const $columns = external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(this.el).find('th');
       const widths = [];
-      columns.each((i, item) => {
+      $columns.each((i, item) => {
         widths.push({
           column: external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(item).data('column'),
           size: external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(item).outerWidth()
@@ -950,8 +946,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_find_js__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var core_js_modules_esnext_iterator_map_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! core-js/modules/esnext.iterator.map.js */ "./node_modules/core-js/modules/esnext.iterator.map.js");
 /* harmony import */ var core_js_modules_esnext_iterator_map_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_esnext_iterator_map_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
+
 
 
 
@@ -1006,19 +1005,19 @@ __webpack_require__.r(__webpack_exports__);
  *
  * See Fomantic-UI validation rule for more details: https://fomantic-ui.com/behaviors/form.html#validation-rules
  */
-class AtkConditionalFormPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["default"] {
+class AtkConditionalFormPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_8__["default"] {
   main() {
     this.inputs = [];
     this.selector = this.settings.selector;
     if (!this.selector) {
-      this.selector = atk__WEBPACK_IMPORTED_MODULE_6__["default"].formService.getDefaultSelector();
+      this.selector = atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.getDefaultSelector();
     }
     // add change listener to inputs according to selector
-    this.$el.find(':checkbox').on('change', this, atk__WEBPACK_IMPORTED_MODULE_6__["default"].createDebouncedFx(this.onInputChange, 100, true));
-    this.$el.find(':radio').on('change', this, atk__WEBPACK_IMPORTED_MODULE_6__["default"].createDebouncedFx(this.onInputChange, 100, true));
-    this.$el.find('input[type="hidden"]').on('change', this, atk__WEBPACK_IMPORTED_MODULE_6__["default"].createDebouncedFx(this.onInputChange, 100, true));
-    this.$el.find('input').on(this.settings.validateEvent, this, atk__WEBPACK_IMPORTED_MODULE_6__["default"].createDebouncedFx(this.onInputChange, 250));
-    this.$el.find('select').on('change', this, atk__WEBPACK_IMPORTED_MODULE_6__["default"].createDebouncedFx(this.onInputChange, 100));
+    external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.el).find(':checkbox').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100, true));
+    external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.el).find(':radio').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100, true));
+    external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.el).find('input[type="hidden"]').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100, true));
+    external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.el).find('input').on(this.settings.validateEvent, this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 250));
+    external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.el).find('select').on('change', this, atk__WEBPACK_IMPORTED_MODULE_7__["default"].createDebouncedFx(this.onInputChange, 100));
     this.initialize();
   }
   getRule(ruleToSearch) {
@@ -1070,10 +1069,10 @@ class AtkConditionalFormPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_
           const validationRule = rules[inputName];
           if (Array.isArray(validationRule)) {
             for (const rule of validationRule) {
-              isAndValid = isAndValid && atk__WEBPACK_IMPORTED_MODULE_6__["default"].formService.validateField(this.$el, inputName, rule);
+              isAndValid = isAndValid && atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.validateField(external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.el), inputName, rule);
             }
           } else {
-            isAndValid = isAndValid && atk__WEBPACK_IMPORTED_MODULE_6__["default"].formService.validateField(this.$el, inputName, validationRule);
+            isAndValid = isAndValid && atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.validateField(external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.el), inputName, validationRule);
           }
         }
         // apply OR condition between rules
@@ -1096,9 +1095,9 @@ class AtkConditionalFormPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_
    */
   setInputsState() {
     for (const input of this.inputs) {
-      const $input = atk__WEBPACK_IMPORTED_MODULE_6__["default"].formService.getField(this.$el, input.inputName);
+      const $input = atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.getField(external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.el), input.inputName);
       if ($input) {
-        const $container = atk__WEBPACK_IMPORTED_MODULE_6__["default"].formService.getContainer($input, this.selector);
+        const $container = atk__WEBPACK_IMPORTED_MODULE_7__["default"].formService.getContainer($input, this.selector);
         if ($container) {
           $container.hide();
           this.setInputState(input.state, $input, $container);
@@ -1295,12 +1294,12 @@ __webpack_require__.r(__webpack_exports__);
 
 class AtkFileUploadPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
-    this.textInput = this.$el.find('input[type="text"]');
-    this.hiddenInput = this.$el.find('input[type="hidden"]');
-    this.fileInput = this.$el.find('input[type="file"]');
-    this.action = this.$el.find('#' + this.settings.action);
-    this.actionContent = this.action.html();
-    this.bar = this.$el.find('.progress');
+    this.$textInput = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).find('input[type="text"]');
+    this.$hiddenInput = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).find('input[type="hidden"]');
+    this.$fileInput = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).find('input[type="file"]');
+    this.$action = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).find('#' + this.settings.action);
+    this.$actionContent = this.$action.html();
+    this.$bar = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).find('.progress');
     this.setEventHandler();
     this.setInitialState();
   }
@@ -1310,16 +1309,16 @@ class AtkFileUploadPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__["
    */
   setInitialState() {
     // set progress bar
-    this.bar.progress({
+    this.$bar.progress({
       text: {
         percent: '{percent}%',
         active: '{percent}%'
       }
     }).hide();
-    this.$el.data().fileId = this.settings.file.id;
-    this.hiddenInput.val(this.settings.file.id);
-    this.textInput.val(this.settings.file.name);
-    this.textInput.data('isTouch', false);
+    external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).data().fileId = this.settings.file.id;
+    this.$hiddenInput.val(this.settings.file.id);
+    this.$textInput.val(this.settings.file.name);
+    this.$textInput.data('isTouch', false);
     if (this.settings.file.id) {
       this.setState('delete');
     }
@@ -1329,12 +1328,12 @@ class AtkFileUploadPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__["
    * Update input value.
    */
   updateField(fileId, fileName) {
-    this.$el.data().fileId = fileId;
-    this.hiddenInput.val(fileId);
+    external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).data().fileId = fileId;
+    this.$hiddenInput.val(fileId);
     if (fileName === '' || fileName === undefined || fileName === null) {
-      this.textInput.val(fileId);
+      this.$textInput.val(fileId);
     } else {
-      this.textInput.val(fileName);
+      this.$textInput.val(fileName);
     }
   }
 
@@ -1342,33 +1341,33 @@ class AtkFileUploadPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__["
    * Add event handler to input element.
    */
   setEventHandler() {
-    this.textInput.on('click', e => {
+    this.$textInput.on('click', e => {
       if (!e.target.value) {
-        this.fileInput.click();
+        this.$fileInput.click();
       }
     });
 
     // add event handler to action button
-    this.action.on('click', e => {
-      if (!this.textInput.val()) {
-        this.fileInput.click();
+    this.$action.on('click', e => {
+      if (!this.$textInput.val()) {
+        this.$fileInput.click();
       } else {
         // When upload is complete a JS action can be send to set an ID
         // to the uploaded file via the jQuery data property.
         // Check if that ID exist and send it with
         // delete callback, If not, default to file name.
-        let id = this.$el.data().fileId;
+        let id = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).data().fileId;
         if (id === '' || id === undefined || id === null) {
-          id = this.textInput.val();
+          id = this.$textInput.val();
         }
         this.doFileDelete(id);
       }
     });
 
     // add event handler to file input
-    this.fileInput.on('change', e => {
+    this.$fileInput.on('change', e => {
       if (e.target.files.length > 0) {
-        this.textInput.val(e.target.files[0].name);
+        this.$textInput.val(e.target.files[0].name);
         this.doFileUpload(e.target.files);
       }
     });
@@ -1382,20 +1381,20 @@ class AtkFileUploadPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__["
     switch (mode) {
       case 'delete':
         {
-          this.action.html(this.getEraseContent);
+          this.$action.html(this.getEraseContent);
           setTimeout(() => {
-            this.bar.progress('reset');
-            this.bar.hide('fade');
+            this.$bar.progress('reset');
+            this.$bar.hide('fade');
           }, 1000);
           break;
         }
       case 'upload':
         {
-          this.action.html(this.actionContent);
-          this.textInput.val('');
-          this.fileInput.val('');
-          this.hiddenInput.val('');
-          this.$el.data().fileId = null;
+          this.$action.html(this.$actionContent);
+          this.$textInput.val('');
+          this.$fileInput.val('');
+          this.$hiddenInput.val('');
+          external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).data().fileId = null;
           break;
         }
     }
@@ -1415,7 +1414,7 @@ class AtkFileUploadPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__["
     // setup task on upload completion
     const completeCb = (response, content) => {
       if (response.success) {
-        this.bar.progress('set label', this.settings.completeLabel);
+        this.$bar.progress('set label', this.settings.completeLabel);
         this.setState('delete');
       }
       if (this.settings.submit) {
@@ -1429,13 +1428,13 @@ class AtkFileUploadPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__["
       xhr.upload.addEventListener('progress', event => {
         if (event.lengthComputable) {
           const percentComplete = event.loaded / event.total;
-          this.bar.progress('set percent', Number.parseInt(percentComplete * 100, 10));
+          this.$bar.progress('set percent', Number.parseInt(percentComplete * 100, 10));
         }
       });
       return xhr;
     };
-    this.bar.show();
-    atk__WEBPACK_IMPORTED_MODULE_4__["default"].uploadService.uploadFiles(files, this.$el, {
+    this.$bar.show();
+    atk__WEBPACK_IMPORTED_MODULE_4__["default"].uploadService.uploadFiles(files, external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el), {
       fUploadAction: 'upload'
     }, this.settings.url, completeCb, xhrCb);
   }
@@ -1444,7 +1443,7 @@ class AtkFileUploadPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__["
    * Callback server for file delete.
    */
   doFileDelete(fileId) {
-    this.$el.api({
+    external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).api({
       on: 'now',
       url: this.settings.url,
       data: {
@@ -1452,7 +1451,7 @@ class AtkFileUploadPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__["
         fUploadId: fileId
       },
       method: 'POST',
-      obj: this.$el,
+      obj: external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el),
       onComplete: (response, content) => {
         if (response.success) {
           this.setState('upload');
@@ -1524,12 +1523,12 @@ class AtkJsSearchPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["de
       button: false,
       filter: false
     };
-    this.textInput = this.$el.find('input[type="text"]');
-    this.leftIcon = this.$el.find('.atk-filter-icon').hide();
-    this.searchAction = this.$el.find('.atk-search-button');
-    this.searchIcon = this.searchAction.find('i.atk-search-icon');
-    this.removeIcon = this.searchAction.find('i.atk-remove-icon').hide();
-    this.$el.data('previousValue', '');
+    this.$textInput = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.el).find('input[type="text"]');
+    this.$leftIcon = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.el).find('.atk-filter-icon').hide();
+    this.$searchAction = external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.el).find('.atk-search-button');
+    this.$searchIcon = this.$searchAction.find('i.atk-search-icon');
+    this.$removeIcon = this.$searchAction.find('i.atk-remove-icon').hide();
+    external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.el).data('previousValue', '');
     this.setInputAction();
     this.setSearchAction();
     this.onEscapeKeyAction();
@@ -1555,21 +1554,21 @@ class AtkJsSearchPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["de
    * Query server on each keystroke after proper timeout.
    */
   onAutoQueryAction() {
-    this.textInput.on('keyup', atk__WEBPACK_IMPORTED_MODULE_6__["default"].createDebouncedFx(e => {
+    this.$textInput.on('keyup', atk__WEBPACK_IMPORTED_MODULE_6__["default"].createDebouncedFx(e => {
       const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.urlOptions);
       if (e.target.value === '' || e.keyCode === 27) {
         this.doSearch(this.settings.url, null, options, () => {
           this.setButtonState(false);
           this.setFilterState(false);
-          this.textInput.val('');
+          this.$textInput.val('');
         });
-      } else if (e.target.value !== this.$el.data('previousValue')) {
+      } else if (e.target.value !== external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.el).data('previousValue')) {
         this.doSearch(this.settings.url, e.target.value, options, () => {
           this.setButtonState(true);
           this.setFilterState(true);
         });
       }
-      this.$el.data('previousValue', e.target.value);
+      external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.el).data('previousValue', e.target.value);
     }, this.settings.timeOut));
   }
 
@@ -1577,22 +1576,22 @@ class AtkJsSearchPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["de
    * Query server after pressing Enter.
    */
   onEnterAction() {
-    this.textInput.on('keyup', e => {
+    this.$textInput.on('keyup', e => {
       const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.urlOptions);
       if (e.keyCode === 13 && e.target.value) {
         this.doSearch(this.settings.url, e.target.value, options, () => {
           this.setButtonState(true);
           this.setFilterState(true);
         });
-        this.$el.data('previousValue', e.target.value);
+        external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.el).data('previousValue', e.target.value);
       } else if (e.keyCode === 27 && e.target.value || e.keyCode === 13 && e.target.value === '') {
         this.doSearch(this.settings.url, null, options, () => {
           this.setButtonState(false);
           this.setFilterState(false);
         });
-        this.$el.data('previousValue', '');
-        this.textInput.val('');
-      } else if (this.$el.data('previousValue') !== e.target.value) {
+        external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.el).data('previousValue', '');
+        this.$textInput.val('');
+      } else if (external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.el).data('previousValue') !== e.target.value) {
         this.setButtonState(false);
       }
     });
@@ -1603,11 +1602,11 @@ class AtkJsSearchPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["de
    * When Search text is already empty the event will bubble up normally.
    */
   onEscapeKeyAction() {
-    this.textInput.keydown(e => {
-      if (this.textInput.val() !== '' && e.key === 'Escape') {
+    this.$textInput.keydown(e => {
+      if (this.$textInput.val() !== '' && e.key === 'Escape') {
         this.setButtonState(false);
         this.setFilterState(false);
-        this.textInput.val('');
+        this.$textInput.val('');
         return false;
       }
     });
@@ -1617,18 +1616,18 @@ class AtkJsSearchPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["de
    * Set Search button event handler.
    */
   setSearchAction() {
-    this.searchAction.on('click', e => {
+    this.$searchAction.on('click', e => {
       const options = external_jquery__WEBPACK_IMPORTED_MODULE_5___default().extend({}, this.urlArgs, this.settings.urlOptions);
       if (this.state.button) {
         this.doSearch(this.settings.url, null, options, () => {
           this.setButtonState(false);
           this.setFilterState(false);
         });
-        this.textInput.val('');
-        this.$el.data('previousValue', '');
+        this.$textInput.val('');
+        external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.el).data('previousValue', '');
       }
-      if (!this.state.button && this.textInput.val()) {
-        this.doSearch(this.settings.url, this.textInput.val(), options, () => {
+      if (!this.state.button && this.$textInput.val()) {
+        this.doSearch(this.settings.url, this.$textInput.val(), options, () => {
           this.setButtonState(true);
           this.setFilterState(true);
         });
@@ -1643,10 +1642,10 @@ class AtkJsSearchPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["de
    * @param {string} text The text input value.
    */
   setFilter(text) {
-    this.textInput.val(text);
+    this.$textInput.val(text);
     this.setButtonState(true);
     this.setFilterState(true);
-    this.$el.data('previousValue', text);
+    external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.el).data('previousValue', text);
   }
 
   /**
@@ -1663,9 +1662,9 @@ class AtkJsSearchPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["de
    */
   setFilterState(isOn) {
     if (isOn) {
-      this.leftIcon.show();
+      this.$leftIcon.show();
     } else {
-      this.leftIcon.hide();
+      this.$leftIcon.hide();
     }
     this.state.filter = isOn;
   }
@@ -1675,11 +1674,11 @@ class AtkJsSearchPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["de
    */
   setButtonState(isOn) {
     if (isOn) {
-      this.searchIcon.hide();
-      this.removeIcon.show();
+      this.$searchIcon.hide();
+      this.$removeIcon.show();
     } else {
-      this.searchIcon.show();
-      this.removeIcon.hide();
+      this.$searchIcon.show();
+      this.$removeIcon.hide();
     }
     this.state.button = isOn;
   }
@@ -1696,13 +1695,13 @@ class AtkJsSearchPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["de
       });
     }
     if (this.settings.useAjax) {
-      this.$el.api({
+      external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.el).api({
         on: 'now',
         url: url,
         data: options,
         method: 'GET',
-        obj: this.$el,
-        stateContext: this.searchAction,
+        obj: external_jquery__WEBPACK_IMPORTED_MODULE_5___default()(this.el),
+        stateContext: this.$searchAction,
         onComplete: cb
       });
     } else {
@@ -1793,8 +1792,8 @@ class AtkJsSortablePlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6__["
       elem.remove();
     }
     this.injectStyles(this.settings.mirrorCss + this.settings.overCss);
-    this.dragContainer = this.$el.find(this.settings.container);
-    const sortable = new Draggable.Sortable(this.dragContainer[0], {
+    this.$dragContainer = external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(this.el).find(this.settings.container);
+    const sortable = new Draggable.Sortable(this.$dragContainer[0], {
       draggable: this.settings.draggable,
       handle: this.settings.handleClass ? '.' + this.settings.handleClass : null
     });
@@ -1807,7 +1806,7 @@ class AtkJsSortablePlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6__["
       this.newIndex = e.data.newIndex;
       this.origIndex = e.data.oldIndex;
       this.sourceId = external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(e.data.dragEvent.data.originalSource).data(this.settings.dataLabel);
-      this.dragContainer.children().each((i, el) => {
+      this.$dragContainer.children().each((i, el) => {
         if (!external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(el).hasClass('draggable--original') && !external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(el).hasClass('draggable-mirror')) {
           this.ids.push(external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(el).data(this.settings.dataLabel));
         }
@@ -1818,7 +1817,7 @@ class AtkJsSortablePlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6__["
     });
   }
   initialize() {
-    this.dragContainer.children().each((i, el) => {
+    this.$dragContainer.children().each((i, el) => {
       this.ids.push(external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(el).data(this.settings.dataLabel));
     });
   }
@@ -1831,7 +1830,7 @@ class AtkJsSortablePlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6__["
   sendSortOrders(params) {
     const url = this.buildUrl(params);
     if (url) {
-      this.dragContainer.api({
+      this.$dragContainer.api({
         on: 'now',
         url: url,
         data: {
@@ -1841,7 +1840,7 @@ class AtkJsSortablePlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6__["
           source: this.sourceId
         },
         method: 'POST',
-        obj: this.dragContainer
+        obj: this.$dragContainer
       });
     }
   }
@@ -1938,8 +1937,8 @@ class AtkReloadViewPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["
     // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/modules/modal.less#L396
     // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/modules/transition.less#L44
     // related fix https://github.com/fomantic/Fomantic-UI/pull/2982
-    if (!settings.stateContext && this.$el.hasClass('ui modal') && this.$el.children().length > 0 /* prevent loading in original DOM location */) {
-      [settings.stateContext] = this.$el.children('.content');
+    if (!settings.stateContext && external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.el).hasClass('ui modal') && external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.el).children().length > 0 /* prevent loading in original DOM location */) {
+      [settings.stateContext] = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.el).children('.content');
       if (!settings.className) {
         settings.className = [];
       }
@@ -1947,8 +1946,8 @@ class AtkReloadViewPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["
     }
     // and for our panel until migrated
     // https://github.com/atk4/ui/issues/1812#issuecomment-1273092181
-    if (!settings.stateContext && this.$el.hasClass('atk-right-panel') && this.$el.children().length > 0 /* prevent loading in original DOM location */) {
-      [settings.stateContext] = this.$el.children('.ui.segment:not(:has(> .atk-panel-warning))');
+    if (!settings.stateContext && external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.el).hasClass('atk-right-panel') && external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.el).children().length > 0 /* prevent loading in original DOM location */) {
+      [settings.stateContext] = external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.el).children('.ui.segment:not(:has(> .atk-panel-warning))');
       if (!settings.className) {
         settings.className = [];
       }
@@ -1962,7 +1961,7 @@ class AtkReloadViewPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_2__["
       urlParams = Object.assign(urlParams, store);
     }
     settings.url = url + '?' + external_jquery__WEBPACK_IMPORTED_MODULE_0___default().param(urlParams);
-    this.$el.api(settings);
+    external_jquery__WEBPACK_IMPORTED_MODULE_0___default()(this.el).api(settings);
   }
 }
 AtkReloadViewPlugin.DEFAULTS = {
@@ -2014,7 +2013,7 @@ class AtkScrollPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_4__["defa
   main() {
     // check if we are initialized already because loading content
     // can recall this plugin and screw up page number
-    if (this.$el.data('__atkScroll')) {
+    if (external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).data('__atkScroll')) {
       return false;
     }
     const defaultSettings = {
@@ -2035,15 +2034,15 @@ class AtkScrollPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_4__["defa
     this.nextPage = this.settings.options.initialPage + 1;
     if (this.settings.options.hasFixTableHeader) {
       this.isWindow = false;
-      this.$scroll = this.$el.parent();
-      this.$inner = this.$el;
+      this.$scroll = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).parent();
+      this.$inner = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el);
       this.setTableHeader();
     } else {
       // check if scroll apply vs Window or inside our element
-      this.isWindow = this.$el.css('overflow-y') === 'visible';
-      this.$scroll = this.isWindow ? external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window) : this.$el;
+      this.isWindow = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).css('overflow-y') === 'visible';
+      this.$scroll = this.isWindow ? external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window) : external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el);
       // is Inner the element itself or it's children
-      this.$inner = this.isWindow ? this.$el : this.$el.children();
+      this.$inner = this.isWindow ? external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el) : external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).children();
     }
 
     // the target element within container where new content is appendTo
@@ -2060,22 +2059,22 @@ class AtkScrollPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_4__["defa
    * Add fix table header.
    */
   setTableHeader() {
-    if (this.$el.parent().length > 0) {
+    if (external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).parent().length > 0) {
       let $tableCopy = null;
-      this.$el.parent().height(this.settings.options.tableContainerHeight);
-      this.$el.addClass('fixed');
-      $tableCopy = this.$el.clone(true, true);
+      external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).parent().height(this.settings.options.tableContainerHeight);
+      external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).addClass('fixed');
+      $tableCopy = external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).clone(true, true);
       $tableCopy.attr('id', $tableCopy.attr('id') + '_');
       $tableCopy.find('tbody, tfoot').remove();
       $tableCopy.css({
         position: 'absolute',
         'background-color': this.settings.options.tableHeaderColor,
-        border: this.$el.find('th').eq(1).css('border-left'),
+        border: external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).find('th').eq(1).css('border-left'),
         'z-index': 1
       });
       this.$scroll.prepend($tableCopy);
-      this.$el.find('thead').hide();
-      this.$el.css('margin-top', $tableCopy.find('thead').height());
+      external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).find('thead').hide();
+      external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).css('margin-top', $tableCopy.find('thead').height());
     }
   }
 
@@ -2083,10 +2082,10 @@ class AtkScrollPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_4__["defa
    * Check if scrolling require adding content.
    */
   onScroll(event) {
-    const borderTopWidth = Number.parseInt(this.$el.css('borderTopWidth'), 10);
+    const borderTopWidth = Number.parseInt(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).css('borderTopWidth'), 10);
     const borderTopWidthInt = Number.isNaN(borderTopWidth) ? 0 : borderTopWidth;
-    // this.$el padding top value
-    const paddingTop = Number.parseInt(this.$el.css('paddingTop'), 10) + borderTopWidthInt;
+    // $(this.el) padding top value
+    const paddingTop = Number.parseInt(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).css('paddingTop'), 10) + borderTopWidthInt;
     // either the scroll bar position using window or the container element top position otherwise
     const topHeight = this.isWindow ? external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(window).scrollTop() : this.$scroll.offset().top;
     // Inner top value. If using Window, this value does not change, otherwise represent the inner element top value when scroll.
@@ -2104,7 +2103,7 @@ class AtkScrollPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_4__["defa
    * @returns {boolean}
    */
   hasScrollbar() {
-    const innerHeight = this.isWindow ? Math.ceil(this.$el.height()) : Math.ceil(this.$inner.height());
+    const innerHeight = this.isWindow ? Math.ceil(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).height()) : Math.ceil(this.$inner.height());
     const scrollHeight = Math.ceil(this.$scroll.height());
     return innerHeight > scrollHeight;
   }
@@ -2200,9 +2199,8 @@ __webpack_require__.r(__webpack_exports__);
 
 class AtkServerSentEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_3__["default"] {
   main() {
-    const element = this.$el;
     const hasLoader = this.settings.showLoader;
-    const stateContext = external_jquery__WEBPACK_IMPORTED_MODULE_1___default()(this.settings.stateContext ?? element);
+    const stateContext = external_jquery__WEBPACK_IMPORTED_MODULE_1___default()(this.settings.stateContext ?? this.el);
     this.source = new EventSource(this.settings.url);
     if (hasLoader) {
       stateContext.addClass('loading');
@@ -2240,7 +2238,7 @@ class AtkServerSentEventPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_
       console.warn('SSE plugin - request aborted');
     }
     if (this.settings.showLoader) {
-      this.$el.removeClass('loading');
+      external_jquery__WEBPACK_IMPORTED_MODULE_1___default()(this.el).removeClass('loading');
     }
   }
 }
@@ -2298,22 +2296,22 @@ __webpack_require__.r(__webpack_exports__);
 class AtkSidenavPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["default"] {
   main() {
     // menu items container
-    this.menu = this.$el.find(this.settings.menuItemsSelector);
-    if (this.menu.length === 0) {
+    this.$menu = external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.el).find(this.settings.menuItemsSelector);
+    if (this.$menu.length === 0) {
       // this $el is our single item
-      if (this.urlMatchLocation(this.$el[0].href)) {
-        this.$el.addClass(this.settings.menuItemActiveClass);
+      if (this.urlMatchLocation(this.el.href)) {
+        external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.el).addClass(this.settings.menuItemActiveClass);
       }
       return;
     }
     // HTML element for display or hiding menu items. Usually a div containning an icon.
-    this.toggler = this.$el.find(this.settings.toggleSelector);
+    this.$toggler = external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.el).find(this.settings.toggleSelector);
     this.addClickHandler();
     if (this.hasBase()) {
       // make menu group active
-      this.$el.addClass(this.settings.menuGroupActiveClass);
+      external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.el).addClass(this.settings.menuGroupActiveClass);
       // make menu group visible
-      this.menu.toggleClass(this.settings.visibleCssClass);
+      this.$menu.toggleClass(this.settings.visibleCssClass);
     }
     this.setTogglerIcon(this.settings.icon.selector);
   }
@@ -2326,7 +2324,7 @@ class AtkSidenavPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["def
    */
   hasBase() {
     let hasBase = false;
-    this.menu.find('a').each((i, el) => {
+    this.$menu.find('a').each((i, el) => {
       if (this.urlMatchLocation(el.href)) {
         hasBase = true;
         // set active class for this specific menu item
@@ -2360,29 +2358,29 @@ class AtkSidenavPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_7__["def
    * @returns {*}
    */
   isMenuOn() {
-    return this.menu.hasClass(this.settings.visibleCssClass);
+    return this.$menu.hasClass(this.settings.visibleCssClass);
   }
 
   /**
    * Set class icon for the toggler element.
    */
   setTogglerIcon(selector) {
-    this.toggler.find(selector).attr('class', (this.isMenuOn() ? this.settings.icon.off : this.settings.icon.on) + ' icon');
+    this.$toggler.find(selector).attr('class', (this.isMenuOn() ? this.settings.icon.off : this.settings.icon.on) + ' icon');
   }
 
   /**
    * Add click handler for menu group and toggler element.
    */
   addClickHandler() {
-    this.$el.find(this.settings.menuGroupTitleSelector).on('click', e => {
+    external_jquery__WEBPACK_IMPORTED_MODULE_6___default()(this.el).find(this.settings.menuGroupTitleSelector).on('click', e => {
       e.preventDefault();
       e.stopPropagation();
-      window.open(this.menu.find(this.settings.firstItemSelector).first().attr('href'), e.metaKey ? '_blank' : '_self');
+      window.open(this.$menu.find(this.settings.firstItemSelector).first().attr('href'), e.metaKey ? '_blank' : '_self');
     });
-    this.toggler.on('click', e => {
+    this.$toggler.on('click', e => {
       e.preventDefault();
       e.stopPropagation();
-      this.menu.toggleClass(this.settings.visibleCssClass);
+      this.$menu.toggleClass(this.settings.visibleCssClass);
       this.setTogglerIcon(this.settings.icon.selector);
     });
   }
@@ -2549,22 +2547,24 @@ class ApiService {
     try {
       if (response.success) {
         if (response.html && response.id) {
-          const $target = external_jquery__WEBPACK_IMPORTED_MODULE_2___default()('#' + response.id);
-          if ($target.length !== 1) {
+          let targets = document.querySelectorAll('#' + CSS.escape(response.id));
+          if (targets.length !== 1) {
             throw new Error('Target DOM element not found');
           }
+          const target = targets[0];
+          targets = null;
           let responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
           const responseElement = responseBody.childNodes[0];
           if (responseBody.childNodes.length !== 1 || responseElement.id !== response.id) {
             throw new Error('Unexpected HTML response');
           }
           responseBody = null;
-          if ($target.hasClass('ui modal') || $target.hasClass('atk-right-panel')) {
+          if (external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(target).hasClass('ui modal') || external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(target).hasClass('atk-right-panel')) {
             // introduced in https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
             // TODO move into teleport observer
             // can be reproduced using /demos/data-action/jsactions2.php "Argument/Preview" action
 
-            external_jquery__WEBPACK_IMPORTED_MODULE_2___default().each([...$target[0].childNodes], (i, node) => {
+            external_jquery__WEBPACK_IMPORTED_MODULE_2___default().each([...target.childNodes], (i, node) => {
               if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
                 return;
               }
@@ -2574,13 +2574,13 @@ class ApiService {
               if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
                 return;
               }
-              $target.append(node);
+              target.append(node);
             });
           } else {
-            $target.replaceWith(response.html);
+            external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(target).replaceWith(response.html);
           }
           atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementTeleportObserver.handleMutationQueueImmediately();
-          atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementRemoveObserver.handleMutationQueueImmediately($target[0]);
+          atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementRemoveObserver.handleMutationQueueImmediately(target);
         }
         if (response.atkjs) {
           atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.evalJsCode(this, response.atkjs);

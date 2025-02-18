@@ -91,10 +91,12 @@ class ApiService {
         try {
             if (response.success) {
                 if (response.html && response.id) {
-                    const $target = $('#' + response.id);
-                    if ($target.length !== 1) {
+                    let targets = document.querySelectorAll('#' + CSS.escape(response.id));
+                    if (targets.length !== 1) {
                         throw new Error('Target DOM element not found');
                     }
+                    const target = targets[0];
+                    targets = null;
 
                     let responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
                     const responseElement = responseBody.childNodes[0];
@@ -103,12 +105,12 @@ class ApiService {
                     }
                     responseBody = null;
 
-                    if ($target.hasClass('ui modal') || $target.hasClass('atk-right-panel')) {
+                    if ($(target).hasClass('ui modal') || $(target).hasClass('atk-right-panel')) {
                         // introduced in https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
                         // TODO move into teleport observer
                         // can be reproduced using /demos/data-action/jsactions2.php "Argument/Preview" action
 
-                        $.each([...$target[0].childNodes], (i, node) => {
+                        $.each([...target.childNodes], (i, node) => {
                             if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
                                 return;
                             }
@@ -120,14 +122,14 @@ class ApiService {
                                 return;
                             }
 
-                            $target.append(node);
+                            target.append(node);
                         });
                     } else {
-                        $target.replaceWith(response.html);
+                        $(target).replaceWith(response.html);
                     }
 
                     atk.elementTeleportObserver.handleMutationQueueImmediately();
-                    atk.elementRemoveObserver.handleMutationQueueImmediately($target[0]);
+                    atk.elementRemoveObserver.handleMutationQueueImmediately(target);
                 }
 
                 if (response.atkjs) {
