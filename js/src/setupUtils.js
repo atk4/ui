@@ -3,6 +3,7 @@ import mitt from 'mitt';
 import lodashDebounce from 'lodash/debounce';
 import atk from 'atk';
 import elementRemoveObserver from './Helper/elementRemoveObserver';
+import elementTeleportObserver from './Helper/elementTeleportObserver';
 import gridCheckboxHelper from './Helper/gridCheckboxHelper';
 import tableDropdownHelper from './Helper/tableDropdownHelper';
 import urlHelper from './Helper/urlHelper';
@@ -85,6 +86,7 @@ atk.utils = {
 };
 
 atk.elementRemoveObserver = elementRemoveObserver;
+atk.elementTeleportObserver = elementTeleportObserver;
 atk.gridCheckboxHelper = gridCheckboxHelper;
 atk.tableDropdownHelper = tableDropdownHelper;
 atk.urlHelper = urlHelper;

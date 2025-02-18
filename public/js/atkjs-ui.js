@@ -256,6 +256,28 @@ function addObserverToParentElement(elem) {
 
 /***/ }),
 
+/***/ "./src/Helper/elementTeleportObserver.js":
+/*!***********************************************!*\
+  !*** ./src/Helper/elementTeleportObserver.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+function handleObserverRecords(mutationRecords) {}
+const observer = new MutationObserver(mutationRecords => handleObserverRecords(mutationRecords));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  handleMutationQueueImmediately: function () {
+    // TODO remove this method once evalJsCode() in apiService is called at least thru JS microtask
+    handleObserverRecords(observer.takeRecords());
+  }
+});
+
+/***/ }),
+
 /***/ "./src/Helper/gridCheckboxHelper.js":
 /*!******************************************!*\
   !*** ./src/Helper/gridCheckboxHelper.js ***!
@@ -2404,6 +2426,7 @@ class ApiService {
             $target.replaceWith(response.html);
           }
           atk__WEBPACK_IMPORTED_MODULE_6__["default"].elementRemoveObserver.handleMutationQueueImmediately($target[0]);
+          atk__WEBPACK_IMPORTED_MODULE_6__["default"].elementTeleportObserver.handleMutationQueueImmediately();
         }
         if (response.atkjs) {
           atk__WEBPACK_IMPORTED_MODULE_6__["default"].apiService.evalJsCode(this, response.atkjs);
@@ -4135,12 +4158,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var mitt__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! mitt */ "./node_modules/mitt/dist/mitt.mjs");
-/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! lodash/debounce */ "./node_modules/lodash/debounce.js");
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
 /* harmony import */ var _Helper_elementRemoveObserver__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Helper/elementRemoveObserver */ "./src/Helper/elementRemoveObserver.js");
-/* harmony import */ var _Helper_gridCheckboxHelper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Helper/gridCheckboxHelper */ "./src/Helper/gridCheckboxHelper.js");
-/* harmony import */ var _Helper_tableDropdownHelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Helper/tableDropdownHelper */ "./src/Helper/tableDropdownHelper.js");
-/* harmony import */ var _Helper_urlHelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Helper/urlHelper */ "./src/Helper/urlHelper.js");
+/* harmony import */ var _Helper_elementTeleportObserver__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Helper/elementTeleportObserver */ "./src/Helper/elementTeleportObserver.js");
+/* harmony import */ var _Helper_gridCheckboxHelper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Helper/gridCheckboxHelper */ "./src/Helper/gridCheckboxHelper.js");
+/* harmony import */ var _Helper_tableDropdownHelper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./Helper/tableDropdownHelper */ "./src/Helper/tableDropdownHelper.js");
+/* harmony import */ var _Helper_urlHelper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Helper/urlHelper */ "./src/Helper/urlHelper.js");
+
 
 
 
@@ -4196,7 +4221,7 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].createDebouncedFx = function (func, 
     }, 25);
     (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().active)++;
   }
-  lodashDebouncedFx = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_7__["default"])(func, wait, options);
+  lodashDebouncedFx = (0,lodash_debounce__WEBPACK_IMPORTED_MODULE_8__["default"])(func, wait, options);
   function debouncedFx() {
     if (timerId === null) {
       createTimer();
@@ -4219,9 +4244,10 @@ atk__WEBPACK_IMPORTED_MODULE_2__["default"].utils = {
   }
 };
 atk__WEBPACK_IMPORTED_MODULE_2__["default"].elementRemoveObserver = _Helper_elementRemoveObserver__WEBPACK_IMPORTED_MODULE_3__["default"];
-atk__WEBPACK_IMPORTED_MODULE_2__["default"].gridCheckboxHelper = _Helper_gridCheckboxHelper__WEBPACK_IMPORTED_MODULE_4__["default"];
-atk__WEBPACK_IMPORTED_MODULE_2__["default"].tableDropdownHelper = _Helper_tableDropdownHelper__WEBPACK_IMPORTED_MODULE_5__["default"];
-atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper = _Helper_urlHelper__WEBPACK_IMPORTED_MODULE_6__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].elementTeleportObserver = _Helper_elementTeleportObserver__WEBPACK_IMPORTED_MODULE_4__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].gridCheckboxHelper = _Helper_gridCheckboxHelper__WEBPACK_IMPORTED_MODULE_5__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].tableDropdownHelper = _Helper_tableDropdownHelper__WEBPACK_IMPORTED_MODULE_6__["default"];
+atk__WEBPACK_IMPORTED_MODULE_2__["default"].urlHelper = _Helper_urlHelper__WEBPACK_IMPORTED_MODULE_7__["default"];
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
 
 /***/ }),

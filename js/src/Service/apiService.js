@@ -129,6 +129,7 @@ class ApiService {
                     }
 
                     atk.elementRemoveObserver.handleMutationQueueImmediately($target[0]);
+                    atk.elementTeleportObserver.handleMutationQueueImmediately();
                 }
 
                 if (response.atkjs) {
