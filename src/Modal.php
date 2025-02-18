@@ -32,6 +32,7 @@ class Modal extends View
 {
     public $ui = 'modal';
     public $defaultTemplate = 'modal.html';
+    public array $attr = ['data-atk4-teleport-to' => 'body > .ui.dimmer.modals'];
 
     /** @var string|null Set null for no title */
     public $title;

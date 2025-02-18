@@ -24,6 +24,7 @@ class Right extends View implements Loadable
 {
     public array $class = ['atk-right-panel'];
     public $defaultTemplate = 'panel/right.html';
+    public array $attr = ['data-atk4-teleport-to' => 'body > .atk-side-panels'];
 
     /** @var Modal|null */
     public $closeModal;

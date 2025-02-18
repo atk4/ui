@@ -103,13 +103,11 @@ class ApiService {
                     }
                     responseBody = null;
 
-                    // prevent modal duplication
-                    const $modalsContainers = $('body > .ui.dimmer.modals.page, body > .atk-side-panels');
-                    $(responseElement).find('.ui.modal[id], .atk-right-panel[id]').each((i, e) => {
-                        $modalsContainers.find('#' + e.id).remove();
-                    });
-
                     if ($target.hasClass('ui modal') || $target.hasClass('atk-right-panel')) {
+                        // introduced in https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
+                        // TODO move into teleport observer
+                        // can be reproduced using /demos/data-action/jsactions2.php "Argument/Preview" action
+
                         $.each([...$target[0].childNodes], (i, node) => {
                             if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
                                 return;
@@ -128,6 +126,7 @@ class ApiService {
                         $target.replaceWith(response.html);
                     }
 
+                    atk.elementTeleportObserver.handleMutationQueueImmediately();
                     atk.elementRemoveObserver.handleMutationQueueImmediately($target[0]);
                 }
 

@@ -101,16 +101,6 @@ class ModalService {
                 method: 'GET',
                 obj: $content,
                 onComplete: function (response, content) {
-                    // prevent modal duplication
-                    // TODO deduplicate in favor of apiService.js code only
-                    if (response.html) {
-                        const responseBody = new DOMParser().parseFromString('<body>' + response.html.trim() + '</body>', 'text/html').body;
-                        const $modalsContainers = $('body > .ui.dimmer.modals.page, body > .atk-side-panels');
-                        $(responseBody.childNodes[0]).find('.ui.modal[id], .atk-right-panel[id]').each((i, e) => {
-                            $modalsContainers.find('#' + e.id).remove();
-                        });
-                    }
-
                     const result = content.html(response.html);
                     if (result.length === 0) {
                         // TODO this if should be removed

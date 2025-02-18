@@ -11,7 +11,7 @@ module.exports = {
         'plugin:@internal/eslint-plugin/recommended',
     ],
     parserOptions: {
-        ecmaVersion: '2020',
+        ecmaVersion: 'latest',
         sourceType: 'module',
     },
     settings: {
