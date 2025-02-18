@@ -13,8 +13,10 @@ Feature: Tab
     When I hide js modal
 
   Scenario: URL exception is displayed
+    Then I should not see "<title>404 Not Found</title>"
     When I click tab with title "URL 404"
     Then Modal is open with text "API Server Error"
-    # TODO text() xpath contains support
     # Then Modal is open with text "<title>404 Not Found</title>"
+    Then I should see "<title>404 Not Found</title>"
     When I hide js modal
+    Then I should not see "<title>404 Not Found</title>"
