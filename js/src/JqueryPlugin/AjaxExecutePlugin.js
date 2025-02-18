@@ -15,7 +15,7 @@ export default class AtkAjaxExecutePlugin extends AbstractPlugin {
             if (window.confirm(this.settings.confirm)) { // eslint-disable-line no-alert
                 this.doExecute();
             }
-        } else if (!this.$el.hasClass('loading')) {
+        } else if (!$(this.el).hasClass('loading')) {
             this.doExecute();
         }
     }
@@ -49,7 +49,7 @@ export default class AtkAjaxExecutePlugin extends AbstractPlugin {
         }
 
         settings.url = url + '?' + $.param(urlParams);
-        this.$el.api(settings);
+        $(this.el).api(settings);
     }
 }
 

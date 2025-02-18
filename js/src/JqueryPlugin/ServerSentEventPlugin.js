@@ -4,9 +4,8 @@ import AbstractPlugin from './AbstractPlugin';
 
 export default class AtkServerSentEventPlugin extends AbstractPlugin {
     main() {
-        const element = this.$el;
         const hasLoader = this.settings.showLoader;
-        const stateContext = $(this.settings.stateContext ?? element);
+        const stateContext = $(this.settings.stateContext ?? this.el);
 
         this.source = new EventSource(this.settings.url);
 
@@ -54,7 +53,7 @@ export default class AtkServerSentEventPlugin extends AbstractPlugin {
         }
 
         if (this.settings.showLoader) {
-            this.$el.removeClass('loading');
+            $(this.el).removeClass('loading');
         }
     }
 }

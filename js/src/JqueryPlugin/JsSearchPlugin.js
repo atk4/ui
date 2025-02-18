@@ -6,12 +6,12 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
     main() {
         this.urlArgs = {};
         this.state = { button: false, filter: false };
-        this.textInput = this.$el.find('input[type="text"]');
-        this.leftIcon = this.$el.find('.atk-filter-icon').hide();
-        this.searchAction = this.$el.find('.atk-search-button');
-        this.searchIcon = this.searchAction.find('i.atk-search-icon');
-        this.removeIcon = this.searchAction.find('i.atk-remove-icon').hide();
-        this.$el.data('previousValue', '');
+        this.$textInput = $(this.el).find('input[type="text"]');
+        this.$leftIcon = $(this.el).find('.atk-filter-icon').hide();
+        this.$searchAction = $(this.el).find('.atk-search-button');
+        this.$searchIcon = this.$searchAction.find('i.atk-search-icon');
+        this.$removeIcon = this.$searchAction.find('i.atk-remove-icon').hide();
+        $(this.el).data('previousValue', '');
 
         this.setInputAction();
         this.setSearchAction();
@@ -38,21 +38,21 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
      * Query server on each keystroke after proper timeout.
      */
     onAutoQueryAction() {
-        this.textInput.on('keyup', atk.createDebouncedFx((e) => {
+        this.$textInput.on('keyup', atk.createDebouncedFx((e) => {
             const options = $.extend({}, this.urlArgs, this.settings.urlOptions);
             if (e.target.value === '' || e.keyCode === 27) {
                 this.doSearch(this.settings.url, null, options, () => {
                     this.setButtonState(false);
                     this.setFilterState(false);
-                    this.textInput.val('');
+                    this.$textInput.val('');
                 });
-            } else if (e.target.value !== this.$el.data('previousValue')) {
+            } else if (e.target.value !== $(this.el).data('previousValue')) {
                 this.doSearch(this.settings.url, e.target.value, options, () => {
                     this.setButtonState(true);
                     this.setFilterState(true);
                 });
             }
-            this.$el.data('previousValue', e.target.value);
+            $(this.el).data('previousValue', e.target.value);
         }, this.settings.timeOut));
     }
 
@@ -60,22 +60,22 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
      * Query server after pressing Enter.
      */
     onEnterAction() {
-        this.textInput.on('keyup', (e) => {
+        this.$textInput.on('keyup', (e) => {
             const options = $.extend({}, this.urlArgs, this.settings.urlOptions);
             if (e.keyCode === 13 && e.target.value) {
                 this.doSearch(this.settings.url, e.target.value, options, () => {
                     this.setButtonState(true);
                     this.setFilterState(true);
                 });
-                this.$el.data('previousValue', e.target.value);
+                $(this.el).data('previousValue', e.target.value);
             } else if ((e.keyCode === 27 && e.target.value) || (e.keyCode === 13 && e.target.value === '')) {
                 this.doSearch(this.settings.url, null, options, () => {
                     this.setButtonState(false);
                     this.setFilterState(false);
                 });
-                this.$el.data('previousValue', '');
-                this.textInput.val('');
-            } else if (this.$el.data('previousValue') !== e.target.value) {
+                $(this.el).data('previousValue', '');
+                this.$textInput.val('');
+            } else if ($(this.el).data('previousValue') !== e.target.value) {
                 this.setButtonState(false);
             }
         });
@@ -86,11 +86,11 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
      * When Search text is already empty the event will bubble up normally.
      */
     onEscapeKeyAction() {
-        this.textInput.keydown((e) => {
-            if (this.textInput.val() !== '' && e.key === 'Escape') {
+        this.$textInput.keydown((e) => {
+            if (this.$textInput.val() !== '' && e.key === 'Escape') {
                 this.setButtonState(false);
                 this.setFilterState(false);
-                this.textInput.val('');
+                this.$textInput.val('');
 
                 return false;
             }
@@ -101,19 +101,19 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
      * Set Search button event handler.
      */
     setSearchAction() {
-        this.searchAction.on('click', (e) => {
+        this.$searchAction.on('click', (e) => {
             const options = $.extend({}, this.urlArgs, this.settings.urlOptions);
             if (this.state.button) {
                 this.doSearch(this.settings.url, null, options, () => {
                     this.setButtonState(false);
                     this.setFilterState(false);
                 });
-                this.textInput.val('');
-                this.$el.data('previousValue', '');
+                this.$textInput.val('');
+                $(this.el).data('previousValue', '');
             }
 
-            if (!this.state.button && this.textInput.val()) {
-                this.doSearch(this.settings.url, this.textInput.val(), options, () => {
+            if (!this.state.button && this.$textInput.val()) {
+                this.doSearch(this.settings.url, this.$textInput.val(), options, () => {
                     this.setButtonState(true);
                     this.setFilterState(true);
                 });
@@ -128,10 +128,10 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
      * @param {string} text The text input value.
      */
     setFilter(text) {
-        this.textInput.val(text);
+        this.$textInput.val(text);
         this.setButtonState(true);
         this.setFilterState(true);
-        this.$el.data('previousValue', text);
+        $(this.el).data('previousValue', text);
     }
 
     /**
@@ -146,9 +146,9 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
      */
     setFilterState(isOn) {
         if (isOn) {
-            this.leftIcon.show();
+            this.$leftIcon.show();
         } else {
-            this.leftIcon.hide();
+            this.$leftIcon.hide();
         }
         this.state.filter = isOn;
     }
@@ -158,11 +158,11 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
      */
     setButtonState(isOn) {
         if (isOn) {
-            this.searchIcon.hide();
-            this.removeIcon.show();
+            this.$searchIcon.hide();
+            this.$removeIcon.show();
         } else {
-            this.searchIcon.show();
-            this.removeIcon.hide();
+            this.$searchIcon.show();
+            this.$removeIcon.hide();
         }
         this.state.button = isOn;
     }
@@ -178,13 +178,13 @@ export default class AtkJsSearchPlugin extends AbstractPlugin {
         }
 
         if (this.settings.useAjax) {
-            this.$el.api({
+            $(this.el).api({
                 on: 'now',
                 url: url,
                 data: options,
                 method: 'GET',
-                obj: this.$el,
-                stateContext: this.searchAction,
+                obj: $(this.el),
+                stateContext: this.$searchAction,
                 onComplete: cb,
             });
         } else {
