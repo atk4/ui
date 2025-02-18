@@ -1,3 +1,4 @@
+import $ from 'external/jquery';
 import atk from 'atk';
 import AbstractPlugin from './AbstractPlugin';
 
