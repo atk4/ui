@@ -8,7 +8,7 @@ import AbstractPlugin from './AbstractPlugin';
 export default class AtkColumnResizerPlugin extends AbstractPlugin {
     main() {
         this.settings.onResize = this.onResize.bind(this);
-        this.resizable = new Resizer($(this.el)[0], { ...this.settings.atkDefaults, ...this.settings });
+        this.resizable = new Resizer(this.el, { ...this.settings.atkDefaults, ...this.settings });
 
         // reset padding class
         $(this.el).removeClass('grip-padding');

@@ -15,7 +15,7 @@ export default class AtkSidenavPlugin extends AbstractPlugin {
         this.menu = $(this.el).find(this.settings.menuItemsSelector);
         if (this.menu.length === 0) {
             // this $el is our single item
-            if (this.urlMatchLocation($(this.el)[0].href)) {
+            if (this.urlMatchLocation(this.el.href)) {
                 $(this.el).addClass(this.settings.menuItemActiveClass);
             }
 
