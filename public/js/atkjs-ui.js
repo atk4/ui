@@ -410,8 +410,7 @@ function handleElementsTeleport(elems) {
   }
 }
 
-// introduced in https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
-// can be reproduced using /demos/data-action/jsactions2.php "Argument/Preview" action
+// needed for example for /demos/data-action/jsactions2.php and "Argument/Preview" action
 function handlePossibleModalReloadKeepOriginalDimmer(elem, elemOrig) {
   if (elemOrig.classList.contains('ui') && elemOrig.classList.contains('modal') || elemOrig.classList.contains('atk-right-panel')) {
     for (const node of [...elemOrig.childNodes]) {
