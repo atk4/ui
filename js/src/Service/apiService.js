@@ -105,25 +105,25 @@ class ApiService {
                     }
                     responseBody = null;
 
-                    if ($(target).hasClass('ui modal') || $(target).hasClass('atk-right-panel')) {
+                    if ((target.classList.contains('ui') && target.classList.contains('modal')) || target.classList.contains('atk-right-panel')) {
                         // introduced in https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
                         // TODO move into teleport observer
                         // can be reproduced using /demos/data-action/jsactions2.php "Argument/Preview" action
 
-                        $.each([...target.childNodes], (i, node) => {
+                        for (const node of [...target.childNodes]) {
                             if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
-                                return;
+                                continue;
                             }
 
                             $(node).remove();
-                        });
-                        $.each([...responseElement.childNodes], (i, node) => {
+                        }
+                        for (const node of [...responseElement.childNodes]) {
                             if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
-                                return;
+                                continue;
                             }
 
                             target.append(node);
-                        });
+                        }
                     } else {
                         $(target).replaceWith(response.html);
                     }
