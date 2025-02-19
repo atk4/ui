@@ -5,7 +5,7 @@ function handleElementsTeleport(elems) {
     const teleportTargets = new Map();
     for (const elem of elems) {
         const teleportTo = elem.getAttribute(attributeToName);
-        if (!teleportTo) {
+        if (!teleportTo || !elem.isConnected) {
             continue;
         }
 
@@ -40,16 +40,58 @@ function handleElementsTeleport(elems) {
     }
 }
 
+// needed for example for /demos/data-action/jsactions2.php and "Argument/Preview" action
+function handlePossibleModalReloadKeepOriginalDimmer(elem, elemOrig) {
+    if ((elemOrig.classList.contains('ui') && elemOrig.classList.contains('modal')) || elemOrig.classList.contains('atk-right-panel')) {
+        for (const node of [...elemOrig.childNodes]) { // eslint-disable-line unicorn/no-useless-spread
+            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
+                continue;
+            }
+
+            node.remove();
+        }
+        for (const node of [...elem.childNodes]) { // eslint-disable-line unicorn/no-useless-spread
+            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
+                continue;
+            }
+
+            elemOrig.append(node);
+        }
+
+        elem.replaceWith(elemOrig); // TODO remove this hack
+    }
+}
+
 function handleObserverRecords(mutationRecords) {
+    const removedElems = new Map();
+    for (const mutationRecord of mutationRecords) {
+        for (const removedNode of mutationRecord.removedNodes) {
+            if (removedNode instanceof Element) {
+                if (removedNode.matches('*[' + attributeFromIdName + ']')) {
+                    removedElems.set(removedNode.id, removedNode);
+                }
+                for (const elem of removedNode.querySelectorAll('*[' + attributeFromIdName + ']')) {
+                    removedElems.set(elem.id, elem);
+                }
+            }
+        }
+    }
+
     const elems = new Set();
     for (const mutationRecord of mutationRecords) {
         for (const addedNode of mutationRecord.addedNodes) {
             if (addedNode instanceof Element) {
                 if (addedNode.matches('*[' + attributeToName + ']')) {
                     elems.add(addedNode);
+                    if (removedElems.has(addedNode.id)) {
+                        handlePossibleModalReloadKeepOriginalDimmer(addedNode, removedElems.get(addedNode.id));
+                    }
                 }
                 for (const elem of addedNode.querySelectorAll('*[' + attributeToName + ']')) {
                     elems.add(elem);
+                    if (removedElems.has(elem.id)) {
+                        handlePossibleModalReloadKeepOriginalDimmer(elem, removedElems.get(elem.id));
+                    }
                 }
             }
         }

@@ -105,28 +105,7 @@ class ApiService {
                     }
                     responseBody = null;
 
-                    if ($(target).hasClass('ui modal') || $(target).hasClass('atk-right-panel')) {
-                        // introduced in https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
-                        // TODO move into teleport observer
-                        // can be reproduced using /demos/data-action/jsactions2.php "Argument/Preview" action
-
-                        $.each([...target.childNodes], (i, node) => {
-                            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
-                                return;
-                            }
-
-                            $(node).remove();
-                        });
-                        $.each([...responseElement.childNodes], (i, node) => {
-                            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
-                                return;
-                            }
-
-                            target.append(node);
-                        });
-                    } else {
-                        $(target).replaceWith(response.html);
-                    }
+                    $(target).replaceWith(response.html); // WARNING: modals are modified via elementTeleportObserver.handlePossibleModalReloadKeepOriginalDimmer()
 
                     atk.elementTeleportObserver.handleMutationQueueImmediately();
                     atk.elementRemoveObserver.handleMutationQueueImmediately(target);

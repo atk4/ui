@@ -383,7 +383,7 @@ function handleElementsTeleport(elems) {
   const teleportTargets = new Map();
   for (const elem of elems) {
     const teleportTo = elem.getAttribute(attributeToName);
-    if (!teleportTo) {
+    if (!teleportTo || !elem.isConnected) {
       continue;
     }
     if (!teleportTargets.has(teleportTo)) {
@@ -409,16 +409,56 @@ function handleElementsTeleport(elems) {
     elem.removeAttribute(attributeToName);
   }
 }
+
+// needed for example for /demos/data-action/jsactions2.php and "Argument/Preview" action
+function handlePossibleModalReloadKeepOriginalDimmer(elem, elemOrig) {
+  if (elemOrig.classList.contains('ui') && elemOrig.classList.contains('modal') || elemOrig.classList.contains('atk-right-panel')) {
+    for (const node of [...elemOrig.childNodes]) {
+      // eslint-disable-line unicorn/no-useless-spread
+      if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
+        continue;
+      }
+      node.remove();
+    }
+    for (const node of [...elem.childNodes]) {
+      // eslint-disable-line unicorn/no-useless-spread
+      if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
+        continue;
+      }
+      elemOrig.append(node);
+    }
+    elem.replaceWith(elemOrig); // TODO remove this hack
+  }
+}
 function handleObserverRecords(mutationRecords) {
+  const removedElems = new Map();
+  for (const mutationRecord of mutationRecords) {
+    for (const removedNode of mutationRecord.removedNodes) {
+      if (removedNode instanceof Element) {
+        if (removedNode.matches('*[' + attributeFromIdName + ']')) {
+          removedElems.set(removedNode.id, removedNode);
+        }
+        for (const elem of removedNode.querySelectorAll('*[' + attributeFromIdName + ']')) {
+          removedElems.set(elem.id, elem);
+        }
+      }
+    }
+  }
   const elems = new Set();
   for (const mutationRecord of mutationRecords) {
     for (const addedNode of mutationRecord.addedNodes) {
       if (addedNode instanceof Element) {
         if (addedNode.matches('*[' + attributeToName + ']')) {
           elems.add(addedNode);
+          if (removedElems.has(addedNode.id)) {
+            handlePossibleModalReloadKeepOriginalDimmer(addedNode, removedElems.get(addedNode.id));
+          }
         }
         for (const elem of addedNode.querySelectorAll('*[' + attributeToName + ']')) {
           elems.add(elem);
+          if (removedElems.has(elem.id)) {
+            handlePossibleModalReloadKeepOriginalDimmer(elem, removedElems.get(elem.id));
+          }
         }
       }
     }
@@ -2559,26 +2599,8 @@ class ApiService {
             throw new Error('Unexpected HTML response');
           }
           responseBody = null;
-          if (external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(target).hasClass('ui modal') || external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(target).hasClass('atk-right-panel')) {
-            // introduced in https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
-            // TODO move into teleport observer
-            // can be reproduced using /demos/data-action/jsactions2.php "Argument/Preview" action
+          external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(target).replaceWith(response.html); // WARNING: modals are modified via elementTeleportObserver.handlePossibleModalReloadKeepOriginalDimmer()
 
-            external_jquery__WEBPACK_IMPORTED_MODULE_2___default().each([...target.childNodes], (i, node) => {
-              if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
-                return;
-              }
-              external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(node).remove();
-            });
-            external_jquery__WEBPACK_IMPORTED_MODULE_2___default().each([...responseElement.childNodes], (i, node) => {
-              if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
-                return;
-              }
-              target.append(node);
-            });
-          } else {
-            external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(target).replaceWith(response.html);
-          }
           atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementTeleportObserver.handleMutationQueueImmediately();
           atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementRemoveObserver.handleMutationQueueImmediately(target);
         }
