@@ -383,7 +383,7 @@ function handleElementsTeleport(elems) {
   const teleportTargets = new Map();
   for (const elem of elems) {
     const teleportTo = elem.getAttribute(attributeToName);
-    if (!teleportTo) {
+    if (!teleportTo || !elem.isConnected) {
       continue;
     }
     if (!teleportTargets.has(teleportTo)) {
