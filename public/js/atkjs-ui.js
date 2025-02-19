@@ -2618,6 +2618,7 @@ class ApiService {
         throw new Error(response.message);
       }
     } catch (e) {
+      console.error(e);
       atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.showErrorModal(atk__WEBPACK_IMPORTED_MODULE_3__["default"].apiService.getErrorHtml('API JavaScript Error', e.message));
     }
   }
