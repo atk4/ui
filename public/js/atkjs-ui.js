@@ -2559,25 +2559,31 @@ class ApiService {
             throw new Error('Unexpected HTML response');
           }
           responseBody = null;
+          external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(target).replaceWith(response.html);
           if (target.classList.contains('ui') && target.classList.contains('modal') || target.classList.contains('atk-right-panel')) {
             // introduced in https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
             // TODO move into teleport observer
             // can be reproduced using /demos/data-action/jsactions2.php "Argument/Preview" action
 
+            targets = document.querySelectorAll('#' + CSS.escape(response.id));
+            if (targets.length !== 1) {
+              throw new Error('Target DOM element not found');
+            }
+            const newTarget = targets[0];
+            targets = null;
             for (const node of [...target.childNodes]) {
               if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
                 continue;
               }
               external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(node).remove();
             }
-            for (const node of [...responseElement.childNodes]) {
+            for (const node of [...newTarget.childNodes]) {
               if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
                 continue;
               }
               target.append(node);
             }
-          } else {
-            external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(target).replaceWith(response.html);
+            newTarget.replaceWith(target);
           }
           atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementTeleportObserver.handleMutationQueueImmediately();
           atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementRemoveObserver.handleMutationQueueImmediately(target);
