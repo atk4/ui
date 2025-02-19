@@ -105,37 +105,7 @@ class ApiService {
                     }
                     responseBody = null;
 
-                    $(target).replaceWith(response.html);
-
-                    if ((target.classList.contains('ui') && target.classList.contains('modal')) || target.classList.contains('atk-right-panel')) {
-                        // introduced in https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
-                        // TODO move into teleport observer
-                        // can be reproduced using /demos/data-action/jsactions2.php "Argument/Preview" action
-
-                        targets = document.querySelectorAll('#' + CSS.escape(response.id));
-                        if (targets.length !== 1) {
-                            throw new Error('Target DOM element not found');
-                        }
-                        const newTarget = targets[0];
-                        targets = null;
-
-                        for (const node of [...target.childNodes]) { // eslint-disable-line unicorn/no-useless-spread
-                            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
-                                continue;
-                            }
-
-                            $(node).remove();
-                        }
-                        for (const node of [...newTarget.childNodes]) { // eslint-disable-line unicorn/no-useless-spread
-                            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
-                                continue;
-                            }
-
-                            target.append(node);
-                        }
-
-                        newTarget.replaceWith(target);
-                    }
+                    $(target).replaceWith(response.html); // WARNING: modals are modified via elementTeleportObserver.handlePossibleModalReloadKeepOriginalDimmer()
 
                     atk.elementTeleportObserver.handleMutationQueueImmediately();
                     atk.elementRemoveObserver.handleMutationQueueImmediately(target);

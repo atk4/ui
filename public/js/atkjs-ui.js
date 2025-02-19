@@ -409,16 +409,57 @@ function handleElementsTeleport(elems) {
     elem.removeAttribute(attributeToName);
   }
 }
+
+// introduced in https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
+// can be reproduced using /demos/data-action/jsactions2.php "Argument/Preview" action
+function handlePossibleModalReloadKeepOriginalDimmer(elem, elemOrig) {
+  if (elemOrig.classList.contains('ui') && elemOrig.classList.contains('modal') || elemOrig.classList.contains('atk-right-panel')) {
+    for (const node of [...elemOrig.childNodes]) {
+      // eslint-disable-line unicorn/no-useless-spread
+      if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
+        continue;
+      }
+      node.remove();
+    }
+    for (const node of [...elem.childNodes]) {
+      // eslint-disable-line unicorn/no-useless-spread
+      if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
+        continue;
+      }
+      elemOrig.append(node);
+    }
+    elem.replaceWith(elemOrig); // TODO remove this hack
+  }
+}
 function handleObserverRecords(mutationRecords) {
+  const removedElems = new Map();
+  for (const mutationRecord of mutationRecords) {
+    for (const removedNode of mutationRecord.removedNodes) {
+      if (removedNode instanceof Element) {
+        if (removedNode.matches('*[' + attributeFromIdName + ']')) {
+          removedElems.set(removedNode.id, removedNode);
+        }
+        for (const elem of removedNode.querySelectorAll('*[' + attributeFromIdName + ']')) {
+          removedElems.set(elem.id, elem);
+        }
+      }
+    }
+  }
   const elems = new Set();
   for (const mutationRecord of mutationRecords) {
     for (const addedNode of mutationRecord.addedNodes) {
       if (addedNode instanceof Element) {
         if (addedNode.matches('*[' + attributeToName + ']')) {
           elems.add(addedNode);
+          if (removedElems.has(addedNode.id)) {
+            handlePossibleModalReloadKeepOriginalDimmer(addedNode, removedElems.get(addedNode.id));
+          }
         }
         for (const elem of addedNode.querySelectorAll('*[' + attributeToName + ']')) {
           elems.add(elem);
+          if (removedElems.has(elem.id)) {
+            handlePossibleModalReloadKeepOriginalDimmer(elem, removedElems.get(elem.id));
+          }
         }
       }
     }
@@ -2559,34 +2600,8 @@ class ApiService {
             throw new Error('Unexpected HTML response');
           }
           responseBody = null;
-          external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(target).replaceWith(response.html);
-          if (target.classList.contains('ui') && target.classList.contains('modal') || target.classList.contains('atk-right-panel')) {
-            // introduced in https://github.com/atk4/ui/pull/2142/commits/aed22bb88a
-            // TODO move into teleport observer
-            // can be reproduced using /demos/data-action/jsactions2.php "Argument/Preview" action
+          external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(target).replaceWith(response.html); // WARNING: modals are modified via elementTeleportObserver.handlePossibleModalReloadKeepOriginalDimmer()
 
-            targets = document.querySelectorAll('#' + CSS.escape(response.id));
-            if (targets.length !== 1) {
-              throw new Error('Target DOM element not found');
-            }
-            const newTarget = targets[0];
-            targets = null;
-            for (const node of [...target.childNodes]) {
-              // eslint-disable-line unicorn/no-useless-spread
-              if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
-                continue;
-              }
-              external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(node).remove();
-            }
-            for (const node of [...newTarget.childNodes]) {
-              // eslint-disable-line unicorn/no-useless-spread
-              if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
-                continue;
-              }
-              target.append(node);
-            }
-            newTarget.replaceWith(target);
-          }
           atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementTeleportObserver.handleMutationQueueImmediately();
           atk__WEBPACK_IMPORTED_MODULE_3__["default"].elementRemoveObserver.handleMutationQueueImmediately(target);
         }
