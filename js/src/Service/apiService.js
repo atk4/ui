@@ -119,14 +119,14 @@ class ApiService {
                         const newTarget = targets[0];
                         targets = null;
 
-                        for (const node of [...target.childNodes]) {
+                        for (const node of [...target.childNodes]) { // eslint-disable-line unicorn/no-useless-spread
                             if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
                                 continue;
                             }
 
                             $(node).remove();
                         }
-                        for (const node of [...newTarget.childNodes]) {
+                        for (const node of [...newTarget.childNodes]) { // eslint-disable-line unicorn/no-useless-spread
                             if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
                                 continue;
                             }
