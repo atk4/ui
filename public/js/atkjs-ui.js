@@ -411,8 +411,12 @@ function handleElementsTeleport(elems) {
 }
 
 // needed for example for /demos/data-action/jsactions2.php and "Argument/Preview" action
-function handlePossibleModalReloadKeepState(elem, elemOrig) {
-  if (elemOrig.classList.contains('ui') && elemOrig.classList.contains('modal') || elemOrig.classList.contains('atk-right-panel')) {
+function handlePossibleModalReloadKeepState(elem, getOrigElementFx) {
+  if (elem.classList.contains('ui') && elem.classList.contains('modal') || elem.classList.contains('atk-right-panel')) {
+    const elemOrig = getOrigElementFx();
+    if (elemOrig === null) {
+      return;
+    }
     for (const node of [...elemOrig.childNodes]) {
       // eslint-disable-line unicorn/no-useless-spread
       if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
@@ -447,9 +451,9 @@ function handleObserverRecords(mutationRecords) {
       elems.add(mutationRecord.target);
     }
   }
-  for (const elem of elems) {
+  const getOrigElementFx = elem => {
+    let elemOrig = null;
     if (elem.id && elem.isConnected) {
-      let elemOrig = null;
       for (const mutationRecord of mutationRecords) {
         for (const removedNode of mutationRecord.removedNodes) {
           if (removedNode instanceof Element) {
@@ -466,10 +470,11 @@ function handleObserverRecords(mutationRecords) {
           }
         }
       }
-      if (elemOrig) {
-        handlePossibleModalReloadKeepState(elem, elemOrig);
-      }
     }
+    return elemOrig;
+  };
+  for (const elem of elems) {
+    handlePossibleModalReloadKeepState(elem, () => getOrigElementFx(elem));
   }
   handleElementsTeleport(elems);
 }
