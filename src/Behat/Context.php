@@ -292,6 +292,12 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iPressWrite(string $text, string $selector): void
     {
+        if ($selector === 'document' && $text === '[escape]') {
+            $this->getSession()->executeScript('document.dispatchEvent(new KeyboardEvent(\'keydown\', {keyCode: 27, which: 27}))');
+
+            return;
+        }
+
         $elem = $this->findElement(null, $selector);
         $this->getSession()->keyboardWrite($elem, $text);
     }
