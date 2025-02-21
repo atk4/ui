@@ -48,22 +48,10 @@ function handlePossibleModalReloadKeepOriginalDimmer(elem, getOrigElementFx) {
             return;
         }
 
-        for (const node of [...elemOrig.childNodes]) { // eslint-disable-line unicorn/no-useless-spread
-            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
-                continue;
-            }
-
-            node.remove();
-        }
-        for (const node of [...elem.childNodes]) { // eslint-disable-line unicorn/no-useless-spread
-            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
-                continue;
-            }
-
-            elemOrig.append(node);
-        }
-
-        elem.replaceWith(elemOrig); // TODO remove this hack
+        // TODO remove this hack
+        // https://github.com/fomantic/Fomantic-UI/issues/3176
+        elemOrig.replaceChildren(...elem.childNodes);
+        elem.replaceWith(elemOrig);
     }
 }
 
