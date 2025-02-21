@@ -41,7 +41,7 @@ function handleElementsTeleport(elems) {
 }
 
 // needed for example for /demos/data-action/jsactions2.php and "Argument/Preview" action
-function handlePossibleModalReloadKeepState(elem, getOrigElementFx) {
+function handlePossibleModalReloadKeepOriginalDimmer(elem, getOrigElementFx) {
     if ((elem.classList.contains('ui') && elem.classList.contains('modal')) || elem.classList.contains('atk-right-panel')) {
         const elemOrig = getOrigElementFx();
         if (elemOrig === null) {
@@ -112,7 +112,7 @@ function handleObserverRecords(mutationRecords) {
     };
 
     for (const elem of elems) {
-        handlePossibleModalReloadKeepState(elem, () => getOrigElementFx(elem));
+        handlePossibleModalReloadKeepOriginalDimmer(elem, () => getOrigElementFx(elem));
     }
 
     handleElementsTeleport(elems);
