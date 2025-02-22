@@ -41,63 +41,66 @@ function handleElementsTeleport(elems) {
 }
 
 // needed for example for /demos/data-action/jsactions2.php and "Argument/Preview" action
-function handlePossibleModalReloadKeepOriginalDimmer(elem, elemOrig) {
-    if ((elemOrig.classList.contains('ui') && elemOrig.classList.contains('modal')) || elemOrig.classList.contains('atk-right-panel')) {
-        for (const node of [...elemOrig.childNodes]) { // eslint-disable-line unicorn/no-useless-spread
-            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
-                continue;
-            }
-
-            node.remove();
-        }
-        for (const node of [...elem.childNodes]) { // eslint-disable-line unicorn/no-useless-spread
-            if (node instanceof Element && node.classList.contains('ui') && node.classList.contains('dimmer')) {
-                continue;
-            }
-
-            elemOrig.append(node);
+function handlePossibleModalReloadKeepOriginalDimmer(elem, getOrigElementFx) {
+    if ((elem.classList.contains('ui') && elem.classList.contains('modal')) || elem.classList.contains('atk-right-panel')) {
+        const elemOrig = getOrigElementFx();
+        if (elemOrig === null) {
+            return;
         }
 
-        elem.replaceWith(elemOrig); // TODO remove this hack
+        // TODO remove this hack
+        // https://github.com/fomantic/Fomantic-UI/issues/3176
+        elemOrig.replaceChildren(...elem.childNodes);
+        elem.replaceWith(elemOrig);
     }
 }
 
 function handleObserverRecords(mutationRecords) {
-    const removedElems = new Map();
-    for (const mutationRecord of mutationRecords) {
-        for (const removedNode of mutationRecord.removedNodes) {
-            if (removedNode instanceof Element) {
-                if (removedNode.matches('*[' + attributeFromIdName + ']')) {
-                    removedElems.set(removedNode.id, removedNode);
-                }
-                for (const elem of removedNode.querySelectorAll('*[' + attributeFromIdName + ']')) {
-                    removedElems.set(elem.id, elem);
-                }
-            }
-        }
-    }
-
     const elems = new Set();
     for (const mutationRecord of mutationRecords) {
         for (const addedNode of mutationRecord.addedNodes) {
             if (addedNode instanceof Element) {
                 if (addedNode.matches('*[' + attributeToName + ']')) {
                     elems.add(addedNode);
-                    if (removedElems.has(addedNode.id)) {
-                        handlePossibleModalReloadKeepOriginalDimmer(addedNode, removedElems.get(addedNode.id));
-                    }
                 }
                 for (const elem of addedNode.querySelectorAll('*[' + attributeToName + ']')) {
                     elems.add(elem);
-                    if (removedElems.has(elem.id)) {
-                        handlePossibleModalReloadKeepOriginalDimmer(elem, removedElems.get(elem.id));
-                    }
                 }
             }
         }
         if (mutationRecord.type === 'attributes') {
             elems.add(mutationRecord.target);
         }
+    }
+
+    const getOrigElementFx = (elem) => {
+        let elemOrig = null;
+        if (elem.id && elem.isConnected) {
+            for (const mutationRecord of mutationRecords) {
+                for (const removedNode of mutationRecord.removedNodes) {
+                    if (removedNode instanceof Element) {
+                        if (removedNode.matches('#' + CSS.escape(elem.id)) && !removedNode.isConnected) {
+                            elemOrig = removedNode;
+
+                            continue;
+                        }
+                        for (const elem2 of removedNode.querySelectorAll('#' + CSS.escape(elem.id))) {
+                            if (!elem2.isConnected) {
+                                elemOrig = elem2;
+
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return elemOrig;
+    };
+
+    for (const elem of elems) {
+        handlePossibleModalReloadKeepOriginalDimmer(elem, () => getOrigElementFx(elem));
     }
 
     handleElementsTeleport(elems);

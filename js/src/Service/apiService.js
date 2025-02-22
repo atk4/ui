@@ -126,6 +126,7 @@ class ApiService {
                 throw new Error(response.message);
             }
         } catch (e) {
+            console.error(e);
             atk.apiService.showErrorModal(atk.apiService.getErrorHtml('API JavaScript Error', e.message));
         }
     }
