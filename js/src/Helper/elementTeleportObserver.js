@@ -48,10 +48,8 @@ function handlePossibleModalReloadKeepState(elem, getOrigElementFx) {
             return;
         }
 
-        // TODO remove this hack
         // https://github.com/fomantic/Fomantic-UI/issues/3176
-        elemOrig.replaceChildren(...elem.childNodes);
-        elem.replaceWith(elemOrig);
+        elem.className = elemOrig.className; // TODO transfer only "active related" classes
     }
 }
 

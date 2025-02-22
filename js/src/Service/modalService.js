@@ -30,8 +30,20 @@ class ModalService {
         ];
     }
 
+    updatePossiblyReplacedReferences() {
+        const s = atk.modalService;
+
+        for (const k of s.modals.keys()) {
+            const m = s.modals[k];
+            if (!m.isConnected && m.id) {
+                s.modals[k] = document.getElementById(m.id); // eslint-disable-line unicorn/prefer-query-selector
+            }
+        }
+    }
+
     onShow() {
         const s = atk.modalService;
+        s.updatePossiblyReplacedReferences();
 
         for (const modal of s.modals) {
             if (modal === this) {
@@ -50,6 +62,7 @@ class ModalService {
 
     onHide() {
         const s = atk.modalService;
+        s.updatePossiblyReplacedReferences();
 
         if (s.modals.length === 0 || s.modals.at(-1) !== this) {
             throw new Error('Unexpected modal to hide - modal is not front');

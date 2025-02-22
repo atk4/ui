@@ -217,6 +217,7 @@ class ApiService {
      */
     showErrorModal(contentHtml) {
         if (atk.modalService.modals.length > 0) {
+            atk.modalService.updatePossiblyReplacedReferences();
             const $modal = $(atk.modalService.modals.at(-1));
             if ($modal.data('closeOnLoadingError')) {
                 $modal.removeData('closeOnLoadingError').modal('hide');

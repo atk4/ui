@@ -418,10 +418,8 @@ function handlePossibleModalReloadKeepState(elem, getOrigElementFx) {
       return;
     }
 
-    // TODO remove this hack
     // https://github.com/fomantic/Fomantic-UI/issues/3176
-    elemOrig.replaceChildren(...elem.childNodes);
-    elem.replaceWith(elemOrig);
+    elem.className = elemOrig.className; // TODO transfer only "active related" classes
   }
 }
 function handleObserverRecords(mutationRecords) {
@@ -2703,6 +2701,7 @@ class ApiService {
    */
   showErrorModal(contentHtml) {
     if (atk__WEBPACK_IMPORTED_MODULE_3__["default"].modalService.modals.length > 0) {
+      atk__WEBPACK_IMPORTED_MODULE_3__["default"].modalService.updatePossiblyReplacedReferences();
       const $modal = external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(atk__WEBPACK_IMPORTED_MODULE_3__["default"].modalService.modals.at(-1));
       if ($modal.data('closeOnLoadingError')) {
         $modal.removeData('closeOnLoadingError').modal('hide');
@@ -3117,8 +3116,18 @@ class ModalService {
       onHidden: this.onHidden
     }];
   }
+  updatePossiblyReplacedReferences() {
+    const s = atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService;
+    for (const k of s.modals.keys()) {
+      const m = s.modals[k];
+      if (!m.isConnected && m.id) {
+        s.modals[k] = document.getElementById(m.id); // eslint-disable-line unicorn/prefer-query-selector
+      }
+    }
+  }
   onShow() {
     const s = atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService;
+    s.updatePossiblyReplacedReferences();
     for (const modal of s.modals) {
       if (modal === this) {
         throw new Error('Unexpected modal to show - modal is already active');
@@ -3134,6 +3143,7 @@ class ModalService {
   }
   onHide() {
     const s = atk__WEBPACK_IMPORTED_MODULE_6__["default"].modalService;
+    s.updatePossiblyReplacedReferences();
     if (s.modals.length === 0 || s.modals.at(-1) !== this) {
       throw new Error('Unexpected modal to hide - modal is not front');
     }
