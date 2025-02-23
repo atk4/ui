@@ -11,6 +11,18 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class PaginatorTest extends TestCase
 {
     /**
+     * @param list<int|'['|'...'|']'> $expected
+     *
+     * @dataProvider providePaginatorCases
+     */
+    #[DataProvider('providePaginatorCases')]
+    public function testPaginator(int $page, int $range, int $total, array $expected): void
+    {
+        $paginator = new Paginator(['page' => $page, 'range' => $range, 'total' => $total]);
+        self::assertSame($expected, $paginator->getPaginatorItems());
+    }
+
+    /**
      * @return iterable<list<mixed>>
      */
     public static function providePaginatorCases(): iterable
@@ -33,17 +45,5 @@ class PaginatorTest extends TestCase
         yield [6, 2, 7, ['[', '...', 3, 4, 5, 6, 7]];
         yield [7, 2, 7, ['[', '...', 3, 4, 5, 6, 7]];
         yield [70, 2, 100, ['[', '...', 68, 69, 70, 71, 72, '...', ']']];
-    }
-
-    /**
-     * @param list<int|'['|'...'|']'> $expected
-     *
-     * @dataProvider providePaginatorCases
-     */
-    #[DataProvider('providePaginatorCases')]
-    public function testPaginator(int $page, int $range, int $total, array $expected): void
-    {
-        $paginator = new Paginator(['page' => $page, 'range' => $range, 'total' => $total]);
-        self::assertSame($expected, $paginator->getPaginatorItems());
     }
 }

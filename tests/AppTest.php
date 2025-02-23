@@ -124,67 +124,6 @@ class AppTest extends TestCase
     }
 
     /**
-     * @return iterable<list<mixed>>
-     */
-    public static function provideUrlCases(): iterable
-    {
-        foreach (['/', '/page.html', '/d/', '/0/index.php'] as $requestPage) {
-            yield [$requestPage, [], ['x'], [], 'x.php'];
-            yield [$requestPage, [], ['/x'], [], '/x.php'];
-            yield [$requestPage, [], ['x/y/z'], [], 'x/y/z.php'];
-            yield [$requestPage, [], ['/x/y/z'], [], '/x/y/z.php'];
-            yield [$requestPage, [], ['0'], [], '0.php'];
-            yield [$requestPage, [], ['x.php'], [], 'x.php'];
-            yield [$requestPage, [], ['x.html'], [], 'x.html'];
-            yield [$requestPage, [], ['index'], [], 'index.php'];
-            yield [$requestPage, [], ['index.php'], [], 'index.php'];
-            yield [$requestPage . '?u=U', [], ['x'], [], 'x.php'];
-            yield [$requestPage . '?index.php', [], ['x'], [], 'x.php'];
-
-            // /w page autoindex
-            yield [$requestPage, [], ['/'], [], '/index.php'];
-            yield [$requestPage, [], ['/0/0/'], [], '/0/0/index.php'];
-            yield [$requestPage, [], ['a.b c/'], [], 'a.b c/index.php'];
-            yield [$requestPage . '?u=U', [], ['x/'], [], 'x/index.php'];
-
-            // /w page args
-            yield [$requestPage, [], ['x', 'foo' => 'a'], [], 'x.php?foo=a'];
-            yield [$requestPage, [], ['x', 'foo' => 'a', 'bar' => '0'], [], 'x.php?foo=a&bar=0'];
-            yield [$requestPage, [], ['x', 'foo' => ''], [], 'x.php?foo='];
-            yield [$requestPage, [], ['x', 'foo' => 'a b'], [], 'x.php?foo=a%20b'];
-            yield [$requestPage, [], ['x.html', 'foo' => 'index.php'], [], 'x.html?foo=index.php'];
-            yield [$requestPage . '?u=U', [], ['x', 'foo' => 'a'], [], 'x.php?foo=a'];
-
-            // /w extra args
-            yield [$requestPage, [], ['x'], ['foo' => 'a'], 'x.php?foo=a'];
-            yield [$requestPage, [], ['x'], ['foo' => 'a', 'bar' => '0'], 'x.php?foo=a&bar=0'];
-            yield [$requestPage, [], ['x'], ['foo' => ''], 'x.php?foo='];
-            yield [$requestPage, [], ['x'], ['foo' => 'a b'], 'x.php?foo=a%20b'];
-            yield [$requestPage . '?u=U', [], ['x'], ['foo' => 'a'], 'x.php?foo=a'];
-        }
-
-        // /w sticky args
-        yield ['/?u=U&v=V', ['v' => true], ['x'], [], 'x.php?v=V'];
-        yield ['/?u=U&v=V', ['v' => true], ['x', 'foo' => 'a'], [], 'x.php?v=V&foo=a'];
-        yield ['/', ['v' => true], ['x'], [], 'x.php'];
-        yield ['/?v=V', ['v' => false], ['x'], [], 'x.php'];
-        yield ['/', ['v' => false], ['x', 'v' => 'page'], [], 'x.php?v=page'];
-        yield ['/', ['v' => false], ['x'], ['v' => 'extra'], 'x.php'];
-        yield ['/', ['__atk_json' => false], ['x'], [], 'x.php'];
-
-        // /wo page path
-        yield ['/x', [], [], [], '/x.php'];
-        yield ['/d/x.html', [], ['foo' => 'a'], [], '/d/x.html?foo=a'];
-        yield ['/?u=U&v=V', ['v' => true], [], [], '/index.php?v=V'];
-
-        // args priority
-        yield ['/', [], ['x', 'foo' => 'page'], ['foo' => 'extra'], 'x.php?foo=page'];
-        yield ['/?foo=sticky', ['foo' => true], ['x', 'foo' => 'page'], ['foo' => 'extra'], 'x.php?foo=page'];
-        yield ['/?foo=sticky', ['foo' => true], ['x'], ['foo' => 'extra'], 'x.php?foo=sticky'];
-        yield ['/', ['foo' => true], ['x'], ['foo' => 'extra'], 'x.php'];
-    }
-
-    /**
      * @dataProvider provideUrlCases
      *
      * @param array<string, bool>               $appStickyGetArguments
@@ -244,6 +183,67 @@ class AppTest extends TestCase
         ]);
         $expectedUrlAutoindex2 = $makeExpectedUrlFx('', '.html');
         self::assertSame($expectedUrlAutoindex2, $app->url($page, $extraRequestUrlArgs));
+    }
+
+    /**
+     * @return iterable<list<mixed>>
+     */
+    public static function provideUrlCases(): iterable
+    {
+        foreach (['/', '/page.html', '/d/', '/0/index.php'] as $requestPage) {
+            yield [$requestPage, [], ['x'], [], 'x.php'];
+            yield [$requestPage, [], ['/x'], [], '/x.php'];
+            yield [$requestPage, [], ['x/y/z'], [], 'x/y/z.php'];
+            yield [$requestPage, [], ['/x/y/z'], [], '/x/y/z.php'];
+            yield [$requestPage, [], ['0'], [], '0.php'];
+            yield [$requestPage, [], ['x.php'], [], 'x.php'];
+            yield [$requestPage, [], ['x.html'], [], 'x.html'];
+            yield [$requestPage, [], ['index'], [], 'index.php'];
+            yield [$requestPage, [], ['index.php'], [], 'index.php'];
+            yield [$requestPage . '?u=U', [], ['x'], [], 'x.php'];
+            yield [$requestPage . '?index.php', [], ['x'], [], 'x.php'];
+
+            // /w page autoindex
+            yield [$requestPage, [], ['/'], [], '/index.php'];
+            yield [$requestPage, [], ['/0/0/'], [], '/0/0/index.php'];
+            yield [$requestPage, [], ['a.b c/'], [], 'a.b c/index.php'];
+            yield [$requestPage . '?u=U', [], ['x/'], [], 'x/index.php'];
+
+            // /w page args
+            yield [$requestPage, [], ['x', 'foo' => 'a'], [], 'x.php?foo=a'];
+            yield [$requestPage, [], ['x', 'foo' => 'a', 'bar' => '0'], [], 'x.php?foo=a&bar=0'];
+            yield [$requestPage, [], ['x', 'foo' => ''], [], 'x.php?foo='];
+            yield [$requestPage, [], ['x', 'foo' => 'a b'], [], 'x.php?foo=a%20b'];
+            yield [$requestPage, [], ['x.html', 'foo' => 'index.php'], [], 'x.html?foo=index.php'];
+            yield [$requestPage . '?u=U', [], ['x', 'foo' => 'a'], [], 'x.php?foo=a'];
+
+            // /w extra args
+            yield [$requestPage, [], ['x'], ['foo' => 'a'], 'x.php?foo=a'];
+            yield [$requestPage, [], ['x'], ['foo' => 'a', 'bar' => '0'], 'x.php?foo=a&bar=0'];
+            yield [$requestPage, [], ['x'], ['foo' => ''], 'x.php?foo='];
+            yield [$requestPage, [], ['x'], ['foo' => 'a b'], 'x.php?foo=a%20b'];
+            yield [$requestPage . '?u=U', [], ['x'], ['foo' => 'a'], 'x.php?foo=a'];
+        }
+
+        // /w sticky args
+        yield ['/?u=U&v=V', ['v' => true], ['x'], [], 'x.php?v=V'];
+        yield ['/?u=U&v=V', ['v' => true], ['x', 'foo' => 'a'], [], 'x.php?v=V&foo=a'];
+        yield ['/', ['v' => true], ['x'], [], 'x.php'];
+        yield ['/?v=V', ['v' => false], ['x'], [], 'x.php'];
+        yield ['/', ['v' => false], ['x', 'v' => 'page'], [], 'x.php?v=page'];
+        yield ['/', ['v' => false], ['x'], ['v' => 'extra'], 'x.php'];
+        yield ['/', ['__atk_json' => false], ['x'], [], 'x.php'];
+
+        // /wo page path
+        yield ['/x', [], [], [], '/x.php'];
+        yield ['/d/x.html', [], ['foo' => 'a'], [], '/d/x.html?foo=a'];
+        yield ['/?u=U&v=V', ['v' => true], [], [], '/index.php?v=V'];
+
+        // args priority
+        yield ['/', [], ['x', 'foo' => 'page'], ['foo' => 'extra'], 'x.php?foo=page'];
+        yield ['/?foo=sticky', ['foo' => true], ['x', 'foo' => 'page'], ['foo' => 'extra'], 'x.php?foo=page'];
+        yield ['/?foo=sticky', ['foo' => true], ['x'], ['foo' => 'extra'], 'x.php?foo=sticky'];
+        yield ['/', ['foo' => true], ['x'], ['foo' => 'extra'], 'x.php'];
     }
 
     public function testTerminateNoContentTypeException(): void
