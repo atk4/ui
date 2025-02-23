@@ -252,6 +252,17 @@ class DemosTest extends TestCase
     }
 
     /**
+     * @dataProvider provideDemosStatusAndHtmlResponseCases
+     */
+    #[DataProvider('provideDemosStatusAndHtmlResponseCases')]
+    public function testDemosStatusAndHtmlResponse(string $path): void
+    {
+        $response = $this->getResponseFromRequest($path);
+        self::assertSame(200, $response->getStatusCode());
+        self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
+    }
+
+    /**
      * @return iterable<list<mixed>>
      */
     public static function provideDemosStatusAndHtmlResponseCases(): iterable
@@ -298,17 +309,6 @@ class DemosTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider provideDemosStatusAndHtmlResponseCases
-     */
-    #[DataProvider('provideDemosStatusAndHtmlResponseCases')]
-    public function testDemosStatusAndHtmlResponse(string $path): void
-    {
-        $response = $this->getResponseFromRequest($path);
-        self::assertSame(200, $response->getStatusCode());
-        self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
-    }
-
     public function testDemoResponseError(): void
     {
         if (static::class === self::class) {
@@ -325,16 +325,6 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @return iterable<list<mixed>>
-     */
-    public static function provideDemoGetCases(): iterable
-    {
-        yield ['others/sticky.php?xx=YEY'];
-        yield ['others/sticky.php?c=OHO'];
-        yield ['others/sticky.php?xx=YEY&c=OHO'];
-    }
-
-    /**
      * @dataProvider provideDemoGetCases
      */
     #[DataProvider('provideDemoGetCases')]
@@ -344,6 +334,16 @@ class DemosTest extends TestCase
         self::assertSame(200, $response->getStatusCode());
         self::assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
+    }
+
+    /**
+     * @return iterable<list<mixed>>
+     */
+    public static function provideDemoGetCases(): iterable
+    {
+        yield ['others/sticky.php?xx=YEY'];
+        yield ['others/sticky.php?c=OHO'];
+        yield ['others/sticky.php?xx=YEY&c=OHO'];
     }
 
     public function testHugeOutputStream(): void
@@ -399,20 +399,6 @@ class DemosTest extends TestCase
     }
 
     /**
-     * @return iterable<list<mixed>>
-     */
-    public static function provideDemoJsonResponseCases(): iterable
-    {
-        // simple reload
-        yield ['_unit-test/reload.php?__atk_reload=reload'];
-        // loader callback reload
-        yield ['_unit-test/reload.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'c_reload=ajax&' . Callback::URL_QUERY_TARGET . '=c_reload'];
-        // test catch exceptions
-        yield ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m_cb&__atk_json=1', 'Test throw exception!'];
-        yield ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm2_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m2_cb&__atk_json=1', 'Test trigger error!'];
-    }
-
-    /**
      * Test reload and loader callback.
      *
      * @dataProvider provideDemoJsonResponseCases
@@ -446,12 +432,15 @@ class DemosTest extends TestCase
     /**
      * @return iterable<list<mixed>>
      */
-    public static function provideDemoSseResponseCases(): iterable
+    public static function provideDemoJsonResponseCases(): iterable
     {
-        yield ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
-        yield ['_unit-test/console.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
-        yield ['_unit-test/console_run.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
-        yield ['_unit-test/console_exec.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
+        // simple reload
+        yield ['_unit-test/reload.php?__atk_reload=reload'];
+        // loader callback reload
+        yield ['_unit-test/reload.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'c_reload=ajax&' . Callback::URL_QUERY_TARGET . '=c_reload'];
+        // test catch exceptions
+        yield ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m_cb&__atk_json=1', 'Test throw exception!'];
+        yield ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm2_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m2_cb&__atk_json=1', 'Test trigger error!'];
     }
 
     /**
@@ -477,12 +466,12 @@ class DemosTest extends TestCase
     /**
      * @return iterable<list<mixed>>
      */
-    public static function provideDemoJsonResponsePostCases(): iterable
+    public static function provideDemoSseResponseCases(): iterable
     {
-        yield [
-            '_unit-test/post.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_submit=ajax&' . Callback::URL_QUERY_TARGET . '=test_submit',
-            ['f1' => 'v1'],
-        ];
+        yield ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
+        yield ['_unit-test/console.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
+        yield ['_unit-test/console_run.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
+        yield ['_unit-test/console_exec.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
     }
 
     /**
@@ -496,6 +485,17 @@ class DemosTest extends TestCase
         $response = $this->getResponseFromRequest($path, ['form_params' => $postData]);
         self::assertSame(200, $response->getStatusCode());
         self::assertMatchesRegularExpression(self::$regexJson, $response->getBody()->getContents());
+    }
+
+    /**
+     * @return iterable<list<mixed>>
+     */
+    public static function provideDemoJsonResponsePostCases(): iterable
+    {
+        yield [
+            '_unit-test/post.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_submit=ajax&' . Callback::URL_QUERY_TARGET . '=test_submit',
+            ['f1' => 'v1'],
+        ];
     }
 
     /**
