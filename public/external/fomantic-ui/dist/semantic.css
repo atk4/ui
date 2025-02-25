@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.4-beta.101+96ed453
+ * # Fomantic UI - 2.9.4
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -5721,8 +5721,8 @@ input::selection {
 
 /* Allow divider between each column row */
 
-.ui.grid > .column + .divider,
-.ui.grid > .row > .column + .divider {
+.ui.grid > .column + .divider:not(.vertical),
+.ui.grid > .row > .column + .divider:not(.vertical) {
   left: auto;
 }
 
@@ -5798,7 +5798,17 @@ input::selection {
 
 /* Inside grid */
 
+.ui.stackable.grid .ui.vertical.divider,
+.ui.grid .stackable.row .ui.vertical.divider {
+  flex: 1;
+}
+
 @media only screen and (max-width: 767.98px) {
+  .ui.stackable.grid .column + .ui.vertical.divider,
+  .ui.grid .stackable.row .column + .ui.vertical.divider {
+    margin: 1rem;
+  }
+
   .ui.stackable.grid .ui.vertical.divider,
   .ui.grid .stackable.row .ui.vertical.divider {
     display: table;
@@ -17947,6 +17957,13 @@ img.ui.bordered.image {
   box-shadow: none;
 }
 
+.ui.form .field > textarea:hover:not(:focus),
+.ui.input > textarea:hover:not(:focus),
+.ui.form .field > input:hover:not(:focus),
+.ui.input > input:hover:not(:focus) {
+  border-color: rgba(34, 36, 38, 0.35);
+}
+
 /* --------------------
            Loading
     --------------------- */
@@ -26236,11 +26253,6 @@ ol.ui.suffixed.list li::before,
   left: calc((-2.2em + 0.95em) - 0.3em);
 }
 
-.ui.circular.steps:not(.vertical) .step.link::before,
-.ui.circular.steps:not(.vertical) .step.link::after {
-  cursor: pointer;
-}
-
 .ui.circular.steps:not(.vertical) .step.completed {
   background: #21ba45;
 }
@@ -26274,6 +26286,15 @@ ol.ui.suffixed.list li::before,
 
 .ui.circular.steps:not(.vertical) .step .content:not(.aligned) .title + .description {
   margin-top: 0.5em;
+}
+
+.ui.circular.steps:not(.vertical) a.step::before,
+.ui.circular.steps:not(.vertical) a.step::after,
+.ui.circular.steps:not(.vertical) a.step .content,
+.ui.circular.steps:not(.vertical) .step.link .content,
+.ui.circular.steps:not(.vertical) .step.link::before,
+.ui.circular.steps:not(.vertical) .step.link::after {
+  cursor: pointer;
 }
 
 .ui.circular.steps .step {
@@ -26654,6 +26675,7 @@ ol.ui.suffixed.list li::before,
 .ui.circular.steps .disabled.step {
   cursor: auto;
   opacity: 0.5;
+  pointer-events: none;
 }
 
 .ui.circular.steps .disabled.step::before,
@@ -28851,6 +28873,11 @@ span.ui.massive.text {
   box-shadow: none;
 }
 
+.ui.form .field.error > textarea:hover:not(:focus),
+.ui.form .field.error > input:hover:not(:focus) {
+  border-color: #e0b4b4;
+}
+
 /* Preserve Native Select Stylings */
 
 .ui.form .field.error select {
@@ -29119,6 +29146,11 @@ span.ui.massive.text {
   border-color: #a9d5de;
   color: #276f86;
   box-shadow: none;
+}
+
+.ui.form .field.info > textarea:hover:not(:focus),
+.ui.form .field.info > input:hover:not(:focus) {
+  border-color: #a9d5de;
 }
 
 /* Preserve Native Select Stylings */
@@ -29391,6 +29423,11 @@ span.ui.massive.text {
   box-shadow: none;
 }
 
+.ui.form .field.success > textarea:hover:not(:focus),
+.ui.form .field.success > input:hover:not(:focus) {
+  border-color: #a3c293;
+}
+
 /* Preserve Native Select Stylings */
 
 .ui.form .field.success select {
@@ -29659,6 +29696,11 @@ span.ui.massive.text {
   border-color: #c9ba9b;
   color: #573a08;
   box-shadow: none;
+}
+
+.ui.form .field.warning > textarea:hover:not(:focus),
+.ui.form .field.warning > input:hover:not(:focus) {
+  border-color: #c9ba9b;
 }
 
 /* Preserve Native Select Stylings */
@@ -47342,7 +47384,7 @@ select.ui.dropdown {
   z-index: 3;
   margin: -0.78571429em;
   padding: 0.91666667em;
-  opacity: 0.8;
+  opacity: 0.5;
   transition: opacity 0.1s ease;
 }
 
@@ -47547,6 +47589,21 @@ select.ui.dropdown {
 .ui.selection.dropdown:focus .menu {
   border-color: #96c8da;
   box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+}
+
+@supports selector(:has(.f)) {
+  .ui.ui.selection.dropdown:not(.inverted):has(> input:focus) {
+    border-color: #96c8da;
+    box-shadow: none;
+  }
+
+  .ui.ui.selection.dropdown:not(.inverted):has(> input:focus) > i.icon {
+    opacity: 1;
+  }
+}
+
+.ui.ui.selection.dropdown:focus > i.icon {
+  opacity: 1;
 }
 
 /* Visible */
@@ -47759,7 +47816,7 @@ select.ui.dropdown {
   right: 2em;
   top: 0.78571429em;
   position: absolute;
-  opacity: 0.6;
+  opacity: 0.5;
   z-index: 3;
 }
 
@@ -48260,7 +48317,7 @@ select.ui.dropdown {
 
 .ui.dropdown > .remove.icon,
 .ui.dropdown > .clear.dropdown.icon {
-  opacity: 0.6;
+  opacity: 0.5;
   transition: opacity 0.1s ease;
 }
 
