@@ -7,7 +7,7 @@
         "@twemoji/api": "https://github.com/jdecked/twemoji/archive/refs/tags/v15.1.0.tar.gz",
         "chart.js": "^3.9.1",
         "flatpickr": "github:atk4/flatpickr#94d289f198",
-        "fomantic-ui": "^2.9.5-beta || ^2.9.5",
+        "fomantic-ui": "^2.10.0-beta || ^2.10.0",
         "jquery": "^3.6.0"
     },
     "scripts": {
