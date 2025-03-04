@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.9.4-beta.101+96ed453
+ * # Fomantic UI - 2.10.0-beta.0+f24b47e
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -18718,7 +18718,7 @@
                     resize: function (_event) {
                         // To avoid a useless performance cost, we only call the label refresh when its necessary
                         if (gapRatio !== module.get.gapRatio()) {
-                            module.setup.labels();
+                            module.resync();
                             gapRatio = module.get.gapRatio();
                         }
                     },
@@ -18732,11 +18732,11 @@
 
                 resync: function () {
                     module.verbose('Resyncing thumb position based on value');
+                    module.setup.labels();
                     if (module.is.range()) {
                         module.update.position(module.secondThumbVal, $secondThumb);
                     }
                     module.update.position(module.thumbVal, $thumb);
-                    module.setup.labels();
                 },
                 takeStep: function (multiplier) {
                     if (!multiplier) {
