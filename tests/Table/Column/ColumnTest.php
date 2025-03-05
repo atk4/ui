@@ -11,7 +11,7 @@ use Atk4\Ui\Table;
 use Atk4\Ui\Tests\CreateAppTrait;
 use Atk4\Ui\Tests\TableTestTrait;
 
-class LinkTest extends TestCase
+class ColumnTest extends TestCase
 {
     use CreateAppTrait;
     use TableTestTrait;
@@ -284,11 +284,11 @@ class LinkTest extends TestCase
     public function testNoValue(): void
     {
         $table = $this->createTable();
-        $table->addDecorator('name', [Table\Column\NoValue::class, ['noValue' => ' --- ']]);
+        $table->addDecorator('name', [Table\Column\NoValue::class, ['noValue' => '---']]);
         $table->model->load(1)->save(['name' => '']);
 
         self::assertSame(
-            '<tr data-id="1"><td> --- </td><td>ref123</td></tr>',
+            '<tr data-id="1"><td>---</td><td>ref123</td></tr>',
             $this->extractTableRow($table)
         );
     }
