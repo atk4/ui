@@ -284,11 +284,11 @@ class ColumnTest extends TestCase
     public function testNoValue(): void
     {
         $table = $this->createTable();
-        $table->addDecorator('name', [Table\Column\NoValue::class, ['noValue' => '---']]);
+        $table->addDecorator('name', [Table\Column\NoValue::class, ['noValue' => ' empty ']]);
         $table->model->load(1)->save(['name' => '']);
 
         self::assertSame(
-            '<tr data-id="1"><td>---</td><td>ref123</td></tr>',
+            '<tr data-id="1"><td> empty </td><td>ref123</td></tr>',
             $this->extractTableRow($table)
         );
     }

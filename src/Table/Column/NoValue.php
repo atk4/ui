@@ -16,9 +16,7 @@ use Atk4\Ui\Table;
  *     [...]
  *     'ui' => [
  *         [...],
- *         'table' => [
- *             'NoValue', ' if empty display this value '
- *         ],
+ *         'table' => [Table\Column\NoValue::class, ['noValue' => ' if empty display this value ']],
  *     ],
  * ]);
  */
