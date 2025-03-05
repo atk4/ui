@@ -39,7 +39,7 @@ class LinkTest extends TestCase
         return $table;
     }
 
-    public function testgetDataRowHtml(): void
+    public function testGetDataRowHtml(): void
     {
         $table = $this->createTable();
         self::assertSame('<td>{$name}</td><td>{$ref}</td>', $table->getDataRowHtml());

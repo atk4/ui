@@ -131,6 +131,7 @@ class ColorRatingTest extends TestCase
         $table = $this->createTable();
 
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Min must be lower than Max');
         $table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 3,
             'max' => 1,
@@ -147,6 +148,7 @@ class ColorRatingTest extends TestCase
         $table = $this->createTable();
 
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Min must be lower than Max');
         $table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 3,
             'max' => 3,
@@ -163,6 +165,7 @@ class ColorRatingTest extends TestCase
         $table = $this->createTable();
 
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage('At least 2 colors must be set');
         $table->addDecorator('rating', [Table\Column\ColorRating::class, [
             'min' => 1,
             'max' => 3,
