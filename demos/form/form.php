@@ -150,7 +150,7 @@ $form->buttonSave->set('SaveE1');
 $form->onSubmit(static function (Form $form) {
     $o = new \stdClass();
 
-    return $o['abc'];
+    return $o['abc']; // @phpstan-ignore offsetAccess.nonOffsetAccessible
 });
 
 Header::addTo($tab, ['Form shows Agile exceptions', 'size' => 2]);
