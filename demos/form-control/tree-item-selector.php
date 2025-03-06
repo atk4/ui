@@ -60,7 +60,7 @@ $control = $form->addControl('tree', [Form\Control\TreeItemSelector::class, 'tre
 $control->set([201, 301, 503]);
 
 $control->onItem(static function (array $values) use ($pathFromIdFx, $items) {
-    return new JsToast('Selected: ' . implode(',<br>', array_map(static fn ($v) => $pathFromIdFx($items, $v), $values)));
+    return new JsToast('Selected: ' . implode(', ', array_map(static fn ($v) => $pathFromIdFx($items, $v), $values)));
 });
 
 $control = $form->addControl('tree1', [Form\Control\TreeItemSelector::class, 'treeItems' => $items, 'allowMultiple' => false, 'caption' => 'Single selection:']);

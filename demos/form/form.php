@@ -69,11 +69,11 @@ $form->addControl('control', [Form\Control\Calendar::class, 'type' => 'date', 'c
 $form->buttonSave->set('Compare Date');
 
 $form->onSubmit(static function (Form $form) {
-    $message = 'field = ' . print_r($form->entity->get('field'), true) . '; <br> control = ' . print_r($form->entity->get('control'), true);
+    $messageHtml = 'field = ' . print_r($form->entity->get('field'), true) . '; <br> control = ' . print_r($form->entity->get('control'), true);
     $view = new Message('Date field vs control:');
     $view->setApp($form->getApp());
     $view->invokeInit();
-    $view->text->dangerouslyAddHtml($message);
+    $view->text->dangerouslyAddHtml($messageHtml);
 
     return $view;
 });

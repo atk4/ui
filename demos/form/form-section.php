@@ -25,7 +25,7 @@ $saveAndDumpValues = static function (Form $form) {
 
     return new JsToast([
         'title' => 'POSTed field values',
-        'message' => '<pre>' . $form->getApp()->encodeJson($form->entity->get()) . '</pre>',
+        'message' => $form->getApp()->encodeJson(array_diff_key($form->entity->get(), [$form->entity->idField => true])),
         'class' => 'success',
         'displayTime' => 5000,
     ]);
