@@ -143,6 +143,14 @@ class Lookup extends Input
         });
     }
 
+    #[\Override]
+    public function getValue()
+    {
+        return $this->entityField !== null
+            ? $this->getApp()->uiPersistence->typecastAttributeSaveField($this->entityField->getField(), $this->entityField->get())
+            : ($this->content ?? '');
+    }
+
     /**
      * @param bool|string      $when
      * @param JsExpressionable $action
@@ -400,7 +408,7 @@ class Lookup extends Input
             $entity = $this->model->loadBy($idField, $this->entityField->get());
 
             $row = $this->renderRow($entity);
-            $jsChain->dropdown('set value', $row['value'], true)->dropdown('set text', $row['title'], true);
+            $jsChain->dropdown('set text', $row['title'], true);
         }
 
         $this->js(true, $jsChain);
