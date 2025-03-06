@@ -29,13 +29,13 @@ $model->setLimit(15);
 $id = $app->uiPersistence->typecastAttributeLoadField($model->getIdField(), $crumb->stickyGet('country_id'));
 if ($id !== null) {
     // perhaps we edit individual country?
-    $model = $model->load($id);
-    $crumb->addCrumb($model->name, []);
+    $entity = $model->load($id);
+    $crumb->addCrumb($entity->name, []);
 
     // here we can check for additional criteria and display a deeper level on the crumb
 
     $form = Form::addTo($app);
-    $form->setEntity($model);
+    $form->setEntity($entity);
     $form->onSubmit(static function (Form $form) {
         return new JsToast('Form Submitted! Data saving is not possible in demo!');
     });

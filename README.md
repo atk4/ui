@@ -161,9 +161,9 @@ $tabs->addTab('Settings', function (\Atk4\Ui\VirtualPage $p) use ($app) {
     // second tab contains an AJAX form that stores itself back to DB
 
     $m = new Settings($app->db);
-    $m = $m->load(2);
+    $entity = $m->load(2);
     \Atk4\Ui\Form::addTo($p)
-        ->setEntity($m);
+        ->setEntity($entity);
 });
 ```
 

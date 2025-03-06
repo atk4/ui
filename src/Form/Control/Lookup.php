@@ -397,9 +397,9 @@ class Lookup extends Input
             $idField = $this->idField
                 ?? $this->model->idField;
 
-            $this->model = $this->model->loadBy($idField, $this->entityField->get());
+            $entity = $this->model->loadBy($idField, $this->entityField->get());
 
-            $row = $this->renderRow($this->model);
+            $row = $this->renderRow($entity);
             $jsChain->dropdown('set value', $row['value'], true)->dropdown('set text', $row['title'], true);
         }
 
