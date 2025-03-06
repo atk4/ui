@@ -19,14 +19,8 @@ class ColumnTest extends TestCase
     use CreateAppTrait;
     use TableTestTrait;
 
-    /** @var Table */
-    protected $table;
-
-    #[\Override]
-    protected function setUp(): void
+    protected function createTable(): Table
     {
-        parent::setUp();
-
         $arr = [
             'table' => [
                 1 => ['id' => 1, 'name' => 'foo'],
@@ -36,10 +30,13 @@ class ColumnTest extends TestCase
         $db = new Persistence\Array_($arr);
         $m = new Model($db, ['table' => 'table']);
         $m->addField('name');
-        $this->table = new Table();
-        $this->table->setApp($this->createApp());
-        $this->table->invokeInit();
-        $this->table->setModel($m, []);
+
+        $table = new Table();
+        $table->setApp($this->createApp());
+        $table->invokeInit();
+        $table->setModel($m, []);
+
+        return $table;
     }
 
     public function testAssertColumnViewNotInitializedException(): void
@@ -58,7 +55,8 @@ class ColumnTest extends TestCase
 
     public function testEachRowIsRenderIndividually(): void
     {
-        $this->table->addColumn('name', new class extends Table\Column {
+        $table = $this->createTable();
+        $table->addColumn('name', new class extends Table\Column {
             #[\Override]
             public function getDataCellHtml(?Field $field = null, array $attr = []): string
             {
@@ -76,8 +74,8 @@ class ColumnTest extends TestCase
                 '<tr data-id="2"><td is_foo="no">bar</td></tr>',
             ],
             [
-                $this->extractTableRow($this->table, '1'),
-                $this->extractTableRow($this->table, '2'),
+                $this->extractTableRow($table, '1'),
+                $this->extractTableRow($table, '2'),
             ]
         );
     }

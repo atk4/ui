@@ -193,10 +193,10 @@ $wizard->addStep('Persistence', static function (Wizard $page) {
         });
 
         Header::addTo($owner, ['Record display in Card View using model data.']);
-        $model = $model->tryLoad(1);
-        if ($model !== null) {
+        $entity = $model->tryLoad(1);
+        if ($entity !== null) {
             Card::addTo($owner, ['useLabel' => true])
-                ->setEntity($model);
+                ->setEntity($entity);
         } else {
             Message::addTo($owner, ['Empty record.']);
         }

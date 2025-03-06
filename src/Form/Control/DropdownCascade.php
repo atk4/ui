@@ -35,7 +35,9 @@ class DropdownCascade extends Dropdown
             ? $this->getApp()->uiPersistence->typecastAttributeLoadField($this->cascadeFrom->entityField->getField(), $this->getApp()->getRequestPostParam($this->cascadeFrom->name))
             : $this->cascadeFrom->entityField->get();
 
-        $this->model = $this->cascadeFrom->model ? $this->cascadeFrom->model->ref($this->reference) : null;
+        $this->model = $this->cascadeFrom->model
+            ? $this->cascadeFrom->model->ref($this->reference)
+            : null;
 
         // populate default dropdown values
         $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($cascadeFromValue), $this->entityField->get());
