@@ -232,12 +232,13 @@ class ApiService {
         m.data('needRemove', true).modal().modal('show');
     }
 
-    getErrorHtml(titleHtml, messageHtml) {
+    getErrorHtml(title, message) {
+        // TODO: HTML escape
         return `<div class="ui negative icon message" style="margin: 0px;">
               <i class="warning sign icon"></i>
               <div class="content">
-                <div class="header">${titleHtml}</div>
-                <div>${messageHtml}</div>
+                <div class="header">${title}</div>
+                <div>${message}</div>
               </div>
             </div>`;
     }

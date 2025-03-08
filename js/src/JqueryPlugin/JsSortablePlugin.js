@@ -107,7 +107,7 @@ export default class AtkJsSortablePlugin extends AbstractPlugin {
     }
 
     injectStyles(style) {
-        $('head').append('<style>' + style + '</style>');
+        $('head').append('<style>' + style + '</style>'); // TODO: prevent HTML injection
     }
 }
 

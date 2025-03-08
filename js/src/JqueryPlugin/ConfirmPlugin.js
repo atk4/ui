@@ -44,6 +44,7 @@ export default class AtkConfirmPlugin extends AbstractPlugin {
     }
 
     getDialogHtml(message) {
+        // TODO: HTML escape
         return `
           <div class=" content">${message}</div>
           <div class="actions">

@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.10.0-beta.0+f24b47e
+ * # Fomantic UI - 2.10.0-beta.4+fcf090f
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -563,14 +563,6 @@ body ::-webkit-scrollbar-thumb:hover {
   background: rgba(128, 135, 139, 0.8);
 }
 
-body .ui {
-  /* IE11 */
-  scrollbar-face-color: #bfbfbf;
-  scrollbar-shadow-color: #bfbfbf;
-  scrollbar-track-color: #e6e6e6;
-  scrollbar-arrow-color: #e6e6e6;
-}
-
 @supports (-moz-appearance: none) {
   body .ui {
     /* firefox: first color thumb, second track */
@@ -595,14 +587,6 @@ body .ui.inverted:not(.dimmer)::-webkit-scrollbar-thumb:window-inactive {
 
 body .ui.inverted:not(.dimmer)::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.35);
-}
-
-body .ui.inverted:not(.dimmer) {
-  /* IE11 */
-  scrollbar-face-color: #656565;
-  scrollbar-shadow-color: #656565;
-  scrollbar-track-color: #323232;
-  scrollbar-arrow-color: #323232;
 }
 
 @supports (-moz-appearance: none) {
@@ -665,7 +649,6 @@ input::selection {
   border-radius: 0.28571429rem;
   box-shadow: 0 0 0 1px transparent inset, 0 0 0 0 rgba(34, 36, 38, 0.15) inset;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   transition: opacity 0.1s ease, background-color 0.1s ease, color 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
   will-change: auto;
@@ -5497,7 +5480,6 @@ input::selection {
 .ui.justified.container {
   text-align: justify;
   -webkit-hyphens: auto;
-  -ms-hyphens: auto;
   hyphens: auto;
 }
 
@@ -5507,7 +5489,6 @@ input::selection {
 
 .ui.scrolling.container {
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -5701,7 +5682,6 @@ input::selection {
   letter-spacing: 0.05em;
   color: rgba(0, 0, 0, 0.85);
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -17907,24 +17887,12 @@ img.ui.bordered.image {
 
 /* browsers require these rules separate */
 
-.ui.input > input:-ms-input-placeholder {
-  color: rgba(191, 191, 191, 0.87);
-}
-
-.ui.input > input::-ms-input-placeholder {
-  color: rgba(191, 191, 191, 0.87);
-}
-
 .ui.input > input::placeholder {
   color: rgba(191, 191, 191, 0.87);
 }
 
 .ui.input > input::-moz-placeholder {
   opacity: 1;
-}
-
-.ui.input > input:-ms-input-placeholder {
-  color: rgba(191, 191, 191, 0.87);
 }
 
 /*******************************
@@ -18006,23 +17974,8 @@ img.ui.bordered.image {
   box-shadow: none;
 }
 
-.ui.input.focus > input:-ms-input-placeholder,
-.ui.input > input:focus:-ms-input-placeholder {
-  color: rgba(115, 115, 115, 0.87);
-}
-
-.ui.input.focus > input::-ms-input-placeholder,
-.ui.input > input:focus::-ms-input-placeholder {
-  color: rgba(115, 115, 115, 0.87);
-}
-
 .ui.input.focus > input::placeholder,
 .ui.input > input:focus::placeholder {
-  color: rgba(115, 115, 115, 0.87);
-}
-
-.ui.input.focus > input:-ms-input-placeholder,
-.ui.input > input:focus:-ms-input-placeholder {
   color: rgba(115, 115, 115, 0.87);
 }
 
@@ -18039,38 +17992,14 @@ img.ui.bordered.image {
 
 /* Placeholder */
 
-.ui.input.error > input:-ms-input-placeholder {
-  color: #e7bdbc;
-}
-
-.ui.input.error > input::-ms-input-placeholder {
-  color: #e7bdbc;
-}
-
 .ui.input.error > input::placeholder {
   color: #e7bdbc;
 }
 
-.ui.input.error > input:-ms-input-placeholder {
-  color: #e7bdbc !important;
-}
-
 /* Focused Placeholder */
-
-.ui.input.error > input:focus:-ms-input-placeholder {
-  color: #da9796;
-}
-
-.ui.input.error > input:focus::-ms-input-placeholder {
-  color: #da9796;
-}
 
 .ui.input.error > input:focus::placeholder {
   color: #da9796;
-}
-
-.ui.input.error > input:focus:-ms-input-placeholder {
-  color: #da9796 !important;
 }
 
 .ui.input.info > input {
@@ -18082,38 +18011,14 @@ img.ui.bordered.image {
 
 /* Placeholder */
 
-.ui.input.info > input:-ms-input-placeholder {
-  color: #98cfe1;
-}
-
-.ui.input.info > input::-ms-input-placeholder {
-  color: #98cfe1;
-}
-
 .ui.input.info > input::placeholder {
   color: #98cfe1;
 }
 
-.ui.input.info > input:-ms-input-placeholder {
-  color: #98cfe1 !important;
-}
-
 /* Focused Placeholder */
-
-.ui.input.info > input:focus:-ms-input-placeholder {
-  color: #70bdd6;
-}
-
-.ui.input.info > input:focus::-ms-input-placeholder {
-  color: #70bdd6;
-}
 
 .ui.input.info > input:focus::placeholder {
   color: #70bdd6;
-}
-
-.ui.input.info > input:focus:-ms-input-placeholder {
-  color: #70bdd6 !important;
 }
 
 .ui.input.success > input {
@@ -18125,38 +18030,14 @@ img.ui.bordered.image {
 
 /* Placeholder */
 
-.ui.input.success > input:-ms-input-placeholder {
-  color: #8fcf90;
-}
-
-.ui.input.success > input::-ms-input-placeholder {
-  color: #8fcf90;
-}
-
 .ui.input.success > input::placeholder {
   color: #8fcf90;
 }
 
-.ui.input.success > input:-ms-input-placeholder {
-  color: #8fcf90 !important;
-}
-
 /* Focused Placeholder */
-
-.ui.input.success > input:focus:-ms-input-placeholder {
-  color: #6cbf6d;
-}
-
-.ui.input.success > input:focus::-ms-input-placeholder {
-  color: #6cbf6d;
-}
 
 .ui.input.success > input:focus::placeholder {
   color: #6cbf6d;
-}
-
-.ui.input.success > input:focus:-ms-input-placeholder {
-  color: #6cbf6d !important;
 }
 
 .ui.input.warning > input {
@@ -18168,38 +18049,14 @@ img.ui.bordered.image {
 
 /* Placeholder */
 
-.ui.input.warning > input:-ms-input-placeholder {
-  color: #edad3e;
-}
-
-.ui.input.warning > input::-ms-input-placeholder {
-  color: #edad3e;
-}
-
 .ui.input.warning > input::placeholder {
   color: #edad3e;
 }
 
-.ui.input.warning > input:-ms-input-placeholder {
-  color: #edad3e !important;
-}
-
 /* Focused Placeholder */
-
-.ui.input.warning > input:focus:-ms-input-placeholder {
-  color: #e39715;
-}
-
-.ui.input.warning > input:focus::-ms-input-placeholder {
-  color: #e39715;
-}
 
 .ui.input.warning > input:focus::placeholder {
   color: #e39715;
-}
-
-.ui.input.warning > input:focus:-ms-input-placeholder {
-  color: #e39715 !important;
 }
 
 /*******************************
@@ -18250,19 +18107,7 @@ img.ui.bordered.image {
   color: inherit;
 }
 
-.ui.transparent.inverted.input > input:-ms-input-placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.ui.transparent.inverted.input > input::-ms-input-placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
 .ui.transparent.inverted.input > input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.ui.transparent.inverted.input > input:-ms-input-placeholder {
   color: rgba(255, 255, 255, 0.5);
 }
 
@@ -18773,74 +18618,8 @@ img.ui.bordered.image {
   padding: 0;
 }
 
-.ui.action.file.input input[type="file"]::-webkit-file-upload-button {
-  display: none;
-}
-
-.ui.form .field input[type="file"]::-webkit-file-upload-button,
-.ui.file.input input[type="file"]::-webkit-file-upload-button {
-  border: none;
-  cursor: pointer;
-  padding: 0.67857143em 1em;
-  margin-right: 1em;
-  background: #e0e1e2;
-  font-weight: 600;
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.ui.form .field input[type="file"]::-webkit-file-upload-button:hover,
-.ui.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #cacbcd;
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.ui.action.file.input input[type="file"]::-ms-browse {
-  display: none;
-}
-
-.ui.form .field input[type="file"]::-ms-browse,
-.ui.file.input input[type="file"]::-ms-browse {
-  border: none;
-  cursor: pointer;
-  padding: 0.67857143em 1em;
-  margin: 0;
-  background: #e0e1e2;
-  font-weight: 600;
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.ui.form .field input[type="file"]::-ms-browse:hover,
-.ui.file.input input[type="file"]::-ms-browse:hover {
-  background: #cacbcd;
-  color: rgba(0, 0, 0, 0.6);
-}
-
-/* IE needs additional styling for input field :S */
-
-@media all and (-ms-high-contrast: none) {
-  .ui.file.input > input[type="file"],
-  input[type="file"].ui.file.input {
-    padding: 0 !important;
-  }
-}
-
-.ui.action.file.input input[type="file"]::-webkit-file-upload-button {
-  display: none;
-}
-
 .ui.action.file.input input[type="file"]::file-selector-button {
   display: none;
-}
-
-.ui.form .field input[type="file"]::-webkit-file-upload-button,
-.ui.file.input input[type="file"]::-webkit-file-upload-button {
-  border: none;
-  cursor: pointer;
-  padding: 0.67857143em 1em;
-  margin-right: 1em;
-  background: #e0e1e2;
-  font-weight: 600;
-  color: rgba(0, 0, 0, 0.6);
 }
 
 .ui.form .field input[type="file"]::file-selector-button,
@@ -18851,12 +18630,6 @@ img.ui.bordered.image {
   margin-right: 1em;
   background: #e0e1e2;
   font-weight: 600;
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.ui.form .field input[type="file"]::-webkit-file-upload-button:hover,
-.ui.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #cacbcd;
   color: rgba(0, 0, 0, 0.6);
 }
 
@@ -19050,76 +18823,15 @@ input[type="file"].ui.file.input:focus + label.ui.black.button:not(.basic):not(.
   background-color: #000000;
 }
 
-input[type="file"].ui.primary.file.input::-webkit-file-upload-button,
-.ui.primary.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #2185d0;
-  color: #fff;
-}
-
-input[type="file"].ui.primary.file.input::-webkit-file-upload-button:hover,
-.ui.primary.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #1678c2;
-}
-
-input[type="file"].ui.primary.file.input::-ms-browse,
-.ui.primary.file.input input[type="file"]::-ms-browse {
-  background: #2185d0;
-  color: #fff;
-}
-
-input[type="file"].ui.primary.file.input::-ms-browse:hover,
-.ui.primary.file.input input[type="file"]::-ms-browse:hover {
-  background: #1678c2;
-}
-
-input[type="file"].ui.primary.file.input::-webkit-file-upload-button,
-.ui.primary.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #2185d0;
-  color: #fff;
-}
-
 input[type="file"].ui.primary.file.input::file-selector-button,
 .ui.primary.file.input input[type="file"]::file-selector-button {
   background: #2185d0;
   color: #fff;
 }
 
-input[type="file"].ui.primary.file.input::-webkit-file-upload-button:hover,
-.ui.primary.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #1678c2;
-}
-
 input[type="file"].ui.primary.file.input::file-selector-button:hover,
 .ui.primary.file.input input[type="file"]::file-selector-button:hover {
   background: #1678c2;
-}
-
-input[type="file"].ui.secondary.file.input::-webkit-file-upload-button,
-.ui.secondary.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #1b1c1d;
-  color: #fff;
-}
-
-input[type="file"].ui.secondary.file.input::-webkit-file-upload-button:hover,
-.ui.secondary.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #27292a;
-}
-
-input[type="file"].ui.secondary.file.input::-ms-browse,
-.ui.secondary.file.input input[type="file"]::-ms-browse {
-  background: #1b1c1d;
-  color: #fff;
-}
-
-input[type="file"].ui.secondary.file.input::-ms-browse:hover,
-.ui.secondary.file.input input[type="file"]::-ms-browse:hover {
-  background: #27292a;
-}
-
-input[type="file"].ui.secondary.file.input::-webkit-file-upload-button,
-.ui.secondary.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #1b1c1d;
-  color: #fff;
 }
 
 input[type="file"].ui.secondary.file.input::file-selector-button,
@@ -19128,42 +18840,9 @@ input[type="file"].ui.secondary.file.input::file-selector-button,
   color: #fff;
 }
 
-input[type="file"].ui.secondary.file.input::-webkit-file-upload-button:hover,
-.ui.secondary.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #27292a;
-}
-
 input[type="file"].ui.secondary.file.input::file-selector-button:hover,
 .ui.secondary.file.input input[type="file"]::file-selector-button:hover {
   background: #27292a;
-}
-
-input[type="file"].ui.red.file.input::-webkit-file-upload-button,
-.ui.red.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #db2828;
-  color: #fff;
-}
-
-input[type="file"].ui.red.file.input::-webkit-file-upload-button:hover,
-.ui.red.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #d01919;
-}
-
-input[type="file"].ui.red.file.input::-ms-browse,
-.ui.red.file.input input[type="file"]::-ms-browse {
-  background: #db2828;
-  color: #fff;
-}
-
-input[type="file"].ui.red.file.input::-ms-browse:hover,
-.ui.red.file.input input[type="file"]::-ms-browse:hover {
-  background: #d01919;
-}
-
-input[type="file"].ui.red.file.input::-webkit-file-upload-button,
-.ui.red.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #db2828;
-  color: #fff;
 }
 
 input[type="file"].ui.red.file.input::file-selector-button,
@@ -19172,42 +18851,9 @@ input[type="file"].ui.red.file.input::file-selector-button,
   color: #fff;
 }
 
-input[type="file"].ui.red.file.input::-webkit-file-upload-button:hover,
-.ui.red.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #d01919;
-}
-
 input[type="file"].ui.red.file.input::file-selector-button:hover,
 .ui.red.file.input input[type="file"]::file-selector-button:hover {
   background: #d01919;
-}
-
-input[type="file"].ui.orange.file.input::-webkit-file-upload-button,
-.ui.orange.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #f2711c;
-  color: #fff;
-}
-
-input[type="file"].ui.orange.file.input::-webkit-file-upload-button:hover,
-.ui.orange.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #f26202;
-}
-
-input[type="file"].ui.orange.file.input::-ms-browse,
-.ui.orange.file.input input[type="file"]::-ms-browse {
-  background: #f2711c;
-  color: #fff;
-}
-
-input[type="file"].ui.orange.file.input::-ms-browse:hover,
-.ui.orange.file.input input[type="file"]::-ms-browse:hover {
-  background: #f26202;
-}
-
-input[type="file"].ui.orange.file.input::-webkit-file-upload-button,
-.ui.orange.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #f2711c;
-  color: #fff;
 }
 
 input[type="file"].ui.orange.file.input::file-selector-button,
@@ -19216,42 +18862,9 @@ input[type="file"].ui.orange.file.input::file-selector-button,
   color: #fff;
 }
 
-input[type="file"].ui.orange.file.input::-webkit-file-upload-button:hover,
-.ui.orange.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #f26202;
-}
-
 input[type="file"].ui.orange.file.input::file-selector-button:hover,
 .ui.orange.file.input input[type="file"]::file-selector-button:hover {
   background: #f26202;
-}
-
-input[type="file"].ui.yellow.file.input::-webkit-file-upload-button,
-.ui.yellow.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #fbbd08;
-  color: #fff;
-}
-
-input[type="file"].ui.yellow.file.input::-webkit-file-upload-button:hover,
-.ui.yellow.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #eaae00;
-}
-
-input[type="file"].ui.yellow.file.input::-ms-browse,
-.ui.yellow.file.input input[type="file"]::-ms-browse {
-  background: #fbbd08;
-  color: #fff;
-}
-
-input[type="file"].ui.yellow.file.input::-ms-browse:hover,
-.ui.yellow.file.input input[type="file"]::-ms-browse:hover {
-  background: #eaae00;
-}
-
-input[type="file"].ui.yellow.file.input::-webkit-file-upload-button,
-.ui.yellow.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #fbbd08;
-  color: #fff;
 }
 
 input[type="file"].ui.yellow.file.input::file-selector-button,
@@ -19260,42 +18873,9 @@ input[type="file"].ui.yellow.file.input::file-selector-button,
   color: #fff;
 }
 
-input[type="file"].ui.yellow.file.input::-webkit-file-upload-button:hover,
-.ui.yellow.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #eaae00;
-}
-
 input[type="file"].ui.yellow.file.input::file-selector-button:hover,
 .ui.yellow.file.input input[type="file"]::file-selector-button:hover {
   background: #eaae00;
-}
-
-input[type="file"].ui.olive.file.input::-webkit-file-upload-button,
-.ui.olive.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #b5cc18;
-  color: #fff;
-}
-
-input[type="file"].ui.olive.file.input::-webkit-file-upload-button:hover,
-.ui.olive.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #a7bd0d;
-}
-
-input[type="file"].ui.olive.file.input::-ms-browse,
-.ui.olive.file.input input[type="file"]::-ms-browse {
-  background: #b5cc18;
-  color: #fff;
-}
-
-input[type="file"].ui.olive.file.input::-ms-browse:hover,
-.ui.olive.file.input input[type="file"]::-ms-browse:hover {
-  background: #a7bd0d;
-}
-
-input[type="file"].ui.olive.file.input::-webkit-file-upload-button,
-.ui.olive.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #b5cc18;
-  color: #fff;
 }
 
 input[type="file"].ui.olive.file.input::file-selector-button,
@@ -19304,42 +18884,9 @@ input[type="file"].ui.olive.file.input::file-selector-button,
   color: #fff;
 }
 
-input[type="file"].ui.olive.file.input::-webkit-file-upload-button:hover,
-.ui.olive.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #a7bd0d;
-}
-
 input[type="file"].ui.olive.file.input::file-selector-button:hover,
 .ui.olive.file.input input[type="file"]::file-selector-button:hover {
   background: #a7bd0d;
-}
-
-input[type="file"].ui.green.file.input::-webkit-file-upload-button,
-.ui.green.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #21ba45;
-  color: #fff;
-}
-
-input[type="file"].ui.green.file.input::-webkit-file-upload-button:hover,
-.ui.green.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #16ab39;
-}
-
-input[type="file"].ui.green.file.input::-ms-browse,
-.ui.green.file.input input[type="file"]::-ms-browse {
-  background: #21ba45;
-  color: #fff;
-}
-
-input[type="file"].ui.green.file.input::-ms-browse:hover,
-.ui.green.file.input input[type="file"]::-ms-browse:hover {
-  background: #16ab39;
-}
-
-input[type="file"].ui.green.file.input::-webkit-file-upload-button,
-.ui.green.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #21ba45;
-  color: #fff;
 }
 
 input[type="file"].ui.green.file.input::file-selector-button,
@@ -19348,42 +18895,9 @@ input[type="file"].ui.green.file.input::file-selector-button,
   color: #fff;
 }
 
-input[type="file"].ui.green.file.input::-webkit-file-upload-button:hover,
-.ui.green.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #16ab39;
-}
-
 input[type="file"].ui.green.file.input::file-selector-button:hover,
 .ui.green.file.input input[type="file"]::file-selector-button:hover {
   background: #16ab39;
-}
-
-input[type="file"].ui.teal.file.input::-webkit-file-upload-button,
-.ui.teal.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #00b5ad;
-  color: #fff;
-}
-
-input[type="file"].ui.teal.file.input::-webkit-file-upload-button:hover,
-.ui.teal.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #009c95;
-}
-
-input[type="file"].ui.teal.file.input::-ms-browse,
-.ui.teal.file.input input[type="file"]::-ms-browse {
-  background: #00b5ad;
-  color: #fff;
-}
-
-input[type="file"].ui.teal.file.input::-ms-browse:hover,
-.ui.teal.file.input input[type="file"]::-ms-browse:hover {
-  background: #009c95;
-}
-
-input[type="file"].ui.teal.file.input::-webkit-file-upload-button,
-.ui.teal.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #00b5ad;
-  color: #fff;
 }
 
 input[type="file"].ui.teal.file.input::file-selector-button,
@@ -19392,42 +18906,9 @@ input[type="file"].ui.teal.file.input::file-selector-button,
   color: #fff;
 }
 
-input[type="file"].ui.teal.file.input::-webkit-file-upload-button:hover,
-.ui.teal.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #009c95;
-}
-
 input[type="file"].ui.teal.file.input::file-selector-button:hover,
 .ui.teal.file.input input[type="file"]::file-selector-button:hover {
   background: #009c95;
-}
-
-input[type="file"].ui.blue.file.input::-webkit-file-upload-button,
-.ui.blue.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #2185d0;
-  color: #fff;
-}
-
-input[type="file"].ui.blue.file.input::-webkit-file-upload-button:hover,
-.ui.blue.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #1678c2;
-}
-
-input[type="file"].ui.blue.file.input::-ms-browse,
-.ui.blue.file.input input[type="file"]::-ms-browse {
-  background: #2185d0;
-  color: #fff;
-}
-
-input[type="file"].ui.blue.file.input::-ms-browse:hover,
-.ui.blue.file.input input[type="file"]::-ms-browse:hover {
-  background: #1678c2;
-}
-
-input[type="file"].ui.blue.file.input::-webkit-file-upload-button,
-.ui.blue.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #2185d0;
-  color: #fff;
 }
 
 input[type="file"].ui.blue.file.input::file-selector-button,
@@ -19436,42 +18917,9 @@ input[type="file"].ui.blue.file.input::file-selector-button,
   color: #fff;
 }
 
-input[type="file"].ui.blue.file.input::-webkit-file-upload-button:hover,
-.ui.blue.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #1678c2;
-}
-
 input[type="file"].ui.blue.file.input::file-selector-button:hover,
 .ui.blue.file.input input[type="file"]::file-selector-button:hover {
   background: #1678c2;
-}
-
-input[type="file"].ui.violet.file.input::-webkit-file-upload-button,
-.ui.violet.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #6435c9;
-  color: #fff;
-}
-
-input[type="file"].ui.violet.file.input::-webkit-file-upload-button:hover,
-.ui.violet.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #5829bb;
-}
-
-input[type="file"].ui.violet.file.input::-ms-browse,
-.ui.violet.file.input input[type="file"]::-ms-browse {
-  background: #6435c9;
-  color: #fff;
-}
-
-input[type="file"].ui.violet.file.input::-ms-browse:hover,
-.ui.violet.file.input input[type="file"]::-ms-browse:hover {
-  background: #5829bb;
-}
-
-input[type="file"].ui.violet.file.input::-webkit-file-upload-button,
-.ui.violet.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #6435c9;
-  color: #fff;
 }
 
 input[type="file"].ui.violet.file.input::file-selector-button,
@@ -19480,42 +18928,9 @@ input[type="file"].ui.violet.file.input::file-selector-button,
   color: #fff;
 }
 
-input[type="file"].ui.violet.file.input::-webkit-file-upload-button:hover,
-.ui.violet.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #5829bb;
-}
-
 input[type="file"].ui.violet.file.input::file-selector-button:hover,
 .ui.violet.file.input input[type="file"]::file-selector-button:hover {
   background: #5829bb;
-}
-
-input[type="file"].ui.purple.file.input::-webkit-file-upload-button,
-.ui.purple.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #a333c8;
-  color: #fff;
-}
-
-input[type="file"].ui.purple.file.input::-webkit-file-upload-button:hover,
-.ui.purple.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #9627ba;
-}
-
-input[type="file"].ui.purple.file.input::-ms-browse,
-.ui.purple.file.input input[type="file"]::-ms-browse {
-  background: #a333c8;
-  color: #fff;
-}
-
-input[type="file"].ui.purple.file.input::-ms-browse:hover,
-.ui.purple.file.input input[type="file"]::-ms-browse:hover {
-  background: #9627ba;
-}
-
-input[type="file"].ui.purple.file.input::-webkit-file-upload-button,
-.ui.purple.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #a333c8;
-  color: #fff;
 }
 
 input[type="file"].ui.purple.file.input::file-selector-button,
@@ -19524,42 +18939,9 @@ input[type="file"].ui.purple.file.input::file-selector-button,
   color: #fff;
 }
 
-input[type="file"].ui.purple.file.input::-webkit-file-upload-button:hover,
-.ui.purple.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #9627ba;
-}
-
 input[type="file"].ui.purple.file.input::file-selector-button:hover,
 .ui.purple.file.input input[type="file"]::file-selector-button:hover {
   background: #9627ba;
-}
-
-input[type="file"].ui.pink.file.input::-webkit-file-upload-button,
-.ui.pink.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #e03997;
-  color: #fff;
-}
-
-input[type="file"].ui.pink.file.input::-webkit-file-upload-button:hover,
-.ui.pink.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #e61a8d;
-}
-
-input[type="file"].ui.pink.file.input::-ms-browse,
-.ui.pink.file.input input[type="file"]::-ms-browse {
-  background: #e03997;
-  color: #fff;
-}
-
-input[type="file"].ui.pink.file.input::-ms-browse:hover,
-.ui.pink.file.input input[type="file"]::-ms-browse:hover {
-  background: #e61a8d;
-}
-
-input[type="file"].ui.pink.file.input::-webkit-file-upload-button,
-.ui.pink.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #e03997;
-  color: #fff;
 }
 
 input[type="file"].ui.pink.file.input::file-selector-button,
@@ -19568,42 +18950,9 @@ input[type="file"].ui.pink.file.input::file-selector-button,
   color: #fff;
 }
 
-input[type="file"].ui.pink.file.input::-webkit-file-upload-button:hover,
-.ui.pink.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #e61a8d;
-}
-
 input[type="file"].ui.pink.file.input::file-selector-button:hover,
 .ui.pink.file.input input[type="file"]::file-selector-button:hover {
   background: #e61a8d;
-}
-
-input[type="file"].ui.brown.file.input::-webkit-file-upload-button,
-.ui.brown.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #a5673f;
-  color: #fff;
-}
-
-input[type="file"].ui.brown.file.input::-webkit-file-upload-button:hover,
-.ui.brown.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #975b33;
-}
-
-input[type="file"].ui.brown.file.input::-ms-browse,
-.ui.brown.file.input input[type="file"]::-ms-browse {
-  background: #a5673f;
-  color: #fff;
-}
-
-input[type="file"].ui.brown.file.input::-ms-browse:hover,
-.ui.brown.file.input input[type="file"]::-ms-browse:hover {
-  background: #975b33;
-}
-
-input[type="file"].ui.brown.file.input::-webkit-file-upload-button,
-.ui.brown.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #a5673f;
-  color: #fff;
 }
 
 input[type="file"].ui.brown.file.input::file-selector-button,
@@ -19612,42 +18961,9 @@ input[type="file"].ui.brown.file.input::file-selector-button,
   color: #fff;
 }
 
-input[type="file"].ui.brown.file.input::-webkit-file-upload-button:hover,
-.ui.brown.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #975b33;
-}
-
 input[type="file"].ui.brown.file.input::file-selector-button:hover,
 .ui.brown.file.input input[type="file"]::file-selector-button:hover {
   background: #975b33;
-}
-
-input[type="file"].ui.grey.file.input::-webkit-file-upload-button,
-.ui.grey.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #767676;
-  color: #fff;
-}
-
-input[type="file"].ui.grey.file.input::-webkit-file-upload-button:hover,
-.ui.grey.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #838383;
-}
-
-input[type="file"].ui.grey.file.input::-ms-browse,
-.ui.grey.file.input input[type="file"]::-ms-browse {
-  background: #767676;
-  color: #fff;
-}
-
-input[type="file"].ui.grey.file.input::-ms-browse:hover,
-.ui.grey.file.input input[type="file"]::-ms-browse:hover {
-  background: #838383;
-}
-
-input[type="file"].ui.grey.file.input::-webkit-file-upload-button,
-.ui.grey.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #767676;
-  color: #fff;
 }
 
 input[type="file"].ui.grey.file.input::file-selector-button,
@@ -19656,53 +18972,15 @@ input[type="file"].ui.grey.file.input::file-selector-button,
   color: #fff;
 }
 
-input[type="file"].ui.grey.file.input::-webkit-file-upload-button:hover,
-.ui.grey.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #838383;
-}
-
 input[type="file"].ui.grey.file.input::file-selector-button:hover,
 .ui.grey.file.input input[type="file"]::file-selector-button:hover {
   background: #838383;
-}
-
-input[type="file"].ui.black.file.input::-webkit-file-upload-button,
-.ui.black.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #1b1c1d;
-  color: #fff;
-}
-
-input[type="file"].ui.black.file.input::-webkit-file-upload-button:hover,
-.ui.black.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #27292a;
-}
-
-input[type="file"].ui.black.file.input::-ms-browse,
-.ui.black.file.input input[type="file"]::-ms-browse {
-  background: #1b1c1d;
-  color: #fff;
-}
-
-input[type="file"].ui.black.file.input::-ms-browse:hover,
-.ui.black.file.input input[type="file"]::-ms-browse:hover {
-  background: #27292a;
-}
-
-input[type="file"].ui.black.file.input::-webkit-file-upload-button,
-.ui.black.file.input input[type="file"]::-webkit-file-upload-button {
-  background: #1b1c1d;
-  color: #fff;
 }
 
 input[type="file"].ui.black.file.input::file-selector-button,
 .ui.black.file.input input[type="file"]::file-selector-button {
   background: #1b1c1d;
   color: #fff;
-}
-
-input[type="file"].ui.black.file.input::-webkit-file-upload-button:hover,
-.ui.black.file.input input[type="file"]::-webkit-file-upload-button:hover {
-  background: #27292a;
 }
 
 input[type="file"].ui.black.file.input::file-selector-button:hover,
@@ -22780,7 +22058,6 @@ ul.ui.list li::before,
 .ui.bulleted.list .list > .item::before,
 .ui.bulleted.list > .item::before {
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   pointer-events: none;
   position: absolute;
@@ -22859,7 +22136,6 @@ ol.ui.list li::before,
   top: auto;
   left: auto;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   pointer-events: none;
   margin-left: -1.25rem;
@@ -24901,7 +24177,6 @@ ol.ui.suffixed.list li::before,
 
 /* Grid */
 
-.ui.page.grid.segment,
 .ui.grid > .row > .ui.segment.column,
 .ui.grid > .ui.segment.column {
   padding-top: 2em;
@@ -25311,7 +24586,6 @@ ol.ui.suffixed.list li::before,
 
 .ui.horizontal.segments:not(.compact) > .segment:not(.compact) {
   flex: 1 1 auto;
-  -ms-flex: 1 1 0;
 }
 
 .ui.horizontal.segments > .segment {
@@ -25361,7 +24635,6 @@ ol.ui.suffixed.list li::before,
   color: rgba(40, 40, 40, 0.3);
   pointer-events: none;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -25375,7 +24648,6 @@ ol.ui.suffixed.list li::before,
   cursor: default;
   pointer-events: none;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   transition: all 0s linear;
   min-height: 4.5em;
@@ -25826,7 +25098,6 @@ ol.ui.suffixed.list li::before,
 
 .ui.scrolling.segment {
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -28627,36 +27898,12 @@ span.ui.massive.text {
 
 /* browsers require these rules separate */
 
-.ui.form :-ms-input-placeholder {
-  color: rgba(191, 191, 191, 0.87);
-}
-
-.ui.form ::-ms-input-placeholder {
-  color: rgba(191, 191, 191, 0.87);
-}
-
 .ui.form ::placeholder {
   color: rgba(191, 191, 191, 0.87);
 }
 
-.ui.form :-ms-input-placeholder {
-  color: rgba(191, 191, 191, 0.87) !important;
-}
-
-.ui.form :focus:-ms-input-placeholder {
-  color: rgba(115, 115, 115, 0.87);
-}
-
-.ui.form :focus::-ms-input-placeholder {
-  color: rgba(115, 115, 115, 0.87);
-}
-
 .ui.form :focus::placeholder {
   color: rgba(115, 115, 115, 0.87);
-}
-
-.ui.form :focus:-ms-input-placeholder {
-  color: rgba(115, 115, 115, 0.87) !important;
 }
 
 /* --------------------
@@ -28878,7 +28125,7 @@ span.ui.massive.text {
   border-color: #e0b4b4;
 }
 
-/* Preserve Native Select Stylings */
+/* Preserve Native Select Styling */
 
 .ui.form .field.error select {
   -webkit-appearance: menulist-button;
@@ -28907,38 +28154,14 @@ span.ui.massive.text {
 
 /* Placeholder */
 
-.ui.form .error :-ms-input-placeholder {
-  color: #e7bdbc;
-}
-
-.ui.form .error ::-ms-input-placeholder {
-  color: #e7bdbc;
-}
-
 .ui.form .error .ui.dropdown > .default.text,
 .ui.form .error ::placeholder {
   color: #e7bdbc;
 }
 
-.ui.form .error :-ms-input-placeholder {
-  color: #e7bdbc !important;
-}
-
-.ui.form .error :focus:-ms-input-placeholder {
-  color: #da9796;
-}
-
-.ui.form .error :focus::-ms-input-placeholder {
-  color: #da9796;
-}
-
 .ui.form .error .ui.dropdown > input:focus ~ .default.text,
 .ui.form .error :focus::placeholder {
   color: #da9796;
-}
-
-.ui.form .error :focus:-ms-input-placeholder {
-  color: #da9796 !important;
 }
 
 /*------------------
@@ -29153,7 +28376,7 @@ span.ui.massive.text {
   border-color: #a9d5de;
 }
 
-/* Preserve Native Select Stylings */
+/* Preserve Native Select Styling */
 
 .ui.form .field.info select {
   -webkit-appearance: menulist-button;
@@ -29182,38 +28405,14 @@ span.ui.massive.text {
 
 /* Placeholder */
 
-.ui.form .info :-ms-input-placeholder {
-  color: #98cfe1;
-}
-
-.ui.form .info ::-ms-input-placeholder {
-  color: #98cfe1;
-}
-
 .ui.form .info .ui.dropdown > .default.text,
 .ui.form .info ::placeholder {
   color: #98cfe1;
 }
 
-.ui.form .info :-ms-input-placeholder {
-  color: #98cfe1 !important;
-}
-
-.ui.form .info :focus:-ms-input-placeholder {
-  color: #70bdd6;
-}
-
-.ui.form .info :focus::-ms-input-placeholder {
-  color: #70bdd6;
-}
-
 .ui.form .info .ui.dropdown > input:focus ~ .default.text,
 .ui.form .info :focus::placeholder {
   color: #70bdd6;
-}
-
-.ui.form .info :focus:-ms-input-placeholder {
-  color: #70bdd6 !important;
 }
 
 /*------------------
@@ -29428,7 +28627,7 @@ span.ui.massive.text {
   border-color: #a3c293;
 }
 
-/* Preserve Native Select Stylings */
+/* Preserve Native Select Styling */
 
 .ui.form .field.success select {
   -webkit-appearance: menulist-button;
@@ -29457,38 +28656,14 @@ span.ui.massive.text {
 
 /* Placeholder */
 
-.ui.form .success :-ms-input-placeholder {
-  color: #8fcf90;
-}
-
-.ui.form .success ::-ms-input-placeholder {
-  color: #8fcf90;
-}
-
 .ui.form .success .ui.dropdown > .default.text,
 .ui.form .success ::placeholder {
   color: #8fcf90;
 }
 
-.ui.form .success :-ms-input-placeholder {
-  color: #8fcf90 !important;
-}
-
-.ui.form .success :focus:-ms-input-placeholder {
-  color: #6cbf6d;
-}
-
-.ui.form .success :focus::-ms-input-placeholder {
-  color: #6cbf6d;
-}
-
 .ui.form .success .ui.dropdown > input:focus ~ .default.text,
 .ui.form .success :focus::placeholder {
   color: #6cbf6d;
-}
-
-.ui.form .success :focus:-ms-input-placeholder {
-  color: #6cbf6d !important;
 }
 
 /*------------------
@@ -29703,7 +28878,7 @@ span.ui.massive.text {
   border-color: #c9ba9b;
 }
 
-/* Preserve Native Select Stylings */
+/* Preserve Native Select Styling */
 
 .ui.form .field.warning select {
   -webkit-appearance: menulist-button;
@@ -29732,38 +28907,14 @@ span.ui.massive.text {
 
 /* Placeholder */
 
-.ui.form .warning :-ms-input-placeholder {
-  color: #edad3e;
-}
-
-.ui.form .warning ::-ms-input-placeholder {
-  color: #edad3e;
-}
-
 .ui.form .warning .ui.dropdown > .default.text,
 .ui.form .warning ::placeholder {
   color: #edad3e;
 }
 
-.ui.form .warning :-ms-input-placeholder {
-  color: #edad3e !important;
-}
-
-.ui.form .warning :focus:-ms-input-placeholder {
-  color: #e39715;
-}
-
-.ui.form .warning :focus::-ms-input-placeholder {
-  color: #e39715;
-}
-
 .ui.form .warning .ui.dropdown > input:focus ~ .default.text,
 .ui.form .warning :focus::placeholder {
   color: #e39715;
-}
-
-.ui.form .warning :focus:-ms-input-placeholder {
-  color: #e39715 !important;
 }
 
 /*------------------
@@ -30498,60 +29649,6 @@ span.ui.massive.text {
            Variations
 *******************************/
 
-/* -----------------------
-           Page Grid
-    ------------------------- */
-
-@media only screen and (max-width: 767.98px) {
-  .ui.page.grid {
-    width: auto;
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: 0;
-    margin-right: 0;
-  }
-}
-
-@media only screen and (min-width: 768px) and (max-width: 991.98px) {
-  .ui.page.grid {
-    width: auto;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 2em;
-    padding-right: 2em;
-  }
-}
-
-@media only screen and (min-width: 992px) and (max-width: 1199.98px) {
-  .ui.page.grid {
-    width: auto;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 3%;
-    padding-right: 3%;
-  }
-}
-
-@media only screen and (min-width: 1200px) and (max-width: 1919.98px) {
-  .ui.page.grid {
-    width: auto;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 15%;
-    padding-right: 15%;
-  }
-}
-
-@media only screen and (min-width: 1920px) {
-  .ui.page.grid {
-    width: auto;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 23%;
-    padding-right: 23%;
-  }
-}
-
 /* -------------------
      Column Count
 -------------------- */
@@ -30709,12 +29806,6 @@ span.ui.massive.text {
 
 .ui.grid > [class*="sixteen column"].row > .column {
   width: 6.25% !important;
-}
-
-/* Celled Page */
-
-.ui.celled.page.grid {
-  box-shadow: none;
 }
 
 /* -------------------
@@ -31779,7 +30870,6 @@ span.ui.massive.text {
 .ui.ui.grid > .row > .justified.column {
   text-align: justify;
   -webkit-hyphens: auto;
-  -ms-hyphens: auto;
   hyphens: auto;
 }
 
@@ -32321,8 +31411,7 @@ span.ui.massive.text {
 
   /* Don't pad inside segment or nested grid */
 
-  .ui.grid .ui.stackable.grid,
-  .ui.segment:not(.vertical) .ui.stackable.page.grid {
+  .ui.grid .ui.stackable.grid {
     margin-left: -1rem;
     margin-right: -1rem;
   }
@@ -32678,7 +31767,6 @@ span.ui.massive.text {
   -webkit-tap-highlight-color: transparent;
   flex: 0 0 auto;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   background: none;
   padding: 0.92857143em 1.14285714em;
@@ -32712,7 +31800,6 @@ span.ui.massive.text {
 .ui.menu .item > a:not(.ui),
 .ui.menu .item > p:only-child {
   -webkit-user-select: text;
-  -ms-user-select: text;
   user-select: text;
   line-height: 1.3;
 }
@@ -32897,8 +31984,6 @@ span.ui.massive.text {
 
 .ui.vertical.menu .dropdown.item .menu {
   left: 100%;
-  /* IE needs 0, all others support max-content to show dropdown icon inline, so keep both settings! */
-  min-width: 0;
   min-width: max-content;
   margin: 0 0 0 0;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
@@ -34553,8 +33638,6 @@ Floated Menu / Item
 }
 
 .ui.compact.vertical.menu {
-  /* IE hack to make dropdown icons appear inline */
-  display: -ms-inline-flexbox !important;
   display: inline-block;
 }
 
@@ -36528,7 +35611,6 @@ Floated Menu / Item
 .ui.scrolling.table > tbody {
   display: block;
   overflow-y: scroll;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -36585,34 +35667,6 @@ Floated Menu / Item
   }
 }
 
-/* IE scrollbar color needs hex values */
-
-@media all and (-ms-high-contrast: none) {
-  .ui.scrolling.table > thead,
-  .ui.scrolling.table > tfoot {
-    scrollbar-face-color: currentColor;
-    scrollbar-shadow-color: currentColor;
-    scrollbar-track-color: currentColor;
-    scrollbar-arrow-color: currentColor;
-  }
-
-  .ui.scrolling.table > thead {
-    color: #f9fafb;
-  }
-
-  .ui.scrolling.table > tfoot {
-    color: #f9fafb;
-  }
-
-  .ui.inverted.scrolling.table > thead {
-    color: #252525;
-  }
-
-  .ui.inverted.scrolling.table > tfoot {
-    color: #252525;
-  }
-}
-
 .ui.inverted.scrolling.table > tbody::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.1);
 }
@@ -36627,14 +35681,6 @@ Floated Menu / Item
 
 .ui.inverted.scrolling.table > tbody::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.35);
-}
-
-.ui.inverted.scrolling.table > tbody {
-  /* IE11 */
-  scrollbar-face-color: #656565;
-  scrollbar-shadow-color: #656565;
-  scrollbar-track-color: #323232;
-  scrollbar-arrow-color: #323232;
 }
 
 @supports (-moz-appearance: none) {
@@ -36656,7 +35702,6 @@ Floated Menu / Item
 .ui.overflowing.table {
   display: block;
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -39426,7 +38471,6 @@ Floated Menu / Item
 .ui.sortable.table thead th.sorted,
 .ui.sortable.table thead th.sorted:hover {
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -45296,7 +44340,6 @@ a.inverted.ui.card:hover,
   padding: 0;
   border: none;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -45922,7 +44965,6 @@ a.inverted.ui.card:hover,
 .ui.checkbox input.hidden + label {
   cursor: pointer;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -46587,7 +45629,6 @@ a.inverted.ui.card:hover,
   align-items: center;
   justify-content: center;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   will-change: opacity;
   z-index: 1000;
@@ -46597,7 +45638,6 @@ a.inverted.ui.card:hover,
 
 .ui.dimmer > .content {
   -webkit-user-select: text;
-  -ms-user-select: text;
   user-select: text;
   color: #fff;
 }
@@ -46624,14 +45664,6 @@ a.inverted.ui.card:hover,
 
 .ui.dimmer:not(.inverted)::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.35);
-}
-
-.ui.dimmer:not(.inverted) {
-  /* IE11 */
-  scrollbar-face-color: #656565;
-  scrollbar-shadow-color: #656565;
-  scrollbar-track-color: #323232;
-  scrollbar-arrow-color: #323232;
 }
 
 @supports (-moz-appearance: none) {
@@ -46973,7 +46005,6 @@ body.dimmable > .dimmer {
   text-align: left;
   transition: box-shadow 0.1s ease, width 0.1s ease;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -47388,26 +46419,11 @@ select.ui.dropdown {
   transition: opacity 0.1s ease;
 }
 
-/* Compact */
-
-.ui.compact.selection.dropdown {
-  min-width: 0;
-}
-
-.ui.compact.selection.dropdown > .menu {
-  width: auto;
-}
-
-.ui.compact.selection.dropdown > .menu:not(.multiline) {
-  width: max-content;
-}
-
 /* Selection Menu */
 
 .ui.selection.dropdown:not(.unlimited) .menu {
   overflow-x: hidden;
   overflow-y: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
@@ -47689,6 +46705,24 @@ select.ui.dropdown {
   }
 }
 
+/* Compact */
+
+.ui.compact.dropdown {
+  min-width: 0;
+}
+
+.ui.compact.dropdown > .menu {
+  width: auto;
+}
+
+.ui.compact.dropdown > .menu:not(.multiline) {
+  width: max-content;
+}
+
+.ui.compact.dropdown .menu > .item {
+  white-space: normal;
+}
+
 /* --------------
        Searchable
     --------------- */
@@ -47776,7 +46810,6 @@ select.ui.dropdown {
 .ui.search.dropdown:not(.unlimited) .menu {
   overflow-x: hidden;
   overflow-y: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
@@ -48498,7 +47531,6 @@ select.ui.dropdown {
 .ui.dropdown .scrolling.menu {
   overflow-x: hidden;
   overflow-y: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
@@ -48528,15 +47560,6 @@ select.ui.dropdown {
 .ui.dropdown > .animating.menu .scrolling.menu,
 .ui.dropdown > .visible.menu .scrolling.menu {
   display: block;
-}
-
-/* Scrollbar in IE */
-
-@media all and (-ms-high-contrast: none) {
-  .ui.scrolling.dropdown .menu,
-  .ui.dropdown .scrolling.menu {
-    min-width: calc(100% - 17px);
-  }
 }
 
 @media only screen and (max-width: 767.98px) {
@@ -48655,8 +47678,6 @@ select.ui.dropdown {
 
 .ui.simple.dropdown .menu {
   position: absolute;
-  /* IE hack to make dropdown icons appear inline */
-  display: -ms-inline-flexbox !important;
   display: block;
   overflow: hidden;
   top: -9999px;
@@ -48709,7 +47730,6 @@ select.ui.dropdown {
 .ui.simple.selection.dropdown > .menu > .item:active > .menu,
 .ui.simple.selection.dropdown .menu .item:hover > .menu {
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -48740,7 +47760,6 @@ select.ui.dropdown {
 .ui.simple.scrolling.dropdown:hover > .menu {
   overflow-x: hidden;
   overflow-y: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -48966,16 +47985,16 @@ select.ui.dropdown {
 
 /* Upward pointing */
 
-.ui.pointing.upward.dropdown .menu,
-.ui.top.pointing.upward.dropdown .menu {
+.ui.pointing.upward.dropdown > .menu,
+.ui.top.pointing.upward.dropdown > .menu {
   top: auto !important;
   bottom: 100% !important;
   margin: 0 0 0.78571429rem;
   border-radius: 0.28571429rem;
 }
 
-.ui.pointing.upward.dropdown .menu::after,
-.ui.top.pointing.upward.dropdown .menu::after {
+.ui.pointing.upward.dropdown > .menu::after,
+.ui.top.pointing.upward.dropdown > .menu::after {
   top: 100% !important;
   bottom: auto !important;
   box-shadow: 1px 1px 0 0 rgba(34, 36, 38, 0.15);
@@ -49251,15 +48270,6 @@ select.ui.dropdown {
 .ui.dropdown .inverted.menu::-webkit-scrollbar-thumb:hover,
 .ui.inverted.dropdown .menu::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.35);
-}
-
-.ui.dropdown .inverted.menu,
-.ui.inverted.dropdown .menu {
-  /* IE11 */
-  scrollbar-face-color: #656565;
-  scrollbar-shadow-color: #656565;
-  scrollbar-track-color: #323232;
-  scrollbar-arrow-color: #323232;
 }
 
 @supports (-moz-appearance: none) {
@@ -49603,7 +48613,6 @@ select.ui.dropdown {
 
 .ui.flyout > .content.scrolling {
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -50152,7 +49161,6 @@ body.pushable > .pusher {
   flex: 0 0 auto;
   border-radius: 0.28571429rem;
   -webkit-user-select: text;
-  -ms-user-select: text;
   user-select: text;
   will-change: top, left, margin, transform, opacity;
   outline: none;
@@ -50604,7 +49612,6 @@ body.pushable > .pusher {
 
 .scrolling.dimmable.dimmed > .dimmer {
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -50617,7 +49624,7 @@ body.pushable > .pusher {
   top: 1em;
 }
 
-/* Fix for Firefox, Edge, IE11 */
+/* Fix for Firefox, Edge */
 
 .modals.dimmer .ui.scrolling.modal:not([class*="overlay fullscreen"])::after {
   content: "\00A0";
@@ -50629,7 +49636,6 @@ body.pushable > .pusher {
 
 .scrolling.undetached.dimmable.dimmed {
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -50647,7 +49653,6 @@ body.pushable > .pusher {
 .ui.modal > .scrolling.content {
   max-height: calc(80vh - 10rem);
   overflow: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
 }
 
@@ -52021,7 +51026,6 @@ a.ui.nag {
   cursor: default;
   pointer-events: none;
   -webkit-user-select: none;
-  -ms-user-select: none;
   user-select: none;
 }
 
@@ -55468,16 +54472,8 @@ a.ui.nag {
   display: none;
 }
 
-.ui.search > .icon.input > input:-ms-input-placeholder ~ .remove.icon {
-  display: none;
-}
-
 .ui.search > .icon.input > input:placeholder-shown ~ .remove.icon,
 .ui.search.loading > .icon.input > .remove.icon {
-  display: none;
-}
-
-.ui.search > .icon.input > input:-ms-input-placeholder ~ .remove.icon {
   display: none;
 }
 
@@ -55574,7 +54570,6 @@ a.ui.nag {
 .ui.search.short > .results {
   overflow-x: hidden;
   overflow-y: auto;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
@@ -55823,7 +54818,6 @@ a.ui.nag {
   display: table;
   text-align: center;
   -webkit-user-select: text;
-  -ms-user-select: text;
   user-select: text;
 }
 
@@ -55934,7 +54928,6 @@ a.ui.nag {
   border-radius: 0 !important;
   margin: 0 !important;
   overflow-y: auto !important;
-  -ms-scroll-chaining: none;
   overscroll-behavior: none;
   z-index: 102;
 }
@@ -57247,7 +56240,6 @@ body.pushable > .pusher {
 .ui.toast.vertical > .ui.image {
   align-self: flex-start;
   flex-shrink: 0;
-  /* IE11 fix */
 }
 
 .ui.toast.vertical > .centered.image,

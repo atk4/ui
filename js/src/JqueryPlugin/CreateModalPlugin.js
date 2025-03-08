@@ -28,6 +28,7 @@ export default class AtkCreateModalPlugin extends AbstractPlugin {
     }
 
     getDialogHtml(title) {
+        // TODO: HTML escape
         return `<i class="close icon"></i>
           ` + (title ? `<div class="${this.settings.headerClass}">${title}</div>
           ` : '') + `<div class="${this.settings.contentClass} content atk-dialog-content">
