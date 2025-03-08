@@ -141,7 +141,7 @@ class ModalService {
 
     getLoaderHtml(loaderText) {
         return '<div class="ui active inverted dimmer">'
-            + '<div class="ui text loader">' + loaderText + '</div>'
+            + '<div class="ui text loader">' + loaderText + '</div>' // TODO: HTML escape
             + '</div>';
     }
 }

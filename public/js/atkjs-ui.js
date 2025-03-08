@@ -1217,6 +1217,7 @@ class AtkConfirmPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_1__["def
     $m.data('needRemove', true).modal(options).modal('show');
   }
   getDialogHtml(message) {
+    // TODO: HTML escape
     return `
           <div class=" content">${message}</div>
           <div class="actions">
@@ -1285,6 +1286,7 @@ class AtkCreateModalPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_1__[
     $m.addClass(this.settings.modalCss);
   }
   getDialogHtml(title) {
+    // TODO: HTML escape
     return `<i class="close icon"></i>
           ` + (title ? `<div class="${this.settings.headerClass}">${title}</div>
           ` : '') + `<div class="${this.settings.contentClass} content atk-dialog-content">
@@ -1897,7 +1899,7 @@ class AtkJsSortablePlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6__["
     return url;
   }
   injectStyles(style) {
-    external_jquery__WEBPACK_IMPORTED_MODULE_4___default()('head').append('<style>' + style + '</style>');
+    external_jquery__WEBPACK_IMPORTED_MODULE_4___default()('head').append('<style>' + style + '</style>'); // TODO: prevent HTML injection
   }
 }
 AtkJsSortablePlugin.DEFAULTS = {
@@ -2713,12 +2715,13 @@ class ApiService {
     const m = external_jquery__WEBPACK_IMPORTED_MODULE_2___default()('<div>').appendTo('body').addClass('ui scrolling modal').css('padding', '1em').html(contentHtml);
     m.data('needRemove', true).modal().modal('show');
   }
-  getErrorHtml(titleHtml, messageHtml) {
+  getErrorHtml(title, message) {
+    // TODO: HTML escape
     return `<div class="ui negative icon message" style="margin: 0px;">
               <i class="warning sign icon"></i>
               <div class="content">
-                <div class="header">${titleHtml}</div>
-                <div>${messageHtml}</div>
+                <div class="header">${title}</div>
+                <div>${message}</div>
               </div>
             </div>`;
   }
@@ -3212,7 +3215,8 @@ class ModalService {
     }
   }
   getLoaderHtml(loaderText) {
-    return '<div class="ui active inverted dimmer">' + '<div class="ui text loader">' + loaderText + '</div>' + '</div>';
+    return '<div class="ui active inverted dimmer">' + '<div class="ui text loader">' + loaderText + '</div>' // TODO: HTML escape
+    + '</div>';
   }
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new ModalService()));
