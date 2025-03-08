@@ -1,16 +1,12 @@
 import $ from 'external/jquery';
 import atk from 'atk';
-import dropdownService from './Service/dropdownService';
-import toastService from './Service/toastService';
 
 const fomanticUiServicesMap = {
-    accordion: atk.accordionService,
     api: atk.apiService,
-    dropdown: dropdownService, // TODO: remove whole service once https://github.com/fomantic/Fomantic-UI/pull/3191 is merged
     form: atk.formService,
     modal: atk.modalService,
     popup: atk.popupService,
-    toast: toastService, // TODO: remove whole service once https://github.com/fomantic/Fomantic-UI/pull/3191 is merged
+    accordion: atk.accordionService,
 };
 
 // setup Fomantic-UI global overrides

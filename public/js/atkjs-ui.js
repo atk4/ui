@@ -2885,28 +2885,6 @@ class DataService {
 
 /***/ }),
 
-/***/ "./src/Service/dropdownService.js":
-/*!****************************************!*\
-  !*** ./src/Service/dropdownService.js ***!
-  \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-class DropdownService {
-  getDefaultFomanticUiSettings() {
-    return [{
-      preserveHTML: false
-    }, {}];
-  }
-}
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new DropdownService()));
-
-/***/ }),
-
 /***/ "./src/Service/formService.js":
 /*!************************************!*\
   !*** ./src/Service/formService.js ***!
@@ -3755,28 +3733,6 @@ class PopupService {
 
 /***/ }),
 
-/***/ "./src/Service/toastService.js":
-/*!*************************************!*\
-  !*** ./src/Service/toastService.js ***!
-  \*************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-class ToastService {
-  getDefaultFomanticUiSettings() {
-    return [{
-      preserveHTML: false
-    }, {}];
-  }
-}
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Object.freeze(new ToastService()));
-
-/***/ }),
-
 /***/ "./src/Service/uploadService.js":
 /*!**************************************!*\
   !*** ./src/Service/uploadService.js ***!
@@ -4136,21 +4092,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! external/jquery */ "external/jquery");
 /* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _Service_dropdownService__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Service/dropdownService */ "./src/Service/dropdownService.js");
-/* harmony import */ var _Service_toastService__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Service/toastService */ "./src/Service/toastService.js");
-
-
 
 
 const fomanticUiServicesMap = {
-  accordion: atk__WEBPACK_IMPORTED_MODULE_1__["default"].accordionService,
   api: atk__WEBPACK_IMPORTED_MODULE_1__["default"].apiService,
-  dropdown: _Service_dropdownService__WEBPACK_IMPORTED_MODULE_2__["default"],
-  // TODO: remove whole service once https://github.com/fomantic/Fomantic-UI/pull/3191 is merged
   form: atk__WEBPACK_IMPORTED_MODULE_1__["default"].formService,
   modal: atk__WEBPACK_IMPORTED_MODULE_1__["default"].modalService,
   popup: atk__WEBPACK_IMPORTED_MODULE_1__["default"].popupService,
-  toast: _Service_toastService__WEBPACK_IMPORTED_MODULE_3__["default"] // TODO: remove whole service once https://github.com/fomantic/Fomantic-UI/pull/3191 is merged
+  accordion: atk__WEBPACK_IMPORTED_MODULE_1__["default"].accordionService
 };
 
 // setup Fomantic-UI global overrides
