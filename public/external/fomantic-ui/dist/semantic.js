@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.10.0-beta.0+f24b47e
+ * # Fomantic UI - 2.10.0-beta.4+fcf090f
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -825,10 +825,10 @@
                         if (currentValue === undefined || currentValue === null) {
                             currentValue = '';
                         } else if (Array.isArray(currentValue)) {
-                            // multiple select values are returned as arrays which are never equal, so do string conversion first
+                            // multiple select values are returned as arrays which are never equal, so do the string conversion first
                             currentValue = currentValue.toString();
                         }
-                        // Boolean values can be encoded as "true/false" or "True/False" depending on underlying frameworks so we need a case insensitive comparison
+                        // Boolean values can be encoded as "true/false" or "True/False" depending on underlying frameworks, so we need a case-insensitive comparison
                         var boolRegex = /^(true|false)$/i;
                         var isBoolValue = boolRegex.test(initialValue) && boolRegex.test(currentValue);
                         if (isBoolValue) {
@@ -942,7 +942,7 @@
                                 event.returnValue = settings.text.leavingMessage;
                             }
 
-                            // For olders...
+                            // For older...
                             return settings.text.leavingMessage;
                         }
                     },
@@ -1763,7 +1763,7 @@
                                 if (typeof settings.errorFocus === 'string') {
                                     $focusElement = $(document).find(settings.errorFocus);
                                     hasTabIndex = $focusElement.is('[tabindex]');
-                                    // to be able to focus/scroll into non input elements we need a tabindex
+                                    // to be able to focus/scroll into non-input elements, we need a tabindex
                                     if (!hasTabIndex) {
                                         $focusElement.attr('tabindex', -1);
                                     }
@@ -2291,11 +2291,6 @@
                 return !(value === undefined || value === '' || (Array.isArray(value) && value.length === 0));
             },
 
-            /* Deprecated */
-            empty: function (value) {
-                return $.fn.form.settings.rules.notEmpty(value);
-            },
-
             // checkbox checked
             checked: function () {
                 return $(this).filter(':checked').length > 0;
@@ -2306,7 +2301,7 @@
                 return $.fn.form.settings.regExp.email.test(value);
             },
 
-            // value is most likely url
+            // value is most likely the url
             url: function (value) {
                 return $.fn.form.settings.regExp.url.test(value);
             },
@@ -2382,7 +2377,7 @@
                 );
             },
 
-            // is valid number (with decimal)
+            // is it a valid number (with decimal)
             decimal: function (value, range) {
                 return $.fn.form.settings.rules.range(value, range, 'decimal');
             },
@@ -2392,7 +2387,7 @@
                 return $.fn.form.settings.rules.range(value, range, 'number');
             },
 
-            // is value (case insensitive)
+            // is value (case-insensitive)
             is: function (value, text) {
                 text = typeof text === 'string'
                     ? text.toLowerCase()
@@ -2409,7 +2404,7 @@
                 return value == text;
             },
 
-            // value is not another value (case insensitive)
+            // value is not another value (case-insensitive)
             not: function (value, notValue) {
                 value = typeof value === 'string'
                     ? value.toLowerCase()
@@ -2421,7 +2416,7 @@
                 return value != notValue;
             },
 
-            // value is not another value (case sensitive)
+            // value is not another value (case-sensitive)
             notExactly: function (value, notValue) {
                 return value != notValue;
             },
@@ -2486,7 +2481,7 @@
                     : false;
             },
 
-            // different than another field
+            // different from another field
             different: function (value, identifier, module) {
                 var matchingValue = module.get.value(identifier, true);
 
@@ -3375,7 +3370,7 @@
                                 $container = $('<div/>', { id: module.popupId }).addClass(className.popup).appendTo($document.find(settings.context));
                             } else {
                                 // prepend the popup element to the activator's parent so that it has less chance of messing with
-                                // the styling (eg input action button needs to be the last child to have correct border radius)
+                                // the styling (e.g., input action button needs to be the last child to have the correct border radius)
                                 var
                                     $activatorParent = $activator.parent(),
                                     domPositionFunction = $activatorParent.closest(selector.append).length > 0 ? 'appendTo' : 'prependTo'
@@ -3857,7 +3852,7 @@
                         }
                         var parent = target.parent();
                         if (parent.data(metadata.date) || parent.data(metadata.focusDate) || parent.data(metadata.mode)) {
-                            // clicked on a child element, switch to parent (used when clicking directly on prev/next <i> icon element)
+                            // clicked on a child element, switch to parent (used when clicking directly on the prev/next <i> icon element)
                             target = parent;
                         }
                         var date = target.data(metadata.date);
@@ -4849,12 +4844,12 @@
 
         context: false,
 
-        type: 'datetime', // picker type, can be 'datetime', 'date', 'time', 'month', or 'year'
+        type: 'datetime', // picker type. can be 'datetime', 'date', 'time', 'month', or 'year'
         firstDayOfWeek: 0, // day for first day column (0 = Sunday)
         constantHeight: true, // add rows to shorter months to keep day calendar height consistent (6 rows)
         today: false, // show a 'today/now' button at the bottom of the calendar
         closable: true, // close the popup after selecting a date/time
-        monthFirst: true, // month before day when parsing date from text
+        monthFirst: false, // month before day when parsing date from a text
         touchReadonly: true, // set input to readonly on touch devices
         inline: false, // create the calendar inline instead of inside a popup
         on: null, // when to show the popup (defaults to 'focus' for input, 'click' for others)
@@ -4871,7 +4866,7 @@
         multiMonth: 1, // show multiple months when in 'day' mode
         monthOffset: 0, // position current month by offset when multimonth > 1
         minTimeGap: 5,
-        showWeekNumbers: false, // show Number of Week at the very first column of a dayView
+        showWeekNumbers: false, // show Number of Weeks at the very first column of a dayView
         disabledHours: [], // specific hour(s) which won't be selectable and contain additional information.
         disabledDates: [], // specific day(s) which won't be selectable and contain additional information.
         disabledDaysOfWeek: [], // day(s) which won't be selectable(s) (0 = Sunday)
@@ -5166,7 +5161,7 @@
 
                 var date = new Date(year, month - 1, day, hour, minute);
                 if (date.getMonth() !== month - 1 || date.getFullYear() !== year) {
-                    // month or year don't match up, switch to last day of the month
+                    // month or year don't match up, switch to the last day of the month
                     date = new Date(year, month, 0, hour, minute);
                 }
 
@@ -5596,8 +5591,6 @@
                     module.set.enabled();
                     if (!module.should.ignoreCallbacks()) {
                         settings.onEnable.call(input);
-                        // preserve legacy callbacks
-                        settings.onEnabled.call(input);
                     }
                 },
 
@@ -5611,8 +5604,6 @@
                     module.set.disabled();
                     if (!module.should.ignoreCallbacks()) {
                         settings.onDisable.call(input);
-                        // preserve legacy callbacks
-                        settings.onDisabled.call(input);
                     }
                 },
 
@@ -6121,10 +6112,6 @@
 
         onEnable: function () {},
         onDisable: function () {},
-
-        // preserve misspelled callbacks (will be removed in 3.0)
-        onEnabled: function () {},
-        onDisabled: function () {},
 
         className: {
             checked: 'checked',
@@ -6786,7 +6773,7 @@
         verbose: false,
         performance: true,
 
-        // whether should use flex layout
+        // whether flex layout should be used
         useFlex: true,
 
         // name to distinguish between multiple dimmers in context
@@ -6798,10 +6785,10 @@
         // whether to bind close events
         closable: 'auto',
 
-        // whether to use css animations
+        // whether to use CSS animations
         useCSS: true,
 
-        // css animation to use
+        // CSS animation to use
         transition: 'fade',
 
         // event to bind to
@@ -7331,7 +7318,7 @@
                             $firstModules = $allModules.slice(0, elementIndex),
                             $lastModules  = $allModules.slice(elementIndex + 1)
                         ;
-                        // adjust all modules to use correct reference
+                        // adjust all modules to use the correct reference
                         $allModules = $firstModules.add($module).add($lastModules);
                     },
                 },
@@ -8038,7 +8025,7 @@
                     },
                     mousedown: function () {
                         if (module.is.searchSelection(true)) {
-                            // prevent menu hiding on immediate re-focus
+                            // prevent the menu hiding on immediate re-focus
                             willRefocus = true;
                         } else {
                             // prevents focus callback from occurring on mousedown
@@ -8047,7 +8034,7 @@
                     },
                     mouseup: function () {
                         if (module.is.searchSelection(true)) {
-                            // prevent menu hiding on immediate re-focus
+                            // prevent the menu hiding on immediate re-focus
                             willRefocus = false;
                         } else {
                             activated = false;
@@ -8303,7 +8290,6 @@
                                 hasSubMenu     = $subMenu.length > 0,
                                 isBubbledEvent = $subMenu.find($target).length > 0
                             ;
-                            // prevents IE11 bug where menu receives focus even though `tabindex=-1`
                             if (document.activeElement.tagName.toLowerCase() !== 'input') {
                                 $(document.activeElement).trigger('blur');
                             }
@@ -8335,7 +8321,7 @@
                     },
 
                     document: {
-                        // label selection should occur even when element has no focus
+                        // label selection should occur even when the element has no focus
                         keydown: function (event) {
                             var
                                 pressedKey    = event.which,
@@ -8481,7 +8467,7 @@
                                 $nextItem,
                                 isSubMenuItem
                             ;
-                            // allow selection with menu closed
+                            // allow selection with the menu closed
                             if (isAdditionWithoutMenu) {
                                 if (selectedIsSelectable && settings.hideAdditions) {
                                     module.verbose('Selecting item from keyboard shortcut', $selectedItem);
@@ -8497,7 +8483,7 @@
 
                             // visible menu keyboard shortcuts
                             if (module.is.visible()) {
-                                // enter (select or open sub-menu)
+                                // enter (select or open submenu)
                                 if (pressedKey === keys.enter || delimiterPressed) {
                                     if (pressedKey === keys.enter && hasSelectedItem && hasSubMenu && !settings.allowCategorySelection) {
                                         module.verbose('Pressed enter on unselectable category, opening sub menu');
@@ -8536,7 +8522,7 @@
                                         }
                                     }
 
-                                    // right arrow (show sub-menu)
+                                    // right arrow (show submenu)
                                     if (pressedKey === keys.rightArrow) {
                                         if (hasSubMenu) {
                                             module.verbose('Right key pressed, opening sub-menu');
@@ -8789,7 +8775,7 @@
                         $sizer.text(value);
 
                         // prevent rounding issues
-                        return Math.ceil($sizer.width() + (module.is.edge() ? 3 : 1));
+                        return Math.ceil($sizer.width() + 1);
                     },
                     selectionCount: function () {
                         var
@@ -8859,7 +8845,7 @@
                             isEmptyMultiselect = Array.isArray(value) && value.length === 1 && value[0] === ''
                         ;
 
-                        // prevents placeholder element from being selected when multiple
+                        // prevents the placeholder element from being selected when multiple
                         return value === undefined || isEmptyMultiselect
                             ? ''
                             : value;
@@ -9203,7 +9189,7 @@
                         }
                     },
                     values: function () {
-                        // prevents callbacks from occurring on initial load
+                        // prevents callbacks from occurring on the initial load
                         module.set.initialLoad();
                         if (settings.apiSettings && settings.saveRemoteData && module.get.remoteValues()) {
                             module.restore.remoteValues();
@@ -9524,7 +9510,7 @@
                             $nextValue            = false,
                             $nextItem
                         ;
-                        // check next of same letter
+                        // check next of the same letter
                         if (alreadySelectedLetter) {
                             $nextItem = $selectedItem.nextAll($item).eq(0);
                             if (module.has.firstLetter($nextItem, letter)) {
@@ -9543,7 +9529,7 @@
                                 })
                             ;
                         }
-                        // set next value
+                        // set the next value
                         if ($nextValue) {
                             module.verbose('Scrolling to next value with letter', letter);
                             module.set.scrollPosition($nextValue);
@@ -9560,7 +9546,7 @@
                             if (!$menu) {
                                 module.remove.upward();
                             } else if (module.is.upward($menu)) {
-                                // we need make sure when make assertion openDownward for $menu, $menu does not have upward class
+                                // we need to make sure when make assertion openDownward for $menu, $menu does not have upward class
                                 module.remove.upward($menu);
                             }
 
@@ -10317,9 +10303,6 @@
                     bubbledIconClick: function (event) {
                         return $(event.target).closest($icon).length > 0;
                     },
-                    edge: function () {
-                        return !!window.chrome && !!window.StyleMedia;
-                    },
                     empty: function () {
                         return $module.hasClass(className.empty);
                     },
@@ -10933,33 +10916,33 @@
         match: 'both', // what to match against with search selection (both, text, or label)
         fullTextSearch: 'exact', // search anywhere in value (set to 'exact' to require exact matches)
         highlightMatches: false, // Whether search result should highlight matching strings
-        ignoreDiacritics: false, // match results also if they contain diacritics of the same base character (for example searching for "a" will also match "á" or "â" or "à", etc...)
+        ignoreDiacritics: false, // match results also if they contain diacritics of the same base character (for example, searching for "a" will also match "á" or "â" or "à", etc...)
         hideDividers: false, // Whether to hide any divider elements (specified in selector.divider) that are sibling to any items when searched (set to true will hide all dividers, set to 'empty' will hide them when they are not followed by a visible item)
 
-        placeholder: 'auto', // whether to convert blank <select> values to placeholder text
-        preserveHTML: true, // preserve html when selecting value
+        placeholder: 'auto', // whether to convert blank <select> values to the placeholder text
+        preserveHTML: false, // preserve HTML when selecting value
         sortSelect: false, // sort selection on init
 
         forceSelection: false, // force a choice on blur with search selection
 
         allowAdditions: false, // whether multiple select should allow user added values
-        keepSearchTerm: false, // whether the search value should be kept and menu stays filtered on item selection
+        keepSearchTerm: false, // whether the search value should be kept, and the menu stays filtered on item selection
         ignoreCase: false, // whether to consider case sensitivity when creating labels
         ignoreSearchCase: true, // whether to consider case sensitivity when filtering items
-        hideAdditions: true, // whether or not to hide special message prompting a user they can enter a value
+        hideAdditions: true, // whether to hide a special message prompting a user, they can enter a value
 
-        maxSelections: false, // When set to a number limits the number of selections to this count
+        maxSelections: false, // When set to a number, limits the number of selections to this count
         useLabels: true, // whether multiple select should filter currently active selections from choices
-        delimiter: ',', // when multiselect uses normal <input> the values will be delimited with this character
+        delimiter: ',', // when multiselect uses normal <input >, the values will be delimited with this character
 
-        showOnFocus: false, // show menu on focus
+        showOnFocus: false, // show the menu on focus
         allowReselection: false, // whether current value should trigger callbacks when reselected
-        allowTab: true, // add tabindex to element
-        allowCategorySelection: false, // allow elements with sub-menus to be selected
+        allowTab: true, // add tabindex to the element
+        allowCategorySelection: false, // allow elements with submenus to be selected
 
         fireOnInit: false, // Whether callbacks should fire when initializing dropdown values
 
-        transition: 'auto', // auto transition will slide down or up based on direction
+        transition: 'auto', // auto transition will slide down or up based on the direction
         duration: 200, // duration of transition
         displayType: false, // displayType of transition
 
@@ -11039,23 +11022,23 @@
             value: 'value',
         },
 
-        // property names for remote query
+        // property names for the remote query
         fields: {
             remoteValues: 'results', // grouping for api results
             values: 'values', // grouping for all dropdown values
             disabled: 'disabled', // whether value should be disabled
-            name: 'name', // displayed dropdown text
+            name: 'name', // the displayed dropdown text
             description: 'description', // displayed dropdown description
             descriptionVertical: 'descriptionVertical', // whether description should be vertical
             value: 'value', // actual dropdown value
-            text: 'text', // displayed text when selected
+            text: 'text', // the displayed text when selected
             data: 'data', // custom data attributes
             type: 'type', // type of dropdown element
             image: 'image', // optional image path
             imageClass: 'imageClass', // optional individual class for image
             alt: 'alt', // optional alt text for image
             icon: 'icon', // optional icon name
-            iconClass: 'iconClass', // optional individual class for icon (for example to use flag instead)
+            iconClass: 'iconClass', // optional individual class for icon (for example, to use a flag instead)
             class: 'class', // optional individual class for item/header
             divider: 'divider', // optional divider append for group headers
             actionable: 'actionable', // optional actionable item
@@ -11290,7 +11273,7 @@
             return message;
         },
 
-        // generates user addition to selection menu
+        // generates user addition to the selection menu
         addition: function (choice) {
             return choice;
         },
@@ -11460,7 +11443,7 @@
                     }
                 },
 
-                // clears embed
+                // clear embed
                 reset: function () {
                     module.debug('Clearing embed and showing placeholder');
                     module.remove.data();
@@ -12161,7 +12144,7 @@
 
                 create: {
                     flyout: function () {
-                        module.verbose('Programmaticaly create flyout', $context);
+                        module.verbose('Programmatically create flyout', $context);
                         $module = $('<div/>', { class: className.flyout, role: 'dialog', 'aria-modal': settings.dimPage });
                         if (settings.closeIcon) {
                             $closeIcon = $('<i/>', {
@@ -12431,28 +12414,6 @@
                                 + ' }';
                         }
 
-                        /* IE is only browser not to create context with transforms */
-                        /* https://www.w3.org/Bugs/Public/show_bug.cgi?id=16328 */
-                        if (module.is.ie()) {
-                            if (direction === 'left' || direction === 'right') {
-                                module.debug('Adding CSS rules for animation distance', width);
-                                style += ''
-                                    + ' body.pushable > .ui.visible.' + direction + '.flyout ~ .pusher::after {'
-                                    + '           transform: translate3d(' + distance[direction] + 'px, 0, 0);'
-                                    + ' }';
-                            } else if (direction === 'top' || direction === 'bottom') {
-                                style += ''
-                                    + ' body.pushable > .ui.visible.' + direction + '.flyout ~ .pusher::after {'
-                                    + '           transform: translate3d(0, ' + distance[direction] + 'px, 0);'
-                                    + ' }';
-                            }
-                            /* opposite sides visible forces content overlay */
-                            style += ''
-                                + ' body.pushable > .ui.visible.left.flyout ~ .ui.visible.right.flyout ~ .pusher::after,'
-                                + ' body.pushable > .ui.visible.right.flyout ~ .ui.visible.left.flyout ~ .pusher::after {'
-                                + '           transform: translate3d(0, 0, 0);'
-                                + ' }';
-                        }
                         style += '</style>';
                         $style = $(style)
                             .appendTo($head)
@@ -12487,7 +12448,7 @@
                                         shouldRefreshInputs = true;
                                     }
                                 } else {
-                                    // mutationobserver only provides the parent nodes
+                                    // mutationobserver only provides the parent nodes,
                                     // so let's collect all childs as well to find nested inputs
                                     var $addedInputs = $(collectNodes(mutation.addedNodes)).filter('a[href], [tabindex], :input:enabled').filter(':visible'),
                                         $removedInputs = $(collectNodes(mutation.removedNodes)).filter('a[href], [tabindex], :input');
@@ -12965,7 +12926,7 @@
                 can: {
                     leftBodyScrollbar: function () {
                         if (module.cache.leftBodyScrollbar === undefined) {
-                            module.cache.leftBodyScrollbar = module.is.rtl() && ((module.is.iframe && !module.is.firefox()) || module.is.safari() || module.is.edge() || module.is.ie());
+                            module.cache.leftBodyScrollbar = module.is.rtl() && ((module.is.iframe && !module.is.firefox()) || module.is.safari());
                         }
 
                         return module.cache.leftBodyScrollbar;
@@ -13000,13 +12961,6 @@
 
                         return module.cache.isSafari;
                     },
-                    edge: function () {
-                        if (module.cache.isEdge === undefined) {
-                            module.cache.isEdge = !!window.setImmediate && !module.is.ie();
-                        }
-
-                        return module.cache.isEdge;
-                    },
                     firefox: function () {
                         if (module.cache.isFirefox === undefined) {
                             module.cache.isFirefox = !!window.InstallTrigger;
@@ -13016,17 +12970,6 @@
                     },
                     iframe: function () {
                         return !(self === top);
-                    },
-                    ie: function () {
-                        if (module.cache.isIE === undefined) {
-                            var
-                                isIE11 = !window.ActiveXObject && 'ActiveXObject' in window,
-                                isIE = 'ActiveXObject' in window
-                            ;
-                            module.cache.isIE = isIE11 || isIE;
-                        }
-
-                        return module.cache.isIE;
                     },
                     mobile: function () {
                         var
@@ -13337,7 +13280,7 @@
         classActions: '',
         closeIcon: false,
         actions: false,
-        preserveHTML: true,
+        preserveHTML: false,
 
         fields: {
             class: 'class',
@@ -13798,7 +13741,7 @@
                                     }
                                 } else {
                                     shouldRefresh = true;
-                                    // mutationobserver only provides the parent nodes
+                                    // mutationobserver only provides the parent nodes,
                                     // so let's collect all childs as well to find nested inputs
                                     var $addedInputs = $(collectNodes(mutation.addedNodes)).filter('a[href], [tabindex], :input:enabled').filter(':visible'),
                                         $removedInputs = $(collectNodes(mutation.removedNodes)).filter('a[href], [tabindex], :input');
@@ -14474,18 +14417,16 @@
                 can: {
                     leftBodyScrollbar: function () {
                         if (module.cache.leftBodyScrollbar === undefined) {
-                            module.cache.leftBodyScrollbar = module.is.rtl() && ((module.is.iframe && !module.is.firefox()) || module.is.safari() || module.is.edge() || module.is.ie());
+                            module.cache.leftBodyScrollbar = module.is.rtl() && ((module.is.iframe && !module.is.firefox()) || module.is.safari());
                         }
 
                         return module.cache.leftBodyScrollbar;
                     },
                     useFlex: function () {
                         if (settings.useFlex === 'auto') {
-                            return settings.detachable && !module.is.ie();
+                            return settings.detachable;
                         }
-                        if (settings.useFlex && module.is.ie()) {
-                            module.debug('useFlex true is not supported in IE');
-                        } else if (settings.useFlex && !settings.detachable) {
+                        if (settings.useFlex && !settings.detachable) {
                             module.debug('useFlex true in combination with detachable false is not supported');
                         }
 
@@ -14519,26 +14460,11 @@
                     active: function () {
                         return $module.hasClass(className.active);
                     },
-                    ie: function () {
-                        if (module.cache.isIE === undefined) {
-                            var
-                                isIE11 = !window.ActiveXObject && 'ActiveXObject' in window,
-                                isIE = 'ActiveXObject' in window
-                            ;
-                            module.cache.isIE = isIE11 || isIE;
-                        }
-
-                        return module.cache.isIE;
-                    },
                     animating: function () {
                         return $module.transition('is animating');
                     },
                     scrolling: function () {
                         return $dimmable.hasClass(className.scrolling);
-                    },
-                    modernBrowser: function () {
-                        // appName for IE11 reports 'Netscape' can no longer use
-                        return !(window.ActiveXObject || 'ActiveXObject' in window);
                     },
                     rtl: function () {
                         if (module.cache.isRTL === undefined) {
@@ -14553,13 +14479,6 @@
                         }
 
                         return module.cache.isSafari;
-                    },
-                    edge: function () {
-                        if (module.cache.isEdge === undefined) {
-                            module.cache.isEdge = !!window.setImmediate && !module.is.ie();
-                        }
-
-                        return module.cache.isEdge;
                     },
                     firefox: function () {
                         if (module.cache.isFirefox === undefined) {
@@ -14957,7 +14876,7 @@
         classActions: '',
         closeIcon: false,
         actions: false,
-        preserveHTML: true,
+        preserveHTML: false,
 
         fields: {
             class: 'class',
@@ -15638,7 +15557,7 @@
         // allows cookie to be overridden
         persist: false,
 
-        // set to zero to require manually dismissal, otherwise hides on its own
+        // set to zero to require manual dismissal, otherwise hides on its own
         displayTime: 0,
 
         animation: {
@@ -15871,7 +15790,7 @@
                     if (documentObserver) {
                         documentObserver.disconnect();
                     }
-                    // remove element only if was created dynamically
+                    // remove the element only if was created dynamically
                     if ($popup && !settings.preserve) {
                         module.removePopup();
                     }
@@ -16258,7 +16177,7 @@
                             },
                         };
 
-                        // if popup offset context is not same as target, then adjust calculations
+                        // if popup offset context is different from target, then adjust calculations
                         if ($popupOffsetParent[0] !== $offsetParent[0]) {
                             var
                                 popupOffset        = $popupOffsetParent.offset()
@@ -16519,7 +16438,7 @@
                             module.debug('RTL: Popup position updated', position);
                         }
 
-                        // if last attempt use specified last resort position
+                        // if last attempt, use specified last resort position
                         if (searchDepth === settings.maxSearchDepth && typeof settings.lastResort === 'string') {
                             position = settings.lastResort;
                         }
@@ -17063,7 +16982,7 @@
         // whether it should use dom mutation observers
         observeChanges: true,
 
-        // callback only when element added to dom
+        // callback only when the element was added to dom
         onCreate: function () {},
 
         // callback before element removed from dom
@@ -17108,7 +17027,7 @@
         // element which popup should be relative to
         target: false,
 
-        // jq selector or element that should be used as popup
+        // jQuery selector or element that should be used as a popup
         popup: false,
 
         // popup should remain inline next to activator
@@ -17123,7 +17042,7 @@
         // explicitly set content
         content: false,
 
-        // explicitly set html
+        // explicitly set HTML
         html: false,
 
         // explicitly set title
@@ -17166,7 +17085,7 @@
         duration: 200,
         transition: 'scale',
 
-        // distance away from activating element in px
+        // distance away from the activating element in px
         distanceAway: 0,
 
         // number of pixels an element is allowed to be "offstage" for a position to be chosen (allows for rounding)
@@ -17323,13 +17242,13 @@
                     /**
        * Derive precision for multiple progress with total and values.
        *
-       * This helper dervices a precision that is sufficiently large to show minimum value of multiple progress.
+       * This helper dervices a precision that is large enough to show the minimum value of multiple progress.
        *
        * Example1
        * - total: 1122
        * - values: [325, 111, 74, 612]
        * - min ratio: 74/1122 = 0.0659...
-       * - required precision:  100
+       * - required precision: 100
        *
        * Example2
        * - total: 10541
@@ -17577,7 +17496,7 @@
                             : value;
                     },
 
-                    // gets current displayed percentage (if animating values this is the intermediary value)
+                    // gets current displayed percentage (if animating values, this is the intermediary value)
                     displayPercent: function (index) {
                         var
                             $bar           = $($bars[index]),
@@ -17741,10 +17660,10 @@
                         var isMultipleValues = percents.length > 1 && hasTotal;
                         var sumTotal = module.helper.sum(module.helper.forceArray(module.value));
                         if (isMultipleValues && sumTotal > module.total) {
-                            // Sum values instead of pecents to avoid precision issues when summing floats
+                            // Sum values instead of percents to avoid precision issues when summing floats
                             module.error(error.sumExceedsTotal, sumTotal, module.total);
                         } else if (!isMultipleValues && totalPercent > 100) {
-                            // Sum before rounding since sum of rounded may have error though sum of actual is fine
+                            // Sum before rounding, since sum of rounded may have error though sum of actual is fine
                             module.error(error.tooHigh, totalPercent);
                         } else if (totalPercent < 0) {
                             module.error(error.tooLow, totalPercent);
@@ -18176,7 +18095,7 @@
         total: false,
         value: false,
 
-        // delay in ms for fail safe animation callback
+        // delay in ms for fail-safe animation callback
         failSafeDelay: 100,
 
         onLabelUpdate: function (state, text, value, total) {
@@ -18496,7 +18415,7 @@
                             isHover = false;
                         });
                         // All touch events are invoked on the element where the touch *started*. Thus, we can bind them all
-                        // on the thumb(s) and don't need to worry about interference with other components, i.e. no dynamic binding
+                        // on the thumb(s) and don't need to worry about interference with other components, i.e., no dynamic binding
                         // and unbinding required.
                         $module.find('.thumb')
                             .on('touchstart' + eventNamespace, module.event.touchDown)
@@ -18506,7 +18425,7 @@
                         ;
                     },
                     slidingEvents: function () {
-                        // these don't need the identifier because we only ever want one of them to be registered with document
+                        // these don't need the identifier because we only ever want one of them to be registered with the document
                         module.verbose('Binding page wide events while handle is being draged');
                         $document.on('mousemove' + eventNamespace, module.event.move);
                         $document.on('mouseup' + eventNamespace, module.event.up);
@@ -18731,7 +18650,7 @@
                 },
 
                 resync: function () {
-                    module.verbose('Resyncing thumb position based on value');
+                    module.verbose('Re-syncing thumb position based on value');
                     module.setup.labels();
                     if (module.is.range()) {
                         module.update.position(module.secondThumbVal, $secondThumb);
@@ -19210,7 +19129,7 @@
                         if (value !== difference) {
                             module.verbose('Rounding value to closest step: ' + difference);
                         }
-                        // Use precision to avoid ugly Javascript floating point rounding issues
+                        // Use precision to avoid ugly JavaScript floating point rounding issues
                         // (like 35 * .01 = 0.35000000000000003)
                         module.verbose('Cutting off additional decimal places');
 
@@ -20429,7 +20348,7 @@
                 determine: {
                     searchFields: function () {
                         // this makes sure $.extend does not add specified search fields to default fields
-                        // this is the only setting which should not extend defaults
+                        // this is the only setting that should not extend defaults
                         if (parameters && parameters.searchFields !== undefined) {
                             settings.searchFields = Array.isArray(parameters.searchFields)
                                 ? parameters.searchFields
@@ -20955,7 +20874,7 @@
                             ? searchFields
                             : settings.searchFields;
 
-                        // search fields should be array to loop correctly
+                        // search fields should be an array to loop correctly
                         if (!Array.isArray(searchFields)) {
                             searchFields = [searchFields];
                         }
@@ -21233,7 +21152,7 @@
                     id: function (results) {
                         module.debug('Injecting unique ids into results');
                         var
-                            // since results may be object, we must use counters
+                            // since results may be an object, we must use counters
                             categoryIndex = 0,
                             resultIndex   = 0
                         ;
@@ -21637,7 +21556,7 @@
         // minimum characters required to search
         minCharacters: 1,
 
-        // whether to select first result after searching automatically
+        // whether to select the first result after searching automatically
         selectFirstResult: false,
 
         // API config
@@ -21665,7 +21584,7 @@
         // Whether search result should highlight matching strings
         highlightMatches: false,
 
-        // match results also if they contain diacritics of the same base character (for example searching for "a" will also match "á" or "â" or "à", etc...)
+        // match results also if they contain diacritics of the same base character (for example, searching for "a" will also match "á" or "â" or "à", etc...)
         ignoreDiacritics: false,
 
         // whether to consider case sensitivity on local searching
@@ -21674,7 +21593,7 @@
         // whether to add events to prompt automatically
         automatic: true,
 
-        // delay before hiding menu after blur
+        // delay before hiding the menu after blur
         hideDelay: 0,
 
         // delay before searching
@@ -21690,7 +21609,7 @@
         showNoResults: true,
 
         // preserve possible html of resultset values
-        preserveHTML: true,
+        preserveHTML: false,
 
         // transition settings
         transition: 'scale',
@@ -22695,7 +22614,7 @@
         onBeforeChange: function () {},
         onChange: function () {},
 
-        // allow animation to same side
+        // allow animation to the same side
         allowRepeats: false,
 
         // animation duration
@@ -22969,28 +22888,6 @@
                                 + ' }';
                         }
 
-                        /* IE is only browser not to create context with transforms */
-                        /* https://www.w3.org/Bugs/Public/show_bug.cgi?id=16328 */
-                        if (module.is.ie()) {
-                            if (direction === 'left' || direction === 'right') {
-                                module.debug('Adding CSS rules for animation distance', width);
-                                style += ''
-                                    + ' body.pushable > .ui.visible.' + direction + '.sidebar ~ .pusher::after {'
-                                    + '           transform: translate3d(' + distance[direction] + 'px, 0, 0);'
-                                    + ' }';
-                            } else if (direction === 'top' || direction === 'bottom') {
-                                style += ''
-                                    + ' body.pushable > .ui.visible.' + direction + '.sidebar ~ .pusher::after {'
-                                    + '           transform: translate3d(0, ' + distance[direction] + 'px, 0);'
-                                    + ' }';
-                            }
-                            /* opposite sides visible forces content overlay */
-                            style += ''
-                                + ' body.pushable > .ui.visible.left.sidebar ~ .ui.visible.right.sidebar ~ .pusher::after,'
-                                + ' body.pushable > .ui.visible.right.sidebar ~ .ui.visible.left.sidebar ~ .pusher::after {'
-                                + '           transform: translate3d(0, 0, 0);'
-                                + ' }';
-                        }
                         style += '</style>';
                         $style = $(style)
                             .appendTo($head)
@@ -23072,7 +22969,7 @@
                 can: {
                     leftBodyScrollbar: function () {
                         if (module.cache.leftBodyScrollbar === undefined) {
-                            module.cache.leftBodyScrollbar = module.is.rtl() && ((module.is.iframe && !module.is.firefox()) || module.is.safari() || module.is.edge() || module.is.ie());
+                            module.cache.leftBodyScrollbar = module.is.rtl() && ((module.is.iframe && !module.is.firefox()) || module.is.safari());
                         }
 
                         return module.cache.leftBodyScrollbar;
@@ -23106,7 +23003,7 @@
                         if (module.othersActive()) {
                             module.debug('Other sidebars currently visible');
                             if (settings.exclusive) {
-                                // if not overlay queue animation after hide
+                                // if not overlay, queue animation after hide
                                 if (settings.transition !== 'overlay') {
                                     module.hideOthers(module.show);
 
@@ -23447,13 +23344,6 @@
 
                         return module.cache.isSafari;
                     },
-                    edge: function () {
-                        if (module.cache.isEdge === undefined) {
-                            module.cache.isEdge = !!window.setImmediate && !module.is.ie();
-                        }
-
-                        return module.cache.isEdge;
-                    },
                     firefox: function () {
                         if (module.cache.isFirefox === undefined) {
                             module.cache.isFirefox = !!window.InstallTrigger;
@@ -23464,18 +23354,6 @@
                     iframe: function () {
                         return !(self === top);
                     },
-                    ie: function () {
-                        if (module.cache.isIE === undefined) {
-                            var
-                                isIE11 = !window.ActiveXObject && 'ActiveXObject' in window,
-                                isIE = 'ActiveXObject' in window
-                            ;
-                            module.cache.isIE = isIE11 || isIE;
-                        }
-
-                        return module.cache.isIE;
-                    },
-
                     mobile: function () {
                         var
                             userAgent    = navigator.userAgent,
@@ -24634,10 +24512,10 @@
         // Offset to adjust scroll when attached to bottom of screen
         bottomOffset: 0,
 
-        // will only set container height if difference between context and container is larger than this number
+        // will only set container height if the difference between context and container is larger than this number
         jitter: 5,
 
-        // set width of sticky element when it is fixed to page (used to make sure 100% width is maintained if no fixed size set)
+        // set width of the sticky element when it is fixed to page (used to make sure 100% width is maintained if no fixed size set)
         setSize: true,
 
         // Whether to automatically observe changes with Mutation Observers
@@ -24649,10 +24527,10 @@
         // Called on each scroll
         onScroll: function () {},
 
-        // Called when element is stuck to viewport
+        // Called when the element is stuck to viewport
         onStick: function () {},
 
-        // Called when element is unstuck from viewport
+        // Called when the element is unstuck from viewport
         onUnstick: function () {},
 
         // Called when element reaches top of context
@@ -24992,7 +24870,7 @@
                         pushStateAvailable = window.history && window.history.pushState,
                         shouldIgnoreLoad   = pushStateAvailable && settings.ignoreFirstLoad && firstLoad,
                         remoteContent      = settings.auto || $.isPlainObject(settings.apiSettings),
-                        // only add default path if not remote content
+                        // only add the default path if not remote content
                         pathArray = remoteContent && !shouldIgnoreLoad
                             ? module.utilities.pathToArray(tabPath)
                             : module.get.defaultPathArray(tabPath)
@@ -25064,7 +24942,7 @@
                             $anchor = $('#' + tabPath + ', a[name="' + tabPath + '"]');
                             currentPath = $anchor.closest('[data-tab]').data(metadata.tab);
                             $tab = module.get.tabElement(currentPath);
-                            // if anchor exists use parent tab
+                            // if anchor exists, use parent tab
                             if ($anchor && $anchor.length > 0 && currentPath) {
                                 module.debug('Anchor link used, opening parent tab', $tab, $anchor);
                                 if (settings.onBeforeChange.call(element, currentPath) === false) {
@@ -25143,9 +25021,6 @@
                                 encodeParameters: false,
                                 on: 'now',
                                 cache: settings.alwaysRefresh,
-                                headers: {
-                                    'X-Remote': true,
-                                },
                                 onSuccess: function (response) {
                                     if (settings.cacheType === 'response') {
                                         module.cache.add(fullTabPath, response);
@@ -25290,7 +25165,7 @@
                     path: function () {
                         return $.address.value();
                     },
-                    // adds default tabs to tab path
+                    // adds default tabs to the tab path
                     defaultPathArray: function (tabPath) {
                         return module.utilities.pathToArray(module.get.defaultPath(tabPath));
                     },
@@ -25574,7 +25449,7 @@
         verbose: false,
         performance: true,
 
-        auto: false, // uses pjax style endpoints fetching content from same url with remote-content headers
+        auto: false, // uses pjax style endpoints fetching content from the same url with remote-content headers
         history: false, // use browser history
         historyType: 'hash', // #/ or html5 state
         path: false, // base path of url
@@ -25588,21 +25463,21 @@
         alwaysRefresh: false, // load tab content new every tab click
         cache: true, // cache the content requests to pull locally
         loadOnce: false, // Whether tab data should only be loaded once when using remote content
-        cacheType: 'response', // Whether to cache exact response, or to html cache contents after scripts execute
-        ignoreFirstLoad: false, // don't load remote content on first load
+        cacheType: 'response', // Whether to cache exact response, or to HTML cache contents after scripts execute
+        ignoreFirstLoad: false, // don't load remote content on the first load
 
         apiSettings: false, // settings for api call
         evaluateScripts: 'once', // whether inline scripts should be parsed (true/false/once). Once will not re-evaluate on cached content
-        autoTabActivation: true, // whether a non existing active tab will auto activate the first available tab
+        autoTabActivation: true, // whether a non-existing active tab will auto activate the first available tab
 
         onFirstLoad: function (tabPath, parameterArray, historyEvent) {}, // called first time loaded
         onLoad: function (tabPath, parameterArray, historyEvent) {}, // called on every load
         onVisible: function (tabPath, parameterArray, historyEvent) {}, // called every time tab visible
-        onRequest: function (tabPath, parameterArray, historyEvent) {}, // called ever time a tab beings loading remote content
+        onRequest: function (tabPath, parameterArray, historyEvent) {}, // called every time a tab beings loading remote content
         onBeforeChange: function (tabPath) {}, // called before a tab is about to be changed. Returning false will cancel the tab change
 
         templates: {
-            determineTitle: function (tabArray) {}, // returns page title for path
+            determineTitle: function (tabArray) {}, // returns page title for the path
         },
 
         error: {
@@ -26457,8 +26332,8 @@
 
         title: '',
         message: '',
-        displayTime: 3000, // set to zero to require manually dismissal, otherwise hides on its own
-        minDisplayTime: 1000, // minimum displaytime in case displayTime is set to 'auto'
+        displayTime: 3000, // set to zero to require manual dismissal, otherwise hides on its own
+        minDisplayTime: 1000, // minimum display time in case displayTime is set to 'auto'
         wordsPerMinute: 120,
         showIcon: false,
         newestOnTop: false,
@@ -26471,7 +26346,7 @@
         closeOnClick: true,
         cloneModule: true,
         actions: false,
-        preserveHTML: true,
+        preserveHTML: false,
         showImage: false,
         alt: false,
 
@@ -26481,7 +26356,7 @@
             showDuration: 500,
             hideMethod: 'scale',
             hideDuration: 500,
-            closeEasing: 'easeOutCubic', // Set to empty string to stack the closed toast area immediately (old behaviour)
+            closeEasing: 'easeOutCubic', // Set to empty string to stack the closed toast area immediately (old behavior)
             closeDuration: 500,
         },
 
@@ -27175,7 +27050,7 @@
                         if (shouldDetermine && $module.data(metadata.displayType) === undefined) {
                             var currentDisplay = $module.css('display');
                             if (currentDisplay === '' || currentDisplay === 'none') {
-                                // create fake element to determine display state
+                                // create a fake element to determine display state
                                 module.can.transition(true);
                             } else {
                                 module.save.displayType(currentDisplay);
@@ -27306,7 +27181,7 @@
                     if (module.is.animating()) {
                         module.reset();
                     }
-                    element.blur(); // IE will trigger focus change if element is not blurred before hiding
+                    element.blur();
                     module.remove.display();
                     module.remove.visible();
                     settings.onBeforeHide.call(element, module.hideNow);
@@ -27554,7 +27429,7 @@
         // event namespace
         namespace: 'transition',
 
-        // delay between animations in group
+        // delay between animations in a group
         interval: 0,
 
         // whether group animations should be reversed
@@ -27577,13 +27452,13 @@
         // whether timeout should be used to ensure callback fires in cases animationend does not
         useFailSafe: true,
 
-        // delay in ms for fail safe
+        // delay in ms for fail-safe
         failSafeDelay: 100,
 
         // whether EXACT animation can occur twice in a row
         allowRepeats: false,
 
-        // Override final display type on visible
+        // Override the final display type on visible
         displayType: false,
 
         // animation duration
@@ -27824,7 +27699,7 @@
                     // call beforesend and get any settings changes
                     requestSettings = module.get.settings();
 
-                    // check if before send cancelled request
+                    // check if before send canceled request
                     if (requestSettings === false) {
                         module.cancelled = true;
                         module.error(error.beforeSend);
@@ -28380,8 +28255,8 @@
                     },
                     errorFromRequest: function (response, status, httpMessage) {
                         return $.isPlainObject(response) && response.error !== undefined
-                            ? response.error // use json error message
-                            : (settings.error[status] !== undefined // use server error message
+                            ? response.error // use JSON error message
+                            : (settings.error[status] !== undefined // use the server error message
                                 ? settings.error[status]
                                 : httpMessage);
                     },
@@ -28738,7 +28613,7 @@
         // whether to add default data to url data
         defaultData: true,
 
-        // whether to serialize closest form
+        // whether to serialize the closest form
         // use true to convert complex named keys like a[b][1][c][] into a nested object
         // use 'formdata' for formdata web api
         serializeForm: false,
@@ -28775,7 +28650,7 @@
         // after request
         onResponse: false, // function(response) { },
 
-        // response was successful, if JSON passed validation
+        // response was successful if JSON passed validation
         onSuccess: function (response, $module) {},
 
         // request finished without aborting
@@ -28903,7 +28778,7 @@
                 initialize: function () {
                     module.verbose('Initializing module');
 
-                    // allow module to guess desired state based on element
+                    // allow module to guess the desired state based on the element
                     if (settings.automatic) {
                         module.add.defaults();
                     }
@@ -29445,7 +29320,7 @@
         // whether to automatically map default states
         automatic: true,
 
-        // activate / deactivate changes all elements instantiated at same time
+        // activate / deactivate changes all elements instantiated at the same time
         sync: false,
 
         // default flash text duration, used for temporarily changing text of an element
@@ -30730,7 +30605,7 @@
         // whether to refresh calculations after page resize event
         refreshOnResize: true,
 
-        // should call callbacks on refresh event (resize, etc)
+        // should call callbacks on refresh event (resize, etc.)
         checkOnRefresh: true,
 
         // callback should only occur one time
