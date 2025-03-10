@@ -25,6 +25,32 @@ Feature: Dropdown
     When I select value "" in lookup "multi"
     Then I check if input value for "input[name='multi']" match text ""
 
+  Scenario: dropdown with escaped HTML
+    Given I am on "_unit-test/dropdown-html.php"
+    When I press button "Save"
+    Then Modal is open with text "match init: 1"
+    When I click close modal
+    When I select value "uTitle <b> &lt;" in lookup "dropdown_single"
+    When I select value "uTitle <b> &lt;" in lookup "dropdown_single2"
+    When I select value "uTitle <b> &lt;" in lookup "dropdown_multi"
+    When I select value "uTitle <b> &lt;" in lookup "dropdown_multi2"
+    When I press button "Save"
+    Then Modal is open with text "match u add: 1"
+    When I click close modal
+    When I select value "" in lookup "dropdown_single"
+    When I select value "" in lookup "dropdown_single2"
+    When I select value "" in lookup "dropdown_multi"
+    When I select value "" in lookup "dropdown_multi2"
+    When I press button "Save"
+    Then Modal is open with text "match empty: 1"
+    When I click close modal
+    When I select value "uTitle <b> &lt;" in lookup "dropdown_single"
+    When I select value "uTitle <b> &lt;" in lookup "dropdown_single2"
+    When I select value "uTitle <b> &lt;" in lookup "dropdown_multi"
+    When I select value "uTitle <b> &lt;" in lookup "dropdown_multi2"
+    When I press button "Save"
+    Then Modal is open with text "match u only: 1"
+
   Scenario: dropdown menu
     Given I am on "basic/menu.php"
     When I click using selector "//div.ui.dropdown[div[text()='With Callback']]"
