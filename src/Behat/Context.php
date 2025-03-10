@@ -556,6 +556,8 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
+     * TODO better method name, it selects name/title, not value.
+     *
      * @When I select value :arg1 in lookup :arg2
      */
     public function iSelectValueInLookup(string $value, string $inputName): void
@@ -570,12 +572,13 @@ class Context extends RawMinkContext implements BehatContext
             return;
         }
 
-        // open dropdown and wait till fully opened (just a click is not triggering it)
+        // open dropdown and wait till fully opened
+        $this->findElement($lookupElem, 'i.dropdown.icon')->click(); // TODO remove once https://github.com/fomantic/Fomantic-UI/issues/3204 is fixed
         $this->getSession()->executeScript('$(arguments[0]).dropdown(\'show\')', [$lookupElem]);
         $this->jqueryWait('$(arguments[0]).hasClass(\'visible\')', [$lookupElem]);
 
         // select value
-        $valueElem = $this->findElement($lookupElem, '//div[text()="' . $value . '"]');
+        $valueElem = $this->findElement($lookupElem, '//div.menu//div.item[text()="' . $value . '"]');
         $this->getSession()->executeScript('$(arguments[0]).dropdown(\'set selected\', arguments[1]);', [$lookupElem, $valueElem->getAttribute('data-value')]);
         $this->jqueryWait();
 

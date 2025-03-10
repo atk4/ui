@@ -369,6 +369,15 @@ class Lookup extends Input
             $settings['clearable'] = true;
         }
 
+        if ($this->entityField !== null && $this->entityField->get() !== null) {
+            $idField = $this->idField
+                ?? $this->model->idField;
+
+            $entity = $this->model->loadBy($idField, $this->entityField->get());
+
+            $settings['values'] = [array_merge($this->renderRow($entity), ['selected' => true])];
+        }
+
         $jsChain->dropdown($settings);
     }
 
@@ -400,16 +409,6 @@ class Lookup extends Input
         $jsChain = $this->jsDropdown();
 
         $this->initDropdown($jsChain);
-
-        if ($this->entityField !== null && $this->entityField->get() !== null) {
-            $idField = $this->idField
-                ?? $this->model->idField;
-
-            $entity = $this->model->loadBy($idField, $this->entityField->get());
-
-            $row = $this->renderRow($entity);
-            $jsChain->dropdown('set text', $row['title'], true);
-        }
 
         $this->js(true, $jsChain);
 
