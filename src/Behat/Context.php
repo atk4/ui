@@ -865,7 +865,7 @@ class Context extends RawMinkContext implements BehatContext
      * Remove once https://github.com/Behat/MinkExtension/pull/386 and
      * https://github.com/minkphp/Mink/issues/656 are fixed and released.
      *
-     * @Then ~^PATCH MINK the (?i)url(?-i) should match ("(?:\\[\\"]|[^"])*+")$~
+     * @Then ~^PATCH MINK the URL should match ("(?:\\[\\"]|[^"])*+")$~
      */
     public function assertUrlRegExp(string $pattern): void
     {

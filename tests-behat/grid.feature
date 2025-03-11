@@ -16,7 +16,7 @@ Feature: Grid
   Scenario: search no ajax
     Given I am on "collection/grid.php?no-ajax=1"
     When I search grid for "kingdom"
-    Then PATCH MINK the url should match "~_q=kingdom~"
+    Then PATCH MINK the URL should match "~_q=kingdom~"
     Then I should see "United Kingdom"
 
   Scenario: Checkbox click event must not bubble to row click
@@ -35,10 +35,10 @@ Feature: Grid
     Then No toast should be displayed
     When I click using selector "//div[@id='grid']//tr[2]//div.ui.dropdown[div[text()='Actions...']]//div.menu/div[text()='Action MenuItem']"
     Then Toast display should contain text "Clicked Action MenuItem"
-    Then PATCH MINK the url should match "~_unit-test/grid-rowclick.php$~"
+    Then PATCH MINK the URL should match "~_unit-test/grid-rowclick.php$~"
     When I click using selector "//div[@id='grid']//tr[2]//a"
     Then No toast should be displayed
-    Then PATCH MINK the url should match "~_unit-test/grid-rowclick.php#test~"
+    Then PATCH MINK the URL should match "~_unit-test/grid-rowclick.php#test~"
 
   Scenario: master checkbox
     Given I am on "_unit-test/grid-master-checkbox.php"
