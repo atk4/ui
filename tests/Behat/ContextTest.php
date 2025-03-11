@@ -17,7 +17,7 @@ class ContextTest extends TestCase
         $content = file_get_contents($file);
 
         $res = [];
-        preg_match_all('~@(Given|Then|When) (.*)~', $content, $matchesAll, PREG_SET_ORDER);
+        preg_match_all('~@(Given|Then|When) (.*)~', $content, $matchesAll, \PREG_SET_ORDER);
         foreach ($matchesAll as $matches) {
             $res[] = $matches[2];
         }
@@ -54,7 +54,7 @@ class ContextTest extends TestCase
     public function testRegexArgumentFormat(string $file): void
     {
         foreach ($this->extractPhpdocRegexes($file) as $regex) {
-            preg_match_all('~\((?:\(.*?\)|.)+?\)~', $regex, $matchesAll, PREG_SET_ORDER);
+            preg_match_all('~\((?:\(.*?\)|.)+?\)~', $regex, $matchesAll, \PREG_SET_ORDER);
             foreach ($matchesAll as $matches) {
                 if (!str_contains($matches[0], '"')) {
                     continue;
