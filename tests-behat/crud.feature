@@ -56,7 +56,7 @@ Feature: Crud
     Then Modal is open with text "Edit Country"
     When I fill in "atk_fp_country__name" with "My United Kingdom"
     When I press Modal button "Save"
-    Then Toast display should contain text 'Record has been saved!'
+    Then Toast display should contain text "Record has been saved!"
     Then I should see "My United Kingdom"
 
   Scenario: delete

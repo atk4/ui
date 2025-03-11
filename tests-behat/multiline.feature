@@ -36,4 +36,4 @@ Feature: Multiline
     When I click using selector "//thead//input[@type='checkbox']"
     When I click using selector "//tfoot//button[i.trash.icon]"
     When I press button "Save"
-    Then Toast display should contain text '[]'
+    Then Toast display should contain text "[]"

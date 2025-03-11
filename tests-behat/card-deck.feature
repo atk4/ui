@@ -34,5 +34,5 @@ Feature: CardDeck
     When I persist DB changes across requests
     When I press button "Delete"
     When I press Modal button "Ok"
-    Then Toast display should contain text 'Record has been deleted!'
+    Then Toast display should contain text "Record has been deleted!"
     Then I should not see "United Kingdom"
