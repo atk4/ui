@@ -116,7 +116,7 @@ Feature: Grid
     When I click paginator page "2"
     Then I should see "Bahamas"
     When I click using selector "//tr[td[text()='Bahamas']]//div.ui.button[text()='Say HI']"
-    Then Toast display should contain text 'Loaded "Bahamas" from ID=16'
+    Then Toast display should contain text "Loaded \"Bahamas\" from ID=16"
 
   Scenario: Row remote action - change row CSS
     Given I am on "interactive/scroll-grid-container.php"

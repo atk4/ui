@@ -16,4 +16,4 @@ Feature: Sortable / Draggable
   Scenario: drag column resize
     Given I am on "collection/table2.php"
     When I drag selector "(//div.grip-resizable)[2]" onto selector "(//div.grip-resizable)[1]"
-    Then Toast display should contain text 'New widths: { "action": "wide", "amount": "narrow", "amount_copy": "wide" }'
+    Then Toast display should contain text "New widths: { \"action\": \"wide\", \"amount\": \"narrow\", \"amount_copy\": \"wide\" }"

@@ -33,5 +33,5 @@ Feature: Lookup
     When I fill in "atk_fp_country__numcode" with "88"
     When I fill in "atk_fp_country__phonecode" with "8"
     When I press Modal button "Save"
-    Then Toast display should contain text 'Country action "add" with "Plusia" entity was executed.'
+    Then Toast display should contain text "Country action \"add\" with \"Plusia\" entity was executed."
     Then I check if text in "//div.text[../input[@name='country2']]" match text "Plusia"
