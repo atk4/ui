@@ -13,7 +13,7 @@ use Atk4\Ui\Message;
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$makeTestStringFx = static fn ($v) => $v . ' <b>"\' &lt;';
+$makeTestStringFx = static fn ($v) => $v . ' <b>"\' &lt;&quot;&amp;';
 $htmlValues = [
     $makeTestStringFx('d') => $makeTestStringFx('dTitle'),
     $makeTestStringFx('u') => $makeTestStringFx('uTitle'),
@@ -64,7 +64,7 @@ $lookupModel->setPersistence(new Persistence\Array_(array_combine(
     array_map(static fn ($v) => ['name' => $v], $htmlValues)
 )));
 
-/* $form->addControl('lookup_single', [
+$form->addControl('lookup_single', [
     Form\Control\Lookup::class,
     'caption' => 'Lookup single',
     'model' => $lookupModel,
@@ -97,8 +97,8 @@ $form->addControl('lookup_multi_json', [
     'caption' => 'Lookup multiple JSON',
     'multiple' => true,
     'model' => $lookupModel,
-]/* , ['type' => 'json'] *-/);
-$form->entity->getField('lookup_multi_json')->type = 'json'; */
+]/* , ['type' => 'json'] */);
+$form->entity->getField('lookup_multi_json')->type = 'json';
 
 foreach (array_keys($form->entity->getFields()) as $k) {
     $form->entity->set(
@@ -119,11 +119,6 @@ $form->onSubmit(static function (Form $form) use ($app, $initData, $makeTestStri
             ? explode(',', $res)
             : $res;
     }, array_combine(array_keys($initData), array_keys($initData)));
-
-    // TODO remove once https://github.com/fomantic/Fomantic-UI/pull/3205 is merged
-    foreach ($form->entity->get() as $k => $v) {
-        $form->entity->set($k, str_replace('&quot;', '"', $v));
-    }
 
     $view = new Message('Values:');
     $view->setApp($form->getApp());
