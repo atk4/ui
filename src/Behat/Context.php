@@ -290,7 +290,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Sleep for a certain time in ms.
      *
-     * @When I wait :arg1 ms
+     * @When ~^I wait ("(?:\\[\\"]|[^"])*+") ms$~
      */
     public function iWait(int $ms): void
     {
@@ -298,7 +298,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I write :arg1 into selector :selector
+     * @When ~^I write ("(?:\\[\\"]|[^"])*+") into selector ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iPressWrite(string $text, string $selector): void
     {
@@ -313,7 +313,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I drag selector :selector onto selector :selectorTarget
+     * @When ~^I drag selector ("(?:\\[\\"]|[^"])*+") onto selector ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iDragElementOnto(string $selector, string $selectorTarget): void
     {
@@ -325,7 +325,7 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ button
 
     /**
-     * @When I press button :arg1
+     * @When ~^I press button ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iPressButton(string $buttonLabel): void
     {
@@ -334,7 +334,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I see button :arg1
+     * @Then ~^I see button ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iSeeButton(string $buttonLabel): void
     {
@@ -342,7 +342,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I don't see button :arg1
+     * @Then ~^I don't see button ("(?:\\[\\"]|[^"])*+")$~
      */
     public function idontSeeButton(string $text): void
     {
@@ -357,7 +357,7 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ link
 
     /**
-     * @Given I click link :arg1
+     * @Given ~^I click link ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iClickLink(string $label): void
     {
@@ -365,7 +365,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I click using selector :selector
+     * @When ~^I click using selector ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iClickUsingSelector(string $selector): void
     {
@@ -378,7 +378,7 @@ class Context extends RawMinkContext implements BehatContext
      *
      * One solution can be waiting for AJAX after each \WebDriver\AbstractWebDriver::curl() call.
      *
-     * @When PATCH DRIVER I click using selector :selector
+     * @When ~^PATCH DRIVER I click using selector ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iClickPatchedUsingSelector(string $selector): void
     {
@@ -394,7 +394,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I click paginator page :arg1
+     * @When ~^I click paginator page ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iClickPaginatorPage(string $pageNumber): void
     {
@@ -403,7 +403,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I fill field using :selector with :value
+     * @When ~^I fill field using ("(?:\\[\\"]|[^"])*+") with ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iFillField(string $selector, string $value): void
     {
@@ -416,7 +416,7 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ modal
 
     /**
-     * @When I press Modal button :arg
+     * @When ~^I press Modal button ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iPressModalButton(string $buttonLabel): void
     {
@@ -426,8 +426,8 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Modal is open with text :arg1
-     * @Then Modal is open with text :arg1 in selector :arg2
+     * @Then ~^Modal is open with text ("(?:\\[\\"]|[^"])*+")$~
+     * @Then ~^Modal is open with text ("(?:\\[\\"]|[^"])*+") in selector ("(?:\\[\\"]|[^"])*+")$~
      *
      * Check if text is present in modal or dynamic modal.
      */
@@ -438,7 +438,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I fill Modal field :arg1 with :arg2
+     * @When ~^I fill Modal field ("(?:\\[\\"]|[^"])*+") with ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iFillModalField(string $fieldName, string $value): void
     {
@@ -448,7 +448,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I click close modal
+     * @When ~^I click close modal$~
      */
     public function iClickCloseModal(): void
     {
@@ -458,7 +458,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I hide js modal
+     * @When ~^I hide js modal$~
      */
     public function iHideJsModal(): void
     {
@@ -471,7 +471,7 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ panel
 
     /**
-     * @Then Panel is open
+     * @Then ~^Panel is open$~
      */
     public function panelIsOpen(): void
     {
@@ -479,8 +479,8 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Panel is open with text :arg1
-     * @Then Panel is open with text :arg1 in selector :arg2
+     * @Then ~^Panel is open with text ("(?:\\[\\"]|[^"])*+")$~
+     * @Then ~^Panel is open with text ("(?:\\[\\"]|[^"])*+") in selector ("(?:\\[\\"]|[^"])*+")$~
      */
     public function panelIsOpenWithText(string $text, string $selector = '*'): void
     {
@@ -489,7 +489,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I fill Panel field :arg1 with :arg2
+     * @When ~^I fill Panel field ("(?:\\[\\"]|[^"])*+") with ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iFillPanelField(string $fieldName, string $value): void
     {
@@ -499,7 +499,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I press Panel button :arg
+     * @When ~^I press Panel button ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iPressPanelButton(string $buttonLabel): void
     {
@@ -513,7 +513,7 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ tab
 
     /**
-     * @When I click tab with title :arg1
+     * @When ~^I click tab with title ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iClickTabWithTitle(string $tabTitle): void
     {
@@ -523,7 +523,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Active tab should be :arg1
+     * @Then ~^Active tab should be ("(?:\\[\\"]|[^"])*+")$~
      */
     public function activeTabShouldBe(string $title): void
     {
@@ -553,7 +553,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I search grid for :arg1
+     * @When ~^I search grid for ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iSearchGridFor(string $text): void
     {
@@ -597,7 +597,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I select file input :arg1 with :arg2 as :arg3
+     * @When ~^I select file input ("(?:\\[\\"]|[^"])*+") with ("(?:\\[\\"]|[^"])*+") as ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iSelectFile(string $inputName, string $fileContent, string $fileName): void
     {
@@ -729,7 +729,7 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ misc
 
     /**
-     * @Then dump :arg1
+     * @Then ~^dump ("(?:\\[\\"]|[^"])*+")$~
      */
     public function dump(string $arg1): void
     {
@@ -738,7 +738,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I click filter column name :arg1
+     * @When ~^I click filter column name ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iClickFilterColumnName(string $columnName): void
     {
@@ -765,7 +765,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I scroll to top
+     * @When ~^I scroll to top$~
      */
     public function iScrollToTop(): void
     {
@@ -773,7 +773,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I scroll to bottom
+     * @When ~^I scroll to bottom$~
      */
     public function iScrollToBottom(): void
     {
@@ -781,7 +781,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Toast display should contain text :arg1
+     * @Then ~^Toast display should contain text ("(?:\\[\\"]|[^"])*+")$~
      */
     public function toastDisplayShouldContainText(string $text): void
     {
@@ -793,7 +793,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then No toast should be displayed
+     * @Then ~^No toast should be displayed$~
      */
     public function noToastShouldBeDisplayed(): void
     {
@@ -856,7 +856,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Element :arg1 attribute :arg2 should contain text :arg3
+     * @Then ~^Element ("(?:\\[\\"]|[^"])*+") attribute ("(?:\\[\\"]|[^"])*+") should contain text ("(?:\\[\\"]|[^"])*+")$~
      */
     public function elementAttributeShouldContainText(string $selector, string $attribute, string $text): void
     {
@@ -868,7 +868,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Element :arg1 should contain class :arg2
+     * @Then ~^Element ("(?:\\[\\"]|[^"])*+") should contain class ("(?:\\[\\"]|[^"])*+")$~
      */
     public function elementShouldContainClass(string $selector, string $class): void
     {
@@ -880,7 +880,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Element :arg1 should not contain class :arg2
+     * @Then ~^Element ("(?:\\[\\"]|[^"])*+") should not contain class ("(?:\\[\\"]|[^"])*+")$~
      */
     public function elementShouldNotContainClass(string $selector, string $class): void
     {

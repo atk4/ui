@@ -17,7 +17,7 @@ class ContextTest extends TestCase
         $content = file_get_contents($file);
 
         $res = [];
-        preg_match_all('~@(When|Then) (\~.*)~', $content, $matchesAll, PREG_SET_ORDER);
+        preg_match_all('~@(Given|Then|When) (.*)~', $content, $matchesAll, PREG_SET_ORDER);
         foreach ($matchesAll as $matches) {
             $res[] = $matches[2];
         }
