@@ -13,7 +13,7 @@ use Atk4\Ui\Message;
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$makeTestStringFx = static fn ($v) => $v . ' <b> &lt;';
+$makeTestStringFx = static fn ($v) => $v . ' <b>"\' &lt;';
 $htmlValues = [
     $makeTestStringFx('d') => $makeTestStringFx('dTitle'),
     $makeTestStringFx('u') => $makeTestStringFx('uTitle'),
@@ -93,6 +93,11 @@ $initData = $form->entity->get();
 
 $form->onSubmit(static function (Form $form) use ($app, $initData, $makeTestStringFx) {
     $message = $app->encodeJson($form->entity->get());
+
+    // TODO remove once https://github.com/fomantic/Fomantic-UI/pull/3205 is merged
+    foreach ($form->entity->get() as $k => $v) {
+        $form->entity->set($k, str_replace('&quot;', '"', $v));
+    }
 
     $view = new Message('Values:');
     $view->setApp($form->getApp());
