@@ -85,9 +85,9 @@ Feature: Remove observer
   Scenario: abort SSE when owner is reloaded
     Given I am on "_unit-test/remove-observer.php"
     When I press button "Run slow SSE"
-    When I wait 2000 ms
+    When I wait "2000" ms
     Then I should see "Abort failed"
     Given I am on "_unit-test/remove-observer.php"
     When I press button "Run slow SSE & remove"
-    When I wait 2000 ms
+    When I wait "2000" ms
     Then I should not see "Abort failed"
