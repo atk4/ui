@@ -292,8 +292,10 @@ class Context extends RawMinkContext implements BehatContext
      *
      * @When ~^I wait ("(?:\\[\\"]|[^"])*+") ms$~
      */
-    public function iWait(int $ms): void
+    public function iWait(string $ms): void
     {
+        $ms = (int) $this->unquoteStepArgument($ms);
+
         $this->getSession()->wait($ms);
     }
 
@@ -302,6 +304,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iPressWrite(string $text, string $selector): void
     {
+        $text = $this->unquoteStepArgument($text);
+        $selector = $this->unquoteStepArgument($selector);
+
         if ($selector === 'document' && $text === '[escape]') {
             $this->getSession()->executeScript('document.dispatchEvent(new KeyboardEvent(\'keydown\', {keyCode: 27, which: 27}))');
 
@@ -317,6 +322,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iDragElementOnto(string $selector, string $selectorTarget): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+        $selectorTarget = $this->unquoteStepArgument($selectorTarget);
+
         $elem = $this->findElement(null, $selector);
         $elemTarget = $this->findElement(null, $selectorTarget);
         $this->getSession()->getDriver()->dragTo($elem->getXpath(), $elemTarget->getXpath());
@@ -329,6 +337,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iPressButton(string $buttonLabel): void
     {
+        $buttonLabel = $this->unquoteStepArgument($buttonLabel);
+
         $button = $this->findElement(null, '//div[text()=' . $this->quoteXpath($buttonLabel) . ']');
         $button->click();
     }
@@ -338,6 +348,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSeeButton(string $buttonLabel): void
     {
+        $buttonLabel = $this->unquoteStepArgument($buttonLabel);
+
         $this->findElement(null, '//div[text()=' . $this->quoteXpath($buttonLabel) . ']');
     }
 
@@ -346,6 +358,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function idontSeeButton(string $text): void
     {
+        $text = $this->unquoteStepArgument($text);
+
         $element = $this->findElement(null, '//div[text()=' . $this->quoteXpath($text) . ']');
         if (!str_contains($element->getAttribute('style'), 'display: none')) {
             throw new \Exception('Element with text "' . $text . '" must be invisible');
@@ -361,6 +375,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickLink(string $label): void
     {
+        $label = $this->unquoteStepArgument($label);
+
         $this->findElement(null, '//a[text()=' . $this->quoteXpath($label) . ']')->click();
     }
 
@@ -369,6 +385,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickUsingSelector(string $selector): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+
         $element = $this->findElement(null, $selector);
         $element->click();
     }
@@ -382,6 +400,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickPatchedUsingSelector(string $selector): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+
         $element = $this->findElement(null, $selector);
 
         $driver = $this->getSession()->getDriver();
@@ -398,6 +418,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickPaginatorPage(string $pageNumber): void
     {
+        $pageNumber = $this->unquoteStepArgument($pageNumber);
+
         $element = $this->findElement(null, 'a.item[data-page="' . $pageNumber . '"]');
         $element->click();
     }
@@ -407,6 +429,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iFillField(string $selector, string $value): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+        $value = $this->unquoteStepArgument($value);
+
         $element = $this->findElement(null, $selector);
         $element->setValue($value);
     }
@@ -420,6 +445,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iPressModalButton(string $buttonLabel): void
     {
+        $buttonLabel = $this->unquoteStepArgument($buttonLabel);
+
         $modal = $this->findElement(null, '.modal.visible.active.front');
         $button = $this->findElement($modal, '//div[text()=' . $this->quoteXpath($buttonLabel) . ']');
         $button->click();
@@ -431,8 +458,11 @@ class Context extends RawMinkContext implements BehatContext
      *
      * Check if text is present in modal or dynamic modal.
      */
-    public function modalIsOpenWithText(string $text, string $selector = '*'): void
+    public function modalIsOpenWithText(string $text, string $selector = '"*"'): void
     {
+        $text = $this->unquoteStepArgument($text);
+        $selector = $this->unquoteStepArgument($selector);
+
         $modal = $this->findElement(null, '.modal.visible.active.front');
         $this->findElement($modal, '//' . $selector . '[text()[normalize-space()=' . $this->quoteXpath($text) . ']]');
     }
@@ -442,6 +472,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iFillModalField(string $fieldName, string $value): void
     {
+        $fieldName = $this->unquoteStepArgument($fieldName);
+        $value = $this->unquoteStepArgument($value);
+
         $modal = $this->findElement(null, '.modal.visible.active.front');
         $field = $modal->find('named', ['field', $fieldName]);
         $field->setValue($value);
@@ -482,8 +515,11 @@ class Context extends RawMinkContext implements BehatContext
      * @Then ~^Panel is open with text ("(?:\\[\\"]|[^"])*+")$~
      * @Then ~^Panel is open with text ("(?:\\[\\"]|[^"])*+") in selector ("(?:\\[\\"]|[^"])*+")$~
      */
-    public function panelIsOpenWithText(string $text, string $selector = '*'): void
+    public function panelIsOpenWithText(string $text, string $selector = '"*"'): void
     {
+        $text = $this->unquoteStepArgument($text);
+        $selector = $this->unquoteStepArgument($selector);
+
         $panel = $this->findElement(null, '.atk-right-panel.atk-visible');
         $this->findElement($panel, '//' . $selector . '[text()[normalize-space()=' . $this->quoteXpath($text) . ']]');
     }
@@ -493,6 +529,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iFillPanelField(string $fieldName, string $value): void
     {
+        $fieldName = $this->unquoteStepArgument($fieldName);
+        $value = $this->unquoteStepArgument($value);
+
         $panel = $this->findElement(null, '.atk-right-panel.atk-visible');
         $field = $panel->find('named', ['field', $fieldName]);
         $field->setValue($value);
@@ -503,6 +542,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iPressPanelButton(string $buttonLabel): void
     {
+        $buttonLabel = $this->unquoteStepArgument($buttonLabel);
+
         $panel = $this->findElement(null, '.atk-right-panel.atk-visible');
         $button = $this->findElement($panel, '//div[text()=' . $this->quoteXpath($buttonLabel) . ']');
         $button->click();
@@ -517,6 +558,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickTabWithTitle(string $tabTitle): void
     {
+        $tabTitle = $this->unquoteStepArgument($tabTitle);
+
         $tabMenu = $this->findElement(null, '.ui.tabular.menu');
         $link = $this->findElement($tabMenu, '//div[text()=' . $this->quoteXpath($tabTitle) . ']');
         $link->click();
@@ -527,6 +570,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function activeTabShouldBe(string $title): void
     {
+        $title = $this->unquoteStepArgument($title);
+
         $tab = $this->findElement(null, '.ui.tabular.menu > .item.active');
         if ($tab->getText() !== $title) {
             throw new \Exception('Active tab is not ' . $title);
@@ -557,6 +602,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSearchGridFor(string $text): void
     {
+        $text = $this->unquoteStepArgument($text);
+
         $search = $this->findElement(null, 'input.atk-grid-search');
         $search->setValue($text);
     }
@@ -601,6 +648,10 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iSelectFile(string $inputName, string $fileContent, string $fileName): void
     {
+        $inputName = $this->unquoteStepArgument($inputName);
+        $fileContent = $this->unquoteStepArgument($fileContent);
+        $fileName = $this->unquoteStepArgument($fileName);
+
         $element = $this->findElement(null, '//input[@name=' . $this->quoteXpath($inputName) . ' and @type="hidden"]/following-sibling::input[@type="file"]');
         $this->getSession()->executeScript(<<<'EOF'
             const dataTransfer = new DataTransfer();
@@ -733,6 +784,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function dump(string $arg1): void
     {
+        $arg1 = $this->unquoteStepArgument($arg1);
+
         $element = $this->getSession()->getPage()->find('xpath', '//div[text()=' . $this->quoteXpath($arg1) . ']');
         var_dump($element->getOuterHtml());
     }
@@ -742,6 +795,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function iClickFilterColumnName(string $columnName): void
     {
+        $columnName = $this->unquoteStepArgument($columnName);
+
         $column = $this->findElement(null, "th[data-column='" . $columnName . "']");
         $icon = $this->findElement($column, 'i');
         $icon->click();
@@ -750,9 +805,10 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * @Then ~^container ("(?:\\[\\"]|[^"])*+") should display ("(?:\\[\\"]|[^"])*+") item\(s\)$~
      */
-    public function containerShouldHaveNumberOfItem(string $selector, int $numberOfitems): void
+    public function containerShouldHaveNumberOfItem(string $selector, string $numberOfitems): void
     {
         $selector = $this->unquoteStepArgument($selector);
+        $numberOfitems = (int) $this->unquoteStepArgument($numberOfitems);
 
         $items = $this->getSession()->getPage()->findAll('css', $selector);
         $count = 0;
@@ -785,6 +841,8 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function toastDisplayShouldContainText(string $text): void
     {
+        $text = $this->unquoteStepArgument($text);
+
         $toastContainer = $this->findElement(null, '.ui.toast-container');
         $toastText = $this->findElement($toastContainer, '.content')->getText();
         if (!str_contains($toastText, $text)) {
@@ -860,6 +918,10 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function elementAttributeShouldContainText(string $selector, string $attribute, string $text): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+        $attribute = $this->unquoteStepArgument($attribute);
+        $text = $this->unquoteStepArgument($text);
+
         $element = $this->findElement(null, $selector);
         $attr = $element->getAttribute($attribute);
         if (!str_contains($attr, $text)) {
@@ -872,6 +934,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function elementShouldContainClass(string $selector, string $class): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+        $class = $this->unquoteStepArgument($class);
+
         $element = $this->findElement(null, $selector);
         $classes = explode(' ', $element->getAttribute('class'));
         if (!in_array($class, $classes, true)) {
@@ -884,6 +949,9 @@ class Context extends RawMinkContext implements BehatContext
      */
     public function elementShouldNotContainClass(string $selector, string $class): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+        $class = $this->unquoteStepArgument($class);
+
         $element = $this->findElement(null, $selector);
         $classes = explode(' ', $element->getAttribute('class'));
         if (in_array($class, $classes, true)) {
