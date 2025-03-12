@@ -172,7 +172,7 @@ class Multiline extends Form\Control
 
     /**
      * Container for component that need Props set based on their field value as Lookup component.
-     * Set during fieldDefinition and apply during renderView() after getValue().
+     * Set during fieldDefinition and apply during renderView() after getInputValue().
      * Must contains callable function and function will receive $model field and value as parameter.
      *
      * @var array<string, \Closure<T of Field>(T, string): void>
@@ -286,10 +286,9 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Get Multiline initial field value. Value is based on model set and will
-     * output data rows as JSON string value.
+     * Get initial field value. Value is based on model set and will output data rows as JSON string value.
      */
-    public function getValue(): string
+    public function getInputValue(): string
     {
         if ($this->entityField->getField()->type === 'json') {
             $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
@@ -685,7 +684,7 @@ class Multiline extends Form\Control
 
         parent::renderView();
 
-        $inputValueJson = $this->getValue();
+        $inputValueJson = $this->getInputValue();
         $this->valuePropsBinding($inputValueJson);
 
         $this->multiLine->vue('atk-multiline', [

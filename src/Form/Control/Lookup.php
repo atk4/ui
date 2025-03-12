@@ -141,14 +141,14 @@ class Lookup extends Input
     }
 
     #[\Override]
-    public function getValue()
+    public function getInputValue(): ?string
     {
         // dropdown input tag accepts CSV formatted list of IDs
         return $this->entityField !== null
             ? ($this->multiple && $this->entityField->getField()->type === 'json' && is_array($this->entityField->get())
                 ? implode(', ', $this->entityField->get())
                 : $this->getApp()->uiPersistence->typecastAttributeSaveField($this->entityField->getField(), $this->entityField->get()))
-            : parent::getValue();
+            : parent::getInputValue();
     }
 
     /**

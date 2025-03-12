@@ -88,12 +88,7 @@ class Input extends Form\Control
         return $this;
     }
 
-    /**
-     * Returns presentable value to be inserted into input tag.
-     *
-     * @return string|null
-     */
-    public function getValue()
+    public function getInputValue(): ?string
     {
         return $this->entityField !== null
                     ? $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get())
@@ -112,7 +107,7 @@ class Input extends Form\Control
             'type' => $this->inputType !== 'text' ? $this->inputType : false,
             'placeholder' => $this->inputType !== 'hidden' && $this->placeholder ? $this->placeholder : false,
             'id' => $this->name . '_input',
-            'value' => $this->getValue(),
+            'value' => $this->getInputValue(),
             'disabled' => $this->disabled && $this->inputType !== 'hidden',
             'readonly' => $this->readOnly && $this->inputType !== 'hidden' && !$this->disabled,
         ], $this->inputAttr));

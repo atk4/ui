@@ -103,14 +103,12 @@ class Upload extends Input
         return parent::set($value);
     }
 
-    /**
-     * Get input field value.
-     *
-     * @return mixed
-     */
-    public function getInputValue()
+    #[\Override]
+    public function getInputValue(): ?string
     {
-        return $this->entityField ? $this->entityField->get() : $this->content;
+        return $this->entityField !== null
+            ? $this->entityField->get()
+            : $this->content;
     }
 
     /**

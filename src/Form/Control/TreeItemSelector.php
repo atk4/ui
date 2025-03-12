@@ -116,14 +116,11 @@ class TreeItemSelector extends Form\Control
         return $this->getApp()->getTag('input/', [
             'name' => $this->shortName,
             'type' => 'hidden',
-            'value' => $this->getValue(),
+            'value' => $this->getInputValue(),
         ]);
     }
 
-    /**
-     * @return string|null
-     */
-    public function getValue()
+    public function getInputValue(): ?string
     {
         return $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get());
     }
