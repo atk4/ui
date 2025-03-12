@@ -653,10 +653,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /**
  * This will create a table td element using SuiTableCell.
- * The td element is created only if column as set isVisible = true;
+ * The td element is created only if column as set isVisible = true.
  * The td element will add a multiline cell element.
- * the multiline cell will set it's own template component depending on the fieldType.
- * getValue
+ * The multiline cell will set it's own template component depending on the fieldType.
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'AtkMultilineRow',
