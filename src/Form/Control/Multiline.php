@@ -288,6 +288,7 @@ class Multiline extends Form\Control
     /**
      * Get initial field value. Value is based on model set and will output data rows as JSON string value.
      */
+    #[\Override]
     public function getInputValue(): string
     {
         if ($this->entityField->getField()->type === 'json') {

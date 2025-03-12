@@ -85,6 +85,15 @@ class TreeItemSelector extends Form\Control
         $this->itemSelector = View::addTo($this, ['template' => $this->itemSelectorTemplate]);
     }
 
+    public function getInputTag(): string
+    {
+        return $this->getApp()->getTag('input/', [
+            'name' => $this->shortName,
+            'type' => 'hidden',
+            'value' => $this->getInputValue(),
+        ]);
+    }
+
     /**
      * Provide a function to be executed when clicking an item in tree selector.
      * The executing function will receive an array with item state in it
@@ -104,20 +113,6 @@ class TreeItemSelector extends Form\Control
 
             return $value;
         })]);
-    }
-
-    public function getInputTag(): string
-    {
-        return $this->getApp()->getTag('input/', [
-            'name' => $this->shortName,
-            'type' => 'hidden',
-            'value' => $this->getInputValue(),
-        ]);
-    }
-
-    public function getInputValue(): ?string
-    {
-        return $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get());
     }
 
     #[\Override]
