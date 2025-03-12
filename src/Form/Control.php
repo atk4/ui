@@ -19,7 +19,7 @@ use Atk4\Ui\View;
  *
  * @phpstan-type JsCallbackSetWithValueClosure \Closure(Jquery, mixed): (JsExpressionable|View|string|void)
  */
-class Control extends View
+abstract class Control extends View
 {
     /** @var Form|null to which this field belongs */
     public ?View $form = null;
@@ -95,6 +95,18 @@ class Control extends View
         }
 
         return $this;
+    }
+
+    public function getInputValue(): ?string
+    {
+        return $this->entityField !== null
+            ? $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get())
+            : ($this->content ?? '');
+    }
+
+    public function setInputValue(string $value): void
+    {
+        $this->set($this->getApp()->uiPersistence->typecastLoadField($this->entityField->getField(), $value));
     }
 
     #[\Override]

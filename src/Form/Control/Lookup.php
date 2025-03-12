@@ -151,6 +151,16 @@ class Lookup extends Input
             : parent::getInputValue();
     }
 
+    #[\Override]
+    public function setInputValue(string $value): void
+    {
+        if ($this->entityField !== null && $this->multiple && $this->entityField->getField()->type === 'json') {
+            $value = $this->getApp()->encodeJson(explode(',', $value));
+        }
+
+        parent::setInputValue($value);
+    }
+
     /**
      * @param bool|string      $when
      * @param JsExpressionable $action

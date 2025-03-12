@@ -88,11 +88,26 @@ class Input extends Form\Control
         return $this;
     }
 
+    #[\Override]
     public function getInputValue(): ?string
     {
-        return $this->entityField !== null
-                    ? $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get())
-                    : ($this->content ?? '');
+        if ($this->entityField !== null && $this->inputType === 'hidden') {
+            return $this->getApp()->uiPersistence->typecastAttributeSaveField($this->entityField->getField(), $this->entityField->get());
+        }
+
+        return parent::getInputValue();
+    }
+
+    #[\Override]
+    public function setInputValue(string $value): void
+    {
+        if ($this->entityField !== null && $this->inputType === 'hidden') {
+            $this->set($this->getApp()->uiPersistence->typecastAttributeLoadField($this->entityField->getField(), $value));
+
+            return;
+        }
+
+        parent::setInputValue($value);
     }
 
     /**
