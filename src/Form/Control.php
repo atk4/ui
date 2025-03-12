@@ -101,7 +101,7 @@ abstract class Control extends View
     {
         return $this->entityField !== null
             ? $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get())
-            : ($this->content ?? '');
+            : $this->content;
     }
 
     public function setInputValue(string $value): void
