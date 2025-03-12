@@ -146,7 +146,7 @@ class DemosHttpTest extends DemosTest
         ];
         yield [
             '_unit-test/fatal-error.php?type=compile-warning',
-            'Unsupported declare \'x\'',
+            'Unsupported declare &apos;x&apos;',
         ];
         yield [
             '_unit-test/fatal-error.php?type=exception-in-shutdown',
