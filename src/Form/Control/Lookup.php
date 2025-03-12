@@ -29,9 +29,6 @@ class Lookup extends Input
 
     public string $inputType = 'hidden';
 
-    /** @var array<array-key, mixed> Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
-    public array $values;
-
     /** @var CallbackLater Object used to capture requests from the browser. */
     public $callback;
 

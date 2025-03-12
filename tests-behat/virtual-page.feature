@@ -30,6 +30,6 @@ Feature: VirtualPage
     Then I check if text in ".__atk-behat-test-second" match text "Second Level Page"
     When I click link "Open Third"
     Then I check if text in ".__atk-behat-test-third" match text "Third Level Page"
-    When I select value "Beverages" in lookup "category"
+    When I select "Beverages" in lookup "category"
     When I press button "Save"
     Then Toast display should contain text "Beverages"

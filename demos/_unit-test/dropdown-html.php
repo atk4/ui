@@ -92,7 +92,7 @@ foreach (array_keys($form->entity->getFields()) as $k) {
 $initData = $form->entity->get();
 
 $form->onSubmit(static function (Form $form) use ($app, $initData, $makeTestStringFx) {
-    $message = $app->encodeJson($form->entity->get());
+    $makeExpectedDataFx = static fn ($fx) => array_map(static fn ($k) => $fx($k), array_combine(array_keys($initData), array_keys($initData)));
 
     // TODO remove once https://github.com/fomantic/Fomantic-UI/pull/3205 is merged
     foreach ($form->entity->get() as $k => $v) {
@@ -102,11 +102,11 @@ $form->onSubmit(static function (Form $form) use ($app, $initData, $makeTestStri
     $view = new Message('Values:');
     $view->setApp($form->getApp());
     $view->invokeInit();
-    $view->text->addParagraph($message);
+    $view->text->addParagraph($app->encodeJson($form->entity->get()));
     $view->text->addParagraph('match init: ' . ($form->entity->get() === $initData));
-    $view->text->addParagraph('match u add: ' . ($form->entity->get() === array_map(static fn ($k) => (str_contains($k, 'multi') ? $initData[$k] . ',' : '') . $makeTestStringFx('u'), array_combine(array_keys($initData), array_keys($initData)))));
-    $view->text->addParagraph('match empty: ' . ($form->entity->get() === array_map(static fn () => '', $initData)));
-    $view->text->addParagraph('match u only: ' . ($form->entity->get() === array_map(static fn () => $makeTestStringFx('u'), $initData)));
+    $view->text->addParagraph('match u add: ' . ($form->entity->get() === $makeExpectedDataFx(static fn ($k) => (str_contains($k, 'multi') ? $initData[$k] . ',' : '') . $makeTestStringFx('u'))));
+    $view->text->addParagraph('match empty: ' . ($form->entity->get() === $makeExpectedDataFx(static fn () => '')));
+    $view->text->addParagraph('match u only: ' . ($form->entity->get() === $makeExpectedDataFx(static fn () => $makeTestStringFx('u'))));
 
     return $view;
 });

@@ -609,11 +609,9 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * TODO better method name, it selects name/title, not value.
-     *
-     * @When ~^I select value ("(?:\\[\\"]|[^"])*+") in lookup ("(?:\\[\\"]|[^"])*+")$~
+     * @When ~^I select ("(?:\\[\\"]|[^"])*+") in lookup ("(?:\\[\\"]|[^"])*+")$~
      */
-    public function iSelectValueInLookup(string $value, string $inputName): void
+    public function iSelectInLookup(string $value, string $inputName): void
     {
         $value = $this->unquoteStepArgument($value);
         $inputName = $this->unquoteStepArgument($inputName);
