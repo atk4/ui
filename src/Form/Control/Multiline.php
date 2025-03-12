@@ -262,7 +262,7 @@ class Multiline extends Form\Control
         }
 
         // remove __atkml ID from array field
-        if ($this->form->entity->getField($this->shortName)->type === 'json') {
+        if ($this->entityField->getField()->type === 'json') {
             $rows = [];
             foreach ($this->rowData as $cols) {
                 unset($cols['__atkml']);
