@@ -106,12 +106,7 @@ class TreeItemSelector extends Form\Control
         })]);
     }
 
-    /**
-     * Returns <input ...> tag.
-     *
-     * @return string
-     */
-    public function getInput()
+    public function getInputTag(): string
     {
         return $this->getApp()->getTag('input/', [
             'name' => $this->shortName,
@@ -130,7 +125,7 @@ class TreeItemSelector extends Form\Control
     {
         parent::renderView();
 
-        $this->itemSelector->template->tryDangerouslySetHtml('Input', $this->getInput());
+        $this->itemSelector->template->tryDangerouslySetHtml('Input', $this->getInputTag());
 
         $this->itemSelector->vue('AtkTreeItemSelector', [
             'item' => ['id' => 'atk-root', 'nodes' => $this->treeItems],

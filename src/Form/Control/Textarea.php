@@ -10,7 +10,7 @@ class Textarea extends Input
     public $rows = 2;
 
     #[\Override]
-    public function getInput()
+    public function getInputTag(): string
     {
         return $this->getApp()->getTag('textarea', array_merge([
             'name' => $this->shortName,

@@ -110,12 +110,7 @@ class Input extends Form\Control
         parent::setInputValue($value);
     }
 
-    /**
-     * Returns <input ...> tag.
-     *
-     * @return string
-     */
-    public function getInput()
+    public function getInputTag(): string
     {
         return $this->getApp()->getTag('input/', array_merge([
             'name' => $this->shortName,
@@ -257,7 +252,7 @@ class Input extends Form\Control
         }
 
         // set template
-        $this->template->dangerouslySetHtml('Input', $this->getInput());
+        $this->template->dangerouslySetHtml('Input', $this->getInputTag());
         $this->content = null;
 
         parent::renderView();
