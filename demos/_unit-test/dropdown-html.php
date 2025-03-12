@@ -98,7 +98,7 @@ $form->addControl('lookup_multi_json', [
     'multiple' => true,
     'model' => $lookupModel,
 ]/* , ['type' => 'json'] *-/);
-$form->entity->getField('lookup_multi_json')->type = 'json';  */
+$form->entity->getField('lookup_multi_json')->type = 'json'; */
 
 foreach (array_keys($form->entity->getFields()) as $k) {
     $form->entity->set(
