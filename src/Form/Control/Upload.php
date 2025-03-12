@@ -150,7 +150,7 @@ class Upload extends Input
                 if (count($postFiles) > 0) {
                     $fileId = reset($postFiles)['name'];
                     $this->setFileId($fileId);
-                    $this->setInput($fileId);
+                    $this->setInputValue($fileId);
                 }
 
                 $jsRes = $fx(...$postFiles);
