@@ -88,19 +88,15 @@ class Upload extends Input
             $fileName = $fileId;
         }
 
-        return $this->setInput($fileName);
+        $this->setInputValue($fileName);
+
+        return $this;
     }
 
-    /**
-     * Set input field value.
-     *
-     * @param mixed $value
-     *
-     * @return $this
-     */
-    public function setInput($value)
+    #[\Override]
+    public function setInputValue(string $value): void
     {
-        return parent::set($value);
+        parent::set($this->getApp()->uiPersistence->typecastAttributeLoadField($this->entityField->getField(), $value));
     }
 
     /**
