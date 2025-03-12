@@ -49,6 +49,13 @@ $form->addControl('dropdown_multi2', [
     'dropdownOptions' => ['allowAdditions' => true],
 ]);
 
+$form->addControl('dropdown_multi_json', [
+    Form\Control\Dropdown::class,
+    'caption' => 'Dropdown multiple JSON',
+    'multiple' => true,
+    'values' => $htmlValues,
+], ['type' => 'json']);
+
 $lookupModel = new Model();
 $lookupModel->addField('id', ['type' => 'string']);
 $lookupModel->addField('name', ['type' => 'string']);
@@ -83,16 +90,35 @@ $form->addControl('lookup_multi2', [
     'multiple' => true,
     'model' => $lookupModel,
     'settings' => ['allowAdditions' => true],
-]); */
+]);
+
+$form->addControl('lookup_multi_json', [
+    Form\Control\Lookup::class,
+    'caption' => 'Lookup multiple JSON',
+    'multiple' => true,
+    'model' => $lookupModel,
+]/* , ['type' => 'json'] *-/);
+$form->entity->getField('lookup_multi_json')->type = 'json'; */
 
 foreach (array_keys($form->entity->getFields()) as $k) {
-    $form->entity->set($k, $makeTestStringFx('d'));
+    $form->entity->set(
+        $k,
+        str_contains($k, 'json')
+            ? [$makeTestStringFx('d')]
+            : $makeTestStringFx('d')
+    );
 }
 
 $initData = $form->entity->get();
 
 $form->onSubmit(static function (Form $form) use ($app, $initData, $makeTestStringFx) {
-    $makeExpectedDataFx = static fn ($fx) => array_map(static fn ($k) => $fx($k), array_combine(array_keys($initData), array_keys($initData)));
+    $makeExpectedDataFx = static fn ($fx) => array_map(static function ($k) use ($fx) {
+        $res = $fx($k);
+
+        return str_contains($k, 'json')
+            ? explode(',', $res)
+            : $res;
+    }, array_combine(array_keys($initData), array_keys($initData)));
 
     // TODO remove once https://github.com/fomantic/Fomantic-UI/pull/3205 is merged
     foreach ($form->entity->get() as $k => $v) {
@@ -104,7 +130,7 @@ $form->onSubmit(static function (Form $form) use ($app, $initData, $makeTestStri
     $view->invokeInit();
     $view->text->addParagraph($app->encodeJson($form->entity->get()));
     $view->text->addParagraph('match init: ' . ($form->entity->get() === $initData));
-    $view->text->addParagraph('match u add: ' . ($form->entity->get() === $makeExpectedDataFx(static fn ($k) => (str_contains($k, 'multi') ? $initData[$k] . ',' : '') . $makeTestStringFx('u'))));
+    $view->text->addParagraph('match u add: ' . ($form->entity->get() === $makeExpectedDataFx(static fn ($k) => (str_contains($k, 'multi') ? $makeTestStringFx('d') . ',' : '') . $makeTestStringFx('u'))));
     $view->text->addParagraph('match empty: ' . ($form->entity->get() === $makeExpectedDataFx(static fn () => '')));
     $view->text->addParagraph('match u only: ' . ($form->entity->get() === $makeExpectedDataFx(static fn () => $makeTestStringFx('u'))));
 

@@ -34,6 +34,7 @@ Feature: Dropdown
     When I select "uTitle <b>\"' &lt;" in lookup "dropdown_single2"
     When I select "uTitle <b>\"' &lt;" in lookup "dropdown_multi"
     When I select "uTitle <b>\"' &lt;" in lookup "dropdown_multi2"
+    When I select "uTitle <b>\"' &lt;" in lookup "dropdown_multi_json"
     When I press button "Save"
     Then Modal is open with text "match u add: 1"
     When I click close modal
@@ -41,6 +42,7 @@ Feature: Dropdown
     When I select "" in lookup "dropdown_single2"
     When I select "" in lookup "dropdown_multi"
     When I select "" in lookup "dropdown_multi2"
+    When I select "" in lookup "dropdown_multi_json"
     When I press button "Save"
     Then Modal is open with text "match empty: 1"
     When I click close modal
@@ -48,6 +50,7 @@ Feature: Dropdown
     When I select "uTitle <b>\"' &lt;" in lookup "dropdown_single2"
     When I select "uTitle <b>\"' &lt;" in lookup "dropdown_multi"
     When I select "uTitle <b>\"' &lt;" in lookup "dropdown_multi2"
+    When I select "uTitle <b>\"' &lt;" in lookup "dropdown_multi_json"
     When I press button "Save"
     Then Modal is open with text "match u only: 1"
 
