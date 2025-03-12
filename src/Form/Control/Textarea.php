@@ -6,6 +6,8 @@ namespace Atk4\Ui\Form\Control;
 
 class Textarea extends Input
 {
+    public string $inputType = 'textarea';
+
     /** @var int Text area vertical size */
     public $rows = 2;
 
