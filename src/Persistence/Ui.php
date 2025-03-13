@@ -271,7 +271,7 @@ class Ui extends Persistence
                 // https://github.com/search?q=unserialize+repo%3Adoctrine%2Fdbal+path%3A%2Fsrc%2FTypes
             case 'object':
             case 'array':
-                throw new Exception('Object serialization is not supported');
+                throw new Exception('Object unserialization is not supported');
         }
 
         // typecast using DBAL type and normalize

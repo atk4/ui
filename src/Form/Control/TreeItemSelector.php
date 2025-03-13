@@ -85,6 +85,15 @@ class TreeItemSelector extends Form\Control
         $this->itemSelector = View::addTo($this, ['template' => $this->itemSelectorTemplate]);
     }
 
+    public function getInputTag(): string
+    {
+        return $this->getApp()->getTag('input/', [
+            'name' => $this->shortName,
+            'type' => 'hidden',
+            'value' => $this->getInputValue(),
+        ]);
+    }
+
     /**
      * Provide a function to be executed when clicking an item in tree selector.
      * The executing function will receive an array with item state in it
@@ -106,34 +115,12 @@ class TreeItemSelector extends Form\Control
         })]);
     }
 
-    /**
-     * Returns <input ...> tag.
-     *
-     * @return string
-     */
-    public function getInput()
-    {
-        return $this->getApp()->getTag('input/', [
-            'name' => $this->shortName,
-            'type' => 'hidden',
-            'value' => $this->getValue(),
-        ]);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getValue()
-    {
-        return $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get());
-    }
-
     #[\Override]
     protected function renderView(): void
     {
         parent::renderView();
 
-        $this->itemSelector->template->tryDangerouslySetHtml('Input', $this->getInput());
+        $this->itemSelector->template->tryDangerouslySetHtml('Input', $this->getInputTag());
 
         $this->itemSelector->vue('AtkTreeItemSelector', [
             'item' => ['id' => 'atk-root', 'nodes' => $this->treeItems],

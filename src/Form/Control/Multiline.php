@@ -172,7 +172,7 @@ class Multiline extends Form\Control
 
     /**
      * Container for component that need Props set based on their field value as Lookup component.
-     * Set during fieldDefinition and apply during renderView() after getValue().
+     * Set during fieldDefinition and apply during renderView() after getInputValue().
      * Must contains callable function and function will receive $model field and value as parameter.
      *
      * @var array<string, \Closure<T of Field>(T, string): void>
@@ -212,27 +212,6 @@ class Multiline extends Form\Control
 
         $this->renderCallback = JsCallback::addTo($this);
 
-        // load the data associated with this input and validate it
-        $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
-            $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($this->getApp()->getRequestPostParam($this->shortName)));
-            if ($this->rowData) {
-                $this->rowErrors = $this->validate($this->rowData);
-                if ($this->rowErrors) {
-                    throw new ValidationException([$this->shortName => 'multiline error']);
-                }
-            }
-
-            // remove __atml ID from array field
-            if ($this->form->entity->getField($this->shortName)->type === 'json') {
-                $rows = [];
-                foreach ($this->rowData as $cols) {
-                    unset($cols['__atkml']);
-                    $rows[] = $cols;
-                }
-                $postRawData[$this->shortName] = $this->getApp()->encodeJson($rows);
-            }
-        });
-
         // change form error handling
         $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
             // when errors are coming from this Multiline field, then notify Multiline component about them
@@ -271,6 +250,31 @@ class Multiline extends Form\Control
         return $dataRows;
     }
 
+    #[\Override]
+    public function setInputValue(string $value): void
+    {
+        $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($value));
+        if ($this->rowData) {
+            $this->rowErrors = $this->validate($this->rowData);
+            if ($this->rowErrors) {
+                throw new ValidationException([$this->shortName => 'multiline error']);
+            }
+        }
+
+        // remove __atkml ID from array field
+        if ($this->entityField->getField()->type === 'json') {
+            $rows = [];
+            foreach ($this->rowData as $cols) {
+                unset($cols['__atkml']);
+                $rows[] = $cols;
+            }
+
+            $value = $this->getApp()->encodeJson($rows);
+        }
+
+        parent::setInputValue($value);
+    }
+
     /**
      * Add a callback when fields are changed. You must supply array of fields
      * that will trigger the callback when changed.
@@ -286,10 +290,10 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Get Multiline initial field value. Value is based on model set and will
-     * output data rows as JSON string value.
+     * Get initial field value. Value is based on model set and will output data rows as JSON string value.
      */
-    public function getValue(): string
+    #[\Override]
+    public function getInputValue(): string
     {
         if ($this->entityField->getField()->type === 'json') {
             $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
@@ -685,7 +689,7 @@ class Multiline extends Form\Control
 
         parent::renderView();
 
-        $inputValueJson = $this->getValue();
+        $inputValueJson = $this->getInputValue();
         $this->valuePropsBinding($inputValueJson);
 
         $this->multiLine->vue('atk-multiline', [

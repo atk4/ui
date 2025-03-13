@@ -88,29 +88,15 @@ class Upload extends Input
             $fileName = $fileId;
         }
 
-        return $this->setInput($fileName);
+        $this->setInputValue($fileName);
+
+        return $this;
     }
 
-    /**
-     * Set input field value.
-     *
-     * @param mixed $value
-     *
-     * @return $this
-     */
-    public function setInput($value)
+    #[\Override]
+    public function setInputValue(string $value): void
     {
-        return parent::set($value);
-    }
-
-    /**
-     * Get input field value.
-     *
-     * @return mixed
-     */
-    public function getInputValue()
-    {
-        return $this->entityField ? $this->entityField->get() : $this->content;
+        parent::set($this->getApp()->uiPersistence->typecastAttributeLoadField($this->entityField->getField(), $value));
     }
 
     /**
@@ -164,7 +150,7 @@ class Upload extends Input
                 if (count($postFiles) > 0) {
                     $fileId = reset($postFiles)['name'];
                     $this->setFileId($fileId);
-                    $this->setInput($fileId);
+                    $this->setInputValue($fileId);
                 }
 
                 $jsRes = $fx(...$postFiles);

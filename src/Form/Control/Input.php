@@ -88,31 +88,36 @@ class Input extends Form\Control
         return $this;
     }
 
-    /**
-     * Returns presentable value to be inserted into input tag.
-     *
-     * @return string|null
-     */
-    public function getValue()
+    #[\Override]
+    public function getInputValue(): ?string
     {
-        return $this->entityField !== null
-                    ? $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get())
-                    : ($this->content ?? '');
+        if ($this->entityField !== null && $this->inputType === 'hidden') {
+            return $this->getApp()->uiPersistence->typecastAttributeSaveField($this->entityField->getField(), $this->entityField->get());
+        }
+
+        return parent::getInputValue();
     }
 
-    /**
-     * Returns <input ...> tag.
-     *
-     * @return string
-     */
-    public function getInput()
+    #[\Override]
+    public function setInputValue(string $value): void
+    {
+        if ($this->entityField !== null && $this->inputType === 'hidden') {
+            $this->set($this->getApp()->uiPersistence->typecastAttributeLoadField($this->entityField->getField(), $value));
+
+            return;
+        }
+
+        parent::setInputValue($value);
+    }
+
+    public function getInputTag(): string
     {
         return $this->getApp()->getTag('input/', array_merge([
             'name' => $this->shortName,
             'type' => $this->inputType !== 'text' ? $this->inputType : false,
             'placeholder' => $this->inputType !== 'hidden' && $this->placeholder ? $this->placeholder : false,
             'id' => $this->name . '_input',
-            'value' => $this->getValue(),
+            'value' => $this->getInputValue(),
             'disabled' => $this->disabled && $this->inputType !== 'hidden',
             'readonly' => $this->readOnly && $this->inputType !== 'hidden' && !$this->disabled,
         ], $this->inputAttr));
@@ -247,7 +252,7 @@ class Input extends Form\Control
         }
 
         // set template
-        $this->template->dangerouslySetHtml('Input', $this->getInput());
+        $this->template->dangerouslySetHtml('Input', $this->getInputTag());
         $this->content = null;
 
         parent::renderView();

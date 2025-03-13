@@ -451,15 +451,7 @@ class Form extends View
                 }
 
                 try {
-                    if ($control instanceof Control\Dropdown || $control instanceof Control\Lookup || $control instanceof Control\Radio) { // this condition is definitely unacceptable, also should Control::set() be in the catch?
-                        if (($control instanceof Control\Dropdown || $control instanceof Control\Lookup) && $control->multiple && $control->entityField->getField()->type === 'json') {
-                            $postRawValue = $this->getApp()->encodeJson(explode(',', $postRawValue));
-                        }
-
-                        $control->set($this->getApp()->uiPersistence->typecastAttributeLoadField($control->entityField->getField(), $postRawValue));
-                    } else {
-                        $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $postRawValue));
-                    }
+                    $control->setInputValue($postRawValue);
                 } catch (\Exception $e) {
                     if ($e instanceof \ErrorException) {
                         throw $e;
