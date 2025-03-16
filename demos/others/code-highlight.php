@@ -29,7 +29,7 @@ Code::addTo($app, [<<<'EOD'
 
     class Foo
     {
-        public $v;
+        public $tag = '<b>';
     }
     EOD, 'language' => 'php']);
 
@@ -41,17 +41,4 @@ Code::addTo($app, [<<<'EOD'
     -removed line
     +added line
      unchanged line
-    EOD, 'language' => 'diff']);
-
-Header::addTo($app, ['Diff PHP code highlight']);
-Code::addTo($app, [<<<'EOD'
-     <?php
-
-     namespace Atk4\Ns;
-
-     class Foo
-     {
-    -    public $v;
-    +    public $v2;
-     }
     EOD, 'language' => 'diff']);
