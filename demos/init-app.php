@@ -241,6 +241,7 @@ if ($layout instanceof Layout\NavigableInterface) {
 
     $path = $demosUrl . 'others/';
     $menu = $layout->addMenuGroup(['Others', 'icon' => 'plus']);
+    $layout->addMenuItem('Code highlight', [$path . 'code-highlight'], $menu);
     $layout->addMenuItem('Sticky GET', [$path . 'sticky'], $menu);
     $layout->addMenuItem('More Sticky', [$path . 'sticky2'], $menu);
     $layout->addMenuItem('Recursive Views', [$path . 'recursive'], $menu);
