@@ -36,9 +36,20 @@ Code::addTo($app, [<<<'EOD'
 Header::addTo($app, ['Empty code highlight']);
 Code::addTo($app, ['', 'language' => 'php']);
 
+// TODO https://github.com/highlightjs/highlight.js/issues/3796
 Header::addTo($app, ['Diff highlight']);
 Code::addTo($app, [<<<'EOD'
     -removed line
     +added line
      unchanged line
     EOD, 'language' => 'diff']);
+
+// TODO https://github.com/highlightjs/highlight.js/issues/480#issuecomment-57007817 and https://github.com/valeriangalliat/highlightjs-code-diff
+Header::addTo($app, ['Diff PHP code highlight']);
+Code::addTo($app, [<<<'EOD'
+     class Foo
+     {
+    -    public $tag = 'foo';
+    +    public $tag = 'bar';
+     }
+    EOD, 'language' => 'php diff']);
