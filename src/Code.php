@@ -32,9 +32,9 @@ class Code extends View
     #[\Override]
     protected function renderView(): void
     {
-        $this->addClass('language-' . $this->language);
+        $this->template->set('language', $this->language);
 
-        $this->js(true)->each(new JsFunction(['i, el'], [new JsExpression('hljs.highlightElement(el)')])); // TODO no $().each!
+        $this->js(true, new JsExpression('hljs.highlightElement(document.querySelector([]))', ['#' . $this->getHtmlId() . ' > code']));
 
         parent::renderView();
     }
