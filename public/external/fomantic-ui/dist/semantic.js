@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.10.0-beta.8+62e258f
+ * # Fomantic UI - 2.10.0-beta.9+45ac3fe
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -10163,7 +10163,7 @@
                             '>': '&gt;',
                         };
 
-                        return string.replace(badChars, (chr) => escape[chr]);
+                        return String(string).replace(badChars, (chr) => escape[chr]);
                     },
                 },
 
@@ -10576,7 +10576,7 @@
                 '>': '&gt;',
             };
 
-            return string.replace(badChars, (chr) => escape[chr]);
+            return String(string).replace(badChars, (chr) => escape[chr]);
         },
         // generates dropdown from select values
         dropdown: function (select, settings) {
@@ -11313,7 +11313,7 @@
                     '>': '&gt;',
                 };
 
-                return string.replace(badChars, (chr) => escape[chr]);
+                return String(string).replace(badChars, (chr) => escape[chr]);
             },
             iframe: function (url, parameters) {
                 let src = url;
@@ -12377,7 +12377,7 @@
                             '>': '&gt;',
                         };
 
-                        return string.replace(badChars, (chr) => escape[chr]);
+                        return String(string).replace(badChars, (chr) => escape[chr]);
                     },
                 },
 
@@ -13644,7 +13644,7 @@
                             '>': '&gt;',
                         };
 
-                        return string.replace(badChars, (chr) => escape[chr]);
+                        return String(string).replace(badChars, (chr) => escape[chr]);
                     },
                 },
                 can: {
@@ -16261,7 +16261,7 @@
                     '>': '&gt;',
                 };
 
-                return string.replace(badChars, (chr) => escape[chr]);
+                return String(string).replace(badChars, (chr) => escape[chr]);
             },
             popup: function (text) {
                 let html = '';
@@ -19157,7 +19157,7 @@
                     '>': '&gt;',
                 };
 
-                return string.replace(badChars, (chr) => escape[chr]);
+                return String(string).replace(badChars, (chr) => escape[chr]);
             },
             icon: function (maxRating, iconClass) {
                 let icon = 1;
@@ -20565,7 +20565,7 @@
                     '>': '&gt;',
                 };
 
-                string = string.replace(badChars, (chr) => escape[chr]);
+                string = String(string).replace(badChars, (chr) => escape[chr]);
 
                 // FUI controlled HTML is still allowed
                 string = string.replace(/&lt;(\/)*mark&gt;/g, '<$1mark>');
@@ -24733,7 +24733,7 @@
                             '>': '&gt;',
                         };
 
-                        return string.replace(badChars, (chr) => escape[chr]);
+                        return String(string).replace(badChars, (chr) => escape[chr]);
                     },
                 },
 
