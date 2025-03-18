@@ -44,9 +44,6 @@ Feature: Crud
     Then I should see "United Kingdom"
 
   Scenario: edit - with unlocked DB
-    # hotfix "element not interactable"
-    # TODO modal should be always fully (re)loaded on open and fully destroyed once it is closed
-    # https://github.com/atk4/ui/issues/1928
     Given I am on "_unit-test/crud.php"
     When I search grid for "united kingdom"
 

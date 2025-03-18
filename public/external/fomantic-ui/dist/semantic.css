@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.10.0-beta.4+fcf090f
+ * # Fomantic UI - 2.10.0-beta.9+45ac3fe
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -46613,13 +46613,15 @@ select.ui.dropdown {
     box-shadow: none;
   }
 
-  .ui.ui.selection.dropdown:not(.inverted):has(> input:focus) > i.icon {
+  .ui.ui.selection.dropdown:focus > i.icon:not(.remove),
+  .ui.ui.selection.dropdown:has(> input:focus) > i.icon:not(.remove) {
     opacity: 1;
   }
-}
 
-.ui.ui.selection.dropdown:focus > i.icon {
-  opacity: 1;
+  .ui.ui.selection.dropdown:focus > i.icon.remove:not(:hover),
+  .ui.ui.selection.dropdown:has(> input:focus) > i.icon.remove:not(:hover) {
+    opacity: 0.68;
+  }
 }
 
 /* Visible */
