@@ -125,14 +125,14 @@ class JsTest extends TestCase
     public function testChainNameStartingWithDigit(): void
     {
         $js = new JsChain('$myInput');
-        $js->{'1x'}(2);
+        $js->{'1x'}(2); // @phpstan-ignore method.notFound
         self::assertSame('$myInput[\'1x\'](2)', $js->jsRender());
     }
 
     public function testChainNameWithDot(): void
     {
         $js = new JsChain('$myInput');
-        $js->{'x.y'}(2);
+        $js->{'x.y'}(2); // @phpstan-ignore method.notFound
         self::assertSame('$myInput[\'x.y\'](2)', $js->jsRender());
     }
 
