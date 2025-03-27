@@ -1,5 +1,6 @@
 /*
 !/.gitignore
+!/fomantic-modal.js
 !/package.json
 !/package-lock.json
 !/postinstall.js

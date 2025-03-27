@@ -308,6 +308,7 @@ jobs:
             cp public.orig/logo.png public
             cp public.orig/css/agileui.less public/css
             cp public.orig/external/.gitignore public/external
+            cp public.orig/external/fomantic-modal.js public/external
             cp public.orig/external/package.json public/external
             cp public.orig/external/package-lock.json public/external
             cp public.orig/external/postinstall.js public/external

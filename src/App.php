@@ -609,6 +609,7 @@ class App
 
         // Fomantic-UI
         $this->requireJs($this->cdn['fomantic-ui'] . '/semantic' . ($minified ? '.min' : '') . '.js');
+        $this->requireJs($this->cdn['fomantic-ui'] . '/../../fomantic-modal.js');
         $this->requireCss($this->cdn['fomantic-ui'] . '/semantic' . ($minified ? '.min' : '') . '.css');
 
         // flatpickr - TODO should be load only when needed
