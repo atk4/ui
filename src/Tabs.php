@@ -10,7 +10,7 @@ use Atk4\Ui\Js\JsFunction;
 class Tabs extends View
 {
     public $defaultTemplate = 'tabs.html';
-    public $ui = 'tabular menu';
+    public $ui = 'tabbed menu';
 
     /** @var string name of active tab */
     public $activeTabName;

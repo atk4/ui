@@ -1,5 +1,5 @@
 /*
- * # Fomantic UI - 2.10.0-beta.9+45ac3fe
+ * # Fomantic UI - 2.10.0-beta.14+ea33639
  * https://github.com/fomantic/Fomantic-UI
  * https://fomantic-ui.com/
  *
@@ -32101,12 +32101,12 @@ span.ui.massive.text {
 }
 
 @media only screen and (min-width: 768px) {
-  .ui.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) > .container > .item:not(.right):not(.borderless):first-child {
+  .ui.menu:not(.secondary):not(.text):not(.tabbed):not(.borderless) > .container > .item:not(.right):not(.borderless):first-child {
     border-left: 1px solid rgba(34, 36, 38, 0.1);
   }
 
-  .ui.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) > .container > .right.item:not(.borderless):last-child,
-  .ui.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) > .container > .right.menu > .item:not(.borderless):last-child {
+  .ui.menu:not(.secondary):not(.text):not(.tabbed):not(.borderless) > .container > .right.item:not(.borderless):last-child,
+  .ui.menu:not(.secondary):not(.text):not(.tabbed):not(.borderless) > .container > .right.menu > .item:not(.borderless):last-child {
     border-right: 1px solid rgba(34, 36, 38, 0.1);
   }
 }
@@ -32346,10 +32346,10 @@ Floated Menu / Item
 }
 
 /* --------------
-         Tabular
+         Tabbed
     --------------- */
 
-.ui.tabular.menu {
+.ui.tabbed.menu {
   border-radius: 0;
   box-shadow: none !important;
   border: none;
@@ -32357,11 +32357,11 @@ Floated Menu / Item
   border-bottom: 1px solid #d4d4d5;
 }
 
-.ui.tabular.fluid.menu {
+.ui.tabbed.fluid.menu {
   width: calc(100% + 2px) !important;
 }
 
-.ui.tabular.menu .item {
+.ui.tabbed.menu .item {
   background: transparent;
   border-bottom: none;
   border-left: 1px solid transparent;
@@ -32371,20 +32371,20 @@ Floated Menu / Item
   color: rgba(0, 0, 0, 0.87);
 }
 
-.ui.tabular.menu .item::before {
+.ui.tabbed.menu .item::before {
   display: none;
 }
 
 /* Hover */
 
-.ui.tabular.menu .item:hover {
+.ui.tabbed.menu .item:hover {
   background-color: transparent;
   color: rgba(0, 0, 0, 0.8);
 }
 
 /* Active */
 
-.ui.tabular.menu .active.item {
+.ui.tabbed.menu .active.item {
   background: none #fff;
   color: rgba(0, 0, 0, 0.95);
   border-top-width: 1px;
@@ -32395,13 +32395,13 @@ Floated Menu / Item
   border-radius: 0.28571429rem 0.28571429rem 0 0 !important;
 }
 
-.ui.tabular.menu .active.item:hover {
+.ui.tabbed.menu .active.item:hover {
   cursor: default;
 }
 
 /* Coupling with segment for attachment */
 
-.ui.tabular.menu ~ .attached:not(.top).segment {
+.ui.tabbed.menu ~ .attached:not(.top).segment {
   border-top: none;
   margin-left: 0;
   margin-top: 0;
@@ -32409,15 +32409,15 @@ Floated Menu / Item
   width: 100%;
 }
 
-.top.attached.segment + .ui.bottom.tabular.menu {
+.top.attached.segment + .ui.bottom.tabbed.menu {
   position: relative;
   width: calc(100% + 2px);
   left: -1px;
 }
 
-/* Bottom Vertical Tabular */
+/* Bottom Vertical Tabbed */
 
-.ui.bottom.tabular.menu {
+.ui.bottom.tabbed.menu {
   background: none transparent;
   border-radius: 0;
   box-shadow: none !important;
@@ -32425,7 +32425,7 @@ Floated Menu / Item
   border-top: 1px solid #d4d4d5;
 }
 
-.ui.bottom.tabular.menu .item {
+.ui.bottom.tabbed.menu .item {
   background: none;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
@@ -32433,7 +32433,7 @@ Floated Menu / Item
   border-top: none;
 }
 
-.ui.bottom.tabular.menu .active.item {
+.ui.bottom.tabbed.menu .active.item {
   background: none #fff;
   color: rgba(0, 0, 0, 0.95);
   border-color: #d4d4d5;
@@ -32441,9 +32441,9 @@ Floated Menu / Item
   border-radius: 0 0 0.28571429rem 0.28571429rem !important;
 }
 
-/* Vertical Tabular (Left) */
+/* Vertical Tabbed (Left) */
 
-.ui.vertical.tabular.menu {
+.ui.vertical.tabbed.menu {
   background: none transparent;
   border-radius: 0;
   box-shadow: none !important;
@@ -32451,7 +32451,7 @@ Floated Menu / Item
   border-right: 1px solid #d4d4d5;
 }
 
-.ui.vertical.tabular.menu .item {
+.ui.vertical.tabbed.menu .item {
   background: none;
   border-left: 1px solid transparent;
   border-bottom: 1px solid transparent;
@@ -32459,7 +32459,7 @@ Floated Menu / Item
   border-right: none;
 }
 
-.ui.vertical.tabular.menu .active.item {
+.ui.vertical.tabbed.menu .active.item {
   background: none #fff;
   color: rgba(0, 0, 0, 0.95);
   border-color: #d4d4d5;
@@ -32467,9 +32467,9 @@ Floated Menu / Item
   border-radius: 0.28571429rem 0 0 0.28571429rem !important;
 }
 
-/* Vertical Right Tabular */
+/* Vertical Right Tabbed */
 
-.ui.vertical.right.tabular.menu {
+.ui.vertical.right.tabbed.menu {
   background: none transparent;
   border-radius: 0;
   box-shadow: none !important;
@@ -32478,7 +32478,7 @@ Floated Menu / Item
   border-left: 1px solid #d4d4d5;
 }
 
-.ui.vertical.right.tabular.menu .item {
+.ui.vertical.right.tabbed.menu .item {
   background: none;
   border-right: 1px solid transparent;
   border-bottom: 1px solid transparent;
@@ -32486,7 +32486,7 @@ Floated Menu / Item
   border-left: none;
 }
 
-.ui.vertical.right.tabular.menu .active.item {
+.ui.vertical.right.tabbed.menu .active.item {
   background: none #fff;
   color: rgba(0, 0, 0, 0.95);
   border-color: #d4d4d5;
@@ -32496,7 +32496,7 @@ Floated Menu / Item
 
 /* Dropdown */
 
-.ui.tabular.menu .active.dropdown.item {
+.ui.tabbed.menu .active.dropdown.item {
   margin-bottom: 0;
   border-left: 1px solid transparent;
   border-right: 1px solid transparent;
@@ -32504,13 +32504,13 @@ Floated Menu / Item
   border-bottom: none;
 }
 
-.ui.inverted.tabular.menu .active.item,
-.ui.inverted.tabular.menu .active.item:hover {
+.ui.inverted.tabbed.menu .active.item,
+.ui.inverted.tabbed.menu .active.item:hover {
   background: none #1b1c1d;
   border-color: #555;
 }
 
-.ui.inverted.tabular.menu .item:not(.active):hover {
+.ui.inverted.tabbed.menu .item:not(.active):hover {
   color: #ffffff;
   background: transparent;
   cursor: pointer;
@@ -33686,8 +33686,8 @@ Floated Menu / Item
   justify-content: center;
 }
 
-.ui.attached[class*="equal width"].menu:not(.tabular),
-.ui.attached.item.menu:not(.tabular) {
+.ui.attached[class*="equal width"].menu:not(.tabbed),
+.ui.attached.item.menu:not(.tabbed) {
   margin: 0 -1px !important;
 }
 
@@ -34019,9 +34019,9 @@ Floated Menu / Item
   border-radius: 0 0 0 0.28571429rem;
 }
 
-/* Tabular Attached */
+/* Tabbed Attached */
 
-.ui.attached.menu:not(.tabular):not(.text) {
+.ui.attached.menu:not(.tabbed):not(.text) {
   border: 1px solid #d4d4d5;
 }
 
@@ -34029,11 +34029,11 @@ Floated Menu / Item
   border: none;
 }
 
-.ui[class*="top attached"].inverted.tabular.menu {
+.ui[class*="top attached"].inverted.tabbed.menu {
   border-bottom: 1px solid #555;
 }
 
-.ui.attached.tabular.menu {
+.ui.attached.tabbed.menu {
   margin-left: 0;
   margin-right: 0;
   width: 100%;
@@ -34052,16 +34052,16 @@ Floated Menu / Item
   display: none;
 }
 
-.ui.wrapping.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) .item:last-of-type,
-.ui.wrapping.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) .item:last-child {
+.ui.wrapping.menu:not(.secondary):not(.text):not(.tabbed):not(.borderless) .item:last-of-type,
+.ui.wrapping.menu:not(.secondary):not(.text):not(.tabbed):not(.borderless) .item:last-child {
   border-right: 1px solid rgba(34, 36, 38, 0.1);
 }
 
-.ui.wrapped.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) .item:first-child {
+.ui.wrapped.menu:not(.secondary):not(.text):not(.tabbed):not(.borderless) .item:first-child {
   border-bottom-left-radius: 0;
 }
 
-.ui.wrapped.menu:not(.secondary):not(.text):not(.tabular):not(.borderless) .item:last-child {
+.ui.wrapped.menu:not(.secondary):not(.text):not(.tabbed):not(.borderless) .item:last-child {
   border-top-right-radius: 0;
 }
 
