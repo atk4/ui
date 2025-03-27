@@ -560,7 +560,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $tabTitle = $this->unquoteStepArgument($tabTitle);
 
-        $tabMenu = $this->findElement(null, '.ui.tabular.menu');
+        $tabMenu = $this->findElement(null, '.ui.tabbed.menu');
         $link = $this->findElement($tabMenu, '//div[text()=' . $this->quoteXpath($tabTitle) . ']');
         $link->click();
     }
@@ -572,7 +572,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $title = $this->unquoteStepArgument($title);
 
-        $tab = $this->findElement(null, '.ui.tabular.menu > .item.active');
+        $tab = $this->findElement(null, '.ui.tabbed.menu > .item.active');
         if ($tab->getText() !== $title) {
             throw new \Exception('Active tab is not ' . $title);
         }
