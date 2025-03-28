@@ -315,7 +315,7 @@ $cb = \Atk4\Ui\JsCallback::addTo($label);
 $cb->set(function (\Atk4\Ui\Js\Jquery $j, int $windowWidth) {
     return 'width is ' . $windowWidth;
 }, [
-    new \Atk4\Ui\Js\JsCallbackLoadableValue('$(window).width()', static fn ($v) => (int) $v),
+    new \Atk4\Ui\Js\JsCallbackLoadableValue(new JsExpression('$(window).width()'), static fn ($v) => (int) $v),
 ]);
 
 $label->detail = $cb->getUrl();
@@ -332,7 +332,7 @@ $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 $label->on('click', function (Jquery $j, int $windowWidth) {
     return 'width is ' . $windowWidth;
 }, ['confirm' => 'sure?', 'args' => [
-    new \Atk4\Ui\Js\JsCallbackLoadableValue('$(window).width()', static fn ($v) => (int) $v),
+    new \Atk4\Ui\Js\JsCallbackLoadableValue(new JsExpression('$(window).width()'), static fn ($v) => (int) $v),
 ]]);
 ```
 
@@ -344,7 +344,7 @@ $label = \Atk4\Ui\Label::addTo($app, ['Callback test']);
 $label->on('click', function (Jquery $j, int $windowWidth) {
     return 'width is ' . $windowWidth;
 }, [
-    new \Atk4\Ui\Js\JsCallbackLoadableValue('$(window).width()', static fn ($v) => (int) $v),
+    new \Atk4\Ui\Js\JsCallbackLoadableValue(new JsExpression('$(window).width()'), static fn ($v) => (int) $v),
 ]);
 ```
 
