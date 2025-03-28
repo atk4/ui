@@ -22,6 +22,7 @@ $view->setAttr('data-bar', 'x');
 Button::addTo($app, ['Display type'])->on('click', static function (Jquery $j, $type) {
     return new JsToast('Type: ' . $type);
 }, [new JsCallbackLoadableValue(new JsExpression('typeof $([elem]).data()[\'foo-A\'] + \', \' + typeof $([elem]).data(\'foo--a\')', ['elem' => $view]), static fn ($v) => $v)]);
-Button::addTo($app, ['Call $elem.data(k, 5)'])->on('click', new JsExpression('$([elem]).data(\'foo--a\', 5)', ['elem' => $view]));
+Button::addTo($app, ['Call $elem.data(k, int)'])->on('click', new JsExpression('$([elem]).data(\'foo--a\', 0)', ['elem' => $view]));
+Button::addTo($app, ['Call $elem.data({k: bigint})'])->on('click', new JsExpression('$([elem]).data({\'foo--a\': 0n})', ['elem' => $view]));
 Button::addTo($app, ['Call $elem.removeData()'])->on('click', new JsExpression('$([elem]).removeData()', ['elem' => $view]));
 Button::addTo($app, ['Call $elem.removeData(k)'])->on('click', new JsExpression('$([elem]).removeData(\'foo--a\')', ['elem' => $view]));
