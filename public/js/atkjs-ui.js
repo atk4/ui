@@ -1266,7 +1266,7 @@ class AtkCreateModalPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_1__[
   main() {
     const options = this.settings;
     // make sure we have an object when no option is passed
-    if (external_jquery__WEBPACK_IMPORTED_MODULE_0___default().isArray(options.urlOptions)) {
+    if (Array.isArray(options.urlOptions)) {
       options.urlOptions = {};
     }
     // create modal and add it to the DOM

@@ -5,7 +5,7 @@ export default class AtkCreateModalPlugin extends AbstractPlugin {
     main() {
         const options = this.settings;
         // make sure we have an object when no option is passed
-        if ($.isArray(options.urlOptions)) {
+        if (Array.isArray(options.urlOptions)) {
             options.urlOptions = {};
         }
         // create modal and add it to the DOM
