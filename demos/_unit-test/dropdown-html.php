@@ -17,7 +17,7 @@ $makeTestStringFx = static fn ($v) => $v . ' <b>"\' &lt;&quot;&amp;';
 $htmlValues = [
     $makeTestStringFx('d') => $makeTestStringFx('dTitle'),
     $makeTestStringFx('u') => $makeTestStringFx('uTitle'),
-    '[0 ]' => '[ ""]',
+    '[0 ]' => '[ ""]', // https://github.com/atk4/ui/pull/2274
 ];
 
 $form = Form::addTo($app);
