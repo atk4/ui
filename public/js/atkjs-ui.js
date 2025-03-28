@@ -49497,6 +49497,81 @@ const fomanticUiServicesMap = {
 
 /***/ }),
 
+/***/ "./src/setupJqueryPatchData.js":
+/*!*************************************!*\
+  !*** ./src/setupJqueryPatchData.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "./node_modules/core-js/modules/es.iterator.constructor.js");
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.iterator.filter.js */ "./node_modules/core-js/modules/es.iterator.filter.js");
+/* harmony import */ var core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_filter_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+
+// enforce all $elem.data() initialized from HTML attributes to be of type string
+// https://github.com/jquery/jquery/blob/3.7.1/src/data.js#L24-L47
+
+// https://github.com/jquery/jquery/blob/3.7.1/src/data/Data.js#L11
+// https://github.com/jquery/jquery/blob/3.7.1/src/data/var/dataUser.js#L6
+const jqueryDataExpandoName = function () {
+  const dummyElem = document.createElement('div');
+  const keysBefore = Object.keys(dummyElem);
+  external_jquery__WEBPACK_IMPORTED_MODULE_2___default()(dummyElem).data('x', true);
+  const keysAfter = Object.keys(dummyElem);
+  const keysDiff = keysAfter.filter(v => !keysBefore.includes(v));
+  if (keysDiff.length !== 1 || !/^jQuery\d+$/.test(keysDiff[0])) {
+    throw new Error('Failed to discover jQuery "data expando name"');
+  }
+  return keysDiff[0];
+}();
+
+// https://github.com/jquery/jquery/blob/3.7.1/src/data/Data.js#L58
+// https://github.com/jquery/jquery/blob/3.7.1/src/core/camelCase.js
+function jqueryCamelCase(value) {
+  return value.replace(/^-ms-/, 'ms-').replaceAll(/-[a-z]/g, v => v.slice(1).toUpperCase());
+}
+function initAttributeData(elem, key) {
+  if (key !== undefined && elem[jqueryDataExpandoName] === undefined) {
+    key = undefined;
+  }
+  if (elem.nodeType === 1 && (elem[jqueryDataExpandoName] === undefined || key !== undefined)) {
+    for (const attribute of elem.attributes) {
+      if (attribute.name.startsWith('data-')) {
+        const kCamel = jqueryCamelCase(attribute.name.slice(5));
+        if (key === undefined || kCamel === jqueryCamelCase(key) && external_jquery__WEBPACK_IMPORTED_MODULE_2___default().data(elem, kCamel) === undefined) {
+          external_jquery__WEBPACK_IMPORTED_MODULE_2___default().data(elem, kCamel, attribute.value);
+        }
+      }
+    }
+  }
+}
+const jqueryFnDataFxOrig = (external_jquery__WEBPACK_IMPORTED_MODULE_2___default().fn).data;
+(external_jquery__WEBPACK_IMPORTED_MODULE_2___default().fn).data = function (key, value) {
+  this.each(function () {
+    if (key === undefined || typeof key === 'string') {
+      initAttributeData(this, key);
+    } else {
+      for (const k of Object.keys(key)) {
+        initAttributeData(this, k);
+      }
+    }
+  });
+  return jqueryFnDataFxOrig.apply(this, arguments); // eslint-disable-line unicorn/prefer-reflect-apply, prefer-rest-params
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (null);
+
+/***/ }),
+
 /***/ "./src/setupJqueryPlugins.js":
 /*!***********************************!*\
   !*** ./src/setupJqueryPlugins.js ***!
@@ -50029,12 +50104,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_stable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/stable */ "./node_modules/core-js/stable/index.js");
 /* harmony import */ var core_js_stable__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_stable__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _setupAtk__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./setupAtk */ "./src/setupAtk.js");
-/* harmony import */ var _setupUtils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./setupUtils */ "./src/setupUtils.js");
-/* harmony import */ var _setupJqueryPlugins__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./setupJqueryPlugins */ "./src/setupJqueryPlugins.js");
-/* harmony import */ var _setupServices__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./setupServices */ "./src/setupServices.js");
-/* harmony import */ var _setupFomanticUi__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./setupFomanticUi */ "./src/setupFomanticUi.js");
+/* harmony import */ var _setupJqueryPatchData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./setupJqueryPatchData */ "./src/setupJqueryPatchData.js");
+/* harmony import */ var _setupUtils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./setupUtils */ "./src/setupUtils.js");
+/* harmony import */ var _setupJqueryPlugins__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./setupJqueryPlugins */ "./src/setupJqueryPlugins.js");
+/* harmony import */ var _setupServices__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./setupServices */ "./src/setupServices.js");
+/* harmony import */ var _setupFomanticUi__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./setupFomanticUi */ "./src/setupFomanticUi.js");
 
  // must be the first non-vendor import
+
 
 
 
