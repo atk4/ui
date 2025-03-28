@@ -49538,9 +49538,12 @@ const jqueryDataExpandoName = function () {
 // https://github.com/jquery/jquery/blob/3.7.1/src/data/Data.js#L58
 // https://github.com/jquery/jquery/blob/3.7.1/src/core/camelCase.js
 function jqueryCamelCase(value) {
-  return value.replace(/^-ms-/, 'ms-').replace(/-[a-z]/g, v => v.slice(1).toUpperCase());
+  return value.replace(/^-ms-/, 'ms-').replaceAll(/-[a-z]/g, v => v.slice(1).toUpperCase());
 }
 function initAttributeData(elem, key) {
+  if (key !== undefined && elem[jqueryDataExpandoName] === undefined) {
+    key = undefined;
+  }
   if (elem.nodeType === 1 && (elem[jqueryDataExpandoName] === undefined || key !== undefined)) {
     for (const attribute of elem.attributes) {
       if (attribute.name.startsWith('data-')) {

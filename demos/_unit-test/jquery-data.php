@@ -17,11 +17,11 @@ require_once __DIR__ . '/../init-app.php';
 
 $view = View::addTo($app);
 $view->setAttr('data-foo--a', 'false');
-$view->setAttr('data-bar', 'x');
+$view->setAttr('data-bar', 'null');
 
-Button::addTo($app, ['Display type'])->on('click', static function (Jquery $j, $type) {
-    return new JsToast('Type: ' . $type);
-}, [new JsCallbackLoadableValue(new JsExpression('typeof $([elem]).data()[\'foo-A\'] + \', \' + typeof $([elem]).data(\'foo--a\')', ['elem' => $view]), static fn ($v) => $v)]);
+Button::addTo($app, ['Display types'])->on('click', static function (Jquery $j, $type) {
+    return new JsToast('Types: ' . $type);
+}, [new JsCallbackLoadableValue(new JsExpression('[\'foo-A\', \'bar\'].map((k) => typeof $([elem]).data()[ k] + \'/\' + typeof $([elem]).data(k)).join(\', \')', ['elem' => $view]), static fn ($v) => $v)]);
 Button::addTo($app, ['Call $elem.data(k, int)'])->on('click', new JsExpression('$([elem]).data(\'foo--a\', 0)', ['elem' => $view]));
 Button::addTo($app, ['Call $elem.data({k: bigint})'])->on('click', new JsExpression('$([elem]).data({\'foo--a\': 0n})', ['elem' => $view]));
 Button::addTo($app, ['Call $elem.removeData()'])->on('click', new JsExpression('$([elem]).removeData()', ['elem' => $view]));
