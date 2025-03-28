@@ -83,7 +83,7 @@ class VueService {
             },
         });
 
-        app.component('FlatpickrPicker', asyncComponentFactory('FlatpickrPicker', () => import('vue-flatpickr-component'))); // eslint-disable-line import/no-unresolved -- https://github.com/ankurk91/vue-flatpickr-component/issues/295
+        app.component('FlatpickrPicker', asyncComponentFactory('FlatpickrPicker', () => import('vue-flatpickr-component')));
 
         app.component('AtkInlineEdit', asyncComponentFactory('AtkInlineEdit', () => import(/* webpackChunkName: 'atk-vue-inline-edit' */'../VueComponent/InlineEditComponent')));
         app.component('AtkItemSearch', asyncComponentFactory('AtkItemSearch', () => import(/* webpackChunkName: 'atk-vue-item-search' */'../VueComponent/ItemSearchComponent')));
