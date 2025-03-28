@@ -17,6 +17,7 @@ $makeTestStringFx = static fn ($v) => $v . ' <b>"\' &lt;&quot;&amp;';
 $htmlValues = [
     $makeTestStringFx('d') => $makeTestStringFx('dTitle'),
     $makeTestStringFx('u') => $makeTestStringFx('uTitle'),
+    '[0 ]' => '[ ""]',
 ];
 
 $form = Form::addTo($app);
@@ -128,6 +129,7 @@ $form->onSubmit(static function (Form $form) use ($app, $initData, $makeTestStri
     $view->text->addParagraph('match u add: ' . ($form->entity->get() === $makeExpectedDataFx(static fn ($k) => (str_contains($k, 'multi') ? $makeTestStringFx('d') . ',' : '') . $makeTestStringFx('u'))));
     $view->text->addParagraph('match empty: ' . ($form->entity->get() === $makeExpectedDataFx(static fn () => '')));
     $view->text->addParagraph('match u only: ' . ($form->entity->get() === $makeExpectedDataFx(static fn () => $makeTestStringFx('u'))));
+    $view->text->addParagraph('match like-arr add: ' . ($form->entity->get() === $makeExpectedDataFx(static fn ($k) => (str_contains($k, 'multi') ? $makeTestStringFx('u') . ',' : '') . '[0 ]')));
 
     return $view;
 });

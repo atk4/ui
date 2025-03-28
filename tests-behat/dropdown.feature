@@ -68,6 +68,19 @@ Feature: Dropdown
     When I select "uTitle <b>\"' &lt;&quot;&amp;" in lookup "lookup_multi_json"
     When I press button "Save"
     Then Modal is open with text "match u only: 1"
+    When I click close modal
+    When I select "[ \"\"]" in lookup "dropdown_single"
+    When I select "[ \"\"]" in lookup "dropdown_single2"
+    When I select "[ \"\"]" in lookup "dropdown_multi"
+    When I select "[ \"\"]" in lookup "dropdown_multi2"
+    When I select "[ \"\"]" in lookup "dropdown_multi_json"
+    When I select "[ \"\"]" in lookup "lookup_single"
+    When I select "[ \"\"]" in lookup "lookup_single2"
+    When I select "[ \"\"]" in lookup "lookup_multi"
+    When I select "[ \"\"]" in lookup "lookup_multi2"
+    When I select "[ \"\"]" in lookup "lookup_multi_json"
+    When I press button "Save"
+    Then Modal is open with text "match like-arr add: 1"
 
   Scenario: dropdown menu
     Given I am on "basic/menu.php"
