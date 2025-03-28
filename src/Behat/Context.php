@@ -627,8 +627,7 @@ class Context extends RawMinkContext implements BehatContext
         }
 
         // open dropdown and wait till fully opened
-        $this->findElement($lookupElem, 'i.dropdown.icon')->click(); // TODO remove once https://github.com/fomantic/Fomantic-UI/issues/3204 is fixed
-        $this->getSession()->executeScript('$(arguments[0]).dropdown(\'show\')', [$lookupElem]);
+        $this->findElement($lookupElem, 'i.dropdown.icon')->click();
         $this->jqueryWait('$(arguments[0]).hasClass(\'visible\')', [$lookupElem]);
 
         // select value
