@@ -129,7 +129,7 @@ $form->onSubmit(static function (Form $form) use ($app, $initData, $makeTestStri
     $view->text->addParagraph('match u add: ' . ($form->entity->get() === $makeExpectedDataFx(static fn ($k) => (str_contains($k, 'multi') ? $makeTestStringFx('d') . ',' : '') . $makeTestStringFx('u'))));
     $view->text->addParagraph('match empty: ' . ($form->entity->get() === $makeExpectedDataFx(static fn () => '')));
     $view->text->addParagraph('match u only: ' . ($form->entity->get() === $makeExpectedDataFx(static fn () => $makeTestStringFx('u'))));
-    $view->text->addParagraph('match like-arr add: ' . ($form->entity->get() === $makeExpectedDataFx(static fn ($k) => (str_contains($k, 'multi') ? $makeTestStringFx('u') . ',' : '') . '[0 ]')));
+    $view->text->addParagraph('match json-like add: ' . ($form->entity->get() === $makeExpectedDataFx(static fn ($k) => (str_contains($k, 'multi') ? $makeTestStringFx('u') . ',' : '') . '[0 ]')));
 
     return $view;
 });

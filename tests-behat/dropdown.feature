@@ -80,7 +80,7 @@ Feature: Dropdown
     When I select "[ \"\"]" in lookup "lookup_multi2"
     When I select "[ \"\"]" in lookup "lookup_multi_json"
     When I press button "Save"
-    Then Modal is open with text "match like-arr add: 1"
+    Then Modal is open with text "match json-like add: 1"
 
   Scenario: dropdown menu
     Given I am on "basic/menu.php"
