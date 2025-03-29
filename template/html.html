@@ -7,6 +7,38 @@
     <script>'use strict'; {$InitJsBundle}</script>
     {$Head}
     <style>{$style}</style>
+    <style>
+    
+    
+    
+.modals.dimmer {
+  scrollbar-gutter: stable;
+}
+
+.modals.dimmer .ui.modal:not([class*="overlay fullscreen"])::after {
+  content: "\00A0";
+  position: absolute;
+  height: 0 !important;
+}
+
+.modals.dimmer .ui.scrolling.modal:not([class*="overlay fullscreen"])::after {
+  height: 2rem !important;
+}
+
+.dimmable.dimmed>.modals.dimmer {
+  overflow: auto;
+}
+
+
+.ui.modal>.close:focus,
+.ui.modal>.close:hover {
+  opacity: 1;
+  outline: none;
+}
+
+    
+    
+    </style>
   </head>
   <body class="{$class}">{$Content}
     <div class="atk-side-panels"></div>
