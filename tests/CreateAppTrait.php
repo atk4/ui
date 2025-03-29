@@ -39,7 +39,7 @@ trait CreateAppTrait
         return $request->withQueryParams(array_merge(
             $request->getQueryParams(),
             [
-                Callback::URL_QUERY_TRIGGER_PREFIX . $cb->getUrlTrigger() => $triggerValue,
+                $cb->getUrlTrigger() => $triggerValue,
                 Callback::URL_QUERY_TARGET => $cb->getUrlTrigger(),
             ]
         ));

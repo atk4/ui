@@ -384,7 +384,7 @@ class DemosTest extends TestCase
         }
 
         $response = $this->getResponseFromRequest(
-            'interactive/wizard.php?demo_wizard=1&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'w_form_submit=ajax&' . Callback::URL_QUERY_TARGET . '=w_form_submit',
+            'interactive/wizard.php?demo_wizard=1&w_form_submit=ajax&' . Callback::URL_QUERY_TARGET . '=w_form_submit',
             ['form_params' => [
                 'dsn' => 'mysql://root:root@db-host.example.com/atk4',
             ]]
@@ -437,10 +437,10 @@ class DemosTest extends TestCase
         // simple reload
         yield ['_unit-test/reload.php?__atk_reload=reload'];
         // loader callback reload
-        yield ['_unit-test/reload.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'c_reload=ajax&' . Callback::URL_QUERY_TARGET . '=c_reload'];
+        yield ['_unit-test/reload.php?c_reload=ajax&' . Callback::URL_QUERY_TARGET . '=c_reload'];
         // test catch exceptions
-        yield ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m_cb&__atk_json=1', 'Test throw exception!'];
-        yield ['_unit-test/exception.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'm2_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m2_cb&__atk_json=1', 'Test trigger error!'];
+        yield ['_unit-test/exception.php?m_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m_cb&__atk_json=1', 'Test throw exception!'];
+        yield ['_unit-test/exception.php?m2_cb=ajax&' . Callback::URL_QUERY_TARGET . '=m2_cb&__atk_json=1', 'Test trigger error!'];
     }
 
     /**
@@ -468,10 +468,10 @@ class DemosTest extends TestCase
      */
     public static function provideDemoSseResponseCases(): iterable
     {
-        yield ['_unit-test/sse.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
-        yield ['_unit-test/console.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
-        yield ['_unit-test/console_run.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
-        yield ['_unit-test/console_exec.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
+        yield ['_unit-test/sse.php?see_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
+        yield ['_unit-test/console.php?console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
+        yield ['_unit-test/console_run.php?console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
+        yield ['_unit-test/console_exec.php?console_test=ajax&' . Callback::URL_QUERY_TARGET . '=1'];
     }
 
     /**
@@ -493,7 +493,7 @@ class DemosTest extends TestCase
     public static function provideDemoJsonResponsePostCases(): iterable
     {
         yield [
-            '_unit-test/post.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_submit=ajax&' . Callback::URL_QUERY_TARGET . '=test_submit',
+            '_unit-test/post.php?test_submit=ajax&' . Callback::URL_QUERY_TARGET . '=test_submit',
             ['f1' => 'v1'],
         ];
     }
@@ -529,28 +529,28 @@ class DemosTest extends TestCase
     public static function provideDemoCallbackErrorCases(): iterable
     {
         yield [
-            '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
+            '_unit-test/callback-nested.php?err_sub_loader&trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
             'Callback requested, but never reached. You may be missing some arguments in request URL.',
         ];
         yield [
-            '_unit-test/callback-nested.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
+            '_unit-test/callback-nested.php?trigger_main_loader=callback&trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=non_existing_target',
             'Callback requested, but never reached. You may be missing some arguments in request URL.',
         ];
         yield [
-            '_unit-test/callback-nested.php?err_main_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_main_loader',
+            '_unit-test/callback-nested.php?err_main_loader&trigger_main_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_main_loader',
             'Exception from Main Loader',
         ];
         yield [
-            '_unit-test/callback-nested.php?err_sub_loader&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
+            '_unit-test/callback-nested.php?err_sub_loader&trigger_main_loader=callback&trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
             'Exception from Sub Loader',
         ];
         yield [
-            '_unit-test/callback-nested.php?err_sub_loader2&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_main_loader=callback&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
+            '_unit-test/callback-nested.php?err_sub_loader2&trigger_main_loader=callback&trigger_sub_loader=callback&' . Callback::URL_QUERY_TARGET . '=trigger_sub_loader',
             'Exception II from Sub Loader',
         ];
 
         yield [
-            '_unit-test/post.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'test_submit=ajax&' . Callback::URL_QUERY_TARGET . '=test_submit',
+            '_unit-test/post.php?test_submit=ajax&' . Callback::URL_QUERY_TARGET . '=test_submit',
             'Form POST param does not exist',
             ['form_params' => []],
         ];

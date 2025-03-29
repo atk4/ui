@@ -24,8 +24,10 @@ use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
  */
 class Callback extends AbstractView
 {
-    public const URL_QUERY_TRIGGER_PREFIX = '__atk_cb_';
     public const URL_QUERY_TARGET = '__atk_cbtarget';
+
+    /** @var array Store currently running callback arguments. */
+    protected static $runningCallbackArgs = [];
 
     /** @var string Specify a custom GET trigger. */
     protected $urlTrigger;
@@ -52,13 +54,16 @@ class Callback extends AbstractView
     public function setUrlTrigger(?string $trigger = null): void
     {
         $this->urlTrigger = $trigger ?? $this->name;
-
-        $this->getOwner()->stickyGet(self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger);
     }
 
     public function getUrlTrigger(): string
     {
         return $this->urlTrigger;
+    }
+
+    public static function getRunningCallbackArgs(): array
+    {
+        return self::$runningCallbackArgs;
     }
 
     /**
@@ -74,6 +79,8 @@ class Callback extends AbstractView
     public function set($fx = null, $fxArgs = null)
     {
         if ($this->isTriggered() && $this->canTrigger()) {
+            self::$runningCallbackArgs[$this->urlTrigger] = $this->getTriggeredValue();
+
             try {
                 return $fx(...($fxArgs ?? []));
             } catch (\Exception $e) {
@@ -101,12 +108,12 @@ class Callback extends AbstractView
      */
     public function isTriggered(): bool
     {
-        return $this->getApp()->hasRequestQueryParam(self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger);
+        return $this->getApp()->hasRequestQueryParam($this->urlTrigger);
     }
 
     public function getTriggeredValue(): string
     {
-        return $this->getApp()->tryGetRequestQueryParam(self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger) ?? '';
+        return $this->getApp()->tryGetRequestQueryParam($this->urlTrigger) ?? '';
     }
 
     /**
@@ -151,9 +158,9 @@ class Callback extends AbstractView
      */
     private function getUrlArguments(?string $value = null): array
     {
-        return [
+        return array_merge(self::getRunningCallbackArgs(), [
             self::URL_QUERY_TARGET => $this->urlTrigger,
-            self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger => $value ?? ($this->isTriggered() ? $this->getTriggeredValue() : ''),
-        ];
+            $this->urlTrigger => $value ?? ($this->isTriggered() ? $this->getTriggeredValue() : ''),
+        ]);
     }
 }

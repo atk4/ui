@@ -103,8 +103,8 @@ class CallbackTest extends TestCase
             return $request;
         });
 
-        $expectedUrlCbApp = '/index.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=callback&' . Callback::URL_QUERY_TARGET . '=aa';
-        $expectedUrlCb = '/index.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=1&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'bb=callback&' . Callback::URL_QUERY_TARGET . '=bb';
+        $expectedUrlCbApp = '/index.php?aa=callback&' . Callback::URL_QUERY_TARGET . '=aa';
+        $expectedUrlCb = '/index.php?aa=1&bb=callback&' . Callback::URL_QUERY_TARGET . '=bb';
         self::assertSame($expectedUrlCbApp, $cbApp->getUrl());
         self::assertSame($expectedUrlCb, $cb->getUrl());
 
@@ -117,7 +117,7 @@ class CallbackTest extends TestCase
         $var = null;
         $cb->set(static function (int $x) use (&$var, $v1) {
             $v3 = View::addTo($v1);
-            self::assertSame('test.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=1&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'bb=1', $v3->url(['test']));
+            self::assertSame('test.php?aa=1&bb=1', $v3->url(['test']));
             $var = $x;
         }, [34]);
 
@@ -125,7 +125,7 @@ class CallbackTest extends TestCase
         $v2->stickyGet('g1', '1');
 
         self::assertSame(34, $var);
-        self::assertSame('test.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . 'aa=1&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'bb=1&g1=1', $v2->url(['test']));
+        self::assertSame('test.php?aa=1&bb=1&g1=1', $v2->url(['test']));
     }
 
     public function testCallbackNotFiring(): void
