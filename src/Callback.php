@@ -99,7 +99,7 @@ class Callback extends AbstractView
      */
     public function isTriggered(): bool
     {
-        return $this->getApp()->hasRequestQueryParam(self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger);
+        return $this->getApp()->hasRequestQueryParam(self::URL_QUERY_TRIGGER_PREFIX . $this->urlTrigger) || $this->getApp()->hasRequestQueryParam('__atk_reload');
     }
 
     public function getTriggeredValue(): string
