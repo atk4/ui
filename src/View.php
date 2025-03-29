@@ -432,7 +432,7 @@ class View extends AbstractView
      */
     public function url($page = []): string
     {
-        return $this->getApp()->url($page, $this->_getStickyArgs());
+        return $this->getApp()->url($page, array_merge($this->getRunningCallbackArgs(false, is_array($page) ? $page : []), $this->getStickyArgs()));
     }
 
     /**
@@ -442,7 +442,29 @@ class View extends AbstractView
      */
     public function jsUrl($page = []): string
     {
-        return $this->getApp()->jsUrl($page, $this->_getStickyArgs());
+        return $this->getApp()->jsUrl($page, array_merge($this->getRunningCallbackArgs(false, is_array($page) ? $page : []), $this->getStickyArgs()));
+    }
+
+    protected function getRunningCallbackArgs(bool $isTerminated, array $page): array
+    {
+        $args = [];
+        foreach ($this->elements as $v) {
+            if ($v instanceof Callback) { // @phpstan-ignore-line
+                if (($page[Callback::URL_QUERY_TARGET] ?? null) === $v->getUrlTrigger()) {
+                    $isTerminated = true;
+                }
+
+                if ($isTerminated) {
+                    $args[Callback::URL_QUERY_TRIGGER_PREFIX . $v->getUrlTrigger()] = $v->getTriggeredValue();
+                }
+            }
+        }
+
+        if ($this->issetOwner() && $this->getOwner() instanceof self) {
+            $args = array_merge($this->getOwner()->getRunningCallbackArgs($isTerminated, $page), $args);
+        }
+
+        return $args;
     }
 
     /**
@@ -450,10 +472,10 @@ class View extends AbstractView
      *
      * @return array<string, string|null>
      */
-    protected function _getStickyArgs(): array
+    protected function getStickyArgs(): array
     {
-        if ($this->issetOwner()) {
-            $stickyArgs = array_merge($this->getOwner()->_getStickyArgs(), $this->stickyArgs);
+        if ($this->issetOwner() && $this->getOwner() instanceof self) {
+            $stickyArgs = array_merge($this->getOwner()->getStickyArgs(), $this->stickyArgs);
         } else {
             $stickyArgs = $this->stickyArgs;
         }
