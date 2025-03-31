@@ -397,6 +397,11 @@ parameters:
             count: 1
         -
             path: 'src/CardDeck.php'
+            identifier: property.defaultValue
+            message: '~^Property Atk4\\Ui\\CardDeck::\$paginator \(Atk4\\Ui\\Paginator\|false\|null\) does not accept default value of type array\{''Atk4\\\\Ui\\\\Paginator''\}\.$~'
+            count: 1
+        -
+            path: 'src/CardDeck.php'
             identifier: assign.propertyType
             message: '~^Property Atk4\\Ui\\CardDeck::\$container \(Atk4\\Ui\\View\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
             count: 1
