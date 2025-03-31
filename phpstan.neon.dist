@@ -31,23 +31,6 @@ parameters:
             message: '~^Property Atk4\\Data\\Model\\UserAction::\$(callback|enabled) .*Closure<.+ does not accept .*Closure\(.+\.$~'
             count: 2
 
-        # TODO template return type of Form::addControl() method
-        -
-            path: 'demos/_includes/FlyersForm.php'
-            identifier: method.notFound
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::setModel\(\)\.$~'
-            count: 1
-        -
-            path: 'src/UserAction/ArgumentFormExecutor.php'
-            identifier: method.notFound
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::setModel\(\)\.$~'
-            count: 1
-        -
-            path: 'src/UserAction/StepExecutorTrait.php'
-            identifier: method.notFound
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::setModel\(\)\.$~'
-            count: 3
-
         # remove once https://github.com/phpstan/phpstan/issues/12792 is fixed
         -
             path: 'src/*.php'
@@ -78,16 +61,6 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\View::addFields\(\)\.$~'
             count: 1
         -
-            path: 'demos/form-control/calendar.php'
-            identifier: method.notFound
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::addAction\(\)\.$~'
-            count: 3
-        -
-            path: 'demos/form-control/calendar.php'
-            identifier: method.notFound
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::jsFlatpickr\(\)\.$~'
-            count: 3
-        -
             path: 'demos/form-control/input2.php'
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onDelete\(\)\.$~'
@@ -102,36 +75,6 @@ parameters:
             identifier: method.notFound
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Layout::addColumn\(\)\.$~'
             count: 2
-        -
-            path: 'demos/form-control/upload.php'
-            identifier: method.notFound
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onDelete\(\)\.$~'
-            count: 2
-        -
-            path: 'demos/form-control/tree-item-selector.php'
-            identifier: method.notFound
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onItem\(\)\.$~'
-            count: 2
-        -
-            path: 'demos/form-control/upload.php'
-            identifier: method.notFound
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::clearThumbnail\(\)\.$~'
-            count: 1
-        -
-            path: 'demos/form-control/upload.php'
-            identifier: method.notFound
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::onUpload\(\)\.$~'
-            count: 2
-        -
-            path: 'demos/form-control/upload.php'
-            identifier: method.notFound
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::setThumbnailSrc\(\)\.$~'
-            count: 1
-        -
-            path: 'demos/form-control/upload.php'
-            identifier: method.notFound
-            message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::setFileId\(\)\.$~'
-            count: 1
         -
             path: 'demos/form/form-section-accordion.php'
             identifier: method.notFound
@@ -216,16 +159,6 @@ parameters:
             path: 'demos/interactive/wizard.php'
             identifier: property.notFound
             message: '~^Access to an undefined property Atk4\\Ui\\Form\\Control::\$placeholder\.$~'
-            count: 1
-        -
-            path: 'src/CardDeck.php'
-            identifier: property.notFound
-            message: '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$reload\.$~'
-            count: 1
-        -
-            path: 'src/CardDeck.php'
-            identifier: property.notFound
-            message: '~^Access to an undefined property Atk4\\Ui\\AbstractView::\$queryArg\.$~'
             count: 1
         -
             path: 'src/CardDeck.php'
@@ -337,11 +270,6 @@ parameters:
             identifier: property.notFound
             message: '~^Access to an undefined property Atk4\\Ui\\Tests\\SessionAbstractMock::\$name\.$~'
             count: 4
-        -
-            path: 'src/Table/Column.php'
-            identifier: method.notFound
-            message: '~^Call to an undefined method Atk4\\Ui\\AbstractView::setHoverable\(\)\.$~'
-            count: 1
         -
             path: 'src/Table/Column/Checkbox.php'
             identifier: method.notFound
@@ -458,16 +386,6 @@ parameters:
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 3
         -
-            path: 'src/Card.php'
-            identifier: return.type
-            message: '~^Method Atk4\\Ui\\Card::addButton\(\) should return Atk4\\Ui\\View\ but returns Atk4\\Ui\\AbstractView\.$~'
-            count: 1
-        -
-            path: 'src/CardDeck.php'
-            identifier: property.defaultValue
-            message: '~^Property Atk4\\Ui\\CardDeck::\$container \(Atk4\\Ui\\View\|null\) does not accept default value of type array<int\|string, string>\.$~'
-            count: 1
-        -
             path: 'src/CardDeck.php'
             identifier: property.defaultValue
             message: '~^Property Atk4\\Ui\\CardDeck::\$sharedExecutorsContainer \(Atk4\\Ui\\UserAction\\SharedExecutorsContainer\|null\) does not accept default value of type array<int, string>\.$~'
@@ -479,28 +397,8 @@ parameters:
             count: 1
         -
             path: 'src/CardDeck.php'
-            identifier: property.defaultValue
-            message: '~^Property Atk4\\Ui\\CardDeck::\$paginator \(Atk4\\Ui\\Paginator\|false\|null\) does not accept default value of type array\{''Atk4\\\\Ui\\\\Paginator''\}\.$~'
-            count: 1
-        -
-            path: 'src/CardDeck.php'
-            identifier: assign.propertyType
-            message: '~^Property Atk4\\Ui\\CardDeck::\$sharedExecutorsContainer \(Atk4\\Ui\\UserAction\\SharedExecutorsContainer\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
-            count: 1
-        -
-            path: 'src/CardDeck.php'
             identifier: assign.propertyType
             message: '~^Property Atk4\\Ui\\CardDeck::\$container \(Atk4\\Ui\\View\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
-            count: 1
-        -
-            path: 'src/CardDeck.php'
-            identifier: assign.propertyType
-            message: '~^Property Atk4\\Ui\\CardDeck::\$menu \(array<mixed>\|Atk4\\Ui\\Menu\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
-            count: 1
-        -
-            path: 'src/CardDeck.php'
-            identifier: assign.propertyType
-            message: '~^Property Atk4\\Ui\\CardDeck::\$search \(array<mixed>\|Atk4\\Ui\\VueComponent\\ItemSearch\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
             count: 1
         -
             path: 'src/CardDeck.php'
@@ -508,24 +406,9 @@ parameters:
             message: '~^Property Atk4\\Ui\\CardDeck::\$paginator \(Atk4\\Ui\\Paginator\|false\|null\) does not accept Atk4\\Ui\\AbstractView\.$~'
             count: 1
         -
-            path: 'src/Form/Control/Input.php'
-            identifier: return.type
-            message: '~^Method Atk4\\Ui\\Form\\Control\\Input::prepareRenderButton\(\) should return Atk4\\Ui\\Button but returns \(Atk4\\Ui\\AbstractView&Atk4\\Ui\\UserAction\\ExecutorInterface\)\|Atk4\\Ui\\View\.$~'
-            count: 1
-        -
-            path: 'src/Form/AbstractLayout.php'
-            identifier: return.type
-            message: '~^Method Atk4\\Ui\\Form\\AbstractLayout::_addControl\(\) should return Atk4\\Ui\\Form\\Control but returns Atk4\\Ui\\View\.$~'
-            count: 1
-        -
             path: 'src/Form/Layout.php'
             identifier: return.type
             message: '~^Method Atk4\\Ui\\Form\\Layout::addButton\(\) should return Atk4\\Ui\\Button but returns Atk4\\Ui\\AbstractView\.$~'
-            count: 1
-        -
-            path: 'src/Form/Layout.php'
-            identifier: return.type
-            message: '~^Method Atk4\\Ui\\Form\\Layout::_addControl\(\) should return Atk4\\Ui\\Form\\Control but returns Atk4\\Ui\\View\.$~'
             count: 1
         -
             path: 'src/Form/Layout.php'
@@ -565,32 +448,12 @@ parameters:
         -
             path: 'src/Grid.php'
             identifier: assign.propertyType
-            message: '~^Property Atk4\\Ui\\Grid::\$menu \(array<mixed>\|Atk4\\Ui\\Menu\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
-            count: 1
-        -
-            path: 'src/Grid.php'
-            identifier: assign.propertyType
-            message: '~^Property Atk4\\Ui\\Grid::\$paginator \(Atk4\\Ui\\Paginator\|false\) does not accept Atk4\\Ui\\AbstractView\.$~'
-            count: 1
-        -
-            path: 'src/Grid.php'
-            identifier: assign.propertyType
             message: '~^Property Atk4\\Ui\\Grid::\$paginator \(Atk4\\Ui\\Paginator\|false\) does not accept null\.$~'
             count: 1
         -
             path: 'src/Grid.php'
             identifier: assign.propertyType
             message: '~^Property Atk4\\Ui\\Grid::\$actionButtons \(Atk4\\Ui\\Table\\Column\\ActionButtons\|null\) does not accept Atk4\\Ui\\Table\\Column\.$~'
-            count: 1
-        -
-            path: 'src/Grid.php'
-            identifier: assign.propertyType
-            message: '~^Property Atk4\\Ui\\Grid::\$selection \(Atk4\\Ui\\Table\\Column\\Checkbox\) does not accept Atk4\\Ui\\Table\\Column\.$~'
-            count: 1
-        -
-            path: 'src/Grid.php'
-            identifier: return.type
-            message: '~^Method Atk4\\Ui\\Grid::addSelection\(\) should return Atk4\\Ui\\Table\\Column\\Checkbox but returns Atk4\\Ui\\Table\\Column\.$~'
             count: 1
         -
             path: 'src/Header.php'
@@ -637,11 +500,6 @@ parameters:
             identifier: assign.propertyType
             message: '~^Property Atk4\\Ui\\Form::\$buttonSave \(array<mixed>\|Atk4\\Ui\\Button\|false\) does not accept null\.$~'
             count: 1
-        -
-            path: 'src/Wizard.php'
-            identifier: assign.propertyType
-            message: '~^Property Atk4\\Ui\\Wizard::\$steps \(list<Atk4\\Ui\\WizardStep>\) does not accept non-empty-list<Atk4\\Ui\\AbstractView>\.$~'
-            count: 1
 
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 5
@@ -669,14 +527,4 @@ parameters:
             path: 'src/Panel/Right.php'
             identifier: argument.type
             message: '~^Parameter #1 \$object of method Atk4\\Ui\\App::add\(\) expects Atk4\\Ui\\AbstractView, array<mixed> given\.$~'
-            count: 1
-        -
-            path: 'src/Popup.php'
-            identifier: argument.type
-            message: '~^Parameter #1 of closure expects Atk4\\Ui\\View, Atk4\\Ui\\AbstractView given\.$~'
-            count: 1
-        -
-            path: 'src/Popup.php'
-            identifier: argument.type
-            message: '~^Parameter #1 \$view of method Atk4\\Ui\\Callback::terminateJsonIfCanTerminate\(\) expects Atk4\\Ui\\View, Atk4\\Ui\\AbstractView given\.$~'
             count: 1
