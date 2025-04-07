@@ -383,9 +383,15 @@ class Lookup extends Input
             $idField = $this->idField
                 ?? $this->model->idField;
 
-            $entity = $this->model->loadBy($idField, $this->entityField->get());
-
-            $settings['values'] = [array_merge($this->renderRow($entity), ['selected' => true])];
+            foreach ($this->model->createIteratorBy(
+                $idField,
+                $this->multiple && $this->entityField->getField()->type === 'json' && is_array($this->entityField->get())
+                    ? 'in'
+                    : '=',
+                $this->entityField->get()
+            ) as $entity) {
+                $settings['values'][] = array_merge($this->renderRow($entity), ['selected' => true]);
+            }
         }
 
         $jsChain->dropdown($settings);
