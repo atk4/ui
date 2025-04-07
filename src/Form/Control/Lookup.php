@@ -385,10 +385,15 @@ class Lookup extends Input
 
             foreach ($this->model->createIteratorBy(
                 $idField,
-                $this->multiple && $this->entityField->getField()->type === 'json' && is_array($this->entityField->get())
+                $this->multiple
                     ? 'in'
                     : '=',
-                $this->entityField->get()
+                $this->multiple && !($this->entityField->getField()->type === 'json' && is_array($this->entityField->get()))
+                    ? array_map(
+                        fn ($v) => $this->model->getPersistence()->typecastLoadField($this->entityField->getField(), $v),
+                        explode(',', $this->model->getPersistence()->typecastSaveField($this->entityField->getField(), $this->entityField->get()))
+                    )
+                    : $this->entityField->get()
             ) as $entity) {
                 $settings['values'][] = array_merge($this->renderRow($entity), ['selected' => true]);
             }
