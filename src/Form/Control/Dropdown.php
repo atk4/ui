@@ -109,7 +109,7 @@ class Dropdown extends Input
         // dropdown input tag accepts CSV formatted list of IDs
         return $this->entityField !== null
             ? ($this->multiple && $this->entityField->getField()->type === 'json' && is_array($this->entityField->get())
-                ? implode(', ', $this->entityField->get())
+                ? implode(',', $this->entityField->get())
                 : $this->getApp()->uiPersistence->typecastAttributeSaveField($this->entityField->getField(), $this->entityField->get()))
             : parent::getInputValue();
     }
