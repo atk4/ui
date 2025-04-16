@@ -46,13 +46,6 @@ parameters:
             message: '~^Call to an undefined method Atk4\\Ui\\Form\\Control::setModel\(\)\.$~'
             count: 3
 
-        # remove once https://github.com/phpstan/phpstan/issues/12792 is fixed
-        -
-            path: 'src/*.php'
-            identifier: identical.alwaysFalse
-            message: '~^Strict comparison using === between non-empty-string and '''' will always evaluate to false\.$~'
-            count: 2
-
         # TODO these rules are generated, this ignores should be fixed in the code
         # for level = 2
         -
