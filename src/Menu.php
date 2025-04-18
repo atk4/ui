@@ -85,7 +85,7 @@ class Menu extends ViewWithContent
      */
     public function addMenu($name)
     {
-        $subMenu = (self::class)::addTo($this, ['defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'inDropdown' => true]);
+        $subMenu = self::addTo($this, ['defaultTemplate' => 'submenu.html', 'ui' => 'dropdown', 'inDropdown' => true]);
 
         if (!is_array($name)) {
             $name = [$name];
@@ -117,7 +117,7 @@ class Menu extends ViewWithContent
      */
     public function addGroup($name, string $template = 'menugroup.html')
     {
-        $group = (self::class)::addTo($this, ['defaultTemplate' => $template, 'ui' => false]);
+        $group = self::addTo($this, ['defaultTemplate' => $template, 'ui' => false]);
 
         if (!is_array($name)) {
             $name = [$name];
@@ -143,7 +143,7 @@ class Menu extends ViewWithContent
      */
     public function addMenuRight()
     {
-        return (self::class)::addTo($this, ['ui' => false], ['RightMenu'])->removeClass('item')->addClass('right menu');
+        return self::addTo($this, ['ui' => false], ['RightMenu'])->removeClass('item')->addClass('right menu');
     }
 
     #[\Override]
