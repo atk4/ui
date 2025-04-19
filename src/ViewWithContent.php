@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-/**
- * TODO move to trait and this class should be migrated to Text.
- */
 class ViewWithContent extends View
 {
     /** @var string|null Set static contents of this view. */
