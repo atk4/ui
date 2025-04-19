@@ -18,6 +18,7 @@ use Atk4\Ui\Popup;
 use Atk4\Ui\View;
 use Atk4\Ui\View\EntityTrait;
 use Atk4\Ui\View\ModelTrait;
+use Atk4\Ui\ViewWithContent;
 use Atk4\Ui\VirtualPage;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -220,7 +221,7 @@ class ViewTest extends TestCase
 
         $this->expectException(\Error::class);
         $this->expectExceptionMessage('$fx must be of type Closure');
-        $v->set('strlen');
+        $v->set('strlen'); // @phpstan-ignore argument.type, argument.templateType
     }
 
     /**

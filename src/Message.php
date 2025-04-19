@@ -11,7 +11,7 @@ namespace Atk4\Ui;
  * ])
  * ->text->addParagraph('').
  */
-class Message extends View
+class Message extends ViewWithContent
 {
     /** @var 'info'|'warning'|'success'|'error'|null */
     public $type;

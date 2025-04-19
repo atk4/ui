@@ -396,11 +396,6 @@ parameters:
 
         # TODO fix contravariance for View::set() method
         -
-            path: 'src/Console.php'
-            identifier: method.childParameterType
-            message: '~^Parameter #1 \$fx \(Closure\(\$this\): void\) of method Atk4\\Ui\\Console::set\(\) should be compatible with parameter \$content \(string\) of method Atk4\\Ui\\View::set\(\)$~'
-            count: 1
-        -
             path: 'src/Form/Control/Calendar.php'
             identifier: method.childParameterType
             message: '~^Parameter #1 \$action \(Atk4\\Ui\\Js\\JsExpressionable\) of method Atk4\\Ui\\Form\\Control\\Calendar::onChange\(\) should be contravariant with parameter \$action \(array\{Closure\(Atk4\\Ui\\Js\\Jquery, mixed\): \(Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void\)\}\|Atk4\\Ui\\Js\\JsExpressionable\|\(Closure\(Atk4\\Ui\\Js\\Jquery, mixed\): \(Atk4\\Ui\\Js\\JsExpressionable\|Atk4\\Ui\\View\|string\|void\)\)\) of method Atk4\\Ui\\Form\\Control::onChange\(\)$~'
@@ -419,26 +414,6 @@ parameters:
             path: 'src/JsCallback.php'
             identifier: method.childParameterType
             message: '~^Parameter #2 \$args \(array<int\|string, Atk4\\Ui\\Js\\JsCallbackLoadableValue>\) of method Atk4\\Ui\\JsCallback::set\(\) should be contravariant with parameter \$fxArgs \(list<mixed>\) of method Atk4\\Ui\\Callback::set\(\)$~'
-            count: 1
-        -
-            path: 'src/Loader.php'
-            identifier: method.childParameterType
-            message: '~^Parameter #1 \$fx \(Closure\(\$this\): void\) of method Atk4\\Ui\\Loader::set\(\) should be compatible with parameter \$content \(string\) of method Atk4\\Ui\\View::set\(\)$~'
-            count: 1
-        -
-            path: 'src/Modal.php'
-            identifier: method.childParameterType
-            message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\View\): void\) of method Atk4\\Ui\\Modal::set\(\) should be compatible with parameter \$content \(string\) of method Atk4\\Ui\\View::set\(\)$~'
-            count: 1
-        -
-            path: 'src/Popup.php'
-            identifier: method.childParameterType
-            message: '~^Parameter #1 \$fx \(Closure\(Atk4\\Ui\\View\): void\) of method Atk4\\Ui\\Popup::set\(\) should be compatible with parameter \$content \(string\) of method Atk4\\Ui\\View::set\(\)$~'
-            count: 1
-        -
-            path: 'src/VirtualPage.php'
-            identifier: method.childParameterType
-            message: '~^Parameter #1 \$fx \(Closure\(\$this, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed\): void\) of method Atk4\\Ui\\VirtualPage::set\(\) should be compatible with parameter \$content \(string\) of method Atk4\\Ui\\View::set\(\)$~'
             count: 1
         -
             path: 'src/VirtualPage.php'

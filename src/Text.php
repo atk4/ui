@@ -9,7 +9,7 @@ use Atk4\Ui\HtmlTemplate\Value as HtmlValue;
 /**
  * Simple text block view.
  */
-class Text extends View
+class Text extends ViewWithContent
 {
     public $defaultTemplate;
 
