@@ -24,6 +24,9 @@ class SessionManager
         return $status === \PHP_SESSION_ACTIVE;
     }
 
+    /**
+     * @return array<string, scalar>
+     */
     protected function createStartSessionOptions(): array
     {
         return [];

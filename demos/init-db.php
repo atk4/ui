@@ -196,8 +196,11 @@ trait ModelPreventModificationTrait
 }
 
 /**
- * Improve testing by using prefixed real field and SQL names.
+ * Improve testing by using non-scalar ID and prefixed field/SQL names.
  *
+ * @property WrappedId $id @Atk4\Field()
+ *
+ * @method WrappedId|null                  getId()
  * @method static|null                     tryLoad(WrappedId $id = null)
  * @method static                          load(WrappedId $id)
  * @method \Traversable<WrappedId, static> getIterator()
@@ -248,8 +251,8 @@ class ModelWithPrefixedFields extends Model
             return $name;
         }
 
-        if (isset(self::$prefixedFieldNames[$name . '_id'])) {
-            return self::$prefixedFieldNames[$name . '_id'];
+        if (str_ends_with(self::$prefixedFieldNames[$name . '_id'] ?? '', '_id')) {
+            return substr(self::$prefixedFieldNames[$name . '_id'], 0, -3);
         }
 
         return self::$prefixedFieldNames[$name];
@@ -438,6 +441,10 @@ class Stat extends ModelWithPrefixedFields
         $this->onHook(Model::HOOK_AFTER_LOAD, static function (self $entity) {
             $map = ['EUR' => '€', 'USD' => '$', 'GBP' => '£'];
             $entity->currency_symbol = $map[$entity->currency] ?? '?';
+
+            // fix too dirty field for user action
+            $dirtyRef = &$entity->getDirtyRef();
+            unset($dirtyRef[$entity->fieldName()->currency_symbol]);
         });
 
         $this->addField($this->fieldName()->project_budget, ['type' => 'atk4_money']);

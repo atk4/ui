@@ -68,12 +68,12 @@ $model->addField('six', ['type' => 'boolean', 'caption' => 'badcaption', 'ui' =>
 $model = $model->createEntity();
 
 $form = Form::addTo($cc->addColumn());
-$form->setModel($model);
+$form->setEntity($model);
 $form->onSubmit($formSubmit);
 
 // next form won't initialize default fields, but we'll add them individually
 $form = Form::addTo($cc->addColumn());
-$form->setModel($model, []);
+$form->setEntity($model, []);
 
 // adding that same field but with custom form control seed
 $form->addControl('one', ['caption' => 'Caption0']);

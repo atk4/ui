@@ -28,7 +28,7 @@ $wizard->addStep('User Interface', static function (Wizard $page) {
     $t->addParagraph(<<<'EOF'
         Agile Toolkit is a "Low Code Framework" written in PHP. It is designed to simplify all aspects of web application creation:
         EOF);
-    $t->addHtml(<<<'EOF'
+    $t->dangerouslyAddHtml(<<<'EOF'
         <ul>
             <li>No front-end coding necessary (like JavaScript)</li>
             <li>No Database coding required (like SQL)</li>
@@ -40,7 +40,7 @@ $wizard->addStep('User Interface', static function (Wizard $page) {
 
     $t->addParagraph('Your ATK code instead takes a more declarative approach. You work with things like:');
 
-    $t->addHtml(<<<'EOF'
+    $t->dangerouslyAddHtml(<<<'EOF'
         <ul>
             <li>Models and fields</li>
             <li>Model User actions</li>
@@ -151,7 +151,7 @@ $wizard->addStep('Business Model', static function (Wizard $page) {
             ]);
             $entity->save();
         }
-        $form->setModel($entity);
+        $form->setEntity($entity);
 
         $form->onSubmit(static function (Form $form) {
             $form->entity->save();
@@ -166,7 +166,7 @@ $wizard->addStep('Business Model', static function (Wizard $page) {
     $t->addParagraph(<<<'EOF'
         This code shows you a combination of 3 objects:
         EOF);
-    $t->addHtml(<<<'EOF'
+    $t->dangerouslyAddHtml(<<<'EOF'
         <ul>
         <li>Form - a generic view that can display and handle any form</li>
         <li>Model - defines fields for a business object</li>
@@ -174,7 +174,7 @@ $wizard->addStep('Business Model', static function (Wizard $page) {
         </ul>
         EOF);
     $t->addParagraph(<<<'EOF'
-        All three are combined by "setModel()" function and that is consistent throughout all the views.
+        All three are combined by "setEntity()" method and that is consistent throughout all the views.
         EOF);
 });
 
@@ -193,10 +193,10 @@ $wizard->addStep('Persistence', static function (Wizard $page) {
         });
 
         Header::addTo($owner, ['Record display in Card View using model data.']);
-        $model = $model->tryLoad(1);
-        if ($model !== null) {
+        $entity = $model->tryLoad(1);
+        if ($entity !== null) {
             Card::addTo($owner, ['useLabel' => true])
-                ->setModel($model);
+                ->setEntity($entity);
         } else {
             Message::addTo($owner, ['Empty record.']);
         }

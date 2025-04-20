@@ -19,7 +19,7 @@ class TagTree
 
     private string $tag;
 
-    /** @var array<int, Value|string|HtmlTemplate> */
+    /** @var list<Value|string|HtmlTemplate> */
     private array $children = [];
 
     public function __construct(HtmlTemplate $parentTemplate, string $tag)
@@ -57,7 +57,7 @@ class TagTree
     }
 
     /**
-     * @return array<int, Value|self|HtmlTemplate>
+     * @return list<Value|self|HtmlTemplate>
      */
     public function getChildren(): array
     {

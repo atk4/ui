@@ -9,6 +9,7 @@ use Atk4\Data\Model;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\UserAction\SharedExecutor;
+use Atk4\Ui\View\EntityTrait;
 
 /**
  * Card can contain arbitrary information.
@@ -24,14 +25,16 @@ use Atk4\Ui\UserAction\SharedExecutor;
  * model field display.
  *
  * Multiple model can be used to display various content on each card section.
- * When using model or models, the first model that get set via setModel method
+ * When using model or models, the first model that get set via setEntity method
  * will have it's idField set as data-id HTML attribute for the card. Thus making
  * the ID available via javascript (new Jquery())->data('id')
- *
- * @property false $model use $entity property instead
  */
 class Card extends View
 {
+    use EntityTrait {
+        setEntity as private _setEntity;
+    }
+
     public $ui = 'card atk-card';
 
     public $defaultTemplate = 'card.html';
@@ -48,7 +51,7 @@ class Card extends View
     /** @var CardSection|null The main card section of this card */
     public $section;
 
-    /** @var array The CardSection default seed. */
+    /** @var array<mixed> The CardSection default seed. */
     public $cardSectionSeed = [CardSection::class];
 
     /** @var View|null The extra content view container for the card. */
@@ -57,7 +60,7 @@ class Card extends View
     /** @var string|View|null A description inside the Card content. */
     public $description;
 
-    /** @var array|Button|null */
+    /** @var array<mixed>|Button|null */
     public $buttons;
 
     /** @var bool How buttons are display inside button container */
@@ -166,14 +169,13 @@ class Card extends View
     }
 
     /**
-     * @param array<int, string>|null $fields
+     * @param list<string>|null $fields
      */
-    #[\Override]
-    public function setModel(Model $entity, ?array $fields = null): void
+    public function setEntity(Model $entity, ?array $fields = null): void
     {
         $entity->assertIsLoaded();
 
-        parent::setModel($entity);
+        $this->_setEntity($entity);
 
         if ($fields === null) {
             $fields = array_keys($this->entity->getFields(['editable', 'visible']));
@@ -188,6 +190,8 @@ class Card extends View
     /**
      * Add a CardSection to this card.
      *
+     * @param list<string> $fields
+     *
      * @return View
      */
     public function addSection(?string $title = null, ?Model $entity = null, ?array $fields = null, bool $useTable = false, bool $useLabel = false)
@@ -198,7 +202,7 @@ class Card extends View
         }
 
         if ($entity !== null && $fields) {
-            $section->setModel($entity);
+            $section->setEntity($entity);
             $section->addFields($entity, $fields, $useTable, $useLabel);
         }
 
@@ -207,6 +211,8 @@ class Card extends View
 
     /**
      * Execute Model user action via button in Card.
+     *
+     * @param array<int|string, mixed> $args
      *
      * @return $this
      */
@@ -251,6 +257,10 @@ class Card extends View
             }
         }
 
+        if ($action->enabled === false) {
+            $button->addClass('disabled');
+        }
+
         $button->on('click', $cardDeck !== null ? $cardDeck->sharedExecutorsContainer->getExecutor($action) : $action, $defaults);
 
         return $this;
@@ -258,6 +268,8 @@ class Card extends View
 
     /**
      * Set extra content using model field.
+     *
+     * @param list<string> $fields
      */
     public function addExtraFields(Model $entity, array $fields, ?string $glue = null): void
     {
@@ -320,7 +332,7 @@ class Card extends View
     /**
      * Add button to card.
      *
-     * @param Button|array $seed
+     * @param Button|array<mixed> $seed
      *
      * @return View
      */

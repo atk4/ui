@@ -42,7 +42,7 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
     /** @var array<string, string> */
     public $stepListItems = ['args' => 'Fill argument(s)', 'fields' => 'Edit Record(s)', 'preview' => 'Preview', 'final' => 'Complete'];
 
-    /** @var array */
+    /** @var array<mixed> */
     public $cancelButtonSeed = [Button::class, ['Cancel', 'class.small left floated basic blue' => true, 'icon' => 'left arrow']];
 
     #[\Override]
@@ -79,7 +79,7 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
     protected function afterActionInit(): void
     {
         $this->loader = Loader::addTo($this, ['shim' => $this, 'loadEvent' => false]);
-        $this->actionData = $this->loader->jsGetStoreData()['session'];
+        $this->actionData = $this->loader->getJsStoreData()['session'] ?? [];
 
         if ($this->cb->canTerminate()) {
             $this->js(true, $this->loader->jsLoad([
@@ -160,13 +160,13 @@ class VpExecutor extends VirtualPage implements JsExecutorInterface
      */
     protected function jsGetExecute($obj, $id): JsBlock
     {
-        $success = $this->jsSuccess instanceof \Closure
+        $jsSuccess = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
 
         return new JsBlock([
             JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore ternary.shortNotAllowed
-                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
+                ?: ($jsSuccess ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
             $this->loader->jsClearStoreData(true),
             (new JsChain('atk.utils'))->redirect($this->getOwner()->url()),
         ]);

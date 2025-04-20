@@ -181,9 +181,9 @@ if ($layout instanceof Layout\NavigableInterface) {
     $layout->addMenuItem('Calendar', [$path . 'calendar'], $menu);
     $layout->addMenuItem(['Checkboxes'], [$path . 'checkbox'], $menu);
     $layout->addMenuItem(['Value Selectors'], [$path . 'form6'], $menu);
+    $layout->addMenuItem(['Dropdown'], [$path . 'dropdown-plus'], $menu);
     $layout->addMenuItem(['Lookup'], [$path . 'lookup'], $menu);
     $layout->addMenuItem(['Lookup Dependency'], [$path . 'lookup-dep'], $menu);
-    $layout->addMenuItem(['Dropdown'], [$path . 'dropdown-plus'], $menu);
     $layout->addMenuItem(['File Upload'], [$path . 'upload'], $menu);
     $layout->addMenuItem(['Multi Line'], [$path . 'multiline'], $menu);
     $layout->addMenuItem(['Tree Selector'], [$path . 'tree-item-selector'], $menu);

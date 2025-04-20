@@ -152,7 +152,7 @@ to populate a content:
 ```
 $grid->addModalAction('Details', 'Additional Details', function (View $p, $id) use ($grid) {
     // $id of the record which was clicked
-    // $model = $grid->model->load($id);
+    // $entity = $grid->model->load($id);
 
     LoremIpsum::addTo($p);
 });
@@ -193,7 +193,7 @@ $grid->menu->addItem('show selection')
 :::
 
 When grid is associated with a model that supports order, it will automatically make itself sortable. You can
-override this behaviour by setting $sortable property to `true` or `false`.
+override this behavior by setting $sortable property to `true` or `false`.
 
 You can also set $sortable property for each table column decorator. That way you can enable/disable sorting
 of particular columns.

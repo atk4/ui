@@ -116,7 +116,7 @@ $g->onFormEdit(function (Form $form, ModalExecutor $ex) {
 $g->onFormAddEdit(function (Form $form, ModalExecutor $ex) {
     $form->onSubmit(function (Form $form) use ($ex) {
         return new \Atk4\Ui\Js\JsBlock([
-            $ex->hide(),
+            $ex->jsHide(),
             new \Atk4\Ui\Js\JsToast('Submit all right! This demo does not saved data.'),
         ]);
     });

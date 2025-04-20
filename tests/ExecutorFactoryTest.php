@@ -7,7 +7,6 @@ namespace Atk4\Ui\Tests;
 use Atk4\Core\Phpunit\TestCase;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
-use Atk4\Ui\App;
 use Atk4\Ui\Button;
 use Atk4\Ui\MenuItem;
 use Atk4\Ui\UserAction\BasicExecutor;
@@ -44,8 +43,6 @@ class ExecutorFactoryTest extends TestCase
 
     /** @var Model */
     protected $model;
-    /** @var App */
-    protected $app;
 
     #[\Override]
     protected function setUp(): void
@@ -54,14 +51,14 @@ class ExecutorFactoryTest extends TestCase
 
         $p = new Persistence\Array_();
         $this->model = new TestModel($p);
-        $this->app = $this->createApp();
     }
 
     public function testExecutorFactory(): void
     {
-        $view = View::addTo($this->app);
+        $app = $this->createApp();
+        $view = View::addTo($app);
 
-        $factory = $this->app->getExecutorFactory();
+        $factory = $app->getExecutorFactory();
         $modalExecutor = $factory->createExecutor($this->model->getUserAction('edit'), $view);
         $jsCallbackExecutor = $factory->createExecutor($this->model->getUserAction('delete'), $view);
         $confirmationExecutor = $factory->createExecutor($this->model->getUserAction('confirm'), $view);
@@ -81,7 +78,9 @@ class ExecutorFactoryTest extends TestCase
 
     public function testExecutorTrigger(): void
     {
-        $factory = $this->app->getExecutorFactory();
+        $app = $this->createApp();
+
+        $factory = $app->getExecutorFactory();
         $editAction = $this->model->getUserAction('edit');
         $addAction = $this->model->getUserAction('add');
 
@@ -105,7 +104,9 @@ class ExecutorFactoryTest extends TestCase
 
     public function testRegisterTrigger(): void
     {
-        $factory = $this->app->getExecutorFactory();
+        $app = $this->createApp();
+
+        $factory = $app->getExecutorFactory();
         $factory->useTriggerDefault(ExecutorFactory::TABLE_BUTTON);
         $factory->useTriggerDefault(ExecutorFactory::MENU_ITEM);
 

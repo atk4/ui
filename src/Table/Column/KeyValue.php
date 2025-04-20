@@ -33,12 +33,13 @@ use Atk4\Ui\Table;
  *    ],
  *    'ui' => [
  *        'form' => [Form\Control\Dropdown::class],
- *        'table' => ['KeyValue'],
+ *        'table' => [Table\Column\KeyValue::class],
  *    ],
  * ]);
  */
 class KeyValue extends Table\Column
 {
+    /** @var array<mixed, string> */
     public array $values;
 
     #[\Override]

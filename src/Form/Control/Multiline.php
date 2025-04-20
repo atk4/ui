@@ -17,6 +17,7 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
+use Atk4\Ui\View\ModelTrait;
 
 /**
  * Creates a Multiline field within a table, which allows adding/editing multiple
@@ -25,7 +26,7 @@ use Atk4\Ui\View;
  * Using hasMany reference will required to save reference data using Multiline::saveRows() method.
  *
  * $form = Form::addTo($app);
- * $form->setModel($invoice, []);
+ * $form->setEntity($invoice, []);
  *
  * // add Multiline form control and set model for Invoice items
  * $ml = $form->addControl('ml', [Multiline::class]);
@@ -79,6 +80,10 @@ use Atk4\Ui\View;
  */
 class Multiline extends Form\Control
 {
+    use ModelTrait {
+        setModel as private _setModel;
+    }
+
     /** @var HtmlTemplate|null The template needed for the multiline view. */
     public $multiLineTemplate;
 
@@ -100,11 +105,11 @@ class Multiline extends Form\Control
      * For example setting 'SuiDropdown' property globally.
      *  $componentProps = [Multiline::SELECT => ['floating' => true]].
      *
-     * @var array
+     * @var array<string, array<string, mixed>>
      */
     public $componentProps = [];
 
-    /** @var array SuiTable component props */
+    /** @var array<string, mixed> SuiTable component props */
     public $tableProps = [];
 
     /** @var array<string, array<string, mixed>> Set Vue component to use per field type. */
@@ -138,7 +143,7 @@ class Multiline extends Form\Control
     /** @var bool Add row when tabbing out of last column in last row. */
     public $addOnTab = false;
 
-    /** @var array The definition of each field used in every multiline row. */
+    /** @var list<array<string, mixed>> The definition of each field used in every multiline row. */
     private $fieldDefs;
 
     /** @var JsCallback */
@@ -147,13 +152,13 @@ class Multiline extends Form\Control
     /** @var \Closure(mixed, Form): (JsExpressionable|View|string|void)|null Function to execute when field change or row is delete. */
     protected $onChangeFunction;
 
-    /** @var array Set fields that will trigger onChange function. */
+    /** @var list<string> Set fields that will trigger onChange function. */
     protected $eventFields;
 
-    /** @var array Collection of field errors. */
+    /** @var array<string, list<array{name: string, msg: string}>> Collection of field errors. */
     private $rowErrors;
 
-    /** @var array The fields names used in each row. */
+    /** @var list<string> The fields names used in each row. */
     public $rowFields;
 
     /** @var list<array<string, mixed>> The data sent for each row. */
@@ -167,7 +172,7 @@ class Multiline extends Form\Control
 
     /**
      * Container for component that need Props set based on their field value as Lookup component.
-     * Set during fieldDefinition and apply during renderView() after getValue().
+     * Set during fieldDefinition and apply during renderView() after getInputValue().
      * Must contains callable function and function will receive $model field and value as parameter.
      *
      * @var array<string, \Closure<T of Field>(T, string): void>
@@ -207,27 +212,6 @@ class Multiline extends Form\Control
 
         $this->renderCallback = JsCallback::addTo($this);
 
-        // load the data associated with this input and validate it
-        $this->form->onHook(Form::HOOK_LOAD_POST, function (Form $form, array &$postRawData) {
-            $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($this->getApp()->getRequestPostParam($this->shortName)));
-            if ($this->rowData) {
-                $this->rowErrors = $this->validate($this->rowData);
-                if ($this->rowErrors) {
-                    throw new ValidationException([$this->shortName => 'multiline error']);
-                }
-            }
-
-            // remove __atml ID from array field
-            if ($this->form->entity->getField($this->shortName)->type === 'json') {
-                $rows = [];
-                foreach ($this->rowData as $cols) {
-                    unset($cols['__atkml']);
-                    $rows[] = $cols;
-                }
-                $postRawData[$this->shortName] = $this->getApp()->encodeJson($rows);
-            }
-        });
-
         // change form error handling
         $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
             // when errors are coming from this Multiline field, then notify Multiline component about them
@@ -243,6 +227,11 @@ class Multiline extends Form\Control
         });
     }
 
+    /**
+     * @param array<mixed, array<string, string|null>> $values
+     *
+     * @return array<mixed, array<string, mixed>>
+     */
     protected function typeCastLoadValues(array $values): array
     {
         $dataRows = [];
@@ -261,11 +250,37 @@ class Multiline extends Form\Control
         return $dataRows;
     }
 
+    #[\Override]
+    public function setInputValue(string $value): void
+    {
+        $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($value));
+        if ($this->rowData) {
+            $this->rowErrors = $this->validate($this->rowData);
+            if ($this->rowErrors) {
+                throw new ValidationException([$this->shortName => 'multiline error']);
+            }
+        }
+
+        // remove __atkml ID from array field
+        if ($this->entityField->getField()->type === 'json') {
+            $rows = [];
+            foreach ($this->rowData as $cols) {
+                unset($cols['__atkml']);
+                $rows[] = $cols;
+            }
+
+            $value = $this->getApp()->encodeJson($rows);
+        }
+
+        parent::setInputValue($value);
+    }
+
     /**
      * Add a callback when fields are changed. You must supply array of fields
      * that will trigger the callback when changed.
      *
      * @param \Closure(mixed, Form): (JsExpressionable|View|string|void) $fx
+     * @param list<string>                                               $fields
      */
     public function onLineChange(\Closure $fx, array $fields): void
     {
@@ -275,10 +290,10 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Get Multiline initial field value. Value is based on model set and will
-     * output data rows as JSON string value.
+     * Get initial field value. Value is based on model set and will output data rows as JSON string value.
      */
-    public function getValue(): string
+    #[\Override]
+    public function getInputValue(): string
     {
         if ($this->entityField->getField()->type === 'json') {
             $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
@@ -304,6 +319,10 @@ class Multiline extends Form\Control
 
     /**
      * Validate each row and return errors if found.
+     *
+     * @param list<array<string, mixed>> $rows
+     *
+     * @return array<string, list<array{name: string, msg: string}>>
      */
     public function validate(array $rows): array
     {
@@ -371,6 +390,10 @@ class Multiline extends Form\Control
 
     /**
      * Check for model validate error.
+     *
+     * @param array<string, list<array{name: string, msg: string}>> $errors
+     *
+     * @return array<string, list<array{name: string, msg: string}>>
      */
     protected function addModelValidateErrors(array $errors, string $rowId, Model $entity): array
     {
@@ -386,6 +409,8 @@ class Multiline extends Form\Control
 
     /**
      * Finds and returns Multiline row ID.
+     *
+     * @param array<string, string> $row
      */
     private function getMlRowId(array $row): ?string
     {
@@ -402,12 +427,11 @@ class Multiline extends Form\Control
     }
 
     /**
-     * @param array<int, string>|null $fields
+     * @param list<string>|null $fields
      */
-    #[\Override]
     public function setModel(Model $model, ?array $fields = null): void
     {
-        parent::setModel($model);
+        $this->_setModel($model);
 
         if ($fields === null) {
             $fields = array_keys($model->getFields('not system'));
@@ -425,6 +449,8 @@ class Multiline extends Form\Control
      * Note: When using setReferenceModel you might need to set this corresponding field to neverPersist to true.
      * Otherwise, form will try to save 'multiline' field value as an array when form is save.
      * $multiline = $form->addControl('multiline', [Multiline::class], ['neverPersist' => true])
+     *
+     * @param list<string> $fieldNames
      */
     public function setReferenceModel(string $refModelName, ?Model $entity = null, array $fieldNames = []): void
     {
@@ -440,6 +466,8 @@ class Multiline extends Form\Control
      *
      * Multiline uses Vue components in order to manage input type based on field type.
      * Component name and props are determine via the getComponentDefinition function.
+     *
+     * @return array<string, mixed>
      */
     public function getFieldDef(Field $field): array
     {
@@ -460,6 +488,8 @@ class Multiline extends Form\Control
     /**
      * Each field input, represent by a Vue component, is place within a table cell.
      * Cell properties can be customized via $field->ui['multiline'][Form\Control\Multiline::TABLE_CELL].
+     *
+     * @return array<string, mixed>
      */
     protected function getSuiTableCellProps(Field $field): array
     {
@@ -474,6 +504,8 @@ class Multiline extends Form\Control
 
     /**
      * Return props for input component.
+     *
+     * @return array<string, mixed>
      */
     protected function getSuiInputProps(Field $field): array
     {
@@ -484,6 +516,8 @@ class Multiline extends Form\Control
 
     /**
      * Return props for AtkDatePicker component.
+     *
+     * @return array<string, mixed>
      */
     protected function getDatePickerProps(Field $field): array
     {
@@ -508,6 +542,8 @@ class Multiline extends Form\Control
 
     /**
      * Return props for Dropdown components.
+     *
+     * @return array<string, mixed>
      */
     protected function getDropdownProps(Field $field): array
     {
@@ -526,6 +562,8 @@ class Multiline extends Form\Control
 
     /**
      * Set property for AtkLookup component.
+     *
+     * @return array<string, mixed>
      */
     protected function getLookupProps(Field $field): array
     {
@@ -558,8 +596,7 @@ class Multiline extends Form\Control
             $option = ['key' => $value, 'text' => $entity->get($model->titleField), 'value' => $value];
             foreach ($this->fieldDefs as $key => $component) {
                 if ($component['name'] === $field->shortName) {
-                    $this->fieldDefs[$key]['definition']['componentProps']['optionalValue'] =
-                        isset($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'])
+                    $this->fieldDefs[$key]['definition']['componentProps']['optionalValue'] = isset($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'])
                         ? array_merge($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'], [$option])
                         : [$option];
                 }
@@ -569,6 +606,8 @@ class Multiline extends Form\Control
 
     /**
      * Component definition require at least a name and a props array.
+     *
+     * @return array<string, mixed>
      */
     protected function getComponentDefinition(Field $field): array
     {
@@ -599,6 +638,9 @@ class Multiline extends Form\Control
         return $component;
     }
 
+    /**
+     * @return array<mixed, mixed>
+     */
     protected function getFieldItems(Field $field, ?int $limit = 10): array
     {
         $items = [];
@@ -641,15 +683,13 @@ class Multiline extends Form\Control
     #[\Override]
     protected function renderView(): void
     {
-        $this->model->assertIsModel();
-
         $this->renderCallback->set(function () {
             $this->outputJson();
         });
 
         parent::renderView();
 
-        $inputValueJson = $this->getValue();
+        $inputValueJson = $this->getInputValue();
         $this->valuePropsBinding($inputValueJson);
 
         $this->multiLine->vue('atk-multiline', [
@@ -693,6 +733,8 @@ class Multiline extends Form\Control
 
     /**
      * Return values associated with callback field.
+     *
+     * @return array<string, string|null>
      */
     private function getCallbackValues(Model $entity): array
     {
@@ -763,6 +805,8 @@ class Multiline extends Form\Control
 
     /**
      * Return values associated to field expression.
+     *
+     * @return array<string, string|null>
      */
     private function getExpressionValues(Model $entity): array
     {

@@ -129,7 +129,7 @@ class Ui extends Persistence
                 break;
             case 'atk4_money':
                 $value = parent::_typecastLoadField($field, $value);
-                $valueDecimals = strlen(preg_replace('~^[^.]$|^.+\.|0+$~s', '', number_format($value, max(0, 11 - (int) log10($value)), '.', '')));
+                $valueDecimals = strlen(preg_replace('~^[^.]$|^.+\.|0+$~s', '', number_format($value, max(0, 11 - (int) log10(abs($value))), '.', '')));
                 $value = ($this->currency ? $this->currency . ' ' : '')
                     . number_format($value, max($this->currencyDecimals, $valueDecimals), $this->decimalSeparator, $this->thousandsSeparator);
                 $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */, $value);
@@ -271,7 +271,7 @@ class Ui extends Persistence
                 // https://github.com/search?q=unserialize+repo%3Adoctrine%2Fdbal+path%3A%2Fsrc%2FTypes
             case 'object':
             case 'array':
-                throw new Exception('Object serialization is not supported');
+                throw new Exception('Object unserialization is not supported');
         }
 
         // typecast using DBAL type and normalize

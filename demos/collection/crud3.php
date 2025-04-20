@@ -46,5 +46,5 @@ $model = new $modelClass($p);
 
 // add Crud
 Header::addTo($app, ['Crud with Array Persistence']);
-$c = Crud::addTo($app, ['ipp' => 5]);
-$c->setModel($model);
+$crud = Crud::addTo($app, ['ipp' => 5]);
+$crud->setModel($model);

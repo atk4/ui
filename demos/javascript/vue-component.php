@@ -31,12 +31,12 @@ Header::addTo($app, ['Inline editing.', 'size' => 3, 'subHeader' => $subHeader])
 View::addTo($app)->set('with autoSave');
 $inlineEditWithAutoSave = VueComponent\InlineEdit::addTo($app, ['autoSave' => true]);
 $inlineEditWithAutoSave->fieldName = $entity->fieldName()->name;
-$inlineEditWithAutoSave->setModel($entity);
+$inlineEditWithAutoSave->setEntity($entity);
 
 View::addTo($app)->set('with onChange callback');
 $inlineEditWithCallback = VueComponent\InlineEdit::addTo($app);
 $inlineEditWithCallback->fieldName = $entity->fieldName()->name;
-$inlineEditWithCallback->setModel($entity);
+$inlineEditWithCallback->setEntity($entity);
 $inlineEditWithCallback->onChange(static function (string $value) use ($app) {
     $view = new Message();
     $view->setApp($app);

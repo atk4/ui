@@ -101,6 +101,8 @@ class Context extends RawMinkContext implements BehatContext
 
     /**
      * Wait till jQuery AJAX request finished and no animation is perform.
+     *
+     * @param list<mixed> $args
      */
     protected function jqueryWait(string $extraWaitCondition = 'true', array $args = [], int $maxWaitdurationMs = 5000): void
     {
@@ -214,6 +216,13 @@ class Context extends RawMinkContext implements BehatContext
         }
     }
 
+    private function quoteXpath(string $value): string
+    {
+        return str_contains($value, '\'')
+            ? 'concat(\'' . str_replace('\'', '\', "\'", \'', $value) . '\')'
+            : '\'' . $value . '\'';
+    }
+
     /**
      * @return array{ 'css'|'xpath', string }
      */
@@ -247,7 +256,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @return array<NodeElement>
+     * @return list<NodeElement>
      */
     protected function findElements(?NodeElement $context, string $selector): array
     {
@@ -269,36 +278,53 @@ class Context extends RawMinkContext implements BehatContext
         return $elements[0];
     }
 
-    protected function unquoteStepArgument(string $argument): string
+    protected function unquoteStepArgument(string $value): string
     {
-        // copied from https://github.com/Behat/MinkExtension/blob/v2.2/src/Behat/MinkExtension/Context/MinkContext.php#L567
-        return str_replace('\"', '"', $argument);
+        assert(str_starts_with($value, '"') && str_ends_with($value, '"'));
+        $res = substr($value, 1, -1);
+
+        // based on https://github.com/Behat/MinkExtension/blob/v2.2/src/Behat/MinkExtension/Context/MinkContext.php#L567
+        return str_replace(['\\\\', '\"'], ['\\', '"'], $res);
     }
 
     /**
      * Sleep for a certain time in ms.
      *
-     * @Then I wait :arg1 ms
+     * @When ~^I wait ("(?:\\[\\"]|[^"])*+") ms$~
      */
-    public function iWait(int $ms): void
+    public function iWait(string $ms): void
     {
+        $ms = (int) $this->unquoteStepArgument($ms);
+
         $this->getSession()->wait($ms);
     }
 
     /**
-     * @When I write :arg1 into selector :selector
+     * @When ~^I write ("(?:\\[\\"]|[^"])*+") into selector ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iPressWrite(string $text, string $selector): void
     {
+        $text = $this->unquoteStepArgument($text);
+        $selector = $this->unquoteStepArgument($selector);
+
+        if ($selector === 'document' && $text === '[escape]') {
+            $this->getSession()->executeScript('document.dispatchEvent(new KeyboardEvent(\'keydown\', {keyCode: 27, which: 27}))');
+
+            return;
+        }
+
         $elem = $this->findElement(null, $selector);
         $this->getSession()->keyboardWrite($elem, $text);
     }
 
     /**
-     * @When I drag selector :selector onto selector :selectorTarget
+     * @When ~^I drag selector ("(?:\\[\\"]|[^"])*+") onto selector ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iDragElementOnto(string $selector, string $selectorTarget): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+        $selectorTarget = $this->unquoteStepArgument($selectorTarget);
+
         $elem = $this->findElement(null, $selector);
         $elemTarget = $this->findElement(null, $selectorTarget);
         $this->getSession()->getDriver()->dragTo($elem->getXpath(), $elemTarget->getXpath());
@@ -307,28 +333,34 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ button
 
     /**
-     * @When I press button :arg1
+     * @When ~^I press button ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iPressButton(string $buttonLabel): void
     {
-        $button = $this->findElement(null, '//div[text()="' . $buttonLabel . '"]');
+        $buttonLabel = $this->unquoteStepArgument($buttonLabel);
+
+        $button = $this->findElement(null, '//div[text()=' . $this->quoteXpath($buttonLabel) . ']');
         $button->click();
     }
 
     /**
-     * @Then I see button :arg1
+     * @Then ~^I see button ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iSeeButton(string $buttonLabel): void
     {
-        $this->findElement(null, '//div[text()="' . $buttonLabel . '"]');
+        $buttonLabel = $this->unquoteStepArgument($buttonLabel);
+
+        $this->findElement(null, '//div[text()=' . $this->quoteXpath($buttonLabel) . ']');
     }
 
     /**
-     * @Then I don't see button :arg1
+     * @Then ~^I don't see button ("(?:\\[\\"]|[^"])*+")$~
      */
     public function idontSeeButton(string $text): void
     {
-        $element = $this->findElement(null, '//div[text()="' . $text . '"]');
+        $text = $this->unquoteStepArgument($text);
+
+        $element = $this->findElement(null, '//div[text()=' . $this->quoteXpath($text) . ']');
         if (!str_contains($element->getAttribute('style'), 'display: none')) {
             throw new \Exception('Element with text "' . $text . '" must be invisible');
         }
@@ -339,18 +371,22 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ link
 
     /**
-     * @Given I click link :arg1
+     * @Given ~^I click link ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iClickLink(string $label): void
     {
-        $this->findElement(null, '//a[text()="' . $label . '"]')->click();
+        $label = $this->unquoteStepArgument($label);
+
+        $this->findElement(null, '//a[text()=' . $this->quoteXpath($label) . ']')->click();
     }
 
     /**
-     * @Then I click using selector :selector
+     * @When ~^I click using selector ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iClickUsingSelector(string $selector): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+
         $element = $this->findElement(null, $selector);
         $element->click();
     }
@@ -360,10 +396,12 @@ class Context extends RawMinkContext implements BehatContext
      *
      * One solution can be waiting for AJAX after each \WebDriver\AbstractWebDriver::curl() call.
      *
-     * @Then PATCH DRIVER I click using selector :selector
+     * @When ~^PATCH DRIVER I click using selector ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iClickPatchedUsingSelector(string $selector): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+
         $element = $this->findElement(null, $selector);
 
         $driver = $this->getSession()->getDriver();
@@ -376,19 +414,24 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I click paginator page :arg1
+     * @When ~^I click paginator page ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iClickPaginatorPage(string $pageNumber): void
     {
+        $pageNumber = $this->unquoteStepArgument($pageNumber);
+
         $element = $this->findElement(null, 'a.item[data-page="' . $pageNumber . '"]');
         $element->click();
     }
 
     /**
-     * @When I fill field using :selector with :value
+     * @When ~^I fill field using ("(?:\\[\\"]|[^"])*+") with ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iFillField(string $selector, string $value): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+        $value = $this->unquoteStepArgument($value);
+
         $element = $this->findElement(null, $selector);
         $element->setValue($value);
     }
@@ -398,43 +441,47 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ modal
 
     /**
-     * @Then I press Modal button :arg
+     * @When ~^I press Modal button ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iPressModalButton(string $buttonLabel): void
     {
+        $buttonLabel = $this->unquoteStepArgument($buttonLabel);
+
         $modal = $this->findElement(null, '.modal.visible.active.front');
-        $button = $this->findElement($modal, '//div[text()="' . $buttonLabel . '"]');
+        $button = $this->findElement($modal, '//div[text()=' . $this->quoteXpath($buttonLabel) . ']');
         $button->click();
     }
 
     /**
-     * @Then Modal is open with text :arg1
-     * @Then Modal is open with text :arg1 in selector :arg2
+     * @Then ~^Modal is open with text ("(?:\\[\\"]|[^"])*+")$~
+     * @Then ~^Modal is open with text ("(?:\\[\\"]|[^"])*+") in selector ("(?:\\[\\"]|[^"])*+")$~
      *
      * Check if text is present in modal or dynamic modal.
      */
-    public function modalIsOpenWithText(string $text, string $selector = '*'): void
+    public function modalIsOpenWithText(string $text, string $selector = '"*"'): void
     {
-        $textEncoded = str_contains($text, '"')
-            ? 'concat("' . str_replace('"', '", \'"\', "', $text) . '")'
-            : '"' . $text . '"';
+        $text = $this->unquoteStepArgument($text);
+        $selector = $this->unquoteStepArgument($selector);
 
         $modal = $this->findElement(null, '.modal.visible.active.front');
-        $this->findElement($modal, '//' . $selector . '[text()[normalize-space()=' . $textEncoded . ']]');
+        $this->findElement($modal, '//' . $selector . '[text()[normalize-space()=' . $this->quoteXpath($text) . ']]');
     }
 
     /**
-     * @When I fill Modal field :arg1 with :arg2
+     * @When ~^I fill Modal field ("(?:\\[\\"]|[^"])*+") with ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iFillModalField(string $fieldName, string $value): void
     {
+        $fieldName = $this->unquoteStepArgument($fieldName);
+        $value = $this->unquoteStepArgument($value);
+
         $modal = $this->findElement(null, '.modal.visible.active.front');
         $field = $modal->find('named', ['field', $fieldName]);
         $field->setValue($value);
     }
 
     /**
-     * @Then I click close modal
+     * @When ~^I click close modal$~
      */
     public function iClickCloseModal(): void
     {
@@ -444,7 +491,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I hide js modal
+     * @When ~^I hide js modal$~
      */
     public function iHideJsModal(): void
     {
@@ -457,7 +504,7 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ panel
 
     /**
-     * @Then Panel is open
+     * @Then ~^Panel is open$~
      */
     public function panelIsOpen(): void
     {
@@ -465,32 +512,40 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Panel is open with text :arg1
-     * @Then Panel is open with text :arg1 in selector :arg2
+     * @Then ~^Panel is open with text ("(?:\\[\\"]|[^"])*+")$~
+     * @Then ~^Panel is open with text ("(?:\\[\\"]|[^"])*+") in selector ("(?:\\[\\"]|[^"])*+")$~
      */
-    public function panelIsOpenWithText(string $text, string $selector = '*'): void
+    public function panelIsOpenWithText(string $text, string $selector = '"*"'): void
     {
+        $text = $this->unquoteStepArgument($text);
+        $selector = $this->unquoteStepArgument($selector);
+
         $panel = $this->findElement(null, '.atk-right-panel.atk-visible');
-        $this->findElement($panel, '//' . $selector . '[text()[normalize-space()="' . $text . '"]]');
+        $this->findElement($panel, '//' . $selector . '[text()[normalize-space()=' . $this->quoteXpath($text) . ']]');
     }
 
     /**
-     * @When I fill Panel field :arg1 with :arg2
+     * @When ~^I fill Panel field ("(?:\\[\\"]|[^"])*+") with ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iFillPanelField(string $fieldName, string $value): void
     {
+        $fieldName = $this->unquoteStepArgument($fieldName);
+        $value = $this->unquoteStepArgument($value);
+
         $panel = $this->findElement(null, '.atk-right-panel.atk-visible');
         $field = $panel->find('named', ['field', $fieldName]);
         $field->setValue($value);
     }
 
     /**
-     * @Then I press Panel button :arg
+     * @When ~^I press Panel button ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iPressPanelButton(string $buttonLabel): void
     {
+        $buttonLabel = $this->unquoteStepArgument($buttonLabel);
+
         $panel = $this->findElement(null, '.atk-right-panel.atk-visible');
-        $button = $this->findElement($panel, '//div[text()="' . $buttonLabel . '"]');
+        $button = $this->findElement($panel, '//div[text()=' . $this->quoteXpath($buttonLabel) . ']');
         $button->click();
     }
 
@@ -499,21 +554,25 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ tab
 
     /**
-     * @Given I click tab with title :arg1
+     * @When ~^I click tab with title ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iClickTabWithTitle(string $tabTitle): void
     {
-        $tabMenu = $this->findElement(null, '.ui.tabular.menu');
-        $link = $this->findElement($tabMenu, '//div[text()="' . $tabTitle . '"]');
+        $tabTitle = $this->unquoteStepArgument($tabTitle);
+
+        $tabMenu = $this->findElement(null, '.ui.tabbed.menu');
+        $link = $this->findElement($tabMenu, '//div[text()=' . $this->quoteXpath($tabTitle) . ']');
         $link->click();
     }
 
     /**
-     * @Then Active tab should be :arg1
+     * @Then ~^Active tab should be ("(?:\\[\\"]|[^"])*+")$~
      */
     public function activeTabShouldBe(string $title): void
     {
-        $tab = $this->findElement(null, '.ui.tabular.menu > .item.active');
+        $title = $this->unquoteStepArgument($title);
+
+        $tab = $this->findElement(null, '.ui.tabbed.menu > .item.active');
         if ($tab->getText() !== $title) {
             throw new \Exception('Active tab is not ' . $title);
         }
@@ -524,7 +583,7 @@ class Context extends RawMinkContext implements BehatContext
     // {{{ input
 
     /**
-     * @Then ~^input "([^"]*)" value should start with "([^"]*)"$~
+     * @Then ~^input ("(?:\\[\\"]|[^"])*+") value should start with ("(?:\\[\\"]|[^"])*+")$~
      */
     public function inputValueShouldStartWith(string $inputName, string $text): void
     {
@@ -539,33 +598,40 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I search grid for :arg1
+     * @When ~^I search grid for ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iSearchGridFor(string $text): void
     {
+        $text = $this->unquoteStepArgument($text);
+
         $search = $this->findElement(null, 'input.atk-grid-search');
         $search->setValue($text);
     }
 
     /**
-     * @Then I select value :arg1 in lookup :arg2
+     * @When ~^I select ("(?:\\[\\"]|[^"])*+") in lookup ("(?:\\[\\"]|[^"])*+")$~
      */
-    public function iSelectValueInLookup(string $value, string $inputName): void
+    public function iSelectInLookup(string $value, string $inputName): void
     {
-        $isSelectorXpath = $this->parseSelector($inputName)[0] === 'xpath';
+        $value = $this->unquoteStepArgument($value);
+        $inputName = $this->unquoteStepArgument($inputName);
 
         // get dropdown item from Fomantic-UI which is direct parent of input HTML element
-        $lookupElem = $this->findElement(null, ($isSelectorXpath ? $inputName : '//input[@name="' . $inputName . '"]') . '/parent::div');
+        $isSelectorXpath = $this->parseSelector($inputName)[0] === 'xpath';
+        $lookupElem = $this->findElement(null, ($isSelectorXpath ? $inputName : '//input[@name=' . $this->quoteXpath($inputName) . ']') . '/parent::div');
 
-        // open dropdown and wait till fully opened (just a click is not triggering it)
-        $this->getSession()->executeScript('$(arguments[0]).dropdown(\'show\')', [$lookupElem]);
+        if ($value === '') {
+            $this->findElement($lookupElem, 'i.remove.icon')->click();
+
+            return;
+        }
+
+        // open dropdown and wait till fully opened
+        $this->findElement($lookupElem, 'i.dropdown.icon')->click();
         $this->jqueryWait('$(arguments[0]).hasClass(\'visible\')', [$lookupElem]);
 
         // select value
-        if ($value === '') { // TODO impl. native clearable - https://github.com/atk4/ui/issues/572
-            $value = "\u{00a0}";
-        }
-        $valueElem = $this->findElement($lookupElem, '//div[text()="' . $value . '"]');
+        $valueElem = $this->findElement($lookupElem, '//div.menu//div.item[text()=' . $this->quoteXpath($value) . ']');
         $this->getSession()->executeScript('$(arguments[0]).dropdown(\'set selected\', arguments[1]);', [$lookupElem, $valueElem->getAttribute('data-value')]);
         $this->jqueryWait();
 
@@ -575,11 +641,15 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @When I select file input :arg1 with :arg2 as :arg3
+     * @When ~^I select file input ("(?:\\[\\"]|[^"])*+") with ("(?:\\[\\"]|[^"])*+") as ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iSelectFile(string $inputName, string $fileContent, string $fileName): void
     {
-        $element = $this->findElement(null, '//input[@name="' . $inputName . '" and @type="hidden"]/following-sibling::input[@type="file"]');
+        $inputName = $this->unquoteStepArgument($inputName);
+        $fileContent = $this->unquoteStepArgument($fileContent);
+        $fileName = $this->unquoteStepArgument($fileName);
+
+        $element = $this->findElement(null, '//input[@name=' . $this->quoteXpath($inputName) . ' and @type="hidden"]/following-sibling::input[@type="file"]');
         $this->getSession()->executeScript(<<<'EOF'
             const dataTransfer = new DataTransfer();
             dataTransfer.items.add(new File([new Uint8Array(arguments[1])], arguments[2]));
@@ -596,7 +666,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Generic ScopeBuilder rule with select operator and input value.
      *
-     * @Then ~^rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
+     * @Then ~^rule ("(?:\\[\\"]|[^"])*+") operator is ("(?:\\[\\"]|[^"])*+") and value is ("(?:\\[\\"]|[^"])*+")$~
      */
     public function scopeBuilderRule(string $name, string $operator, string $value): void
     {
@@ -612,7 +682,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * HasOne reference or enum type rule for ScopeBuilder.
      *
-     * @Then ~^reference rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
+     * @Then ~^reference rule ("(?:\\[\\"]|[^"])*+") operator is ("(?:\\[\\"]|[^"])*+") and value is ("(?:\\[\\"]|[^"])*+")$~
      */
     public function scopeBuilderReferenceRule(string $name, string $operator, string $value): void
     {
@@ -628,7 +698,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * HasOne select or enum type rule for ScopeBuilder.
      *
-     * @Then ~^select rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
+     * @Then ~^select rule ("(?:\\[\\"]|[^"])*+") operator is ("(?:\\[\\"]|[^"])*+") and value is ("(?:\\[\\"]|[^"])*+")$~
      */
     public function scopeBuilderSelectRule(string $name, string $operator, string $value): void
     {
@@ -644,7 +714,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Date, Time or Datetime rule for ScopeBuilder.
      *
-     * @Then ~^date rule "([^"]*)" operator is "([^"]*)" and value is "([^"]*)"$~
+     * @Then ~^date rule ("(?:\\[\\"]|[^"])*+") operator is ("(?:\\[\\"]|[^"])*+") and value is ("(?:\\[\\"]|[^"])*+")$~
      */
     public function scopeBuilderDateRule(string $name, string $operator, string $value): void
     {
@@ -660,7 +730,7 @@ class Context extends RawMinkContext implements BehatContext
     /**
      * Boolean type rule for ScopeBuilder.
      *
-     * @Then ~^bool rule "([^"]*)" has value "([^"]*)"$~
+     * @Then ~^bool rule ("(?:\\[\\"]|[^"])*+") has value ("(?:\\[\\"]|[^"])*+")$~
      */
     public function scopeBuilderBoolRule(string $name, string $value): void
     {
@@ -676,7 +746,20 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then ~^I check if input value for "([^"]*)" match text "([^"]*)"~
+     * @Then ~^I check if input value for ("(?:\\[\\"]|[^"])*+") match text in ("(?:\\[\\"]|[^"])*+")$~
+     */
+    public function compareInputValueText(string $compareSelector, string $compareToSelector): void
+    {
+        $compareSelector = $this->unquoteStepArgument($compareSelector);
+        $compareToSelector = $this->unquoteStepArgument($compareToSelector);
+
+        if ($this->findElement(null, $compareSelector)->getValue() !== $this->findElement(null, $compareToSelector)->getText()) {
+            throw new \Exception('Input value does not match between: ' . $compareSelector . ' and ' . $compareToSelector);
+        }
+    }
+
+    /**
+     * @Then ~^I check if input value for ("(?:\\[\\"]|[^"])*+") match text ("(?:\\[\\"]|[^"])*+")$~
      */
     public function compareInputValueToText(string $selector, string $text): void
     {
@@ -689,50 +772,40 @@ class Context extends RawMinkContext implements BehatContext
         }
     }
 
-    /**
-     * @Then ~^I check if input value for "([^"]*)" match text in "([^"]*)"$~
-     */
-    public function compareInputValueToElementText(string $inputName, string $selector): void
-    {
-        $inputName = $this->unquoteStepArgument($inputName);
-        $selector = $this->unquoteStepArgument($selector);
-
-        $expectedText = $this->findElement(null, $selector)->getText();
-        $input = $this->findElement(null, 'input[name="' . $inputName . '"]');
-        if ($expectedText !== $input->getValue()) {
-            throw new \Exception('Input value does not match: ' . $input->getValue() . ', expected: ' . $expectedText);
-        }
-    }
-
     // }}}
 
     // {{{ misc
 
     /**
-     * @Then dump :arg1
+     * @Then ~^dump ("(?:\\[\\"]|[^"])*+")$~
      */
     public function dump(string $arg1): void
     {
-        $element = $this->getSession()->getPage()->find('xpath', '//div[text()="' . $arg1 . '"]');
+        $arg1 = $this->unquoteStepArgument($arg1);
+
+        $element = $this->getSession()->getPage()->find('xpath', '//div[text()=' . $this->quoteXpath($arg1) . ']');
         var_dump($element->getOuterHtml());
     }
 
     /**
-     * @Then I click filter column name :arg1
+     * @When ~^I click filter column name ("(?:\\[\\"]|[^"])*+")$~
      */
     public function iClickFilterColumnName(string $columnName): void
     {
+        $columnName = $this->unquoteStepArgument($columnName);
+
         $column = $this->findElement(null, "th[data-column='" . $columnName . "']");
         $icon = $this->findElement($column, 'i');
         $icon->click();
     }
 
     /**
-     * @Then ~^container "([^"]*)" should display "([^"]*)" item\(s\)$~
+     * @Then ~^container ("(?:\\[\\"]|[^"])*+") should display ("(?:\\[\\"]|[^"])*+") item\(s\)$~
      */
-    public function containerShouldHaveNumberOfItem(string $selector, int $numberOfitems): void
+    public function containerShouldHaveNumberOfItem(string $selector, string $numberOfitems): void
     {
         $selector = $this->unquoteStepArgument($selector);
+        $numberOfitems = (int) $this->unquoteStepArgument($numberOfitems);
 
         $items = $this->getSession()->getPage()->findAll('css', $selector);
         $count = 0;
@@ -745,7 +818,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I scroll to top
+     * @When ~^I scroll to top$~
      */
     public function iScrollToTop(): void
     {
@@ -753,7 +826,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then I scroll to bottom
+     * @When ~^I scroll to bottom$~
      */
     public function iScrollToBottom(): void
     {
@@ -761,10 +834,12 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Toast display should contain text :arg1
+     * @Then ~^Toast display should contain text ("(?:\\[\\"]|[^"])*+")$~
      */
     public function toastDisplayShouldContainText(string $text): void
     {
+        $text = $this->unquoteStepArgument($text);
+
         $toastContainer = $this->findElement(null, '.ui.toast-container');
         $toastText = $this->findElement($toastContainer, '.content')->getText();
         if (!str_contains($toastText, $text)) {
@@ -773,7 +848,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then No toast should be displayed
+     * @Then ~^No toast should be displayed$~
      */
     public function noToastShouldBeDisplayed(): void
     {
@@ -787,7 +862,7 @@ class Context extends RawMinkContext implements BehatContext
      * Remove once https://github.com/Behat/MinkExtension/pull/386 and
      * https://github.com/minkphp/Mink/issues/656 are fixed and released.
      *
-     * @Then ~^PATCH MINK the (?i)url(?-i) should match "(?P<pattern>(?:[^"]|\\")*)"$~
+     * @Then ~^PATCH MINK the URL should match ("(?:\\[\\"]|[^"])*+")$~
      */
     public function assertUrlRegExp(string $pattern): void
     {
@@ -797,7 +872,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then ~^I check if text in "([^"]*)" match text in "([^"]*)"~
+     * @Then ~^I check if text in ("(?:\\[\\"]|[^"])*+") match text in ("(?:\\[\\"]|[^"])*+")$~
      */
     public function compareElementText(string $compareSelector, string $compareToSelector): void
     {
@@ -810,7 +885,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then ~^I check if text in "([^"]*)" match text "([^"]*)"~
+     * @Then ~^I check if text in ("(?:\\[\\"]|[^"])*+") match text ("(?:\\[\\"]|[^"])*+")$~
      */
     public function textInContainerShouldMatch(string $selector, string $text): void
     {
@@ -823,7 +898,7 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then ~^I check if text in "([^"]*)" match regex "([^"]*)"~
+     * @Then ~^I check if text in ("(?:\\[\\"]|[^"])*+") match regex ("(?:\\[\\"]|[^"])*+")$~
      */
     public function textInContainerShouldMatchRegex(string $selector, string $regex): void
     {
@@ -836,14 +911,48 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
-     * @Then Element :arg1 attribute :arg2 should contain text :arg3
+     * @Then ~^Element ("(?:\\[\\"]|[^"])*+") attribute ("(?:\\[\\"]|[^"])*+") should contain text ("(?:\\[\\"]|[^"])*+")$~
      */
     public function elementAttributeShouldContainText(string $selector, string $attribute, string $text): void
     {
+        $selector = $this->unquoteStepArgument($selector);
+        $attribute = $this->unquoteStepArgument($attribute);
+        $text = $this->unquoteStepArgument($text);
+
         $element = $this->findElement(null, $selector);
         $attr = $element->getAttribute($attribute);
         if (!str_contains($attr, $text)) {
-            throw new \Exception('Element " . $selector . " attribute "' . $attribute . '" does not contain "' . $text . '"');
+            throw new \Exception('Element "' . $selector . '" attribute "' . $attribute . '" does not contain "' . $text . '"');
+        }
+    }
+
+    /**
+     * @Then ~^Element ("(?:\\[\\"]|[^"])*+") should contain class ("(?:\\[\\"]|[^"])*+")$~
+     */
+    public function elementShouldContainClass(string $selector, string $class): void
+    {
+        $selector = $this->unquoteStepArgument($selector);
+        $class = $this->unquoteStepArgument($class);
+
+        $element = $this->findElement(null, $selector);
+        $classes = explode(' ', $element->getAttribute('class'));
+        if (!in_array($class, $classes, true)) {
+            throw new \Exception('Element "' . $selector . '" does not contain "' . $class . '" class');
+        }
+    }
+
+    /**
+     * @Then ~^Element ("(?:\\[\\"]|[^"])*+") should not contain class ("(?:\\[\\"]|[^"])*+")$~
+     */
+    public function elementShouldNotContainClass(string $selector, string $class): void
+    {
+        $selector = $this->unquoteStepArgument($selector);
+        $class = $this->unquoteStepArgument($class);
+
+        $element = $this->findElement(null, $selector);
+        $classes = explode(' ', $element->getAttribute('class'));
+        if (in_array($class, $classes, true)) {
+            throw new \Exception('Element "' . $selector . '" contains "' . $class . '" class');
         }
     }
 

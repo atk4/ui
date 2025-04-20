@@ -19,13 +19,13 @@ class Accordion extends View
 
     public $ui = 'accordion';
 
-    /** @var array|string|null The CSS class for Fomantic-UI accordion type. */
+    /** @var list<string>|string|null The CSS class for Fomantic-UI accordion type. */
     public $type;
 
-    /** @var array Settings as per Fomantic-UI accordion settings. */
+    /** @var array<string, mixed> Settings as per Fomantic-UI accordion settings. */
     public $settings = [];
 
-    /** @var array A collection of AccordionSection in this Accordion. */
+    /** @var list<AccordionSection> A collection of AccordionSection in this Accordion. */
     public $sections = [];
 
     /** @var int The AccordionSection index number to activate on load. */
@@ -116,8 +116,9 @@ class Accordion extends View
      * Ex: toggle an accordion from it's index value.
      * $accordion->jsBehavior('toggle', 1).
      *
-     * @param string $behavior the name of the behavior for the module
-     * @param bool   $when
+     * @param string      $behavior the name of the behavior for the module
+     * @param list<mixed> $args
+     * @param bool        $when
      *
      * @return JsChain
      */

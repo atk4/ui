@@ -1,0 +1,20 @@
+import atk from 'atk';
+import accordionService from './Service/accordionService';
+import apiService from './Service/apiService';
+import dataService from './Service/dataService';
+import formService from './Service/formService';
+import modalService from './Service/modalService';
+import panelService from './Service/panelService';
+import popupService from './Service/popupService';
+import uploadService from './Service/uploadService';
+import vueService from './Service/vueService';
+
+atk.accordionService = accordionService;
+atk.apiService = apiService;
+atk.dataService = dataService;
+atk.formService = formService;
+atk.modalService = modalService;
+atk.panelService = panelService;
+atk.popupService = popupService;
+atk.uploadService = uploadService;
+atk.vueService = vueService;

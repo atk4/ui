@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
+use Atk4\Ui\Js\JsFunction;
 
 class Tabs extends View
 {
     public $defaultTemplate = 'tabs.html';
-    public $ui = 'tabular menu';
+    public $ui = 'tabbed menu';
 
     /** @var string name of active tab */
     public $activeTabName;
@@ -17,6 +18,7 @@ class Tabs extends View
     /**
      * @param string|TabsTab                                                                                    $name
      * @param \Closure(VirtualPage, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $callback
+     * @param array<string, mixed>                                                                              $settings
      *
      * @return View
      */
@@ -28,7 +30,23 @@ class Tabs extends View
         // if there is callback action, then use VirtualPage
         if ($callback) {
             $vp = VirtualPage::addTo($sub, ['ui' => '']);
-            $item->setPath($vp->getJsUrl('cut'));
+
+            // TODO hack like https://github.com/atk4/ui/blob/5.2.0/src/AccordionSection.php#L37
+            View::addTo($sub, ['name' => $vp->name]);
+
+            $reloadViewArgs = ['url' => $vp->getJsUrl('cut')];
+            if (isset($item->settings['apiSettings'])) {
+                $reloadViewArgs['apiConfig'] = $item->settings['apiSettings'];
+            }
+            unset($item->settings['apiSettings']);
+
+            $item->settings['onFirstLoad'] = new JsFunction([], [$vp->js()->atkReloadView($reloadViewArgs)]);
+
+            if (($item->settings['cache'] ?? null) === false) {
+                $item->settings['onLoad'] = $item->settings['onFirstLoad'];
+                unset($item->settings['onFirstLoad']);
+            }
+            unset($item->settings['cache']);
 
             $vp->set($callback);
         }
@@ -41,22 +59,24 @@ class Tabs extends View
      * page/url when activated.
      *
      * @param string|TabsTab                           $name
-     * @param string|array<0|string, string|int|false> $page URL to open inside a tab
+     * @param string|array<0|string, string|int|false> $page     URL to open inside a tab
+     * @param array<string, mixed>                     $settings
      */
     public function addTabUrl($name, $page, array $settings = []): void
     {
         $item = $this->addTabMenuItem($name, $settings);
         $this->addSubView($item->name);
 
-        $item->setPath($page);
+        $item->setUrl($page);
     }
 
     /**
      * Add a tab menu item.
      *
-     * @param string|TabsTab $name
+     * @param string|TabsTab       $name
+     * @param array<string, mixed> $settings
      *
-     * @return TabsTab|View tab menu item view
+     * @return TabsTab
      */
     protected function addTabMenuItem($name, array $settings)
     {

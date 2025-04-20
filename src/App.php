@@ -49,8 +49,8 @@ class App
     private static ?string $shutdownReservedMemory; // @phpstan-ignore property.onlyRead
     private static ?int $errorReportingLevel = null;
 
-    /** @var array|false Location where to load JS/CSS files */
-    public $cdn = [
+    /** @var array<string, string> Location where to load JS/CSS files */
+    public array $cdn = [
         'atk' => '/public',
         'jquery' => '/public/external/jquery/dist',
         'fomantic-ui' => '/public/external/fomantic-ui/dist',
@@ -67,7 +67,7 @@ class App
      *
      * @TODO remove, no longer needed for CDN versioning as we bundle all resources
      */
-    public $version = '5.3-dev';
+    public $version = '6.0-dev';
 
     /** @var string Name of application */
     public $title = 'Agile UI - Untitled Application';
@@ -75,7 +75,7 @@ class App
     /** @var Layout the top-most view object */
     public $layout;
 
-    /** @var string|array Set one or more directories where templates should reside. */
+    /** @var string|list<string> Set one or more directories where templates should reside. */
     public $templateDir;
 
     /** @var bool Will replace an exception handler with our own, that will output errors nicely. */
@@ -140,6 +140,9 @@ class App
     /** @var class-string */
     public $templateClass = HtmlTemplate::class;
 
+    /**
+     * @param array<string, mixed> $defaults
+     */
     public function __construct(array $defaults = [])
     {
         if (isset($defaults['request'])) {
@@ -340,8 +343,7 @@ class App
 
         $this->setResponseHeader('Cache-Control', 'no-store');
 
-        if (($this->isJsUrlRequest() || $this->getRequest()->getHeaderLine('X-Requested-With') === 'XMLHttpRequest')
-                && !$this->hasRequestQueryParam('__atk_tab')) {
+        if ($this->isJsUrlRequest() || $this->getRequest()->getHeaderLine('X-Requested-With') === 'XMLHttpRequest') {
             $this->outputResponseJson([
                 'success' => false,
                 'message' => $this->layout->getHtml(),
@@ -508,7 +510,7 @@ class App
      * directly, instead call it from Callback, JsCallback or similar
      * other classes.
      *
-     * @param string|StreamInterface|array $output Array type is supported only for JSON response
+     * @param string|StreamInterface|array<mixed> $output Array type is supported only for JSON response
      *
      * @return never
      */
@@ -539,7 +541,7 @@ class App
     }
 
     /**
-     * @param string|array|View|HtmlTemplate $output
+     * @param string|array<mixed>|View|HtmlTemplate $output
      *
      * @return never
      */
@@ -556,7 +558,7 @@ class App
     }
 
     /**
-     * @param string|array|View $output
+     * @param string|array<mixed>|View $output
      *
      * @return never
      */
@@ -573,7 +575,7 @@ class App
     /**
      * Initializes layout.
      *
-     * @param Layout|array $seed
+     * @param Layout|array<mixed> $seed
      *
      * @return $this
      */
@@ -643,8 +645,8 @@ class App
     /**
      * Add a new object into the app. You will need to have Layout first.
      *
-     * @param AbstractView      $object
-     * @param string|array|null $region
+     * @param AbstractView             $object
+     * @param string|array<mixed>|null $region
      *
      * @return ($object is View ? View : AbstractView)
      */
@@ -776,6 +778,22 @@ class App
     }
 
     /**
+     * @return array<0|string, string>
+     */
+    private function explodeUrlPage(string $page): array
+    {
+        $pageExploded = explode('?', $page, 2);
+
+        $pagePath = $pageExploded[0] !== ''
+            ? $pageExploded[0]
+            : null;
+
+        parse_str($pageExploded[1] ?? '', $pageArgs);
+
+        return [$pagePath] + $pageArgs;
+    }
+
+    /**
      * Build a URL that application can use for loading HTML data.
      *
      * @param string|array<0|string, string|int|false> $page                URL as string or array with page path as first element and other GET arguments
@@ -784,13 +802,11 @@ class App
     public function url($page = [], array $extraRequestUrlArgs = []): string
     {
         if (is_string($page)) {
-            $pageExploded = explode('?', $page, 2);
-            parse_str($pageExploded[1] ?? '', $page);
-            $pagePath = $pageExploded[0] !== '' ? $pageExploded[0] : null;
-        } else {
-            $pagePath = $page[0] ?? null;
-            unset($page[0]);
+            $page = $this->explodeUrlPage($page);
         }
+
+        $pagePath = $page[0] ?? null;
+        unset($page[0]);
 
         $request = $this->getRequest();
 
@@ -839,8 +855,13 @@ class App
      */
     public function jsUrl($page = [], array $extraRequestUrlArgs = []): string
     {
-        // append to the end but allow override
-        $extraRequestUrlArgs = array_merge($extraRequestUrlArgs, ['__atk_json' => 1], $extraRequestUrlArgs);
+        if (is_string($page)) {
+            $page = $this->explodeUrlPage($page);
+        }
+
+        if (($page['__atk_json'] ?? null) !== false) {
+            $page['__atk_json'] = 1;
+        }
 
         return $this->url($page, $extraRequestUrlArgs);
     }
@@ -973,7 +994,7 @@ class App
      * --> <a href="hello"><b class="red"><i class="blue">welcome</i></b></a>'
      *
      * @param array<0|string, string|bool>                                                                             $attr
-     * @param string|array<int, array{0: string, 1?: array<0|string, string|bool>, 2?: string|array|null}|string>|null $value
+     * @param string|list<array{0: string, 1?: array<0|string, string|bool>, 2?: string|list<mixed>|null}|string>|null $value
      */
     public function getTag(string $tag, array $attr = [], $value = null): string
     {
@@ -1027,7 +1048,7 @@ class App
                     }
                     // see https://mathiasbynens.be/notes/etago
                     $result[] = preg_replace('~(?<=<)(?=/\s*' . preg_quote($tag, '~') . '|!--)~', '\\\\', $v);
-                } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behaviour, only directly passed strings were escaped
+                } elseif (is_array($value)) { // todo, remove later and fix wrong usages, this is the original behavior, only directly passed strings were escaped
                     $result[] = $v;
                 } else {
                     $result[] = $this->encodeHtml($v);
@@ -1247,7 +1268,7 @@ class App
     }
 
     /**
-     * @param string|array $data
+     * @param string|array<mixed> $data
      */
     private function outputResponseJson($data): void
     {

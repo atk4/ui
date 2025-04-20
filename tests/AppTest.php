@@ -123,6 +123,71 @@ class AppTest extends TestCase
         $this->createApp(['request' => $request]);
     }
 
+    /**
+     * @dataProvider provideUrlCases
+     *
+     * @param array<string, bool>               $appStickyGetArguments
+     * @param array<0|string, string|int|false> $page
+     * @param array<string, string>             $extraRequestUrlArgs
+     */
+    #[DataProvider('provideUrlCases')]
+    public function testUrl(string $requestUrl, array $appStickyGetArguments, array $page, array $extraRequestUrlArgs, string $expectedUrl): void
+    {
+        $request = (new Psr17Factory())->createServerRequest('GET', $requestUrl);
+
+        $app = $this->createApp([
+            'request' => $request,
+            'stickyGetArguments' => $appStickyGetArguments,
+        ]);
+        self::assertSame($expectedUrl, $app->url($page, $extraRequestUrlArgs));
+        $pageAssocOnly = array_diff_key($page, [true]);
+        self::assertSame($expectedUrl, $app->url(($page[0] ?? '') . (count($pageAssocOnly) > 0 ? '?' . implode('&', array_map(static fn ($k) => $k . '=' . $pageAssocOnly[$k], array_keys($pageAssocOnly))) : ''), $extraRequestUrlArgs));
+        self::assertSame($expectedUrl . (str_contains($expectedUrl, '?') ? '&' : '?') . '__atk_json=1', $app->jsUrl($page, $extraRequestUrlArgs));
+
+        $makeExpectedUrlFx = static function (string $indexPage, string $ext) use ($page, $expectedUrl) {
+            return preg_replace_callback('~^[^?]*?\K([^/?]*)(\.php)(?=\?|$)~', static function ($matches) use ($page, $indexPage, $ext) {
+                if ($matches[1] === 'index' && !preg_match('~^([^?]*?/)?index(\.php)?(?=\?|$)~', $page[0] ?? '')) {
+                    $matches[1] = $indexPage;
+                }
+                if (!preg_match('~^[^?]*?\.php(?=\?|$)~', $page[0] ?? '')) {
+                    $matches[2] = $matches[1] !== '' ? $ext : '';
+                }
+
+                return $matches[1] . $matches[2];
+            }, $expectedUrl);
+        };
+
+        $app = $this->createApp([
+            'request' => $request,
+            'stickyGetArguments' => $appStickyGetArguments,
+            'urlBuildingIndexPage' => 'default',
+            'urlBuildingExt' => '.php8',
+        ]);
+        $expectedUrlCustom = $makeExpectedUrlFx('default', '.php8');
+        self::assertSame($expectedUrlCustom, $app->url($page, $extraRequestUrlArgs));
+
+        $app = $this->createApp([
+            'request' => $request,
+            'stickyGetArguments' => $appStickyGetArguments,
+            'urlBuildingIndexPage' => '',
+            'urlBuildingExt' => '',
+        ]);
+        $expectedUrlAutoindex = $makeExpectedUrlFx('', '');
+        self::assertSame($expectedUrlAutoindex, $app->url($page, $extraRequestUrlArgs));
+
+        $app = $this->createApp([
+            'request' => $request,
+            'stickyGetArguments' => $appStickyGetArguments,
+            'urlBuildingIndexPage' => '',
+            'urlBuildingExt' => '.html',
+        ]);
+        $expectedUrlAutoindex2 = $makeExpectedUrlFx('', '.html');
+        self::assertSame($expectedUrlAutoindex2, $app->url($page, $extraRequestUrlArgs));
+    }
+
+    /**
+     * @return iterable<list<mixed>>
+     */
     public static function provideUrlCases(): iterable
     {
         foreach (['/', '/page.html', '/d/', '/0/index.php'] as $requestPage) {
@@ -167,6 +232,7 @@ class AppTest extends TestCase
         yield ['/?v=V', ['v' => false], ['x'], [], 'x.php'];
         yield ['/', ['v' => false], ['x', 'v' => 'page'], [], 'x.php?v=page'];
         yield ['/', ['v' => false], ['x'], ['v' => 'extra'], 'x.php'];
+        yield ['/', ['__atk_json' => false], ['x'], [], 'x.php'];
 
         // /wo page path
         yield ['/x', [], [], [], '/x.php'];
@@ -178,68 +244,6 @@ class AppTest extends TestCase
         yield ['/?foo=sticky', ['foo' => true], ['x', 'foo' => 'page'], ['foo' => 'extra'], 'x.php?foo=page'];
         yield ['/?foo=sticky', ['foo' => true], ['x'], ['foo' => 'extra'], 'x.php?foo=sticky'];
         yield ['/', ['foo' => true], ['x'], ['foo' => 'extra'], 'x.php'];
-    }
-
-    /**
-     * @dataProvider provideUrlCases
-     *
-     * @param array<string, bool>               $appStickyGetArguments
-     * @param array<0|string, string|int|false> $page
-     * @param array<string, string>             $extraRequestUrlArgs
-     */
-    #[DataProvider('provideUrlCases')]
-    public function testUrl(string $requestUrl, array $appStickyGetArguments, array $page, array $extraRequestUrlArgs, string $expectedUrl): void
-    {
-        $request = (new Psr17Factory())->createServerRequest('GET', $requestUrl);
-
-        $app = $this->createApp([
-            'request' => $request,
-            'stickyGetArguments' => $appStickyGetArguments,
-        ]);
-        self::assertSame($expectedUrl, $app->url($page, $extraRequestUrlArgs));
-        $pageAssocOnly = array_diff_key($page, [true]);
-        self::assertSame($expectedUrl, $app->url(($page[0] ?? '') . (count($pageAssocOnly) > 0 ? '?' . implode('&', array_map(static fn ($k) => $k . '=' . $pageAssocOnly[$k], array_keys($pageAssocOnly))) : ''), $extraRequestUrlArgs));
-        self::assertSame($expectedUrl, $app->jsUrl($page, array_merge(['__atk_json' => null], $extraRequestUrlArgs)));
-
-        $makeExpectedUrlFx = static function (string $indexPage, string $ext) use ($page, $expectedUrl) {
-            return preg_replace_callback('~^[^?]*?\K([^/?]*)(\.php)(?=\?|$)~', static function ($matches) use ($page, $indexPage, $ext) {
-                if ($matches[1] === 'index' && !preg_match('~^([^?]*?/)?index(\.php)?(?=\?|$)~', $page[0] ?? '')) {
-                    $matches[1] = $indexPage;
-                }
-                if (!preg_match('~^[^?]*?\.php(?=\?|$)~', $page[0] ?? '')) {
-                    $matches[2] = $matches[1] !== '' ? $ext : '';
-                }
-
-                return $matches[1] . $matches[2];
-            }, $expectedUrl);
-        };
-
-        $app = $this->createApp([
-            'request' => $request,
-            'stickyGetArguments' => $appStickyGetArguments,
-            'urlBuildingIndexPage' => 'default',
-            'urlBuildingExt' => '.php8',
-        ]);
-        $expectedUrlCustom = $makeExpectedUrlFx('default', '.php8');
-        self::assertSame($expectedUrlCustom, $app->url($page, $extraRequestUrlArgs));
-
-        $app = $this->createApp([
-            'request' => $request,
-            'stickyGetArguments' => $appStickyGetArguments,
-            'urlBuildingIndexPage' => '',
-            'urlBuildingExt' => '',
-        ]);
-        $expectedUrlAutoindex = $makeExpectedUrlFx('', '');
-        self::assertSame($expectedUrlAutoindex, $app->url($page, $extraRequestUrlArgs));
-
-        $app = $this->createApp([
-            'request' => $request,
-            'stickyGetArguments' => $appStickyGetArguments,
-            'urlBuildingIndexPage' => '',
-            'urlBuildingExt' => '.html',
-        ]);
-        $expectedUrlAutoindex2 = $makeExpectedUrlFx('', '.html');
-        self::assertSame($expectedUrlAutoindex2, $app->url($page, $extraRequestUrlArgs));
     }
 
     public function testTerminateNoContentTypeException(): void

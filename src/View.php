@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
+use Atk4\Data\Field;
 use Atk4\Data\Model;
-use Atk4\Data\Persistence;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
@@ -26,14 +27,11 @@ class View extends AbstractView
     /**
      * When you call renderAll() this will be populated with JavaScript chains.
      *
-     * @var array<1|string, array<int, JsExpressionable>>
+     * @var array<1|string, list<JsExpressionable>>
      *
      * @internal
      */
     protected array $_jsActions = [];
-
-    public ?Model $model = null;
-    public ?Model $entity = null;
 
     /**
      * Name of the region in the parent's template where this object will output itself.
@@ -49,7 +47,7 @@ class View extends AbstractView
      */
     public $ui = false;
 
-    /** @var array<int, string> List of element CSS classes. */
+    /** @var list<string> List of element CSS classes. */
     public array $class = [];
 
     /** @var array<string, string> Map of element CSS styles. */
@@ -102,71 +100,6 @@ class View extends AbstractView
         }
 
         $this->setDefaults($defaults);
-    }
-
-    #[\Override]
-    public function &__get(string $name)
-    {
-        // TODO remove in atk4/ui 6.0
-        if ($name === 'model' && !(new \ReflectionProperty(self::class, 'model'))->isInitialized($this) && $this->entity !== null) {
-            throw new Exception('Use View::$entity property instead for entity access');
-        }
-
-        return parent::__get($name);
-    }
-
-    /**
-     * Associate this view with a model. Do not place any logic in this class, instead take it
-     * to renderView().
-     *
-     * Do not try to create your own "Model" implementation, instead you must be looking for
-     * your own "Persistence" implementation.
-     */
-    public function setModel(Model $model): void
-    {
-        if (((new \ReflectionProperty(self::class, 'model'))->isInitialized($this) ? $this->model : $this->entity) !== null) {
-            if (((new \ReflectionProperty(self::class, 'model'))->isInitialized($this) ? $this->model : $this->entity) === $model) {
-                return;
-            }
-
-            throw new Exception('Different model is already set');
-        }
-
-        if ($model->isEntity()) {
-            unset($this->{'model'});
-            $this->entity = $model;
-        } else {
-            unset($this->{'entity'});
-            $this->model = $model;
-        }
-    }
-
-    /**
-     * Sets source of the View.
-     *
-     * @param array $fields Limit model to particular fields
-     *
-     * @phpstan-assert !null $this->model
-     */
-    public function setSource(array $data, $fields = null): Model
-    {
-        // ID with zero value is not supported (at least in MySQL replaces it with next AI value)
-        if (isset($data[0])) {
-            if (array_is_list($data)) {
-                $oldData = $data;
-                $data = [];
-                foreach ($oldData as $k => $row) {
-                    $data[$k + 1_000_000_000] = $row; // large offset to prevent accessing wrong data by old key
-                }
-            } else {
-                throw new Exception('Source data contains unsupported zero key');
-            }
-        }
-
-        $this->setModel(new Model(new Persistence\Static_($data)), $fields); // @phpstan-ignore arguments.count
-        $this->model->getIdField()->type = 'string'; // TODO probably unwanted
-
-        return $this->model;
     }
 
     #[\Override]
@@ -262,8 +195,8 @@ class View extends AbstractView
         }
 
         // allow for injecting the model with a seed
-        if ($this->model !== null) {
-            $this->setModel($this->model);
+        if (property_exists($this, 'model') && $this->model !== null) {
+            $this->setModel($this->model); // @phpstan-ignore method.notFound
         }
     }
 
@@ -276,8 +209,8 @@ class View extends AbstractView
      * In addition to adding a child object, sets up it's template
      * and associate it's output with the region in our template.
      *
-     * @param AbstractView      $object
-     * @param string|array|null $region
+     * @param AbstractView             $object
+     * @param string|array<mixed>|null $region
      */
     #[\Override]
     public function add($object, $region = null): AbstractView
@@ -371,15 +304,17 @@ class View extends AbstractView
      * Multiple CSS classes can also be added if passed as space separated
      * string or array of class names.
      *
-     * @param string|array<int, string> $class
+     * @param string|list<string> $class
      *
      * @return $this
      */
     public function addClass($class)
     {
-        if ($class !== []) {
-            $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
-            $this->class = array_merge($this->class, $classArr);
+        $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
+        foreach ($classArr as $v) {
+            if (!in_array($v, $this->class, true)) {
+                $this->class[] = $v;
+            }
         }
 
         return $this;
@@ -388,14 +323,14 @@ class View extends AbstractView
     /**
      * Remove one or several CSS classes from the element.
      *
-     * @param string|array<int, string> $class
+     * @param string|list<string> $class
      *
      * @return $this
      */
     public function removeClass($class)
     {
         $classArr = explode(' ', is_array($class) ? implode(' ', $class) : $class);
-        $this->class = array_diff($this->class, $classArr);
+        $this->class = array_values(array_diff($this->class, $classArr));
 
         return $this;
     }
@@ -416,6 +351,9 @@ class View extends AbstractView
                 $this->setStyle($k, $v);
             }
         } else {
+            \assert(is_string($property)); // @phpstan-ignore function.alreadyNarrowedType, function.alreadyNarrowedType
+            \assert(is_string($value));
+
             $this->style[$property] = $value;
         }
 
@@ -437,9 +375,9 @@ class View extends AbstractView
     }
 
     /**
-     * Set attribute.
+     * Set HTML attribute.
      *
-     * @param string|int|array<string, string|int>  $name
+     * @param string|array<string, string|int>      $name
      * @param ($name is array ? never : string|int) $value
      *
      * @return $this
@@ -451,6 +389,9 @@ class View extends AbstractView
                 $this->setAttr($k, $v);
             }
         } else {
+            \assert(is_string($name)); // @phpstan-ignore function.alreadyNarrowedType, function.alreadyNarrowedType
+            \assert(is_string($value) || is_int($value));
+
             $this->attr[$name] = $value;
         }
 
@@ -458,9 +399,9 @@ class View extends AbstractView
     }
 
     /**
-     * Remove attribute.
+     * Remove HTML attribute.
      *
-     * @param string|array<int, string> $name
+     * @param string|list<string> $name
      *
      * @return $this
      */
@@ -481,7 +422,7 @@ class View extends AbstractView
 
     // {{{ Sticky URLs
 
-    /** @var array<string, string> stickyGet arguments */
+    /** @var array<string, string|null> stickyGet arguments */
     public $stickyArgs = [];
 
     /**
@@ -506,6 +447,8 @@ class View extends AbstractView
 
     /**
      * Get sticky arguments defined by the view and parents (including API).
+     *
+     * @return array<string, string|null>
      */
     protected function _getStickyArgs(): array
     {
@@ -680,6 +623,8 @@ class View extends AbstractView
 
     /**
      * Render View using JSON format.
+     *
+     * @return array<string, mixed>
      */
     public function renderToJsonArr(): array
     {
@@ -731,10 +676,10 @@ class View extends AbstractView
      *
      * 1. Calling with arguments:
      * $view->js(); // technically does nothing
-     * $a = $view->js()->hide(); // creates chain for hiding $view but does not bind to event yet
+     * $jsHide = $view->js()->hide(); // creates chain for hiding $view but does not bind to event yet
      *
      * 2. Binding existing chains
-     * $img->on('mouseenter', $a); // binds previously defined chain to event on event of $img
+     * $img->on('mouseenter', $jsHide); // binds previously defined chain to event on event of $img
      *
      * Produced code: $('#img_id').on('mouseenter', function (event) {
      *     event.preventDefault();
@@ -796,7 +741,7 @@ class View extends AbstractView
      * as Vue.component() method.
      *
      * @param string                $component           The component name
-     * @param array                 $initData            The component properties passed as the initData prop.
+     * @param array<string, mixed>  $initData            The component properties passed as the initData prop.
      *                                                   This is the initial data pass to your main component via the initData bind property
      *                                                   of the vue component instance created via the vueService.
      * @param JsExpressionable|null $componentDefinition component definition object
@@ -811,12 +756,12 @@ class View extends AbstractView
         }
 
         if ($componentDefinition) {
-            $chain = (new JsVueService())->createVue($selector, $component, $componentDefinition, $initData);
+            $jsChain = (new JsVueService())->createVue($selector, $component, $componentDefinition, $initData);
         } else {
-            $chain = (new JsVueService())->createAtkVue($selector, $component, $initData);
+            $jsChain = (new JsVueService())->createAtkVue($selector, $component, $initData);
         }
 
-        $this->js(true, $chain);
+        $this->js(true, $jsChain);
 
         return $this;
     }
@@ -833,6 +778,8 @@ class View extends AbstractView
      * Note: In order to make sure your event is unique within atk, you can
      * use the view name in it.
      *    $this->jsEmitEvent($this->name . '-my-event', $data)
+     *
+     * @param array<string, mixed> $eventData
      */
     public function jsEmitEvent(string $eventName, array $eventData = []): JsChain
     {
@@ -842,16 +789,19 @@ class View extends AbstractView
     /**
      * Get Local and Session web storage associated with this view.
      * Web storage can be retrieved using a $view->jsReload() request.
+     *
+     * @return array{local: mixed, session: mixed}
      */
-    public function jsGetStoreData(): array
+    public function getJsStoreData(): array
     {
-        $data = [];
-        $data['local'] = $this->getApp()->decodeJson(
-            $this->getApp()->tryGetRequestQueryParam($this->name . '_local_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_local_store') ?? 'null'
-        );
-        $data['session'] = $this->getApp()->decodeJson(
-            $this->getApp()->tryGetRequestQueryParam($this->name . '_session_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_session_store') ?? 'null'
-        );
+        $data = [
+            'local' => $this->getApp()->decodeJson(
+                $this->getApp()->tryGetRequestQueryParam($this->name . '_local_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_local_store') ?? 'null'
+            ),
+            'session' => $this->getApp()->decodeJson(
+                $this->getApp()->tryGetRequestQueryParam($this->name . '_session_store') ?? $this->getApp()->tryGetRequestPostParam($this->name . '_session_store') ?? 'null'
+            ),
+        ];
 
         return $data;
     }
@@ -876,6 +826,8 @@ class View extends AbstractView
      *  $v->jsAddStoreData(['args' => ['path' => '/'], 'fields' => ['name' => 'test']]]);
      *
      *  Final store value will be: ['args' => ['path' => '/'], 'fields' => ['name' => 'test']];
+     *
+     * @param array<string, mixed> $data
      */
     public function jsAddStoreData(array $data, bool $useSession = false): JsExpressionable
     {
@@ -887,9 +839,9 @@ class View extends AbstractView
     /**
      * Returns JS for reloading View.
      *
-     * @param array                 $args
-     * @param JsExpressionable|null $afterSuccess
-     * @param array<string, mixed>  $apiConfig
+     * @param array<string, string|int|JsExpressionable> $args
+     * @param JsExpressionable|null                      $afterSuccess
+     * @param array<string, mixed>                       $apiConfig
      *
      * @return JsReload
      */
@@ -926,11 +878,12 @@ class View extends AbstractView
      *
      * @param string                                                                                                                                                                                       $event    JavaScript event
      * @param ($action is object ? string : ($action is null ? string : never)|JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction) $selector Optional jQuery-style selector
-     * @param ($selector is string|null ? JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction : array)                              $action   code to execute
+     * @param ($selector is string|null ? JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction : array<int|string, mixed>)           $action   code to execute
+     * @param array<int|string, mixed>                                                                                                                                                                     $defaults
      *
      * @return ($selector is string|null ? ($action is null ? Jquery : null) : ($action is array|null ? Jquery : null))
      */
-    public function on(string $event, $selector = null, $action = null, array $defaults = [])
+    public function on(string $event, $selector = null, $action = null, array $defaults = []): ?JsExpressionable
     {
         // second argument may be omitted
         if ($selector !== null && !is_string($selector) && ($action === null || is_array($action)) && $defaults === []) {
@@ -959,9 +912,9 @@ class View extends AbstractView
         }
 
         // set preventDefault and stopPropagation by default
-        $eventStatements = [];
-        $eventStatements['preventDefault'] = $defaults['preventDefault'] ?? true;
-        $eventStatements['stopPropagation'] = $defaults['stopPropagation'] ?? true;
+        $jsEventStatements = [];
+        $jsEventStatements['preventDefault'] = $defaults['preventDefault'] ?? true;
+        $jsEventStatements['stopPropagation'] = $defaults['stopPropagation'] ?? true;
 
         $lazyJsRenderFx = function (\Closure $fx): JsExpressionable {
             return new class($fx) implements JsExpressionable {
@@ -985,12 +938,12 @@ class View extends AbstractView
 
         // dealing with callback action
         if ($action instanceof \Closure || (is_array($action) && ($action[0] ?? null) instanceof \Closure)) {
-            $actions = [];
+            $jsActions = [];
             if (is_array($action)) {
                 $urlData = $action;
                 unset($urlData[0]);
-                foreach ($urlData as $a) {
-                    $actions[] = $a;
+                foreach ($urlData as $v) {
+                    $jsActions[] = $v;
                 }
                 $action = $action[0];
             }
@@ -1005,9 +958,11 @@ class View extends AbstractView
                 return $action($chain, ...$args);
             }, $arguments);
 
-            $actions[] = $lazyJsRenderFx(static fn () => $cb->jsExecute());
+            $jsActions[] = $lazyJsRenderFx(static fn () => $cb->jsExecute());
         } elseif ($action instanceof UserAction\ExecutorInterface || $action instanceof UserAction\SharedExecutor || $action instanceof Model\UserAction) {
-            $ex = $action instanceof Model\UserAction ? $this->getExecutorFactory()->createExecutor($action, $this) : $action;
+            $ex = $action instanceof Model\UserAction
+                ? $this->getExecutorFactory()->createExecutor($action, $this)
+                : $action;
 
             $setupNonSharedExecutorFx = function (UserAction\ExecutorInterface $ex) use (&$defaults, &$arguments): void {
                 /** @var AbstractView&UserAction\ExecutorInterface $ex https://github.com/phpstan/phpstan/issues/3770 */
@@ -1022,9 +977,24 @@ class View extends AbstractView
                     unset($arguments[0]);
                 }
 
-                if (isset($arguments[$ex->name]) && !$arguments[$ex->name] instanceof JsExpressionable) {
-                    $exModel = $ex->getAction()->getModel();
-                    $arguments[$ex->name] = $this->getApp()->uiPersistence->typecastAttributeSaveField($exModel->getIdField(), $arguments[$ex->name]);
+                // implicitly typecast all user action arguments
+                foreach ($arguments as $k => $v) {
+                    if (!$v instanceof JsExpressionable) {
+                        if ($k !== $ex->name && !isset($ex->getAction()->args[$k])) {
+                            continue;
+                        }
+
+                        $actionArgType = $k === $ex->name
+                            ? $ex->getAction()->getModel()->getIdField()->type
+                            : $ex->getAction()->args[$k]['type'];
+
+                        $arguments[$k] = new JsCallbackLoadableValue(
+                            new JsExpression('[]', [$this->getApp()->uiPersistence->typecastAttributeSaveField(new Field(['type' => $actionArgType]), $v)]),
+                            function ($v) use ($actionArgType) {
+                                return $this->getApp()->uiPersistence->typecastAttributeLoadField(new Field(['type' => $actionArgType]), $v);
+                            }
+                        );
+                    }
                 }
 
                 if ($ex instanceof UserAction\JsCallbackExecutor) {
@@ -1040,46 +1010,46 @@ class View extends AbstractView
 
             if ($ex instanceof UserAction\SharedExecutor) {
                 $setupNonSharedExecutorFx($ex->getExecutor());
-                $actions = [$ex->getExecutor() instanceof UserAction\JsCallbackExecutor
+                $jsActions = [$ex->getExecutor() instanceof UserAction\JsCallbackExecutor
                     ? $lazyJsRenderFx(static fn () => $ex->jsExecute($arguments))
                     : $ex->jsExecute($arguments)];
             } elseif ($ex instanceof UserAction\JsExecutorInterface && $ex instanceof self) {
                 $setupNonSharedExecutorFx($ex);
                 $ex->executeModelAction();
-                $actions = [$ex->jsExecute($arguments)];
+                $jsActions = [$ex->jsExecute($arguments)];
             } elseif ($ex instanceof UserAction\JsCallbackExecutor) {
                 $setupNonSharedExecutorFx($ex);
-                $ex->executeModelAction();
-                $actions = [$lazyJsRenderFx(static fn () => $ex->jsExecute($arguments))];
+                $ex->executeModelAction($arguments);
+                $jsActions = [$lazyJsRenderFx(static fn () => $ex->jsExecute($arguments))];
             } else {
                 throw new Exception('Executor must be of type UserAction\JsCallbackExecutor or UserAction\JsExecutorInterface');
             }
         } elseif ($action instanceof JsCallback) {
-            $actions = [$lazyJsRenderFx(static fn () => $action->jsExecute())];
+            $jsActions = [$lazyJsRenderFx(static fn () => $action->jsExecute())];
         } else {
-            $actions = [$action];
+            $jsActions = [$action];
         }
 
         if ($defaults['confirm'] ?? null) {
-            array_unshift($eventStatements, new JsExpression('$.atkConfirm({ message: [confirm], onApprove: [action], options: { button: { ok: [ok], cancel: [cancel] } }, context: this })', [
+            array_unshift($jsEventStatements, new JsExpression('$.atkConfirm({ message: [confirm], onApprove: [action], options: { button: { ok: [ok], cancel: [cancel] } }, context: this })', [
                 'confirm' => $defaults['confirm'],
-                'action' => new JsFunction([], $actions),
+                'action' => new JsFunction([], $jsActions),
                 'ok' => $defaults['ok'] ?? 'Ok',
                 'cancel' => $defaults['cancel'] ?? 'Cancel',
             ]));
         } else {
-            $eventStatements = array_merge($eventStatements, $actions);
+            $jsEventStatements = array_merge($jsEventStatements, $jsActions);
         }
 
-        $eventFunction = new JsFunction([], $eventStatements);
-        $eventChain = new Jquery($this);
+        $jsEventFunction = new JsFunction([], $jsEventStatements);
+        $jsEventChain = new Jquery($this);
         if ($selector) {
-            $eventChain->on($event, $selector, $eventFunction);
+            $jsEventChain->on($event, $selector, $jsEventFunction);
         } else {
-            $eventChain->on($event, $eventFunction);
+            $jsEventChain->on($event, $jsEventFunction);
         }
 
-        $this->_jsActions[$event][] = $eventChain;
+        $this->_jsActions[$event][] = $jsEventChain;
 
         return $res;
     }
@@ -1089,14 +1059,14 @@ class View extends AbstractView
      */
     public function getJs(): JsBlock
     {
-        $actions = [];
+        $jsActions = [];
         foreach ($this->_jsActions as $eventActions) {
             foreach ($eventActions as $action) {
-                $actions[] = $action;
+                $jsActions[] = $action;
             }
         }
 
-        return new JsBlock($actions);
+        return new JsBlock($jsActions);
     }
 
     // }}}

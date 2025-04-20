@@ -1,10 +1,10 @@
 "use strict";
 (self["webpackChunkatk"] = self["webpackChunkatk"] || []).push([["atk-vue-inline-edit"],{
 
-/***/ "./src/vue-components/inline-edit.component.js":
-/*!*****************************************************!*\
-  !*** ./src/vue-components/inline-edit.component.js ***!
-  \*****************************************************/
+/***/ "./src/VueComponent/InlineEditComponent.js":
+/*!*************************************************!*\
+  !*** ./src/VueComponent/InlineEditComponent.js ***!
+  \*************************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);

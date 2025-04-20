@@ -63,7 +63,7 @@ class FilterPopup extends Popup
         if ($filter !== null) {
             $entity->setMulti($filter);
         }
-        $this->form->setModel($entity);
+        $this->form->setEntity($entity);
 
         $this->form->onSubmit(function (Form $form) {
             $form->entity->save();
@@ -88,6 +88,9 @@ class FilterPopup extends Popup
         return $this->recallData() !== null;
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public function recallData(): ?array
     {
         return $this->form->entity->recallData();

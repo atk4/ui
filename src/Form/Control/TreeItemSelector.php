@@ -7,6 +7,7 @@ namespace Atk4\Ui\Form\Control;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
@@ -63,7 +64,7 @@ class TreeItemSelector extends Form\Control
      *
      * When adding nodes array into an item, it will automatically be treated as a group unless empty.
      *
-     * @var array
+     * @var list<array{name: string, id: mixed, nodes?: list<array<string, mixed>>}>
      */
     public $treeItems = [];
 
@@ -84,6 +85,15 @@ class TreeItemSelector extends Form\Control
         $this->itemSelector = View::addTo($this, ['template' => $this->itemSelectorTemplate]);
     }
 
+    public function getInputTag(): string
+    {
+        return $this->getApp()->getTag('input/', [
+            'name' => $this->shortName,
+            'type' => 'hidden',
+            'value' => $this->getInputValue(),
+        ]);
+    }
+
     /**
      * Provide a function to be executed when clicking an item in tree selector.
      * The executing function will receive an array with item state in it
@@ -93,36 +103,16 @@ class TreeItemSelector extends Form\Control
      */
     public function onItem(\Closure $fx): void
     {
-        $this->cb = JsCallback::addTo($this)->set(function (Jquery $j, $data) use ($fx) {
-            $value = $this->getApp()->decodeJson($data);
+        $this->cb = JsCallback::addTo($this)->set(static function (Jquery $j, $value) use ($fx) {
+            return $fx($value);
+        }, ['data' => new JsCallbackLoadableValue(null, function ($v) {
+            $value = $this->getApp()->decodeJson($v);
             if (!$this->allowMultiple) {
                 $value = $value[0];
             }
 
-            return $fx($value);
-        }, ['data' => 'value']);
-    }
-
-    /**
-     * Returns <input ...> tag.
-     *
-     * @return string
-     */
-    public function getInput()
-    {
-        return $this->getApp()->getTag('input/', [
-            'name' => $this->shortName,
-            'type' => 'hidden',
-            'value' => $this->getValue(),
-        ]);
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getValue()
-    {
-        return $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get());
+            return $value;
+        })]);
     }
 
     #[\Override]
@@ -130,7 +120,7 @@ class TreeItemSelector extends Form\Control
     {
         parent::renderView();
 
-        $this->itemSelector->template->tryDangerouslySetHtml('Input', $this->getInput());
+        $this->itemSelector->template->tryDangerouslySetHtml('Input', $this->getInputTag());
 
         $this->itemSelector->vue('AtkTreeItemSelector', [
             'item' => ['id' => 'atk-root', 'nodes' => $this->treeItems],

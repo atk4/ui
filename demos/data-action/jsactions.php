@@ -24,7 +24,7 @@ Header::addTo($app, [
 $country = new Country($app->db);
 
 $sendEmailAction = $country->addUserAction('Email', [
-    'confirmation' => 'Are you sure you wish to send an email?',
+    'confirmation' => 'Are you sure to send an email?',
     'callback' => static function (Country $country) {
         return 'Email to Kristy in ' . $country->name . ' has been sent!';
     },
@@ -42,7 +42,7 @@ Header::addTo($app, [
 
 // note here that we explicitly required a JsCallbackExecutor for the greet action
 $country->addUserAction('greet', [
-    'appliesTo' => UserAction::APPLIES_TO_NO_RECORDS,
+    'appliesTo' => UserAction::APPLIES_TO_NO_RECORD,
     'args' => [
         'name' => [
             'type' => 'string',
@@ -78,7 +78,8 @@ $card->addContent($content);
 $card->addDescription('Kristy is a friend of Mully.');
 
 $s = $card->addSection('Country');
-$s->addFields($entity = $country->loadAny(), [$country->fieldName()->name, $country->fieldName()->iso]);
+$entity = $country->loadAny();
+$s->addFields($entity, [$country->fieldName()->name, $country->fieldName()->iso]);
 
 // pass the model action to the Card::addClickAction() method
 $card->addClickAction($sendEmailAction, null, ['id' => $entity->getId()]);

@@ -31,19 +31,21 @@ Button::addTo($buttons, ['Use Stat Model', 'icon' => 'arrow down'])
 
 $form = Form::addTo($seg, ['layout' => [Form\Layout\Columns::class]]);
 $modelClass = ['country' => Country::class, 'file' => File::class][$app->tryGetRequestQueryParam('m')] ?? Stat::class;
-$form->setModel((new $modelClass($app->db))->loadAny());
+$form->setEntity((new $modelClass($app->db))->loadAny());
 
 $form->onSubmit(static function (Form $form) {
-    $errors = [];
+    $jsErrors = [];
     $modelDirty = \Closure::bind(static function () use ($form): array { // TODO Model::dirty property is private
         return $form->entity->dirty;
     }, null, Model::class)();
     foreach ($modelDirty as $field => $value) {
         // we should care only about editable fields
         if ($form->entity->getField($field)->isEditable()) {
-            $errors[] = $form->jsError($field, 'Value was changed, ' . $form->getApp()->encodeJson($value) . ' to ' . $form->getApp()->encodeJson($form->entity->get($field)));
+            $jsErrors[] = $form->jsError($field, 'Value was changed, ' . $form->getApp()->encodeJson($value) . ' to ' . $form->getApp()->encodeJson($form->entity->get($field)));
         }
     }
 
-    return $errors !== [] ? new JsBlock($errors) : 'No fields were changed';
+    return $jsErrors !== []
+        ? new JsBlock($jsErrors)
+        : 'No fields were changed';
 });

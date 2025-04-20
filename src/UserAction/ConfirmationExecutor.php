@@ -8,7 +8,6 @@ use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\Button;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
@@ -27,8 +26,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     use HookTrait;
     use InnerLoaderTrait;
 
-    /** @var UserAction|null Action to execute */
-    public $action;
+    public UserAction $action;
 
     /** @var JsExpressionable|\Closure<T of Model>($this, T, mixed, mixed): ?JsBlock JS expression to return if action was successful, e.g "new JsToast('Thank you')" */
     public $jsSuccess;
@@ -83,9 +81,7 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
     #[\Override]
     public function jsExecute(array $urlArgs = []): JsBlock
     {
-        if (!$this->action) {
-            throw new Exception('Action must be set prior to assign trigger');
-        }
+        $this->action; // assert action is set @phpstan-ignore expr.resultUnused
 
         return $this->jsLoadAndShow($urlArgs);
     }
@@ -117,6 +113,8 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
         $this->action = $this->executeModelActionLoad($this->action);
 
         $this->loader->set(function (Loader $p) {
+            $this->action->validateBeforeExecute();
+
             if ($this->step === 'execute') {
                 $this->doFinal($p);
             } else {
@@ -180,14 +178,14 @@ class ConfirmationExecutor extends Modal implements JsExecutorInterface
      */
     protected function jsGetExecute($obj, $id): JsBlock
     {
-        $success = $this->jsSuccess instanceof \Closure
+        $jsSuccess = $this->jsSuccess instanceof \Closure
             ? ($this->jsSuccess)($this, $this->action->getModel(), $id, $obj)
             : $this->jsSuccess;
 
         return new JsBlock([
             $this->jsHide(),
             JsBlock::fromHookResult($this->hook(BasicExecutor::HOOK_AFTER_EXECUTE, [$obj, $id]) // @phpstan-ignore ternary.shortNotAllowed
-                ?: ($success ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
+                ?: ($jsSuccess ?? new JsToast('Success' . (is_string($obj) ? (': ' . $obj) : '')))),
         ]);
     }
 }

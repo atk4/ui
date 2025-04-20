@@ -21,11 +21,11 @@ const updateFileSync = function (f, callback) {
 for (const f of [
     '@highlightjs',
     '@shopify',
+    '@twemoji/api',
     'chart.js',
     'flatpickr',
     'fomantic-ui',
     'jquery',
-    'twemoji',
 ]) {
     fs.cpSync(
         path.join(path.join(__dirname, 'node_modules'), f),
@@ -120,7 +120,7 @@ walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
     });
 });
 
-// remove twemoji images from Fomantic-UI, reduce total size by about 3500 files and 25 MB
+// remove Twemoji images from Fomantic-UI, reduce total size by about 3500 files and 25 MB
 // wait until https://github.com/fomantic/Fomantic-UI/issues/2363 is implemented or pack all images in one phar
 walkFilesSync(path.join(__dirname, 'fomantic-ui'), (f) => {
     updateFileSync(f, (data) => {
@@ -148,7 +148,7 @@ walkFilesSync(__dirname, (f) => {
             let pathRel = null;
             if (m2.startsWith('http://') || m2.startsWith('https://') || m2.startsWith('//')) {
                 const pathMap = {
-                    'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/svg/': path.join(__dirname, 'twemoji/assets/svg/'),
+                    'https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/svg/': path.join(__dirname, '@twemoji/api/assets/svg/'),
                 };
 
                 const pathMapKeys = Object.keys(pathMap);

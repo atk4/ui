@@ -26,7 +26,7 @@ class FormExecutor extends BasicExecutor
             if (!$this->action->fields) {
                 $this->action->fields = $this->getModelFields($this->action->getModel());
             }
-            $this->form->setModel($this->action->getEntity(), $this->action->fields);
+            $this->form->setEntity($this->action->getEntity(), $this->action->fields);
         }
 
         $this->form->onSubmit(function (Form $form) {
@@ -38,7 +38,7 @@ class FormExecutor extends BasicExecutor
      * Returns array of names of fields.
      * This includes all editable or visible fields of the model.
      *
-     * @return array
+     * @return list<string>
      */
     protected function getModelFields(Model $model)
     {

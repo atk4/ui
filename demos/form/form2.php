@@ -27,7 +27,7 @@ $form = Form::addTo($app, ['class.segment' => true]);
 // $form = Form::addTo($app, ['class.segment' => true, 'buttonSave' => [null, 'Import', 'class.secondary' => true, 'iconRight' => 'list']]);
 Label::addTo($form, ['Input new country information here', 'class.top attached' => true], ['AboveControls']);
 
-$form->setModel((new Country($app->db))->createEntity(), []);
+$form->setEntity((new Country($app->db))->createEntity(), []);
 
 // form basic field group
 $formAddress = $form->addGroup('Basic Country Information');
@@ -65,21 +65,21 @@ $form->onSubmit(static function (Form $form) {
     }
 
     // in-form validation
-    $errors = [];
+    $jsErrors = [];
     if (mb_strlen($form->entity->get('first_name')) < 3) {
-        $errors[] = $form->jsError('first_name', 'too short, ' . $form->entity->get('first_name'));
+        $jsErrors[] = $form->jsError('first_name', 'too short, ' . $form->entity->get('first_name'));
     }
     if (mb_strlen($form->entity->get('last_name')) < 5) {
-        $errors[] = $form->jsError('last_name', 'too short');
+        $jsErrors[] = $form->jsError('last_name', 'too short');
     }
 
     // Model validation. We do it manually because we are not using Model::save() method in demo mode.
     foreach ($countryEntity->validate('save') as $k => $error) {
-        $errors[] = $form->jsError($k, $error);
+        $jsErrors[] = $form->jsError($k, $error);
     }
 
-    if ($errors) {
-        return new JsBlock($errors);
+    if ($jsErrors) {
+        return new JsBlock($jsErrors);
     }
 
     return new JsToast($countryEntity->getUserAction('add')->execute());
@@ -96,8 +96,8 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class extends Mod
         $this->addField('name', ['required' => true]);
         $this->addField('surname', ['ui' => ['placeholder' => 'e.g. Smith']]);
         $this->addField('gender', ['enum' => ['M', 'F']]);
-        $this->hasOne('country_lookup_id', ['model' => [Country::class]]); // this works fast
-        $this->hasOne('country_dropdown_id', ['model' => [Country::class], 'ui' => ['form' => new Form\Control\Dropdown()]]); // this works slow
+        $this->hasOne('country_lookup_id', ['model' => [Country::class]]); // this renders faster
+        $this->hasOne('country_dropdown_id', ['model' => [Country::class], 'ui' => ['form' => new Form\Control\Dropdown()]]); // this renders slower
     }
 
     #[\Override]
@@ -114,7 +114,7 @@ $personClass = AnonymousClassNameCache::get_class(fn () => new class extends Mod
 });
 
 $form = Form::addTo($app)->addClass('segment');
-$form->setModel((new $personClass($app->db))->createEntity());
+$form->setEntity((new $personClass($app->db))->createEntity());
 
 $form->onSubmit(static function (Form $form) {
     return new JsToast('Form saved!');

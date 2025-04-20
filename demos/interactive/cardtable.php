@@ -13,4 +13,4 @@ require_once __DIR__ . '/../init-app.php';
 
 Header::addTo($app, ['Card displays read-only data of a single record']);
 
-CardTable::addTo($app)->setModel((new Stat($app->db))->loadAny());
+CardTable::addTo($app)->setEntity((new Stat($app->db))->loadAny());

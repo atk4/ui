@@ -17,24 +17,20 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsFunction;
 use Atk4\Ui\Js\JsModal;
 use Atk4\Ui\Js\JsToast;
+use Atk4\Ui\View\ModelTrait;
 use Atk4\Ui\VirtualPage;
 
 class Lookup extends Input
 {
     use HookTrait;
+    use ModelTrait;
 
     public $defaultTemplate = 'form/control/lookup.html';
 
     public string $inputType = 'hidden';
 
-    /** @var array<array-key, mixed> Declare this property so Lookup is consistent as decorator to replace Form\Control\Dropdown. */
-    public array $values;
-
     /** @var CallbackLater Object used to capture requests from the browser. */
     public $callback;
-
-    /** @var string Set this to true, to permit "empty" selection. If you set it to string, it will be used as a placeholder for empty value. */
-    public $empty = "\u{00a0}"; // Unicode NBSP
 
     /**
      * Either set this to array of fields which must be searched (e.g. "name", "surname"), or define this
@@ -64,7 +60,7 @@ class Lookup extends Input
      * true = will use "Add new" label
      * string = will use your string
      *
-     * @var bool|string|array|null
+     * @var bool|string|array<'button'|'fields'|'caption', mixed>|null
      */
     public $plus = false;
 
@@ -105,13 +101,14 @@ class Lookup extends Input
      *     }'),
      * ]]);
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public $settings = [];
 
     /**
-     * Define callback for generating the row data
-     * If left empty default callback Lookup::defaultRenderRow is used.
+     * Define callback for generating the row data.
+     *
+     * When null default callback Lookup::defaultRenderRow is used.
      *
      * @var \Closure<T of Model>($this, T): array{title: mixed}
      */
@@ -143,6 +140,27 @@ class Lookup extends Input
         });
     }
 
+    #[\Override]
+    public function getInputValue(): ?string
+    {
+        // dropdown input tag accepts CSV formatted list of IDs
+        return $this->entityField !== null
+            ? ($this->multiple && $this->entityField->getField()->type === 'json' && is_array($this->entityField->get())
+                ? implode(',', $this->entityField->get())
+                : $this->getApp()->uiPersistence->typecastAttributeSaveField($this->entityField->getField(), $this->entityField->get()))
+            : parent::getInputValue();
+    }
+
+    #[\Override]
+    public function setInputValue(string $value): void
+    {
+        if ($this->entityField !== null && $this->multiple && $this->entityField->getField()->type === 'json') {
+            $value = $this->getApp()->encodeJson(explode(',', $value));
+        }
+
+        parent::setInputValue($value);
+    }
+
     /**
      * @param bool|string      $when
      * @param JsExpressionable $action
@@ -157,7 +175,7 @@ class Lookup extends Input
     /**
      * Returns URL which would respond with first 50 matching records.
      */
-    protected function getCallbackUrl(): string
+    protected function getCallbackJsUrl(): string
     {
         return $this->callback->getJsUrl();
     }
@@ -193,10 +211,6 @@ class Lookup extends Input
         $data = [];
         foreach ($this->model as $row) {
             $data[] = $this->renderRow($row);
-        }
-
-        if (!$this->multiple && $this->empty) {
-            array_unshift($data, ['value' => '', 'title' => $this->empty]);
         }
 
         return $data;
@@ -267,7 +281,7 @@ class Lookup extends Input
             $form = Form::addTo($p);
 
             $entity = $this->model->createEntity();
-            $form->setModel($entity, $this->plus['fields'] ?? null);
+            $form->setEntity($entity, $this->plus['fields'] ?? null);
 
             $form->onSubmit(function (Form $form) {
                 $msg = $form->entity->getUserAction('add')->execute();
@@ -279,9 +293,9 @@ class Lookup extends Input
                 $res->addStatement((new Jquery())->closest('.atk-modal')->modal('hide'));
 
                 $row = $this->renderRow($form->entity);
-                $chain = $this->jsDropdown();
-                $chain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
-                $res->addStatement($chain);
+                $jsChain = $this->jsDropdown();
+                $jsChain->dropdown('set value', $row['value'])->dropdown('set text', $row['title']);
+                $res->addStatement($jsChain);
 
                 return $res;
             });
@@ -352,16 +366,40 @@ class Lookup extends Input
     /**
      * Override this method if you want to add more logic to the initialization of the auto-complete field.
      *
-     * @param Jquery $chain
+     * @param Jquery $jsChain
      */
-    protected function initDropdown($chain): void
+    protected function initDropdown($jsChain): void
     {
         $settings = array_merge([
             'fields' => ['name' => 'title'],
-            'apiSettings' => array_merge(['url' => $this->getCallbackUrl() . '&q={query}'], $this->apiConfig),
+            'apiSettings' => array_merge(['url' => $this->getCallbackJsUrl() . '&q={query}'], $this->apiConfig),
         ], $this->settings);
 
-        $chain->dropdown($settings);
+        if ($this->entityField === null || ($this->entityField->getField()->nullable || !$this->entityField->getField()->required)) {
+            $settings['clearable'] = true;
+        }
+
+        if ($this->entityField !== null && $this->entityField->get() !== null) {
+            $idField = $this->idField
+                ?? $this->model->idField;
+
+            foreach ($this->model->createIteratorBy(
+                $idField,
+                $this->multiple
+                    ? 'in'
+                    : '=',
+                $this->multiple && !($this->entityField->getField()->type === 'json' && is_array($this->entityField->get()))
+                    ? array_map(
+                        fn ($v) => $this->model->getPersistence()->typecastLoadField($this->entityField->getField(), $v),
+                        explode(',', $this->model->getPersistence()->typecastSaveField($this->entityField->getField(), $this->entityField->get()))
+                    )
+                    : $this->entityField->get()
+            ) as $entity) {
+                $settings['values'][] = array_merge($this->renderRow($entity), ['selected' => true]);
+            }
+        }
+
+        $jsChain->dropdown($settings);
     }
 
     #[\Override]
@@ -377,9 +415,10 @@ class Lookup extends Input
         } elseif ($this->readOnly) {
             $this->template->set('disabledClass', 'read-only');
             $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
+        }
 
+        if ($this->disabled || $this->readOnly) {
             $this->settings['apiSettings'] = null;
-            $this->settings['onShow'] = new JsFunction([], [new JsExpression('return false')]);
         }
 
         if ($this->dependency) {
@@ -388,21 +427,11 @@ class Lookup extends Input
             ], $this->apiConfig['data'] ?? []);
         }
 
-        $chain = $this->jsDropdown();
+        $jsChain = $this->jsDropdown();
 
-        $this->initDropdown($chain);
+        $this->initDropdown($jsChain);
 
-        if ($this->entityField !== null && $this->entityField->get() !== null) {
-            $idField = $this->idField
-                ?? $this->model->idField;
-
-            $this->model = $this->model->loadBy($idField, $this->entityField->get());
-
-            $row = $this->renderRow($this->model);
-            $chain->dropdown('set value', $row['value'], true)->dropdown('set text', $row['title'], true);
-        }
-
-        $this->js(true, $chain);
+        $this->js(true, $jsChain);
 
         parent::renderView();
     }

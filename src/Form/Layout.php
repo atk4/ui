@@ -39,7 +39,7 @@ class Layout extends AbstractLayout
     /** @var HtmlTemplate|null Template holding input HTML. */
     public $inputTemplate;
 
-    /** @var array Seed for creating input hint View used in this layout. */
+    /** @var array<mixed> Seed for creating input hint View used in this layout. */
     public $defaultHintSeed = [Label::class, 'class' => ['pointing']];
 
     #[\Override]
@@ -65,7 +65,7 @@ class Layout extends AbstractLayout
     }
 
     /**
-     * @param string|array $label
+     * @param string|array<0|string, mixed> $label
      *
      * @return $this
      */
@@ -79,7 +79,7 @@ class Layout extends AbstractLayout
     /**
      * Adds field group in form layout.
      *
-     * @param string|array $label
+     * @param string|array<0|string, mixed> $label
      *
      * @return static
      */
@@ -169,7 +169,13 @@ class Layout extends AbstractLayout
             }
 
             $template = $element->renderLabel ? $labeledControl : $noLabelControl;
-            $label = $element->caption ?? $element->entityField->getField()->getCaption();
+            $label = $element->caption;
+            if ($label === null) {
+                $label = $element->entityField->getField()->getCaption();
+                if (property_exists($element, 'model')) {
+                    $label = preg_replace('~ ID$~i', '', $label);
+                }
+            }
 
             // anything but form controls gets inserted directly
             if ($element instanceof Control\Checkbox) {

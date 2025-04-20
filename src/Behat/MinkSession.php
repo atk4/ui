@@ -25,18 +25,27 @@ class MinkSession extends BaseSession
         return parent::getDriver(); // @phpstan-ignore return.type
     }
 
+    /**
+     * @param list<mixed> $args
+     */
     #[\Override]
     public function executeScript($script, array $args = []): void
     {
         $this->getDriver()->executeScript($script, $args);
     }
 
+    /**
+     * @param list<mixed> $args
+     */
     #[\Override]
     public function evaluateScript($script, array $args = [])
     {
         return $this->getDriver()->evaluateScript($script, $args);
     }
 
+    /**
+     * @param list<mixed> $args
+     */
     #[\Override]
     public function wait($time, $condition = 'false', array $args = [])
     {

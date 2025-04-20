@@ -6,7 +6,9 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Ui\Button;
 use Atk4\Ui\Exception;
+use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\JsCallback;
 
@@ -23,7 +25,6 @@ class Upload extends Input
      * The uploaded file ID.
      * This ID is return on form submit.
      * If not set, will default to file name.
-     * file ID is also sent with onDelete Callback.
      *
      * @var string|null
      */
@@ -44,7 +45,7 @@ class Upload extends Input
      * An array of string value for accept file type.
      * ex: ['.jpg', '.jpeg', '.png'] or ['images/*'].
      *
-     * @var array
+     * @var list<string>
      */
     public $accept = [];
 
@@ -87,29 +88,15 @@ class Upload extends Input
             $fileName = $fileId;
         }
 
-        return $this->setInput($fileName);
+        $this->setInputValue($fileName);
+
+        return $this;
     }
 
-    /**
-     * Set input field value.
-     *
-     * @param mixed $value
-     *
-     * @return $this
-     */
-    public function setInput($value)
+    #[\Override]
+    public function setInputValue(string $value): void
     {
-        return parent::set($value);
-    }
-
-    /**
-     * Get input field value.
-     *
-     * @return mixed
-     */
-    public function getInputValue()
-    {
-        return $this->entityField ? $this->entityField->get() : $this->content;
+        parent::set($this->getApp()->uiPersistence->typecastAttributeLoadField($this->entityField->getField(), $value));
     }
 
     /**
@@ -163,7 +150,7 @@ class Upload extends Input
                 if (count($postFiles) > 0) {
                     $fileId = reset($postFiles)['name'];
                     $this->setFileId($fileId);
-                    $this->setInput($fileId);
+                    $this->setInputValue($fileId);
                 }
 
                 $jsRes = $fx(...$postFiles);
@@ -191,16 +178,14 @@ class Upload extends Input
     {
         $this->hasDeleteCb = true;
         if ($this->getApp()->tryGetRequestPostParam('fUploadAction') === self::DELETE_ACTION) {
-            $this->cb->set(function () use ($fx) {
-                $fileId = $this->getApp()->getRequestPostParam('fUploadId');
-
+            $this->cb->set(function (Jquery $j, string $fileId) use ($fx) {
                 $jsRes = $fx($fileId);
                 if ($jsRes !== null) { // @phpstan-ignore notIdentical.alwaysTrue (https://github.com/phpstan/phpstan/issues/9388)
                     $this->addJsAction($jsRes);
                 }
 
                 return new JsBlock($this->jsActions);
-            });
+            }, ['fUploadId' => new JsCallbackLoadableValue(null, static fn ($v) => $v)]);
         }
     }
 

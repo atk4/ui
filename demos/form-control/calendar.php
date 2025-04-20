@@ -31,24 +31,11 @@ $control = $form->addControl('date_action', [
     'options' => ['clickOpens' => false],
 ])->set(new \DateTime());
 $control->addAction(['Today', 'icon' => 'calendar day'])
-    ->on('click', $control->getJsInstance()->setDate($app->uiPersistence->typecastSaveField($control->entityField->getField(), new \DateTime())));
+    ->on('click', $control->jsFlatpickr()->setDate($app->uiPersistence->typecastSaveField($control->entityField->getField(), new \DateTime())));
 $control->addAction(['Select...', 'icon' => 'calendar'])
-    ->on('click', $control->getJsInstance()->open());
+    ->on('click', $control->jsFlatpickr()->open());
 $control->addAction(['Clear', 'icon' => 'times red'])
-    ->on('click', $control->getJsInstance()->clear());
-
-// TODO "date" type does not support ranges
-// $form->addControl('date_range', [
-//    Form\Control\Calendar::class,
-//    'type' => 'date',
-//    'options' => ['mode' => 'range'],
-// ])->set(date('Y-m-d') . ' to ' . date('Y-m-d', strtotime('+1 week')));
-//
-// $form->addControl('date_multiple', [
-//    Form\Control\Calendar::class,
-//    'type' => 'date',
-//    'options' => ['mode' => 'multiple'],
-// ])->set(date('Y-m-d') . ', ' . date('Y-m-d', strtotime('+1 Day')) . ', ' . date('Y-m-d', strtotime('+2 Day')));
+    ->on('click', $control->jsFlatpickr()->clear());
 
 $form->onSubmit(static function (Form $form) use ($app) {
     $data = [];

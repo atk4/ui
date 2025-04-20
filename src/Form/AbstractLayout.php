@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form;
 
-use Atk4\Core\WarnDynamicPropertyTrait;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Button;
@@ -12,15 +11,16 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Misc\ProxyModel;
 use Atk4\Ui\View;
+use Atk4\Ui\View\EntityTrait;
 
 /**
  * Custom Layout for a form.
- *
- * @property false $model use $entity property instead
  */
 abstract class AbstractLayout extends View
 {
-    use WarnDynamicPropertyTrait;
+    use EntityTrait {
+        setEntity as private _setEntity;
+    }
 
     /** Links layout to owner Form. */
     public Form $form;
@@ -40,7 +40,7 @@ abstract class AbstractLayout extends View
     public function addControl(string $name, $control = [], array $fieldSeed = []): Control
     {
         if ($this->form->entity === null) {
-            $this->form->setModel((new ProxyModel())->createEntity());
+            $this->form->setEntity((new ProxyModel())->createEntity());
         }
         $model = $this->form->entity->getModel();
 
@@ -61,7 +61,7 @@ abstract class AbstractLayout extends View
                     $fieldSeed['type'] = $cascadeFromControl->entityField->getField()->type;
                 }
             } else {
-                $dropdownModel = $control instanceof Control ? $control->model : ($control['model'] ?? null);
+                $dropdownModel = $control instanceof Control && property_exists($control, 'model') ? $control->model : ($control['model'] ?? null);
                 if ($dropdownModel !== null) {
                     $fieldSeed['type'] = $dropdownModel->getIdField()->type;
                 }
@@ -99,7 +99,7 @@ abstract class AbstractLayout extends View
      * Returns array of names of fields to automatically include them in form.
      * This includes all editable or visible fields of the model.
      *
-     * @return array
+     * @return list<string>
      */
     protected function getModelFields(Model $model)
     {
@@ -107,16 +107,24 @@ abstract class AbstractLayout extends View
     }
 
     /**
-     * Sets form model and adds form controls.
+     * @deprecated
      *
-     * @param array<int, string>|null $fields
+     * @param never             $entity
+     * @param list<string>|null $fields
      */
-    #[\Override]
     public function setModel(Model $entity, ?array $fields = null): void
     {
-        $entity->assertIsEntity();
+        throw new Exception('Use Form\AbstractLayout::setEntity() method instead for entity set');
+    }
 
-        parent::setModel($entity);
+    /**
+     * Sets form entity and adds form controls.
+     *
+     * @param list<string>|null $fields
+     */
+    public function setEntity(Model $entity, ?array $fields = null): void
+    {
+        $this->_setEntity($entity);
 
         if ($fields === null) {
             $fields = $this->getModelFields($entity);
@@ -150,7 +158,7 @@ abstract class AbstractLayout extends View
     /**
      * Adds Button into form layout.
      *
-     * @param Button|array $seed
+     * @param Button|array<mixed> $seed
      *
      * @return Button
      */

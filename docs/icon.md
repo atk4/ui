@@ -84,7 +84,7 @@ exclusive to Icon, but I'm adding a few examples here, just for your convenience
 Let's start with a View that contains your custom HTML loaded from file or embedded like this:
 
 ```
-$view = View::addTo($app, ['template' => new \Atk4\Ui\Template('<div>Hello my {Icon}<i class="huge icons">
+$view = View::addTo($app, ['template' => new \Atk4\Ui\HtmlTemplate('<div>Hello my {Icon}<i class="huge icons">
     <i class="big thin circle icon"></i>
     <i class="{Content}user{/} icon"></i>
 </i>{/}, It is me</div>')]);

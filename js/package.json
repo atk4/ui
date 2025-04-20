@@ -28,7 +28,7 @@
         "lodash": "github:lodash/lodash#2da024c3b4",
         "mitt": "^3.0.0",
         "vue": "^3.3.4",
-        "vue-flatpickr-component": "^11.0.3",
+        "vue-flatpickr-component": "^12.0.0",
         "vue-fomantic-ui": "^0.15.1",
         "vue-query-builder": "github:TheAustinG/vue-query-builder#2f62fa09ea"
     },

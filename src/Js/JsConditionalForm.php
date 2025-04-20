@@ -14,12 +14,15 @@ class JsConditionalForm implements JsExpressionable
     /** @var Form The form where rules should apply. */
     public $form;
 
-    /** @var array The field rules for that form. */
+    /** @var array<string, mixed> The field rules for that form. */
     public array $fieldRules;
 
     /** @var string The HTML class name parent for input. */
     public $selector;
 
+    /**
+     * @param array<string, mixed> $rules
+     */
     public function __construct(Form $form, array $rules = [], string $selector = '.field')
     {
         $this->form = $form;
@@ -29,6 +32,8 @@ class JsConditionalForm implements JsExpressionable
 
     /**
      * Set field rules for the form.
+     *
+     * @param array<string, mixed> $rules
      */
     public function setRules(array $rules): void
     {
@@ -38,12 +43,12 @@ class JsConditionalForm implements JsExpressionable
     #[\Override]
     public function jsRender(): string
     {
-        $chain = (new Jquery($this->form))
+        $jsChain = (new Jquery($this->form))
             ->atkConditionalForm([
                 'fieldRules' => $this->fieldRules,
                 'selector' => $this->selector,
             ]);
 
-        return $chain->jsRender();
+        return $jsChain->jsRender();
     }
 }

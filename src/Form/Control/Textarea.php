@@ -6,11 +6,13 @@ namespace Atk4\Ui\Form\Control;
 
 class Textarea extends Input
 {
+    public string $inputType = 'textarea';
+
     /** @var int Text area vertical size */
     public $rows = 2;
 
     #[\Override]
-    public function getInput()
+    public function getInputTag(): string
     {
         return $this->getApp()->getTag('textarea', array_merge([
             'name' => $this->shortName,
@@ -19,6 +21,6 @@ class Textarea extends Input
             'id' => $this->name . '_input',
             'disabled' => $this->disabled,
             'readonly' => $this->readOnly && !$this->disabled,
-        ], $this->inputAttr), $this->getValue() ?? '');
+        ], $this->inputAttr), $this->getInputValue() ?? '');
     }
 }

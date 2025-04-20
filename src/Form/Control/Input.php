@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Form\Control;
 
+use Atk4\Data\Field;
 use Atk4\Data\Model\UserAction;
 use Atk4\Ui\AbstractView;
 use Atk4\Ui\Button;
+use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Icon;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Label;
 use Atk4\Ui\UserAction\ExecutorFactory;
 use Atk4\Ui\UserAction\ExecutorInterface;
@@ -47,10 +50,10 @@ class Input extends Form\Control
     /** @var string|Label Set label that will appear to the right of the input field. */
     public $labelRight;
 
-    /** @var Button|array|UserAction|null */
+    /** @var Button|array<mixed>|UserAction|null */
     public $action;
 
-    /** @var Button|array|UserAction|null */
+    /** @var Button|array<mixed>|UserAction|null */
     public $actionLeft;
 
     /**
@@ -85,31 +88,36 @@ class Input extends Form\Control
         return $this;
     }
 
-    /**
-     * Returns presentable value to be inserted into input tag.
-     *
-     * @return string|null
-     */
-    public function getValue()
+    #[\Override]
+    public function getInputValue(): ?string
     {
-        return $this->entityField !== null
-                    ? $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get())
-                    : ($this->content ?? '');
+        if ($this->entityField !== null && $this->inputType === 'hidden') {
+            return $this->getApp()->uiPersistence->typecastAttributeSaveField($this->entityField->getField(), $this->entityField->get());
+        }
+
+        return parent::getInputValue();
     }
 
-    /**
-     * Returns <input ...> tag.
-     *
-     * @return string
-     */
-    public function getInput()
+    #[\Override]
+    public function setInputValue(string $value): void
+    {
+        if ($this->entityField !== null && $this->inputType === 'hidden') {
+            $this->set($this->getApp()->uiPersistence->typecastAttributeLoadField($this->entityField->getField(), $value));
+
+            return;
+        }
+
+        parent::setInputValue($value);
+    }
+
+    public function getInputTag(): string
     {
         return $this->getApp()->getTag('input/', array_merge([
             'name' => $this->shortName,
             'type' => $this->inputType !== 'text' ? $this->inputType : false,
             'placeholder' => $this->inputType !== 'hidden' && $this->placeholder ? $this->placeholder : false,
             'id' => $this->name . '_input',
-            'value' => $this->getValue(),
+            'value' => $this->getInputValue(),
             'disabled' => $this->disabled && $this->inputType !== 'hidden',
             'readonly' => $this->readOnly && $this->inputType !== 'hidden' && !$this->disabled,
         ], $this->inputAttr));
@@ -142,8 +150,8 @@ class Input extends Form\Control
     /**
      * Used only from renderView().
      *
-     * @param string|array|Button|UserAction|(AbstractView&ExecutorInterface) $button Button class or object
-     * @param string                                                          $spot   Template spot
+     * @param string|array<mixed>|Button|UserAction|(AbstractView&ExecutorInterface) $button Button class or object
+     * @param string                                                                 $spot   Template spot
      *
      * @return Button
      */
@@ -157,13 +165,27 @@ class Input extends Form\Control
                 ? $this->getExecutorFactory()->createExecutor($button, $this, ExecutorFactory::JS_EXECUTOR)
                 : $button;
             $button = $this->add($this->getExecutorFactory()->createTrigger($executor->getAction()), $spot);
-            if ($executor->getAction()->args) {
-                $button->on('click', $executor, ['args' => [array_key_first($executor->getAction()->args) => $this->jsInput()->val()]]);
-            } else {
+
+            if (count($executor->getAction()->args) === 0) {
                 $button->on('click', $executor);
+            } elseif (count($executor->getAction()->args) === 1) {
+                $actionArgName = array_key_first($executor->getAction()->args);
+                $actionArgType = $executor->getAction()->args[$actionArgName]['type'];
+
+                $button->on('click', $executor, ['args' => [
+                    $actionArgName => new JsCallbackLoadableValue($this->jsInput()->val(), function ($v) use ($actionArgType) {
+                        return $this->getApp()->uiPersistence->typecastLoadField(
+                            new Field(['type' => $actionArgType]),
+                            $v
+                        );
+                    }),
+                ]]);
+            } else {
+                throw (new Exception('Input form control supports user action with zero or one argument only'))
+                    ->addMoreInfo('arguments', array_keys($executor->getAction()->args));
             }
         }
-        if (!$button->isInitialized()) {
+        if (!$button->isInitialized()) { // TODO if should be replaced with new method like View::addOrAssertRegion() which will add the element and otherwise assert the owner and region
             $this->add($button, $spot);
         }
 
@@ -230,7 +252,7 @@ class Input extends Form\Control
         }
 
         // set template
-        $this->template->dangerouslySetHtml('Input', $this->getInput());
+        $this->template->dangerouslySetHtml('Input', $this->getInputTag());
         $this->content = null;
 
         parent::renderView();
@@ -238,6 +260,8 @@ class Input extends Form\Control
 
     /**
      * Adds new action button.
+     *
+     * @param array<mixed> $defaults
      *
      * @return Button
      */

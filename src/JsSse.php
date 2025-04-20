@@ -15,11 +15,11 @@ class JsSse extends JsCallback
 
     private string $lastSentId = '';
 
+    /** @var string|View */
+    public $stateContext;
+
     /** @var bool Show Loader when doing SSE. */
     public $showLoader = false;
-
-    /** @var bool Add window.beforeunload listener for closing js EventSource. Off by default. */
-    public $closeBeforeUnload = false;
 
     /** @var \Closure(string): void|null Custom function for outputting (instead of echo). */
     public $echoFunction;
@@ -30,16 +30,19 @@ class JsSse extends JsCallback
         $this->assertIsInitialized();
 
         $options = ['url' => $this->getJsUrl()];
+        if ($this->stateContext) {
+            $options['stateContext'] = $this->stateContext;
+        }
         if ($this->showLoader) {
             $options['showLoader'] = $this->showLoader;
         }
-        if ($this->closeBeforeUnload) {
-            $options['closeBeforeUnload'] = $this->closeBeforeUnload;
-        }
 
-        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerEvent($options)]);
+        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkServerSentEvent($options)]);
     }
 
+    /**
+     * @param array<int|string, mixed> $args
+     */
     #[\Override]
     public function set($fx = null, $args = null)
     {
@@ -85,12 +88,12 @@ class JsSse extends JsCallback
      */
     public function send(JsExpressionable $action): void
     {
-        $ajaxec = $this->getAjaxec($action);
+        $jsAjaxExecute = $this->jsAjaxExecute($action);
         $this->sendEvent(
             '',
             $this->getApp()->encodeJson([
                 'success' => true,
-                'atkjs' => $ajaxec->jsRender(),
+                'atkjs' => $jsAjaxExecute->jsRender(),
             ]),
             'atkSseAction'
         );
@@ -100,15 +103,15 @@ class JsSse extends JsCallback
      * @return never
      */
     #[\Override]
-    protected function terminateAjaxIfCanTerminate(JsBlock $ajaxec): void
+    protected function terminateAjaxIfCanTerminate(JsBlock $ajaxExecute): void
     {
-        $ajaxecStr = $ajaxec->jsRender();
-        if ($ajaxecStr !== '') {
+        $jsAjaxExecuteStr = $ajaxExecute->jsRender();
+        if ($jsAjaxExecuteStr !== '') {
             $this->sendEvent(
                 '',
                 $this->getApp()->encodeJson([
                     'success' => true,
-                    'atkjs' => $ajaxecStr,
+                    'atkjs' => $jsAjaxExecuteStr,
                 ]),
                 'atkSseAction'
             );

@@ -6,13 +6,14 @@ namespace Atk4\Ui;
 
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
 
 class JsCallback extends Callback
 {
-    /** @var array<string, string|JsExpressionable> Holds information about arguments passed in to the callback. */
-    public $args = [];
+    /** @var array<string, JsCallbackLoadableValue> */
+    public array $args = [];
 
     /** @var string Text to display as a confirmation. Set with setConfirm(..). */
     public $confirm;
@@ -37,7 +38,7 @@ class JsCallback extends Callback
     {
         $this->assertIsInitialized();
 
-        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkAjaxec([
+        return new JsBlock([(new Jquery($this->getOwner() /* TODO element and loader element should be passed explicitly */))->atkAjaxExecute([
             'url' => $this->getJsUrl(),
             'urlOptions' => $this->args,
             'confirm' => $this->confirm,
@@ -58,6 +59,7 @@ class JsCallback extends Callback
 
     /**
      * @param \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void) $fx
+     * @param array<int|string, JsCallbackLoadableValue>                                                                                  $args
      *
      * @return $this
      */
@@ -77,23 +79,24 @@ class JsCallback extends Callback
         }
 
         parent::set(function () use ($fx) {
-            $chain = new Jquery();
+            $jsChain = new Jquery();
 
             $values = [];
-            foreach (array_keys($this->args) as $key) {
-                $values[] = $this->getApp()->getRequestPostParam($key);
+            foreach ($this->args as $k => $jsValue) {
+                $rawValue = $this->getApp()->getRequestPostParam($k);
+                $values[] = $jsValue->typecastLoadValue($rawValue);
             }
 
-            $response = $fx($chain, ...$values);
+            $response = $fx($jsChain, ...$values);
 
             // TODO should we create/pass $chain to $fx at all?
-            if (count($chain->_chain) !== 0 && !$response instanceof JsExpressionable) {
+            if (count($jsChain->_chain) !== 0 && !$response instanceof JsExpressionable) {
                 throw new Exception('Jquery JsCallback chain was mutated but not returned');
             }
 
-            $ajaxec = $this->getAjaxec($response);
+            $jsAjaxExecute = $this->jsAjaxExecute($response);
 
-            $this->terminateAjaxIfCanTerminate($ajaxec);
+            $this->terminateAjaxIfCanTerminate($jsAjaxExecute);
         });
 
         return $this;
@@ -103,11 +106,11 @@ class JsCallback extends Callback
      * A proper way to finish execution of AJAX response. Generates JSON
      * which is returned to frontend.
      */
-    protected function terminateAjaxIfCanTerminate(JsBlock $ajaxec): void
+    protected function terminateAjaxIfCanTerminate(JsBlock $ajaxExecute): void
     {
         $data = [
             'success' => true,
-            'atkjs' => $ajaxec->jsRender(),
+            'atkjs' => $ajaxExecute->jsRender(),
         ];
 
         if ($this->canTerminate()) {
@@ -120,7 +123,7 @@ class JsCallback extends Callback
      *
      * @param JsExpressionable|View|string|null $response
      */
-    public function getAjaxec($response): JsBlock
+    public function jsAjaxExecute($response): JsBlock
     {
         $jsBlock = new JsBlock();
         if ($response) {

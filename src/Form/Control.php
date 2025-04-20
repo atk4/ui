@@ -17,9 +17,9 @@ use Atk4\Ui\View;
 /**
  * Provides generic functionality for a form control.
  *
- * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
+ * @phpstan-type JsCallbackSetWithValueClosure \Closure(Jquery, mixed): (JsExpressionable|View|string|void)
  */
-class Control extends View
+abstract class Control extends View
 {
     /** @var Form|null to which this field belongs */
     public ?View $form = null;
@@ -55,7 +55,7 @@ class Control extends View
      * Placed as a pointing label below the field. This only works when Form\Control appears in a form. You can also
      * set this to object, such as \Atk4\Ui\Text otherwise HTML characters are escaped.
      *
-     * @var string|View|array
+     * @var string|View|array<mixed>
      */
     public $hint;
 
@@ -97,6 +97,18 @@ class Control extends View
         return $this;
     }
 
+    public function getInputValue(): ?string
+    {
+        return $this->entityField !== null
+            ? $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get())
+            : $this->content;
+    }
+
+    public function setInputValue(string $value): void
+    {
+        $this->set($this->getApp()->uiPersistence->typecastLoadField($this->entityField->getField(), $value));
+    }
+
     #[\Override]
     protected function renderView(): void
     {
@@ -122,23 +134,19 @@ class Control extends View
      * Shorthand method for on('change') event.
      * Some input fields, like Calendar, could call this differently.
      *
-     * If $expr is JsExpressionable, then it will execute it instantly.
-     * If $expr is callback method, then it'll make additional request to webserver.
+     * If $action is JsExpressionable, then it will execute it instantly.
+     * If $action is callback, then it'll make additional request to webserver.
      *
      * Examples:
      * $control->onChange(new JsExpression('console.log(\'changed\')'));
      * $control->onChange(new JsExpression('$(this).parents(\'.form\').form(\'submit\')'));
      *
-     * @param JsExpressionable|JsCallbackSetClosure|array{JsCallbackSetClosure} $expr
-     * @param array|bool                                                        $defaults
+     * @param JsExpressionable|JsCallbackSetWithValueClosure|array{JsCallbackSetWithValueClosure} $action
+     * @param array<int|string, mixed>                                                            $defaults
      */
-    public function onChange($expr, $defaults = []): void
+    public function onChange($action, array $defaults = []): void
     {
-        if (is_bool($defaults)) {
-            $defaults = $defaults ? [] : ['preventDefault' => false, 'stopPropagation' => false];
-        }
-
-        $this->on('change', '#' . $this->name . '_input', $expr, $defaults);
+        $this->on('change', '#' . $this->name . '_input', $action, $defaults);
     }
 
     /**

@@ -19,7 +19,7 @@ class DropdownCascade extends Dropdown
     /** @var string|Form\Control The form control to use for setting this dropdown list values from. */
     public $cascadeFrom;
 
-    /** @var string|Model|null The hasMany reference model that will generate value for this dropdown list. */
+    /** @var string The hasMany reference model that will generate value for this dropdown list. */
     public $reference;
 
     #[\Override]
@@ -35,7 +35,9 @@ class DropdownCascade extends Dropdown
             ? $this->getApp()->uiPersistence->typecastAttributeLoadField($this->cascadeFrom->entityField->getField(), $this->getApp()->getRequestPostParam($this->cascadeFrom->name))
             : $this->cascadeFrom->entityField->get();
 
-        $this->model = $this->cascadeFrom->model ? $this->cascadeFrom->model->ref($this->reference) : null;
+        $this->model = $this->cascadeFrom->model
+            ? $this->cascadeFrom->model->ref($this->reference)
+            : null;
 
         // populate default dropdown values
         $this->dropdownOptions['values'] = $this->getJsValues($this->getNewValues($cascadeFromValue), $this->entityField->get());
@@ -52,7 +54,9 @@ class DropdownCascade extends Dropdown
             $this->jsDropdown()->addClass('loading'),
         ];
 
-        $this->cascadeFrom->onChange($expr, ['args' => [$this->cascadeFrom->name => $this->cascadeFrom->jsInput()->val()]]);
+        $this->cascadeFrom->onChange($expr, ['args' => [
+            $this->cascadeFrom->name => $this->cascadeFrom->jsInput()->val(),
+        ]]);
     }
 
     #[\Override]
@@ -65,7 +69,6 @@ class DropdownCascade extends Dropdown
 
     /**
      * Generate new dropdown values based on cascadeInput model selected ID.
-     * Return an empty value set if ID is null.
      *
      * @param mixed $id
      *
@@ -74,11 +77,7 @@ class DropdownCascade extends Dropdown
     public function getNewValues($id): array
     {
         if ($id === null) {
-            return [[
-                'value' => '',
-                'text' => $this->empty,
-                'name' => $this->empty,
-            ]];
+            return [];
         }
 
         $model = $this->cascadeFrom->model->load($id)->ref($this->reference);
@@ -109,6 +108,8 @@ class DropdownCascade extends Dropdown
      *
      * @param list<array{value: string, text: mixed, name: mixed}> $values
      * @param mixed                                                $value  the current field value
+     *
+     * @return list<array{value: string, text: mixed, name: mixed, selected: true}>
      */
     private function getJsValues(array $values, $value): array
     {

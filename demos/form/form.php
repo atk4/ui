@@ -69,11 +69,11 @@ $form->addControl('control', [Form\Control\Calendar::class, 'type' => 'date', 'c
 $form->buttonSave->set('Compare Date');
 
 $form->onSubmit(static function (Form $form) {
-    $message = 'field = ' . print_r($form->entity->get('field'), true) . '; <br> control = ' . print_r($form->entity->get('control'), true);
+    $messageHtml = 'field = ' . print_r($form->entity->get('field'), true) . '; <br> control = ' . print_r($form->entity->get('control'), true);
     $view = new Message('Date field vs control:');
     $view->setApp($form->getApp());
     $view->invokeInit();
-    $view->text->addHtml($message);
+    $view->text->dangerouslyAddHtml($messageHtml);
 
     return $view;
 });
@@ -150,7 +150,7 @@ $form->buttonSave->set('SaveE1');
 $form->onSubmit(static function (Form $form) {
     $o = new \stdClass();
 
-    return $o['abc'];
+    return $o['abc']; // @phpstan-ignore offsetAccess.nonOffsetAccessible
 });
 
 Header::addTo($tab, ['Form shows Agile exceptions', 'size' => 2]);
@@ -191,7 +191,7 @@ $modelRegister->addField('is_accept_terms', ['type' => 'boolean', 'nullable' => 
 $modelRegister = $modelRegister->createEntity();
 
 $form = Form::addTo($tab, ['class.segment' => true]);
-$form->setModel($modelRegister);
+$form->setEntity($modelRegister);
 
 $form->onSubmit(static function (Form $form) {
     if ($form->entity->get('name') !== 'John') {
@@ -211,7 +211,7 @@ $tab = $tabs->addTab('Layout Control');
 Header::addTo($tab, ['Shows example of grouping and multiple errors']);
 
 $form = Form::addTo($tab, ['class.segment' => true]);
-$form->setModel((new Model())->createEntity());
+$form->setEntity((new Model())->createEntity());
 
 $form->addHeader('Example fields added one-by-one');
 $form->addControl('name');
@@ -232,16 +232,18 @@ $group->addControl('middle_name', ['width' => 'three', 'disabled' => true]);
 $group->addControl('last_name', ['width' => 'five']);
 
 $form->onSubmit(static function (Form $form) {
-    $errors = [];
+    $jsErrors = [];
     foreach ($form->entity->getFields() as $name => $ff) {
         if ($name === 'id') {
             continue;
         }
 
         if ($form->entity->get($name) !== 'a') {
-            $errors[] = $form->jsError($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $form->entity->get($name));
+            $jsErrors[] = $form->jsError($name, 'Field ' . $name . ' should contain exactly "a", but contains ' . $form->entity->get($name));
         }
     }
 
-    return $errors !== [] ? new JsBlock($errors) : $form->jsSuccess('No more errors', 'so we have saved everything into the database');
+    return $jsErrors !== []
+        ? new JsBlock($jsErrors)
+        : $form->jsSuccess('No more errors', 'so we have saved everything into the database');
 });

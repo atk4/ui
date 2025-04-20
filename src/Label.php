@@ -12,14 +12,14 @@ class Label extends View
      * Add icon before label. If 'string' or seed is specified, it will
      * be converted to object by init().
      *
-     * @var View|array|string
+     * @var View|array<mixed>|string
      */
     public $icon;
 
     /**
      * Icon to the right of the label.
      *
-     * @var View|array|string
+     * @var View|array<mixed>|string
      */
     public $iconRight;
 
@@ -30,14 +30,14 @@ class Label extends View
      * Image to the left of the label. Cannot be used with label. If string
      * is set, will be used as Image source. Can also contain seed or object.
      *
-     * @var View|array|string
+     * @var View|array<mixed>|string
      */
     public $image;
 
     /**
      * Image to the right of the label.
      *
-     * @var View|array|string
+     * @var View|array<mixed>|string
      */
     public $imageRight;
 

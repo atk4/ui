@@ -9,7 +9,7 @@ Agile UI is the quickest way for building back-end UI, admin interfaces, data ma
 - Agile UI offers out-of-the-box components, you don't need front-end development experience.
 - Agile UI is interactive, making it very easy to trigger PHP code on JS events.
 - Agile UI is compact - single file, several lines of code - that's all it takes.
-- Agile UI is extensible - integrates VueJS for custom components and interactive behaviours.
+- Agile UI is extensible - integrates VueJS for custom components and interactive behaviors.
 
 [![Build](https://github.com/atk4/ui/actions/workflows/test-unit.yml/badge.svg?branch=develop)](https://github.com/atk4/ui/actions?query=branch:develop)
 [![CodeCov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
@@ -161,9 +161,9 @@ $tabs->addTab('Settings', function (\Atk4\Ui\VirtualPage $p) use ($app) {
     // second tab contains an AJAX form that stores itself back to DB
 
     $m = new Settings($app->db);
-    $m = $m->load(2);
+    $entity = $m->load(2);
     \Atk4\Ui\Form::addTo($p)
-        ->setModel($m);
+        ->setEntity($entity);
 });
 ```
 

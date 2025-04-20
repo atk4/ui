@@ -8,6 +8,7 @@ use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Table;
@@ -18,14 +19,14 @@ use Atk4\Ui\View;
  * Table column action menu.
  * Will create a dropdown menu within table column.
  *
- * @phpstan-type JsCallbackSetClosure \Closure(Jquery, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): (JsExpressionable|View|string|void)
+ * @phpstan-type JsCallbackSetWithRowIdClosure \Closure(Jquery, mixed): (JsExpressionable|View|string|void)
  */
 class ActionMenu extends Table\Column
 {
-    /** @var array<int, View> Menu items collections. */
+    /** @var list<View> Menu items collections. */
     protected $items = [];
 
-    /** @var array<string, \Closure<T of Model>(T): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
+    /** @var array<string, false|\Closure<T of Model>(T): bool> Callbacks as defined in UserAction->enabled for evaluating row-specific if an action is enabled. */
     protected $isEnabledFxs = [];
 
     /** @var string Dropdown label. */
@@ -34,7 +35,7 @@ class ActionMenu extends Table\Column
     /** @var string Dropdown module CSS class name as per Formantic-UI. */
     public $ui = 'small dropdown button';
 
-    /** @var array The dropdown module option setting as per Fomantic-UI. */
+    /** @var array<string, mixed> The dropdown module option setting as per Fomantic-UI. */
     public $options = ['action' => 'hide'];
 
     /** @var string Button icon to use for display dropdown. */
@@ -53,13 +54,13 @@ class ActionMenu extends Table\Column
     /**
      * Add a menu item in Dropdown.
      *
-     * @param View|string                                             $item
-     * @param JsExpressionable|JsCallbackSetClosure|ExecutorInterface $action
-     * @param bool|\Closure<T of Model>(T): bool                      $isDisabled
+     * @param View|string                                                      $item
+     * @param JsExpressionable|JsCallbackSetWithRowIdClosure|ExecutorInterface $action
+     * @param bool|\Closure<T of Model>(T): bool                               $isEnabled
      *
      * @return View
      */
-    public function addActionMenuItem($item, $action = null, string $confirmMsg = '', $isDisabled = false)
+    public function addActionMenuItem($item, $action = null, string $confirmMsg = '', $isEnabled = true)
     {
         $name = $this->name . '_action_' . (count($this->items) + 1);
 
@@ -74,20 +75,23 @@ class ActionMenu extends Table\Column
 
         $item->addClass('{$_' . $name . '_disabled} i_' . $name);
 
-        if ($isDisabled === true) {
-            $item->addClass('disabled');
-        } elseif ($isDisabled !== false) {
-            $this->isEnabledFxs[$name] = $isDisabled;
+        if ($isEnabled !== true) {
+            $this->isEnabledFxs[$name] = $isEnabled;
         }
 
         if ($action !== null) {
             // set executor context
-            $context = (new Jquery())->closest('.ui.button');
+            $jsContext = (new Jquery())->closest('.ui.button');
 
             $this->table->on('click', '.i_' . $name, $action, [
-                $this->table->jsRow()->data('id'),
+                new JsCallbackLoadableValue($this->table->jsRow()->data('id'), function ($v) {
+                    return $this->getApp()->uiPersistence->typecastAttributeLoadField(
+                        $this->table->model->getIdField(),
+                        $v
+                    );
+                }),
                 'confirm' => $confirmMsg,
-                'apiConfig' => ['stateContext' => $context],
+                'apiConfig' => ['stateContext' => $jsContext],
             ]);
         }
 
@@ -115,7 +119,7 @@ class ActionMenu extends Table\Column
     #[\Override]
     public function getDataCellTemplate(?Field $field = null): string
     {
-        if (!$this->items) {
+        if ($this->items === []) {
             return '';
         }
 
@@ -140,7 +144,7 @@ class ActionMenu extends Table\Column
     {
         $tags = [];
         foreach ($this->isEnabledFxs as $name => $isEnabledFx) {
-            if (!$isEnabledFx($row)) {
+            if ($isEnabledFx === false || !$isEnabledFx($row)) {
                 $tags['_' . $name . '_disabled'] = 'disabled';
             }
         }

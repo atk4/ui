@@ -6,18 +6,23 @@ namespace Atk4\Ui\VueComponent;
 
 use Atk4\Data\Model;
 use Atk4\Data\ValidationException;
+use Atk4\Ui\Js\Jquery;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\JsCallback;
 use Atk4\Ui\View;
+use Atk4\Ui\View\EntityTrait;
 
 /**
  * A Simple inline editable text Vue component.
- *
- * @property false $model use $entity property instead
  */
 class InlineEdit extends View
 {
+    use EntityTrait {
+        setEntity as private _setEntity;
+    }
+
     public $defaultTemplate = 'inline-edit.html';
 
     /** @var JsCallback JsCallback for saving data. */
@@ -68,7 +73,7 @@ class InlineEdit extends View
      * A default one is supply if this is null.
      * It receive the error ($e) as parameter.
      *
-     * @var \Closure(ValidationException, string): string|null
+     * @var \Closure(ValidationException, mixed): string|null
      */
     public $formatErrorMsg;
 
@@ -80,31 +85,28 @@ class InlineEdit extends View
         $this->cb = JsCallback::addTo($this);
 
         // set default validation error handler
-        if (!$this->formatErrorMsg) {
-            $this->formatErrorMsg = function (ValidationException $e, string $value) {
+        if ($this->formatErrorMsg === null) {
+            $this->formatErrorMsg = function (ValidationException $e, $value) {
                 $caption = $this->entity->getField($this->fieldName)->getCaption();
 
-                return $caption . ' - ' . $e->getMessage() . '. <br>Trying to set this value: "' . $value . '"';
+                return $this->getApp()->encodeHtml($caption) . ' - ' . $this->getApp()->encodeHtml($e->getMessage())
+                    . '. <br>Trying to set this value: "' . $this->getApp()->encodeHtml($value) . '"';
             };
         }
     }
 
-    #[\Override]
-    public function setModel(Model $entity): void
+    public function setEntity(Model $entity): void
     {
-        $entity->assertIsEntity();
-
-        parent::setModel($entity);
+        $this->_setEntity($entity);
 
         if ($this->fieldName === null) {
             $this->fieldName = $this->entity->titleField;
         }
 
         if ($this->autoSave && $this->entity->isLoaded()) {
-            $this->cb->set(function () {
-                $postValue = $this->getApp()->getRequestPostParam('value');
+            $this->cb->set(function (Jquery $j, $value) {
                 try {
-                    $this->entity->set($this->fieldName, $this->getApp()->uiPersistence->typecastLoadField($this->entity->getField($this->fieldName), $postValue));
+                    $this->entity->set($this->fieldName, $value);
                     $this->entity->save();
 
                     return $this->jsSuccess('Update saved');
@@ -112,10 +114,15 @@ class InlineEdit extends View
                     $this->getApp()->terminateJson([
                         'success' => true,
                         'hasValidationError' => true,
-                        'atkjs' => $this->jsError(($this->formatErrorMsg)($e, $postValue))->jsRender(),
+                        'atkjs' => $this->jsError(($this->formatErrorMsg)($e, $value))->jsRender(),
                     ]);
                 }
-            });
+            }, ['value' => new JsCallbackLoadableValue(null, function ($v) {
+                return $this->getApp()->uiPersistence->typecastLoadField(
+                    $this->entity->getField($this->fieldName),
+                    $v
+                );
+            })]);
         }
     }
 
@@ -129,13 +136,14 @@ class InlineEdit extends View
     public function onChange(\Closure $fx): void
     {
         if (!$this->autoSave) {
-            $value = $this->getApp()->uiPersistence->typecastLoadField(
-                $this->entity->getField($this->fieldName),
-                $this->getApp()->tryGetRequestPostParam('value')
-            );
-            $this->cb->set(static function () use ($fx, $value) {
+            $this->cb->set(static function (Jquery $j, $value) use ($fx) {
                 return $fx($value);
-            });
+            }, ['value' => new JsCallbackLoadableValue(null, function ($v) {
+                return $this->getApp()->uiPersistence->typecastLoadField(
+                    $this->entity->getField($this->fieldName),
+                    $v
+                );
+            })]);
         }
     }
 

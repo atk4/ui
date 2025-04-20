@@ -13,6 +13,7 @@ use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsModal;
 use Atk4\Ui\Js\JsReload;
 use Atk4\Ui\Table;
+use Atk4\Ui\View\ModelTrait;
 use Atk4\Ui\VirtualPage;
 
 /** @var App $app */
@@ -21,7 +22,9 @@ require_once __DIR__ . '/../init-app.php';
 // re-usable component implementing counter
 
 $finderClass = AnonymousClassNameCache::get_class(fn () => new class extends Columns {
-    public array $route = [];
+    use ModelTrait {
+        setModel as private _setModel;
+    }
 
     /**
      * @return list<mixed>
@@ -36,10 +39,12 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class extends Col
         return $res;
     }
 
-    #[\Override]
+    /**
+     * @param list<string> $route
+     */
     public function setModel(Model $model, array $route = []): void
     {
-        parent::setModel($model);
+        $this->_setModel($model);
 
         $this->addClass('internally celled');
 
@@ -65,14 +70,14 @@ $finderClass = AnonymousClassNameCache::get_class(fn () => new class extends Col
 
             $path[] = $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getIdField(), $id);
             $pushModel = new $model($model->getPersistence());
-            $pushModel = $pushModel->load($id);
+            $pushEntity = $pushModel->load($id);
 
             $ref = array_shift($route);
             if ($route === []) {
                 $route[] = $ref; // repeat last route
             }
 
-            $pushModel = $pushModel->ref($ref);
+            $pushModel = $pushEntity->ref($ref);
             $pushModel->setOrder([File::hinting()->fieldName()->is_folder => 'desc', File::hinting()->fieldName()->name]);
 
             $table = Table::addTo($this->addColumn(), ['header' => false, 'class.very basic selectable' => true])->setStyle('cursor', 'pointer');

@@ -10,10 +10,11 @@ Feature: ScopeBuilder
     Then date rule "atk_fp_stat__start_date" operator is "is on" and value is "Oct 22, 2020"
     Then date rule "atk_fp_stat__finish_time" operator is "is not on" and value is "22:22:00"
     Then bool rule "atk_fp_stat__is_commercial" has value "No"
-    Then I check if input value for "qb" match text in "p.atk-expected-input-result"
+    Then I check if input value for "//input[@name='qb']" match text in "p.atk-expected-input-result"
+    Then I should not see "Object unserialization is not supported"
     When I press button "Save"
-    Then Modal is open with text "TypeError: Unexpected non-scalar value"
-    # TODO uncomment once "Object serialization is not supported" is fixed
+    Then I should see "Object unserialization is not supported"
+    # TODO uncomment once "Object unserialization is not supported" is fixed
     # Then I check if text in "p.atk-expected-word-result" match text in ".atk-scope-builder-response"
 
   Scenario: test ScopeBuilder query string to model scope

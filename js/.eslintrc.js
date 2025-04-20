@@ -11,7 +11,7 @@ module.exports = {
         'plugin:@internal/eslint-plugin/recommended',
     ],
     parserOptions: {
-        ecmaVersion: '2020',
+        ecmaVersion: 'latest',
         sourceType: 'module',
     },
     settings: {
@@ -57,6 +57,7 @@ module.exports = {
         }],
         'linebreak-style': ['error', 'unix'],
         'max-len': 'off',
+        'no-continue': 'off',
         'no-console': ['error', {
             allow: ['warn', 'error'],
         }],
@@ -88,6 +89,14 @@ module.exports = {
             },
         }],
         'unicorn/catch-error-name': 'off',
+        'unicorn/filename-case': ['error', {
+            cases: {
+                camelCase: true,
+                kebabCase: false,
+                pascalCase: true,
+                snakeCase: false,
+            },
+        }],
         'unicorn/no-array-callback-reference': 'off',
         'unicorn/no-lonely-if': 'off',
         'unicorn/no-negated-condition': 'off',

@@ -7,12 +7,13 @@ namespace Atk4\Ui\Form\Control;
 use Atk4\Data\Model;
 use Atk4\Ui\HtmlTemplate;
 use Atk4\Ui\Js\Jquery;
-use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
-use Atk4\Ui\Js\JsFunction;
+use Atk4\Ui\View\ModelTrait;
 
 class Dropdown extends Input
 {
+    use ModelTrait;
+
     public $defaultTemplate = 'form/control/dropdown.html';
 
     public string $inputType = 'hidden';
@@ -31,10 +32,7 @@ class Dropdown extends Input
      */
     public array $values;
 
-    /** @var string The string to set as an empty values. */
-    public $empty = "\u{00a0}"; // Unicode NBSP
-
-    /** @var array Dropdown options as per Fomantic-UI dropdown options. */
+    /** @var array<string, mixed> Dropdown options as per Fomantic-UI dropdown options. */
     public $dropdownOptions = [];
 
     /**
@@ -106,24 +104,24 @@ class Dropdown extends Input
     }
 
     #[\Override]
-    public function getValue()
+    public function getInputValue(): ?string
     {
         // dropdown input tag accepts CSV formatted list of IDs
         return $this->entityField !== null
-            ? (is_array($this->entityField->get()) ? implode(', ', $this->entityField->get()) : $this->entityField->get()) // TODO is_array() should be replaced with field type condition
-            : parent::getValue();
+            ? ($this->multiple && $this->entityField->getField()->type === 'json' && is_array($this->entityField->get())
+                ? implode(',', $this->entityField->get())
+                : $this->getApp()->uiPersistence->typecastAttributeSaveField($this->entityField->getField(), $this->entityField->get()))
+            : parent::getInputValue();
     }
 
     #[\Override]
-    public function set($value = null)
+    public function setInputValue(string $value): void
     {
-        if ($this->entityField !== null) {
-            if ($this->entityField->getField()->type === 'json' && is_string($value)) {
-                $value = explode(',', $value);
-            }
+        if ($this->entityField !== null && $this->multiple && $this->entityField->getField()->type === 'json') {
+            $value = $this->getApp()->encodeJson(explode(',', $value));
         }
 
-        return parent::set($value);
+        parent::setInputValue($value);
     }
 
     /**
@@ -140,7 +138,7 @@ class Dropdown extends Input
     /**
      * Set JS dropdown() options.
      *
-     * @param array $options
+     * @param array<string, mixed> $options
      */
     public function setDropdownOptions($options): void
     {
@@ -160,18 +158,16 @@ class Dropdown extends Input
 
     protected function jsRenderDropdown(): JsExpressionable
     {
-        return $this->jsDropdown(true)->dropdown($this->dropdownOptions);
+        $dropdownOptions = $this->dropdownOptions;
+        if ($this->entityField === null || ($this->entityField->getField()->nullable || !$this->entityField->getField()->required)) {
+            $dropdownOptions['clearable'] = true;
+        }
+
+        return $this->jsDropdown(true)->dropdown($dropdownOptions);
     }
 
     protected function htmlRenderValue(): void
     {
-        // add selection only if no value is required and Dropdown has no multiple selections enabled
-        if ($this->entityField !== null && !$this->entityField->getField()->required && !$this->multiple) {
-            $this->_tItem->set('value', '');
-            $this->_tItem->set('title', $this->empty);
-            $this->template->dangerouslyAppendHtml('Item', $this->_tItem->renderToHtml());
-        }
-
         // model set? use this, else values property
         if ($this->model !== null) {
             if ($this->renderRowFunction) {
@@ -201,23 +197,15 @@ class Dropdown extends Input
             $this->template->dangerouslySetHtml('multipleClass', 'multiple');
         }
 
-        if ($this->readOnly || $this->disabled) {
-            if ($this->multiple) {
-                $this->jsDropdown(true)->find('a i.delete.icon')->attr('class', 'disabled');
-            }
-        }
-
         if ($this->disabled) {
             $this->template->set('disabledClass', 'disabled');
             $this->template->dangerouslySetHtml('disabled', 'disabled="disabled"');
         } elseif ($this->readOnly) {
             $this->template->set('disabledClass', 'read-only');
             $this->template->dangerouslySetHtml('disabled', 'readonly="readonly"');
-
-            $this->setDropdownOption('onShow', new JsFunction([], [new JsExpression('return false')]));
         }
 
-        $this->template->set('DefaultText', $this->empty);
+        $this->template->set('DefaultText', $this->placeholder);
 
         $this->htmlRenderValue();
         $this->jsRenderDropdown();

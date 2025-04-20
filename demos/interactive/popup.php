@@ -35,6 +35,7 @@ require_once __DIR__ . '/../init-app.php';
 $cartClass = AnonymousClassNameCache::get_class(fn () => new class extends Lister {
     use SessionTrait;
 
+    /** @var array<int, string> */
     public array $items = [];
 
     public $defaultTemplate = 'lister.html';
@@ -87,8 +88,6 @@ $cartClass = AnonymousClassNameCache::get_class(fn () => new class extends Liste
     #[\Override]
     protected function renderView(): void
     {
-        // memorize items
-
         $this->setSource($this->items);
 
         parent::renderView();

@@ -69,7 +69,7 @@ $wizard->addStep('Define User Action', static function (Wizard $page) {
         $country = $country->loadAny();
 
         $card = Card::addTo($owner);
-        $card->setModel($country, [$country->fieldName()->iso]);
+        $card->setEntity($country, [$country->fieldName()->iso]);
         $card->addClickAction($country->getModel()->getUserAction('send_message'));
     });
 });
@@ -118,7 +118,7 @@ $wizard->addStep('Arguments', static function (Wizard $page) {
         $model = new Model($owner->getApp()->db, ['table' => 'test']);
 
         $model->addUserAction('greet', [
-            'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORDS,
+            'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORD,
             'args' => [
                 'name' => [
                     'type' => 'string',
@@ -130,7 +130,7 @@ $wizard->addStep('Arguments', static function (Wizard $page) {
         ]);
 
         $model->addUserAction('ask_age', [
-            'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORDS,
+            'appliesTo' => Model\UserAction::APPLIES_TO_NO_RECORD,
             'args' => [
                 'age' => [
                     'type' => 'integer',
@@ -165,7 +165,7 @@ $wizard->addStep('Crud integration', static function (Wizard $page) {
         $country = new Country($owner->getApp()->db);
         $country->getUserAction('add')->enabled = false;
         $country->getUserAction('delete')->enabled = static function (Country $entity) {
-            return $entity->id % 2 === 0;
+            return $entity->id->getId() % 2 === 0;
         };
         $country->addUserAction('mail', [
             'appliesTo' => Model\UserAction::APPLIES_TO_SINGLE_RECORD,

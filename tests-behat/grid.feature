@@ -2,21 +2,21 @@ Feature: Grid
 
   Scenario: search
     Given I am on "collection/grid.php"
-    Then I search grid for "kingdom"
+    When I search grid for "kingdom"
     Then I should see "United Kingdom"
-    Then I press button "Test"
+    When I press button "Test"
     Then Toast display should contain text "United Kingdom"
-    Then I click using selector "i.atk-remove-icon"
+    When I click using selector "i.atk-remove-icon"
     Then I should not see "United Kingdom"
-    Then I search grid for "kingdom"
+    When I search grid for "kingdom"
     Then I should see "United Kingdom"
     When I write "[escape]" into selector "input.atk-grid-search"
     Then I should not see "United Kingdom"
 
   Scenario: search no ajax
     Given I am on "collection/grid.php?no-ajax=1"
-    Then I search grid for "kingdom"
-    Then PATCH MINK the url should match "~_q=kingdom~"
+    When I search grid for "kingdom"
+    Then PATCH MINK the URL should match "~_q=kingdom~"
     Then I should see "United Kingdom"
 
   Scenario: Checkbox click event must not bubble to row click
@@ -30,15 +30,45 @@ Feature: Grid
     When I click using selector "//div[@id='grid']//tr[2]//div.ui.button[text()='Action Modal']"
     Then No toast should be displayed
     Then I should see "Clicked Action Modal: Albania"
-    Then I hide js modal
+    When I hide js modal
     When I click using selector "//div[@id='grid']//tr[2]//div.ui.dropdown[div[text()='Actions...']]"
     Then No toast should be displayed
     When I click using selector "//div[@id='grid']//tr[2]//div.ui.dropdown[div[text()='Actions...']]//div.menu/div[text()='Action MenuItem']"
     Then Toast display should contain text "Clicked Action MenuItem"
-    Then PATCH MINK the url should match "~_unit-test/grid-rowclick.php$~"
+    Then PATCH MINK the URL should match "~_unit-test/grid-rowclick.php$~"
     When I click using selector "//div[@id='grid']//tr[2]//a"
     Then No toast should be displayed
-    Then PATCH MINK the url should match "~_unit-test/grid-rowclick.php#test~"
+    Then PATCH MINK the URL should match "~_unit-test/grid-rowclick.php#test~"
+
+  Scenario: master checkbox
+    Given I am on "_unit-test/grid-master-checkbox.php"
+    Then Element "//div.ui.master.checkbox" should not contain class "checked"
+    Then Element "//div.ui.master.checkbox" should not contain class "indeterminate"
+    Then Element "//div.ui.menu/div.item[text()='Show selected']" should contain class "disabled"
+    When I click using selector "//tr[1]//div.ui.child.checkbox"
+    Then Element "//div.ui.master.checkbox" should not contain class "checked"
+    Then Element "//div.ui.master.checkbox" should contain class "indeterminate"
+    Then Element "//div.ui.menu/div.item[text()='Show selected']" should not contain class "disabled"
+    When I press button "Show selected"
+    Then Toast display should contain text "Selected: 1#"
+    When I click using selector "//div.ui.master.checkbox"
+    Then Element "//div.ui.master.checkbox" should contain class "checked"
+    Then Element "//div.ui.master.checkbox" should not contain class "indeterminate"
+    Then Element "//div.ui.menu/div.item[text()='Show selected']" should not contain class "disabled"
+    When I press button "Show selected"
+    Then Toast display should contain text "Selected: 1, 2, 3, 4, 5#"
+    When I click using selector "//div.ui.master.checkbox"
+    Then Element "//div.ui.master.checkbox" should not contain class "checked"
+    Then Element "//div.ui.master.checkbox" should not contain class "indeterminate"
+    Then Element "//div.ui.menu/div.item[text()='Show selected']" should contain class "disabled"
+    When I click paginator page "2"
+    When I click using selector "//tr[2]//div.ui.child.checkbox"
+    When I click using selector "//tr[4]//div.ui.child.checkbox"
+    Then Element "//div.ui.master.checkbox" should not contain class "checked"
+    Then Element "//div.ui.master.checkbox" should contain class "indeterminate"
+    Then Element "//div.ui.menu/div.item[text()='Show selected']" should not contain class "disabled"
+    When I press button "Show selected"
+    Then Toast display should contain text "Selected: 7, 9#"
 
   Scenario: popup column header
     Given I am on "collection/tablecolumnmenu.php"
@@ -80,25 +110,35 @@ Feature: Grid
     Then I should see "China"
     Then I should see "Zambia"
 
+  Scenario: Row remote action - load record
+    Given I am on "collection/grid.php"
+    Then I should not see "Bahamas"
+    When I click paginator page "2"
+    Then I should see "Bahamas"
+    When I click using selector "//tr[td[text()='Bahamas']]//div.ui.button[text()='Say HI']"
+    Then Toast display should contain text "Loaded \"Bahamas\" from ID=16"
+
+  Scenario: Row remote action - change row CSS
+    Given I am on "interactive/scroll-grid-container.php"
+    When I click using selector "//tr[td[text()='Algeria']]//div.ui.button[text()='red']"
+    Then Element "//tr[td[text()='Algeria'] and .//div.ui.button[text()='red']]" attribute "style" should contain text "color: red;"
+
   Scenario: Bulk action
     Given I am on "collection/grid.php"
-    Then I press button "Show selected"
-    Then Toast display should contain text "Selected: #"
+    Then Element "//div.ui.menu/div.item[text()='Show selected']" should contain class "disabled"
     When I click using selector "//tr[5]//div.ui.checkbox"
     When I click using selector "//tr[8]//div.ui.checkbox"
-    Then I press button "Show selected"
+    Then Element "//div.ui.menu/div.item[text()='Show selected']" should not contain class "disabled"
+    When I press button "Show selected"
     Then Toast display should contain text "Selected: 5, 8#"
 
   Scenario: Bulk modal action
     Given I am on "collection/grid.php"
-    Then I press button "Delete selected"
-    Then Modal is open with text "The selected records will be permanently deleted: #"
-    Then I press button "Delete"
-    Then I should see "Success"
-    Then I click close modal
+    Then Element "//div.ui.menu/div.item[text()='Delete selected']" should contain class "disabled"
     When I click using selector "//tr[5]//div.ui.checkbox"
     When I click using selector "//tr[8]//div.ui.checkbox"
-    Then I press button "Delete selected"
+    Then Element "//div.ui.menu/div.item[text()='Delete selected']" should not contain class "disabled"
+    When I press button "Delete selected"
     Then Modal is open with text "The selected records will be permanently deleted: 5, 8#"
-    Then I press button "Delete"
+    When I press button "Delete"
     Then I should see "Success"

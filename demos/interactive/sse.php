@@ -47,7 +47,7 @@ $button->on('click', $sse->set(static function () use ($button, $sse, $bar) {
 }));
 
 $buttonStop->on('click', new JsBlock([
-    $button->js()->atkServerEvent('stop'),
+    $button->js()->atkServerSentEvent('stop'),
     $button->js()->removeClass('disabled'),
 ]));
 

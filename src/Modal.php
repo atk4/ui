@@ -14,7 +14,7 @@ use Atk4\Ui\Js\JsExpressionable;
  * $modal->jsShow() is the triggered needed to actually display the modal.
  *
  * Modal can be use as a regular view, simply by adding other view to it.
- *  Message::addTo($modal, ['title' => 'Welcome to Agile Toolkit'])->text('Your text here');
+ *  Message::addTo($modal, ['title' => 'Welcome to Agile Toolkit'])->text->set('Your text here');
  *
  * Modal can add content dynamically via CallbackLater.
  *  $modal->set(function (View $p) {
@@ -32,6 +32,7 @@ class Modal extends View
 {
     public $ui = 'modal';
     public $defaultTemplate = 'modal.html';
+    public array $attr = ['data-atk4-teleport-to' => 'body > .ui.dimmer.modals'];
 
     /** @var string|null Set null for no title */
     public $title;
@@ -45,15 +46,15 @@ class Modal extends View
     public $cb;
     /** @var View|null */
     public $cbView;
-    /** @var array */
+    /** @var array<string, mixed> */
     public $args = [];
-    /** @var array */
+    /** @var array<string, mixed> */
     public $options = [];
 
     /** @var string Currently only "json" response type is supported. */
     public $type = 'json';
 
-    /** @var array Add ability to add CSS classes to "content" div. */
+    /** @var list<string> Add ability to add CSS classes to "content" div. */
     public $contentClass = ['img', 'content', 'atk-dialog-content'];
 
     /**
@@ -106,7 +107,7 @@ class Modal extends View
     /**
      * Add CSS classes to "content" div.
      *
-     * @param string|array $class
+     * @param string|list<string> $class
      */
     public function addContentClass($class): void
     {
@@ -118,16 +119,18 @@ class Modal extends View
      *
      * Example: $button->on('click', $modal->jsShow());
      *
+     * @param array<string, string> $args
+     *
      * @return JsChain
      */
     public function jsShow(array $args = []): JsExpressionable
     {
-        $chain = $this->js();
+        $jsChain = $this->js();
         if ($args !== []) {
-            $chain->data(['args' => $args]);
+            $jsChain->data(['args' => $args]);
         }
 
-        return $chain->modal('show');
+        return $jsChain->modal('show');
     }
 
     /**

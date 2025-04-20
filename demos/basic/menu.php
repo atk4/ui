@@ -8,6 +8,7 @@ use Atk4\Ui\App;
 use Atk4\Ui\Dropdown as UiDropdown;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Menu;
 use Atk4\Ui\View;
 
@@ -20,8 +21,19 @@ $menu->addItem('bar');
 $menu->addItem('baz');
 $dropdown = UiDropdown::addTo($menu, ['With Callback', 'dropdownOptions' => ['on' => 'hover']]);
 $dropdown->setSource(['a', 'b', 'c']);
-$dropdown->onChange(static function (string $itemId) {
-    return 'New selected item ID: ' . $itemId;
+$dropdown->onChange(static function (int $id) use ($dropdown) {
+    $entity = $dropdown->model->load($id);
+
+    return new JsToast('New selected item: ' . $dropdown->getApp()->uiPersistence->typecastSaveField($dropdown->model->getField('name'), $entity->get('name')));
+});
+
+$model = new Category($app->db);
+$dropdown2 = UiDropdown::addTo($menu, ['From Model', 'dropdownOptions' => ['on' => 'hover']]);
+$dropdown2->setModel($model);
+$dropdown2->onChange(static function ($id) use ($app, $model) {
+    $entity = $model->load($id);
+
+    return new JsToast('New selected item: ' . $app->uiPersistence->typecastSaveField($model->getField($model->fieldName()->name), $entity->name));
 });
 
 $submenu = $menu->addMenu('Sub-menu');

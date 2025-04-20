@@ -5,21 +5,22 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Data\Model;
+use Atk4\Ui\View\EntityTrait;
 
 /**
  * Display a card section within a Card View.
- *
- * @property false $model use $entity property instead
  */
 class CardSection extends View
 {
+    use EntityTrait;
+
     /** @var Card */
     public $card;
 
     /** @var string */
     public $glue = ': ';
 
-    /** @var array<int, string> */
+    /** @var list<string> */
     public $tableClass = ['fixed', 'small'];
 
     #[\Override]
@@ -28,14 +29,6 @@ class CardSection extends View
         parent::init();
 
         $this->addClass('content');
-    }
-
-    #[\Override]
-    public function setModel(Model $entity, ?array $fields = null): void
-    {
-        $entity->assertIsEntity();
-
-        parent::setModel($entity);
     }
 
     /**
@@ -60,6 +53,8 @@ class CardSection extends View
 
     /**
      * Add Model fields to a card section.
+     *
+     * @param list<string> $fields
      */
     public function addFields(Model $entity, array $fields, bool $useLabel = false, bool $useTable = false): void
     {
@@ -74,6 +69,8 @@ class CardSection extends View
 
     /**
      * Add fields label and value to section.
+     *
+     * @param list<string> $fields
      */
     private function addSectionFields(Model $entity, array $fields, bool $useLabel = false): void
     {
@@ -96,10 +93,12 @@ class CardSection extends View
 
     /**
      * Add field into section using a CardTable View.
+     *
+     * @param list<string> $fields
      */
     private function addTableSection(Model $entity, array $fields): void
     {
         $cardTable = CardTable::addTo($this, ['class' => $this->tableClass]);
-        $cardTable->setModel($entity, $fields);
+        $cardTable->setEntity($entity, $fields);
     }
 }

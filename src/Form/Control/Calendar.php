@@ -23,6 +23,8 @@ class Calendar extends Input
     /**
      * Any other options you'd like to pass to Flatpickr JS.
      * See https://flatpickr.js.org/options/ for all possible options.
+     *
+     * @var array<string, mixed>
      */
     public array $options = [];
 
@@ -80,27 +82,27 @@ class Calendar extends Input
     }
 
     /**
-     * @param JsExpressionable $expr
+     * @param JsExpressionable $action
      */
     #[\Override]
-    public function onChange($expr, $default = []): void
+    public function onChange($action, $default = []): void
     {
-        if (!$expr instanceof JsBlock) {
-            $expr = [$expr];
+        if (!$action instanceof JsBlock) {
+            $action = [$action];
         }
 
-        $this->options['onChange'] = new JsFunction(['date', 'text', 'mode'], $expr);
+        $this->options['onChange'] = new JsFunction(['date', 'text', 'mode'], $action);
     }
 
     /**
      * Get the FlatPickr instance of this input in order to
      * get it's properties like selectedDates or run it's methods.
      * Ex: clearing date via JS
-     *     $button->on('click', $f->getControl('date')->getJsInstance()->clear());.
+     *     $button->on('click', $f->getControl('date')->jsFlatpickr()->clear());.
      *
      * @return JsChain
      */
-    public function getJsInstance(): JsExpressionable
+    public function jsFlatpickr(): JsExpressionable
     {
         return (new Jquery('#' . $this->name . '_input'))->get(0)->_flatpickr;
     }

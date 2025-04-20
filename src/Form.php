@@ -13,18 +13,18 @@ use Atk4\Data\Model\EntityFieldPair;
 use Atk4\Data\Reference\ContainsMany;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Form\Control;
-use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsChain;
 use Atk4\Ui\Js\JsConditionalForm;
 use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsExpressionable;
+use Atk4\Ui\View\EntityTrait;
 
-/**
- * @property false $model use $entity property instead
- */
 class Form extends View
 {
+    use EntityTrait {
+        setEntity as private _setEntity;
+    }
     use HookTrait;
 
     /** Executed when form is submitted */
@@ -61,7 +61,7 @@ class Form extends View
      * Will point to the Save button. If you don't want to have save button, then set this to false
      * or destroy it. Initialized by initLayout().
      *
-     * @var Button|array|false Button object, seed or false to not show button at all
+     * @var Button|array<mixed>|false Button object, seed or false to not show button at all
      */
     public $buttonSave = [Button::class, 'Save', 'class.primary' => true];
 
@@ -96,6 +96,8 @@ class Form extends View
      *  Show "target' if 'source1' is not empty AND is a number
      *      OR
      *  Show 'target' if 'source1' is exactly 5.
+     *
+     * @var array<string, mixed>
      */
     public array $controlDisplayRules = [];
 
@@ -159,6 +161,8 @@ class Form extends View
     /**
      * Setter for control display rules.
      *
+     * @param array<string, mixed> $rules
+     *
      * @return $this
      */
     public function setControlsDisplayRules(array $rules = [])
@@ -171,7 +175,8 @@ class Form extends View
     /**
      * Set display rule for a group collection.
      *
-     * @param string|View $selector
+     * @param array<string, mixed> $rules
+     * @param string|View          $selector
      *
      * @return $this
      */
@@ -188,18 +193,26 @@ class Form extends View
     }
 
     /**
-     * @param array<int, string>|null $fields if null, then all "editable" fields will be added
+     * @deprecated
+     *
+     * @param never             $entity
+     * @param list<string>|null $fields
      */
-    #[\Override]
     public function setModel(Model $entity, ?array $fields = null): void
     {
-        $entity->assertIsEntity();
+        throw new Exception('Use Form::setEntity() method instead for entity set');
+    }
 
+    /**
+     * @param list<string>|null $fields if null, then all "editable" fields will be added
+     */
+    public function setEntity(Model $entity, ?array $fields = null): void
+    {
         // set model for the form and also for the current layout
         try {
-            parent::setModel($entity);
+            $this->_setEntity($entity);
 
-            $this->layout->setModel($entity, $fields);
+            $this->layout->setEntity($entity, $fields);
         } catch (Exception $e) {
             throw $e->addMoreInfo('model', $entity);
         }
@@ -325,7 +338,7 @@ class Form extends View
     /**
      * Add header into the form, which appears as a separator.
      *
-     * @param string|array $title
+     * @param string|array<0|string, mixed> $title
      */
     public function addHeader($title = null): void
     {
@@ -335,7 +348,7 @@ class Form extends View
     /**
      * Creates a group of fields and returns layout.
      *
-     * @param string|array $title
+     * @param string|array<0|string, mixed> $title
      *
      * @return Form\Layout
      */
@@ -369,7 +382,7 @@ class Form extends View
         if ($field->type === 'json' && $field->hasReference()) {
             $limit = ($field->getReference() instanceof ContainsMany) ? 0 : 1;
             $model = $field->getReference()->createTheirModel();
-            $fallbackSeed = [Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit, 'caption' => $model->getModelCaption()];
+            $fallbackSeed = [Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit];
         } elseif ($field->type !== 'boolean') {
             if ($field->enum !== null) {
                 $fallbackSeed = [Control\Dropdown::class, 'values' => array_combine($field->enum, $field->enum)];
@@ -394,6 +407,9 @@ class Form extends View
             $this->typeToControl[$field->type] ?? null,
             $fallbackSeed
         );
+        if (!is_object($controlSeed) && !property_exists($controlSeed[0], 'model')) {
+            unset($controlSeed['model']);
+        }
 
         $defaults = [
             'form' => $this,
@@ -405,7 +421,7 @@ class Form extends View
     }
 
     /**
-     * @var array<string, array>
+     * @var array<string, array<mixed>>
      */
     protected array $typeToControl = [
         'boolean' => [Control\Checkbox::class],
@@ -427,7 +443,7 @@ class Form extends View
         $errors = [];
         foreach ($this->controls as $k => $control) {
             // save field value only if field was editable in form at all
-            if (!$control->readOnly && !$control->disabled) {
+            if (!$control->disabled && !$control->readOnly) {
                 $postRawValue = $postRawData[$k] ?? null;
                 if ($postRawValue === null) {
                     throw (new Exception('Form POST param does not exist'))
@@ -435,11 +451,7 @@ class Form extends View
                 }
 
                 try {
-                    if ($control instanceof Control\Dropdown || $control instanceof Control\Lookup || $control instanceof Control\Radio) { // this condition is definitely unacceptable, also should Control::set() be in the catch?
-                        $control->set($this->getApp()->uiPersistence->typecastAttributeLoadField($control->entityField->getField(), $postRawValue));
-                    } else {
-                        $control->set($this->getApp()->uiPersistence->typecastLoadField($control->entityField->getField(), $postRawValue));
-                    }
+                    $control->setInputValue($postRawValue);
                 } catch (\Exception $e) {
                     if ($e instanceof \ErrorException) {
                         throw $e;

@@ -15,7 +15,7 @@ use Atk4\Ui\View;
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-if ($app->tryGetRequestQueryParam('id')) {
+if ($app->tryGetRequestQueryParam('person_id') || $app->tryGetRequestQueryParam('person_surname')) {
     $app->layout->js(true, new JsToast('Details link is in simulation mode.'));
 }
 
@@ -70,7 +70,7 @@ $table->addTotals([
 $myArray = [
     ['name' => 'Vinny', 'surname' => 'Sihra', 'birthdate' => '1973-02-03', 'cv' => 'I am <strong>BIG</strong> Vinny'],
     ['name' => 'Zoe', 'surname' => 'Shatwell', 'birthdate' => '1958-08-21', 'cv' => null],
-    ['name' => 'Darcy', 'surname' => 'Wild', 'birthdate' => '1968-11-01', 'cv' => 'I like <i style="color: orange;>icecream</i>'],
+    ['name' => 'Darcy', 'surname' => 'Wild', 'birthdate' => '1968-11-01', 'cv' => 'I like <i style="color: orange;">icecream</i>'],
     ['name' => 'Brett', 'surname' => 'Bird', 'birthdate' => '1988-12-20', 'cv' => null],
 ];
 
@@ -78,7 +78,7 @@ $table = Table::addTo($app);
 $table->setSource($myArray, ['name']);
 
 // $table->addColumn('name');
-$table->addColumn('surname', [Table\Column\Link::class, 'url' => 'table.php?id={$surname}']);
+$table->addColumn('surname', [Table\Column\Link::class, 'url' => 'table.php?person_surname={$surname}']);
 $table->addColumn('birthdate', [], ['type' => 'date']);
 $table->addColumn('cv', [Table\Column\Html::class]);
 

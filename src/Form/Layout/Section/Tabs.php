@@ -13,7 +13,7 @@ use Atk4\Ui\View;
  */
 class Tabs extends UiTabs
 {
-    /** @var array */
+    /** @var array<mixed> */
     public $formLayoutSeed = [Form\Layout::class];
 
     public Form $form;

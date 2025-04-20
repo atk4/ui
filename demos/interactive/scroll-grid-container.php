@@ -28,15 +28,15 @@ $c = Columns::addTo($app);
 $c1 = $c->addColumn();
 $g1 = Crud::addTo($c1);
 $m1 = new Country($app->db);
-$g1->setModel($m1);
+$g1->setModel($m1, [$m1->fieldName()->name, $m1->fieldName()->iso]); // fields are filtered to fit into table for Behat, TODO remove filtering after https://github.com/atk4/ui/issues/1988
 $g1->addQuickSearch([Country::hinting()->fieldName()->name, Country::hinting()->fieldName()->iso]);
 
 // demo for additional action buttons in Crud + JsPaginator
-$g1->addModalAction(['icon' => 'cogs'], 'Details', static function (View $p, $id) use ($g1) {
-    Card::addTo($p)->setModel($g1->model->load($id));
+$g1->addModalAction(['icon' => 'cogs'], 'Details', static function (View $p, WrappedId $id) use ($g1) {
+    Card::addTo($p)->setEntity($g1->model->load($id));
 });
-$g1->addActionButton('red', static function (Jquery $js) {
-    return $js->closest('tr')->css('color', 'red');
+$g1->addActionButton('red', static function (Jquery $js, WrappedId $id) use ($app, $m1) {
+    return $js->find('tr[data-id=' . $app->uiPersistence->typecastAttributeSaveField($m1->getIdField(), $id) . ']')->css('color', 'red');
 });
 // THIS SHOULD GO AFTER YOU CALL Grid::addActionButton()
 $g1->addJsPaginatorInContainer(30, 350);

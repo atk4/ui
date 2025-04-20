@@ -88,7 +88,7 @@ would do). Here is how to set the HTML "maxlength" attribute on the generated in
 
 ```
 $form = \Atk4\Ui\Form::addTo($this);
-$form->setModel($model);
+$form->setEntity($model);
 $form->getControl('name')->setInputAttr('maxlength', 20);
 ```
 
@@ -102,7 +102,7 @@ A most common use of form is if you have a working Model (https://atk4-data.read
 ```
 // Form will automatically add a new user and save into the database
 $form = Form::addTo($app);
-$form->setModel(new User($db));
+$form->setEntity(new User($db));
 ```
 
 The basic 2-line syntax will extract all the required logic from the Model including:
@@ -182,7 +182,7 @@ specific field type:
 
 ```
 $form = Form::addTo($app);
-$form->setModel(new User($db), ['email', 'gender', 'terms']);
+$form->setEntity(new User($db), ['email', 'gender', 'terms']);
 ```
 
 Form control does not have to be added directly into the form. You can use a separate
@@ -280,7 +280,7 @@ existing field properties. This example make email field mandatory for the form:
 
 ```
 $form = Form::addTo($app);
-$form->setModel(new User($db), []);
+$form->setEntity(new User($db), []);
 
 $form->addControl('email', [], ['required' => true]);
 ```
@@ -308,7 +308,7 @@ class User extends \Atk4\Data\Model
 }
 
 $form = Form::addTo($app);
-$form->setModel(new User($db));
+$form->setEntity(new User($db));
 
 // add password verification field
 $form->addControl('password_verify', [\Atk4\Ui\Form\Control\Password::class], 'Type password again');
@@ -366,7 +366,7 @@ date1 = DateTime Object(
 ### Seeding Form Control from Model
 
 In large projects you most likely won't be setting individual form controls for each Form. Instead
-you can simply use `setModel()` to populate all form controls from fields defined inside a model. Form does
+you can simply use `setEntity()` to populate all form controls from fields defined inside a model. Form does
 have a pretty good guess about form control decorator based on the data field type, but what if you want to
 use a custom decorator?
 
@@ -401,15 +401,15 @@ $this->addField('birth_year', ['ui' => [\Atk4\Ui\Form\Control\Calendar::class, '
 
 Without the data 'type' property, now the calendar selection will be stored as text.
 
-### Using setModel()
+### Using setEntity()
 
-Although there were many examples above for the use of setModel() this method
+Although there were many examples above for the use of setEntity() this method
 needs a bit more info:
 
 :::{php:attr} model
 :::
 
-:::{php:method} setModel($model, [$fields])
+:::{php:method} setEntity($model, [$fields])
 :::
 
 Associate form controls with existing model object and import all editable fields
@@ -421,24 +421,24 @@ field names in an array as a second argument.
 Specifying "false" or empty array as a second argument will import no model fields as form controls,
 so you can then use {php:meth}`Form::addControl` to import form controls from model fields individually.
 
-Note that {php:meth}`Form::setModel` also delegates adding form control to the form layout
-by using `Form->layout->setModel()` internally.
+Note that {php:meth}`Form::setEntity` also delegates adding form control to the form layout
+by using `Form->layout->setEntity()` internally.
 
 See also: https://atk4-data.readthedocs.io/en/develop/fields.html#Field::isEditable
 
-### Using setModel() on a sub layout
+### Using setEntity() on a sub layout
 
-You may add form controls to sub layout directly using setModel method on the sub layout itself.:
+You may add form controls to sub layout directly using setEntity method on the sub layout itself.:
 
 ```
 $form = Form::addTo($app);
-$form->setModel($model, []);
+$form->setEntity($model, []);
 
 $subLayout = $form->layout->addSubLayout();
-$subLayout->setModel($model, ['first_name', 'last_name']);
+$subLayout->setEntity($model, ['first_name', 'last_name']);
 ```
 
-When using setModel() on a sub layout to add controls per sub layout instead of entire layout,
+When using setEntity() on a sub layout to add controls per sub layout instead of entire layout,
 make sure you pass false as second argument when setting the model on the Form itself, like above.
 Otherwise all model fields will be automatically added in Forms main layout and you will not be
 able to add them again in sub-layouts.
@@ -456,7 +456,7 @@ $user = $user->load($currentUserId);
 
 // display all fields (except password) and values
 $form = Form::addTo($app);
-$form->setModel($user);
+$form->setEntity($user);
 ```
 
 Submitting this form will automatically store values back to the database. Form uses
@@ -468,7 +468,7 @@ see https://atk4-data.readthedocs.io/en/develop/model.html?highlight=onlyfields#
 
 ```
 $form = Form::addTo($app);
-$form->setModel((new User($db))->load($currentUserId), ['email', 'name']);
+$form->setEntity((new User($db))->load($currentUserId), ['email', 'name']);
 ```
 
 As before, field `password` will not be loaded from the database, but this time
@@ -540,7 +540,7 @@ We can now populate form controls based around the data fields defined in the mo
 
 ```
 Form::addTo($app)
-    ->setModel(new Person($db));
+    ->setEntity(new Person($db));
 ```
 
 This should display a following form:
@@ -602,18 +602,18 @@ with a message about failure to accept of terms and conditions:
 
 ```
 $form->onSubmit(function (Form $form) {
-    $errors = [];
+    $jsErrors = [];
 
     if (!$form->entity->get('name')) {
-        $errors[] = $form->jsError('name', 'Name must be specified');
+        $jsErrors[] = $form->jsError('name', 'Name must be specified');
     }
 
     if (!$form->entity->get('surname')) {
-        $errors[] = $form->jsError('surname', 'Surname must be specified');
+        $jsErrors[] = $form->jsError('surname', 'Surname must be specified');
     }
 
-    if ($errors) {
-        return new \Atk4\Ui\Js\JsBlock($errors);
+    if ($jsErrors) {
+        return new \Atk4\Ui\Js\JsBlock($jsErrors);
     }
 
     if (!$form->entity->get('terms')) {
@@ -645,7 +645,7 @@ will not be included in response for security reasons.
 ### Form Layout and Sub-layout
 
 As stated above, when a Form object is created and form controls are added through either {php:meth}`Form::addControl()`
-or {php:meth}`Form::setModel()`, the form controls will appear one under each-other. This arrangement of form controls as
+or {php:meth}`Form::setEntity()`, the form controls will appear one under each-other. This arrangement of form controls as
 well as display of labels and structure around the form controls themselves is not done by a form,
 but another object - "Form Layout". This object is responsible for the form control flow, presence
 of labels etc.
@@ -680,7 +680,7 @@ and where you can setup specific width for each field.
 My next example will add multiple controls on the same line:
 
 ```
-$form->setModel(new User($db), []); // will not populate any form controls automatically
+$form->setEntity(new User($db), []); // will not populate any form controls automatically
 
 $group = $form->addGroup('Customer');
 $group->addControl('name');
@@ -733,20 +733,20 @@ The following example will show how to organize fields using regular sub layout 
 
 ```
 $form = Form::addTo($app);
-$form->setModel($model, []);
+$form->setEntity($model, []);
 
 $subLayout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section::class]);
 
 Header::addTo($subLayout, ['Accordion Section in Form']);
-$subLayout->setModel($model, ['name']);
+$subLayout->setEntity($model, ['name']);
 
 $accordionLayout = $form->layout->addSubLayout([\Atk4\Ui\Form\Layout\Section\Accordion::class]);
 
 $a1 = $accordionLayout->addSection('Section 1');
-$a1->setModel($model, ['iso', 'iso3']);
+$a1->setEntity($model, ['iso', 'iso3']);
 
 $a2 = $accordionLayout->addSection('Section 2');
-$a2->setModel($model, ['numcode', 'phonecode']);
+$a2->setEntity($model, ['numcode', 'phonecode']);
 ```
 
 In the example above, we first add a Generic sub layout to the existing layout of the form where one form
@@ -756,8 +756,8 @@ Then we add another layout to the form layout. In this case it's specific Accord
 is further separated in two accordion sections and form controls are added to each section:
 
 ```
-$a1->setModel($model, ['iso', 'iso3']);
-$a2->setModel($model, ['numcode', 'phonecode']);
+$a1->setEntity($model, ['iso', 'iso3']);
+$a2->setEntity($model, ['numcode', 'phonecode']);
 ```
 
 Sub layout gives you greater control on how to display form controls within your form. For more examples on

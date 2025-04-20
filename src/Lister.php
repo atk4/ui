@@ -6,10 +6,12 @@ namespace Atk4\Ui;
 
 use Atk4\Core\HookTrait;
 use Atk4\Data\Model;
+use Atk4\Ui\View\ModelTrait;
 
 class Lister extends View
 {
     use HookTrait;
+    use ModelTrait;
 
     public const HOOK_BEFORE_ROW = self::class . '@beforeRow';
     public const HOOK_AFTER_ROW = self::class . '@afterRow';
@@ -77,14 +79,14 @@ class Lister extends View
      * Will output x item in lister set per IPP until user scroll content to the end of page.
      * When this happen, content will be reload x number of items.
      *
-     * @param int    $ipp          Number of item per page
-     * @param array  $options      an array with JS Scroll plugin options
-     * @param View   $container    the container holding the lister for scrolling purpose
-     * @param string $scrollRegion A specific template region to render. Render output is append to container HTML element.
+     * @param int                  $ipp          Number of item per page
+     * @param array<string, mixed> $options      an array with JS Scroll plugin options
+     * @param View                 $container    the container holding the lister for scrolling purpose
+     * @param string               $scrollRegion A specific template region to render. Render output is append to container HTML element.
      *
      * @return $this
      */
-    public function addJsPaginator($ipp, $options = [], $container = null, $scrollRegion = null)
+    public function addJsPaginator($ipp, array $options = [], $container = null, $scrollRegion = null)
     {
         $this->ipp = $ipp;
         $this->jsPaginator = JsPaginator::addTo($this, ['view' => $container, 'options' => $options]);
@@ -120,7 +122,7 @@ class Lister extends View
             throw new Exception('Lister requires you to specify template explicitly');
         }
 
-        // if no model is set, don't show anything (even warning)
+        // if no model is set, don't show anything
         if ($this->model === null) {
             parent::renderView();
 
@@ -170,11 +172,7 @@ class Lister extends View
         parent::renderView();
     }
 
-    /**
-     * Render individual row. Override this method if you want to do more
-     * decoration.
-     */
-    public function renderRow(): void
+    protected function renderTRow(): void
     {
         $this->tRow->trySet($this->getApp()->uiPersistence->typecastSaveRow($this->currentRow, $this->currentRow->get()));
 
@@ -186,6 +184,15 @@ class Lister extends View
             $this->tRow->set('_href', $this->url(['id' => $idStr]));
         }
         $this->tRow->trySet('_id', $this->name . '-' . $idStr);
+    }
+
+    /**
+     * Render individual row. Override this method if you want to do more
+     * decoration.
+     */
+    public function renderRow(): void
+    {
+        $this->renderTRow();
 
         $html = $this->tRow->renderToHtml();
         if ($this->template->hasTag('rows')) {

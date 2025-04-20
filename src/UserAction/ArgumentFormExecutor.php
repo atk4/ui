@@ -26,10 +26,6 @@ class ArgumentFormExecutor extends BasicExecutor
         $this->form = Form::addTo($this, ['buttonSave' => $this->executorButton]);
 
         foreach ($this->action->args as $key => $val) {
-            if ($val instanceof Model) {
-                $val = ['model' => $val];
-            }
-
             if (isset($val['model'])) {
                 $val['model'] = Factory::factory($val['model']);
                 $this->form->addControl($key, [Form\Control\Lookup::class])->setModel($val['model']);

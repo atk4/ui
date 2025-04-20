@@ -9,9 +9,9 @@ class Money extends Input
     public string $inputType = 'text';
 
     #[\Override]
-    public function getValue()
+    public function getInputValue(): ?string
     {
-        $res = parent::getValue();
+        $res = parent::getInputValue();
         if ($res === null) {
             return null;
         }

@@ -118,7 +118,7 @@ $country->setLimit(3);
 
 foreach ($country as $ct) {
     $c = Card::addTo($deck, ['useLabel' => true])->setStyle('cursor', 'pointer');
-    $c->setModel($ct);
+    $c->setEntity($ct);
     $c->on('click', $panel3->jsOpen([], ['id'], 'orange'));
 }
 

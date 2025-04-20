@@ -49,8 +49,8 @@ $loader->set(static function (Loader $p) use ($m) {
         $loaderSubSub->set(static function (Loader $p) use ($m) {
             Header::addTo($p, ['Loader-3', 'size' => 4]);
 
-            $c = Crud::addTo($p, ['ipp' => 4]);
-            $c->setModel($m, [$m->fieldName()->name]);
+            $crud = Crud::addTo($p, ['ipp' => 4]);
+            $crud->setModel($m, [$m->fieldName()->name]);
         });
     });
     Button::addTo($p, ['Load2'])

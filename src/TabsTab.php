@@ -10,9 +10,9 @@ namespace Atk4\Ui;
 class TabsTab extends MenuItem
 {
     /** @var string */
-    public $path;
+    public $url;
 
-    /** @var array Tab settings */
+    /** @var array<string, mixed> Tab settings */
     public $settings = [];
 
     /**
@@ -20,9 +20,9 @@ class TabsTab extends MenuItem
      *
      * @return $this
      */
-    public function setPath($page)
+    public function setUrl($page)
     {
-        $this->path = $this->getApp()->url($page) . '#';
+        $this->url = $this->getApp()->url($page);
 
         return $this;
     }
@@ -32,11 +32,14 @@ class TabsTab extends MenuItem
     {
         $this->settings = array_merge($this->settings, ['autoTabActivation' => false]);
 
-        if ($this->path) {
+        if ($this->url) {
             $this->settings['cache'] = false;
-            $this->settings['auto'] = true;
-            $this->settings['path'] = $this->path;
-            $this->settings['apiSettings']['data']['__atk_tab'] = 1;
+            $this->settings['apiSettings']['url'] = $this->url;
+
+            // prevent adding timestamp to URL by jQuery
+            // https://github.com/jquery/jquery/blob/3.7.1/src/ajax.js#L612
+            // https://github.com/fomantic/Fomantic-UI/blob/2.9.3/src/definitions/modules/tab.js#L473
+            $this->settings['alwaysRefresh'] = null;
         }
 
         $this->js(true)->tab($this->settings);

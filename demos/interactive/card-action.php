@@ -24,7 +24,7 @@ $stat = new Stat($app->db);
 $stat = $stat->loadAny();
 
 $c = Card::addTo($app);
-$c->setModel($stat, [$stat->fieldName()->client_name, $stat->fieldName()->description]);
+$c->setEntity($stat, [$stat->fieldName()->client_name, $stat->fieldName()->description]);
 
 $c->addSection('Project: ', $stat, [$stat->fieldName()->start_date, $stat->fieldName()->finish_date], true);
 

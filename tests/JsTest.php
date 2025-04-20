@@ -110,64 +110,64 @@ class JsTest extends TestCase
 
     public function testChain1(): void
     {
-        $c = new JsChain('$myInput');
-        $c->getTextInRange('start', 'end'); // @phpstan-ignore method.notFound
-        self::assertSame('$myInput.getTextInRange(\'start\', \'end\')', $c->jsRender());
+        $js = new JsChain('$myInput');
+        $js->getTextInRange('start', 'end'); // @phpstan-ignore method.notFound
+        self::assertSame('$myInput.getTextInRange(\'start\', \'end\')', $js->jsRender());
     }
 
     public function testChain2(): void
     {
-        $c = new JsChain('$myInput');
-        $c->getTextInRange(new JsExpression('getStart()'), 'end'); // @phpstan-ignore method.notFound
-        self::assertSame('$myInput.getTextInRange(getStart(), \'end\')', $c->jsRender());
+        $js = new JsChain('$myInput');
+        $js->getTextInRange(new JsExpression('getStart()'), 'end'); // @phpstan-ignore method.notFound
+        self::assertSame('$myInput.getTextInRange(getStart(), \'end\')', $js->jsRender());
     }
 
     public function testChainNameStartingWithDigit(): void
     {
-        $c = new JsChain('$myInput');
-        $c->{'1x'}(2);
-        self::assertSame('$myInput[\'1x\'](2)', $c->jsRender());
+        $js = new JsChain('$myInput');
+        $js->{'1x'}(2); // @phpstan-ignore method.notFound
+        self::assertSame('$myInput[\'1x\'](2)', $js->jsRender());
     }
 
     public function testChainNameWithDot(): void
     {
-        $c = new JsChain('$myInput');
-        $c->{'x.y'}(2);
-        self::assertSame('$myInput[\'x.y\'](2)', $c->jsRender());
+        $js = new JsChain('$myInput');
+        $js->{'x.y'}(2); // @phpstan-ignore method.notFound
+        self::assertSame('$myInput[\'x.y\'](2)', $js->jsRender());
     }
 
     public function testJquery(): void
     {
-        $c = new Jquery('.mytag');
-        $c->find('li')->first()->hide();
+        $js = new Jquery('.mytag');
+        $js->find('li')->first()->hide();
 
-        self::assertSame('$(\'.mytag\').find(\'li\').first().hide()', $c->jsRender());
+        self::assertSame('$(\'.mytag\').find(\'li\').first().hide()', $js->jsRender());
     }
 
     public function testArgs(): void
     {
-        $c = new Jquery('.mytag');
-        $c->val((new Jquery('.othertag'))->val());
+        $js = new Jquery('.mytag');
+        $js->val((new Jquery('.othertag'))->val());
 
-        self::assertSame('$(\'.mytag\').val($(\'.othertag\').val())', $c->jsRender());
+        self::assertSame('$(\'.mytag\').val($(\'.othertag\').val())', $js->jsRender());
     }
 
     public function testComplex1(): void
     {
         // binding that maintains same height on
-        $b1 = new Jquery('.box1');
-        $b2 = new Jquery('.box2');
+        $jsB1 = new Jquery('.box1');
+        $jsB2 = new Jquery('.box2');
 
-        $doc = new Jquery(new JsExpression('document'));
-        $fx = $doc->first(new JsFunction([], [
-            $b1->height($b2->height()),
+        $jsDoc = new Jquery(new JsExpression('document'));
+        $jsFirst = $jsDoc->first(new JsFunction([], [
+            $jsB1->height($jsB2->height()),
         ]));
 
         self::assertSame(<<<'EOF'
             $(document).first(function () {
                 $('.box1').height($('.box2').height());
             })
-            EOF, $fx->jsRender());
+            EOF, $jsFirst->jsRender());
     }
 
     public function testFunctionEmpty(): void

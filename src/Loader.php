@@ -39,7 +39,7 @@ class Loader extends View
     /** @var Callback for triggering */
     public $cb;
 
-    /** @var array URL arguments. */
+    /** @var array<string, string|int> URL arguments. */
     public $urlArgs = [];
 
     #[\Override]
@@ -115,8 +115,9 @@ class Loader extends View
     /**
      * Return a JS action that will trigger the loader to start.
      *
-     * @param array<string, mixed> $apiConfig
-     * @param string               $storeName
+     * @param array<string, string|int|JsExpressionable> $args
+     * @param array<string, mixed>                       $apiConfig
+     * @param string                                     $storeName
      *
      * @return JsChain
      */

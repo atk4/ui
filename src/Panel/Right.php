@@ -24,10 +24,11 @@ class Right extends View implements Loadable
 {
     public array $class = ['atk-right-panel'];
     public $defaultTemplate = 'panel/right.html';
+    public array $attr = ['data-atk4-teleport-to' => 'body > .atk-side-panels'];
 
     /** @var Modal|null */
     public $closeModal;
-    /** @var array Confirmation Modal default */
+    /** @var array<mixed> Confirmation Modal default */
     public $defaultModal = [Modal::class, 'class' => ['mini']];
 
     /** @var View|null The content to display inside flyout */
@@ -39,7 +40,7 @@ class Right extends View implements Loadable
     /** @var bool can be closed via esc key. */
     protected $hasEscAway = true;
 
-    /** @var array The default content seed. */
+    /** @var array<mixed> The default content seed. */
     public $dynamic = [Content::class];
 
     /** @var string The CSS selector on where to add close panel event triggering for closing it. */
@@ -91,7 +92,7 @@ class Right extends View implements Loadable
      * Return JS expression need to open panel via JS panelService.
      *
      * @param array<string, string> $urlArgs       the argument to include when dynamic content panel open
-     * @param array                 $dataAttribute the data attribute name to include in reload from the triggering element
+     * @param list<string>          $dataAttribute the data attribute name to include in reload from the triggering element
      * @param string|null           $activeCss     the CSS class name to apply on triggering element when panel is open
      * @param JsExpressionable      $jsTrigger     JS expression that trigger panel to open. Default = $(this).
      */
@@ -108,6 +109,8 @@ class Right extends View implements Loadable
 
     /**
      * Will reload panel passing args as Get param via JS flyoutService.
+     *
+     * @param array<string, string> $args
      */
     public function jsPanelReload(array $args = []): JsExpressionable
     {
@@ -162,9 +165,9 @@ class Right extends View implements Loadable
      */
     public function jsDisplayWarning(bool $state = true): JsExpressionable
     {
-        $chain = new Jquery('#' . $this->name . ' ' . $this->warningSelector);
+        $jsChain = new Jquery('#' . $this->name . ' ' . $this->warningSelector);
 
-        return $state ? $chain->addClass($this->warningTrigger) : $chain->removeClass($this->warningTrigger);
+        return $state ? $jsChain->addClass($this->warningTrigger) : $jsChain->removeClass($this->warningTrigger);
     }
 
     /**
@@ -177,6 +180,9 @@ class Right extends View implements Loadable
         return (new Jquery('#' . $this->name . ' ' . $this->warningSelector))->toggleClass($this->warningTrigger);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getPanelOptions(): array
     {
         $res = [
@@ -191,7 +197,7 @@ class Right extends View implements Loadable
         ];
 
         if ($this->dynamicContent) {
-            $res['url'] = $this->getDynamicContent()->getCallbackUrl();
+            $res['url'] = $this->getDynamicContent()->getCallbackJsUrl();
             $res['clearable'] = $this->getDynamicContent()->getClearSelector();
         }
 

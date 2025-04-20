@@ -45,7 +45,7 @@ class Popup extends View
      */
     public $target = false;
 
-    /** @var array Popup options as defined in Fomantic-UI popup module. */
+    /** @var array<string, mixed> Popup options as defined in Fomantic-UI popup module. */
     public $popOptions = [];
 
     /** @var Callback|null The callback use to generate dynamic content. */
@@ -55,7 +55,7 @@ class Popup extends View
      * The dynamic View to load inside the popup
      * when dynamic content is use.
      *
-     * @var View|array
+     * @var View|array<mixed>
      */
     public $dynamicContent = [View::class];
 
@@ -223,13 +223,13 @@ class Popup extends View
         if ($this->triggerBy instanceof Form\Control) {
             $selector = '#' . $this->triggerBy->name . '_input';
         }
-        $chain = new Jquery($selector);
-        $chain->popup($this->popOptions);
+        $jsChain = new Jquery($selector);
+        $jsChain->popup($this->popOptions);
         if ($this->stopClickEvent) {
-            $chain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));
+            $jsChain->on('click', new JsExpression('function (e) { e.stopPropagation(); }'));
         }
 
-        return $chain;
+        return $jsChain;
     }
 
     #[\Override]

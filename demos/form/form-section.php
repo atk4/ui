@@ -18,15 +18,14 @@ Button::addTo($app, ['Accordion in Form', 'class.small right floated basic blue'
     ->link(['form-section-accordion']);
 View::addTo($app, ['ui' => 'clearing divider']);
 
-$model = new Country($app->db);
-$model = $model->loadAny();
+$entity = (new Country($app->db))->loadAny();
 
 $saveAndDumpValues = static function (Form $form) {
     $form->entity->save();
 
     return new JsToast([
         'title' => 'POSTed field values',
-        'message' => '<pre>' . $form->getApp()->encodeJson($form->entity->get()) . '</pre>',
+        'message' => $form->getApp()->encodeJson(array_diff_key($form->entity->get(), [$form->entity->idField => true])),
         'class' => 'success',
         'displayTime' => 5000,
     ]);
@@ -35,22 +34,22 @@ $saveAndDumpValues = static function (Form $form) {
 // -----------------------------------------------------------------------------
 
 $form = Form::addTo($app);
-$form->setModel($model, []);
+$form->setEntity($entity, []);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
 Header::addTo($sublayout, ['Column Section in Form']);
-$sublayout->setModel($model, [$model->fieldName()->name]);
+$sublayout->setEntity($entity, [$entity->fieldName()->name]);
 
 $colsLayout = $form->layout->addSubLayout([Form\Layout\Section\Columns::class]);
 
 $c1 = $colsLayout->addColumn();
-$c1->setModel($model, [$model->fieldName()->iso, $model->fieldName()->iso3]);
+$c1->setEntity($entity, [$entity->fieldName()->iso, $entity->fieldName()->iso3]);
 
 $c2 = $colsLayout->addColumn();
-$c2->setModel($model, [$model->fieldName()->numcode/* , $model->fieldName()->phonecode */]);
+$c2->setEntity($entity, [$entity->fieldName()->numcode/* , $model->fieldName()->phonecode */]);
 
-$form->addControl($model->fieldName()->phonecode);
+$form->addControl($entity->fieldName()->phonecode);
 
 $form->onSubmit($saveAndDumpValues);
 
@@ -59,20 +58,20 @@ View::addTo($app, ['ui' => 'divider']);
 // -----------------------------------------------------------------------------
 
 $form = Form::addTo($app);
-$form->setModel($model, []);
+$form->setEntity($entity, []);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
 Header::addTo($sublayout, ['Accordion Section in Form']);
-$sublayout->setModel($model, [$model->fieldName()->name]);
+$sublayout->setEntity($entity, [$entity->fieldName()->name]);
 
 $accordionLayout = $form->layout->addSubLayout([Form\Layout\Section\Accordion::class]);
 
 $a1 = $accordionLayout->addSection('Section 1');
-$a1->setModel($model, [$model->fieldName()->iso, $model->fieldName()->iso3]);
+$a1->setEntity($entity, [$entity->fieldName()->iso, $entity->fieldName()->iso3]);
 
 $a2 = $accordionLayout->addSection('Section 2');
-$a2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phonecode]);
+$a2->setEntity($entity, [$entity->fieldName()->numcode, $entity->fieldName()->phonecode]);
 
 $form->onSubmit($saveAndDumpValues);
 
@@ -81,20 +80,20 @@ View::addTo($app, ['ui' => 'divider']);
 // -----------------------------------------------------------------------------
 
 $form = Form::addTo($app);
-$form->setModel($model, []);
+$form->setEntity($entity, []);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class]);
 
 Header::addTo($sublayout, ['Tabs in Form']);
-$sublayout->setModel($model, [$model->fieldName()->name]);
+$sublayout->setEntity($entity, [$entity->fieldName()->name]);
 
 $tabsLayout = $form->layout->addSubLayout([Form\Layout\Section\Tabs::class]);
 
 $tab1 = $tabsLayout->addTab('Tab 1');
-$tab1->addGroup('In Group')->setModel($model, [$model->fieldName()->iso, $model->fieldName()->iso3]);
+$tab1->addGroup('In Group')->setEntity($entity, [$entity->fieldName()->iso, $entity->fieldName()->iso3]);
 
 $tab2 = $tabsLayout->addTab('Tab 2');
-$tab2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phonecode]);
+$tab2->setEntity($entity, [$entity->fieldName()->numcode, $entity->fieldName()->phonecode]);
 
 $form->onSubmit($saveAndDumpValues);
 
@@ -105,21 +104,21 @@ View::addTo($app, ['ui' => 'divider']);
 Header::addTo($app, ['Color in form']);
 
 $form = Form::addTo($app);
-$form->setModel($model, []);
+$form->setEntity($entity, []);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment red inverted'], false);
 
 Header::addTo($sublayout, ['This section in Red', 'ui' => 'dividing header', 'element' => 'h2']);
-$sublayout->setModel($model, [$model->fieldName()->name]);
+$sublayout->setEntity($entity, [$entity->fieldName()->name]);
 
 $sublayout = $form->layout->addSubLayout([Form\Layout\Section::class, 'ui' => 'segment teal inverted']);
 $colsLayout = $sublayout->addSubLayout([Form\Layout\Section\Columns::class]);
 
 $c1 = $colsLayout->addColumn();
-$c1->setModel($model, [$model->fieldName()->iso, $model->fieldName()->iso3]);
+$c1->setEntity($entity, [$entity->fieldName()->iso, $entity->fieldName()->iso3]);
 
 $c2 = $colsLayout->addColumn();
-$c2->setModel($model, [$model->fieldName()->numcode, $model->fieldName()->phonecode]);
+$c2->setEntity($entity, [$entity->fieldName()->numcode, $entity->fieldName()->phonecode]);
 
 $form->onSubmit($saveAndDumpValues);
 

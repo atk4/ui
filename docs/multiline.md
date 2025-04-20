@@ -114,7 +114,7 @@ If you want to edit them along with the user, Multiline need to be set up accord
 ```
 // add a form to UI in order to edit User record
 $userForm = \Atk4\Ui\Form::addTo($app);
-$userForm->setModel($user->load($userId));
+$userForm->setEntity($user->load($userId));
 
 $ml = $userForm->addControl('emails', [\Atk4\Ui\Form\Control\Multiline::class]);
 $ml->setReferenceModel('Emails');
@@ -200,7 +200,7 @@ You will find a list of Vue component associated with each field type within the
 :::{php:attr} fieldMapToComponent
 :::
 
-Each control being a Vue component means that they accept 'Props' that may change their look or behaviour.
+Each control being a Vue component means that they accept 'Props' that may change their look or behavior.
 Props on each component may be applied globally, i.e. to all control within Multiline that use that control, or
 per component.
 

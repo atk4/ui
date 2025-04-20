@@ -30,7 +30,7 @@ $grid->addActionMenuItem('Action MenuItem', static function () {
     return new JsToast(['message' => 'Clicked Action MenuItem']);
 });
 
-$grid->addModalAction('Action Modal', 'Details', static function (View $p, $id) use ($model) {
+$grid->addModalAction('Action Modal', 'Details', static function (View $p, WrappedId $id) use ($model) {
     Message::addTo($p, ['Clicked Action Modal: ' . $model->load($id)->name]);
 });
 
@@ -45,5 +45,5 @@ $grid->addSelection();
 // this emulation is not perfect, as it works even with event.preventDefault() called
 $grid->table->js(true)->find('a')->on(
     'click',
-    new JsFunction(['event'], [new JsExpression('window.location.href = \'#test\'; event.preventDefault();')])
+    new JsFunction([], [new JsExpression('window.location.href = \'#test\''), 'preventDefault' => true])
 );

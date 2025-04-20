@@ -36,7 +36,7 @@ class ExecutorFactory
      * Basic type can be changed or added globally via the registerTypeExecutor method.
      * A specific model/action executor may be set via the registerExecutor method.
      *
-     * @var array<string, array>
+     * @var array<string, array<mixed>>
      */
     protected $executorSeed = [
         self::JS_EXECUTOR => [JsCallbackExecutor::class],
@@ -67,7 +67,7 @@ class ExecutorFactory
      * They can be store per either view type or
      * model/action name.
      *
-     * @var array<string, array|View>
+     * @var array<string, array<string, array<mixed>|View>>
      */
     protected $triggerSeed = [
         self::TABLE_BUTTON => [
@@ -81,6 +81,8 @@ class ExecutorFactory
 
     /**
      * Register an executor for a basic type.
+     *
+     * @param array<mixed> $seed
      */
     public function registerTypeExecutor(string $type, array $seed): void
     {
@@ -89,6 +91,8 @@ class ExecutorFactory
 
     /**
      * Register an executor instance for a specific model User action.
+     *
+     * @param array<mixed> $seed
      */
     public function registerExecutor(UserAction $action, array $seed): void
     {
@@ -99,7 +103,7 @@ class ExecutorFactory
      * Register a trigger for a specific View type.
      * Trigger can be specify per action or per model/action.
      *
-     * @param array|View $seed
+     * @param array<mixed>|View $seed
      */
     public function registerTrigger(string $type, $seed, UserAction $action, bool $isSpecific = false): void
     {
@@ -200,6 +204,8 @@ class ExecutorFactory
 
     /**
      * Return executor default trigger seed based on type.
+     *
+     * @return array<mixed>
      */
     protected function getDefaultTrigger(UserAction $action, ?string $type = null): array
     {
@@ -253,6 +259,8 @@ class ExecutorFactory
 
     /**
      * Return Add action seed for menu item.
+     *
+     * @return array<mixed>
      */
     protected function getAddMenuItem(UserAction $action): array
     {
