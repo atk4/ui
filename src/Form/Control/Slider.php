@@ -21,11 +21,11 @@ class Slider extends Input
     /** @var float|null The slider step. Set to 0 to disable step. */
     public $step = 0;
 
-    /** The value the slider will start at. */
+    /** @var float The value the slider will start with. */
     public float $start = 0;
 
-    /** @var float|null The second value to set in case of a range slider. */
-    public $end;
+    /** @var float|null The end value to set in case of a range slider. */
+    public ?float $end = null;
 
     /** @var float|false Makes sure that the two thumbs of a range slider always need to have a difference of the given value. */
     public $minRange = false;
@@ -39,7 +39,7 @@ class Slider extends Input
     /** @var array|null An array of label values which restrict the displayed labels to only those which are defined. */
     public $restrictedLabels;
 
-    /** Whether a tooltip should be shown to the thumb(s) on hover. Will contain the current slider value. */
+    /** @vat bool Whether a tooltip should be shown to the thumb(s) on hover. Will contain the current slider value. */
     public bool $showThumbTooltip = false;
 
     /**
@@ -87,8 +87,17 @@ class Slider extends Input
     /** Whether the ticks and labels should be at the bottom. */
     public bool $bottom = false;
 
-    /** Whether the ticks and labels should be at the bottom. */
+    /** Whether the slider should be vertical. */
     public bool $vertical = false;
+
+    /** @var string Default height for vertical slider. */
+    public $verticalHeight = 200;
+
+    /** @var bool Right aligned vertical slider. Default true. */
+    public bool $verticalRightAligned = true;
+
+    /** @var bool Default reversed slider. */
+    public bool $reversed = false;
 
     /**
      * Custom interpreted labels.
@@ -96,10 +105,17 @@ class Slider extends Input
      *
      * @var array|null
      */
-    public $customLabels;
+    public $customLabels = null;
 
     /** @var string|null Color of the slider. */
     public $color;
+
+    /**
+     * Size of the slider.
+     * Can be: small, large, big, null is normal size.
+     * @var string|null 
+     */
+    public $size = null;
 
     /** @var View */
     public $slider;
@@ -108,10 +124,7 @@ class Slider extends Input
     private $owner;
 
     /** @var object */
-    private $firstInput;
-
-    /** @var object */
-    private $secondInput;
+    private $endInput;
 
     #[\Override]
     protected function init(): void
@@ -121,7 +134,19 @@ class Slider extends Input
         $this->owner = $this->getOwner();
 
         $this->slider = View::addTo($this->owner);
-        $this->slider->ui = 'ui slider';
+        if($this->reversed) {
+            $this->slider->ui = 'reversed';
+        }
+        
+        if (!$this->vertical) {
+            $this->slider->ui .= ' slider';
+        } else {
+            $this->slider->ui .= ' vertical slider';
+            $this->slider->setAttr(['style' => 'height: ' . $this->verticalHeight . 'px']);
+            if($this->verticalRightAligned) {
+                $this->slider->addClass('right aligned');
+            }
+        }
 
         if ($this->end) {
             $this->slider->addClass('range');
@@ -139,12 +164,12 @@ class Slider extends Input
             $this->slider->addClass('bottom aligned');
         }
 
-        if ($this->vertical) {
-            $this->slider->addClass('vertical');
-        }
-
         if ($this->color) {
             $this->slider->addClass($this->color);
+        }
+
+        if ($this->size) {
+            $this->slider->addClass($this->size);
         }
 
         $sliderSettings = [];
@@ -193,7 +218,7 @@ class Slider extends Input
                     new JsExpression(
                         <<<'EOF'
                                 var labels = [];
-                                return labels[ value ];
+                                return labels.slice(value, value + 1);
                             EOF,
                         [
                             $this->customLabels,
@@ -208,21 +233,16 @@ class Slider extends Input
         }
 
         if (!$this->disabled) {
-            // First input value, always present
-            $this->firstInput = $this->owner->addControl(
-                $this->shortName . '_first',
-                [
-                    Hidden::class,
-                ]
-            )->set($this->start);
-
+            // Set first input value, always present
+            $this->set($this->start);
+            
             if (!$this->readOnly) {
                 $onChange = [
                     'onChange' => new JsFunction(
                         ['v'],
                         [
                             new JsExpression(
-                                $this->firstInput->js()->find('input')->jsRender() . '.val($(\'div#\' + [] + \'\').slider(\'get thumbValue\', \'first\'))',
+                                $this->js()->find('input')->jsRender() . '.val($(\'div#\' + [] + \'\').slider(\'get thumbValue\', \'first\'))',
                                 [$this->slider->getHtmlId()]
                             ),
                         ]
@@ -230,10 +250,10 @@ class Slider extends Input
                 ];
             }
 
-            // Second input value, optional, depending on $this->end
+            // End input value, optional, depending on $this->end
             if ($this->end) {
-                $this->secondInput = $this->owner->addControl(
-                    $this->shortName . '_second',
+                $this->endInput = $this->owner->addControl(
+                    $this->shortName . '_end',
                     [
                         Hidden::class,
                     ]
@@ -245,11 +265,11 @@ class Slider extends Input
                             ['v'],
                             [
                                 new JsExpression(
-                                    $this->firstInput->js()->find('input')->jsRender() . '.val($(\'div#\' + [] + \'\').slider(\'get thumbValue\', \'first\'))',
+                                    $this->js()->find('input')->jsRender() . '.val($(\'div#\' + [] + \'\').slider(\'get thumbValue\', \'first\'))',
                                     [$this->slider->getHtmlId()]
                                 ),
                                 new JsExpression(
-                                    $this->secondInput->js()->find('input')->jsRender() . '.val($(\'div#\' + [] + \'\').slider(\'get thumbValue\', \'second\'))',
+                                    $this->endInput->js()->find('input')->jsRender() . '.val($(\'div#\' + [] + \'\').slider(\'get thumbValue\', \'second\'))',
                                     [$this->slider->getHtmlId()]
                                 ),
                             ]
@@ -259,8 +279,8 @@ class Slider extends Input
             }
         }
         if ($this->readOnly) {
-            $this->firstInput->addClass('readOnly');
-            $this->firstInput->setAttr(['readOnly' => '']);
+            $this->addClass('readOnly');
+            $this->setAttr(['readOnly' => '']);
         }
         if (!empty($onChange)) {
             $sliderSettings += $onChange;
