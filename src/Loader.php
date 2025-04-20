@@ -75,8 +75,9 @@ class Loader extends View
      *  });
      *
      * @param \Closure($this): void $fx
+     *
+     * @return $this
      */
-    #[\Override]
     public function set($fx = null)
     {
         if (!$fx instanceof \Closure) {

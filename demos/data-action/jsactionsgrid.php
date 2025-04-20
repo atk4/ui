@@ -11,7 +11,7 @@ use Atk4\Ui\Grid;
 use Atk4\Ui\Header;
 use Atk4\Ui\Icon;
 use Atk4\Ui\UserAction\ExecutorFactory;
-use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 // Demo for Model action in Grid
 
@@ -25,7 +25,7 @@ DemoActionsUtil::setupDemoActions($country);
 
 // creating special menu item for multi_step action
 $multiAction = $country->getUserAction('multi_step');
-$specialItem = Factory::factory([View::class], ['class' => ['item'], 'content' => 'Multi Step']);
+$specialItem = Factory::factory([ViewWithContent::class], ['class' => ['item'], 'content' => 'Multi Step']);
 Icon::addTo($specialItem, ['content' => 'window maximize outline']);
 // register this menu item in factory
 $app->getExecutorFactory()->registerTrigger(ExecutorFactory::TABLE_MENU_ITEM, $specialItem, $multiAction);
@@ -35,18 +35,18 @@ Header::addTo($app, ['Execute model action from Grid menu items', 'subHeader' =>
 $grid = Grid::addTo($app, ['menu' => false]);
 $grid->setModel($country);
 
-$divider = Factory::factory([View::class], ['class' => ['divider'], 'content' => '']);
+$divider = Factory::factory([ViewWithContent::class], ['class' => ['divider'], 'content' => '']);
 
-$modelHeader = Factory::factory([View::class], ['class' => ['header'], 'content' => 'Model Actions']);
+$modelHeader = Factory::factory([ViewWithContent::class], ['class' => ['header'], 'content' => 'Model Actions']);
 Icon::addTo($modelHeader, ['content' => 'database']);
 
-$jsHeader = Factory::factory([View::class], ['class' => ['header'], 'content' => 'JS Actions']);
+$jsHeader = Factory::factory([ViewWithContent::class], ['class' => ['header'], 'content' => 'JS Actions']);
 Icon::addTo($jsHeader, ['content' => 'file code']);
 
 $grid->addActionMenuItem($jsHeader);
 // beside model user action, grid menu items can also execute javascript
 $grid->addActionMenuItem('JS Callback', static function () {
-    return (new View())->set('JS Callback done!');
+    return (new ViewWithContent())->set('JS Callback done!');
 }, 'Are you sure?');
 
 $grid->addActionMenuItem($divider);

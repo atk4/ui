@@ -62,8 +62,9 @@ class Console extends View implements LoggerInterface
      * @param \Closure($this): void $fx    callback which will be executed while displaying output inside console
      * @param bool|string           $event "true" would mean to execute on page load, string would indicate
      *                                     JS event. See first argument for View::js()
+     *
+     * @return $this
      */
-    #[\Override]
     public function set($fx = null, $event = null)
     {
         if (!$fx instanceof \Closure) {
