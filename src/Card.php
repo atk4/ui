@@ -183,7 +183,7 @@ class Card extends View
 
         $this->template->trySet('dataId', $this->getApp()->uiPersistence->typecastAttributeSaveField($this->entity->getIdField(), $this->entity->getId()));
 
-        View::addTo($this->getSection(), [$entity->getTitle(), 'class.header' => true]);
+        ViewWithContent::addTo($this->getSection(), [$entity->getTitle(), 'class.header' => true]);
         $this->getSection()->addFields($entity, $fields, $this->useLabel, $this->useTable);
     }
 
@@ -198,7 +198,7 @@ class Card extends View
     {
         $section = CardSection::addToWithCl($this, array_merge($this->cardSectionSeed, ['card' => $this]), ['Section']);
         if ($title) {
-            View::addTo($section, [$title, 'class.header' => true]);
+            ViewWithContent::addTo($section, [$title, 'class.header' => true]);
         }
 
         if ($entity !== null && $fields) {
@@ -280,10 +280,10 @@ class Card extends View
                 $extra .= $entity->get($field) . $glue;
             }
             $extra = rtrim($extra, $glue);
-            $this->addExtraContent(new View([$extra, 'ui' => 'basic fitted segment']));
+            $this->addExtraContent(new ViewWithContent([$extra, 'ui' => 'basic fitted segment']));
         } else {
             foreach ($fields as $field) {
-                $this->addExtraContent(new View([$entity->get($field), 'class.ui basic fitted segment' => true]));
+                $this->addExtraContent(new ViewWithContent([$entity->get($field), 'class.ui basic fitted segment' => true]));
             }
         }
     }

@@ -10,6 +10,7 @@ use Atk4\Ui\Card;
 use Atk4\Ui\Header;
 use Atk4\Ui\Image;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -34,7 +35,7 @@ $card->addImage('../images/kristy.png');
 $card->addButton(new Button(['Join']));
 $card->addButton(new Button(['Email']));
 
-$card->addExtraContent(new View(['Copyright notice: Image from Fomantic-UI', 'element' => 'span']));
+$card->addExtraContent(new ViewWithContent(['Copyright notice: Image from Fomantic-UI', 'element' => 'span']));
 
 // Simple Card
 

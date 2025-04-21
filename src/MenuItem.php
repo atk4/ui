@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-class MenuItem extends View
+class MenuItem extends ViewWithContent
 {
     /** @var string Specify a label for this menu item. */
     public $label;

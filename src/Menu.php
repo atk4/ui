@@ -9,7 +9,7 @@ use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
 use Atk4\Ui\Js\JsExpressionable;
 
-class Menu extends View
+class Menu extends ViewWithContent
 {
     public $ui = 'menu';
 

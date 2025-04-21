@@ -18,6 +18,7 @@ use Atk4\Ui\Popup;
 use Atk4\Ui\View;
 use Atk4\Ui\View\EntityTrait;
 use Atk4\Ui\View\ModelTrait;
+use Atk4\Ui\ViewWithContent;
 use Atk4\Ui\VirtualPage;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -87,7 +88,7 @@ class ViewTest extends TestCase
 
     public function testMultipleTimesRender(): void
     {
-        $v = new View();
+        $v = new ViewWithContent();
         $v->set('foo');
 
         $v->setApp($this->createApp());
@@ -98,7 +99,7 @@ class ViewTest extends TestCase
 
     public function testAddAfterRenderException(): void
     {
-        $v = new View();
+        $v = new ViewWithContent();
         $v->set('foo');
 
         $v->setApp($this->createApp());
@@ -201,7 +202,7 @@ class ViewTest extends TestCase
 
     public function testSetException(): void
     {
-        $v = new View();
+        $v = new ViewWithContent();
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Not sure what to do with argument');
@@ -220,7 +221,7 @@ class ViewTest extends TestCase
 
         $this->expectException(\Error::class);
         $this->expectExceptionMessage('$fx must be of type Closure');
-        $v->set('strlen');
+        $v->set('strlen'); // @phpstan-ignore argument.type, argument.templateType
     }
 
     /**

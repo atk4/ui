@@ -14,6 +14,7 @@ use Atk4\Ui\Js\JsExpressionable;
 use Atk4\Ui\Table;
 use Atk4\Ui\UserAction\ExecutorInterface;
 use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 /**
  * Table column action menu.
@@ -65,7 +66,7 @@ class ActionMenu extends Table\Column
         $name = $this->name . '_action_' . (count($this->items) + 1);
 
         if (!is_object($item)) {
-            $item = Factory::factory([View::class], ['ui' => 'item', 'content' => $item]);
+            $item = Factory::factory([ViewWithContent::class], ['ui' => 'item', 'content' => $item]);
         }
 
         $this->assertColumnViewNotInitialized($item);

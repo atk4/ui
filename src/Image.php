@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-class Image extends View
+class Image extends ViewWithContent
 {
     public $ui = 'image';
 

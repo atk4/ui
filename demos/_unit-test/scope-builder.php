@@ -9,7 +9,7 @@ use Atk4\Data\Model\Scope\Condition;
 use Atk4\Ui\App;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
-use Atk4\Ui\View;
+use Atk4\Ui\ViewWithContent;
 
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -37,7 +37,7 @@ $form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model], [
 
 $form->onSubmit(static function (Form $form) use ($model) {
     $message = $form->entity->get('qb')->toWords($model);
-    $view = View::addTo($form)->addClass('atk-scope-builder-response');
+    $view = ViewWithContent::addTo($form)->addClass('atk-scope-builder-response');
     $view->set($message);
 
     return $view;
@@ -137,7 +137,7 @@ $expectedInput = json_encode(json_decode(<<<"EOF"
     EOF, true), \JSON_UNESCAPED_UNICODE);
 
 Header::addTo($app, ['Input:']);
-View::addTo($app, ['element' => 'p', 'content' => $expectedInput])->addClass('atk-expected-input-result');
+ViewWithContent::addTo($app, ['element' => 'p', 'content' => $expectedInput])->addClass('atk-expected-input-result');
 
 $expectedWord = <<<'EOF'
     Project Budget is greater or equal to '{$budget1000Eur}'
@@ -147,4 +147,4 @@ $expectedWord = <<<'EOF'
     EOF;
 
 Header::addTo($app, ['Word:']);
-View::addTo($app, ['element' => 'p', 'content' => $expectedWord])->addClass('atk-expected-word-result');
+ViewWithContent::addTo($app, ['element' => 'p', 'content' => $expectedWord])->addClass('atk-expected-word-result');
