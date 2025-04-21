@@ -7,9 +7,6 @@ namespace Atk4\Ui\Demos;
 use Atk4\Ui\App;
 use Atk4\Ui\Form;
 use Atk4\Ui\Header;
-use Atk4\Ui\Label;
-use Atk4\Ui\Coluns;
-
 
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
@@ -79,6 +76,8 @@ $form->addControl(
     ]
 );
 
+
+
 $form->addControl(
     'slider_custom',
     [
@@ -100,13 +99,14 @@ $form->addControl(
 
 $group = $form->addGroup(
     [
-        'Vertical sliders',
-        'inline' => true,
-        'width' => 'six',
+        'inline' => false,
+        //        'width' => 'six',
     ],
 );
 
-$g1 = $group->addControl(
+$h1 = Header::addTo($group, ['Vertical Sliders', 'size' => 3]);
+
+$group->addControl(
     'slider_vertical',
     [
         Form\Control\Slider::class,
@@ -122,11 +122,9 @@ $g1 = $group->addControl(
         'reversed' => true,
         'size' => 'small',
         'caption' => 'Smooth Red, ticked and vertical slider',
-        'width' => 'one',
+        'width' => 'two',
     ]
 );
-
-Label::addTo($g1, ['Smooth Red, ticked and vertical slider', 'class.right pointing basic label' => true], ['BeforeInput']);
 
 $group->addControl(
     'slider_vertical_right',
@@ -137,7 +135,7 @@ $group->addControl(
         'min' => 0,
         'max' => 6,
         'step' => 1,
-        'start' => 2,
+        'start' => 3,
         'smooth' => true,
         'color' => 'yellow',
         'vertical' => true,
@@ -166,8 +164,8 @@ $group->addControl(
         'verticalHeight' => 400,
         'verticalRightAligned' => false,
         'size' => 'large',
-        'caption' => 'Large',
-        'width' => 'one',
+        'caption' => 'Smooth green, ticked, large, custom heigth, vertical not right aligned slider',
+        'width' => 'two',
     ]
 );
 

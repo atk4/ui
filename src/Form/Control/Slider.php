@@ -10,6 +10,9 @@ use Atk4\Ui\View;
 
 class Slider extends Input
 {
+
+    public string $defaultInputTemplateVertical = 'form/layout/slider-vertical.html';
+
     public string $inputType = 'hidden';
 
     /** @var float|string The lowest value the slider can be. */
@@ -118,6 +121,7 @@ class Slider extends Input
     public $size = null;
 
     /** @var View */
+
     public $slider;
 
     /** @var object */
@@ -132,7 +136,7 @@ class Slider extends Input
         parent::init();
 
         $this->owner = $this->getOwner();
-
+        
         $this->slider = View::addTo($this->owner);
         if($this->reversed) {
             $this->slider->ui = 'reversed';
@@ -141,6 +145,9 @@ class Slider extends Input
         if (!$this->vertical) {
             $this->slider->ui .= ' slider';
         } else {
+            $this->owner->defaultInputTemplate = $this->defaultInputTemplateVertical;
+            $this->owner->inputTemplate = $this->getApp()->loadTemplate($this->defaultInputTemplateVertical);
+            
             $this->slider->ui .= ' vertical slider';
             $this->slider->setAttr(['style' => 'height: ' . $this->verticalHeight . 'px']);
             if($this->verticalRightAligned) {
