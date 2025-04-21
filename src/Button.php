@@ -7,7 +7,7 @@ namespace Atk4\Ui;
 /**
  * Component implementing UI Button.
  */
-class Button extends View
+class Button extends ViewWithContent
 {
     public $defaultTemplate = 'button.html';
 

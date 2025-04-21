@@ -40,8 +40,9 @@ class VirtualPage extends View
      *
      * @param \Closure($this, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed, mixed): void $fx
      * @param list<mixed>                                                                                 $fxArgs
+     *
+     * @return $this
      */
-    #[\Override]
     public function set($fx = null, $fxArgs = [])
     {
         if (!$fx instanceof \Closure) {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atk4\Ui;
 
-class Icon extends View
+class Icon extends ViewWithContent
 {
     public $defaultTemplate = 'icon.html';
 
