@@ -138,7 +138,7 @@ class Slider extends Input
 
         $this->input = View::addTo($this->owner);
 
-        if($this->reversed) {
+        if ($this->reversed) {
             $this->input->ui = 'reversed';
         }
 
