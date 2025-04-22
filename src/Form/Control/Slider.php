@@ -145,8 +145,8 @@ class Slider extends Input
         if (!$this->vertical) {
             $this->input->ui .= ' slider';
         } else {
-            $this->owner->defaultInputTemplate = $this->defaultInputTemplateVertical; // @phpstan-ignore variable.undefined
-            $this->owner->inputTemplate = $this->getApp()->loadTemplate($this->defaultInputTemplateVertical); // @phpstan-ignore variable.undefined
+            $this->owner->defaultInputTemplate = $this->defaultInputTemplateVertical; // @phpstan-ignore property.notFound
+            $this->owner->inputTemplate = $this->getApp()->loadTemplate($this->defaultInputTemplateVertical); // @phpstan-ignore property.notFound
             $this->input->ui .= ' vertical slider';
             $this->input->setAttr(['style' => 'height: ' . $this->verticalHeight . 'px']);
             if ($this->verticalRightAligned) {
