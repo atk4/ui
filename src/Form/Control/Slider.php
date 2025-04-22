@@ -39,7 +39,7 @@ class Slider extends Input
     public $labelType = 'number';
 
     /** @var array<string, mixed>|null An array of label values which restrict the displayed labels to only those which are defined. */
-    public $restrictedLabels = null;
+    public $restrictedLabels;
 
     /** @vat bool Whether a tooltip should be shown to the thumb(s) on hover. Will contain the current slider value. */
     public bool $showThumbTooltip = false;
@@ -107,20 +107,20 @@ class Slider extends Input
      *
      * @var array<string, mixed>|null
      */
-    public $customLabels = null;
+    public $customLabels;
 
     /** @var string|null Color of the slider. */
     public $color;
 
     /**
      * Size of the slider.
-     * Can be: small, large, big, null is normal size.
-     * @var string|null 
+     * Can be: small, large, big, not set is normal size.
+     *
+     * @var string
      */
-    public $size = null;
+    public $size;
 
     /** @var object The input object so it can be addressed from the code, ie addClass. */
-
     public $input;
 
     /** @var object */
@@ -135,23 +135,21 @@ class Slider extends Input
         parent::init();
 
         $this->owner = $this->getOwner();
-        
+
         $this->input = View::addTo($this->owner);
 
         if($this->reversed) {
             $this->input->ui = 'reversed';
         }
-        
+
         if (!$this->vertical) {
             $this->input->ui .= ' slider';
         } else {
             $this->owner->defaultInputTemplate = $this->defaultInputTemplateVertical;
             $this->owner->inputTemplate = $this->getApp()->loadTemplate($this->defaultInputTemplateVertical);
-            //var_dump($this->form->layout->inputTemplate);
-            
             $this->input->ui .= ' vertical slider';
             $this->input->setAttr(['style' => 'height: ' . $this->verticalHeight . 'px']);
-            if($this->verticalRightAligned) {
+            if ($this->verticalRightAligned) {
                 $this->input->addClass('right aligned');
             }
         }
@@ -243,7 +241,7 @@ class Slider extends Input
         if (!$this->disabled) {
             // Set first input value, always present
             $this->set($this->start);
-            
+
             if (!$this->readOnly) {
                 $onChange = [
                     'onChange' => new JsFunction(
