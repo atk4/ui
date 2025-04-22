@@ -48,7 +48,7 @@ class Slider extends Input
      * Tooltip configuration used when showThumbTooltip is true
      * Refer to Tooltip Variations for possible values.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public $tooltipConfig;
 
@@ -92,7 +92,7 @@ class Slider extends Input
     /** Whether the slider should be vertical. */
     public bool $vertical = false;
 
-    /** @var string Default height for vertical slider. */
+    /** @var int Default height for vertical slider. */
     public $verticalHeight = 200;
 
     /** @var bool Right aligned vertical slider. Default true. */
@@ -105,7 +105,7 @@ class Slider extends Input
      * Custom interpreted labels.
      * Provide an array which will be used for populating the labels.
      *
-     * @var array|null
+     * @var array<string, mixed>|null
      */
     public $customLabels = null;
 
@@ -147,6 +147,8 @@ class Slider extends Input
         } else {
             $this->owner->defaultInputTemplate = $this->defaultInputTemplateVertical;
             $this->owner->inputTemplate = $this->getApp()->loadTemplate($this->defaultInputTemplateVertical);
+            //var_dump($this->form->layout->inputTemplate);
+            
             $this->input->ui .= ' vertical slider';
             $this->input->setAttr(['style' => 'height: ' . $this->verticalHeight . 'px']);
             if($this->verticalRightAligned) {

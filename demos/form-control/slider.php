@@ -40,7 +40,7 @@ $slider2 = $form->addControl(
         'caption' => 'Blue ticked and labeled simple slider',
     ]
 );
-$slider2->slider->addClass('blue');
+$slider2->input->addClass('blue');
 
 $form->addControl(
     'slider_simple3',
