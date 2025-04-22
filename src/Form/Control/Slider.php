@@ -10,7 +10,6 @@ use Atk4\Ui\View;
 
 class Slider extends Input
 {
-
     public string $defaultInputTemplateVertical = 'form/layout/slider-vertical.html';
 
     public string $inputType = 'hidden';
@@ -39,8 +38,8 @@ class Slider extends Input
     /** @var 'number'|'letter' The type of label to display for a labeled slider. Can be number or letter. */
     public $labelType = 'number';
 
-    /** @var array|null An array of label values which restrict the displayed labels to only those which are defined. */
-    public $restrictedLabels;
+    /** @var array<string, mixed>|null An array of label values which restrict the displayed labels to only those which are defined. */
+    public $restrictedLabels = null;
 
     /** @vat bool Whether a tooltip should be shown to the thumb(s) on hover. Will contain the current slider value. */
     public bool $showThumbTooltip = false;
@@ -147,7 +146,6 @@ class Slider extends Input
         } else {
             $this->owner->defaultInputTemplate = $this->defaultInputTemplateVertical;
             $this->owner->inputTemplate = $this->getApp()->loadTemplate($this->defaultInputTemplateVertical);
-            
             $this->slider->ui .= ' vertical slider';
             $this->slider->setAttr(['style' => 'height: ' . $this->verticalHeight . 'px']);
             if($this->verticalRightAligned) {
@@ -289,7 +287,7 @@ class Slider extends Input
             $this->addClass('readOnly');
             $this->setAttr(['readOnly' => '']);
         }
-        if (!empty($onChange)) {
+        if (isset($onChange)) {
             $sliderSettings += $onChange;
         }
         $this->slider->js(true)->slider(

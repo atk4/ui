@@ -76,8 +76,6 @@ $form->addControl(
     ]
 );
 
-
-
 $form->addControl(
     'slider_custom',
     [
