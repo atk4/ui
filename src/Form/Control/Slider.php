@@ -121,7 +121,7 @@ class Slider extends Input
     public $size;
 
     /** @var object The input object so it can be addressed from the code, ie addClass. */
-    public $input;
+    public object $input;
 
     /** @var object */
     private $owner;
