@@ -119,9 +119,9 @@ class Slider extends Input
      */
     public $size = null;
 
-    /** @var View */
+    /** @var object The input object so it can be addressed from the code, ie addClass. */
 
-    public $slider;
+    public $input;
 
     /** @var object */
     private $owner;
@@ -136,45 +136,46 @@ class Slider extends Input
 
         $this->owner = $this->getOwner();
         
-        $this->slider = View::addTo($this->owner);
+        $this->input = View::addTo($this->owner);
+
         if($this->reversed) {
-            $this->slider->ui = 'reversed';
+            $this->input->ui = 'reversed';
         }
         
         if (!$this->vertical) {
-            $this->slider->ui .= ' slider';
+            $this->input->ui .= ' slider';
         } else {
             $this->owner->defaultInputTemplate = $this->defaultInputTemplateVertical;
             $this->owner->inputTemplate = $this->getApp()->loadTemplate($this->defaultInputTemplateVertical);
-            $this->slider->ui .= ' vertical slider';
-            $this->slider->setAttr(['style' => 'height: ' . $this->verticalHeight . 'px']);
+            $this->input->ui .= ' vertical slider';
+            $this->input->setAttr(['style' => 'height: ' . $this->verticalHeight . 'px']);
             if($this->verticalRightAligned) {
-                $this->slider->addClass('right aligned');
+                $this->input->addClass('right aligned');
             }
         }
 
         if ($this->end) {
-            $this->slider->addClass('range');
+            $this->input->addClass('range');
         }
 
         if ($this->ticked) {
-            $this->slider->addClass('ticked');
+            $this->input->addClass('ticked');
         }
 
         if ($this->labeled) {
-            $this->slider->addClass('labeled');
+            $this->input->addClass('labeled');
         }
 
         if ($this->bottom) {
-            $this->slider->addClass('bottom aligned');
+            $this->input->addClass('bottom aligned');
         }
 
         if ($this->color) {
-            $this->slider->addClass($this->color);
+            $this->input->addClass($this->color);
         }
 
         if ($this->size) {
-            $this->slider->addClass($this->size);
+            $this->input->addClass($this->size);
         }
 
         $sliderSettings = [];
@@ -234,7 +235,7 @@ class Slider extends Input
         }
 
         if ($this->disabled || $this->readOnly) {
-            $this->slider->addClass('disabled');
+            $this->input->addClass('disabled');
         }
 
         if (!$this->disabled) {
@@ -248,7 +249,7 @@ class Slider extends Input
                         [
                             new JsExpression(
                                 $this->js()->find('input')->jsRender() . '.val($(\'div#\' + [] + \'\').slider(\'get thumbValue\', \'first\'))',
-                                [$this->slider->getHtmlId()]
+                                [$this->input->getHtmlId()]
                             ),
                         ]
                     ),
@@ -271,11 +272,11 @@ class Slider extends Input
                             [
                                 new JsExpression(
                                     $this->js()->find('input')->jsRender() . '.val($(\'div#\' + [] + \'\').slider(\'get thumbValue\', \'first\'))',
-                                    [$this->slider->getHtmlId()]
+                                    [$this->input->getHtmlId()]
                                 ),
                                 new JsExpression(
                                     $this->endInput->js()->find('input')->jsRender() . '.val($(\'div#\' + [] + \'\').slider(\'get thumbValue\', \'second\'))',
-                                    [$this->slider->getHtmlId()]
+                                    [$this->input->getHtmlId()]
                                 ),
                             ]
                         ),
@@ -290,7 +291,7 @@ class Slider extends Input
         if (isset($onChange)) {
             $sliderSettings += $onChange;
         }
-        $this->slider->js(true)->slider(
+        $this->input->js(true)->slider(
             $sliderSettings,
         );
     }
