@@ -40,7 +40,8 @@ $slider2 = $form->addControl(
         'caption' => 'Blue ticked and labeled simple slider',
     ]
 );
-$slider2->input->addClass('blue');
+$slider2->input->addClass('blue'); // @phpstan-ignore variable.undefined
+
 
 $form->addControl(
     'slider_simple3',

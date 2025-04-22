@@ -112,7 +112,7 @@ $disabledSlider = $form->addControl(
     ]
 );
 // We can add classes to a slider by doing:
-$disabledSlider->input->addClass('red');
+$disabledSlider->input->addClass('red'); // @phpstan-ignore variable.undefined
 
 $group = $form->addGroup('File upload');
 
