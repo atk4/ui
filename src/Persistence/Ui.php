@@ -148,12 +148,12 @@ class Ui extends Persistence
                     ][$field->type];
 
                     $valueHasSeconds = (int) $value->format('s') !== 0;
-                    $valueHasMicroseconds = (int) $value->format('u') !== 0;
+                    $valueHasMicroseconds = (int) $value->format('u') !== 0; // @phpstan-ignore notIdentical.alwaysTrue (https://github.com/phpstan/phpstan-src/pull/3980)
                     $formatHasMicroseconds = str_contains($format, '.u');
-                    if ($valueHasSeconds || $valueHasMicroseconds) {
+                    if ($valueHasSeconds || $valueHasMicroseconds) { // @phpstan-ignore booleanOr.rightAlwaysTrue (https://github.com/phpstan/phpstan-src/pull/3980)
                         $format = preg_replace('~(?<=:i)(?!:s)~', ':s', $format);
                     }
-                    if ($valueHasMicroseconds) {
+                    if ($valueHasMicroseconds) { // @phpstan-ignore if.alwaysTrue (https://github.com/phpstan/phpstan-src/pull/3980)
                         $format = preg_replace('~(?<=:s)(?!\.u)~', '.u', $format);
                     }
 
