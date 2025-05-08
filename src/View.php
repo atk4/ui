@@ -183,11 +183,6 @@ class View extends AbstractView
         foreach ($addLater as [$object, $region]) {
             $this->add($object, $region);
         }
-
-        // allow for injecting the model with a seed
-        if (property_exists($this, 'model') && $this->model !== null) {
-            $this->setModel($this->model); // @phpstan-ignore method.notFound
-        }
     }
 
     public function getExecutorFactory(): ExecutorFactory
