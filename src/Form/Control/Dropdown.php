@@ -159,10 +159,12 @@ class Dropdown extends Input
     protected function jsRenderDropdown(): JsExpressionable
     {
         $dropdownOptions = $this->dropdownOptions;
-        if ($this->entityField === null || ($this->entityField->getField()->nullable || !$this->entityField->getField()->required)) {
-            $dropdownOptions['clearable'] = true;
-        }
 
+        if (!array_key_exists('clearable', $dropdownOptions)) {
+            if ($this->entityField === null || ($this->entityField->getField()->nullable || !$this->entityField->getField()->required)) {
+                $dropdownOptions['clearable'] = true;
+            }
+        }
         return $this->jsDropdown(true)->dropdown($dropdownOptions);
     }
 
