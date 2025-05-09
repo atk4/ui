@@ -165,6 +165,7 @@ class Dropdown extends Input
                 $dropdownOptions['clearable'] = true;
             }
         }
+
         return $this->jsDropdown(true)->dropdown($dropdownOptions);
     }
 
