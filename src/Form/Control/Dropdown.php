@@ -160,10 +160,8 @@ class Dropdown extends Input
     {
         $dropdownOptions = $this->dropdownOptions;
 
-        if (!array_key_exists('clearable', $dropdownOptions)) {
-            if ($this->entityField === null || ($this->entityField->getField()->nullable || !$this->entityField->getField()->required)) {
-                $dropdownOptions['clearable'] = true;
-            }
+        if (!isset($dropdownOptions['clearable']) && $this->entityField === null || ($this->entityField->getField()->nullable || !$this->entityField->getField()->required)) {
+            $dropdownOptions['clearable'] = true;
         }
 
         return $this->jsDropdown(true)->dropdown($dropdownOptions);
