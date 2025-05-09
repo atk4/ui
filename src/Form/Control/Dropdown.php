@@ -160,7 +160,7 @@ class Dropdown extends Input
     {
         $dropdownOptions = $this->dropdownOptions;
 
-        if (!isset($dropdownOptions['clearable']) && ($this->entityField === null || ($this->entityField->getField()->nullable || !$this->entityField->getField()->required))) {
+        if (!isset($dropdownOptions['clearable']) && ($this->entityField === null || $this->entityField->getField()->nullable || !$this->entityField->getField()->required)) {
             $dropdownOptions['clearable'] = true;
         }
 
