@@ -22,7 +22,7 @@ class JsIntegrationTest extends TestCase
         $v->renderAll();
 
         self::assertNotEmpty($v->icon);
-        self::assertNotEmpty($v->icon->name); // @phpstan-ignore staticMethod.alreadyNarrowedType
+        self::assertNotEmpty($v->icon->name);
         self::assertNotSame($v->name, $v->icon->name);
     }
 

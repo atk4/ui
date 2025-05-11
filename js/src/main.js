@@ -1,4 +1,3 @@
-import 'core-js/stable';
 import atk from './setupAtk'; // must be the first non-vendor import
 import './setupJqueryPatchData';
 import './setupUtils';

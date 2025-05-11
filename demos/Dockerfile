@@ -8,14 +8,10 @@
 FROM php:8.3-apache
 
 RUN apt-get update && apt-get install -y \
-        libicu-dev git unzip npm \
+        git libicu-dev npm unzip \
     && docker-php-ext-configure intl \
     && docker-php-ext-install intl \
     && docker-php-ext-install pdo pdo_mysql
-
-RUN curl -sL https://deb.nodesource.com/setup_current.x  | bash - \
-    && apt-get update && apt-get -y install nodejs \
-    && npm install -g npm
 
 WORKDIR /var/www/html/
 
