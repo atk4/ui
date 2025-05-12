@@ -11,6 +11,16 @@ trait EntityTrait
 {
     public ?Model $entity = null;
 
+    #[\Override]
+    protected function init(): void
+    {
+        parent::init();
+
+        if ($this->entity !== null) {
+            $this->setEntity($this->entity);
+        }
+    }
+
     /**
      * Associate this view with an entity. Do not place any logic in this method, instead take it to renderView().
      *
