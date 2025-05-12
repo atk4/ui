@@ -12,16 +12,6 @@ trait ModelTrait
 {
     public ?Model $model = null;
 
-    #[\Override]
-    protected function init(): void
-    {
-        parent::init();
-
-        if ($this->model !== null) {
-            $this->setModel($this->model);
-        }
-    }
-
     /**
      * Associate this view with a model. Do not place any logic in this method, instead take it to renderView().
      *
