@@ -132,102 +132,14 @@ class Layout extends AbstractLayout
         $this->template->del('Content');
 
         foreach ($this->elements as $element) {
-            // buttons go under Button section
             if ($element instanceof Button) {
-                $this->template->dangerouslyAppendHtml('Buttons', $element->getHtml());
-
-                continue;
-            }
-
-            if ($element instanceof self) {
-                if ($element->label && !$element->inline) {
-                    $template = $labeledGroup;
-                    $template->set('label', $element->label);
-                } else {
-                    $template = $noLabelGroup;
-                }
-
-                if ($element->width) {
-                    $template->set('width', $element->width);
-                }
-
-                if ($element->inline) {
-                    $template->set('class', 'inline');
-                }
-                $template->dangerouslySetHtml('Content', $element->getHtml());
-
-                $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
-
-                continue;
-            }
-
-            // anything but controls or explicitly defined controls get inserted directly
-            if (!$element instanceof Control || !$element->layoutWrap) {
-                $this->template->dangerouslyAppendHtml('Content', $element->getHtml()); // @phpstan-ignore method.notFound
-
-                continue;
-            }
-
-            $template = $element->renderLabel ? $labeledControl : $noLabelControl;
-            $label = $element->caption;
-            if ($label === null) {
-                $label = $element->entityField->getField()->getCaption();
-                if (property_exists($element, 'model')) {
-                    $label = preg_replace('~ ID$~i', '', $label);
-                }
-            }
-
-            // anything but form controls gets inserted directly
-            if ($element instanceof Control\Checkbox) {
-                $template = $noLabelControl;
-                $element->template->set('Content', $label);
-            }
-
-            if ($this->label && $this->inline) {
-                if ($element instanceof Control\Input) {
-                    $element->placeholder = $label;
-                }
-                $label = $this->label;
-                $this->label = null;
-            } elseif ($this->label || $this->inline) {
-                $template = $noLabelControl;
-                if ($element instanceof Control\Input) {
-                    $element->placeholder = $label;
-                }
-            }
-
-            // controls get extra pampering
-            $template->dangerouslySetHtml('Input', $element->getHtml());
-            $template->trySet('label', $label);
-            $template->trySet('labelFor', $element->name . '_input');
-            $template->set('controlClass', $element->controlClass);
-
-            if ($element->entityField->getField()->required) {
-                $template->append('controlClass', 'required ');
-            }
-
-            if ($element->width) {
-                $template->append('controlClass', $element->width . ' wide ');
-            }
-
-            if ($element->hint && $template->hasTag('Hint')) {
-                $hint = Factory::factory($this->defaultHintSeed);
-                $hint->name = $element->name . '_hint';
-                if (is_object($element->hint) || is_array($element->hint)) {
-                    $hint->add($element->hint);
-                } else {
-                    $hint->set($element->hint);
-                }
-                $hint->setApp($this->getApp());
-                $template->dangerouslySetHtml('Hint', $hint->getHtml());
-            } elseif ($template->hasTag('Hint')) {
-                $template->del('Hint');
-            }
-
-            if ($this->template->hasTag($element->shortName)) {
-                $this->template->dangerouslySetHtml($element->shortName, $template->renderToHtml());
-            } else {
-                $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
+                $this->renderElementToRegion($element, 'Buttons');
+            } elseif ($element instanceof self) {
+                $this->recursiveRenderLayout($element, $labeledGroup, $noLabelGroup);
+            } elseif ($element instanceof Control) {
+                $this->renderControl($element, $labeledControl, $noLabelControl);
+            } elseif ($element instanceof View) {
+                $this->renderElementToRegion($element, 'Content');
             }
         }
 
@@ -239,5 +151,104 @@ class Layout extends AbstractLayout
                 }
             }
         }
+    }
+
+    protected function recursiveRenderLayout(self $layout, HtmlTemplate $labeledGroup, HtmlTemplate $noLabelGroup): void
+    {
+        if ($layout->label && !$layout->inline) {
+            $template = $labeledGroup;
+            $template->set('label', $layout->label);
+        } else {
+            $template = $noLabelGroup;
+        }
+
+        if ($layout->width) {
+            $template->set('width', $layout->width);
+        }
+
+        if ($layout->inline) {
+            $template->set('class', 'inline');
+        }
+        $template->dangerouslySetHtml('Content', $layout->getHtml());
+        if ($layout->region && $this->template->hasTag($layout->region)) {
+            $this->template->dangerouslyAppendHtml($layout->region, $template->renderToHtml());
+        } else {
+            $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
+        }
+    }
+
+    protected function renderControl(Control $control, HtmlTemplate $labeledControl, HtmlTemplate $noLabelControl): void
+    {
+        if (!$control->layoutWrap) {
+            $this->renderElementToRegion($control, 'Content');
+
+            return;
+        }
+        $template = $control->renderLabel ? $labeledControl : $noLabelControl;
+        $label = $control->caption;
+        if ($label === null) {
+            $label = $control->entityField->getField()->getCaption();
+            if (property_exists($control, 'model')) {
+                $label = preg_replace('~ ID$~i', '', $label);
+            }
+        }
+
+        // anything but form controls gets inserted directly
+        if ($control instanceof Control\Checkbox) {
+            $template = $noLabelControl;
+            $control->template->set('Content', $label);
+        }
+
+        if ($this->label && $this->inline) {
+            if ($control instanceof Control\Input) {
+                $control->placeholder = $label;
+            }
+            $label = $this->label;
+            $this->label = null;
+        } elseif ($this->label || $this->inline) {
+            $template = $noLabelControl;
+            if ($control instanceof Control\Input) {
+                $control->placeholder = $label;
+            }
+        }
+
+        // controls get extra pampering
+        $template->dangerouslySetHtml('Input', $control->getHtml());
+        $template->trySet('label', $label);
+        $template->trySet('labelFor', $control->name . '_input');
+        $template->set('controlClass', $control->controlClass);
+
+        if ($control->entityField->getField()->required) {
+            $template->append('controlClass', 'required ');
+        }
+
+        if ($control->width) {
+            $template->append('controlClass', $control->width . ' wide ');
+        }
+
+        if ($control->hint && $template->hasTag('Hint')) {
+            $hint = Factory::factory($this->defaultHintSeed);
+            $hint->name = $control->name . '_hint';
+            if (is_object($control->hint) || is_array($control->hint)) {
+                $hint->add($control->hint);
+            } else {
+                $hint->set($control->hint);
+            }
+            $hint->setApp($this->getApp());
+            $template->dangerouslySetHtml('Hint', $hint->getHtml());
+        } elseif ($template->hasTag('Hint')) {
+            $template->del('Hint');
+        }
+
+        if ($this->template->hasTag($control->shortName)) {
+            $this->template->dangerouslySetHtml($control->shortName, $template->renderToHtml());
+        } else {
+            $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
+        }
+    }
+
+    private function renderElementToRegion(View $element, string $region): void
+    {
+        $this->template->dangerouslyAppendHtml($region, $element->getHtml());
     }
 }
