@@ -138,7 +138,7 @@ class Layout extends AbstractLayout
                 $this->recursiveRenderLayout($element, $labeledGroup, $noLabelGroup);
             } elseif ($element instanceof Control) {
                 $this->renderControl($element, $labeledControl, $noLabelControl);
-            } elseif ($element instanceof View) {
+            } else {
                 $this->renderElementToRegion($element, 'Content');
             }
         }
