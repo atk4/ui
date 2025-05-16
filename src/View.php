@@ -184,7 +184,7 @@ class View extends AbstractView
             $this->add($object, $region);
         }
 
-        // allow for injecting the model with a seed
+        // allow for injecting the model using View\ModelTrait
         if (property_exists($this, 'model') && $this->model !== null) {
             $this->setModel($this->model); // @phpstan-ignore method.notFound
         }
