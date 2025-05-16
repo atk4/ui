@@ -133,13 +133,13 @@ class Layout extends AbstractLayout
 
         foreach ($this->elements as $element) {
             if ($element instanceof Button) {
-                $this->renderElementToRegion($element, 'Buttons');
+                $this->renderElementAndAppendToTemplateRegion($element, 'Buttons');
             } elseif ($element instanceof self) {
                 $this->recursiveRenderLayout($element, $labeledGroup, $noLabelGroup);
             } elseif ($element instanceof Control && $element->layoutWrap) {
                 $this->recursiveRenderControl($element, $labeledControl, $noLabelControl);
             } else {
-                $this->renderElementToRegion($element, 'Content'); // @phpstan-ignore argument.type
+                $this->renderElementAndAppendToTemplateRegion($element, 'Content'); // @phpstan-ignore argument.type
             }
         }
 
@@ -153,7 +153,7 @@ class Layout extends AbstractLayout
         }
     }
 
-    private function renderElementToRegion(View $element, string $defaultRegion): void
+    private function renderElementAndAppendToTemplateRegion(View $element, string $defaultRegion): void
     {
         $this->template->dangerouslyAppendHtml(
             $element->region && $this->template->hasTag($element->region)
