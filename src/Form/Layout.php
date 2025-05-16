@@ -180,8 +180,12 @@ class Layout extends AbstractLayout
             $template->set('class', 'inline');
         }
         $template->dangerouslySetHtml('Content', $layout->getHtml());
-
-        $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
+        $this->template->dangerouslyAppendHtml(
+            $layout->region && $this->template->hasTag($layout->region)
+                ? $layout->region
+                : 'Content',
+            $template->renderToHtml()
+        );
     }
 
     protected function recursiveRenderControl(Control $control, HtmlTemplate $labeledControl, HtmlTemplate $noLabelControl): void
