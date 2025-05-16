@@ -137,7 +137,7 @@ class Layout extends AbstractLayout
             } elseif ($element instanceof self) {
                 $this->recursiveRenderLayout($element, $labeledGroup, $noLabelGroup);
             } elseif ($element instanceof Control && $element->layoutWrap) {
-                $this->renderControl($element, $labeledControl, $noLabelControl);
+                $this->recursiveRenderControl($element, $labeledControl, $noLabelControl);
             } else {
                 $this->renderElementToRegion($element, 'Content');
             }
@@ -151,6 +151,11 @@ class Layout extends AbstractLayout
                 }
             }
         }
+    }
+
+    private function renderElementToRegion(View $element, string $region): void
+    {
+        $this->template->dangerouslyAppendHtml($region, $element->getHtml());
     }
 
     protected function recursiveRenderLayout(self $layout, HtmlTemplate $labeledGroup, HtmlTemplate $noLabelGroup): void
@@ -174,7 +179,7 @@ class Layout extends AbstractLayout
         $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
     }
 
-    protected function renderControl(Control $control, HtmlTemplate $labeledControl, HtmlTemplate $noLabelControl): void
+    protected function recursiveRenderControl(Control $control, HtmlTemplate $labeledControl, HtmlTemplate $noLabelControl): void
     {
         $template = $control->renderLabel ? $labeledControl : $noLabelControl;
         $label = $control->caption;
@@ -237,10 +242,5 @@ class Layout extends AbstractLayout
         } else {
             $this->template->dangerouslyAppendHtml('Content', $template->renderToHtml());
         }
-    }
-
-    private function renderElementToRegion(View $element, string $region): void
-    {
-        $this->template->dangerouslyAppendHtml($region, $element->getHtml());
     }
 }
