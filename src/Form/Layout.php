@@ -153,9 +153,14 @@ class Layout extends AbstractLayout
         }
     }
 
-    private function renderElementToRegion(View $element, string $region): void
+    private function renderElementToRegion(View $element, string $defaultRegion): void
     {
-        $this->template->dangerouslyAppendHtml($region, $element->getHtml());
+        $this->template->dangerouslyAppendHtml(
+            $element->region && $this->template->hasTag($element->region)
+                ? $element->region
+                : $defaultRegion,
+            $element->getHtml()
+        );
     }
 
     protected function recursiveRenderLayout(self $layout, HtmlTemplate $labeledGroup, HtmlTemplate $noLabelGroup): void
