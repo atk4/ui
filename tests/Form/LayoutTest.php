@@ -18,10 +18,11 @@ class LayoutTest extends TestCase
 
     public function testRecursiveRenderRespectsRegions(): void
     {
-        $template = new HtmlTemplate(
-            '<div id="defaultRegion">{$Content}{$Buttons}</div><div id="anotherRegion">{$input2}{$AnotherRegion}</div>'
-        );
-        $form = new Form(['buttonSave' => false]);  // no buttonSave to keep rendered HTML minimal
+        $template = new HtmlTemplate(<<<'EOD'
+            <div id="defaultRegion">{$Content}{$Buttons}</div>
+            <div id="anotherRegion">{$input2}{$AnotherRegion}</div>
+            EOD);
+        $form = new Form(['buttonSave' => false]);
         $form->setApp($this->createApp());
         $form->invokeInit();
         $form->layout->template = $template;
@@ -42,39 +43,40 @@ class LayoutTest extends TestCase
         Form\Layout::addTo($form->layout, ['label' => 'Layout2'], ['AnotherRegion']);
 
         $renderedHtml = $form->getHtml();
-        $expectedHtml = <<<EOF
+        $expectedHtml = <<<'EOF'
 
-<div id="atk" class="ui form">
-<form id="atk_form"></form>
+            <div id="atk" class="ui form">
+            <form id="atk_form"></form>
 
-<div id="defaultRegion">
-<div class=" field">
-  <label for="atk_form_layout_input1_input">Input 1</label>
-<div id="atk_form_layout_input1" class="ui input">
-<input form="atk_form" name="input1" id="atk_form_layout_input1_input" value="">
-</div>
-  
-</div><div id="atk_form_layout_button" class="ui button">Button1</div><div id="atk_form_layout_viewwithcontent">View1</div>
-<div class=" field atk-form-group">
-  <label>Layout1</label>
-  <div class="  fields">
+            <div id="defaultRegion">
+            <div class=" field">
+              <label for="atk_form_layout_input1_input">Input 1</label>
+            <div id="atk_form_layout_input1" class="ui input">
+            <input form="atk_form" name="input1" id="atk_form_layout_input1_input" value="">
+            </div>
 
-</div>
-</div></div><div id="anotherRegion">
-<div class=" field">
-  <label for="atk_form_layout_input2_input">Input 2</label>
-<div id="atk_form_layout_input2" class="ui input">
-<input form="atk_form" name="input2" id="atk_form_layout_input2_input" value="">
-</div>
-  
-</div><div id="atk_form_layout_button_2" class="ui button">Button2</div><div id="atk_form_layout_viewwithcontent_2">View2</div>
-<div class=" field atk-form-group">
-  <label>Layout2</label>
-  <div class="  fields">
+            </div><div id="atk_form_layout_button" class="ui button">Button1</div><div id="atk_form_layout_viewwithcontent">View1</div>
+            <div class=" field atk-form-group">
+              <label>Layout1</label>
+              <div class="  fields">
 
-</div>
-</div></div></div>
-EOF;
+            </div>
+            </div></div>
+            <div id="anotherRegion">
+            <div class=" field">
+              <label for="atk_form_layout_input2_input">Input 2</label>
+            <div id="atk_form_layout_input2" class="ui input">
+            <input form="atk_form" name="input2" id="atk_form_layout_input2_input" value="">
+            </div>
+
+            </div><div id="atk_form_layout_button_2" class="ui button">Button2</div><div id="atk_form_layout_viewwithcontent_2">View2</div>
+            <div class=" field atk-form-group">
+              <label>Layout2</label>
+              <div class="  fields">
+
+            </div>
+            </div></div></div>
+            EOF;
 
         self::assertSame($expectedHtml, $renderedHtml);
     }
