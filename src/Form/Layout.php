@@ -136,7 +136,7 @@ class Layout extends AbstractLayout
                 $this->renderElementToRegion($element, 'Buttons');
             } elseif ($element instanceof self) {
                 $this->recursiveRenderLayout($element, $labeledGroup, $noLabelGroup);
-            } elseif ($element instanceof Control) {
+            } elseif ($element instanceof Control && $element->layoutWrap) {
                 $this->renderControl($element, $labeledControl, $noLabelControl);
             } else {
                 $this->renderElementToRegion($element, 'Content');
@@ -176,12 +176,6 @@ class Layout extends AbstractLayout
 
     protected function renderControl(Control $control, HtmlTemplate $labeledControl, HtmlTemplate $noLabelControl): void
     {
-        if (!$control->layoutWrap) {
-            $this->renderElementToRegion($control, 'Content');
-
-            return;
-        }
-
         $template = $control->renderLabel ? $labeledControl : $noLabelControl;
         $label = $control->caption;
         if ($label === null) {
