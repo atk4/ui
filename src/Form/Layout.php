@@ -139,7 +139,7 @@ class Layout extends AbstractLayout
             } elseif ($element instanceof Control && $element->layoutWrap) {
                 $this->recursiveRenderControl($element, $labeledControl, $noLabelControl);
             } else {
-                $this->renderElementToRegion($element, 'Content');
+                $this->renderElementToRegion($element, 'Content'); // @phpstan-ignore argument.type
             }
         }
 
