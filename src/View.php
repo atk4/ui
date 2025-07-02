@@ -882,7 +882,7 @@ class View extends AbstractView
         $jsEventStatements['preventDefault'] = $defaults['preventDefault'] ?? true;
         $jsEventStatements['stopPropagation'] = $defaults['stopPropagation'] ?? true;
 
-        $lazyJsRenderFx = function (\Closure $fx): JsExpressionable {
+        $lazyJsRenderFx = static function (\Closure $fx): JsExpressionable {
             return new class($fx) implements JsExpressionable {
                 public \Closure $fx;
 

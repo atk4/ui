@@ -309,7 +309,7 @@ class App
      */
     private function throwOrCaughtExceptionIfInShutdown(\Throwable $exception): void
     {
-        if (\PHP_VERSION_ID < 80300 && self::$shutdownReservedMemory === null) {
+        if (\PHP_VERSION_ID < 8_03_00 && self::$shutdownReservedMemory === null) {
             // remove method once PHP 8.2 support is dropped
             // https://github.com/php/php-src/issues/10695
             $this->caughtException($exception);
