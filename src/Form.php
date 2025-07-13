@@ -236,7 +236,7 @@ class Form extends View
                 $response = $this->hook(self::HOOK_SUBMIT);
                 // TODO JsBlock::fromHookResult() cannot be used here as long as the result can contain View
                 if (is_array($response) && count($response) === 1) {
-                    $response = reset($response);
+                    $response = array_first($response);
                 }
 
                 return $response;

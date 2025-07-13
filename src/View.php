@@ -520,7 +520,7 @@ class View extends AbstractView
                 $this->template->dangerouslySetHtml('attributes', implode(' ', $attrsHtml));
             } catch (Exception $e) {
                 // TODO hack to ignore missing '{$attributes}' mostly in layout templates
-                if (count($attrsHtml) === 1 ? !str_starts_with(reset($attrsHtml), 'id=') : !$this instanceof Lister) {
+                if (count($attrsHtml) === 1 ? !str_starts_with(array_first($attrsHtml), 'id=') : !$this instanceof Lister) {
                     throw $e;
                 }
             }

@@ -359,7 +359,7 @@ class Column
     {
         $tags = $this->table->hook(self::HOOK_GET_HEADER_CELL_HTML, [$this, $field, $value]);
         if ($tags) {
-            return reset($tags);
+            return array_first($tags);
         }
 
         if ($field === null) {
