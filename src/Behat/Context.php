@@ -44,8 +44,8 @@ class Context extends RawMinkContext implements BehatContext
         foreach ($event->getFeature()->getScenarios() as $scenario) {
             $scenarioSteps = $scenario->getSteps();
             if (count($scenarioSteps) > 0
-                && reset($scenarioSteps)->getLine() <= $event->getStep()->getLine()
-                && end($scenarioSteps)->getLine() >= $event->getStep()->getLine()
+                && array_first($scenarioSteps)->getLine() <= $event->getStep()->getLine()
+                && array_last($scenarioSteps)->getLine() >= $event->getStep()->getLine()
             ) {
                 return $scenario;
             }
@@ -854,7 +854,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $toasts = $this->getSession()->getPage()->findAll('css', '.ui.toast-container .toast-box');
         if (count($toasts) > 0) {
-            throw new \Exception('Toast is displayed: "' . $this->findElement(reset($toasts), '.content')->getText() . '"');
+            throw new \Exception('Toast is displayed: "' . $this->findElement(array_first($toasts), '.content')->getText() . '"');
         }
     }
 

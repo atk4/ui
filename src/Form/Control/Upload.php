@@ -148,7 +148,7 @@ class Upload extends Input
                 }
 
                 if (count($postFiles) > 0) {
-                    $fileId = reset($postFiles)['name'];
+                    $fileId = array_first($postFiles)['name'];
                     $this->setFileId($fileId);
                     $this->setInputValue($fileId);
                 }
@@ -158,7 +158,7 @@ class Upload extends Input
                     $this->addJsAction($jsRes);
                 }
 
-                if (count($postFiles) > 0 && reset($postFiles)['error'] === 0) {
+                if (count($postFiles) > 0 && array_first($postFiles)['error'] === 0) {
                     $this->addJsAction(
                         $this->js()->atkFileUpload('updateField', [$this->fileId, $this->getInputValue()])
                     );

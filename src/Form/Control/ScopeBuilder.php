@@ -750,7 +750,7 @@ class ScopeBuilder extends Form\Control
         $max = array_keys($matches, max($matches), true);
 
         return $max !== []
-            ? reset($max)
-            : reset(static::$listDelimiters);
+            ? array_first($max)
+            : array_first(static::$listDelimiters);
     }
 }
