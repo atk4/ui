@@ -190,7 +190,7 @@ It's really easy to put together a complex Admin system. Add this code to a new 
 ```php
 <?php
 
-$app = new \Atk4\Ui\App('My App');
+$app = new \Atk4\Ui\App(['title' => 'My App']);
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/yourdb');
 

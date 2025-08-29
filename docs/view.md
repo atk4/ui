@@ -82,7 +82,7 @@ $top->add($middle);
 
 // still not sure if finished adding
 
-$app = new \Atk4\Ui\App('My App');
+$app = new \Atk4\Ui\App(['title' => 'My App']);
 $app->initLayout($top);
 
 // calls init() for all elements recursively
@@ -93,7 +93,7 @@ child elements. To make your execution more straightforward we recommend you to 
 App class first and then continue with Layout initialization:
 
 ```
-$app = new \Atk4\Ui\App('My App');
+$app = new \Atk4\Ui\App(['title' => 'My App']);
 $top = $app->initLayout(new \Atk4\Ui\View(['ui' => 'segments']));
 
 $middle = View::addTo($top, ['ui' => 'segment', 'class.red' => true]);
@@ -104,7 +104,7 @@ $bottom = Button::addTo($middle, ['Hello World', 'class.orange' => true]);
 Finally, if you prefer a more consise code, you can also use the following format:
 
 ```
-$app = new \Atk4\Ui\App('My App');
+$app = new \Atk4\Ui\App(['title' => 'My App']);
 $top = $app->initLayout([\Atk4\Ui\View::class, 'ui' => 'segments']);
 
 $middle = View::addTo($top, ['ui' => 'segment', 'class.red' => true]);

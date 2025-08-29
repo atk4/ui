@@ -14,7 +14,7 @@ create this class explicitly, components generally will do it for you. The commo
 is:
 
 ```
-$app = new \Atk4\Ui\App('My App');
+$app = new \Atk4\Ui\App(['title' => 'My App']);
 $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 LoremIpsum::addTo($app);
 ```
