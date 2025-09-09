@@ -85,10 +85,14 @@ Feature: Dropdown
   Scenario: dropdown menu
     Given I am on "basic/menu.php"
     When I click using selector "//div.ui.dropdown[div[text()='With Callback']]"
+    # click twice, fix Firefox CI since 2025-09-01 (v142.0.1)
+    When I click using selector "//div.ui.dropdown[div[text()='With Callback']]"
     When I click using selector "//div.ui.dropdown[div[text()='With Callback']]//div.item[text()='c']"
     Then Toast display should contain text "New selected item: c"
 
   Scenario: dropdown menu from model
+    When I click using selector "//div.ui.dropdown[div[text()='From Model']]"
+    # click twice, fix Firefox CI since 2025-09-01 (v142.0.1)
     When I click using selector "//div.ui.dropdown[div[text()='From Model']]"
     When I click using selector "//div.ui.dropdown[div[text()='From Model']]//div.item[text()='Beverages']"
     Then Toast display should contain text "New selected item: Beverages"
