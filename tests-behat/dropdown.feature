@@ -86,13 +86,13 @@ Feature: Dropdown
     Given I am on "basic/menu.php"
     When I click using selector "//div.ui.dropdown[div[text()='With Callback']]"
     # https://github.com/fomantic/Fomantic-UI/blob/2.9.4/src/definitions/modules/dropdown.js#L3804
-    When I wait "150" ms
+    When I wait "100" ms
     When I click using selector "//div.ui.dropdown[div[text()='With Callback']]//div.item[text()='c']"
     Then Toast display should contain text "New selected item: c"
 
   Scenario: dropdown menu from model
     When I click using selector "//div.ui.dropdown[div[text()='From Model']]"
     # https://github.com/fomantic/Fomantic-UI/blob/2.9.4/src/definitions/modules/dropdown.js#L3804
-    When I wait "150" ms
+    When I wait "100" ms
     When I click using selector "//div.ui.dropdown[div[text()='From Model']]//div.item[text()='Beverages']"
     Then Toast display should contain text "New selected item: Beverages"
