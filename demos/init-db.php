@@ -694,9 +694,9 @@ class MultilineItem extends ModelWithPrefixedFields
 }
 
 /**
- * @property string        $name    @Atk4\Field()
- * @property Country       $country @Atk4\RefOne()
- * @property MultilineItem $items   @Atk4\RefMany()
+ * @property string        $name  @Atk4\Field()
+ * @property MultilineItem $item  @Atk4\RefOne()
+ * @property MultilineItem $items @Atk4\RefMany()
  */
 class MultilineDelivery extends ModelWithPrefixedFields
 {
@@ -708,7 +708,7 @@ class MultilineDelivery extends ModelWithPrefixedFields
         parent::init();
 
         $this->addField($this->fieldName()->name, ['required' => true]);
-        $this->containsOne($this->fieldName()->country, ['model' => [Country::class]]);
+        $this->containsOne($this->fieldName()->item, ['model' => [MultilineItem::class]]);
         $this->containsMany($this->fieldName()->items, ['model' => [MultilineItem::class]]);
     }
 }

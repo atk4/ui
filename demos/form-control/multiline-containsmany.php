@@ -10,4 +10,5 @@ use Atk4\Ui\Crud;
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-Crud::addTo($app)->setModel(new MultilineDelivery($app->db));
+$crud = Crud::addTo($app);
+$crud->setModel(new MultilineDelivery($app->db));
