@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Data\Persistence;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Table;
@@ -678,18 +679,20 @@ class MultilineItem extends ModelWithPrefixedFields
         ]);
         $this->addField($this->fieldName()->qty, ['type' => 'integer', 'required' => true]);
         $this->addField($this->fieldName()->box, ['type' => 'integer', 'required' => true]);
-        $this->addExpression($this->fieldName()->total_sql, [
-            'expr' => function (Model /* TODO self is not working because of clone in Multiline */ $row) {
-                return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore method.notFound
-            },
-            'type' => 'bigint',
-        ]);
-        $this->addCalculatedField($this->fieldName()->total_php, [
-            'expr' => static function (self $row) {
-                return $row->qty * $row->box;
-            },
-            'type' => 'bigint',
-        ]);
+        if ($this->getPersistence() instanceof Persistence\Sql) { // for MultilineDelivery contained models
+            $this->addExpression($this->fieldName()->total_sql, [
+                'expr' => function (Model /* TODO self is not working because of clone in Multiline */ $row) {
+                    return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore method.notFound
+                },
+                'type' => 'bigint',
+            ]);
+            $this->addCalculatedField($this->fieldName()->total_php, [
+                'expr' => static function (self $row) {
+                    return $row->qty * $row->box;
+                },
+                'type' => 'bigint',
+            ]);
+        }
     }
 }
 
