@@ -713,5 +713,10 @@ class MultilineDelivery extends ModelWithPrefixedFields
         $this->addField($this->fieldName()->name, ['required' => true]);
         $this->containsOne($this->fieldName()->item, ['model' => [MultilineItem::class]]);
         $this->containsMany($this->fieldName()->items, ['model' => [MultilineItem::class]]);
+
+        // hack to supress "ContainsXxx does not support unmanaged data modification" exception
+        // TODO remove once https://github.com/atk4/ui/issues/1860 is fixed
+        // https://github.com/atk4/data/blob/6.0.0/src/Reference/ContainsBase.php#L69
+        $this->removeHook(Model::HOOK_NORMALIZE);
     }
 }
