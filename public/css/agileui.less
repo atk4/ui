@@ -308,6 +308,14 @@ i.atk-panel-warning {
     padding: 0;
 }
 
+// fix segment line between menu and segment for Crud
+// https://github.com/atk4/ui/issues/1901
+// https://github.com/fomantic/Fomantic-UI/blob/2.9.4/src/definitions/elements/segment.less#L59
+.ui.menu + .ui.vertical.segment {
+    border-top: none;
+    padding-top: 0;
+}
+
 // Components
 
 .ui.step,
