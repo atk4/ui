@@ -552,6 +552,7 @@ class Multiline extends Form\Control
             $this->componentProps[self::SELECT] ?? []
         );
 
+        $props['options'] = [];
         $items = $this->getFieldItems($field, $this->itemLimit);
         foreach ($items as $value => $text) {
             $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
@@ -571,6 +572,8 @@ class Multiline extends Form\Control
         // will be applied globally
         $props = [];
         $props['config'] = $this->componentProps[self::LOOKUP] ?? [];
+
+        $props['config']['options'] = [];
         $items = $this->getFieldItems($field, 10);
         foreach ($items as $value => $text) {
             $props['config']['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
