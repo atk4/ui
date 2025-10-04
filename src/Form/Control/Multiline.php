@@ -253,7 +253,9 @@ class Multiline extends Form\Control
     #[\Override]
     public function setInputValue(string $value): void
     {
-        $this->rowData = $this->typecastLoadValues($this->getApp()->decodeJson($value));
+        $rowDataRaw = $this->getApp()->decodeJson($value);
+
+        $this->rowData = $this->typecastLoadValues($rowDataRaw);
         if ($this->rowData) {
             $this->rowErrors = $this->validate($this->rowData);
             if ($this->rowErrors) {
@@ -263,13 +265,11 @@ class Multiline extends Form\Control
 
         // remove __atkml ID from array field
         if ($this->entityField->getField()->type === 'json') {
-            $rows = [];
-            foreach ($this->rowData as $cols) {
-                unset($cols['__atkml']);
-                $rows[] = $cols;
+            foreach ($rowDataRaw as $k => $v) {
+                unset($rowDataRaw[$k]['__atkml']);
             }
 
-            $value = $this->getApp()->encodeJson($rows);
+            $value = $this->getApp()->encodeJson($rowDataRaw);
         }
 
         parent::setInputValue($value);

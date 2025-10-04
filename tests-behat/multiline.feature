@@ -40,3 +40,17 @@ Feature: Multiline
     When I click using selector "//tfoot//button[i.trash.icon]"
     When I press button "Save"
     Then Toast display should contain text "[]"
+
+  Scenario:
+    Given I am on "form-control/multiline-containsmany-single.php"
+    # 'ce0a190b1901b807' = substr(md5('multiline_delivery'), 0, 16)
+    When I fill in "atk_fp_ce0a190b1901b807__name" with "Delivery Foo"
+    When I click using selector "//div.field[label[text()='Item']]//tfoot//button[i.plus.icon]"
+    When I fill field using "div[name=-atk_fp_tbl__item] input" with "Melon"
+    When I select "Argentina" in lookup "//div.text[parent::div[@name='-atk_fp_tbl__country_id']]"
+    When I fill field using "div[name=-atk_fp_tbl__qty] input" with "5"
+    When I fill field using "div[name=-atk_fp_tbl__box] input" with "6"
+    When I press button "Save"
+    Then Toast display should contain text "\"atk_fp_ce0a190b1901b807__name\": \"Delivery Foo\","
+    Then Toast display should contain text "\"atk_fp_ce0a190b1901b807__item\": [ { \"atk_fp_tbl__id\": null, \"atk_fp_tbl__item\": \"Melon\","
+    Then Toast display should contain text "\"atk_fp_ce0a190b1901b807__items\": []"
