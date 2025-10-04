@@ -861,7 +861,7 @@ __webpack_require__.r(__webpack_exports__);
  * Note: The remaining config object may contain any or SuiDropdown { props: value } pair.
  *
  * modelValue: The selected value.
- * optionalValue: The initial list of options for the dropdown.
+ * optionalValues: The initial list of options for the dropdown.
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'AtkLookup',
@@ -872,7 +872,7 @@ __webpack_require__.r(__webpack_exports__);
             :modelValue="getDropdownValue(modelValue)"
             @update:modelValue="onUpdate"
         ></SuiDropdown>`,
-  props: ['config', 'modelValue', 'optionalValue'],
+  props: ['config', 'modelValue', 'optionalValues'],
   data: function () {
     const {
       url,
@@ -889,8 +889,8 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function () {
-    if (this.optionalValue) {
-      this.dropdownProps.options = Array.isArray(this.optionalValue) ? this.optionalValue : [this.optionalValue];
+    if (this.optionalValues) {
+      this.dropdownProps.options = Array.isArray(this.optionalValues) ? this.optionalValues : [this.optionalValues];
     }
   },
   emits: ['update:modelValue'],
