@@ -232,7 +232,7 @@ class Multiline extends Form\Control
      *
      * @return array<mixed, array<string, mixed>>
      */
-    protected function typeCastLoadValues(array $values): array
+    private function typecastLoadValues(array $values): array
     {
         $dataRows = [];
         foreach ($values as $k => $row) {
@@ -253,7 +253,7 @@ class Multiline extends Form\Control
     #[\Override]
     public function setInputValue(string $value): void
     {
-        $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($value));
+        $this->rowData = $this->typecastLoadValues($this->getApp()->decodeJson($value));
         if ($this->rowData) {
             $this->rowErrors = $this->validate($this->rowData);
             if ($this->rowErrors) {
@@ -724,7 +724,7 @@ class Multiline extends Form\Control
             case 'on-change':
                 $rowsRaw = $this->getApp()->decodeJson($this->getApp()->getRequestPostParam('rows'));
                 $this->renderCallback->set(function () use ($rowsRaw) {
-                    return ($this->onChangeFunction)($this->typeCastLoadValues($rowsRaw), $this->form);
+                    return ($this->onChangeFunction)($this->typecastLoadValues($rowsRaw), $this->form);
                 });
         }
     }
