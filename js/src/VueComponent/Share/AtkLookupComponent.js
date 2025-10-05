@@ -35,7 +35,10 @@ export default {
     },
     mounted: function () {
         if (this.optionalValues) {
-            this.dropdownProps.options = Array.isArray(this.optionalValues) ? this.optionalValues : [this.optionalValues];
+            this.dropdownProps.options = [
+                ...this.dropdownProps.options,
+                ...(Array.isArray(this.optionalValues) ? this.optionalValues : [this.optionalValues]),
+            ];
         }
     },
     emits: ['update:modelValue'],
