@@ -56,10 +56,19 @@ Feature: Multiline
     Then Toast display should contain text "\"atk_fp_tbl__country_id\": 10, \"atk_fp_tbl__qty\": \"5\", \"atk_fp_tbl__box\": \"6\" } ]"
     Then Toast display should contain text "\"atk_fp_ce0a190b1901b807__items\": []"
 
-  Scenario: contained Crud
+  Scenario: contained Crud - with unlocked DB
     Given I am on "form-control/multiline-containsmany.php"
+    When I persist DB changes across requests
     When I press button "Add"
     # 'ce0a190b1901b807' = substr(md5('multiline_delivery'), 0, 16)
-    When I fill in "atk_fp_ce0a190b1901b807__name" with "Test"
+    When I fill in "atk_fp_ce0a190b1901b807__name" with "Cheetah"
+    When I click using selector "//div.field[label[text()='Item']]//tfoot//button[i.plus.icon]"
+    When I fill field using "div[name=-atk_fp_tbl__item] input" with "Melon"
+    When I select "Argentina" in lookup "//div.text[parent::div[@name='-atk_fp_tbl__country_id']]"
+    When I fill field using "div[name=-atk_fp_tbl__qty] input" with "5"
+    When I fill field using "div[name=-atk_fp_tbl__box] input" with "6"
     When I press Modal button "Save"
-    Then Toast display should contain text "Multiline Delivery action \"add\" with \"Test\" entity was executed."
+    Then Toast display should contain text "Record has been saved!"
+    Then I check if text in "//table//tr[1]/td[1]" match text "Cheetah"
+    Then I check if text in "//table//tr[1]/td[2]" match regex "~^\[\{.+,\"atk_fp_tbl__item\":\"Melon\",~"
+    Then I check if text in "//table//tr[1]/td[2]" match regex "~,\"atk_fp_tbl__country_id\":10,\"atk_fp_tbl__qty\":\"5\",\"atk_fp_tbl__box\":\"6\"\}\]$~"
