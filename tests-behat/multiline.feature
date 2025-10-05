@@ -41,7 +41,7 @@ Feature: Multiline
     When I press button "Save"
     Then Toast display should contain text "[]"
 
-  Scenario: contained Form
+  Scenario: contained - Form
     Given I am on "form-control/multiline-containsmany-single.php"
     # 'ce0a190b1901b807' = substr(md5('multiline_delivery'), 0, 16)
     When I fill in "atk_fp_ce0a190b1901b807__name" with "Delivery Foo"
@@ -56,7 +56,7 @@ Feature: Multiline
     Then Toast display should contain text "\"atk_fp_tbl__country_id\": 10, \"atk_fp_tbl__qty\": \"5\", \"atk_fp_tbl__box\": \"6\" } ]"
     Then Toast display should contain text "\"atk_fp_ce0a190b1901b807__items\": []"
 
-  Scenario: contained Crud - with unlocked DB
+  Scenario: contained - Crud - with unlocked DB
     Given I am on "form-control/multiline-containsmany.php"
     When I persist DB changes across requests
     When I press button "Add"
