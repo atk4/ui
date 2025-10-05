@@ -675,7 +675,14 @@ class Multiline extends Form\Control
         foreach ($fieldValues as $rows) {
             foreach ($rows as $fieldName => $value) {
                 if (isset($this->valuePropsBinding[$fieldName])) {
-                    ($this->valuePropsBinding[$fieldName])($this->model->getField($fieldName), $value);
+                    if ($value !== null) {
+                        if (!is_string($value)) {
+                            assert(is_scalar($value));
+                            $value = (string) $value;
+                        }
+
+                        ($this->valuePropsBinding[$fieldName])($this->model->getField($fieldName), $value);
+                    }
                 }
             }
         }
