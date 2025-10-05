@@ -657,7 +657,7 @@ class Multiline extends Form\Control
 
             $theirFieldName = $field->getReference()->getTheirFieldName($model);
             foreach ($model as $item) {
-                $theirValue = $this->getApp()->uiPersistence->typecastAttributeSaveField($model->getField($theirFieldName), $item->get($theirFieldName));
+                $theirValue = $this->getApp()->uiPersistence->typecastSaveField($model->getField($theirFieldName), $item->get($theirFieldName));
                 $items[$theirValue] = $item->get($model->titleField);
             }
         }
