@@ -53,4 +53,5 @@ Feature: Multiline
     When I press button "Save"
     Then Toast display should contain text "\"atk_fp_ce0a190b1901b807__name\": \"Delivery Foo\","
     Then Toast display should contain text "\"atk_fp_ce0a190b1901b807__item\": [ { \"atk_fp_tbl__id\": null, \"atk_fp_tbl__item\": \"Melon\","
+    Then Toast display should contain text "\"atk_fp_tbl__country_id\": 10, \"atk_fp_tbl__qty\": \"5\", \"atk_fp_tbl__box\": \"6\" } ]"
     Then Toast display should contain text "\"atk_fp_ce0a190b1901b807__items\": []"
