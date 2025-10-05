@@ -890,7 +890,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function () {
     if (this.optionalValues) {
-      this.dropdownProps.options = [...this.dropdownProps.options, ...(Array.isArray(this.optionalValues) ? this.optionalValues : [this.optionalValues])];
+      this.dropdownProps.options = [...this.dropdownProps.options, ...this.optionalValues];
     }
   },
   emits: ['update:modelValue'],

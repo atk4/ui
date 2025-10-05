@@ -637,7 +637,7 @@ class ScopeBuilder extends Form\Control
      *
      * @param array<string, string|null> $inputsMap
      *
-     * @return array{rule: string, operator: string, value: string|null, option: array<string, mixed>|null}
+     * @return array{rule: string, operator: string, value: string|null, options: list<array<string, mixed>>|null}
      */
     public function conditionToQuery(Condition $condition, array $inputsMap = []): array
     {
@@ -696,11 +696,13 @@ class ScopeBuilder extends Form\Control
             $operator = $operatorKey;
         }
 
+        $option = $this->getConditionOption($inputType, $value, $condition);
+
         return [
             'rule' => $rule,
             'operator' => $operator,
             'value' => $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($rule), $value),
-            'option' => $this->getConditionOption($inputType, $value, $condition),
+            'options' => $option !== null ? [$option] : null,
         ];
     }
 

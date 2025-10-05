@@ -99,7 +99,7 @@
                                             :is="rule.component"
                                             v-model="query.value"
                                             :config="rule.componentProps"
-                                            :optionalValues="query.option"
+                                            :optionalValues="query.options"
                                         />
                                     </div>
                                 </template>
