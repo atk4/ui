@@ -13,6 +13,6 @@ require_once __DIR__ . '/../init-app.php';
 
 $form = Form::addTo($app);
 $form->setEntity((new MultilineDelivery($app->db))->createEntity());
-$form->onSubmit(static function (Form $form) use ($app) {
-    return new JsToast($app->encodeJson($form->entity->get()));
+$form->onSubmit(static function (Form $form) {
+    return new JsToast($form->getApp()->encodeJson($form->entity->get()));
 });
