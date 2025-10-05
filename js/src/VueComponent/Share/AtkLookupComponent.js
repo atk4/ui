@@ -7,7 +7,7 @@
  * Note: The remaining config object may contain any or SuiDropdown { props: value } pair.
  *
  * modelValue: The selected value.
- * optionalValue: The initial list of options for the dropdown.
+ * optionalValues: The initial list of options for the dropdown.
  */
 export default {
     name: 'AtkLookup',
@@ -18,7 +18,7 @@ export default {
             :modelValue="getDropdownValue(modelValue)"
             @update:modelValue="onUpdate"
         ></SuiDropdown>`,
-    props: ['config', 'modelValue', 'optionalValue'],
+    props: ['config', 'modelValue', 'optionalValues'],
     data: function () {
         const {
             url, reference, ...otherConfig
@@ -34,8 +34,11 @@ export default {
         };
     },
     mounted: function () {
-        if (this.optionalValue) {
-            this.dropdownProps.options = Array.isArray(this.optionalValue) ? this.optionalValue : [this.optionalValue];
+        if (this.optionalValues) {
+            this.dropdownProps.options = [
+                ...this.dropdownProps.options,
+                ...this.optionalValues,
+            ];
         }
     },
     emits: ['update:modelValue'],

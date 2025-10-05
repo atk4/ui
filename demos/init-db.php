@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Data\Persistence;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Table;
@@ -678,25 +679,27 @@ class MultilineItem extends ModelWithPrefixedFields
         ]);
         $this->addField($this->fieldName()->qty, ['type' => 'integer', 'required' => true]);
         $this->addField($this->fieldName()->box, ['type' => 'integer', 'required' => true]);
-        $this->addExpression($this->fieldName()->total_sql, [
-            'expr' => function (Model /* TODO self is not working because of clone in Multiline */ $row) {
-                return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore method.notFound
-            },
-            'type' => 'bigint',
-        ]);
-        $this->addCalculatedField($this->fieldName()->total_php, [
-            'expr' => static function (self $row) {
-                return $row->qty * $row->box;
-            },
-            'type' => 'bigint',
-        ]);
+        if ($this->getPersistence() instanceof Persistence\Sql) { // for MultilineDelivery contained models
+            $this->addExpression($this->fieldName()->total_sql, [
+                'expr' => function (Model /* TODO self is not working because of clone in Multiline */ $row) {
+                    return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore method.notFound
+                },
+                'type' => 'bigint',
+            ]);
+            $this->addCalculatedField($this->fieldName()->total_php, [
+                'expr' => static function (self $row) {
+                    return $row->qty * $row->box;
+                },
+                'type' => 'bigint',
+            ]);
+        }
     }
 }
 
 /**
- * @property string        $name    @Atk4\Field()
- * @property Country       $country @Atk4\RefOne()
- * @property MultilineItem $items   @Atk4\RefMany()
+ * @property string        $name  @Atk4\Field()
+ * @property MultilineItem $item  @Atk4\RefOne()
+ * @property MultilineItem $items @Atk4\RefMany()
  */
 class MultilineDelivery extends ModelWithPrefixedFields
 {
@@ -708,7 +711,12 @@ class MultilineDelivery extends ModelWithPrefixedFields
         parent::init();
 
         $this->addField($this->fieldName()->name, ['required' => true]);
-        $this->containsOne($this->fieldName()->country, ['model' => [Country::class]]);
+        $this->containsOne($this->fieldName()->item, ['model' => [MultilineItem::class]]);
         $this->containsMany($this->fieldName()->items, ['model' => [MultilineItem::class]]);
+
+        // hack to supress "ContainsXxx does not support unmanaged data modification" exception
+        // TODO remove once https://github.com/atk4/ui/issues/1860 is fixed
+        // https://github.com/atk4/data/blob/6.0.0/src/Reference/ContainsBase.php#L69
+        $this->removeHook(Model::HOOK_NORMALIZE);
     }
 }

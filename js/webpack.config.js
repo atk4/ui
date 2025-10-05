@@ -100,6 +100,7 @@ module.exports = (env) => {
             new webpack.DefinePlugin({
                 __VUE_OPTIONS_API__: true,
                 __VUE_PROD_DEVTOOLS__: false,
+                __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
                 __VUE_FOMANTICUI_COMPONENT_NAMES__: JSON.stringify(Object.keys(VueFomanticUi).filter((v) => v.startsWith('Sui'))),
             }),
             new VueLoaderPlugin(),

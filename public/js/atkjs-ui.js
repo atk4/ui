@@ -13498,10 +13498,7 @@ function initFeatureFlags() {
   const needWarn = [];
   if (false) {}
   if (false) {}
-  if (typeof __VUE_PROD_HYDRATION_MISMATCH_DETAILS__ !== "boolean") {
-     true && needWarn.push(`__VUE_PROD_HYDRATION_MISMATCH_DETAILS__`);
-    (0,_vue_shared__WEBPACK_IMPORTED_MODULE_1__.getGlobalThis)().__VUE_PROD_HYDRATION_MISMATCH_DETAILS__ = false;
-  }
+  if (false) {}
   if ( true && needWarn.length) {
     const multi = needWarn.length > 1;
     console.warn(
@@ -27280,19 +27277,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ AtkConditionalFormPlugin)
 /* harmony export */ });
-/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.array.push.js */ "./node_modules/core-js/modules/es.array.push.js");
-/* harmony import */ var core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_push_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "./node_modules/core-js/modules/es.iterator.constructor.js");
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.iterator.find.js */ "./node_modules/core-js/modules/es.iterator.find.js");
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core-js/modules/es.iterator.map.js */ "./node_modules/core-js/modules/es.iterator.map.js");
-/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! external/jquery */ "external/jquery");
-/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
-/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
-
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "./node_modules/core-js/modules/es.iterator.constructor.js");
+/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.iterator.find.js */ "./node_modules/core-js/modules/es.iterator.find.js");
+/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core-js/modules/es.iterator.map.js */ "./node_modules/core-js/modules/es.iterator.map.js");
+/* harmony import */ var core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_map_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! external/jquery */ "external/jquery");
+/* harmony import */ var external_jquery__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(external_jquery__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var atk__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! atk */ "./src/setupAtk.js");
+/* harmony import */ var _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./AbstractPlugin */ "./src/JqueryPlugin/AbstractPlugin.js");
 
 
 
@@ -27345,19 +27339,19 @@ __webpack_require__.r(__webpack_exports__);
  *
  * See Fomantic-UI validation rule for more details: https://fomantic-ui.com/behaviors/form.html#validation-rules
  */
-class AtkConditionalFormPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_6__["default"] {
+class AtkConditionalFormPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__["default"] {
   main() {
     this.inputs = [];
     this.selector = this.settings.selector;
     if (!this.selector) {
-      this.selector = atk__WEBPACK_IMPORTED_MODULE_5__["default"].formService.getDefaultSelector();
+      this.selector = atk__WEBPACK_IMPORTED_MODULE_4__["default"].formService.getDefaultSelector();
     }
     // add change listener to inputs according to selector
-    external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(this.el).find(':checkbox').on('change', this, atk__WEBPACK_IMPORTED_MODULE_5__["default"].createDebouncedFx(this.onInputChange, 100, true));
-    external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(this.el).find(':radio').on('change', this, atk__WEBPACK_IMPORTED_MODULE_5__["default"].createDebouncedFx(this.onInputChange, 100, true));
-    external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(this.el).find('input[type="hidden"]').on('change', this, atk__WEBPACK_IMPORTED_MODULE_5__["default"].createDebouncedFx(this.onInputChange, 100, true));
-    external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(this.el).find('input').on(this.settings.validateEvent, this, atk__WEBPACK_IMPORTED_MODULE_5__["default"].createDebouncedFx(this.onInputChange, 250));
-    external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(this.el).find('select').on('change', this, atk__WEBPACK_IMPORTED_MODULE_5__["default"].createDebouncedFx(this.onInputChange, 100));
+    external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).find(':checkbox').on('change', this, atk__WEBPACK_IMPORTED_MODULE_4__["default"].createDebouncedFx(this.onInputChange, 100, true));
+    external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).find(':radio').on('change', this, atk__WEBPACK_IMPORTED_MODULE_4__["default"].createDebouncedFx(this.onInputChange, 100, true));
+    external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).find('input[type="hidden"]').on('change', this, atk__WEBPACK_IMPORTED_MODULE_4__["default"].createDebouncedFx(this.onInputChange, 100, true));
+    external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).find('input').on(this.settings.validateEvent, this, atk__WEBPACK_IMPORTED_MODULE_4__["default"].createDebouncedFx(this.onInputChange, 250));
+    external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).find('select').on('change', this, atk__WEBPACK_IMPORTED_MODULE_4__["default"].createDebouncedFx(this.onInputChange, 100));
     this.initialize();
   }
   getRule(ruleToSearch) {
@@ -27368,14 +27362,7 @@ class AtkConditionalFormPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_
     // map inputs according to ruleKeys
     this.inputs = ruleKeys.map((ruleKey, idx, org) => {
       const tempRule = this.settings.fieldRules[ruleKey];
-      const temp = [];
-      if (Array.isArray(tempRule)) {
-        for (const rule of tempRule) {
-          temp.push(rule);
-        }
-      } else {
-        temp.push(tempRule);
-      }
+      const temp = [...(Array.isArray(tempRule) ? tempRule : [tempRule])];
       return {
         inputName: ruleKey,
         rules: temp,
@@ -27407,12 +27394,8 @@ class AtkConditionalFormPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_
         const validateInputNames = Object.keys(rules);
         for (const inputName of validateInputNames) {
           const validationRule = rules[inputName];
-          if (Array.isArray(validationRule)) {
-            for (const rule of validationRule) {
-              isAndValid = isAndValid && atk__WEBPACK_IMPORTED_MODULE_5__["default"].formService.validateField(external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(this.el), inputName, rule);
-            }
-          } else {
-            isAndValid = isAndValid && atk__WEBPACK_IMPORTED_MODULE_5__["default"].formService.validateField(external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(this.el), inputName, validationRule);
+          for (const rule of Array.isArray(validationRule) ? validationRule : [validationRule]) {
+            isAndValid = isAndValid && atk__WEBPACK_IMPORTED_MODULE_4__["default"].formService.validateField(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el), inputName, rule);
           }
         }
         // apply OR condition between rules
@@ -27435,9 +27418,9 @@ class AtkConditionalFormPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_
    */
   setInputsState() {
     for (const input of this.inputs) {
-      const $input = atk__WEBPACK_IMPORTED_MODULE_5__["default"].formService.getField(external_jquery__WEBPACK_IMPORTED_MODULE_4___default()(this.el), input.inputName);
+      const $input = atk__WEBPACK_IMPORTED_MODULE_4__["default"].formService.getField(external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el), input.inputName);
       if ($input) {
-        const $container = atk__WEBPACK_IMPORTED_MODULE_5__["default"].formService.getContainer($input, this.selector);
+        const $container = atk__WEBPACK_IMPORTED_MODULE_4__["default"].formService.getContainer($input, this.selector);
         if ($container) {
           $container.hide();
           this.setInputState(input.state, $input, $container);

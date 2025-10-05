@@ -232,7 +232,7 @@ class Multiline extends Form\Control
      *
      * @return array<mixed, array<string, mixed>>
      */
-    protected function typeCastLoadValues(array $values): array
+    private function typecastLoadValues(array $values): array
     {
         $dataRows = [];
         foreach ($values as $k => $row) {
@@ -253,7 +253,9 @@ class Multiline extends Form\Control
     #[\Override]
     public function setInputValue(string $value): void
     {
-        $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($value));
+        $rowDataRaw = $this->getApp()->decodeJson($value);
+
+        $this->rowData = $this->typecastLoadValues($rowDataRaw);
         if ($this->rowData) {
             $this->rowErrors = $this->validate($this->rowData);
             if ($this->rowErrors) {
@@ -263,13 +265,11 @@ class Multiline extends Form\Control
 
         // remove __atkml ID from array field
         if ($this->entityField->getField()->type === 'json') {
-            $rows = [];
-            foreach ($this->rowData as $cols) {
-                unset($cols['__atkml']);
-                $rows[] = $cols;
+            foreach ($rowDataRaw as $k => $v) {
+                unset($rowDataRaw[$k]['__atkml']);
             }
 
-            $value = $this->getApp()->encodeJson($rows);
+            $value = $this->getApp()->encodeJson($rowDataRaw);
         }
 
         parent::setInputValue($value);
@@ -552,6 +552,7 @@ class Multiline extends Form\Control
             $this->componentProps[self::SELECT] ?? []
         );
 
+        $props['options'] = [];
         $items = $this->getFieldItems($field, $this->itemLimit);
         foreach ($items as $value => $text) {
             $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
@@ -571,6 +572,8 @@ class Multiline extends Form\Control
         // will be applied globally
         $props = [];
         $props['config'] = $this->componentProps[self::LOOKUP] ?? [];
+
+        $props['config']['options'] = [];
         $items = $this->getFieldItems($field, 10);
         foreach ($items as $value => $text) {
             $props['config']['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
@@ -596,9 +599,7 @@ class Multiline extends Form\Control
             $option = ['key' => $value, 'text' => $entity->get($model->titleField), 'value' => $value];
             foreach ($this->fieldDefs as $key => $component) {
                 if ($component['name'] === $field->shortName) {
-                    $this->fieldDefs[$key]['definition']['componentProps']['optionalValue'] = isset($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'])
-                        ? array_merge($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'], [$option])
-                        : [$option];
+                    $this->fieldDefs[$key]['definition']['componentProps']['optionalValues'] = array_merge($this->fieldDefs[$key]['definition']['componentProps']['optionalValues'] ?? [], [$option]);
                 }
             }
         }
@@ -656,7 +657,7 @@ class Multiline extends Form\Control
 
             $theirFieldName = $field->getReference()->getTheirFieldName($model);
             foreach ($model as $item) {
-                $theirValue = $this->getApp()->uiPersistence->typecastAttributeSaveField($model->getField($theirFieldName), $item->get($theirFieldName));
+                $theirValue = $this->getApp()->uiPersistence->typecastSaveField($model->getField($theirFieldName), $item->get($theirFieldName));
                 $items[$theirValue] = $item->get($model->titleField);
             }
         }
@@ -674,7 +675,14 @@ class Multiline extends Form\Control
         foreach ($fieldValues as $rows) {
             foreach ($rows as $fieldName => $value) {
                 if (isset($this->valuePropsBinding[$fieldName])) {
-                    ($this->valuePropsBinding[$fieldName])($this->model->getField($fieldName), $value);
+                    if ($value !== null) {
+                        if (!is_string($value)) {
+                            assert(is_scalar($value));
+                            $value = (string) $value;
+                        }
+
+                        ($this->valuePropsBinding[$fieldName])($this->model->getField($fieldName), $value);
+                    }
                 }
             }
         }
@@ -726,7 +734,7 @@ class Multiline extends Form\Control
             case 'on-change':
                 $rowsRaw = $this->getApp()->decodeJson($this->getApp()->getRequestPostParam('rows'));
                 $this->renderCallback->set(function () use ($rowsRaw) {
-                    return ($this->onChangeFunction)($this->typeCastLoadValues($rowsRaw), $this->form);
+                    return ($this->onChangeFunction)($this->typecastLoadValues($rowsRaw), $this->form);
                 });
         }
     }

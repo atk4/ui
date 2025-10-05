@@ -632,7 +632,11 @@ class Context extends RawMinkContext implements BehatContext
 
         // select value
         $valueElem = $this->findElement($lookupElem, '//div.menu//div.item[text()=' . $this->quoteXpath($value) . ']');
-        $this->getSession()->executeScript('$(arguments[0]).dropdown(\'set selected\', arguments[1]);', [$lookupElem, $valueElem->getAttribute('data-value')]);
+        if ($valueElem->getAttribute('data-value') === null) { // Multiline vue dropdown
+            $valueElem->click();
+        } else {
+            $this->getSession()->executeScript('$(arguments[0]).dropdown(\'set selected\', arguments[1]);', [$lookupElem, $valueElem->getAttribute('data-value')]);
+        }
         $this->jqueryWait();
 
         // hide dropdown and wait till fully closed

@@ -1175,7 +1175,7 @@ $model->import([
 
 $model = new ImportModelWithPrefixedFields($db, ['table' => 'multiline_delivery']);
 $model->addField('name', ['type' => 'string']);
-$model->addField('country', ['type' => 'json']);
+$model->addField('item', ['type' => 'json']);
 $model->addField('items', ['type' => 'json']);
 (new Migrator($model))->create();
 $model->import([
