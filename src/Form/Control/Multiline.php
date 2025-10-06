@@ -101,8 +101,8 @@ class Multiline extends Form\Control
     public const TABLE_CELL = 'SuiTableCell';
 
     /**
-     * Props to be applied globally for each component supported by field type.
-     * For example setting 'SuiDropdown' property globally.
+     * Props to be applied for each component supported by field type.
+     * For example setting 'SuiDropdown' property.
      *  $componentProps = [Multiline::SELECT => ['floating' => true]].
      *
      * @var array<string, array<string, mixed>>
@@ -568,8 +568,6 @@ class Multiline extends Form\Control
      */
     protected function getLookupProps(Field $field): array
     {
-        // set any of SuiDropdown props via this property
-        // will be applied globally
         $props = [];
         $props['config'] = $this->componentProps[self::LOOKUP] ?? [];
 
