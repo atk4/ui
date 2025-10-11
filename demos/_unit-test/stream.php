@@ -65,7 +65,7 @@ $hugePseudoStreamClass = AnonymousClassNameCache::get_class(static fn () => new 
         return $this->size;
     }
 
-    #[\Override]
+    #[\Override] // @phpstan-ignore throws.unusedType (https://github.com/phpstan/phpstan/issues/13671)
     public function tell(): int
     {
         return $this->pos;
