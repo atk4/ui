@@ -250,7 +250,14 @@ class Multiline extends Form\Control
         return $dataRows;
     }
 
-    private function typecastSaveRow(array $row): array
+    /**
+     * Same as Persistence::typecastSaveRow() but allow null in not-nullable fields.
+     *
+     * @param array<string, mixed> $row
+     *
+     * @return array<string, scalar|null>
+     */
+    private function typecastContainedSaveRow(array $row): array
     {
         $res = [];
         foreach ($row as $fieldName => $value) {
@@ -259,6 +266,20 @@ class Multiline extends Form\Control
             $res[$field->getPersistenceName()] = $value === null
                 ? null
                 : $this->model->getPersistence()->typecastSaveField($field, $value);
+        }
+
+        return $res;
+    }
+
+    private function remapLoadFieldNames(array $row): array
+    {
+        $fieldNamesMap = array_flip(array_map(static fn ($v) => $v->getPersistenceName(), $this->model->getFields()));
+
+        $res = [];
+        foreach ($row as $k => $value) {
+            $field = $this->model->getField($fieldNamesMap[$k]);
+
+            $res[$field->shortName] = $value;
         }
 
         return $res;
@@ -282,7 +303,7 @@ class Multiline extends Form\Control
             foreach ($this->rowData as $k => $v) {
                 unset($v['__atkml']);
 
-                $rowDataRaw[$k] = $this->typecastSaveRow($v);
+                $rowDataRaw[$k] = $this->typecastContainedSaveRow($v);
             }
 
             $value = $this->getApp()->encodeJson($rowDataRaw);
@@ -312,7 +333,8 @@ class Multiline extends Form\Control
     public function getInputValue(): string
     {
         if ($this->entityField->getField()->type === 'json') {
-            $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
+            $rows = array_map(fn ($v) => $this->remapLoadFieldNames($v), $this->entityField->get() ?? []);
+            $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $rows);
         } else {
             // set data according to HasMany relation or using model
             $rows = [];
