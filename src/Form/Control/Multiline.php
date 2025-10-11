@@ -250,23 +250,39 @@ class Multiline extends Form\Control
         return $dataRows;
     }
 
+    private function typecastSaveRow(array $row): array
+    {
+        $res = [];
+        foreach ($row as $fieldName => $value) {
+            $field = $this->model->getField($fieldName);
+
+            $res[$field->getPersistenceName()] = $value === null
+                ? null
+                : $this->model->getPersistence()->typecastSaveField($field, $value);
+        }
+
+        return $res;
+    }
+
     #[\Override]
     public function setInputValue(string $value): void
     {
         $rowDataRaw = $this->getApp()->decodeJson($value);
 
         $this->rowData = $this->typecastLoadValues($rowDataRaw);
-        if ($this->rowData) {
+        if ($this->rowData !== []) {
             $this->rowErrors = $this->validate($this->rowData);
-            if ($this->rowErrors) {
+            if ($this->rowErrors !== []) {
                 throw new ValidationException([$this->shortName => 'multiline error']);
             }
         }
 
-        // remove __atkml ID from array field
         if ($this->entityField->getField()->type === 'json') {
-            foreach ($rowDataRaw as $k => $v) {
-                unset($rowDataRaw[$k]['__atkml']);
+            $rowDataRaw = [];
+            foreach ($this->rowData as $k => $v) {
+                unset($v['__atkml']);
+
+                $rowDataRaw[$k] = $this->typecastSaveRow($v);
             }
 
             $value = $this->getApp()->encodeJson($rowDataRaw);
