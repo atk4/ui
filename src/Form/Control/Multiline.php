@@ -297,7 +297,7 @@ class Multiline extends Form\Control
         if ($this->rowData !== []) {
             $this->rowErrors = $this->validate($this->rowData);
             if ($this->rowErrors !== []) {
-                throw new ValidationException([$this->shortName => 'multiline error']);
+                throw new ValidationException([$this->shortName => 'Multiline error']);
             }
         }
 
