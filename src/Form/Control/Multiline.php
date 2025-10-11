@@ -293,9 +293,7 @@ class Multiline extends Form\Control
     #[\Override]
     public function setInputValue(string $value): void
     {
-        $rowsRaw = $this->getApp()->decodeJson($value);
-
-        $this->rowData = $this->typecastLoadValues($rowsRaw);
+        $this->rowData = $this->typecastLoadValues($this->getApp()->decodeJson($value));
         if ($this->rowData !== []) {
             $this->rowErrors = $this->validate($this->rowData);
             if ($this->rowErrors !== []) {
