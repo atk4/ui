@@ -216,7 +216,7 @@ class Multiline extends Form\Control
         $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
             // when errors are coming from this Multiline field, then notify Multiline component about them
             // otherwise use normal field error
-            if ($fieldName === $this->shortName) {
+            if ($fieldName === $this->shortName && $this->rowErrors) {
                 // multiline js component listen to 'multiline-rows-error' event
                 $jsError = $this->jsEmitEvent($this->multiLine->name . '-multiline-rows-error', ['errors' => $this->rowErrors]);
             } else {
