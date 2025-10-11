@@ -216,7 +216,7 @@ class Multiline extends Form\Control
         $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
             // when errors are coming from this Multiline field, then notify Multiline component about them
             // otherwise use normal field error
-            if ($fieldName === $this->shortName) {
+            if ($fieldName === $this->shortName && $this->rowErrors) {
                 // multiline js component listen to 'multiline-rows-error' event
                 $jsError = $this->jsEmitEvent($this->multiLine->name . '-multiline-rows-error', ['errors' => $this->rowErrors]);
             } else {
@@ -250,26 +250,66 @@ class Multiline extends Form\Control
         return $dataRows;
     }
 
+    /**
+     * Same as Persistence::typecastSaveRow() but allow null in not-nullable fields.
+     *
+     * @param array<string, mixed> $row
+     *
+     * @return array<string, scalar|null>
+     */
+    private function typecastContainedSaveRow(array $row): array
+    {
+        $res = [];
+        foreach ($row as $fieldName => $value) {
+            $field = $this->model->getField($fieldName);
+
+            $res[$field->getPersistenceName()] = $value === null
+                ? null
+                : $this->model->getPersistence()->typecastSaveField($field, $value);
+        }
+
+        return $res;
+    }
+
+    /**
+     * @param array<string, scalar|null> $row
+     *
+     * @return array<string, scalar|null>
+     */
+    private function remapLoadFieldNames(array $row): array
+    {
+        $fieldNamesMap = array_flip(array_map(static fn ($v) => $v->getPersistenceName(), $this->model->getFields()));
+
+        $res = [];
+        foreach ($row as $k => $value) {
+            $field = $this->model->getField($fieldNamesMap[$k]);
+
+            $res[$field->shortName] = $value;
+        }
+
+        return $res;
+    }
+
     #[\Override]
     public function setInputValue(string $value): void
     {
-        $rowDataRaw = $this->getApp()->decodeJson($value);
-
-        $this->rowData = $this->typecastLoadValues($rowDataRaw);
-        if ($this->rowData) {
+        $this->rowData = $this->typecastLoadValues($this->getApp()->decodeJson($value));
+        if ($this->rowData !== []) {
             $this->rowErrors = $this->validate($this->rowData);
-            if ($this->rowErrors) {
+            if ($this->rowErrors !== []) {
                 throw new ValidationException([$this->shortName => 'multiline error']);
             }
         }
 
-        // remove __atkml ID from array field
         if ($this->entityField->getField()->type === 'json') {
-            foreach ($rowDataRaw as $k => $v) {
-                unset($rowDataRaw[$k]['__atkml']);
+            $rowsRaw = [];
+            foreach ($this->rowData as $k => $v) {
+                unset($v['__atkml']);
+
+                $rowsRaw[$k] = $this->typecastContainedSaveRow($v);
             }
 
-            $value = $this->getApp()->encodeJson($rowDataRaw);
+            $value = $this->getApp()->encodeJson($rowsRaw);
         }
 
         parent::setInputValue($value);
@@ -296,7 +336,8 @@ class Multiline extends Form\Control
     public function getInputValue(): string
     {
         if ($this->entityField->getField()->type === 'json') {
-            $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
+            $rows = array_map(fn ($v) => $this->remapLoadFieldNames($v), $this->entityField->get() ?? []);
+            $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $rows);
         } else {
             // set data according to HasMany relation or using model
             $rows = [];
