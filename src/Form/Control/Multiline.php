@@ -271,6 +271,11 @@ class Multiline extends Form\Control
         return $res;
     }
 
+    /**
+     * @param array<string, scalar|null> $row
+     *
+     * @return array<string, scalar|null>
+     */
     private function remapLoadFieldNames(array $row): array
     {
         $fieldNamesMap = array_flip(array_map(static fn ($v) => $v->getPersistenceName(), $this->model->getFields()));
