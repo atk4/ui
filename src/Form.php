@@ -380,7 +380,7 @@ class Form extends View
         $fallbackSeed = [Control\Line::class];
 
         if ($field->type === 'json' && $field->hasReference()) {
-            $limit = ($field->getReference() instanceof ContainsMany) ? 0 : 1;
+            $limit = $field->getReference() instanceof ContainsMany ? 0 : 1;
             $model = $field->getReference()->createTheirModel();
             $fallbackSeed = [Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit];
         } elseif ($field->type !== 'boolean') {
