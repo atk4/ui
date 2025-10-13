@@ -226,6 +226,10 @@ class Multiline extends Form\Control
 
             return $jsError;
         });
+
+        if ($this->isContainsOne()) {
+            $this->rowLimit = 1;
+        }
     }
 
     /**
@@ -272,7 +276,7 @@ class Multiline extends Form\Control
 
     private function isContainsOne(): bool
     {
-        return $this->rowLimit === 1 && $this->entityField->getField()->hasReference()
+        return $this->entityField->getField()->hasReference()
             && $this->entityField->getField()->getReference() instanceof ContainsOne;
     }
 
