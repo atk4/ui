@@ -229,26 +229,45 @@ class Multiline extends Form\Control
     }
 
     /**
+     * @param array<mixed, array<string, mixed>> $values
+     *
+     * @return array<mixed, array<string, string|null>>
+     */
+    private function typecastUiSaveValues(array $values): array
+    {
+        $res = [];
+        foreach ($values as $k => $row) {
+            foreach ($row as $fieldName => $value) {
+                $res[$k][$fieldName] = $fieldName === $this->model->idField
+                    ? $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getField($fieldName), $value)
+                    : $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($fieldName), $value);
+            }
+        }
+
+        return $res;
+    }
+
+    /**
      * @param array<mixed, array<string, string|null>> $values
      *
      * @return array<mixed, array<string, mixed>>
      */
-    private function typecastLoadValues(array $values): array
+    private function typecastUiLoadValues(array $values): array
     {
-        $dataRows = [];
+        $res = [];
         foreach ($values as $k => $row) {
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
-                    $dataRows[$k][$fieldName] = $value;
+                    $res[$k][$fieldName] = $value;
                 } else {
-                    $dataRows[$k][$fieldName] = $fieldName === $this->model->idField
+                    $res[$k][$fieldName] = $fieldName === $this->model->idField
                         ? $this->getApp()->uiPersistence->typecastAttributeLoadField($this->model->getField($fieldName), $value)
                         : $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($fieldName), $value);
                 }
             }
         }
 
-        return $dataRows;
+        return $res;
     }
 
     private function isContainsOne(): bool
@@ -278,29 +297,10 @@ class Multiline extends Form\Control
         return $res;
     }
 
-    /**
-     * @param array<string, scalar|null> $row
-     *
-     * @return array<string, scalar|null>
-     */
-    private function remapLoadFieldNames(array $row): array
-    {
-        $fieldNamesMap = array_flip(array_map(static fn ($v) => $v->getPersistenceName(), $this->model->getFields()));
-
-        $res = [];
-        foreach ($row as $k => $value) {
-            $field = $this->model->getField($fieldNamesMap[$k]);
-
-            $res[$field->shortName] = $value;
-        }
-
-        return $res;
-    }
-
     #[\Override]
     public function setInputValue(string $value): void
     {
-        $this->rowData = $this->typecastLoadValues($this->getApp()->decodeJson($value));
+        $this->rowData = $this->typecastUiLoadValues($this->getApp()->decodeJson($value));
         if ($this->rowData !== []) {
             $this->rowErrors = $this->validate($this->rowData);
             if ($this->rowErrors !== []) {
@@ -361,39 +361,26 @@ class Multiline extends Form\Control
         $this->onChangeFunction = $fx;
     }
 
-    /**
-     * Get initial field value. Value is based on model set and will output data rows as JSON string value.
-     */
     #[\Override]
     public function getInputValue(): string
     {
-        if ($this->entityField->getField()->type === 'json') {
-            $rowsRaw = $this->entityField->get();
-            if ($rowsRaw === null) {
-                $rowsRaw = [];
-            } elseif ($this->isContainsOne()) {
-                $rowsRaw = [$rowsRaw];
-            }
-            $rows = array_map(fn ($v) => $this->remapLoadFieldNames($v), $rowsRaw);
-            $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $rows);
-        } else {
-            // set data according to HasMany relation or using model
-            $rows = [];
-            foreach ($this->model as $row) {
-                $cols = [];
-                foreach ($this->rowFields as $fieldName) {
-                    $field = $this->model->getField($fieldName);
-                    $value = $field->shortName === $this->model->idField
-                        ? $this->getApp()->uiPersistence->typecastAttributeSaveField($field, $row->get($field->shortName))
-                        : $this->getApp()->uiPersistence->typecastSaveField($field, $row->get($field->shortName));
-                    $cols[$fieldName] = $value;
-                }
-                $rows[] = $cols;
-            }
-            $jsonValues = $this->getApp()->encodeJson($rows);
+        $refModelOrEntity = $this->entityField->getField()->hasReference()
+            ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())
+            : $this->model;
+        if ($refModelOrEntity->isEntity()) {
+            $refModelOrEntity = $refModelOrEntity->isLoaded()
+                ? [$refModelOrEntity]
+                : [];
         }
 
-        return $jsonValues;
+        $rows = [];
+        foreach ($refModelOrEntity as $row) {
+            $rows[] = $row->get();
+        }
+
+        $rowsUi = $this->typecastUiSaveValues($rows);
+
+        return $this->getApp()->encodeJson($rowsUi);
     }
 
     /**
@@ -811,7 +798,7 @@ class Multiline extends Form\Control
             case 'on-change':
                 $rowsRaw = $this->getApp()->decodeJson($this->getApp()->getRequestPostParam('rows'));
                 $this->renderCallback->set(function () use ($rowsRaw) {
-                    return ($this->onChangeFunction)($this->typecastLoadValues($rowsRaw), $this->form);
+                    return ($this->onChangeFunction)($this->typecastUiLoadValues($rowsRaw), $this->form);
                 });
         }
     }
