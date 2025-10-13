@@ -368,7 +368,13 @@ class Multiline extends Form\Control
     public function getInputValue(): string
     {
         if ($this->entityField->getField()->type === 'json') {
-            $rows = array_map(fn ($v) => $this->remapLoadFieldNames($v), $this->entityField->get() ?? []);
+            $rowsRaw = $this->entityField->get();
+            if ($rowsRaw === null) {
+                $rowsRaw = [];
+            } elseif ($this->isContainsOne()) {
+                $rowsRaw = [$rowsRaw];
+            }
+            $rows = array_map(fn ($v) => $this->remapLoadFieldNames($v), $rowsRaw);
             $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $rows);
         } else {
             // set data according to HasMany relation or using model
