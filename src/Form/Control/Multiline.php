@@ -10,6 +10,7 @@ use Atk4\Data\Field\CallbackField;
 use Atk4\Data\Field\SqlExpressionField;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Data\Reference\ContainsOne;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
@@ -250,6 +251,12 @@ class Multiline extends Form\Control
         return $dataRows;
     }
 
+    private function isContainsOne(): bool
+    {
+        return $this->rowLimit === 1 && $this->entityField->getField()->hasReference()
+            && $this->entityField->getField()->getReference() instanceof ContainsOne;
+    }
+
     /**
      * Same as Persistence::typecastSaveRow() but allow null in not-nullable fields.
      *
@@ -309,7 +316,32 @@ class Multiline extends Form\Control
                 $rowsRaw[$k] = $this->typecastContainedSaveRow($v);
             }
 
-            $value = $this->getApp()->encodeJson($rowsRaw);
+            // mimic ContainsOne save format
+            // https://github.com/atk4/data/blob/6.0.0/src/Reference/ContainsOne.php#L37
+            if ($rowsRaw === []) {
+                $value = '';
+            } else {
+                $idField = $this->model->getIdField();
+                $idFieldRawName = $idField->getPersistenceName();
+                foreach ($rowsRaw as $k => $rowRaw) { // @phpstan-ignore foreach.keyOverwrite (https://github.com/phpstan/phpstan-strict-rules/issues/194)
+                    if ($rowRaw[$idFieldRawName] === null) {
+                        $origIdFieldType = $idField->type;
+                        $idField->type = 'bigint';
+                        try {
+                            $rowsRaw[$k][$idFieldRawName] = Persistence\Array_::assertInstanceOf($this->model->getPersistence())->generateNewId($this->model);
+                        } finally {
+                            $idField->type = $origIdFieldType;
+                        }
+                    }
+                }
+
+                if ($this->isContainsOne()) {
+                    assert(count($rowsRaw) === 1);
+                    $rowsRaw = array_first($rowsRaw);
+                }
+
+                $value = $this->getApp()->encodeJson($rowsRaw);
+            }
         }
 
         parent::setInputValue($value);
