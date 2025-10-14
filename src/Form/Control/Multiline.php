@@ -280,6 +280,28 @@ class Multiline extends Form\Control
             && $this->entityField->getField()->getReference() instanceof ContainsOne;
     }
 
+    #[\Override]
+    public function getInputValue(): string
+    {
+        $refModelOrEntity = $this->entityField->getField()->hasReference()
+            ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())
+            : $this->model;
+        if ($refModelOrEntity->isEntity()) {
+            $refModelOrEntity = $refModelOrEntity->isLoaded()
+                ? [$refModelOrEntity]
+                : [];
+        }
+
+        $rows = [];
+        foreach ($refModelOrEntity as $row) {
+            $rows[] = $row->get();
+        }
+
+        $rowsUi = $this->typecastUiSaveValues($rows);
+
+        return $this->getApp()->encodeJson($rowsUi);
+    }
+
     /**
      * Same as Persistence::typecastSaveRow() but allow null in not-nullable fields.
      *
@@ -395,28 +417,6 @@ class Multiline extends Form\Control
         $this->eventFields = $fields;
 
         $this->onChangeFunction = $fx;
-    }
-
-    #[\Override]
-    public function getInputValue(): string
-    {
-        $refModelOrEntity = $this->entityField->getField()->hasReference()
-            ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())
-            : $this->model;
-        if ($refModelOrEntity->isEntity()) {
-            $refModelOrEntity = $refModelOrEntity->isLoaded()
-                ? [$refModelOrEntity]
-                : [];
-        }
-
-        $rows = [];
-        foreach ($refModelOrEntity as $row) {
-            $rows[] = $row->get();
-        }
-
-        $rowsUi = $this->typecastUiSaveValues($rows);
-
-        return $this->getApp()->encodeJson($rowsUi);
     }
 
     /**
