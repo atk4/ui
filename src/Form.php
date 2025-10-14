@@ -10,7 +10,6 @@ use Atk4\Data\Exception as DataException;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
 use Atk4\Data\Model\EntityFieldPair;
-use Atk4\Data\Reference\ContainsMany;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Form\Control;
 use Atk4\Ui\Js\JsBlock;
@@ -380,9 +379,8 @@ class Form extends View
         $fallbackSeed = [Control\Line::class];
 
         if ($field->type === 'json' && $field->hasReference()) {
-            $limit = ($field->getReference() instanceof ContainsMany) ? 0 : 1;
             $model = $field->getReference()->createTheirModel();
-            $fallbackSeed = [Control\Multiline::class, 'model' => $model, 'rowLimit' => $limit];
+            $fallbackSeed = [Control\Multiline::class, 'model' => $model];
         } elseif ($field->type !== 'boolean') {
             if ($field->enum !== null) {
                 $fallbackSeed = [Control\Dropdown::class, 'values' => array_combine($field->enum, $field->enum)];

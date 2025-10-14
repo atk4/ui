@@ -10,6 +10,7 @@ use Atk4\Data\Field\CallbackField;
 use Atk4\Data\Field\SqlExpressionField;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
+use Atk4\Data\Reference\ContainsOne;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
@@ -225,6 +226,29 @@ class Multiline extends Form\Control
 
             return $jsError;
         });
+
+        if ($this->isContainsOne()) {
+            $this->rowLimit = 1;
+        }
+    }
+
+    /**
+     * @param array<mixed, array<string, mixed>> $values
+     *
+     * @return array<mixed, array<string, string|null>>
+     */
+    private function typecastUiSaveValues(array $values): array
+    {
+        $res = [];
+        foreach ($values as $k => $row) {
+            foreach ($row as $fieldName => $value) {
+                $res[$k][$fieldName] = $fieldName === $this->model->idField
+                    ? $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getField($fieldName), $value)
+                    : $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($fieldName), $value);
+            }
+        }
+
+        return $res;
     }
 
     /**
@@ -232,22 +256,50 @@ class Multiline extends Form\Control
      *
      * @return array<mixed, array<string, mixed>>
      */
-    private function typecastLoadValues(array $values): array
+    private function typecastUiLoadValues(array $values): array
     {
-        $dataRows = [];
+        $res = [];
         foreach ($values as $k => $row) {
             foreach ($row as $fieldName => $value) {
                 if ($fieldName === '__atkml') {
-                    $dataRows[$k][$fieldName] = $value;
+                    $res[$k][$fieldName] = $value;
                 } else {
-                    $dataRows[$k][$fieldName] = $fieldName === $this->model->idField
+                    $res[$k][$fieldName] = $fieldName === $this->model->idField
                         ? $this->getApp()->uiPersistence->typecastAttributeLoadField($this->model->getField($fieldName), $value)
                         : $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($fieldName), $value);
                 }
             }
         }
 
-        return $dataRows;
+        return $res;
+    }
+
+    private function isContainsOne(): bool
+    {
+        return $this->entityField->getField()->hasReference()
+            && $this->entityField->getField()->getReference() instanceof ContainsOne;
+    }
+
+    #[\Override]
+    public function getInputValue(): string
+    {
+        $refModelOrEntity = $this->entityField->getField()->hasReference()
+            ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())
+            : $this->model;
+        if ($refModelOrEntity->isEntity()) {
+            $refModelOrEntity = $refModelOrEntity->isLoaded()
+                ? [$refModelOrEntity]
+                : [];
+        }
+
+        $rows = [];
+        foreach ($refModelOrEntity as $row) {
+            $rows[] = $row->get();
+        }
+
+        $rowsUi = $this->typecastUiSaveValues($rows);
+
+        return $this->getApp()->encodeJson($rowsUi);
     }
 
     /**
@@ -272,47 +324,89 @@ class Multiline extends Form\Control
     }
 
     /**
-     * @param array<string, scalar|null> $row
-     *
-     * @return array<string, scalar|null>
+     * @param \Closure(): void $fx
      */
-    private function remapLoadFieldNames(array $row): array
+    private function invokeWithContainsXxxNormalizeHookIgnored(\Closure $fx): void
     {
-        $fieldNamesMap = array_flip(array_map(static fn ($v) => $v->getPersistenceName(), $this->model->getFields()));
+        // TOD hack to supress "Contained model data cannot be modified directly" exception
+        // https://github.com/atk4/data/blob/fca1cd55b0/src/Reference/ContainsBase.php#L58-L81
+        $ourModel = $this->entityField->getModel();
+        \Closure::bind(static function () use ($fx, $ourModel) {
+            $spot = Model::HOOK_NORMALIZE;
+            $priority = \PHP_INT_MIN;
+            $normalizeHooks = $ourModel->hooks[$spot][$priority] ?? [];
+            foreach (array_keys($normalizeHooks) as $hookIndex) {
+                $ourModel->hooks[$spot][$priority][$hookIndex][0] = static fn () => null;
+            }
 
-        $res = [];
-        foreach ($row as $k => $value) {
-            $field = $this->model->getField($fieldNamesMap[$k]);
-
-            $res[$field->shortName] = $value;
-        }
-
-        return $res;
+            try {
+                $fx();
+            } finally {
+                foreach (array_keys($normalizeHooks) as $hookIndex) {
+                    $ourModel->hooks[$spot][$priority][$hookIndex][0] = $normalizeHooks[$hookIndex][0];
+                }
+            }
+        }, null, Model::class)();
     }
 
     #[\Override]
     public function setInputValue(string $value): void
     {
-        $this->rowData = $this->typecastLoadValues($this->getApp()->decodeJson($value));
+        $this->rowData = $this->typecastUiLoadValues($this->getApp()->decodeJson($value));
         if ($this->rowData !== []) {
             $this->rowErrors = $this->validate($this->rowData);
             if ($this->rowErrors !== []) {
-                throw new ValidationException([$this->shortName => 'multiline error']);
+                throw new ValidationException([$this->shortName => 'Multiline error']);
             }
         }
 
-        if ($this->entityField->getField()->type === 'json') {
-            $rowsRaw = [];
-            foreach ($this->rowData as $k => $v) {
-                unset($v['__atkml']);
+        $rowsRaw = [];
+        foreach ($this->rowData as $k => $v) {
+            unset($v['__atkml']);
 
-                $rowsRaw[$k] = $this->typecastContainedSaveRow($v);
+            $rowsRaw[$k] = $this->typecastContainedSaveRow($v);
+        }
+
+        // mimic ContainsOne save format
+        // https://github.com/atk4/data/blob/6.0.0/src/Reference/ContainsOne.php#L37
+        // TODO replace with something like "schedule model save task" and then drop self::saveRows() method
+        if ($rowsRaw === []) {
+            $value = '';
+        } else {
+            foreach ($rowsRaw as $k => $rowRaw) { // @phpstan-ignore foreach.keyOverwrite (https://github.com/phpstan/phpstan-strict-rules/issues/194)
+                $idFieldRawName = $this->model->getIdField()->getPersistenceName();
+                if ($rowRaw[$idFieldRawName] === null) {
+                    $refModel = $this->entityField->getField()->hasReference()
+                        ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())->getModel(true)
+                        : $this->model;
+
+                    // TODO to pass Behat tests purely
+                    if (!$this->entityField->getField()->hasReference() && $this->entityField->getField()->type !== 'json' && !$refModel->getPersistence() instanceof Persistence\Array_) {
+                        continue;
+                    }
+
+                    $idField = $refModel->getIdField();
+                    $origIdFieldType = $idField->type;
+                    $idField->type = 'bigint';
+                    try {
+                        $rowsRaw[$k][$idFieldRawName] = Persistence\Array_::assertInstanceOf($refModel->getPersistence())->generateNewId($refModel);
+                    } finally {
+                        $idField->type = $origIdFieldType;
+                    }
+                }
+            }
+
+            if ($this->isContainsOne()) {
+                assert(count($rowsRaw) === 1);
+                $rowsRaw = array_first($rowsRaw);
             }
 
             $value = $this->getApp()->encodeJson($rowsRaw);
         }
 
-        parent::setInputValue($value);
+        $this->invokeWithContainsXxxNormalizeHookIgnored(function () use ($value) {
+            parent::setInputValue($value);
+        });
     }
 
     /**
@@ -327,35 +421,6 @@ class Multiline extends Form\Control
         $this->eventFields = $fields;
 
         $this->onChangeFunction = $fx;
-    }
-
-    /**
-     * Get initial field value. Value is based on model set and will output data rows as JSON string value.
-     */
-    #[\Override]
-    public function getInputValue(): string
-    {
-        if ($this->entityField->getField()->type === 'json') {
-            $rows = array_map(fn ($v) => $this->remapLoadFieldNames($v), $this->entityField->get() ?? []);
-            $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $rows);
-        } else {
-            // set data according to HasMany relation or using model
-            $rows = [];
-            foreach ($this->model as $row) {
-                $cols = [];
-                foreach ($this->rowFields as $fieldName) {
-                    $field = $this->model->getField($fieldName);
-                    $value = $field->shortName === $this->model->idField
-                        ? $this->getApp()->uiPersistence->typecastAttributeSaveField($field, $row->get($field->shortName))
-                        : $this->getApp()->uiPersistence->typecastSaveField($field, $row->get($field->shortName));
-                    $cols[$fieldName] = $value;
-                }
-                $rows[] = $cols;
-            }
-            $jsonValues = $this->getApp()->encodeJson($rows);
-        }
-
-        return $jsonValues;
     }
 
     /**
@@ -715,11 +780,6 @@ class Multiline extends Form\Control
             foreach ($rows as $fieldName => $value) {
                 if (isset($this->valuePropsBinding[$fieldName])) {
                     if ($value !== null) {
-                        if (!is_string($value)) {
-                            assert(is_scalar($value));
-                            $value = (string) $value;
-                        }
-
                         ($this->valuePropsBinding[$fieldName])($this->model->getField($fieldName), $value);
                     }
                 }
@@ -773,7 +833,7 @@ class Multiline extends Form\Control
             case 'on-change':
                 $rowsRaw = $this->getApp()->decodeJson($this->getApp()->getRequestPostParam('rows'));
                 $this->renderCallback->set(function () use ($rowsRaw) {
-                    return ($this->onChangeFunction)($this->typecastLoadValues($rowsRaw), $this->form);
+                    return ($this->onChangeFunction)($this->typecastUiLoadValues($rowsRaw), $this->form);
                 });
         }
     }

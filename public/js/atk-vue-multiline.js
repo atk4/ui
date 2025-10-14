@@ -115,8 +115,6 @@ __webpack_require__.r(__webpack_exports__);
             :is="getComponent()"
             v-bind="getComponentProps()"
             ref="cell"
-            :fluid="true"
-            class="fluid"
             :name="inputName"
             v-model="inputValue"
             @update:modelValue="onInput"
@@ -203,6 +201,7 @@ __webpack_require__.r(__webpack_exports__);
                 <AtkMultilineHeader
                     :fields="fieldData"
                     :selectionState="getMainToggleState"
+                    :rowDataCount="rowData.length"
                     :errors="errors"
                     :caption="caption"
                 ></AtkMultilineHeader>
@@ -486,7 +485,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.data.rowLimit === 0) {
         return false;
       }
-      return this.data.rowLimit < this.rowData.length + 1;
+      return this.rowData.length >= this.data.rowLimit;
     }
   }
 });
@@ -531,7 +530,7 @@ __webpack_require__.r(__webpack_exports__);
             </SuiTableRow>
             <SuiTableRow :verticalAlign="'top'">
                 <SuiTableHeaderCell :width=1 textAlign="center">
-                    <input ref="check" type="checkbox" :checked="isChecked" :indeterminate="isIndeterminate" @input="onToggleDeleteAll" />
+                    <input v-if="rowDataCount > 1" ref="check" type="checkbox" :checked="isChecked" :indeterminate="isIndeterminate" @input="onToggleDeleteAll" />
                 </SuiTableHeaderCell>
                 <SuiTableHeaderCell
                     v-for="column in filterVisibleColumns(columns)"
@@ -545,7 +544,7 @@ __webpack_require__.r(__webpack_exports__);
                 </SuiTableHeaderCell>
             </SuiTableRow>
         </SuiTableHeader>`,
-  props: ['fields', 'selectionState', 'errors', 'caption'],
+  props: ['fields', 'selectionState', 'rowDataCount', 'errors', 'caption'],
   data: function () {
     return {
       columns: this.fields,
