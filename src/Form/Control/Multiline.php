@@ -369,6 +369,7 @@ class Multiline extends Form\Control
 
         // mimic ContainsOne save format
         // https://github.com/atk4/data/blob/6.0.0/src/Reference/ContainsOne.php#L37
+        // TODO replace with something like "schedule model save task" and then drop self::saveRows() method
         if ($rowsRaw === []) {
             $value = '';
         } else {
@@ -379,8 +380,8 @@ class Multiline extends Form\Control
                         ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())->getModel(true)
                         : $this->model;
 
+                    // TODO to pass Behat tests purely
                     if (!$this->entityField->getField()->hasReference() && $this->entityField->getField()->type !== 'json' && !$refModel->getPersistence() instanceof Persistence\Array_) {
-                        // pass Behat tests
                         continue;
                     }
 
