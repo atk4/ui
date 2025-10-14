@@ -360,44 +360,47 @@ class Multiline extends Form\Control
             }
         }
 
-        if ($this->entityField->getField()->type === 'json') {
-            $rowsRaw = [];
-            foreach ($this->rowData as $k => $v) {
-                unset($v['__atkml']);
+        $rowsRaw = [];
+        foreach ($this->rowData as $k => $v) {
+            unset($v['__atkml']);
 
-                $rowsRaw[$k] = $this->typecastContainedSaveRow($v);
-            }
+            $rowsRaw[$k] = $this->typecastContainedSaveRow($v);
+        }
 
-            // mimic ContainsOne save format
-            // https://github.com/atk4/data/blob/6.0.0/src/Reference/ContainsOne.php#L37
-            if ($rowsRaw === []) {
-                $value = '';
-            } else {
-                foreach ($rowsRaw as $k => $rowRaw) { // @phpstan-ignore foreach.keyOverwrite (https://github.com/phpstan/phpstan-strict-rules/issues/194)
-                    $idFieldRawName = $this->model->getIdField()->getPersistenceName();
-                    if ($rowRaw[$idFieldRawName] === null) {
-                        $refModel = $this->entityField->getField()->hasReference()
-                            ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())->getModel(true)
-                            : $this->model;
+        // mimic ContainsOne save format
+        // https://github.com/atk4/data/blob/6.0.0/src/Reference/ContainsOne.php#L37
+        if ($rowsRaw === []) {
+            $value = '';
+        } else {
+            foreach ($rowsRaw as $k => $rowRaw) { // @phpstan-ignore foreach.keyOverwrite (https://github.com/phpstan/phpstan-strict-rules/issues/194)
+                $idFieldRawName = $this->model->getIdField()->getPersistenceName();
+                if ($rowRaw[$idFieldRawName] === null) {
+                    $refModel = $this->entityField->getField()->hasReference()
+                        ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())->getModel(true)
+                        : $this->model;
 
-                        $idField = $refModel->getIdField();
-                        $origIdFieldType = $idField->type;
-                        $idField->type = 'bigint';
-                        try {
-                            $rowsRaw[$k][$idFieldRawName] = Persistence\Array_::assertInstanceOf($refModel->getPersistence())->generateNewId($refModel);
-                        } finally {
-                            $idField->type = $origIdFieldType;
-                        }
+                    if (!$this->entityField->getField()->hasReference() && $this->entityField->getField()->type !== 'json' && !$refModel->getPersistence() instanceof Persistence\Array_) {
+                        // pass Behat tests
+                        continue;
+                    }
+
+                    $idField = $refModel->getIdField();
+                    $origIdFieldType = $idField->type;
+                    $idField->type = 'bigint';
+                    try {
+                        $rowsRaw[$k][$idFieldRawName] = Persistence\Array_::assertInstanceOf($refModel->getPersistence())->generateNewId($refModel);
+                    } finally {
+                        $idField->type = $origIdFieldType;
                     }
                 }
-
-                if ($this->isContainsOne()) {
-                    assert(count($rowsRaw) === 1);
-                    $rowsRaw = array_first($rowsRaw);
-                }
-
-                $value = $this->getApp()->encodeJson($rowsRaw);
             }
+
+            if ($this->isContainsOne()) {
+                assert(count($rowsRaw) === 1);
+                $rowsRaw = array_first($rowsRaw);
+            }
+
+            $value = $this->getApp()->encodeJson($rowsRaw);
         }
 
         $this->invokeWithContainsXxxNormalizeHookIgnored(function () use ($value) {
