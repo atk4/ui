@@ -325,14 +325,18 @@ class Multiline extends Form\Control
             if ($rowsRaw === []) {
                 $value = '';
             } else {
-                $idField = $this->model->getIdField();
-                $idFieldRawName = $idField->getPersistenceName();
                 foreach ($rowsRaw as $k => $rowRaw) { // @phpstan-ignore foreach.keyOverwrite (https://github.com/phpstan/phpstan-strict-rules/issues/194)
+                    $idFieldRawName = $this->model->getIdField()->getPersistenceName();
                     if ($rowRaw[$idFieldRawName] === null) {
+                        $refModel = $this->entityField->getField()->hasReference()
+                            ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())->getModel(true)
+                            : $this->model;
+
+                        $idField = $refModel->getIdField();
                         $origIdFieldType = $idField->type;
                         $idField->type = 'bigint';
                         try {
-                            $rowsRaw[$k][$idFieldRawName] = Persistence\Array_::assertInstanceOf($this->model->getPersistence())->generateNewId($this->model);
+                            $rowsRaw[$k][$idFieldRawName] = Persistence\Array_::assertInstanceOf($refModel->getPersistence())->generateNewId($refModel);
                         } finally {
                             $idField->type = $origIdFieldType;
                         }
