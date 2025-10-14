@@ -46,6 +46,7 @@ Feature: Multiline
     # 'ce0a190b1901b807' = substr(md5('multiline_delivery'), 0, 16)
     When I fill in "atk_fp_ce0a190b1901b807__name" with "Delivery Foo"
     When I click using selector "//div.field[label[text()='Item']]//tfoot//button[i.plus.icon]"
+    Then Element "//div.field[label[text()='Item']]//tfoot//button[i.plus.icon]" attribute "class" should contain text "disabled"
     When I fill field using "div[name=-atk_fp_tbl__item] input" with "Melon"
     When I select "Argentina" in lookup "//div.text[parent::div[@name='-atk_fp_tbl__country_id']]"
     When I fill field using "div[name=-atk_fp_tbl__qty] input" with "5"
