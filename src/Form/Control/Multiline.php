@@ -301,6 +301,32 @@ class Multiline extends Form\Control
         return $res;
     }
 
+    /**
+     * @param \Closure(): void $fx
+     */
+    private function invokeWithContainsXxxNormalizeHookIgnored(\Closure $fx): void
+    {
+        // TOD hack to supress "Contained model data cannot be modified directly" exception
+        // https://github.com/atk4/data/blob/fca1cd55b0/src/Reference/ContainsBase.php#L58-L81
+        $ourModel = $this->entityField->getModel();
+        \Closure::bind(static function () use ($fx, $ourModel) {
+            $spot = Model::HOOK_NORMALIZE;
+            $priority = \PHP_INT_MIN;
+            $normalizeHooks = $ourModel->hooks[$spot][$priority] ?? [];
+            foreach (array_keys($normalizeHooks) as $hookIndex) {
+                $ourModel->hooks[$spot][$priority][$hookIndex][0] = static fn () => null;
+            }
+
+            try {
+                $fx();
+            } finally {
+                foreach (array_keys($normalizeHooks) as $hookIndex) {
+                    $ourModel->hooks[$spot][$priority][$hookIndex][0] = $normalizeHooks[$hookIndex][0];
+                }
+            }
+        }, null, Model::class)();
+    }
+
     #[\Override]
     public function setInputValue(string $value): void
     {
@@ -352,7 +378,9 @@ class Multiline extends Form\Control
             }
         }
 
-        parent::setInputValue($value);
+        $this->invokeWithContainsXxxNormalizeHookIgnored(function () use ($value) {
+            parent::setInputValue($value);
+        });
     }
 
     /**
