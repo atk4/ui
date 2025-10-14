@@ -115,8 +115,6 @@ __webpack_require__.r(__webpack_exports__);
             :is="getComponent()"
             v-bind="getComponentProps()"
             ref="cell"
-            :fluid="true"
-            class="fluid"
             :name="inputName"
             v-model="inputValue"
             @update:modelValue="onInput"

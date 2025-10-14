@@ -10,8 +10,6 @@ export default {
             :is="getComponent()"
             v-bind="getComponentProps()"
             ref="cell"
-            :fluid="true"
-            class="fluid"
             :name="inputName"
             v-model="inputValue"
             @update:modelValue="onInput"
