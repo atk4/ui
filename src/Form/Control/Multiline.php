@@ -435,7 +435,7 @@ class Multiline extends Form\Control
         $entity = $this->model->createEntity();
 
         foreach ($rows as $cols) {
-            $rowId = $this->getMlRowId($cols);
+            $rowId = $cols['__atkml'] ?? null;
             foreach ($cols as $fieldName => $value) {
                 if ($fieldName === '__atkml' || $fieldName === $entity->idField) {
                     continue;
@@ -510,25 +510,6 @@ class Multiline extends Form\Control
         }
 
         return $errors;
-    }
-
-    /**
-     * Finds and returns Multiline row ID.
-     *
-     * @param array<string, string> $row
-     */
-    private function getMlRowId(array $row): ?string
-    {
-        $rowId = null;
-        foreach ($row as $col => $value) {
-            if ($col === '__atkml') {
-                $rowId = $value;
-
-                break;
-            }
-        }
-
-        return $rowId;
     }
 
     /**
