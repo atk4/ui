@@ -10,7 +10,6 @@ use Atk4\Data\Field\CallbackField;
 use Atk4\Data\Field\SqlExpressionField;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
-use Atk4\Data\Reference\ContainsOne;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
@@ -227,7 +226,7 @@ class Multiline extends Form\Control
             return $jsError;
         });
 
-        if ($this->isContainsOne()) {
+        if ($this->isOneToOne()) {
             $this->rowLimit = 1;
         }
     }
@@ -274,10 +273,10 @@ class Multiline extends Form\Control
         return $res;
     }
 
-    private function isContainsOne(): bool
+    private function isOneToOne(): bool
     {
         return $this->entityField->getField()->hasReference()
-            && $this->entityField->getField()->getReference() instanceof ContainsOne;
+            && $this->entityField->getField()->getReference()->isOneToOne();
     }
 
     #[\Override]
@@ -396,7 +395,7 @@ class Multiline extends Form\Control
                 }
             }
 
-            if ($this->isContainsOne()) {
+            if ($this->isOneToOne()) {
                 assert(count($rowsRaw) === 1);
                 $rowsRaw = array_first($rowsRaw);
             }
