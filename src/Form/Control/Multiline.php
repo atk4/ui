@@ -10,7 +10,6 @@ use Atk4\Data\Field\CallbackField;
 use Atk4\Data\Field\SqlExpressionField;
 use Atk4\Data\Model;
 use Atk4\Data\Persistence;
-use Atk4\Data\Reference\ContainsOne;
 use Atk4\Data\ValidationException;
 use Atk4\Ui\Form;
 use Atk4\Ui\HtmlTemplate;
@@ -150,7 +149,7 @@ class Multiline extends Form\Control
     /** @var JsCallback */
     private $renderCallback;
 
-    /** @var \Closure(mixed, Form): (JsExpressionable|View|string|void)|null Function to execute when field change or row is delete. */
+    /** @var \Closure(list<array<string, mixed>>, list<string>, Form): (JsExpressionable|View|string|void)|null Function to execute when field change or row is delete. */
     protected $onChangeFunction;
 
     /** @var list<string> Set fields that will trigger onChange function. */
@@ -163,7 +162,7 @@ class Multiline extends Form\Control
     public $rowFields;
 
     /** @var list<array<string, mixed>> The data sent for each row. */
-    public $rowData;
+    protected $rowData;
 
     /** @var int The max number of records (rows) that can be added to Multiline. 0 means no limit. */
     public $rowLimit = 0;
@@ -227,7 +226,7 @@ class Multiline extends Form\Control
             return $jsError;
         });
 
-        if ($this->isContainsOne()) {
+        if ($this->isOneToOne()) {
             $this->rowLimit = 1;
         }
     }
@@ -252,32 +251,26 @@ class Multiline extends Form\Control
     }
 
     /**
-     * @param array<mixed, array<string, string|null>> $values
+     * @param array<string, string|null> $row
      *
-     * @return array<mixed, array<string, mixed>>
+     * @return array<string, mixed>
      */
-    private function typecastUiLoadValues(array $values): array
+    private function typecastUiLoadRow(array $row): array
     {
         $res = [];
-        foreach ($values as $k => $row) {
-            foreach ($row as $fieldName => $value) {
-                if ($fieldName === '__atkml') {
-                    $res[$k][$fieldName] = $value;
-                } else {
-                    $res[$k][$fieldName] = $fieldName === $this->model->idField
-                        ? $this->getApp()->uiPersistence->typecastAttributeLoadField($this->model->getField($fieldName), $value)
-                        : $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($fieldName), $value);
-                }
-            }
+        foreach ($row as $fieldName => $value) {
+            $res[$fieldName] = $fieldName === $this->model->idField
+                ? $this->getApp()->uiPersistence->typecastAttributeLoadField($this->model->getField($fieldName), $value)
+                : $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($fieldName), $value);
         }
 
         return $res;
     }
 
-    private function isContainsOne(): bool
+    private function isOneToOne(): bool
     {
         return $this->entityField->getField()->hasReference()
-            && $this->entityField->getField()->getReference() instanceof ContainsOne;
+            && $this->entityField->getField()->getReference()->isOneToOne();
     }
 
     #[\Override]
@@ -349,23 +342,37 @@ class Multiline extends Form\Control
         }, null, Model::class)();
     }
 
+    /**
+     * @return array{list<array<string, mixed>>, list<string>}
+     */
+    private function decodeInput(string $json): array
+    {
+        $rowDataWithMlid = $this->getApp()->decodeJson($json);
+        $rowData = [];
+        $mlids = [];
+        foreach ($rowDataWithMlid as $row) {
+            $mlids[] = $row['__atkml'];
+            unset($row['__atkml']);
+            $rowData[] = $this->typecastUiLoadRow($row);
+        }
+
+        return [$rowData, $mlids];
+    }
+
     #[\Override]
     public function setInputValue(string $value): void
     {
-        $this->rowData = $this->typecastUiLoadValues($this->getApp()->decodeJson($value));
+        [$rowData, $mlids] = $this->decodeInput($value);
+
+        $this->rowData = $rowData;
         if ($this->rowData !== []) {
-            $this->rowErrors = $this->validate($this->rowData);
+            $this->rowErrors = $this->validate($this->rowData, $mlids);
             if ($this->rowErrors !== []) {
                 throw new ValidationException([$this->shortName => 'Multiline error']);
             }
         }
 
-        $rowsRaw = [];
-        foreach ($this->rowData as $k => $v) {
-            unset($v['__atkml']);
-
-            $rowsRaw[$k] = $this->typecastContainedSaveRow($v);
-        }
+        $rowsRaw = array_map(fn ($v) => $this->typecastContainedSaveRow($v), $this->rowData);
 
         // mimic ContainsOne save format
         // https://github.com/atk4/data/blob/6.0.0/src/Reference/ContainsOne.php#L37
@@ -373,7 +380,7 @@ class Multiline extends Form\Control
         if ($rowsRaw === []) {
             $value = '';
         } else {
-            foreach ($rowsRaw as $k => $rowRaw) { // @phpstan-ignore foreach.keyOverwrite (https://github.com/phpstan/phpstan-strict-rules/issues/194)
+            foreach ($rowsRaw as $k => $rowRaw) {
                 $idFieldRawName = $this->model->getIdField()->getPersistenceName();
                 if ($rowRaw[$idFieldRawName] === null) {
                     $refModel = $this->entityField->getField()->hasReference()
@@ -396,7 +403,7 @@ class Multiline extends Form\Control
                 }
             }
 
-            if ($this->isContainsOne()) {
+            if ($this->isOneToOne()) {
                 assert(count($rowsRaw) === 1);
                 $rowsRaw = array_first($rowsRaw);
             }
@@ -413,8 +420,8 @@ class Multiline extends Form\Control
      * Add a callback when fields are changed. You must supply array of fields
      * that will trigger the callback when changed.
      *
-     * @param \Closure(mixed, Form): (JsExpressionable|View|string|void) $fx
-     * @param list<string>                                               $fields
+     * @param \Closure(list<array<string, mixed>>, list<string>, Form): (JsExpressionable|View|string|void) $fx
+     * @param list<string>                                                                                  $fields
      */
     public function onLineChange(\Closure $fx, array $fields): void
     {
@@ -427,18 +434,19 @@ class Multiline extends Form\Control
      * Validate each row and return errors if found.
      *
      * @param list<array<string, mixed>> $rows
+     * @param list<string>               $mlids
      *
      * @return array<string, list<array{name: string, msg: string}>>
      */
-    public function validate(array $rows): array
+    public function validate(array $rows, array $mlids): array
     {
         $rowErrors = [];
         $entity = $this->model->createEntity();
 
-        foreach ($rows as $cols) {
-            $rowId = $this->getMlRowId($cols);
+        foreach ($rows as $i => $cols) {
+            $rowId = $mlids[$i];
             foreach ($cols as $fieldName => $value) {
-                if ($fieldName === '__atkml' || $fieldName === $entity->idField) {
+                if ($fieldName === $entity->idField) {
                     continue;
                 }
 
@@ -477,10 +485,6 @@ class Multiline extends Form\Control
                 ? $model->load($row[$model->idField])
                 : $model->createEntity();
             foreach ($row as $fieldName => $value) {
-                if ($fieldName === '__atkml') {
-                    continue;
-                }
-
                 if ($model->getField($fieldName)->isEditable()) {
                     $entity->set($fieldName, $value);
                 }
@@ -511,25 +515,6 @@ class Multiline extends Form\Control
         }
 
         return $errors;
-    }
-
-    /**
-     * Finds and returns Multiline row ID.
-     *
-     * @param array<string, string> $row
-     */
-    private function getMlRowId(array $row): ?string
-    {
-        $rowId = null;
-        foreach ($row as $col => $value) {
-            if ($col === '__atkml') {
-                $rowId = $value;
-
-                break;
-            }
-        }
-
-        return $rowId;
     }
 
     /**
@@ -831,10 +816,8 @@ class Multiline extends Form\Control
                 $this->getApp()->terminateJson(['success' => true, 'expressions' => $expressionValues]);
                 // no break - expression above always terminate
             case 'on-change':
-                $rowsRaw = $this->getApp()->decodeJson($this->getApp()->getRequestPostParam('rows'));
-                $this->renderCallback->set(function () use ($rowsRaw) {
-                    return ($this->onChangeFunction)($this->typecastUiLoadValues($rowsRaw), $this->form);
-                });
+                [$rows, $mlids] = $this->decodeInput($this->getApp()->getRequestPostParam('rows'));
+                $this->renderCallback->set(fn () => ($this->onChangeFunction)($rows, $mlids, $this->form));
         }
     }
 
