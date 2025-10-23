@@ -353,6 +353,13 @@ class Multiline extends Form\Control
         foreach ($rowDataWithMlid as $row) {
             $mlids[] = $row['__atkml'];
             unset($row['__atkml']);
+
+            foreach ($row as $k => $v) {
+                if ($this->model->getField($k)->readOnly) {
+                    unset($row[$k]);
+                }
+            }
+
             $rowData[] = $this->typecastUiLoadRow($row);
         }
 
