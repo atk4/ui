@@ -58,7 +58,9 @@ $multiline->jsAfterDelete = new JsFunction(['value'], [new JsExpression('console
 
 $form->onSubmit(static function (Form $form) use ($multiline) {
     $rows = $multiline->model->atomic(static function () use ($multiline) {
-        return $multiline->saveRows()->model->export();
+        $multiline->saveRows();
+
+        return $multiline->model->export();
     });
 
     $rows = array_map(static fn ($row) => $form->getApp()->uiPersistence->typecastSaveRow($multiline->model, $row), $rows);

@@ -466,10 +466,7 @@ class Multiline extends Form\Control
         return $rowErrors;
     }
 
-    /**
-     * @return $this
-     */
-    public function saveRows(): self
+    public function saveRows(): void
     {
         $model = $this->model;
 
@@ -494,8 +491,6 @@ class Multiline extends Form\Control
                 $entity->save();
             }
         }
-
-        return $this;
     }
 
     /**
