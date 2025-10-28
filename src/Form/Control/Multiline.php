@@ -276,17 +276,17 @@ class Multiline extends Form\Control
     #[\Override]
     public function getInputValue(): string
     {
-        $refModelOrEntity = $this->entityField->getField()->hasReference()
+        $theirModelOrEntity = $this->entityField->getField()->hasReference()
             ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())
             : $this->model;
-        if ($refModelOrEntity->isEntity()) {
-            $refModelOrEntity = $refModelOrEntity->isLoaded()
-                ? [$refModelOrEntity]
+        if ($theirModelOrEntity->isEntity()) {
+            $theirModelOrEntity = $theirModelOrEntity->isLoaded()
+                ? [$theirModelOrEntity]
                 : [];
         }
 
         $rows = [];
-        foreach ($refModelOrEntity as $row) {
+        foreach ($theirModelOrEntity as $row) {
             $rows[] = $row->get();
         }
 
@@ -331,27 +331,34 @@ class Multiline extends Form\Control
             }
         }
 
-        $refModelOrEntity = $this->entityField->getField()->hasReference()
+        $theirModelOrEntity = $this->entityField->getField()->hasReference()
             ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())
             : $this->model;
 
         $changes = new TheirChanges();
 
         // TODO this is dangerous, deleted row IDs should be passed from UI
-        $idsToDelete = array_filter(array_column($rowData, $refModelOrEntity->idField), static fn ($v) => $v !== null);
-        foreach ($refModelOrEntity->getModel(true)->createIteratorBy($refModelOrEntity->idField, 'not in', $idsToDelete) as $entity) {
-            $changes->deletes[] = [$refModelOrEntity->idField => $entity->getId()];
+        $idsToDelete = array_filter(array_column($rowData, $theirModelOrEntity->idField), static fn ($v) => $v !== null);
+        foreach ($theirModelOrEntity->getModel(true)->createIteratorBy($theirModelOrEntity->idField, 'not in', $idsToDelete) as $entity) {
+            $changes->deletes[] = [$theirModelOrEntity->idField => $entity->getId()];
         }
 
         foreach ($rowData as $row) {
-            if ($row[$refModelOrEntity->idField] === null) {
+            if ($row[$theirModelOrEntity->idField] === null) {
                 $changes->inserts[] = $row;
             } else {
-                $changes->updates[] = [[$refModelOrEntity->idField => $row[$refModelOrEntity->idField]], $row];
+                $changes->updates[] = [[$theirModelOrEntity->idField => $row[$theirModelOrEntity->idField]], $row];
             }
         }
 
         $this->changes = $changes;
+
+        if ($this->entityField->getField()->hasReference()) {
+            $changes->saveOnSave(
+                $this->entityField->getEntity(),
+                $this->entityField->getField()->getReference()
+            );
+        }
     }
 
     /**
@@ -406,6 +413,8 @@ class Multiline extends Form\Control
 
     public function saveRows(): void
     {
+        assert(!$this->entityField->getField()->hasReference());
+
         $this->changes->saveTo($this->model);
     }
 

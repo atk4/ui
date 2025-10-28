@@ -6,6 +6,7 @@ namespace Atk4\Ui\Form\Control;
 
 use Atk4\Data\Exception;
 use Atk4\Data\Model;
+use Atk4\Data\Reference;
 
 /**
  * TODO move to atk4/data and allow deep/nested changes.
@@ -72,6 +73,22 @@ class TheirChanges
                 $entity->setMulti($newData);
                 $entity->save();
             }
+        });
+    }
+
+    public function saveOnSave(Model $ourEntity, Reference $theirReference): void
+    {
+        $ourEntity->assertIsEntity();
+        $theirReference->assertOurModelOrEntity($ourEntity);
+
+        $hookIndex = $ourEntity->onHook(Model::HOOK_AFTER_SAVE, function (Model $m) use ($ourEntity, $theirReference, &$hookIndex) {
+            assert($m === $ourEntity); // prevent cloning
+
+            $ourEntity->removeHook(Model::HOOK_AFTER_SAVE, $hookIndex, true);
+
+            $theirModelOrEntity = $theirReference->ref($m);
+
+            $this->saveTo($theirModelOrEntity);
         });
     }
 }
