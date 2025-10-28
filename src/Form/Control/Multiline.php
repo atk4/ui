@@ -161,8 +161,8 @@ class Multiline extends Form\Control
     /** @var list<string> The fields names used in each row. */
     public $rowFields;
 
-    /** @var list<array<string, mixed>> The data sent for each row. */
-    protected $rowData;
+    /** The changes set by self::setInputValue(). */
+    public TheirChanges $changes;
 
     /** @var int The max number of records (rows) that can be added to Multiline. 0 means no limit. */
     public $rowLimit = 0;
@@ -296,53 +296,6 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Same as Persistence::typecastSaveRow() but allow null in not-nullable fields.
-     *
-     * @param array<string, mixed> $row
-     *
-     * @return array<string, scalar|null>
-     */
-    private function typecastContainedSaveRow(array $row): array
-    {
-        $res = [];
-        foreach ($row as $fieldName => $value) {
-            $field = $this->model->getField($fieldName);
-
-            $res[$field->getPersistenceName()] = $value === null
-                ? null
-                : $this->model->getPersistence()->typecastSaveField($field, $value);
-        }
-
-        return $res;
-    }
-
-    /**
-     * @param \Closure(): void $fx
-     */
-    private function invokeWithContainsXxxNormalizeHookIgnored(\Closure $fx): void
-    {
-        // TOD hack to supress "Contained model data cannot be modified directly" exception
-        // https://github.com/atk4/data/blob/fca1cd55b0/src/Reference/ContainsBase.php#L58-L81
-        $ourModel = $this->entityField->getModel();
-        \Closure::bind(static function () use ($fx, $ourModel) {
-            $spot = Model::HOOK_NORMALIZE;
-            $priority = \PHP_INT_MIN;
-            $normalizeHooks = $ourModel->hooks[$spot][$priority] ?? [];
-            foreach (array_keys($normalizeHooks) as $hookIndex) {
-                $ourModel->hooks[$spot][$priority][$hookIndex][0] = static fn () => null;
-            }
-
-            try {
-                $fx();
-            } finally {
-                foreach (array_keys($normalizeHooks) as $hookIndex) {
-                    $ourModel->hooks[$spot][$priority][$hookIndex][0] = $normalizeHooks[$hookIndex][0];
-                }
-            }
-        }, null, Model::class)();
-    }
-
-    /**
      * @return array{list<array<string, mixed>>, list<string>}
      */
     private function decodeInput(string $json): array
@@ -371,56 +324,34 @@ class Multiline extends Form\Control
     {
         [$rowData, $mlids] = $this->decodeInput($value);
 
-        $this->rowData = $rowData;
-        if ($this->rowData !== []) {
-            $this->rowErrors = $this->validate($this->rowData, $mlids);
+        if ($rowData !== []) {
+            $this->rowErrors = $this->validate($rowData, $mlids);
             if ($this->rowErrors !== []) {
                 throw new ValidationException([$this->shortName => 'Multiline error']);
             }
         }
 
-        $rowsRaw = array_map(fn ($v) => $this->typecastContainedSaveRow($v), $this->rowData);
+        $refModelOrEntity = $this->entityField->getField()->hasReference()
+            ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())
+            : $this->model;
 
-        // mimic ContainsOne save format
-        // https://github.com/atk4/data/blob/6.0.0/src/Reference/ContainsOne.php#L37
-        // TODO replace with something like "schedule model save task" and then drop self::saveRows() method
-        if ($rowsRaw === []) {
-            $value = '';
-        } else {
-            foreach ($rowsRaw as $k => $rowRaw) {
-                $idFieldRawName = $this->model->getIdField()->getPersistenceName();
-                if ($rowRaw[$idFieldRawName] === null) {
-                    $refModel = $this->entityField->getField()->hasReference()
-                        ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())->getModel(true)
-                        : $this->model;
+        $changes = new TheirChanges();
 
-                    // TODO to pass Behat tests purely
-                    if (!$this->entityField->getField()->hasReference() && $this->entityField->getField()->type !== 'json' && !$refModel->getPersistence() instanceof Persistence\Array_) {
-                        continue;
-                    }
-
-                    $idField = $refModel->getIdField();
-                    $origIdFieldType = $idField->type;
-                    $idField->type = 'bigint';
-                    try {
-                        $rowsRaw[$k][$idFieldRawName] = Persistence\Array_::assertInstanceOf($refModel->getPersistence())->generateNewId($refModel);
-                    } finally {
-                        $idField->type = $origIdFieldType;
-                    }
-                }
-            }
-
-            if ($this->isOneToOne()) {
-                assert(count($rowsRaw) === 1);
-                $rowsRaw = array_first($rowsRaw);
-            }
-
-            $value = $this->getApp()->encodeJson($rowsRaw);
+        // TODO this is dangerous, deleted row IDs should be passed from UI
+        $idsToDelete = array_filter(array_column($rowData, $refModelOrEntity->idField), static fn ($v) => $v !== null);
+        foreach ($refModelOrEntity->getModel(true)->createIteratorBy($refModelOrEntity->idField, 'not in', $idsToDelete) as $entity) {
+            $changes->deletes[] = [$refModelOrEntity->idField => $entity->getId()];
         }
 
-        $this->invokeWithContainsXxxNormalizeHookIgnored(function () use ($value) {
-            parent::setInputValue($value);
-        });
+        foreach ($rowData as $row) {
+            if ($row[$refModelOrEntity->idField] === null) {
+                $changes->inserts[] = $row;
+            } else {
+                $changes->updates[] = [[$refModelOrEntity->idField => $row[$refModelOrEntity->idField]], $row];
+            }
+        }
+
+        $this->changes = $changes;
     }
 
     /**
@@ -475,29 +406,7 @@ class Multiline extends Form\Control
 
     public function saveRows(): void
     {
-        $model = $this->model;
-
-        // delete removed rows
-        // TODO this is dangerous, deleted row IDs should be passed from UI
-        $idsToDelete = array_filter(array_column($this->rowData, $model->idField), static fn ($v) => $v !== null);
-        foreach ($model->createIteratorBy($model->idField, 'not in', $idsToDelete) as $entity) {
-            $entity->delete();
-        }
-
-        foreach ($this->rowData as $row) {
-            $entity = $row[$model->idField] !== null
-                ? $model->load($row[$model->idField])
-                : $model->createEntity();
-            foreach ($row as $fieldName => $value) {
-                if ($model->getField($fieldName)->isEditable()) {
-                    $entity->set($fieldName, $value);
-                }
-            }
-
-            if (!$entity->isLoaded() || $entity->getDirtyRef() !== []) {
-                $entity->save();
-            }
-        }
+        $this->changes->saveTo($this->model);
     }
 
     /**
