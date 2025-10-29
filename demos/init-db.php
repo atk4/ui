@@ -284,6 +284,29 @@ class ModelWithPrefixedFields extends Model
 
         $this->getIdField()->type = WrappedIdType::NAME;
 
+        // workaround autoincrement for custom ID type for ContainsXxx save
+        // https://github.com/atk4/data/blob/6.0.0/src/Persistence/Array_.php#L324
+        $this->onHookShort(Model::HOOK_BEFORE_INSERT, function (&$data) {
+            $persistence = $this->getModel()->getPersistence();
+            if ($persistence instanceof Persistence\Array_) {
+                $idField = $this->getIdField();
+
+                if (isset($data[$idField->shortName])) {
+                    return;
+                }
+
+                assert($this->getModel()->containedInEntity !== null);
+
+                $origIdFieldType = $idField->type;
+                $idField->type = 'bigint';
+                try {
+                    $data[$idField->shortName] = new WrappedId($persistence->generateNewId($this->getModel()));
+                } finally {
+                    $idField->type = $origIdFieldType;
+                }
+            }
+        });
+
         $this->initPreventModification();
 
         if ($this->getPersistence()->getDatabasePlatform() instanceof PostgreSQLPlatform || class_exists(CodeCoverage::class, false)) {

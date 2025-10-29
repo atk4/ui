@@ -125,7 +125,7 @@ $userForm->onSubmit(function (Form $form) use ($ml) {
     // save emails record related to current user
     $ml->saveRows();
 
-    return new JsToast(var_export($ml->model->export(), true));
+    return new JsToast(json_encode($ml->model->export()));
 });
 ```
 

@@ -102,6 +102,14 @@ Feature: Multiline
     Then I check if text in "//table//tr[1]/td[3]" match regex "~\"atk_afp_tbl__box\":8[,}]~"
     Then I check if text in "//table//tr[1]/td[3]" match regex "~\{\"atk_afp_tbl__id\":2,[^{}]*\"atk_afp_tbl__item\":\"Mango\",~"
 
+    When I click using selector "//table//tr[1]//i.icon.edit"
+    When I click using selector "(//div.modal.active//div.field[label[text()='Items']]//tbody//input[@type=\"checkbox\"])[1]"
+    When I click using selector "//div.modal.active//div.field[label[text()='Items']]//tfoot//button[i.trash.icon]"
+    When I press Modal button "Save"
+    Then Toast display should contain text "Record has been saved!"
+    Then I check if text in "//table//tr[1]/td[2]" match regex "~^\{\"atk_afp_tbl__id\":1,[^{}]*\"atk_afp_tbl__item\":\"Melon\",~"
+    Then I check if text in "//table//tr[1]/td[3]" match regex "~^\[\{\"atk_afp_tbl__id\":2,[^{}]*\"atk_afp_tbl__item\":\"Mango\",~"
+
     When I click using selector "//table//tr[1]//i.icon.trash"
     When I press Modal button "Ok"
     Then Toast display should contain text "Record has been deleted!"

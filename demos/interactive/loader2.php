@@ -9,6 +9,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Form;
 use Atk4\Ui\Grid;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
@@ -35,4 +36,9 @@ $countryLoader->set(static function (Loader $p) {
 
     $form = Form::addTo($p);
     $form->setEntity($country->load($id));
+    $form->onSubmit(static function (Form $form) {
+        $message = $form->entity->getUserAction('edit')->execute();
+
+        return new JsToast($message);
+    });
 });
