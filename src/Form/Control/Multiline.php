@@ -830,7 +830,24 @@ class Multiline extends Form\Control
             return [];
         }
 
-        $dummyModel = new Model($entity->getModel()->getPersistence(), ['table' => $entity->getModel()->table, 'idField' => false]);
+        $dummyModel = new Model($entity->getModel()->getPersistence(), [
+            'table' => new class($entity->getModel()->getPersistence()) extends Model {
+                public $table = '';
+
+                #[\Override]
+                public function action(string $mode, array $args = [])
+                {
+                    assert($mode === 'select');
+                    assert($args === []);
+
+                    $query = Persistence\Sql::assertInstanceOf($this->getPersistence())->dsql();
+                    $query->field($query->expr('[]', [1]));
+
+                    return $query;
+                }
+            },
+            'idField' => false,
+        ]);
 
         $createExprFromValueFx = static function ($v) use ($dummyModel): Persistence\Sql\Expression {
             if (is_int($v)) {
@@ -853,7 +870,6 @@ class Multiline extends Form\Control
                 'actual' => $field->actual,
             ]);
         }
-        $dummyModel->setLimit(1); // TODO must work with empty table, no table should be used
         $values = $dummyModel->loadOne()->get();
         unset($values[$entity->idField]);
 
