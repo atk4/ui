@@ -156,7 +156,7 @@ jobs:
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-sqlite.cov; fi
 
       - name: "Run tests: MySQL (only for cron)"
-        if: (success() || failure()) && github.event_name == 'schedule'
+        if: success() || failure()
         env:
           DB_DSN: "mysql:host=mysql;dbname=atk4_test"
           DB_USER: atk4_test_user
@@ -384,7 +384,7 @@ jobs:
           vendor/bin/behat --strict -vv --config behat.yml.dist
 
       - name: "Run tests: MySQL (only for cron)"
-        if: (success() || failure()) && github.event_name == 'schedule'
+        if: success() || failure()
         env:
           DB_DSN: "mysql:host=mysql;dbname=atk4_test"
           DB_USER: atk4_test_user
