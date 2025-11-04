@@ -75,7 +75,7 @@ Feature: Multiline
     When I press Modal button "Save"
     Then Toast display should contain text "Record has been saved!"
     Then I check if text in "//table//tr[1]/td[1]" match text "Cheetah"
-    Then I check if text in "//table//tr[1]/td[2]" match regex "~^\{\"atk_afp_tbl__id\":1,[^{}]*\"atk_afp_tbl__item\":\"Melon\",~"
+    Then I check if text in "//table//tr[1]/td[2]" match regex "~^\{\"atk_afp_tbl__id\":1,\"atk_afp_tbl__item\":\"Melon\",~"
     Then I check if text in "//table//tr[1]/td[2]" match regex "~\"atk_afp_tbl__country_id\":10[,}]~"
     Then I check if text in "//table//tr[1]/td[2]" match regex "~\"atk_afp_tbl__qty\":5[,}]~"
     Then I check if text in "//table//tr[1]/td[2]" match regex "~\"atk_afp_tbl__box\":6[,}]~"
