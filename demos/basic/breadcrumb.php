@@ -26,7 +26,9 @@ $crumb->addCrumb('Countries', []);
 $model = new Country($app->db);
 $model->setLimit(15);
 
-$id = $app->uiPersistence->typecastAttributeLoadField($model->getIdField(), $crumb->stickyGet('country_id'));
+$container = View::addTo($app);
+
+$id = $app->uiPersistence->typecastAttributeLoadField($model->getIdField(), $container->stickyGet('country_id'));
 if ($id !== null) {
     // perhaps we edit individual country?
     $entity = $model->load($id);
@@ -34,14 +36,14 @@ if ($id !== null) {
 
     // here we can check for additional criteria and display a deeper level on the crumb
 
-    $form = Form::addTo($app);
+    $form = Form::addTo($container);
     $form->setEntity($entity);
     $form->onSubmit(static function (Form $form) {
         return new JsToast('Form Submitted! Data saving is not possible in demo!');
     });
 } else {
     // display list of countries
-    $table = Table::addTo($app);
+    $table = Table::addTo($container);
     $table->setModel($model);
     $table->addDecorator($model->fieldName()->name, [Table\Column\Link::class, [], ['country_id' => $model->fieldName()->id]]);
 }
