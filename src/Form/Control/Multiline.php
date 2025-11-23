@@ -841,7 +841,7 @@ class Multiline extends Form\Control
                     assert($args === []);
 
                     $query = Persistence\Sql::assertInstanceOf($this->getPersistence())->dsql();
-                    $query->field($query->expr('[]', [1]));
+                    $query->field($query->expr('[]', [1]), '_c');
 
                     return $query;
                 }
