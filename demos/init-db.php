@@ -57,7 +57,9 @@ class WrappedIdType extends DbalType
 {
     public const NAME = 'atk4_ui_demos_id';
 
-    #[\Override]
+    /**
+     * @deprecated remove once DBAL 3.x support is dropped
+     */
     public function getName(): string
     {
         return self::NAME;
@@ -89,7 +91,9 @@ class WrappedIdType extends DbalType
         return new WrappedId((int) DbalType::getType('bigint')->convertToPHPValue($value, $platform)); // once DBAL 3.x support is dropped, the explicit cast should no longer be needed
     }
 
-    #[\Override]
+    /**
+     * @deprecated remove once DBAL 3.x support is dropped
+     */
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;

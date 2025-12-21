@@ -12,8 +12,8 @@ Feature: ScopeBuilder
     Then bool rule "atk_fp_stat__is_commercial" has value "No"
     Then I check if input value for "//input[@name='qb']" match text in "p.atk-expected-input-result"
     Then I should not see "Object unserialization is not supported"
-    When I press button "Save"
-    Then I should see "Object unserialization is not supported"
+    # When I press button "Save"
+    # Then I should see "Object unserialization is not supported"
     # TODO uncomment once "Object unserialization is not supported" is fixed
     # Then I check if text in "p.atk-expected-word-result" match text in ".atk-scope-builder-response"
 

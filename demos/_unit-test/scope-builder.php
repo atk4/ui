@@ -33,7 +33,7 @@ $model->scope()->add($orScope);
 
 $form = Form::addTo($app);
 
-$form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model], ['type' => 'object']);
+$form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model], ['type' => 'json']);
 
 $form->onSubmit(static function (Form $form) use ($model) {
     $message = $form->entity->get('qb')->toWords($model);
