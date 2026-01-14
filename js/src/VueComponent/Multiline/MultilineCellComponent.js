@@ -26,7 +26,9 @@ export default {
             fieldName: this.cellData.name,
             type: this.cellData.type,
             inputName: '-' + this.cellData.name,
-            inputValue: this.fieldValue,
+            inputValue: this.cellData.definition.component === 'SuiDropdown' // mimic https://github.com/atk4/ui/blob/6.0.0/js/src/VueComponent/Share/AtkLookupComponent.js#L44
+                ? this.cellData.definition.componentProps.options.find((item) => item.value === this.fieldValue)
+                : this.fieldValue,
         };
     },
     emits: ['updateValue'],
@@ -43,7 +45,13 @@ export default {
         },
         onInput: function (value) {
             this.inputValue = value;
-            this.$emit('updateValue', this.fieldName, this.inputValue);
+            this.$emit(
+                'updateValue',
+                this.fieldName,
+                this.cellData.definition.component === 'SuiDropdown' // mimic https://github.com/atk4/ui/blob/ea4cc192c8/js/src/VueComponent/Share/AtkLookupComponent.js#L50
+                    ? (value === null ? null : value.value)
+                    : value
+            );
         },
     },
 };
