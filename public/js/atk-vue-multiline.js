@@ -100,16 +100,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "./node_modules/core-js/modules/es.iterator.constructor.js");
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.iterator.find.js */ "./node_modules/core-js/modules/es.iterator.find.js");
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _MultilineReadonlyComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./MultilineReadonlyComponent */ "./src/VueComponent/Multiline/MultilineReadonlyComponent.js");
-/* harmony import */ var _MultilineTextareaComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MultilineTextareaComponent */ "./src/VueComponent/Multiline/MultilineTextareaComponent.js");
-/* harmony import */ var _Share_AtkDatePickerComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Share/AtkDatePickerComponent */ "./src/VueComponent/Share/AtkDatePickerComponent.js");
-/* harmony import */ var _Share_AtkLookupComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Share/AtkLookupComponent */ "./src/VueComponent/Share/AtkLookupComponent.js");
-
-
+/* harmony import */ var _MultilineReadonlyComponent__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MultilineReadonlyComponent */ "./src/VueComponent/Multiline/MultilineReadonlyComponent.js");
+/* harmony import */ var _MultilineTextareaComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MultilineTextareaComponent */ "./src/VueComponent/Multiline/MultilineTextareaComponent.js");
+/* harmony import */ var _Share_AtkDatePickerComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Share/AtkDatePickerComponent */ "./src/VueComponent/Share/AtkDatePickerComponent.js");
+/* harmony import */ var _Share_AtkLookupComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../Share/AtkLookupComponent */ "./src/VueComponent/Share/AtkLookupComponent.js");
 
 
 
@@ -126,10 +120,10 @@ __webpack_require__.r(__webpack_exports__);
             @update:modelValue="onInput"
         ></component>`,
   components: {
-    AtkMultilineReadonly: _MultilineReadonlyComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
-    AtkMultilineTextarea: _MultilineTextareaComponent__WEBPACK_IMPORTED_MODULE_3__["default"],
-    AtkDatePicker: _Share_AtkDatePickerComponent__WEBPACK_IMPORTED_MODULE_4__["default"],
-    AtkLookup: _Share_AtkLookupComponent__WEBPACK_IMPORTED_MODULE_5__["default"]
+    AtkMultilineReadonly: _MultilineReadonlyComponent__WEBPACK_IMPORTED_MODULE_0__["default"],
+    AtkMultilineTextarea: _MultilineTextareaComponent__WEBPACK_IMPORTED_MODULE_1__["default"],
+    AtkDatePicker: _Share_AtkDatePickerComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
+    AtkLookup: _Share_AtkLookupComponent__WEBPACK_IMPORTED_MODULE_3__["default"]
   },
   props: ['cellData', 'fieldValue'],
   data: function () {
@@ -138,7 +132,7 @@ __webpack_require__.r(__webpack_exports__);
       type: this.cellData.type,
       inputName: '-' + this.cellData.name,
       inputValue: this.cellData.definition.component === 'SuiDropdown' // mimic https://github.com/atk4/ui/blob/6.0.0/js/src/VueComponent/Share/AtkLookupComponent.js#L44
-      ? this.cellData.definition.componentProps.options.find(item => item.value === this.fieldValue) : this.fieldValue
+      ? this.getDropdownValue(this.fieldValue) : this.fieldValue
     };
   },
   emits: ['updateValue'],
@@ -153,6 +147,14 @@ __webpack_require__.r(__webpack_exports__);
         };
       }
       return this.cellData.definition.componentProps;
+    },
+    getDropdownValue: function (value) {
+      for (const option of this.cellData.definition.componentProps.options) {
+        if (option.value === value) {
+          return option;
+        }
+      }
+      return value;
     },
     onInput: function (value) {
       this.inputValue = value;
@@ -853,12 +855,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "./node_modules/core-js/modules/es.iterator.constructor.js");
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.iterator.find.js */ "./node_modules/core-js/modules/es.iterator.find.js");
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__);
-
-
 /**
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
  *
@@ -903,7 +899,12 @@ __webpack_require__.r(__webpack_exports__);
   emits: ['update:modelValue'],
   methods: {
     getDropdownValue: function (value) {
-      return this.dropdownProps.options.find(item => item.value === value);
+      for (const option of this.dropdownProps.options) {
+        if (option.value === value) {
+          return option;
+        }
+      }
+      return value;
     },
     onUpdate: function (value) {
       this.$emit('update:modelValue', value === null ? null : value.value);

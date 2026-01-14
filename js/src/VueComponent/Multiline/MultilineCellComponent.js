@@ -27,7 +27,7 @@ export default {
             type: this.cellData.type,
             inputName: '-' + this.cellData.name,
             inputValue: this.cellData.definition.component === 'SuiDropdown' // mimic https://github.com/atk4/ui/blob/6.0.0/js/src/VueComponent/Share/AtkLookupComponent.js#L44
-                ? this.cellData.definition.componentProps.options.find((item) => item.value === this.fieldValue)
+                ? this.getDropdownValue(this.fieldValue)
                 : this.fieldValue,
         };
     },
@@ -42,6 +42,15 @@ export default {
             }
 
             return this.cellData.definition.componentProps;
+        },
+        getDropdownValue: function (value) {
+            for (const option of this.cellData.definition.componentProps.options) {
+                if (option.value === value) {
+                    return option;
+                }
+            }
+
+            return value;
         },
         onInput: function (value) {
             this.inputValue = value;
