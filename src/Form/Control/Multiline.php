@@ -651,7 +651,7 @@ class Multiline extends Form\Control
     /**
      * @return array<mixed, mixed>
      */
-    protected function getFieldItems(Field $field, ?int $limit = 10): array
+    protected function getFieldItems(Field $field, ?int $limit): array
     {
         $items = [];
         if ($field->enum !== null) {
