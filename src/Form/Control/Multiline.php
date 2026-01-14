@@ -164,11 +164,11 @@ class Multiline extends Form\Control
     /** The changes set by self::setInputValue(). */
     public TheirChanges $changes;
 
-    /** @var int The max number of records (rows) that can be added to Multiline. 0 means no limit. */
-    public $rowLimit = 0;
+    /** The max number of records (rows) that can be added to Multiline. 0 means no limit. */
+    public int $rowLimit = 0;
 
-    /** @var int The maximum number of items for select type field. */
-    public $itemLimit = 25;
+    /** The maximum number of items for select type field. */
+    public ?int $itemLimit = 25;
 
     /**
      * Container for component that need Props set based on their field value as Lookup component.
