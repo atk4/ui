@@ -116,7 +116,7 @@ __webpack_require__.r(__webpack_exports__);
             v-bind="getComponentProps()"
             ref="cell"
             :name="inputName"
-            v-model="inputValue"
+            :modelValue="inputValue"
             @update:modelValue="onInput"
         ></component>`,
   components: {

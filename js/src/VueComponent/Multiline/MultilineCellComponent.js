@@ -11,7 +11,7 @@ export default {
             v-bind="getComponentProps()"
             ref="cell"
             :name="inputName"
-            v-model="inputValue"
+            :modelValue="inputValue"
             @update:modelValue="onInput"
         ></component>`,
     components: {
