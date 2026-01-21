@@ -283,8 +283,10 @@ class Context extends RawMinkContext implements BehatContext
         assert(str_starts_with($value, '"') && str_ends_with($value, '"'));
         $res = substr($value, 1, -1);
 
-        // based on https://github.com/Behat/MinkExtension/blob/v2.2/src/Behat/MinkExtension/Context/MinkContext.php#L567
-        return str_replace(['\\\\', '\"'], ['\\', '"'], $res);
+        // inspired by https://github.com/Behat/MinkExtension/blob/v2.2/src/Behat/MinkExtension/Context/MinkContext.php#L567
+        $res = str_replace(['\\\\', '\"', '\n'], ['x\\\x', '"', "\n"], $res);
+
+        return str_replace('x\\\x', '\\', $res);
     }
 
     /**
