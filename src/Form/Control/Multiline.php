@@ -164,11 +164,11 @@ class Multiline extends Form\Control
     /** The changes set by self::setInputValue(). */
     public TheirChanges $changes;
 
-    /** @var int The max number of records (rows) that can be added to Multiline. 0 means no limit. */
-    public $rowLimit = 0;
+    /** The max number of records (rows) that can be added to Multiline. 0 means no limit. */
+    public int $rowLimit = 0;
 
-    /** @var int The maximum number of items for select type field. */
-    public $itemLimit = 25;
+    /** The maximum number of items for select type field. */
+    public ?int $itemLimit = 25;
 
     /**
      * Container for component that need Props set based on their field value as Lookup component.
@@ -559,7 +559,7 @@ class Multiline extends Form\Control
     protected function getDropdownProps(Field $field): array
     {
         $props = array_merge(
-            ['floating' => false, 'closeOnBlur' => true, 'selection' => true],
+            ['floating' => false, 'closeOnBlur' => true, 'selection' => true, 'clearable' => true],
             $this->componentProps[self::SELECT] ?? []
         );
 
@@ -580,17 +580,20 @@ class Multiline extends Form\Control
     protected function getLookupProps(Field $field): array
     {
         $props = [];
-        $props['config'] = $this->componentProps[self::LOOKUP] ?? [];
+        $props['config'] = array_merge(
+            ['clearable' => true],
+            $this->componentProps[self::LOOKUP] ?? []
+        );
 
         $props['config']['options'] = [];
-        $items = $this->getFieldItems($field, 10);
+        $items = $this->getFieldItems($field, $this->itemLimit);
         foreach ($items as $value => $text) {
             $props['config']['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
         }
 
         if ($field->hasReference()) {
             $props['config']['reference'] = $field->shortName;
-            $props['config']['search'] = true;
+            // $props['config']['search'] = true; // breaks "clearable" config
         }
 
         $props['config']['placeholder'] ??= 'Select ' . $field->getCaption();
@@ -651,7 +654,7 @@ class Multiline extends Form\Control
     /**
      * @return array<mixed, mixed>
      */
-    protected function getFieldItems(Field $field, ?int $limit = 10): array
+    protected function getFieldItems(Field $field, ?int $limit): array
     {
         $items = [];
         if ($field->enum !== null) {

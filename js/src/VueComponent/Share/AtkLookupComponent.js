@@ -47,7 +47,7 @@ export default {
             return this.dropdownProps.options.find((item) => item.value === value);
         },
         onUpdate: function (value) {
-            this.$emit('update:modelValue', value.value);
+            this.$emit('update:modelValue', value === null ? null : value.value);
         },
     },
 };
