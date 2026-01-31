@@ -559,7 +559,7 @@ class Multiline extends Form\Control
     protected function getDropdownProps(Field $field): array
     {
         $props = array_merge(
-            ['floating' => false, 'closeOnBlur' => true, 'selection' => true],
+            ['floating' => false, 'closeOnBlur' => true, 'selection' => true, 'clearable' => true],
             $this->componentProps[self::SELECT] ?? []
         );
 
@@ -580,7 +580,10 @@ class Multiline extends Form\Control
     protected function getLookupProps(Field $field): array
     {
         $props = [];
-        $props['config'] = $this->componentProps[self::LOOKUP] ?? [];
+        $props['config'] = array_merge(
+            ['clearable' => true],
+            $this->componentProps[self::LOOKUP] ?? []
+        );
 
         $props['config']['options'] = [];
         $items = $this->getFieldItems($field, $this->itemLimit);
@@ -590,7 +593,7 @@ class Multiline extends Form\Control
 
         if ($field->hasReference()) {
             $props['config']['reference'] = $field->shortName;
-            $props['config']['search'] = true;
+            // $props['config']['search'] = true; // breaks "clearable" config
         }
 
         $props['config']['placeholder'] ??= 'Select ' . $field->getCaption();
