@@ -7,7 +7,7 @@ export default {
             <SuiTableRow v-if="hasError()">
                 <SuiTableCell :style="{ background: 'none' }" />
                 <SuiTableCell :style="{ background: 'none' }"
-                    error="true"
+                    :error="true"
                     v-for="column in filterVisibleColumns(columns)"
                     :textAlign="getTextAlign(column)"
                 >

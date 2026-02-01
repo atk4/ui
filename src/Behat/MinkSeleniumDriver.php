@@ -31,7 +31,7 @@ class MinkSeleniumDriver extends Selenium2Driver
         // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/innerText
         // https://github.com/minkphp/MinkSelenium2Driver/pull/327
         // https://github.com/minkphp/MinkSelenium2Driver/pull/328
-        return $this->executeJsOnXpath($xpath, 'return {{ELEMENT}}.innerText;');
+        return $this->executeJsOnXpath($xpath, 'return {{ELEMENT}}.tagName === \'TEXTAREA\' ? {{ELEMENT}}.value : {{ELEMENT}}.innerText;');
     }
 
     protected function findElement(string $xpath): WebDriverElement

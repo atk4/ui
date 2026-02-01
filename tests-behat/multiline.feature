@@ -41,6 +41,30 @@ Feature: Multiline
     When I press button "Save"
     Then Toast display should contain text "[]"
 
+  Scenario: dropdown enum
+    Given I am on "_unit-test/multiline-enum.php"
+    When I click using selector "//tfoot//button[i.plus.icon]"
+    When I check if text in "//div.text[parent::div[@name='-age0']]" match text ""
+    When I check if text in "//div.text[parent::div[@name='-age1']]" match text "Child"
+    When I check if text in "//div.text[parent::div[@name='-age2']]" match text "Adult"
+    When I check if text in "//div.text[parent::div[@name='-age3']]" match text "3\u{00a0}000"
+    When I check if text in "textarea[name=-text]" match text "a\nb"
+    When I press button "Save"
+    Then Toast display should contain text "[ { \"id\": null, \"age0\": null, \"age1\": 1, \"age2\": 2000, \"age3\": 3000, \"text\": \"a\\nb\" } ]"
+
+    When I select "Child" in lookup "//div.text[parent::div[@name='-age0']]"
+    When I select "Adult" in lookup "//div.text[parent::div[@name='-age1']]"
+    When I select "" in lookup "//div.text[parent::div[@name='-age2']]"
+    When I select "" in lookup "//div.text[parent::div[@name='-age3']]"
+    When I fill field using "textarea[name=-text]" with "a\n b"
+    When I check if text in "//div.text[parent::div[@name='-age0']]" match text "Child"
+    When I check if text in "//div.text[parent::div[@name='-age1']]" match text "Adult"
+    When I check if text in "//div.text[parent::div[@name='-age2']]" match text ""
+    When I check if text in "//div.text[parent::div[@name='-age3']]" match text ""
+    When I check if text in "textarea[name=-text]" match text "a\n b"
+    When I press button "Save"
+    Then Toast display should contain text "[ { \"id\": null, \"age0\": 1, \"age1\": 2000, \"age2\": null, \"age3\": null, \"text\": \"a\\n b\" } ]"
+
   Scenario: contained - Form
     Given I am on "form-control/multiline-containsmany-single.php"
     # 'ce0a190b1901b807' = substr(md5('multiline_delivery'), 0, 16)

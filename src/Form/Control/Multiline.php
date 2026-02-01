@@ -566,6 +566,10 @@ class Multiline extends Form\Control
         $props['options'] = [];
         $items = $this->getFieldItems($field, $this->itemLimit);
         foreach ($items as $value => $text) {
+            if (is_int($value)) {
+                $value = (string) $value;
+            }
+
             $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
         }
 
@@ -588,6 +592,10 @@ class Multiline extends Form\Control
         $props['config']['options'] = [];
         $items = $this->getFieldItems($field, $this->itemLimit);
         foreach ($items as $value => $text) {
+            if (is_int($value)) {
+                $value = (string) $value;
+            }
+
             $props['config']['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
         }
 
@@ -652,17 +660,22 @@ class Multiline extends Form\Control
     }
 
     /**
-     * @return array<mixed, mixed>
+     * @return array<string|int, string>
      */
     protected function getFieldItems(Field $field, ?int $limit): array
     {
         $items = [];
         if ($field->enum !== null) {
             $items = array_slice($field->enum, 0, $limit);
+            $items = array_map(fn ($v) => $this->getApp()->uiPersistence->typecastSaveField($field, $v), $items);
             $items = array_combine($items, $items);
         }
         if ($field->values !== null) {
             $items = array_slice($field->values, 0, $limit, true);
+            $items = array_combine(
+                array_map(fn ($v) => $this->getApp()->uiPersistence->typecastSaveField($field, $v), array_keys($items)),
+                $items
+            );
         } elseif ($field->hasReference()) {
             $model = $field->getReference()->createTheirModel();
             $model->setLimit($limit);

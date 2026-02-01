@@ -116,7 +116,7 @@ __webpack_require__.r(__webpack_exports__);
             v-bind="getComponentProps()"
             ref="cell"
             :name="inputName"
-            v-model="inputValue"
+            :modelValue="inputValue"
             @update:modelValue="onInput"
         ></component>`,
   components: {
@@ -131,7 +131,8 @@ __webpack_require__.r(__webpack_exports__);
       fieldName: this.cellData.name,
       type: this.cellData.type,
       inputName: '-' + this.cellData.name,
-      inputValue: this.fieldValue
+      inputValue: this.cellData.definition.component === 'SuiDropdown' // mimic https://github.com/atk4/ui/blob/6.0.0/js/src/VueComponent/Share/AtkLookupComponent.js#L44
+      ? this.getDropdownValue(this.fieldValue) : this.fieldValue
     };
   },
   emits: ['updateValue'],
@@ -147,9 +148,18 @@ __webpack_require__.r(__webpack_exports__);
       }
       return this.cellData.definition.componentProps;
     },
+    getDropdownValue: function (value) {
+      for (const option of this.cellData.definition.componentProps.options) {
+        if (option.value === value) {
+          return option;
+        }
+      }
+      return value;
+    },
     onInput: function (value) {
       this.inputValue = value;
-      this.$emit('updateValue', this.fieldName, this.inputValue);
+      this.$emit('updateValue', this.fieldName, this.cellData.definition.component === 'SuiDropdown' // mimic https://github.com/atk4/ui/blob/ea4cc192c8/js/src/VueComponent/Share/AtkLookupComponent.js#L50
+      ? value === null ? null : value.value : value);
     }
   }
 });
@@ -517,7 +527,7 @@ __webpack_require__.r(__webpack_exports__);
             <SuiTableRow v-if="hasError()">
                 <SuiTableCell :style="{ background: 'none' }" />
                 <SuiTableCell :style="{ background: 'none' }"
-                    error="true"
+                    :error="true"
                     v-for="column in filterVisibleColumns(columns)"
                     :textAlign="getTextAlign(column)"
                 >
@@ -845,12 +855,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "./node_modules/core-js/modules/es.iterator.constructor.js");
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.iterator.find.js */ "./node_modules/core-js/modules/es.iterator.find.js");
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__);
-
-
 /**
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
  *
@@ -895,7 +899,12 @@ __webpack_require__.r(__webpack_exports__);
   emits: ['update:modelValue'],
   methods: {
     getDropdownValue: function (value) {
-      return this.dropdownProps.options.find(item => item.value === value);
+      for (const option of this.dropdownProps.options) {
+        if (option.value === value) {
+          return option;
+        }
+      }
+      return value;
     },
     onUpdate: function (value) {
       this.$emit('update:modelValue', value === null ? null : value.value);

@@ -2871,12 +2871,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "./node_modules/core-js/modules/es.iterator.constructor.js");
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.iterator.find.js */ "./node_modules/core-js/modules/es.iterator.find.js");
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__);
-
-
 /**
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
  *
@@ -2921,7 +2915,12 @@ __webpack_require__.r(__webpack_exports__);
   emits: ['update:modelValue'],
   methods: {
     getDropdownValue: function (value) {
-      return this.dropdownProps.options.find(item => item.value === value);
+      for (const option of this.dropdownProps.options) {
+        if (option.value === value) {
+          return option;
+        }
+      }
+      return value;
     },
     onUpdate: function (value) {
       this.$emit('update:modelValue', value === null ? null : value.value);

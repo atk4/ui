@@ -44,7 +44,13 @@ export default {
     emits: ['update:modelValue'],
     methods: {
         getDropdownValue: function (value) {
-            return this.dropdownProps.options.find((item) => item.value === value);
+            for (const option of this.dropdownProps.options) {
+                if (option.value === value) {
+                    return option;
+                }
+            }
+
+            return value;
         },
         onUpdate: function (value) {
             this.$emit('update:modelValue', value === null ? null : value.value);
