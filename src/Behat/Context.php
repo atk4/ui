@@ -284,7 +284,7 @@ class Context extends RawMinkContext implements BehatContext
         $res = substr($value, 1, -1);
 
         // inspired by https://github.com/Behat/MinkExtension/blob/v2.2/src/Behat/MinkExtension/Context/MinkContext.php#L567
-        $res = str_replace(['\\\\', '\"', '\n'], ['x\\\x', '"', "\n"], $res);
+        $res = str_replace(['\\\\', '\"', '\n', '\u{00a0}'], ['x\\\x', '"', "\n", "\u{00a0}" /* Unicode NBSP */], $res);
 
         return str_replace('x\\\x', '\\', $res);
     }

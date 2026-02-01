@@ -23,11 +23,11 @@ $multiline->setModel(new class(new Persistence\Array_()) extends Model {
     {
         parent::init();
 
-        $ageValues = [1 => 'Child', 2 => 'Adult', 3 => 'Senior'];
+        $ageValues = [1 => 'Child', 2_000 => 'Adult', 3_000 => 'Senior'];
         $this->addField('age0', ['type' => 'integer', 'values' => $ageValues]);
         $this->addField('age1', ['type' => 'integer', 'values' => $ageValues, 'default' => 1]);
-        $this->addField('age2', ['type' => 'integer', 'values' => $ageValues, 'default' => 2]);
-        $this->addField('age3', ['type' => 'integer', 'values' => $ageValues, 'default' => 3]);
+        $this->addField('age2', ['type' => 'integer', 'values' => $ageValues, 'default' => 2_000]);
+        $this->addField('age3', ['type' => 'integer', 'values' => $ageValues, 'default' => 3_000]);
         $this->addField('text', ['type' => 'text', 'default' => "a\nb"]);
     }
 });
