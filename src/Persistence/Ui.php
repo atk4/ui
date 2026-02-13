@@ -129,7 +129,7 @@ class Ui extends Persistence
                 break;
             case 'atk4_money':
                 $value = parent::_typecastLoadField($field, $value);
-                $valueDecimals = strlen(preg_replace('~^[^.]$|^.+\.|0+$~s', '', number_format($value, max(0, 11 - (int) log10(abs($value))), '.', '')));
+                $valueDecimals = strlen(preg_replace('~^[^.]$|^.+\.|0+$~s', '', number_format($value, max(0, 11 - ($value !== 0.0 ? (int) log10(abs($value)) : 0)), '.', '')));
                 $value = ($this->currency ? $this->currency . ' ' : '')
                     . number_format($value, max($this->currencyDecimals, $valueDecimals), $this->decimalSeparator, $this->thousandsSeparator);
                 $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */, $value);
