@@ -685,7 +685,7 @@ class View extends AbstractView
         }
 
         if ($when === true) {
-            $this->_jsActions[$when][] = $action; // @phpstan-ignore offsetAccess.invalidOffset
+            $this->_jsActions[$when][] = $action;
         }
 
         return $res;

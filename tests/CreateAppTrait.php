@@ -74,7 +74,6 @@ trait CreateAppTrait
      */
     protected function simulateViewCallback(\Closure $createViewFx, \Closure $simulateRequestFx): AbstractView
     {
-        /** @var T https://github.com/phpstan/phpstan/issues/14096 */ // @phpstan-ignore varTag.nativeType
         $view = null;
         $this->simulateAppCallback(static function (ServerRequestInterface $request) use ($createViewFx, &$view) {
             $view = $createViewFx($request);

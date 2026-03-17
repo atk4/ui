@@ -88,7 +88,6 @@ class CallbackTest extends TestCase
     public function testViewUrlCallback(): void
     {
         $v1 = null;
-        /** @var Callback https://github.com/phpstan/phpstan/issues/14096 */ // @phpstan-ignore varTag.nativeType
         $cb = null;
         $cbApp = $this->simulateViewCallback(function (ServerRequestInterface $request) use (&$v1, &$cb) {
             $app = $this->createApp(['request' => $request]);
