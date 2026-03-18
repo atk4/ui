@@ -55,16 +55,16 @@
         "atk4/data": "dev-develop",
         "nyholm/psr7": "^1.8.2",
         "nyholm/psr7-server": "^1.0",
-        "symfony/filesystem": "^4.4 || ^5.3 || ^6.0",
-        "symfony/http-foundation": "^4.4 || ^5.3 || ^6.0"
+        "symfony/filesystem": "^4.4 || ^5.3 || ^6.0 || ^7.0 || ^8.0",
+        "symfony/http-foundation": "^4.4 || ^5.3 || ^6.0 || ^7.0 || ^8.0"
     },
     "require-release": {
         "php": ">=7.4 <8.6",
         "atk4/data": "~6.1.0",
         "nyholm/psr7": "^1.8.2",
         "nyholm/psr7-server": "^1.0",
-        "symfony/filesystem": "^4.4 || ^5.3 || ^6.0",
-        "symfony/http-foundation": "^4.4 || ^5.3 || ^6.0"
+        "symfony/filesystem": "^4.4 || ^5.3 || ^6.0 || ^7.0 || ^8.0",
+        "symfony/http-foundation": "^4.4 || ^5.3 || ^6.0 || ^7.0 || ^8.0"
     },
     "require-dev": {
         "atk4/behat-mink-selenium2-driver": "^1.6.2",
@@ -79,7 +79,7 @@
         "phpstan/phpstan-deprecation-rules": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
         "phpunit/phpunit": "^9.5.5 || ^10.0 || ^11.0 || ^12.0 || ^13.0",
-        "symfony/process": "^4.4.30 || ^5.3.7 || ^6.0"
+        "symfony/process": "^4.4.30 || ^5.3.7 || ^6.0 || ^7.0 || ^8.0"
     },
     "conflict": {
         "behat/behat": "<3.9",
@@ -88,7 +88,6 @@
         "guzzlehttp/psr7": "<2.4",
         "instaclick/php-webdriver": "<1.4.20",
         "psr/http-factory": "<1.1",
-        "symfony/config": "<6.4.26 || >=7 <7.3.4",
         "symfony/console": "<5.4.35 || >=6 <6.4.3",
         "symfony/css-selector": "<5.4.35 || >=6 <6.4.3",
         "symfony/dependency-injection": "<5.4.35 || >=6 <6.4.3",
