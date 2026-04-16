@@ -103,7 +103,7 @@ jobs:
 
       - name: Require specific phpstan-src
         run: |
-          sed 's/XXXX/2.1.x-dev#${{ matrix.phpstan_hash }}/' -i composer.json
+          sed 's/99.99.99/2.1.x-dev#${{ matrix.phpstan_hash }}/' -i composer.json
           cat composer.json | grep phpstan
 
       - name: Install PHP dependencies
