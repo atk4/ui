@@ -460,6 +460,8 @@ class DemosTest extends TestCase
 
         if ($response->getStatusCode() !== 500) {
             var_dump($responseBodyStr);
+
+            var_dump(file_get_contents(__DIR__ . '/../log'));
         }
         self::assertSame(500, $response->getStatusCode());
         self::assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));

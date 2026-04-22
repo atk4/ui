@@ -21,8 +21,18 @@ $runOnShutdownFx = static function (\Closure $fx) use ($app) {
 $type = $app->tryGetRequestQueryParam('type');
 if ($type === 'oom') {
 
-    var_dump(ini_get('memory_limit'));
-    var_dump('x');
+    $logFx = function ($v, $clear = false) {
+        $p = __DIR__ . '/../../log';
+
+        ob_start();
+        var_dump($v);
+        $str = ob_get_clean();
+        file_put_contents($p, $str, $clear ? 0 : FILE_APPEND);
+    };
+    $logFx('', true);
+
+    $logFx(ini_get('memory_limit'));
+    $logFx('x');
 
     ini_set('memory_limit', '64M');
 
@@ -31,10 +41,10 @@ if ($type === 'oom') {
         $str .= random_bytes(256 * 1024);
     }
 
-    var_dump(memory_get_usage(true));
-    var_dump(memory_get_usage(false));
-    var_dump(ini_get('memory_limit'));
-    var_dump('y');
+    $logFx(memory_get_usage(true));
+    $logFx(memory_get_usage(false));
+    $logFx(ini_get('memory_limit'));
+    $logFx('y');
 } elseif ($type === 'time-limit') {
     set_time_limit(1);
 
