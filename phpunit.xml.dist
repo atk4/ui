@@ -1,13 +1,8 @@
 <phpunit bootstrap="vendor/autoload.php" colors="true">
     <testsuites>
         <testsuite name="tests">
-            <directory>tests</directory>
             <file>tests/DemosTest.php</file>
             <file>tests/DemosHttpTest.php</file>
-            <file>tests/DemosHttpNoExitTest.php</file>
-            <exclude>tests/DemosTest.php</exclude>
-            <exclude>tests/DemosHttpTest.php</exclude>
-            <exclude>tests/DemosHttpNoExitTest.php</exclude>
         </testsuite>
     </testsuites>
     <groups>
