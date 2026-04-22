@@ -20,12 +20,21 @@ $runOnShutdownFx = static function (\Closure $fx) use ($app) {
 
 $type = $app->tryGetRequestQueryParam('type');
 if ($type === 'oom') {
+
+    var_dump(ini_get('memory_limit'));
+    var_dump('x');
+
     ini_set('memory_limit', '64M');
 
     $str = '';
     for ($i = 0; $i < 256; ++$i) {
         $str .= random_bytes(256 * 1024);
     }
+
+    var_dump(memory_get_usage(true));
+    var_dump(memory_get_usage(false));
+    var_dump(ini_get('memory_limit'));
+    var_dump('y');
 } elseif ($type === 'time-limit') {
     set_time_limit(1);
 
