@@ -456,10 +456,14 @@ class DemosTest extends TestCase
 
         $response = $this->getResponseFromRequest5xx($path, $options);
 
+        $responseBodyStr = $response->getBody()->getContents();
+
+        if ($response->getStatusCode() !== 500) {
+            var_dump($responseBodyStr);
+        }
         self::assertSame(500, $response->getStatusCode());
         self::assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         self::assertSame('no-store', $response->getHeaderLine('Cache-Control'));
-        $responseBodyStr = $response->getBody()->getContents();
         self::assertMatchesRegularExpression(self::$regexHtml, $responseBodyStr);
         self::assertStringNotContainsString(preg_replace('~.+\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
         self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
