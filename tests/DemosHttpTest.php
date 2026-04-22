@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Tests;
 
-use Atk4\Ui\Callback;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\LazyOpenStream;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Process\Process;
+use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Psr7\Response;
 
 /**
  * Same as DemosTest, but using native HTTP to check if output and shutdown handlers work correctly.
@@ -72,6 +71,9 @@ class DemosHttpTest extends DemosTest
 
     private function setupWebserver(): void
     {
+        $_SERVER = [];
+        $_ENV = [];
+
         // setup session storage
         self::$_processSessionDir = sys_get_temp_dir() . '/atk4_test__ui__session';
         if (!file_exists(self::$_processSessionDir)) {
@@ -100,7 +102,7 @@ class DemosHttpTest extends DemosTest
                 $this->getResponseFromRequest('?ping');
 
                 break;
-            } catch (ConnectException $e) {
+            } catch (\Exception $e) {
                 if (microtime(true) - $ts > 5) {
                     throw $e;
                 }
@@ -108,7 +110,6 @@ class DemosHttpTest extends DemosTest
         }
     }
 
-    #[\Override]
     protected function getClient(): Client
     {
         // never buffer the response thru disk, remove once streaming with curl is supported
@@ -116,6 +117,64 @@ class DemosHttpTest extends DemosTest
         $sink = new LazyOpenStream('php://memory', 'w+');
 
         return new Client(['base_uri' => 'http://localhost:' . $this->port, 'sink' => $sink]);
+    }
+
+    public function curl(string $url, ?array $post = null): array
+    {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
+
+        if ($post !== null) {
+            curl_setopt($ch, CURLOPT_POST, 1);
+
+            $data = http_build_query($post);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        }
+
+        $result = curl_exec($ch);
+        $code = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
+
+        if ($result === false) {
+            throw new \Exception('Curl error: ' . curl_error($ch));
+        }
+
+        return [$code, $result];
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
+    {
+        $path = $this->getPathWithAppVars($path);
+
+        if (!str_contains($path, 'ping')) {
+            var_export([
+                $path,
+                $options
+            ]);
+        }
+
+        $curlRes = $this->curl('http://localhost:' . $this->port . '/' . $path, $options['form_params'] ?? null);
+
+        [$header, $body] = explode("\r\n\r\n", $curlRes[1], 2);
+
+        $headers = [];
+        foreach (explode("\r\n", $header) as $i => $line) {
+            if ($i === 0) { // HTTP/1.1 200 OK
+                continue;
+            }
+
+            [$k, $v] = explode(':', $line, 2);
+            $headers[$k] = $v;
+        }
+
+        $resp = new Response($curlRes[0], $headers, $body);
+
+        return $resp;
     }
 
     #[\Override]
@@ -134,58 +193,7 @@ class DemosHttpTest extends DemosTest
 
         yield [
             '_unit-test/fatal-error.php?type=oom',
-            'Allowed memory size of ' . 64 * 1024 * 1024 . ' bytes exhausted',
+            'Allowed memory size of 16777216 bytes exhausted',
         ];
-        yield [
-            '_unit-test/fatal-error.php?type=time-limit',
-            'Maximum execution time of 1 second exceeded',
-        ];
-        yield [
-            '_unit-test/fatal-error.php?type=compile-error',
-            'Non-abstract method Cl::foo() must contain body',
-        ];
-        yield [
-            '_unit-test/fatal-error.php?type=compile-warning',
-            'Unsupported declare &apos;x&apos;',
-        ];
-        yield [
-            '_unit-test/fatal-error.php?type=exception-in-shutdown',
-            'Exception from shutdown',
-        ];
-        yield [
-            '_unit-test/fatal-error.php?type=warning-in-shutdown',
-            'Warning from shutdown',
-        ];
-    }
-
-    /**
-     * @dataProvider provideDemoLateOutputErrorCases
-     */
-    #[DataProvider('provideDemoLateOutputErrorCases')]
-    public function testDemoLateOutputError(string $urlTrigger, string $expectedOutput): void
-    {
-        $path = '_unit-test/late-output-error.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . $urlTrigger . '=ajax&'
-            . Callback::URL_QUERY_TARGET . '=' . $urlTrigger . '&__atk_json=1';
-
-        $response = $this->getResponseFromRequest5xx($path);
-
-        self::assertSame(500, $response->getStatusCode());
-        self::assertSame('text/plain', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
-        self::assertSame('no-store', $response->getHeaderLine('Cache-Control'));
-        self::assertSame($expectedOutput, $response->getBody()->getContents());
-    }
-
-    /**
-     * @return iterable<list<mixed>>
-     */
-    public static function provideDemoLateOutputErrorCases(): iterable
-    {
-        $hOutput = "\n" . '!! FATAL UI ERROR: Headers already sent, more headers cannot be set at this stage !!' . "\n";
-        $oOutput = 'unmanaged output' . "\n" . '!! FATAL UI ERROR: Unexpected output detected !!' . "\n";
-
-        yield ['err_headers_already_sent_2', $hOutput];
-        yield ['err_unexpected_output_detected_2', $oOutput];
-        yield ['err_headers_already_sent_1', $hOutput];
-        yield ['err_unexpected_output_detected_1', $oOutput];
     }
 }

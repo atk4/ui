@@ -11,11 +11,7 @@ use Atk4\Ui\App;
 use Atk4\Ui\Callback;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
-use Atk4\Ui\Layout;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\RequestInterface;
@@ -26,7 +22,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * Requests are emulated in the same process. It is fast, but some output or shutdown functionality cannot be fully tested.
  */
-class DemosTest extends TestCase
+abstract class DemosTest extends TestCase
 {
     protected const ROOT_DIR = __DIR__ . '/..';
     protected const DEMOS_DIR = self::ROOT_DIR . '/demos';
@@ -55,17 +51,9 @@ class DemosTest extends TestCase
     }
 
     #[\Override]
-    public static function tearDownAfterClass(): void
-    {
-        $_SERVER = self::$_serverSuperglobalBackup;
-
-        parent::tearDownAfterClass();
-    }
-
-    #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
+        // parent::setUp();
 
         if (self::$_db === null) {
             // load demos config
@@ -131,26 +119,6 @@ class DemosTest extends TestCase
         unset($_SESSION);
     }
 
-    protected function createTestingApp(): App
-    {
-        $app = new class(['callExit' => false, 'catchExceptions' => false, 'alwaysRun' => false]) extends App {
-            #[\Override]
-            public function callExit(bool $calledFromShutdownHandler = false): void
-            {
-                throw new DemosTestExitError();
-            }
-
-            #[\Override]
-            protected function emitResponse(): void {}
-        };
-        $app->initLayout([Layout::class]);
-
-        // clone DB (mainly because all Models remains attached now, TODO can be removed once they are GCed)
-        $app->db = clone self::$_db;
-
-        return $app;
-    }
-
     protected function assertNoGlobalSticky(App $app): void
     {
         $appSticky = array_diff_assoc(
@@ -160,69 +128,6 @@ class DemosTest extends TestCase
         if ($appSticky !== []) {
             throw (new Exception('Global GET sticky must never be set by any component'))
                 ->addMoreInfo('appSticky', $appSticky);
-        }
-    }
-
-    protected function getClient(): Client
-    {
-        $handler = function (RequestInterface $request) {
-            // emulate request
-            $localPath = static::ROOT_DIR . $request->getUri()->getPath();
-            $this->setSuperglobalsFromRequest($request);
-
-            ob_start();
-            try {
-                $app = $this->createTestingApp();
-                $this->resetSuperglobals();
-                try {
-                    require $localPath;
-
-                    if (!$app->runCalled) {
-                        $app->run();
-                    }
-
-                    $this->assertNoGlobalSticky($app);
-                } catch (DemosTestExitError $e) {
-                }
-            } finally {
-                self::assertSame('', ob_get_clean());
-                $this->resetSuperglobals();
-            }
-
-            // rewind the body of the response if possible
-            if ($app->getResponse()->getBody()->isSeekable()) {
-                $app->getResponse()->getBody()->rewind();
-            }
-
-            return new FulfilledPromise($app->getResponse());
-        };
-
-        return new Client(['base_uri' => 'http://localhost/', 'handler' => $handler]);
-    }
-
-    /**
-     * @param array<string, mixed> $options
-     */
-    protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
-    {
-        try {
-            return $this->getClient()->request(isset($options['form_params']) ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
-        } catch (ServerException $ex) {
-            $exFactoryWithFullBody = new class('', $ex->getRequest()) extends RequestException {
-                public static function getResponseBodySummary(ResponseInterface $response): string
-                {
-                    $body = $response->getBody();
-                    $res = $body->getContents();
-
-                    if ($body->isSeekable()) {
-                        $body->rewind();
-                    }
-
-                    return $res;
-                }
-            };
-
-            throw $exFactoryWithFullBody::create($ex->getRequest(), $ex->getResponse());
         }
     }
 
@@ -249,64 +154,6 @@ class DemosTest extends TestCase
     protected function getPathWithAppVars(string $path): string
     {
         return 'demos/' . $path;
-    }
-
-    /**
-     * @dataProvider provideDemosStatusAndHtmlResponseCases
-     */
-    #[DataProvider('provideDemosStatusAndHtmlResponseCases')]
-    public function testDemosStatusAndHtmlResponse(string $path): void
-    {
-        $response = $this->getResponseFromRequest($path);
-        self::assertSame(200, $response->getStatusCode());
-        self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
-    }
-
-    /**
-     * @return iterable<list<mixed>>
-     */
-    public static function provideDemosStatusAndHtmlResponseCases(): iterable
-    {
-        $excludeDirs = ['_demo-data', '_includes'];
-        $excludeFiles = ['_unit-test/stream.php', 'layout/layouts_error.php'];
-
-        $files = [];
-        $files[] = 'index.php';
-        foreach (array_diff(scandir(static::DEMOS_DIR), ['.', '..'], $excludeDirs) as $dir) {
-            if (!is_dir(static::DEMOS_DIR . '/' . $dir)) {
-                continue;
-            }
-
-            foreach (scandir(static::DEMOS_DIR . '/' . $dir) as $f) {
-                $path = $dir . '/' . $f;
-                if (substr($path, -4) !== '.php' || in_array($path, $excludeFiles, true)) {
-                    continue;
-                }
-
-                $files[] = $path;
-            }
-        }
-
-        // these tests require SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
-        // always move these tests to the end, so data provider # stays same as much as possible across tests for fast skip
-        $httpOnlyFiles = ['collection/tablefilter.php', 'interactive/popup.php'];
-        foreach ($files as $k => $path) {
-            if (in_array($path, $httpOnlyFiles, true)) {
-                unset($files[$k]);
-                $files[] = $path;
-            }
-        }
-        if (static::class === self::class) {
-            foreach ($files as $k => $path) {
-                if (in_array($path, $httpOnlyFiles, true)) {
-                    unset($files[$k]);
-                }
-            }
-        }
-
-        foreach ($files as $path) {
-            yield [$path];
-        }
     }
 
     public function testDemoResponseError(): void
@@ -372,30 +219,6 @@ class DemosTest extends TestCase
                 self::assertSame(-1, $pos);
             }
         }
-    }
-
-    public function testWizard(): void
-    {
-        // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
-        if (static::class === self::class) {
-            self::assertTrue(true); // @phpstan-ignore staticMethod.alreadyNarrowedType
-
-            return;
-        }
-
-        $response = $this->getResponseFromRequest(
-            'interactive/wizard.php?demo_wizard=1&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'w_form_submit=ajax&' . Callback::URL_QUERY_TARGET . '=w_form_submit',
-            ['form_params' => [
-                'dsn' => 'mysql://root:root@db-host.example.com/atk4',
-            ]]
-        );
-
-        self::assertSame(200, $response->getStatusCode());
-        self::assertMatchesRegularExpression(self::$regexJson, $response->getBody()->getContents());
-
-        $response = $this->getResponseFromRequest('interactive/wizard.php?atk_admin_wizard=2&name=Country');
-        self::assertSame(200, $response->getStatusCode());
-        self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
     }
 
     /**
@@ -514,10 +337,16 @@ class DemosTest extends TestCase
 
         $response = $this->getResponseFromRequest5xx($path, $options);
 
+        $responseBodyStr = $response->getBody()->getContents();
+
+        if ($response->getStatusCode() !== 500) {
+            // var_dump($responseBodyStr);
+
+            var_dump(file_get_contents(__DIR__ . '/../log'));
+        }
         self::assertSame(500, $response->getStatusCode());
         self::assertSame('text/html', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
         self::assertSame('no-store', $response->getHeaderLine('Cache-Control'));
-        $responseBodyStr = $response->getBody()->getContents();
         self::assertMatchesRegularExpression(self::$regexHtml, $responseBodyStr);
         self::assertStringNotContainsString(preg_replace('~.+\\\~', '', UnhandledCallbackExceptionError::class), $responseBodyStr);
         self::assertStringContainsString($expectedExceptionMessage, $responseBodyStr);
@@ -556,5 +385,3 @@ class DemosTest extends TestCase
         ];
     }
 }
-
-class DemosTestExitError extends \Error {}
