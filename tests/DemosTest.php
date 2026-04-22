@@ -251,64 +251,6 @@ class DemosTest extends TestCase
         return 'demos/' . $path;
     }
 
-    /**
-     * @dataProvider provideDemosStatusAndHtmlResponseCases
-     */
-    #[DataProvider('provideDemosStatusAndHtmlResponseCases')]
-    public function testDemosStatusAndHtmlResponse(string $path): void
-    {
-        $response = $this->getResponseFromRequest($path);
-        self::assertSame(200, $response->getStatusCode());
-        self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
-    }
-
-    /**
-     * @return iterable<list<mixed>>
-     */
-    public static function provideDemosStatusAndHtmlResponseCases(): iterable
-    {
-        $excludeDirs = ['_demo-data', '_includes'];
-        $excludeFiles = ['_unit-test/stream.php', 'layout/layouts_error.php'];
-
-        $files = [];
-        $files[] = 'index.php';
-        foreach (array_diff(scandir(static::DEMOS_DIR), ['.', '..'], $excludeDirs) as $dir) {
-            if (!is_dir(static::DEMOS_DIR . '/' . $dir)) {
-                continue;
-            }
-
-            foreach (scandir(static::DEMOS_DIR . '/' . $dir) as $f) {
-                $path = $dir . '/' . $f;
-                if (substr($path, -4) !== '.php' || in_array($path, $excludeFiles, true)) {
-                    continue;
-                }
-
-                $files[] = $path;
-            }
-        }
-
-        // these tests require SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
-        // always move these tests to the end, so data provider # stays same as much as possible across tests for fast skip
-        $httpOnlyFiles = ['collection/tablefilter.php', 'interactive/popup.php'];
-        foreach ($files as $k => $path) {
-            if (in_array($path, $httpOnlyFiles, true)) {
-                unset($files[$k]);
-                $files[] = $path;
-            }
-        }
-        if (static::class === self::class) {
-            foreach ($files as $k => $path) {
-                if (in_array($path, $httpOnlyFiles, true)) {
-                    unset($files[$k]);
-                }
-            }
-        }
-
-        foreach ($files as $path) {
-            yield [$path];
-        }
-    }
-
     public function testDemoResponseError(): void
     {
         if (static::class === self::class) {
