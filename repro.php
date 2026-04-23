@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-use Atk4\Ui\App;
-
-/** @var App $app */
-require_once __DIR__ . '/demos/init-app.php';
-
 use GuzzleHttp\Exception\ConnectException;
 use Symfony\Component\Process\Process;
+
+require_once __DIR__ . '/vendor/autoload.php';
 
 class DemosHttpTest
 {
