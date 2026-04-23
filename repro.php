@@ -64,7 +64,31 @@ class DemosHttpTest
             }
         }
     }
+
+    public function test(): void
+    {
+        $path = '/demos/_unit-test/fatal-error.php?type=oom';
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'http://' . $this->host . ':' . $this->port . $path);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        // curl_setopt($ch, CURLOPT_POST, 1);
+
+//        $headers = [];
+//        $headers[] = 'Authorization: Bearer ' . $token;
+//        $headers[] = 'Dropbox-API-Arg: {"path":"' . $in_filepath . '"}';
+//        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $result = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        var_dump($code);
+        var_dump($result);
+    }
 }
 
 $tc = new DemosHttpTest();
 $tc->setupWebserver();
+$tc->test();
