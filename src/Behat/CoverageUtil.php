@@ -8,7 +8,8 @@ use PHPUnit\Framework\TestCase;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
 use SebastianBergmann\CodeCoverage\Driver\Selector as DriverSelector;
 use SebastianBergmann\CodeCoverage\Filter;
-use SebastianBergmann\CodeCoverage\Report;
+use SebastianBergmann\CodeCoverage\Report\PHP as ReportPhp;
+use SebastianBergmann\CodeCoverage\Serialization\Serializer;
 
 class CoverageUtil
 {
@@ -93,8 +94,15 @@ class CoverageUtil
         $outputFile = $outputDir . '/' . basename($_SERVER['SCRIPT_NAME'] ?? 'unknown', '.php') . '-' . hash('sha256', microtime(true) . random_bytes(64)) . '.cov';
 
         self::$coverage->stop();
-        $writer = new Report\PHP();
-        $writer->process(self::$coverage, $outputFile);
+
+        if (class_exists(ReportPhp::class)) { // for phpunit/php-code-coverage v13 or lower
+            $writer = new ReportPhp();
+            $writer->process(self::$coverage, $outputFile);
+        } else {
+            $serializer = new Serializer();
+            $serializer->serialize($outputFile, self::$coverage);
+        }
+
         self::$coverage = null;
     }
 
