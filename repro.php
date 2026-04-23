@@ -39,7 +39,10 @@ class DemosHttpTest
 
         $result = curl_exec($ch);
         $code = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
-        curl_close($ch);
+
+        if ($result === false) {
+            throw new \Exception('Curl error: ' . curl_error($ch));
+        }
 
         return [$code, $result];
     }
