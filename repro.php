@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Demos;
 
-use GuzzleHttp\Exception\ConnectException;
 use Symfony\Component\Process\Process;
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -77,7 +76,7 @@ class DemosHttpTest
                 $this->getResponseFromRequest('/demos/?ping');
 
                 break;
-            } catch (ConnectException $e) {
+            } catch (\Exception $e) {
                 if (microtime(true) - $ts > 5) {
                     throw $e;
                 }
