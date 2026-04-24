@@ -131,26 +131,6 @@ abstract class DemosTest extends TestCase
         unset($_SESSION);
     }
 
-    protected function createTestingApp(): App
-    {
-        $app = new class(['callExit' => false, 'catchExceptions' => false, 'alwaysRun' => false]) extends App {
-            #[\Override]
-            public function callExit(bool $calledFromShutdownHandler = false): void
-            {
-                throw new DemosTestExitError();
-            }
-
-            #[\Override]
-            protected function emitResponse(): void {}
-        };
-        $app->initLayout([Layout::class]);
-
-        // clone DB (mainly because all Models remains attached now, TODO can be removed once they are GCed)
-        $app->db = clone self::$_db;
-
-        return $app;
-    }
-
     protected function assertNoGlobalSticky(App $app): void
     {
         $appSticky = array_diff_assoc(
@@ -161,43 +141,6 @@ abstract class DemosTest extends TestCase
             throw (new Exception('Global GET sticky must never be set by any component'))
                 ->addMoreInfo('appSticky', $appSticky);
         }
-    }
-
-    protected function getClient(): Client
-    {
-        $handler = function (RequestInterface $request) {
-            // emulate request
-            $localPath = static::ROOT_DIR . $request->getUri()->getPath();
-            $this->setSuperglobalsFromRequest($request);
-
-            ob_start();
-            try {
-                $app = $this->createTestingApp();
-                $this->resetSuperglobals();
-                try {
-                    require $localPath;
-
-                    if (!$app->runCalled) {
-                        $app->run();
-                    }
-
-                    $this->assertNoGlobalSticky($app);
-                } catch (DemosTestExitError $e) {
-                }
-            } finally {
-                self::assertSame('', ob_get_clean());
-                $this->resetSuperglobals();
-            }
-
-            // rewind the body of the response if possible
-            if ($app->getResponse()->getBody()->isSeekable()) {
-                $app->getResponse()->getBody()->rewind();
-            }
-
-            return new FulfilledPromise($app->getResponse());
-        };
-
-        return new Client(['base_uri' => 'http://localhost/', 'handler' => $handler]);
     }
 
     /**

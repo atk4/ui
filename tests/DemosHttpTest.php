@@ -109,7 +109,6 @@ class DemosHttpTest extends DemosTest
         }
     }
 
-    #[\Override]
     protected function getClient(): Client
     {
         // never buffer the response thru disk, remove once streaming with curl is supported
