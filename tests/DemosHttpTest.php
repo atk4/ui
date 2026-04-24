@@ -142,7 +142,7 @@ class DemosHttpTest extends DemosTest
     protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
     {
         if ($path !== '?ping') {
-            print_r([
+            var_export([
                 $path,
                 $options
             ]);
