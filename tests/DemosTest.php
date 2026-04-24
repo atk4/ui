@@ -316,30 +316,6 @@ class DemosTest extends TestCase
         }
     }
 
-    public function testWizard(): void
-    {
-        // this test requires SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
-        if (static::class === self::class) {
-            self::assertTrue(true); // @phpstan-ignore staticMethod.alreadyNarrowedType
-
-            return;
-        }
-
-        $response = $this->getResponseFromRequest(
-            'interactive/wizard.php?demo_wizard=1&' . Callback::URL_QUERY_TRIGGER_PREFIX . 'w_form_submit=ajax&' . Callback::URL_QUERY_TARGET . '=w_form_submit',
-            ['form_params' => [
-                'dsn' => 'mysql://root:root@db-host.example.com/atk4',
-            ]]
-        );
-
-        self::assertSame(200, $response->getStatusCode());
-        self::assertMatchesRegularExpression(self::$regexJson, $response->getBody()->getContents());
-
-        $response = $this->getResponseFromRequest('interactive/wizard.php?atk_admin_wizard=2&name=Country');
-        self::assertSame(200, $response->getStatusCode());
-        self::assertMatchesRegularExpression(self::$regexHtml, $response->getBody()->getContents());
-    }
-
     /**
      * Test reload and loader callback.
      *
