@@ -22,7 +22,7 @@ class Repro
 
     public function curl(string $path, ?array $post = null): array
     {
-        return $this->tc->curl('http://localhost:' . $this->port . '/' . $path, $post);
+        return $this->tc->curl('http://localhost:9687/' . $path, $post);
     }
 
     public function test(): void
@@ -146,7 +146,7 @@ class Repro
         foreach ($tests as $test) {
             [$code, $result] = $this->curl($test[0], $test[1]);
         }
-        
+
         var_dump($code);
         var_dump($result);
     }
