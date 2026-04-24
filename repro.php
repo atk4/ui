@@ -109,7 +109,12 @@ class Repro
 
         var_dump($code);
         // var_dump($result);
-        var_dump(file_get_contents(__DIR__ . '/log'));
+        $log = file_get_contents(__DIR__ . '/log');
+        var_dump($log);
+
+        if (str_contains($log, 'string(1) "y"')) {
+            exit(1);
+        }
     }
 }
 
