@@ -121,11 +121,11 @@ class DemosHttpTest extends DemosTest
         return new Client(['base_uri' => 'http://localhost:' . $this->port, 'sink' => $sink]);
     }
 
-    protected function curl(string $path, ?array $post = null): array
+    protected function curl(string $url, ?array $post = null): array
     {
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, 'http://127.0.0.1:9687' . $path);
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
         if ($post !== null) {
