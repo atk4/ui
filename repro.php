@@ -148,7 +148,7 @@ class Repro
         }
 
         var_dump($code);
-        var_dump($result);
+        // var_dump($result);
         var_dump(file_get_contents(__DIR__ . '/log'));
     }
 }
