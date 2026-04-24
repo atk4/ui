@@ -51,14 +51,6 @@ abstract class DemosTest extends TestCase
     }
 
     #[\Override]
-    public static function tearDownAfterClass(): void
-    {
-        $_SERVER = self::$_serverSuperglobalBackup;
-
-        parent::tearDownAfterClass();
-    }
-
-    #[\Override]
     protected function setUp(): void
     {
         // parent::setUp();
