@@ -163,6 +163,7 @@ class DemosHttpTest extends DemosTest
 
         $headers = [];
         foreach (explode("\n", $header) as $line) {
+            var_dump($line);
             [$k, $v] = explode(':', $line, 2);
             $headers[$k] = $v;
         }
