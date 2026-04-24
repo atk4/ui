@@ -11,11 +11,7 @@ use Atk4\Ui\App;
 use Atk4\Ui\Callback;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Exception\UnhandledCallbackExceptionError;
-use Atk4\Ui\Layout;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\Promise\FulfilledPromise;
 use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Psr\Http\Message\RequestInterface;
@@ -140,32 +136,6 @@ abstract class DemosTest extends TestCase
         if ($appSticky !== []) {
             throw (new Exception('Global GET sticky must never be set by any component'))
                 ->addMoreInfo('appSticky', $appSticky);
-        }
-    }
-
-    /**
-     * @param array<string, mixed> $options
-     */
-    protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
-    {
-        try {
-            return $this->getClient()->request(isset($options['form_params']) ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
-        } catch (ServerException $ex) {
-            $exFactoryWithFullBody = new class('', $ex->getRequest()) extends RequestException {
-                public static function getResponseBodySummary(ResponseInterface $response): string
-                {
-                    $body = $response->getBody();
-                    $res = $body->getContents();
-
-                    if ($body->isSeekable()) {
-                        $body->rewind();
-                    }
-
-                    return $res;
-                }
-            };
-
-            throw $exFactoryWithFullBody::create($ex->getRequest(), $ex->getResponse());
         }
     }
 

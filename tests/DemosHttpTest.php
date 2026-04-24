@@ -10,6 +10,7 @@ use GuzzleHttp\Psr7\LazyOpenStream;
 use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Process\Process;
 use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Same as DemosTest, but using native HTTP to check if output and shutdown handlers work correctly.
@@ -119,6 +120,39 @@ class DemosHttpTest extends DemosTest
         return new Client(['base_uri' => 'http://localhost:' . $this->port, 'sink' => $sink]);
     }
 
+    /**
+     * @param array<string, mixed> $options
+     */
+    protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
+    {
+        if ($path !== '?ping') {
+            var_export([
+                $path,
+                $options
+            ]);
+        }
+
+        try {
+            return $this->getClient()->request(isset($options['form_params']) ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
+        } catch (ServerException $ex) {
+            $exFactoryWithFullBody = new class('', $ex->getRequest()) extends RequestException {
+                public static function getResponseBodySummary(ResponseInterface $response): string
+                {
+                    $body = $response->getBody();
+                    $res = $body->getContents();
+
+                    if ($body->isSeekable()) {
+                        $body->rewind();
+                    }
+
+                    return $res;
+                }
+            };
+
+            throw $exFactoryWithFullBody::create($ex->getRequest(), $ex->getResponse());
+        }
+    }
+
     #[\Override]
     protected function getPathWithAppVars(string $path): string
     {
@@ -137,17 +171,5 @@ class DemosHttpTest extends DemosTest
             '_unit-test/fatal-error.php?type=oom',
             'Allowed memory size of 16777216 bytes exhausted',
         ];
-    }
-
-    protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
-    {
-        if ($path !== '?ping') {
-            var_export([
-                $path,
-                $options
-            ]);
-        }
-
-        return parent::getResponseFromRequest($path, $options);
     }
 }
