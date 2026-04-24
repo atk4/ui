@@ -61,7 +61,7 @@ abstract class DemosTest extends TestCase
     #[\Override]
     protected function setUp(): void
     {
-        parent::setUp();
+        // parent::setUp();
 
         if (self::$_db === null) {
             // load demos config
