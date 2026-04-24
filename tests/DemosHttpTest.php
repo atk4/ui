@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Atk4\Ui\Tests;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\LazyOpenStream;
 use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Process\Process;
 use Psr\Http\Message\ResponseInterface;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Response;
 
 /**
