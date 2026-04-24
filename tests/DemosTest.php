@@ -26,7 +26,7 @@ use Psr\Http\Message\ResponseInterface;
  *
  * Requests are emulated in the same process. It is fast, but some output or shutdown functionality cannot be fully tested.
  */
-class DemosTest extends TestCase
+abstract class DemosTest extends TestCase
 {
     protected const ROOT_DIR = __DIR__ . '/..';
     protected const DEMOS_DIR = self::ROOT_DIR . '/demos';
