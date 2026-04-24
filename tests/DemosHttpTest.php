@@ -127,6 +127,7 @@ class DemosHttpTest extends DemosTest
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 1);
 
         if ($post !== null) {
             curl_setopt($ch, CURLOPT_POST, 1);
@@ -158,7 +159,15 @@ class DemosHttpTest extends DemosTest
 
         $curlRes = $this->curl('http://localhost:' . $this->port . '/' . $path, $options['form_params'] ?? null);
 
-        $resp = new Response($curlRes[0], [], $curlRes[1]);
+        [$header, $body] = explode("\r\n\r\n", $curlRes[1], 2);
+
+        $headers = [];
+        foreach (explode("\n", $header) as $line) {
+            [$k, $v] = explode(':', $line, 2);
+            $headers[$k] = $v;
+        }
+
+        $resp = new Response($curlRes[0], $headers, $body);
 
         return $resp;
     }
