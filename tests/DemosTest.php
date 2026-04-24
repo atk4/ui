@@ -385,5 +385,3 @@ abstract class DemosTest extends TestCase
         ];
     }
 }
-
-class DemosTestExitError extends \Error {}
