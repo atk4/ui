@@ -157,7 +157,7 @@ class DemosHttpTest extends DemosTest
         }
 
         try {
-            $curlRes = $this->curl($path, $options['form_params'] ?? null);
+            $curlRes = $this->curl('http://localhost:' . $this->port . '/' . $path, $options['form_params'] ?? null);
 
             $resp = new Response($curlRes[0], [], $curlRes[1]);
 
