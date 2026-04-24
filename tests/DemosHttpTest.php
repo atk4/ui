@@ -162,8 +162,11 @@ class DemosHttpTest extends DemosTest
         [$header, $body] = explode("\r\n\r\n", $curlRes[1], 2);
 
         $headers = [];
-        foreach (explode("\n", $header) as $line) {
-            var_dump($line);
+        foreach (explode("\n", $header) as $i => $line) {
+            if ($i === 0) { // HTTP/1.1 200 OK
+                continue;
+            }
+
             [$k, $v] = explode(':', $line, 2);
             $headers[$k] = $v;
         }
