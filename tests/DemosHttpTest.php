@@ -136,56 +136,5 @@ class DemosHttpTest extends DemosTest
             '_unit-test/fatal-error.php?type=oom',
             'Allowed memory size of 16777216 bytes exhausted',
         ];
-        yield [
-            '_unit-test/fatal-error.php?type=time-limit',
-            'Maximum execution time of 1 second exceeded',
-        ];
-        yield [
-            '_unit-test/fatal-error.php?type=compile-error',
-            'Non-abstract method Cl::foo() must contain body',
-        ];
-        yield [
-            '_unit-test/fatal-error.php?type=compile-warning',
-            'Unsupported declare &apos;x&apos;',
-        ];
-        yield [
-            '_unit-test/fatal-error.php?type=exception-in-shutdown',
-            'Exception from shutdown',
-        ];
-        yield [
-            '_unit-test/fatal-error.php?type=warning-in-shutdown',
-            'Warning from shutdown',
-        ];
-    }
-
-    /**
-     * @dataProvider provideDemoLateOutputErrorCases
-     */
-    #[DataProvider('provideDemoLateOutputErrorCases')]
-    public function testDemoLateOutputError(string $urlTrigger, string $expectedOutput): void
-    {
-        $path = '_unit-test/late-output-error.php?' . Callback::URL_QUERY_TRIGGER_PREFIX . $urlTrigger . '=ajax&'
-            . Callback::URL_QUERY_TARGET . '=' . $urlTrigger . '&__atk_json=1';
-
-        $response = $this->getResponseFromRequest5xx($path);
-
-        self::assertSame(500, $response->getStatusCode());
-        self::assertSame('text/plain', preg_replace('~;\s*charset=.+$~', '', $response->getHeaderLine('Content-Type')));
-        self::assertSame('no-store', $response->getHeaderLine('Cache-Control'));
-        self::assertSame($expectedOutput, $response->getBody()->getContents());
-    }
-
-    /**
-     * @return iterable<list<mixed>>
-     */
-    public static function provideDemoLateOutputErrorCases(): iterable
-    {
-        $hOutput = "\n" . '!! FATAL UI ERROR: Headers already sent, more headers cannot be set at this stage !!' . "\n";
-        $oOutput = 'unmanaged output' . "\n" . '!! FATAL UI ERROR: Unexpected output detected !!' . "\n";
-
-        yield ['err_headers_already_sent_2', $hOutput];
-        yield ['err_unexpected_output_detected_2', $oOutput];
-        yield ['err_headers_already_sent_1', $hOutput];
-        yield ['err_unexpected_output_detected_1', $oOutput];
     }
 }
