@@ -70,6 +70,9 @@ class DemosHttpTest extends DemosTest
 
     private function setupWebserver(): void
     {
+        $_SERVER = [];
+        $_ENV = [];
+
         // setup session storage
         self::$_processSessionDir = sys_get_temp_dir() . '/atk4_test__ui__session';
         if (!file_exists(self::$_processSessionDir)) {
