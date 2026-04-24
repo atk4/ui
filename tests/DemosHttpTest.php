@@ -170,7 +170,7 @@ class DemosHttpTest extends DemosTest
             [$k, $v] = explode(':', $line, 2);
             $headers[$k] = $v;
         }
-
+print_r([$header, $headers]);
         $resp = new Response($curlRes[0], $headers, $body);
 
         return $resp;
