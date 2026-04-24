@@ -134,7 +134,7 @@ class DemosHttpTest extends DemosTest
 
         yield [
             '_unit-test/fatal-error.php?type=oom',
-            'Allowed memory size of ' . 64 * 1024 * 1024 . ' bytes exhausted',
+            'Allowed memory size of 16777216 bytes exhausted',
         ];
         yield [
             '_unit-test/fatal-error.php?type=time-limit',

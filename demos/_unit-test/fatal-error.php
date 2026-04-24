@@ -34,11 +34,11 @@ if ($type === 'oom') {
     $logFx(ini_get('memory_limit'));
     $logFx('x');
 
-    ini_set('memory_limit', '64M');
+    ini_set('memory_limit', '16M');
 
     $str = '';
-    for ($i = 0; $i < 256; ++$i) {
-        $str .= random_bytes(256 * 1024);
+    for ($i = 0; $i < 1024; ++$i) {
+        $str .= random_bytes(16 * 1024);
     }
 
     $logFx(memory_get_usage(true));
