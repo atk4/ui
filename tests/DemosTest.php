@@ -459,7 +459,7 @@ class DemosTest extends TestCase
         $responseBodyStr = $response->getBody()->getContents();
 
         if ($response->getStatusCode() !== 500) {
-            var_dump($responseBodyStr);
+            // var_dump($responseBodyStr);
 
             var_dump(file_get_contents(__DIR__ . '/../log'));
         }
