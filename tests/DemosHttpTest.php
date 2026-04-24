@@ -131,6 +131,9 @@ class DemosHttpTest extends DemosTest
 
         if ($post !== null) {
             curl_setopt($ch, CURLOPT_POST, 1);
+
+            $data = http_build_query($post);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         }
 
         $result = curl_exec($ch);
@@ -170,7 +173,7 @@ class DemosHttpTest extends DemosTest
             [$k, $v] = explode(':', $line, 2);
             $headers[$k] = $v;
         }
-print_r([$header, $headers]);
+
         $resp = new Response($curlRes[0], $headers, $body);
 
         return $resp;
