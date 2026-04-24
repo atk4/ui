@@ -125,7 +125,9 @@ class DemosHttpTest extends DemosTest
      */
     protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
     {
-        if ($path !== '?ping') {
+        $path = $this->getPathWithAppVars($path);
+
+        if (!str_contains($path, 'ping')) {
             var_export([
                 $path,
                 $options
@@ -133,7 +135,7 @@ class DemosHttpTest extends DemosTest
         }
 
         try {
-            return $this->getClient()->request(isset($options['form_params']) ? 'POST' : 'GET', $this->getPathWithAppVars($path), $options);
+            return $this->getClient()->request(isset($options['form_params']) ? 'POST' : 'GET', $path, $options);
         } catch (ServerException $ex) {
             $exFactoryWithFullBody = new class('', $ex->getRequest()) extends RequestException {
                 public static function getResponseBodySummary(ResponseInterface $response): string
