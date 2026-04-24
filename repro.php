@@ -2,32 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Atk4\Ui\Demos;
+namespace Atk4\Ui\Repro;
 
-use Symfony\Component\Process\Process;
+use Atk4\Ui\Tests\DemosHttpTest;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-class DemosHttpTest
+class Repro
 {
-    protected const ROOT_DIR = __DIR__;
-    protected const DEMOS_DIR = self::ROOT_DIR . '/demos';
-
-    /** @var Process|null */
-    private static $_process;
-    /** @var string|null */
-    private static $_processSessionDir;
-
-    /** @var string */
-    protected $host = '127.0.0.1';
-    /** @var int */
-    protected $port = 9687;
-
-    protected function getResponseFromRequest(string $path): array
+    protected function getResponseFromRequest(string $path, ?array $post = []): array
     {
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, 'http://' . $this->host . ':' . $this->port . $path);
+        curl_setopt($ch, CURLOPT_URL, 'http://127.0.0.1:9687' . $path);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         // curl_setopt($ch, CURLOPT_POST, 1);
 
@@ -48,40 +35,9 @@ class DemosHttpTest
 
     public function setupWebserver(): void
     {
-        // setup session storage
-        self::$_processSessionDir = sys_get_temp_dir() . '/atk4_test__ui__session';
-        if (!file_exists(self::$_processSessionDir)) {
-            mkdir(self::$_processSessionDir);
-        }
-
-        // spin up the test server
-        $cmdArgs = [
-            '-S', $this->host . ':' . $this->port,
-            '-t', static::ROOT_DIR,
-            '-d', 'session.save_path=' . self::$_processSessionDir,
-        ];
-        if (ini_get('open_basedir') !== '') {
-            $cmdArgs[] = '-d';
-            $cmdArgs[] = 'open_basedir=' . ini_get('open_basedir');
-        }
-        self::$_process = Process::fromShellCommandline('php ' . implode(' ', array_map('escapeshellarg', $cmdArgs)));
-        self::$_process->disableOutput();
-        self::$_process->start();
-
-        // wait until server is ready
-        $ts = microtime(true);
-        while (true) {
-            usleep(20_000);
-            try {
-                $this->getResponseFromRequest('/demos/?ping');
-
-                break;
-            } catch (\Exception $e) {
-                if (microtime(true) - $ts > 5) {
-                    throw $e;
-                }
-            }
-        }
+        DemosHttpTest::setUpBeforeClass();
+        $tc = new DemosHttpTest('x');
+        \Closure::bind(static fn () => $tc->setUp(), null, DemosHttpTest::class)();
     }
 
     public function test(): void
@@ -93,6 +49,6 @@ class DemosHttpTest
     }
 }
 
-$tc = new DemosHttpTest();
+$tc = new Repro();
 $tc->setupWebserver();
 $tc->test();
