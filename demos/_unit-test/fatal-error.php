@@ -40,7 +40,7 @@ if ($type === 'oom') {
     ini_set('memory_limit', '16M');
 
     $str = '';
-    for ($i = 0; $i < 2 * 1024; ++$i) {
+    for ($i = 0; $i < 1024; ++$i) {
         $str .= random_bytes(16 * 1024);
         $logFx(memory_get_usage(true));
     }
