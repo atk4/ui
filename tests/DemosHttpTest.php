@@ -119,7 +119,7 @@ class DemosHttpTest extends DemosTest
         return new Client(['base_uri' => 'http://localhost:' . $this->port, 'sink' => $sink]);
     }
 
-    protected function curl(string $url, ?array $post = null): array
+    public function curl(string $url, ?array $post = null): array
     {
         $ch = curl_init();
 
