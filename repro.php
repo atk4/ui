@@ -27,8 +27,126 @@ class Repro
 
     public function test(): void
     {
-        [$code, $result] = $this->curl('demos/_unit-test/fatal-error.php?type=oom');
+        $tests = [
+            array (
+              0 => 'demos/layout/layouts_error.php?APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/others/sticky.php?xx=YEY&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/others/sticky.php?c=OHO&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/others/sticky.php?xx=YEY&c=OHO&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/stream.php?size_mb=40&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/reload.php?__atk_reload=reload&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/reload.php?__atk_cb_c_reload=ajax&__atk_cbtarget=c_reload&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/exception.php?__atk_cb_m_cb=ajax&__atk_cbtarget=m_cb&__atk_json=1&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/exception.php?__atk_cb_m2_cb=ajax&__atk_cbtarget=m2_cb&__atk_json=1&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/sse.php?__atk_cb_see_test=ajax&__atk_cbtarget=1&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/console.php?__atk_cb_console_test=ajax&__atk_cbtarget=1&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/console_run.php?__atk_cb_console_test=ajax&__atk_cbtarget=1&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/console_exec.php?__atk_cb_console_test=ajax&__atk_cbtarget=1&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/post.php?__atk_cb_test_submit=ajax&__atk_cbtarget=test_submit&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+                'form_params' =>
+                array (
+                  'f1' => 'v1',
+                ),
+              ),
+            ), array (
+              0 => 'demos/_unit-test/callback-nested.php?err_sub_loader&__atk_cb_trigger_main_loader=callback&__atk_cbtarget=non_existing_target&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/callback-nested.php?__atk_cb_trigger_main_loader=callback&__atk_cb_trigger_sub_loader=callback&__atk_cbtarget=non_existing_target&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/callback-nested.php?err_main_loader&__atk_cb_trigger_main_loader=callback&__atk_cbtarget=trigger_main_loader&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/callback-nested.php?err_sub_loader&__atk_cb_trigger_main_loader=callback&__atk_cb_trigger_sub_loader=callback&__atk_cbtarget=trigger_sub_loader&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/callback-nested.php?err_sub_loader2&__atk_cb_trigger_main_loader=callback&__atk_cb_trigger_sub_loader=callback&__atk_cbtarget=trigger_sub_loader&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            ), array (
+              0 => 'demos/_unit-test/post.php?__atk_cb_test_submit=ajax&__atk_cbtarget=test_submit&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+                'form_params' =>
+                array (
+                ),
+              ),
+            ), array (
+              0 => 'demos/_unit-test/fatal-error.php?type=oom&APP_CALL_EXIT=1&APP_CATCH_EXCEPTIONS=1',
+              1 =>
+              array (
+              ),
+            )
+        ];
 
+        foreach ($tests as $test) {
+            [$code, $result] = $this->curl($test[0], $test[1]);
+        }
+        
         var_dump($code);
         var_dump($result);
     }
