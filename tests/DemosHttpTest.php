@@ -11,6 +11,7 @@ use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Process\Process;
 use Psr\Http\Message\ResponseInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Response;
 
 /**
  * Same as DemosTest, but using native HTTP to check if output and shutdown handlers work correctly.
@@ -120,6 +121,27 @@ class DemosHttpTest extends DemosTest
         return new Client(['base_uri' => 'http://localhost:' . $this->port, 'sink' => $sink]);
     }
 
+    protected function curl(string $path, ?array $post = null): array
+    {
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'http://127.0.0.1:9687' . $path);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+        if ($post !== null) {
+            curl_setopt($ch, CURLOPT_POST, 1);
+        }
+
+        $result = curl_exec($ch);
+        $code = curl_getinfo($ch, \CURLINFO_HTTP_CODE);
+
+        if ($result === false) {
+            throw new \Exception('Curl error: ' . curl_error($ch));
+        }
+
+        return [$code, $result];
+    }
+
     /**
      * @param array<string, mixed> $options
      */
@@ -135,6 +157,12 @@ class DemosHttpTest extends DemosTest
         }
 
         try {
+            $curlRes = $this->curl($path, $options['form_params'] ?? null);
+
+            $resp = new Response($curlRes[0], [], $curlRes[1]);
+
+            return $resp;
+
             return $this->getClient()->request(isset($options['form_params']) ? 'POST' : 'GET', $path, $options);
         } catch (ServerException $ex) {
             $exFactoryWithFullBody = new class('', $ex->getRequest()) extends RequestException {
