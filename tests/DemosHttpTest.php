@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\LazyOpenStream;
 use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Process\Process;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Same as DemosTest, but using native HTTP to check if output and shutdown handlers work correctly.
@@ -136,5 +137,17 @@ class DemosHttpTest extends DemosTest
             '_unit-test/fatal-error.php?type=oom',
             'Allowed memory size of 16777216 bytes exhausted',
         ];
+    }
+
+    protected function getResponseFromRequest(string $path, array $options = []): ResponseInterface
+    {
+        if ($path !== '?ping') {
+            print_r([
+                $path,
+                $options
+            ]);
+        }
+
+        return parent::getResponseFromRequest($path, $options);
     }
 }
