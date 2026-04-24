@@ -104,7 +104,7 @@ class DemosHttpTest extends DemosTest
                 $this->getResponseFromRequest('?ping');
 
                 break;
-            } catch (ConnectException $e) {
+            } catch (\Exception $e) {
                 if (microtime(true) - $ts > 5) {
                     throw $e;
                 }
@@ -156,31 +156,11 @@ class DemosHttpTest extends DemosTest
             ]);
         }
 
-        try {
-            $curlRes = $this->curl('http://localhost:' . $this->port . '/' . $path, $options['form_params'] ?? null);
+        $curlRes = $this->curl('http://localhost:' . $this->port . '/' . $path, $options['form_params'] ?? null);
 
-            $resp = new Response($curlRes[0], [], $curlRes[1]);
+        $resp = new Response($curlRes[0], [], $curlRes[1]);
 
-            return $resp;
-
-            return $this->getClient()->request(isset($options['form_params']) ? 'POST' : 'GET', $path, $options);
-        } catch (ServerException $ex) {
-            $exFactoryWithFullBody = new class('', $ex->getRequest()) extends RequestException {
-                public static function getResponseBodySummary(ResponseInterface $response): string
-                {
-                    $body = $response->getBody();
-                    $res = $body->getContents();
-
-                    if ($body->isSeekable()) {
-                        $body->rewind();
-                    }
-
-                    return $res;
-                }
-            };
-
-            throw $exFactoryWithFullBody::create($ex->getRequest(), $ex->getResponse());
-        }
+        return $resp;
     }
 
     #[\Override]
