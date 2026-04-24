@@ -42,7 +42,6 @@ if ($type === 'oom') {
     $str = '';
     for ($i = 0; $i < 1024; ++$i) {
         $str .= random_bytes(16 * 1024);
-        $logFx(memory_get_usage(true));
     }
 
     $logFx(memory_get_usage(true));
