@@ -25,8 +25,8 @@ class Value
      */
     public function set(string $value): self
     {
-        if (\PHP_VERSION_ID < 80200
-                ? preg_match('~~u', $value) === false // much faster in PHP 8.1 and lower
+        if (\PHP_VERSION_ID < 8_02_00
+                ? preg_match('~~u', $value) === false // much faster in PHP 8.1 or lower
                 : !mb_check_encoding($value, 'UTF-8')
         ) {
             throw new Exception('Value is not valid UTF-8');

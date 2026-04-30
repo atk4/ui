@@ -271,12 +271,12 @@ trait StepExecutorTrait
 
     protected function isFirstStep(string $step): bool
     {
-        return $this->steps[array_key_first($this->steps)] === $step;
+        return array_first($this->steps) === $step;
     }
 
     protected function isLastStep(string $step): bool
     {
-        return $this->steps[array_key_last($this->steps)] === $step;
+        return array_last($this->steps) === $step;
     }
 
     protected function getPreviousStep(string $step): string

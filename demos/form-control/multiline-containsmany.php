@@ -10,4 +10,9 @@ use Atk4\Ui\Crud;
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-Crud::addTo($app)->setModel(new MultilineDelivery($app->db));
+$model = new MultilineDelivery($app->db);
+$model->getField($model->fieldName()->item)->ui['visible'] = true;
+$model->getField($model->fieldName()->items)->ui['visible'] = true;
+
+$crud = Crud::addTo($app);
+$crud->setModel($model);

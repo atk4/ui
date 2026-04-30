@@ -121,7 +121,7 @@ require_once $rootdir . "vendor/autoload.php"; // loads up atk4 and our project 
 ### Initialize the app class in init.php
 
 ```
-$app = new \Atk4\Ui\App('Welcome to my first app'); // initialization of our app
+$app = new \Atk4\Ui\App(['title' => 'Welcome to my first app']); // initialization of our app
 $app->db = $db; // defines our database for reuse in other classes
 ```
 

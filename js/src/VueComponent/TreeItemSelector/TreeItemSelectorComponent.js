@@ -100,14 +100,10 @@ export default {
         },
         getValues: function () {
             const initValues = JSON.parse(this.getInputElement().value);
-            let values = [];
-            if (Array.isArray(initValues)) {
-                values = initValues;
-            } else {
-                values.push(initValues);
-            }
 
-            return values;
+            return Array.isArray(initValues)
+                ? initValues
+                : [initValues];
         },
         /**
          * Check if all children nodes are on.

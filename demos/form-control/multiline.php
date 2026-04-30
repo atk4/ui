@@ -44,9 +44,9 @@ $column = $sublayout->addColumn(4);
 $controlTotal = $column->addControl('total', ['readOnly' => true])->set($total);
 
 // update total when qty and box value in any row has changed
-$multiline->onLineChange(static function (array $rows, Form $form) use ($controlTotal) {
+$multiline->onLineChange(static function (array $rows, array $mlids, Form $form) use ($controlTotal) {
     $total = 0;
-    foreach ($rows as $row => $cols) {
+    foreach ($rows as $cols) {
         $total += $cols[MultilineItem::hinting()->fieldName()->qty] * $cols[MultilineItem::hinting()->fieldName()->box];
     }
 
@@ -58,7 +58,9 @@ $multiline->jsAfterDelete = new JsFunction(['value'], [new JsExpression('console
 
 $form->onSubmit(static function (Form $form) use ($multiline) {
     $rows = $multiline->model->atomic(static function () use ($multiline) {
-        return $multiline->saveRows()->model->export();
+        $multiline->saveRows();
+
+        return $multiline->model->export();
     });
 
     $rows = array_map(static fn ($row) => $form->getApp()->uiPersistence->typecastSaveRow($multiline->model, $row), $rows);

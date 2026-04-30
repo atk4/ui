@@ -44,8 +44,8 @@ class Context extends RawMinkContext implements BehatContext
         foreach ($event->getFeature()->getScenarios() as $scenario) {
             $scenarioSteps = $scenario->getSteps();
             if (count($scenarioSteps) > 0
-                && reset($scenarioSteps)->getLine() <= $event->getStep()->getLine()
-                && end($scenarioSteps)->getLine() >= $event->getStep()->getLine()
+                && array_first($scenarioSteps)->getLine() <= $event->getStep()->getLine()
+                && array_last($scenarioSteps)->getLine() >= $event->getStep()->getLine()
             ) {
                 return $scenario;
             }
@@ -283,8 +283,10 @@ class Context extends RawMinkContext implements BehatContext
         assert(str_starts_with($value, '"') && str_ends_with($value, '"'));
         $res = substr($value, 1, -1);
 
-        // based on https://github.com/Behat/MinkExtension/blob/v2.2/src/Behat/MinkExtension/Context/MinkContext.php#L567
-        return str_replace(['\\\\', '\"'], ['\\', '"'], $res);
+        // inspired by https://github.com/Behat/MinkExtension/blob/v2.2/src/Behat/MinkExtension/Context/MinkContext.php#L567
+        $res = str_replace(['\\\\', '\"', '\n', '\u{00a0}'], ['x\\\x', '"', "\n", "\u{00a0}" /* Unicode NBSP */], $res);
+
+        return str_replace('x\\\x', '\\', $res);
     }
 
     /**
@@ -632,7 +634,11 @@ class Context extends RawMinkContext implements BehatContext
 
         // select value
         $valueElem = $this->findElement($lookupElem, '//div.menu//div.item[text()=' . $this->quoteXpath($value) . ']');
-        $this->getSession()->executeScript('$(arguments[0]).dropdown(\'set selected\', arguments[1]);', [$lookupElem, $valueElem->getAttribute('data-value')]);
+        if ($valueElem->getAttribute('data-value') === null) { // Multiline vue dropdown
+            $valueElem->click();
+        } else {
+            $this->getSession()->executeScript('$(arguments[0]).dropdown(\'set selected\', arguments[1]);', [$lookupElem, $valueElem->getAttribute('data-value')]);
+        }
         $this->jqueryWait();
 
         // hide dropdown and wait till fully closed
@@ -854,7 +860,7 @@ class Context extends RawMinkContext implements BehatContext
     {
         $toasts = $this->getSession()->getPage()->findAll('css', '.ui.toast-container .toast-box');
         if (count($toasts) > 0) {
-            throw new \Exception('Toast is displayed: "' . $this->findElement(reset($toasts), '.content')->getText() . '"');
+            throw new \Exception('Toast is displayed: "' . $this->findElement(array_first($toasts), '.content')->getText() . '"');
         }
     }
 

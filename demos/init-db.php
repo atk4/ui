@@ -7,6 +7,7 @@ namespace Atk4\Ui\Demos;
 use Atk4\Core\Factory;
 use Atk4\Data\Field;
 use Atk4\Data\Model;
+use Atk4\Data\Persistence;
 use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Table;
@@ -56,7 +57,9 @@ class WrappedIdType extends DbalType
 {
     public const NAME = 'atk4_ui_demos_id';
 
-    #[\Override]
+    /**
+     * @deprecated remove once DBAL 3.x support is dropped
+     */
     public function getName(): string
     {
         return self::NAME;
@@ -88,7 +91,9 @@ class WrappedIdType extends DbalType
         return new WrappedId((int) DbalType::getType('bigint')->convertToPHPValue($value, $platform)); // once DBAL 3.x support is dropped, the explicit cast should no longer be needed
     }
 
-    #[\Override]
+    /**
+     * @deprecated remove once DBAL 3.x support is dropped
+     */
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
@@ -282,6 +287,29 @@ class ModelWithPrefixedFields extends Model
         parent::init();
 
         $this->getIdField()->type = WrappedIdType::NAME;
+
+        // workaround autoincrement for custom ID type for ContainsXxx save
+        // https://github.com/atk4/data/blob/6.0.0/src/Persistence/Array_.php#L324
+        $this->onHookShort(Model::HOOK_BEFORE_INSERT, function (&$data) {
+            $persistence = $this->getModel()->getPersistence();
+            if ($persistence instanceof Persistence\Array_) {
+                $idField = $this->getIdField();
+
+                if (isset($data[$idField->shortName])) {
+                    return;
+                }
+
+                assert($this->getModel()->containedInEntity !== null);
+
+                $origIdFieldType = $idField->type;
+                $idField->type = 'bigint';
+                try {
+                    $data[$idField->shortName] = new WrappedId($persistence->generateNewId($this->getModel()));
+                } finally {
+                    $idField->type = $origIdFieldType;
+                }
+            }
+        });
 
         $this->initPreventModification();
 
@@ -678,25 +706,27 @@ class MultilineItem extends ModelWithPrefixedFields
         ]);
         $this->addField($this->fieldName()->qty, ['type' => 'integer', 'required' => true]);
         $this->addField($this->fieldName()->box, ['type' => 'integer', 'required' => true]);
-        $this->addExpression($this->fieldName()->total_sql, [
-            'expr' => function (Model /* TODO self is not working because of clone in Multiline */ $row) {
-                return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore method.notFound
-            },
-            'type' => 'bigint',
-        ]);
-        $this->addCalculatedField($this->fieldName()->total_php, [
-            'expr' => static function (self $row) {
-                return $row->qty * $row->box;
-            },
-            'type' => 'bigint',
-        ]);
+        if ($this->getPersistence() instanceof Persistence\Sql) { // for MultilineDelivery contained models
+            $this->addExpression($this->fieldName()->total_sql, [
+                'expr' => function (Model /* TODO self is not working because of clone in Multiline */ $row) {
+                    return $row->expr('{' . $this->fieldName()->qty . '} * {' . $this->fieldName()->box . '}'); // @phpstan-ignore method.notFound
+                },
+                'type' => 'bigint',
+            ]);
+            $this->addCalculatedField($this->fieldName()->total_php, [
+                'expr' => static function (self $row) {
+                    return $row->qty * $row->box;
+                },
+                'type' => 'bigint',
+            ]);
+        }
     }
 }
 
 /**
- * @property string        $name    @Atk4\Field()
- * @property Country       $country @Atk4\RefOne()
- * @property MultilineItem $items   @Atk4\RefMany()
+ * @property string        $name  @Atk4\Field()
+ * @property MultilineItem $item  @Atk4\RefOne()
+ * @property MultilineItem $items @Atk4\RefMany()
  */
 class MultilineDelivery extends ModelWithPrefixedFields
 {
@@ -708,7 +738,7 @@ class MultilineDelivery extends ModelWithPrefixedFields
         parent::init();
 
         $this->addField($this->fieldName()->name, ['required' => true]);
-        $this->containsOne($this->fieldName()->country, ['model' => [Country::class]]);
+        $this->containsOne($this->fieldName()->item, ['model' => [MultilineItem::class]]);
         $this->containsMany($this->fieldName()->items, ['model' => [MultilineItem::class]]);
     }
 }

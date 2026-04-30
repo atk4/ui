@@ -36,7 +36,7 @@ Open a new file `index.php` and enter the following code:
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-$app = new \Atk4\Ui\App('My First App');
+$app = new \Atk4\Ui\App(['title' => 'My First App']);
 $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 
 \Atk4\Ui\HelloWorld::addTo($app);
@@ -72,7 +72,7 @@ By using namespaces you will make out of this:
 
 ```
 <?php
-$app = new \Atk4\Ui\App('My First App');
+$app = new \Atk4\Ui\App(['title' => 'My First App']);
 ```
 
 this:
@@ -81,17 +81,7 @@ this:
 <?php
 use \Atk4\Ui\App; // just declared once at the top of your file
 
-$app = new App('My First App');
-```
-
-This is helpful, if you use in this case "new App('...');" several times in your code (hint: normally you use "new App()" just
-once in your project, but other classes could be used more often in one file)
-
-If you call it only once in a file, just use:
-
-```
-<?php
-$app = new \Atk4\Ui\App('My First App');
+$app = new App(['title' => 'My First App']);
 ```
 
 ## Data Persistence
@@ -106,7 +96,7 @@ create the application:
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
 
-$app = new \Atk4\Ui\App('ToDo List');
+$app = new \Atk4\Ui\App(['title' => 'ToDo List']);
 $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 ```
 

@@ -78,14 +78,7 @@ export default class AtkConditionalFormPlugin extends AbstractPlugin {
         // map inputs according to ruleKeys
         this.inputs = ruleKeys.map((ruleKey, idx, org) => {
             const tempRule = this.settings.fieldRules[ruleKey];
-            const temp = [];
-            if (Array.isArray(tempRule)) {
-                for (const rule of tempRule) {
-                    temp.push(rule);
-                }
-            } else {
-                temp.push(tempRule);
-            }
+            const temp = [...(Array.isArray(tempRule) ? tempRule : [tempRule])];
 
             return { inputName: ruleKey, rules: temp, state: false };
         });
@@ -115,12 +108,8 @@ export default class AtkConditionalFormPlugin extends AbstractPlugin {
                 const validateInputNames = Object.keys(rules);
                 for (const inputName of validateInputNames) {
                     const validationRule = rules[inputName];
-                    if (Array.isArray(validationRule)) {
-                        for (const rule of validationRule) {
-                            isAndValid = isAndValid && atk.formService.validateField($(this.el), inputName, rule);
-                        }
-                    } else {
-                        isAndValid = isAndValid && atk.formService.validateField($(this.el), inputName, validationRule);
+                    for (const rule of Array.isArray(validationRule) ? validationRule : [validationRule]) {
+                        isAndValid = isAndValid && atk.formService.validateField($(this.el), inputName, rule);
                     }
                 }
                 // apply OR condition between rules

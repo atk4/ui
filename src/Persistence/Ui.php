@@ -129,7 +129,7 @@ class Ui extends Persistence
                 break;
             case 'atk4_money':
                 $value = parent::_typecastLoadField($field, $value);
-                $valueDecimals = strlen(preg_replace('~^[^.]$|^.+\.|0+$~s', '', number_format($value, max(0, 11 - (int) log10(abs($value))), '.', '')));
+                $valueDecimals = strlen(preg_replace('~^[^.]$|^.+\.|0+$~s', '', number_format($value, max(0, 11 - ($value !== 0.0 ? (int) log10(abs($value)) : 0)), '.', '')));
                 $value = ($this->currency ? $this->currency . ' ' : '')
                     . number_format($value, max($this->currencyDecimals, $valueDecimals), $this->decimalSeparator, $this->thousandsSeparator);
                 $value = str_replace(' ', "\u{00a0}" /* Unicode NBSP */, $value);
@@ -148,12 +148,12 @@ class Ui extends Persistence
                     ][$field->type];
 
                     $valueHasSeconds = (int) $value->format('s') !== 0;
-                    $valueHasMicroseconds = (int) $value->format('u') !== 0; // @phpstan-ignore notIdentical.alwaysTrue (https://github.com/phpstan/phpstan-src/pull/3980)
+                    $valueHasMicroseconds = (int) $value->format('u') !== 0;
                     $formatHasMicroseconds = str_contains($format, '.u');
-                    if ($valueHasSeconds || $valueHasMicroseconds) { // @phpstan-ignore booleanOr.rightAlwaysTrue (https://github.com/phpstan/phpstan-src/pull/3980)
+                    if ($valueHasSeconds || $valueHasMicroseconds) {
                         $format = preg_replace('~(?<=:i)(?!:s)~', ':s', $format);
                     }
-                    if ($valueHasMicroseconds) { // @phpstan-ignore if.alwaysTrue (https://github.com/phpstan/phpstan-src/pull/3980)
+                    if ($valueHasMicroseconds) {
                         $format = preg_replace('~(?<=:s)(?!\.u)~', '.u', $format);
                     }
 

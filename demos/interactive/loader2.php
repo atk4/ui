@@ -9,6 +9,7 @@ use Atk4\Ui\Button;
 use Atk4\Ui\Columns;
 use Atk4\Ui\Form;
 use Atk4\Ui\Grid;
+use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Loader;
 use Atk4\Ui\Text;
 use Atk4\Ui\View;
@@ -31,6 +32,13 @@ $grid->table->onRowClick($countryLoader->jsLoad(['id' => $grid->jsRow()->data('i
 
 $countryLoader->set(static function (Loader $p) {
     $country = new Country($p->getApp()->db);
-    $id = $p->getApp()->uiPersistence->typecastAttributeLoadField($country->getIdField(), $p->getApp()->getRequestQueryParam('id'));
-    Form::addTo($p)->setEntity($country->load($id));
+    $id = $p->getApp()->uiPersistence->typecastAttributeLoadField($country->getIdField(), $p->stickyGet('id'));
+
+    $form = Form::addTo($p);
+    $form->setEntity($country->load($id));
+    $form->onSubmit(static function (Form $form) {
+        $message = $form->entity->getUserAction('edit')->execute();
+
+        return new JsToast($message);
+    });
 });

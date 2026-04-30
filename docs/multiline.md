@@ -125,7 +125,7 @@ $userForm->onSubmit(function (Form $form) use ($ml) {
     // save emails record related to current user
     $ml->saveRows();
 
-    return new JsToast(var_export($ml->model->export(), true));
+    return new JsToast(json_encode($ml->model->export()));
 });
 ```
 
@@ -177,9 +177,9 @@ You can return a single JsExpressionable or an array of JsExpressionables which 
 In this case we display a message when any of the control value for 'qty' and 'box' are changed:
 
 ```
-$multiline->onLineChange(function (array $rows, Form $form) {
+$multiline->onLineChange(function (array $rows, array $mlids, Form $form) {
     $total = 0;
-    foreach ($rows as $row => $cols) {
+    foreach ($rows as $cols) {
         $qty = $cols['qty'] ?? 0;
         $box = $cols['box'] ?? 0;
         $total += $qty * $box;

@@ -186,7 +186,7 @@ class ExecutorFactory
      */
     protected function createActionTrigger(UserAction $action, ?string $type = null): View
     {
-        $viewType = array_merge(['default' => [$this, 'getDefaultTrigger']], $this->triggerSeed[$type] ?? []);
+        $viewType = array_merge(['default' => [$this, 'getDefaultTrigger']], $this->triggerSeed[$type ?? ''] ?? []);
         $seed = $viewType[$this->getModelKey($action)][$action->shortName] ?? null;
         if ($seed === null) {
             $seed = $viewType[$action->shortName] ?? null;
@@ -239,7 +239,7 @@ class ExecutorFactory
      */
     protected function getActionCaption(UserAction $action, ?string $type = null): string
     {
-        $caption = $this->triggerCaption[$type][$action->shortName] ?? null;
+        $caption = $this->triggerCaption[$type ?? ''][$action->shortName] ?? null;
         if ($caption === null) {
             $caption = $this->triggerCaption[$this->getModelKey($action)][$action->shortName] ?? null;
             if ($caption === null) {

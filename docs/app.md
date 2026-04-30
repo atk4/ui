@@ -12,7 +12,7 @@ App is a mandatory object that's essential for Agile UI to operate. You should c
 of an App class yourself before other components:
 
 ```
-$app = new \Atk4\Ui\App('My App');
+$app = new \Atk4\Ui\App(['title' => 'My App']);
 $app->initLayout([\Atk4\Ui\Layout\Centered::class]);
 LoremIpsum::addTo($app);
 ```
@@ -390,7 +390,7 @@ value for the 'app' property. This value is carried into new objects through App
 You can create App object on your own then add elements into it:
 
 ```
-$app = new App('My App');
+$app = new App(['title' => 'My App']);
 $app->add($grid);
 
 echo $grid->renderToHtml();

@@ -11,6 +11,7 @@ export default {
                 <AtkMultilineHeader
                     :fields="fieldData"
                     :selectionState="getMainToggleState"
+                    :rowDataCount="rowData.length"
                     :errors="errors"
                     :caption="caption"
                 ></AtkMultilineHeader>
@@ -291,7 +292,7 @@ export default {
                 return false;
             }
 
-            return this.data.rowLimit < this.rowData.length + 1;
+            return this.rowData.length >= this.data.rowLimit;
         },
     },
 };

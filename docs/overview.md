@@ -111,7 +111,7 @@ class Offer extends \Atk4\Data\Model
 }
 
 // create Application object and initialize Admin Layout
-$app = new \Atk4\Ui\App('Offer tracking system');
+$app = new \Atk4\Ui\App(['title' => 'Offer tracking system']);
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 
 // connect to database and place a fully-interactive Crud

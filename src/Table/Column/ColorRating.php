@@ -133,9 +133,9 @@ class ColorRating extends Table\Column
         ];
 
         $rgb = [
-            'r' => round($fromRgb['r'] + $value * ($toRgb['r'] - $fromRgb['r'])),
-            'g' => round($fromRgb['g'] + $value * ($toRgb['g'] - $fromRgb['g'])),
-            'b' => round($fromRgb['b'] + $value * ($toRgb['b'] - $fromRgb['b'])),
+            'r' => (int) round($fromRgb['r'] + $value * ($toRgb['r'] - $fromRgb['r'])),
+            'g' => (int) round($fromRgb['g'] + $value * ($toRgb['g'] - $fromRgb['g'])),
+            'b' => (int) round($fromRgb['b'] + $value * ($toRgb['b'] - $fromRgb['b'])),
         ];
 
         return '#' . sprintf('%02x%02x%02x', $rgb['r'], $rgb['g'], $rgb['b']);

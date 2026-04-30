@@ -7,7 +7,7 @@ export default {
             <SuiTableRow v-if="hasError()">
                 <SuiTableCell :style="{ background: 'none' }" />
                 <SuiTableCell :style="{ background: 'none' }"
-                    error="true"
+                    :error="true"
                     v-for="column in filterVisibleColumns(columns)"
                     :textAlign="getTextAlign(column)"
                 >
@@ -20,7 +20,7 @@ export default {
             </SuiTableRow>
             <SuiTableRow :verticalAlign="'top'">
                 <SuiTableHeaderCell :width=1 textAlign="center">
-                    <input ref="check" type="checkbox" :checked="isChecked" :indeterminate="isIndeterminate" @input="onToggleDeleteAll" />
+                    <input v-if="rowDataCount > 1" ref="check" type="checkbox" :checked="isChecked" :indeterminate="isIndeterminate" @input="onToggleDeleteAll" />
                 </SuiTableHeaderCell>
                 <SuiTableHeaderCell
                     v-for="column in filterVisibleColumns(columns)"
@@ -34,7 +34,7 @@ export default {
                 </SuiTableHeaderCell>
             </SuiTableRow>
         </SuiTableHeader>`,
-    props: ['fields', 'selectionState', 'errors', 'caption'],
+    props: ['fields', 'selectionState', 'rowDataCount', 'errors', 'caption'],
     data: function () {
         return { columns: this.fields, isDeleteAll: false };
     },

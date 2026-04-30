@@ -12,9 +12,9 @@ Agile UI is the quickest way for building back-end UI, admin interfaces, data ma
 - Agile UI is extensible - integrates VueJS for custom components and interactive behaviors.
 
 [![Build](https://github.com/atk4/ui/actions/workflows/test-unit.yml/badge.svg?branch=develop)](https://github.com/atk4/ui/actions?query=branch:develop)
-[![CodeCov](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
-[![GitHub release](https://img.shields.io/github/release/atk4/ui.svg)](https://github.com/atk4/ui/releases)
-[![Code Climate](https://codeclimate.com/github/atk4/ui/badges/gpa.svg)](https://codeclimate.com/github/atk4/ui)
+[![Coverage](https://codecov.io/gh/atk4/ui/branch/develop/graph/badge.svg)](https://codecov.io/gh/atk4/ui)
+[![Release](https://img.shields.io/github/release/atk4/ui.svg)](https://github.com/atk4/ui/releases)
+[![Downloads](https://img.shields.io/packagist/dt/atk4/ui.svg)](https://github.com/atk4/ui/releases)
 
 Quick-Links: [Documentation](https://atk4-ui.readthedocs.io/). [Demo-site](https://ui.atk4.org/). [ATK Data](https://github.com/atk4/data). [Discord community](https://discord.gg/QVKSk2B).
 
@@ -190,7 +190,7 @@ It's really easy to put together a complex Admin system. Add this code to a new 
 ```php
 <?php
 
-$app = new \Atk4\Ui\App('My App');
+$app = new \Atk4\Ui\App(['title' => 'My App']);
 $app->initLayout([\Atk4\Ui\Layout\Admin::class]);
 $app->db = \Atk4\Data\Persistence::connect('mysql://user:pass@localhost/yourdb');
 

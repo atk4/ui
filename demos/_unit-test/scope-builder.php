@@ -33,7 +33,7 @@ $model->scope()->add($orScope);
 
 $form = Form::addTo($app);
 
-$form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model], ['type' => 'object']);
+$form->addControl('qb', [Form\Control\ScopeBuilder::class, 'model' => $model], ['type' => 'json']);
 
 $form->onSubmit(static function (Form $form) use ($model) {
     $message = $form->entity->get('qb')->toWords($model);
@@ -55,7 +55,7 @@ $expectedInput = json_encode(json_decode(<<<"EOF"
             "rule": "{$statModelForHinting->fieldName()->project_budget}",
             "operator": ">=",
             "value": "{$budget1000Eur}",
-            "option": null
+            "options": null
           }
         },
         {
@@ -69,7 +69,7 @@ $expectedInput = json_encode(json_decode(<<<"EOF"
                   "rule": "{$statModelForHinting->fieldName()->project_name}",
                   "operator": "matches regular expression",
                   "value": "[a-zA-Z]",
-                  "option": null
+                  "options": null
                 }
               },
               {
@@ -78,11 +78,13 @@ $expectedInput = json_encode(json_decode(<<<"EOF"
                   "rule": "{$statModelForHinting->fieldName()->client_country_iso}",
                   "operator": "equals",
                   "value": "BR",
-                  "option": {
-                    "key": "BR",
-                    "text": "Brazil",
-                    "value": "BR"
-                  }
+                  "options": [
+                    {
+                      "key": "BR",
+                      "text": "Brazil",
+                      "value": "BR"
+                    }
+                  ]
                 }
               },
               {
@@ -91,7 +93,7 @@ $expectedInput = json_encode(json_decode(<<<"EOF"
                   "rule": "{$statModelForHinting->fieldName()->start_date}",
                   "operator": "is on",
                   "value": "Oct 22, 2020",
-                  "option": null
+                  "options": null
                 }
               }
             ]
@@ -108,7 +110,7 @@ $expectedInput = json_encode(json_decode(<<<"EOF"
                   "rule": "{$statModelForHinting->fieldName()->finish_time}",
                   "operator": "is not on",
                   "value": "22:22",
-                  "option": null
+                  "options": null
                 }
               },
               {
@@ -117,7 +119,7 @@ $expectedInput = json_encode(json_decode(<<<"EOF"
                   "rule": "{$statModelForHinting->fieldName()->is_commercial}",
                   "operator": "equals",
                   "value": "Yes",
-                  "option": null
+                  "options": null
                 }
               },
               {
@@ -126,7 +128,7 @@ $expectedInput = json_encode(json_decode(<<<"EOF"
                   "rule": "{$statModelForHinting->fieldName()->currency}",
                   "operator": "equals",
                   "value": "USD",
-                  "option": null
+                  "options": null
                 }
               }
             ]
@@ -139,7 +141,7 @@ $expectedInput = json_encode(json_decode(<<<"EOF"
 Header::addTo($app, ['Input:']);
 ViewWithContent::addTo($app, ['element' => 'p', 'content' => $expectedInput])->addClass('atk-expected-input-result');
 
-$expectedWord = <<<'EOF'
+$expectedWord = <<<"EOF"
     Project Budget is greater or equal to '{$budget1000Eur}'
     and (Project Name is regular expression '[a-zA-Z]'
     and Client Country Iso is equal to 'BR' ('Brazil') and Start Date is equal to 'Oct 22, 2020')

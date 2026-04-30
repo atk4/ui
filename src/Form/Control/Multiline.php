@@ -101,8 +101,8 @@ class Multiline extends Form\Control
     public const TABLE_CELL = 'SuiTableCell';
 
     /**
-     * Props to be applied globally for each component supported by field type.
-     * For example setting 'SuiDropdown' property globally.
+     * Props to be applied for each component supported by field type.
+     * For example setting 'SuiDropdown' property.
      *  $componentProps = [Multiline::SELECT => ['floating' => true]].
      *
      * @var array<string, array<string, mixed>>
@@ -149,7 +149,7 @@ class Multiline extends Form\Control
     /** @var JsCallback */
     private $renderCallback;
 
-    /** @var \Closure(mixed, Form): (JsExpressionable|View|string|void)|null Function to execute when field change or row is delete. */
+    /** @var \Closure(list<array<string, mixed>>, list<string>, Form): (JsExpressionable|View|string|void)|null Function to execute when field change or row is delete. */
     protected $onChangeFunction;
 
     /** @var list<string> Set fields that will trigger onChange function. */
@@ -161,14 +161,14 @@ class Multiline extends Form\Control
     /** @var list<string> The fields names used in each row. */
     public $rowFields;
 
-    /** @var list<array<string, mixed>> The data sent for each row. */
-    public $rowData;
+    /** The changes set by self::setInputValue(). */
+    public TheirChanges $changes;
 
-    /** @var int The max number of records (rows) that can be added to Multiline. 0 means no limit. */
-    public $rowLimit = 0;
+    /** The max number of records (rows) that can be added to Multiline. 0 means no limit. */
+    public int $rowLimit = 0;
 
-    /** @var int The maximum number of items for select type field. */
-    public $itemLimit = 25;
+    /** The maximum number of items for select type field. */
+    public ?int $itemLimit = 25;
 
     /**
      * Container for component that need Props set based on their field value as Lookup component.
@@ -216,7 +216,7 @@ class Multiline extends Form\Control
         $this->form->onHook(Form::HOOK_DISPLAY_ERROR, function (Form $form, $fieldName, $str) {
             // when errors are coming from this Multiline field, then notify Multiline component about them
             // otherwise use normal field error
-            if ($fieldName === $this->shortName) {
+            if ($fieldName === $this->shortName && $this->rowErrors) {
                 // multiline js component listen to 'multiline-rows-error' event
                 $jsError = $this->jsEmitEvent($this->multiLine->name . '-multiline-rows-error', ['errors' => $this->rowErrors]);
             } else {
@@ -225,62 +225,148 @@ class Multiline extends Form\Control
 
             return $jsError;
         });
+
+        if ($this->isOneToOne()) {
+            $this->rowLimit = 1;
+        }
     }
 
     /**
-     * @param array<mixed, array<string, string|null>> $values
+     * @param array<mixed, array<string, mixed>> $values
      *
-     * @return array<mixed, array<string, mixed>>
+     * @return array<mixed, array<string, string|null>>
      */
-    protected function typeCastLoadValues(array $values): array
+    private function typecastUiSaveValues(array $values): array
     {
-        $dataRows = [];
+        $res = [];
         foreach ($values as $k => $row) {
             foreach ($row as $fieldName => $value) {
-                if ($fieldName === '__atkml') {
-                    $dataRows[$k][$fieldName] = $value;
-                } else {
-                    $dataRows[$k][$fieldName] = $fieldName === $this->model->idField
-                        ? $this->getApp()->uiPersistence->typecastAttributeLoadField($this->model->getField($fieldName), $value)
-                        : $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($fieldName), $value);
-                }
+                $res[$k][$fieldName] = $fieldName === $this->model->idField
+                    ? $this->getApp()->uiPersistence->typecastAttributeSaveField($this->model->getField($fieldName), $value)
+                    : $this->getApp()->uiPersistence->typecastSaveField($this->model->getField($fieldName), $value);
             }
         }
 
-        return $dataRows;
+        return $res;
+    }
+
+    /**
+     * @param array<string, string|null> $row
+     *
+     * @return array<string, mixed>
+     */
+    private function typecastUiLoadRow(array $row): array
+    {
+        $res = [];
+        foreach ($row as $fieldName => $value) {
+            $res[$fieldName] = $fieldName === $this->model->idField
+                ? $this->getApp()->uiPersistence->typecastAttributeLoadField($this->model->getField($fieldName), $value)
+                : $this->getApp()->uiPersistence->typecastLoadField($this->model->getField($fieldName), $value);
+        }
+
+        return $res;
+    }
+
+    private function isOneToOne(): bool
+    {
+        return $this->entityField->getField()->hasReference()
+            && $this->entityField->getField()->getReference()->isOneToOne();
+    }
+
+    #[\Override]
+    public function getInputValue(): string
+    {
+        $theirModelOrEntity = $this->entityField->getField()->hasReference()
+            ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())
+            : $this->model;
+        if ($theirModelOrEntity->isEntity()) {
+            $theirModelOrEntity = $theirModelOrEntity->isLoaded()
+                ? [$theirModelOrEntity]
+                : [];
+        }
+
+        $rows = [];
+        foreach ($theirModelOrEntity as $row) {
+            $rows[] = $row->get();
+        }
+
+        $rowsUi = $this->typecastUiSaveValues($rows);
+
+        return $this->getApp()->encodeJson($rowsUi);
+    }
+
+    /**
+     * @return array{list<array<string, mixed>>, list<string>}
+     */
+    private function decodeInput(string $json): array
+    {
+        $rowDataWithMlid = $this->getApp()->decodeJson($json);
+        $rowData = [];
+        $mlids = [];
+        foreach ($rowDataWithMlid as $row) {
+            $mlids[] = $row['__atkml'];
+            unset($row['__atkml']);
+
+            foreach ($row as $k => $v) {
+                if ($this->model->getField($k)->readOnly) {
+                    unset($row[$k]);
+                }
+            }
+
+            $rowData[] = $this->typecastUiLoadRow($row);
+        }
+
+        return [$rowData, $mlids];
     }
 
     #[\Override]
     public function setInputValue(string $value): void
     {
-        $this->rowData = $this->typeCastLoadValues($this->getApp()->decodeJson($value));
-        if ($this->rowData) {
-            $this->rowErrors = $this->validate($this->rowData);
-            if ($this->rowErrors) {
-                throw new ValidationException([$this->shortName => 'multiline error']);
+        [$rowData, $mlids] = $this->decodeInput($value);
+
+        if ($rowData !== []) {
+            $this->rowErrors = $this->validate($rowData, $mlids);
+            if ($this->rowErrors !== []) {
+                throw new ValidationException([$this->shortName => 'Multiline error']);
             }
         }
 
-        // remove __atkml ID from array field
-        if ($this->entityField->getField()->type === 'json') {
-            $rows = [];
-            foreach ($this->rowData as $cols) {
-                unset($cols['__atkml']);
-                $rows[] = $cols;
-            }
+        $theirModelOrEntity = $this->entityField->getField()->hasReference()
+            ? $this->entityField->getField()->getReference()->ref($this->entityField->getEntity())
+            : $this->model;
 
-            $value = $this->getApp()->encodeJson($rows);
+        $changes = new TheirChanges();
+
+        // TODO this is dangerous, deleted row IDs should be passed from UI
+        $idsToDelete = array_filter(array_column($rowData, $theirModelOrEntity->idField), static fn ($v) => $v !== null);
+        foreach ($theirModelOrEntity->getModel(true)->createIteratorBy($theirModelOrEntity->idField, 'not in', $idsToDelete) as $entity) {
+            $changes->deletes[] = [$theirModelOrEntity->idField => $entity->getId()];
         }
 
-        parent::setInputValue($value);
+        foreach ($rowData as $row) {
+            if ($row[$theirModelOrEntity->idField] === null) {
+                $changes->inserts[] = $row;
+            } else {
+                $changes->updates[] = [[$theirModelOrEntity->idField => $row[$theirModelOrEntity->idField]], $row];
+            }
+        }
+
+        $this->changes = $changes;
+
+        if ($this->entityField->getField()->hasReference()) {
+            $changes->saveOnSave(
+                $this->entityField->getEntity(),
+                $this->entityField->getField()->getReference()
+            );
+        }
     }
 
     /**
      * Add a callback when fields are changed. You must supply array of fields
      * that will trigger the callback when changed.
      *
-     * @param \Closure(mixed, Form): (JsExpressionable|View|string|void) $fx
-     * @param list<string>                                               $fields
+     * @param \Closure(list<array<string, mixed>>, list<string>, Form): (JsExpressionable|View|string|void) $fx
+     * @param list<string>                                                                                  $fields
      */
     public function onLineChange(\Closure $fx, array $fields): void
     {
@@ -290,49 +376,22 @@ class Multiline extends Form\Control
     }
 
     /**
-     * Get initial field value. Value is based on model set and will output data rows as JSON string value.
-     */
-    #[\Override]
-    public function getInputValue(): string
-    {
-        if ($this->entityField->getField()->type === 'json') {
-            $jsonValues = $this->getApp()->uiPersistence->typecastSaveField($this->entityField->getField(), $this->entityField->get() ?? []);
-        } else {
-            // set data according to HasMany relation or using model
-            $rows = [];
-            foreach ($this->model as $row) {
-                $cols = [];
-                foreach ($this->rowFields as $fieldName) {
-                    $field = $this->model->getField($fieldName);
-                    $value = $field->shortName === $this->model->idField
-                        ? $this->getApp()->uiPersistence->typecastAttributeSaveField($field, $row->get($field->shortName))
-                        : $this->getApp()->uiPersistence->typecastSaveField($field, $row->get($field->shortName));
-                    $cols[$fieldName] = $value;
-                }
-                $rows[] = $cols;
-            }
-            $jsonValues = $this->getApp()->encodeJson($rows);
-        }
-
-        return $jsonValues;
-    }
-
-    /**
      * Validate each row and return errors if found.
      *
      * @param list<array<string, mixed>> $rows
+     * @param list<string>               $mlids
      *
      * @return array<string, list<array{name: string, msg: string}>>
      */
-    public function validate(array $rows): array
+    public function validate(array $rows, array $mlids): array
     {
         $rowErrors = [];
         $entity = $this->model->createEntity();
 
-        foreach ($rows as $cols) {
-            $rowId = $this->getMlRowId($cols);
+        foreach ($rows as $i => $cols) {
+            $rowId = $mlids[$i];
             foreach ($cols as $fieldName => $value) {
-                if ($fieldName === '__atkml' || $fieldName === $entity->idField) {
+                if ($fieldName === $entity->idField) {
                     continue;
                 }
 
@@ -352,40 +411,11 @@ class Multiline extends Form\Control
         return $rowErrors;
     }
 
-    /**
-     * @return $this
-     */
-    public function saveRows(): self
+    public function saveRows(): void
     {
-        $model = $this->model;
+        assert(!$this->entityField->getField()->hasReference());
 
-        // delete removed rows
-        // TODO this is dangerous, deleted row IDs should be passed from UI
-        $idsToDelete = array_filter(array_column($this->rowData, $model->idField), static fn ($v) => $v !== null);
-        foreach ($model->createIteratorBy($model->idField, 'not in', $idsToDelete) as $entity) {
-            $entity->delete();
-        }
-
-        foreach ($this->rowData as $row) {
-            $entity = $row[$model->idField] !== null
-                ? $model->load($row[$model->idField])
-                : $model->createEntity();
-            foreach ($row as $fieldName => $value) {
-                if ($fieldName === '__atkml') {
-                    continue;
-                }
-
-                if ($model->getField($fieldName)->isEditable()) {
-                    $entity->set($fieldName, $value);
-                }
-            }
-
-            if (!$entity->isLoaded() || $entity->getDirtyRef() !== []) {
-                $entity->save();
-            }
-        }
-
-        return $this;
+        $this->changes->saveTo($this->model);
     }
 
     /**
@@ -405,25 +435,6 @@ class Multiline extends Form\Control
         }
 
         return $errors;
-    }
-
-    /**
-     * Finds and returns Multiline row ID.
-     *
-     * @param array<string, string> $row
-     */
-    private function getMlRowId(array $row): ?string
-    {
-        $rowId = null;
-        foreach ($row as $col => $value) {
-            if ($col === '__atkml') {
-                $rowId = $value;
-
-                break;
-            }
-        }
-
-        return $rowId;
     }
 
     /**
@@ -548,12 +559,17 @@ class Multiline extends Form\Control
     protected function getDropdownProps(Field $field): array
     {
         $props = array_merge(
-            ['floating' => false, 'closeOnBlur' => true, 'selection' => true],
+            ['floating' => false, 'closeOnBlur' => true, 'selection' => true, 'clearable' => true],
             $this->componentProps[self::SELECT] ?? []
         );
 
+        $props['options'] = [];
         $items = $this->getFieldItems($field, $this->itemLimit);
         foreach ($items as $value => $text) {
+            if (is_int($value)) {
+                $value = (string) $value;
+            }
+
             $props['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
         }
 
@@ -567,18 +583,25 @@ class Multiline extends Form\Control
      */
     protected function getLookupProps(Field $field): array
     {
-        // set any of SuiDropdown props via this property
-        // will be applied globally
         $props = [];
-        $props['config'] = $this->componentProps[self::LOOKUP] ?? [];
-        $items = $this->getFieldItems($field, 10);
+        $props['config'] = array_merge(
+            ['clearable' => true],
+            $this->componentProps[self::LOOKUP] ?? []
+        );
+
+        $props['config']['options'] = [];
+        $items = $this->getFieldItems($field, $this->itemLimit);
         foreach ($items as $value => $text) {
+            if (is_int($value)) {
+                $value = (string) $value;
+            }
+
             $props['config']['options'][] = ['key' => $value, 'text' => $text, 'value' => $value];
         }
 
         if ($field->hasReference()) {
             $props['config']['reference'] = $field->shortName;
-            $props['config']['search'] = true;
+            // $props['config']['search'] = true; // breaks "clearable" config
         }
 
         $props['config']['placeholder'] ??= 'Select ' . $field->getCaption();
@@ -596,9 +619,7 @@ class Multiline extends Form\Control
             $option = ['key' => $value, 'text' => $entity->get($model->titleField), 'value' => $value];
             foreach ($this->fieldDefs as $key => $component) {
                 if ($component['name'] === $field->shortName) {
-                    $this->fieldDefs[$key]['definition']['componentProps']['optionalValue'] = isset($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'])
-                        ? array_merge($this->fieldDefs[$key]['definition']['componentProps']['optionalValue'], [$option])
-                        : [$option];
+                    $this->fieldDefs[$key]['definition']['componentProps']['optionalValues'] = array_merge($this->fieldDefs[$key]['definition']['componentProps']['optionalValues'] ?? [], [$option]);
                 }
             }
         }
@@ -639,24 +660,29 @@ class Multiline extends Form\Control
     }
 
     /**
-     * @return array<mixed, mixed>
+     * @return array<string|int, string>
      */
-    protected function getFieldItems(Field $field, ?int $limit = 10): array
+    protected function getFieldItems(Field $field, ?int $limit): array
     {
         $items = [];
         if ($field->enum !== null) {
             $items = array_slice($field->enum, 0, $limit);
+            $items = array_map(fn ($v) => $this->getApp()->uiPersistence->typecastSaveField($field, $v), $items);
             $items = array_combine($items, $items);
         }
         if ($field->values !== null) {
             $items = array_slice($field->values, 0, $limit, true);
+            $items = array_combine(
+                array_map(fn ($v) => $this->getApp()->uiPersistence->typecastSaveField($field, $v), array_keys($items)),
+                $items
+            );
         } elseif ($field->hasReference()) {
             $model = $field->getReference()->createTheirModel();
             $model->setLimit($limit);
 
             $theirFieldName = $field->getReference()->getTheirFieldName($model);
             foreach ($model as $item) {
-                $theirValue = $this->getApp()->uiPersistence->typecastAttributeSaveField($model->getField($theirFieldName), $item->get($theirFieldName));
+                $theirValue = $this->getApp()->uiPersistence->typecastSaveField($model->getField($theirFieldName), $item->get($theirFieldName));
                 $items[$theirValue] = $item->get($model->titleField);
             }
         }
@@ -674,7 +700,9 @@ class Multiline extends Form\Control
         foreach ($fieldValues as $rows) {
             foreach ($rows as $fieldName => $value) {
                 if (isset($this->valuePropsBinding[$fieldName])) {
-                    ($this->valuePropsBinding[$fieldName])($this->model->getField($fieldName), $value);
+                    if ($value !== null) {
+                        ($this->valuePropsBinding[$fieldName])($this->model->getField($fieldName), $value);
+                    }
                 }
             }
         }
@@ -724,10 +752,8 @@ class Multiline extends Form\Control
                 $this->getApp()->terminateJson(['success' => true, 'expressions' => $expressionValues]);
                 // no break - expression above always terminate
             case 'on-change':
-                $rowsRaw = $this->getApp()->decodeJson($this->getApp()->getRequestPostParam('rows'));
-                $this->renderCallback->set(function () use ($rowsRaw) {
-                    return ($this->onChangeFunction)($this->typeCastLoadValues($rowsRaw), $this->form);
-                });
+                [$rows, $mlids] = $this->decodeInput($this->getApp()->getRequestPostParam('rows'));
+                $this->renderCallback->set(fn () => ($this->onChangeFunction)($rows, $mlids, $this->form));
         }
     }
 
@@ -820,7 +846,24 @@ class Multiline extends Form\Control
             return [];
         }
 
-        $dummyModel = new Model($entity->getModel()->getPersistence(), ['table' => $entity->getModel()->table, 'idField' => false]);
+        $dummyModel = new Model($entity->getModel()->getPersistence(), [
+            'table' => new class($entity->getModel()->getPersistence()) extends Model {
+                public $table = '';
+
+                #[\Override]
+                public function action(string $mode, array $args = [])
+                {
+                    assert($mode === 'select');
+                    assert($args === []);
+
+                    $query = Persistence\Sql::assertInstanceOf($this->getPersistence())->dsql();
+                    $query->field($query->expr('[]', [1]), '_c');
+
+                    return $query;
+                }
+            },
+            'idField' => false,
+        ]);
 
         $createExprFromValueFx = static function ($v) use ($dummyModel): Persistence\Sql\Expression {
             if (is_int($v)) {
@@ -843,7 +886,6 @@ class Multiline extends Form\Control
                 'actual' => $field->actual,
             ]);
         }
-        $dummyModel->setLimit(1); // TODO must work with empty table, no table should be used
         $values = $dummyModel->loadOne()->get();
         unset($values[$entity->idField]);
 

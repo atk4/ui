@@ -115,10 +115,8 @@ __webpack_require__.r(__webpack_exports__);
             :is="getComponent()"
             v-bind="getComponentProps()"
             ref="cell"
-            :fluid="true"
-            class="fluid"
             :name="inputName"
-            v-model="inputValue"
+            :modelValue="inputValue"
             @update:modelValue="onInput"
         ></component>`,
   components: {
@@ -133,7 +131,8 @@ __webpack_require__.r(__webpack_exports__);
       fieldName: this.cellData.name,
       type: this.cellData.type,
       inputName: '-' + this.cellData.name,
-      inputValue: this.fieldValue
+      inputValue: this.cellData.definition.component === 'SuiDropdown' // mimic https://github.com/atk4/ui/blob/6.0.0/js/src/VueComponent/Share/AtkLookupComponent.js#L44
+      ? this.getDropdownValue(this.fieldValue) : this.fieldValue
     };
   },
   emits: ['updateValue'],
@@ -149,9 +148,18 @@ __webpack_require__.r(__webpack_exports__);
       }
       return this.cellData.definition.componentProps;
     },
+    getDropdownValue: function (value) {
+      for (const option of this.cellData.definition.componentProps.options) {
+        if (option.value === value) {
+          return option;
+        }
+      }
+      return value;
+    },
     onInput: function (value) {
       this.inputValue = value;
-      this.$emit('updateValue', this.fieldName, this.inputValue);
+      this.$emit('updateValue', this.fieldName, this.cellData.definition.component === 'SuiDropdown' // mimic https://github.com/atk4/ui/blob/ea4cc192c8/js/src/VueComponent/Share/AtkLookupComponent.js#L50
+      ? value === null ? null : value.value : value);
     }
   }
 });
@@ -203,6 +211,7 @@ __webpack_require__.r(__webpack_exports__);
                 <AtkMultilineHeader
                     :fields="fieldData"
                     :selectionState="getMainToggleState"
+                    :rowDataCount="rowData.length"
                     :errors="errors"
                     :caption="caption"
                 ></AtkMultilineHeader>
@@ -486,7 +495,7 @@ __webpack_require__.r(__webpack_exports__);
       if (this.data.rowLimit === 0) {
         return false;
       }
-      return this.data.rowLimit < this.rowData.length + 1;
+      return this.rowData.length >= this.data.rowLimit;
     }
   }
 });
@@ -518,7 +527,7 @@ __webpack_require__.r(__webpack_exports__);
             <SuiTableRow v-if="hasError()">
                 <SuiTableCell :style="{ background: 'none' }" />
                 <SuiTableCell :style="{ background: 'none' }"
-                    error="true"
+                    :error="true"
                     v-for="column in filterVisibleColumns(columns)"
                     :textAlign="getTextAlign(column)"
                 >
@@ -531,7 +540,7 @@ __webpack_require__.r(__webpack_exports__);
             </SuiTableRow>
             <SuiTableRow :verticalAlign="'top'">
                 <SuiTableHeaderCell :width=1 textAlign="center">
-                    <input ref="check" type="checkbox" :checked="isChecked" :indeterminate="isIndeterminate" @input="onToggleDeleteAll" />
+                    <input v-if="rowDataCount > 1" ref="check" type="checkbox" :checked="isChecked" :indeterminate="isIndeterminate" @input="onToggleDeleteAll" />
                 </SuiTableHeaderCell>
                 <SuiTableHeaderCell
                     v-for="column in filterVisibleColumns(columns)"
@@ -545,7 +554,7 @@ __webpack_require__.r(__webpack_exports__);
                 </SuiTableHeaderCell>
             </SuiTableRow>
         </SuiTableHeader>`,
-  props: ['fields', 'selectionState', 'errors', 'caption'],
+  props: ['fields', 'selectionState', 'rowDataCount', 'errors', 'caption'],
   data: function () {
     return {
       columns: this.fields,
@@ -846,12 +855,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.iterator.constructor.js */ "./node_modules/core-js/modules/es.iterator.constructor.js");
-/* harmony import */ var core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_constructor_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core-js/modules/es.iterator.find.js */ "./node_modules/core-js/modules/es.iterator.find.js");
-/* harmony import */ var core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_iterator_find_js__WEBPACK_IMPORTED_MODULE_1__);
-
-
 /**
  * Wrapper for Fomantic-UI dropdown component into a lookup component.
  *
@@ -861,7 +864,7 @@ __webpack_require__.r(__webpack_exports__);
  * Note: The remaining config object may contain any or SuiDropdown { props: value } pair.
  *
  * modelValue: The selected value.
- * optionalValue: The initial list of options for the dropdown.
+ * optionalValues: The initial list of options for the dropdown.
  */
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'AtkLookup',
@@ -872,7 +875,7 @@ __webpack_require__.r(__webpack_exports__);
             :modelValue="getDropdownValue(modelValue)"
             @update:modelValue="onUpdate"
         ></SuiDropdown>`,
-  props: ['config', 'modelValue', 'optionalValue'],
+  props: ['config', 'modelValue', 'optionalValues'],
   data: function () {
     const {
       url,
@@ -889,17 +892,22 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function () {
-    if (this.optionalValue) {
-      this.dropdownProps.options = Array.isArray(this.optionalValue) ? this.optionalValue : [this.optionalValue];
+    if (this.optionalValues) {
+      this.dropdownProps.options = [...this.dropdownProps.options, ...this.optionalValues];
     }
   },
   emits: ['update:modelValue'],
   methods: {
     getDropdownValue: function (value) {
-      return this.dropdownProps.options.find(item => item.value === value);
+      for (const option of this.dropdownProps.options) {
+        if (option.value === value) {
+          return option;
+        }
+      }
+      return value;
     },
     onUpdate: function (value) {
-      this.$emit('update:modelValue', value.value);
+      this.$emit('update:modelValue', value === null ? null : value.value);
     }
   }
 });

@@ -520,7 +520,7 @@ class View extends AbstractView
                 $this->template->dangerouslySetHtml('attributes', implode(' ', $attrsHtml));
             } catch (Exception $e) {
                 // TODO hack to ignore missing '{$attributes}' mostly in layout templates
-                if (count($attrsHtml) === 1 ? !str_starts_with(reset($attrsHtml), 'id=') : !$this instanceof Lister) {
+                if (count($attrsHtml) === 1 ? !str_starts_with(array_first($attrsHtml), 'id=') : !$this instanceof Lister) {
                     throw $e;
                 }
             }
@@ -685,7 +685,7 @@ class View extends AbstractView
         }
 
         if ($when === true) {
-            $this->_jsActions[$when][] = $action;
+            $this->_jsActions[$when][] = $action; // @phpstan-ignore offsetAccess.invalidOffset
         }
 
         return $res;
@@ -882,7 +882,7 @@ class View extends AbstractView
         $jsEventStatements['preventDefault'] = $defaults['preventDefault'] ?? true;
         $jsEventStatements['stopPropagation'] = $defaults['stopPropagation'] ?? true;
 
-        $lazyJsRenderFx = function (\Closure $fx): JsExpressionable {
+        $lazyJsRenderFx = static function (\Closure $fx): JsExpressionable {
             return new class($fx) implements JsExpressionable {
                 public \Closure $fx;
 

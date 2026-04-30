@@ -11,7 +11,7 @@ use Psr\Http\Message\StreamInterface;
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$hugePseudoStreamClass = AnonymousClassNameCache::get_class(fn () => new class(static fn (int $pos) => '', -1) implements StreamInterface {
+$hugePseudoStreamClass = AnonymousClassNameCache::get_class(static fn () => new class(static fn (int $pos) => '', -1) implements StreamInterface {
     /** @var \Closure(int): string */
     private \Closure $fx;
 
