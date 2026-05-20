@@ -391,7 +391,7 @@ class Console extends View implements LoggerInterface
                     $object->getApp()->logger = $loggerBak; // @phpstan-ignore variable.undefined
                 }
                 if (TraitUtil::hasTrait($object, DebugTrait::class)) {
-                    $object->debug = $debugBak;
+                    $object->debug = $debugBak; // @phpstan-ignore variable.undefined
                 }
             }
         } else {
