@@ -63,9 +63,9 @@ class ScopeBuilder extends Form\Control
 
     /**
      * Set Labels for Vue-Query-Builder
-     * see https://dabernathy89.github.io/vue-query-builder/configuration.html#labels.
+     * see https://dabernathy89.github.io/vue-query-builder/configuration.html#labels .
      *
-     * @var array<mixed, mixed>
+     * @var array<string, mixed>
      */
     public array $labels = [];
 
@@ -514,7 +514,7 @@ class ScopeBuilder extends Form\Control
                 'maxDepth' => $this->maxDepth,
                 'query' => $this->query,
                 'name' => $this->shortName,
-                'labels' => $this->labels !== [] ? $this->labels : null, // TODO do we need to really pass null for empty array?
+                'labels' => $this->labels,
                 'form' => $this->form->formElement->name,
                 'debug' => $this->options['debug'] ?? false,
             ],
