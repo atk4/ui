@@ -26,7 +26,7 @@ class CoverageUtil
             throw new \Error('Coverage already started');
         }
 
-        self::$coverage = new CodeCoverage((new DriverSelector())->forLineCoverage($filter), $filter);
+        self::$coverage = new CodeCoverage((new DriverSelector())->forLineCoverage($filter), $filter); // @phpstan-ignore method.deprecated
         self::$coverage->cacheStaticAnalysis(sys_get_temp_dir() . '/phpunit-coverage.' . md5(__DIR__) . '.cache');
         self::$coverage->start(self::class);
     }
