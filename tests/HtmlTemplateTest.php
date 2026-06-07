@@ -85,7 +85,7 @@ class HtmlTemplateTest extends TestCase
         $t = new HtmlTemplate('{foo}hello{/} guys');
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Value is not valid UTF-8');
+        $this->expectExceptionMessageIs('Value is not valid UTF-8');
         $t->set('foo', "\xc2");
     }
 
@@ -149,7 +149,7 @@ class HtmlTemplateTest extends TestCase
         self::assertSame('<br>', $tagTreeFoo->getChildren()[1]->getHtml());
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unencoded value is not available');
+        $this->expectExceptionMessageIs('Unencoded value is not available');
         $tagTreeFoo->getChildren()[1]->getUnencoded();
     }
 
@@ -194,7 +194,7 @@ class HtmlTemplateTest extends TestCase
         $t = new HtmlTemplate('{$foo}');
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Tag is not defined in template');
+        $this->expectExceptionMessageIs('Tag is not defined in template');
         $t->set('bar', 'test');
     }
 
@@ -205,7 +205,7 @@ class HtmlTemplateTest extends TestCase
         self::assertSameTemplate('{foo}x{/foo}', $t);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Tag is not defined in template');
+        $this->expectExceptionMessageIs('Tag is not defined in template');
         try {
             $t->set(['foo' => 'y', 'bar' => 'test']);
         } finally {
@@ -218,28 +218,28 @@ class HtmlTemplateTest extends TestCase
         $t = new HtmlTemplate();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Tag must be non-empty string');
+        $this->expectExceptionMessageIs('Tag must be non-empty string');
         $t->set('', 'test');
     }
 
     public function testParseNotOpenedTagException(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Template parse error: tag was not opened');
+        $this->expectExceptionMessageIs('Template parse error: tag was not opened');
         new HtmlTemplate('{/}');
     }
 
     public function testParseNotOpenedTag2Exception(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Template parse error: tag was not opened');
+        $this->expectExceptionMessageIs('Template parse error: tag was not opened');
         new HtmlTemplate('{foo}{/bar}');
     }
 
     public function testParseNotClosedTagException(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Template parse error: tag is not closed');
+        $this->expectExceptionMessageIs('Template parse error: tag is not closed');
         new HtmlTemplate('{foo}');
     }
 }

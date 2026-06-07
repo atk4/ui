@@ -166,7 +166,7 @@ class ViewTest extends TestCase
         $v->setModel($m1);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Different model is already set');
+        $this->expectExceptionMessageIs('Different model is already set');
         $v->setModel($m2);
     }
 
@@ -181,7 +181,7 @@ class ViewTest extends TestCase
         $v->setEntity($entity1);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Different entity is already set');
+        $this->expectExceptionMessageIs('Different entity is already set');
         $v->setEntity($entity2);
     }
 
@@ -196,7 +196,7 @@ class ViewTest extends TestCase
         $v = new $vClass();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Source data contains unsupported zero key');
+        $this->expectExceptionMessageIs('Source data contains unsupported zero key');
         $v->setSource(['a', 2 => 'b']);
     }
 
@@ -205,7 +205,7 @@ class ViewTest extends TestCase
         $v = new ViewWithContent();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Not sure what to do with argument');
+        $this->expectExceptionMessageIs('Not sure what to do with argument');
         $v->set(1); // @phpstan-ignore argument.type
     }
 
@@ -220,7 +220,7 @@ class ViewTest extends TestCase
         $v = new $class();
 
         $this->expectException(\Error::class);
-        $this->expectExceptionMessage('$fx must be of type Closure');
+        $this->expectExceptionMessageIs('$fx must be of type Closure');
         $v->set('strlen'); // @phpstan-ignore argument.type, argument.templateType
     }
 
@@ -243,7 +243,7 @@ class ViewTest extends TestCase
         $v = new JsCallback();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Do not use getUrl on JsCallback, use getJsUrl()');
+        $this->expectExceptionMessageIs('Do not use getUrl on JsCallback, use getJsUrl()');
         $v->getUrl();
     }
 }

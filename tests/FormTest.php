@@ -43,7 +43,7 @@ class FormTest extends TestCase
         $form->addControl('foo');
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Form field already exists');
+        $this->expectExceptionMessageIs('Form field already exists');
         $form->addControl('foo');
     }
 
@@ -53,7 +53,7 @@ class FormTest extends TestCase
         $entity = (new Model())->createEntity();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Use Form::setEntity() method instead for entity set');
+        $this->expectExceptionMessageIs('Use Form::setEntity() method instead for entity set');
         $form->setModel($entity); // @phpstan-ignore argument.type, method.deprecated
     }
 
@@ -63,7 +63,7 @@ class FormTest extends TestCase
         $entity = (new Model())->createEntity();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Use Form\AbstractLayout::setEntity() method instead for entity set');
+        $this->expectExceptionMessageIs('Use Form\AbstractLayout::setEntity() method instead for entity set');
         $form->setModel($entity); // @phpstan-ignore argument.type, method.deprecated
     }
 
@@ -255,7 +255,7 @@ class FormTest extends TestCase
             self::assertSame('bar', $e->getPrevious()->getParams()['field']->shortName); // @phpstan-ignore method.notFound
 
             $this->expectException(ValidationException::class);
-            $this->expectExceptionMessage('Must not be null');
+            $this->expectExceptionMessageIs('Must not be null');
 
             throw $e->getPrevious();
         } finally {
@@ -289,7 +289,7 @@ class FormTest extends TestCase
             $catchReached = true;
 
             $this->expectException(\ErrorException::class);
-            $this->expectExceptionMessage('Converted PHP warning');
+            $this->expectExceptionMessageIs('Converted PHP warning');
 
             throw $e->getPrevious();
         } finally {
@@ -319,7 +319,7 @@ class FormTest extends TestCase
         });
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unable to create form control');
+        $this->expectExceptionMessageIs('Unable to create form control');
         try {
             $form->addControl('foo', [$controlClass]);
         } catch (Exception $e) {
@@ -354,7 +354,7 @@ class FormTest extends TestCase
         });
 
         $this->expectException(\ErrorException::class);
-        $this->expectExceptionMessage('Converted PHP warning');
+        $this->expectExceptionMessageIs('Converted PHP warning');
         try {
             $form->addControl('foo', [$controlClass]);
         } finally {
@@ -400,7 +400,7 @@ class FormTest extends TestCase
         $input->entityField->set('1');
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Checkbox form control requires field with boolean type');
+        $this->expectExceptionMessageIs('Checkbox form control requires field with boolean type');
         $input->renderAll();
     }
 
@@ -419,7 +419,7 @@ class FormTest extends TestCase
         });
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing onUpload callback');
+        $this->expectExceptionMessageIs('Missing onUpload callback');
         $input->renderAll();
     }
 
@@ -438,7 +438,7 @@ class FormTest extends TestCase
         });
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing onDelete callback');
+        $this->expectExceptionMessageIs('Missing onDelete callback');
         $input->renderAll();
     }
 }

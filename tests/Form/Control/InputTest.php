@@ -35,7 +35,7 @@ class InputTest extends TestCase
         $form->addControl('foo', [Form\Control\Input::class, 'action' => $executor]);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Input form control supports user action with zero or one argument only');
+        $this->expectExceptionMessageIs('Input form control supports user action with zero or one argument only');
         $form->renderAll();
     }
 }

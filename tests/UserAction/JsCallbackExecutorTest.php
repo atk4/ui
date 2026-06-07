@@ -24,7 +24,7 @@ class JsCallbackExecutorTest extends TestCase
         $executor->setAction($m->getUserAction('foo'));
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('URL arguments does not match user action arguments');
+        $this->expectExceptionMessageIs('URL arguments does not match user action arguments');
         $executor->executeModelAction();
     }
 }
