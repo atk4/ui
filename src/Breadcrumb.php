@@ -13,7 +13,7 @@ class Breadcrumb extends Lister
     /** @var string|null */
     public $title;
 
-    /** @var list<array{section: string, link: string|array<0|string, string|int|false>}> */
+    /** @var list<array{section: string, link: string|array<0|string, string|int|false>, divider?: string}> */
     public $path = [];
 
     /** @var string */
