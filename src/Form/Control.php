@@ -142,8 +142,8 @@ abstract class Control extends ViewWithContent
      * $control->onChange(new JsExpression('console.log(\'changed\')'));
      * $control->onChange(new JsExpression('$(this).parents(\'.form\').form(\'submit\')'));
      *
-     * @param JsExpressionable|JsCallbackSetWithValueClosure|array{JsCallbackSetWithValueClosure} $action
-     * @param array<int|string, mixed>                                                            $defaults
+     * @param JsExpressionable|JsCallbackSetWithValueClosure|array{JsCallbackSetWithValueClosure, ...<JsExpressionable>} $action
+     * @param array<int|string, mixed>                                                                                   $defaults
      */
     public function onChange($action, array $defaults = []): void
     {
