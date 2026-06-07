@@ -99,28 +99,28 @@ class TagTest extends TestCase
     public function testNotSelfClosingVoidTagException(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessageIs('void tag');
+        $this->expectExceptionMessageIs('Wrong void tag usage');
         self::assertTagRender('', ['br']);
     }
 
     public function testClosingVoidTagException(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessageIs('void tag');
+        $this->expectExceptionMessageIs('Wrong void tag usage');
         self::assertTagRender('', ['/br']);
     }
 
     public function testSelfClosingNonVoidTagException(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessageIs('void tag');
+        $this->expectExceptionMessageIs('Wrong void tag usage');
         self::assertTagRender('', ['div/']);
     }
 
     public function testVoidTagWithValueException(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessageIs('void tag');
+        $this->expectExceptionMessageIs('Wrong void tag usage');
         self::assertTagRender('', ['br/', [], '']);
     }
 }
