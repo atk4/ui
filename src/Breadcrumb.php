@@ -38,20 +38,6 @@ class Breadcrumb extends Lister
     }
 
     /**
-     * Converts the last crumb you added into a title. This may be convenient if you add
-     * crumbs conditionally and the last should remain as a title.
-     *
-     * @return $this
-     */
-    public function popTitle()
-    {
-        $title = array_pop($this->path);
-        $this->title = $title['section'];
-
-        return $this;
-    }
-
-    /**
      * Adds a new link that will appear on the left.
      *
      * @param string                                   $section Title of link
@@ -62,6 +48,20 @@ class Breadcrumb extends Lister
     public function addCrumbReverse($section = null, $link = null)
     {
         array_unshift($this->path, ['section' => $section, 'link' => $link]);
+
+        return $this;
+    }
+
+    /**
+     * Converts the last crumb you added into a title. This may be convenient if you add
+     * crumbs conditionally and the last should remain as a title.
+     *
+     * @return $this
+     */
+    public function popTitle()
+    {
+        $title = array_pop($this->path);
+        $this->title = $title['section'];
 
         return $this;
     }
