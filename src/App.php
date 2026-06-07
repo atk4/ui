@@ -1076,7 +1076,7 @@ class App
             return '</' . $tag . '>';
         }
 
-        return '<' . $tag . ($tmp !== [] ? ' ' . implode(' ', $tmp) : '') . ($isClosing && !$isVoid ? ' /' : '') . '>'
+        return '<' . $tag . ($tmp !== [] ? ' ' . implode(' ', $tmp) : '') . '>'
             . ($value !== null ? $value . '</' . $tag . '>' : '');
     }
 
