@@ -465,7 +465,7 @@ class View extends AbstractView
         }
 
         $app = $this->getApp();
-        if (!$app->isVoidTag($this->element)) {
+        if (!$app->isHtmlVoidTag($this->element)) {
             $this->template->tryDangerouslySetHtml('_element_end', '</' . $this->element . '>');
         }
 
