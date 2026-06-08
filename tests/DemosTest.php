@@ -313,7 +313,7 @@ class DemosTest extends TestCase
     {
         if (static::class === self::class) {
             $this->expectException(CoreException::class);
-            $this->expectExceptionMessage('Property for specified object is not defined');
+            $this->expectExceptionMessageIs('Property for specified object is not defined');
         }
 
         $response = $this->getResponseFromRequest5xx('layout/layouts_error.php');
@@ -414,7 +414,7 @@ class DemosTest extends TestCase
                     return;
                 }
 
-                $this->expectExceptionMessage($expectedExceptionMessage);
+                $this->expectExceptionMessageIs($expectedExceptionMessage);
             }
         }
 
@@ -509,7 +509,7 @@ class DemosTest extends TestCase
     public function testDemoCallbackError(string $path, string $expectedExceptionMessage, array $options = []): void
     {
         if (static::class === self::class) {
-            $this->expectExceptionMessage($expectedExceptionMessage);
+            $this->expectExceptionMessageIs($expectedExceptionMessage);
         }
 
         $response = $this->getResponseFromRequest5xx($path, $options);

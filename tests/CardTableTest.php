@@ -17,7 +17,7 @@ class CardTableTest extends TestCase
         $entity = (new Model())->createEntity();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Use CardTable::setEntity() method instead for entity set');
+        $this->expectExceptionMessageIs('Use CardTable::setEntity() method instead for entity set');
         $form->setModel($entity); // @phpstan-ignore argument.type, method.deprecated
     }
 }

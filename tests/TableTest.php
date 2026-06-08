@@ -47,7 +47,7 @@ class TableTest extends TestCase
         $table->addColumn('foo');
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Table column already exists');
+        $this->expectExceptionMessageIs('Table column already exists');
         $table->addColumn('foo');
     }
 }

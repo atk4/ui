@@ -84,7 +84,7 @@ class JsTest extends TestCase
         $app = $this->createAppWithoutConstructor();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Object to JSON encode is not supported');
+        $this->expectExceptionMessageIs('Object to JSON encode is not supported');
         $app->encodeJson(new \stdClass());
     }
 
@@ -93,7 +93,7 @@ class JsTest extends TestCase
         $app = $this->createAppWithoutConstructor();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Object to JSON encode is not supported');
+        $this->expectExceptionMessageIs('Object to JSON encode is not supported');
         $app->encodeJson([[0, new \stdClass()]]);
     }
 
@@ -184,7 +184,7 @@ class JsTest extends TestCase
         $js = new JsExpression('[foo]', ['foo']);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Tag is not defined in template');
+        $this->expectExceptionMessageIs('Tag is not defined in template');
         $js->jsRender();
     }
 
@@ -193,7 +193,7 @@ class JsTest extends TestCase
         $js = new JsExpression('{}', [new \stdClass()]);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('not renderable to JS');
+        $this->expectExceptionMessageIs('Argument is not renderable to JS');
         $js->jsRender();
     }
 
@@ -252,14 +252,14 @@ class JsTest extends TestCase
     public function testBlockInvalidStringTypeException(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage((\PHP_MAJOR_VERSION === 7 ? 'must implement interface' : 'must be of type') . ' Atk4\Ui\Js\JsExpressionable, string given');
+        $this->expectExceptionMessageIsOrContains((\PHP_MAJOR_VERSION === 7 ? 'must implement interface' : 'must be of type') . ' Atk4\Ui\Js\JsExpressionable, string given');
         new JsBlock(['a()']); // @phpstan-ignore argument.type
     }
 
     public function testBlockInvalidArrayTypeException(): void
     {
         $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage((\PHP_MAJOR_VERSION === 7 ? 'must implement interface' : 'must be of type') . ' Atk4\Ui\Js\JsExpressionable, array given');
+        $this->expectExceptionMessageIsOrContains((\PHP_MAJOR_VERSION === 7 ? 'must implement interface' : 'must be of type') . ' Atk4\Ui\Js\JsExpressionable, array given');
         new JsBlock([[]]); // @phpstan-ignore argument.type
     }
 }

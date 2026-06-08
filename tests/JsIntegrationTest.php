@@ -145,7 +145,7 @@ class JsIntegrationTest extends TestCase
         $js->data(['url' => JsCallback::addTo($v)]);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('not renderable to JS');
+        $this->expectExceptionMessageIs('Argument is not renderable to JS');
         $js->jsRender();
     }
 

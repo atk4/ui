@@ -37,7 +37,7 @@ class AppTest extends TestCase
         $app = $this->createApp();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('GET param does not exist');
+        $this->expectExceptionMessageIs('GET param does not exist');
         $app->getRequestQueryParam('foo');
     }
 
@@ -46,7 +46,7 @@ class AppTest extends TestCase
         $app = $this->createApp();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('POST param does not exist');
+        $this->expectExceptionMessageIs('POST param does not exist');
         $app->getRequestPostParam('foo');
     }
 
@@ -55,7 +55,7 @@ class AppTest extends TestCase
         $app = $this->createApp();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('FILES upload does not exist');
+        $this->expectExceptionMessageIs('FILES upload does not exist');
         $app->getRequestUploadedFile('foo');
     }
 
@@ -106,7 +106,7 @@ class AppTest extends TestCase
             echo $testStr;
 
             $this->expectException(LateOutputError::class);
-            $this->expectExceptionMessage('Unexpected output detected');
+            $this->expectExceptionMessageIs('Unexpected output detected');
             $app->terminateHtml('');
         } finally {
             self::assertSame($testStr, ob_get_contents());
@@ -119,7 +119,7 @@ class AppTest extends TestCase
         $request = (new Psr17Factory())->createServerRequest('GET', '');
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Request URL path must always start with \'/\'');
+        $this->expectExceptionMessageIs('Request URL path must always start with \'/\'');
         $this->createApp(['request' => $request]);
     }
 
@@ -251,7 +251,7 @@ class AppTest extends TestCase
         $app = $this->createApp();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Content type must be always set');
+        $this->expectExceptionMessageIs('Content type must be always set');
         $app->terminate();
     }
 }

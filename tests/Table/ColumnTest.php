@@ -49,7 +49,7 @@ class ColumnTest extends TestCase
         $view->invokeInit();
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unexpected initialized View instance');
+        $this->expectExceptionMessageIs('Unexpected initialized View instance');
         $column->addButton($view);
     }
 

@@ -465,7 +465,7 @@ class View extends AbstractView
         }
 
         $app = $this->getApp();
-        if (!$app->isVoidTag($this->element)) {
+        if (!$app->isHtmlVoidTag($this->element)) {
             $this->template->tryDangerouslySetHtml('_element_end', '</' . $this->element . '>');
         }
 
@@ -842,10 +842,10 @@ class View extends AbstractView
      *   return $js->parent()->hide();
      * });
      *
-     * @param string                                                                                                                                                                                       $event    JavaScript event
-     * @param ($action is object ? string : ($action is null ? string : never)|JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction) $selector Optional jQuery-style selector
-     * @param ($selector is string|null ? JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure}|UserAction\ExecutorInterface|Model\UserAction : array<int|string, mixed>)           $action   code to execute
-     * @param array<int|string, mixed>                                                                                                                                                                     $defaults
+     * @param string                                                                                                                                                                                                              $event    JavaScript event
+     * @param ($action is object ? string : ($action is null ? string : never)|JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure, ...<JsExpressionable>}|UserAction\ExecutorInterface|Model\UserAction) $selector Optional jQuery-style selector
+     * @param ($selector is string|null ? JsExpressionable|JsCallback|JsCallbackSetClosure|array{JsCallbackSetClosure, ...<JsExpressionable>}|UserAction\ExecutorInterface|Model\UserAction : array<int|string, mixed>)           $action   code to execute
+     * @param array<int|string, mixed>                                                                                                                                                                                            $defaults
      *
      * @return ($selector is string|null ? ($action is null ? Jquery : null) : ($action is array|null ? Jquery : null))
      */

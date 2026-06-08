@@ -926,7 +926,7 @@ class App
         return new JsExpression('window.open([], [])', [$this->url($page), $newWindow ? '_blank' : '_top']);
     }
 
-    public function isVoidTag(string $tag): bool
+    public function isHtmlVoidTag(string $tag): bool
     {
         return [
             'area' => true, 'base' => true, 'br' => true, 'col' => true, 'embed' => true,
@@ -1012,7 +1012,7 @@ class App
             $isClosing = true;
         }
 
-        $isVoid = $this->isVoidTag($tag);
+        $isVoid = $this->isHtmlVoidTag($tag);
         if ($isVoid
             ? $isOpening && !$isClosing || !$isOpening || $value !== null
             : $isOpening && $isClosing
@@ -1076,7 +1076,7 @@ class App
             return '</' . $tag . '>';
         }
 
-        return '<' . $tag . ($tmp !== [] ? ' ' . implode(' ', $tmp) : '') . ($isClosing && !$isVoid ? ' /' : '') . '>'
+        return '<' . $tag . ($tmp !== [] ? ' ' . implode(' ', $tmp) : '') . '>'
             . ($value !== null ? $value . '</' . $tag . '>' : '');
     }
 
