@@ -214,13 +214,18 @@ class Grid extends View
      *
      * @return $this
      */
-    public function addItemsPerPageSelector(array $items = [10, 100, 1000], $label = 'Items per page:')
+    public function addItemsPerPageSelector(array $items = [10, 50, 100, 1000], $label = 'Items per page:')
     {
         $ipp = (int) $this->container->stickyGet('ipp');
-        if ($ipp) {
+
+        /*
+         * If $ipp is 0 don't set $this->ipp to the first item as that always sets the viewed selection
+         * to the first item in the list. If we actually track the ipp in the app we want it to set and
+         * show the correct value, as it was before reload or other events, before this change it only set the selected ipp value but showed the first item.
+         * Default ipp in this class is 50, that will be showed when nothing is selected.
+         */
+        if ($ipp > 0) {
             $this->ipp = $ipp;
-        } else {
-            $this->ipp = $items[0];
         }
 
         $pageLength = ItemsPerPageSelector::addTo($this->paginator, ['pageLengthItems' => $items, 'label' => $label, 'currentIpp' => $this->ipp], ['afterPaginator']);
