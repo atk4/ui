@@ -48,7 +48,7 @@ class Grid extends View
     public $paginator;
 
     /** @var int Number of items per page to display. */
-    public $ipp = 50;
+    public $ipp = 10;
 
     /**
      * Calling addActionButton will add a new column inside $table, and will be re-used
