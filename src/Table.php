@@ -427,6 +427,7 @@ class Table extends Lister
         // add totals rows or empty message
         if ($this->_renderedRowsCount === 0) {
             if (!$this->jsPaginator || !$this->jsPaginator->getPage()) {
+                $this->tEmpty->set('columns', (string) count($this->columns));
                 $this->template->dangerouslyAppendHtml('Body', $this->tEmpty->renderToHtml());
             }
         } elseif ($this->totalsPlan) {
