@@ -153,10 +153,10 @@ if ($layout instanceof Layout\NavigableInterface) {
     $layout->addMenuItem(['Sliding Panel'], [$path . 'layout-panel'], $menu);
 
     $path = $demosUrl . 'basic/';
-    $menu = $layout->addMenuGroup(['Basics', 'icon' => 'cubes']);
+    $menu = $layout->addMenuGroup(['Basics', 'label' => ['10', 'class.red' => true]]);
     $layout->addMenuItem('View', [$path . 'view'], $menu);
-    $layout->addMenuItem('Button', [$path . 'button'], $menu);
-    $layout->addMenuItem('Header', [$path . 'header'], $menu);
+    $layout->addMenuItem(['Button', 'label' => ['10', 'class.red' => true]], [$path . 'button'], $menu);
+    $layout->addMenuItem(['Header', 'icon' => 'edit'], [$path . 'header'], $menu);
     $layout->addMenuItem('Message', [$path . 'message'], $menu);
     $layout->addMenuItem('Labels', [$path . 'label'], $menu);
     $layout->addMenuItem('Menu', [$path . 'menu'], $menu);
@@ -174,9 +174,11 @@ if ($layout instanceof Layout\NavigableInterface) {
     $layout->addMenuItem(['HTML Layout'], [$path . 'html-layout'], $menu);
     $layout->addMenuItem(['Conditional Fields'], [$path . 'jscondform'], $menu);
 
+    $layout->addMenuItem(['Chats', 'label' => ['10', 'class.red' => true]], [$path . '..']);
+
     $path = $demosUrl . 'form-control/';
     $menu = $layout->addMenuGroup(['Form Controls', 'icon' => 'keyboard outline']);
-    $layout->addMenuItem(['Input'], [$path . 'input2'], $menu);
+    $layout->addMenuItem(['Input', 'label' => ['10', 'class.red' => true]], [$path . 'input2'], $menu);
     $layout->addMenuItem('Input Decoration', [$path . 'input'], $menu);
     $layout->addMenuItem('Calendar', [$path . 'calendar'], $menu);
     $layout->addMenuItem(['Checkboxes'], [$path . 'checkbox'], $menu);
