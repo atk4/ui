@@ -188,6 +188,7 @@ if ($layout instanceof Layout\NavigableInterface) {
     $layout->addMenuItem(['Multi Line'], [$path . 'multiline'], $menu);
     $layout->addMenuItem(['Tree Selector'], [$path . 'tree-item-selector'], $menu);
     $layout->addMenuItem(['Scope Builder'], [$path . 'scope-builder'], $menu);
+    $layout->addMenuItem(['Slider'], [$path . 'slider'], $menu);
 
     $path = $demosUrl . 'collection/';
     $menu = $layout->addMenuGroup(['Data Collection', 'icon' => 'table']);
