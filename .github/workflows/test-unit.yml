@@ -100,16 +100,19 @@ jobs:
           POSTGRES_USER: atk4_test_user
           POSTGRES_PASSWORD: atk4_pass
           POSTGRES_DB: atk4_test
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        options: --health-cmd=pg_isready --health-interval=10s --health-timeout=5s --health-retries=5
       mssql:
         image: mcr.microsoft.com/mssql/server
         env:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
+        options: --health-cmd="/opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1' || /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=5
       oracle:
         image: gvenzl/oracle-xe:18-slim-faststart
         env:
-          ORACLE_PASSWORD: atk4_pass
+          ORACLE_PASSWORD: atk4_pass_root
+          APP_USER: atk4_test_user
+          APP_USER_PASSWORD: atk4_pass
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -148,7 +151,6 @@ jobs:
           php -r '(new PDO("mysql:host=mysql", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
-          /usr/lib/oracle/setup.sh
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage; fi
 
       - name: "Run tests: SQLite"
@@ -205,11 +207,17 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mssql.cov; fi
 
+      - name: "Setup and wait for healthy Oracle service"
+        if: success() || failure()
+        run: |
+          /usr/lib/oracle/setup.sh
+          php -r '$t = microtime(true); while (microtime(true) - $t < 300) { try { (new PDO("oci:host=oracle;dbname=oracle/freepdb1", "system", "atk4_pass_root")); exit; } catch (Exception $e) {} sleep(1); } exit(2);'
+
       - name: "Run tests: Oracle (only for cron)"
         if: (success() || failure()) && github.event_name == 'schedule'
         env:
-          DB_DSN: "oci:dbname=oracle/free"
-          DB_USER: system
+          DB_DSN: "oci8:dbname=oracle/freepdb1"
+          DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
           NLS_LANG: AMERICAN_AMERICA.AL32UTF8
         run: |
@@ -274,7 +282,9 @@ jobs:
       oracle:
         image: gvenzl/oracle-xe:18-slim-faststart
         env:
-          ORACLE_PASSWORD: atk4_pass
+          ORACLE_PASSWORD: atk4_pass_root
+          APP_USER: atk4_test_user
+          APP_USER_PASSWORD: atk4_pass
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -368,7 +378,6 @@ jobs:
           php -r '(new PDO("mysql:host=mysql", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
-          /usr/lib/oracle/setup.sh
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage coverage/js; fi
           ci_wait_until () { timeout 30 sh -c "until { $1 2> /dev/null; }; do sleep 0.02; done" || timeout 15 sh -c "$1" || { echo "health timeout: $1"; exit 1; }; }
           php -d opcache.enable_cli=1 -S 127.0.0.1:8888 > /dev/null 2>&1 &
@@ -430,11 +439,17 @@ jobs:
           php demos/_demo-data/create-db.php
           vendor/bin/behat --strict -vv --config behat.yml.dist
 
+      - name: "Setup and wait for healthy Oracle service"
+        if: success() || failure()
+        run: |
+          /usr/lib/oracle/setup.sh
+          php -r '$t = microtime(true); while (microtime(true) - $t < 300) { try { (new PDO("oci:host=oracle;dbname=oracle/freepdb1", "system", "atk4_pass_root")); exit; } catch (Exception $e) {} sleep(1); } exit(2);'
+
       - name: "Run tests: Oracle (only for cron)"
         if: (success() || failure()) && github.event_name == 'schedule'
         env:
-          DB_DSN: "oci:dbname=oracle/free"
-          DB_USER: system
+          DB_DSN: "oci8:dbname=oracle/freepdb1"
+          DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
           NLS_LANG: AMERICAN_AMERICA.AL32UTF8
         run: |
