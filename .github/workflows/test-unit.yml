@@ -149,7 +149,6 @@ jobs:
           php -r '(new PDO("mysql:host=mysql", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
-          /usr/lib/oracle/setup.sh
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage; fi
 
       - name: "Run tests: SQLite"
@@ -205,6 +204,12 @@ jobs:
           php demos/_demo-data/create-db.php
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-mssql.cov; fi
+
+      - name: "Setup and wait for healthy Oracle service"
+        if: success() || failure()
+        run: |
+          /usr/lib/oracle/setup.sh
+          php -r '$t = microtime(true); while (microtime(true) - $t < 300) { try { (new PDO("oci:host=oracle;dbname=oracle/freepdb1", "system", "atk4_pass_root")); exit; } catch (Exception $e) {} sleep(1); } exit(2);'
 
       - name: "Run tests: Oracle (only for cron)"
         if: (success() || failure()) && github.event_name == 'schedule'
@@ -369,7 +374,6 @@ jobs:
           php -r '(new PDO("mysql:host=mysql", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("mysql:host=mariadb", "root", "atk4_pass_root"))->exec("ALTER USER '"'"'atk4_test_user'"'"'@'"'"'%'"'"' WITH MAX_USER_CONNECTIONS 5");'
           php -r '(new PDO("pgsql:host=postgres;dbname=atk4_test", "atk4_test_user", "atk4_pass"))->exec("ALTER ROLE atk4_test_user CONNECTION LIMIT 1");'
-          /usr/lib/oracle/setup.sh
           if [ -n "$LOG_COVERAGE" ]; then mkdir coverage coverage/js; fi
           ci_wait_until () { timeout 30 sh -c "until { $1 2> /dev/null; }; do sleep 0.02; done" || timeout 15 sh -c "$1" || { echo "health timeout: $1"; exit 1; }; }
           php -d opcache.enable_cli=1 -S 127.0.0.1:8888 > /dev/null 2>&1 &
@@ -430,6 +434,12 @@ jobs:
           sed -E "s~(\\\$db = new.+Persistence\\\\Sql)\(.+\);~\\1('$DB_DSN', '$DB_USER', '$DB_PASSWORD');~g" -i demos/db.default.php
           php demos/_demo-data/create-db.php
           vendor/bin/behat --strict -vv --config behat.yml.dist
+
+      - name: "Setup and wait for healthy Oracle service"
+        if: success() || failure()
+        run: |
+          /usr/lib/oracle/setup.sh
+          php -r '$t = microtime(true); while (microtime(true) - $t < 300) { try { (new PDO("oci:host=oracle;dbname=oracle/freepdb1", "system", "atk4_pass_root")); exit; } catch (Exception $e) {} sleep(1); } exit(2);'
 
       - name: "Run tests: Oracle (only for cron)"
         if: (success() || failure()) && github.event_name == 'schedule'
