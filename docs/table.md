@@ -418,7 +418,7 @@ of the TD properties.
 The link does add any TD properties so the resulting "td" tag would be:
 
 ```
-['class' => ['{$f_name_money}'] ]
+['class' => ['{$f_name_money}']]
 
 // would produce <td class="{$f_name_money}"> .. </td>
 ```
