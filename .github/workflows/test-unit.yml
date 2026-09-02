@@ -110,7 +110,9 @@ jobs:
       oracle:
         image: gvenzl/oracle-xe:18-slim-faststart
         env:
-          ORACLE_PASSWORD: atk4_pass
+          ORACLE_PASSWORD: atk4_pass_root
+          APP_USER: atk4_test_user
+          APP_USER_PASSWORD: atk4_pass
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -214,8 +216,8 @@ jobs:
       - name: "Run tests: Oracle (only for cron)"
         if: (success() || failure()) && github.event_name == 'schedule'
         env:
-          DB_DSN: "oci:dbname=oracle/free"
-          DB_USER: system
+          DB_DSN: "oci8:dbname=oracle/freepdb1"
+          DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
           NLS_LANG: AMERICAN_AMERICA.AL32UTF8
         run: |
@@ -280,7 +282,9 @@ jobs:
       oracle:
         image: gvenzl/oracle-xe:18-slim-faststart
         env:
-          ORACLE_PASSWORD: atk4_pass
+          ORACLE_PASSWORD: atk4_pass_root
+          APP_USER: atk4_test_user
+          APP_USER_PASSWORD: atk4_pass
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -444,8 +448,8 @@ jobs:
       - name: "Run tests: Oracle (only for cron)"
         if: (success() || failure()) && github.event_name == 'schedule'
         env:
-          DB_DSN: "oci:dbname=oracle/free"
-          DB_USER: system
+          DB_DSN: "oci8:dbname=oracle/freepdb1"
+          DB_USER: atk4_test_user
           DB_PASSWORD: atk4_pass
           NLS_LANG: AMERICAN_AMERICA.AL32UTF8
         run: |
