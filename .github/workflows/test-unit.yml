@@ -106,6 +106,7 @@ jobs:
         env:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
+        options: --health-cmd="/opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1' || /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=5
       oracle:
         image: gvenzl/oracle-xe:18-slim-faststart
         env:
@@ -271,6 +272,7 @@ jobs:
         env:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
+        options: --health-cmd="/opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1' || /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=5
       oracle:
         image: gvenzl/oracle-xe:18-slim-faststart
         env:
