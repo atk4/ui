@@ -9,7 +9,6 @@ use Atk4\Data\Persistence;
 use Atk4\Ui\App;
 use Atk4\Ui\Behat\CoverageUtil;
 use Atk4\Ui\Button;
-use Atk4\Ui\Exception;
 use Atk4\Ui\Layout;
 use Atk4\Ui\Persistence\Ui as UiPersistence;
 
