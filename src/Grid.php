@@ -498,7 +498,7 @@ class Grid extends View
      * with the $title and $callback is executed.
      *
      * @param string|array<mixed>|View           $button
-     * @param string                             $title
+     * @param string|array<mixed>                $title     modal title or modal defaults array
      * @param \Closure(View, mixed): void        $callback
      * @param array<string, string>              $args      extra URL argument for callback
      * @param bool|\Closure<T of Model>(T): bool $isEnabled
