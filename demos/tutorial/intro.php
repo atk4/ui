@@ -87,7 +87,7 @@ $wizard->addStep('Interactivity', static function (Wizard $page) {
 
         Text::addTo($seg)->set('Number of buttons: ');
 
-        $paginator = Paginator::addTo($seg, [
+        Paginator::addTo($seg, [
             'total' => 5,
             'reload' => $seg,
             'urlTrigger' => 'count',

@@ -14,8 +14,9 @@ return (new Config())
     ->setRules([
         '@PhpCsFixer' => true,
         '@PhpCsFixer:risky' => true,
-        '@PHP74Migration' => true,
-        '@PHP74Migration:risky' => true,
+        '@autoPHPMigration' => true,
+        '@autoPHPMigration:risky' => true,
+        '@autoPHPUnitMigration:risky' => true,
 
         // required by PSR-12
         'concat_space' => [

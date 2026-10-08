@@ -80,7 +80,7 @@ class GridLayout extends View
                 \Closure::bind(static function () use ($tagTree, $cloneTagTreeFx, $src) {
                     foreach ($tagTree->children as $v) {
                         if (is_string($v)) {
-                            $cloneTagTreeFx($src->getParentTemplate()->getTagTree($v));
+                            $cloneTagTreeFx($src->getParentTemplate()->getTagTree($v)); // @phpstan-ignore callable.nonCallable (https://github.com/phpstan/phpstan/issues/15442)
                         }
                     }
                 }, null, HtmlTemplate\TagTree::class)();

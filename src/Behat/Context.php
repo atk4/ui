@@ -41,7 +41,7 @@ class Context extends RawMinkContext implements BehatContext
 
     protected function getScenario(StepScope $event): ScenarioInterface
     {
-        foreach ($event->getFeature()->getScenarios() as $scenario) {
+        foreach ($event->getFeature()->getScenarios() as $scenario) { // TODO @phpstan-ignore method.deprecated
             $scenarioSteps = $scenario->getSteps();
             if (count($scenarioSteps) > 0
                 && array_first($scenarioSteps)->getLine() <= $event->getStep()->getLine()
@@ -814,10 +814,8 @@ class Context extends RawMinkContext implements BehatContext
         $numberOfitems = (int) $this->unquoteStepArgument($numberOfitems);
 
         $items = $this->getSession()->getPage()->findAll('css', $selector);
-        $count = 0;
-        foreach ($items as $el => $item) {
-            ++$count;
-        }
+        $count = count($items);
+
         if ($count !== $numberOfitems) {
             throw new \Exception('Items does not match. There were ' . $count . ' item in container');
         }
