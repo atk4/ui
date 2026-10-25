@@ -32,19 +32,6 @@ jobs:
           rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
           php --version
 
-      - name: Setup cache 1/2
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Setup cache 2/2
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-smoke-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
       - name: Install PHP dependencies
         run: |
           if [ "${{ matrix.type }}" != "CodingStyle" ]; then composer remove --no-interaction --no-update friendsofphp/php-cs-fixer ergebnis/composer-normalize --dev; fi
@@ -120,19 +107,6 @@ jobs:
         run: |
           if [ -n "$LOG_COVERAGE" ]; then echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; else rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; fi
           php --version
-
-      - name: Setup cache 1/2
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Setup cache 2/2
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
         run: |
@@ -292,19 +266,6 @@ jobs:
         run: |
           if [ -n "$LOG_COVERAGE" ]; then echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; else rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; fi
           php --version
-
-      - name: Setup cache 1/2
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Setup cache 2/2
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-behat-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
 
       - name: Install JS dependencies (only for coverage or Chrome Slow)
         if: env.LOG_COVERAGE || matrix.type == 'Chrome Slow'
