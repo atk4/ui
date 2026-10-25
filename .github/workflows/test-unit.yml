@@ -25,25 +25,12 @@ jobs:
             type: 'StaticAnalysis'
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Configure PHP
         run: |
           rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
           php --version
-
-      - name: Setup cache 1/2
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Setup cache 2/2
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-smoke-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
         run: |
@@ -89,10 +76,10 @@ jobs:
     services:
       mysql:
         image: mysql
-        options: --health-cmd="mysqladmin ping" --health-interval=2s --health-timeout=2s --health-retries=50 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --health-cmd="mysqladmin ping" --health-interval=2s --health-timeout=2s --health-retries=50
       mariadb:
         image: mariadb
-        options: --health-cmd="mariadb-admin ping" --health-interval=2s --health-timeout=2s --health-retries=50 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --health-cmd="mariadb-admin ping" --health-interval=2s --health-timeout=2s --health-retries=50
       postgres:
         image: postgres:alpine
         env:
@@ -105,7 +92,7 @@ jobs:
         env:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
-        options: --health-cmd="/opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1' || /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1'" --health-interval=2s --health-timeout=2s --health-retries=50
+        options: --tmpfs /var/opt/mssql:mode=777 --health-cmd="/opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1' || /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1'" --health-interval=2s --health-timeout=2s --health-retries=50
       oracle:
         image: gvenzl/oracle-xe:18-slim-faststart
         env:
@@ -114,25 +101,12 @@ jobs:
           APP_USER_PASSWORD: atk4_pass
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Configure PHP
         run: |
           if [ -n "$LOG_COVERAGE" ]; then echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; else rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; fi
           php --version
-
-      - name: Setup cache 1/2
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Setup cache 2/2
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
         run: |
@@ -224,13 +198,13 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-oracle.cov; fi
 
-      - name: Upload coverage logs 1/2 (only for latest Phpunit)
+      - name: Upload coverage logs 1/2 (only for coverage)
         if: env.LOG_COVERAGE
         run: |
           ls -l coverage | wc -l
           php -d memory_limit=2G vendor/bin/phpcov merge coverage/ --clover coverage/merged.xml
 
-      - name: Upload coverage logs 2/2 (only for latest Phpunit)
+      - name: Upload coverage logs 2/2 (only for coverage)
         if: env.LOG_COVERAGE
         uses: codecov/codecov-action@v7
         with:
@@ -261,10 +235,10 @@ jobs:
     services:
       mysql:
         image: mysql
-        options: --health-cmd="mysqladmin ping" --health-interval=2s --health-timeout=2s --health-retries=50 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --health-cmd="mysqladmin ping" --health-interval=2s --health-timeout=2s --health-retries=50
       mariadb:
         image: mariadb
-        options: --health-cmd="mariadb-admin ping" --health-interval=2s --health-timeout=2s --health-retries=50 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --health-cmd="mariadb-admin ping" --health-interval=2s --health-timeout=2s --health-retries=50
       postgres:
         image: postgres:alpine
         env:
@@ -277,7 +251,7 @@ jobs:
         env:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
-        options: --health-cmd="/opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1' || /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1'" --health-interval=2s --health-timeout=2s --health-retries=50
+        options: --tmpfs /var/opt/mssql:mode=777 --health-cmd="/opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1' || /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1'" --health-interval=2s --health-timeout=2s --health-retries=50
       oracle:
         image: gvenzl/oracle-xe:18-slim-faststart
         env:
@@ -286,25 +260,12 @@ jobs:
           APP_USER_PASSWORD: atk4_pass
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Configure PHP
         run: |
           if [ -n "$LOG_COVERAGE" ]; then echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; else rm /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; fi
           php --version
-
-      - name: Setup cache 1/2
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Setup cache 2/2
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-behat-${{ matrix.php }}-${{ matrix.type }}-${{ hashFiles('composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
 
       - name: Install JS dependencies (only for coverage or Chrome Slow)
         if: env.LOG_COVERAGE || matrix.type == 'Chrome Slow'
@@ -483,7 +444,7 @@ jobs:
       image: ghcr.io/mvorisek/image-php:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Python and dependencies
         run: |
@@ -509,7 +470,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Build
         run: |
