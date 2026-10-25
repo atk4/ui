@@ -76,10 +76,10 @@ jobs:
     services:
       mysql:
         image: mysql
-        options: --health-cmd="mysqladmin ping" --health-interval=2s --health-timeout=2s --health-retries=50 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --health-cmd="mysqladmin ping" --health-interval=2s --health-timeout=2s --health-retries=50
       mariadb:
         image: mariadb
-        options: --health-cmd="mariadb-admin ping" --health-interval=2s --health-timeout=2s --health-retries=50 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --health-cmd="mariadb-admin ping" --health-interval=2s --health-timeout=2s --health-retries=50
       postgres:
         image: postgres:alpine
         env:
@@ -198,13 +198,13 @@ jobs:
           php -d opcache.enable_cli=1 vendor/bin/phpunit --exclude-group none $(if [ -n "$LOG_COVERAGE" ]; then echo --coverage-text; else echo --no-coverage; fi) --fail-on-warning --fail-on-risky $(if vendor/bin/phpunit --version | grep -q '^PHPUnit 9\.'; then echo -v; else echo --fail-on-notice --fail-on-deprecation --display-notices --display-deprecations --display-warnings --display-errors --display-incomplete --display-skipped; fi)
           if [ -n "$LOG_COVERAGE" ]; then mv coverage/phpunit.cov coverage/phpunit-oracle.cov; fi
 
-      - name: Upload coverage logs 1/2 (only for latest Phpunit)
+      - name: Upload coverage logs 1/2 (only for coverage)
         if: env.LOG_COVERAGE
         run: |
           ls -l coverage | wc -l
           php -d memory_limit=2G vendor/bin/phpcov merge coverage/ --clover coverage/merged.xml
 
-      - name: Upload coverage logs 2/2 (only for latest Phpunit)
+      - name: Upload coverage logs 2/2 (only for coverage)
         if: env.LOG_COVERAGE
         uses: codecov/codecov-action@v7
         with:
@@ -235,10 +235,10 @@ jobs:
     services:
       mysql:
         image: mysql
-        options: --health-cmd="mysqladmin ping" --health-interval=2s --health-timeout=2s --health-retries=50 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --health-cmd="mysqladmin ping" --health-interval=2s --health-timeout=2s --health-retries=50
       mariadb:
         image: mariadb
-        options: --health-cmd="mariadb-admin ping" --health-interval=2s --health-timeout=2s --health-retries=50 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test --health-cmd="mariadb-admin ping" --health-interval=2s --health-timeout=2s --health-retries=50
       postgres:
         image: postgres:alpine
         env:
