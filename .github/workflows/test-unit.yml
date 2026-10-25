@@ -89,23 +89,23 @@ jobs:
     services:
       mysql:
         image: mysql
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: --health-cmd="mysqladmin ping" --health-interval=2s --health-timeout=2s --health-retries=50 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       mariadb:
         image: mariadb
-        options: --health-cmd="mariadb-admin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: --health-cmd="mariadb-admin ping" --health-interval=2s --health-timeout=2s --health-retries=50 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       postgres:
         image: postgres:alpine
         env:
           POSTGRES_USER: atk4_test_user
           POSTGRES_PASSWORD: atk4_pass
           POSTGRES_DB: atk4_test
-        options: --health-cmd=pg_isready --health-interval=10s --health-timeout=5s --health-retries=5
+        options: --health-cmd=pg_isready --health-interval=2s --health-timeout=2s --health-retries=50
       mssql:
         image: mcr.microsoft.com/mssql/server
         env:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
-        options: --health-cmd="/opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1' || /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=5
+        options: --health-cmd="/opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1' || /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1'" --health-interval=2s --health-timeout=2s --health-retries=50
       oracle:
         image: gvenzl/oracle-xe:18-slim-faststart
         env:
@@ -261,23 +261,23 @@ jobs:
     services:
       mysql:
         image: mysql
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: --health-cmd="mysqladmin ping" --health-interval=2s --health-timeout=2s --health-retries=50 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       mariadb:
         image: mariadb
-        options: --health-cmd="mariadb-admin ping" --health-interval=10s --health-timeout=5s --health-retries=5 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
+        options: --health-cmd="mariadb-admin ping" --health-interval=2s --health-timeout=2s --health-retries=50 -e MYSQL_ROOT_PASSWORD=atk4_pass_root -e MYSQL_USER=atk4_test_user -e MYSQL_PASSWORD=atk4_pass -e MYSQL_DATABASE=atk4_test
       postgres:
         image: postgres:alpine
         env:
           POSTGRES_USER: atk4_test_user
           POSTGRES_PASSWORD: atk4_pass
           POSTGRES_DB: atk4_test
-        options: --health-cmd=pg_isready --health-interval=10s --health-timeout=5s --health-retries=5
+        options: --health-cmd=pg_isready --health-interval=2s --health-timeout=2s --health-retries=50
       mssql:
         image: mcr.microsoft.com/mssql/server
         env:
           ACCEPT_EULA: Y
           SA_PASSWORD: atk4_pass
-        options: --health-cmd="/opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1' || /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1'" --health-interval=10s --health-timeout=5s --health-retries=5
+        options: --health-cmd="/opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1' || /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -C -U sa -P atk4_pass -b -Q 'SELECT 1'" --health-interval=2s --health-timeout=2s --health-retries=50
       oracle:
         image: gvenzl/oracle-xe:18-slim-faststart
         env:
