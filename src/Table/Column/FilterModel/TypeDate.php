@@ -37,7 +37,7 @@ class TypeDate extends Column\FilterModel
             '+1 week' => 'One week from now',
             '-1 month' => 'One month ago',
             '+1 month' => 'One month from now',
-            'x_day_ago' => 'Numbers of days ago',
+            'x_day_ago' => 'Number of days ago',
             'x_day_now' => 'Number of days from now',
             'exact' => 'Exact date',
         ];
@@ -52,48 +52,74 @@ class TypeDate extends Column\FilterModel
                 '+1 week' => 'The next week',
                 '+1 month' => 'The next month',
                 '+1 year' => 'The next year',
-                'x_day_before' => 'The next numbers of days before',
+                'x_day_before' => 'The next number of days before',
                 'x_day_after' => 'The next number of days after',
             ],
         ]);
 
         // the exact date field input when exact is select as input value
-        $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);
+        $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '', 'placeholder' => 'date']]);
 
         // the integer field to generate a date when x day selector is used
-        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
+        $this->addField('number_days', ['type' => 'integer', 'ui' => ['caption' => '', 'form' => [Form\Control\Line::class, 'placeholder' => 'days']]]);
+
+        $this->onHook(self::HOOK_VALIDATE, static function (Model $entity) {
+            $errors = [];
+            if (!in_array($entity->get('op'), ['empty', 'not empty'], true) && $entity->get('value') === null) {
+                $errors['value'] = 'Value required';
+            }
+            if ($entity->get('op') === 'within' && $entity->get('range') === null) {
+                $errors['range'] = 'Value required';
+            }
+            if ($entity->get('value') === 'exact' && $entity->get('exact_date') === null) {
+                $errors['exact_date'] = 'Value required';
+            }
+            if (
+                (
+                    in_array($entity->get('value'), ['x_day_ago', 'x_day_now'], true)
+                    || in_array($entity->get('range'), ['x_day_before', 'x_day_after'], true)
+                )
+                && $entity->get('number_days') === null
+            ) {
+                $errors['number_days'] = 'Value required';
+            }
+
+            return $errors;
+        });
     }
 
     #[\Override]
     public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
-        if ($filter !== null) {
-            switch ($filter['op']) {
-                case 'empty':
-                    $model->addCondition($this->lookupField, '=', null);
+        if ($filter === null || $filter['op'] === null) {
+            return;
+        }
 
-                    break;
-                case 'not empty':
-                    $model->addCondition($this->lookupField, '!=', null);
+        switch ($filter['op']) {
+            case 'empty':
+                $model->addCondition($this->lookupField, '=', null);
 
-                    break;
-                case 'within':
-                    $d1 = $this->getDate($filter['value']);
-                    $d2 = $this->getDate($filter['range']);
-                    if ($d1 > $d2) {
-                        [$d1, $d2] = [$d2, $d1];
-                    }
-                    $model->addCondition($model->expr('[field] between [value] and [value2]', [
-                        'field' => $this->lookupField,
-                        'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $d1),
-                        'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $d2),
-                    ]));
+                break;
+            case 'not empty':
+                $model->addCondition($this->lookupField, '!=', null);
 
-                    break;
-                default:
-                    $model->addCondition($this->lookupField, $filter['op'], $this->getDate($filter['value']));
-            }
+                break;
+            case 'within':
+                $d1 = $this->getDateTime($filter['value']);
+                $d2 = $this->getDateTime($filter['range']);
+                if ($d1 > $d2) {
+                    [$d1, $d2] = [$d2, $d1];
+                }
+                $model->addCondition($model->expr('[field] between [value] and [value2]', [
+                    'field' => $this->lookupField,
+                    'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $d1),
+                    'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $d2),
+                ]));
+
+                break;
+            default:
+                $model->addCondition($this->lookupField, $filter['op'], $this->getDateTime($filter['value']));
         }
     }
 
@@ -103,7 +129,7 @@ class TypeDate extends Column\FilterModel
      *
      * @param string $dateModifier the string to pass to generated a date from
      */
-    public function getDate(string $dateModifier): ?\DateTime
+    public function getDateTime(string $dateModifier): ?\DateTime
     {
         switch ($dateModifier) {
             case 'exact':
@@ -131,9 +157,15 @@ class TypeDate extends Column\FilterModel
     public function getFormDisplayRules(): array
     {
         return [
+            'value' => ['op' => ['notEmpty', 'notExactly[empty]', 'notExactly[not empty]']],
             'range' => ['op' => 'isExactly[within]'],
             'exact_date' => ['value' => 'isExactly[exact]'],
-            'number_days' => [['value' => 'isExactly[x_day_ago]'], ['value' => 'isExactly[x_day_now]']],
+            'number_days' => [
+                ['value' => 'isExactly[x_day_ago]'],
+                ['value' => 'isExactly[x_day_now]'],
+                ['range' => 'isExactly[x_day_before]'],
+                ['range' => 'isExactly[x_day_after]'],
+            ],
         ];
     }
 }

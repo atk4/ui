@@ -18,6 +18,7 @@ class TypeEnum extends Column\FilterModel
         $this->afterInit();
 
         $this->op = null;
+
         if ($this->lookupField->values !== null) {
             foreach ($this->lookupField->values as $key => $value) {
                 $this->addField($key, ['type' => 'boolean', 'ui' => ['caption' => $value]]);
@@ -33,16 +34,18 @@ class TypeEnum extends Column\FilterModel
     public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
-        if ($filter !== null) {
-            $values = [];
-            foreach ($filter as $key => $isSet) {
-                if ($isSet === true) {
-                    $values[] = $key;
-                }
+        if ($filter === null) {
+            return;
+        }
+
+        $values = [];
+        foreach ($filter as $key => $isSet) {
+            if ($isSet === true) {
+                $values[] = $key;
             }
-            if ($values !== []) {
-                $model->addCondition($this->lookupField, 'in', $values);
-            }
+        }
+        if ($values !== []) {
+            $model->addCondition($this->lookupField, 'in', $values);
         }
     }
 }
