@@ -11,6 +11,7 @@ use Atk4\Ui\Form;
 use Atk4\Ui\Header;
 use Atk4\Ui\Js\Jquery;
 use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsCallbackLoadableValue;
 use Atk4\Ui\Js\JsToast;
 use Atk4\Ui\Label;
 
@@ -39,7 +40,7 @@ $nameInput->addAction(['Check Duplicate', 'iconRight' => 'search'])
         }
 
         return new JsToast('This country name can be added.');
-    }, ['args' => [$nameInput->jsInput()->val()]]);
+    }, ['args' => [new JsCallbackLoadableValue($nameInput->jsInput()->val(), static fn ($v) => $v)]]);
 
 // form codes field group
 $formCodes = $form->addGroup(['Codes']);
