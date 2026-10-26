@@ -29,7 +29,7 @@ $addAccordionFx = static function ($view, int $maxDepth, int $level = 0) use (&$
     }
 
     // dynamic section - simple view
-    $i2 = $accordion->addSection('Dynamic Text', static function (VirtualPage $vp) use ($addAccordionFx, $maxDepth, $level) {
+    $accordion->addSection('Dynamic Text', static function (VirtualPage $vp) use ($addAccordionFx, $maxDepth, $level) {
         Message::addTo($vp, ['Every time you open this accordion item, you will see a different text', 'ui' => 'tiny message']);
         LoremIpsum::addTo($vp, ['size' => 2]);
 
@@ -37,7 +37,7 @@ $addAccordionFx = static function ($view, int $maxDepth, int $level = 0) use (&$
     });
 
     // dynamic section - form view
-    $i3 = $accordion->addSection('Dynamic Form', static function (VirtualPage $vp) use ($addAccordionFx, $maxDepth, $level) {
+    $accordion->addSection('Dynamic Form', static function (VirtualPage $vp) use ($addAccordionFx, $maxDepth, $level) {
         Message::addTo($vp, ['Loading a form dynamically.', 'ui' => 'tiny message']);
         $form = Form::addTo($vp);
         $form->addControl('email');

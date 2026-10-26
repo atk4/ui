@@ -12,10 +12,10 @@ use Atk4\Ui\Exception;
 use Atk4\Ui\Form;
 use Atk4\Ui\Table;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Platforms\OraclePlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Types\Type as DbalType;
 use Mvorisek\Atk4\Hintable\Data\HintablePropertyDef;
-use SebastianBergmann\CodeCoverage\CodeCoverage;
 
 try {
     require_once file_exists(__DIR__ . '/db.php')
@@ -313,7 +313,9 @@ class ModelWithPrefixedFields extends Model
 
         $this->initPreventModification();
 
-        if ($this->getPersistence()->getDatabasePlatform() instanceof PostgreSQLPlatform || class_exists(CodeCoverage::class, false)) {
+        // TODO set implicit order preferably in logic where pagination is used, otherwise filtered rows might be unstable across queries/requests
+        // WARNING: this might be needed for all DB vendors when a model query is wrapped in another query
+        if ($this->getPersistence()->getDatabasePlatform() instanceof PostgreSQLPlatform || $this->getPersistence()->getDatabasePlatform() instanceof OraclePlatform) {
             $this->setOrder($this->idField);
         }
     }

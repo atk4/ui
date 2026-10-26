@@ -290,7 +290,6 @@ class Form extends View
      */
     public function jsSuccess($success = 'Success', $subHeader = null, bool $useTemplate = true): JsExpressionable
     {
-        $response = null;
         // by using this hook you can overwrite default behavior of this method
         if ($this->hookHasCallbacks(self::HOOK_DISPLAY_SUCCESS)) {
             return JsBlock::fromHookResult($this->hook(self::HOOK_DISPLAY_SUCCESS, [$success, $subHeader]));

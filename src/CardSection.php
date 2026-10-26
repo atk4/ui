@@ -40,8 +40,6 @@ class CardSection extends View
      */
     public function addDescription($description)
     {
-        $view = null;
-
         if (is_string($description)) {
             $view = ViewWithContent::addTo($this, [$description, 'class' => ['description']]);
         } else {

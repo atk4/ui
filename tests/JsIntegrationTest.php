@@ -50,7 +50,7 @@ class JsIntegrationTest extends TestCase
     public function testChainTrue(): void
     {
         $v = new Button(['name' => 'b']);
-        $js = $v->js(true)->hide();
+        $v->js(true)->hide();
         $v->setApp($this->createApp());
         $v->renderAll();
 

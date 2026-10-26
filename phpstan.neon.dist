@@ -15,6 +15,13 @@ parameters:
         - '~^Only booleans are allowed in .+, .+ given( on the (left|right) side)?\.$~'
         - '~^Variable (static )?(property access|method call) on .+\.$~'
 
+        # @return $this is not inferred as impure https://github.com/phpstan/phpstan/issues/15320
+        -
+            path: '*'
+            identifier: staticMethod.alreadyNarrowedType
+            message: '~^Call to static method PHPUnit\\Framework\\Assert::assert\w+\(\) .* and .* will always evaluate to true\.$~'
+            count: 3
+
         # assign to generic callable property is broken https://github.com/phpstan/phpstan/issues/8964
         -
             path: '*'
