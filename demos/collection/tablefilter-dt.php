@@ -6,11 +6,14 @@ namespace Atk4\Ui\Demos;
 
 use Atk4\Ui\App;
 use Atk4\Ui\Grid;
+use Atk4\Ui\View;
 
 /** @var App $app */
 require_once __DIR__ . '/../init-app.php';
 
-$grid = Grid::addTo($app);
+// for popup positioning to work correctly, table needs to be inside a view segment
+$view = View::addTo($app, ['ui' => 'basic segment']);
+$grid = Grid::addTo($view, ['menu' => ['class' => ['atk-grid-menu']]]); // menu class added for Behat testing
 
 $model = new Stat($app->db);
 $grid->setModel($model, [
@@ -26,3 +29,5 @@ $grid->setModel($model, [
 ]);
 
 $grid->addFilterColumn();
+
+$grid->ipp = 20;
