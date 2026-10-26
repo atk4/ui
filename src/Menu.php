@@ -91,7 +91,7 @@ class Menu extends ViewWithContent
             $name = [$name];
         }
 
-        $label = $name['title'] ?? $name['text'] ?? $name['name'] ?? $name[0] ?? null;
+        $label = $name['title'] ?? $name[0] ?? null;
 
         if ($label !== null) {
             $subMenu->template->set('label', $label);
@@ -123,7 +123,7 @@ class Menu extends ViewWithContent
             $name = [$name];
         }
 
-        $title = $name['title'] ?? $name['text'] ?? $name['name'] ?? $name[0] ?? null;
+        $title = $name['title'] ?? $name[0] ?? null;
 
         if ($title !== null) {
             $group->template->set('title', $title);
@@ -131,6 +131,8 @@ class Menu extends ViewWithContent
 
         if (isset($name['icon'])) {
             Icon::addTo($group, [$name['icon']], ['Icon'])->removeClass('item');
+        } elseif (isset($name['label'])) {
+            Label::addTo($group, [$name['label']], ['Icon'])->removeClass('item')->addClass('tiny');
         }
 
         return $group;

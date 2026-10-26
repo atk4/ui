@@ -447,8 +447,11 @@ $layout = $app->layout;
 $layout->menuLeft->addItem(['Welcome Page', 'icon' => 'gift'], ['index']);
 $layout->menuLeft->addItem(['Layouts', 'icon' => 'object group'], ['layouts']);
 
-$EditGroup = $layout->menuLeft->addGroup(['Edit', 'icon' => 'edit']);
-$EditGroup->addItem('Basics', ['edit/basic']);
+$editGroup = $layout->menuLeft->addGroup(['Edit', 'icon' => 'edit']);
+$editGroup->addItem('Basics', ['edit/basic']);
+
+$newsGroup = $layout->menuLeft->addGroup(['News', 'label' => ['28', 'class.red' => true]]);
+$newsGroup->addItem('Emails', ['news/emails']);
 ```
 
 :::{php:attr} menu
