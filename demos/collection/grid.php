@@ -105,4 +105,4 @@ $grid->addModalBulkAction(['Delete selected', 'icon' => 'trash'], '', static fun
 });
 
 // setting ipp with an array will add an ItemPerPageSelector to paginator
-$grid->setIpp([10, 100, 1000]);
+$grid->setIpp([10, 50, 100, 1000]);
