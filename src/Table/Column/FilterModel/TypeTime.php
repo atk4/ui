@@ -23,17 +23,30 @@ class TypeTime extends Column\FilterModel
             '>=' => '> or equal',
             'between' => 'Between',
         ];
-
         $this->op->default = '=';
+
         $this->value->type = 'time';
-        $this->addField('range', ['ui' => ['caption' => ''], 'type' => 'time']);
+
+        $this->addField('range', ['type' => 'time', 'ui' => ['caption' => '']]);
+
+        $this->onHook(self::HOOK_VALIDATE, static function (Model $entity) {
+            $errors = [];
+            if ($entity->get('value') === null) {
+                $errors['value'] = 'Value required';
+            }
+            if ($entity->get('op') === 'between' && $entity->get('range') === null) {
+                $errors['range'] = 'Value required';
+            }
+
+            return $errors;
+        });
     }
 
     #[\Override]
     public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
-        if ($filter === null) {
+        if ($filter === null || $filter['op'] === null) {
             return;
         }
 
@@ -60,6 +73,7 @@ class TypeTime extends Column\FilterModel
     public function getFormDisplayRules(): array
     {
         return [
+            'value' => ['op' => 'notEmpty'],
             'range' => ['op' => 'isExactly[between]'],
         ];
     }

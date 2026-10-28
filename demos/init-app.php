@@ -191,6 +191,7 @@ if ($layout instanceof Layout\NavigableInterface) {
     $layout->addMenuItem('Table interractions', [$path . 'multitable'], $menu);
     $layout->addMenuItem(['Column Menus'], [$path . 'tablecolumnmenu'], $menu);
     $layout->addMenuItem(['Column Filters'], [$path . 'tablefilter'], $menu);
+    $layout->addMenuItem(['Column Filters (Data Types)'], [$path . 'tablefilter-dt'], $menu);
     $layout->addMenuItem('Grid - Table+Bar+Search+Paginator', [$path . 'grid'], $menu);
     $layout->addMenuItem('Crud - Full editing solution', [$path . 'crud'], $menu);
     $layout->addMenuItem(['Crud - /w Array Persistence'], [$path . 'crud3'], $menu);

@@ -29,7 +29,7 @@ class TypeString extends Column\FilterModel
     public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
-        if ($filter === null) {
+        if ($filter === null || $filter['op'] === null) {
             return;
         }
 
@@ -59,5 +59,13 @@ class TypeString extends Column\FilterModel
 
                 break;
         }
+    }
+
+    #[\Override]
+    public function getFormDisplayRules(): array
+    {
+        return [
+            'value' => ['op' => 'notEmpty'],
+        ];
     }
 }

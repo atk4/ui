@@ -58,17 +58,41 @@ class TypeDate extends Column\FilterModel
         ]);
 
         // the exact date field input when exact is select as input value
-        $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);
+        $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '', 'placeholder' => 'date']]);
 
         // the integer field to generate a date when x day selector is used
-        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
+        $this->addField('number_days', ['type' => 'integer', 'ui' => ['caption' => '', 'form' => [Form\Control\Line::class, 'placeholder' => 'days']]]);
+
+        $this->onHook(self::HOOK_VALIDATE, static function (Model $entity) {
+            $errors = [];
+            if (!in_array($entity->get('op'), ['empty', 'not empty'], true) && $entity->get('value') === null) {
+                $errors['value'] = 'Value required';
+            }
+            if ($entity->get('op') === 'within' && $entity->get('range') === null) {
+                $errors['range'] = 'Value required';
+            }
+            if ($entity->get('value') === 'exact' && $entity->get('exact_date') === null) {
+                $errors['exact_date'] = 'Value required';
+            }
+            if (
+                (
+                    in_array($entity->get('value'), ['x_day_ago', 'x_day_now'], true)
+                    || in_array($entity->get('range'), ['x_day_before', 'x_day_after'], true)
+                )
+                && $entity->get('number_days') === null
+            ) {
+                $errors['number_days'] = 'Value required';
+            }
+
+            return $errors;
+        });
     }
 
     #[\Override]
     public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
-        if ($filter === null) {
+        if ($filter === null || $filter['op'] === null) {
             return;
         }
 
@@ -82,8 +106,8 @@ class TypeDate extends Column\FilterModel
 
                 break;
             case 'within':
-                $d1 = $this->getDate($filter['value']);
-                $d2 = $this->getDate($filter['range']);
+                $d1 = $this->getDateTime($filter['value']);
+                $d2 = $this->getDateTime($filter['range']);
                 if ($d1 > $d2) {
                     [$d1, $d2] = [$d2, $d1];
                 }
@@ -95,7 +119,7 @@ class TypeDate extends Column\FilterModel
 
                 break;
             default:
-                $model->addCondition($this->lookupField, $filter['op'], $this->getDate($filter['value']));
+                $model->addCondition($this->lookupField, $filter['op'], $this->getDateTime($filter['value']));
         }
     }
 
@@ -105,7 +129,7 @@ class TypeDate extends Column\FilterModel
      *
      * @param string $dateModifier the string to pass to generated a date from
      */
-    public function getDate(string $dateModifier): ?\DateTime
+    public function getDateTime(string $dateModifier): ?\DateTime
     {
         switch ($dateModifier) {
             case 'exact':
@@ -123,7 +147,7 @@ class TypeDate extends Column\FilterModel
 
                 break;
             default:
-                $date = null;
+                $date = new \DateTime($dateModifier);
         }
 
         return $date;
@@ -133,9 +157,15 @@ class TypeDate extends Column\FilterModel
     public function getFormDisplayRules(): array
     {
         return [
+            'value' => ['op' => ['notEmpty', 'notExactly[empty]', 'notExactly[not empty]']],
             'range' => ['op' => 'isExactly[within]'],
             'exact_date' => ['value' => 'isExactly[exact]'],
-            'number_days' => [['value' => 'isExactly[x_day_ago]'], ['value' => 'isExactly[x_day_now]']],
+            'number_days' => [
+                ['value' => 'isExactly[x_day_ago]'],
+                ['value' => 'isExactly[x_day_now]'],
+                ['range' => 'isExactly[x_day_before]'],
+                ['range' => 'isExactly[x_day_after]'],
+            ],
         ];
     }
 }
