@@ -289,7 +289,7 @@ class DemosTest extends TestCase
 
         // these tests require SessionTrait, more precisely session_start() which we do not support in non-HTTP testing
         // always move these tests to the end, so data provider # stays same as much as possible across tests for fast skip
-        $httpOnlyFiles = ['collection/tablefilter.php', 'collection/tablefilter-dt.php', 'interactive/popup.php'];
+        $httpOnlyFiles = ['collection/tablefilter.php', 'interactive/popup.php'];
         foreach ($files as $k => $path) {
             if (in_array($path, $httpOnlyFiles, true)) {
                 unset($files[$k]);

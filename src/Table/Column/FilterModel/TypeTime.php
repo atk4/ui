@@ -23,49 +23,34 @@ class TypeTime extends Column\FilterModel
             '>=' => '> or equal',
             'between' => 'Between',
         ];
+
         $this->op->default = '=';
-
         $this->value->type = 'time';
-
-        $this->addField('range', ['type' => 'time', 'ui' => ['caption' => '']]);
-
-        $this->onHook(self::HOOK_VALIDATE, static function (Model $entity) {
-            $errors = [];
-            if ($entity->get('value') === null) {
-                $errors['value'] = 'Value required';
-            }
-            if ($entity->get('op') === 'between' && $entity->get('range') === null) {
-                $errors['range'] = 'Value required';
-            }
-
-            return $errors;
-        });
+        $this->addField('range', ['ui' => ['caption' => ''], 'type' => 'time']);
     }
 
     #[\Override]
     public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
-        if ($filter === null || $filter['op'] === null) {
-            return;
-        }
+        if ($filter !== null) {
+            switch ($filter['op']) {
+                case 'between':
+                    $d1 = $filter['value'];
+                    $d2 = $filter['range'];
+                    if ($d1 > $d2) {
+                        [$d1, $d2] = [$d2, $d1];
+                    }
+                    $model->addCondition($model->expr('[field] between [value] and [value2]', [
+                        'field' => $this->lookupField,
+                        'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $d1),
+                        'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $d2),
+                    ]));
 
-        switch ($filter['op']) {
-            case 'between':
-                $d1 = $filter['value'];
-                $d2 = $filter['range'];
-                if ($d1 > $d2) {
-                    [$d1, $d2] = [$d2, $d1];
-                }
-                $model->addCondition($model->expr('[field] between [value] and [value2]', [
-                    'field' => $this->lookupField,
-                    'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $d1),
-                    'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $d2),
-                ]));
-
-                break;
-            default:
-                $model->addCondition($this->lookupField, $filter['op'], $filter['value']);
+                    break;
+                default:
+                    $model->addCondition($this->lookupField, $filter['op'], $filter['value']);
+            }
         }
     }
 
@@ -73,7 +58,6 @@ class TypeTime extends Column\FilterModel
     public function getFormDisplayRules(): array
     {
         return [
-            'value' => ['op' => 'notEmpty'],
             'range' => ['op' => 'isExactly[between]'],
         ];
     }
