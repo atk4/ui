@@ -28,8 +28,10 @@ class TypeBoolean extends Column\FilterModel
     public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
-        if ($filter !== null) {
-            $model->addCondition($this->lookupField, $filter['op'] === 1);
+        if ($filter === null) {
+            return;
         }
+
+        $model->addCondition($this->lookupField, $filter['op'] === 1);
     }
 }

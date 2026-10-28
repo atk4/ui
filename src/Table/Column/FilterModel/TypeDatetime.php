@@ -37,7 +37,7 @@ class TypeDatetime extends Column\FilterModel
             '+1 week' => 'One week from now',
             '-1 month' => 'One month ago',
             '+1 month' => 'One month from now',
-            'x_day_ago' => 'Numbers of days ago',
+            'x_day_ago' => 'Number of days ago',
             'x_day_now' => 'Number of days from now',
             'exact' => 'Exact date',
         ];
@@ -52,7 +52,7 @@ class TypeDatetime extends Column\FilterModel
                 '+1 week' => 'The next week',
                 '+1 month' => 'The next month',
                 '+1 year' => 'The next year',
-                'x_day_before' => 'The next numbers of days before',
+                'x_day_before' => 'The next number of days before',
                 'x_day_after' => 'The next number of days after',
             ],
         ]);
@@ -68,57 +68,59 @@ class TypeDatetime extends Column\FilterModel
     public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
-        if ($filter !== null) {
-            switch ($filter['op']) {
-                case 'empty':
-                    $model->addCondition($this->lookupField, '=', null);
+        if ($filter === null) {
+            return;
+        }
 
-                    break;
-                case 'not empty':
-                    $model->addCondition($this->lookupField, '!=', null);
+        switch ($filter['op']) {
+            case 'empty':
+                $model->addCondition($this->lookupField, '=', null);
 
-                    break;
-                case 'within':
-                    $d1 = $this->getDatetime($filter['value'])->setTime(0, 0, 0);
-                    $d2 = $this->getDatetime($filter['range'])->setTime(23, 59, 59, 999_999);
-                    if ($d1 > $d2) {
-                        [$d1, $d2] = [$d2, $d1];
-                    }
-                    $model->addCondition($model->expr('[field] between [value] and [value2]', [
-                        'field' => $this->lookupField,
-                        'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $d1),
-                        'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $d2),
-                    ]));
+                break;
+            case 'not empty':
+                $model->addCondition($this->lookupField, '!=', null);
 
-                    break;
-                case '!=':
-                case '=':
-                    $d1 = clone $this->getDatetime($filter['value'])->setTime(0, 0, 0);
-                    $d2 = $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999_999);
-                    if ($d1 > $d2) {
-                        [$d1, $d2] = [$d2, $d1];
-                    }
-                    $betweenOperator = $filter['op'] === '!=' ? 'not between' : 'between';
-                    $model->addCondition($model->expr('[field] ' . $betweenOperator . ' [value] and [value2]', [
-                        'field' => $this->lookupField,
-                        'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $d1),
-                        'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $d2),
-                    ]));
+                break;
+            case 'within':
+                $d1 = $this->getDatetime($filter['value'])->setTime(0, 0, 0);
+                $d2 = $this->getDatetime($filter['range'])->setTime(23, 59, 59, 999_999);
+                if ($d1 > $d2) {
+                    [$d1, $d2] = [$d2, $d1];
+                }
+                $model->addCondition($model->expr('[field] between [value] and [value2]', [
+                    'field' => $this->lookupField,
+                    'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $d1),
+                    'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $d2),
+                ]));
 
-                    break;
-                case '>':
-                case '<=':
-                    $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999_999));
+                break;
+            case '!=':
+            case '=':
+                $d1 = clone $this->getDatetime($filter['value'])->setTime(0, 0, 0);
+                $d2 = $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999_999);
+                if ($d1 > $d2) {
+                    [$d1, $d2] = [$d2, $d1];
+                }
+                $betweenOperator = $filter['op'] === '!=' ? 'not between' : 'between';
+                $model->addCondition($model->expr('[field] ' . $betweenOperator . ' [value] and [value2]', [
+                    'field' => $this->lookupField,
+                    'value' => $model->getPersistence()->typecastSaveField($this->lookupField, $d1),
+                    'value2' => $model->getPersistence()->typecastSaveField($this->lookupField, $d2),
+                ]));
 
-                    break;
-                case '<':
-                case '>=':
-                    $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value'])->setTime(0, 0, 0));
+                break;
+            case '>':
+            case '<=':
+                $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999_999));
 
-                    break;
-                default:
-                    $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value']));
-            }
+                break;
+            case '<':
+            case '>=':
+                $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value'])->setTime(0, 0, 0));
+
+                break;
+            default:
+                $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value']));
         }
     }
 
