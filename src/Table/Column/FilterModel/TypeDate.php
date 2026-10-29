@@ -92,7 +92,7 @@ class TypeDate extends Column\FilterModel
     public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
-        if ($filter === null || $filter['op'] === null) {
+        if ($filter === null) {
             return;
         }
 
