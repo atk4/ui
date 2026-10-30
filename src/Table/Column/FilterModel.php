@@ -91,11 +91,6 @@ abstract class FilterModel extends Model
         parent::init();
 
         $this->op = $this->addField('op', ['ui' => ['caption' => '']]);
-        $this->onHook(self::HOOK_VALIDATE, static function (Model $entity) {
-            if ($entity->get('op') === null) {
-                return ['op' => 'Value required'];
-            }
-        });
 
         if (!$this->noValueField) {
             $this->value = $this->addField('value', ['ui' => ['caption' => '']]);

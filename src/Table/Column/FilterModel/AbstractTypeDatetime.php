@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column\FilterModel;
 
-use Atk4\Data\Model;
 use Atk4\Ui\Form;
 use Atk4\Ui\Table\Column;
 
@@ -62,30 +61,6 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
 
         // the integer field to generate a date when x day selector is used
         $this->addField('number_days', ['type' => 'integer', 'ui' => ['caption' => '', 'form' => [Form\Control\Line::class, 'placeholder' => 'days']]]);
-
-        $this->onHook(self::HOOK_VALIDATE, static function (Model $entity) {
-            $errors = [];
-            if (!in_array($entity->get('op'), ['empty', 'not empty'], true) && $entity->get('value') === null) {
-                $errors['value'] = 'Value required';
-            }
-            if ($entity->get('op') === 'within' && $entity->get('range') === null) {
-                $errors['range'] = 'Value required';
-            }
-            if ($entity->get('value') === 'exact' && $entity->get('exact_date') === null) {
-                $errors['exact_date'] = 'Value required';
-            }
-            if (
-                (
-                    in_array($entity->get('value'), ['x_day_ago', 'x_day_now'], true)
-                    || in_array($entity->get('range'), ['x_day_before', 'x_day_after'], true)
-                )
-                && $entity->get('number_days') === null
-            ) {
-                $errors['number_days'] = 'Value required';
-            }
-
-            return $errors;
-        });
     }
 
     /**
