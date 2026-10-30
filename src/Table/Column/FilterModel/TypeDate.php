@@ -82,8 +82,8 @@ class TypeDate extends Column\FilterModel
 
                 break;
             case 'within':
-                $d1 = $this->getDate($filter['value']);
-                $d2 = $this->getDate($filter['range']);
+                $d1 = $this->getDatetime($filter['value']);
+                $d2 = $this->getDatetime($filter['range']);
                 if ($d1 > $d2) {
                     [$d1, $d2] = [$d2, $d1];
                 }
@@ -95,7 +95,7 @@ class TypeDate extends Column\FilterModel
 
                 break;
             default:
-                $model->addCondition($this->lookupField, $filter['op'], $this->getDate($filter['value']));
+                $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value']));
         }
     }
 
@@ -105,7 +105,7 @@ class TypeDate extends Column\FilterModel
      *
      * @param string $dateModifier the string to pass to generated a date from
      */
-    public function getDate(string $dateModifier): ?\DateTime
+    public function getDatetime(string $dateModifier): ?\DateTime
     {
         switch ($dateModifier) {
             case 'exact':
