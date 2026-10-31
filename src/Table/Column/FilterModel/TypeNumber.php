@@ -29,7 +29,7 @@ class TypeNumber extends Column\FilterModel
         $this->value->type = $this->lookupField->type;
         $this->value->ui['form'] = [Form\Control\Line::class];
 
-        $this->addField('range', ['type' => $this->lookupField->type, 'ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
+        $this->addField('range', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
     }
 
     #[\Override]

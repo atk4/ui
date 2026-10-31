@@ -57,10 +57,10 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
         ]);
 
         // the exact date field input when exact is select as input value
-        $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '', 'placeholder' => 'date']]);
+        $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);
 
         // the integer field to generate a date when x day selector is used
-        $this->addField('number_days', ['type' => 'integer', 'ui' => ['caption' => '', 'form' => [Form\Control\Line::class, 'placeholder' => 'days']]]);
+        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
     }
 
     /**
@@ -87,7 +87,7 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
 
                 break;
             default:
-                $date = new \DateTime($dateModifier);
+                $date = null;
         }
 
         return $date;
