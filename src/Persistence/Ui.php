@@ -60,7 +60,7 @@ class Ui extends Persistence
     public function __construct(array $defaults = [])
     {
         $this->setDefaults($defaults);
-        
+
         if ($this->timezone === null) {
             $this->timezone = date_default_timezone_get();
         }
