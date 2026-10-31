@@ -23,9 +23,10 @@ class TypeTime extends Column\FilterModel
             '>=' => '> or equal',
             'between' => 'Between',
         ];
-
         $this->op->default = '=';
+
         $this->value->type = 'time';
+
         $this->addField('range', ['ui' => ['caption' => ''], 'type' => 'time']);
     }
 
