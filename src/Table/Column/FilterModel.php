@@ -23,18 +23,18 @@ abstract class FilterModel extends Model
     use NameTrait; // needed for SessionTrait
     use SessionTrait;
 
-    /** @var Field The operator for defining a condition on a field. */
-    public $op;
-
-    /** @var Field The value for defining a condition on a field. */
-    public $value;
+    /** The field where this filter need to query data. */
+    public Field $lookupField;
 
     protected bool $noOpField = false;
 
     protected bool $noValueField = false;
 
-    /** The field where this filter need to query data. */
-    public Field $lookupField;
+    /** @var Field The operator for defining a condition on a field. */
+    public $op;
+
+    /** @var Field The value for defining a condition on a field. */
+    public $value;
 
     public function __construct(App $app, array $defaults = [])
     {
