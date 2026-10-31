@@ -19,6 +19,7 @@ $model = new Stat($app->db);
 $model->getField($model->fieldName()->updated)->caption = 'Updated Datetime';
 $grid->setModel($model, [
     $model->fieldName()->project_name, // string
+    $model->fieldName()->currency, // list of string values
     $model->fieldName()->project_budget, // atk4_money
     $model->fieldName()->finish_date, // date
     $model->fieldName()->finish_time, // time
