@@ -15,12 +15,12 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
 
         $this->op->values = [
             '=' => 'Is',
-            'within' => 'Is within',
-            '<' => 'Is before',
-            '>' => 'Is after',
-            '<=' => 'Is on or before',
-            '>=' => 'Is on or after',
             '!=' => 'Is not',
+            'within' => 'Within',
+            '<' => 'Before',
+            '>' => 'After',
+            '<=' => 'Before or on',
+            '>=' => 'After or on',
             'empty' => 'Is empty',
             'not empty' => 'Is not empty',
         ];
@@ -45,10 +45,10 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
             'ui' => ['caption' => ''],
             'values' => [
                 '-1 week' => 'The past week',
-                '-1 month' => 'The past month',
-                '-1 year' => 'The past year',
                 '+1 week' => 'The next week',
+                '-1 month' => 'The past month',
                 '+1 month' => 'The next month',
+                '-1 year' => 'The past year',
                 '+1 year' => 'The next year',
                 'x_day_before' => 'The next number of days before',
                 'x_day_after' => 'The next number of days after',

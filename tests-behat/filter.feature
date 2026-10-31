@@ -26,11 +26,11 @@ Feature: Table Filter
 
   # Scenario: filter bool & clear filters
     When I click filter column name "is_uk"
-    When I select "Is No" in lookup "//div.popup[7]//input[@name='op']"
+    When I select "No" in lookup "//div.popup[7]//input[@name='op']"
     When I click using selector "//div.popup[7]//div[text()='Set']"
     Then I should see "No records"
     When I click filter column name "is_uk"
-    When I select "Is Yes" in lookup "//div.popup[7]//input[@name='op']"
+    When I select "Yes" in lookup "//div.popup[7]//input[@name='op']"
     When I click using selector "//div.popup[7]//div[text()='Set']"
     Then I should see "United Kingdom"
     When I press button "Clear Filters"
@@ -87,12 +87,12 @@ Feature: Table Filter
 
   Scenario: filter date one week ago after & before
     When I click filter column name "atk_fp_stat__finish_date"
-    When I select "Is after" in lookup "//div.popup[4]//input[@name='op']"
+    When I select "After" in lookup "//div.popup[4]//input[@name='op']"
     When I select "One week ago" in lookup "//div.popup[4]//input[@name='value']"
     When I click using selector "//div.popup[4]//div[text()='Set']"
     Then I should not see "€ 7 000.00"
     When I click filter column name "atk_fp_stat__finish_date"
-    When I select "Is on or before" in lookup "//div.popup[4]//input[@name='op']"
+    When I select "Before or on" in lookup "//div.popup[4]//input[@name='op']"
     When I click using selector "//div.popup[4]//div[text()='Set']"
     Then I should see "€ 7 000.00"
 

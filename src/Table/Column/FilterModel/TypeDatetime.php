@@ -38,8 +38,8 @@ class TypeDatetime extends AbstractTypeDatetime
                 ]));
 
                 break;
-            case '!=':
             case '=':
+            case '!=':
                 $d1 = $this->getDatetime($filter['value'], false);
                 $d2 = $this->getDatetime($filter['value'], true);
                 if ($d1 > $d2) {
