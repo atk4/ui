@@ -9,13 +9,14 @@ use Atk4\Ui\Table\Column;
 
 class TypeEnum extends Column\FilterModel
 {
+    protected bool $noOpField = true;
+
+    protected bool $noValueField = true;
+
     #[\Override]
     protected function init(): void
     {
-        // bypass parent init since we are not using op and value field but create them from the lookup field value
-
-        Model::init();
-        $this->afterInit();
+        parent::init();
 
         $this->op = null;
         if ($this->lookupField->values !== null) {

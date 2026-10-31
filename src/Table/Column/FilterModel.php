@@ -29,8 +29,9 @@ abstract class FilterModel extends Model
     /** @var Field The value for defining a condition on a field. */
     public $value;
 
-    /** @var bool Determines if this field shouldn't have a value field, and use only op field. */
-    public $noValueField = false;
+    protected bool $noOpField = false;
+
+    protected bool $noValueField = false;
 
     /** The field where this filter need to query data. */
     public Field $lookupField;
@@ -92,7 +93,9 @@ abstract class FilterModel extends Model
     {
         parent::init();
 
-        $this->op = $this->addField('op', ['ui' => ['caption' => '']]);
+        if (!$this->noOpField) {
+            $this->op = $this->addField('op', ['ui' => ['caption' => '']]);
+        }
 
         if (!$this->noValueField) {
             $this->value = $this->addField('value', ['ui' => ['caption' => '']]);
