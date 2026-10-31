@@ -6,7 +6,7 @@ namespace Atk4\Ui\Table\Column\FilterModel;
 
 use Atk4\Data\Model;
 
-class TypeDatetime extends TypeDate
+class TypeDatetime extends AbstractTypeDatetime
 {
     #[\Override]
     public function setConditionForModel(Model $model): void
@@ -26,8 +26,8 @@ class TypeDatetime extends TypeDate
 
                 break;
             case 'within':
-                $d1 = $this->getDateTime($filter['value'])->setTime(0, 0, 0);
-                $d2 = $this->getDateTime($filter['range'])->setTime(23, 59, 59, 999_999);
+                $d1 = $this->getDatetime($filter['value'])->setTime(0, 0, 0);
+                $d2 = $this->getDatetime($filter['range'])->setTime(23, 59, 59, 999_999);
                 if ($d1 > $d2) {
                     [$d1, $d2] = [$d2, $d1];
                 }
@@ -40,8 +40,8 @@ class TypeDatetime extends TypeDate
                 break;
             case '!=':
             case '=':
-                $d1 = clone $this->getDateTime($filter['value'])->setTime(0, 0, 0);
-                $d2 = $this->getDateTime($filter['value'])->setTime(23, 59, 59, 999_999);
+                $d1 = clone $this->getDatetime($filter['value'])->setTime(0, 0, 0);
+                $d2 = $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999_999);
                 if ($d1 > $d2) {
                     [$d1, $d2] = [$d2, $d1];
                 }
@@ -55,16 +55,16 @@ class TypeDatetime extends TypeDate
                 break;
             case '>':
             case '<=':
-                $model->addCondition($this->lookupField, $filter['op'], $this->getDateTime($filter['value'])->setTime(23, 59, 59, 999_999));
+                $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999_999));
 
                 break;
             case '<':
             case '>=':
-                $model->addCondition($this->lookupField, $filter['op'], $this->getDateTime($filter['value'])->setTime(0, 0, 0));
+                $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value'])->setTime(0, 0, 0));
 
                 break;
             default:
-                $model->addCondition($this->lookupField, $filter['op'], $this->getDateTime($filter['value']));
+                $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value']));
         }
     }
 }
