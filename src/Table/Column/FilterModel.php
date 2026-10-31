@@ -23,17 +23,18 @@ abstract class FilterModel extends Model
     use NameTrait; // needed for SessionTrait
     use SessionTrait;
 
-    /** @var Field The operator for defining a condition on a field. */
-    public $op;
-
-    /** @var Field The value for defining a condition on a field. */
-    public $value;
-
-    /** @var bool Determines if this field shouldn't have a value field, and use only op field. */
-    public $noValueField = false;
-
     /** The field where this filter need to query data. */
     public Field $lookupField;
+
+    protected bool $noOpField = false;
+
+    protected bool $noValueField = false;
+
+    /** The operator for defining a condition on a field. */
+    public ?Field $op;
+
+    /** The value for defining a condition on a field. */
+    public ?Field $value;
 
     public function __construct(App $app, array $defaults = [])
     {
@@ -68,9 +69,11 @@ abstract class FilterModel extends Model
             Types::DATETIME_IMMUTABLE => FilterModel\TypeDatetime::class,
 
             Types::JSON => FilterModel\TypeString::class,
-
-            'TODO we do not support enum type, any type can be enum' => FilterModel\TypeEnum::class,
         ][$field->type] ?? null;
+
+        if ($class === FilterModel\TypeString::class && ($field->enum || $field->values)) {
+            $class = FilterModel\TypeEnum::class;
+        }
 
         // you can set your own filter model class
         if (isset($field->ui['filterModel'])) {
@@ -90,11 +93,13 @@ abstract class FilterModel extends Model
     {
         parent::init();
 
-        $this->op = $this->addField('op', ['ui' => ['caption' => '']]);
+        $this->op = $this->noOpField
+            ? null
+            : $this->addField('op', ['ui' => ['caption' => '']]);
 
-        if (!$this->noValueField) {
-            $this->value = $this->addField('value', ['ui' => ['caption' => '']]);
-        }
+        $this->value = $this->noValueField
+            ? null
+            : $this->addField('value', ['ui' => ['caption' => '']]);
 
         $this->afterInit();
     }
@@ -122,26 +127,20 @@ abstract class FilterModel extends Model
         return $this->recall('data');
     }
 
+    public function clearData(): void
+    {
+        $this->forget();
+    }
+
     /**
      * Method that will set conditions on a model base on $op and $value value.
-     * Each FilterModel\TypeModel should override this method.
      */
     abstract public function setConditionForModel(Model $model): void;
 
     /**
      * Method that will set Field display condition in a form.
-     * If form filter need to have a field display at certain condition, then
-     * override this method in your FilterModel\TypeModel.
      *
      * @return array<string, array<mixed>>
      */
-    public function getFormDisplayRules(): array
-    {
-        return [];
-    }
-
-    public function clearData(): void
-    {
-        $this->forget();
-    }
+    abstract public function getFormDisplayRules(): array;
 }

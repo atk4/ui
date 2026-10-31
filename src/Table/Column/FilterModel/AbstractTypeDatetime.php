@@ -97,7 +97,9 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
     public function getFormDisplayRules(): array
     {
         return [
-            'value' => ['op' => ['notEmpty', 'notExactly[empty]', 'notExactly[not empty]']],
+            'value' => [
+                'op' => ['notEmpty', 'notExactly[empty]', 'notExactly[not empty]'],
+            ],
             'range' => ['op' => 'isExactly[within]'],
             'exact_date' => ['value' => 'isExactly[exact]'],
             'number_days' => [

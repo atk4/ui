@@ -9,15 +9,14 @@ use Atk4\Ui\Table\Column;
 
 class TypeEnum extends Column\FilterModel
 {
+    protected bool $noOpField = true;
+
+    protected bool $noValueField = true;
+
     #[\Override]
     protected function init(): void
     {
-        // bypass parent init since we are not using op and value field but create them from the lookup field value
-
-        Model::init();
-        $this->afterInit();
-
-        $this->op = null;
+        parent::init();
 
         if ($this->lookupField->values !== null) {
             foreach ($this->lookupField->values as $key => $value) {
@@ -47,5 +46,11 @@ class TypeEnum extends Column\FilterModel
         if ($values !== []) {
             $model->addCondition($this->lookupField, 'in', $values);
         }
+    }
+
+    #[\Override]
+    public function getFormDisplayRules(): array
+    {
+        return [];
     }
 }
