@@ -127,6 +127,11 @@ abstract class FilterModel extends Model
         return $this->recall('data');
     }
 
+    public function clearData(): void
+    {
+        $this->forget();
+    }
+
     /**
      * Method that will set conditions on a model base on $op and $value value.
      * Each FilterModel\TypeModel should override this method.
@@ -143,10 +148,5 @@ abstract class FilterModel extends Model
     public function getFormDisplayRules(): array
     {
         return [];
-    }
-
-    public function clearData(): void
-    {
-        $this->forget();
     }
 }
