@@ -61,6 +61,7 @@ class TypeTime extends Column\FilterModel
     public function getFormDisplayRules(): array
     {
         return [
+            'value' => ['op' => 'notEmpty'],
             'range' => ['op' => 'isExactly[between]'],
         ];
     }

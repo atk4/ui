@@ -34,4 +34,10 @@ class TypeBoolean extends Column\FilterModel
 
         $model->addCondition($this->lookupField, $filter['op'] === 1);
     }
+
+    #[\Override]
+    public function getFormDisplayRules(): array
+    {
+        return [];
+    }
 }

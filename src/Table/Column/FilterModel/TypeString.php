@@ -60,4 +60,12 @@ class TypeString extends Column\FilterModel
                 break;
         }
     }
+
+    #[\Override]
+    public function getFormDisplayRules(): array
+    {
+        return [
+            'value' => ['op' => 'notEmpty'],
+        ];
+    }
 }

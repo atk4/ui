@@ -134,19 +134,13 @@ abstract class FilterModel extends Model
 
     /**
      * Method that will set conditions on a model base on $op and $value value.
-     * Each FilterModel\TypeModel should override this method.
      */
     abstract public function setConditionForModel(Model $model): void;
 
     /**
      * Method that will set Field display condition in a form.
-     * If form filter need to have a field display at certain condition, then
-     * override this method in your FilterModel\TypeModel.
      *
      * @return array<string, array<mixed>>
      */
-    public function getFormDisplayRules(): array
-    {
-        return [];
-    }
+    abstract public function getFormDisplayRules(): array;
 }

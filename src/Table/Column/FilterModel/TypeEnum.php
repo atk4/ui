@@ -47,4 +47,10 @@ class TypeEnum extends Column\FilterModel
             $model->addCondition($this->lookupField, 'in', $values);
         }
     }
+
+    #[\Override]
+    public function getFormDisplayRules(): array
+    {
+        return [];
+    }
 }
