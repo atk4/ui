@@ -40,7 +40,7 @@ class TypeDatetime extends AbstractTypeDatetime
                 break;
             case '!=':
             case '=':
-                $d1 = clone $this->getDatetime($filter['value'])->setTime(0, 0, 0);
+                $d1 = $this->getDatetime($filter['value'])->setTime(0, 0, 0);
                 $d2 = $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999_999);
                 if ($d1 > $d2) {
                     [$d1, $d2] = [$d2, $d1];

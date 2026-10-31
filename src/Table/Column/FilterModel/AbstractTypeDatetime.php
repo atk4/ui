@@ -71,7 +71,7 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
     public function getDatetime(string $dateModifier): ?\DateTime
     {
         if ($dateModifier === 'exact') {
-            $date = $this->get('exact_date');
+            $date = clone $this->get('exact_date');
         } else {
             if ($dateModifier === 'x_day_ago' || $dateModifier === 'x_day_before') {
                 $dateModifier = '-' . $this->get('number_days') . ' days';

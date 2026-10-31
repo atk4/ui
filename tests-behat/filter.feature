@@ -104,6 +104,7 @@ Feature: Table Filter
     Then I should not see "€ 7 000.00"
     Then I should see "€ 12 000.00"
     When I click filter column name "atk_fp_stat__updated"
+    Then Element "//div.popup[6]//input[@name='exact_date']" attribute "value" should contain text "Oct 31, 2026 18:07:40"
     When I select "Is not" in lookup "//div.popup[6]//input[@name='op']"
     When I click using selector "//div.popup[6]//div[text()='Set']"
     Then I should see "€ 7 000.00"
