@@ -47,3 +47,6 @@ Feature: Table Filter
     Then I should see "Australia"
     Then I should see "Argentina"
     Then I should not see "Austria"
+
+  Scenario:
+    Given I am on "_unit-test/tablefilter-datetime.php"

@@ -18,6 +18,7 @@ class TypeString extends Column\FilterModel
             'is' => 'Is',
             'is not' => 'Is Not',
             'contains' => 'Contains',
+            'not contain' => 'Not Contains',
             'start' => 'Start with',
             'end' => 'End with',
         ];
@@ -28,29 +29,35 @@ class TypeString extends Column\FilterModel
     public function setConditionForModel(Model $model): void
     {
         $filter = $this->recallData();
-        if ($filter !== null) {
-            switch ($filter['op']) {
-                case 'is':
-                    $model->addCondition($this->lookupField, $filter['value']);
+        if ($filter === null) {
+            return;
+        }
 
-                    break;
-                case 'is not':
-                    $model->addCondition($this->lookupField, '!=', $filter['value']);
+        switch ($filter['op']) {
+            case 'is':
+                $model->addCondition($this->lookupField, $filter['value']);
 
-                    break;
-                case 'contains':
-                    $model->addCondition($this->lookupField, 'like', '%' . $filter['value'] . '%');
+                break;
+            case 'is not':
+                $model->addCondition($this->lookupField, '!=', $filter['value']);
 
-                    break;
-                case 'start':
-                    $model->addCondition($this->lookupField, 'like', $filter['value'] . '%');
+                break;
+            case 'contains':
+                $model->addCondition($this->lookupField, 'like', '%' . $filter['value'] . '%');
 
-                    break;
-                case 'end':
-                    $model->addCondition($this->lookupField, 'like', '%' . $filter['value']);
+                break;
+            case 'not contains':
+                $model->addCondition($this->lookupField, 'not like', '%' . $filter['value'] . '%');
 
-                    break;
-            }
+                break;
+            case 'start':
+                $model->addCondition($this->lookupField, 'like', $filter['value'] . '%');
+
+                break;
+            case 'end':
+                $model->addCondition($this->lookupField, 'like', '%' . $filter['value']);
+
+                break;
         }
     }
 }
