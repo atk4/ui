@@ -59,7 +59,7 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
         $this->addField('exact_date', ['type' => $this->lookupField->type, 'ui' => ['caption' => '']]);
 
         // the integer field to generate a date when x day selector is used
-        $this->addField('number_days', ['type' => 'integer', 'ui' => ['caption' => '']]);
+        $this->addField('number_days', ['type' => 'integer', 'ui' => ['caption' => '', 'placeholder' => 'days']]);
     }
 
     /**
