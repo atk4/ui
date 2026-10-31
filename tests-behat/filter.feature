@@ -1,6 +1,6 @@
 Feature: Table Filter
 
-  Scenario:
+  Scenario: filter string
     Given I am on "collection/tablefilter.php"
     Then I should see "Australia"
     When I click filter column name "atk_fp_country__name"
@@ -8,6 +8,8 @@ Feature: Table Filter
     When I click using selector "//div.popup[2]//div[text()='Set']"
     Then I should not see "Australia"
     Then I should see "United Kingdom"
+
+  # Scenario: filter number
     When I click filter column name "atk_fp_country__phonecode"
     When I fill field using "//div.popup[6]//input[@name='value']" with "44"
     When I click using selector "//div.popup[6]//div[text()='Set']"
@@ -21,6 +23,8 @@ Feature: Table Filter
     When I click using selector "//div.popup[6]//div[text()='Clear']"
     Then I should not see "No records"
     Then I should see "United Kingdom"
+
+  # Scenario: filter bool & clear filters
     When I click filter column name "is_uk"
     When I select "Is No" in lookup "//div.popup[7]//input[@name='op']"
     When I click using selector "//div.popup[7]//div[text()='Set']"
@@ -34,6 +38,8 @@ Feature: Table Filter
     Then I should see "Australia"
     Then I should see "Argentina"
     Then I should see "Austria"
+
+  Scenario: filter ID
     When I click filter column name "atk_fp_country__id"
     When I select "=" in lookup "//div.popup[1]//input[@name='op']"
     When I fill field using "//div.popup[1]//input[@name='value']" with "13"
@@ -48,26 +54,57 @@ Feature: Table Filter
     Then I should see "Argentina"
     Then I should not see "Austria"
 
-  Scenario:
+  Scenario: filter enum
     Given I am on "_unit-test/tablefilter-datetime.php"
-    When I press button "Clear Filters"
-    Then I should see "Agile Core"
+    Then I should see "Agile DSQL"
+    When I click filter column name "atk_fp_stat__currency"
+    When I click using selector "//div.popup[2]//div.ui.checkbox[label[text()='Euro']]"
+    When I click using selector "//div.popup[2]//div[text()='Set']"
+    Then I should not see "Agile DSQL"
+    When I click filter column name "atk_fp_stat__currency"
+    When I click using selector "//div.popup[2]//div.ui.checkbox[label[text()='Pound Sterling']]"
+    When I click using selector "//div.popup[2]//div[text()='Set']"
+    Then I should see "Agile DSQL"
 
-    # Testing remove icon - no op = no extra fields
-    #When I click filter column name "atk_fp_stat__project_name"
-    #Then I should see a "//div.popup[1]//div.field//input[@name='value']" element
-    #When I click using selector "//div.popup[1]//div.field//input[@name='op']//..//i.remove"
-    #Then I should not see a "//div.popup[1]//div.field//input[@name='value']" element
+  Scenario: filter atk4_money between
+    Then I should see "€ 3 000.00"
+    Then I should see "€ 7 000.00"
+    Then I should see "€ 12 000.00"
+    When I click filter column name "atk_fp_stat__project_budget"
+    When I select "Between" in lookup "//div.popup[3]//input[@name='op']"
+    When I fill field using "//div.popup[3]//input[@name='value']" with "7000"
+    When I fill field using "//div.popup[3]//input[@name='range']" with "8000"
+    When I click using selector "//div.popup[3]//div[text()='Set']"
+    Then I should not see "€ 3 000.00"
+    Then I should see "€ 7 000.00"
+    Then I should not see "€ 12 000.00"
+    When I click filter column name "atk_fp_stat__project_budget"
+    When I fill field using "//div.popup[3]//input[@name='range']" with "12000"
+    When I click using selector "//div.popup[3]//div[text()='Set']"
+    Then I should not see "€ 3 000.00"
+    Then I should see "€ 7 000.00"
+    Then I should see "€ 12 000.00"
 
+  Scenario: filter date one week ago after & before
     When I click filter column name "atk_fp_stat__finish_date"
-    When I select "Is before" in lookup "//div.popup[4]//input[@name='op']"
-    When I select "Today" in lookup "//div.popup[4]//input[@name='value']"
+    When I select "Is after" in lookup "//div.popup[4]//input[@name='op']"
+    When I select "One week ago" in lookup "//div.popup[4]//input[@name='value']"
     When I click using selector "//div.popup[4]//div[text()='Set']"
-    Then I should see "Agile Core"
-
+    Then I should not see "€ 7 000.00"
     When I click filter column name "atk_fp_stat__finish_date"
-    When I select "Is on or after" in lookup "//div.popup[4]//input[@name='op']"
-    When I select "Tomorrow" in lookup "//div.popup[4]//input[@name='value']"
+    When I select "Is on or before" in lookup "//div.popup[4]//input[@name='op']"
     When I click using selector "//div.popup[4]//div[text()='Set']"
-    Then I should not see "Agile Core"
+    Then I should see "€ 7 000.00"
 
+  Scenario: filter datetime exact is & is not
+    When I click filter column name "atk_fp_stat__updated"
+    When I select "Exact date" in lookup "//div.popup[6]//input[@name='value']"
+    When I fill field using "//div.popup[6]//input[@name='exact_date']" with "Oct 31, 2026 18:07:40"
+    When I click using selector "//div.popup[6]//div[text()='Set']"
+    Then I should not see "€ 7 000.00"
+    Then I should see "€ 12 000.00"
+    When I click filter column name "atk_fp_stat__updated"
+    When I select "Is not" in lookup "//div.popup[6]//input[@name='op']"
+    When I click using selector "//div.popup[6]//div[text()='Set']"
+    Then I should see "€ 7 000.00"
+    Then I should not see "€ 12 000.00"
