@@ -64,7 +64,7 @@ class TypeDatetime extends AbstractTypeDatetime
 
                 break;
             default:
-                assert(false);
+                assert(false); // @phpstan-ignore function.impossibleType
         }
     }
 }
