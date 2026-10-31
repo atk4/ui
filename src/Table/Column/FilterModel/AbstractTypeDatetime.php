@@ -70,23 +70,16 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
      */
     public function getDatetime(string $dateModifier): ?\DateTime
     {
-        switch ($dateModifier) {
-            case 'exact':
-                $date = $this->get('exact_date');
+        if ($dateModifier === 'exact') {
+            $date = $this->get('exact_date');
+        } else {
+            if ($dateModifier === 'x_day_ago' || $dateModifier === 'x_day_before') {
+                $dateModifier = '-' . $this->get('number_days') . ' days';
+            } elseif ($dateModifier === 'x_day_now' || $dateModifier === 'x_day_after') {
+                $dateModifier = '+' . $this->get('number_days') . ' days';
+            }
 
-                break;
-            case 'x_day_ago':
-            case 'x_day_before':
-                $date = new \DateTime('-' . $this->get('number_days') . ' days');
-
-                break;
-            case 'x_day_now':
-            case 'x_day_after':
-                $date = new \DateTime('+' . $this->get('number_days') . ' days');
-
-                break;
-            default:
-                $date = null;
+            $date = null;
         }
 
         return $date;
