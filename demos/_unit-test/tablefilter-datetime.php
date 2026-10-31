@@ -16,13 +16,10 @@ $view = View::addTo($app, ['ui' => 'basic segment']);
 $grid = Grid::addTo($view, ['menu' => ['class' => ['atk-grid-menu']]]); // menu class added for Behat testing
 
 $model = new Stat($app->db);
+$model->getField($model->fieldName()->updated)->caption = 'Updated Datetime';
 $grid->setModel($model, [
     $model->fieldName()->project_name, // string
-    $model->fieldName()->project_code, // string
     $model->fieldName()->project_budget, // atk4_money
-    $model->fieldName()->project_hours_est, // int
-    $model->fieldName()->is_commercial, // bool
-    $model->fieldName()->currency, // list of string values
     $model->fieldName()->finish_date, // date
     $model->fieldName()->finish_time, // time
     $model->fieldName()->updated, // datetime
