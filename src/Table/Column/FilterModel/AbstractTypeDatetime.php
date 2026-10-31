@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column\FilterModel;
 
-use Atk4\Ui\Form;
 use Atk4\Ui\Table\Column;
 
 abstract class AbstractTypeDatetime extends Column\FilterModel
@@ -57,10 +56,10 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
         ]);
 
         // the exact date field input when exact is select as input value
-        $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);
+        $this->addField('exact_date', ['type' => $this->lookupField->type, 'ui' => ['caption' => '']]);
 
         // the integer field to generate a date when x day selector is used
-        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
+        $this->addField('number_days', ['type' => 'integer', 'ui' => ['caption' => '', 'placeholder' => 'days']]);
     }
 
     /**
@@ -71,23 +70,16 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
      */
     public function getDatetime(string $dateModifier): ?\DateTime
     {
-        switch ($dateModifier) {
-            case 'exact':
-                $date = $this->get('exact_date');
+        if ($dateModifier === 'exact') {
+            $date = $this->get('exact_date');
+        } else {
+            if ($dateModifier === 'x_day_ago' || $dateModifier === 'x_day_before') {
+                $dateModifier = '-' . $this->get('number_days') . ' days';
+            } elseif ($dateModifier === 'x_day_now' || $dateModifier === 'x_day_after') {
+                $dateModifier = '+' . $this->get('number_days') . ' days';
+            }
 
-                break;
-            case 'x_day_ago':
-            case 'x_day_before':
-                $date = new \DateTime('-' . $this->get('number_days') . ' days');
-
-                break;
-            case 'x_day_now':
-            case 'x_day_after':
-                $date = new \DateTime('+' . $this->get('number_days') . ' days');
-
-                break;
-            default:
-                $date = null;
+            $date = new \DateTime($dateModifier, $this->getApp()->uiPersistence->getTimezone());
         }
 
         return $date;
