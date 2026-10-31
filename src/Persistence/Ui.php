@@ -37,7 +37,7 @@ class Ui extends Persistence
     public $currencyDecimals = 2;
 
     /** @var non-empty-string */
-    public $timezone;
+    protected $timezone;
     /** @var non-empty-string */
     public $dateFormat = 'M j, Y';
     /** @var non-empty-string */
@@ -54,8 +54,13 @@ class Ui extends Persistence
 
     private Persistence $attributePersistence;
 
-    public function __construct()
+    /**
+     * @param array<string, mixed> $defaults
+     */
+    public function __construct(array $defaults = [])
     {
+        $this->setDefaults($defaults);
+        
         if ($this->timezone === null) {
             $this->timezone = date_default_timezone_get();
         }
@@ -63,6 +68,11 @@ class Ui extends Persistence
         $attributePersistence = clone $this;
         $this->initAttributePersistence($attributePersistence);
         $this->attributePersistence = $attributePersistence;
+    }
+
+    public function getTimezone(): \DateTimeZone
+    {
+        return new \DateTimeZone($this->timezone);
     }
 
     protected function initAttributePersistence(self $attributePersistence): void
@@ -159,7 +169,7 @@ class Ui extends Persistence
 
                     if ($field->type === 'datetime') {
                         $value = new \DateTime($value->format('Y-m-d H:i:s.u'), $value->getTimezone());
-                        $value->setTimezone(new \DateTimeZone($this->timezone));
+                        $value->setTimezone($this->getTimezone());
                     }
                     $value = $value->format($format);
 
@@ -236,7 +246,6 @@ class Ui extends Persistence
                 }
 
                 $dtClass = \DateTime::class;
-                $tzClass = \DateTimeZone::class;
                 $format = [
                     'date' => $this->dateFormat,
                     'datetime' => $this->datetimeFormat,
@@ -251,7 +260,7 @@ class Ui extends Persistence
                 }
 
                 $valueOrig = $value;
-                $value = $dtClass::createFromFormat('!' . $format, $value, $field->type === 'datetime' ? new $tzClass($this->timezone) : null);
+                $value = $dtClass::createFromFormat('!' . $format, $value, $field->type === 'datetime' ? $this->getTimezone() : null);
                 if ($value === false) {
                     throw (new Exception('Incorrectly formatted datetime'))
                         ->addMoreInfo('format', $format)
@@ -260,7 +269,7 @@ class Ui extends Persistence
                 }
 
                 if ($field->type === 'datetime') {
-                    $value->setTimezone(new $tzClass(date_default_timezone_get()));
+                    $value->setTimezone(new \DateTimeZone(date_default_timezone_get()));
                 }
 
                 $value = parent::_typecastSaveField($field, $value);

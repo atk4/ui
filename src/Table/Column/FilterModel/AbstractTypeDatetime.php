@@ -79,7 +79,7 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
                 $dateModifier = '+' . $this->get('number_days') . ' days';
             }
 
-            $date = new \DateTime($dateModifier, new \DateTimeZone($this->getApp()->uiPersistence->timezone));
+            $date = new \DateTime($dateModifier, $this->getApp()->uiPersistence->getTimezone());
         }
 
         return $date;
