@@ -40,6 +40,9 @@ class TypeNumber extends Column\FilterModel
 
         switch ($filter['op']) {
             case 'between':
+                if ($filter['value'] > $filter['range']) {
+                    [$filter['value'], $filter['range']] = [$filter['range'], $filter['value']];
+                }
                 $model->addCondition(
                     $model->expr('[field] between [value] and [value2]', [
                         'field' => $this->lookupField,
