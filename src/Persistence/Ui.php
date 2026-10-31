@@ -36,13 +36,13 @@ class Ui extends Persistence
     /** @var int Number of decimal digits for 'atk4_money' type. */
     public $currencyDecimals = 2;
 
-    /** @var string */
+    /** @var non-empty-string */
     public $timezone;
-    /** @var string */
+    /** @var non-empty-string */
     public $dateFormat = 'M j, Y';
-    /** @var string */
+    /** @var non-empty-string */
     public $timeFormat = 'H:i';
-    /** @var string */
+    /** @var non-empty-string */
     public $datetimeFormat = 'M j, Y H:i';
     /** @var int Calendar input first day of week, 0 = Sunday, 1 = Monday. */
     public $firstDayOfWeek = 0;
