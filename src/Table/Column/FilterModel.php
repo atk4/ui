@@ -30,11 +30,11 @@ abstract class FilterModel extends Model
 
     protected bool $noValueField = false;
 
-    /** @var Field The operator for defining a condition on a field. */
-    public $op;
+    /** The operator for defining a condition on a field. */
+    public ?Field $op;
 
-    /** @var Field The value for defining a condition on a field. */
-    public $value;
+    /** The value for defining a condition on a field. */
+    public ?Field $value;
 
     public function __construct(App $app, array $defaults = [])
     {
@@ -93,13 +93,13 @@ abstract class FilterModel extends Model
     {
         parent::init();
 
-        if (!$this->noOpField) {
-            $this->op = $this->addField('op', ['ui' => ['caption' => '']]);
-        }
+        $this->op = $this->noOpField
+            ? null
+            : $this->addField('op', ['ui' => ['caption' => '']]);
 
-        if (!$this->noValueField) {
-            $this->value = $this->addField('value', ['ui' => ['caption' => '']]);
-        }
+        $this->value = $this->noValueField
+            ? null
+            : $this->addField('value', ['ui' => ['caption' => '']]);
 
         $this->afterInit();
     }

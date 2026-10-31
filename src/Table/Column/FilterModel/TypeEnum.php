@@ -18,7 +18,6 @@ class TypeEnum extends Column\FilterModel
     {
         parent::init();
 
-        $this->op = null;
         if ($this->lookupField->values !== null) {
             foreach ($this->lookupField->values as $key => $value) {
                 $this->addField($key, ['type' => 'boolean', 'ui' => ['caption' => $value]]);
