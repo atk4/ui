@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atk4\Ui\Table\Column\FilterModel;
 
 use Atk4\Data\Model;
-use Atk4\Ui\Form;
 use Atk4\Ui\Table\Column;
 
 class TypeNumber extends Column\FilterModel
@@ -27,9 +26,8 @@ class TypeNumber extends Column\FilterModel
         $this->op->default = '=';
 
         $this->value->type = $this->lookupField->type;
-        $this->value->ui['form'] = [Form\Control\Line::class];
 
-        $this->addField('range', ['type' => $this->lookupField->type, 'ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
+        $this->addField('range', ['type' => $this->lookupField->type, 'ui' => ['caption' => '']]);
     }
 
     #[\Override]

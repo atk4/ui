@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column\FilterModel;
 
-use Atk4\Ui\Form;
 use Atk4\Ui\Table\Column;
 
 abstract class AbstractTypeDatetime extends Column\FilterModel
@@ -60,7 +59,7 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
         $this->addField('exact_date', ['type' => $this->lookupField->type, 'ui' => ['caption' => '']]);
 
         // the integer field to generate a date when x day selector is used
-        $this->addField('number_days', ['type' => 'integer', 'ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
+        $this->addField('number_days', ['type' => 'integer', 'ui' => ['caption' => '']]);
     }
 
     /**
