@@ -34,10 +34,10 @@ class AbstractTypeDatetimeTest extends TestCase
         };
 
         $tableFilter = new TypeDate($app, ['lookupField' => new Field(['shortName' => 'foo'])]);
-        $assertSameDtFx($tableFilter->getDatetime($modifier));
+        $assertSameDtFx($tableFilter->getDatetime($modifier, null));
 
         $tableFilter2 = new TypeDateTime($app, ['lookupField' => new Field(['shortName' => 'foo'])]);
-        $assertSameDtFx($tableFilter2->getDatetime($modifier));
+        $assertSameDtFx($tableFilter2->getDatetime($modifier, null));
     }
 
     /**

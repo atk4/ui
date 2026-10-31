@@ -64,14 +64,11 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
 
     /**
      * Get date object according to it's modifier string.
-     * Will construct and return a date object base on constructor string.
-     *
-     * @param string $dateModifier the string to pass to generated a date from
      */
-    public function getDatetime(string $dateModifier): ?\DateTime
+    public function getDatetime(string $dateModifier, ?bool $ceilTimeIfNotExact): ?\DateTime
     {
         if ($dateModifier === 'exact') {
-            $date = clone $this->get('exact_date');
+            $date = $this->get('exact_date');
         } else {
             if ($dateModifier === 'x_day_ago' || $dateModifier === 'x_day_before') {
                 $dateModifier = '-' . $this->get('number_days') . ' days';
@@ -80,6 +77,13 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
             }
 
             $date = new \DateTime($dateModifier, $this->getApp()->uiPersistence->getTimezone());
+        }
+
+        if ($ceilTimeIfNotExact !== null && $dateModifier !== 'exact') {
+            $date = clone $date;
+            $date = $ceilTimeIfNotExact
+                ? $date->setTime(23, 59, 59, 999_999)
+                : $date->setTime(0, 0);
         }
 
         return $date;
