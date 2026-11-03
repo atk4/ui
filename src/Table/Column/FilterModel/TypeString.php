@@ -19,8 +19,8 @@ class TypeString extends Column\FilterModel
             'is not' => 'Is Not',
             'contains' => 'Contains',
             'not contain' => 'Not Contains',
-            'start' => 'Start with',
-            'end' => 'End with',
+            'start' => 'Starts with',
+            'end' => 'Ends with',
         ];
         $this->op->default = 'is';
     }

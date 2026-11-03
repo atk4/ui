@@ -12,6 +12,30 @@ use PHPUnit\Framework\Attributes\DataProvider;
 class PersistenceUiTest extends TestCase
 {
     /**
+     * @dataProvider provideGetTimezoneCases
+     */
+    #[DataProvider('provideGetTimezoneCases')]
+    public function testGetTimezone(string $timezone): void
+    {
+        $p = new UiPersistence();
+        self::assertSame(date_default_timezone_get(), $p->getTimezone()->getName());
+
+        $p = new UiPersistence(['timezone' => $timezone]);
+        self::assertSame($timezone, $p->getTimezone()->getName());
+    }
+
+    /**
+     * @return iterable<list<mixed>>
+     */
+    public static function provideGetTimezoneCases(): iterable
+    {
+        yield ['UTC'];
+        yield ['Europe/Prague'];
+        yield ['Pacific/Honolulu'];
+        yield ['Australia/Sydney'];
+    }
+
+    /**
      * @param array<string, mixed> $persistenceSeed
      * @param array<string, mixed> $fieldSeed
      * @param mixed                $phpValue
@@ -101,7 +125,7 @@ class PersistenceUiTest extends TestCase
         yield [[], ['type' => 'boolean'], false, 'No'];
         yield [[], ['type' => 'boolean'], true, 'Yes'];
 
-        foreach (['UTC', 'Europe/Prague', 'Pacific/Honolulu', 'Australia/Sydney'] as $tz) {
+        foreach (self::provideGetTimezoneCases() as [$tz]) {
             $date = new \DateTime('2022-1-2 UTC');
             $time1 = new \DateTime('1970-1-1 10:20 UTC');
             $time2 = new \DateTime('1970-1-1 10:20:30 UTC');

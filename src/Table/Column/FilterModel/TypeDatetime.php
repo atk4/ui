@@ -26,8 +26,8 @@ class TypeDatetime extends AbstractTypeDatetime
 
                 break;
             case 'within':
-                $d1 = $this->getDatetime($filter['value'])->setTime(0, 0, 0);
-                $d2 = $this->getDatetime($filter['range'])->setTime(23, 59, 59, 999_999);
+                $d1 = $this->getDatetime($filter['value'], false);
+                $d2 = $this->getDatetime($filter['range'], true);
                 if ($d1 > $d2) {
                     [$d1, $d2] = [$d2, $d1];
                 }
@@ -38,10 +38,10 @@ class TypeDatetime extends AbstractTypeDatetime
                 ]));
 
                 break;
-            case '!=':
             case '=':
-                $d1 = clone $this->getDatetime($filter['value'])->setTime(0, 0, 0);
-                $d2 = $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999_999);
+            case '!=':
+                $d1 = $this->getDatetime($filter['value'], false);
+                $d2 = $this->getDatetime($filter['value'], true);
                 if ($d1 > $d2) {
                     [$d1, $d2] = [$d2, $d1];
                 }
@@ -55,16 +55,16 @@ class TypeDatetime extends AbstractTypeDatetime
                 break;
             case '>':
             case '<=':
-                $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value'])->setTime(23, 59, 59, 999_999));
+                $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value'], true));
 
                 break;
             case '<':
             case '>=':
-                $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value'])->setTime(0, 0, 0));
+                $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value'], false));
 
                 break;
             default:
-                $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value']));
+                assert(false); // @phpstan-ignore function.impossibleType
         }
     }
 }

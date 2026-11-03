@@ -18,8 +18,8 @@ class TypeBoolean extends Column\FilterModel
 
         $this->op->type = 'smallint';
         $this->op->values = [
-            0 => 'Is No',
-            1 => 'Is Yes',
+            0 => 'No',
+            1 => 'Yes',
         ];
         $this->op->default = 1;
     }

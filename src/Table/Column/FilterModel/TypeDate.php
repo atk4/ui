@@ -26,8 +26,8 @@ class TypeDate extends AbstractTypeDatetime
 
                 break;
             case 'within':
-                $d1 = $this->getDatetime($filter['value']);
-                $d2 = $this->getDatetime($filter['range']);
+                $d1 = $this->getDatetime($filter['value'], null);
+                $d2 = $this->getDatetime($filter['range'], null);
                 if ($d1 > $d2) {
                     [$d1, $d2] = [$d2, $d1];
                 }
@@ -39,7 +39,7 @@ class TypeDate extends AbstractTypeDatetime
 
                 break;
             default:
-                $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value']));
+                $model->addCondition($this->lookupField, $filter['op'], $this->getDatetime($filter['value'], null));
         }
     }
 }

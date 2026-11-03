@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Atk4\Ui\Table\Column\FilterModel;
 
-use Atk4\Ui\Form;
 use Atk4\Ui\Table\Column;
 
 abstract class AbstractTypeDatetime extends Column\FilterModel
@@ -16,12 +15,12 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
 
         $this->op->values = [
             '=' => 'Is',
-            'within' => 'Is within',
-            '<' => 'Is before',
-            '>' => 'Is after',
-            '<=' => 'Is on or before',
-            '>=' => 'Is on or after',
             '!=' => 'Is not',
+            'within' => 'Within',
+            '<' => 'Before',
+            '>' => 'After',
+            '<=' => 'Before or on',
+            '>=' => 'After or on',
             'empty' => 'Is empty',
             'not empty' => 'Is not empty',
         ];
@@ -46,10 +45,10 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
             'ui' => ['caption' => ''],
             'values' => [
                 '-1 week' => 'The past week',
-                '-1 month' => 'The past month',
-                '-1 year' => 'The past year',
                 '+1 week' => 'The next week',
+                '-1 month' => 'The past month',
                 '+1 month' => 'The next month',
+                '-1 year' => 'The past year',
                 '+1 year' => 'The next year',
                 'x_day_before' => 'The next number of days before',
                 'x_day_after' => 'The next number of days after',
@@ -57,37 +56,34 @@ abstract class AbstractTypeDatetime extends Column\FilterModel
         ]);
 
         // the exact date field input when exact is select as input value
-        $this->addField('exact_date', ['type' => 'date', 'ui' => ['caption' => '']]);
+        $this->addField('exact_date', ['type' => $this->lookupField->type, 'ui' => ['caption' => '']]);
 
         // the integer field to generate a date when x day selector is used
-        $this->addField('number_days', ['ui' => ['caption' => '', 'form' => [Form\Control\Line::class]]]);
+        $this->addField('number_days', ['type' => 'integer', 'ui' => ['caption' => '', 'placeholder' => 'days']]);
     }
 
     /**
      * Get date object according to it's modifier string.
-     * Will construct and return a date object base on constructor string.
-     *
-     * @param string $dateModifier the string to pass to generated a date from
      */
-    public function getDatetime(string $dateModifier): ?\DateTime
+    public function getDatetime(string $dateModifier, ?bool $ceilTimeIfNotExact): ?\DateTime
     {
-        switch ($dateModifier) {
-            case 'exact':
-                $date = $this->get('exact_date');
+        if ($dateModifier === 'exact') {
+            $date = $this->get('exact_date');
+        } else {
+            if ($dateModifier === 'x_day_ago' || $dateModifier === 'x_day_before') {
+                $dateModifier = '-' . $this->get('number_days') . ' days';
+            } elseif ($dateModifier === 'x_day_now' || $dateModifier === 'x_day_after') {
+                $dateModifier = '+' . $this->get('number_days') . ' days';
+            }
 
-                break;
-            case 'x_day_ago':
-            case 'x_day_before':
-                $date = new \DateTime('-' . $this->get('number_days') . ' days');
+            $date = new \DateTime($dateModifier, $this->getApp()->uiPersistence->getTimezone());
+        }
 
-                break;
-            case 'x_day_now':
-            case 'x_day_after':
-                $date = new \DateTime('+' . $this->get('number_days') . ' days');
-
-                break;
-            default:
-                $date = null;
+        if ($ceilTimeIfNotExact !== null && $dateModifier !== 'exact') {
+            $date = clone $date;
+            $date = $ceilTimeIfNotExact
+                ? $date->setTime(23, 59, 59, 999_999)
+                : $date->setTime(0, 0);
         }
 
         return $date;
