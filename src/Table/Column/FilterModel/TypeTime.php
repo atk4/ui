@@ -27,7 +27,7 @@ class TypeTime extends Column\FilterModel
 
         $this->value->type = 'time';
 
-        $this->addField('range', ['type' => 'time', 'ui' => ['caption' => '']]);
+        $this->addField('range', ['type' => $this->lookupField->type, 'ui' => ['caption' => '']]);
     }
 
     #[\Override]
