@@ -28,6 +28,18 @@ class TypeNumber extends Column\FilterModel
         $this->value->type = $this->lookupField->type;
 
         $this->addField('range', ['type' => $this->lookupField->type, 'ui' => ['caption' => '']]);
+
+        $this->onHook(self::HOOK_VALIDATE, static function (Model $entity) {
+            $errors = [];
+            if ($entity->get('value') === null) {
+                $errors['value'] = 'Value required';
+            }
+            if ($entity->get('op') === 'between' && $entity->get('range') === null) {
+                $errors['range'] = 'Value required';
+            }
+
+            return $errors;
+        });
     }
 
     #[\Override]
