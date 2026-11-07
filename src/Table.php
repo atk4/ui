@@ -613,6 +613,11 @@ class Table extends Lister
     {
         $output = [];
         foreach ($this->columns as $name => $column) {
+            // if multiple formatters are defined, use the first for the totals cell
+            if (is_array($column)) {
+                $column = $column[0];
+            }
+
             // if no totals plan, then show dash, but keep column formatting
             if (!isset($this->totalsPlan[$name])) {
                 $output[] = $column->getTag('foot', [], '-');
