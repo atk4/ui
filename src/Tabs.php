@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Atk4\Ui;
 
 use Atk4\Core\Factory;
+use Atk4\Ui\Js\JsBlock;
+use Atk4\Ui\Js\JsExpression;
 use Atk4\Ui\Js\JsFunction;
 
 class Tabs extends ViewWithContent
@@ -40,11 +42,22 @@ class Tabs extends ViewWithContent
             }
             unset($item->settings['apiSettings']);
 
-            $item->settings['onFirstLoad'] = new JsFunction([], [$vp->js()->atkReloadView($reloadViewArgs)]);
-
             if (($item->settings['cache'] ?? null) === false) {
-                $item->settings['onLoad'] = $item->settings['onFirstLoad'];
-                unset($item->settings['onFirstLoad']);
+                $item->settings['onLoad'] = new JsFunction([], [$vp->js()->atkReloadView($reloadViewArgs)]);
+            } else {
+                // Fomantic-UI "onFirstLoad" callback is not used as it does not allow to reload the tab when the 1st load failed
+                $reloadViewArgs['apiConfig']['onComplete'] = new JsFunction(['response'], [
+                    new JsExpression('if (!response || !response.success) { [] }', [new JsBlock([$sub->js()->removeData('atkTabLoaded')])]),
+                ]);
+                $item->settings['onLoad'] = new JsFunction([], [
+                    new JsExpression('if (![]) { [] }', [
+                        $sub->js()->data('atkTabLoaded'),
+                        new JsBlock([
+                            $sub->js()->data('atkTabLoaded', true),
+                            $vp->js()->atkReloadView($reloadViewArgs),
+                        ]),
+                    ]),
+                ]);
             }
             unset($item->settings['cache']);
 
