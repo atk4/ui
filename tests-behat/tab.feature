@@ -12,8 +12,7 @@ Feature: Tab
     Then Modal is open with text "AssertionError [code: 1]: assert(false)"
     When I hide js modal
 
-  Scenario: API exception is displayed again when failed tab is activated again
-    When I click tab with title "Hello"
+  Scenario: API cached exception is displayed
     When I click tab with title "Server exception"
     Then Modal is open with text "AssertionError [code: 1]: assert(false)"
     When I hide js modal
