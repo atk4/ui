@@ -50,4 +50,25 @@ class TableTest extends TestCase
         $this->expectExceptionMessageIs('Table column already exists');
         $table->addColumn('foo');
     }
+
+    public function testTotalsWithDecoratedColumn(): void
+    {
+        $table = new Table();
+        $table->setApp($this->createApp());
+        $table->invokeInit();
+        $table->setSource([
+            ['name' => 'foo', 'note' => 'x', 'amount' => 2, 'other' => 'a'],
+            ['name' => 'bar', 'note' => 'y', 'amount' => 3, 'other' => 'b'],
+        ]);
+
+        foreach (['name', 'amount', 'other'] as $name) {
+            $table->addDecorator($name, [Table\Column\Tooltip::class, 'tooltipField' => 'note']);
+        }
+
+        $table->addTotals(['name' => 'Total:', 'amount' => ['sum']]);
+
+        preg_match('~<tfoot>.*</tfoot>~s', $table->renderToHtml(), $footMatches);
+        preg_match_all('~<th[^>]*>(.*?)</th>~', $footMatches[0], $cellMatches);
+        self::assertSame(['Total:', '-', '5', '-'], $cellMatches[1]);
+    }
 }
