@@ -173,7 +173,7 @@ class JsIntegrationTest extends TestCase
         self::assertSame(0, $jsCallback->counter);
 
         $v->renderAll();
-        self::assertSame(0, $jsCallback->counter);
+        self::assertSame(0, $jsCallback->counter); // @phpstan-ignore staticMethod.alreadyNarrowedType
 
         $v->getJs()->jsRender();
         self::assertSame(1, $jsCallback->counter);

@@ -109,7 +109,7 @@ class SessionTraitTest extends TestCase
         self::assertSame('bar', $m->recall('foo'));
 
         $m->learn('foo', 'qwerty');
-        self::assertSame('bar', $m->recall('foo'));
+        self::assertSame('bar', $m->recall('foo')); // @phpstan-ignore staticMethod.alreadyNarrowedType
 
         $m->forget('foo');
         self::assertSame('undefined', $m->recall('foo', 'undefined'));
