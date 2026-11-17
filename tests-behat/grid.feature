@@ -13,6 +13,11 @@ Feature: Grid
     When I write "[escape]" into selector "input.atk-grid-search"
     Then I should not see "United Kingdom"
 
+  Scenario: search button focuses empty search input
+    Given I am on "collection/grid.php"
+    When I click using selector "i.atk-search-icon"
+    Then Element "input.atk-grid-search" should be focused
+
   Scenario: search no ajax
     Given I am on "collection/grid.php?no-ajax=1"
     When I search grid for "kingdom"

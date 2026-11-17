@@ -27941,12 +27941,13 @@ class AtkJsSearchPlugin extends _AbstractPlugin__WEBPACK_IMPORTED_MODULE_5__["de
         });
         this.$textInput.val('');
         external_jquery__WEBPACK_IMPORTED_MODULE_3___default()(this.el).data('previousValue', '');
-      }
-      if (!this.state.button && this.$textInput.val()) {
+      } else if (this.$textInput.val()) {
         this.doSearch(this.settings.url, this.$textInput.val(), options, () => {
           this.setButtonState(true);
           this.setFilterState(true);
         });
+      } else {
+        this.$textInput.trigger('focus');
       }
     });
   }

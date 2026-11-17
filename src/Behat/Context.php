@@ -931,6 +931,19 @@ class Context extends RawMinkContext implements BehatContext
     }
 
     /**
+     * @Then ~^Element ("(?:\\[\\"]|[^"])*+") should be focused$~
+     */
+    public function elementShouldBeFocused(string $selector): void
+    {
+        $selector = $this->unquoteStepArgument($selector);
+
+        $element = $this->findElement(null, $selector);
+        if (!$this->getSession()->evaluateScript('return arguments[0] === document.activeElement', [$element])) {
+            throw new \Exception('Element "' . $selector . '" is not focused');
+        }
+    }
+
+    /**
      * @Then ~^Element ("(?:\\[\\"]|[^"])*+") should contain class ("(?:\\[\\"]|[^"])*+")$~
      */
     public function elementShouldContainClass(string $selector, string $class): void
