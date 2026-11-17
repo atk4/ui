@@ -12,6 +12,11 @@ Feature: Tab
     Then Modal is open with text "AssertionError [code: 1]: assert(false)"
     When I hide js modal
 
+  Scenario: API cached exception is displayed
+    When I click tab with title "Server exception"
+    Then Modal is open with text "AssertionError [code: 1]: assert(false)"
+    When I hide js modal
+
   Scenario: URL exception is displayed
     Then I should not see "<title>404 Not Found</title>"
     When I click tab with title "URL 404"
