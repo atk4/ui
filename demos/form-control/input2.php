@@ -58,6 +58,62 @@ $group->addControl('radio_norm', [Form\Control\Radio::class], ['enum' => ['one',
 $group->addControl('radio_read', [Form\Control\Radio::class, 'readOnly' => true], ['enum' => ['one', 'two', 'three']])->set('two');
 $group->addControl('radio_disb', [Form\Control\Radio::class, 'disabled' => true], ['enum' => ['one', 'two', 'three']])->set('two');
 
+$group = $form->addGroup('Sliders');
+
+$form->addControl(
+    'slider_norm',
+    [
+        Form\Control\Slider::class,
+        'labeled' => true,
+        'ticked' => true,
+        'bottom' => true,
+        'min' => 0,
+        'max' => 1,
+        'step' => 0.1,
+        'start' => 0.5,
+        'smooth' => true,
+        'color' => 'green',
+        'caption' => 'Normal Slider',
+    ]
+);
+
+$form->addControl(
+    'slider_read',
+    [
+        Form\Control\Slider::class,
+        'readOnly' => true,
+        'labeled' => true,
+        'ticked' => true,
+        'bottom' => false,
+        'min' => 1,
+        'max' => 5,
+        'step' => 1,
+        'start' => 2,
+        'smooth' => true,
+        'color' => 'yellow',
+        'caption' => 'Read Only Slider',
+    ]
+);
+
+$disabledSlider = $form->addControl(
+    'slider_disb',
+    [
+        Form\Control\Slider::class,
+        'disabled' => true,
+        'labeled' => true,
+        'ticked' => true,
+        'bottom' => false,
+        'min' => 1,
+        'max' => 10,
+        'step' => 1,
+        'start' => 5,
+        'smooth' => true,
+        'caption' => 'Disabled Slider',
+    ]
+);
+// We can add classes to a slider by doing:
+$disabledSlider->input->addClass('red'); // @phpstan-ignore property.notFound
+
 $group = $form->addGroup('File upload');
 
 $onDelete = static function () {};
